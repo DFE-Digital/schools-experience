@@ -1,0 +1,3 @@
+server: bin/rails server
+assets: bin/webpack-dev-server
+browser_sync: bundle exec rake browser_sync:start
