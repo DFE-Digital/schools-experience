@@ -23,7 +23,6 @@
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 - [GOV.UK Lint](https://github.com/alphagov/govuk-lint)
 - Autoprefixer rails
-- Browsersync
 - RSpec
 - Dotenv (managing environment variables)
 - Travis with heroku deployment
