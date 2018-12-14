@@ -1,4 +1,6 @@
 {
+  "name": "school_experience_candidate",
+  "private": true,
   "dependencies": {
     "@rails/webpacker": "3.5",
     "govuk-frontend": "^2.3.0"
