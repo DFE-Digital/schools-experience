@@ -1,5 +1,5 @@
 {
-  "name": "school_experience_candidate",
+  "name": "school_experience",
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate db:seed"
   },
