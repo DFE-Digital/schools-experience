@@ -124,6 +124,9 @@ GEM
       dotenv (= 2.6.0)
       railties (>= 3.2, < 6.0)
     erubi (1.8.0)
+    exception_notification (4.3.0)
+      actionmailer (>= 4.0, < 6)
+      activesupport (>= 4.0, < 6)
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -291,6 +294,7 @@ GEM
       rubyzip (~> 1.2, >= 1.2.2)
     shoulda-matchers (4.0.0.rc1)
       activesupport (>= 4.2.0)
+    slack-notifier (2.3.2)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -344,6 +348,7 @@ DEPENDENCIES
   database_cleaner
   delayed_job_active_record
   dotenv-rails
+  exception_notification
   factory_bot_rails
   foreman
   geocoder
@@ -362,6 +367,7 @@ DEPENDENCIES
   sassc-rails
   selenium-webdriver
   shoulda-matchers (= 4.0.0.rc1)
+  slack-notifier
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data

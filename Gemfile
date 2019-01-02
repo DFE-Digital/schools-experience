@@ -49,6 +49,9 @@ gem 'delayed_job_active_record'
 
 gem "redis", "~> 4.0"
 
+gem 'exception_notification'
+gem 'slack-notifier'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
