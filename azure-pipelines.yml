@@ -8,9 +8,10 @@ pool:
 
 variables:
   imageName: 'your-container-image-name:$(build.buildId)'
+  group: VARGROUP
 
 steps:
 - script: docker build -f Dockerfile -t $(imageName) .
   displayName: 'docker build'
-- script: docker run -e imageName ubuntu bash -c "echo $imageName"
+- script: docker run -e VARGROUP_VARTEST=$(VARGROUP_VARTEST) -e VARGROUP=$(VARTEST) ubuntu bash -c "env"
   displayName: 'passing through vars'
