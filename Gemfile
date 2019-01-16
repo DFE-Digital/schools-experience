@@ -48,6 +48,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
 
   gem 'dotenv-rails'
+
+  gem 'brakeman', github: 'presidentbeef/brakeman'
 end
 
 group :development do

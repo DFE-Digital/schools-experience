@@ -1,0 +1,33 @@
+pool:
+  vmImage: 'ubuntu-16.04'
+
+variables:
+  imageName: school-experience
+  POSTGRESS_PASSWORD: secret
+  DATABASE_URL: postgres://postgres:secret@postgres/school_experience_test
+  WEB_URL: postgres://postgres:secret@postgres/school_experience
+  SECRET_KEY_BASE: stubbed
+
+steps:
+  - script: docker run --name=postgres -e POSTGRES_PASSWORD -d postgres
+    displayName: Launch Postgres # done early to give it time to boot
+  - script: docker build -t $(imageName) .
+    displayName: Build Docker Image
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(imageName) rake db:create db:test:prepare
+    displayName: Create Testing databases, import schema and fixtures
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(imageName) rspec
+    displayName: Run the Specs
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true $(imageName) cucumber
+    displayName: Run the Cucumber features
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(imageName) brakeman --no-pager
+    displayName: Run the Brakeman security scan
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL="$(WEB_URL)" -e SECRET_KEY_BASE=stubbed $(imageName) rake db:create db:schema:load
+    displayName: Create Smoketest database and import schema
+  - script: docker run -d --name=smoketest --health-interval=4s --link postgres:postgres -e DATABASE_URL="$(WEB_URL)" -e SECRET_KEY_BASE=stubbed $(imageName)
+    displayName: Spin up app
+  - script: sleep 15 # ugly but gives the web app time to boot
+    displayName: Pause to allow app to boot
+  - script: docker ps | grep smoketest | grep '(healthy)' || false
+    displayName: Check app reports as Healthy
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(imageName) govuk-lint-ruby app lib spec
+    displayName: Run the GovUK Lint check
