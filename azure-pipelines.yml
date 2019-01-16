@@ -19,5 +19,6 @@ steps:
   displayName: Spin up app
 - script: sleep 15 # ugly but gives the web app time to boot
   displayName: Pause to allow app to boot
+- script: docker ps
 - script: docker ps | grep smoketest | grep '(healthy)' || false
   displayName: Check app reports as Healthy
