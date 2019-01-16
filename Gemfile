@@ -52,6 +52,7 @@ group :development, :test do
 
   # Testing framework
   gem 'rspec-rails', '~> 3.8'
+  gem 'factory_bot_rails'
 
   gem 'dotenv-rails'
 end
@@ -78,7 +79,7 @@ group :test do
   gem 'database_cleaner'
 
   gem 'shoulda-matchers', '4.0.0.rc1'
-  gem 'rails-controller-testing' # If you are using Rails 5.x
+  gem 'rails-controller-testing'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
