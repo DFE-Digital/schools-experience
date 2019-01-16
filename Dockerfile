@@ -1,15 +1,5 @@
-FROM ruby:2.5
+FROM nginx
 
-ENV RAILS_ENV=production \
-    RAILS_SERVE_STATIC_FILES=true \
-    RAILS_LOG_TO_STDOUT=true
-
-RUN mkdir /app
-WORKDIR /app
-
-EXPOSE 3000
-ENTRYPOINT ["bundle", "exec"]
-CMD ["rails", "server" ]
 HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1
 
 # Install node, leaving as few artifacts as possible
@@ -33,5 +23,5 @@ HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1
 #    rm -rf /usr/local/bundle/cache
 #
 # Add code and compile assets
-COPY . .
+#COPY . .
 #RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed
