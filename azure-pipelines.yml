@@ -17,6 +17,8 @@ steps:
     displayName: Create Testing databases, import schema and fixtures
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(imageName) rspec
     displayName: Run the Specs
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true $(imageName) cucumber
+    displayName: Run the Cucumber features
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(imageName) brakeman --no-pager
     displayName: Run the Brakeman security scan
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL="$(WEB_URL)" -e SECRET_KEY_BASE=stubbed $(imageName) rake db:create db:schema:load
