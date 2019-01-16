@@ -1,6 +1,6 @@
 FROM nginx
 
-HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
 
 # Install node, leaving as few artifacts as possible
 #RUN apt-get update && apt-get install apt-transport-https && \
