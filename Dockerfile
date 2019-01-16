@@ -1,5 +1,7 @@
 FROM nginx
 
+RUN apt-get update && apt-get install -yy curl
+
 HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
 
 # Install node, leaving as few artifacts as possible
