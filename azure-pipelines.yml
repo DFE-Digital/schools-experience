@@ -20,5 +20,6 @@ steps:
 - script: sleep 15 # ugly but gives the web app time to boot
   displayName: Pause to allow app to boot
 - script: docker ps
+- script: docker logs smoketest
 - script: docker ps | grep smoketest | grep '(healthy)' || false
   displayName: Check app reports as Healthy
