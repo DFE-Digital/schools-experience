@@ -10,9 +10,10 @@ variables:
   imageName: 'your-container-image-name:$(build.buildId)'
   pgPwd: secret
   group: VARGROUP
+  DATABASE_URL: postgresql://user:pass@server/dbname
 
 steps:
 - script: docker build -f Dockerfile -t $(imageName) .
   displayName: 'docker build'
-- script: docker run -e POSTGRESQL_PASSWORD="$(pgPwd)" -e imageName=$(imageName) ubuntu bash -c "env"
+- script: docker run -e POSTGRESQL_PASSWORD="$(pgPwd)" -e imageName=$(imageName) -e DATABASE_URL ubuntu bash -c "env"
   displayName: 'passing through vars'
