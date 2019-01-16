@@ -8,6 +8,11 @@ gem 'rails', '~> 5.2.2'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
+
+# Take advantage of postgresql's full text indexing
+gem 'pg_search'
+
+# PostGIS adapter for Active Record
 gem 'activerecord-postgis-adapter'
 
 # Use Puma as the app server
