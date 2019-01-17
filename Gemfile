@@ -15,6 +15,8 @@ gem 'pg_search'
 # PostGIS adapter for Active Record
 gem 'activerecord-postgis-adapter'
 
+gem 'geocoder'
+
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 

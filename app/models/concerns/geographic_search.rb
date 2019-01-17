@@ -6,6 +6,8 @@ module GeographicSearch
 
   included do
     scope :close_to, ->(coordinates, radius: 10, column: 'coordinates') do
+      return where(nil) unless coordinates.present?
+
       where("st_dwithin(%<column>s, '%<coordinates>s', %<radius>d)" % {
         column: column,
         coordinates: coordinates,

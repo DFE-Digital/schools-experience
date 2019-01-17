@@ -10,5 +10,13 @@ module FullTextSearch
       using: {
         tsearch: { any_word: true, prefix: true }
       }
+
+    def self.search(query)
+      if query.present?
+        search_by_name(query)
+      else
+        where(nil)
+      end
+    end
   end
 end
