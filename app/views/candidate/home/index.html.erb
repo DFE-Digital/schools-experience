@@ -1,2 +1,79 @@
-<h1>Candidate::Home#index</h1>
-<p>Find me in app/views/candidate/home/index.html.erb</p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">Request school experience placements</h1>
+
+    <p>
+      Use this service if you're interested in becoming a teacher and want 
+      to find and request school experience placements in schools across 
+      England.
+    </p>
+
+    <p>
+      School experience allows you to find out more about teaching by 
+      providing in-school placements within the current academic year.
+    </p>
+
+    <p>
+      It's up to schools to contact you and book you on placements and some 
+      require you to undergo a 
+      <a href="https://www.gov.uk/government/organisations/disclosure-and-barring-service/about">
+        Disclosure and Barring Service (DBS) check
+      </a>.
+    </p>
+
+    <p>
+      This is a safeguarding check to confirm you’re suitable and able to work 
+      with children and young people.
+    </p>
+
+    <p class="govuk-inset-text">
+      This service is only available for placements at primary and secondary 
+      schools in England.
+    </p>
+
+    <%= link_to 'Start now', candidate_schools_path,
+        role:'button',
+        class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' %>
+
+    <h2 class="govuk-heading-m">Before you start</h2>
+
+    <p>
+      To request a school experience placement, you’ll need to provide:
+    </p>
+    
+    <ul class="govuk-list govuk-list--bullet">
+      <li>personal details - including your address</li>
+      <li>contact details - including your email and telephone number</li>
+    </ul>
+
+    <p>
+      You’ll get a confirmation email after you’ve requested a school 
+      experience placement.
+    </p>
+
+    <p class="govuk-inset-text">
+      To help cover costs, some schools charge a fee for placements. You’ll 
+      need to pay any fees direct to the individual schools.
+    </p>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+
+    <aside class="app-related-items" role="complementary">
+      <h2 class="govuk-heading-m" id="subsection-title">
+        Teaching resources
+      </h2>
+      <nav role="navigation" aria-labelledby="subsection-title">
+        <ul class="govuk-list govuk-!-font-size-16">
+          <li>
+            <a href="https://getintoteaching.education.gov.uk/" class="govuk-!-font-weight-bold">
+              Get Into Teaching<span class="govuk-visually-hidden">in Subsection</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+  </div>
+</div>
