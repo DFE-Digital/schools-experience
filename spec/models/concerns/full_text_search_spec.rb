@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'Concerns' do
   describe 'FullTextSearch' do
 
-    context 'Searching by name' do
+    describe '.search_by_name' do
       subject { School }
 
       let!(:primary) { subject.create(name: "Springfield Primary School") }
