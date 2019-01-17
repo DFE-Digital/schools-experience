@@ -48,6 +48,7 @@ group :development, :test do
   gem 'govuk-lint'
 
   # Debugging
+  gem 'pry-rails'
   gem 'pry-byebug'
 
   # Testing framework
