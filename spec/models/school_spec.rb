@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe School, type: :model do
-
   describe 'Scopes' do
     subject { School }
 
@@ -17,5 +16,4 @@ describe School, type: :model do
       it { is_expected.to validate_length_of(:name).is_at_most(128) }
     end
   end
-
 end

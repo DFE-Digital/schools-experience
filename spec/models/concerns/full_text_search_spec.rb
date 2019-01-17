@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe 'Concerns' do
   describe 'FullTextSearch' do
-
     describe '.search_by_name' do
       subject { School }
 
@@ -25,7 +24,6 @@ describe 'Concerns' do
           expect(subject.search_by_name(term)).to include(secondary)
         end
       end
-
     end
   end
 end

@@ -3,7 +3,6 @@ require 'rails_helper'
 describe 'Concerns' do
   describe 'GeographicSearch' do
     describe '.close_to' do
-
       subject { School }
 
       let(:geofactory) { subject::GEOFACTORY }
@@ -36,7 +35,6 @@ describe 'Concerns' do
           expect(subject.close_to(mcr_centre, radius: 50)).to include(leeds_station)
         end
       end
-
     end
   end
 end
