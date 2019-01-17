@@ -9,12 +9,8 @@ module GeographicSearch
       where("st_dwithin(%<column>s, '%<coordinates>s', %<radius>d)" % {
         column: column,
         coordinates: coordinates,
-        radius: miles_to_metres(radius)
+        radius: Conversions::Distance::Miles::ToMetres.convert(radius)
       })
-    end
-
-    def self.miles_to_metres(miles)
-      miles * 1609.344
     end
   end
 end
