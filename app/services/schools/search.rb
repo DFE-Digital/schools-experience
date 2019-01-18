@@ -1,7 +1,7 @@
 class Schools::Search
   # Search for schools based on a query string, location
   # and optional radius. Note, both +.search+ and +.close_to+
-  # will not amend the ActiveRecord::Relation if falsy values
+  # will not amend the +ActiveRecord::Relation+ if falsy values
   # or empty strings (in the case of +.search+) are passed.
   #
   # This means if one is present and not the other, the query will fall
