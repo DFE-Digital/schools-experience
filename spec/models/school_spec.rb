@@ -8,6 +8,11 @@ describe School, type: :model do
       # provided by FullTextSearch
       it { is_expected.to respond_to(:search_by_name) }
     end
+
+    context 'Geographic searching by Coordinates' do
+      # provided by FullTextSearch
+      it { is_expected.to respond_to(:close_to) }
+    end
   end
 
   describe 'Validation' do
