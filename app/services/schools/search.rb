@@ -17,14 +17,9 @@ private
 
   def point(location)
     if (results = Geocoder.search(location)) && results.any?
-      extract_coordinates(results.first)
+      results.first.tap do |r|
+        School::GEOFACTORY.point(r.data.dig('lon'), r.data.dig('lat'))
+      end
     end
-  end
-
-  def extract_coordinates(result)
-    School::GEOFACTORY.point(
-      result.data.dig('lon'),
-      result.data.dig('lat')
-    )
   end
 end
