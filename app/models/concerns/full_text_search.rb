@@ -15,7 +15,7 @@ module FullTextSearch
       if query.present?
         search_by_name(query)
       else
-        where(nil)
+        all
       end
     end
   end
