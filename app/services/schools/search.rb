@@ -16,10 +16,11 @@ class Schools::Search
 private
 
   def point(location)
-    if (results = Geocoder.search(location)) && results.any?
-      results.first.tap do |r|
-        School::GEOFACTORY.point(r.data.dig('lon'), r.data.dig('lat'))
-      end
+    if (result = Geocoder.search(location)&.first)
+      School::GEOFACTORY.point(
+        result.data.dig('lon'),
+        result.data.dig('lat')
+      )
     end
   end
 end
