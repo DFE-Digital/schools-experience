@@ -6,7 +6,6 @@ class Schools::Search
   end
 
 private
-
   def coordinates(location)
     if (results = Geocoder.search(location))
       School::GEOFACTORY.point(*extract_coordinates(results.first))
