@@ -14,8 +14,7 @@ class Candidate::SchoolsController < ApplicationController
 private
 
   def search_params
-    return {} unless params[:candidate_school]
-    params.require(:candidate_school).permit(*Candidate::School.attributes_registry.keys)
+    params.permit(*Candidate::School.attributes_registry.keys)
   end
 
 end

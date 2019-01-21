@@ -20,7 +20,7 @@ RSpec.describe Candidate::SchoolsController, type: :request do
    end
 
     context "With search params" do
-      before { get candidate_schools_path(candidate_school: {query: 'manchester'}) }
+      before { get candidate_schools_path(query: 'manchester') }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)
