@@ -1,0 +1,215 @@
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l">School experience placements near <%= @search.query.to_s.humanize %></h1>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third filter">
+        <div class="govuk-form-group se-filter">
+			<fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+				<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+					<h3 class="govuk-heading-m">
+						Education phase
+					</h3>
+				</legend>
+				<span id="waste-hint" class="govuk-hint">
+					Select all that apply
+				</span>
+				<div class="govuk-checkboxes">
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-1" name="waste" type="checkbox" value="carcasses">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-1">
+							Primary 4 - 11
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-2" name="waste" type="checkbox" value="mines">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-2">
+							Secondary 11- 16
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-3" name="waste" type="checkbox" value="farm">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-3">
+							16 to 18
+						</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="govuk-form-group se-filter">
+			<fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+				<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+					<h3 class="govuk-heading-m">
+						Fees
+					</h3>
+				</legend>
+				<span id="waste-hint" class="govuk-hint">
+					Schools may charge
+				</span>
+				<div class="govuk-radios">
+					<div class="govuk-radios__item">
+						<input class="govuk-radios__input" id="fees1" name="fees" type="radio" value="up to £25">
+						<label class="govuk-label govuk-radios__label" for="where-do-you-live-1">
+							None
+						</label>
+					</div>
+					<div class="govuk-radios__item">
+						<input class="govuk-radios__input" id="fees2" name="fees" type="radio" value="up to £50">
+						<label class="govuk-label govuk-radios__label" for="where-do-you-live-2">
+							up to £30
+						</label>
+					</div>
+					<div class="govuk-radios__item">
+						<input class="govuk-radios__input" id="fees3" name="fees" type="radio" value="up to £75">
+						<label class="govuk-label govuk-radios__label" for="where-do-you-live-3">
+							up to £60
+						</label>
+					</div>
+					<div class="govuk-radios__item">
+						<input class="govuk-radios__input" id="fees4" name="fees" type="radio" value="up to £100">
+						<label class="govuk-label govuk-radios__label" for="where-do-you-live-4">
+							up to £90
+						</label>
+					</div>
+				</div>
+
+			</fieldset>
+		</div>
+
+		<div class="govuk-form-group se-filter">
+			<fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+				<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+					<h3 class="govuk-heading-m">
+						Subject
+					</h3>
+				</legend>
+				<span id="waste-hint" class="govuk-hint">
+					Select all that apply
+				</span>
+				<div class="govuk-checkboxes">
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input fix" id="waste-1" name="waste" type="checkbox" value="carcasses">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-1">
+							Art and design
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input fix" id="waste-2" name="waste" type="checkbox" value="mines">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-2">
+							Combined science
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input fix" id="waste-3" name="waste" type="checkbox" value="farm">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-3">
+							Computer science
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-4" name="waste" type="checkbox" value="farm">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-4">
+							Food preparation and nutrition
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
+							Geography
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
+							History
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
+							Music
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
+							Physical education
+						</label>
+					</div>
+					<div class="govuk-checkboxes__item">
+						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
+						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
+							Religious studies
+						</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+
+    </div>
+
+	<div class="govuk-grid-column-two-thirds results">
+
+		<div class="results-number">
+			Showing 1 - 50 of 165 schools and colleges
+		</div>
+		<div class="pagination-container">
+			<ul class="pagin">
+				<li><a href="">1</a></li>
+				<li><a href="">2</a></li>
+				<li><a href="">3</a></li>
+				<li><a href="">4</a></li>
+				<li><a href="">Next</a></li>
+			</ul>
+		</div>
+
+		<div class="govuk-grid-row">
+
+			<div class="govuk-grid-column-full">
+				<div class="divider"></div>
+				<div class="sortby">
+					<div class="sort-text">Sorted by</div>
+					<div class="drop">
+						<select name="orderby" id="OrderBy" aria-controls="js-search-results-info" class="select">
+							<option value="" selected="">Distance</option>
+							<option value="SCHNAME_sort asc">Alphabetical A - Z</option>
+							<option value="SCHNAME_sort desc">Alphabetical Z - A</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="list">
+					<ul>
+                        <% for result in @search.results %>
+						<li>
+							<div class="school-result">
+								<form action="/candidate-search/search-result-post" title="{{item.Name}}" method="post">
+
+									<input type="submit" name="school-name" value="{{item.Name}}" class="govuk-label link-fix" />
+									<ul>
+										<li>Address: <%= result.address %></li>
+										<li>Education phase: <%= result.phase %></li>
+										<li>Fees: <%= result.fees %></li>
+										<li>School type: <%= result.school_type %></li>
+										<li>Subjects: <%= result.subjects %></li>
+									</ul>
+								</form>
+
+							</div>
+						</li>
+                        <% end %>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+
+
+    </div>
+
+
+
+
+</div>
