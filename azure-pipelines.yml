@@ -9,6 +9,8 @@ variables:
   SECRET_KEY_BASE: stubbed
 
 steps:
+  - script: echo 'Building on the private-registry branch'
+    displayName: Confirm branch
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d postgres
     displayName: Launch Postgres # done early to give it time to boot
   - script: docker build -t $(imageName) .
