@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'Concerns' do
   describe 'GeographicSearch' do
     describe '.close_to' do
-      subject { School }
+      subject { Bookings::School }
 
       let(:geofactory) { subject::GEOFACTORY }
 

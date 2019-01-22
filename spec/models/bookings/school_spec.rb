@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe School, type: :model do
+describe Bookings::School, type: :model do
   describe 'Scopes' do
-    subject { School }
+    subject { Bookings::School }
 
     context 'Full text searching on Name' do
       # provided by FullTextSearch

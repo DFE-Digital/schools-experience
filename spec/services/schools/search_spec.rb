@@ -7,13 +7,13 @@ describe Schools::Search do
     end
 
     let!(:matching_school) do
-      create(:school, name: "Springfield Primary School", coordinates: School::GEOFACTORY.point(-2.241, 53.481))
+      create(:school, name: "Springfield Primary School", coordinates: Bookings::School::GEOFACTORY.point(-2.241, 53.481))
     end
 
     context 'When no conditions are supplied' do
       subject { Schools::Search.new.search('', location: '') }
       specify 'results should include all schools' do
-        expect(subject.count).to eql(School.count)
+        expect(subject.count).to eql(Bookings::School.count)
       end
     end
 
@@ -28,7 +28,7 @@ describe Schools::Search do
       end
 
       let!(:non_matching_school) do
-        create(:school, name: "Pontefract Primary School", coordinates: School::GEOFACTORY.point(-1.548, 53.794))
+        create(:school, name: "Pontefract Primary School", coordinates: Bookings::School::GEOFACTORY.point(-1.548, 53.794))
       end
 
       context 'When text and location are supplied' do
