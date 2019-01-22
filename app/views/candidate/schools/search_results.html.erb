@@ -6,155 +6,25 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third filter">
-        <div class="govuk-form-group se-filter">
-			<fieldset class="govuk-fieldset" aria-describedby="waste-hint">
-				<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-					<h3 class="govuk-heading-m">
-						Education phase
-					</h3>
-				</legend>
-				<span id="waste-hint" class="govuk-hint">
-					Select all that apply
-				</span>
-				<div class="govuk-checkboxes">
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-1" name="waste" type="checkbox" value="carcasses">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-1">
-							Primary 4 - 11
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-2" name="waste" type="checkbox" value="mines">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-2">
-							Secondary 11- 16
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-3" name="waste" type="checkbox" value="farm">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-3">
-							16 to 18
-						</label>
-					</div>
-				</div>
-			</fieldset>
-		</div>
+        <%= form_for @search, as: '', method: :get do |f| %>
+            <%= f.hidden_field :query %>
+            <%= f.hidden_field :distance %>
 
-		<div class="govuk-form-group se-filter">
-			<fieldset class="govuk-fieldset" aria-describedby="waste-hint">
-				<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-					<h3 class="govuk-heading-m">
-						Fees
-					</h3>
-				</legend>
-				<span id="waste-hint" class="govuk-hint">
-					Schools may charge
-				</span>
-				<div class="govuk-radios">
-					<div class="govuk-radios__item">
-						<input class="govuk-radios__input" id="fees1" name="fees" type="radio" value="up to £25">
-						<label class="govuk-label govuk-radios__label" for="where-do-you-live-1">
-							None
-						</label>
-					</div>
-					<div class="govuk-radios__item">
-						<input class="govuk-radios__input" id="fees2" name="fees" type="radio" value="up to £50">
-						<label class="govuk-label govuk-radios__label" for="where-do-you-live-2">
-							up to £30
-						</label>
-					</div>
-					<div class="govuk-radios__item">
-						<input class="govuk-radios__input" id="fees3" name="fees" type="radio" value="up to £75">
-						<label class="govuk-label govuk-radios__label" for="where-do-you-live-3">
-							up to £60
-						</label>
-					</div>
-					<div class="govuk-radios__item">
-						<input class="govuk-radios__input" id="fees4" name="fees" type="radio" value="up to £100">
-						<label class="govuk-label govuk-radios__label" for="where-do-you-live-4">
-							up to £90
-						</label>
-					</div>
-				</div>
+            <%= f.collection_check_boxes :phase, Candidate::School::PHASES, :first, :last %>
 
-			</fieldset>
-		</div>
+            <%= f.radio_button_fieldset :fees, choices: Candidate::School::FEES,
+                                                value_method: :first,
+                                                text_method: :last %>
 
-		<div class="govuk-form-group se-filter">
-			<fieldset class="govuk-fieldset" aria-describedby="waste-hint">
-				<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-					<h3 class="govuk-heading-m">
-						Subject
-					</h3>
-				</legend>
-				<span id="waste-hint" class="govuk-hint">
-					Select all that apply
-				</span>
-				<div class="govuk-checkboxes">
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input fix" id="waste-1" name="waste" type="checkbox" value="carcasses">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-1">
-							Art and design
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input fix" id="waste-2" name="waste" type="checkbox" value="mines">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-2">
-							Combined science
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input fix" id="waste-3" name="waste" type="checkbox" value="farm">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-3">
-							Computer science
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-4" name="waste" type="checkbox" value="farm">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-4">
-							Food preparation and nutrition
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
-							Geography
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
-							History
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
-							Music
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
-							Physical education
-						</label>
-					</div>
-					<div class="govuk-checkboxes__item">
-						<input class="govuk-checkboxes__input" id="waste-5" name="waste" type="checkbox" value="farm">
-						<label class="govuk-label govuk-checkboxes__label" for="waste-5">
-							Religious studies
-						</label>
-					</div>
-				</div>
-			</fieldset>
-		</div>
-
+            <%= f.collection_check_boxes :subject, Candidate::School::SUBJECTS, :to_s, :to_s %>
+        <% end %>
     </div>
 
 	<div class="govuk-grid-column-two-thirds results">
 
-		<div class="results-number">
-			Showing 1 - 50 of 165 schools and colleges
-		</div>
+		<p class="results-number">
+			Showing 1 - <%= @search.results.length %> of <%= @search.total_results %> schools and colleges
+		</p>
 		<div class="pagination-container">
 			<ul class="pagin">
 				<li><a href="">1</a></li>

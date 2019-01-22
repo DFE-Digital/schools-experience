@@ -30,4 +30,15 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  helpers:
+    fieldset:
+      phase: Education phase
+      fees: Fees
+      subject: Subject
+    hint:
+      phase: Select all that apply
+      fees: Schools may charge
+      subject: Select all that apply
+
+
+

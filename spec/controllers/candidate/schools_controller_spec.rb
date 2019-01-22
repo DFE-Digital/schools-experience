@@ -34,6 +34,29 @@ RSpec.describe Candidate::SchoolsController, type: :request do
         expect(response.body).to match(/School experience placements near/i)
       end
     end
+
+    context 'with search and filters' do
+      before do
+        get candidate_schools_path, params: {
+              query: 'manchester',
+              phases: ['16-18'],
+              fees: '<60',
+              subjects: ['Computer science', 'Physical education']
+            }
+      end
+
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "excludes the search form" do
+        expect(response.body).to_not match(/Find.*placements/i)
+      end
+
+      it "excludes the search form" do
+        expect(response.body).to match(/School experience placements near/i)
+      end
+    end
   end
 
   context "GET #show" do
