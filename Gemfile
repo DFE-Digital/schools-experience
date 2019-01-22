@@ -43,7 +43,6 @@ gem 'foreman'
 gem 'canonical-rails'
 
 gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
-gem 'active_model_attributes'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

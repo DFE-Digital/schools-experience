@@ -6,17 +6,17 @@ RSpec.describe Candidates::School do
       @search = Candidates::School.new(
         query: 'this',
         distance: '3',
-        fees: '0',
-        phase: 'X',
-        subject: 'Maths')
+        fees: '>30',
+        phase: ['11-16', '16-18'],
+        subject: ['Maths', 'English'])
     end
 
     it 'assigns attributes' do
       expect(@search.query).to eq('this')
       expect(@search.distance).to eq(3)
-      expect(@search.fees).to eq(false)
-      expect(@search.phase).to eq('X')
-      expect(@search.subject).to eq('Maths')
+      expect(@search.fees).to eq('>30')
+      expect(@search.phase).to eq(['11-16', '16-18'])
+      expect(@search.subject).to eq(['Maths', 'English'])
     end
   end
 

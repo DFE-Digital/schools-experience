@@ -10,7 +10,7 @@ class Candidates::SchoolsController < ApplicationController
 private
 
   def search_params
-    params.permit(*Candidates::School.attributes_registry.keys)
+    params.permit(:query, :distance, :fees, phase: [], subject: [])
   end
 
 end

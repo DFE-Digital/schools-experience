@@ -17,6 +17,8 @@
                                                 text_method: :last %>
 
             <%= f.collection_check_boxes :subject, Candidates::School::SUBJECTS, :to_s, :to_s %>
+
+            <%= f.submit 'Update schools list' %>
         <% end %>
     </div>
 

@@ -1,7 +1,6 @@
 module Candidates
   class School
     include ActiveModel::Model
-    include ActiveModelAttributes
 
     DISTANCES = [
       [1, '1 mile'],
@@ -32,11 +31,13 @@ module Candidates
       'Physical education', 'Religious studies'
     ].freeze
 
-    attribute :query, :string
-    attribute :distance, :integer, default: -> {'3'}
-    attribute :fees, :boolean
-    attribute :subject, :string
-    attribute :phase, :string
+    attr_accessor :query
+    attr_writer :distance
+    attr_accessor :fees, :subject, :phase
+
+    def distance
+      @distance.to_i || 3
+    end
 
     def results
       []
