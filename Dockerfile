@@ -1,7 +1,7 @@
 FROM ruby:2.5
 
-ENV XRAILS_ENV=production \
-    XRAILS_SERVE_STATIC_FILES=true \
+ENV RAILS_ENV=production \
+    RAILS_SERVE_STATIC_FILES=true \
     RAILS_LOG_TO_STDOUT=true
 
 # Install node, leaving as few artifacts as possible
@@ -26,6 +26,8 @@ COPY .ruby-version Gemfile Gemfile.lock /app/
 RUN bundle install
 
 COPY . /app
+
+RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed
 
 EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
