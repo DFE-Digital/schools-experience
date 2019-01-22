@@ -21,7 +21,7 @@ WORKDIR /app
 COPY package.json yarn.lock /app/
 RUN yarn install && yarn cache clean
 
-COPY Gemfile Gemfile.lock /app/
+COPY .ruby-version Gemfile Gemfile.lock /app/
 
 RUN bundle install
 
