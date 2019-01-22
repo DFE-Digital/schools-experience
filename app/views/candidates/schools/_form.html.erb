@@ -1,0 +1,28 @@
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<div class="govuk-form-group">
+            <%= form_for @search, as: '', method: :get do |f| %>
+    			<fieldset class="govuk-fieldset inline-fields">
+    				<legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    					<h1 class="govuk-fieldset__heading">
+    						Find school experience placements
+    					</h1>
+    				</legend>
+    				<p>This service is only available in England</p>
+
+					<span id="search-hint" class="govuk-hint">
+						For example: <strong>Manchester M1 1AD</strong><br/>
+						OR<br/>
+						<strong>Maths, special school, M1 1AD</strong>
+					</span>
+
+                    <%= f.text_field :query, placeholder: 'search' %>
+
+                    <%= f.collection_select :distance, Candidates::School::DISTANCES, :first, :last %>
+
+                    <%= f.submit 'Find' %>
+                </fieldset>
+            <% end %>
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@
 </div>
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third filter">
+    <div class="govuk-grid-column-one-third" id="search-filter">
         <%= form_for @search, as: '', method: :get do |f| %>
             <%= f.hidden_field :query %>
             <%= f.hidden_field :distance %>
@@ -20,7 +20,7 @@
         <% end %>
     </div>
 
-	<div class="govuk-grid-column-two-thirds results">
+	<div class="govuk-grid-column-two-thirds" id="search-results">
 
 		<p class="results-number">
 			Showing 1 - <%= @search.results.length %> of <%= @search.total_results %> schools and colleges
