@@ -18,11 +18,10 @@ RUN mkdir /app
 WORKDIR /app
 
 # install NPM packages removign artifacts
-COPY package.json yarn.lock /app/package.json
+COPY package.json yarn.lock /app/
 RUN yarn install && yarn cache clean
 
-COPY Gemfile /app/Gemfile
-COPY Gemfile.lock /app/Gemfile.lock
+COPY Gemfile Gemfile.lock /app/
 
 RUN bundle install
 
