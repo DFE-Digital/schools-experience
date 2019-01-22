@@ -1,4 +1,4 @@
-module Candidate
+module Candidates
   class School
     include ActiveModel::Model
     include ActiveModelAttributes

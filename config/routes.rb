@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get "/pages/:page", to: "pages#show"
   root to: 'candidate/home#index'
 
-  namespace :candidate do
+  namespace :candidates do
     root to: 'home#index'
 
     resources :schools, only: [:index, :show] do

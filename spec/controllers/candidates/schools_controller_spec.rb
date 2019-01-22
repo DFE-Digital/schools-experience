@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Candidate::SchoolsController, type: :request do
+RSpec.describe Candidates::SchoolsController, type: :request do
 
  context "GET #index" do
    context "Without search params" do
-     before { get candidate_schools_path }
+     before { get candidates_schools_path }
 
      it "returns http success" do
        expect(response).to have_http_status(:success)
@@ -20,7 +20,7 @@ RSpec.describe Candidate::SchoolsController, type: :request do
    end
 
     context "With search params" do
-      before { get candidate_schools_path(query: 'manchester') }
+      before { get candidates_schools_path(query: 'manchester') }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)
@@ -37,7 +37,7 @@ RSpec.describe Candidate::SchoolsController, type: :request do
 
     context 'with search and filters' do
       before do
-        get candidate_schools_path, params: {
+        get candidates_schools_path, params: {
               query: 'manchester',
               phases: ['16-18'],
               fees: '<60',

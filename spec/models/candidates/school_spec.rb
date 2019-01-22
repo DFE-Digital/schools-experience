@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Candidate::School do
+RSpec.describe Candidates::School do
   context '.new' do
     before do
-      @search = Candidate::School.new(
+      @search = Candidates::School.new(
         query: 'this',
         distance: '3',
         fees: '0',
@@ -21,7 +21,7 @@ RSpec.describe Candidate::School do
   end
 
   context '.results' do
-    before { @search = Candidate::School.new(query: 'Test School') }
+    before { @search = Candidates::School.new(query: 'Test School') }
 
     it 'returns stubbed array' do
       expect(@search.results).to eq([])
@@ -30,7 +30,7 @@ RSpec.describe Candidate::School do
 
   context '.filtering_results' do
     context 'for blank search' do
-      before { @search = Candidate::School.new }
+      before { @search = Candidates::School.new }
 
       it "will be false" do
         expect(@search.filtering_results?).to be_falsey
@@ -38,7 +38,7 @@ RSpec.describe Candidate::School do
     end
 
     context 'for valid search' do
-      before { @search = Candidate::School.new(query:"test") }
+      before { @search = Candidates::School.new(query:"test") }
 
       it "will be true" do
         expect(@search.filtering_results?).to be_truthy
