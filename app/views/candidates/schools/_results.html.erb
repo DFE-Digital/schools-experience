@@ -6,7 +6,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third" id="search-filter">
-        <%= form_for @search, as: '', method: :get do |f| %>
+        <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
             <%= f.hidden_field :query %>
             <%= f.hidden_field :distance %>
 
