@@ -1,4 +1,4 @@
-class Bookings::Search
+class Bookings::SchoolSearch
   # Search for schools based on a query string, location
   # and optional radius. Note, both +.search+ and +.close_to+
   # will not amend the +ActiveRecord::Relation+ if falsy values
