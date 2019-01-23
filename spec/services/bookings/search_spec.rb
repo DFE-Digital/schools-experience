@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Schools::Search do
+describe Bookings::Search do
   describe '#search' do
     before do
       allow(Geocoder).to receive(:search).and_return([])
@@ -11,7 +11,7 @@ describe Schools::Search do
     end
 
     context 'When no conditions are supplied' do
-      subject { Schools::Search.new.search('', location: '') }
+      subject { Bookings::Search.new.search('', location: '') }
       specify 'results should include all schools' do
         expect(subject.count).to eql(Bookings::School.count)
       end
@@ -32,7 +32,7 @@ describe Schools::Search do
       end
 
       context 'When text and location are supplied' do
-        subject { Schools::Search.new.search('Springfield', location: 'Manchester') }
+        subject { Bookings::Search.new.search('Springfield', location: 'Manchester') }
 
         specify 'results should include matching records' do
           expect(subject).to include(matching_school)
@@ -44,7 +44,7 @@ describe Schools::Search do
       end
 
       context 'When only text is supplied' do
-        subject { Schools::Search.new.search('Springfield') }
+        subject { Bookings::Search.new.search('Springfield') }
 
         let!(:matching_school) do
           create(:school, name: "Springfield Primary School")
@@ -60,7 +60,7 @@ describe Schools::Search do
       end
 
       context 'When only a location is supplied' do
-        subject { Schools::Search.new.search('', location: 'Manchester') }
+        subject { Bookings::Search.new.search('', location: 'Manchester') }
 
         let!(:matching_school) do
           create(:school, name: "Springfield Primary School")
@@ -78,7 +78,7 @@ describe Schools::Search do
 
     context 'When GeoCoder finds no location' do
       context 'When the query matches a school' do
-        subject { Schools::Search.new.search('Springfield', location: 'Madrid') }
+        subject { Bookings::Search.new.search('Springfield', location: 'Madrid') }
 
         specify 'results should include records that match the query' do
           expect(subject).to include(matching_school)
@@ -86,7 +86,7 @@ describe Schools::Search do
       end
 
       context 'When the query does not match a school' do
-        subject { Schools::Search.new.search('William McKinley High', location: 'Chippewa, Michigan') }
+        subject { Bookings::Search.new.search('William McKinley High', location: 'Chippewa, Michigan') }
 
         specify 'results should include records that match the query' do
           expect(subject).to be_empty
