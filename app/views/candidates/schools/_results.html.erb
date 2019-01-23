@@ -1,3 +1,5 @@
+<%= link_to 'Back', candidates_schools_path, class: 'govuk-back-link' %>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-l">School experience placements near <%= @search.query.to_s.humanize %></h1>
@@ -5,7 +7,7 @@
 </div>
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third" id="search-filter">
+    <div class="govuk-grid-column-one-third filter-list" id="search-filter">
         <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
             <%= f.hidden_field :query %>
             <%= f.hidden_field :distance %>

@@ -8,3 +8,7 @@
     margin-right: 0.4em;
   }
 }
+
+.filter-list fieldset legend span.govuk-label {
+  @extend %govuk-heading-m ;
+}
