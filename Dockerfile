@@ -4,6 +4,14 @@ ENV RAILS_ENV=production \
     RAILS_SERVE_STATIC_FILES=true \
     RAILS_LOG_TO_STDOUT=true
 
+RUN mkdir /app
+WORKDIR /app
+
+EXPOSE 3000
+ENTRYPOINT ["bundle", "exec"]
+CMD ["rails", "server" ]
+HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1
+
 # Install node, leaving as few artifacts as possible
 RUN apt-get update && apt-get install apt-transport-https && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -14,31 +22,16 @@ RUN apt-get update && apt-get install apt-transport-https && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/dpkg.log
 
-RUN mkdir /app
-WORKDIR /app
-
 # install NPM packages removign artifacts
-COPY package.json yarn.lock /app/
+COPY package.json yarn.lock ./
 RUN yarn install && yarn cache clean
 
-COPY .ruby-version Gemfile Gemfile.lock /app/
-
-RUN bundle install
-
-COPY . /app
-
-RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed
-
-EXPOSE 3000
-ENTRYPOINT ["bundle", "exec"]
-
-# Start the main process.
-CMD ["rails", "server", "-b", "0.0.0.0"]
-
-HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1
-
 # Install Gems removing artifacts
-#COPY .ruby-version Gemfile Gemfile.lock ./
-#RUN bundle install --without development --jobs=$(nproc --all) && \
-#    rm -rf /root/.bundle/cache && \
-#    rm -rf /usr/local/bundle/cache
+COPY .ruby-version Gemfile Gemfile.lock ./
+RUN bundle install --without development --jobs=$(nproc --all) && \
+    rm -rf /root/.bundle/cache && \
+    rm -rf /usr/local/bundle/cache
+
+# Add code and compile assets
+COPY . .
+RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed
