@@ -42,7 +42,3 @@ HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1
 #RUN bundle install --without development --jobs=$(nproc --all) && \
 #    rm -rf /root/.bundle/cache && \
 #    rm -rf /usr/local/bundle/cache
-
-# Add code and compile assets
-#COPY . .
-#RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed
