@@ -40,7 +40,33 @@ module Candidates
     end
 
     def results
-      []
+      school = Struct.new(:name, :address, :phase, :fees, :school_type, :subjects)
+      [
+        school.new(
+          "Abbey College",
+          'Long Millgate, Manchester',
+          'Primary',
+          'Independent School',
+          '£50',
+          ['Maths', 'English', 'Art', 'Physics', 'Geography'],
+        ),
+        school.new(
+          "Chetham's School of Music",
+          'Long Millgate, Manchester',
+          'Primary',
+          'Independent School',
+          '£0',
+          ['Maths', 'English', 'Art', 'Physics', 'Music'],
+        ),
+        school.new(
+          "The Creative Studio",
+          '16 Blossom Street, Manchester',
+          'Primary',
+          'Academy',
+          '£5',
+          ['Maths', 'Art', 'Physics', 'Geography'],
+        )
+      ]
     end
 
     def filtering_results?

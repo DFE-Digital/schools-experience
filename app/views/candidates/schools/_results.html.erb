@@ -54,28 +54,21 @@
 					</div>
 				</div>
 
-				<div class="list">
-					<ul>
-                        <% for result in @search.results %>
-						<li>
-							<div class="school-result">
-								<form action="/candidate-search/search-result-post" title="{{item.Name}}" method="post">
 
-									<input type="submit" name="school-name" value="{{item.Name}}" class="govuk-label link-fix" />
-									<ul>
-										<li>Address: <%= result.address %></li>
-										<li>Education phase: <%= result.phase %></li>
-										<li>Fees: <%= result.fees %></li>
-										<li>School type: <%= result.school_type %></li>
-										<li>Subjects: <%= result.subjects %></li>
-									</ul>
-								</form>
-
-							</div>
-						</li>
-                        <% end %>
-					</ul>
-				</div>
+				<ul>
+                    <% @search.results.each_with_index do |result, index| %>
+					<li class="school-result">
+                        <strong><%= link_to result.name, candidates_school_path(index + 1) %></strong>
+						<ul>
+							<li><strong>Address:</strong> <%= result.address %></li>
+							<li><strong>Education </strong>phase: <%= result.phase %></li>
+							<li><strong>Fees:</strong> <%= result.fees %></li>
+							<li><strong>School type:</strong> <%= result.school_type %></li>
+							<li><strong>Subjects:</strong> <%= result.subjects.to_sentence %></li>
+						</ul>
+					</li>
+                    <% end %>
+				</ul>
 			</div>
 
 		</div>

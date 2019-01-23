@@ -24,7 +24,7 @@ RSpec.describe Candidates::School do
     before { @search = Candidates::School.new(query: 'Test School') }
 
     it 'returns stubbed array' do
-      expect(@search.results).to eq([])
+      expect(@search.results).to be_kind_of Array
     end
   end
 
