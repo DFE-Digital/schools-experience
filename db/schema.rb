@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2019_01_22_103053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
+
+  create_table "bookings_schools", force: :cascade do |t|
+    t.string "name", limit: 128, null: false
+    t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
+    t.index ["name"], name: "index_bookings_schools_on_name"
+  end
 
 end

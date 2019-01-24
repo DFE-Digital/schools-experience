@@ -9,6 +9,14 @@ gem 'rails', '~> 5.2.2'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 
+# Take advantage of postgresql's full text indexing
+gem 'pg_search'
+
+# PostGIS adapter for Active Record
+gem 'activerecord-postgis-adapter'
+
+gem 'geocoder'
+
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 
@@ -42,10 +50,12 @@ group :development, :test do
   gem 'govuk-lint'
 
   # Debugging
+  gem 'pry-rails'
   gem 'pry-byebug'
 
   # Testing framework
   gem 'rspec-rails', '~> 3.8'
+  gem 'factory_bot_rails'
 
   gem 'dotenv-rails'
 
@@ -72,6 +82,9 @@ group :test do
 
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
+
+  gem 'shoulda-matchers', '4.0.0.rc1'
+  gem 'rails-controller-testing'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
