@@ -1,0 +1,4 @@
+body {
+  @include govuk-text-colour;
+  @include govuk-font($size: 16);
+}
