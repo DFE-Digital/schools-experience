@@ -1,6 +1,51 @@
 require 'rails_helper'
 
 describe Bookings::School, type: :model do
+  describe 'Validation' do
+    context 'Name' do
+      it { is_expected.to validate_presence_of(:name) }
+      it { is_expected.to validate_length_of(:name).is_at_most(128) }
+    end
+  end
+
+  describe 'Relationships' do
+    specify do
+      is_expected.to(
+        have_many(:bookings_schools_subjects)
+          .class_name("Bookings::SchoolsSubject")
+          .with_foreign_key(:bookings_school_id)
+          .inverse_of(:bookings_school)
+      )
+    end
+
+    specify do
+      is_expected.to(
+        have_many(:subjects)
+          .through(:bookings_schools_subjects)
+          .class_name("Bookings::Subject")
+          .source(:bookings_subject)
+      )
+    end
+
+    specify do
+      is_expected.to(
+        have_many(:bookings_schools_phases)
+          .class_name("Bookings::SchoolsPhase")
+          .with_foreign_key(:bookings_school_id)
+          .inverse_of(:bookings_school)
+      )
+    end
+
+    specify do
+      is_expected.to(
+        have_many(:phases)
+          .through(:bookings_schools_phases)
+          .class_name("Bookings::Phase")
+          .source(:bookings_phase)
+      )
+    end
+  end
+
   describe 'Scopes' do
     subject { Bookings::School }
 
@@ -55,51 +100,6 @@ describe Bookings::School, type: :model do
           end
         end
       end
-    end
-  end
-
-  describe 'Validation' do
-    context 'Name' do
-      it { is_expected.to validate_presence_of(:name) }
-      it { is_expected.to validate_length_of(:name).is_at_most(128) }
-    end
-  end
-
-  describe 'Relationships' do
-    specify do
-      is_expected.to(
-        have_many(:bookings_schools_subjects)
-          .class_name("Bookings::SchoolsSubject")
-          .with_foreign_key(:bookings_school_id)
-          .inverse_of(:bookings_school)
-      )
-    end
-
-    specify do
-      is_expected.to(
-        have_many(:subjects)
-          .through(:bookings_schools_subjects)
-          .class_name("Bookings::Subject")
-          .source(:bookings_subject)
-      )
-    end
-
-    specify do
-      is_expected.to(
-        have_many(:bookings_schools_phases)
-          .class_name("Bookings::SchoolsPhase")
-          .with_foreign_key(:bookings_school_id)
-          .inverse_of(:bookings_school)
-      )
-    end
-
-    specify do
-      is_expected.to(
-        have_many(:phases)
-          .through(:bookings_schools_phases)
-          .class_name("Bookings::Phase")
-          .source(:bookings_phase)
-      )
     end
   end
 end
