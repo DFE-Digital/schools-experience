@@ -64,22 +64,22 @@ describe Bookings::School, type: :model do
       let!(:school_b) { create(:bookings_school) }
       let!(:school_c) { create(:bookings_school) }
 
-      let!(:maths) { create(:bookings_subject, name: "Maths") }
-      let!(:physics) { create(:bookings_subject, name: "Physics") }
-      let!(:chemistry) { create(:bookings_subject, name: "Chemistry") }
-      let!(:biology) { create(:bookings_subject, name: "Biology") }
-
-      before do
-        school_a.subjects << [maths, physics]
-        school_b.subjects << [maths, chemistry]
-        school_c.subjects << [biology]
-      end
-
       context 'By subject' do
+        let!(:maths) { create(:bookings_subject, name: "Maths") }
+        let!(:physics) { create(:bookings_subject, name: "Physics") }
+        let!(:chemistry) { create(:bookings_subject, name: "Chemistry") }
+        let!(:biology) { create(:bookings_subject, name: "Biology") }
+
+        before do
+          school_a.subjects << [maths, physics]
+          school_b.subjects << [maths, chemistry]
+          school_c.subjects << [biology]
+        end
+
         context 'when no subjects are supplied' do
           specify 'all schools should be returned' do
-            [nil, "", []].each do |term|
-              expect(subject.that_provide(term)).to include(school_a, school_b, school_c)
+            [nil, "", []].each do |empty|
+              expect(subject.that_provide(empty)).to include(school_a, school_b, school_c)
             end
           end
         end
@@ -96,6 +96,40 @@ describe Bookings::School, type: :model do
               [maths, biology]     => [school_a, school_b, school_c]
             }.each do |subjects, results|
               expect(subject.that_provide(subjects)).to match_array(results)
+            end
+          end
+        end
+      end
+
+      context 'By phase' do
+        let!(:primary) { create(:bookings_phase, name: "Primary") }
+        let!(:secondary) { create(:bookings_phase, name: "Secondary") }
+        let!(:college) { create(:bookings_phase, name: "College") }
+
+        before do
+          school_a.phases << [primary]
+          school_b.phases << [primary, secondary]
+          school_c.phases << [college]
+        end
+
+        context 'when no phases are supplied' do
+          specify 'all schools should be returned' do
+            [nil, "", []].each do |empty|
+              expect(subject.at_phase(empty)).to include(school_a, school_b, school_c)
+            end
+          end
+        end
+
+        context 'when one or more phases are supplied' do
+          specify 'all schools that match any provided phase are returned' do
+            {
+              primary              => [school_a, school_b],
+              secondary            => [school_b],
+              college              => [school_c],
+              [primary, college]   => [school_a, school_b, school_c],
+              [secondary, college] => [school_b, school_c]
+            }.each do |phases, results|
+              expect(subject.at_phase(phases)).to match_array(results)
             end
           end
         end

@@ -33,4 +33,12 @@ class Bookings::School < ApplicationRecord
       all
     end
   end
+
+  scope :at_phase, ->(phase_ids) do
+    if phase_ids.present?
+      joins(:phases).merge(Bookings::Phase.where(id: phase_ids)).distinct
+    else
+      all
+    end
+  end
 end
