@@ -21,4 +21,24 @@ describe Bookings::School, type: :model do
       it { is_expected.to validate_length_of(:name).is_at_most(128) }
     end
   end
+
+  describe 'Relationships' do
+    specify do
+      is_expected.to(
+        have_many(:bookings_schools_subjects)
+          .class_name("Bookings::SchoolsSubject")
+          .with_foreign_key(:bookings_school_id)
+          .inverse_of(:bookings_school)
+      )
+    end
+
+    specify do
+      is_expected.to(
+        have_many(:subjects)
+          .through(:bookings_schools_subjects)
+          .class_name("Bookings::Subject")
+          .source(:bookings_subject)
+      )
+    end
+  end
 end

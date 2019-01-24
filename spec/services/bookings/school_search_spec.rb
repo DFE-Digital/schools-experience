@@ -7,7 +7,7 @@ describe Bookings::SchoolSearch do
     end
 
     let!(:matching_school) do
-      create(:school, name: "Springfield Primary School", coordinates: Bookings::School::GEOFACTORY.point(-2.241, 53.481))
+      create(:bookings_school, name: "Springfield Primary School", coordinates: Bookings::School::GEOFACTORY.point(-2.241, 53.481))
     end
 
     context 'When no conditions are supplied' do
@@ -28,7 +28,7 @@ describe Bookings::SchoolSearch do
       end
 
       let!(:non_matching_school) do
-        create(:school, name: "Pontefract Primary School", coordinates: Bookings::School::GEOFACTORY.point(-1.548, 53.794))
+        create(:bookings_school, name: "Pontefract Primary School", coordinates: Bookings::School::GEOFACTORY.point(-1.548, 53.794))
       end
 
       context 'When text and location are supplied' do
@@ -47,7 +47,7 @@ describe Bookings::SchoolSearch do
         subject { Bookings::SchoolSearch.new.search('Springfield') }
 
         let!(:matching_school) do
-          create(:school, name: "Springfield Primary School")
+          create(:bookings_school, name: "Springfield Primary School")
         end
 
         specify 'results should include matching records' do
@@ -63,7 +63,7 @@ describe Bookings::SchoolSearch do
         subject { Bookings::SchoolSearch.new.search('', location: 'Manchester') }
 
         let!(:matching_school) do
-          create(:school, name: "Springfield Primary School")
+          create(:bookings_school, name: "Springfield Primary School")
         end
 
         specify 'results should include matching records' do
