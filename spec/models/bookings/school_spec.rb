@@ -83,5 +83,23 @@ describe Bookings::School, type: :model do
           .source(:bookings_subject)
       )
     end
+
+    specify do
+      is_expected.to(
+        have_many(:bookings_schools_phases)
+          .class_name("Bookings::SchoolsPhase")
+          .with_foreign_key(:bookings_school_id)
+          .inverse_of(:bookings_school)
+      )
+    end
+
+    specify do
+      is_expected.to(
+        have_many(:phases)
+          .through(:bookings_schools_phases)
+          .class_name("Bookings::Phase")
+          .source(:bookings_phase)
+      )
+    end
   end
 end

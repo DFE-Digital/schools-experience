@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_24_124111) do
+ActiveRecord::Schema.define(version: 2019_01_24_145221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "bookings_phases", force: :cascade do |t|
+    t.string "name", limit: 32
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_bookings_phases_on_name"
+  end
 
   create_table "bookings_schools", force: :cascade do |t|
     t.string "name", limit: 128, null: false
@@ -23,6 +30,13 @@ ActiveRecord::Schema.define(version: 2019_01_24_124111) do
     t.datetime "updated_at", null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
+  end
+
+  create_table "bookings_schools_phases", force: :cascade do |t|
+    t.integer "bookings_school_id", null: false
+    t.integer "bookings_phase_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "bookings_schools_subjects", force: :cascade do |t|
@@ -40,6 +54,8 @@ ActiveRecord::Schema.define(version: 2019_01_24_124111) do
     t.index ["name"], name: "index_bookings_subjects_on_name"
   end
 
+  add_foreign_key "bookings_schools_phases", "bookings_phases"
+  add_foreign_key "bookings_schools_phases", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_subjects"
 end
