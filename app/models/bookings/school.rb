@@ -15,4 +15,12 @@ class Bookings::School < ApplicationRecord
     class_name: "Bookings::Subject",
     through: :bookings_schools_subjects,
     source: :bookings_subject
+
+  scope :that_provide, ->(subject_ids) do
+    if subject_ids.present?
+      joins(:subjects).merge(Bookings::Subject.where(id: subject_ids)).distinct
+    else
+      all
+    end
+  end
 end

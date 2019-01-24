@@ -10,6 +10,7 @@ RSpec.describe Bookings::SchoolsSubject, type: :model do
     context '#bookings_school_id' do
       it { is_expected.to validate_presence_of(:bookings_school_id) }
     end
+
     context '#bookings_subject_id' do
       it { is_expected.to validate_presence_of(:bookings_subject_id) }
 
