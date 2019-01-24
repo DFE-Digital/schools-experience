@@ -134,6 +134,30 @@ describe Bookings::School, type: :model do
           end
         end
       end
+
+      context 'By fees' do
+        let!(:school_a) { create(:bookings_school, fee: nil) }
+        let!(:school_b) { create(:bookings_school, fee: 20) }
+        let!(:school_c) { create(:bookings_school, fee: 40) }
+
+        specify 'should return all schools when no amount provided' do
+          [nil, "", []].each do |empty|
+            expect(subject.costing_upto(empty)).to include(school_a, school_b, school_c)
+          end
+        end
+
+        specify 'should return all schools with no fee when amount provided' do
+          expect(subject.costing_upto(20)).to include(school_a)
+        end
+
+        specify 'should return all schools with a lower equal fee when amount provided' do
+          expect(subject.costing_upto(20)).to include(school_b)
+        end
+
+        specify 'should not return schools with a higher fee than provided amount' do
+          expect(subject.costing_upto(20)).not_to include(school_c)
+        end
+      end
     end
   end
 end

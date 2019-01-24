@@ -41,4 +41,12 @@ class Bookings::School < ApplicationRecord
       all
     end
   end
+
+  scope :costing_upto, ->(amount) do
+    if amount.present?
+      where(arel_table[:fee].lteq(amount)).or(where(fee: nil))
+    else
+      all
+    end
+  end
 end
