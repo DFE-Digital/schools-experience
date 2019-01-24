@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_103053) do
+ActiveRecord::Schema.define(version: 2019_01_24_100749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(version: 2019_01_22_103053) do
     t.datetime "updated_at", null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
+  end
+
+  create_table "bookings_subjects", force: :cascade do |t|
+    t.string "name", limit: 64
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_bookings_subjects_on_name"
   end
 
 end
