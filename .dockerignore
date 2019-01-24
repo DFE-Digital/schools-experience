@@ -27,7 +27,5 @@ yarn-debug.log*
 # Ignore .env file
 .env
 
-config/database.yml
-
 # Ignore git repo
 .git
