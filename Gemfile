@@ -58,6 +58,8 @@ group :development, :test do
   gem 'factory_bot_rails'
 
   gem 'dotenv-rails'
+
+  gem 'brakeman', github: 'presidentbeef/brakeman'
 end
 
 group :development do
