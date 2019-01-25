@@ -218,6 +218,7 @@ describe Bookings::SchoolSearch do
           expect(subject.map(&:name)).to eql([mcr_school, leeds_school, york_school, glasgow_school].map(&:name))
         end
       end
+
       context 'Fee ordering' do
         let!(:reasonable) { create(:bookings_school, name: "Cheap", fee: 15) }
         let!(:cheap) { create(:bookings_school, name: "Cheap", fee: 0) }
