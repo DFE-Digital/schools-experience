@@ -18,7 +18,15 @@ module GeographicSearch
     # @return [School::ActiveRecord_Relation] All matching records
     scope :close_to, ->(point, radius: 10, column: 'coordinates') do
       if point.present?
-        where("st_dwithin(%<column>s, '%<coordinates>s', %<radius>d)" % {
+        select(
+          [
+            "bookings_schools.*",
+            "st_distance(%<source>s, '%<destination>s', false) as distance" % {
+              source: "coordinates",
+              destination: point.to_s
+            }
+          ]
+        ).where("st_dwithin(%<column>s, '%<coordinates>s', %<radius>d)" % {
           column: column,
           coordinates: point,
           radius: Conversions::Distance::Miles::ToMetres.convert(radius)
