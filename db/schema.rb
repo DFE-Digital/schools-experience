@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_25_085522) do
+ActiveRecord::Schema.define(version: 2019_01_25_134528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 2019_01_25_085522) do
     t.string "name", limit: 64
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_bookings_subjects_on_name"
+    t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
   end
 
   add_foreign_key "bookings_schools_phases", "bookings_phases"

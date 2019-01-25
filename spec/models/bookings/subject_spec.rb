@@ -9,6 +9,11 @@ RSpec.describe Bookings::Subject, type: :model do
           .is_at_least(2)
           .is_at_most(64)
       end
+
+      context 'Uniqueness' do
+        subject { create(:bookings_subject) }
+        it { is_expected.to validate_uniqueness_of(:name) }
+      end
     end
   end
 
