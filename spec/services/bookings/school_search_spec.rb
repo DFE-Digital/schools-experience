@@ -220,9 +220,9 @@ describe Bookings::SchoolSearch do
       end
 
       context 'Fee ordering' do
-        let!(:reasonable) { create(:bookings_school, name: "Cheap", fee: 15) }
+        let!(:reasonable) { create(:bookings_school, name: "Reasonable", fee: 15) }
         let!(:cheap) { create(:bookings_school, name: "Cheap", fee: 0) }
-        let!(:expensive) { create(:bookings_school, name: "Cheap", fee: 30) }
+        let!(:expensive) { create(:bookings_school, name: "Expensive", fee: 30) }
 
         subject do
           Bookings::SchoolSearch.new('', requested_order: 'fee').results
