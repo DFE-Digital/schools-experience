@@ -6,6 +6,11 @@ describe Bookings::School, type: :model do
       it { is_expected.to validate_presence_of(:name) }
       it { is_expected.to validate_length_of(:name).is_at_most(128) }
     end
+
+    context 'Fee' do
+      it { is_expected.to validate_presence_of(:fee) }
+      it { is_expected.to validate_numericality_of(:fee).is_greater_than_or_equal_to(0) }
+    end
   end
 
   describe 'Relationships' do
@@ -136,7 +141,7 @@ describe Bookings::School, type: :model do
       end
 
       context 'By fees' do
-        let!(:school_a) { create(:bookings_school, fee: nil) }
+        let!(:school_a) { create(:bookings_school, fee: 0) }
         let!(:school_b) { create(:bookings_school, fee: 20) }
         let!(:school_c) { create(:bookings_school, fee: 40) }
 
@@ -151,7 +156,7 @@ describe Bookings::School, type: :model do
         end
 
         specify 'should return all schools with a lower equal fee when amount provided' do
-          expect(subject.costing_upto(20)).to include(school_b)
+          expect(subject.costing_upto(20)).to include(school_a, school_b)
         end
 
         specify 'should not return schools with a higher fee than provided amount' do

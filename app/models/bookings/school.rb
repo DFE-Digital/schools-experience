@@ -6,6 +6,10 @@ class Bookings::School < ApplicationRecord
     presence: true,
     length: { maximum: 128 }
 
+  validates :fee,
+    presence: true,
+    numericality: { greater_than_or_equal_to: 0, only_integer: true }
+
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
     inverse_of: :bookings_school,
@@ -44,7 +48,7 @@ class Bookings::School < ApplicationRecord
 
   scope :costing_upto, ->(amount) do
     if amount.present?
-      where(arel_table[:fee].lteq(amount)).or(where(fee: nil))
+      where(arel_table[:fee].lteq(amount))
     else
       all
     end
