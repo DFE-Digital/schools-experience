@@ -1,0 +1,36 @@
+Request school experience placement
+
+<%= form_for @placement do |f| %>
+  <div>
+    <%= f.label :date_start, 'Start Date' %>
+    <%= f.date_field :date_start %>
+    <%= f.object.errors[:date_start].join('  ') %>
+  </div>
+
+  <div>
+    <%= f.label :date_end, 'End Date' %>
+    <%= f.date_field :date_end %>
+    <%= f.object.errors[:date_end].join('  ') %>
+  </div>
+
+  <div>
+    <%= f.label :objectives %>
+    <%= f.text_field :objectives %>
+    <%= f.object.errors[:objectives].join('  ') %>
+  </div>
+
+  <div>
+    <%= f.radio_button :access_needs, '1' %>
+    <%= f.label :access_needs, 'Yes', value: '1' %>
+    <%= f.radio_button :access_needs, '0' %>
+    <%= f.label :access_needs, 'No', value: '0' %>
+    <%= f.label :access_needs_details %>
+    <%= f.text_field :access_needs_details %>
+    <%= f.object.errors[:access_needs].join('  ') %>
+  </div>
+
+  <div>
+    <%= f.submit 'Continue' %>
+  </div>
+<% end %>
+
