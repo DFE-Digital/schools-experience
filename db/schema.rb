@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_25_134528) do
+ActiveRecord::Schema.define(version: 2019_01_25_144531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
 
   create_table "bookings_phases", force: :cascade do |t|
-    t.string "name", limit: 32
+    t.string "name", limit: 32, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_bookings_phases_on_name"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2019_01_25_134528) do
   end
 
   create_table "bookings_subjects", force: :cascade do |t|
-    t.string "name", limit: 64
+    t.string "name", limit: 64, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
