@@ -20,10 +20,10 @@ module GeographicSearch
       if point.present?
         select(
           [
-            "bookings_schools.*",
+            arel_table[Arel.star],
             "st_distance(%<source>s, '%<destination>s', false) as distance" % {
-              source: "coordinates",
-              destination: point.to_s
+              source: column,
+              destination: point
             }
           ]
         ).where("st_dwithin(%<column>s, '%<coordinates>s', %<radius>d)" % {
