@@ -7,7 +7,21 @@ describe Bookings::SchoolSearch do
     end
 
     let!(:matching_school) do
-      create(:bookings_school, name: "Springfield Primary School", coordinates: Bookings::School::GEOFACTORY.point(-2.241, 53.481))
+      create(
+        :bookings_school,
+        name: "Springfield Primary School",
+        coordinates: Bookings::School::GEOFACTORY.point(-2.241, 53.481),
+        fee: 10
+      )
+    end
+
+    let!(:non_matching_school) do
+      create(
+        :bookings_school,
+        name: "Pontefract Primary School",
+        coordinates: Bookings::School::GEOFACTORY.point(-1.548, 53.794),
+        fee: 30
+      )
     end
 
     context 'When no conditions are supplied' do
@@ -25,10 +39,6 @@ describe Bookings::SchoolSearch do
             OpenStruct.new(data: { "lat" => "53.476", "lon" => "-2.229" })
           ]
         )
-      end
-
-      let!(:non_matching_school) do
-        create(:bookings_school, name: "Pontefract Primary School", coordinates: Bookings::School::GEOFACTORY.point(-1.548, 53.794))
       end
 
       context 'When text and location are supplied' do
@@ -90,6 +100,61 @@ describe Bookings::SchoolSearch do
 
         specify 'results should include records that match the query' do
           expect(subject).to be_empty
+        end
+      end
+    end
+
+    context 'Filtering' do
+      # subjects
+      let(:maths) { create(:bookings_subject, name: "Maths") }
+      let(:physics) { create(:bookings_subject, name: "Physics") }
+      # phases
+      let(:college) { create(:bookings_phase, name: "College") }
+      let(:secondary) { create(:bookings_phase, name: "Secondary") }
+
+      context 'Filtering on subjects' do
+        before do
+          matching_school.subjects << maths
+          non_matching_school.subjects << physics
+        end
+
+        subject { Bookings::SchoolSearch.new.search('', location: '', subject_ids: maths) }
+
+        specify 'should return matching results' do
+          expect(subject).to include(matching_school)
+        end
+
+        specify 'should omit non-matching results' do
+          expect(subject).not_to include(non_matching_school)
+        end
+      end
+
+      context 'Filtering on phases' do
+        before do
+          matching_school.phases << college
+          non_matching_school.phases << secondary
+        end
+
+        subject { Bookings::SchoolSearch.new.search('', location: '', phase_ids: college) }
+
+        specify 'should return matching results' do
+          expect(subject).to include(matching_school)
+        end
+
+        specify 'should omit non-matching results' do
+          expect(subject).not_to include(non_matching_school)
+        end
+      end
+
+      context 'Filtering on fees' do
+        subject { Bookings::SchoolSearch.new.search('', location: '', max_fee: 20) }
+
+        specify 'should return matching results' do
+          expect(subject).to include(matching_school)
+        end
+
+        specify 'should omit non-matching results' do
+          expect(subject).not_to include(non_matching_school)
         end
       end
     end

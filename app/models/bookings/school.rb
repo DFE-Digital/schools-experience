@@ -38,7 +38,7 @@ class Bookings::School < ApplicationRecord
     end
   end
 
-  scope :at_phase, ->(phase_ids) do
+  scope :at_phases, ->(phase_ids) do
     if phase_ids.present?
       joins(:phases).merge(Bookings::Phase.where(id: phase_ids)).distinct
     else
@@ -46,9 +46,9 @@ class Bookings::School < ApplicationRecord
     end
   end
 
-  scope :costing_upto, ->(amount) do
-    if amount.present?
-      where(arel_table[:fee].lteq(amount))
+  scope :costing_upto, ->(limit) do
+    if limit.present?
+      where(arel_table[:fee].lteq(limit))
     else
       all
     end

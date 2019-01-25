@@ -7,10 +7,13 @@ class Bookings::SchoolSearch
   # This means if one is present and not the other, the query will fall
   # back to the present value. It also means that if none are passed,
   # all schools will be returned.
-  def search(query, location: nil, radius: 10)
+  def search(query, location: nil, radius: 10, subject_ids: nil, phase_ids: nil, max_fee: nil)
     Bookings::School
       .search(query)
       .close_to(point(location), radius: radius)
+      .that_provide(subject_ids)
+      .at_phases(phase_ids)
+      .costing_upto(max_fee)
   end
 
 private

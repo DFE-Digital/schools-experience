@@ -120,7 +120,7 @@ describe Bookings::School, type: :model do
         context 'when no phases are supplied' do
           specify 'all schools should be returned' do
             [nil, "", []].each do |empty|
-              expect(subject.at_phase(empty)).to include(school_a, school_b, school_c)
+              expect(subject.at_phases(empty)).to include(school_a, school_b, school_c)
             end
           end
         end
@@ -134,7 +134,7 @@ describe Bookings::School, type: :model do
               [primary, college]   => [school_a, school_b, school_c],
               [secondary, college] => [school_b, school_c]
             }.each do |phases, results|
-              expect(subject.at_phase(phases)).to match_array(results)
+              expect(subject.at_phases(phases)).to match_array(results)
             end
           end
         end
