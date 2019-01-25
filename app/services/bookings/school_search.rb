@@ -3,7 +3,7 @@ class Bookings::SchoolSearch
 
   def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: 'distance')
     self.query    = query
-    self.point    = extract_point(location)
+    self.point    = geolocate(location)
     self.radius   = radius
     self.subjects = subjects
     self.phases   = phases
@@ -26,7 +26,7 @@ class Bookings::SchoolSearch
 
 private
 
-  def extract_point(location)
+  def geolocate(location)
     if (result = Geocoder.search(location)&.first)
       Bookings::School::GEOFACTORY.point(
         result.data.dig('lon'),
