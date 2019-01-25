@@ -6,11 +6,14 @@ describe Bookings::SchoolSearch do
       allow(Geocoder).to receive(:search).and_return([])
     end
 
+    let(:point_in_manchester) { Bookings::School::GEOFACTORY.point(-2.241, 53.481) }
+    let(:point_in_leeds) { Bookings::School::GEOFACTORY.point(-1.548, 53.794) }
+
     let!(:matching_school) do
       create(
         :bookings_school,
         name: "Springfield Primary School",
-        coordinates: Bookings::School::GEOFACTORY.point(-2.241, 53.481),
+        coordinates: point_in_manchester,
         fee: 10
       )
     end
@@ -19,7 +22,7 @@ describe Bookings::SchoolSearch do
       create(
         :bookings_school,
         name: "Pontefract Primary School",
-        coordinates: Bookings::School::GEOFACTORY.point(-1.548, 53.794),
+        coordinates: point_in_leeds,
         fee: 30
       )
     end
@@ -156,6 +159,39 @@ describe Bookings::SchoolSearch do
         specify 'should omit non-matching results' do
           expect(subject).not_to include(non_matching_school)
         end
+      end
+    end
+
+    context 'Chaining' do
+      let(:secondary) { create(:bookings_phase, name: "Secondary") }
+      let(:physics) { create(:bookings_subject, name: "Physics") }
+
+      before do
+        allow(Geocoder).to receive(:search).and_return(
+          [
+            OpenStruct.new(data: { "lat" => "53.488", "lon" => "-2.242" }),
+            OpenStruct.new(data: { "lat" => "53.476", "lon" => "-2.229" })
+          ]
+        )
+      end
+
+      before do
+        matching_school.phases << secondary
+        matching_school.subjects << physics
+      end
+
+      subject do
+        Bookings::SchoolSearch.new.search(
+          'Springf',
+          location: 'Cheetham Hill',
+          subject_ids: physics,
+          phase_ids: secondary,
+          max_fee: 20
+        ).uniq
+      end
+
+      specify 'should allow all search options and filters to work in conjunction' do
+        expect(subject).to include(matching_school)
       end
     end
   end
