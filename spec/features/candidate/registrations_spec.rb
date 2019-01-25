@@ -39,4 +39,33 @@ feature 'Candidate Registrations', type: :feature do
 
     expect(page.current_path).to eq '/candidate/registrations/personal_details/new'
   end
+
+  scenario 'Submit registrations/personal_details form with errors' do
+    visit '/candidate/registrations/personal_details/new'
+
+    fill_in 'Building', with: 'Test house'
+    fill_in 'Street', with: 'Test street'
+    fill_in 'Town or city', with: 'Test Town'
+    fill_in 'County', with: 'Testshire'
+    fill_in 'Postcode', with: 'TE57 1NG'
+
+    click_button 'Continue'
+
+    expect(page).to have_text "can't be blank"
+  end
+
+  scenario 'Submit registrations/personal_details form successfully' do
+    visit '/candidate/registrations/personal_details/new'
+
+    fill_in 'Building', with: 'Test house'
+    fill_in 'Street', with: 'Test street'
+    fill_in 'Town or city', with: 'Test Town'
+    fill_in 'County', with: 'Testshire'
+    fill_in 'Postcode', with: 'TE57 1NG'
+    fill_in 'Phone', with: '01234567890'
+
+    click_button 'Continue'
+
+    expect(page.current_path).to eq '/candidate/registrations/account_info/new'
+  end
 end

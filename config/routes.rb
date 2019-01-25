@@ -12,7 +12,8 @@ Rails.application.routes.draw do
 
     namespace :registrations do
       resources :placements, only: %i(new create)
-      resources :personal_details, only: %i(new)
+      resources :personal_details, only: %i(new create)
+      resource :account_info, only: %i(new)
     end
   end
 end
