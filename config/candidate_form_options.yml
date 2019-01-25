@@ -1,0 +1,78 @@
+---
+DEGREE_STAGES:
+  - I don't have a degree and am not studying for one
+  - Graduate or postgraduate
+  - Final year
+  - Second year
+  - First year
+  - Other
+
+TEACHING_STAGES:
+  - I'm thinking about teaching and want to find out more
+  - I want to become a teacher
+  - I’ve applied for teacher training
+  - I've been accepted on teacher training
+
+DEGREE_SUBJECTS:
+  - Not applicable
+  - Architecture
+  - Art
+  - Astronomy
+  - Bioscience
+  - Business
+  - Chemical engineering
+  - Chemistry
+  - Childcare
+  - Citizenship
+  - Civil engineering
+  - Classical languages
+  - Classics
+  - Computer studies
+  - Dentistry
+  - Design and technology
+  - Drama and performing arts
+  - Economics
+  - Education
+  - Electronic engineering
+  - English
+  - Environmental science
+  - Finance and accounting
+  - Food
+  - Forensic science
+  - French
+  - General engineering
+  - General science
+  - Geography
+  - Geology &amp; earth science
+  - German
+  - Health
+  - History
+  - HR
+  - ICT
+  - Italian
+  - Law
+  - Leisure and tourism
+  - Linguistics
+  - Manufacturing
+  - Mathematics
+  - Media studies and communications
+  - Medicine
+  - Music
+  - Other languages
+  - Outdoor activities
+  - Pharmacology
+  - Philosophy
+  - Physical education
+  - Physics
+  - Politics
+  - Product design
+  - Psychology
+  - Religious education
+  - Social science
+  - Sociology
+  - Spanish
+  - Sports science
+  - Systems, control and engineering
+  - Textiles
+  - Theology
+  - Training

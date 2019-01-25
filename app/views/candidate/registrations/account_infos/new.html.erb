@@ -1,1 +1,50 @@
 We need some more details
+
+<%= form_for @account_info do |f| %>
+  <div>
+    <% Candidate::Registrations::AccountInfo.degree_stages.each do |degree_stage| %>
+      <%= f.radio_button :degree_stage, degree_stage %>
+      <%= f.label :degree_stage, value: degree_stage %>
+    <% end %>
+    <%= f.object.errors[:degree_stage].join(' ') %>
+    <%= f.label :degree_stage_explaination %>
+    <%= f.text_area :degree_stage_explaination %>
+    <%= f.object.errors[:degree_stage_explaination].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.label :degree_subject %>
+    <%= f.select :degree_subject,
+      options_for_select(Candidate::Registrations::AccountInfo.degree_subjects),
+      prompt: '' %>
+    <%= f.object.errors[:degree_subject].join(' ') %>
+  </div>
+
+  <div>
+    <% Candidate::Registrations::AccountInfo.teaching_stages.each do |teaching_stage| %>
+      <%= f.radio_button :teaching_stage, teaching_stage %>
+      <%= f.label :teaching_stage, value: teaching_stage %>
+    <% end %>
+    <%= f.object.errors[:teaching_stage].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.label :subject_first_choice %>
+    <%= f.select :subject_first_choice,
+      options_for_select(Candidate::Registrations::AccountInfo.subject_choices),
+      prompt: '' %>
+    <%= f.object.errors[:subject_first_choice].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.label :subject_second_choice %>
+    <%= f.select :subject_second_choice,
+      options_for_select(Candidate::Registrations::AccountInfo.subject_choices),
+      prompt: '' %>
+    <%= f.object.errors[:subject_second_choice].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.submit 'Continue' %>
+  </div>
+<% end %>
