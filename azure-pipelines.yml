@@ -3,13 +3,14 @@ pool:
 
 variables:
   imageName: school-experience
+  POSTGRES_IMAGE: mdillon/postgis:11-alpine
   POSTGRESS_PASSWORD: secret
-  DATABASE_URL: postgres://postgres:secret@postgres/school_experience_test
-  WEB_URL: postgres://postgres:secret@postgres/school_experience
+  DATABASE_URL: postgis://postgres:secret@postgres/school_experience_test
+  WEB_URL: postgis://postgres:secret@postgres/school_experience
   SECRET_KEY_BASE: stubbed
 
 steps:
-  - script: docker run --name=postgres -e POSTGRES_PASSWORD -d postgres
+  - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
   - script: docker build -t $(imageName) .
     displayName: Build Docker Image
