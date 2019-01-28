@@ -18,14 +18,14 @@ class Candidate::Registrations::Placement
   validate  :date_end_not_before_date_start, if: -> { date_start_is_a_date? && date_end_is_a_date? }
   validates :objectives, presence: true
   validate  :objectives_not_too_long, if: -> { objectives.present? }
-  validates :access_needs, inclusion: { in: [true, false], message: "Please select an option" }
+  validates :access_needs, inclusion: { in: [true, false] }
   validates :access_needs_details, presence: true, if: -> { access_needs.present? }
 
 private
 
   def date_start_is_a_date
     unless date_start_is_a_date?
-      errors.add :date_start, 'is not a date'
+      errors.add :date_start, :is_not_a_date
     end
   end
 
@@ -35,7 +35,7 @@ private
 
   def date_end_is_a_date
     unless date_end_is_a_date?
-      errors.add :date_end, 'is not a date'
+      errors.add :date_end, :is_not_a_date
     end
   end
 
@@ -52,7 +52,7 @@ private
 
   def date_start_is_not_in_the_past
     if date_start_is_in_the_past?
-      errors.add :date_start, 'should not be in the past'
+      errors.add :date_start, :should_not_be_in_past
     end
   end
 
@@ -62,7 +62,7 @@ private
 
   def date_end_not_before_date_start
     unless date_end_not_before_date_start?
-      errors.add :date_end, 'should not be before prefered start date'
+      errors.add :date_end, :should_not_be_before_date_start
     end
   end
 
@@ -72,7 +72,7 @@ private
 
   def objectives_not_too_long
     if objectives_too_long?
-      errors.add :objectives, 'Please use 50 words or fewer'
+      errors.add :objectives, :use_fifty_words_or_fewer
     end
   end
 
