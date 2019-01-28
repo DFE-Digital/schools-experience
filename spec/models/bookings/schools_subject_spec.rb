@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Bookings::SchoolsSubject, type: :model do
   describe 'Relationships' do
-    it { is_expected.to belong_to(:bookings_school).optional }
-    it { is_expected.to belong_to(:bookings_subject).optional }
+    it { is_expected.to belong_to(:bookings_school) }
+    it { is_expected.to belong_to(:bookings_subject) }
   end
 
   describe 'Validation' do

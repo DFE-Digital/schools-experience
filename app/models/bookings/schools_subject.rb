@@ -1,11 +1,9 @@
 class Bookings::SchoolsSubject < ApplicationRecord
   belongs_to :bookings_school,
-    class_name: "Bookings::School",
-    optional: true
+    class_name: "Bookings::School"
 
   belongs_to :bookings_subject,
-    class_name: "Bookings::Subject",
-    optional: true
+    class_name: "Bookings::Subject"
 
   validates_associated :bookings_subject, :bookings_school
 
