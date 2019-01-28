@@ -1,0 +1,7 @@
+<%= form_for @dbs_check do |f| %>
+  <%= f.radio_button :has_dbs_check, '1' %>
+  <%= f.label :has_dbs_check, 'Yes', value: '1' %>
+  <%= f.radio_button :has_dbs_check, '0' %>
+  <%= f.label :has_dbs_check, 'No', value: '0' %>
+  <%= f.submit 'Continue' %>
+<% end %>

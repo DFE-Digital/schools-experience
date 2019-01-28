@@ -7,7 +7,7 @@ class Candidate::Registrations::AccountInfosController < Candidate::Registration
     @account_info = Candidate::Registrations::AccountInfo.new account_info_params
     if @account_info.valid?
       current_registration[:account_info] = @account_info.attributes
-      redirect_to new_candidate_registrations_background_and_security_check_path
+      redirect_to new_candidate_registrations_dbs_check_path
     else
       render :new
     end

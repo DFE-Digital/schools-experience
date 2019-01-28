@@ -14,7 +14,8 @@ Rails.application.routes.draw do
       resources :placements, only: %i(new create)
       resources :personal_details, only: %i(new create)
       resources :account_infos, only: %i(new create)
-      resources :background_and_security_checks, only: %i(new)
+      resources :dbs_checks, only: %i(new create)
+      resource  :placement_request, only: %i(show)
     end
   end
 end

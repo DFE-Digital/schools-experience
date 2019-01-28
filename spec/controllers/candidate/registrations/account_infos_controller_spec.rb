@@ -59,7 +59,7 @@ describe Candidate::Registrations::AccountInfosController, type: :request do
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to '/candidate/registrations/background_and_security_checks/new'
+        expect(response).to redirect_to '/candidate/registrations/dbs_checks/new'
       end
     end
   end
