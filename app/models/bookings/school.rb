@@ -32,7 +32,7 @@ class Bookings::School < ApplicationRecord
 
   scope :that_provide, ->(subject_ids) do
     if subject_ids.present?
-      joins(:subjects).merge(Bookings::Subject.where(id: subject_ids)).distinct
+      joins(:subjects).where(bookings_subjects: { id: subject_ids }).distinct
     else
       all
     end
@@ -40,7 +40,7 @@ class Bookings::School < ApplicationRecord
 
   scope :at_phases, ->(phase_ids) do
     if phase_ids.present?
-      joins(:phases).merge(Bookings::Phase.where(id: phase_ids)).distinct
+      joins(:phases).where(bookings_phases: { id: phase_ids }).distinct
     else
       all
     end
