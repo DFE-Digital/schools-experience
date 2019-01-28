@@ -1,1 +1,43 @@
 Register your details with us so you can get school experience placements.
+
+<%= form_for @personal_details do |f| %>
+  <div>
+    <%= f.label :building %>
+    <%= f.text_field :building %>
+    <%= f.object.errors[:building].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.label :street %>
+    <%= f.text_field :street %>
+    <%= f.object.errors[:street].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.label :town_or_city %>
+    <%= f.text_field :town_or_city %>
+    <%= f.object.errors[:town_or_city].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.label :county %>
+    <%= f.text_field :county %>
+    <%= f.object.errors[:county].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.label :postcode %>
+    <%= f.text_field :postcode %>
+    <%= f.object.errors[:postcode].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.label :phone %>
+    <%= f.telephone_field :phone %>
+    <%= f.object.errors[:phone].join(' ') %>
+  </div>
+
+  <div>
+    <%= f.submit 'Continue' %>
+  </div>
+<% end %>
