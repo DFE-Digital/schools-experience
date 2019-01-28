@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :candidates do
     root to: 'home#index'
 
-    resources :schools, only: [:index, :show] do
+    resources :schools, only: %i{index show} do
       get 'request_placement', to: 'placement_requests#new'
       post 'request_placement', to: 'placement_requests#create'
     end

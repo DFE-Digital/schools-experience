@@ -8,7 +8,8 @@ RSpec.describe Candidates::School do
         distance: '3',
         fees: '>30',
         phase: ['11-16', '16-18'],
-        subject: ['Maths', 'English'])
+        subject: %w{Maths English}
+      )
     end
 
     it 'assigns attributes' do
@@ -16,7 +17,7 @@ RSpec.describe Candidates::School do
       expect(@search.distance).to eq(3)
       expect(@search.fees).to eq('>30')
       expect(@search.phase).to eq(['11-16', '16-18'])
-      expect(@search.subject).to eq(['Maths', 'English'])
+      expect(@search.subject).to eq(%w{Maths English})
     end
   end
 
@@ -38,7 +39,7 @@ RSpec.describe Candidates::School do
     end
 
     context 'for valid search' do
-      before { @search = Candidates::School.new(query:"test") }
+      before { @search = Candidates::School.new(query: "test") }
 
       it "will be true" do
         expect(@search.filtering_results?).to be_truthy

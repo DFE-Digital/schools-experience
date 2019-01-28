@@ -19,7 +19,7 @@ module Candidates
     ].freeze
 
     FEES = [
-      ['none', 'None'],
+      %w{none None},
       ['<30', 'up to £30'],
       ['<60', 'up to £60'],
       ['<90', 'up to £90']
@@ -48,7 +48,7 @@ module Candidates
           'Primary',
           'Independent School',
           '£50',
-          ['Maths', 'English', 'Art', 'Physics', 'Geography'],
+          %w{Maths English Art Physics Geography}
         ),
         school.new(
           "Chetham's School of Music",
@@ -56,7 +56,7 @@ module Candidates
           'Primary',
           'Independent School',
           '£0',
-          ['Maths', 'English', 'Art', 'Physics', 'Music'],
+          %w{Maths English Art Physics Music}
         ),
         school.new(
           "The Creative Studio",
@@ -64,7 +64,7 @@ module Candidates
           'Primary',
           'Academy',
           '£5',
-          ['Maths', 'Art', 'Physics', 'Geography'],
+          %w{Maths Art Physics Geography}
         )
       ]
     end
@@ -76,6 +76,5 @@ module Candidates
     def total_results
       0
     end
-
   end
 end

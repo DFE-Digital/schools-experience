@@ -4,7 +4,7 @@ class Candidates::SchoolsController < ApplicationController
   end
 
   def show
-
+    # Shut linter up
   end
 
 private
@@ -12,5 +12,4 @@ private
   def search_params
     params.permit(:query, :distance, :fees, phase: [], subject: [])
   end
-
 end
