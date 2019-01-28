@@ -93,7 +93,16 @@ feature 'Candidate Registrations', type: :feature do
 
     click_button 'Continue'
 
-    expect(page.current_path).to eq \
-      '/candidate/registrations/background_and_security_checks/new'
+    expect(page.current_path).to eq '/candidate/registrations/dbs_checks/new'
+  end
+
+  scenario 'Submit registrations/dbs_checks/new' do
+    visit '/candidate/registrations/dbs_checks/new'
+
+    choose 'Yes'
+
+    click_button 'Continue'
+
+    expect(page.current_path).to eq '/candidate/registrations/placement_request'
   end
 end
