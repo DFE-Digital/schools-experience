@@ -66,6 +66,34 @@ feature 'Candidate Registrations', type: :feature do
 
     click_button 'Continue'
 
-    expect(page.current_path).to eq '/candidate/registrations/account_info/new'
+    expect(page.current_path).to eq '/candidate/registrations/account_infos/new'
+  end
+
+  scenario 'Submit registrations/account-info form with errors' do
+    visit '/candidate/registrations/account_infos/new'
+
+    choose 'Graduate or postgraduate'
+    select 'Physics', from: 'Degree subject'
+    choose 'I want to become a teacher'
+    select 'Physics', from: 'Subject first choice'
+
+    click_button 'Continue'
+
+    expect(page).to have_text "can't be blank"
+  end
+
+  scenario 'Submit registrations/account-info form successfully' do
+    visit '/candidate/registrations/account_infos/new'
+
+    choose 'Graduate or postgraduate'
+    select 'Physics', from: 'Degree subject'
+    choose 'I want to become a teacher'
+    select 'Physics', from: 'Subject first choice'
+    select 'Mathematics', from: 'Subject second choice'
+
+    click_button 'Continue'
+
+    expect(page.current_path).to eq \
+      '/candidate/registrations/background_and_security_checks/new'
   end
 end

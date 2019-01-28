@@ -65,7 +65,7 @@ describe Candidate::Registrations::PersonalDetailsController, type: :request do
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to '/candidate/registrations/account_info/new'
+        expect(response).to redirect_to '/candidate/registrations/account_infos/new'
       end
     end
   end
