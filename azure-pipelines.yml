@@ -18,7 +18,9 @@ steps:
     displayName: 'Docker login'
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
-  - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
+  - script: docker pull $(dockerRegistry)/$(imageName):latest || true
+    displayName: Retrieve latest Docker build to use as cache
+  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):latest -t $(dockerRegistry)/$(imageName):$(imageTag) .
     displayName: Build Docker Image $(imageName):$(imageTag)
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:test:prepare
     displayName: Create Testing databases, import schema and fixtures
