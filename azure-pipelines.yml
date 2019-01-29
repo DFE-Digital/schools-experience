@@ -3,7 +3,7 @@ pool:
 
 variables:
   imageName: school-experience
-  imageTag: $(Build.BuildId)
+  imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
   # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
@@ -38,6 +38,9 @@ steps:
     displayName: Check app reports as Healthy
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
-  - script: docker push $(dockerRegistry)/$(imageName):$(imageTag)
+  - script: |
+      docker push $(dockerRegistry)/$(imageName):$(imageTag)
+      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):latest
+      docker push $(dockerRegistry)/$(imageName):latest
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: 'Push Docker image'
