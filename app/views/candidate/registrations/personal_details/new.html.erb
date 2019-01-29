@@ -1,43 +1,37 @@
-Register your details with us so you can get school experience placements.
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Unfortunately, we don’t have your details</h1>
+      <p>Register your details with us so you can get school experience placements.</p>
+      <%= form_for @personal_details do |f| %>
+        <%= GovukElementsErrorsHelper.error_summary @personal_details, 'There is a problem', '' %>
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h1 class="govuk-fieldset__heading">Address and telephone number</h1>
+          </legend>
+          <%= f.text_field :building, class: 'govuk-!-width-two-thirds' %>
+          <%= f.text_field :street, class: 'govuk-!-width-two-thirds' %>
+        </fieldset>
 
-<%= form_for @personal_details do |f| %>
-  <div>
-    <%= f.label :building %>
-    <%= f.text_field :building %>
-    <%= f.object.errors[:building].join(' ') %>
+        <fieldset class="govuk-fieldset">
+          <%= f.text_field :town_or_city, class: 'govuk-!-width-one-half' %>
+        </fieldset>
+
+        <fieldset class="govuk-fieldset">
+          <%= f.text_field :county, class: 'govuk-!-width-one-half' %>
+        </fieldset>
+
+        <fieldset class="govuk-fieldset">
+          <%= f.text_field :postcode, class: 'govuk-input govuk-input--width-5' %>
+        </fieldset>
+
+        <fieldset class="govuk-fieldset">
+          <%= f.telephone_field :phone, class: 'govuk-!-width-one-half' %>
+        </fieldset>
+
+        <fieldset class="govuk-fieldset">
+          <%= f.submit 'Continue' %>
+        </fieldset>
+      <% end %>
+    </div>
   </div>
 
-  <div>
-    <%= f.label :street %>
-    <%= f.text_field :street %>
-    <%= f.object.errors[:street].join(' ') %>
-  </div>
-
-  <div>
-    <%= f.label :town_or_city %>
-    <%= f.text_field :town_or_city %>
-    <%= f.object.errors[:town_or_city].join(' ') %>
-  </div>
-
-  <div>
-    <%= f.label :county %>
-    <%= f.text_field :county %>
-    <%= f.object.errors[:county].join(' ') %>
-  </div>
-
-  <div>
-    <%= f.label :postcode %>
-    <%= f.text_field :postcode %>
-    <%= f.object.errors[:postcode].join(' ') %>
-  </div>
-
-  <div>
-    <%= f.label :phone %>
-    <%= f.telephone_field :phone %>
-    <%= f.object.errors[:phone].join(' ') %>
-  </div>
-
-  <div>
-    <%= f.submit 'Continue' %>
-  </div>
-<% end %>
