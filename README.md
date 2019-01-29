@@ -1,11 +1,10 @@
-[![Build Status](https://travis-ci.org/DFE-Digital/dfe-rails-boilerplate.svg?branch=master)](https://travis-ci.com/DFE-Digital/dfe-rails-boilerplate)
-
-# DfE Rails Boilerplate
+# DfE School Experience
 
 ## Prerequisites
 
 - Ruby 2.5.3
 - PostgreSQL
+- PostGIS extension
 - NodeJS 8.11.x
 - Yarn 1.12.x
 
@@ -14,7 +13,7 @@
 1. Run `bundle install` to install the gem dependencies
 2. Run `yarn` to install node dependencies
 3. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
-4. Run `bundle exec foreman start -f Procfile.dev` to launch the app on http://localhost:5000.
+4. Run `bundle exec rails s` to launch the app on http://localhost:5000.
 
 ## Whats included in this boilerplate?
 
@@ -25,11 +24,7 @@
 - Autoprefixer rails
 - RSpec
 - Dotenv (managing environment variables)
-- Travis with heroku deployment
-
-## DfE SignIn
-
-Example https://github.com/DFE-Digital/login.dfe.examples.rails
+- Azure DevOps integration
 
 ## Linting
 
@@ -38,3 +33,16 @@ It's best to lint just your app directories and not those belonging to the frame
 ```bash
 bundle exec govuk-lint-ruby app lib spec
 ```
+
+## HTTP Basic Auth access control
+
+If its required to password protect then entire application then you can set two
+environment variables when booting the app. This can either be part of the 
+deployment configuration.
+
+```
+SECURE_USERNAME = <my-username>
+SECURE_PASSWORD = <my-password>
+```
+
+
