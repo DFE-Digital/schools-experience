@@ -2,6 +2,14 @@ class Candidate::Registrations::Placement
   include ActiveModel::Model
   include ActiveModel::Attributes
 
+  # This allows us to parse multi-part date parameters like an ActiveRecord object.
+  include ActiveRecord::AttributeAssignment
+  class ActiveModel::Type::Date
+    def default_timezone
+      :utc
+    end
+  end
+
   MAX_WORDS_FOR_OBJECTIVE = 50
 
   attribute :date_start, :date
