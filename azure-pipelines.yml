@@ -3,7 +3,7 @@ pool:
 
 variables:
   imageName: school-experience
-  imageTag: $(Build.BuildId)
+  imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
   # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
@@ -12,10 +12,21 @@ variables:
   SECRET_KEY_BASE: stubbed
 
 steps:
+  - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
+    env:
+      pswd: $(dockerPassword)
+    displayName: 'Docker login'
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
+  - script: docker pull $(dockerRegistry)/$(imageName):latest || true
+    displayName: Retrieve latest Docker build to use as cache
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):latest -t $(dockerRegistry)/$(imageName):$(imageTag) .
+    displayName: Build Docker Image using Cache
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
   - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
-    displayName: Build Docker Image $(imageName):$(imageTag)
+    displayName: Build Docker Image without Cache
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:test:prepare
     displayName: Create Testing databases, import schema and fixtures
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rspec
@@ -35,9 +46,8 @@ steps:
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
   - script: |
-      docker login $(dockerRegistry) -u $(dockerId) -p $pswd
       docker push $(dockerRegistry)/$(imageName):$(imageTag)
-    env:
-      pswd: $(dockerPassword)
+      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):latest
+      docker push $(dockerRegistry)/$(imageName):latest
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: 'Push Docker image'
