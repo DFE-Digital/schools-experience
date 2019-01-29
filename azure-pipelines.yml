@@ -12,6 +12,10 @@ variables:
   SECRET_KEY_BASE: stubbed
 
 steps:
+  - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
+    env:
+      pswd: $(dockerPassword)
+    displayName: 'Docker login'
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
   - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
@@ -34,10 +38,6 @@ steps:
     displayName: Check app reports as Healthy
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
-  - script: |
-      docker login $(dockerRegistry) -u $(dockerId) -p $pswd
-      docker push $(dockerRegistry)/$(imageName):$(imageTag)
-    env:
-      pswd: $(dockerPassword)
+  - script: docker push $(dockerRegistry)/$(imageName):$(imageTag)
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: 'Push Docker image'
