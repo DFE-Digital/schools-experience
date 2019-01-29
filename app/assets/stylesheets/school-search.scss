@@ -26,5 +26,24 @@
     @include govuk-typography-weight-bold($important: true);
     margin-bottom: 1em;
   }
+
+  hr {
+    @extend .govuk-section-break ;
+    @extend .govuk-section-break--m ;
+    @extend .govuk-section-break--visible ;
+  }
 }
 
+.filter-list fieldset legend span.govuk-label {
+  @extend %govuk-heading-m ;
+}
+
+#search-form {
+  label {
+    display: none;
+  }
+
+  select {
+    width: 100%;
+  }
+}

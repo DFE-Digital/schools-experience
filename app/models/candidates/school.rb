@@ -36,7 +36,7 @@ module Candidates
     attr_accessor :fees, :subject, :phase
 
     def distance
-      @distance.to_i || 3
+      @distance.to_i
     end
 
     def results

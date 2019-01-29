@@ -42,17 +42,20 @@
 		<div class="govuk-grid-row">
 
 			<div class="govuk-grid-column-full">
-				<div class="divider"></div>
-				<div class="sortby">
-					<div class="sort-text">Sorted by</div>
-					<div class="drop">
-						<select name="orderby" id="OrderBy" aria-controls="js-search-results-info" class="select">
+                <hr />
+
+				<div class="sortby inline-fields">
+					<div class="drop govuk-form-group">
+                        <label for="orderby">Sorted by</label>
+						<select name="orderby" id="OrderBy" aria-controls="js-search-results-info" class="govuk-select">
 							<option value="" selected="">Distance</option>
 							<option value="SCHNAME_sort asc">Alphabetical A - Z</option>
 							<option value="SCHNAME_sort desc">Alphabetical Z - A</option>
 						</select>
 					</div>
 				</div>
+
+                <hr />
 
 
 				<ul>

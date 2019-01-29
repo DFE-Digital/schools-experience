@@ -1,8 +1,8 @@
 <div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-		<div class="govuk-form-group">
+	<div class="govuk-grid-column-full">
+		<div class="govuk-form-group" id="search-form">
             <%= form_for @search, as: '', method: :get do |f| %>
-    			<fieldset class="govuk-fieldset inline-fields">
+    			<fieldset class="govuk-fieldset">
     				<legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
     					<h1 class="govuk-fieldset__heading">
     						Find school experience placements
@@ -16,11 +16,21 @@
 						<strong>Maths, special school, M1 1AD</strong>
 					</span>
 
-                    <%= f.text_field :query, placeholder: 'search' %>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            <%= f.text_field :query, placeholder: 'search' %>
+                        </div>
 
-                    <%= f.collection_select :distance, Candidates::School::DISTANCES, :first, :last %>
+                        <div class="govuk-grid-column-one-quarter">
+                            <%= f.collection_select :distance,
+                                Candidates::School::DISTANCES, :first, :last,
+                                include_blank: 'Select search distance' %>
+                        </div>
 
-                    <%= f.submit 'Find' %>
+                        <div class="govuk-grid-column-one-quarter">
+                            <%= f.submit 'Find' %>
+                        </div>
+                    </div>
                 </fieldset>
             <% end %>
         </div>
