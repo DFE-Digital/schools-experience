@@ -39,4 +39,5 @@ steps:
       docker push $(dockerRegistry)/$(imageName):$(imageTag)
     env:
       pswd: $(dockerPassword)
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/feature/push-to-registry')
     displayName: 'Push Docker image'
