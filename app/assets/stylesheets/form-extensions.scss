@@ -1,10 +1,19 @@
 .inline-fields {
-  label {
-    display: none;
-  }
+  display: block;
 
   .govuk-form-group {
     display: inline-block;
     margin-right: 0.4em;
+    margin-bottom: 0;
+
+    label {
+      @extend .govuk-label;
+      display: inline-block;
+      @include govuk-responsive-margin(3, "right");
+    }
+
+    input, select {
+      width: auto;
+    }
   }
 }

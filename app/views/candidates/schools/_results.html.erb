@@ -1,0 +1,62 @@
+<%= link_to 'Back', candidates_schools_path, class: 'govuk-back-link' %>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l">School experience placements near <%= @search.query.to_s.humanize %></h1>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third filter-list" id="search-filter">
+        <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
+            <%= f.hidden_field :query %>
+            <%= f.hidden_field :distance %>
+
+            <%= f.collection_check_boxes :phase, Candidates::School::PHASES, :first, :last %>
+
+            <%= f.radio_button_fieldset :fees, choices: Candidates::School::FEES,
+                                                value_method: :first,
+                                                text_method: :last %>
+
+            <%= f.collection_check_boxes :subject, Candidates::School::SUBJECTS, :to_s, :to_s %>
+
+            <%= f.submit 'Update schools list' %>
+        <% end %>
+    </div>
+
+    <div class="govuk-grid-column-two-thirds" id="search-results">
+        <p class="results-number">
+            Showing 1 - <%= @search.results.length %> of <%= @search.total_results %> schools and colleges
+        </p>
+
+        <hr />
+
+        <div class="sortby inline-fields">
+            <div class="drop govuk-form-group">
+                <label for="orderby">Sorted by</label>
+                <select name="orderby" id="OrderBy" aria-controls="js-search-results-info" class="govuk-select">
+                    <option value="" selected="">Distance</option>
+                    <option value="SCHNAME_sort asc">Alphabetical A - Z</option>
+                    <option value="SCHNAME_sort desc">Alphabetical Z - A</option>
+                </select>
+            </div>
+        </div>
+
+        <hr />
+
+        <ul>
+            <% @search.results.each_with_index do |result, index| %>
+            <li class="school-result">
+                <strong><%= link_to result.name, candidates_school_path(index + 1) %></strong>
+                <ul>
+                    <li><strong>Address:</strong> <%= result.address %></li>
+                    <li><strong>Education </strong>phase: <%= result.phase %></li>
+                    <li><strong>Fees:</strong> <%= result.fees %></li>
+                    <li><strong>School type:</strong> <%= result.school_type %></li>
+                    <li><strong>Subjects:</strong> <%= result.subjects.to_sentence %></li>
+                </ul>
+            </li>
+            <% end %>
+        </ul>
+    </div>
+</div>
