@@ -4,10 +4,7 @@ class Candidates::SchoolsController < ApplicationController
   end
 
   def show
-    @school = OpenStruct.new(
-      name: "A school",
-      postcode: "MA1 1AM"
-    )
+    @school = OpenStruct.new(YAML.load_file('demo-school.yml'))
   end
 
 private

@@ -2,73 +2,35 @@
             class: 'govuk-back-link',
             data: {controller: 'back-link'} %>
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+<div class="govuk-grid-row govuk-!-margin-top-4">
+    <div class="govuk-grid-column-two-thirds" id="candidate-school-details">
         <h1 class="govuk-heading-l"><%= @school.name %></h1>
 
-        <p>
-            We’re a thriving community school serving a cosmopolitan community
-            in North Manchester with more than 1,700 pupils.
-        </p>
-
-        <p>
-            Our pupils’ GCSE scores are above the national average and, with
-            more than 63 languages spoken at our school, we’re highly skilled in
-            meeting the needs of bilingual children.
-        </p>
-
-        <p>
-            We’re also a barrier free school and cater fully for the needs of
-            pupils with movement difficulties while our work with hearing
-            impaired children is well supported by the local authority and other
-            agencies.
-        </p>
+        <%= simple_format @school.description %>
 
         <h1 class="govuk-heading-m">About our school</h1>
 
         <p>
-            <b>Age range:</b> 3 to 16 years (nursery, primary and secondary)
+            <b>Age range:</b> <%= @school.age_range %>
         </p>
 
         <p>
-            <b>Specialisms:</b> Arts, bilingual students and SEN.
+            <b>Specialisms:</b> <%= @school.specialisms %>.
         </p>
 
+        <% unless @school.links.empty? %>
         <p>
             <b>For more information about our school use the following links:</b>
         </p>
 
-        <p>
+        <ul>
+            <% for link_pair in @school.links %>
             <li>
-                <a class="govuk-link" href="https://www.abrahammoss.manchester.sch.uk/">
-                    <%= @school.name %> website
-                </a>
+                <%= link_to link_pair['text'], link_pair['link'] %>
             </li>
-        </p>
-
-        <p>
-            <li>
-                <a class="govuk-link" href="https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/105560#school-dashboard">
-                    <%= @school.name %> Get Information About Schools page
-                </a>
-            </li>
-        </p>
-
-        <p>
-            <li>
-                <a class="govuk-link" href="https://reports.ofsted.gov.uk/provider/28/105560">
-                    Ofsted report: <%= @school.name %>
-                </a>
-            </li>
-        </p>
-
-        <p>
-            <li>
-                <a class="govuk-link" href="https://www.compare-school-performance.service.gov.uk/school/105560/abraham-moss-community-school">
-                    Performance information: <%= @school.name %>
-                </a>
-            </li>
-        </p>
+            <% end %>
+        </ul>
+        <% end %>
 
         <h1 class="govuk-heading-m">Placement information</h1>
 
@@ -85,7 +47,7 @@
         </p>
 
 
-        <p><b>Placement subjects:</b> {{ data['school-subjects'] }}.</p>
+        <p><b>Placement subjects:</b> <%= @school.subjects.to_sentence %>.</p>
 
         <h1 class="govuk-heading-m">Location</h1>
 
@@ -98,46 +60,45 @@
         </p>
     </div>
 
-    <div class="govuk-grid-column-one-third app-related-items ">
+    <div class="govuk-grid-column-one-third govuk-!-margin-top-9 column-top-border">        
         <h3 class="govuk-heading-m">Address</h3>
         <p class="govuk-body">
-            {{ data['school-address'] }}.
+            <%= @school.address %>.
         </p>
 
         <h3 class="govuk-heading-s">DBS check required</h3>
         <p class="govuk-body">
-          Yes
+          <%= @school.dbs ? 'Yes' : 'No' %>
         </p>
 
         <h3 class="govuk-heading-s">Fee</h3>
         <p class="govuk-body">
-          Yes - £50 per placement
+          <%= @school.fee %>
         </p>
 
         <h3 class="govuk-heading-s">Dress code</h3>
         <p class="govuk-body">
-		  Yes - business attire with male attendees expected to wear a collar and tie
+            <%= @school.dress_code %>
         </p>
 
         <h3 class="govuk-heading-s">Start and finish times</h3>
         <p class="govuk-body">
-          8am to 5pm
+            <%= @school.times %>
         </p>
 
         <h3 class="govuk-heading-s">Parking</h3>
         <p class="govuk-body">
-            Limited on-site parking arranged as part of placement. Local
-            paid-for on-street parking around school site for £3 per day
+            <%= @school.parking %>
         </p>
 
         <h3 class="govuk-heading-s">Accessibility details</h3>
         <p class="govuk-body">
-            Ramp access and disabled parking available on site
+            <%= @school.accessibility %>
         </p>
 
         <h3 class="govuk-heading-s">Teacher training offered</h3>
         <p class="govuk-body">
-            Yes. We offer training opportunities for a mainstream ITT programme
+            <%= @school.training_offered %>
         </p>
     </div>
 </div>
