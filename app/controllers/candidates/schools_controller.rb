@@ -4,7 +4,10 @@ class Candidates::SchoolsController < ApplicationController
   end
 
   def show
-    # Shut linter up
+    @school = OpenStruct.new(
+      name: "A school",
+      postcode: "MA1 1AM"
+    )
   end
 
 private
