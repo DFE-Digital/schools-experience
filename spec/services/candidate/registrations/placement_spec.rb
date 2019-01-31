@@ -24,7 +24,7 @@ describe Candidate::Registrations::Placement, type: :model do
 
       it 'adds an error to date_start' do
         expect(placement.errors[:date_start]).to eq \
-          ["can't be blank"]
+          ["Enter a start date"]
       end
     end
 
@@ -35,7 +35,7 @@ describe Candidate::Registrations::Placement, type: :model do
 
       it 'adds an error to date_start' do
         expect(placement.errors[:date_start]).to eq \
-          ["can't be blank"]
+          ["Enter a start date"]
       end
     end
 
@@ -46,7 +46,7 @@ describe Candidate::Registrations::Placement, type: :model do
 
       it 'adds an error to date_end' do
         expect(placement.errors[:date_end]).to eq \
-          ["can't be blank"]
+          ["Enter an end date"]
       end
     end
 
@@ -57,7 +57,7 @@ describe Candidate::Registrations::Placement, type: :model do
 
       it 'adds an error to date_end' do
         expect(placement.errors[:date_end]).to eq \
-          ["can't be blank"]
+          ["Enter an end date"]
       end
     end
 
@@ -70,7 +70,7 @@ describe Candidate::Registrations::Placement, type: :model do
 
       it 'adds an error to date_end' do
         expect(placement.errors[:date_end]).to eq \
-          ["should not be before prefered start date"]
+          ["End date must not be earlier than start date"]
       end
     end
 
@@ -83,7 +83,7 @@ describe Candidate::Registrations::Placement, type: :model do
 
       it 'adds an error to date_start' do
         expect(placement.errors[:date_start]).to eq \
-          ["should not be in the past"]
+          ["Must not be in the past"]
       end
     end
 
@@ -94,7 +94,7 @@ describe Candidate::Registrations::Placement, type: :model do
 
       it 'adds an error to objectives' do
         expect(placement.errors[:objectives]).to eq \
-          ["can't be blank"]
+          ["Enter what you want to get out of a placement"]
       end
     end
 
@@ -116,8 +116,7 @@ describe Candidate::Registrations::Placement, type: :model do
       end
 
       it 'adds an error to access_needs' do
-        expect(placement.errors[:access_needs]).to eq \
-          ['Please select an option']
+        expect(placement.errors[:access_needs]).to eq ['Select an option']
       end
     end
 
@@ -129,7 +128,7 @@ describe Candidate::Registrations::Placement, type: :model do
 
         it 'adds an error to access_needs_details' do
           expect(placement.errors[:access_needs_details]).to eq \
-            ["can't be blank"]
+            ["Enter details"]
         end
       end
     end

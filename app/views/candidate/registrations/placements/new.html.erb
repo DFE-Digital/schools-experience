@@ -1,36 +1,36 @@
-Request school experience placement
+<h1 class="govuk-heading-l">Request school experience placement</h1>
+<p>Tell us a few details so we can forward your requirements to the school.</p>
 
 <%= form_for @placement do |f| %>
-  <div>
-    <%= f.label :date_start, 'Start Date' %>
+  <%= GovukElementsErrorsHelper.error_summary @placement, 'There is a problem', '' %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">When would you be available for a placement?</h1>
+    </legend>
     <%= f.date_field :date_start %>
-    <%= f.object.errors[:date_start].join('  ') %>
-  </div>
-
-  <div>
-    <%= f.label :date_end, 'End Date' %>
     <%= f.date_field :date_end %>
-    <%= f.object.errors[:date_end].join('  ') %>
-  </div>
+  </fieldset>
 
-  <div>
-    <%= f.label :objectives %>
-    <%= f.text_field :objectives %>
-    <%= f.object.errors[:objectives].join('  ') %>
-  </div>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">What do you want to get out of a placement?</h1>
+    </legend>
+    <%= f.text_area :objectives, rows: 5 %>
+  </fieldset>
 
-  <div>
-    <%= f.radio_button :access_needs, '1' %>
-    <%= f.label :access_needs, 'Yes', value: '1' %>
-    <%= f.radio_button :access_needs, '0' %>
-    <%= f.label :access_needs, 'No', value: '0' %>
-    <%= f.label :access_needs_details %>
-    <%= f.text_field :access_needs_details %>
-    <%= f.object.errors[:access_needs].join('  ') %>
-  </div>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">Do you have any disability or access needs?</h1>
+    </legend>
+    <%= f.radio_button_fieldset :access_needs do |field_set| %>
+      <%= field_set.radio_input true do %>
+        <%= field_set.text_area :access_needs_details, rows: 5 %>
+      <% end %>
+      <%= field_set.radio_input false %>
+    <% end %>
+  </fieldset>
 
-  <div>
+  <fieldset class="govuk-fieldset">
     <%= f.submit 'Continue' %>
-  </div>
+  </fieldset>
 <% end %>
-

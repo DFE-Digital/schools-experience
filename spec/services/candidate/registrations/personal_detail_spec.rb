@@ -21,7 +21,7 @@ describe Candidate::Registrations::PersonalDetail, type: :model do
       end
 
       it 'adds an error to building' do
-        expect(personal_detail.errors[:building]).to eq ["can't be blank"]
+        expect(personal_detail.errors[:building]).to eq ["Enter a building"]
       end
     end
 
@@ -31,7 +31,7 @@ describe Candidate::Registrations::PersonalDetail, type: :model do
       end
 
       it 'adds an error to street' do
-        expect(personal_detail.errors[:street]).to eq ["can't be blank"]
+        expect(personal_detail.errors[:street]).to eq ["Enter a street"]
       end
     end
 
@@ -41,7 +41,8 @@ describe Candidate::Registrations::PersonalDetail, type: :model do
       end
 
       it 'adds an error to town_or_city' do
-        expect(personal_detail.errors[:town_or_city]).to eq ["can't be blank"]
+        expect(personal_detail.errors[:town_or_city]).to eq \
+          ["Enter a town or city"]
       end
     end
 
@@ -51,7 +52,7 @@ describe Candidate::Registrations::PersonalDetail, type: :model do
       end
 
       it 'adds an error to county' do
-        expect(personal_detail.errors[:county]).to eq ["can't be blank"]
+        expect(personal_detail.errors[:county]).to eq ["Enter a county"]
       end
     end
 
@@ -61,7 +62,7 @@ describe Candidate::Registrations::PersonalDetail, type: :model do
       end
 
       it 'adds an error to postcode' do
-        expect(personal_detail.errors[:postcode]).to eq ["can't be blank"]
+        expect(personal_detail.errors[:postcode]).to eq ["Enter a postcode"]
       end
     end
 
@@ -71,7 +72,8 @@ describe Candidate::Registrations::PersonalDetail, type: :model do
       end
 
       it 'adds an error to phone' do
-        expect(personal_detail.errors[:phone]).to eq ["can't be blank"]
+        expect(personal_detail.errors[:phone]).to eq \
+          ["Enter a telephone number"]
       end
     end
   end

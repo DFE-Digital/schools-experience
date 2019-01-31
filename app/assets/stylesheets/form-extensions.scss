@@ -1,0 +1,10 @@
+.inline-fields {
+  label {
+    display: none;
+  }
+
+  .govuk-form-group {
+    display: inline-block;
+    margin-right: 0.4em;
+  }
+}

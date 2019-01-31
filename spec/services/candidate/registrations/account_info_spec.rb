@@ -33,8 +33,9 @@ describe Candidate::Registrations::AccountInfo, type: :model do
     it { is_expected.to validate_presence_of :degree_subject }
 
     it do
-      is_expected.to validate_inclusion_of(:degree_subject).in_array \
-        described_class.degree_subjects
+      is_expected.to validate_inclusion_of(:degree_subject)
+        .in_array(described_class.degree_subjects)
+        .with_message('Select a subject')
     end
 
     context 'when degree stage is "I don\'t have a degree and am not studying for one"' do

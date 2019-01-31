@@ -1,48 +1,69 @@
-We need some more details
+<h1 class="govuk-heading-l">We need some more details</h1>
+<p>The following will be used to help schools offer you school experience placements.</p>
 
 <%= form_for @account_info do |f| %>
-  <div>
-    <% Candidate::Registrations::AccountInfo.degree_stages.each do |degree_stage| %>
-      <%= f.radio_button :degree_stage, degree_stage %>
-      <%= f.label :degree_stage, value: degree_stage %>
+  <%= GovukElementsErrorsHelper.error_summary @account_info, 'There is a problem', '' %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">What stage are you at with your degree?</h1>
+    </legend>
+    <%= f.radio_button_fieldset :degree_stage, legend_options: { class: 'govuk-visually-hidden' } do |fieldset| %>
+      <% Candidate::Registrations::AccountInfo.degree_stages.each do |degree_stage| %>
+        <% if degree_stage == Candidate::Registrations::AccountInfo::DEGREE_STAGE_REQUIRING_EXPLINATIONN %>
+          <%= fieldset.radio_input degree_stage do %>
+            <%= fieldset.text_area :degree_stage_explaination %>
+          <% end %>
+        <% else %>
+          <%= fieldset.radio_input degree_stage %>
+        <% end %>
+      <% end %>
     <% end %>
-    <%= f.object.errors[:degree_stage].join(' ') %>
-    <%= f.label :degree_stage_explaination %>
-    <%= f.text_area :degree_stage_explaination %>
-    <%= f.object.errors[:degree_stage_explaination].join(' ') %>
-  </div>
+  </fieldset>
 
-  <div>
-    <%= f.label :degree_subject %>
-    <%= f.select :degree_subject,
-      options_for_select(Candidate::Registrations::AccountInfo.degree_subjects),
-      prompt: '' %>
-    <%= f.object.errors[:degree_subject].join(' ') %>
-  </div>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">If you have or are studying for a degree, tell us your your degree subject</h1>
+    </legend>
+    <div class="govuk-form-group">
+      <%= f.label :degree_subject, class: 'govuk-label' %>
+      <%= f.select :degree_subject,
+        options_for_select(Candidate::Registrations::AccountInfo.degree_subjects),
+        { prompt: '', },
+        { class: 'govuk-select' } %>
+    </div>
+  </fieldset>
 
-  <div>
-    <% Candidate::Registrations::AccountInfo.teaching_stages.each do |teaching_stage| %>
-      <%= f.radio_button :teaching_stage, teaching_stage %>
-      <%= f.label :teaching_stage, value: teaching_stage %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">Which of the following teaching stages are you at?</h1>
+    </legend>
+    <%= f.radio_button_fieldset :teaching_stage, legend_options: { class: 'govuk-visually-hidden' } do |fieldset| %>
+      <% Candidate::Registrations::AccountInfo.teaching_stages.each do |teaching_stage| %>
+        <%= fieldset.radio_input teaching_stage %>
+      <% end %>
     <% end %>
-    <%= f.object.errors[:teaching_stage].join(' ') %>
-  </div>
+  </fieldset>
 
-  <div>
-    <%= f.label :subject_first_choice %>
-    <%= f.select :subject_first_choice,
-      options_for_select(Candidate::Registrations::AccountInfo.subject_choices),
-      prompt: '' %>
-    <%= f.object.errors[:subject_first_choice].join(' ') %>
-  </div>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">What subject do you want to teach?</h1>
+    </legend>
+    <div class="govuk-form-group">
+      <%= f.label :subject_first_choice, class: 'govuk-label' %>
+      <%= f.select :subject_first_choice,
+        options_for_select(Candidate::Registrations::AccountInfo.subject_choices),
+        { prompt: 'Select' },
+        { class: 'govuk-select' } %>
+    </div>
 
-  <div>
-    <%= f.label :subject_second_choice %>
-    <%= f.select :subject_second_choice,
-      options_for_select(Candidate::Registrations::AccountInfo.subject_choices),
-      prompt: '' %>
-    <%= f.object.errors[:subject_second_choice].join(' ') %>
-  </div>
+    <div class="govuk-form-group">
+      <%= f.label :subject_second_choice, class: 'govuk-label' %>
+      <%= f.select :subject_second_choice,
+        options_for_select(Candidate::Registrations::AccountInfo.subject_choices),
+        { prompt: 'Select' },
+        { class: 'govuk-select' } %>
+    </div>
+  </fieldset>
 
   <div>
     <%= f.submit 'Continue' %>

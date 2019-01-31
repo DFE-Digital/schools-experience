@@ -1,33 +1,88 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  errors:
+   format: "%{message}"
+  activemodel:
+    errors:
+      models:
+        candidate/registrations/account_info:
+          attributes:
+            degree_stage:
+              blank: "Select a stage"
+            degree_stage_explaination:
+              blank: "Enter an explaination"
+            degree_subject:
+              blank: "Select a subject"
+              exclusion: "Select a subject"
+              inclusion: "Select a subject"
+            subject_first_choice:
+              blank: "Select a subject"
+            subject_second_choice:
+              blank: "Select a subject"
+            teaching_stage:
+              blank: "Select a stage"
+
+        candidate/registrations/dbs_check:
+          attributes:
+            has_dbs_check:
+              inclusion: "Select an option"
+
+        candidate/registrations/personal_detail:
+          attributes:
+            building:
+              blank: "Enter a building"
+            county:
+              blank: "Enter a county"
+            phone:
+              blank: "Enter a telephone number"
+            postcode:
+              blank: "Enter a postcode"
+            street:
+              blank: "Enter a street"
+            town_or_city:
+              blank: "Enter a town or city"
+        candidate/registrations/placement:
+          attributes:
+            access_needs:
+              inclusion: "Select an option"
+            access_needs_details:
+              blank: "Enter details"
+            date_end:
+              blank: "Enter an end date"
+              is_not_a_date: "Enter a valid date"
+              should_not_be_before_date_start: "End date must not be earlier than start date"
+            date_start:
+              blank: "Enter a start date"
+              is_not_a_date: "Enter a valid date"
+              should_not_be_in_past: "Must not be in the past"
+            objectives:
+              blank: "Enter what you want to get out of a placement"
+              use_fifty_words_or_fewer: "Please use 50 words or fewer"
+
+  helpers:
+    fieldset:
+      candidate_registrations_dbs_check:
+        has_dbs_check: "These documents are used to confirm you’re suitable to work with children and young people."
+      candidate_registrations_placement:
+        date_start: "Start date"
+        date_end: "End date"
+        access_needs: "Tell us so we can make sure the school is able to cater for your requirements"
+
+    label:
+      candidate_registrations_account_info:
+        degree_stage_explaination: "Explain"
+        degree_subject: "Select the nearest or equivalent option"
+        subject_first_choice: "First choice"
+        subject_second_choice: "Second choice"
+      candidate_registrations_dbs_check:
+        has_dbs_check:
+          true: "Yes"
+          false: "No"
+      candidate_registrations_personal_detail:
+        building: "Building and street"
+        phone: "UK telephone number"
+      candidate_registrations_placement:
+        objectives: "Explain in 50 words or fewer"
+        access_needs_details: "Provide details"
+        access_needs:
+          true: "Yes"
+          false: "No"
