@@ -2,18 +2,20 @@ require 'rails_helper'
 
 RSpec.describe Bookings::SchoolsPhase, type: :model do
   describe 'Relationships' do
-    it { is_expected.to belong_to(:bookings_school).optional }
-    it { is_expected.to belong_to(:bookings_phase).optional }
+    it { is_expected.to belong_to(:bookings_school) }
+    it { is_expected.to belong_to(:bookings_phase) }
   end
 
   describe 'Validation' do
-    context '#bookings_school_id' do
-      it { is_expected.to validate_presence_of(:bookings_school_id) }
+    context '#bookings_school' do
+      it { is_expected.to validate_presence_of(:bookings_school) }
+    end
+
+    context '#bookings_school' do
+      it { is_expected.to validate_presence_of(:bookings_phase) }
     end
 
     context '#bookings_phase_id' do
-      it { is_expected.to validate_presence_of(:bookings_phase_id) }
-
       context 'Uniqueness' do
         subject { create(:bookings_schools_phase) }
 

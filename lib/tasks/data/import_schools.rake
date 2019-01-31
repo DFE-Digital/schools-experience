@@ -14,8 +14,9 @@ namespace :data do
 
       edubase_data = CSV
         .parse(edubase_file, headers: true)
-        .map.with_object({}) do |record, hash|
-          hash[record['URN'].to_i] = record
+        .map
+        .with_object({}) do |record, output|
+          output[record['URN'].to_i] = record
         end
 
       SchoolImporter.new(urns, edubase_data).import

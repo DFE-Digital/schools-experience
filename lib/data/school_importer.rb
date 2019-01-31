@@ -7,23 +7,58 @@ class SchoolImporter
 
   def import
     total = @urns.length
+
     Bookings::School.transaction do
       @urns.each.with_index(1) do |urn, i|
-        unless (school = @edubase_data[urn])
+        unless (row = @edubase_data[urn])
           raise "URN #{urn} cannot be found in dataset"
         end
 
-        #Bookings::School.new(
-          # blah
-        #)
+        school = build_school(row)
 
-        puts "%<count>s of %<total>d | %<urn>s | %<name>s" % {
-          count: i.to_s.rjust(3),
-          total: total,
-          urn: urn.to_s.rjust(8),
-          name: school['EstablishmentName']
-        }
+        if school.save
+          puts("%<count>s of %<total>d | %<urn>s | %<name>s" % {
+            count: i.to_s.rjust(3),
+            total: total,
+            urn: urn.to_s.rjust(8),
+            name: row['EstablishmentName']
+          })
+        else
+          puts "failed to import #{urn}"
+        end
       end
     end
+  end
+
+private
+
+  def build_school(row)
+    Bookings::School.new(
+      urn:          row['URN'],
+      name:         row['EstablishmentName'],
+      website:      row['SchoolWebsite'],
+      address_1:    row['Street'],
+      address_2:    row['Locality'],
+      address_3:    row['Address3'],
+      town:         row['Town'],
+      county:       row['County (name)'],
+      postcode:     row['Postcode'],
+      coordinates:  convert_to_point(row['Easting'], row['Northing'])
+    ).tap do |school|
+      school.phases << phases[row['PhaseOfEducation (code)'].to_i]
+    end
+  end
+
+  def phases
+    @phases ||= Bookings::Phase.all.group_by(&:id)
+  end
+
+  def convert_to_point(easting, northing)
+    coords = Breasal::EastingNorthing.new(
+      easting: easting.to_i,
+      northing: northing.to_i,
+      type: 'gb'
+    ).to_wgs84
+    Bookings::School::GEOFACTORY.point(coords[:longitude], coords[:latitude])
   end
 end

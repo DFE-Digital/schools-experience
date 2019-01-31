@@ -3,5 +3,8 @@ FactoryBot.define do
     sequence(:name) { |n| "school #{n}" }
     coordinates { Bookings::School::GEOFACTORY.point(-2.241, 53.481) }
     fee { 0 }
+    sequence(:urn) { |n| 10000 + n }
+    sequence(:address_1) { |n| "#{n} Something Street" }
+    sequence(:postcode) { |n| "M#{n} 2JF" }
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_25_144531) do
+ActiveRecord::Schema.define(version: 2019_01_31_110800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,8 +29,17 @@ ActiveRecord::Schema.define(version: 2019_01_25_144531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "fee", default: 0, null: false
+    t.integer "urn", null: false
+    t.string "website"
+    t.string "address_1", null: false
+    t.string "address_2"
+    t.string "address_3"
+    t.string "town"
+    t.string "county"
+    t.string "postcode", null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
+    t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true
   end
 
   create_table "bookings_schools_phases", force: :cascade do |t|
