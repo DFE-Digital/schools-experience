@@ -24,7 +24,7 @@ class SchoolImporter
             name: row['EstablishmentName']
           })
         else
-          puts "failed to import #{urn}"
+          fail "failed to import #{urn}"
         end
       end
     end
@@ -34,19 +34,23 @@ private
 
   def build_school(row)
     Bookings::School.new(
-      urn:          row['URN'],
-      name:         row['EstablishmentName'],
-      website:      row['SchoolWebsite'],
-      address_1:    row['Street'],
-      address_2:    row['Locality'],
-      address_3:    row['Address3'],
-      town:         row['Town'],
-      county:       row['County (name)'],
-      postcode:     row['Postcode'],
+      urn:          nilify(row['URN']),
+      name:         nilify(row['EstablishmentName']),
+      website:      nilify(row['SchoolWebsite']),
+      address_1:    nilify(row['Street']),
+      address_2:    nilify(row['Locality']),
+      address_3:    nilify(row['Address3']),
+      town:         nilify(row['Town']),
+      county:       nilify(row['County (name)']),
+      postcode:     nilify(row['Postcode']),
       coordinates:  convert_to_point(row['Easting'], row['Northing'])
     ).tap do |school|
       school.phases << phases[row['PhaseOfEducation (code)'].to_i]
     end
+  end
+
+  def nilify(val)
+    val.present? ? val : nil
   end
 
   def phases
