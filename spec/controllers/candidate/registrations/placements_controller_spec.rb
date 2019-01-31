@@ -58,7 +58,7 @@ describe Candidate::Registrations::PlacementsController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          '/candidate/registrations/personal_details/new'
+          '/candidate/registrations/account_checks/new'
       end
     end
   end
