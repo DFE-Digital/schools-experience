@@ -78,6 +78,7 @@ en:
           true: "Yes"
           false: "No"
       candidate_registrations_personal_detail:
+        building: "Building and street"
         phone: "UK telephone number"
       candidate_registrations_placement:
         objectives: "Explain in 50 words or fewer"

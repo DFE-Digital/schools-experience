@@ -4,7 +4,7 @@ class Candidate::Registrations::AccountInfo
 
   OPTIONS_CONFIG = YAML.load_file "#{Rails.root}/config/candidate_form_options.yml"
   NOT_APPLYING_FOR_DEGREE = "I don't have a degree and am not studying for one".freeze
-  DEGREE_STAGE_REQUIRING_EXPLINATIONN = 'Other'
+  DEGREE_STAGE_REQUIRING_EXPLINATIONN = 'Other'.freeze
 
   def self.degree_subjects
     OPTIONS_CONFIG.fetch 'DEGREE_SUBJECTS'
@@ -44,7 +44,7 @@ class Candidate::Registrations::AccountInfo
   validates :subject_second_choice, presence: true
   validates :subject_second_choice, inclusion: subject_choices, if: -> { subject_second_choice.present? }
 
-  private
+private
 
   def applying_for_degree?
     degree_stage != NOT_APPLYING_FOR_DEGREE
