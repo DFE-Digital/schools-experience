@@ -8,50 +8,59 @@
 
         <%= simple_format @school.description %>
 
-        <h2 class="govuk-heading-m">About our school</h2>
+        <div>
+            <h2 class="govuk-heading-m">About our school</h2>
 
-        <p>
-            <b>Age range:</b> <%= @school.age_range %>
-        </p>
+            <p>
+                <b>Age range:</b> <%= @school.age_range %>
+            </p>
 
-        <p>
-            <b>Specialisms:</b> <%= @school.specialisms %>.
-        </p>
+            <p>
+                <b>Specialisms:</b> <%= @school.specialisms %>.
+            </p>
 
-        <% unless @school.links.empty? %>
-        <p>
-            <b>For more information about our school use the following links:</b>
-        </p>
+            <% unless @school.links.empty? %>
+            <p>
+                <b>For more information about our school use the following links:</b>
+            </p>
 
-        <ul>
-            <% for link_pair in @school.links %>
-            <li>
-                <%= link_to link_pair['text'], link_pair['link'] %>
-            </li>
+            <ul>
+                <% for link_pair in @school.links %>
+                <li>
+                    <%= link_to link_pair['text'], link_pair['link'] %>
+                </li>
+                <% end %>
+            </ul>
             <% end %>
-        </ul>
-        <% end %>
+        </div>
 
-        <h2 class="govuk-heading-m">Placement information</h2>
+        <div>
+            <h2 class="govuk-heading-m">Placement information</h2>
 
-        <p>
-            <b>Individual requirements:</b> Must have a degree and be planning
-            to become a teacher.
-        </p>
+            <p>
+                <b>Individual requirements:</b> Must have a degree and be planning
+                to become a teacher.
+            </p>
 
-        <p>
-            <b>Placement details:</b> Attendees will observe lessons in their
-            chosen subjects and may get the chance to interact with pupils and
-            classroom activities. Only offer key stage 1 experience for primary
-            placements.
-        </p>
+            <p>
+                <b>Placement details:</b> Attendees will observe lessons in their
+                chosen subjects and may get the chance to interact with pupils and
+                classroom activities. Only offer key stage 1 experience for primary
+                placements.
+            </p>
 
+            <p>
+                <b>Placement subjects:</b> <%= @school.subjects.to_sentence %>.
+            </p>
+        </div>
+        
+        <%- if false -%>
+        <div>
+            <h1 class="govuk-heading-m">Location</h1>
 
-        <p><b>Placement subjects:</b> <%= @school.subjects.to_sentence %>.</p>
-
-        <h1 class="govuk-heading-m">Location</h1>
-
-        <img class="school-map" src="/public/images/abschool.jpg" width="250" height="172" />
+            <img class="school-map" src="/public/images/abschool.jpg" width="250" height="172" />
+        </div>
+        <%- end -%>
 
         <p>
             <a class="govuk-button" href="/register/request">
