@@ -10,4 +10,5 @@ Rails.application.routes.draw do
       post 'request_placement', to: 'placement_requests#create'
     end
   end
+  resolve('Candidates::SchoolSearch') { [:candidates, :schools] }
 end

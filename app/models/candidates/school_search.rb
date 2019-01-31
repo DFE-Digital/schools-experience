@@ -1,5 +1,5 @@
 module Candidates
-  class School
+  class SchoolSearch
     include ActiveModel::Model
 
     DISTANCES = [
@@ -35,38 +35,30 @@ module Candidates
     attr_writer :distance
     attr_accessor :fees, :subject, :phase
 
+    class << self
+      def fees
+        FEES
+      end
+
+      def subjects
+        SUBJECTS
+      end
+
+      def phases
+        PHASES
+      end
+
+      def distances
+        DISTANCES
+      end
+    end
+
     def distance
       @distance.to_i
     end
 
     def results
-      school = Struct.new(:name, :address, :phase, :fees, :school_type, :subjects)
-      [
-        school.new(
-          "Abbey College",
-          'Long Millgate, Manchester',
-          'Primary',
-          'Independent School',
-          '£50',
-          %w{Maths English Art Physics Geography}
-        ),
-        school.new(
-          "Chetham's School of Music",
-          'Long Millgate, Manchester',
-          'Primary',
-          'Independent School',
-          '£0',
-          %w{Maths English Art Physics Music}
-        ),
-        school.new(
-          "The Creative Studio",
-          '16 Blossom Street, Manchester',
-          'Primary',
-          'Academy',
-          '£5',
-          %w{Maths Art Physics Geography}
-        )
-      ]
+      school_search.results
     end
 
     def filtering_results?
@@ -75,6 +67,15 @@ module Candidates
 
     def total_results
       0
+    end
+
+  private
+
+    def school_search
+      @school_search ||= Bookings::SchoolSearch.new(
+        query,
+        radius: distance
+      )
     end
   end
 end

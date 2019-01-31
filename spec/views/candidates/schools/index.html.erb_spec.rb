@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "candidates/schools/index.html.erb", type: :view do
   context 'with fresh search' do
     before do
-      assign(:search, Candidates::School.new)
+      assign(:search, Candidates::SchoolSearch.new)
       render
     end
 
@@ -14,7 +14,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
 
   context 'filtering existing search' do
     before do
-      assign :search, Candidates::School.new(
+      assign :search, Candidates::SchoolSearch.new(
         query: 'Manchester',
         phase: ['16-18'],
         fees: '<60',
