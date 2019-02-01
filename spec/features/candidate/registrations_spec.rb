@@ -58,6 +58,27 @@ feature 'Candidate Registrations', type: :feature do
 
     click_button 'Continue'
 
+    expect(page.current_path).to eq '/candidate/registrations/account_checks/new'
+  end
+
+  scenario 'Submit account checks form with errors' do
+    visit '/candidate/registrations/account_checks/new'
+
+    fill_in 'Full name', with: 'testy mctest'
+
+    click_button 'Continue'
+
+    expect(page).to have_text 'There is a problem'
+  end
+
+  scenario 'Submit account checks form successfully' do
+    visit '/candidate/registrations/account_checks/new'
+
+    fill_in 'Full name', with: 'testy mctest'
+    fill_in 'Email address', with: 'test@example.com'
+
+    click_button 'Continue'
+
     expect(page.current_path).to eq '/candidate/registrations/personal_details/new'
   end
 

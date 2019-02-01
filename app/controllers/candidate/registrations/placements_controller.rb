@@ -7,7 +7,7 @@ class Candidate::Registrations::PlacementsController < Candidate::RegistrationsC
     @placement = Candidate::Registrations::Placement.new placement_params
     if @placement.valid?
       current_registration[:placement] = @placement.attributes
-      redirect_to new_candidate_registrations_personal_detail_path
+      redirect_to new_candidate_registrations_account_check_path
     else
       render :new
     end

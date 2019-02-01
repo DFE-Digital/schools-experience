@@ -4,6 +4,12 @@ en:
   activemodel:
     errors:
       models:
+        candidate/registrations/account_check:
+          attributes:
+            email:
+              blank: "Enter an email address"
+            full_name:
+              blank: "Enter your full name"
         candidate/registrations/account_info:
           attributes:
             degree_stage:
@@ -68,6 +74,8 @@ en:
         access_needs: "Tell us so we can make sure the school is able to cater for your requirements"
 
     label:
+      candidate_registrations_account_check:
+        email: 'Email address'
       candidate_registrations_account_info:
         degree_stage_explaination: "Explain"
         degree_subject: "Select the nearest or equivalent option"
