@@ -68,6 +68,8 @@ private
   end
 
   def convert_to_point(easting, northing)
+    return nil if easting.blank? || northing.blank?
+
     coords = Breasal::EastingNorthing.new(
       easting: easting.to_i,
       northing: northing.to_i,
