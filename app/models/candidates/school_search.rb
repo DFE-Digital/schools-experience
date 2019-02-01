@@ -64,9 +64,12 @@ module Candidates
   private
 
     def school_search
-      @school_search ||= Bookings::SchoolSearch.new(
+      Bookings::SchoolSearch.new(
         query,
-        radius: distance
+        radius: distance,
+        subjects: subjects,
+        phases: phases,
+        max_fee: max_fee
       )
     end
   end
