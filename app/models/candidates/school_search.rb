@@ -13,15 +13,14 @@ module Candidates
     ].freeze
 
     FEES = [
-      %w{none None},
-      ['<30', 'up to £30'],
-      ['<60', 'up to £60'],
-      ['<90', 'up to £90']
+      ['', 'None'],
+      ['30', 'up to £30'],
+      ['60', 'up to £60'],
+      ['90', 'up to £90']
     ].freeze
 
     attr_accessor :query
-    attr_writer :distance
-    attr_accessor :fees, :subject, :phase
+    attr_reader :distance, :subjects, :phases, :max_fee
 
     class << self
       def fees
@@ -33,8 +32,21 @@ module Candidates
       end
     end
 
-    def distance
-      @distance.to_i
+    def distance=(d)
+      @distance = d.present? ? d.to_i : nil
+    end
+
+    def subjects=(s)
+      @subjects = Array.wrap(s).map(&:presence).compact.map(&:to_i)
+    end
+
+    def phases=(p)
+      @phases = Array.wrap(p).map(&:presence).compact.map(&:to_i)
+    end
+
+    def max_fee=(mf)
+      mf = mf.to_s.strip
+      @max_fee = FEES.map(&:first).include?(mf) ? mf : ''
     end
 
     def results
