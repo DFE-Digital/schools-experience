@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe Candidate::Registrations::AccountInfosController, type: :request do
+describe Candidate::Registrations::SubjectPreferencesController, type: :request do
   context '#new' do
     before do
-      get '/candidate/registrations/account_infos/new'
+      get '/candidate/registrations/subject_preference/new'
     end
 
     it 'renders the new template' do
@@ -13,13 +13,13 @@ describe Candidate::Registrations::AccountInfosController, type: :request do
 
   context '#create' do
     before do
-      post '/candidate/registrations/account_infos', params: account_info_params
+      post '/candidate/registrations/subject_preference', params: subject_preference_params
     end
 
     context 'invalid' do
-      let :account_info_params do
+      let :subject_preference_params do
         {
-          candidate_registrations_account_info: {
+          candidate_registrations_subject_preference: {
             degree_stage: "I don't have a degree and am not studying for one",
             degree_subject: "geology &amp; earth science",
             teaching_stage: "I want to become a teacher",
@@ -35,9 +35,9 @@ describe Candidate::Registrations::AccountInfosController, type: :request do
     end
 
     context 'valid' do
-      let :account_info_params do
+      let :subject_preference_params do
         {
-          candidate_registrations_account_info: {
+          candidate_registrations_subject_preference: {
             degree_stage: "I don't have a degree and am not studying for one",
             degree_subject: "Not applicable",
             teaching_stage: "I want to become a teacher",
@@ -47,8 +47,8 @@ describe Candidate::Registrations::AccountInfosController, type: :request do
         }
       end
 
-      it 'stores the personal details in the session' do
-        expect(session[:registration][:account_info]).to eq(
+      it 'stores the subject_preference in the session' do
+        expect(session[:registration][:subject_preference]).to eq(
           "degree_stage" =>  "I don't have a degree and am not studying for one",
           "degree_stage_explaination" => nil,
           "degree_subject" =>  "Not applicable",
@@ -59,7 +59,8 @@ describe Candidate::Registrations::AccountInfosController, type: :request do
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to '/candidate/registrations/dbs_checks/new'
+        expect(response).to redirect_to \
+          '/candidate/registrations/background_check/new'
       end
     end
   end

@@ -2,8 +2,8 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Unfortunately, we don’t have your details</h1>
       <p>Register your details with us so you can get school experience placements.</p>
-      <%= form_for @personal_details do |f| %>
-        <%= GovukElementsErrorsHelper.error_summary @personal_details, 'There is a problem', '' %>
+      <%= form_for @address, url: candidate_registrations_address_path do |f| %>
+        <%= GovukElementsErrorsHelper.error_summary @address, 'There is a problem', '' %>
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             <h1 class="govuk-fieldset__heading">Address and telephone number</h1>

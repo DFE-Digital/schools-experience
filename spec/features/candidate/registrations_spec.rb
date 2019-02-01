@@ -9,14 +9,14 @@ feature 'Candidate Registrations', type: :feature do
     today + 1.day
   end
 
-  scenario 'Navigate to registrations/placements/new' do
-    visit '/candidate/registrations/placements/new'
+  scenario 'Navigate to registrations/placement_preference/new' do
+    visit '/candidate/registrations/placement_preference/new'
 
     expect(page).to have_text 'Request school experience placement'
   end
 
-  scenario 'Submit registrations/placements form with errors' do
-    visit '/candidate/registrations/placements/new'
+  scenario 'Submit registrations/placement_preference form with errors' do
+    visit '/candidate/registrations/placement_preference/new'
 
     within all('.govuk-date-input')[0] do
       fill_in 'Day',   with: today.day
@@ -37,8 +37,8 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text 'There is a problem'
   end
 
-  scenario 'Submit registrations/placements form successfully' do
-    visit '/candidate/registrations/placements/new'
+  scenario 'Submit registrations/placement_preference form successfully' do
+    visit '/candidate/registrations/placement_preference/new'
 
     within all('.govuk-date-input')[0] do
       fill_in 'Day',   with: today.day
@@ -58,11 +58,11 @@ feature 'Candidate Registrations', type: :feature do
 
     click_button 'Continue'
 
-    expect(page.current_path).to eq '/candidate/registrations/account_checks/new'
+    expect(page.current_path).to eq '/candidate/registrations/account_check/new'
   end
 
   scenario 'Submit account checks form with errors' do
-    visit '/candidate/registrations/account_checks/new'
+    visit '/candidate/registrations/account_check/new'
 
     fill_in 'Full name', with: 'testy mctest'
 
@@ -72,18 +72,18 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   scenario 'Submit account checks form successfully' do
-    visit '/candidate/registrations/account_checks/new'
+    visit '/candidate/registrations/account_check/new'
 
     fill_in 'Full name', with: 'testy mctest'
     fill_in 'Email address', with: 'test@example.com'
 
     click_button 'Continue'
 
-    expect(page.current_path).to eq '/candidate/registrations/personal_details/new'
+    expect(page.current_path).to eq '/candidate/registrations/address/new'
   end
 
-  scenario 'Submit registrations/personal_details form with errors' do
-    visit '/candidate/registrations/personal_details/new'
+  scenario 'Submit registrations/address form with errors' do
+    visit '/candidate/registrations/address/new'
 
     fill_in 'Building', with: 'Test house'
     fill_in 'Street', with: 'Test street'
@@ -96,8 +96,8 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "There is a problem"
   end
 
-  scenario 'Submit registrations/personal_details form successfully' do
-    visit '/candidate/registrations/personal_details/new'
+  scenario 'Submit registrations/address form successfully' do
+    visit '/candidate/registrations/address/new'
 
     fill_in 'Building', with: 'Test house'
     fill_in 'Street', with: 'Test street'
@@ -108,11 +108,11 @@ feature 'Candidate Registrations', type: :feature do
 
     click_button 'Continue'
 
-    expect(page.current_path).to eq '/candidate/registrations/account_infos/new'
+    expect(page.current_path).to eq '/candidate/registrations/subject_preference/new'
   end
 
-  scenario 'Submit registrations/account-info form with errors' do
-    visit '/candidate/registrations/account_infos/new'
+  scenario 'Submit registrations/subject_preference form with errors' do
+    visit '/candidate/registrations/subject_preference/new'
 
     choose 'Graduate or postgraduate'
     select 'Physics', from: 'Select the nearest or equivalent option'
@@ -124,8 +124,8 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "There is a problem"
   end
 
-  scenario 'Submit registrations/account-info form successfully' do
-    visit '/candidate/registrations/account_infos/new'
+  scenario 'Submit registrations/subject_preferenc form successfully' do
+    visit '/candidate/registrations/subject_preference/new'
 
     choose 'Graduate or postgraduate'
     select 'Physics', from: 'Select the nearest or equivalent option'
@@ -135,11 +135,12 @@ feature 'Candidate Registrations', type: :feature do
 
     click_button 'Continue'
 
-    expect(page.current_path).to eq '/candidate/registrations/dbs_checks/new'
+    expect(page.current_path).to eq \
+      '/candidate/registrations/background_check/new'
   end
 
-  scenario 'Submit registrations/dbs_checks/new' do
-    visit '/candidate/registrations/dbs_checks/new'
+  scenario 'Submit registrations/background_check/new' do
+    visit '/candidate/registrations/background_check/new'
 
     choose 'Yes'
 

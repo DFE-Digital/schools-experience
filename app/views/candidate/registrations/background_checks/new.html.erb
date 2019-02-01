@@ -3,8 +3,8 @@
     <h1 class="govuk-heading-l">Background and security checks</h1>
     <p>Some schools will carry out these kinds of checks before offering placements.</p>
 
-    <%= form_for @dbs_check do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary @dbs_check, 'There is a problem', '' %>
+    <%= form_for @background_check, url: candidate_registrations_background_check_path do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary @background_check, 'There is a problem', '' %>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h1 class="govuk-fieldset__heading">Do you have a Disclosure and Barring Service (DBS) check document?</h1>
