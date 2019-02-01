@@ -1,3 +1,5 @@
+require 'breasal'
+
 class SchoolImporter
   attr_accessor :urns, :edubase_data
   def initialize(urns, edubase_data)

@@ -14,7 +14,7 @@ namespace :data do
 
       edubase_data = CSV
         .parse(edubase_file, headers: true)
-        .map
+        .each
         .with_object({}) do |record, output|
           output[record['URN'].to_i] = record
         end
