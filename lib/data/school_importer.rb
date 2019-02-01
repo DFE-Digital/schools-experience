@@ -3,8 +3,16 @@ require 'breasal'
 class SchoolImporter
   attr_accessor :urns, :edubase_data
   def initialize(urns, edubase_data)
-    self.urns         = urns
+    self.urns = urns
+      .reject { |l| l.in?(%w{URN SCITT TRUST TSA}) }
+      .map(&:strip)
+      .map(&:to_i)
+
     self.edubase_data = edubase_data
+      .each
+      .with_object({}) do |record, h|
+        h[record['URN'].to_i] = record
+      end
   end
 
   def import
