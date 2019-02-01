@@ -64,7 +64,7 @@ private
   end
 
   def phases
-    @phases ||= Bookings::Phase.all.group_by(&:edubase_id)
+    @phases ||= Bookings::Phase.all.index_by(&:edubase_id)
   end
 
   def convert_to_point(easting, northing)
