@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe Candidate::Registrations::DbsChecksController, type: :request do
+describe Candidate::Registrations::BackgroundChecksController, type: :request do
   context '#new' do
     before do
-      get '/candidate/registrations/dbs_checks/new'
+      get '/candidate/registrations/background_check/new'
     end
 
     it 'renders the new form' do
@@ -13,13 +13,14 @@ describe Candidate::Registrations::DbsChecksController, type: :request do
 
   context '#create' do
     before do
-      post '/candidate/registrations/dbs_checks/', params: dbs_check_params
+      post '/candidate/registrations/background_check/',
+        params: background_check_params
     end
 
     context 'invalid' do
-      let :dbs_check_params do
+      let :background_check_params do
         {
-          candidate_registrations_dbs_check: { has_dbs_check: nil }
+          candidate_registrations_background_check: { has_dbs_check: nil }
         }
       end
 
@@ -29,14 +30,15 @@ describe Candidate::Registrations::DbsChecksController, type: :request do
     end
 
     context 'valid' do
-      let :dbs_check_params do
+      let :background_check_params do
         {
-          candidate_registrations_dbs_check: { has_dbs_check: true }
+          candidate_registrations_background_check: { has_dbs_check: true }
         }
       end
 
       it 'stores the dbs check in the session' do
-        expect(session[:registration][:dbs_check]).to eq 'has_dbs_check' => true
+        expect(session[:registration][:background_check]).to eq \
+          'has_dbs_check' => true
       end
 
       it 'redirects to the next step' do

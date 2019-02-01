@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Candidate::Registrations::PersonalDetail, type: :model do
+describe Candidate::Registrations::Address, type: :model do
   context 'attributes' do
     it { is_expected.to respond_to :building }
     it { is_expected.to respond_to :street }
@@ -12,67 +12,67 @@ describe Candidate::Registrations::PersonalDetail, type: :model do
 
   context 'validations' do
     before :each do
-      personal_detail.validate
+      address.validate
     end
 
     context 'when building is not present' do
-      let :personal_detail do
+      let :address do
         described_class.new
       end
 
       it 'adds an error to building' do
-        expect(personal_detail.errors[:building]).to eq ["Enter a building"]
+        expect(address.errors[:building]).to eq ["Enter a building"]
       end
     end
 
     context 'when street is not present' do
-      let :personal_detail do
+      let :address do
         described_class.new
       end
 
       it 'adds an error to street' do
-        expect(personal_detail.errors[:street]).to eq ["Enter a street"]
+        expect(address.errors[:street]).to eq ["Enter a street"]
       end
     end
 
     context 'when town_or_city is not present' do
-      let :personal_detail do
+      let :address do
         described_class.new
       end
 
       it 'adds an error to town_or_city' do
-        expect(personal_detail.errors[:town_or_city]).to eq \
+        expect(address.errors[:town_or_city]).to eq \
           ["Enter a town or city"]
       end
     end
 
     context 'when county is not present' do
-      let :personal_detail do
+      let :address do
         described_class.new
       end
 
       it 'adds an error to county' do
-        expect(personal_detail.errors[:county]).to eq ["Enter a county"]
+        expect(address.errors[:county]).to eq ["Enter a county"]
       end
     end
 
     context 'when postcode is not present' do
-      let :personal_detail do
+      let :address do
         described_class.new
       end
 
       it 'adds an error to postcode' do
-        expect(personal_detail.errors[:postcode]).to eq ["Enter a postcode"]
+        expect(address.errors[:postcode]).to eq ["Enter a postcode"]
       end
     end
 
     context 'when phone is not present' do
-      let :personal_detail do
+      let :address do
         described_class.new
       end
 
       it 'adds an error to phone' do
-        expect(personal_detail.errors[:phone]).to eq \
+        expect(address.errors[:phone]).to eq \
           ["Enter a telephone number"]
       end
     end

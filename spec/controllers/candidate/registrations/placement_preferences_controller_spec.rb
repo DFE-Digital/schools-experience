@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-describe Candidate::Registrations::PlacementsController, type: :request do
+describe Candidate::Registrations::PlacementPreferencesController, type: :request do
   let! :tomorrow do
     Date.tomorrow
   end
 
   context '#new' do
     before do
-      get '/candidate/registrations/placements/new'
+      get '/candidate/registrations/placement_preference/new'
     end
 
     it 'responds with 200' do
@@ -21,12 +21,17 @@ describe Candidate::Registrations::PlacementsController, type: :request do
 
   context '#create' do
     before do
-      post '/candidate/registrations/placements', params: placement_params
+      post '/candidate/registrations/placement_preference',
+        params: placement_preference_params
     end
 
     context 'invalid' do
-      let :placement_params do
-        { candidate_registrations_placement: { date_start: tomorrow } }
+      let :placement_preference_params do
+        {
+          candidate_registrations_placement_preference: {
+            date_start: tomorrow
+          }
+        }
       end
 
       it 'rerenders the new form' do
@@ -35,9 +40,9 @@ describe Candidate::Registrations::PlacementsController, type: :request do
     end
 
     context 'valid' do
-      let :placement_params do
+      let :placement_preference_params do
         {
-          candidate_registrations_placement: {
+          candidate_registrations_placement_preference: {
             date_start: tomorrow,
             date_end: (tomorrow + 3.days),
             objectives: 'Become a teacher',
@@ -46,8 +51,8 @@ describe Candidate::Registrations::PlacementsController, type: :request do
         }
       end
 
-      it 'stores the placement details in the session' do
-        expect(session[:registration][:placement]).to eq(
+      it 'stores the placement_preference details in the session' do
+        expect(session[:registration][:placement_preference]).to eq(
           "date_start" => tomorrow,
           "date_end" => (tomorrow + 3.days),
           "objectives" => 'Become a teacher',
@@ -58,7 +63,7 @@ describe Candidate::Registrations::PlacementsController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          '/candidate/registrations/account_checks/new'
+          '/candidate/registrations/account_check/new'
       end
     end
   end

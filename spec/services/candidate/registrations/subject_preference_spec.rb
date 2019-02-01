@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Candidate::Registrations::AccountInfo, type: :model do
+describe Candidate::Registrations::SubjectPreference, type: :model do
   context 'attributes' do
     it { is_expected.to respond_to :degree_stage }
     it { is_expected.to respond_to :degree_stage_explaination }
