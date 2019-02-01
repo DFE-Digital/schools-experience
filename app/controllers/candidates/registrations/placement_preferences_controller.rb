@@ -8,7 +8,7 @@ module Candidates
       def create
         @placement_preference = PlacementPreference.new placement_preference_params
         if @placement_preference.valid?
-          current_registration[:placement_preference] = @placement_preference.attributes
+          persist @placement_preference
           redirect_to new_candidates_registrations_account_check_path
         else
           render :new

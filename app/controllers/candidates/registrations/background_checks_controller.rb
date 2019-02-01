@@ -8,7 +8,7 @@ module Candidates
       def create
         @background_check = BackgroundCheck.new background_check_params
         if @background_check.valid?
-          current_registration[:background_check] = @background_check.attributes
+          persist @background_check
           redirect_to candidates_registrations_placement_request_path
         else
           render :new

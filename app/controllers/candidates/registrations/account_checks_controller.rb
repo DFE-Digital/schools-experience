@@ -8,7 +8,7 @@ module Candidates
       def create
         @account_check = AccountCheck.new account_check_params
         if @account_check.valid?
-          current_registration[:account_check] = @account_check.attributes
+          persist @account_check
           redirect_to new_candidates_registrations_address_path
         else
           render :new

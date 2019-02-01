@@ -8,7 +8,7 @@ module Candidates
       def create
         @subject_preference = SubjectPreference.new subject_preference_params
         if @subject_preference.valid?
-          current_registration[:subject_preference] = @subject_preference.attributes
+          persist @subject_preference
           redirect_to new_candidates_registrations_background_check_path
         else
           render :new

@@ -48,7 +48,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
       end
 
       it 'stores the subject_preference in the session' do
-        expect(session[:registration][:subject_preference]).to eq(
+        expect(session['registration']['candidates_registrations_subject_preference']).to eq(
           "degree_stage" =>  "I don't have a degree and am not studying for one",
           "degree_stage_explaination" => nil,
           "degree_subject" =>  "Not applicable",

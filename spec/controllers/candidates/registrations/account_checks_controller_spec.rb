@@ -42,7 +42,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
       end
 
       it 'stores the account_check details in the session' do
-        expect(session[:registration][:account_check]).to eq(
+        expect(session['registration']['candidates_registrations_account_check']).to eq(
           'full_name' => 'test name',
           'email' => 'test@example.com'
         )

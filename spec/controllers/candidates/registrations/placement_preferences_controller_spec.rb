@@ -52,7 +52,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
 
       it 'stores the placement_preference details in the session' do
-        expect(session[:registration][:placement_preference]).to eq(
+        expect(session['registration']['candidates_registrations_placement_preference']).to eq(
           "date_start" => tomorrow,
           "date_end" => (tomorrow + 3.days),
           "objectives" => 'Become a teacher',

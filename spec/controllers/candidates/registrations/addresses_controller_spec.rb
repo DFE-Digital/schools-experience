@@ -54,7 +54,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
       end
 
       it 'stores the address details in the session' do
-        expect(session[:registration][:address]).to eq(
+        expect(session["registration"]["candidates_registrations_address"]).to eq(
           "building" => 'Test house',
           "street" => 'Test street',
           "town_or_city" => 'Test Town',

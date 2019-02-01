@@ -8,7 +8,7 @@ module Candidates
       def create
         @address = Address.new address_params
         if @address.valid?
-          current_registration[:address] = @address.attributes
+          persist @address
           redirect_to new_candidates_registrations_subject_preference_path
         else
           render :new
