@@ -42,8 +42,8 @@ describe SchoolImporter do
       let!(:count_before) { Bookings::School.count }
 
       before do
-        create(:bookings_phase, id: 2)
-        create(:bookings_phase, id: 4)
+        create(:bookings_phase, edubase_id: 2)
+        create(:bookings_phase, edubase_id: 4)
       end
 
       subject { SchoolImporter.new(urns, edubase_data) }
