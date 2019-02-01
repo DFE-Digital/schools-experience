@@ -20,7 +20,7 @@
 
             <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
 
-            <%= f.submit 'Update schools list' %>
+            <%= f.submit 'Update schools list', name: nil %>
         <% end %>
     </div>
 
@@ -49,11 +49,11 @@
             <li class="school-result">
                 <strong><%= link_to result.name, candidates_school_path(index + 1) %></strong>
                 <ul>
-                    <li><strong>Address:</strong> <%= result.address %></li>
-                    <li><strong>Education </strong>phase: <%= result.phase %></li>
-                    <li><strong>Fees:</strong> <%= result.fees %></li>
-                    <li><strong>School type:</strong> <%= result.school_type %></li>
-                    <li><strong>Subjects:</strong> <%= result.subjects.to_sentence %></li>
+                    <li><strong>Address:</strong> <%= 'FIXME - TBD' %></li>
+                    <li><strong>Education phase:</strong> <%= result.phases.map(&:name).join(', ') %></li>
+                    <li><strong>Fees:</strong> &pound;<%= result.fee %></li>
+                    <li><strong>School type:</strong> <%= 'FIXME - TBD' %></li>
+                    <li><strong>Subjects:</strong> <%= result.subjects.map(&:name).join(', ') %></li>
                 </ul>
             </li>
             <% end %>

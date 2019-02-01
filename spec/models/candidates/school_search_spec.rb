@@ -5,6 +5,7 @@ RSpec.describe Candidates::SchoolSearch do
     subject do
       described_class.new(
         query: 'this',
+        location: 'manchester',
         distance: '3',
         max_fee: '30',
         phases: [1,2,3],
@@ -15,6 +16,7 @@ RSpec.describe Candidates::SchoolSearch do
     it 'assigns attributes' do
       expect(subject.query).to eq('this')
       expect(subject.distance).to eq(3)
+      expect(subject.location).to eq('manchester')
       expect(subject.max_fee).to eq('30')
       expect(subject.phases).to eq([1,2,3])
       expect(subject.subjects).to eq([4,5,6])
@@ -136,6 +138,40 @@ RSpec.describe Candidates::SchoolSearch do
 
     it 'returns array of Schools' do
       expect(subject.results).to be_kind_of Enumerable
+    end
+  end
+
+  context '.valid_search?' do
+    context 'with query' do
+      subject { described_class.new(query: 'Test School') }
+      it('should be valid') { expect(subject.valid_search?).to be true }
+    end
+
+    context 'with location' do
+      subject { described_class.new(location: 'Manchester') }
+      it('should be valid') { expect(subject.valid_search?).to be false }
+    end
+
+    context 'with distance' do
+      subject { described_class.new(distance: '10') }
+      it('should be valid') { expect(subject.valid_search?).to be false }
+    end
+
+    context 'with location and distance' do
+      subject { described_class.new(location: 'Manchester', distance: '10') }
+      it('should be valid') { expect(subject.valid_search?).to be true }
+    end
+
+    context 'with query, location and distance' do
+      subject do
+        described_class.new(
+          query: 'test',
+          location: 'Manchester',
+          distance: '10'
+        )
+      end
+
+      it('should be valid') { expect(subject.valid_search?).to be true }
     end
   end
 
