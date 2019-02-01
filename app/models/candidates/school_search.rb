@@ -12,23 +12,11 @@ module Candidates
       [25, '25 miles']
     ].freeze
 
-    PHASES = [
-      ['4-11', 'Primary 4 - 11'],
-      ['11-16', 'Secondary 11 - 16'],
-      ['16-18', '16 to 18']
-    ].freeze
-
     FEES = [
       %w{none None},
       ['<30', 'up to £30'],
       ['<60', 'up to £60'],
       ['<90', 'up to £90']
-    ].freeze
-
-    SUBJECTS = [
-      'Art and design', 'Combined science', 'Computer science',
-      'Food preparation and nutrition', 'Geography', 'History', 'Music',
-      'Physical education', 'Religious studies'
     ].freeze
 
     attr_accessor :query
@@ -38,14 +26,6 @@ module Candidates
     class << self
       def fees
         FEES
-      end
-
-      def subjects
-        SUBJECTS
-      end
-
-      def phases
-        PHASES
       end
 
       def distances
