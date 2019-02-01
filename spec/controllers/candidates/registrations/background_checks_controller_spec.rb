@@ -43,7 +43,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          '/candidates/registrations/placement_request'
+          '/candidates/registrations/application_preview'
       end
     end
   end
