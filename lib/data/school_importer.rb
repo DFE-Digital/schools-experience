@@ -24,15 +24,15 @@ class SchoolImporter
           raise "URN #{urn} cannot be found in dataset"
         end
 
-        school = build_school(row)
-
-        if school.save
-          puts("%<count>s of %<total>d | %<urn>s | %<name>s" % {
-            count: i.to_s.rjust(3),
-            total: total,
-            urn: urn.to_s.rjust(8),
-            name: row['EstablishmentName']
-          })
+        if build_school(row).save
+          if Rails.env != 'test'
+            puts("%<count>s of %<total>d | %<urn>s | %<name>s" % {
+              count: i.to_s.rjust(3),
+              total: total,
+              urn: urn.to_s.rjust(8),
+              name: row['EstablishmentName']
+            })
+          end
         else
           fail "failed to import #{urn}"
         end
