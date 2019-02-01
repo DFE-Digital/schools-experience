@@ -1,8 +1,3 @@
-Given("I am on the {string} page") do |string|
-  visit(path_for(string))
-  expect(page.current_path).to eql('/')
-end
-
 Then("the leading paragraph should provide me with a summary of the service") do
   within('p.govuk-body-lead') do
     [
@@ -13,10 +8,6 @@ Then("the leading paragraph should provide me with a summary of the service") do
       expect(page).to have_text(snippet)
     end
   end
-end
-
-Then("the page's main header should be {string}") do |string|
-  expect(page).to have_css("h1.govuk-heading-xl", text: string)
 end
 
 Then("the page should include a paragraph on DBS checks with a link to the service") do

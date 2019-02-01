@@ -5,7 +5,7 @@ Feature: Candidate landing page
 
     Scenario: Page heading
         Given I am on the 'landing' page
-        Then the page's main header should be "Request school experience placements"
+        Then the page's main header should be 'Request school experience placements'
 
     Scenario: Leading paragraph
         Given I am on the 'landing' page
