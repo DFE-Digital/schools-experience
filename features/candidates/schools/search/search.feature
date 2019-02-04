@@ -1,7 +1,7 @@
 Feature: Schools search page
     To help me find a suitable school
     As a potential candidate
-    I want to be able to search and filter schools
+    I want to be able to search for schools in my area
 
     Scenario: Page contents
         Given I am on the 'find a school' page

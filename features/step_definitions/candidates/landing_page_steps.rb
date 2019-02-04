@@ -20,7 +20,7 @@ Then("the page should include a paragraph on DBS checks with a link to the servi
 end
 
 Then("I should see a warning informing me that placements are only available in England") do
-  within('p.govuk-inset-text.govuk-se-warning-location-phase') do
+  within('p.govuk-inset-text.warning-location-phase') do
     expect(page).to have_text('This service is only available for placements at primary and secondary schools in England.')
   end
 end
@@ -48,12 +48,8 @@ Then("the right column should have the subheading {string}") do |string|
   end
 end
 
-Then("there should be a section titled {string}") do |string|
-  expect(page).to have_css('h2.govuk-heading-m', text: string)
-end
-
 Then("it should contain some useful information about the process") do
-  within('.govuk-se-info-before-you-start') do
+  within('.before-you-start') do
     [
       "you’ll need to provide",
       "personal details",

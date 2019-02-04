@@ -1,7 +1,7 @@
 Feature: Candidate landing page
     To give me an idea of service's purpose
     As a potential candidate
-    I want to read an introduction to the service
+    I want to read an overview of the what the service offers
 
     Scenario: Page heading
         Given I am on the 'landing' page
