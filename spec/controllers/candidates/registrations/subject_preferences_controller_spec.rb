@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Candidates::Registrations::SubjectPreferencesController, type: :request do
   context '#new' do
     before do
-      get '/candidates/registrations/subject_preference/new'
+      get '/candidates/schools/URN/registrations/subject_preference/new'
     end
 
     it 'renders the new template' do
@@ -13,7 +13,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
 
   context '#create' do
     before do
-      post '/candidates/registrations/subject_preference', params: subject_preference_params
+      post '/candidates/schools/URN/registrations/subject_preference', params: subject_preference_params
     end
 
     context 'invalid' do
@@ -60,7 +60,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          '/candidates/registrations/background_check/new'
+          '/candidates/schools/URN/registrations/background_check/new'
       end
     end
   end

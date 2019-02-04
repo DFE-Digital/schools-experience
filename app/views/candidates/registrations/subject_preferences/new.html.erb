@@ -1,7 +1,7 @@
 <h1 class="govuk-heading-l">We need some more details</h1>
 <p>The following will be used to help schools offer you school experience placements.</p>
 
-<%= form_for @subject_preference, url: candidates_registrations_subject_preference_path do |f| %>
+<%= form_for @subject_preference, url: candidates_school_registrations_subject_preference_path do |f| %>
   <%= GovukElementsErrorsHelper.error_summary @subject_preference, 'There is a problem', '' %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

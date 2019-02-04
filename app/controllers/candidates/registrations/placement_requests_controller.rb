@@ -14,7 +14,7 @@ module Candidates
       end
 
       def create
-        redirect_to candidates_registrations_placement_request_path
+        redirect_to candidates_school_registrations_placement_request_path
       end
     end
   end
