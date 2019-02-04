@@ -12,13 +12,13 @@
             <%= f.hidden_field :query %>
             <%= f.hidden_field :distance %>
 
-            <%= f.collection_check_boxes :phase, Candidates::School::PHASES, :first, :last %>
+            <%= f.collection_check_boxes :phase, Candidates::SchoolSearch.phases, :first, :last %>
 
-            <%= f.radio_button_fieldset :fees, choices: Candidates::School::FEES,
+            <%= f.radio_button_fieldset :fees, choices: Candidates::SchoolSearch.fees,
                                                 value_method: :first,
                                                 text_method: :last %>
 
-            <%= f.collection_check_boxes :subject, Candidates::School::SUBJECTS, :to_s, :to_s %>
+            <%= f.collection_check_boxes :subject, Candidates::SchoolSearch.subjects, :to_s, :to_s %>
 
             <%= f.submit 'Update schools list' %>
         <% end %>

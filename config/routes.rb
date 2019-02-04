@@ -19,4 +19,5 @@ Rails.application.routes.draw do
       resource :placement_request, only: %i(show)
     end
   end
+  resolve('Candidates::SchoolSearch') { %i{candidates schools} }
 end
