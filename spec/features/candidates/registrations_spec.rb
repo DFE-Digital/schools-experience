@@ -9,15 +9,20 @@ feature 'Candidate Registrations', type: :feature do
     today + 1.day
   end
 
-  scenario 'Navigate to registrations/placement_preference/new' do
-    visit '/candidates/registrations/placement_preference/new'
+  let! :today_in_words do
+    today.strftime '%d %B %Y'
+  end
 
+  let! :tomorrow_in_words do
+    tomorrow.strftime '%d %B %Y'
+  end
+
+  scenario 'Candidate Registraion Journey' do
+    # Begin wizard journey
+    visit '/candidates/registrations/placement_preference/new'
     expect(page).to have_text 'Request school experience placement'
-  end
 
-  scenario 'Submit registrations/placement_preference form with errors' do
-    visit '/candidates/registrations/placement_preference/new'
-
+    # Submit registrations/placement_preference form with errors
     within all('.govuk-date-input')[0] do
       fill_in 'Day',   with: today.day
       fill_in 'Month', with: today.month
@@ -31,15 +36,10 @@ feature 'Candidate Registrations', type: :feature do
     end
 
     fill_in 'Explain in 50 words or fewer', with: 'I enjoy teaching'
-
     click_button 'Continue'
-
     expect(page).to have_text 'There is a problem'
-  end
 
-  scenario 'Submit registrations/placement_preference form successfully' do
-    visit '/candidates/registrations/placement_preference/new'
-
+    # Submit registrations/placement_preference form successfully
     within all('.govuk-date-input')[0] do
       fill_in 'Day',   with: today.day
       fill_in 'Month', with: today.month
@@ -53,99 +53,90 @@ feature 'Candidate Registrations', type: :feature do
     end
 
     fill_in 'Explain in 50 words or fewer', with: 'I enjoy teaching'
-
     choose 'No'
-
     click_button 'Continue'
+    expect(page.current_path).to eq \
+      '/candidates/registrations/account_check/new'
 
-    expect(page.current_path).to eq '/candidates/registrations/account_check/new'
-  end
-
-  scenario 'Submit account checks form with errors' do
-    visit '/candidates/registrations/account_check/new'
-
+    # Submit account checks form with errors
     fill_in 'Full name', with: 'testy mctest'
-
     click_button 'Continue'
-
     expect(page).to have_text 'There is a problem'
-  end
 
-  scenario 'Submit account checks form successfully' do
-    visit '/candidates/registrations/account_check/new'
-
+    # Submit account checks form successfully
     fill_in 'Full name', with: 'testy mctest'
     fill_in 'Email address', with: 'test@example.com'
-
     click_button 'Continue'
-
     expect(page.current_path).to eq '/candidates/registrations/address/new'
-  end
 
-  scenario 'Submit registrations/address form with errors' do
-    visit '/candidates/registrations/address/new'
-
+    # Submit registrations/address form with errors
     fill_in 'Building', with: 'Test house'
     fill_in 'Street', with: 'Test street'
     fill_in 'Town or city', with: 'Test Town'
     fill_in 'County', with: 'Testshire'
     fill_in 'Postcode', with: 'TE57 1NG'
-
     click_button 'Continue'
-
     expect(page).to have_text "There is a problem"
-  end
 
-  scenario 'Submit registrations/address form successfully' do
-    visit '/candidates/registrations/address/new'
-
+    # Submit registrations/address form successfully
     fill_in 'Building', with: 'Test house'
     fill_in 'Street', with: 'Test street'
     fill_in 'Town or city', with: 'Test Town'
     fill_in 'County', with: 'Testshire'
     fill_in 'Postcode', with: 'TE57 1NG'
     fill_in 'UK telephone number', with: '01234567890'
-
     click_button 'Continue'
+    expect(page.current_path).to eq \
+      '/candidates/registrations/subject_preference/new'
 
-    expect(page.current_path).to eq '/candidates/registrations/subject_preference/new'
-  end
-
-  scenario 'Submit registrations/subject_preference form with errors' do
-    visit '/candidates/registrations/subject_preference/new'
-
+    # Submit registrations/subject_preference form with errors
     choose 'Graduate or postgraduate'
     select 'Physics', from: 'Select the nearest or equivalent option'
     choose 'I want to become a teacher'
     select 'Physics', from: 'First choice'
-
     click_button 'Continue'
-
     expect(page).to have_text "There is a problem"
-  end
 
-  scenario 'Submit registrations/subject_preferenc form successfully' do
-    visit '/candidates/registrations/subject_preference/new'
-
+    # Submit registrations/subject_preference form successfully
     choose 'Graduate or postgraduate'
     select 'Physics', from: 'Select the nearest or equivalent option'
     choose 'I want to become a teacher'
     select 'Physics', from: 'First choice'
     select 'Mathematics', from: 'Second choice'
-
     click_button 'Continue'
-
     expect(page.current_path).to eq \
       '/candidates/registrations/background_check/new'
-  end
 
-  xscenario 'Submit registrations/background_check/new' do
-    visit '/candidates/registrations/background_check/new'
-
-    choose 'Yes'
-
+    # Submit registrations/background_check form with errors
     click_button 'Continue'
+    expect(page).to have_text 'There is a problem'
 
-    expect(page.current_path).to eq '/candidates/registrations/application_previews'
+    # Submit registrations/background_check form successfully
+    choose 'Yes'
+    click_button 'Continue'
+    expect(page.current_path).to eq \
+      '/candidates/registrations/application_preview'
+
+    # Expect preview to match the data we successfully submited
+    expect(page).to have_text 'Full name testy mctest'
+    expect(page).to have_text \
+      'Address Test house, Test street, Test Town, Testshire, TE57 1NG'
+    expect(page).to have_text 'UK telephone number 01234567890'
+    expect(page).to have_text 'Email address test@example.com'
+    expect(page).to have_text 'School or college SCHOOL_STUB'
+    expect(page).to have_text \
+      "Placement availability #{today_in_words} to #{tomorrow_in_words}"
+    expect(page).to have_text "Placement outcome I enjoy teaching"
+    expect(page).to have_text "Disability or access needs None"
+    expect(page).to have_text "Degree stage Graduate or postgraduate"
+    expect(page).to have_text "Degree subject Physics"
+    expect(page).to have_text "Teaching stage I want to become a teacher"
+    expect(page).to have_text "Teaching subject - first choice Physics"
+    expect(page).to have_text "Teaching subject - second choice Mathematics"
+    expect(page).to have_text "DBS check document Yes"
+
+    # Submit placement request form successfully
+    click_button 'Accept and send'
+    expect(page).to have_text 'Your placement request has been sent'
   end
 end
