@@ -11,8 +11,10 @@ describe Candidates::School do
     end
 
     context('with invalid URN') do
-      it "will return nil" do
-        expect(described_class.find('abc123')).to be_nil
+      it "will raise ActiveRecord::RecordNotFound" do
+        expect {
+          described_class.find('abc123')
+        }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
   end

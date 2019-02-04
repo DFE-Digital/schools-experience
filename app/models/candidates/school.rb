@@ -2,7 +2,7 @@ class Candidates::School
   class << self
     def find(identifier)
       # Note currently using id, will be converted to URN when available
-      Bookings::School.find_by(id: identifier)
+      Bookings::School.find_by!(id: identifier)
     end
 
     def phases
