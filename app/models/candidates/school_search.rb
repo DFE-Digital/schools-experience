@@ -32,21 +32,21 @@ module Candidates
       end
     end
 
-    def distance=(d)
-      @distance = d.present? ? d.to_i : nil
+    def distance=(dist_ids)
+      @distance = dist_ids.present? ? dist_ids.to_i : nil
     end
 
-    def subjects=(s)
-      @subjects = Array.wrap(s).map(&:presence).compact.map(&:to_i)
+    def subjects=(subj_ids)
+      @subjects = Array.wrap(subj_ids).map(&:presence).compact.map(&:to_i)
     end
 
-    def phases=(p)
-      @phases = Array.wrap(p).map(&:presence).compact.map(&:to_i)
+    def phases=(phase_ids)
+      @phases = Array.wrap(phase_ids).map(&:presence).compact.map(&:to_i)
     end
 
-    def max_fee=(mf)
-      mf = mf.to_s.strip
-      @max_fee = FEES.map(&:first).include?(mf) ? mf : ''
+    def max_fee=(max_f)
+      max_f = max_f.to_s.strip
+      @max_fee = FEES.map(&:first).include?(max_f) ? max_f : ''
     end
 
     def results

@@ -24,9 +24,9 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
 
       assign :search, Candidates::SchoolSearch.new(
         query: 'Manchester',
-        phases: ['3'],
+        phases: %w{3},
         max_fee: '60',
-        subjects: ['1', '3']
+        subjects: %w{1 3}
       )
 
       render
