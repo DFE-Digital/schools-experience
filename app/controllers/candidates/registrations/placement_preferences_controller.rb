@@ -9,7 +9,7 @@ module Candidates
         @placement_preference = PlacementPreference.new placement_preference_params
         if @placement_preference.valid?
           persist @placement_preference
-          redirect_to new_candidates_registrations_account_check_path
+          redirect_to new_candidates_school_registrations_account_check_path(current_school)
         else
           render :new
         end

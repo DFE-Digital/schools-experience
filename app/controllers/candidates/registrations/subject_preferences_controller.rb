@@ -9,7 +9,7 @@ module Candidates
         @subject_preference = SubjectPreference.new subject_preference_params
         if @subject_preference.valid?
           persist @subject_preference
-          redirect_to new_candidates_registrations_background_check_path
+          redirect_to new_candidates_school_registrations_background_check_path(current_school)
         else
           render :new
         end

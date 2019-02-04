@@ -9,7 +9,7 @@ module Candidates
         @account_check = AccountCheck.new account_check_params
         if @account_check.valid?
           persist @account_check
-          redirect_to new_candidates_registrations_address_path
+          redirect_to new_candidates_school_registrations_address_path(current_school)
         else
           render :new
         end

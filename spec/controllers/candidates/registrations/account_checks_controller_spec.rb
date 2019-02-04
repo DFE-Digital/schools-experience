@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Candidates::Registrations::AccountChecksController, type: :request do
   context '#new' do
     before do
-      get '/candidates/registrations/account_check/new'
+      get '/candidates/schools/URN/registrations/account_check/new'
     end
 
     it 'renders the new template' do
@@ -13,7 +13,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
 
   context '#create' do
     before do
-      post '/candidates/registrations/account_check',
+      post '/candidates/schools/URN/registrations/account_check',
         params: account_check_params
     end
 
@@ -50,7 +50,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          '/candidates/registrations/address/new'
+          '/candidates/schools/URN/registrations/address/new'
       end
     end
   end

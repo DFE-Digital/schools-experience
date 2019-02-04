@@ -9,5 +9,10 @@ module Candidates
     def current_registration
       session[:registration] ||= {}
     end
+
+    def current_school
+      'URN'
+    end
+    helper_method :current_school
   end
 end
