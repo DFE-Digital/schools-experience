@@ -46,4 +46,25 @@
   select {
     width: 100%;
   }
+
+  #location-field {
+    width: 59%;
+    display: inline-block;
+  }
+
+  #distance-field {
+    width: 39%;
+    display: inline-block;
+  }
+
+  #location-distance-fields {
+    div, input, select {
+      margin: 0;
+    }
+
+    div {
+      padding: 0;
+      box-sizing: border-box;
+    }
+  }
 }
