@@ -66,12 +66,19 @@ en:
 
   helpers:
     fieldset:
+      phase: Education phase
+      fees: Fees
+      subject: Subject
       candidates_registrations_background_check:
         has_dbs_check: "These documents are used to confirm you’re suitable to work with children and young people."
       candidates_registrations_placement_preference:
         date_start: "Start date"
         date_end: "End date"
         access_needs: "Tell us so we can make sure the school is able to cater for your requirements"
+    hint:
+      phase: Select all that apply
+      fees: Schools may charge
+      subject: Select all that apply
 
     label:
       candidates_registrations_account_check:

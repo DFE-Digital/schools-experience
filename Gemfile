@@ -61,7 +61,7 @@ group :development, :test do
 
   gem 'dotenv-rails'
 
-  gem 'brakeman', github: 'presidentbeef/brakeman'
+  gem 'brakeman', '>= 4.4.0'
 end
 
 group :development do

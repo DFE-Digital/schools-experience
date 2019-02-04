@@ -8,15 +8,15 @@ describe 'Concerns' do
       let(:geofactory) { subject::GEOFACTORY }
 
       let!(:mcr_victoria) do
-        create(:school, coordinates: geofactory.point(-2.242, 53.488))
+        create(:bookings_school, coordinates: geofactory.point(-2.242, 53.488))
       end
 
       let!(:mcr_piccadilly) do
-        create(:school, coordinates: geofactory.point(-2.229, 53.476))
+        create(:bookings_school, coordinates: geofactory.point(-2.229, 53.476))
       end
 
       let!(:leeds_station) do
-        create(:school, coordinates: geofactory.point(-1.548, 53.794))
+        create(:bookings_school, coordinates: geofactory.point(-1.548, 53.794))
       end
 
       let(:mcr_centre) { geofactory.point(-2.241, 53.481) }
