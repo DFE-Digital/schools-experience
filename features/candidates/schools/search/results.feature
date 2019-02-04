@@ -28,7 +28,7 @@ Feature: Schools search page
     Scenario: Filtering by Fees
         Given there are some subjects
         When I have searched for 'Manchester' and am on the results page
-        Then I should see an 'Fees' filter on the left
+        Then I should see a 'Fees' filter on the left
         And it should have the hint text 'Schools may charge'
         And it should have radio buttons for the following items:
             | No        |
@@ -39,7 +39,7 @@ Feature: Schools search page
     Scenario: Filtering by Subject
         Given there are some subjects
         When I have searched for 'Manchester' and am on the results page
-        Then I should see an 'Fees' filter on the left
+        Then I should see a 'Subject' filter on the left
         And it should have the hint text 'Select all that apply'
         And it should have checkboxes for all subjects
 
