@@ -19,7 +19,7 @@ feature 'Candidate Registrations', type: :feature do
 
   scenario 'Candidate Registraion Journey' do
     # Begin wizard journey
-    visit '/candidates/registrations/placement_preference/new'
+    visit '/candidates/schools/URN/registrations/placement_preference/new'
     expect(page).to have_text 'Request school experience placement'
 
     # Submit registrations/placement_preference form with errors
@@ -56,7 +56,7 @@ feature 'Candidate Registrations', type: :feature do
     choose 'No'
     click_button 'Continue'
     expect(page.current_path).to eq \
-      '/candidates/registrations/account_check/new'
+      '/candidates/schools/URN/registrations/account_check/new'
 
     # Submit account checks form with errors
     fill_in 'Full name', with: 'testy mctest'
@@ -67,7 +67,7 @@ feature 'Candidate Registrations', type: :feature do
     fill_in 'Full name', with: 'testy mctest'
     fill_in 'Email address', with: 'test@example.com'
     click_button 'Continue'
-    expect(page.current_path).to eq '/candidates/registrations/address/new'
+    expect(page.current_path).to eq '/candidates/schools/URN/registrations/address/new'
 
     # Submit registrations/address form with errors
     fill_in 'Building', with: 'Test house'
@@ -87,7 +87,7 @@ feature 'Candidate Registrations', type: :feature do
     fill_in 'UK telephone number', with: '01234567890'
     click_button 'Continue'
     expect(page.current_path).to eq \
-      '/candidates/registrations/subject_preference/new'
+      '/candidates/schools/URN/registrations/subject_preference/new'
 
     # Submit registrations/subject_preference form with errors
     choose 'Graduate or postgraduate'
@@ -105,7 +105,7 @@ feature 'Candidate Registrations', type: :feature do
     select 'Mathematics', from: 'Second choice'
     click_button 'Continue'
     expect(page.current_path).to eq \
-      '/candidates/registrations/background_check/new'
+      '/candidates/schools/URN/registrations/background_check/new'
 
     # Submit registrations/background_check form with errors
     click_button 'Continue'
@@ -115,7 +115,7 @@ feature 'Candidate Registrations', type: :feature do
     choose 'Yes'
     click_button 'Continue'
     expect(page.current_path).to eq \
-      '/candidates/registrations/application_preview'
+      '/candidates/schools/URN/registrations/application_preview'
 
     # Expect preview to match the data we successfully submited
     expect(page).to have_text 'Full name testy mctest'
