@@ -45,7 +45,7 @@ Feature: Schools search page
 
     Scenario: Sorting by distance
         Given I have searched for 'Manchester' and provided my location
-        When I select 'Distance' in the 'orderby' select box
+        When I select 'Distance' in the 'Sorted by' select box
         Then the results should be sorted by distance, nearest to furthest
 
     Scenario: Sorting by fee
