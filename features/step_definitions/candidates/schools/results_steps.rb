@@ -42,7 +42,7 @@ Then("each result should have the following information") do |table|
   end
 end
 
-Then(%r{I should see (?:an|a) '(.*?)' filter on the left}) do |label|
+Then("I should see a/an {string} filter on the left") do |label|
   within('#search-filter') do
     expect(page).to have_css('legend > span.govuk-label', text: label)
   end
