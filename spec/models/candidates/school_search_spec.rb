@@ -8,8 +8,8 @@ RSpec.describe Candidates::SchoolSearch do
         location: 'manchester',
         distance: '3',
         max_fee: '30',
-        phases: [1,2,3],
-        subjects: [4,5,6]
+        phases: [1, 2, 3],
+        subjects: [4, 5, 6]
       )
     end
 
@@ -18,17 +18,17 @@ RSpec.describe Candidates::SchoolSearch do
       expect(subject.distance).to eq(3)
       expect(subject.location).to eq('manchester')
       expect(subject.max_fee).to eq('30')
-      expect(subject.phases).to eq([1,2,3])
-      expect(subject.subjects).to eq([4,5,6])
+      expect(subject.phases).to eq([1, 2, 3])
+      expect(subject.subjects).to eq([4, 5, 6])
     end
   end
 
   context '.subjects=' do
     context 'with blank strings' do
-      before { subject.subjects = [1,'', 3] }
+      before { subject.subjects = [1, '', 3] }
 
       it 'should remove blank strings' do
-        expect(subject.subjects).to eq [1,3]
+        expect(subject.subjects).to eq [1, 3]
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Candidates::SchoolSearch do
       before { subject.subjects = [1, 3, nil] }
 
       it 'should remove nils' do
-        expect(subject.subjects).to eq [1,3]
+        expect(subject.subjects).to eq [1, 3]
       end
     end
 
@@ -59,10 +59,10 @@ RSpec.describe Candidates::SchoolSearch do
 
   context '.phases=' do
     context 'with blank strings' do
-      before { subject.phases = [1,'', 3] }
+      before { subject.phases = [1, '', 3] }
 
       it 'should remove blank strings' do
-        expect(subject.phases).to eq [1,3]
+        expect(subject.phases).to eq [1, 3]
       end
     end
 
@@ -70,7 +70,7 @@ RSpec.describe Candidates::SchoolSearch do
       before { subject.phases = [1, 3, nil] }
 
       it 'should remove nils' do
-        expect(subject.phases).to eq [1,3]
+        expect(subject.phases).to eq [1, 3]
       end
     end
 
