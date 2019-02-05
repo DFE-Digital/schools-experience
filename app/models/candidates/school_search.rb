@@ -12,40 +12,19 @@ module Candidates
       [25, '25 miles']
     ].freeze
 
-    PHASES = [
-      ['4-11', 'Primary 4 - 11'],
-      ['11-16', 'Secondary 11 - 16'],
-      ['16-18', '16 to 18']
-    ].freeze
-
     FEES = [
-      %w{none None},
-      ['<30', 'up to £30'],
-      ['<60', 'up to £60'],
-      ['<90', 'up to £90']
+      ['', 'None'],
+      ['30', 'up to £30'],
+      ['60', 'up to £60'],
+      ['90', 'up to £90']
     ].freeze
 
-    SUBJECTS = [
-      'Art and design', 'Combined science', 'Computer science',
-      'Food preparation and nutrition', 'Geography', 'History', 'Music',
-      'Physical education', 'Religious studies'
-    ].freeze
-
-    attr_accessor :query
-    attr_writer :distance
-    attr_accessor :fees, :subject, :phase
+    attr_accessor :query, :location
+    attr_reader :distance, :subjects, :phases, :max_fee
 
     class << self
       def fees
         FEES
-      end
-
-      def subjects
-        SUBJECTS
-      end
-
-      def phases
-        PHASES
       end
 
       def distances
@@ -53,16 +32,33 @@ module Candidates
       end
     end
 
-    def distance
-      @distance.to_i
+    def distance=(dist_ids)
+      @distance = dist_ids.present? ? dist_ids.to_i : nil
+    end
+
+    def subjects=(subj_ids)
+      @subjects = Array.wrap(subj_ids).map(&:presence).compact.map(&:to_i)
+    end
+
+    def phases=(phase_ids)
+      @phases = Array.wrap(phase_ids).map(&:presence).compact.map(&:to_i)
+    end
+
+    def max_fee=(max_f)
+      max_f = max_f.to_s.strip
+      @max_fee = FEES.map(&:first).include?(max_f) ? max_f : ''
     end
 
     def results
       school_search.results
     end
 
+    def valid_search?
+      query.present? || (location.present? && distance.present?)
+    end
+
     def filtering_results?
-      query.present?
+      valid_search?
     end
 
     def total_results
@@ -72,9 +68,13 @@ module Candidates
   private
 
     def school_search
-      @school_search ||= Bookings::SchoolSearch.new(
+      Bookings::SchoolSearch.new(
         query,
-        radius: distance
+        location: location,
+        radius: distance,
+        subjects: subjects,
+        phases: phases,
+        max_fee: max_fee
       )
     end
   end

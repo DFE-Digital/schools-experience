@@ -18,18 +18,24 @@
                     </span>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-third">
                             <%= f.text_field :query, placeholder: 'search' %>
                         </div>
 
-                        <div class="govuk-grid-column-one-quarter">
-                            <%= f.collection_select :distance,
-                                Candidates::SchoolSearch.distances, :first, :last,
-                                include_blank: 'Select search distance' %>
+                        <div class="govuk-grid-column-one-third" id="location-distance-fields">
+                            <div id="location-field">
+                                <%= f.text_field :location, placeholder: 'location' %>
+                            </div>
+
+                            <div id="distance-field">
+                                <%= f.collection_select :distance,
+                                    Candidates::SchoolSearch.distances, :first, :last,
+                                    include_blank: 'distance' %>
+                            </div>
                         </div>
 
-                        <div class="govuk-grid-column-one-quarter">
-                            <%= f.submit 'Find' %>
+                        <div class="govuk-grid-column-one-third">
+                            <%= f.submit 'Find', name: nil %>
                         </div>
                     </div>
                 </fieldset>

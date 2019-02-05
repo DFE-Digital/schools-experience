@@ -10,6 +10,6 @@ class Candidates::SchoolsController < ApplicationController
 private
 
   def search_params
-    params.permit(:query, :distance, :fees, phase: [], subject: [])
+    params.permit(:query, :location, :distance, :max_fee, phases: [], subjects: [])
   end
 end
