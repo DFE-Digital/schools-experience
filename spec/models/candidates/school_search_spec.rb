@@ -7,7 +7,7 @@ RSpec.describe Candidates::SchoolSearch do
         query: 'this',
         distance: '3',
         fees: '>30',
-        phase: ['11-16', '16-18'],
+        phases: ['11-16', '16-18'],
         subject: %w{Maths English}
       )
     end
@@ -16,7 +16,7 @@ RSpec.describe Candidates::SchoolSearch do
       expect(subject.query).to eq('this')
       expect(subject.distance).to eq(3)
       expect(subject.fees).to eq('>30')
-      expect(subject.phase).to eq(['11-16', '16-18'])
+      expect(subject.phases).to eq(['11-16', '16-18'])
       expect(subject.subject).to eq(%w{Maths English})
     end
   end

@@ -12,7 +12,7 @@
             <%= f.hidden_field :query %>
             <%= f.hidden_field :distance %>
 
-            <%= f.collection_check_boxes :phase, Candidates::SchoolSearch.phases, :first, :last %>
+            <%= f.collection_check_boxes :phases, Candidates::SchoolSearch.phases, :first, :last %>
 
             <%= f.radio_button_fieldset :fees, choices: Candidates::SchoolSearch.fees,
                                                 value_method: :first,
@@ -51,8 +51,8 @@
                 <strong class="name"><%= link_to result.name, candidates_school_path(index + 1) %></strong>
                 <ul>
                     <li><strong>Address:</strong> <%= result.address %></li>
-                    <li><strong>Education </strong>phase: <%= result.phase %></li>
-                    <li><strong>Fees:</strong> <%= result.fees %></li>
+                    <li><strong>Education </strong>phase: <%= result.phases.map(&:name).to_sentence %></li>
+                    <li><strong>Fees:</strong> <%= result.fee %></li>
                     <li><strong>School type:</strong> <%= result.school_type %></li>
                     <li><strong>Subjects:</strong> <%= result.subjects.to_sentence %></li>
                 </ul>

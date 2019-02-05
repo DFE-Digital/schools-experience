@@ -33,7 +33,7 @@ module Candidates
 
     attr_accessor :query
     attr_writer :distance
-    attr_accessor :fees, :subject, :phase
+    attr_accessor :fees, :subject, :phases
 
     class << self
       def fees

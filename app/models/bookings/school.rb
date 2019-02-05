@@ -53,4 +53,17 @@ class Bookings::School < ApplicationRecord
       all
     end
   end
+
+  def address
+    # Placeholder for address displayed on one line, uncomment when importer
+    # merged
+    # [address_1, address_2, address_3, county, postcode].compact.join(", ")
+    "Address goes here"
+  end
+
+  def school_type
+    # Placeholder for school type, uncomment when importer merged
+    # Note, is this different to Phase
+    "School type goes here"
+  end
 end
