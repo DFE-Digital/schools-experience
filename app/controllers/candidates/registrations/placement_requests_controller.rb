@@ -12,6 +12,10 @@ module Candidates
           "from 8 to 12 October 2018",
           "Abraham Moss Community School"
       end
+
+      def create
+        redirect_to candidates_registrations_placement_request_path
+      end
     end
   end
 end

@@ -16,7 +16,8 @@ Rails.application.routes.draw do
       resource :address, only: %i(new create)
       resource :subject_preference, only: %i(new create)
       resource :background_check, only: %i(new create)
-      resource :placement_request, only: %i(show)
+      resource :application_preview, only: %i(show)
+      resource :placement_request, only: %i(show create)
     end
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
