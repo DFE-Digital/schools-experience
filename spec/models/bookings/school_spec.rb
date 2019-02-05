@@ -59,6 +59,14 @@ describe Bookings::School, type: :model do
     end
   end
 
+  describe 'Paramterisation' do
+    subject { create(:bookings_school) }
+
+    specify do
+      expect(subject.to_param).to eq(subject.urn)
+    end
+  end
+
   describe 'Scopes' do
     subject { Bookings::School }
 

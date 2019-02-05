@@ -61,4 +61,8 @@ class Bookings::School < ApplicationRecord
   def address
     [address_1, address_2, address_3, county, postcode].compact.join(", ")
   end
+
+  def to_param
+    urn
+  end
 end

@@ -18,7 +18,10 @@ RSpec.describe Candidates::SchoolsController, type: :request do
   end
 
   context "GET #show" do
-    before { get candidates_school_path('123456') }
+    before do
+      @school = create(:bookings_school)
+      get candidates_school_path(@school.urn)
+    end
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
