@@ -38,22 +38,18 @@
             <h2 class="govuk-heading-m">Placement information</h2>
 
             <p>
-                <b>Individual requirements:</b> Must have a degree and be planning
-                to become a teacher.
+                <b>Individual requirements:</b> <%= @school.requirements %>
             </p>
 
             <p>
-                <b>Placement details:</b> Attendees will observe lessons in their
-                chosen subjects and may get the chance to interact with pupils and
-                classroom activities. Only offer key stage 1 experience for primary
-                placements.
+                <b>Placement details:</b> <%= @school.placement_details %>
             </p>
 
             <p>
                 <b>Placement subjects:</b> <%= @school.subjects.to_sentence %>.
             </p>
         </div>
-        
+
         <%- if false -%>
         <div>
             <h1 class="govuk-heading-m">Location</h1>
@@ -69,7 +65,7 @@
         </p>
     </div>
 
-    <div class="govuk-grid-column-one-third govuk-!-margin-top-9 column-top-border">        
+    <div class="govuk-grid-column-one-third govuk-!-margin-top-9 column-top-border">
         <h3 class="govuk-heading-m">Address</h3>
         <p class="govuk-body">
             <%= @school.address %>.
