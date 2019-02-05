@@ -18,7 +18,7 @@ Feature: Schools search page
 
     Scenario: Filtering by Education Phase
         Given I have searched for 'Manchester' and am on the results page
-        Then I should see an 'Phases' filter on the left
+        Then I should see a 'Phases' filter on the left
         And it should have the hint text 'Select all that apply'
         And it should have checkboxes for the following items:
             | Primary 4 - 11    |
