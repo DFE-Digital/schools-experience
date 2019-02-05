@@ -1,0 +1,9 @@
+#application-preview {
+  dl.govuk-summary-list {
+    h2.govuk-heading-m {
+      &:nth-of-type(2) {
+        margin-top: 60px;
+      }
+    }
+  }
+}

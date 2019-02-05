@@ -24,7 +24,7 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <%= f.collection_select :distance,
-                                Candidates::School::DISTANCES, :first, :last,
+                                Candidates::SchoolSearch.distances, :first, :last,
                                 include_blank: 'Select search distance' %>
                         </div>
 

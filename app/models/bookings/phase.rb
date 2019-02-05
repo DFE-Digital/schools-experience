@@ -12,4 +12,7 @@ class Bookings::Phase < ApplicationRecord
     class_name: "Bookings::School",
     through: :bookings_schools_phases,
     source: :bookings_school
+
+  acts_as_list
+  default_scope -> { order(:position) }
 end

@@ -1,0 +1,25 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Your placement request has been <%= @placement_request.status_in_words %>
+      </h1>
+    </div>
+    <h3 class="govuk-heading-m">What happens next</h3>
+    <p>
+      Your request for a school experience placement 
+      <%= @placement_request.date_range_in_words %>
+      will be forwarded to <%= @placement_request.school_name %>.
+    </p>
+    <p class="govuk-inset-text">
+      The school will be in touch with you shortly. For example, during term 
+      time this could typically mean within 2 weeks.
+    </p>
+    <p>
+      We'll also send you an email to confirm you've requested a placement.
+    </p>
+    <h3 class="govuk-heading-m">View and request more placements</h3>
+    <%= link_to 'View and request more placements', '#', class: 'govuk-link' %>
+    <%= link_to 'Sign out', '#', class: 'govuk-link' %>
+  </div>
+</div>

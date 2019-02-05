@@ -21,7 +21,9 @@ ActiveRecord::Schema.define(version: 2019_02_05_091721) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "edubase_id"
+    t.integer "position"
     t.index ["name"], name: "index_bookings_phases_on_name"
+    t.index ["position"], name: "index_bookings_phases_on_position", unique: true
   end
 
   create_table "bookings_school_types", force: :cascade do |t|

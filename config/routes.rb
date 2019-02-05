@@ -9,5 +9,16 @@ Rails.application.routes.draw do
       get 'request_placement', to: 'placement_requests#new'
       post 'request_placement', to: 'placement_requests#create'
     end
+
+    namespace :registrations do
+      resource :placement_preference, only: %i(new create)
+      resource :account_check, only: %i(new create)
+      resource :address, only: %i(new create)
+      resource :subject_preference, only: %i(new create)
+      resource :background_check, only: %i(new create)
+      resource :application_preview, only: %i(show)
+      resource :placement_request, only: %i(show create)
+    end
   end
+  resolve('Candidates::SchoolSearch') { %i{candidates schools} }
 end

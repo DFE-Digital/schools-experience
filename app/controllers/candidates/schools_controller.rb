@@ -1,6 +1,6 @@
 class Candidates::SchoolsController < ApplicationController
   def index
-    @search = Candidates::School.new(search_params)
+    @search = Candidates::SchoolSearch.new(search_params)
   end
 
   def show
