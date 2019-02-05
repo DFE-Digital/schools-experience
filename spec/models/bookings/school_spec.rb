@@ -173,4 +173,23 @@ describe Bookings::School, type: :model do
       end
     end
   end
+
+  context 'Methods' do
+    context '#address' do
+      subject do
+        create(
+          :bookings_school,
+          address_1: "Address 1",
+          address_2: "Address 2",
+          address_3: nil,
+          county: "County",
+          postcode: "M1 2WD"
+        )
+      end
+
+      specify "it should omit missing fields and delimit with commas" do
+        expect(subject.address).to eql("Address 1, Address 2, County, M1 2WD")
+      end
+    end
+  end
 end
