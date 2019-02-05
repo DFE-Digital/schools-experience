@@ -6,3 +6,8 @@ Feature: Check everything's working
 	Scenario: Visiting the landing page
 		Given I visit the landing page
 		Then I should see text 'Lorem'
+
+    @javascript
+	Scenario: Visiting the landing page
+		Given I visit the landing page
+		Then I should see text 'Lorem'
