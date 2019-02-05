@@ -29,7 +29,12 @@ subjects:
 - Art
 - Physics
 - Music
-address: Long Millgate, XXX
+address_1: Long Millgate
+address_2: XXX
+address_3:
+town: Manchester
+county:
+postcode:
 dbs: true
 fee: "Yes - £50 per placement"
 dress_code: Yes - business attire with male attendees expected to wear a collar and tie
