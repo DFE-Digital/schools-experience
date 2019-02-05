@@ -1,6 +1,21 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::SubjectPreferencesController, type: :request do
+  let :subjects do
+    [
+      { name: 'Astronomy' },
+      { name: 'History' }
+    ]
+  end
+
+  let :school do
+    double Candidates::School, subjects: subjects
+  end
+
+  before do
+    allow(Candidates::School).to receive(:find) { school }
+  end
+
   context '#new' do
     before do
       get '/candidates/schools/URN/registrations/subject_preference/new'
@@ -24,7 +39,8 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
             degree_subject: "geology &amp; earth science",
             teaching_stage: "I want to become a teacher",
             subject_first_choice: "Astronomy",
-            subject_second_choice: "History"
+            subject_second_choice: "History",
+            urn: 'URN'
           }
         }
       end
@@ -42,7 +58,8 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
             degree_subject: "Not applicable",
             teaching_stage: "I want to become a teacher",
             subject_first_choice: "Astronomy",
-            subject_second_choice: "History"
+            subject_second_choice: "History",
+            urn: 'URN'
           }
         }
       end
@@ -54,7 +71,8 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
           "degree_subject" =>  "Not applicable",
           "teaching_stage" =>  "I want to become a teacher",
           "subject_first_choice" =>  "Astronomy",
-          "subject_second_choice" =>  "History"
+          "subject_second_choice" =>  "History",
+          "urn" => "URN"
         )
       end
 

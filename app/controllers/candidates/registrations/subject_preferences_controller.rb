@@ -2,11 +2,13 @@ module Candidates
   module Registrations
     class SubjectPreferencesController < RegistrationsController
       def new
-        @subject_preference = SubjectPreference.new
+        @subject_preference = SubjectPreference.new urn: current_urn
       end
 
       def create
-        @subject_preference = SubjectPreference.new subject_preference_params
+        @subject_preference = SubjectPreference.new \
+          subject_preference_params.merge(urn: current_urn)
+
         if @subject_preference.valid?
           persist @subject_preference
           redirect_to new_candidates_school_registrations_background_check_path
