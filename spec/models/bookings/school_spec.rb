@@ -49,6 +49,14 @@ describe Bookings::School, type: :model do
           .source(:bookings_phase)
       )
     end
+
+    specify do
+      is_expected.to(
+        belong_to(:school_type)
+        .with_foreign_key(:bookings_school_type_id)
+        .class_name("Bookings::SchoolType")
+      )
+    end
   end
 
   describe 'Scopes' do

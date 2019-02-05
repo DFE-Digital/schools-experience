@@ -40,10 +40,13 @@ describe SchoolImporter do
 
     context 'Importing' do
       let!(:count_before) { Bookings::School.count }
+      let(:school_type_id) { 2 }
 
       before do
+        # note these values are present in spec/sample_data/edubase.csv
         create(:bookings_phase, edubase_id: 2)
         create(:bookings_phase, edubase_id: 4)
+        create(:bookings_school_type, edubase_id: school_type_id)
       end
 
       subject { SchoolImporter.new(urns, edubase_data) }
@@ -79,6 +82,9 @@ describe SchoolImporter do
         }.each do |urn, attributes|
           Bookings::School.find_by(urn: urn).tap do |school|
             expect(school).to have_attributes(attributes)
+            expect(school.school_type).to eql(
+              Bookings::SchoolType.find_by(edubase_id: school_type_id)
+            )
           end
         end
       end

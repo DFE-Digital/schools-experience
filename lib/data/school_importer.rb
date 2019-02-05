@@ -53,7 +53,8 @@ private
       town:         nilify(row['Town']),
       county:       nilify(row['County (name)']),
       postcode:     nilify(row['Postcode']),
-      coordinates:  convert_to_point(row['Easting'], row['Northing'])
+      coordinates:  convert_to_point(row['Easting'], row['Northing']),
+      school_type:  school_types[row['TypeOfEstablishment (code)'].to_i]
     ).tap do |school|
       school.phases << phases[row['PhaseOfEducation (code)'].to_i]
     end
@@ -65,6 +66,10 @@ private
 
   def phases
     @phases ||= Bookings::Phase.all.index_by(&:edubase_id)
+  end
+
+  def school_types
+    @school_types ||= Bookings::SchoolType.all.index_by(&:edubase_id)
   end
 
   def convert_to_point(easting, northing)
