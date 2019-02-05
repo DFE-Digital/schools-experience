@@ -19,7 +19,7 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location, :order
+    attr_accessor :query, :location, :order, :latitude, :longitude
     attr_reader :distance, :max_fee
 
     class << self
@@ -70,7 +70,9 @@ module Candidates
     end
 
     def valid_search?
-      query.present? || (location.present? && distance.present?)
+      query.present? ||
+        (location.present? && distance.present?) ||
+        (longitude.present? && latitude.present? && distance.present?)
     end
 
     def filtering_results?
@@ -86,13 +88,21 @@ module Candidates
     def school_search
       Bookings::SchoolSearch.new(
         query,
-        location: location,
+        location: location_or_coords,
         radius: distance,
         subjects: subjects,
         phases: phases,
         max_fee: max_fee,
         requested_order: order
       )
+    end
+
+    def location_or_coords
+      if latitude.present? && longitude.present?
+        { latitude: latitude, longitude: longitude }
+      else
+        location
+      end
     end
   end
 end

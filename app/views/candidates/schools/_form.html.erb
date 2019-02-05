@@ -18,8 +18,17 @@
                         </div>
 
                         <div class="school-search-form__location-pair">
-                            <div class="school-search-form__location-field">
-                                <%= f.text_field :location, placeholder: 'e.g. Manchester, M1 3BD' %>
+                            <div class="school-search-form__location-field"
+                                data-controller="grab-location">
+
+                                <%= f.search_field :location,
+                                        placeholder: 'e.g. Manchester, M1 3BD',
+                                        data: {
+                                            action: "focus->grab-location#clearLocationInfo",
+                                            target: "grab-location.location"
+                                        } %>
+                                <%= f.hidden_field :latitude, data: { target: 'grab-location.latitude' } %>
+                                <%= f.hidden_field :longitude, data: { target: 'grab-location.longitude' } %>
                             </div>
 
                             <div class="school-search-form__distance-field">

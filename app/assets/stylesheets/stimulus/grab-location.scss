@@ -1,0 +1,21 @@
+div[data-controller="grab-location"] {
+  .school-search-form__coords-request {
+    @extend .govuk-link ;
+    float: right;
+    line-height: 20px ;
+
+    @include govuk-media-query($from: tablet) {
+      line-height: 25px;
+      margin-right: 12px;
+    }
+  }
+
+  &.school-search-form--show-coords-request .school-search-form__coords_request {
+    display: block;
+  }
+
+  &.school-search-form__location-field--using-coords input {
+    color: $govuk-brand-colour;
+    background-color: rgb(221,221,221) ;
+  }
+}

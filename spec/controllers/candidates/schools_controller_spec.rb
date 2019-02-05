@@ -22,6 +22,8 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       {
         query: 'Something',
         location: 'Manchester',
+        latitude: '53.481',
+        longitude: '-2.241',
         distance: '10',
         phases: %w{1},
         subjects: %w{2 3},
@@ -35,6 +37,8 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     it "assigns params to search model" do
       expect(assigns(:search).query).to eq('Something')
       expect(assigns(:search).location).to eq('Manchester')
+      expect(assigns(:search).latitude).to eq('53.481')
+      expect(assigns(:search).longitude).to eq('-2.241')
       expect(assigns(:search).distance).to eq(10)
       expect(assigns(:search).phases).to eq([1])
       expect(assigns(:search).subjects).to eq([2, 3])
