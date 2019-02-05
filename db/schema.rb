@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_01_110055) do
+ActiveRecord::Schema.define(version: 2019_02_05_091721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,9 +20,18 @@ ActiveRecord::Schema.define(version: 2019_02_01_110055) do
     t.string "name", limit: 32, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "edubase_id"
     t.integer "position"
     t.index ["name"], name: "index_bookings_phases_on_name"
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
+  end
+
+  create_table "bookings_school_types", force: :cascade do |t|
+    t.string "name", limit: 64, null: false
+    t.integer "edubase_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_bookings_school_types_on_name", unique: true
   end
 
   create_table "bookings_schools", force: :cascade do |t|
@@ -31,8 +40,18 @@ ActiveRecord::Schema.define(version: 2019_02_01_110055) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "fee", default: 0, null: false
+    t.integer "urn", null: false
+    t.string "website"
+    t.string "address_1", null: false
+    t.string "address_2"
+    t.string "address_3"
+    t.string "town"
+    t.string "county"
+    t.string "postcode", null: false
+    t.integer "bookings_school_type_id", null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
+    t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true
   end
 
   create_table "bookings_schools_phases", force: :cascade do |t|
@@ -57,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_110055) do
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
   end
 
+  add_foreign_key "bookings_schools", "bookings_school_types"
   add_foreign_key "bookings_schools_phases", "bookings_phases"
   add_foreign_key "bookings_schools_phases", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_schools"

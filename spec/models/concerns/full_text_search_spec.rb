@@ -5,9 +5,9 @@ describe 'Concerns' do
     describe '.search_by_name' do
       subject { Bookings::School }
 
-      let!(:primary) { subject.create(name: "Springfield Primary School") }
-      let!(:secondary) { subject.create(name: "Springhead Secondary School") }
-      let!(:grammar) { subject.create(name: "Hulme Grammar School") }
+      let!(:primary) { create(:bookings_school, name: "Springfield Primary School") }
+      let!(:secondary) { create(:bookings_school, name: "Springhead Secondary School") }
+      let!(:grammar) { create(:bookings_school, name: "Hulme Grammar School") }
 
       specify 'should match on word prefixes' do
         expect(subject.search_by_name("Spring")).to include(primary, secondary)

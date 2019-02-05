@@ -30,6 +30,10 @@ class Bookings::School < ApplicationRecord
     through: :bookings_schools_phases,
     source: :bookings_phase
 
+  belongs_to :school_type,
+    class_name: "Bookings::SchoolType",
+    foreign_key: :bookings_school_type_id
+
   scope :that_provide, ->(subject_ids) do
     if subject_ids.present?
       joins(:subjects).where(bookings_subjects: { id: subject_ids }).distinct

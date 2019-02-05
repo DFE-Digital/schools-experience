@@ -14,7 +14,7 @@ gem 'pg_search'
 
 # PostGIS adapter for Active Record
 gem 'activerecord-postgis-adapter'
-
+gem 'breasal', require: false
 gem 'geocoder'
 
 # Use Puma as the app server

@@ -1,18 +1,13 @@
 class Bookings::SchoolsPhase < ApplicationRecord
   belongs_to :bookings_school,
-    class_name: "Bookings::School",
-    optional: true
+    class_name: "Bookings::School"
 
   belongs_to :bookings_phase,
-    class_name: "Bookings::Phase",
-    optional: true
+    class_name: "Bookings::Phase"
 
-  validates_associated :bookings_phase, :bookings_school
-
-  validates :bookings_school_id,
-    presence: true
+  validates :bookings_school, presence: true
+  validates :bookings_phase, presence: true
 
   validates :bookings_phase_id,
-    presence: true,
     uniqueness: { scope: :bookings_school_id }
 end
