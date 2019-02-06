@@ -6,7 +6,8 @@ Feature: Schools search page
     Background:
         Given the phases 'Primary' and 'Secondary' exist
         Given there are some schools with a range of fees containing the word 'Manchester'
-
+    
+    @remoteapp
     Scenario: Search result contents
         Given I have searched for 'Manchester' and am on the results page
         And there are 3 results
@@ -16,7 +17,8 @@ Feature: Schools search page
             | Fees        |
             | School type |
             | Subjects    |
-
+    
+    @remoteapp
     Scenario: Filtering by Education Phase
         Given I have searched for 'Manchester' and am on the results page
         Then I should see a 'Phases' filter on the left
@@ -25,6 +27,7 @@ Feature: Schools search page
             | Primary   |
             | Secondary |
 
+    @remoteapp
     Scenario: Filtering by Fees
         Given there are some subjects
         When I have searched for 'Manchester' and am on the results page

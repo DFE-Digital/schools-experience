@@ -59,3 +59,34 @@ end
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
+
+if ENV['SELENIUM_HUB_HOSTNAME'].present?
+  Capybara.run_server = false
+  Capybara.app_host = "#{ENV['APP_URL']}"
+  Capybara.default_driver = :selenium_remote
+  Capybara.register_driver :selenium_remote do |app|
+    Capybara::Selenium::Driver.new(app,
+        :browser => :remote,
+        :url => "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:4444/wd/hub",
+        :desired_capabilities => :chrome)
+  end
+end
+if ENV['chrome']
+   Capybara.default_driver = :chrome
+   Capybara.register_driver :chrome do |app|
+     Capybara::Selenium::Driver.new(app, browser: :chrome, args: ['--disable-logging'])
+   end
+elsif ENV['firefox']
+   Capybara.default_driver = :firefox
+   Capybara.register_driver :firefox do |app|
+     Capybara::Selenium::Driver.new(app, browser: :firefox)
+   end
+elsif ENV['ie']
+   Capybara.default_driver = :ie
+   Capybara.register_driver :ie do |app|
+     Capybara::Selenium::Driver.new(app, browser: :internet_explorer)
+   end
+ end
+#Capybara.default_wait_time = 5
+Capybara.javascript_driver = :chrome
+Capybara.server_port = 3000
