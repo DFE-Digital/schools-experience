@@ -34,4 +34,4 @@ RUN bundle install --without development --jobs=$(nproc --all) && \
 
 # Add code and compile assets
 COPY . .
-RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed
+RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
