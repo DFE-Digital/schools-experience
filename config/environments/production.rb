@@ -90,10 +90,8 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
-  if (ENV['REDIS_CACHE_URL'].present? || ENV['REDIS_URL'].present?)
-    config.cache_store = :redis_cache_store, {
-      url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
-    }
-    config.session_store :cache_store, key: 'schoolex-session'
-  end
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence
+  }
+  config.session_store :cache_store, key: 'schoolex-session'
 end
