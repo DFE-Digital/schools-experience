@@ -26,3 +26,17 @@ Then("I should see a form with the following fields:") do |table|
     end
   end
 end
+
+Then("I fill in the date field {string} with {int}-{int}-{int}") do |field, day, month, year|
+  within(page.find('.govuk-label', text: field).ancestor('.govuk-form-group')) do
+    fill_in 'Day',   with: day
+    fill_in 'Month', with: month
+    fill_in 'Year',  with: year
+  end
+end
+
+Given("I have entered the following details into the form:") do |table|
+  table.raw.to_h.each do |field, value|
+    fill_in field, with: value
+  end
+end

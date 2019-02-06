@@ -35,7 +35,7 @@ feature 'Candidate Registrations', type: :feature do
       fill_in 'Year',  with: tomorrow.year
     end
 
-    fill_in 'Explain in 50 words or fewer', with: 'I enjoy teaching'
+    fill_in 'What do you want to get out of a placement?', with: 'I enjoy teaching'
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 
@@ -52,7 +52,7 @@ feature 'Candidate Registrations', type: :feature do
       fill_in 'Year',  with: tomorrow.year
     end
 
-    fill_in 'Explain in 50 words or fewer', with: 'I enjoy teaching'
+    fill_in 'What do you want to get out of a placement?', with: 'I enjoy teaching'
     choose 'No'
     click_button 'Continue'
     expect(page.current_path).to eq \

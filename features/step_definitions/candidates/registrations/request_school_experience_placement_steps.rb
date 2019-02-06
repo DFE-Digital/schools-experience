@@ -1,5 +1,5 @@
 Then("the {string} word count should say {string}") do |string, string2|
-  pending # Write code here that turns the phrase above into concrete actions
+  pending "awaiting @javascript driver config"
 end
 
 When("I enter {string} into the {string} text area") do |value, label|
@@ -25,9 +25,16 @@ Then("a text area labelled {string} should appear") do |string|
 end
 
 Given("I have filled in the form with accurate data") do
-  pending # Write code here that turns the phrase above into concrete actions
+  steps %(
+    When I fill in the date field "Start date" with 20-02-2022
+    And I fill in the date field "End date" with 27-02-2022
+  )
+  fill_in "What do you want to get out of a placement?", with: "I love teaching"
+  choose "No"
 end
 
 When("I submit the form") do
-  pending # Write code here that turns the phrase above into concrete actions
+  within('#main-content form') do
+    click_on "Continue"
+  end
 end

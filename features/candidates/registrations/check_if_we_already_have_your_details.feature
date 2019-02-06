@@ -15,3 +15,11 @@ Feature: Request a school experience placement
             | Label         | Type  |
             | Full name     | text  |
             | Email address | email |
+
+    Scenario: Submitting my data
+        Given I am on the 'Check if we already have your details' page
+        And I have entered the following details into the form:
+            | Full name     | Philip Gilbert         |
+            | Email address | phil.gilbert@gmail.com |
+        When I submit the form
+        Then I should be on the 'candidate address' page
