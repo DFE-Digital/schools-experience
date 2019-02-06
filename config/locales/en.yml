@@ -74,7 +74,7 @@ en:
       candidates_registrations_placement_preference:
         date_start: "Start date"
         date_end: "End date"
-        access_needs: "Tell us so we can make sure the school is able to cater for your requirements"
+        access_needs: "Do you have any disability or access needs?"
     hint:
       phases: Select all that apply
       max_fee: Schools may charge
@@ -96,7 +96,7 @@ en:
         building: "Building and street"
         phone: "UK telephone number"
       candidates_registrations_placement_preference:
-        objectives: "Explain in 50 words or fewer"
+        objectives: What do you want to get out of a placement?
         access_needs_details: "Provide details"
         access_needs:
           true: "Yes"

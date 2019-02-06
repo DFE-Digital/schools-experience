@@ -11,18 +11,18 @@
     <%= f.date_field :date_end %>
   </fieldset>
 
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">What do you want to get out of a placement?</h1>
-    </legend>
-    <%= f.text_area :objectives, rows: 5 %>
+  <fieldset id="placement-objectives-container" class="govuk-fieldset">
+    <%= f.text_area :objectives, rows: 5, label_options: {class: "govuk-!-font-weight-bold govuk-!-margin-bottom-4 govuk-!-font-size-24"} %>
+    <span id="word-count-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+          You can enter up to 150 words
+            </span>
   </fieldset>
 
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">Do you have any disability or access needs?</h1>
-    </legend>
-    <%= f.radio_button_fieldset :access_needs do |field_set| %>
+  <fieldset class="govuk-fieldset disability-needs">
+    <%= f.radio_button_fieldset :access_needs, label_options: {"class" => "zomg"} do |field_set| %>
+      <span id="access-needs-hint" class="govuk-hint">
+        Tell us so we can make sure the school is able to cater for your requirements
+      </span>
       <%= field_set.radio_input true do %>
         <%= field_set.text_area :access_needs_details, rows: 5 %>
       <% end %>

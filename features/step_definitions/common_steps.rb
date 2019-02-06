@@ -6,7 +6,7 @@ Given("I am on the {string} page") do |string|
 end
 
 Then("the page's main header should be {string}") do |string|
-  expect(page).to have_css("h1.govuk-heading-xl", text: string)
+  expect(page).to have_css("h1", text: string)
 end
 
 Then("there should be a section titled {string}") do |string|

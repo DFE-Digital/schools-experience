@@ -2,8 +2,8 @@
   <div class="govuk-grid-column-one-half">
     <h1 class="govuk-heading-l">Check if we already have your details</h1>
     <p>
-      If you’ve already passed them on at a teaching event or via the 
-      <%= link_to 'Get Into Teaching', 'https://getintoteaching.education.gov.uk/' %>
+      If you’ve already passed them on at a teaching event or via the
+      <%= link_to 'Get Into Teaching', 'https://getintoteaching.education.gov.uk' %>
       website, we can use them to speed up your placement request.
     </p>
 
@@ -14,7 +14,7 @@
       </fieldset>
 
       <fieldset class="govuk-fieldset">
-        <%= f.text_field :email %>
+        <%= f.email_field :email %>
       </fieldset>
 
       <fieldset class="govuk-fieldset">
