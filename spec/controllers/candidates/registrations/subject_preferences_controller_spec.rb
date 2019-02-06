@@ -39,8 +39,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
             degree_subject: "geology &amp; earth science",
             teaching_stage: "I want to become a teacher",
             subject_first_choice: "Astronomy",
-            subject_second_choice: "History",
-            urn: 'URN'
+            subject_second_choice: "History"
           }
         }
       end
@@ -58,8 +57,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
             degree_subject: "Not applicable",
             teaching_stage: "I want to become a teacher",
             subject_first_choice: "Astronomy",
-            subject_second_choice: "History",
-            urn: 'URN'
+            subject_second_choice: "History"
           }
         }
       end
