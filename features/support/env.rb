@@ -72,4 +72,3 @@ if ENV['SELENIUM_HUB_HOSTNAME'].present?
         :desired_capabilities => :chrome)
   end
 end
-
