@@ -63,8 +63,6 @@ Rails.application.configure do
 
   config.sass.inline_source_maps = true
 
-  config.action_controller.perform_caching = true
-
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
   config.cache_store = :redis_cache_store, {
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
