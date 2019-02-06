@@ -29,7 +29,7 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   let :school do
-    double Candidates::School, subjects: subjects
+    double Candidates::School, subjects: subjects, name: 'Test School'
   end
 
   before do
@@ -143,7 +143,7 @@ feature 'Candidate Registrations', type: :feature do
       'Address Test house, Test street, Test Town, Testshire, TE57 1NG'
     expect(page).to have_text 'UK telephone number 01234567890'
     expect(page).to have_text 'Email address test@example.com'
-    expect(page).to have_text 'School or college SCHOOL_STUB'
+    expect(page).to have_text "School or college #{school.name}"
     expect(page).to have_text \
       "Placement availability #{today_in_words} to #{tomorrow_in_words}"
     expect(page).to have_text "Placement outcome I enjoy teaching"

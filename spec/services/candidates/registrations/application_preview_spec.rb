@@ -58,7 +58,8 @@ describe Candidates::Registrations::ApplicationPreview do
       degree_subject: "Not applicable",
       teaching_stage: "I'm thinking about teaching and want to find out more",
       subject_first_choice: "Architecture",
-      subject_second_choice: "Mathematics"
+      subject_second_choice: "Mathematics",
+      school_name: 'Test school'
   end
 
   subject do
@@ -97,7 +98,7 @@ describe Candidates::Registrations::ApplicationPreview do
 
   context '#school' do
     it 'returns the correct value' do
-      expect(subject.school).to eq "SCHOOL_STUB"
+      expect(subject.school).to eq "Test school"
     end
   end
 

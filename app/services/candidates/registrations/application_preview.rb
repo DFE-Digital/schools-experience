@@ -39,7 +39,7 @@ module Candidates
       end
 
       def school
-        'SCHOOL_STUB'
+        subject_preference.school_name
       end
 
       def placement_availability

@@ -45,6 +45,10 @@ module Candidates
         school.subjects.pluck :name
       end
 
+      def school_name
+        school.name
+      end
+
     private
 
       def school
