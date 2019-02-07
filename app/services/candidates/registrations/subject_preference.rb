@@ -6,7 +6,7 @@ module Candidates
 
       OPTIONS_CONFIG = YAML.load_file "#{Rails.root}/config/candidate_form_options.yml"
       NOT_APPLYING_FOR_DEGREE = "I don't have a degree and am not studying for one".freeze
-      DEGREE_STAGE_REQUIRING_EXPLINATION = 'Other'.freeze
+      DEGREE_STAGE_REQUIRING_EXPLANATION = 'Other'.freeze
 
       def self.degree_subjects
         OPTIONS_CONFIG.fetch 'DEGREE_SUBJECTS'
@@ -53,7 +53,7 @@ module Candidates
       end
 
       def degree_stage_explaination_required?
-        degree_stage == DEGREE_STAGE_REQUIRING_EXPLINATIONN
+        degree_stage == DEGREE_STAGE_REQUIRING_EXPLANATION
       end
     end
   end

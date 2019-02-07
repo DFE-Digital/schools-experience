@@ -91,7 +91,7 @@ feature 'Candidate Registrations', type: :feature do
 
     # Submit registrations/subject_preference form with errors
     choose 'Graduate or postgraduate'
-    select 'Physics', from: 'Select the nearest or equivalent option'
+    select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
     choose 'I want to become a teacher'
     select 'Physics', from: 'First choice'
     click_button 'Continue'
@@ -99,7 +99,7 @@ feature 'Candidate Registrations', type: :feature do
 
     # Submit registrations/subject_preference form successfully
     choose 'Graduate or postgraduate'
-    select 'Physics', from: 'Select the nearest or equivalent option'
+    select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
     choose 'I want to become a teacher'
     select 'Physics', from: 'First choice'
     select 'Mathematics', from: 'Second choice'
