@@ -69,7 +69,11 @@ Given("I choose {string} from the {string} radio buttons") do |option, field|
 end
 
 def get_form_group(page, label_text)
-  page.find(".govuk-label", text: label_text).ancestor('div.govuk-form-group')
+  if page.has_css?(".govuk-label", text: label_text)
+    page.find(".govuk-label", text: label_text).ancestor('div.govuk-form-group')
+  else
+    page.find("legend", text: label_text).ancestor('div.govuk-form-group')
+  end
 end
 
 def ensure_date_field_exists(form_group)
