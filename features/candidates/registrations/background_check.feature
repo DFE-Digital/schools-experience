@@ -12,6 +12,7 @@ Feature: Background checks
         And I should see radio buttons for 'Do you have a Disclosure and Barring Service (DBS) check document?' with the following options:
             | Yes |
             | No  |
+        And there should be a hint stating 'These documents are used to confirm you’re suitable to work with children and young people'
         And there should be some inset text continaing a link to the DBS website
 
     Scenario: Filling in and submitting the form
