@@ -8,12 +8,12 @@ module Candidates
         :subject_preference,
         :background_check
 
-      def initialize(registration)
-        @account_check = registration.fetch(AccountCheck)
-        @placement_preference = registration.fetch(PlacementPreference)
-        @address = registration.fetch(Address)
-        @subject_preference = registration.fetch(SubjectPreference)
-        @background_check = registration.fetch(BackgroundCheck)
+      def initialize(account_check:, placement_preference:, address:, subject_preference:, background_check:)
+        @account_check = account_check
+        @placement_preference = placement_preference
+        @address = address
+        @subject_preference = subject_preference
+        @background_check = background_check
       end
 
       def full_name
