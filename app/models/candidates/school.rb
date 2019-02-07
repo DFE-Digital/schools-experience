@@ -7,15 +7,11 @@ class Candidates::School
     end
 
     def phases
-      Bookings::Phase.all.map do |phase|
-        [phase.id, phase.name]
-      end
+      Bookings::Phase.all.pluck(:id, :name)
     end
 
     def subjects
-      Bookings::Subject.order(name: :asc).map do |subject|
-        [subject.id, subject.name]
-      end
+      Bookings::Subject.order(name: :asc).pluck(:id, :name)
     end
   end
 end
