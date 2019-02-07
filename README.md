@@ -7,6 +7,7 @@
 - Ruby 2.5.3
 - PostgreSQL
 - PostGIS extension
+- Redis
 - NodeJS 8.11.x
 - Yarn 1.12.x
 
@@ -15,7 +16,8 @@
 1. Run `bundle install` to install the gem dependencies
 2. Run `yarn` to install node dependencies
 3. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
-4. Run `bundle exec rails s` to launch the app on http://localhost:5000.
+4. If you don't wish to use the first Redis Database, set the `REDIS_URL`, eg in the `.env` file
+5. Run `bundle exec rails s` to launch the app on http://localhost:5000.
 
 ## Whats included in this boilerplate?
 

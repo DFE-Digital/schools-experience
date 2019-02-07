@@ -10,6 +10,8 @@ variables:
   DATABASE_URL: postgis://postgres:secret@postgres/school_experience_test
   WEB_URL: postgis://postgres:secret@postgres/school_experience
   SECRET_KEY_BASE: stubbed
+  REDIS_IMAGE: redis:5-alpine
+  REDIS_URL: redis://redis:6379/1
 
 steps:
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
@@ -18,6 +20,8 @@ steps:
     displayName: 'Docker login'
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
+  - script: docker run --name=redis -d $(REDIS_IMAGE)
+    displayName: Launch Redis # done early to give it time to boot
   - script: docker pull $(dockerRegistry)/$(imageName):latest || true
     displayName: Retrieve latest Docker build to use as cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
@@ -27,23 +31,23 @@ steps:
   - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
     displayName: Build Docker Image without Cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:test:prepare
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:test:prepare
     displayName: Create Testing databases, import schema and fixtures
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rspec
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rspec
     displayName: Run the Specs
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true $(dockerRegistry)/$(imageName):$(imageTag) cucumber
     displayName: Run the Cucumber features
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) brakeman --no-pager
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL="$(WEB_URL)" -e SECRET_KEY_BASE=stubbed $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:schema:load
+  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL="$(WEB_URL)" -e REDIS_URL -e SECRET_KEY_BASE=stubbed $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:schema:load
     displayName: Create Smoketest database and import schema
-  - script: docker run -d --name=smoketest --health-interval=4s --link postgres:postgres -e DATABASE_URL="$(WEB_URL)" -e SECRET_KEY_BASE=stubbed $(dockerRegistry)/$(imageName):$(imageTag)
+  - script: docker run -d --name=smoketest --health-interval=4s --link postgres:postgres --link redis:redis -e DATABASE_URL="$(WEB_URL)" -e REDIS_URL -e SECRET_KEY_BASE=stubbed $(dockerRegistry)/$(imageName):$(imageTag)
     displayName: Spin up app
   - script: sleep 15 # ugly but gives the web app time to boot
     displayName: Pause to allow app to boot
   - script: docker ps | grep smoketest | grep '(healthy)' || false
     displayName: Check app reports as Healthy
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
+  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
   - script: |
       docker push $(dockerRegistry)/$(imageName):$(imageTag)
