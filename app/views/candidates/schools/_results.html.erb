@@ -54,7 +54,7 @@
                     <li><strong>Education phase:</strong> <%= result.phases.map(&:name).join(', ') %></li>
                     <li><strong>Fees:</strong> &pound;<%= result.fee %></li>
                     <li><strong>School type:</strong> <%= result.school_type&.name %></li>
-                    <li><strong>Subjects:</strong> <%= result.subjects.to_sentence %></li>
+                    <li><strong>Subjects:</strong> <%= result.subjects.map(&:name).to_sentence %></li>
                 </ul>
             </li>
             <% end %>

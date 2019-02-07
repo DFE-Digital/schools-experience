@@ -18,9 +18,10 @@ class Bookings::SchoolSearch
     Bookings::School
       .search(@query)
       .close_to(@point, radius: @radius)
-      .that_provide(@subjects)
-      .at_phases(@phases)
+      .that_provide(@subjects).includes(:subjects)
+      .at_phases(@phases).includes(:phases)
       .costing_upto(@max_fee)
+      .includes(:school_type)
       .reorder(@order)
   end
 
