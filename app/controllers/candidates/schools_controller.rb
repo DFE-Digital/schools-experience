@@ -4,7 +4,7 @@ class Candidates::SchoolsController < ApplicationController
   end
 
   def show
-    @school = OpenStruct.new(YAML.load_file('demo-school.yml'))
+    @school = Candidates::SchoolStub.find(params[:id])
   end
 
 private

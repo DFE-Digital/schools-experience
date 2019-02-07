@@ -48,7 +48,7 @@
         <ul id="results">
             <% @search.results.each_with_index do |result, index| %>
             <li class="school-result">
-                <strong class="name"><%= link_to result.name, candidates_school_path(index + 1) %></strong>
+                <strong class="name"><%= link_to result.name, candidates_school_path(result) %></strong>
                 <ul>
                     <li><strong>Address:</strong> <%= format_school_address result %></li>
                     <li><strong>Education phase:</strong> <%= result.phases.map(&:name).join(', ') %></li>
