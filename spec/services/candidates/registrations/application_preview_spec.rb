@@ -23,40 +23,46 @@ describe Candidates::Registrations::ApplicationPreview do
 
   let :valid_registraion_session do
     {
-      "candidates_registrations_account_check" => {
-        "full_name" => "Testy McTest",
-        "email" => "test@example.com"
-      },
-      "candidates_registrations_placement_preference" => {
-        "date_start" => placement_date_start.strftime('%Y-%m-%d'),
-        "date_end" => placement_date_end.strftime('%Y-%m-%d'),
-        "objectives" => "test the software",
-        "access_needs" => access_needs,
-        "access_needs_details" => access_needs_details
-      },
-      "candidates_registrations_address" => {
-        "building" => "Test building",
-        "street" => "Test street",
-        "town_or_city" => "Test town",
-        "county" => "Testshire",
-        "postcode" => "TE57 1NG",
-        "phone" => "01234567890"
-      },
-      "candidates_registrations_subject_preference" => {
-        "degree_stage" => "I don't have a degree and am not studying for one",
-        "degree_stage_explaination" => "",
-        "degree_subject" => "Not applicable",
-        "teaching_stage" => "I'm thinking about teaching and want to find out more",
-        "subject_first_choice" => "Architecture",
-        "subject_second_choice" => "Mathematics"
-      },
-      "candidates_registrations_background_check" => {
-        "has_dbs_check" => has_dbs_check
+      'registration' => {
+        "candidates_registrations_account_check" => {
+          "full_name" => "Testy McTest",
+          "email" => "test@example.com"
+        },
+        "candidates_registrations_placement_preference" => {
+          "date_start" => placement_date_start.strftime('%Y-%m-%d'),
+          "date_end" => placement_date_end.strftime('%Y-%m-%d'),
+          "objectives" => "test the software",
+          "access_needs" => access_needs,
+          "access_needs_details" => access_needs_details
+        },
+        "candidates_registrations_address" => {
+          "building" => "Test building",
+          "street" => "Test street",
+          "town_or_city" => "Test town",
+          "county" => "Testshire",
+          "postcode" => "TE57 1NG",
+          "phone" => "01234567890"
+        },
+        "candidates_registrations_subject_preference" => {
+          "degree_stage" => "I don't have a degree and am not studying for one",
+          "degree_stage_explaination" => "",
+          "degree_subject" => "Not applicable",
+          "teaching_stage" => "I'm thinking about teaching and want to find out more",
+          "subject_first_choice" => "Architecture",
+          "subject_second_choice" => "Mathematics"
+        },
+        "candidates_registrations_background_check" => {
+          "has_dbs_check" => has_dbs_check
+        }
       }
     }
   end
 
-  subject { described_class.new valid_registraion_session }
+  let :current_registration do
+    Candidates::Registrations::RegistrationSession.new valid_registraion_session
+  end
+
+  subject { described_class.new current_registration }
 
   context '#full_name' do
     it 'returns the correct value' do

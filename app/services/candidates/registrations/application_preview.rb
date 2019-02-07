@@ -9,11 +9,11 @@ module Candidates
         :background_check
 
       def initialize(registration)
-        @account_check = AccountCheck.new registration.fetch(AccountCheck.model_name.param_key)
-        @placement_preference = PlacementPreference.new registration.fetch(PlacementPreference.model_name.param_key)
-        @address = Address.new registration.fetch(Address.model_name.param_key)
-        @subject_preference = SubjectPreference.new registration.fetch(SubjectPreference.model_name.param_key)
-        @background_check = BackgroundCheck.new registration.fetch(BackgroundCheck.model_name.param_key)
+        @account_check = registration.fetch(AccountCheck)
+        @placement_preference = registration.fetch(PlacementPreference)
+        @address = registration.fetch(Address)
+        @subject_preference = registration.fetch(SubjectPreference)
+        @background_check = registration.fetch(BackgroundCheck)
       end
 
       def full_name
