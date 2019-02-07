@@ -67,6 +67,8 @@ group :development, :test do
   gem 'dotenv-rails'
 
   gem 'brakeman', '>= 4.4.0'
+
+  gem 'bullet'
 end
 
 group :development do
