@@ -60,7 +60,9 @@ describe Candidates::Registrations::AddressesController, type: :request do
           "town_or_city" => 'Test Town',
           "county" => 'Testshire',
           "postcode" => 'TE57 1NG',
-          "phone" => '01234567890'
+          "phone" => '01234567890',
+          "created_at" => nil,
+          "updated_at" => nil
         )
       end
 

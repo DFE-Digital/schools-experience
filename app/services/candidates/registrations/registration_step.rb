@@ -11,8 +11,9 @@ module Candidates
         created_at.present?
       end
 
-      def persist!
-        return unless valid?
+      # Flag the model as having being persisted
+      def persisted!
+        validate!
         self.updated_at = DateTime.now
         self.created_at = self.updated_at unless persisted?
       end

@@ -57,7 +57,9 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
           "date_end" => (tomorrow + 3.days),
           "objectives" => 'Become a teacher',
           "access_needs" => false,
-          "access_needs_details" => nil
+          "access_needs_details" => nil,
+          "created_at" => nil,
+          "updated_at" => nil
         )
       end
 

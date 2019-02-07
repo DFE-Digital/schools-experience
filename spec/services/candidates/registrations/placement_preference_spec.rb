@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementPreference, type: :model do
+  it_behaves_like 'a registration step'
+
   let! :today do
     Date.today
   end
