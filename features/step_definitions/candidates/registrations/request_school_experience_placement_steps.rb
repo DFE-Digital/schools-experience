@@ -32,9 +32,3 @@ Given("I have filled in the form with accurate data") do
   fill_in "What do you want to get out of a placement?", with: "I love teaching"
   choose "No"
 end
-
-When("I submit the form") do
-  within('#main-content form') do
-    click_on "Continue"
-  end
-end

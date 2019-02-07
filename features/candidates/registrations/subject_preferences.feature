@@ -25,4 +25,4 @@ Feature: Entering candidate contact details
         Given I am on the 'candidate subjects' page
         And I make my degree and teaching preference selections
         When I submit the form
-        Then I should be on the 'background check' page
+        Then I should be on the 'background checks' page
