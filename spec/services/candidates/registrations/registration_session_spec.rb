@@ -18,9 +18,7 @@ describe Candidates::Registrations::RegistrationSession do
 
     context 'when registration key is set' do
       let :session do
-        {
-          'registration' => { 'some' => 'information' }
-        }
+        { 'registration' => { 'some' => 'information' } }
       end
 
       it "doesn't over write the registration key" do
@@ -34,12 +32,8 @@ describe Candidates::Registrations::RegistrationSession do
       { 'registration' => { 'some' => 'information' } }
     end
 
-    let :model_klass do
-      Candidates::Registrations::BackgroundCheck
-    end
-
     let :model do
-      model_klass.new has_dbs_check: true
+      Candidates::Registrations::BackgroundCheck.new has_dbs_check: true
     end
 
     before do
