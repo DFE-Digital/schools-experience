@@ -1,9 +1,6 @@
 module Candidates
   module Registrations
-    class PlacementPreference
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class PlacementPreference < RegistrationStep
       # This allows us to parse multi-part date parameters like an ActiveRecord object.
       include ActiveRecord::AttributeAssignment
       class ActiveModel::Type::Date

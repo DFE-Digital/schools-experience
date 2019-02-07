@@ -1,9 +1,6 @@
 module Candidates
   module Registrations
-    class SubjectPreference
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class SubjectPreference < RegistrationStep
       OPTIONS_CONFIG = YAML.load_file "#{Rails.root}/config/candidate_form_options.yml"
       NOT_APPLYING_FOR_DEGREE = "I don't have a degree and am not studying for one".freeze
       DEGREE_STAGE_REQUIRING_EXPLINATIONN = 'Other'.freeze
