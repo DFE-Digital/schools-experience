@@ -59,6 +59,14 @@ describe Bookings::School, type: :model do
     end
   end
 
+  describe 'Paramterisation' do
+    subject { create(:bookings_school) }
+
+    specify do
+      expect(subject.to_param).to eq(subject.urn)
+    end
+  end
+
   describe 'Scopes' do
     subject { Bookings::School }
 
@@ -170,25 +178,6 @@ describe Bookings::School, type: :model do
         specify 'should not return schools with a higher fee than provided amount' do
           expect(subject.costing_upto(20)).not_to include(school_c)
         end
-      end
-    end
-  end
-
-  context 'Methods' do
-    context '#address' do
-      subject do
-        create(
-          :bookings_school,
-          address_1: "Address 1",
-          address_2: "Address 2",
-          address_3: nil,
-          county: "County",
-          postcode: "M1 2WD"
-        )
-      end
-
-      specify "it should omit missing fields and delimit with commas" do
-        expect(subject.address).to eql("Address 1, Address 2, County, M1 2WD")
       end
     end
   end

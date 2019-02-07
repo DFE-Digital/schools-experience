@@ -4,7 +4,7 @@ class Candidates::SchoolsController < ApplicationController
   end
 
   def show
-    # Shut linter up
+    @school = OpenStruct.new(YAML.load_file('demo-school.yml'))
   end
 
 private
