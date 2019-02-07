@@ -2,23 +2,133 @@
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Check your answers before requesting your placement</h1>
     <dl class="govuk-summary-list">
+
       <h2 class="govuk-heading-m">Personal details</h2>
-      <%= render partial: "list_row", locals: { key: 'Full name', value: @application_preview.full_name, action: link_to('Change', '#') } %>
-      <%= render partial: "list_row", locals: { key: 'Address', value: @application_preview.full_address, action: link_to('Change', '#') } %>
-      <%= render partial: "list_row", locals: { key: 'UK telephone number', value: @application_preview.telephone_number, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Email address', value: @application_preview.email_address, action: link_to('Change', '#')  } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Full name',
+        value: @application_preview.full_name,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_account_check_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Address',
+        value: @application_preview.full_address,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_address_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'UK telephone number',
+        value: @application_preview.telephone_number,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_address_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Email address',
+        value: @application_preview.email_address,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_account_check_path
+        )
+      } %>
 
       <h2 class="govuk-heading-m">Request details</h2>
-      <%= render partial: "list_row", locals: { key: 'School or college', value: @application_preview.school, action: link_to('Change', '#') } %>
-      <%= render partial: "list_row", locals: { key: 'Placement availability', value: @application_preview.placement_availability, action: link_to('Change', '#') } %>
-      <%= render partial: "list_row", locals: { key: 'Placement outcome', value: @application_preview.placement_outcome, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Disability or access needs', value: @application_preview.access_needs, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Degree stage', value: @application_preview.degree_stage, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Degree subject', value: @application_preview.degree_subject, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Teaching stage', value: @application_preview.teaching_stage, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Teaching subject - first choice', value: @application_preview.teaching_subject_first_choice, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Teaching subject - second choice', value: @application_preview.teaching_subject_second_choice, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'DBS check document', value: @application_preview.dbs_check_document, action: link_to('Change', '#')  } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'School or college',
+        value: @application_preview.school,
+        action: ''
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Placement availability',
+        value: @application_preview.placement_availability,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_placement_preference_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Placement outcome',
+        value: @application_preview.placement_outcome,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_placement_preference_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Disability or access needs',
+        value: @application_preview.access_needs,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_placement_preference_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Degree stage',
+        value: @application_preview.degree_stage,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_subject_preference_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Degree subject',
+        value: @application_preview.degree_subject,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_subject_preference_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Teaching stage',
+        value: @application_preview.teaching_stage,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_subject_preference_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Teaching subject - first choice',
+        value: @application_preview.teaching_subject_first_choice,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_subject_preference_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'Teaching subject - second choice',
+        value: @application_preview.teaching_subject_second_choice,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_subject_preference_path
+        )
+      } %>
+
+      <%= render partial: "list_row", locals: {
+        key: 'DBS check document',
+        value: @application_preview.dbs_check_document,
+        action: link_to(
+          'Change',
+          edit_candidates_school_registrations_background_check_path
+        )
+      } %>
     </dl>
   </div>
   <div class="govuk-grid-column-full">
