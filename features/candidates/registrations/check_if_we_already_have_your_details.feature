@@ -1,4 +1,4 @@
-Feature: Request a school experience placement
+Feature: Check if my details are already held
     So I can pre-fill later stages of the wizard
     As a potential candidate
     I want to check if my details are already held by the DfE

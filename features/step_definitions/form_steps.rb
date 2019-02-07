@@ -1,30 +1,61 @@
 Then("I should see a form with the following fields:") do |table|
   within('#main-content form') do
     table.hashes.each do |row|
-      label = page.find(".govuk-label", text: row['Label'])
+      label_text = row['Label']
+      options = row['Options']&.split(',')&.map(&:strip)
 
-      within(label.ancestor('div.govuk-form-group')) do
+      within(get_form_group(page, label_text)) do
         case row['Type']
-
-        when 'date'
-          %w{Day Month Year}.each do |date_part|
-            page.find('label', text: date_part).tap do |inner_label|
-              expect(page).to have_field(inner_label.text, type: 'number')
-            end
-          end
-
-        when /radio/
-          expect(page).to have_css('.govuk-label', text: row['Label'])
-          row['Options'].split(',').map(&:strip).each do |opt|
-            expect(page).to have_field(opt, type: 'radio')
-          end
-
+        when 'date' then ensure_date_field_exists(page)
+        when /radio/ then ensure_radio_buttons_exist(page, options)
+        when /select/ then ensure_select_options_exist(page, options)
         else # regular inputs
-          expect(page).to have_field(row['Label'], type: row['Type'])
+          expect(page).to have_field(label_text, type: row['Type'])
         end
       end
     end
   end
+end
+
+Then("I should see radio buttons for {string} with the following options:") do |string, table|
+  ensure_radio_buttons_exist(
+    get_form_group(page, string),
+    table.raw.flatten.to_a
+  )
+end
+
+Then("I should see a select box labelled {string} with the following options:") do |string, table|
+  ensure_select_options_exist(
+    get_form_group(page, string),
+    table.raw.flatten.to_a
+  )
+end
+
+Then("I should see a select box containing degree subjects labelled {string}") do |string|
+  @degree_subjects ||= YAML
+    .load_file("#{Rails.root}/config/candidate_form_options.yml")['DEGREE_SUBJECTS']
+    .sample(10) # we don't need all of them, just pick out 10
+  ensure_select_options_exist(get_form_group(page, string), @degree_subjects)
+end
+
+def get_form_group(page, label_text)
+  page.find(".govuk-label", text: label_text).ancestor('div.govuk-form-group')
+end
+
+def ensure_date_field_exists(form_group)
+  %w{Day Month Year}.each do |date_part|
+    form_group.find('label', text: date_part).tap do |inner_label|
+      expect(form_group).to have_field(inner_label.text, type: 'number')
+    end
+  end
+end
+
+def ensure_radio_buttons_exist(form_group, options)
+  options.each { |option| expect(form_group).to have_field(option, type: 'radio') }
+end
+
+def ensure_select_options_exist(form_group, options)
+  options.each { |option| expect(form_group).to have_css('select option', text: option) }
 end
 
 Then("I fill in the date field {string} with {int}-{int}-{int}") do |field, day, month, year|

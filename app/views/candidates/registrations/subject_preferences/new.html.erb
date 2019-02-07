@@ -3,13 +3,11 @@
 
 <%= form_for @subject_preference, url: candidates_registrations_subject_preference_path do |f| %>
   <%= GovukElementsErrorsHelper.error_summary @subject_preference, 'There is a problem', '' %>
+
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">What stage are you at with your degree?</h1>
-    </legend>
-    <%= f.radio_button_fieldset :degree_stage, legend_options: { class: 'govuk-visually-hidden' } do |fieldset| %>
+    <%= f.radio_button_fieldset :degree_stage do |fieldset| %>
       <% Candidates::Registrations::SubjectPreference.degree_stages.each do |degree_stage| %>
-        <% if degree_stage == Candidates::Registrations::SubjectPreference::DEGREE_STAGE_REQUIRING_EXPLINATIONN %>
+        <% if degree_stage == Candidates::Registrations::SubjectPreference::DEGREE_STAGE_REQUIRING_EXPLINATION %>
           <%= fieldset.radio_input degree_stage do %>
             <%= fieldset.text_area :degree_stage_explaination %>
           <% end %>
@@ -21,9 +19,6 @@
   </fieldset>
 
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">If you have or are studying for a degree, tell us your your degree subject</h1>
-    </legend>
     <div class="govuk-form-group">
       <%= f.label :degree_subject, class: 'govuk-label' %>
       <%= f.select :degree_subject,
@@ -34,10 +29,7 @@
   </fieldset>
 
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">Which of the following teaching stages are you at?</h1>
-    </legend>
-    <%= f.radio_button_fieldset :teaching_stage, legend_options: { class: 'govuk-visually-hidden' } do |fieldset| %>
+    <%= f.radio_button_fieldset :teaching_stage do |fieldset| %>
       <% Candidates::Registrations::SubjectPreference.teaching_stages.each do |teaching_stage| %>
         <%= fieldset.radio_input teaching_stage %>
       <% end %>

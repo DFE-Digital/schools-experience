@@ -75,6 +75,9 @@ en:
         date_start: "Start date"
         date_end: "End date"
         access_needs: "Do you have any disability or access needs?"
+      candidates_registrations_subject_preference:
+        degree_stage: What stage are you at with your degree?
+        teaching_stage: Which of the following teaching stages are you at?
     hint:
       phases: Select all that apply
       max_fee: Schools may charge
@@ -84,8 +87,9 @@ en:
       candidates_registrations_account_check:
         email: 'Email address'
       candidates_registrations_subject_preference:
+        degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"
-        degree_subject: "Select the nearest or equivalent option"
+        degree_subject: If you have or are studying for a degree, tell us about your degree subject
         subject_first_choice: "First choice"
         subject_second_choice: "Second choice"
       candidates_registrations_background_check:
