@@ -21,3 +21,8 @@ Feature: Entering candidate contact details
         And I should see a select box containing degree subjects labelled 'First choice'
         And I should see a select box containing degree subjects labelled 'Second choice'
 
+    Scenario: Filling in and submitting the form
+        Given I am on the 'candidate subjects' page
+        And I make my degree and teaching preference selections
+        When I submit the form
+        Then I should be on the 'background check' page
