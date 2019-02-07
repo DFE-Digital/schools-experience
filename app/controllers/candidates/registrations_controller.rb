@@ -9,5 +9,9 @@ module Candidates
     def current_registration
       session[:registration] ||= {}
     end
+
+    def current_urn
+      params[:school_id]
+    end
   end
 end

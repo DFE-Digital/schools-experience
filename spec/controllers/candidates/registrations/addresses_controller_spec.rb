@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Candidates::Registrations::AddressesController, type: :request do
   context '#new' do
     before do
-      get '/candidates/registrations/address/new'
+      get '/candidates/schools/URN/registrations/address/new'
     end
 
     it 'responds with 200' do
@@ -17,7 +17,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
 
   context '#create' do
     before do
-      post '/candidates/registrations/address',
+      post '/candidates/schools/URN/registrations/address',
         params: address_params
     end
 
@@ -65,7 +65,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to '/candidates/registrations/subject_preference/new'
+        expect(response).to redirect_to '/candidates/schools/URN/registrations/subject_preference/new'
       end
     end
   end

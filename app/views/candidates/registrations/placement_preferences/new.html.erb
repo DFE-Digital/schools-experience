@@ -1,7 +1,7 @@
 <h1 class="govuk-heading-l">Request school experience placement</h1>
 <p>Tell us a few details so we can forward your requirements to the school.</p>
 
-<%= form_for @placement_preference, url: candidates_registrations_placement_preference_path do |f| %>
+<%= form_for @placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>
   <%= GovukElementsErrorsHelper.error_summary @placement_preference, 'There is a problem', '' %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
