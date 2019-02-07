@@ -63,9 +63,9 @@
         <%- end -%>
 
         <p>
-            <a class="govuk-button" href="/register/request">
-                Request placement
-            </a>
+            <%= link_to "Request placement",
+                        candidates_school_registrations_placement_preference_path(@school.urn),
+                        class:"govuk-button" %>
         </p>
     </div>
 
