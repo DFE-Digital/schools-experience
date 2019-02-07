@@ -78,9 +78,8 @@ describe Candidates::Registrations::ApplicationPreview do
 
   context '#full_address' do
     it 'returns the correct value' do
-      expect(subject.full_address).to eq <<-ADDRESS.squish
-        Test building, Test street, Test town, Testshire, TE57 1NG
-      ADDRESS
+      expect(subject.full_address).to eq \
+        "Test building, Test street, Test town, Testshire, TE57 1NG"
     end
   end
 

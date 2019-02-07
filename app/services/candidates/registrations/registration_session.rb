@@ -1,5 +1,5 @@
 # Simple wrapper around Rails session.
-# Encapsulates storing and retrieving registration wizard models from the 
+# Encapsulates storing and retrieving registration wizard models from the
 # session.
 module Candidates
   module Registrations
@@ -18,4 +18,3 @@ module Candidates
     end
   end
 end
-

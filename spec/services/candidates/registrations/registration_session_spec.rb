@@ -24,7 +24,7 @@ describe Candidates::Registrations::RegistrationSession do
       end
 
       it "doesn't over write the registration key" do
-        expect(session['registration']).to eq({ 'some' => 'information' })
+        expect(session['registration']).to eq 'some' => 'information'
       end
     end
   end
@@ -49,7 +49,7 @@ describe Candidates::Registrations::RegistrationSession do
     it 'stores the models attributes under the correct key' do
       expect(
         session['registration']['candidates_registrations_background_check']
-      ).to eq({ 'has_dbs_check' => true })
+      ).to eq 'has_dbs_check' => true
     end
 
     it 'doesnt over write other keys' do
