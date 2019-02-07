@@ -46,7 +46,6 @@ gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_buil
 
 gem 'acts_as_list'
 
-gem "hiredis"
 gem "redis", "~> 4.0"
 
 group :development, :test do
