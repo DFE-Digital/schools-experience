@@ -3,46 +3,32 @@
 
 <%= form_for @subject_preference, url: candidates_school_registrations_subject_preference_path do |f| %>
   <%= GovukElementsErrorsHelper.error_summary @subject_preference, 'There is a problem', '' %>
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">What stage are you at with your degree?</h1>
-    </legend>
-    <%= f.radio_button_fieldset :degree_stage, legend_options: { class: 'govuk-visually-hidden' } do |fieldset| %>
-      <% Candidates::Registrations::SubjectPreference.degree_stages.each do |degree_stage| %>
-        <% if degree_stage == Candidates::Registrations::SubjectPreference::DEGREE_STAGE_REQUIRING_EXPLINATIONN %>
-          <%= fieldset.radio_input degree_stage do %>
-            <%= fieldset.text_area :degree_stage_explaination %>
-          <% end %>
-        <% else %>
-          <%= fieldset.radio_input degree_stage %>
+
+  <%= f.radio_button_fieldset :degree_stage do |fieldset| %>
+    <% Candidates::Registrations::SubjectPreference.degree_stages.each do |degree_stage| %>
+      <% if degree_stage == Candidates::Registrations::SubjectPreference::DEGREE_STAGE_REQUIRING_EXPLANATION %>
+        <%= fieldset.radio_input degree_stage do %>
+          <%= fieldset.text_area :degree_stage_explaination %>
         <% end %>
+      <% else %>
+        <%= fieldset.radio_input degree_stage %>
       <% end %>
     <% end %>
-  </fieldset>
+  <% end %>
 
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">If you have or are studying for a degree, tell us your your degree subject</h1>
-    </legend>
-    <div class="govuk-form-group">
-      <%= f.label :degree_subject, class: 'govuk-label' %>
-      <%= f.select :degree_subject,
-        options_for_select(Candidates::Registrations::SubjectPreference.degree_subjects),
-        { prompt: '', },
-        { class: 'govuk-select' } %>
-    </div>
-  </fieldset>
+  <div class="govuk-form-group">
+    <%= f.label :degree_subject, class: 'govuk-label' %>
+    <%= f.select :degree_subject,
+      options_for_select(Candidates::Registrations::SubjectPreference.degree_subjects),
+      { prompt: '', },
+      { class: 'govuk-select' } %>
+  </div>
 
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">Which of the following teaching stages are you at?</h1>
-    </legend>
-    <%= f.radio_button_fieldset :teaching_stage, legend_options: { class: 'govuk-visually-hidden' } do |fieldset| %>
-      <% Candidates::Registrations::SubjectPreference.teaching_stages.each do |teaching_stage| %>
-        <%= fieldset.radio_input teaching_stage %>
-      <% end %>
+  <%= f.radio_button_fieldset :teaching_stage do |fieldset| %>
+    <% Candidates::Registrations::SubjectPreference.teaching_stages.each do |teaching_stage| %>
+      <%= fieldset.radio_input teaching_stage %>
     <% end %>
-  </fieldset>
+  <% end %>
 
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -65,7 +51,5 @@
     </div>
   </fieldset>
 
-  <fieldset class="govuk-fieldset">
-    <%= f.submit 'Continue' %>
-  </fieldset>
+  <%= f.submit 'Continue' %>
 <% end %>

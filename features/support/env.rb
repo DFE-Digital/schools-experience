@@ -5,6 +5,7 @@
 # files.
 
 require 'cucumber/rails'
+require 'selenium/webdriver'
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -58,6 +59,64 @@ end
 # Possible values are :truncation and :transaction
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
+
+Cucumber::Rails::Database.javascript_strategy = :truncation
+
+# Browser configuration
+
+Capybara.server = :puma, { Silent: true }
+
+Capybara.register_driver :chrome do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: { args: %w(disable-gpu) }
+  )
+
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    desired_capabilities: capabilities
+  )
+end
+
+Capybara.register_driver :chrome_headless do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: { args: %w(headless disable-gpu) }
+  )
+
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    desired_capabilities: capabilities
+  )
+end
+
+Capybara.register_driver :firefox do |app|
+  Capybara::Selenium::Driver.new(app, browser: :firefox)
+end
+
+Capybara.register_driver :firefox_headless do |app|
+  options = Selenium::WebDriver::Firefox::Options.new(args: %w(--headless))
+
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :firefox,
+    options: options
+  )
+end
+
+if (driver = ENV['CUC_DRIVER']) && driver.present?
+  Capybara.default_driver = driver.to_sym
+else
+  Capybara.use_default_driver
+end
+
+
+if (js_driver = ENV['CUC_JAVASCRIPT_DRIVER']) && js_driver.present?
+  Capybara.default_driver = js_driver.to_sym
+else
+  Capybara.javascript_driver = :chrome_headless
+end
+  
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
 if ENV['SELENIUM_HUB_HOSTNAME'].present?

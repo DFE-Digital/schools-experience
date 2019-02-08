@@ -59,7 +59,7 @@ end
 
 Then("I should see a/an {string} filter on the left") do |label|
   within('#search-filter') do
-    expect(page).to have_css('legend > span.govuk-label', text: label)
+    expect(page).to have_css('legend', text: label)
   end
 end
 

@@ -70,22 +70,28 @@ en:
       fees: Fees
       subject: Subject
       candidates_registrations_background_check:
-        has_dbs_check: "These documents are used to confirm you’re suitable to work with children and young people."
+        has_dbs_check: Do you have a Disclosure and Barring Service (DBS) check document?
       candidates_registrations_placement_preference:
         date_start: "Start date"
         date_end: "End date"
-        access_needs: "Tell us so we can make sure the school is able to cater for your requirements"
+        access_needs: "Do you have any disability or access needs?"
+      candidates_registrations_subject_preference:
+        degree_stage: What stage are you at with your degree?
+        teaching_stage: Which of the following teaching stages are you at?
     hint:
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
+      candidates_registrations_background_check:
+        has_dbs_check: These documents are used to confirm you’re suitable to work with children and young people
 
     label:
       candidates_registrations_account_check:
         email: 'Email address'
       candidates_registrations_subject_preference:
+        degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"
-        degree_subject: "Select the nearest or equivalent option"
+        degree_subject: If you have or are studying for a degree, tell us about your degree subject
         subject_first_choice: "First choice"
         subject_second_choice: "Second choice"
       candidates_registrations_background_check:
@@ -96,7 +102,7 @@ en:
         building: "Building and street"
         phone: "UK telephone number"
       candidates_registrations_placement_preference:
-        objectives: "Explain in 50 words or fewer"
+        objectives: What do you want to get out of a placement?
         access_needs_details: "Provide details"
         access_needs:
           true: "Yes"

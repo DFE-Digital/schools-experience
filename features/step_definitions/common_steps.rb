@@ -3,10 +3,20 @@ Given("I am on the {string} page") do |string|
     visit(p)
     expect(page.current_path).to eql(p)
   end
+  make_inputs_opaque if opaquify_inputs?
+end
+
+Given("I am on the {string} page for my school of choice") do |string|
+  @school = FactoryBot.create(:bookings_school)
+  path_for(string, school_id: @school.id).tap do |p|
+    visit(p)
+    expect(page.current_path).to eql(p)
+  end
+  make_inputs_opaque if opaquify_inputs?
 end
 
 Then("the page's main header should be {string}") do |string|
-  expect(page).to have_css("h1.govuk-heading-xl", text: string)
+  expect(page).to have_css("h1", text: string)
 end
 
 Then("there should be a section titled {string}") do |string|
