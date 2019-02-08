@@ -1,7 +1,32 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::SubjectPreference, type: :model do
+  let :school_urn do
+    'URN'
+  end
+
+  let :subjects do
+    [
+      { name: 'Geography' }
+    ]
+  end
+
+  let :school do
+    double Bookings::School, id: school_urn, subjects: subjects
+  end
+
+  let :allowed_subject_choices do
+    school.subjects.pluck :name
+  end
+
+  before do
+    allow(Candidates::School).to receive(:find) { school }
+  end
+
+  subject { described_class.new urn: school_urn }
+
   context 'attributes' do
+    it { is_expected.to respond_to :urn }
     it { is_expected.to respond_to :degree_stage }
     it { is_expected.to respond_to :degree_stage_explaination }
     it { is_expected.to respond_to :degree_subject }
@@ -11,6 +36,8 @@ describe Candidates::Registrations::SubjectPreference, type: :model do
   end
 
   context 'validations' do
+    it { is_expected.to validate_presence_of :urn }
+
     it { is_expected.to validate_presence_of :degree_stage }
 
     it do
@@ -71,14 +98,24 @@ describe Candidates::Registrations::SubjectPreference, type: :model do
 
     it do
       is_expected.to validate_inclusion_of(:subject_first_choice).in_array \
-        described_class.subject_choices
+        allowed_subject_choices
     end
 
     it { is_expected.to validate_presence_of :subject_second_choice }
 
     it do
       is_expected.to validate_inclusion_of(:subject_second_choice).in_array \
-        described_class.subject_choices
+        allowed_subject_choices
+    end
+  end
+
+  context '#subject_choices' do
+    it "returns the list of subjects from it's school" do
+      expect(subject.subject_choices).to eq school.subjects.pluck :name
+
+      # Test we're passing the correct argument to find as we're stubbing
+      # the real return value.
+      expect(Candidates::School).to have_received(:find).with(school_urn)
     end
   end
 end

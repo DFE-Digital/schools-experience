@@ -1,7 +1,7 @@
 <h1 class="govuk-heading-l">We need some more details</h1>
 <p>The following will be used to help schools offer you school experience placements.</p>
 
-<%= form_for @subject_preference, url: candidates_registrations_subject_preference_path do |f| %>
+<%= form_for @subject_preference, url: candidates_school_registrations_subject_preference_path do |f| %>
   <%= GovukElementsErrorsHelper.error_summary @subject_preference, 'There is a problem', '' %>
 
   <%= f.radio_button_fieldset :degree_stage do |fieldset| %>
@@ -37,7 +37,7 @@
     <div class="govuk-form-group">
       <%= f.label :subject_first_choice, class: 'govuk-label' %>
       <%= f.select :subject_first_choice,
-        options_for_select(Candidates::Registrations::SubjectPreference.subject_choices),
+        options_for_select(@subject_preference.subject_choices),
         { prompt: 'Select' },
         { class: 'govuk-select' } %>
     </div>
@@ -45,7 +45,7 @@
     <div class="govuk-form-group">
       <%= f.label :subject_second_choice, class: 'govuk-label' %>
       <%= f.select :subject_second_choice,
-        options_for_select(Candidates::Registrations::SubjectPreference.subject_choices),
+        options_for_select(@subject_preference.subject_choices),
         { prompt: 'Select' },
         { class: 'govuk-select' } %>
     </div>

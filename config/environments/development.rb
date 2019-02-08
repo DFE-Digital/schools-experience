@@ -62,4 +62,10 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.sass.inline_source_maps = true
+
+  # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
+  }
+  config.session_store :cache_store, key: 'schoolex-session'
 end

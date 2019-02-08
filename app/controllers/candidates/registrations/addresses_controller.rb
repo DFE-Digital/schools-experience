@@ -9,7 +9,7 @@ module Candidates
         @address = Address.new address_params
         if @address.valid?
           persist @address
-          redirect_to new_candidates_registrations_subject_preference_path
+          redirect_to new_candidates_school_registrations_subject_preference_path
         else
           render :new
         end

@@ -3,7 +3,7 @@
     <h1 class="govuk-heading-l">Background and security checks</h1>
     <p class="govuk-body-lead">Some schools will carry out these kinds of checks before offering placements.</p>
 
-    <%= form_for @background_check, url: candidates_registrations_background_check_path do |f| %>
+    <%= form_for @background_check, url: candidates_school_registrations_background_check_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary @background_check, 'There is a problem', '' %>
 
       <% # force the params to submit if the user has not selected an option %>

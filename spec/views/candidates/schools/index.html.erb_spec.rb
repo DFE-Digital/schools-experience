@@ -22,12 +22,16 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
         [[1, 'Primary'], [2, 'Seconday'], [3, '16 to 18']]
       )
 
-      assign :search, Candidates::SchoolSearch.new(
+      @school = build(:bookings_school)
+      @search = Candidates::SchoolSearch.new(
         query: 'Manchester',
         phases: %w{3},
         max_fee: '60',
         subjects: %w{1 3}
       )
+      allow(@search).to receive(:results).and_return([@school])
+
+      assign :search, @search
 
       render
     end
@@ -53,6 +57,12 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       expect(rendered).to have_css '#search-filter'
       expect(rendered).to have_checked_field 'max_fee', count: 1
       expect(rendered).to have_unchecked_field 'max_fee', count: 3
+    end
+
+    it "shows results" do
+      expect(rendered).to have_css 'li.school-result'
+      expect(rendered).to have_css 'li.school-result>strong a', text: @school.name
+      expect(rendered).to have_css 'li.school-result ul li', count: 5
     end
   end
 end

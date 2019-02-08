@@ -59,7 +59,8 @@ end
 # Possible values are :truncation and :transaction
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
-Cucumber::Rails::Database.javascript_strategy = :transaction
+
+Cucumber::Rails::Database.javascript_strategy = :truncation
 
 # Browser configuration
 
@@ -114,4 +115,19 @@ if (js_driver = ENV['CUC_JAVASCRIPT_DRIVER']) && js_driver.present?
   Capybara.default_driver = js_driver.to_sym
 else
   Capybara.javascript_driver = :chrome_headless
+end
+  
+Cucumber::Rails::Database.javascript_strategy = :truncation
+
+if ENV['SELENIUM_HUB_HOSTNAME'].present?
+  Capybara.run_server = false
+  Capybara.app_host = "#{ENV['APP_URL']}"
+  Capybara.javascript_driver = :chrome
+  Capybara.default_driver = :selenium_remote
+  Capybara.register_driver :selenium_remote do |app|
+    Capybara::Selenium::Driver.new(app,
+        :browser => :remote,
+        :url => "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:4444/wd/hub",
+        :desired_capabilities => :chrome)
+  end
 end

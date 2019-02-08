@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Candidates::Registrations::BackgroundChecksController, type: :request do
   context '#new' do
     before do
-      get '/candidates/registrations/background_check/new'
+      get '/candidates/schools/URN/registrations/background_check/new'
     end
 
     it 'renders the new form' do
@@ -13,7 +13,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
   context '#create' do
     before do
-      post '/candidates/registrations/background_check/',
+      post '/candidates/schools/URN/registrations/background_check/',
         params: background_check_params
     end
 
@@ -43,7 +43,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          '/candidates/registrations/application_preview'
+          '/candidates/schools/URN/registrations/application_preview'
       end
     end
   end

@@ -21,42 +21,54 @@ describe Candidates::Registrations::ApplicationPreview do
     true
   end
 
-  let :valid_registraion_session do
-    {
-      "candidates_registrations_account_check" => {
-        "full_name" => "Testy McTest",
-        "email" => "test@example.com"
-      },
-      "candidates_registrations_placement_preference" => {
-        "date_start" => placement_date_start.strftime('%Y-%m-%d'),
-        "date_end" => placement_date_end.strftime('%Y-%m-%d'),
-        "objectives" => "test the software",
-        "access_needs" => access_needs,
-        "access_needs_details" => access_needs_details
-      },
-      "candidates_registrations_address" => {
-        "building" => "Test building",
-        "street" => "Test street",
-        "town_or_city" => "Test town",
-        "county" => "Testshire",
-        "postcode" => "TE57 1NG",
-        "phone" => "01234567890"
-      },
-      "candidates_registrations_subject_preference" => {
-        "degree_stage" => "I don't have a degree and am not studying for one",
-        "degree_stage_explaination" => "",
-        "degree_subject" => "Not applicable",
-        "teaching_stage" => "I'm thinking about teaching and want to find out more",
-        "subject_first_choice" => "Architecture",
-        "subject_second_choice" => "Mathematics"
-      },
-      "candidates_registrations_background_check" => {
-        "has_dbs_check" => has_dbs_check
-      }
-    }
+  let :account_check do
+    double Candidates::Registrations::AccountCheck,
+      full_name: 'Testy McTest',
+      email: 'test@example.com'
   end
 
-  subject { described_class.new valid_registraion_session }
+  let :address do
+    double Candidates::Registrations::Address,
+      building: "Test building",
+      street: "Test street",
+      town_or_city: "Test town",
+      county: "Testshire",
+      postcode: "TE57 1NG",
+      phone: "01234567890"
+  end
+
+  let :background_check do
+    double Candidates::Registrations::BackgroundCheck,
+      has_dbs_check: has_dbs_check
+  end
+
+  let :placement_preference do
+    double Candidates::Registrations::PlacementPreference,
+      date_start: placement_date_start,
+      date_end: placement_date_end,
+      objectives: "test the software",
+      access_needs: access_needs,
+      access_needs_details: access_needs_details
+  end
+
+  let :subject_preference do
+    double Candidates::Registrations::SubjectPreference,
+      degree_stage: "I don't have a degree and am not studying for one",
+      degree_stage_explaination: "",
+      degree_subject: "Not applicable",
+      teaching_stage: "I'm thinking about teaching and want to find out more",
+      subject_first_choice: "Architecture",
+      subject_second_choice: "Mathematics"
+  end
+
+  subject do
+    described_class.new \
+      account_check: account_check,
+      placement_preference: placement_preference,
+      address: address,
+      subject_preference: subject_preference,
+      background_check: background_check
+  end
 
   context '#full_name' do
     it 'returns the correct value' do
@@ -66,9 +78,8 @@ describe Candidates::Registrations::ApplicationPreview do
 
   context '#full_address' do
     it 'returns the correct value' do
-      expect(subject.full_address).to eq <<-ADDRESS.squish
-        Test building, Test street, Test town, Testshire, TE57 1NG
-      ADDRESS
+      expect(subject.full_address).to eq \
+        "Test building, Test street, Test town, Testshire, TE57 1NG"
     end
   end
 

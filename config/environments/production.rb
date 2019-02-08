@@ -88,4 +88,12 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence
+  }
+  config.session_store :cache_store, key: 'schoolex-session'
+
+  config.active_job.queue_adapter = :delayed_job
 end

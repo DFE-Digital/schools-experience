@@ -7,7 +7,7 @@
       website, we can use them to speed up your placement request.
     </p>
 
-    <%= form_for @account_check, url: candidates_registrations_account_check_path do |f| %>
+    <%= form_for @account_check, url: candidates_school_registrations_account_check_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary @account_check, 'There is a problem', '' %>
       <fieldset class="govuk-fieldset">
         <%= f.text_field :full_name %>

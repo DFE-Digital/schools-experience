@@ -7,7 +7,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
   context '#new' do
     before do
-      get '/candidates/registrations/placement_preference/new'
+      get '/candidates/schools/URN/registrations/placement_preference/new'
     end
 
     it 'responds with 200' do
@@ -21,7 +21,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
   context '#create' do
     before do
-      post '/candidates/registrations/placement_preference',
+      post '/candidates/schools/URN/registrations/placement_preference',
         params: placement_preference_params
     end
 
@@ -63,7 +63,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          '/candidates/registrations/account_check/new'
+          '/candidates/schools/URN/registrations/account_check/new'
       end
     end
   end

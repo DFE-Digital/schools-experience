@@ -50,10 +50,10 @@
             <li class="school-result">
                 <strong class="name"><%= link_to result.name, candidates_school_path(index + 1) %></strong>
                 <ul>
-                    <li><strong>Address:</strong> <%= result.address %></li>
+                    <li><strong>Address:</strong> <%= format_school_address result %></li>
                     <li><strong>Education phase:</strong> <%= result.phases.map(&:name).join(', ') %></li>
                     <li><strong>Fees:</strong> &pound;<%= result.fee %></li>
-                    <li><strong>School type:</strong> <%= result.school_type %></li>
+                    <li><strong>School type:</strong> <%= result.school_type&.name %></li>
                     <li><strong>Subjects:</strong> <%= result.subjects.to_sentence %></li>
                 </ul>
             </li>
