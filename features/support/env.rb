@@ -61,8 +61,21 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
+# Browser configuration
 
-Capybara.register_driver :headless_chrome do |app|
+Capybara.register_driver :chrome do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: { args: %w(disable-gpu) }
+  )
+
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    desired_capabilities: capabilities
+  )
+end
+
+Capybara.register_driver :chrome_headless do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     chromeOptions: { args: %w(headless disable-gpu) }
   )
@@ -74,4 +87,29 @@ Capybara.register_driver :headless_chrome do |app|
   )
 end
 
-Capybara.javascript_driver = :headless_chrome
+Capybara.register_driver :firefox do |app|
+  Capybara::Selenium::Driver.new(app, browser: :firefox)
+end
+
+Capybara.register_driver :firefox_headless do |app|
+  options = Selenium::WebDriver::Firefox::Options.new(args: %w(--headless))
+
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :firefox,
+    options: options
+  )
+end
+
+if (driver = ENV['CUC_DRIVER']) && driver.present?
+  Capybara.default_driver = driver.to_sym
+else
+  Capybara.use_default_driver
+end
+
+
+if (js_driver = ENV['CUC_JAVASCRIPT_DRIVER']) && js_driver.present?
+  Capybara.default_driver = js_driver.to_sym
+else
+  Capybara.javascript_driver = :headless
+end
