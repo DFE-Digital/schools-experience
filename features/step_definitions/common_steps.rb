@@ -3,6 +3,7 @@ Given("I am on the {string} page") do |string|
     visit(p)
     expect(page.current_path).to eql(p)
   end
+  make_inputs_opaque if opaquify_inputs?
 end
 
 Then("the page's main header should be {string}") do |string|
