@@ -79,7 +79,7 @@ end
 if ENV['BROWSER'] == 'chrome'
   Capybara.default_driver = :chrome
   Capybara.register_driver :chrome do |app|
-    Capybara::Selenium::Driver.new(app, browser: :chrome)
+    Capybara::Selenium::Driver.new(app, browser: :chrome, :driver_path => ENV['ChromeWebDriver'])
   end
 elsif ENV['BROWSER'] == 'firefox'
   Capybara.default_driver = :firefox
