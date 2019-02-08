@@ -1,16 +1,24 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationStore do
+  include_context 'redis'
+
   let :session do
     FactoryBot.build :registration_session
   end
 
-  let! :uuid do
+  let :uuid do
     allow(SecureRandom).to receive(:urlsafe_base64) { 'sekret_key' }
     described_class.store session
   end
 
   before do
+    # We're namespacing all our test redis keys under 'TEST'
+    # See spec/support/redis.rb
+    allow(described_class).to receive(:namespace) do
+      "#{test_namespace}:pending_confirmations"
+    end
+
     uuid
   end
 
