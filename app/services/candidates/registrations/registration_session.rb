@@ -18,6 +18,10 @@ module Candidates
         fetch AccountCheck
       end
 
+      def address
+        fetch Address
+      end
+
       def background_check
         fetch BackgroundCheck
       end

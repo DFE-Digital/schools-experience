@@ -15,6 +15,22 @@ module Candidates
         end
       end
 
+      def edit
+        @address = current_registration.address
+      end
+
+      def update
+        @address = current_registration.address
+        @address.assign_attributes address_params
+
+        if @address.valid?
+          persist @address
+          redirect_to candidates_school_registrations_application_preview_path
+        else
+          render :edit
+        end
+      end
+
     private
 
       def address_params

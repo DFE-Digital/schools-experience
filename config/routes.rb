@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       namespace :registrations do
         resource :placement_preference, only: %i(new create edit)
         resource :account_check, only: %i(new create edit update)
-        resource :address, only: %i(new create edit)
+        resource :address, only: %i(new create edit update)
         resource :subject_preference, only: %i(new create edit)
         resource :background_check, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
