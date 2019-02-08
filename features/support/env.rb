@@ -62,6 +62,7 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 
 if ENV['APP_URL'].present?
   Capybara.app_host = "#{ENV['APP_URL']}"
+  Capybara.run_server = false
 end
 
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
