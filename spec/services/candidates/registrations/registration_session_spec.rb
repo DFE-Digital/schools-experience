@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationSession do
+  let! :date do
+    DateTime.now
+  end
+
+  before do
+    allow(DateTime).to receive(:now) { date }
+  end
+
   context '#initialize' do
     before do
       described_class.new session
@@ -45,8 +53,8 @@ describe Candidates::Registrations::RegistrationSession do
         session['registration']['candidates_registrations_background_check']
       ).to eq \
         'has_dbs_check' => true,
-        'created_at' => nil,
-        'updated_at' => nil
+        'created_at' => date,
+        'updated_at' => date
     end
 
     it 'doesnt over write other keys' do

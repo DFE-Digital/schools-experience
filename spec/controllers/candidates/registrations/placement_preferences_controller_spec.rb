@@ -1,8 +1,23 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementPreferencesController, type: :request do
+  let! :date do
+    DateTime.now
+  end
+
   let! :tomorrow do
-    Date.tomorrow
+    date.tomorrow
+  end
+
+  let :registration_session do
+    double Candidates::Registrations::RegistrationSession, save: true
+  end
+
+  before do
+    allow(DateTime).to receive(:now) { date }
+
+    allow(Candidates::Registrations::RegistrationSession).to \
+      receive(:new) { registration_session }
   end
 
   context '#new' do
@@ -34,6 +49,10 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         }
       end
 
+      it 'doesnt modify the session' do
+        expect(registration_session).not_to have_received(:save)
+      end
+
       it 'rerenders the new form' do
         expect(response.body).to render_template :new
       end
@@ -52,15 +71,12 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
 
       it 'stores the placement_preference details in the session' do
-        expect(session['registration']['candidates_registrations_placement_preference']).to eq(
-          "date_start" => tomorrow,
-          "date_end" => (tomorrow + 3.days),
-          "objectives" => 'Become a teacher',
-          "access_needs" => false,
-          "access_needs_details" => nil,
-          "created_at" => nil,
-          "updated_at" => nil
-        )
+        expect(registration_session).to have_received(:save).with \
+          Candidates::Registrations::PlacementPreference.new \
+            date_start: tomorrow,
+            date_end: (tomorrow + 3.days),
+            objectives: 'Become a teacher',
+            access_needs: false
       end
 
       it 'redirects to the next step' do

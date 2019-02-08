@@ -16,6 +16,12 @@ module Candidates
         self.updated_at = DateTime.now
         self.created_at = self.updated_at unless persisted?
       end
+
+      def ==(other)
+        return false unless other.is_a? self.class
+
+        other.attributes == self.attributes
+      end
     end
   end
 end

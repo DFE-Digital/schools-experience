@@ -1,6 +1,21 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::AddressesController, type: :request do
+  let! :date do
+    DateTime.now
+  end
+
+  let :registration_session do
+    double Candidates::Registrations::RegistrationSession, save: true
+  end
+
+  before do
+    allow(DateTime).to receive(:now) { date }
+
+    allow(Candidates::Registrations::RegistrationSession).to \
+      receive(:new) { registration_session }
+  end
+
   context '#new' do
     before do
       get '/candidates/schools/URN/registrations/address/new'
@@ -37,6 +52,10 @@ describe Candidates::Registrations::AddressesController, type: :request do
       it 'rerenders the new template' do
         expect(response).to render_template :new
       end
+
+      it 'doesnt modify the session' do
+        expect(registration_session).not_to have_received(:save)
+      end
     end
 
     context 'valid' do
@@ -54,20 +73,19 @@ describe Candidates::Registrations::AddressesController, type: :request do
       end
 
       it 'stores the address details in the session' do
-        expect(session["registration"]["candidates_registrations_address"]).to eq(
-          "building" => 'Test house',
-          "street" => 'Test street',
-          "town_or_city" => 'Test Town',
-          "county" => 'Testshire',
-          "postcode" => 'TE57 1NG',
-          "phone" => '01234567890',
-          "created_at" => nil,
-          "updated_at" => nil
-        )
+        expect(registration_session).to have_received(:save).with \
+          Candidates::Registrations::Address.new \
+            building: 'Test house',
+            street: 'Test street',
+            town_or_city: 'Test Town',
+            county: 'Testshire',
+            postcode: 'TE57 1NG',
+            phone: '01234567890'
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to '/candidates/schools/URN/registrations/subject_preference/new'
+        expect(response).to redirect_to \
+          '/candidates/schools/URN/registrations/subject_preference/new'
       end
     end
   end
