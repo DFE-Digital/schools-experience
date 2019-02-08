@@ -1,0 +1,39 @@
+<h1 class="govuk-heading-l">Request school experience placement</h1>
+<p>Tell us a few details so we can forward your requirements to the school.</p>
+
+<%= form_for placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>
+  <%= GovukElementsErrorsHelper.error_summary placement_preference, 'There is a problem', '' %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">When would you be available for a placement?</h1>
+    </legend>
+    <%= f.date_field :date_start %>
+    <%= f.date_field :date_end %>
+  </fieldset>
+
+  <fieldset id="placement-objectives-container" class="govuk-fieldset">
+    <%=
+      f.text_area_with_maxwords \
+        :objectives,
+        rows: 5,
+        maxwords: { count: 150 }
+      %>
+  </fieldset>
+
+  <fieldset class="govuk-fieldset disability-needs">
+    <%= f.radio_button_fieldset :access_needs do |field_set| %>
+      <span id="access-needs-hint" class="govuk-hint">
+        Tell us so we can make sure the school is able to cater for your requirements
+      </span>
+      <%= field_set.radio_input true do %>
+        <%= field_set.text_area :access_needs_details, rows: 5 %>
+      <% end %>
+      <%= field_set.radio_input false %>
+    <% end %>
+  </fieldset>
+
+  <fieldset class="govuk-fieldset">
+    <%= f.submit 'Continue' %>
+  </fieldset>
+<% end %>
+

@@ -26,6 +26,10 @@ module Candidates
         fetch BackgroundCheck
       end
 
+      def placement_preference
+        fetch PlacementPreference
+      end
+
       def subject_preference
         fetch SubjectPreference
       end
