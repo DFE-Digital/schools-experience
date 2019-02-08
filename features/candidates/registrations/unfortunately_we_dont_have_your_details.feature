@@ -4,7 +4,7 @@ Feature: Entering candidate contact details
     I want to enter my address and telephone number
 
     Scenario: Page contents
-        Given I am on the 'candidate address' page
+        Given I am on the 'candidate address' page for my school of choice
         Then the page's main header should be "Unfortunately we don’t have your details"
         And there should be some information explaining why my contact details are needed
         And I should see a form with the following fields:
@@ -17,7 +17,7 @@ Feature: Entering candidate contact details
             | UK telephone number | tel  |         |
 
     Scenario: Filling in and submitting the form
-        Given I am on the 'candidate address' page
+        Given I am on the 'candidate address' page for my school of choice
         And I have entered the following details into the form:
             | Building and street | 221B           |
             | Street              | Baker Street   |
@@ -26,4 +26,4 @@ Feature: Entering candidate contact details
             | Postcode            | NW1 6XE        |
             | UK telephone number | 07765 432 100  |
         When I submit the form
-        Then I should be on the 'candidate subjects' page
+        Then I should be on the 'candidate subjects' page for my school of choice

@@ -33,6 +33,10 @@ Then("I should be on the {string} page") do |string|
   expect(page.current_path).to eql(path_for(string))
 end
 
+Then("I should be on the {string} page for my school of choice") do |string|
+  expect(page.current_path).to eql(path_for(string, school_id: @school.id))
+end
+
 
 Then("I should see a column on the right with the following useful links:") do |table|
   within('aside nav') do

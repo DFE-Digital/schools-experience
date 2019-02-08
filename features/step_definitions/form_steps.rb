@@ -48,6 +48,12 @@ Then("I should see a select box containing degree subjects labelled {string}") d
   ensure_select_options_exist(get_form_group(page, string), @degree_subjects)
 end
 
+
+Then("I should see a select box containing school subjects labelled {string}") do |string|
+  pending
+  ensure_select_options_exist(get_form_group(page, string), @subjects.map(&:name))
+end
+
 Then("I fill in the date field {string} with {int}-{int}-{int}") do |field, day, month, year|
   within(page.find('.govuk-label', text: field).ancestor('.govuk-form-group')) do
     fill_in 'Day',   with: day

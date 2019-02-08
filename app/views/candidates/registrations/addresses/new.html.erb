@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Unfortunately we don’t have your details</h1>
     <p>Register your details with us so you can get school experience placements.</p>
-    <%= form_for @address, url: candidates_registrations_address_path do |f| %>
+    <%= form_for @address, url: candidates_school_registrations_address_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary @address, 'There is a problem', '' %>
 
       <fieldset id="address-fields" class="govuk-fieldset">
