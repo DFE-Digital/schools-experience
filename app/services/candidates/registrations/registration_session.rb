@@ -18,6 +18,10 @@ module Candidates
         fetch AccountCheck
       end
 
+      def background_check
+        fetch BackgroundCheck
+      end
+
       def fetch(klass)
         klass.new @registration_session.fetch(klass.model_name.param_key)
       end
