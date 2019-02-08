@@ -13,6 +13,11 @@ module Candidates
           model.tap(&:persisted!).attributes
       end
 
+      # TODO add spec
+      def account_check
+        fetch AccountCheck
+      end
+
       def fetch(klass)
         klass.new @registration_session.fetch(klass.model_name.param_key)
       end
