@@ -9,7 +9,8 @@ module Candidates
       end
 
       def save(model)
-        @registration_session[model.model_name.param_key] = model.attributes
+        @registration_session[model.model_name.param_key] =
+          model.tap(&:persisted!).attributes
       end
 
       def fetch(klass)
