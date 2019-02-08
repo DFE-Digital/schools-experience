@@ -17,6 +17,22 @@ module Candidates
         end
       end
 
+      def edit
+        @subject_preference = current_registration.subject_preference
+      end
+
+      def update
+        @subject_preference = current_registration.subject_preference
+        @subject_preference.assign_attributes subject_preference_params
+
+        if @subject_preference.valid?
+          persist @subject_preference
+          redirect_to candidates_school_registrations_application_preview_path
+        else
+          render :edit
+        end
+      end
+
     private
 
       def subject_preference_params

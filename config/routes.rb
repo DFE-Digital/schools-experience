@@ -10,7 +10,7 @@ Rails.application.routes.draw do
         resource :placement_preference, only: %i(new create edit)
         resource :account_check, only: %i(new create edit update)
         resource :address, only: %i(new create edit update)
-        resource :subject_preference, only: %i(new create edit)
+        resource :subject_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
         resource :placement_request, only: %i(show create)
