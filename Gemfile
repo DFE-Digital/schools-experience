@@ -43,6 +43,7 @@ gem 'foreman'
 gem 'canonical-rails'
 
 gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
+gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
 gem 'delayed_job_active_record'
