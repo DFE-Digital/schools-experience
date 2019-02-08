@@ -29,7 +29,7 @@ Feature: Request a school experience placement
         Given I am on the 'Request school experience placement' page
         Then the 'Disability needs' section should have 'Yes' and 'No' radio buttons
 
-    @javascript
+    @javascript @wip
     Scenario: Revealing the 'Provide details' box
         Given I am on the 'Request school experience placement' page
         And there is no 'Provide details' text area
