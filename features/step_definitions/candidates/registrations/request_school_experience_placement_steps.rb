@@ -1,5 +1,5 @@
 Then("the {string} word count should say {string}") do |string, string2|
-  pending "awaiting @javascript driver config"
+  pending "awaiting patch to form builder enabling counts"
 end
 
 When("I enter {string} into the {string} text area") do |value, label|
@@ -14,14 +14,19 @@ Then("the {string} section should have {string} and {string} radio buttons") do 
   end
 end
 
+
 When("I click the {string} option in the {string} section") do |option, section|
   within(".#{section.parameterize}") do
     expect(choose(option)).to be_checked
   end
 end
 
-Then("a text area labelled {string} should appear") do |string|
-  pending "awaiting @javascript driver config"
+Given("there is no {string} text area") do |string|
+  expect(page).not_to have_field(string, type: 'textarea')
+end
+
+Then("a text area labelled {string} should have appeared") do |string|
+  expect(page).to have_field(string, type: 'textarea')
 end
 
 Given("I have filled in the form with accurate data") do

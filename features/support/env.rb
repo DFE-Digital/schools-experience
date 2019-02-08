@@ -111,5 +111,5 @@ end
 if (js_driver = ENV['CUC_JAVASCRIPT_DRIVER']) && js_driver.present?
   Capybara.default_driver = js_driver.to_sym
 else
-  Capybara.javascript_driver = :headless
+  Capybara.javascript_driver = :chrome_headless
 end

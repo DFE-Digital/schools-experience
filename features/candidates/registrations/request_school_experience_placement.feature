@@ -29,10 +29,12 @@ Feature: Request a school experience placement
         Given I am on the 'Request school experience placement' page
         Then the 'Disability needs' section should have 'Yes' and 'No' radio buttons
 
+    @javascript
     Scenario: Revealing the 'Provide details' box
         Given I am on the 'Request school experience placement' page
+        And there is no 'Provide details' text area
         When I click the 'Yes' option in the 'Disability needs' section
-        Then a text area labelled 'Provide details' should appear
+        Then a text area labelled 'Provide details' should have appeared
 
     Scenario: Submitting my data
         Given I am on the 'Request school experience placement' page
