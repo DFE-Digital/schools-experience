@@ -3,11 +3,11 @@ module Candidates
   private
 
     def persist(model)
-      current_registration[model.model_name.param_key] = model.attributes
+      current_registration.save model
     end
 
     def current_registration
-      session[:registration] ||= {}
+      @current_registration ||= Registrations::RegistrationSession.new(session)
     end
 
     def current_urn
