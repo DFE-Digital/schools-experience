@@ -94,4 +94,6 @@ Rails.application.configure do
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence
   }
   config.session_store :cache_store, key: 'schoolex-session'
+
+  config.active_job.queue_adapter = :delayed_job
 end
