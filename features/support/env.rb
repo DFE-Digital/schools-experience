@@ -60,9 +60,12 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
+if ENV['APP_URL'].present?
+  Capybara.app_host = "#{ENV['APP_URL']}"
+end
+
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
   Capybara.run_server = false
-  Capybara.app_host = "#{ENV['APP_URL']}"
   Capybara.javascript_driver = :chrome
   Capybara.default_driver = :selenium_remote
   Capybara.register_driver :selenium_remote do |app|
