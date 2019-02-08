@@ -1,6 +1,16 @@
 class Bookings::SchoolSearch
   attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :order
 
+  AVAILABLE_ORDERS = [
+    %w{distance Distance},
+    %w{fee Fee},
+    %w{name Name}
+  ].freeze
+
+  def self.available_orders
+    AVAILABLE_ORDERS.map
+  end
+
   def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: 'distance')
     self.query    = query
     self.point    = geolocate(location)

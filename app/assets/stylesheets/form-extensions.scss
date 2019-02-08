@@ -16,4 +16,8 @@
       width: auto;
     }
   }
+
+  input[type=submit].govuk-button {
+    margin-bottom: 0;
+  }
 }
