@@ -4,8 +4,10 @@
 module Candidates
   module Registrations
     class RegistrationSession
+      NAMESPACE = 'registration'.freeze
+
       def initialize(session)
-        @registration_session = session['registration'] ||= {}
+        @registration_session = session[NAMESPACE] ||= {}
       end
 
       def save(model)
@@ -36,6 +38,14 @@ module Candidates
 
       def fetch(klass)
         klass.new @registration_session.fetch(klass.model_name.param_key)
+      end
+
+      def to_h
+        { NAMESPACE => @registration_session  }
+      end
+
+      def ==(other)
+        other.to_h == self.to_h
       end
     end
   end
