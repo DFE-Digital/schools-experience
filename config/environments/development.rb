@@ -74,4 +74,6 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
   end
+
+  config.active_job.queue_adapter = :delayed_job
 end
