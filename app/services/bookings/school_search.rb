@@ -13,7 +13,7 @@ class Bookings::SchoolSearch
 
   def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: 'distance')
     self.query    = query
-    self.point    = geolocate(location)
+    self.point    = geolocate(location) if location.present?
     self.radius   = radius
     self.subjects = subjects
     self.phases   = phases

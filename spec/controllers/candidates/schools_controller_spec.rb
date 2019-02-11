@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolsController, type: :request do
-  before do
-    allow(Geocoder).to receive(:search).and_return([
-      OpenStruct.new(data: {'lat' => "53.4794892", 'lon' => "-2.2451148"})
-    ])
-  end
-
   context "GET #index" do
     before { get candidates_schools_path }
 
@@ -29,8 +23,8 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         query: 'Something',
         location: 'Manchester',
         distance: '10',
-        phases: ['1'],
-        subjects: ['2','3'],
+        phases: %w{1},
+        subjects: %w{2 3},
         max_fee: '30',
         order: 'Name'
       }
@@ -43,7 +37,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       expect(assigns(:search).location).to eq('Manchester')
       expect(assigns(:search).distance).to eq(10)
       expect(assigns(:search).phases).to eq([1])
-      expect(assigns(:search).subjects).to eq([2,3])
+      expect(assigns(:search).subjects).to eq([2, 3])
       expect(assigns(:search).max_fee).to eq('30')
       expect(assigns(:search).order).to eq('Name')
     end

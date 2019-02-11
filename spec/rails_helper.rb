@@ -60,6 +60,13 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include FactoryBot::Syntax::Methods
+
+  # Prevent unintended API access from Geocoder
+  config.before :each do
+    allow(Geocoder).to receive(:search).and_return([
+      OpenStruct.new(data: { 'lat' => "53.4794892", 'lon' => "-2.2451148" })
+    ])
+  end
 end
 
 Shoulda::Matchers.configure do |config|
