@@ -57,4 +57,11 @@ SECURE_USERNAME = <my-username>
 SECURE_PASSWORD = <my-password>
 ```
 
+## Exception notification
 
+If required Exceptions Notifications can be sent to a Slack channel. This is 
+enabled and configured via environment variables.
+
+**SLACK_WEBHOOK** _(required)_ Webhook to use to post to Slack
+**SLACK_CHANNEL** _(optional)_ Channel to post to, should be left blank if hook defaults to a specifi channel
+**SLACK_ENV** _(optional)_ Identifier for deployment environment - eg Staging or Production
