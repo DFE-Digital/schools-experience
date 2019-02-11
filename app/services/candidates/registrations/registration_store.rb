@@ -20,11 +20,14 @@ module Candidates
         uuid
       end
 
-      def self.find_by!(uuid: uuid)
+      def self.find_by!(uuid:)
         hash = Rails.cache.read uuid, namespace: namespace
         raise SessionNotFound unless hash
-        Rails.cache.delete uuid
         RegistrationSession.new hash
+      end
+
+      def self.remove!(uuid:)
+        Rails.cache.delete uuid
       end
     end
   end

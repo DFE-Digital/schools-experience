@@ -45,13 +45,18 @@ describe Candidates::Registrations::RegistrationStore do
       it 'returns the session' do
         expect(described_class.find_by! uuid: 'sekret_key').to eq session
       end
+    end
+  end
 
-      it 'removes the session from the cache' do
-        described_class.find_by! uuid: 'sekret_key'
+  context '.remove!' do
+    before do
+      allow(Rails.cache).to receive(:delete)
 
-        expect{ described_class.find_by! uuid: 'bad_id' }.to raise_error \
-          described_class::SessionNotFound
-      end
+      described_class.remove! uuid: 'sekret_key'
+    end
+
+    it 'removes the session from the cache' do
+      expect(Rails.cache).to have_received(:delete).with 'sekret_key'
     end
   end
 end
