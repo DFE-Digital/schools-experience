@@ -1,7 +1,6 @@
 class Candidates::School
   class << self
     def find(identifier)
-      # Note currently using id, will be converted to URN when available
       Bookings::School.find_by!(urn: identifier)
     end
 
