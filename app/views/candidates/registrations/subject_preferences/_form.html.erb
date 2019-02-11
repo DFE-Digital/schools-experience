@@ -37,7 +37,7 @@
     <div class="govuk-form-group">
       <%= f.label :subject_first_choice, class: 'govuk-label' %>
       <%= f.select :subject_first_choice,
-        options_for_select(subject_preference.subject_choices),
+        options_for_select(subject_preference.subject_choices, f.object.subject_first_choice),
         { prompt: 'Select' },
         { class: 'govuk-select' } %>
     </div>
@@ -45,7 +45,7 @@
     <div class="govuk-form-group">
       <%= f.label :subject_second_choice, class: 'govuk-label' %>
       <%= f.select :subject_second_choice,
-        options_for_select(subject_preference.subject_choices),
+        options_for_select(subject_preference.subject_choices, f.object.subject_second_choice),
         { prompt: 'Select' },
         { class: 'govuk-select' } %>
     </div>
