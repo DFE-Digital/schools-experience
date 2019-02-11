@@ -10,6 +10,7 @@
     <div class="govuk-grid-column-one-third filter-list" id="search-filter">
         <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
             <%= f.hidden_field :query %>
+            <%= f.hidden_field :location %>
             <%= f.hidden_field :distance %>
 
             <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
@@ -19,6 +20,7 @@
                                                     text_method: :last %>
 
             <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
+            <%= f.hidden_field :order %>
 
             <%= f.submit 'Update schools list', name: nil %>
         <% end %>
@@ -32,15 +34,20 @@
         <hr />
 
         <div class="sortby inline-fields">
-            <div class="drop govuk-form-group">
-                <label for="orderby">Sorted by</label>
-                <select name="orderby" id="OrderBy" aria-controls="js-search-results-info" class="govuk-select">
-                    <option value="" selected="">Distance</option>
-                    <option value="fee">Fee</option>
-                    <option value="SCHNAME_sort asc">Alphabetical A - Z</option>
-                    <option value="SCHNAME_sort desc">Alphabetical Z - A</option>
-                </select>
-            </div>
+            <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
+                <%= f.hidden_field :query %>
+                <%= f.hidden_field :location %>
+                <%= f.hidden_field :distance %>
+                <% for phase_id in f.object.phases %>
+                    <%= f.hidden_field :phases, multiple: true, value: phase_id, id: nil %>
+                <% end %>
+                <% for subject_id in f.object.subjects %>
+                    <%= f.hidden_field :subjects, multiple: true, value: subject_id, id: nil %>
+                <% end %>
+                <%= f.hidden_field :max_fee %>
+                <%= f.collection_select :order, f.object.class.available_orders, :first, :last %>
+                <%= f.submit "Change sort order", name: nil %>
+            <% end %>
         </div>
 
         <hr />
@@ -48,13 +55,13 @@
         <ul id="results">
             <% @search.results.each_with_index do |result, index| %>
             <li class="school-result">
-                <strong class="name"><%= link_to result.name, candidates_school_path(index + 1) %></strong>
+                <strong class="name"><%= link_to result.name, candidates_school_path(result) %></strong>
                 <ul>
                     <li><strong>Address:</strong> <%= format_school_address result %></li>
-                    <li><strong>Education phase:</strong> <%= result.phases.map(&:name).join(', ') %></li>
+                    <li><strong>Education phase:</strong> <%= format_school_phases result %></li>
                     <li><strong>Fees:</strong> &pound;<%= result.fee %></li>
                     <li><strong>School type:</strong> <%= result.school_type&.name %></li>
-                    <li><strong>Subjects:</strong> <%= result.subjects.to_sentence %></li>
+                    <li><strong>Subjects:</strong> <%= format_school_subjects result %></li>
                 </ul>
             </li>
             <% end %>

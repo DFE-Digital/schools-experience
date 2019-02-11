@@ -19,10 +19,12 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location
-    attr_reader :distance, :subjects, :phases, :max_fee
+    attr_accessor :query, :location, :order
+    attr_reader :distance, :max_fee
 
     class << self
+      delegate :available_orders, to: Bookings::SchoolSearch
+
       def fees
         FEES
       end
@@ -34,6 +36,14 @@ module Candidates
 
     def distance=(dist_ids)
       @distance = dist_ids.present? ? dist_ids.to_i : nil
+    end
+
+    def subjects
+      @subjects ||= []
+    end
+
+    def phases
+      @phases ||= []
     end
 
     def subjects=(subj_ids)
@@ -62,7 +72,7 @@ module Candidates
     end
 
     def total_results
-      0
+      results.length
     end
 
   private
@@ -74,7 +84,8 @@ module Candidates
         radius: distance,
         subjects: subjects,
         phases: phases,
-        max_fee: max_fee
+        max_fee: max_fee,
+        requested_order: order
       )
     end
   end

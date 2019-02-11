@@ -50,7 +50,7 @@
             </p>
 
             <p>
-                <b>Placement subjects:</b> <%= @school.subjects.to_sentence %>.
+                <b>Placement subjects:</b> <%= format_school_subjects @school %>.
             </p>
         </div>
 
@@ -63,9 +63,9 @@
         <%- end -%>
 
         <p>
-            <a class="govuk-button" href="/register/request">
-                Request placement
-            </a>
+            <%= link_to "Request placement",
+                        new_candidates_school_registrations_placement_preference_path(@school),
+                        class:"govuk-button" %>
         </p>
     </div>
 

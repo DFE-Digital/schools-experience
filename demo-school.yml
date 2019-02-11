@@ -1,4 +1,3 @@
-name: The Creative Studio
 description: "We're a thriving community school serving a cosmopolitan community
 in North Manchester with more than 1,700 pupils.\n
 
@@ -9,7 +8,6 @@ bilingual children.\n
 We're also a barrier free school and cater fully for the needs of pupils with
 movement difficulties while our work with hearing impaired children is well
 supported by the local authority and other agencies."
-postcode: MA1 1AM
 age_range: 3 to 16 (nursery, primary and secondary)
 specialisms: Arts, bilingual students and SEN
 links:
@@ -23,18 +21,6 @@ links:
     link: "https://reports.ofsted.gov.uk/provider/28/105560"
 requirements: Must have a degree and be planning to become a teacher.
 placement_details: Attendees will observe lessons in their chosen subjects and may get the chance to interact with pupils and classroom activities. Only offer key stage 1 experience for primary placements
-subjects:
-- Maths
-- English
-- Art
-- Physics
-- Music
-address_1: Long Millgate
-address_2: XXX
-address_3:
-town: Manchester
-county:
-postcode:
 dbs: true
 fee: "Yes - £50 per placement"
 dress_code: Yes - business attire with male attendees expected to wear a collar and tie
@@ -42,3 +28,4 @@ times: 8am to 5pm
 parking: Limited on-site parking arranged as part of placement. Local paid-for on-street parking around school site for £3 per day
 accessibility: Ramp access and disabled parking available on site
 training_offered: Yes. We offer training opportunities for a a mainstream ITT programme.
+

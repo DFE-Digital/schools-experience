@@ -68,4 +68,10 @@ Rails.application.configure do
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
   }
   config.session_store :cache_store, key: 'schoolex-session'
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+  end
 end

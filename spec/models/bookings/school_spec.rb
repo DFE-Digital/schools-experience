@@ -63,7 +63,7 @@ describe Bookings::School, type: :model do
     subject { create(:bookings_school) }
 
     specify do
-      expect(subject.to_param).to eq(subject.urn)
+      expect(subject.to_param).to eq(subject.urn.to_s)
     end
   end
 

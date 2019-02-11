@@ -59,6 +59,6 @@ class Bookings::School < ApplicationRecord
   end
 
   def to_param
-    urn
+    urn.to_s.presence
   end
 end

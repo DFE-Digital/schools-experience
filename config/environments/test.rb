@@ -46,4 +46,9 @@ Rails.application.configure do
 
   # Use the test adapter for active jobs
   config.active_job.queue_adapter = :test
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.raise = true
+  end
 end

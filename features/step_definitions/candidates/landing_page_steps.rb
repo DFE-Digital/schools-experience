@@ -34,7 +34,7 @@ Then("I should be on the {string} page") do |string|
 end
 
 Then("I should be on the {string} page for my school of choice") do |string|
-  expect(page.current_path).to eql(path_for(string, school_id: @school.id))
+  expect(page.current_path).to eql(path_for(string, school: @school))
 end
 
 

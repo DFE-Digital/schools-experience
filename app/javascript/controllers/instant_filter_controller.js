@@ -6,7 +6,7 @@ export default class extends Controller {
     const form = this.element ;
 
     this.element.addEventListener('change', function(ev) {
-      if (ev.target.nodeName == 'INPUT') {
+      if (ev.target.nodeName == 'INPUT' || ev.target.nodeName == 'SELECT') {
           form.submit() ;
       }
     }) ;
