@@ -46,7 +46,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
   context "GET #show" do
     before do
       @school = create(:bookings_school)
-      get candidates_school_path(@school.urn)
+      get candidates_school_path(@school)
     end
 
     it "returns http success" do

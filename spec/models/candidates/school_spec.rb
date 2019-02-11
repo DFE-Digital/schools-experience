@@ -6,7 +6,6 @@ describe Candidates::School do
 
     context('with valid identifier') do
       it "will return school" do
-        pending
         expect(described_class.find(@school.to_param)).to eq(@school)
       end
     end

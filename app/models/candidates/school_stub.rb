@@ -15,7 +15,7 @@ class Candidates::SchoolStub
   def method_missing(method, *args, &block)
     if @school.respond_to?(method, false)
       @school.public_send(method, *args, &block)
-    elsif @fallback.keys?(method.to_s)
+    elsif @fallback.key?(method.to_s)
       @fallback[method.to_s]
     else
       super
