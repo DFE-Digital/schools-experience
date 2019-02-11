@@ -60,6 +60,7 @@ end
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 
+DatabaseCleaner.strategy = :truncation
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
 # Browser configuration
@@ -125,11 +126,11 @@ end
 
 
 if (js_driver = ENV['CUC_JAVASCRIPT_DRIVER']) && js_driver.present?
-  Capybara.default_driver = js_driver.to_sym
+  Capybara.javascript_driver = js_driver.to_sym
 else
   Capybara.javascript_driver = :chrome_headless
 end
-  
+
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
   Capybara.run_server = false
   Capybara.javascript_driver = :chrome
