@@ -66,10 +66,19 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 
 Capybara.server = :puma, { Silent: true }
 
+if ENV['APP_URL'].present?
+  Capybara.app_host = "#{ENV['APP_URL']}"
+  Capybara.run_server = false
+end
+
 Capybara.register_driver :chrome do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     chromeOptions: { args: %w(disable-gpu) }
   )
+
+  if ENV['ChromeWebDriver'].present?
+    Selenium::WebDriver::Chrome.driver_path = "#{ENV['ChromeWebDriver']}/chromedriver.exe"
+  end
 
   Capybara::Selenium::Driver.new(
     app,
@@ -82,6 +91,10 @@ Capybara.register_driver :chrome_headless do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     chromeOptions: { args: %w(headless disable-gpu) }
   )
+
+  if ENV['ChromeWebDriver'].present?
+    Selenium::WebDriver::Chrome.driver_path = "#{ENV['ChromeWebDriver']}/chromedriver.exe"
+  end
 
   Capybara::Selenium::Driver.new(
     app,
@@ -117,11 +130,8 @@ else
   Capybara.javascript_driver = :chrome_headless
 end
   
-Cucumber::Rails::Database.javascript_strategy = :truncation
-
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
   Capybara.run_server = false
-  Capybara.app_host = "#{ENV['APP_URL']}"
   Capybara.javascript_driver = :chrome
   Capybara.default_driver = :selenium_remote
   Capybara.register_driver :selenium_remote do |app|
