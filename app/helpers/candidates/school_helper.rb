@@ -9,4 +9,16 @@ module Candidates::SchoolHelper
       school.postcode.presence,
     ].compact, ", ")
   end
+
+  def format_school_subjects(school)
+    safe_subjects = school.subjects.map(&:name).map do |subj|
+      ERB::Util.h(subj)
+    end
+
+    safe_subjects.to_sentence.html_safe
+  end
+
+  def format_school_phases(school)
+    safe_join school.phases.map(&:name), ', '
+  end
 end

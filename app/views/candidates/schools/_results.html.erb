@@ -58,10 +58,10 @@
                 <strong class="name"><%= link_to result.name, candidates_school_path(result) %></strong>
                 <ul>
                     <li><strong>Address:</strong> <%= format_school_address result %></li>
-                    <li><strong>Education phase:</strong> <%= result.phases.map(&:name).join(', ') %></li>
+                    <li><strong>Education phase:</strong> <%= format_school_phases result %></li>
                     <li><strong>Fees:</strong> &pound;<%= result.fee %></li>
                     <li><strong>School type:</strong> <%= result.school_type&.name %></li>
-                    <li><strong>Subjects:</strong> <%= result.subjects.map(&:name).to_sentence %></li>
+                    <li><strong>Subjects:</strong> <%= format_school_subjects result %></li>
                 </ul>
             </li>
             <% end %>
