@@ -80,7 +80,7 @@ if ENV['GeckoWebDriver'].present?
 end
 
 if ENV['IEWebDriver'].present?
-  Selenium::WebDriver::IE.driver_path = "#{ENV['IEWebDriver']}/IEDriverServer"
+  Selenium::WebDriver::IE.driver_path = "#{ENV['IEWebDriver']}/IEDriverServer.exe"
 end
 
 Capybara.register_driver :chrome do |app|
