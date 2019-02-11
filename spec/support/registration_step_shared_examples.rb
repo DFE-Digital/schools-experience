@@ -13,7 +13,7 @@ shared_examples 'a registration step' do
 
   context 'methods' do
     it { is_expected.to respond_to :persisted? }
-    it { is_expected.to respond_to :persisted! }
+    it { is_expected.to respond_to :flag_as_persisted! }
     it { is_expected.to respond_to :created_at }
     it { is_expected.to respond_to :updated_at }
   end
@@ -41,10 +41,10 @@ shared_examples 'a registration step' do
       end
     end
 
-    context '#persisted!' do
+    context '#flag_as_persisted!' do
       context 'when invalid' do
         it 'raises a validation error' do
-          expect { subject.persisted! }.to raise_error \
+          expect { subject.flag_as_persisted! }.to raise_error \
             ActiveModel::ValidationError
         end
       end
@@ -52,7 +52,7 @@ shared_examples 'a registration step' do
       context 'when valid' do
         before do
           allow(subject).to receive(:valid?) { true }
-          subject.persisted!
+          subject.flag_as_persisted!
         end
 
         it 'sets the created_at' do
@@ -83,7 +83,7 @@ shared_examples 'a registration step' do
       context 'when invalid' do
         # ie a bad update attempt
         it 'raises a validation error' do
-          expect { subject.persisted! }.to raise_error \
+          expect { subject.flag_as_persisted! }.to raise_error \
             ActiveModel::ValidationError
         end
       end
@@ -91,7 +91,7 @@ shared_examples 'a registration step' do
       context 'when valid' do
         before do
           allow(subject).to receive(:valid?) { true }
-          subject.persisted!
+          subject.flag_as_persisted!
         end
 
         it "doesn't change the created_at" do
