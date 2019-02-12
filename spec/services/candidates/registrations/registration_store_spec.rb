@@ -1,8 +1,6 @@
 require 'rails_helper'
 
-describe Candidates::Registrations::RegistrationStore do
-  include_context 'redis'
-
+describe Candidates::Registrations::RegistrationStore, redis_cache: true do
   let :session do
     FactoryBot.build :registration_session
   end
@@ -16,7 +14,7 @@ describe Candidates::Registrations::RegistrationStore do
     # We're namespacing all our test redis keys under 'TEST'
     # See spec/support/redis.rb
     allow(described_class).to receive(:namespace) do
-      "#{test_namespace}:pending_confirmations"
+      'TEST:pending_confirmations'
     end
 
     uuid
