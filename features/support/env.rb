@@ -71,14 +71,22 @@ if ENV['APP_URL'].present?
   Capybara.run_server = false
 end
 
+if ENV['ChromeWebDriver'].present?
+  Selenium::WebDriver::Chrome.driver_path = "#{ENV['ChromeWebDriver']}/chromedriver.exe"
+end
+
+if ENV['GeckoWebDriver'].present?
+  Selenium::WebDriver::Firefox.driver_path = "#{ENV['GeckoWebDriver']}/geckodriver.exe"
+end
+
+if ENV['IEWebDriver'].present?
+  Selenium::WebDriver::IE.driver_path = "#{ENV['IEWebDriver']}/IEDriverServer.exe"
+end
+
 Capybara.register_driver :chrome do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     chromeOptions: { args: %w(disable-gpu) }
   )
-
-  if ENV['ChromeWebDriver'].present?
-    Selenium::WebDriver::Chrome.driver_path = "#{ENV['ChromeWebDriver']}/chromedriver.exe"
-  end
 
   Capybara::Selenium::Driver.new(
     app,
@@ -91,10 +99,6 @@ Capybara.register_driver :chrome_headless do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     chromeOptions: { args: %w(headless disable-gpu) }
   )
-
-  if ENV['ChromeWebDriver'].present?
-    Selenium::WebDriver::Chrome.driver_path = "#{ENV['ChromeWebDriver']}/chromedriver.exe"
-  end
 
   Capybara::Selenium::Driver.new(
     app,
@@ -115,6 +119,10 @@ Capybara.register_driver :firefox_headless do |app|
     browser: :firefox,
     options: options
   )
+end
+
+Capybara.register_driver :ie do |app|
+  Capybara::Selenium::Driver.new(app, browser: :internet_explorer)
 end
 
 if (driver = ENV['CUC_DRIVER']) && driver.present?
