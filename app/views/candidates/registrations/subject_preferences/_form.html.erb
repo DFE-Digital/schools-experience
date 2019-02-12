@@ -6,7 +6,7 @@
 
   <%= f.radio_button_fieldset :degree_stage do |fieldset| %>
     <% f.object.available_degree_stages.each do |degree_stage| %>
-      <% if degree_stage == Candidates::Registrations::SubjectPreference::DEGREE_STAGE_REQUIRING_EXPLANATION %>
+      <% if f.object.requires_explanation_for_degree_stage? degree_stage %>
         <%= fieldset.radio_input degree_stage do %>
           <%= fieldset.text_area :degree_stage_explaination %>
         <% end %>
