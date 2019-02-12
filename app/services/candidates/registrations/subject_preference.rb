@@ -48,8 +48,8 @@ module Candidates
         OPTIONS_CONFIG.fetch 'TEACHING_STAGES'
       end
 
-      def requires_explanation_for_degree_stage?(_degree_stage)
-        _degree_stage == DEGREE_STAGE_REQUIRING_EXPLANATION
+      def requires_explanation_for_degree_stage?(some_degree_stage)
+        some_degree_stage == DEGREE_STAGE_REQUIRING_EXPLANATION
       end
 
     private
