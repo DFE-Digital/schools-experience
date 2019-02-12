@@ -2,23 +2,80 @@
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Check your answers before requesting your placement</h1>
     <dl class="govuk-summary-list">
+
       <h2 class="govuk-heading-m">Personal details</h2>
-      <%= render partial: "list_row", locals: { key: 'Full name', value: @application_preview.full_name, action: link_to('Change', '#') } %>
-      <%= render partial: "list_row", locals: { key: 'Address', value: @application_preview.full_address, action: link_to('Change', '#') } %>
-      <%= render partial: "list_row", locals: { key: 'UK telephone number', value: @application_preview.telephone_number, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Email address', value: @application_preview.email_address, action: link_to('Change', '#')  } %>
+
+      <%= summary_row \
+        'Full name',
+        @application_preview.full_name,
+        edit_candidates_school_registrations_account_check_path %>
+
+      <%= summary_row \
+        'Address',
+        @application_preview.full_address,
+        edit_candidates_school_registrations_address_path %>
+
+      <%= summary_row \
+        'UK telephone number',
+        @application_preview.telephone_number,
+        edit_candidates_school_registrations_address_path %>
+
+      <%= summary_row \
+        'Email address',
+        @application_preview.email_address,
+        edit_candidates_school_registrations_account_check_path %>
 
       <h2 class="govuk-heading-m">Request details</h2>
-      <%= render partial: "list_row", locals: { key: 'School or college', value: @application_preview.school, action: link_to('Change', '#') } %>
-      <%= render partial: "list_row", locals: { key: 'Placement availability', value: @application_preview.placement_availability, action: link_to('Change', '#') } %>
-      <%= render partial: "list_row", locals: { key: 'Placement outcome', value: @application_preview.placement_outcome, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Disability or access needs', value: @application_preview.access_needs, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Degree stage', value: @application_preview.degree_stage, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Degree subject', value: @application_preview.degree_subject, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Teaching stage', value: @application_preview.teaching_stage, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Teaching subject - first choice', value: @application_preview.teaching_subject_first_choice, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'Teaching subject - second choice', value: @application_preview.teaching_subject_second_choice, action: link_to('Change', '#')  } %>
-      <%= render partial: "list_row", locals: { key: 'DBS check document', value: @application_preview.dbs_check_document, action: link_to('Change', '#')  } %>
+
+      <%= summary_row \
+        'School or college',
+        @application_preview.school %>
+
+      <%= summary_row \
+        'Placement availability',
+        @application_preview.placement_availability,
+        edit_candidates_school_registrations_placement_preference_path %>
+
+      <%= summary_row \
+        'Placement outcome',
+        @application_preview.placement_outcome,
+        edit_candidates_school_registrations_placement_preference_path %>
+
+      <%= summary_row \
+        'Disability or access needs',
+        @application_preview.access_needs,
+        edit_candidates_school_registrations_placement_preference_path %>
+
+      <%= summary_row \
+        'Degree stage',
+        @application_preview.degree_stage,
+        edit_candidates_school_registrations_subject_preference_path %>
+
+      <%= summary_row \
+        'Degree subject',
+        @application_preview.degree_subject,
+        edit_candidates_school_registrations_subject_preference_path %>
+
+      <%= summary_row \
+        'Teaching stage',
+        @application_preview.teaching_stage,
+        edit_candidates_school_registrations_subject_preference_path %>
+
+      <%= summary_row \
+        'Teaching subject - first choice',
+        @application_preview.teaching_subject_first_choice,
+        edit_candidates_school_registrations_subject_preference_path %>
+
+      <%= summary_row \
+        'Teaching subject - second choice',
+        @application_preview.teaching_subject_second_choice,
+        edit_candidates_school_registrations_subject_preference_path %>
+
+      <%= summary_row \
+        'DBS check document',
+        @application_preview.dbs_check_document,
+        edit_candidates_school_registrations_background_check_path %>
+
     </dl>
   </div>
   <div class="govuk-grid-column-full">

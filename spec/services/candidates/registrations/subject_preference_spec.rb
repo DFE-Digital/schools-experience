@@ -44,7 +44,7 @@ describe Candidates::Registrations::SubjectPreference, type: :model do
 
     it do
       is_expected.to validate_inclusion_of(:degree_stage).in_array \
-        described_class.degree_stages
+        described_class::OPTIONS_CONFIG.fetch 'DEGREE_STAGES'
     end
 
     context 'when degree stage is "Other"' do
@@ -63,7 +63,7 @@ describe Candidates::Registrations::SubjectPreference, type: :model do
 
     it do
       is_expected.to validate_inclusion_of(:degree_subject)
-        .in_array(described_class.degree_subjects)
+        .in_array(described_class::OPTIONS_CONFIG.fetch('DEGREE_SUBJECTS'))
         .with_message('Select a subject')
     end
 
@@ -93,7 +93,7 @@ describe Candidates::Registrations::SubjectPreference, type: :model do
 
     it do
       is_expected.to validate_inclusion_of(:teaching_stage).in_array \
-        described_class.teaching_stages
+        described_class::OPTIONS_CONFIG.fetch('TEACHING_STAGES')
     end
 
     it { is_expected.to validate_presence_of :subject_first_choice }
@@ -113,7 +113,8 @@ describe Candidates::Registrations::SubjectPreference, type: :model do
 
   context '#subject_choices' do
     it "returns the list of subjects from it's school" do
-      expect(subject.subject_choices).to eq school.subjects.pluck :name
+      expect(subject.available_subject_choices).to \
+        eq school.subjects.pluck :name
 
       # Test we're passing the correct argument to find as we're stubbing
       # the real return value.

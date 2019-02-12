@@ -3,11 +3,11 @@ module Candidates
     class ApplicationPreviewsController < RegistrationsController
       def show
         @application_preview = ApplicationPreview.new \
-          account_check: current_registration.fetch(AccountCheck),
-          placement_preference: current_registration.fetch(PlacementPreference),
-          address: current_registration.fetch(Address),
-          subject_preference: current_registration.fetch(SubjectPreference),
-          background_check: current_registration.fetch(BackgroundCheck)
+          account_check: current_registration.account_check,
+          placement_preference: current_registration.placement_preference,
+          address: current_registration.address,
+          subject_preference: current_registration.subject_preference,
+          background_check: current_registration.background_check
       end
     end
   end

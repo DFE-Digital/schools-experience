@@ -1,0 +1,61 @@
+<h1 class="govuk-heading-l">We need some more details</h1>
+<p>The following will be used to help schools offer you school experience placements.</p>
+
+<%= form_for subject_preference, url: candidates_school_registrations_subject_preference_path do |f| %>
+  <%= GovukElementsErrorsHelper.error_summary subject_preference, 'There is a problem', '' %>
+
+  <%= f.radio_button_fieldset :degree_stage do |fieldset| %>
+    <% f.object.available_degree_stages.each do |degree_stage| %>
+      <% if f.object.requires_explanation_for_degree_stage? degree_stage %>
+        <%= fieldset.radio_input degree_stage do %>
+          <%= fieldset.text_area :degree_stage_explaination %>
+        <% end %>
+      <% else %>
+        <%= fieldset.radio_input degree_stage %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <div class="govuk-form-group">
+    <%= f.collection_select \
+      :degree_subject,
+      subject_preference.available_degree_subjects,
+      :to_s,
+      :to_s,
+      { prompt: 'Select' },
+      { class: 'govuk-select' } %>
+  </div>
+
+  <%= f.radio_button_fieldset :teaching_stage do |fieldset| %>
+    <% f.object.available_teaching_stages.each do |teaching_stage| %>
+      <%= fieldset.radio_input teaching_stage %>
+    <% end %>
+  <% end %>
+
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">What subject do you want to teach?</h1>
+    </legend>
+    <div class="govuk-form-group">
+      <%= f.collection_select \
+        :subject_first_choice,
+        subject_preference.available_subject_choices,
+        :to_s,
+        :to_s,
+        { prompt: 'Select' },
+        { class: 'govuk-select' } %>
+    </div>
+
+    <div class="govuk-form-group">
+      <%= f.collection_select \
+        :subject_second_choice,
+        subject_preference.available_subject_choices,
+        :to_s,
+        :to_s,
+        { prompt: 'Select' },
+        { class: 'govuk-select' } %>
+    </div>
+  </fieldset>
+
+  <%= f.submit 'Continue' %>
+<% end %>

@@ -15,6 +15,22 @@ module Candidates
         end
       end
 
+      def edit
+        @background_check = current_registration.background_check
+      end
+
+      def update
+        @background_check = current_registration.background_check
+        @background_check.assign_attributes background_check_params
+
+        if @background_check.valid?
+          persist @background_check
+          redirect_to candidates_school_registrations_application_preview_path
+        else
+          render :edit
+        end
+      end
+
     private
 
       def background_check_params
