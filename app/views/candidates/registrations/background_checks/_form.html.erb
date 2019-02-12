@@ -5,11 +5,6 @@
 
     <%= form_for background_check, url: candidates_school_registrations_background_check_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary background_check, 'There is a problem', '' %>
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h1 class="govuk-fieldset__heading">Do you have a Disclosure and Barring Service (DBS) check document?</h1>
-        </legend>
-      </fieldset>
 
       <% # force the params to submit if the user has not selected an option %>
       <%= f.hidden_field :has_dbs_check, value: nil %>

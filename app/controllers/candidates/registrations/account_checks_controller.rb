@@ -16,11 +16,6 @@ module Candidates
       end
 
       def edit
-        # TODO think about this
-        # Not sure on this,
-        # seems like one might expect
-        # @account.update to work
-        # maybe current_registration.fetch Klass is better?
         @account_check = current_registration.account_check
       end
 

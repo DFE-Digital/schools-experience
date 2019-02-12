@@ -10,7 +10,7 @@ module Candidates
 
       def save(model)
         @registration_session[model.model_name.param_key] =
-          model.tap(&:persisted!).attributes
+          model.tap(&:flag_as_persisted!).attributes
       end
 
       # TODO add spec
