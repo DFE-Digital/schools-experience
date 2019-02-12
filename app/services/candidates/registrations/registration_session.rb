@@ -41,7 +41,7 @@ module Candidates
       end
 
       def to_h
-        { NAMESPACE => @registration_session  }
+        { NAMESPACE => @registration_session }
       end
 
       def ==(other)

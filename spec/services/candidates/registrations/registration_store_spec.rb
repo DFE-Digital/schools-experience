@@ -24,7 +24,7 @@ describe Candidates::Registrations::RegistrationStore do
 
   context '.store' do
     it 'writes the session to the cache under a random key' do
-      expect(Rails.cache.read 'pending_confirmations:sekret_key').to eq \
+      expect(Rails.cache.read('pending_confirmations:sekret_key')).to eq \
         session.to_h
     end
 
@@ -36,14 +36,14 @@ describe Candidates::Registrations::RegistrationStore do
   context '.find_by!' do
     context 'when key is not found' do
       it 'raises' do
-        expect{ described_class.find_by! uuid: 'bad_id' }.to raise_error \
+        expect { described_class.find_by! uuid: 'bad_id' }.to raise_error \
           described_class::SessionNotFound
       end
     end
 
     context 'when key is found' do
       it 'returns the session' do
-        expect(described_class.find_by! uuid: 'sekret_key').to eq session
+        expect(described_class.find_by!(uuid: 'sekret_key')).to eq session
       end
     end
   end

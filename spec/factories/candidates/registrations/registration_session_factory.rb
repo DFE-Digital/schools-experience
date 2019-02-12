@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :registration_session, class: Candidates::Registrations::RegistrationSession do
     initialize_with do
-      new({
+      new \
         "registration" => {
           "account_check" => {
             "full_name" => 'Testy McTest',
@@ -35,7 +35,6 @@ FactoryBot.define do
               "school_name" => 'Test school'
           }
         }
-      })
     end
   end
 end

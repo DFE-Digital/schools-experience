@@ -23,6 +23,7 @@ module Candidates
       def self.find_by!(uuid:)
         hash = Rails.cache.read uuid, namespace: namespace
         raise SessionNotFound unless hash
+
         RegistrationSession.new hash
       end
 
