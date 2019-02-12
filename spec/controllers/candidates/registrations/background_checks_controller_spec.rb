@@ -38,7 +38,9 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
       it 'stores the dbs check in the session' do
         expect(session['registration']['candidates_registrations_background_check']).to eq \
-          'has_dbs_check' => true
+          'has_dbs_check' => true,
+          "created_at" => nil,
+          "updated_at" => nil
       end
 
       it 'redirects to the next step' do

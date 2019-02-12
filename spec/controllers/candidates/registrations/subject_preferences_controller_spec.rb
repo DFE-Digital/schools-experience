@@ -70,7 +70,9 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
           "teaching_stage" =>  "I want to become a teacher",
           "subject_first_choice" =>  "Astronomy",
           "subject_second_choice" =>  "History",
-          "urn" => "URN"
+          "urn" => "URN",
+          "created_at" => nil,
+          "updated_at" => nil
         )
       end
 

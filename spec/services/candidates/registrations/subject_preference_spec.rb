@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::SubjectPreference, type: :model do
+  it_behaves_like 'a registration step'
+
   let :school_urn do
     'URN'
   end

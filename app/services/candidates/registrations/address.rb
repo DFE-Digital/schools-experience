@@ -1,9 +1,6 @@
 module Candidates
   module Registrations
-    class Address
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class Address < RegistrationStep
       attribute :building, :string
       attribute :street, :string
       attribute :town_or_city, :string

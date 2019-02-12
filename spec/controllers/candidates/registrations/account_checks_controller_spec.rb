@@ -44,7 +44,9 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
       it 'stores the account_check details in the session' do
         expect(session['registration']['candidates_registrations_account_check']).to eq(
           'full_name' => 'test name',
-          'email' => 'test@example.com'
+          'email' => 'test@example.com',
+          'created_at' => nil,
+          'updated_at' => nil
         )
       end
 
