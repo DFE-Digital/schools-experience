@@ -27,7 +27,7 @@ module Candidates
           address.town_or_city,
           address.county,
           address.postcode
-        ].join(', ')
+        ].compact.join(', ')
       end
 
       def telephone_number

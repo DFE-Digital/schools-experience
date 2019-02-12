@@ -1,17 +1,17 @@
 class Notify
-  attr_accessor :notify_client, :email_address
+  attr_accessor :notify_client, :to
 
   API_KEY = Rails.application.credentials[:notify_api_key]
 
-  def initialize(email_address:)
-    self.email_address = email_address
+  def initialize(to:)
+    self.to = to
     @notify_client = Notifications::Client.new(API_KEY)
   end
 
   def despatch!
     @notify_client.send_email(
       template_id: template_id,
-      email_address: @email_address,
+      email_address: @to,
       personalisation: personalisation
     )
   end

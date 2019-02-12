@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-describe Notify::Candidates::RequestConfirmation do
-  let(:email_address) { "someone@somecompany.org" }
+describe Notify::Candidates::MagicLink do
+  let(:to) { "someone@somecompany.org" }
   let(:school_name) { "Springfield Elementary School" }
   let(:confirmation_link) { "ABCDEFGHIJKLM1234567890" }
 
   subject do
     described_class.new(
-      email_address: email_address,
+      to: to,
       school_name: school_name,
       confirmation_link: confirmation_link
     )
@@ -25,13 +25,13 @@ describe Notify::Candidates::RequestConfirmation do
 
   describe 'Initialization' do
     args = {
-      email_address: "someone@somecompany.org",
+      to: "someone@somecompany.org",
       school_name: "Springfield Elementary School",
       confirmation_link: "ABCDEFGHIJKLM1234567890"
     }
 
     args.each do |k, _|
-      specify "should raise an error if supplied without #{k}" do
+      specify "should raise an error if supplied without :#{k}" do
         expect { described_class.new(args.except(k)) }.to raise_error(ArgumentError, "missing keyword: #{k}")
       end
     end
@@ -44,7 +44,7 @@ describe Notify::Candidates::RequestConfirmation do
       specify 'should call @notify_client.send_email with correct args' do
         expect(subject.notify_client).to receive(:send_email).with(
           template_id: subject.send(:template_id),
-          email_address: email_address,
+          email_address: to,
           personalisation: {
             school_name: school_name,
             confirmation_link: confirmation_link

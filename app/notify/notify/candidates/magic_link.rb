@@ -1,10 +1,10 @@
-class Notify::Candidates::RequestConfirmation < Notify
+class Notify::Candidates::MagicLink < Notify
   attr_accessor :school_name, :confirmation_link
 
-  def initialize(email_address:, school_name:, confirmation_link:)
+  def initialize(to:, school_name:, confirmation_link:)
     self.school_name = school_name
     self.confirmation_link = confirmation_link
-    super(email_address: email_address)
+    super(to: to)
   end
 
 private
