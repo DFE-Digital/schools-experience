@@ -8,9 +8,7 @@ end
 
 Then("the {string} section should have {string} and {string} radio buttons") do |section, option_one, option_two|
   within(".#{section.parameterize}") do
-    [option_one, option_two].each do |opt|
-      expect(page).to have_field(opt, type: 'radio')
-    end
+    ensure_radio_buttons_exist(page, [option_one, option_two])
   end
 end
 

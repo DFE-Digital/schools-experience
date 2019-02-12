@@ -7,7 +7,7 @@ def make_inputs_opaque
     document
       .querySelectorAll("input[type='checkbox'], input[type='radio']")
       .forEach(
-        function(element) {element.setAttribute("style", "opacity: 1;")}
+        function(element) {element.setAttribute("style", "opacity: 1 !important;")}
       );
   SCRIPT
 
