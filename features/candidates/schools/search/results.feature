@@ -34,7 +34,7 @@ Feature: Schools search page
         Then I should see a 'Max fee' filter on the left
         And it should have the hint text 'Schools may charge'
         And it should have radio buttons for the following items:
-            | No        |
+            | None      |
             | up to £30 |
             | up to £60 |
             | up to £90 |

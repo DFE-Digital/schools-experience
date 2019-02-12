@@ -71,17 +71,13 @@ end
 
 Then("it should have checkboxes for the following items:") do |table|
   within('#search-filter') do
-    table.raw.flatten.each do |option|
-      expect(page).to have_selector(:label, option)
-    end
+    ensure_check_boxes_exist(page, table.raw.flatten)
   end
 end
 
 Then("it should have radio buttons for the following items:") do |table|
   within('#search-filter') do
-    table.raw.flatten.each do |option|
-      expect(page).to have_selector(:label, option)
-    end
+    ensure_radio_buttons_exist(page, table.raw.flatten)
   end
 end
 

@@ -90,8 +90,20 @@ def ensure_date_field_exists(form_group)
   end
 end
 
+def ensure_check_boxes_exist(form_group, options)
+  make_inputs_opaque if opaquify_inputs?
+
+  options.each do |option|
+    expect(form_group).to have_field(option, type: 'checkbox')
+  end
+end
+
 def ensure_radio_buttons_exist(form_group, options)
-  options.each { |option| expect(form_group).to have_field(option, type: 'radio') }
+  make_inputs_opaque if opaquify_inputs?
+
+  options.each do |option|
+    expect(form_group).to have_field(option, type: 'radio')
+  end
 end
 
 def ensure_select_options_exist(form_group, options)
