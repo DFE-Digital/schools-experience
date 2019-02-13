@@ -7,7 +7,6 @@ Feature: Schools search page
         Given the phases 'Primary' and 'Secondary' exist
         Given there are some schools with a range of fees containing the word 'Manchester'
     
-    @onlylocalapp
     Scenario: Search result contents
         Given I have searched for 'Manchester' and am on the results page
         And there are 3 results
@@ -18,7 +17,6 @@ Feature: Schools search page
             | School type |
             | Subjects    |
     
-    @onlylocalapp
     Scenario: Filtering by Education Phase
         Given I have searched for 'Manchester' and am on the results page
         Then I should see a 'Phases' filter on the left
@@ -27,7 +25,6 @@ Feature: Schools search page
             | Primary   |
             | Secondary |
 
-    @onlylocalapp
     Scenario: Filtering by Fees
         Given there are some subjects
         When I have searched for 'Manchester' and am on the results page
