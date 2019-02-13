@@ -5,11 +5,11 @@ require "rails"
 require "active_model/railtie"
 require "active_job/railtie"
 require "active_record/railtie"
-require "active_storage/engine"
+# require "active_storage/engine" # We don't need activestorage
 require "action_controller/railtie"
-require "action_mailer/railtie"
+# require "action_mailer/railtie" # We don't need actionmailer
 require "action_view/railtie"
-# require "action_cable/engine"
+# require "action_cable/engine" # We don't need actioncable
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
