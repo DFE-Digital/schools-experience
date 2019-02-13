@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Notify::Candidates::MagicLink do
+describe NotifyEmail::CandidateConfirmMagicLink do
   let(:to) { "someone@somecompany.org" }
   let(:school_name) { "Springfield Elementary School" }
   let(:confirmation_link) { "ABCDEFGHIJKLM1234567890" }

@@ -46,6 +46,10 @@ class NotifySync
     end
   end
 
+  def pull
+    # blah
+  end
+
 private
 
   def diff(local_path, remote_body)
@@ -57,7 +61,7 @@ private
   end
 
   def load_local_templates
-    Dir.glob(File.join(Rails.root, "app", "notify", "notify", "**/*.md")).each do |path|
+    Dir.glob(File.join(Rails.root, "app", "notify", "notify_email", "*.md")).each do |path|
       self.local_templates[path] = {
         template_id: path.match(/\.(?<template_id>[A-z0-9\-]+)\.md$/)[:template_id],
         body: File.read(path).chomp

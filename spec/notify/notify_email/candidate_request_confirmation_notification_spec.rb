@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Notify::Candidates::RequestConfirmationNotification do
+describe NotifyEmail::CandidateRequestConfirmationNotification do
   let(:to) { "someone@somecompany.org" }
 
   personalisation = {

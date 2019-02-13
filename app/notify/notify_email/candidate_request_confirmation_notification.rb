@@ -1,4 +1,4 @@
-class Notify::Candidates::RequestConfirmationNotification < Notify
+class NotifyEmail::CandidateRequestConfirmationNotification < Notify
   attr_accessor :candidate_address,
     :candidate_dbs_check_document,
     :candidate_degree_stage,
