@@ -38,33 +38,43 @@
   @extend %govuk-heading-m ;
 }
 
-#search-form {
-  label {
-    display: none;
+.school-search-form {
+  .school-search-form__search-field {
+    @include govuk-grid-column(one-third, $at: desktop, $class: false) ;
   }
 
-  select {
-    width: 100%;
+  .school-search-form__location-field {
+    @include govuk-grid-column(two-thirds, $class: false) ;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  #location-field {
-    width: 59%;
-    display: inline-block;
-  }
+  .school-search-form__distance-field {
+    @include govuk-grid-column(one-third, $class: false) ;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
 
-  #distance-field {
-    width: 39%;
-    display: inline-block;
-  }
-
-  #location-distance-fields {
-    div, input, select {
-      margin: 0;
+    select {
+      width: 100%;
     }
+  }
 
-    div {
-      padding: 0;
-      box-sizing: border-box;
+  .school-search-form__location-pair {
+    @include govuk-grid-column(one-half, $at: desktop, $class: false) ;
+  }
+
+  .school-search-form__submit {
+    @include govuk-grid-column(two-twelths, $class: false) ;
+
+    .govuk-button {
+      @include govuk-media-query($from: desktop) {
+        width: 100%;
+        margin-top: govuk-spacing(6);
+      }
     }
   }
 }

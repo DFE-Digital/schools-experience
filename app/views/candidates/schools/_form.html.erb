@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <div class="govuk-form-group" id="search-form">
+        <div id="search-form">
             <%= form_for @search, as: '', method: :get do |f| %>
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -19,25 +19,27 @@
                         <strong>Maths, special school, M1 1AD</strong>
                     </span>
 
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-third">
+                    <div class="govuk-grid-row school-search-form">
+                        <div class="school-search-form__search-field">
                             <%= f.search_field :query, placeholder: 'search' %>
                         </div>
 
-                        <div class="govuk-grid-column-one-third" id="location-distance-fields">
-                            <div id="location-field">
+                        <div class="school-search-form__location-pair">
+                            <div class="school-search-form__location-field">
                                 <%= f.text_field :location, placeholder: 'location' %>
                             </div>
 
-                            <div id="distance-field">
+                            <div class="school-search-form__distance-field">
                                 <%= f.collection_select :distance,
                                     Candidates::SchoolSearch.distances, :first, :last,
                                     include_blank: 'distance' %>
                             </div>
                         </div>
 
-                        <div class="govuk-grid-column-one-third">
-                            <%= f.submit 'Find', name: nil %>
+                        <div class="school-search-form__submit">
+                            <div class="govuk-form-group">
+                                <%= f.submit 'Find', name: nil %>
+                            </div>
                         </div>
                     </div>
                 </fieldset>

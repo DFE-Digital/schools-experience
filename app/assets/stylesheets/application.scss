@@ -1,6 +1,20 @@
 $govuk-image-url-function: "image-url";
 $govuk-font-url-function: "font-url";
 $govuk-global-styles: true;
+$govuk-grid-widths: (
+  one-twelth: 8.3333%,
+  two-twelths: 16.6666%,
+  five-twelths: 41.6666%,
+  seven-twelths: 58.3333%,
+  ten-twelths: 83.3333%,
+  eleven-twelths: 91.6666%,
+  one-quarter: 25%,
+  one-third: 33.3333%,
+  one-half: 50%,
+  two-thirds: 66.6666%,
+  three-quarters: 75%,
+  full: 100%
+);
 
 @import "../../../node_modules/govuk-frontend/all";
 @import "global-styles" ;
