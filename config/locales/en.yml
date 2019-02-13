@@ -108,3 +108,5 @@ en:
           true: "Yes"
           false: "No"
       order: Sorted by
+      query: Find what?
+      location: Where?

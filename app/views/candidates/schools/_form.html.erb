@@ -12,21 +12,14 @@
                     </legend>
                     <p>This service is only available in England</p>
 
-                    <span id="search-hint" class="govuk-hint">
-                        For example: <strong>Manchester M1 1AD</strong><br/>
-                        OR
-                        <br/>
-                        <strong>Maths, special school, M1 1AD</strong>
-                    </span>
-
                     <div class="govuk-grid-row school-search-form">
                         <div class="school-search-form__search-field">
-                            <%= f.search_field :query, placeholder: 'search' %>
+                            <%= f.search_field :query, placeholder: 'e.g. maths, special school' %>
                         </div>
 
                         <div class="school-search-form__location-pair">
                             <div class="school-search-form__location-field">
-                                <%= f.text_field :location, placeholder: 'location' %>
+                                <%= f.text_field :location, placeholder: 'e.g. Manchester, M1 3BD' %>
                             </div>
 
                             <div class="school-search-form__distance-field">
