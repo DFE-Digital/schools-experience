@@ -68,11 +68,15 @@ module Candidates
       end
 
       def transform_json_dates(value)
-        if value =~ JSON_DATE
+        if is_a_json_date? value
           Time.zone.parse value
         else
           value
         end
+      end
+
+      def is_a_json_date?(value)
+        value.is_a?(String) && JSON_DATE.match?(value)
       end
     end
   end
