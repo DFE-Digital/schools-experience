@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative 'shared_examples'
 
 describe NotifyEmail::CandidateBookingCancellation do
   it_should_behave_like "email template", "ec830a0d-d032-4d4b-a107-882d6f3b471f",

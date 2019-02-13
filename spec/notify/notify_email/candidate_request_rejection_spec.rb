@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative 'shared_examples'
 
 describe NotifyEmail::CandidateRequestRejection do
   it_should_behave_like "email template", "7693242f-1ae4-40b9-9e4a-061f94e0587b",

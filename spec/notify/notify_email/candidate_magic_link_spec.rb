@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative 'shared_examples'
 
 describe NotifyEmail::CandidateMagicLink do
   it_should_behave_like "email template", "74dc6510-c89d-4b5b-9608-075d3f2de32d",
