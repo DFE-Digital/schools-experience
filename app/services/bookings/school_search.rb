@@ -1,5 +1,5 @@
 class Bookings::SchoolSearch
-  attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :order
+  attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :requested_order
 
   AVAILABLE_ORDERS = [
     %w{distance Distance},
@@ -11,14 +11,14 @@ class Bookings::SchoolSearch
     AVAILABLE_ORDERS.map
   end
 
-  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: 'distance')
+  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: 'name')
     self.query    = query
     self.point    = geolocate(location) if location.present?
     self.radius   = radius
     self.subjects = subjects
     self.phases   = phases
     self.max_fee  = max_fee
-    self.order    = order_by(requested_order)
+    self.requested_order = requested_order
   end
 
   # Note, all of the scopes provided by +Bookings::School+ will not
@@ -27,12 +27,16 @@ class Bookings::SchoolSearch
   def results
     Bookings::School
       .search(@query)
-      .close_to(@point, radius: @radius)
+      .close_to(
+        @point,
+        radius: @radius,
+        calculate_distance: (@requested_order == 'distance')
+      )
       .that_provide(@subjects).includes(:subjects)
       .at_phases(@phases).includes(:phases)
       .costing_upto(@max_fee)
       .includes(:school_type)
-      .reorder(@order)
+      .reorder(order_by(@requested_order))
   end
 
 private
