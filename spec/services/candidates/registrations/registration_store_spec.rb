@@ -1,60 +1,87 @@
 require 'rails_helper'
 
-describe Candidates::Registrations::RegistrationStore, redis_cache: true do
+describe Candidates::Registrations::RegistrationStore do
+  let :redis do
+    Redis.current
+  end
+
   let :session do
     FactoryBot.build :registration_session
   end
 
-  let :uuid do
-    allow(SecureRandom).to receive(:urlsafe_base64) { 'sekret_key' }
-    described_class.store session
-  end
-
   before do
-    # We're namespacing all our test redis keys under 'TEST'
-    # See spec/support/redis.rb
-    allow(described_class).to receive(:namespace) do
-      'TEST:pending_confirmations'
-    end
-
-    uuid
+    allow(SecureRandom).to receive(:urlsafe_base64) { 'sekret' }
   end
 
-  context '.store' do
-    it 'writes the session to the cache under a random key' do
-      expect(Rails.cache.read('pending_confirmations:sekret_key')).to eq \
-        session.to_h
+  subject { described_class.instance }
+
+  context '#store!' do
+    let! :returned_uuid do
+      subject.store! session
     end
 
-    it 'returns the key' do
-      expect(uuid).to eq 'sekret_key'
+    it 'stores the key in redis correctly' do
+      expect(redis.get("pending_confirmations:sekret")).to eq session.to_json
+    end
+
+    it 'stores the key with the correct ttl' do
+      expect(redis.ttl("pending_confirmations:sekret")).to eq 86400
+    end
+
+    it 'returns the uuid' do
+      expect(returned_uuid).to eq 'sekret'
     end
   end
 
-  context '.find_by!' do
-    context 'when key is not found' do
+  context '#get!' do
+    before do
+      subject.store! session
+    end
+
+    let :returned do
+      subject.retrieve! 'sekret'
+    end
+
+    it 'raises when the key is not found' do
+      expect { subject.retrieve! 'missing' }.to raise_error \
+        described_class::SessionNotFound
+    end
+
+    it 'returns the session when the key is found' do
+      expect(returned).to eq session
+    end
+
+    it 'preserves dates when deserializing' do
+      expect(returned.placement_preference.date_start).to eq \
+        session.placement_preference.date_start
+    end
+
+    it 'preserves date times when deserializing' do
+      expect(returned.placement_preference.created_at.to_i).to \
+        eq session.placement_preference.created_at.to_i
+    end
+  end
+
+  context '#delete!' do
+    before do
+      subject.store! session
+    end
+
+    context 'when key does not exist' do
       it 'raises' do
-        expect { described_class.find_by! uuid: 'bad_id' }.to raise_error \
+        expect { subject.delete! 'missing' }.to raise_error \
           described_class::SessionNotFound
       end
     end
 
-    context 'when key is found' do
-      it 'returns the session' do
-        expect(described_class.find_by!(uuid: 'sekret_key')).to eq session
+    context 'when key does exist' do
+      before do
+        subject.delete! "sekret"
       end
-    end
-  end
 
-  context '.remove!' do
-    before do
-      allow(Rails.cache).to receive(:delete)
-
-      described_class.remove! uuid: 'sekret_key'
-    end
-
-    it 'removes the session from the cache' do
-      expect(Rails.cache).to have_received(:delete).with 'sekret_key'
+      it 'removes the key from redis' do
+        expect(redis.get("pending_confirmations:sekret")).to eq nil
+      end
     end
   end
 end
