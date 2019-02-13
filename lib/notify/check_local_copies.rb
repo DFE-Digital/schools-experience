@@ -1,4 +1,4 @@
-class CheckLocalCopies
+class NotifySync
   attr_accessor :remote_templates, :local_templates
   attr_writer :client
 
@@ -10,7 +10,7 @@ class CheckLocalCopies
     load_remote_templates
   end
 
-  def compare
+  def compare(show_diff)
     local_templates.each do |path, local_template|
       # check the remote template is present based on the local template's guid
       unless (rt = remote_templates.delete(local_template[:template_id]))
@@ -27,12 +27,14 @@ class CheckLocalCopies
       # Check the two templates are the same, diff if they're not
       if local_template[:body] == remote_body
         puts "#{local_template[:template_id]} Matches"
-      else
+      elsif show_diff
         puts "#{local_template[:template_id]} Doesn't match"
         puts path
         puts "-------------"
         puts diff(path, remote_body)
         puts "-------------"
+      else
+        puts "#{local_template[:template_id]} Doesn't match"
       end
     end
 
