@@ -27,6 +27,14 @@ shared_examples_for "email template" do |template_id, personalisation|
     end
   end
 
+  describe 'Attributes' do
+    personalisation.each do |k, _|
+      specify "should respond to #{k}" do
+        expect(subject).to respond_to(k)
+      end
+    end
+  end
+
   describe 'Methods' do
     describe '#despatch!' do
       after { subject.despatch! }
