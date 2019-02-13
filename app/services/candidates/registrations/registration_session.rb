@@ -44,8 +44,13 @@ module Candidates
         { NAMESPACE => @registration_session }
       end
 
+      def to_json
+        to_h.to_json
+      end
+
       def ==(other)
-        other.to_h == self.to_h
+        # Ensure dates are compared correctly
+        other.to_json == self.to_json
       end
     end
   end
