@@ -2,19 +2,18 @@ require 'rails_helper'
 
 describe NotifyEmail::CandidateRequestCancellation do
   let(:to) { "someone@somecompany.org" }
-  let(:school_name) { "Springfield Elementary School" }
-  let(:candidate_name) { "Nelson Muntz" }
-  let(:start_date) { "2020-04-05" }
-  let(:finish_date) { "2020-04-12" }
+
+  personalisation = {
+    school_name: "Springfield Elementary School",
+    candidate_name: "Nelson Muntz",
+    start_date: "2020-04-05",
+    finish_date: "2020-04-12"
+  }
+
+  let(:personalisation) { personalisation }
 
   subject do
-    described_class.new(
-      to: to,
-      school_name: school_name,
-      candidate_name: candidate_name,
-      start_date: start_date,
-      finish_date: finish_date,
-    )
+    described_class.new(to: to, **personalisation)
   end
 
   specify 'should inherit from Notify' do
@@ -28,17 +27,11 @@ describe NotifyEmail::CandidateRequestCancellation do
   end
 
   describe 'Initialization' do
-    args = {
-      to: "someone@somecompany.org",
-      school_name: "Springfield Elementary School",
-      candidate_name: "Nelson Muntz",
-      start_date: "2020-04-05",
-      finish_date: "2020-04-12"
-    }
-
-    args.each do |k, _|
+    personalisation.each do |k, _|
       specify "should raise an error if supplied without :#{k}" do
-        expect { described_class.new(args.except(k)) }.to raise_error(ArgumentError, "missing keyword: #{k}")
+        { to: to }.merge(personalisation.except(k)).tap do |args|
+          expect { described_class.new(args) }.to raise_error(ArgumentError, "missing keyword: #{k}")
+        end
       end
     end
   end
@@ -51,12 +44,7 @@ describe NotifyEmail::CandidateRequestCancellation do
         expect(subject.notify_client).to receive(:send_email).with(
           template_id: subject.send(:template_id),
           email_address: to,
-          personalisation: {
-            school_name: "Springfield Elementary School",
-            candidate_name: "Nelson Muntz",
-            start_date: "2020-04-05",
-            finish_date: "2020-04-12"
-          }
+          personalisation: personalisation
         )
       end
     end

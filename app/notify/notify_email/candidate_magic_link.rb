@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateConfirmMagicLink < Notify
+class NotifyEmail::CandidateMagicLink < Notify
   attr_accessor :school_name, :confirmation_link
 
   def initialize(to:, school_name:, confirmation_link:)
