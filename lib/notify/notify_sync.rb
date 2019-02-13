@@ -2,6 +2,8 @@ class NotifySync
   attr_accessor :remote_templates, :local_templates
   attr_writer :client
 
+  TEMPLATE_PATH = [Rails.root, "app", "notify", "notify_email"].freeze
+
   def initialize
     self.local_templates = {}
     self.remote_templates = {}
@@ -18,20 +20,14 @@ class NotifySync
         next
       end
 
-      # extract the body text, standardise newlines and chomp trailing lines
-      remote_body = rt
-        .body
-        .encode(rt.body.encoding, universal_newline: true)
-        .chomp
-
       # Check the two templates are the same, diff if they're not
-      if local_template[:body] == remote_body
+      if local_template[:body] == reencode(rt.body)
         puts "#{local_template[:template_id]} Matches"
       elsif show_diff
         puts "#{local_template[:template_id]} Doesn't match"
         puts path
         puts "-------------"
-        puts diff(path, remote_body)
+        puts diff(path, reencode(rt.body))
         puts "-------------"
       else
         puts "#{local_template[:template_id]} Doesn't match"
@@ -47,10 +43,23 @@ class NotifySync
   end
 
   def pull
-    # blah
+    remote_templates.each do |template_id, rt|
+      File.write(
+        File.join(
+          TEMPLATE_PATH,
+          [rt.name.gsub(/[\ \-]/, "").underscore, template_id, 'md'].join('.'),
+        ),
+        reencode(rt.body)
+      )
+    end
   end
 
 private
+
+  # extract the body text, standardise newlines and chomp trailing lines
+  def reencode(body)
+    body.encode(body.encoding, universal_newline: true).chomp
+  end
 
   def diff(local_path, remote_body)
     `echo "#{remote_body}" | diff - #{local_path}`
@@ -61,7 +70,7 @@ private
   end
 
   def load_local_templates
-    Dir.glob(File.join(Rails.root, "app", "notify", "notify_email", "*.md")).each do |path|
+    Dir.glob(File.join(TEMPLATE_PATH, "*.md")).each do |path|
       self.local_templates[path] = {
         template_id: path.match(/\.(?<template_id>[A-z0-9\-]+)\.md$/)[:template_id],
         body: File.read(path).chomp

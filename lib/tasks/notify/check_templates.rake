@@ -8,7 +8,7 @@ namespace :notify do
   end
 
   desc "Pull remote templates"
-  task check_local_copies: :environment do |_t|
+  task update_local_copies: :environment do |_t|
     NotifySync.new.pull
   end
 end
