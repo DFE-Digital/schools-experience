@@ -3,21 +3,20 @@ class Bookings::SchoolSearch
 
   AVAILABLE_ORDERS = [
     %w{distance Distance},
-    %w{fee Fee},
-    %w{name Name}
+    %w{fee Fee}
   ].freeze
 
   def self.available_orders
     AVAILABLE_ORDERS.map
   end
 
-  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: 'name')
-    self.query    = query
-    self.point    = geolocate(location) if location.present?
-    self.radius   = radius
-    self.subjects = subjects
-    self.phases   = phases
-    self.max_fee  = max_fee
+  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: nil)
+    self.query           = query
+    self.point           = geolocate(location) if location.present?
+    self.radius          = radius
+    self.subjects        = subjects
+    self.phases          = phases
+    self.max_fee         = max_fee
     self.requested_order = requested_order
   end
 
@@ -25,18 +24,20 @@ class Bookings::SchoolSearch
   # amend the +ActiveRecord::Relation+ if no param is provided, meaning
   # they can be safely chained
   def results
-    Bookings::School
-      .search(@query)
+    q = Bookings::School
       .close_to(
         @point,
         radius: @radius,
         calculate_distance: (@requested_order == 'distance')
       )
-      .that_provide(@subjects).includes(:subjects)
-      .at_phases(@phases).includes(:phases)
+      .that_provide(@subjects)
+      .at_phases(@phases)
       .costing_upto(@max_fee)
-      .includes(:school_type)
-      .reorder(order_by(@requested_order))
+      .eager_load(:phases, :subjects, :school_type)
+      .merge(Bookings::School.search(@query))
+      .order(order_by(@requested_order))
+
+    q.uniq
   end
 
 private
@@ -58,8 +59,8 @@ private
       'distance asc'
     elsif requested_order == 'fee'
       { fee: 'asc' }
-    else # default to alphabetical
-      { name: 'asc' }
+    else
+      nil
     end
   end
 end
