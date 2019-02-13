@@ -4,7 +4,7 @@ module Candidates
     class RegistrationStore
       include Singleton
 
-      JSON_DATE = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\Z/.freeze
+      JSON_DATE = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}/.freeze
 
       class SessionNotFound < StandardError; end
 
