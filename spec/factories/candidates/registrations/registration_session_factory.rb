@@ -3,11 +3,11 @@ FactoryBot.define do
     initialize_with do
       new \
         "registration" => {
-          "account_check" => {
+          "candidates_registrations_account_check" => {
             "full_name" => 'Testy McTest',
             "email" => 'test@example.com'
           },
-          "address" => {
+          "candidates_registrations_address" => {
             "building" => "Test building",
             "street" => "Test street",
             "town_or_city" => "Test town",
@@ -15,17 +15,17 @@ FactoryBot.define do
             "postcode" => "TE57 1NG",
             "phone" => "01234567890"
           },
-          "background_check" => {
+          "candidates_registrations_background_check" => {
             "has_dbs_check" => true
           },
-           "placement_preference" => {
+           "candidates_registrations_placement_preference" => {
               "date_start" => 3.days.from_now,
               "date_end" => 4.days.from_now,
               "objectives" => "test the software",
               "access_needs" => false,
               "access_needs_details" => ""
           },
-           "subject_preference" => {
+           "candidates_registrations_subject_preference" => {
               "degree_stage" => "I don't have a degree and am not studying for one",
               "degree_stage_explaination" => "",
               "degree_subject" => "Not applicable",
