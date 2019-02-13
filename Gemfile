@@ -36,9 +36,6 @@ gem 'webpacker'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-# Manage multiple processes i.e. web server and webpack
-gem 'foreman'
-
 # Canonical meta tag
 gem 'canonical-rails'
 
@@ -51,6 +48,8 @@ gem "redis", "~> 4.0"
 
 gem 'exception_notification'
 gem 'slack-notifier'
+
+gem 'dotenv-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -67,8 +66,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'factory_bot_rails'
 
-  gem 'dotenv-rails'
-
   gem 'brakeman', '>= 4.4.0'
 
   gem 'bullet'
@@ -82,6 +79,9 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # Manage multiple processes i.e. web server and webpack
+  gem 'foreman'
 end
 
 group :test do
