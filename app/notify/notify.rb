@@ -5,7 +5,6 @@ class Notify
 
   def initialize(to:)
     self.to = to
-
     if API_KEY.present?
       self.notify_client = Notifications::Client.new(API_KEY)
     else

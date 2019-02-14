@@ -9,6 +9,13 @@ end
 shared_examples_for "email template" do |template_id, personalisation|
   let(:to) { "someone@somecompany.org" }
 
+  before do
+    stub_const(
+      'Notify::API_KEY',
+      ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
+    )
+  end
+
   subject do
     described_class.new(to: to, **personalisation)
   end

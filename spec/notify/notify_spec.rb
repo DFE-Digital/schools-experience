@@ -2,6 +2,14 @@ require 'rails_helper'
 
 describe Notify do
   let(:to) { 'somename@somecompany.org' }
+
+  before do
+    stub_const(
+      'Notify::API_KEY',
+      ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
+    )
+  end
+
   subject { Notify.new(to: to) }
 
   describe 'Attributes' do
@@ -15,10 +23,6 @@ describe Notify do
     end
 
     specify 'should set up a notify client with the correct API key' do
-      stub_const(
-        'API_KEY',
-        ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
-      )
       expect(described_class.new(to: to).notify_client).to be_a(Notifications::Client)
     end
   end
