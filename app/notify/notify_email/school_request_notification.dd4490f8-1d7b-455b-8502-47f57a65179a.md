@@ -1,6 +1,6 @@
 Dear ((school_admin_name)),
 
-((candidate_name)) has sent you a request for school experience from ((start_date)) to ((finish_date)) at ((school_name)).
+((candidate_name)) has sent you a request for school experience from ((placement_start_date)) to ((placement_finish_date)) at ((school_name)).
 
 # ((candidate_name)) request details
 

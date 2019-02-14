@@ -4,7 +4,7 @@ Here are some details about your school experience placement at ((school_name)).
 
 * School or college: ((school_name))
 * Address: ((school_address))
-* Placement dates: ((start_date)) to ((finish_date))
+* Placement dates: ((placement_start_date)) to ((placement_finish_date))
 * Start and finish times: ((school_start_time)) to ((school_finish_time))
 * Dress code: ((school_dress_code))
 * Parking: ((school_parking))

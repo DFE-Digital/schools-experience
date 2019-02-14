@@ -1,8 +1,8 @@
 class NotifyEmail::CandidateBookingConfirmation < Notify
   attr_accessor :school_name,
     :candidate_name,
-    :start_date,
-    :finish_date,
+    :placement_start_date,
+    :placement_finish_date,
     :school_start_time,
     :school_finish_time,
     :school_dress_code,
@@ -21,8 +21,8 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     to:,
     school_name:,
     candidate_name:,
-    start_date:,
-    finish_date:,
+    placement_start_date:,
+    placement_finish_date:,
     school_start_time:,
     school_finish_time:,
     school_dress_code:,
@@ -39,8 +39,8 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
 
     self.school_name = school_name
     self.candidate_name = candidate_name
-    self.start_date = start_date
-    self.finish_date = finish_date
+    self.placement_start_date = placement_start_date
+    self.placement_finish_date = placement_finish_date
     self.school_start_time = school_start_time
     self.school_finish_time = school_finish_time
     self.school_dress_code = school_dress_code
@@ -67,8 +67,8 @@ private
     {
       school_name: @school_name,
       candidate_name: @candidate_name,
-      start_date: @start_date,
-      finish_date: @finish_date,
+      placement_start_date: @placement_start_date,
+      placement_finish_date: @placement_finish_date,
       school_start_time: @school_start_time,
       school_finish_time: @school_finish_time,
       school_dress_code: @school_dress_code,
