@@ -8,7 +8,11 @@ module FullTextSearch
     pg_search_scope :search_by_name,
       against: %i(name),
       using: {
-        tsearch: { any_word: true, prefix: true }
+        tsearch: {
+          any_word: true,
+          prefix: true,
+          normalization: 1
+        }
       }
 
     def self.search(query)
