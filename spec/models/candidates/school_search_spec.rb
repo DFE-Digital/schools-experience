@@ -147,14 +147,14 @@ RSpec.describe Candidates::SchoolSearch do
       it('should be valid') { expect(subject.valid_search?).to be true }
     end
 
-    context 'with location' do
-      subject { described_class.new(location: 'Manchester') }
-      it('should be valid') { expect(subject.valid_search?).to be false }
+    context 'with only location' do
+      subject { described_class.new(location: 'Manchester', distance: '') }
+      it('should be invalid') { expect(subject.valid_search?).to be false }
     end
 
-    context 'with distance' do
+    context 'with only distance' do
       subject { described_class.new(distance: '10') }
-      it('should be valid') { expect(subject.valid_search?).to be false }
+      it('should be invalid') { expect(subject.valid_search?).to be false }
     end
 
     context 'with location and distance' do

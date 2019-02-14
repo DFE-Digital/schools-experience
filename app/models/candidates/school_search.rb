@@ -34,8 +34,14 @@ module Candidates
       end
     end
 
-    def distance=(dist_ids)
-      @distance = dist_ids.present? ? dist_ids.to_i : nil
+    def initialize(*args)
+      @distance = 3
+
+      super
+    end
+
+    def distance=(dist)
+      @distance = dist.present? ? dist.to_i : nil
     end
 
     def subjects
