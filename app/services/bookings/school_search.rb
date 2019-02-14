@@ -24,20 +24,24 @@ class Bookings::SchoolSearch
   # amend the +ActiveRecord::Relation+ if no param is provided, meaning
   # they can be safely chained
   def results
-    q = Bookings::School
+    Bookings::School
       .close_to(
         @point,
-        radius: @radius,
-        calculate_distance: (@requested_order == 'distance')
+        radius: @radius
       )
       .that_provide(@subjects)
       .at_phases(@phases)
       .costing_upto(@max_fee)
-      .eager_load(:phases, :subjects, :school_type)
+      .eager_load(
+        :school_type,
+        :phases,
+        :subjects,
+        bookings_schools_phases: :bookings_phase,
+        bookings_schools_subjects: :bookings_subject
+      )
       .merge(Bookings::School.search(@query))
       .order(order_by(@requested_order))
-
-    q.uniq
+      .uniq
   end
 
 private
@@ -59,8 +63,10 @@ private
       'distance asc'
     elsif requested_order == 'fee'
       { fee: 'asc' }
-    else
-      nil
+    elsif requested_order == 'name'
+      { name: 'asc' }
+    else # revert to pg_search's rank which is default
+      {}
     end
   end
 end
