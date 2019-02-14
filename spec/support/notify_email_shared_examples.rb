@@ -1,10 +1,20 @@
 require 'rails_helper'
 
+class FakeNotificationsClient
+  def send_email(template_id:, email_address:, personalisation:)
+    # blah
+  end
+end
+
 shared_examples_for "email template" do |template_id, personalisation|
   let(:to) { "someone@somecompany.org" }
 
   subject do
     described_class.new(to: to, **personalisation)
+  end
+
+  before do
+    allow(subject).to receive(:notify_client).and_return(FakeNotificationsClient.new)
   end
 
   specify 'should inherit from Notify' do

@@ -5,11 +5,11 @@ class Notify
 
   def initialize(to:)
     self.to = to
-    @notify_client = Notifications::Client.new(API_KEY)
+    self.notify_client = Notifications::Client.new(API_KEY)
   end
 
   def despatch!
-    @notify_client.send_email(
+    notify_client.send_email(
       template_id: template_id,
       email_address: @to,
       personalisation: personalisation
