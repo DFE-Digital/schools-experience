@@ -15,7 +15,11 @@ describe Notify do
     end
 
     specify 'should set up a notify client with the correct API key' do
-      expect(subject.notify_client).to be_a(Notifications::Client)
+      stub_const(
+        'API_KEY',
+        ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
+      )
+      expect(described_class.new(to: to).notify_client).to be_a(Notifications::Client)
     end
   end
 

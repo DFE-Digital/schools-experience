@@ -1,11 +1,16 @@
 class Notify
   attr_accessor :notify_client, :to
 
-  API_KEY = Rails.application.credentials[:notify_api_key]
+  API_KEY = Rails.application.credentials[:notify_api_key].freeze
 
   def initialize(to:)
     self.to = to
-    self.notify_client = Notifications::Client.new(API_KEY)
+
+    if API_KEY.present?
+      self.notify_client = Notifications::Client.new(API_KEY)
+    else
+      Rails.logger.error("Notify API key is missing")
+    end
   end
 
   def despatch!
