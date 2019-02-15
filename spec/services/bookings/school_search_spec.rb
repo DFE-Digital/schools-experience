@@ -42,6 +42,70 @@ describe Bookings::SchoolSearch do
         end
       end
 
+      context 'When coodinates are supplied' do
+        let!(:latlng) { manchester_coordinates[0].data }
+
+        context 'When text and latitude and longitude are supplied' do
+          subject do
+            Bookings::SchoolSearch.new('Springfield', location: {
+              latitude: latlng['lat'], longitude: latlng['lon']
+            }).results
+          end
+
+          specify 'results should include matching records' do
+            expect(subject).to include(matching_school)
+          end
+
+          specify 'results should not include non-matching records' do
+            expect(subject).not_to include(non_matching_school)
+          end
+        end
+
+        context 'When only lat and lon are supplied' do
+          subject { Bookings::SchoolSearch.new('', location: latlng).results }
+
+          let!(:matching_school) do
+            create(:bookings_school, name: "Springfield Primary School")
+          end
+
+          specify 'results should include matching records' do
+            expect(subject).to include(matching_school)
+          end
+
+          specify 'results should not include non-matching records' do
+            expect(subject).not_to include(non_matching_school)
+          end
+        end
+
+        context 'When only latitude is supplied' do
+          subject do
+            Bookings::SchoolSearch.new('', location: {
+              latitude: latlng['lat']
+            })
+          end
+
+          it("should raise error") do
+            expect {
+              subject.results
+            }.to raise_exception(Bookings::SchoolSearch::InvalidCoordinatesError)
+          end
+        end
+
+        context 'When only longitude is supplied' do
+          subject do
+            Bookings::SchoolSearch.new('', location: {
+              longitude: latlng['lon']
+            })
+          end
+
+          it("should raise error") do
+            expect {
+              subject.results
+            }.to raise_exception(Bookings::SchoolSearch::InvalidCoordinatesError)
+          end
+        end
+      end
+
       context 'When Geocoder finds a location' do
         before do
           allow(Geocoder).to receive(:search).and_return(manchester_coordinates)

@@ -12,7 +12,7 @@ class Bookings::SchoolSearch
 
   def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: nil)
     self.query           = query
-    self.point           = geolocate(location) if location.present?
+    self.point           = parse_location(location)
     self.radius          = radius
     self.subjects        = subjects
     self.phases          = phases
@@ -44,7 +44,38 @@ class Bookings::SchoolSearch
       .uniq
   end
 
+  class InvalidCoordinatesError < ArgumentError
+    def initialize(msg = "Invalid coordinates - :latitude or :longitude keys are missing", *args)
+      super(msg, *args)
+    end
+  end
+
 private
+
+  def parse_location(location)
+    if location.is_a?(Hash)
+      extract_coords(location) || raise(InvalidCoordinatesError)
+    elsif location.present?
+      geolocate(location)
+    end
+  end
+
+  def extract_coords(coords)
+    coords = coords.symbolize_keys
+
+    if coords.has_key?(:latitude) && coords.has_key?(:longitude)
+      Bookings::School::GEOFACTORY.point(
+        coords[:longitude],
+        coords[:latitude]
+      )
+    elsif coords.has_key?(:lat)
+      if coords.has_key?(:lng)
+        Bookings::School::GEOFACTORY.point(coords[:lng], coords[:lat])
+      elsif coords.has_key?(:lon)
+        Bookings::School::GEOFACTORY.point(coords[:lon], coords[:lat])
+      end
+    end
+  end
 
   def geolocate(location)
     if (result = Geocoder.search(location)&.first)
