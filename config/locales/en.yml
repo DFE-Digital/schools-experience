@@ -71,6 +71,12 @@ en:
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
 
+  activerecord:
+    errors:
+      models:
+        candidates/registrations/placement_request:
+          <<: *placement_preference_errors
+
   helpers:
     fieldset:
       phase: Education phase

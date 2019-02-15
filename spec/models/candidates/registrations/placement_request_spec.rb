@@ -14,4 +14,6 @@ describe Candidates::Registrations::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:subject_first_choice).of_type :string }
   it { is_expected.to have_db_column(:subject_second_choice).of_type :string }
   it { is_expected.to have_db_column(:has_dbs_check).of_type :boolean }
+
+  it_behaves_like 'a placement preference'
 end
