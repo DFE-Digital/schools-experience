@@ -4,6 +4,11 @@ module Candidates
       include Behaviours::PlacementPreference
       include Behaviours::SubjectPreference
       include Behaviours::BackgroundCheck
+
+      def self.create_from_registration_session!(registration_session)
+        self.create! \
+          RegistrationAsPlacementRequest.new(registration_session).attributes
+      end
     end
   end
 end
