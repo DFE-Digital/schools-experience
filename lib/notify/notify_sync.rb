@@ -1,13 +1,8 @@
 class NotifySync
-  attr_accessor :remote_templates, :local_templates
   attr_writer :client
 
+  API_KEY = Rails.application.credentials[:notify_api_key].freeze
   TEMPLATE_PATH = [Rails.root, "app", "notify", "notify_email"].freeze
-
-  def initialize
-    self.local_templates = load_local_templates
-    self.remote_templates = load_remote_templates
-  end
 
   def compare
     local_templates.each do |template_id, local_body|
@@ -52,17 +47,17 @@ private
   end
 
   def client
-    @client ||= Notifications::Client.new(Rails.application.credentials[:notify_api_key])
+    @client ||= Notifications::Client.new(API_KEY)
   end
 
-  def load_local_templates
+  def local_templates
     Dir.glob(File.join(TEMPLATE_PATH, "*.md")).each.with_object({}) do |path, hash|
       template_id = path.match(/\.(?<template_id>[A-z0-9\-]+)\.md$/)[:template_id]
       hash[template_id] = File.read(path).chomp
     end
   end
 
-  def load_remote_templates
+  def remote_templates
     client.get_all_templates.collection.index_by(&:id)
   end
 end

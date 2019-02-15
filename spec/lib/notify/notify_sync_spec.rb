@@ -2,6 +2,17 @@ require 'rails_helper'
 require File.join(Rails.root, "lib", "notify", "notify_sync")
 
 describe NotifySync do
+  before do
+    stub_const(
+      'NotifySync::API_KEY',
+      ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
+    )
+  end
+
+  before do
+    allow(subject).to receive(:client).and_return(NotifyFakeClient.new)
+  end
+
   subject do
     described_class.new
   end

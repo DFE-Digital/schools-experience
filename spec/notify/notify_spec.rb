@@ -1,4 +1,5 @@
 require 'rails_helper'
+require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
 
 describe Notify do
   let(:to) { 'somename@somecompany.org' }
@@ -8,6 +9,10 @@ describe Notify do
       'Notify::API_KEY',
       ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
     )
+  end
+
+  before do
+    allow(subject).to receive(:notify_client).and_return(NotifyFakeClient.new)
   end
 
   subject { Notify.new(to: to) }
