@@ -1,3 +1,11 @@
+# A python script has been written which processes the cucumber json output. It takes two arguments, the first argument 
+# is the location of the cucumber test result json file and the second is the minimum response time in nano seconds.
+#
+# Usage:
+#  $ python check_timings.py reports/cucumber_chrome.json 2000000000
+# * param1: location of the cucumber json output
+# * param2: minimum response time in nanoseconds
+
 import json
 import sys
   
