@@ -1,7 +1,8 @@
 module Candidates
   module Registrations
     class PlacementRequest < ApplicationRecord
-      include Validations::PlacementPreferenceValidations
+      include Behaviours::PlacementPreference
+      include Behaviours::SubjectPreference
     end
   end
 end

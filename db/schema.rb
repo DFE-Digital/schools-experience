@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_102428) do
     t.text "access_needs_details"
     t.string "urn"
     t.string "degree_stage"
-    t.text "degree_stage_explanination"
+    t.text "degree_stage_explaination"
     t.string "degree_subject"
     t.string "teaching_stage"
     t.string "subject_first_choice"

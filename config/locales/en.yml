@@ -75,7 +75,7 @@ en:
     errors:
       models:
         candidates/registrations/placement_request:
-          <<: *placement_preference_errors
+          <<: [ *placement_preference_errors, *subject_preference_errors ]
 
   helpers:
     fieldset:
