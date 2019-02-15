@@ -1,3 +1,5 @@
+# Persists the non personally identifiable information from a candidates
+# registration
 module Candidates
   module Registrations
     class PlacementRequest < ApplicationRecord
