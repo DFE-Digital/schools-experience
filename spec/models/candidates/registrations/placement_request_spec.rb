@@ -17,4 +17,5 @@ describe Candidates::Registrations::PlacementRequest, type: :model do
 
   it_behaves_like 'a placement preference'
   it_behaves_like 'a subject preference'
+  it_behaves_like 'a background check'
 end
