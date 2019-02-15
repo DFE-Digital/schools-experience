@@ -18,11 +18,11 @@ private
 
   def personalisation
     {
-      school_name: @school_name,
-      candidate_name: @candidate_name,
-      rejection_reasons: @rejection_reasons,
-      school_experience_admin: @school_experience_admin,
-      teaching_line_telephone_number: @teaching_line_telephone_number
+      school_name: school_name,
+      candidate_name: candidate_name,
+      rejection_reasons: rejection_reasons,
+      school_experience_admin: school_experience_admin,
+      teaching_line_telephone_number: teaching_line_telephone_number
     }
   end
 end

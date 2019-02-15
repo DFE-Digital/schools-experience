@@ -14,6 +14,6 @@ private
   end
 
   def personalisation
-    { school_name: @school_name, confirmation_link: @confirmation_link }
+    { school_name: school_name, confirmation_link: confirmation_link }
   end
 end

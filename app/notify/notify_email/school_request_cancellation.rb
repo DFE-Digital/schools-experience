@@ -30,11 +30,11 @@ private
 
   def personalisation
     {
-      school_admin_name: @school_admin_name,
-      candidate_name: @candidate_name,
-      placement_start_date: @placement_start_date,
-      placement_finish_date: @placement_finish_date,
-      school_name: @school_name
+      school_admin_name: school_admin_name,
+      candidate_name: candidate_name,
+      placement_start_date: placement_start_date,
+      placement_finish_date: placement_finish_date,
+      school_name: school_name
     }
   end
 end

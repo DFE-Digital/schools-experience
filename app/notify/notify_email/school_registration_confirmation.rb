@@ -27,10 +27,10 @@ private
 
   def personalisation
     {
-      school_name: @school_name,
-      school_admin_name: @school_admin_name,
-      school_experience_profile_link: @school_experience_profile_link,
-      school_experience_dashboard_link: @school_experience_dashboard_link
+      school_name: school_name,
+      school_admin_name: school_admin_name,
+      school_experience_profile_link: school_experience_profile_link,
+      school_experience_dashboard_link: school_experience_dashboard_link
     }
   end
 end
