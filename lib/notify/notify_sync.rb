@@ -5,9 +5,11 @@ class NotifySync
   TEMPLATE_PATH = [Rails.root, "app", "notify", "notify_email"].freeze
 
   def compare
+    remote_templates_copy = remote_templates.dup
+
     local_templates.each do |template_id, local_body|
       # check the remote template is present based on the local template's guid
-      unless (rt = remote_templates.delete(template_id))
+      unless (rt = remote_templates_copy.delete(template_id))
         puts "#{template_id} Missing remote template"
         next
       end
@@ -20,8 +22,8 @@ class NotifySync
     end
 
     # Any templates remaining aren't present locally
-    if remote_templates.size.positive?
-      remote_templates.each do |_, template|
+    if remote_templates_copy.size.positive?
+      remote_templates_copy.each do |_, template|
         puts "#{template.id} Missing local template"
       end
     end
