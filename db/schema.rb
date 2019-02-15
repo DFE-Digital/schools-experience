@@ -77,19 +77,19 @@ ActiveRecord::Schema.define(version: 2019_02_15_102428) do
   end
 
   create_table "candidates_registrations_placement_requests", force: :cascade do |t|
-    t.date "date_start"
-    t.date "date_end"
-    t.text "objectives"
-    t.boolean "access_needs"
+    t.date "date_start", null: false
+    t.date "date_end", null: false
+    t.text "objectives", null: false
+    t.boolean "access_needs", null: false
     t.text "access_needs_details"
-    t.string "urn"
-    t.string "degree_stage"
+    t.string "urn", null: false
+    t.string "degree_stage", null: false
     t.text "degree_stage_explaination"
-    t.string "degree_subject"
-    t.string "teaching_stage"
-    t.string "subject_first_choice"
-    t.string "subject_second_choice"
-    t.boolean "has_dbs_check"
+    t.string "degree_subject", null: false
+    t.string "teaching_stage", null: false
+    t.string "subject_first_choice", null: false
+    t.string "subject_second_choice", null: false
+    t.boolean "has_dbs_check", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
