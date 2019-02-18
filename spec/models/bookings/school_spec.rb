@@ -116,7 +116,7 @@ describe Bookings::School, type: :model do
               [maths, chemistry]   => [school_a, school_b],
               [maths, biology]     => [school_a, school_b, school_c]
             }.each do |subjects, results|
-              expect(subject.that_provide(subjects)).to match_array(results)
+              expect(subject.that_provide(subjects).uniq).to match_array(results)
             end
           end
         end

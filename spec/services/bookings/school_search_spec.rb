@@ -233,13 +233,27 @@ describe Bookings::SchoolSearch do
         end
       end
 
-      context 'Alphabetical ordering (fallback)' do
+      context 'Search relevance ordering' do
+        let!(:bath) { create(:bookings_school, name: "Bath High School") }
+        let!(:coventry) { create(:bookings_school, name: "Coventry Academy") }
+        let!(:cardiff) { create(:bookings_school, name: "Cardiff Comprehensive") }
+
+        subject do
+          Bookings::SchoolSearch.new('Cardiff High').results
+        end
+
+        specify 'schools should be ordered alphabetically by name' do
+          expect(subject.map(&:name)).to eql([cardiff, bath].map(&:name))
+        end
+      end
+
+      context 'Sorting by name' do
         let!(:cardiff) { create(:bookings_school, name: "Cardiff Comprehensive") }
         let!(:bath) { create(:bookings_school, name: "Bath High School") }
         let!(:coventry) { create(:bookings_school, name: "Coventry Academy") }
 
         subject do
-          Bookings::SchoolSearch.new('').results
+          Bookings::SchoolSearch.new('', requested_order: 'name').results
         end
 
         specify 'schools should be ordered alphabetically by name' do

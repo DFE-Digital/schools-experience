@@ -1,24 +1,23 @@
 class Bookings::SchoolSearch
-  attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :order
+  attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :requested_order
 
   AVAILABLE_ORDERS = [
     %w{distance Distance},
-    %w{fee Fee},
-    %w{name Name}
+    %w{fee Fee}
   ].freeze
 
   def self.available_orders
     AVAILABLE_ORDERS.map
   end
 
-  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: 'distance')
-    self.query    = query
-    self.point    = geolocate(location) if location.present?
-    self.radius   = radius
-    self.subjects = subjects
-    self.phases   = phases
-    self.max_fee  = max_fee
-    self.order    = order_by(requested_order)
+  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: nil)
+    self.query           = query
+    self.point           = geolocate(location) if location.present?
+    self.radius          = radius
+    self.subjects        = subjects
+    self.phases          = phases
+    self.max_fee         = max_fee
+    self.requested_order = requested_order
   end
 
   # Note, all of the scopes provided by +Bookings::School+ will not
@@ -26,13 +25,23 @@ class Bookings::SchoolSearch
   # they can be safely chained
   def results
     Bookings::School
-      .search(@query)
-      .close_to(@point, radius: @radius)
-      .that_provide(@subjects).includes(:subjects)
-      .at_phases(@phases).includes(:phases)
+      .close_to(
+        @point,
+        radius: @radius
+      )
+      .that_provide(@subjects)
+      .at_phases(@phases)
       .costing_upto(@max_fee)
-      .includes(:school_type)
-      .reorder(@order)
+      .eager_load(
+        :school_type,
+        :phases,
+        :subjects,
+        bookings_schools_phases: :bookings_phase,
+        bookings_schools_subjects: :bookings_subject
+      )
+      .merge(Bookings::School.search(@query))
+      .order(order_by(@requested_order))
+      .uniq
   end
 
 private
@@ -54,8 +63,10 @@ private
       'distance asc'
     elsif requested_order == 'fee'
       { fee: 'asc' }
-    else # default to alphabetical
+    elsif requested_order == 'name'
       { name: 'asc' }
+    else # revert to pg_search's rank which is default
+      {}
     end
   end
 end
