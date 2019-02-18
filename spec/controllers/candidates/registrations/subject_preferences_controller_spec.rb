@@ -38,7 +38,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
 
     context '#new' do
       before do
-        get '/candidates/schools/URN/registrations/subject_preference/new'
+        get '/candidates/schools/11048/registrations/subject_preference/new'
       end
 
       it 'renders the new template' do
@@ -48,7 +48,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
 
     context '#create' do
       before do
-        post '/candidates/schools/URN/registrations/subject_preference',
+        post '/candidates/schools/11048/registrations/subject_preference',
           params: subject_preference_params
       end
 
@@ -96,12 +96,12 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
               teaching_stage: "I want to become a teacher",
               subject_first_choice: "Astronomy",
               subject_second_choice: "History",
-              urn: 'URN'
+              urn: 11048
         end
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/background_check/new'
+            '/candidates/schools/11048/registrations/background_check/new'
         end
       end
     end
@@ -116,12 +116,12 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
         teaching_stage: "I want to become a teacher",
         subject_first_choice: "Astronomy",
         subject_second_choice: "History",
-        urn: 'URN'
+        urn: 11048
     end
 
     context '#edit' do
       before do
-        get '/candidates/schools/URN/registrations/subject_preference/edit'
+        get '/candidates/schools/11048/registrations/subject_preference/edit'
       end
 
       it 'populates the edit form with values from the session' do
@@ -135,7 +135,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
 
     context '#update' do
       before do
-        patch '/candidates/schools/URN/registrations/subject_preference',
+        patch '/candidates/schools/11048/registrations/subject_preference',
           params: subject_preference_params
       end
 
@@ -184,12 +184,12 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
               teaching_stage: "I want to become a teacher",
               subject_first_choice: "Astronomy",
               subject_second_choice: "History",
-              urn: 'URN'
+              urn: 11048
         end
 
         it 'redirects to the application preview' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/application_preview'
+            '/candidates/schools/11048/registrations/application_preview'
         end
       end
     end

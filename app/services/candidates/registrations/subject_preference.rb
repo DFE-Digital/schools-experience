@@ -3,7 +3,7 @@ module Candidates
     class SubjectPreference < RegistrationStep
       include Behaviours::SubjectPreference
 
-      attribute :urn, :string
+      attribute :urn, :integer
       attribute :degree_stage, :string
       attribute :degree_stage_explaination, :string
       attribute :degree_subject, :string

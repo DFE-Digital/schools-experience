@@ -6,7 +6,7 @@ class CreateCandidatesRegistrationsPlacementRequests < ActiveRecord::Migration[5
       t.text :objectives, null: false
       t.boolean :access_needs, null: false
       t.text :access_needs_details
-      t.string :urn, null: false
+      t.integer :urn, null: false
       t.string :degree_stage, null: false
       t.text :degree_stage_explaination
       t.string :degree_subject, null: false

@@ -6,7 +6,7 @@ describe Candidates::Registrations::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:objectives).of_type :text }
   it { is_expected.to have_db_column(:access_needs).of_type :boolean }
   it { is_expected.to have_db_column(:access_needs_details).of_type :text }
-  it { is_expected.to have_db_column(:urn).of_type :string }
+  it { is_expected.to have_db_column(:urn).of_type :integer }
   it { is_expected.to have_db_column(:degree_stage).of_type :string }
   it { is_expected.to have_db_column(:degree_stage_explaination).of_type :text }
   it { is_expected.to have_db_column(:degree_subject).of_type :string }

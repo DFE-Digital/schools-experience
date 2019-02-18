@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 2019_02_15_102428) do
     t.string "name", limit: 32, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "edubase_id"
     t.integer "position"
+    t.integer "edubase_id"
     t.index ["name"], name: "index_bookings_phases_on_name"
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
   end
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_102428) do
     t.text "objectives", null: false
     t.boolean "access_needs", null: false
     t.text "access_needs_details"
-    t.string "urn", null: false
+    t.integer "urn", null: false
     t.string "degree_stage", null: false
     t.text "degree_stage_explaination"
     t.string "degree_subject", null: false

@@ -25,7 +25,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
 
     context '#new' do
       before do
-        get '/candidates/schools/URN/registrations/account_check/new'
+        get '/candidates/schools/11048/registrations/account_check/new'
       end
 
       it 'renders the new template' do
@@ -35,7 +35,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
 
     context '#create' do
       before do
-        post '/candidates/schools/URN/registrations/account_check',
+        post '/candidates/schools/11048/registrations/account_check',
           params: account_check_params
       end
 
@@ -77,7 +77,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/address/new'
+            '/candidates/schools/11048/registrations/address/new'
         end
       end
     end
@@ -92,7 +92,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
 
     context '#edit' do
       before do
-        get '/candidates/schools/URN/registrations/account_check/edit'
+        get '/candidates/schools/11048/registrations/account_check/edit'
       end
 
       it 'populates the edit form with values from the session' do
@@ -106,7 +106,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
 
     context '#update' do
       before do
-        patch '/candidates/schools/URN/registrations/account_check',
+        patch '/candidates/schools/11048/registrations/account_check',
           params: account_check_params
       end
 
@@ -149,7 +149,7 @@ describe Candidates::Registrations::AccountChecksController, type: :request do
 
         it 'redirects to the application preview' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/application_preview'
+            '/candidates/schools/11048/registrations/application_preview'
         end
       end
     end

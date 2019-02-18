@@ -25,7 +25,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
 
     context '#new' do
       before do
-        get '/candidates/schools/URN/registrations/address/new'
+        get '/candidates/schools/11048/registrations/address/new'
       end
 
       it 'responds with 200' do
@@ -39,7 +39,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
 
     context '#create' do
       before do
-        post '/candidates/schools/URN/registrations/address',
+        post '/candidates/schools/11048/registrations/address',
           params: address_params
       end
 
@@ -92,7 +92,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/subject_preference/new'
+            '/candidates/schools/11048/registrations/subject_preference/new'
         end
       end
     end
@@ -111,7 +111,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
 
     context '#edit' do
       before do
-        get '/candidates/schools/URN/registrations/address/edit'
+        get '/candidates/schools/11048/registrations/address/edit'
       end
 
       it 'populates the edit form with values from the session' do
@@ -125,7 +125,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
 
     context '#update' do
       before do
-        patch '/candidates/schools/URN/registrations/address',
+        patch '/candidates/schools/11048/registrations/address',
           params: address_params
       end
 
@@ -179,7 +179,7 @@ describe Candidates::Registrations::AddressesController, type: :request do
 
         it 'redirects to the application preview' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/application_preview'
+            '/candidates/schools/11048/registrations/application_preview'
         end
       end
     end

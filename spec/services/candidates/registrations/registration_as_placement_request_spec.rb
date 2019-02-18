@@ -36,7 +36,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "teaching_stage" => "I'm thinking about teaching and want to find out more",
     "subject_first_choice" => "Architecture",
     "subject_second_choice" => "Mathematics",
-    "urn" => 'URN',
+    "urn" => 11048,
   }.freeze
 
   context '#attributes' do
