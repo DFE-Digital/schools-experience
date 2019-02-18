@@ -1,19 +1,19 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementRequest, type: :model do
-  it { is_expected.to have_db_column(:date_start).of_type :date }
-  it { is_expected.to have_db_column(:date_end).of_type :date }
-  it { is_expected.to have_db_column(:objectives).of_type :text }
-  it { is_expected.to have_db_column(:access_needs).of_type :boolean }
+  it { is_expected.to have_db_column(:date_start).of_type(:date).with_options null: false }
+  it { is_expected.to have_db_column(:date_end).of_type(:date).with_options null: false }
+  it { is_expected.to have_db_column(:objectives).of_type(:text).with_options null: false }
+  it { is_expected.to have_db_column(:access_needs).of_type(:boolean).with_options null: false }
   it { is_expected.to have_db_column(:access_needs_details).of_type :text }
-  it { is_expected.to have_db_column(:urn).of_type :integer }
-  it { is_expected.to have_db_column(:degree_stage).of_type :string }
+  it { is_expected.to have_db_column(:urn).of_type(:integer).with_options null: false }
+  it { is_expected.to have_db_column(:degree_stage).of_type(:string).with_options null: false }
   it { is_expected.to have_db_column(:degree_stage_explaination).of_type :text }
-  it { is_expected.to have_db_column(:degree_subject).of_type :string }
-  it { is_expected.to have_db_column(:teaching_stage).of_type :string }
-  it { is_expected.to have_db_column(:subject_first_choice).of_type :string }
-  it { is_expected.to have_db_column(:subject_second_choice).of_type :string }
-  it { is_expected.to have_db_column(:has_dbs_check).of_type :boolean }
+  it { is_expected.to have_db_column(:degree_subject).of_type(:string).with_options null: false }
+  it { is_expected.to have_db_column(:teaching_stage).of_type(:string).with_options null: false }
+  it { is_expected.to have_db_column(:subject_first_choice).of_type(:string).with_options null: false }
+  it { is_expected.to have_db_column(:subject_second_choice).of_type(:string).with_options null: false }
+  it { is_expected.to have_db_column(:has_dbs_check).of_type(:boolean).with_options null: false }
 
   it_behaves_like 'a placement preference'
   it_behaves_like 'a subject preference'
