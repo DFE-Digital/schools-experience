@@ -21,7 +21,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "county" => "Testshire",
     "postcode" => "TE57 1NG",
     "phone" => "01234567890"
-  }
+  }.freeze
 
   EXPECTED_ATTRIBUTES = {
     "has_dbs_check" => true,
@@ -37,12 +37,12 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "subject_first_choice" => "Architecture",
     "subject_second_choice" => "Mathematics",
     "urn" => 'URN',
-  }
+  }.freeze
 
   context '#attributes' do
     context 'PII' do
       # Redundant given the next spec, but going for clarity!
-      PII.each do |k, v|
+      PII.each do |k, _|
         it "removes #{k}" do
           expect(subject.attributes[k]).to eq nil
         end

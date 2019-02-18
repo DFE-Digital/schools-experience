@@ -24,18 +24,18 @@ describe Candidates::Registrations::PlacementRequest, type: :model do
       let :invalid_session do
         Candidates::Registrations::RegistrationSession.new \
           "registration" => {
-            "candidates_registrations_account_check" => { },
-            "candidates_registrations_address" => { },
-            "candidates_registrations_background_check" => { },
-             "candidates_registrations_placement_preference" => { },
-             "candidates_registrations_subject_preference" => { }
+            "candidates_registrations_account_check" => {},
+            "candidates_registrations_address" => {},
+            "candidates_registrations_background_check" => {},
+             "candidates_registrations_placement_preference" => {},
+             "candidates_registrations_subject_preference" => {}
           }
       end
 
       it 'raises a validation error' do
-        expect do
+        expect {
           described_class.create_from_registration_session! invalid_session
-        end.to raise_error ActiveRecord::RecordInvalid
+        }.to raise_error ActiveRecord::RecordInvalid
       end
     end
 
@@ -47,9 +47,9 @@ describe Candidates::Registrations::PlacementRequest, type: :model do
       end
 
       it 'creates the placement request' do
-        expect do
+        expect {
           described_class.create_from_registration_session! registration_session
-        end.to change { described_class.count }.by 1
+        }.to change { described_class.count }.by 1
       end
     end
   end

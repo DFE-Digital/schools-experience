@@ -8,7 +8,7 @@ module Candidates
         background_check
         placement_preference
         subject_preference
-      )
+      ).freeze
 
       OTHER_IGNORED_ATTRS = %w(created_at updated_at).freeze
 
@@ -22,10 +22,10 @@ module Candidates
         end
       end
 
-      private
+    private
 
       def attributes_for(model_name)
-        @registration_session.public_send(model_name).attributes.reject do |k, v|
+        @registration_session.public_send(model_name).attributes.reject do |k, _|
           OTHER_IGNORED_ATTRS.include? k
         end
       end
