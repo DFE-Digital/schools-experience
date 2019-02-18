@@ -30,6 +30,18 @@ describe Notify do
     specify 'should set up a notify client with the correct API key' do
       expect(described_class.new(to: to).notify_client).to be_a(Notifications::Client)
     end
+
+    context 'When no Notify::API_KEY is present' do
+      before do
+        stub_const('Notify::API_KEY', "")
+      end
+
+      specify 'should raise a NotifyAPIKeyMissing error' do
+        expect { described_class.new(to: to) }.to(
+          raise_error(Notify::NotifyAPIKeyMissing, "Notify API key is missing")
+        )
+      end
+    end
   end
 
   describe 'Methods' do

@@ -3,12 +3,14 @@ class Notify
 
   API_KEY = Rails.application.credentials[:notify_api_key].freeze
 
+  class NotifyAPIKeyMissing < ArgumentError; end
+
   def initialize(to:)
     self.to = to
     if API_KEY.present?
       self.notify_client = Notifications::Client.new(API_KEY)
     else
-      Rails.logger.error("Notify API key is missing")
+      fail(NotifyAPIKeyMissing, "Notify API key is missing")
     end
   end
 
