@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "latitude", "longitude", "location" ] ;
+  static targets = [ "latitude", "longitude", "location", "icon" ] ;
   currentLocationString = 'Using your current location' ;
 
   connect() {
@@ -44,8 +44,13 @@ export default class extends Controller {
     link.setAttribute('href', '#') ;
     link.setAttribute('data-action', 'click->' + this.identifier + '#requestLocation') ;
 
-    const txt = document.createTextNode("Use my location") ;
+    const txt = document.createTextNode("Use my location ") ;
     link.appendChild(txt) ;
+
+    const icon = document.createElement('i') ;
+    icon.className = 'fa fa-fw fa-crosshairs' ;
+    icon.setAttribute('data-target', this.identifier + '.icon') ;
+    link.appendChild(icon) ;
 
     label.parentNode.insertBefore(link, label) ;
 
@@ -55,18 +60,30 @@ export default class extends Controller {
   requestLocation(ev) {
     ev.preventDefault() ;
 
-    // FIXME Show a spinner
+    this.showSpinner() ;
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // FIXME Hide spinner
           this.setCoords(position.coords) ;
+          this.hideSpinner()
         },
         () => {
-          // FIXME Hide spinner
+          this.hideSpinner()
         }
       ) ;
     }
+  }
+
+  showSpinner() {
+    this.iconTarget.classList.remove('fa-crosshairs') ;
+    this.iconTarget.classList.add('fa-spinner') ;
+    this.iconTarget.classList.add('fa-spin') ;
+  }
+
+  hideSpinner() {
+    this.iconTarget.classList.remove('fa-spin') ;
+    this.iconTarget.classList.remove('fa-spinner') ;
+    this.iconTarget.classList.add('fa-crosshairs') ;
   }
 }
