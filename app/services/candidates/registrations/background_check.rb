@@ -1,9 +1,8 @@
 module Candidates
   module Registrations
     class BackgroundCheck < RegistrationStep
+      include Behaviours::BackgroundCheck
       attribute :has_dbs_check, :boolean
-
-      validates :has_dbs_check, inclusion: [true, false]
     end
   end
 end

@@ -1,6 +1,40 @@
 en:
   errors:
    format: "%{message}"
+
+  placement_preference_errors: &placement_preference_errors
+    attributes:
+      access_needs:
+        inclusion: "Select an option"
+      access_needs_details:
+        blank: "Enter details"
+      date_end:
+        blank: "Enter an end date"
+        is_not_a_date: "Enter a valid date"
+        should_not_be_before_date_start: "End date must not be earlier than start date"
+      date_start:
+        blank: "Enter a start date"
+        is_not_a_date: "Enter a valid date"
+        should_not_be_in_past: "Must not be in the past"
+      objectives:
+        blank: "Enter what you want to get out of a placement"
+        use_fifty_words_or_fewer: "Please use 50 words or fewer"
+
+  subject_preference_errors: &subject_preference_errors
+    attributes:
+      degree_stage:
+        blank: "Select a stage"
+      degree_stage_explaination:
+        blank: "Enter an explaination"
+      degree_subject:
+        blank: "Select a subject"
+      subject_first_choice:
+        blank: "Select a subject"
+      subject_second_choice:
+        blank: "Select a subject"
+      teaching_stage:
+        blank: "Select a stage"
+
   activemodel:
     errors:
       models:
@@ -10,22 +44,9 @@ en:
               blank: "Enter an email address"
             full_name:
               blank: "Enter your full name"
+
         candidates/registrations/subject_preference:
-          attributes:
-            degree_stage:
-              blank: "Select a stage"
-            degree_stage_explaination:
-              blank: "Enter an explaination"
-            degree_subject:
-              blank: "Select a subject"
-              exclusion: "Select a subject"
-              inclusion: "Select a subject"
-            subject_first_choice:
-              blank: "Select a subject"
-            subject_second_choice:
-              blank: "Select a subject"
-            teaching_stage:
-              blank: "Select a stage"
+          <<: *subject_preference_errors
 
         candidates/registrations/background_check:
           attributes:
@@ -46,23 +67,9 @@ en:
               blank: "Enter a street"
             town_or_city:
               blank: "Enter a town or city"
+
         candidates/registrations/placement_preference:
-          attributes:
-            access_needs:
-              inclusion: "Select an option"
-            access_needs_details:
-              blank: "Enter details"
-            date_end:
-              blank: "Enter an end date"
-              is_not_a_date: "Enter a valid date"
-              should_not_be_before_date_start: "End date must not be earlier than start date"
-            date_start:
-              blank: "Enter a start date"
-              is_not_a_date: "Enter a valid date"
-              should_not_be_in_past: "Must not be in the past"
-            objectives:
-              blank: "Enter what you want to get out of a placement"
-              use_fifty_words_or_fewer: "Please use 50 words or fewer"
+          <<: *placement_preference_errors
 
   helpers:
     fieldset:
