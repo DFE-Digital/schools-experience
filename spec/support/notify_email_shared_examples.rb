@@ -49,14 +49,32 @@ shared_examples_for "email template" do |template_id, personalisation|
 
   describe 'Methods' do
     describe '#despatch!' do
-      after { subject.despatch! }
+      context 'successfully sending emails' do
+        after { subject.despatch! }
 
-      specify 'should call @notify_client.send_email with correct args' do
-        expect(subject.notify_client).to receive(:send_email).with(
-          template_id: subject.send(:template_id),
-          email_address: to,
-          personalisation: personalisation
-        )
+        specify 'should call @notify_client.send_email with correct args' do
+          expect(subject.notify_client).to receive(:send_email).with(
+            template_id: subject.send(:template_id),
+            email_address: to,
+            personalisation: personalisation
+          )
+        end
+      end
+
+      # https://docs.notifications.service.gov.uk/ruby.html#error-codes
+      context 'when Notify is unable to process a request' do
+        let(:nc) { subject.notify_client }
+        let(:error_message) { "500, something went wrong" }
+        before do
+          allow(nc).to receive(:send_email).and_raise(
+            Notifications::Client::ServerError,
+            OpenStruct.new(body: error_message)
+          )
+        end
+
+        specify 'should raise a RetryableError' do
+          expect { subject.despatch! }.to raise_error(Notify::RetryableError, error_message)
+        end
       end
     end
   end
