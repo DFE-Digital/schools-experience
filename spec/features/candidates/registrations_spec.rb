@@ -18,7 +18,7 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   let! :school_urn do
-    'URN'
+    11048
   end
 
   let :subjects do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_05_164245) do
+ActiveRecord::Schema.define(version: 2019_02_15_102428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 2019_02_05_164245) do
     t.string "name", limit: 32, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "edubase_id"
     t.integer "position"
+    t.integer "edubase_id"
     t.index ["name"], name: "index_bookings_phases_on_name"
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
   end
@@ -74,6 +74,24 @@ ActiveRecord::Schema.define(version: 2019_02_05_164245) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
+  end
+
+  create_table "candidates_registrations_placement_requests", force: :cascade do |t|
+    t.date "date_start", null: false
+    t.date "date_end", null: false
+    t.text "objectives", null: false
+    t.boolean "access_needs", null: false
+    t.text "access_needs_details"
+    t.integer "urn", null: false
+    t.string "degree_stage", null: false
+    t.text "degree_stage_explaination"
+    t.string "degree_subject", null: false
+    t.string "teaching_stage", null: false
+    t.string "subject_first_choice", null: false
+    t.string "subject_second_choice", null: false
+    t.boolean "has_dbs_check", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "delayed_jobs", force: :cascade do |t|

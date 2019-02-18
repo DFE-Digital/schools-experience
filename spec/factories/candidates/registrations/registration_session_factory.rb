@@ -1,7 +1,10 @@
 FactoryBot.define do
   factory :registration_session, class: Candidates::Registrations::RegistrationSession do
+    transient do
+      current_time { DateTime.current }
+    end
+
     initialize_with do
-      current_time = DateTime.current
       new \
         "registration" => {
           "candidates_registrations_account_check" => {
@@ -26,8 +29,8 @@ FactoryBot.define do
             "updated_at" => current_time
           },
            "candidates_registrations_placement_preference" => {
-            "date_start" => (current_time + 3.day),
-            "date_end" => (current_time + 4.days),
+             "date_start" => (current_time + 3.days),
+             "date_end" => (current_time + 4.days),
              "objectives" => "test the software",
              "access_needs" => false,
              "access_needs_details" => "",
@@ -41,7 +44,7 @@ FactoryBot.define do
              "teaching_stage" => "I'm thinking about teaching and want to find out more",
              "subject_first_choice" => "Architecture",
              "subject_second_choice" => "Mathematics",
-             "school_name" => 'Test school',
+             "urn" => 11048,
              "created_at" => current_time,
              "updated_at" => current_time
           }

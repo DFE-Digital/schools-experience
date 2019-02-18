@@ -25,7 +25,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
     context '#new' do
       before do
-        get '/candidates/schools/URN/registrations/background_check/new'
+        get '/candidates/schools/11048/registrations/background_check/new'
       end
 
       it 'renders the new form' do
@@ -35,7 +35,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
     context '#create' do
       before do
-        post '/candidates/schools/URN/registrations/background_check/',
+        post '/candidates/schools/11048/registrations/background_check/',
           params: background_check_params
       end
 
@@ -70,7 +70,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/application_preview'
+            '/candidates/schools/11048/registrations/application_preview'
         end
       end
     end
@@ -84,7 +84,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
     context '#edit' do
       before do
-        get '/candidates/schools/URN/registrations/background_check/edit'
+        get '/candidates/schools/11048/registrations/background_check/edit'
       end
 
       it 'populates the edit form with values from the session' do
@@ -98,7 +98,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
     context '#update' do
       before do
-        patch '/candidates/schools/URN/registrations/background_check',
+        patch '/candidates/schools/11048/registrations/background_check',
           params: background_check_params
       end
 
@@ -133,7 +133,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
         it 'redirects to the application preview' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/application_preview'
+            '/candidates/schools/11048/registrations/application_preview'
         end
       end
     end

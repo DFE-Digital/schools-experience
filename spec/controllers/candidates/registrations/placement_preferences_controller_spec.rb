@@ -29,7 +29,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
     context '#new' do
       before do
-        get '/candidates/schools/URN/registrations/placement_preference/new'
+        get '/candidates/schools/11048/registrations/placement_preference/new'
       end
 
       it 'responds with 200' do
@@ -43,7 +43,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
     context '#create' do
       before do
-        post '/candidates/schools/URN/registrations/placement_preference',
+        post '/candidates/schools/11048/registrations/placement_preference',
           params: placement_preference_params
       end
 
@@ -88,7 +88,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/account_check/new'
+            '/candidates/schools/11048/registrations/account_check/new'
         end
       end
     end
@@ -105,7 +105,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
     context '#edit' do
       before do
-        get '/candidates/schools/URN/registrations/placement_preference/edit'
+        get '/candidates/schools/11048/registrations/placement_preference/edit'
       end
 
       it 'populates the edit form with values from the session' do
@@ -120,7 +120,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
     context '#update' do
       before do
-        patch '/candidates/schools/URN/registrations/placement_preference',
+        patch '/candidates/schools/11048/registrations/placement_preference',
           params: placement_preference_params
       end
 
@@ -168,7 +168,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
         it 'redirects to the application preview' do
           expect(response).to redirect_to \
-            '/candidates/schools/URN/registrations/application_preview'
+            '/candidates/schools/11048/registrations/application_preview'
         end
       end
     end
