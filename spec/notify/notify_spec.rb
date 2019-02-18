@@ -38,7 +38,7 @@ describe Notify do
 
       specify 'should raise a NotifyAPIKeyMissing error' do
         expect { described_class.new(to: to) }.to(
-          raise_error(Notify::NotifyAPIKeyMissing, "Notify API key is missing")
+          raise_error(Notify::APIKeyMissing, "Notify API key is missing")
         )
       end
     end
