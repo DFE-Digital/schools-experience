@@ -67,4 +67,49 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       expect(@formatted).to eq "First, Second, Third"
     end
   end
+
+  context '.current_search' do
+    context 'with coordinates search' do
+      subject do
+        double('Coords search',
+          latitude: '1',
+          longitude: '2',
+          location: '',
+          query: '')
+      end
+
+      it('should say near me') do
+        expect(describe_current_search(subject)).to match(/near me/)
+      end
+    end
+
+    context 'with location search' do
+      subject do
+        double('Location search',
+          latitude: '',
+          longitude: '',
+          location: 'Manchester',
+          query: '')
+      end
+
+      it('should say near Manchester') do
+        expect(describe_current_search(subject)).to match(/near Manchester/i)
+      end
+    end
+
+    context 'with query search' do
+      subject do
+        double('Text search',
+          latitude: '',
+          longitude: '',
+          location: '',
+          query: 'special school')
+      end
+
+      it('should say matching special school') do
+        expect(describe_current_search(subject)).to \
+          match(/matching special school/i)
+      end
+    end
+  end
 end
