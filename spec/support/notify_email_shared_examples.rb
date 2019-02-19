@@ -92,6 +92,8 @@ shared_examples_for "email template from application preview" do |school_admin_i
 
     subject { described_class.from_application_preview(to, ap) }
 
+    it { is_expected.to be_a(described_class) }
+
     context 'correctly assigning attributes' do
       specify 'candidate_address is correctly-assigned' do
         expect(subject.candidate_address).to eql(ap.full_address)
