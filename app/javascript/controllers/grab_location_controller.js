@@ -3,6 +3,9 @@ import { Controller } from "stimulus"
 export default class extends Controller {
   static targets = [ "latitude", "longitude", "location", "icon" ] ;
   currentLocationString = 'Using your current location' ;
+  crossHairsIcon = 'fa-crosshairs' ;
+  spinnerIcon = 'fa-refresh' ;
+  spinIcon = 'fa-spin' ;
 
   connect() {
     if ("geolocation" in navigator) {
@@ -20,10 +23,12 @@ export default class extends Controller {
   }
 
   removeCoords() {
-    this.latitudeTarget.value = '' ;
-    this.longitudeTarget.value = '' ;
-    this.locationTarget.value = '' ;
-    this.element.classList.remove('school-search-form__location-field--using-coords') ;
+    if (this.latitudeTarget.value != '' || this.longitudeTarget.value != '') {
+      this.latitudeTarget.value = '' ;
+      this.longitudeTarget.value = '' ;
+      this.locationTarget.value = '' ;
+      this.element.classList.remove('school-search-form__location-field--using-coords') ;
+    }
   }
 
   setCoords(coords) {
@@ -48,7 +53,7 @@ export default class extends Controller {
     link.appendChild(txt) ;
 
     const icon = document.createElement('i') ;
-    icon.className = 'fa fa-fw fa-crosshairs' ;
+    icon.className = 'fa fa-fw ' + this.crossHairsIcon ;
     icon.setAttribute('data-target', this.identifier + '.icon') ;
     link.appendChild(icon) ;
 
@@ -76,14 +81,14 @@ export default class extends Controller {
   }
 
   showSpinner() {
-    this.iconTarget.classList.remove('fa-crosshairs') ;
-    this.iconTarget.classList.add('fa-spinner') ;
-    this.iconTarget.classList.add('fa-spin') ;
+    this.iconTarget.classList.remove(this.crossHairsIcon) ;
+    this.iconTarget.classList.add(this.spinnerIcon) ;
+    this.iconTarget.classList.add(this.spinIcon) ;
   }
 
   hideSpinner() {
-    this.iconTarget.classList.remove('fa-spin') ;
-    this.iconTarget.classList.remove('fa-spinner') ;
-    this.iconTarget.classList.add('fa-crosshairs') ;
+    this.iconTarget.classList.remove(this.spinIcon) ;
+    this.iconTarget.classList.remove(this.spinnerIcon) ;
+    this.iconTarget.classList.add(this.crossHairsIcon) ;
   }
 }
