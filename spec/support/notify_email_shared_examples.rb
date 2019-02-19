@@ -88,15 +88,7 @@ shared_examples_for "email template from application preview" do |school_admin_i
     let!(:school) { create(:bookings_school, urn: 11048) }
     let(:rs) { build(:registration_session) }
     let(:to) { "morris.szyslak@moes.net" }
-    let(:ap) do
-      Candidates::Registrations::ApplicationPreview.new(
-        account_check: rs.account_check,
-        address: rs.address,
-        placement_preference: rs.placement_preference,
-        subject_preference: rs.subject_preference,
-        background_check: rs.background_check
-      )
-    end
+    let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
 
     subject { described_class.from_application_preview(to, ap) }
 

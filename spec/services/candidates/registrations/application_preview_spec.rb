@@ -62,13 +62,17 @@ describe Candidates::Registrations::ApplicationPreview do
       school_name: 'Test school'
   end
 
-  subject do
-    described_class.new \
+  let :registration_session do
+    double Candidates::Registrations::RegistrationSession,
       account_check: account_check,
       placement_preference: placement_preference,
       address: address,
       subject_preference: subject_preference,
       background_check: background_check
+  end
+
+  subject do
+    described_class.new registration_session
   end
 
   context '#full_name' do

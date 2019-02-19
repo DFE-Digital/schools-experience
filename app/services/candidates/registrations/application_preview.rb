@@ -1,19 +1,19 @@
 module Candidates
   module Registrations
     class ApplicationPreview
-      attr_reader \
+      attr_accessor \
         :account_check,
         :address,
         :placement_preference,
         :subject_preference,
         :background_check
 
-      def initialize(account_check:, placement_preference:, address:, subject_preference:, background_check:)
-        @account_check = account_check
-        @placement_preference = placement_preference
-        @address = address
-        @subject_preference = subject_preference
-        @background_check = background_check
+      def initialize(registration_session)
+        self.account_check = registration_session.account_check
+        self.placement_preference = registration_session.placement_preference
+        self.address = registration_session.address
+        self.subject_preference = registration_session.subject_preference
+        self.background_check = registration_session.background_check
       end
 
       def full_name
