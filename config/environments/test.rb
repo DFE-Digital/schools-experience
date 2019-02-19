@@ -51,4 +51,6 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.raise = true
   end
+
+  Rails.application.routes.default_url_options = { host: 'example.com' }
 end

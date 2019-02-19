@@ -12,7 +12,11 @@ shared_context 'Stubbed candidates school' do
   end
 
   let :school do
-    double Bookings::School, id: school_urn, subjects: subjects
+    double Bookings::School, \
+      id: school_urn,
+      subjects: subjects,
+      name: 'Test School',
+      to_param: school_urn
   end
 
   let :allowed_subject_choices do
