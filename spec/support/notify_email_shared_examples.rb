@@ -83,6 +83,13 @@ end
 
 shared_examples_for "email template from application preview" do |school_admin_included|
   describe ".from_application_preview" do
+    before do
+      stub_const(
+        'Notify::API_KEY',
+        ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
+      )
+    end
+
     specify { expect(described_class).to respond_to(:from_application_preview) }
 
     let!(:school) { create(:bookings_school, urn: 11048) }
