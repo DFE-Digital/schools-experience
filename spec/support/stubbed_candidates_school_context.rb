@@ -16,7 +16,7 @@ shared_context 'Stubbed candidates school' do
       id: school_urn,
       subjects: subjects,
       name: 'Test School',
-      to_param: school_urn
+      to_param: school_urn.to_s
   end
 
   let :allowed_subject_choices do

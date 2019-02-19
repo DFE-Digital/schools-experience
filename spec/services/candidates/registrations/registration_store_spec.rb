@@ -84,4 +84,22 @@ describe Candidates::Registrations::RegistrationStore do
       end
     end
   end
+
+  context '#has_registration?' do
+    let! :returned_uuid do
+      subject.store! session
+    end
+
+    context 'when registration does not exist' do
+      it 'returns false' do
+        expect(subject.has_registration?('bad-uuid')).to eq false
+      end
+    end
+
+    context 'when registration exists' do
+      it 'returns true' do
+        expect(subject.has_registration?(returned_uuid)).to eq true
+      end
+    end
+  end
 end

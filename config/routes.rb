@@ -13,6 +13,8 @@ Rails.application.routes.draw do
         resource :subject_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
+        resource :confirmation_email, only: %i(show create)
+        resource :resend_confirmation_email, only: %i(create)
         resource :placement_request, only: %i(show create)
       end
     end

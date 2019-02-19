@@ -32,8 +32,21 @@ feature 'Candidate Registrations', type: :feature do
     double Candidates::School, subjects: subjects, name: 'Test School'
   end
 
+  let :uuid do
+    'some-uuid'
+  end
+
+  let :registration_store do
+    double Candidates::Registrations::RegistrationStore, store!: uuid
+  end
+
   before do
     allow(Candidates::School).to receive(:find) { school }
+    allow(Candidates::Registrations::RegistrationStore).to \
+      receive(:instance) { registration_store }
+
+    allow(Candidates::Registrations::SendEmailConfirmationJob).to \
+      receive(:perform_later)
   end
 
   scenario 'Candidate Registraion Journey' do
@@ -155,8 +168,12 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "Teaching subject - second choice Mathematics"
     expect(page).to have_text "DBS check document Yes"
 
-    # Submit placement request form successfully
+    # Send email confirmation
     click_button 'Accept and send'
-    expect(page).to have_text 'Your placement request has been sent'
+    expect(page).to have_text \
+      "Click the confirmation link in the email we’ve sent to the following email address to confirm your request for a placement at Test School:\ntest@example.com"
+
+    # Visit email confirmation link
+    # expect(page).to have_text 'Your placement request has been sent'
   end
 end
