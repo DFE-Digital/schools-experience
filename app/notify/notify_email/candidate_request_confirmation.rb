@@ -53,8 +53,24 @@ class NotifyEmail::CandidateRequestConfirmation < Notify
     super(to: to)
   end
 
-  def self.from_registration_session(application_preview, uuid)
-    # TODO for ease, allow initialisation via a RegistrationSession
+  def self.from_application_preview(to, application_preview)
+    NotifyEmail::CandidateRequestConfirmation.new(
+      to: to,
+      candidate_address: application_preview.full_address,
+      candidate_dbs_check_document: application_preview.dbs_check_document, candidate_degree_stage: application_preview.degree_stage,
+      candidate_degree_subject: application_preview.degree_subject,
+      candidate_disability_needs: application_preview.access_needs,
+      candidate_email_address: application_preview.email_address,
+      candidate_name: application_preview.full_name,
+      candidate_phone_number: application_preview.telephone_number,
+      candidate_teaching_stage: application_preview.teaching_stage,
+      candidate_teaching_subject_first_choice: application_preview.teaching_subject_first_choice,
+      candidate_teaching_subject_second_choice: application_preview.teaching_subject_second_choice,
+      placement_finish_date: application_preview.placement_date_end,
+      placement_outcome: application_preview.placement_outcome,
+      placement_start_date: application_preview.placement_date_start,
+      school_name: application_preview.school
+    )
   end
 
 private

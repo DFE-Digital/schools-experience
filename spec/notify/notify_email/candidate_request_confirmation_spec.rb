@@ -17,4 +17,6 @@ describe NotifyEmail::CandidateRequestConfirmation do
     placement_finish_date: "2020-01-14",
     placement_outcome: "I enjoy teaching",
     placement_start_date: "2020-01-07"
+
+  it_should_behave_like "email template from application preview", false
 end

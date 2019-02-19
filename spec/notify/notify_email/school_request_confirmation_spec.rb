@@ -18,4 +18,6 @@ describe NotifyEmail::SchoolRequestConfirmation do
     placement_start_date: "2020-01-07",
     school_name: "Springfield Elementary School",
     school_admin_name: "Seymour Skinner"
+
+  it_should_behave_like "email template from application preview", true
 end

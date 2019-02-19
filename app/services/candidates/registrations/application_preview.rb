@@ -43,8 +43,15 @@ module Candidates
       end
 
       def placement_availability
-        date_in_words(placement_preference.date_start) + ' to ' +
-          date_in_words(placement_preference.date_end)
+        "#{placement_date_start} to #{placement_date_end}"
+      end
+
+      def placement_date_start
+        date_in_words(placement_preference.date_start)
+      end
+
+      def placement_date_end
+        date_in_words(placement_preference.date_end)
       end
 
       def placement_outcome

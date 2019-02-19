@@ -102,6 +102,20 @@ describe Candidates::Registrations::ApplicationPreview do
     end
   end
 
+  context '#placement_date_start' do
+    it 'returns the correct value' do
+      expect(subject.placement_date_start).to eq \
+        placement_date_start.strftime('%d %B %Y')
+    end
+  end
+
+  context '#placement_date_end' do
+    it 'returns the correct value' do
+      expect(subject.placement_date_end).to eq \
+        placement_date_end.strftime('%d %B %Y')
+    end
+  end
+
   context '#placement_availability' do
     it 'returns the correct value' do
       expect(subject.placement_availability).to eq \

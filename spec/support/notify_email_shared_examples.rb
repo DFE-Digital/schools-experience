@@ -79,3 +79,89 @@ shared_examples_for "email template" do |template_id, personalisation|
     end
   end
 end
+
+
+shared_examples_for "email template from application preview" do |school_admin_included|
+  describe ".from_application_preview" do
+    specify { expect(described_class).to respond_to(:from_application_preview) }
+
+    let!(:school) { create(:bookings_school, urn: 11048) }
+    let(:rs) { build(:registration_session) }
+    let(:to) { "morris.szyslak@moes.net" }
+    let(:ap) do
+      Candidates::Registrations::ApplicationPreview.new(
+        account_check: rs.account_check,
+        address: rs.address,
+        placement_preference: rs.placement_preference,
+        subject_preference: rs.subject_preference,
+        background_check: rs.background_check
+      )
+    end
+
+    subject { described_class.from_application_preview(to, ap) }
+
+    context 'correctly assigning attributes' do
+      specify 'candidate_address is correctly-assigned' do
+        expect(subject.candidate_address).to eql(ap.full_address)
+      end
+
+      specify 'candidate_dbs_check_document is correctly-assigned' do
+        expect(subject.candidate_dbs_check_document).to eql(ap.dbs_check_document)
+      end
+
+      specify 'candidate_degree_stage is correctly-assigned' do
+        expect(subject.candidate_degree_stage).to eql(ap.degree_stage)
+      end
+
+      specify 'candidate_disability_needs is correctly-assigned' do
+        expect(subject.candidate_disability_needs).to eql(ap.access_needs)
+      end
+
+      specify 'candidate_email_address is correctly-assigned' do
+        expect(subject.candidate_email_address).to eql(ap.email_address)
+      end
+
+      specify 'candidate_name is correctly-assigned' do
+        expect(subject.candidate_name).to eql(ap.full_name)
+      end
+
+      specify 'candidate_phone_number is correctly-assigned' do
+        expect(subject.candidate_phone_number).to eql(ap.telephone_number)
+      end
+
+      specify 'candidate_teaching_stage is correctly-assigned' do
+        expect(subject.candidate_teaching_stage).to eql(ap.teaching_stage)
+      end
+
+      specify 'candidate_teaching_subject_first_choice is correctly-assigned' do
+        expect(subject.candidate_teaching_subject_first_choice).to eql(ap.teaching_subject_first_choice)
+      end
+
+      specify 'candidate_teaching_subject_second_choice is correctly-assigned' do
+        expect(subject.candidate_teaching_subject_second_choice).to eql(ap.teaching_subject_second_choice)
+      end
+
+      specify 'placement_finish_date is correctly-assigned' do
+        expect(subject.placement_finish_date).to eql(ap.placement_date_end)
+      end
+
+      specify 'placement_outcome is correctly-assigned' do
+        expect(subject.placement_outcome).to eql(ap.placement_outcome)
+      end
+
+      specify 'placement_start_date is correctly-assigned' do
+        expect(subject.placement_start_date).to eql(ap.placement_date_start)
+      end
+
+      specify 'school_name is correctly-assigned' do
+        expect(subject.school_name).to eql(ap.school)
+      end
+
+      if school_admin_included
+        specify 'school_admin_name is correctly-assigned' do
+          expect(subject.school_admin_name).to match(/PLACEHOLDER/)
+        end
+      end
+    end
+  end
+end
