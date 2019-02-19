@@ -27,6 +27,11 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
     allow(NotifyEmail::CandidateMagicLink).to receive(:new) { notification }
   end
 
+  after do
+    # Clean up redis
+    Candidates::Registrations::RegistrationStore.instance.delete! uuid
+  end
+
   context '#perform' do
     context 'with errors' do
       context 'retryable error' do
