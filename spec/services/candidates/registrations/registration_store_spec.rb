@@ -21,11 +21,12 @@ describe Candidates::Registrations::RegistrationStore do
     end
 
     it 'stores the key in redis correctly' do
-      expect(redis.get("pending_confirmations:sekret")).to eq session.to_json
+      expect(redis.get("test:registrations:sekret")).to eq \
+        session.to_json
     end
 
     it 'stores the key with the correct ttl' do
-      expect(redis.ttl("pending_confirmations:sekret")).to eq 86400
+      expect(redis.ttl("test:registrations:sekret")).to eq 86400
     end
 
     it 'returns the uuid' do
@@ -80,7 +81,7 @@ describe Candidates::Registrations::RegistrationStore do
       end
 
       it 'removes the key from redis' do
-        expect(redis.get("pending_confirmations:sekret")).to eq nil
+        expect(redis.get("test:registrations:sekret")).to eq nil
       end
     end
   end

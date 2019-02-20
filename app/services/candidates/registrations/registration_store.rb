@@ -7,7 +7,7 @@ module Candidates
       class SessionNotFound < StandardError; end
 
       def initialize
-        @namespace = 'pending_confirmations'.freeze
+        @namespace = 'registrations'.freeze
         @ttl = 1.day.to_i
         @redis = Redis.current
       end
@@ -41,7 +41,7 @@ module Candidates
       end
 
       def namespace(key)
-        "#{@namespace}:#{key}"
+        "#{Rails.env}:#{@namespace}:#{key}"
       end
 
       def serialize(session)
