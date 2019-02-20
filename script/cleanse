@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+# Clean invalid UTF-8 characters from files prior to import.
+# This is intended for use with the GiaS data dumps
+#
+# https://get-information-schools.service.gov.uk/Downloads
+#
+# Intended use:
+#
+# $./cleanse < edubasealldata20190220.csv > clean.csv
+
+STDOUT.puts(STDIN.read.scrub)
