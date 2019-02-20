@@ -1,7 +1,7 @@
 module Candidates
   module Registrations
     class ApplicationPreview
-      attr_accessor \
+      attr_reader \
         :account_check,
         :address,
         :placement_preference,
@@ -9,11 +9,11 @@ module Candidates
         :background_check
 
       def initialize(registration_session)
-        self.account_check = registration_session.account_check
-        self.placement_preference = registration_session.placement_preference
-        self.address = registration_session.address
-        self.subject_preference = registration_session.subject_preference
-        self.background_check = registration_session.background_check
+        @account_check = registration_session.account_check
+        @placement_preference = registration_session.placement_preference
+        @address = registration_session.address
+        @subject_preference = registration_session.subject_preference
+        @background_check = registration_session.background_check
       end
 
       def full_name
