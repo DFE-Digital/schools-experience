@@ -8,12 +8,12 @@ module Candidates
         :subject_preference,
         :background_check
 
-      def initialize(account_check:, placement_preference:, address:, subject_preference:, background_check:)
-        @account_check = account_check
-        @placement_preference = placement_preference
-        @address = address
-        @subject_preference = subject_preference
-        @background_check = background_check
+      def initialize(registration_session)
+        @account_check = registration_session.account_check
+        @placement_preference = registration_session.placement_preference
+        @address = registration_session.address
+        @subject_preference = registration_session.subject_preference
+        @background_check = registration_session.background_check
       end
 
       def full_name
@@ -43,8 +43,15 @@ module Candidates
       end
 
       def placement_availability
-        date_in_words(placement_preference.date_start) + ' to ' +
-          date_in_words(placement_preference.date_end)
+        "#{placement_date_start} to #{placement_date_end}"
+      end
+
+      def placement_date_start
+        date_in_words(placement_preference.date_start)
+      end
+
+      def placement_date_end
+        date_in_words(placement_preference.date_end)
       end
 
       def placement_outcome
