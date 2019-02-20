@@ -3,16 +3,21 @@ class Notify
 
   API_KEY = Rails.application.credentials[:notify_api_key].freeze
 
-  class APIKeyMissing < ArgumentError; end
   class RetryableError < ArgumentError; end
+
+  class << self
+    def notification_class
+      Thread.current[:notification_class] || Notifications::Client
+    end
+
+    def notification_class=(klass)
+      Thread.current[:notification_class] = klass
+    end
+  end
 
   def initialize(to:)
     self.to = to
-    if API_KEY.present?
-      self.notify_client = Notifications::Client.new(API_KEY)
-    else
-      fail(APIKeyMissing, "Notify API key is missing")
-    end
+    self.notify_client = self.class.notification_class.new(API_KEY)
   end
 
   def despatch!

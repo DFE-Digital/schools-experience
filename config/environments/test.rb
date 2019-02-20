@@ -1,3 +1,5 @@
+require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
