@@ -37,7 +37,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     end
 
     it "shows search results" do
-      expect(rendered).to match(/School experience placements near/)
+      expect(rendered).to match(/School experience placements matching/)
       expect(rendered).to have_css '#search-results'
     end
 

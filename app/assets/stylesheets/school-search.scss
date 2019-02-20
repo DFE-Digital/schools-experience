@@ -68,11 +68,12 @@
   }
 
   .school-search-form__submit {
-    @include govuk-grid-column(two-twelths, $class: false) ;
+    @include govuk-grid-column(two-twelths, $at: desktop, $class: false) ;
 
     .govuk-button {
+      width: 100%;
+
       @include govuk-media-query($from: desktop) {
-        width: 100%;
         margin-top: govuk-spacing(6);
       }
     }

@@ -21,4 +21,14 @@ module Candidates::SchoolHelper
   def format_school_phases(school)
     safe_join school.phases.map(&:name), ', '
   end
+
+  def describe_current_search(search)
+    if search.latitude.present? && search.longitude.present?
+      "near me"
+    elsif search.location.to_s.present?
+      "near #{search.location.to_s.humanize}"
+    else
+      "matching #{search.query.to_s.humanize}"
+    end
+  end
 end
