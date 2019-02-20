@@ -93,7 +93,7 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
         expect(NotifyEmail::CandidateMagicLink).to have_received(:new).with \
           to: 'test@example.com',
           school_name: 'Test School',
-          confirmation_link: 'http://example.com/candidates/schools/11048/registrations/placement_request?uuid=some-uuid'
+          confirmation_link: 'http://example.com/candidates/schools/11048/registrations/placement_request/new?uuid=some-uuid'
       end
 
       it 'sends the email' do

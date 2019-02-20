@@ -21,7 +21,7 @@ module Candidates
 
       def confirmation_link(uuid, registration_session)
         Rails.application.routes.url_helpers
-          .candidates_school_registrations_placement_request_url \
+          .candidates_school_registrations_placement_request_new_url \
             registration_session.subject_preference.school,
             uuid: uuid
       end

@@ -2,14 +2,14 @@
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-panel govuk-panel--confirmation">
       <h1 class="govuk-panel__title">
-        Your placement request has been <%= @placement_request.status_in_words %>
+        Your placement request has been sent
       </h1>
     </div>
     <h3 class="govuk-heading-m">What happens next</h3>
     <p>
-      Your request for a school experience placement
-      <%= @placement_request.date_range_in_words %>
-      will be forwarded to <%= @placement_request.school_name %>.
+      Your request for a school experience placement for
+      <%= @application_preview.placement_availability %>
+      will be forwarded to <%= @application_preview.school %>.
     </p>
     <p class="govuk-inset-text">
       The school will be in touch with you shortly. For example, during term
