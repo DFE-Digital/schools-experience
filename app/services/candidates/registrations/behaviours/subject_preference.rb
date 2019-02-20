@@ -25,6 +25,10 @@ module Candidates
           validates :subject_second_choice, inclusion: { in: :available_subject_choices }, if: -> { subject_second_choice.present? }
         end
 
+        def school
+          @school ||= Candidates::School.find urn
+        end
+
         def school_name
           school.name
         end
@@ -50,10 +54,6 @@ module Candidates
         end
 
       private
-
-        def school
-          @school ||= Candidates::School.find urn
-        end
 
         def applying_for_degree?
           degree_stage != NOT_APPLYING_FOR_DEGREE
