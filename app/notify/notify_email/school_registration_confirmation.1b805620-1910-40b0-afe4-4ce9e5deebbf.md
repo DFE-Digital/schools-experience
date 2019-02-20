@@ -9,4 +9,4 @@ You’ll receive confirmation emails when candidates have made a school experien
 ^ You should try to respond to requests within 10 working days
 
 ((school_experience_profile_link))
-((school_requests_and_bookings_link))
+((school_experience_dashboard_link))

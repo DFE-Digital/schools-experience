@@ -78,6 +78,37 @@ shared_examples_for "email template" do |template_id, personalisation|
       end
     end
   end
+
+  describe 'Template' do
+    subject { described_class.new(to: to, **personalisation) }
+    let(:template_path) { [Rails.root, "app", "notify", "notify_email"] }
+
+    let(:template) do
+      File.read(
+        Dir.glob(
+          "#{File.join(template_path)}/*#{subject.send(:template_id)}.md"
+        ).first
+      )
+    end
+
+    specify "every initialization paramater should appear in the template" do
+      template_params = template
+        .scan(/\(\((\w+)\)\)/)
+        .flatten
+        .sort
+        .uniq
+        .map(&:to_s)
+
+      initialization_params = subject
+        .method(:initialize)
+        .parameters
+        .map(&:last)
+        .reject { |ip| ip == :to }
+        .map(&:to_s)
+
+      expect(initialization_params).to match_array(template_params)
+    end
+  end
 end
 
 

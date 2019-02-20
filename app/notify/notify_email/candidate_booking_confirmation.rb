@@ -3,6 +3,7 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     :candidate_name,
     :placement_start_date,
     :placement_finish_date,
+    :school_address,
     :school_start_time,
     :school_finish_time,
     :school_dress_code,
@@ -16,13 +17,13 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     :placement_details,
     :placement_fee
 
-
   def initialize(
     to:,
     school_name:,
     candidate_name:,
     placement_start_date:,
     placement_finish_date:,
+    school_address:,
     school_start_time:,
     school_finish_time:,
     school_dress_code:,
@@ -41,6 +42,7 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     self.candidate_name = candidate_name
     self.placement_start_date = placement_start_date
     self.placement_finish_date = placement_finish_date
+    self.school_address = school_address
     self.school_start_time = school_start_time
     self.school_finish_time = school_finish_time
     self.school_dress_code = school_dress_code
@@ -69,6 +71,7 @@ private
       candidate_name: candidate_name,
       placement_start_date: placement_start_date,
       placement_finish_date: placement_finish_date,
+      school_address: school_address,
       school_start_time: school_start_time,
       school_finish_time: school_finish_time,
       school_dress_code: school_dress_code,

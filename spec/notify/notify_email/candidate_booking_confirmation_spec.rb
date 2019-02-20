@@ -6,6 +6,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
     candidate_name: "Kearney Zzyzwicz",
     placement_start_date: "2022-01-01",
     placement_finish_date: "2022-02-01",
+    school_address: "123 Main Street, Springfield, M2 3JF",
     school_start_time: "08:40",
     school_finish_time: "15:30",
     school_dress_code: "Smart casual, elbow patches",
