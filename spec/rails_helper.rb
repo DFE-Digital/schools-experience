@@ -67,6 +67,10 @@ RSpec.configure do |config|
       OpenStruct.new(data: { 'lat' => "53.4794892", 'lon' => "-2.2451148" })
     ])
   end
+
+  config.after :suite do
+    Redis.current.keys("test:*").each { |k| Redis.current.del k }
+  end
 end
 
 Shoulda::Matchers.configure do |config|
