@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # Clean invalid UTF-8 characters from files prior to import.
 # This is intended for use with the GiaS data dumps
