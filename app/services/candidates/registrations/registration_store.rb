@@ -34,6 +34,10 @@ module Candidates
         true
       end
 
+      def has_registration?(uuid)
+        @redis.exists namespace(uuid)
+      end
+
     private
 
       def delete(uuid)

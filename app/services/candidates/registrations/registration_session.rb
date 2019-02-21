@@ -15,6 +15,14 @@ module Candidates
           model.tap(&:flag_as_persisted!).attributes
       end
 
+      def email
+        account_check.email
+      end
+
+      def school
+        subject_preference.school
+      end
+
       # TODO add spec
       def account_check
         fetch AccountCheck
