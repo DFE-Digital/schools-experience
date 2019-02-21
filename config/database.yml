@@ -88,5 +88,5 @@ production: &production
   username: <%= ENV['DB_USERNAME'] %>
   password: <%= ENV['DB_PASSWORD'] %>
 
-staging:
+servertest:
   <<: *production
