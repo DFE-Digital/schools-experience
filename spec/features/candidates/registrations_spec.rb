@@ -36,17 +36,26 @@ feature 'Candidate Registrations', type: :feature do
     'some-uuid'
   end
 
-  let :registration_store do
-    double Candidates::Registrations::RegistrationStore, store!: uuid
+  let :registration_session do
+    FactoryBot.build :registration_session, current_time: today
   end
 
   before do
     allow(Candidates::School).to receive(:find) { school }
-    allow(Candidates::Registrations::RegistrationStore).to \
-      receive(:instance) { registration_store }
 
-    allow(Candidates::Registrations::SendEmailConfirmationJob).to \
-      receive(:perform_later)
+    allow(SecureRandom).to receive(:urlsafe_base64) { uuid }
+
+    allow(NotifyEmail::CandidateMagicLink).to receive :new do
+      double NotifyEmail::CandidateMagicLink, despatch!: true
+    end
+
+    allow(NotifyEmail::SchoolRequestConfirmation).to receive :new do
+      double NotifyEmail::SchoolRequestConfirmation, despatch!: true
+    end
+
+    allow(NotifyEmail::CandidateRequestConfirmation).to receive :new do
+      double NotifyEmail::CandidateRequestConfirmation, despatch!: true
+    end
   end
 
   scenario 'Candidate Registraion Journey' do
@@ -173,7 +182,12 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text \
       "Click the confirmation link in the email we’ve sent to the following email address to confirm your request for a placement at Test School:\ntest@example.com"
 
-    # Visit email confirmation link
-    # expect(page).to have_text 'Your placement request has been sent'
+    # Click email confirmation link
+    visit \
+      "/candidates/schools/#{school_urn}/registrations/placement_request/new?uuid=#{uuid}"
+
+    save_page
+    expect(page).to have_text \
+      "Your request for a school experience placement for #{today_in_words} to #{tomorrow_in_words} will be forwarded to Test School."
   end
 end
