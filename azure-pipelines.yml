@@ -62,6 +62,6 @@ steps:
     displayName: 'Copy Docker Compose file to staging area'
   - task: PublishBuildArtifacts@1
     inputs:
-      pathtoPublish: $(Build.ArtifactStagingDirectory)
-      artifactName: 'compose-school-experience.sh'
+      pathtoPublish: $(Build.ArtifactStagingDirectory)/script/compose-school-experience.sh
+      artifactName: 'compose-file'
     displayName: 'Publish the Docker Compose file'
