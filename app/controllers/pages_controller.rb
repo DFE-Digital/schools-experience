@@ -3,6 +3,10 @@ class PagesController < ApplicationController
     render template: sanitise_page
   end
 
+  def healthcheck
+    render plain: 'healthy'
+  end
+
 private
 
   def sanitise_page

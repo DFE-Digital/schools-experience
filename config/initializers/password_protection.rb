@@ -1,6 +1,4 @@
 if ENV['SECURE_USERNAME'].present? && ENV['SECURE_PASSWORD'].present?
-  ApplicationController.http_basic_authenticate_with(
-    name: ENV['SECURE_USERNAME'],
-    password: ENV['SECURE_PASSWORD']
-  )
+  ApplicationController.before_action :http_basic_authenticate
+  PagesController.skip_before_action :http_basic_authenticate, only: :healthcheck
 end
