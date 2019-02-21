@@ -57,7 +57,7 @@ steps:
     displayName: 'Push Docker image'
   - task: CopyFiles@2
     inputs:
-      contents: 'compose-school-experience.sh'
+      contents: 'script/compose-school-experience.sh'
       targetFolder: $(Build.ArtifactStagingDirectory)
     displayName: 'Copy Docker Compose file to staging area'
   - task: PublishBuildArtifacts@1
