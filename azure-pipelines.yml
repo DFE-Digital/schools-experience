@@ -55,3 +55,13 @@ steps:
       docker push $(dockerRegistry)/$(imageName):latest
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: 'Push Docker image'
+  - task: CopyFiles@2
+    inputs:
+      contents: 'compose-school-experience.sh'
+      targetFolder: $(Build.ArtifactStagingDirectory)
+    displayName: 'Copy Docker Compose file to staging area'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: 'compose-school-experience.sh'
+    displayName: 'Publish the Docker Compose file'
