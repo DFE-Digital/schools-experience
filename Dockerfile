@@ -36,3 +36,6 @@ RUN bundle install --without development --jobs=$(nproc --all) && \
 # Add code and compile assets
 COPY . .
 RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
+# Create symlinks for CSS files without digest hashes for use in error pages
+RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
