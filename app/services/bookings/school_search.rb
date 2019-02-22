@@ -78,7 +78,15 @@ private
   end
 
   def geolocate(location)
-    if (result = Geocoder.search(location)&.first)
+    result = Rails.cache.fetch(
+      Digest::SHA1.hexdigest(location.downcase.chomp),
+      expires_in: 1.month,
+      namespace: 'geocoder'
+    ) do
+      Geocoder.search(location)&.first
+    end
+
+    if result
       Bookings::School::GEOFACTORY.point(
         result.data.dig('lon'),
         result.data.dig('lat')
