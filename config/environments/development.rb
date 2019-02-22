@@ -74,6 +74,4 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
   end
-
-  Rails.application.routes.default_url_options = { host: 'http://localhost:5000' }
 end

@@ -37,7 +37,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
 
       it 'enqueues the confirmation email job' do
         expect(Candidates::Registrations::SendEmailConfirmationJob).to \
-          have_received(:perform_later).with uuid
+          have_received(:perform_later).with uuid, 'www.example.com'
       end
 
       it 'redirects to the check your email page' do
