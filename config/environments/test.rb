@@ -1,3 +1,5 @@
+require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -53,4 +55,7 @@ Rails.application.configure do
   end
 
   Rails.application.routes.default_url_options = { host: 'example.com' }
+
+  # Don't actually attempt to delivery emails during tests
+  Notify.notification_class = NotifyFakeClient
 end

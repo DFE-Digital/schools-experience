@@ -23,24 +23,18 @@ describe Notify do
   end
 
   describe 'Initialization' do
+    before do
+      @orig_notification_class = Notify.notification_class
+      Notify.notification_class = nil
+    end
+    after { Notify.notification_class = @orig_notification_class }
+
     specify 'should assign email address' do
       expect(subject.to).to eql(to)
     end
 
     specify 'should set up a notify client with the correct API key' do
       expect(described_class.new(to: to).notify_client).to be_a(Notifications::Client)
-    end
-
-    context 'When no Notify::API_KEY is present' do
-      before do
-        stub_const('Notify::API_KEY', "")
-      end
-
-      specify 'should raise a NotifyAPIKeyMissing error' do
-        expect { described_class.new(to: to) }.to(
-          raise_error(Notify::APIKeyMissing, "Notify API key is missing")
-        )
-      end
     end
   end
 
@@ -62,6 +56,57 @@ describe Notify do
         it "should fail with 'Not implemented'" do
           expect { subject.send(:template_id) }.to raise_error('Not implemented')
         end
+      end
+    end
+  end
+
+  describe 'custom notify_client' do
+    class StubNotification < Notify
+      attr_accessor :name
+
+      def initialize(to:, name:)
+        self.name = name
+        super(to: to)
+      end
+
+    private
+
+      def template_id
+        'ec830a0d-d032-4d4b-a107-xxxxyyyyzzzz'
+      end
+
+      def personalisation
+        { name: name }
+      end
+    end
+
+    before do
+      Notify.notification_class = NotifyFakeClient
+      NotifyFakeClient.reset_deliveries!
+    end
+
+    after { Notify.notification_class = nil }
+
+    describe '#despatch!' do
+      subject { StubNotification.new(to: 'test@user.com', name: 'Test User') }
+
+      it "should return hash of stubbed despatch" do
+        expect(subject.despatch!.keys).to eq(
+          %i(delivered_at template_id email_address personalisation)
+        )
+      end
+    end
+
+    describe '.test_deliveries' do
+      before do
+        StubNotification.new(to: 'test@user.com', name: 'Test User').despatch!
+      end
+
+      it "should be included in test_deliveries list" do
+        expect(NotifyFakeClient.deliveries.length).to eql(1)
+        expect(NotifyFakeClient.deliveries.first.keys).to eq(
+          %i(delivered_at template_id email_address personalisation)
+        )
       end
     end
   end
