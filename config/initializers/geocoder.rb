@@ -13,7 +13,6 @@ Geocoder.configure(
   # geocoding service request timeout, in seconds (default 3):
   # timeout: 5,
 
-  # set default units to kilometers:
   units: :miles,
 
   # caching (see [below](#caching) for details):
