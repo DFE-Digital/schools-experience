@@ -31,7 +31,7 @@ module Candidates
         end
       end
 
-      private
+    private
 
       def contact_information_params
         params.require(:candidates_registrations_contact_information).permit \
@@ -47,4 +47,3 @@ module Candidates
     end
   end
 end
-

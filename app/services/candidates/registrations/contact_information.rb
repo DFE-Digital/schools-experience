@@ -21,4 +21,3 @@ module Candidates
     end
   end
 end
-
