@@ -7,6 +7,11 @@ class PagesController < ApplicationController
     render plain: 'healthy'
   end
 
+  # FIXME this page should be removed
+  def fivehundred
+    raise "Test Exception Handler"
+  end
+
 private
 
   def sanitise_page
