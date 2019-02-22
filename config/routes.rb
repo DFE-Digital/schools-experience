@@ -11,8 +11,7 @@ Rails.application.routes.draw do
     resources :schools, only: %i{index show} do
       namespace :registrations do
         resource :placement_preference, only: %i(new create edit update)
-        resource :account_check, only: %i(new create edit update)
-        resource :address, only: %i(new create edit update)
+        resource :contact_information, only: %i(new create edit update)
         resource :subject_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
         resource :application_preview, only: %i(show)

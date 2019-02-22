@@ -88,7 +88,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/account_check/new'
+            '/candidates/schools/11048/registrations/contact_information/new'
         end
       end
     end

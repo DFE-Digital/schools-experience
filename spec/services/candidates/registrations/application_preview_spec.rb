@@ -21,14 +21,10 @@ describe Candidates::Registrations::ApplicationPreview do
     true
   end
 
-  let :account_check do
-    double Candidates::Registrations::AccountCheck,
+  let :contact_information do
+    double Candidates::Registrations::ContactInformation,
       full_name: 'Testy McTest',
-      email: 'test@example.com'
-  end
-
-  let :address do
-    double Candidates::Registrations::Address,
+      email: 'test@example.com',
       building: "Test building",
       street: "Test street",
       town_or_city: "Test town",
@@ -64,9 +60,8 @@ describe Candidates::Registrations::ApplicationPreview do
 
   let :registration_session do
     double Candidates::Registrations::RegistrationSession,
-      account_check: account_check,
+      contact_information: contact_information,
       placement_preference: placement_preference,
-      address: address,
       subject_preference: subject_preference,
       background_check: background_check
   end

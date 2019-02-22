@@ -7,13 +7,9 @@ FactoryBot.define do
     initialize_with do
       new \
         "registration" => {
-          "candidates_registrations_account_check" => {
+          "candidates_registrations_contact_information" => {
             "full_name" => 'Testy McTest',
             "email" => 'test@example.com',
-            "created_at" => current_time,
-            "updated_at" => current_time
-          },
-          "candidates_registrations_address" => {
             "building" => "Test building",
             "street" => "Test street",
             "town_or_city" => "Test town",

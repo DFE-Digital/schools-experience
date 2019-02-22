@@ -9,8 +9,8 @@ module Candidates
         registration_session = RegistrationStore.instance.retrieve! uuid
 
         notification = NotifyEmail::CandidateMagicLink.new \
-          to: registration_session.account_check.email,
-          school_name: registration_session.subject_preference.school_name,
+          to: registration_session.email,
+          school_name: registration_session.school.name,
           confirmation_link: confirmation_link(uuid, registration_session)
 
         notification.despatch!
@@ -21,7 +21,7 @@ module Candidates
       def confirmation_link(uuid, registration_session)
         Rails.application.routes.url_helpers
           .candidates_school_registrations_placement_request_new_url \
-            registration_session.subject_preference.school,
+            registration_session.school,
             uuid: uuid
       end
     end

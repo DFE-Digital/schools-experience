@@ -2,40 +2,38 @@ module Candidates
   module Registrations
     class ApplicationPreview
       attr_reader \
-        :account_check,
-        :address,
+        :contact_information,
         :placement_preference,
         :subject_preference,
         :background_check
 
       def initialize(registration_session)
-        @account_check = registration_session.account_check
+        @contact_information = registration_session.contact_information
         @placement_preference = registration_session.placement_preference
-        @address = registration_session.address
         @subject_preference = registration_session.subject_preference
         @background_check = registration_session.background_check
       end
 
       def full_name
-        account_check.full_name
+        contact_information.full_name
       end
 
       def full_address
         [
-          address.building,
-          address.street,
-          address.town_or_city,
-          address.county,
-          address.postcode
+          contact_information.building,
+          contact_information.street,
+          contact_information.town_or_city,
+          contact_information.county,
+          contact_information.postcode
         ].compact.join(', ')
       end
 
       def telephone_number
-        address.phone
+        contact_information.phone
       end
 
       def email_address
-        account_check.email
+        contact_information.email
       end
 
       def school

@@ -1,0 +1,33 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">Enter your contact details</h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p>
+          Your details will be used by schools to contact you about placements once
+          you’ve sent them a school experience request.
+        </p>
+        <%= form_for contact_information, url: candidates_school_registrations_contact_information_path do |f| %>
+          <%= GovukElementsErrorsHelper.error_summary contact_information, 'There is a problem', '' %>
+
+          <%= f.text_field :full_name %>
+          <%= f.telephone_field :phone %>
+          <%= f.email_field :email %>
+
+          <h2 class="govuk-heading-m">Address</h2>
+          <%= f.text_field :building %>
+          <% if f.object.errors[:street].any? %>
+            <%= f.text_field :street %>
+          <% else %>
+            <%= f.text_field :street, label_options: { class: 'govuk-visually-hidden' } %>
+          <% end %>
+          <%= f.text_field :town_or_city, class: 'govuk-!-width-two-thirds' %>
+          <%= f.text_field :county, class: 'govuk-!-width-two-thirds' %>
+          <%= f.text_field :postcode, class: 'govuk-input govuk-input--width-10' %>
+
+        <%= f.submit 'Continue' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
