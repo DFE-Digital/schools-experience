@@ -1,4 +1,4 @@
-Feature: Internal server error page
+Feature: Unprocessable entity error page
     To inform me something I have done may not have been saved
     As a user
     I would like to see an informative error page

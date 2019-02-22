@@ -1,4 +1,4 @@
-Feature: Page not found error
+Feature: Page not found error page
     To inform me I the page I navigated to does not exist
     As a user
     I would like to see an informative error page

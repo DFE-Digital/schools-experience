@@ -1,4 +1,4 @@
-Feature: Page not found error page
+Feature: Internal server error page
     To inform me that there is a problem with the service
     As a user
     I would like to see an informative error page
