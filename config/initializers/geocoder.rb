@@ -17,5 +17,5 @@ Geocoder.configure(
 
   # caching (see [below](#caching) for details):
   cache: AutoexpireCacheRedis.new(Redis.new(url: ENV['REDIS_CACHE_URL'].presence)),
-  cache_prefix: "geocoder:"
+  cache_prefix: "#{Rails.env}:geocoder:"
 )
