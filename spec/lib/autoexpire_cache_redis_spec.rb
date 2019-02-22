@@ -9,6 +9,7 @@ describe AutoexpireCacheRedis do
   let(:value) { "some_value" }
 
   before { subject[key] = value }
+  after { subject.del(key) }
 
   it 'should correctly set the value' do
     expect(subject[key]).to eql(value)
