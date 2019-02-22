@@ -9,4 +9,4 @@
 #
 # $./cleanse < edubasealldata20190220.csv > clean.csv
 
-STDOUT.puts(STDIN.read.scrub)
+STDOUT.puts(STDIN.read.scrub.encode(Encoding::UTF_8, universal_newline: true))
