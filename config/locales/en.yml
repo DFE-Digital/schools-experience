@@ -123,3 +123,17 @@ en:
       order: Sorted by
       query: Find what?
       location: Where?
+
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "No %{entry_name} found"
+          one: "Displaying 1 %{entry_name}"
+          other: "Displaying all %{count} %{entry_name}"
+      more_pages:
+        display_entries: "Showing %{first}&ndash;%{last} of %{total} %{entry_name}"
+
+  views:
+    pagination:
+      next: Next
+      previous: Previous
