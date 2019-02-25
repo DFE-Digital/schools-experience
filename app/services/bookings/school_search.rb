@@ -26,23 +26,14 @@ class Bookings::SchoolSearch
   # they can be safely chained
   def results
     Bookings::School
-      .close_to(
-        @point,
-        radius: @radius
-      )
+      .close_to(@point, radius: @radius)
       .that_provide(@subjects)
       .at_phases(@phases)
       .costing_upto(@max_fee)
-      .eager_load(
-        :school_type,
-        :phases,
-        :subjects,
-        bookings_schools_phases: :bookings_phase,
-        bookings_schools_subjects: :bookings_subject
-      )
-      .merge(Bookings::School.search(@query))
+      .search(@query)
       .order(order_by(@requested_order))
       .page(@page)
+      .includes(%i{subjects phases school_type})
   end
 
   class InvalidCoordinatesError < ArgumentError
