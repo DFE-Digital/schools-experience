@@ -23,6 +23,14 @@ describe Bookings::SchoolSearch do
     end
 
     specify "should cache search results" do
+      expect(
+        Rails.cache.read(
+          "geocoder:#{Digest::SHA1.hexdigest(location.downcase.chomp)}"
+        )
+      ).to eql(manchester_coordinates.first)
+    end
+
+    specify "should hit the cache for subsequent searches" do
       expect(Geocoder).to have_received(:search).with(location).at_most(:once)
     end
   end
