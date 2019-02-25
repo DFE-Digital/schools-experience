@@ -1,14 +1,41 @@
 require 'rails_helper'
 
 describe Bookings::SchoolSearch do
-  describe '#results' do
-    let(:manchester_coordinates) {
-      [
-        OpenStruct.new(data: { "lat" => "53.488", "lon" => "-2.242" }),
-        OpenStruct.new(data: { "lat" => "53.476", "lon" => "-2.229" })
-      ]
-    }
+  let(:manchester_coordinates) {
+    [
+      OpenStruct.new(data: { "lat" => "53.488", "lon" => "-2.242" }),
+      OpenStruct.new(data: { "lat" => "53.476", "lon" => "-2.229" })
+    ]
+  }
 
+  describe '#geolocation' do
+    let(:location) { 'Springfield' }
+    before do
+      allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
+    end
+
+    subject { Bookings::SchoolSearch.new('') }
+
+    before do
+      3.times do
+        subject.send(:geolocate, location)
+      end
+    end
+
+    specify "should cache search results" do
+      expect(
+        Rails.cache.read(
+          "geocoder:#{Digest::SHA1.hexdigest(location.downcase.chomp)}"
+        )
+      ).to eql(manchester_coordinates.first)
+    end
+
+    specify "should hit the cache for subsequent searches" do
+      expect(Geocoder).to have_received(:search).with(location).at_most(:once)
+    end
+  end
+
+  describe '#results' do
     context 'Search Criteria' do
       before do
         allow(Geocoder).to receive(:search).and_return([])
