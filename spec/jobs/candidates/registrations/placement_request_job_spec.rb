@@ -58,11 +58,19 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
       end
 
       context 'retryable error' do
-        let :exponentially_longer do
-          3.seconds.from_now.to_f
+        let :number_of_executions do
+          4
+        end
+
+        let :a_decent_amount_longer do
+          31250.seconds.from_now.to_i
         end
 
         before do
+          allow_any_instance_of(described_class).to receive(:executions) do
+            number_of_executions
+          end
+
           allow(placement_request_action).to receive :perform! do
             raise Notify::RetryableError
           end
@@ -77,7 +85,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         it 'reenqueues the job' do
           expect(described_class.queue_adapter).to \
             have_received(:enqueue_at).with \
-              an_instance_of(described_class), exponentially_longer
+              an_instance_of(described_class), a_decent_amount_longer
         end
       end
     end

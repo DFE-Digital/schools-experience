@@ -35,11 +35,19 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
   context '#perform' do
     context 'with errors' do
       context 'retryable error' do
-        let :exponentially_longer do
-          3.seconds.from_now.to_f
+        let :a_decent_amount_longer do
+          31250.seconds.from_now.to_i # ~8 hours 40mins
+        end
+
+        let :number_of_executions do
+          4
         end
 
         before do
+          allow_any_instance_of(described_class).to receive(:executions) do
+            number_of_executions
+          end
+
           allow(described_class.queue_adapter).to receive :enqueue_at
 
           allow(notification).to receive :despatch! do
@@ -54,7 +62,7 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
         it 'reenqueues the job' do
           expect(described_class.queue_adapter).to \
             have_received(:enqueue_at).with \
-              an_instance_of(described_class), exponentially_longer
+              an_instance_of(described_class), a_decent_amount_longer
         end
       end
 
