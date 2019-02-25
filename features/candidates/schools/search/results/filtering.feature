@@ -3,6 +3,9 @@ Feature: Filtering school search results
     As a potential candidate
     I want to be able to narrow down search results
 
+    Background:
+        Given the phases 'Primary' and 'Secondary' exist
+
     Scenario: Filtering by Education Phase
         Given I have searched for 'Manchester' and am on the results page
         Then I should see a 'Phases' filter on the left
