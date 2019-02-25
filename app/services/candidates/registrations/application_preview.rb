@@ -57,15 +57,7 @@ module Candidates
       end
 
       def placement_availability
-        "#{placement_date_start} to #{placement_date_end}"
-      end
-
-      def placement_date_start
-        date_in_words(placement_preference.date_start)
-      end
-
-      def placement_date_end
-        date_in_words(placement_preference.date_end)
+        placement_preference.availability
       end
 
       def placement_outcome
@@ -86,12 +78,6 @@ module Candidates
         else
           'No'
         end
-      end
-
-    private
-
-      def date_in_words(date)
-        date.strftime '%d %B %Y'
       end
     end
   end

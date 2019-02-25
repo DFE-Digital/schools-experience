@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_25_092622) do
+ActiveRecord::Schema.define(version: 2019_02_26_120359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,8 +77,6 @@ ActiveRecord::Schema.define(version: 2019_02_25_092622) do
   end
 
   create_table "candidates_registrations_placement_requests", force: :cascade do |t|
-    t.date "date_start", null: false
-    t.date "date_end", null: false
     t.text "objectives", null: false
     t.integer "urn", null: false
     t.string "degree_stage", null: false
@@ -90,6 +88,7 @@ ActiveRecord::Schema.define(version: 2019_02_25_092622) do
     t.boolean "has_dbs_check", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "availability", null: false
   end
 
   create_table "delayed_jobs", force: :cascade do |t|

@@ -51,7 +51,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         let :placement_preference_params do
           {
             candidates_registrations_placement_preference: {
-              date_start: tomorrow
+              availability: ''
             }
           }
         end
@@ -69,8 +69,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         let :placement_preference_params do
           {
             candidates_registrations_placement_preference: {
-              date_start: tomorrow,
-              date_end: (tomorrow + 3.days),
+              availability: 'Every second Friday',
               objectives: 'Become a teacher'
             }
           }
@@ -79,8 +78,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         it 'stores the placement_preference details in the session' do
           expect(registration_session).to have_received(:save).with \
             Candidates::Registrations::PlacementPreference.new \
-              date_start: tomorrow,
-              date_end: (tomorrow + 3.days),
+              availability: 'Every second Friday',
               objectives: 'Become a teacher'
         end
 
@@ -95,8 +93,6 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
   context 'with existing placement_preference in session' do
     let :existing_placement_preference do
       Candidates::Registrations::PlacementPreference.new \
-        date_start: tomorrow,
-        date_end: (tomorrow + 3.days),
         objectives: 'Become a teacher'
     end
 
@@ -125,8 +121,6 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         let :placement_preference_params do
           {
             candidates_registrations_placement_preference: {
-              date_start: nil,
-              date_end: (tomorrow + 3.days),
               objectives: 'Become a teacher'
             }
           }
@@ -145,8 +139,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         let :placement_preference_params do
           {
             candidates_registrations_placement_preference: {
-              date_start: tomorrow,
-              date_end: (tomorrow + 3.days),
+              availability: 'Every second Friday',
               objectives: 'I would like to become a teacher'
             }
           }
@@ -155,8 +148,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         it 'updates the session with the new details' do
           expect(registration_session).to have_received(:save).with \
             Candidates::Registrations::PlacementPreference.new \
-              date_start: tomorrow,
-              date_end: (tomorrow + 3.days),
+              availability: 'Every second Friday',
               objectives: 'I would like to become a teacher'
         end
 

@@ -12,9 +12,8 @@ describe NotifyEmail::SchoolRequestConfirmation do
     candidate_teaching_stage: "I want to become a teacher",
     candidate_teaching_subject_first_choice: "Sociology",
     candidate_teaching_subject_second_choice: "Philosophy",
-    placement_finish_date: "2020-01-14",
     placement_outcome: "I enjoy teaching",
-    placement_start_date: "2020-01-07",
+    placement_availability: "Late Smarch",
     school_name: "Springfield Elementary School",
     school_admin_name: "Seymour Skinner"
 

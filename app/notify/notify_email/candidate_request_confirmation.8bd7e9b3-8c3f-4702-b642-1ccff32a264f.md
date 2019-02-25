@@ -1,6 +1,6 @@
 Dear ((candidate_name))
 
-You've requested a placement from ((placement_start_date))-((placement_finish_date)) at ((school_name)).
+You've requested a placement at ((school_name)).
 
 ^ The school will be in touch with you shortly. For example, during term time this could typically mean within two weeks.
 
@@ -18,7 +18,7 @@ Personal details
 Request details
 
 * School or college: ((school_name))
-* Placement availability: ((placement_start_date))-((placement_finish_date))
+* Placement availability: ((placement_availability))
 * Placement outcome: ((placement_outcome))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))

@@ -13,9 +13,8 @@ describe NotifyEmail::CandidateRequestConfirmation do
     candidate_teaching_stage: "I want to become a teacher",
     candidate_teaching_subject_first_choice: "Sociology",
     candidate_teaching_subject_second_choice: "Philosophy",
-    placement_finish_date: "2020-01-14",
-    placement_outcome: "I enjoy teaching",
-    placement_start_date: "2020-01-07"
+    placement_availability: "Mid lent",
+    placement_outcome: "I enjoy teaching"
 
   it_should_behave_like "email template from application preview", false
 end

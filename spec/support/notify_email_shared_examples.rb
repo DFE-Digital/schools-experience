@@ -169,16 +169,12 @@ shared_examples_for "email template from application preview" do |school_admin_i
         expect(subject.candidate_teaching_subject_second_choice).to eql(ap.teaching_subject_second_choice)
       end
 
-      specify 'placement_finish_date is correctly-assigned' do
-        expect(subject.placement_finish_date).to eql(ap.placement_date_end)
-      end
-
       specify 'placement_outcome is correctly-assigned' do
         expect(subject.placement_outcome).to eql(ap.placement_outcome)
       end
 
-      specify 'placement_start_date is correctly-assigned' do
-        expect(subject.placement_start_date).to eql(ap.placement_date_start)
+      specify 'placement_availability is correctly-assigned' do
+        expect(subject.placement_availability).to eql(ap.placement_availability)
       end
 
       specify 'school_name is correctly-assigned' do

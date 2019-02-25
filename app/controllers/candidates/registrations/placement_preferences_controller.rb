@@ -37,8 +37,7 @@ module Candidates
 
       def placement_preference_params
         params.require(:candidates_registrations_placement_preference).permit \
-          :date_start,
-          :date_end,
+          :availability,
           :objectives
       end
     end

@@ -10,10 +10,9 @@ Feature: Request a school experience placement
     Scenario: Form contents
         Given I am on the 'Request school experience placement' page for my school of choice
         Then I should see a form with the following fields:
-            | Label                                       | Type          | Options |
-            | Start date                                  | date          |         |
-            | End date                                    | date          |         |
-            | What do you want to get out of a placement? | textarea      |         |
+            | Label                                          | Type          | Options |
+            | When are you available for placements?         | textarea      |         |
+            | What do you want to get out of your placement? | textarea      |         |
 
     Scenario: Word counting in placement objectives
         Given I am on the 'Request school experience placement' page for my school of choice
@@ -21,7 +20,7 @@ Feature: Request a school experience placement
 
     Scenario: Updating the word count
         Given I am on the 'Request school experience placement' page for my school of choice
-        When I enter 'The quick brown fox' into the 'What do you want to get out of a placement?' text area
+        When I enter 'The quick brown fox' into the 'What do you want to get out of your placement?' text area
         Then the 'placement objectives' word count should say 'You have 46 words remaining'
 
     Scenario: Submitting my data
