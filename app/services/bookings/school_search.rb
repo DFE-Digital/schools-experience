@@ -1,5 +1,5 @@
 class Bookings::SchoolSearch
-  attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :requested_order
+  attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :page, :requested_order
 
   AVAILABLE_ORDERS = [
     %w{distance Distance},
@@ -10,13 +10,14 @@ class Bookings::SchoolSearch
     AVAILABLE_ORDERS.map
   end
 
-  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: nil)
+  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: nil, page: nil)
     self.query           = query
     self.point           = parse_location(location)
     self.radius          = radius
     self.subjects        = subjects
     self.phases          = phases
     self.max_fee         = max_fee
+    self.page            = page
     self.requested_order = requested_order
   end
 
@@ -41,7 +42,7 @@ class Bookings::SchoolSearch
       )
       .merge(Bookings::School.search(@query))
       .order(order_by(@requested_order))
-      .uniq
+      .page(@page)
   end
 
   class InvalidCoordinatesError < ArgumentError

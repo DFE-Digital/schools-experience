@@ -52,6 +52,8 @@
 
         <hr />
 
+        <%= paginate @search.results %>
+
         <ul id="results">
             <% @search.results.each_with_index do |result, index| %>
             <li class="school-result">
