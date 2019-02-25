@@ -4,10 +4,16 @@ class ApplicationJob < ActiveJob::Base
   # failure
   retry_on(StandardError, attempts: 3, wait: :exponentially_longer)
 
-  # Retry | Backoff
-  # 1     | 108 seconds
-  # 2     | 24 minutes
-  # 3     | 2 hours 15 minutes
-  # 4     | 8 hours 40 minutes
-  A_DECENT_AMOUNT_LONGER = ->(executions) { ((executions + 1)**6) * 2 }
+  RETRYS = [
+    1.minute,
+    10.minutes,
+    1.hour,
+    8.hours
+  ].freeze
+
+  MAX_RETRY = 8.hours
+
+  A_DECENT_AMOUNT_LONGER = ->(executions) do
+    RETRYS[executions - 1] || MAX_RETRY
+  end
 end

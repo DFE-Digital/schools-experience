@@ -59,11 +59,11 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
       context 'retryable error' do
         let :number_of_executions do
-          4
+          2
         end
 
         let :a_decent_amount_longer do
-          31250.seconds.from_now.to_i
+          10.minutes.from_now.to_i
         end
 
         before do
@@ -77,7 +77,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
           allow(described_class.queue_adapter).to receive :enqueue_at
 
-          freeze_time # so we can easily compare 3.seconds.from_now
+          freeze_time # so we can easily compare a decent_amount_longer from now
 
           described_class.perform_later uuid
         end

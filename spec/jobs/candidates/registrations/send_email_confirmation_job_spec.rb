@@ -36,7 +36,7 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
     context 'with errors' do
       context 'retryable error' do
         let :a_decent_amount_longer do
-          31250.seconds.from_now.to_i # ~8 hours 40mins
+          8.hours.from_now.to_i
         end
 
         let :number_of_executions do
@@ -54,7 +54,7 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
             raise Notify::RetryableError
           end
 
-          freeze_time # so we can easily compare 3.seconds.from_now
+          freeze_time # so we can easily compare a decent_amount_longer from now
 
           described_class.perform_later uuid
         end
