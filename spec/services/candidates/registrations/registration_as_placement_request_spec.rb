@@ -28,8 +28,6 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "date_start" => (CURRENT_TIME + 3.days),
     "date_end" => (CURRENT_TIME + 4.days),
     "objectives" => "test the software",
-    "access_needs" => false,
-    "access_needs_details" => "",
     "degree_stage" => "I don't have a degree and am not studying for one",
     "degree_stage_explaination" => "",
     "degree_subject" => "Not applicable",

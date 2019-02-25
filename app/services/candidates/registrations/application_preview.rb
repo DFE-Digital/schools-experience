@@ -72,14 +72,6 @@ module Candidates
         placement_preference.objectives
       end
 
-      def access_needs
-        if placement_preference.access_needs
-          placement_preference.access_needs_details
-        else
-          'None'
-        end
-      end
-
       def teaching_subject_first_choice
         subject_first_choice
       end

@@ -14,8 +14,6 @@ module Candidates
       attribute :date_start, :date
       attribute :date_end, :date
       attribute :objectives, :string
-      attribute :access_needs, :boolean
-      attribute :access_needs_details, :string
     end
   end
 end

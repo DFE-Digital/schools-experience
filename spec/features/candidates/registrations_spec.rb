@@ -73,7 +73,6 @@ feature 'Candidate Registrations', type: :feature do
     within all('.govuk-date-input')[1] do
       fill_in 'Day',   with: tomorrow.day
       fill_in 'Month', with: tomorrow.month
-      fill_in 'Year',  with: tomorrow.year
     end
 
     fill_in 'What do you want to get out of a placement?', with: 'I enjoy teaching'
@@ -94,7 +93,6 @@ feature 'Candidate Registrations', type: :feature do
     end
 
     fill_in 'What do you want to get out of a placement?', with: 'I enjoy teaching'
-    choose 'No'
     click_button 'Continue'
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/contact_information/new"
@@ -155,7 +153,6 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text \
       "Placement availability #{today_in_words} to #{tomorrow_in_words}"
     expect(page).to have_text "Placement outcome I enjoy teaching"
-    expect(page).to have_text "Disability or access needs None"
     expect(page).to have_text "Degree stage Graduate or postgraduate"
     expect(page).to have_text "Degree subject Physics"
     expect(page).to have_text "Teaching stage I want to become a teacher"

@@ -6,7 +6,6 @@ describe NotifyEmail::SchoolRequestConfirmation do
     candidate_dbs_check_document: "Yes",
     candidate_degree_stage: "Postgraduate",
     candidate_degree_subject: "Sociology",
-    candidate_disability_needs: "None",
     candidate_email_address: "milhouse.vh@gmail.com",
     candidate_name: "Milhouse van Houten",
     candidate_phone_number: "01234 456 678",

@@ -4,10 +4,6 @@ en:
 
   placement_preference_errors: &placement_preference_errors
     attributes:
-      access_needs:
-        inclusion: "Select an option"
-      access_needs_details:
-        blank: "Enter details"
       date_end:
         blank: "Enter an end date"
         is_not_a_date: "Enter a valid date"
@@ -84,7 +80,6 @@ en:
       candidates_registrations_placement_preference:
         date_start: "Start date"
         date_end: "End date"
-        access_needs: "Do you have any disability or access needs?"
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
@@ -112,10 +107,6 @@ en:
           false: "No"
       candidates_registrations_placement_preference:
         objectives: What do you want to get out of a placement?
-        access_needs_details: "Provide details"
-        access_needs:
-          true: "Yes"
-          false: "No"
       order: Sorted by
       query: Find what?
       location: Where?

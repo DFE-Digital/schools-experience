@@ -71,8 +71,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
             candidates_registrations_placement_preference: {
               date_start: tomorrow,
               date_end: (tomorrow + 3.days),
-              objectives: 'Become a teacher',
-              access_needs: false
+              objectives: 'Become a teacher'
             }
           }
         end
@@ -82,8 +81,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
             Candidates::Registrations::PlacementPreference.new \
               date_start: tomorrow,
               date_end: (tomorrow + 3.days),
-              objectives: 'Become a teacher',
-              access_needs: false
+              objectives: 'Become a teacher'
         end
 
         it 'redirects to the next step' do
@@ -99,8 +97,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       Candidates::Registrations::PlacementPreference.new \
         date_start: tomorrow,
         date_end: (tomorrow + 3.days),
-        objectives: 'Become a teacher',
-        access_needs: false
+        objectives: 'Become a teacher'
     end
 
     context '#edit' do
@@ -130,8 +127,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
             candidates_registrations_placement_preference: {
               date_start: nil,
               date_end: (tomorrow + 3.days),
-              objectives: 'Become a teacher',
-              access_needs: false
+              objectives: 'Become a teacher'
             }
           }
         end
@@ -151,8 +147,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
             candidates_registrations_placement_preference: {
               date_start: tomorrow,
               date_end: (tomorrow + 3.days),
-              objectives: 'I would like to become a teacher',
-              access_needs: false
+              objectives: 'I would like to become a teacher'
             }
           }
         end
@@ -162,8 +157,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
             Candidates::Registrations::PlacementPreference.new \
               date_start: tomorrow,
               date_end: (tomorrow + 3.days),
-              objectives: 'I would like to become a teacher',
-              access_needs: false
+              objectives: 'I would like to become a teacher'
         end
 
         it 'redirects to the application preview' do

@@ -145,10 +145,6 @@ shared_examples_for "email template from application preview" do |school_admin_i
         expect(subject.candidate_degree_stage).to eql(ap.degree_stage)
       end
 
-      specify 'candidate_disability_needs is correctly-assigned' do
-        expect(subject.candidate_disability_needs).to eql(ap.access_needs)
-      end
-
       specify 'candidate_email_address is correctly-assigned' do
         expect(subject.candidate_email_address).to eql(ap.email_address)
       end

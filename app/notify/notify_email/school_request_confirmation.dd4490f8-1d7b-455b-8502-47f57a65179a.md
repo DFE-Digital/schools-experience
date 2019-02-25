@@ -19,7 +19,6 @@ Request details:
 School or college: ((school_name))
 Placement availability: ((placement_start_date))-((placement_finish_date))
 Placement outcome: ((placement_outcome))
-Disability or access needs: ((candidate_disability_needs))
 Degree stage: ((candidate_degree_stage))
 Degree subject: ((candidate_degree_subject))
 Teaching stage: ((candidate_teaching_stage))

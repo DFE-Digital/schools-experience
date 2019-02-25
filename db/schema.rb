@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_15_102428) do
+ActiveRecord::Schema.define(version: 2019_02_25_092622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,8 +80,6 @@ ActiveRecord::Schema.define(version: 2019_02_15_102428) do
     t.date "date_start", null: false
     t.date "date_end", null: false
     t.text "objectives", null: false
-    t.boolean "access_needs", null: false
-    t.text "access_needs_details"
     t.integer "urn", null: false
     t.string "degree_stage", null: false
     t.text "degree_stage_explaination"
