@@ -28,7 +28,7 @@
 
     <div class="govuk-grid-column-two-thirds" id="search-results">
 
-        <div class="pagination-info">
+        <div class="pagination-info higher">
           <div class="pagination-slice">
             <%= page_entries_info @search.results, entry_name: 'result' %>
           </div>
@@ -72,8 +72,8 @@
             <% end %>
         </ul>
 
-        <%- if @search.results.length > 10 %>
-          <div class="pagination-info bottom">
+        <%- if show_lower_navigation?(@search.results.length) %>
+          <div class="pagination-info lower">
             <%= paginate @search.results %>
           </div>
         <% end %>
