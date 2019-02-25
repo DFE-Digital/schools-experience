@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  get "/robots933456.txt", to: "pages#healthcheck"
-  
+  get "/healthcheck.txt", to: "pages#healthcheck"
+
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'
 
