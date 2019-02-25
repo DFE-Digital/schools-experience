@@ -71,5 +71,11 @@
             </li>
             <% end %>
         </ul>
+
+        <%- if @search.results.length > 10 %>
+          <div class="pagination-info bottom">
+            <%= paginate @search.results %>
+          </div>
+        <% end %>
     </div>
 </div>
