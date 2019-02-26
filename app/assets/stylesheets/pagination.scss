@@ -1,7 +1,15 @@
 .pagination-info {
-
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
+
+  @include govuk-media-query($until: tablet) {
+    flex-direction: column;
+    nav.pagination {
+      margin-top: 0.5rem;
+      text-align: left;
+    }
+  }
 
   div.pagination-slice {
     flex: 1;
@@ -9,23 +17,30 @@
 
   nav.pagination {
     flex: 1;
+    flex-grow: 2;
     text-align: right;
 
-    span.prev {
-      margin-right: 0.2rem;
-    }
+    span {
+      display: inline-block;
+      text-align: center;
 
-    span.page {
-      margin: 0rem 0.2rem;
-    }
+      a {
+        display: inline-block;
+        padding: 0rem 0.2rem;
+        min-width: 1rem;
+      }
 
-    span.next {
-      margin-left: 0.2rem;
+      &.prev {
+        margin-right: 0.1rem;
+      }
+
+      &.page {
+        margin: 0rem 0.2rem;
+      }
+
+      &.next {
+        margin-left: 0.1rem;
+      }
     }
   }
-
-  &.bottom {
-    // nothing for now
-  }
-
 }

@@ -20,11 +20,11 @@
     li {
       margin-top: 0.1em;
     }
-  }
 
-  a {
-    @include govuk-typography-weight-bold($important: true);
-    margin-bottom: 1em;
+    a {
+      @include govuk-typography-weight-bold($important: true);
+      margin-bottom: 1em;
+    }
   }
 
   hr {
