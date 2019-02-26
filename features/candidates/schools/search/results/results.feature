@@ -4,7 +4,8 @@ Feature: Schools search page contents
     I want to be able to see and understand search results
 
     Background:
-        Given there are some schools with a range of fees containing the word 'Manchester'
+        Given the phases 'Primary' and 'Secondary' exist
+        And there are some schools with a range of fees containing the word 'Manchester'
 
     Scenario: Search result contents
         Given I have searched for 'Manchester' and am on the results page
