@@ -99,7 +99,7 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
 
-  gem 'shoulda-matchers', '4.0.0.rc1'
+  gem 'shoulda-matchers', '4.0.1'
   gem 'rails-controller-testing'
 end
 
