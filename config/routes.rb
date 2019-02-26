@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   get "/healthcheck.txt", to: "pages#healthcheck"
-  get "/pages/fivehundred", to: "pages#fivehundred" #FIXME to remove
 
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'
