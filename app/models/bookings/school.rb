@@ -36,7 +36,8 @@ class Bookings::School < ApplicationRecord
 
   scope :that_provide, ->(subject_ids) do
     if subject_ids.present?
-      joins(:subjects).where(bookings_subjects: { id: subject_ids })
+      left_outer_joins(:bookings_schools_subjects)
+        .where(bookings_schools_subjects: { bookings_subject_id: subject_ids })
     else
       all
     end
@@ -44,7 +45,8 @@ class Bookings::School < ApplicationRecord
 
   scope :at_phases, ->(phase_ids) do
     if phase_ids.present?
-      joins(:phases).where(bookings_phases: { id: phase_ids })
+      left_outer_joins(:bookings_schools_phases)
+        .where(bookings_schools_phases: { bookings_phase_id: phase_ids })
     else
       all
     end

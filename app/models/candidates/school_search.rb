@@ -19,7 +19,7 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location, :order, :latitude, :longitude
+    attr_accessor :query, :location, :order, :latitude, :longitude, :page
     attr_reader :distance, :max_fee
 
     class << self
@@ -93,7 +93,8 @@ module Candidates
         subjects: subjects,
         phases: phases,
         max_fee: max_fee,
-        requested_order: order
+        requested_order: order,
+        page: page
       )
     end
 

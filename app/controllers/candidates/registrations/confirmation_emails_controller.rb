@@ -13,7 +13,7 @@ module Candidates
       def create
         uuid = RegistrationStore.instance.store! current_registration
 
-        SendEmailConfirmationJob.perform_later uuid
+        SendEmailConfirmationJob.perform_later uuid, request.host
 
         redirect_to candidates_school_registrations_confirmation_email_path \
           email: current_registration.email,

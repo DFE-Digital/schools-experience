@@ -12,6 +12,10 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
     'some-uuid'
   end
 
+  let :host do
+    'www.example.com'
+  end
+
   let :notification do
     double NotifyEmail::CandidateMagicLink, despatch!: true
   end
@@ -56,7 +60,7 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
 
           freeze_time # so we can easily compare a decent_amount_longer from now
 
-          described_class.perform_later uuid
+          described_class.perform_later uuid, host
         end
 
         it 'reenqueues the job' do
@@ -86,7 +90,7 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
         end
 
         it 'lets the error propogate' do
-          expect { described_class.perform_later uuid }.to raise_error \
+          expect { described_class.perform_later uuid, host }.to raise_error \
             Notifications::Client::RequestError
         end
       end
@@ -94,14 +98,14 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
 
     context 'without errors' do
       before do
-        described_class.perform_later uuid
+        described_class.perform_later uuid, host
       end
 
       it 'builds the email correctly' do
         expect(NotifyEmail::CandidateMagicLink).to have_received(:new).with \
           to: 'test@example.com',
           school_name: 'Test School',
-          confirmation_link: 'http://example.com/candidates/schools/11048/registrations/placement_request/new?uuid=some-uuid'
+          confirmation_link: 'http://www.example.com/candidates/schools/11048/registrations/placement_request/new?uuid=some-uuid'
       end
 
       it 'sends the email' do
