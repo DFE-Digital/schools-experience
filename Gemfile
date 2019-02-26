@@ -24,12 +24,6 @@ gem 'puma', '~> 3.11'
 gem 'sassc-rails'
 gem "autoprefixer-rails"
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
-
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -54,6 +48,14 @@ gem 'dotenv-rails'
 
 gem "font-awesome-rails"
 gem 'kaminari'
+
+group :development, :test, :build do
+  # Use Uglifier as compressor for JavaScript assets
+  gem 'uglifier', '>= 1.3.0'
+
+  # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+  gem 'webpacker'
+end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

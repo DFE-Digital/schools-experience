@@ -26,7 +26,7 @@ RUN apt-get update && \
 
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
-RUN bundle install --without development --jobs=$(nproc --all) && \
+RUN bundle install --without "development build" --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
 
@@ -51,7 +51,11 @@ COPY package.json yarn.lock ./
 RUN yarn install && yarn cache clean
 
 # compile assets
-RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed
+RUN bundle install --without development --jobs=$(nproc --all) && \
+    rm -rf /root/.bundle/cache && \
+    rm -rf /usr/local/bundle/cache
+
+RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 # Create symlinks for CSS files without digest hashes for use in error pages
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
