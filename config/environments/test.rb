@@ -57,8 +57,6 @@ Rails.application.configure do
     Bullet.raise = true
   end
 
-  Rails.application.routes.default_url_options = { host: 'example.com' }
-
   # Don't actually attempt to delivery emails during tests
   Notify.notification_class = NotifyFakeClient
 end
