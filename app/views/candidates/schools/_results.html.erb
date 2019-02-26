@@ -27,9 +27,14 @@
     </div>
 
     <div class="govuk-grid-column-two-thirds" id="search-results">
-        <p class="results-number">
-            Showing 1 - <%= @search.results.length %> of <%= @search.total_results %> schools and colleges
-        </p>
+
+        <div class="pagination-info higher">
+          <div class="pagination-slice">
+            <%= page_entries_info @search.results, entry_name: 'result' %>
+          </div>
+
+          <%= paginate @search.results %>
+        </div>
 
         <hr />
 
@@ -66,5 +71,11 @@
             </li>
             <% end %>
         </ul>
+
+        <%- if show_lower_navigation?(@search.results.length) %>
+          <div class="pagination-info lower">
+            <%= paginate @search.results %>
+          </div>
+        <% end %>
     </div>
 </div>

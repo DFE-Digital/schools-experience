@@ -29,7 +29,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
         max_fee: '60',
         subjects: %w{1 3}
       )
-      allow(@search).to receive(:results).and_return([@school])
+      allow(@search).to receive(:results).and_return(Kaminari.paginate_array([@school]).page(1))
 
       assign :search, @search
 

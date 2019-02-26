@@ -31,4 +31,8 @@ module Candidates::SchoolHelper
       "matching #{search.query.to_s.humanize}"
     end
   end
+
+  def show_lower_navigation?(count)
+    count >= 10
+  end
 end
