@@ -61,4 +61,9 @@ class Bookings::School < ApplicationRecord
   def to_param
     urn.to_s.presence
   end
+
+  def contact_email
+    # TODO
+    'CONTACT_EMAIL'
+  end
 end

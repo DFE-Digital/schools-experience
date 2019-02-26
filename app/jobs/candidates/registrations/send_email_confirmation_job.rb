@@ -3,8 +3,7 @@ module Candidates
     class SendEmailConfirmationJob < ApplicationJob
       queue_as :default
 
-      retry_on \
-        Notify::RetryableError, wait: :exponentially_longer, attempts: 5
+      retry_on Notify::RetryableError, wait: A_DECENT_AMOUNT_LONGER, attempts: 5
 
       def perform(uuid)
         registration_session = RegistrationStore.instance.retrieve! uuid
@@ -21,7 +20,7 @@ module Candidates
 
       def confirmation_link(uuid, registration_session)
         Rails.application.routes.url_helpers
-          .candidates_school_registrations_placement_request_url \
+          .candidates_school_registrations_placement_request_new_url \
             registration_session.subject_preference.school,
             uuid: uuid
       end

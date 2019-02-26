@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'
 
+
   namespace :candidates do
     root to: 'home#index'
 
@@ -18,6 +19,8 @@ Rails.application.routes.draw do
         resource :confirmation_email, only: %i(show create)
         resource :resend_confirmation_email, only: %i(create)
         resource :placement_request, only: %i(show create)
+        # email confirmation link
+        get 'placement_request/new', to: 'placement_requests#create'
       end
     end
   end

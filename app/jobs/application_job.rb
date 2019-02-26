@@ -3,4 +3,17 @@ class ApplicationJob < ActiveJob::Base
   # cascade up to DelayJob which will deal with notifying in the event of
   # failure
   retry_on(StandardError, attempts: 3, wait: :exponentially_longer)
+
+  RETRYS = [
+    1.minute,
+    10.minutes,
+    1.hour,
+    8.hours
+  ].freeze
+
+  MAX_RETRY = 8.hours
+
+  A_DECENT_AMOUNT_LONGER = ->(executions) do
+    RETRYS[executions - 1] || MAX_RETRY
+  end
 end
