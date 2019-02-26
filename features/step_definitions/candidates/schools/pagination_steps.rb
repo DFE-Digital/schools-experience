@@ -1,9 +1,3 @@
-Given("that the default results per page is set to {int}") do |int|
-  Kaminari.configure do |c|
-    c.default_per_page = int
-  end
-end
-
 Given("there are {int} schools in {string}") do |count, town|
   FactoryBot.create_list(:bookings_school, count, name: town)
   expect(Bookings::School.count).to eql(count)
@@ -18,13 +12,13 @@ Then("I should not see pagination links") do
 end
 
 Then("pagination page {int} should not be a hyperlink") do |int|
-  within('nav.pagination') do
+  within('.pagination-info.higher > nav.pagination') do
     expect(page).to have_css('span.current', text: '1')
   end
 end
 
 Then("pagination page {int} should be a hyperlink") do |int|
-  within('nav.pagination') do
+  within('.pagination-info.higher > nav.pagination') do
     expect(page).to have_css('a', text: '2')
   end
 end
@@ -36,7 +30,7 @@ When("I navigate to the second page of results") do
 end
 
 Then("there should be a {string} link in the pagination") do |string|
-  within('nav.pagination') do
+  within('.pagination-info.higher > nav.pagination') do
     expect(page).to have_css('a', text: string)
   end
 end
