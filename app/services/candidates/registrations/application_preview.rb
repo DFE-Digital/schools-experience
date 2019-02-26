@@ -1,11 +1,31 @@
 module Candidates
   module Registrations
     class ApplicationPreview
-      attr_reader \
-        :contact_information,
-        :placement_preference,
-        :subject_preference,
-        :background_check
+      # FIXME delegate other methods to placement_preference once remove dates
+      # pr is merged
+      attr_reader :placement_preference
+
+      delegate \
+        :full_name,
+        :email,
+        :phone,
+        :building,
+        :street,
+        :town_or_city,
+        :county,
+        :postcode,
+        to: :@contact_information
+
+      delegate \
+        :school_name,
+        :degree_stage,
+        :degree_subject,
+        :teaching_stage,
+        :subject_first_choice,
+        :subject_second_choice,
+        to: :@subject_preference
+
+      delegate :has_dbs_check, to: :@background_check
 
       def initialize(registration_session)
         @contact_information = registration_session.contact_information
@@ -14,30 +34,26 @@ module Candidates
         @background_check = registration_session.background_check
       end
 
-      def full_name
-        contact_information.full_name
-      end
-
       def full_address
         [
-          contact_information.building,
-          contact_information.street,
-          contact_information.town_or_city,
-          contact_information.county,
-          contact_information.postcode
+          building,
+          street,
+          town_or_city,
+          county,
+          postcode
         ].compact.join(', ')
       end
 
       def telephone_number
-        contact_information.phone
+        phone
       end
 
       def email_address
-        contact_information.email
+        email
       end
 
       def school
-        subject_preference.school_name
+        school_name
       end
 
       def placement_availability
@@ -64,28 +80,16 @@ module Candidates
         end
       end
 
-      def degree_stage
-        subject_preference.degree_stage
-      end
-
-      def degree_subject
-        subject_preference.degree_subject
-      end
-
-      def teaching_stage
-        subject_preference.teaching_stage
-      end
-
       def teaching_subject_first_choice
-        subject_preference.subject_first_choice
+        subject_first_choice
       end
 
       def teaching_subject_second_choice
-        subject_preference.subject_second_choice
+        subject_second_choice
       end
 
       def dbs_check_document
-        if background_check.has_dbs_check
+        if has_dbs_check
           'Yes'
         else
           'No'
