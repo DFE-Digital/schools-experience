@@ -97,30 +97,16 @@ feature 'Candidate Registrations', type: :feature do
     choose 'No'
     click_button 'Continue'
     expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/account_check/new"
+      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
 
-    # Submit account checks form with errors
+    # Submit contact information form with errors
     fill_in 'Full name', with: 'testy mctest'
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 
-    # Submit account checks form successfully
+    # Submit contact information form successfully
     fill_in 'Full name', with: 'testy mctest'
     fill_in 'Email address', with: 'test@example.com'
-    click_button 'Continue'
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/address/new"
-
-    # Submit registrations/address form with errors
-    fill_in 'Building', with: 'Test house'
-    fill_in 'Street', with: 'Test street'
-    fill_in 'Town or city', with: 'Test Town'
-    fill_in 'County', with: 'Testshire'
-    fill_in 'Postcode', with: 'TE57 1NG'
-    click_button 'Continue'
-    expect(page).to have_text "There is a problem"
-
-    # Submit registrations/address form successfully
     fill_in 'Building', with: 'Test house'
     fill_in 'Street', with: 'Test street'
     fill_in 'Town or city', with: 'Test Town'

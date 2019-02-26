@@ -40,4 +40,4 @@ Feature: Request a school experience placement
         Given I am on the 'Request school experience placement' page for my school of choice
         And I have filled in the form with accurate data
         When I submit the form
-        Then I should be on the 'Check if we already have your details' page for my school of choice
+        Then I should be on the 'Enter your contact details' page for my school of choice

@@ -38,13 +38,6 @@ en:
   activemodel:
     errors:
       models:
-        candidates/registrations/account_check:
-          attributes:
-            email:
-              blank: "Enter an email address"
-            full_name:
-              blank: "Enter your full name"
-
         candidates/registrations/subject_preference:
           <<: *subject_preference_errors
 
@@ -53,12 +46,16 @@ en:
             has_dbs_check:
               inclusion: "Select an option"
 
-        candidates/registrations/address:
+        candidates/registrations/contact_information:
           attributes:
             building:
               blank: "Enter a building"
             county:
               blank: "Enter a county"
+            email:
+              blank: "Enter an email address"
+            full_name:
+              blank: "Enter your full name"
             phone:
               blank: "Enter a telephone number"
             postcode:
@@ -99,8 +96,10 @@ en:
         has_dbs_check: These documents are used to confirm you’re suitable to work with children and young people
 
     label:
-      candidates_registrations_account_check:
+      candidates_registrations_contact_information:
         email: 'Email address'
+        building: "Building and street"
+        phone: "UK telephone number"
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"
@@ -111,9 +110,6 @@ en:
         has_dbs_check:
           true: "Yes"
           false: "No"
-      candidates_registrations_address:
-        building: "Building and street"
-        phone: "UK telephone number"
       candidates_registrations_placement_preference:
         objectives: What do you want to get out of a placement?
         access_needs_details: "Provide details"

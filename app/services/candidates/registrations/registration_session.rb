@@ -15,25 +15,22 @@ module Candidates
           model.tap(&:flag_as_persisted!).attributes
       end
 
+      # TODO add spec
       def email
-        account_check.email
+        contact_information.email
       end
 
       def school
         subject_preference.school
       end
 
-      # TODO add spec
-      def account_check
-        fetch AccountCheck
-      end
-
-      def address
-        fetch Address
-      end
-
       def background_check
         fetch BackgroundCheck
+      end
+
+      # TODO add specs for these
+      def contact_information
+        fetch ContactInformation
       end
 
       def placement_preference
