@@ -2,6 +2,7 @@ import { initAll } from "govuk-frontend";
 
 initAll();
 
+import "@stimulus/polyfills"
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 
