@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
   <head>
+    <%= render partial: 'google_analytics' if google_analytics_enabled? %>
     <title>DfE School Experience</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -16,8 +17,6 @@
     <%= favicon_link_tag 'govuk-apple-touch-icon-180x180.png', rel: 'apple-touch-icon', type: 'image/png', size: '180x180' %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
-
-  <%= render partial: 'google_analytics' if google_analytics_enabled? %>
 
   <body class="govuk-template__body ">
     <script>
