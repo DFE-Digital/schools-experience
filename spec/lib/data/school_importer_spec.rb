@@ -41,11 +41,19 @@ describe SchoolImporter do
     context 'Importing' do
       let!(:count_before) { Bookings::School.count }
       let(:school_type_id) { 2 }
+      let(:urns) { %w{100492 100494 100171} }
 
       before do
         # note these values are present in spec/sample_data/edubase.csv
-        create(:bookings_phase, edubase_id: 2)
-        create(:bookings_phase, edubase_id: 4)
+        {
+         1 => 'Nursery',
+         2 => 'Primary',
+         4 => 'Secondary',
+         6 => '16 plus',
+         7 => 'All through'
+        }.each do |i, name|
+          create(:bookings_phase, name: name, edubase_id: i)
+        end
         create(:bookings_school_type, edubase_id: school_type_id)
       end
 
@@ -85,6 +93,17 @@ describe SchoolImporter do
             expect(school.school_type).to eql(
               Bookings::SchoolType.find_by(edubase_id: school_type_id)
             )
+          end
+        end
+      end
+
+      specify 'the new records should have the corret phases' do
+        {
+          100492 => %w{Primary},
+          100171 => ['Nursery', 'Primary', 'Secondary', '16 plus']
+        }.each do |urn, phase_names|
+          Bookings::School.find_by(urn: urn).tap do |school|
+            expect(school.phases.map(&:name)).to match_array(phase_names)
           end
         end
       end
