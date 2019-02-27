@@ -4,8 +4,6 @@ describe Candidates::Registrations::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:date_start).of_type(:date).with_options null: false }
   it { is_expected.to have_db_column(:date_end).of_type(:date).with_options null: false }
   it { is_expected.to have_db_column(:objectives).of_type(:text).with_options null: false }
-  it { is_expected.to have_db_column(:access_needs).of_type(:boolean).with_options null: false }
-  it { is_expected.to have_db_column(:access_needs_details).of_type :text }
   it { is_expected.to have_db_column(:urn).of_type(:integer).with_options null: false }
   it { is_expected.to have_db_column(:degree_stage).of_type(:string).with_options null: false }
   it { is_expected.to have_db_column(:degree_stage_explaination).of_type :text }

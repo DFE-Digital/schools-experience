@@ -7,7 +7,6 @@ describe NotifyEmail::CandidateRequestConfirmation do
     candidate_dbs_check_document: "Yes",
     candidate_degree_stage: "Postgraduate",
     candidate_degree_subject: "Sociology",
-    candidate_disability_needs: "None",
     candidate_email_address: "tony.hancock@bbc.co.uk",
     candidate_name: "Tony Hancock",
     candidate_phone_number: "01234 456 678",

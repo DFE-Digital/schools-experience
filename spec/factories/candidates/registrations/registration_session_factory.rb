@@ -28,8 +28,6 @@ FactoryBot.define do
              "date_start" => (current_time + 3.days),
              "date_end" => (current_time + 4.days),
              "objectives" => "test the software",
-             "access_needs" => false,
-             "access_needs_details" => "",
              "created_at" => current_time,
              "updated_at" => current_time
           },

@@ -20,18 +20,6 @@
       %>
   </fieldset>
 
-  <fieldset class="govuk-fieldset disability-needs">
-    <%= f.radio_button_fieldset :access_needs do |field_set| %>
-      <span id="access-needs-hint" class="govuk-hint">
-        Tell us so we can make sure the school is able to cater for your requirements
-      </span>
-      <%= field_set.radio_input true do %>
-        <%= field_set.text_area :access_needs_details, rows: 5 %>
-      <% end %>
-      <%= field_set.radio_input false %>
-    <% end %>
-  </fieldset>
-
   <fieldset class="govuk-fieldset">
     <%= f.submit 'Continue' %>
   </fieldset>

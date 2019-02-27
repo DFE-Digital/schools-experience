@@ -7,7 +7,6 @@ shared_examples 'a placement preference' do
     it { is_expected.to respond_to :date_start }
     it { is_expected.to respond_to :date_end }
     it { is_expected.to respond_to :objectives }
-    it { is_expected.to respond_to :access_needs }
   end
 
   context 'validations' do
@@ -105,30 +104,6 @@ shared_examples 'a placement preference' do
       it 'adds an error to objectives' do
         expect(placement_preference.errors[:objectives]).to eq \
           ["Please use 50 words or fewer"]
-      end
-    end
-
-    context 'when access_needs are not a boolean' do
-      let :placement_preference do
-        described_class.new
-      end
-
-      it 'adds an error to access_needs' do
-        expect(placement_preference.errors[:access_needs]).to eq \
-          ['Select an option']
-      end
-    end
-
-    context 'when access_needs are present' do
-      context 'when access_needs_details are not present' do
-        let :placement_preference do
-          described_class.new access_needs: true
-        end
-
-        it 'adds an error to access_needs_details' do
-          expect(placement_preference.errors[:access_needs_details]).to eq \
-            ["Enter details"]
-        end
       end
     end
   end

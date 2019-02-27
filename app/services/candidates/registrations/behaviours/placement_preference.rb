@@ -19,9 +19,6 @@ module Candidates
             if: -> { date_start_is_a_date? && date_end_is_a_date? }
           validates :objectives, presence: true
           validate  :objectives_not_too_long, if: -> { objectives.present? }
-          validates :access_needs, inclusion: { in: [true, false] }
-          validates :access_needs_details,
-            presence: true, if: -> { access_needs.present? }
         end
 
       private

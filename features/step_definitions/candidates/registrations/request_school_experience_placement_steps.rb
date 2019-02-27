@@ -33,5 +33,4 @@ Given("I have filled in the form with accurate data") do
     And I fill in the date field "End date" with 27-02-2022
   )
   fill_in "What do you want to get out of a placement?", with: "I love teaching"
-  choose "No"
 end

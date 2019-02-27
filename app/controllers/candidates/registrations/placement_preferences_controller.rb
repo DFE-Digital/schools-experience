@@ -39,9 +39,7 @@ module Candidates
         params.require(:candidates_registrations_placement_preference).permit \
           :date_start,
           :date_end,
-          :objectives,
-          :access_needs,
-          :access_needs_details
+          :objectives
       end
     end
   end

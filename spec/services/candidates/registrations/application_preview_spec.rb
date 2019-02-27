@@ -9,14 +9,6 @@ describe Candidates::Registrations::ApplicationPreview do
     placement_date_start + 7.days
   end
 
-  let :access_needs do
-    true
-  end
-
-  let :access_needs_details do
-    'Access needs'
-  end
-
   let :has_dbs_check do
     true
   end
@@ -42,9 +34,7 @@ describe Candidates::Registrations::ApplicationPreview do
     double Candidates::Registrations::PlacementPreference,
       date_start: placement_date_start,
       date_end: placement_date_end,
-      objectives: "test the software",
-      access_needs: access_needs,
-      access_needs_details: access_needs_details
+      objectives: "test the software"
   end
 
   let :subject_preference do
@@ -126,32 +116,6 @@ describe Candidates::Registrations::ApplicationPreview do
   context '#placement_outcome' do
     it 'returns the correct value' do
       expect(subject.placement_outcome).to eq "test the software"
-    end
-  end
-
-  context '#access_needs' do
-    context 'with access needs' do
-      let :access_needs do
-        true
-      end
-
-      let :access_needs_details do
-        'Access needs'
-      end
-
-      it 'returns the correct value' do
-        expect(subject.access_needs).to eq access_needs_details
-      end
-    end
-
-    context 'without access needs' do
-      let :access_needs do
-        false
-      end
-
-      it 'returns the correct value' do
-        expect(subject.access_needs).to eq "None"
-      end
     end
   end
 
