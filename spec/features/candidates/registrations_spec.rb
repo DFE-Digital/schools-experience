@@ -135,9 +135,17 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "Teaching stage I want to become a teacher"
     expect(page).to have_text "Teaching subject - first choice Physics"
     expect(page).to have_text "Teaching subject - second choice Mathematics"
-    expect(page).to have_text "DBS check document Yes"
+    expect(page).to have_text "DBS certificate Yes"
 
-    # Send email confirmation
+    # Submit email confirmation form with errors
+    click_button 'Accept and send'
+    expect(page).to have_text 'must be accepted'
+    expect(page).not_to have_text \
+      "Click the confirmation link in the email we’ve sent to the following email address to confirm your request for a placement at Test School:\ntest@example.com"
+
+    # Submit email confirmation form successfully
+    check \
+      "By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our privacy policy"
     click_button 'Accept and send'
     expect(page).to have_text \
       "Click the confirmation link in the email we’ve sent to the following email address to confirm your request for a placement at Test School:\ntest@example.com"

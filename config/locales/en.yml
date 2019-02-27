@@ -113,6 +113,8 @@ en:
       candidates_registrations_placement_preference:
         availability: When are you available for placements?
         objectives: What do you want to get out of your placement?
+      candidates_registrations_privacy_policy:
+        acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="#" class="govuk-link">privacy policy</a>'
       order: Sorted by
       query: Find what?
       location: Where?
