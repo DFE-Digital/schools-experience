@@ -17,6 +17,8 @@
     <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
 
+  <%= render partial: 'google_analytics' if google_analytics_enabled? %>
+
   <body class="govuk-template__body ">
     <script>
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
