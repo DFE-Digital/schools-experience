@@ -1,7 +1,22 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Background and security checks</h1>
-    <p class="govuk-body-lead">Some schools will carry out these kinds of checks before offering placements.</p>
+    <p>
+      Some schools will ask you to undergo a criminal record check through the
+      <%= link_to 'Disclosure and Barring Service (DBS)', 'https://www.gov.uk/government/organisations/disclosure-and-barring-service/about' %>
+      before offering you a placement.
+    </p>
+    <p>
+      These are commonly known as ‘DBS checks’ and provide you with a ‘DBS certificate’ to show you’re suitable to work with children and young people.
+    </p>
+    <p>
+      If you don’t have a certificate, schools will let you know what you need to do before offering you a placement.
+    </p>
+    <p>
+      <strong>
+        <%= link_to "Find out more about 'DBS checks' and 'DBS certificates'", 'https://www.gov.uk/government/organisations/disclosure-and-barring-service/about' %>
+      </strong>
+    </p>
 
     <%= form_for background_check, url: candidates_school_registrations_background_check_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary background_check, 'There is a problem', '' %>
@@ -11,18 +26,8 @@
 
       <%= f.radio_button_fieldset :has_dbs_check do |fieldset| %>
         <%= fieldset.radio_input true %>
-        <%= fieldset.radio_input false do %>
-          <div class="govuk-form-group">
-            <%= label_tag 'message', class: 'govuk-label' do %>
-              Don't worry if you don’t have one but some schools may ask you to get one before you can go on their placements.
-            <% end %>
-          </div>
-        <% end %>
+        <%= fieldset.radio_input false %>
       <% end %>
-
-      <p class="govuk-inset-text">
-        Find out more about <%= link_to 'DBS checks and documents.', 'https://www.gov.uk/government/organisations/disclosure-and-barring-service/about' %>
-      </p>
 
       <fieldset class="govuk-fieldset">
         <%= f.submit 'Continue' %>
