@@ -9,9 +9,8 @@ export default class extends Controller {
 
   connect() {
     if ("geolocation" in navigator) {
-      for(var input of this.locationTargets) {
-        this.addLocationLink(input.getAttribute('id')) ;
-      }
+      this.addLocationLink() ;
+      this.toggleCoordsState() ;
     }
   }
 
@@ -23,23 +22,20 @@ export default class extends Controller {
   }
 
   removeCoords() {
-    if (this.latitudeTarget.value != '' || this.longitudeTarget.value != '') {
-      this.latitudeTarget.value = '' ;
-      this.longitudeTarget.value = '' ;
-      this.locationTarget.value = '' ;
-      this.element.classList.remove('school-search-form__location-field--using-coords') ;
-    }
+    this.latitudeTarget.value = '' ;
+    this.longitudeTarget.value = '' ;
+    this.toggleCoordsState() ;
   }
 
   setCoords(coords) {
     this.latitudeTarget.value = coords.latitude ;
     this.longitudeTarget.value = coords.longitude ;
-    this.locationTarget.value = this.currentLocationString ;
-    this.element.classList.add('school-search-form__location-field--using-coords') ;
+    this.toggleCoordsState() ;
   }
 
-  addLocationLink(input_id) {
-    const label = this.element.querySelectorAll('label[for="' + input_id + '"]')[0] ;
+  addLocationLink(el) {
+    const inputId = this.locationTarget.getAttribute('id') ;
+    const label = this.element.querySelectorAll('label[for="' + inputId + '"]')[0] ;
 
     if (!label)
       return ;
@@ -60,6 +56,18 @@ export default class extends Controller {
     label.parentNode.insertBefore(link, label) ;
 
     return link ;
+  }
+
+  toggleCoordsState() {
+    if (this.latitudeTarget.value != '' && this.longitudeTarget.value != '') {
+      this.locationTarget.value = this.currentLocationString ;
+      this.element.classList.add('school-search-form__location-field--using-coords') ;
+    } else {
+      this.latitudeTarget.value = '' ;
+      this.longitudeTarget.value = '' ;
+      this.locationTarget.value = '' ;
+      this.element.classList.remove('school-search-form__location-field--using-coords') ;
+    }
   }
 
   requestLocation(ev) {
