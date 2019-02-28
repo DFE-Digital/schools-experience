@@ -41,7 +41,7 @@ Rails.application.configure do
 #  config.action_mailer.delivery_method = :test
 
   # set the cache to use RAM
-  config.cache_store = :memory_store, { size: 2.megabytes }
+  config.cache_store = :null_store
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
