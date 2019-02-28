@@ -79,6 +79,8 @@ en:
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
+      candidates_registrations_subject_preference:
+        degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
         availability:
           - Tell us about your availability. For example, when you'll be
