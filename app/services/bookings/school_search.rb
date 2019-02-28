@@ -2,6 +2,7 @@ class Bookings::SchoolSearch
   attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :page, :requested_order
 
   AVAILABLE_ORDERS = [
+    %w{relevance Relevance},
     %w{distance Distance},
     %w{fee Fee}
   ].freeze
@@ -21,20 +22,18 @@ class Bookings::SchoolSearch
     self.requested_order = requested_order
   end
 
-  # Note, all of the scopes provided by +Bookings::School+ will not
-  # amend the +ActiveRecord::Relation+ if no param is provided, meaning
-  # they can be safely chained
   def results
-    Rails.logger.debug("sorting by '#{order_by(@requested_order)}'")
-    Bookings::School
-      .close_to(@point, radius: @radius)
-      .that_provide(@subjects)
-      .at_phases(@phases)
-      .costing_upto(@max_fee)
-      .search(@query)
-      .reorder(order_by(@requested_order))
-      .page(@page)
+    base_query
       .includes(%i{subjects phases school_type})
+      .reorder(order_by(@requested_order))
+      .close_to(@point, radius: @radius)
+      .page(@page)
+  end
+
+  def total_count
+    base_query
+      .close_to(@point, radius: @radius, include_distance: false)
+      .count
   end
 
   class InvalidCoordinatesError < ArgumentError
@@ -45,8 +44,19 @@ class Bookings::SchoolSearch
 
 private
 
+  # Note, all of the scopes provided by +Bookings::School+ will not
+  # amend the +ActiveRecord::Relation+ if no param is provided, meaning
+  # they can be safely chained
+  def base_query
+    Bookings::School
+      .that_provide(@subjects)
+      .at_phases(@phases)
+      .costing_upto(@max_fee)
+      .search(@query)
+  end
+
   def parse_location(location)
-    if location.is_a?(Hash)
+    if location.is_a?(Hash) || location.is_a?(OpenStruct)
       extract_coords(location) || raise(InvalidCoordinatesError)
     elsif location.present?
       geolocate(location)

@@ -5,15 +5,15 @@ Feature: Schools search page sorting
 
     Background:
         Given there there are schools with the following attributes:
-            | Name     | Fee | Location   |
-            | School 1 | 30  | Manchester |
-            | School 2 | 10  | Rochdale   |
-            | School 3 | 20  | Burnley    |
+            | Name              | Fee | Location   |
+            | Manchester School | 30  | Manchester |
+            | Rochdale School   | 10  | Rochdale   |
+            | Burnley School    | 20  | Burnley    |
 
-    @javascript
+    @javascript @not_cd
     Scenario: Sorting by distance
-        Given I have searched for 'Manchester' and provided my location
-        When I select 'Distance' in the 'Sorted by' select box
+        Given I have searched for 'School' and provided 'Bury' for my location
+        When I sort the results by distance
         Then the results should be sorted by distance, nearest to furthest
 
     @javascript

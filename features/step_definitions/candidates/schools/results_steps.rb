@@ -35,15 +35,6 @@ Given("I have searched for {string} and am on the results page") do |string|
   expect(path_with_query).to eql(path)
 end
 
-Given("I have searched for {string} and provided my location") do |string|
-  pending "candidate providing location not implemented just yet"
-  path = candidates_schools_path(query: string)
-  visit(path)
-  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
-  expect(path_with_query).to eql(path)
-end
-
-
 Given("there are {int} results") do |quantity|
   expect(page).to have_css('ul > li.school-result', count: quantity)
 end

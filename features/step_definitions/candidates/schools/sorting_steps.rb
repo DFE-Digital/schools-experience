@@ -1,3 +1,5 @@
+require 'cucumber/rspec/doubles'
+
 Given("there there are schools with the following attributes:") do |table|
   def locate(place)
     {
@@ -19,21 +21,47 @@ Given("there there are schools with the following attributes:") do |table|
   expect(Bookings::School.count).to eql(table.rows.length)
 end
 
-Then("the results should be sorted by distance, nearest to furthest") do
-  pending "sorting not yet implemented"
-  # should be ol, results will always be ordered by something?
-  # below is pseudocode
-  within('ul#results') do
-    actual = page.all('li.school-result .name').map(&:text).map(&:name)
-    expected = Bookings::School.close_to(@point, radius: 20).reorder('distance asc')
-    expect(expected).to eql(actual)
-  end
-end
-
 Then("the results should be sorted by fee, lowest to highest") do
   expect(
     page
       .all('#search-results > ul > li')
       .map{ |ele| ele['data-school-urn'].to_i }
   ).to eql(@schools.sort_by(&:fee).map(&:urn))
+end
+
+Given("I have searched for {string} and provided {string} for my location") do |query, location|
+  path = candidates_schools_path(query: query, location: location, radius: 50)
+  visit(path)
+
+  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
+  expect(path_with_query).to eql(path)
+end
+
+Then("the results should be sorted by distance, nearest to furthest") do
+  # proximity from Bury
+  urns_in_distance_order = [
+    @schools.detect { |s| s.name == "Rochdale School" },
+    @schools.detect { |s| s.name == "Manchester School" },
+    @schools.detect { |s| s.name == "Burnley School" }
+  ].map(&:urn)
+
+  expect(
+    page
+      .all('#search-results > ul > li')
+      .map{ |ele| ele['data-school-urn'].to_i }
+  ).to eql(urns_in_distance_order)
+end
+
+When("I sort the results by distance") do
+  RSpec::Mocks.with_temporary_scope do
+
+    bury_coordinates = [
+      OpenStruct.new(data: { "lat" => "53.596", "lon" => "-2.29" })
+    ]
+
+    allow(Geocoder).to receive(:search).and_return(bury_coordinates)
+
+    label = page.find('label', text: 'Sorted by')
+    select('Distance', from: label[:for])
+  end
 end
