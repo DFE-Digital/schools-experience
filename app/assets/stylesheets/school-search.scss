@@ -80,18 +80,42 @@
   }
 }
 
-#candidate-school-details ul {
-  @extend .govuk-list ;
-  @extend .govuk-list--bullet ;
-  @extend .govuk-body-s ;
-
-  a {
-    @extend .govuk-link ;
+#candidate-school-profile {
+  .school-map-container {
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    margin-top: 0;
+    @include govuk-responsive-margin(4, "bottom");
+    height: 0;
+    padding-bottom: 67%;
   }
 
-  li {
-    @include govuk-responsive-margin(4, "top") ;
-    @include govuk-responsive-margin(4, "bottom") ;
+  #school-map {
+    box-sizing: border-box;
+    position: absolute;
+    margin: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border: 1px solid $govuk-border-colour;
+  }
+
+  ul {
+    @extend .govuk-list ;
+    @extend .govuk-list--bullet ;
+    @extend .govuk-body-s ;
+
+    a {
+      @extend .govuk-link ;
+    }
+
+    li {
+      @include govuk-responsive-margin(4, "top") ;
+      @include govuk-responsive-margin(4, "bottom") ;
+    }
   }
 }
+
 

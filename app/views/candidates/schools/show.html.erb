@@ -3,7 +3,7 @@
             data: {controller: 'back-link'} %>
 
 <div class="govuk-grid-row govuk-!-margin-top-4">
-    <div class="govuk-grid-column-two-thirds" id="candidate-school-details">
+    <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
         <h1 class="govuk-heading-l"><%= @school.name %></h1>
 
         <%= simple_format @school.description %>
@@ -54,13 +54,13 @@
             </p>
         </div>
 
-        <%- if false -%>
         <div>
             <h1 class="govuk-heading-m">Location</h1>
-
-            <img class="school-map" src="/public/images/abschool.jpg" width="250" height="172" />
+            <div class="school-map-container">
+                <div id="school-map">
+                </div>
+            </div>
         </div>
-        <%- end -%>
 
         <p>
             <%= link_to "Request placement",
