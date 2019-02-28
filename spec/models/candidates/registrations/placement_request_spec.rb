@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementRequest, type: :model do
-  it { is_expected.to have_db_column(:date_start).of_type(:date).with_options null: false }
-  it { is_expected.to have_db_column(:date_end).of_type(:date).with_options null: false }
+  it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: false }
   it { is_expected.to have_db_column(:objectives).of_type(:text).with_options null: false }
   it { is_expected.to have_db_column(:urn).of_type(:integer).with_options null: false }
   it { is_expected.to have_db_column(:degree_stage).of_type(:string).with_options null: false }
@@ -24,8 +23,8 @@ describe Candidates::Registrations::PlacementRequest, type: :model do
           "registration" => {
             "candidates_registrations_background_check" => {},
             "candidates_registrations_contact_information" => {},
-             "candidates_registrations_placement_preference" => {},
-             "candidates_registrations_subject_preference" => {}
+            "candidates_registrations_placement_preference" => {},
+            "candidates_registrations_subject_preference" => {}
           }
       end
 

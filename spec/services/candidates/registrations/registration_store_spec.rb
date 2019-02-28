@@ -52,11 +52,6 @@ describe Candidates::Registrations::RegistrationStore do
       expect(returned).to eq session
     end
 
-    it 'preserves dates when deserializing' do
-      expect(returned.placement_preference.date_start).to eq \
-        session.placement_preference.date_start
-    end
-
     it 'preserves date times when deserializing' do
       expect(returned.placement_preference.created_at.to_i).to \
         eq session.placement_preference.created_at.to_i

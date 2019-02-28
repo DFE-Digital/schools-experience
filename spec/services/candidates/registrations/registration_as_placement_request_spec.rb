@@ -1,13 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationAsPlacementRequest do
-  # It's a date not a time,
-  # it just makes comparisions with date_end/date_start easier and we don't
-  # care too much about the registration_session's updated/created_at timestamps
-  CURRENT_TIME = Date.today
-
   let :session do
-    FactoryBot.build :registration_session, current_time: CURRENT_TIME
+    FactoryBot.build :registration_session
   end
 
   subject { described_class.new session }
@@ -25,8 +20,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
 
   EXPECTED_ATTRIBUTES = {
     "has_dbs_check" => true,
-    "date_start" => (CURRENT_TIME + 3.days),
-    "date_end" => (CURRENT_TIME + 4.days),
+    "availability" => "Every third Tuesday",
     "objectives" => "test the software",
     "degree_stage" => "I don't have a degree and am not studying for one",
     "degree_stage_explaination" => "",
