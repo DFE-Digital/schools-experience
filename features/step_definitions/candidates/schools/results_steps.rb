@@ -86,7 +86,6 @@ Given("there are some subjects") do
 end
 
 Then("it should have checkboxes for all subjects") do
-  pending "these are currently hardcoded"
   within('#search-filter') do
     @subjects.each do |subject|
       expect(page).to have_field(subject.name, type: 'checkbox')
@@ -97,19 +96,4 @@ end
 When("I select {string} in the {string} select box") do |option, label_text|
   label = page.find('label', text: label_text)
   select(option, from: label[:for])
-end
-
-Then("the results should be sorted by distance, nearest to furthest") do
-  pending "sorting not yet implemented"
-  # should be ol, results will always be ordered by something?
-  # below is pseudocode
-  within('ul#results') do
-    actual = page.all('li.school-result .name').map(&:text).map(&:name)
-    expected = Bookings::School.close_to(@point, radius: 20).reorder('distance asc')
-    expect(expected).to eql(actual)
-  end
-end
-
-Then("the results should be sorted by fee, lowest to highest") do
-  pending "sorting not yet implemented"
 end

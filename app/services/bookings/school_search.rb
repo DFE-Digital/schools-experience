@@ -25,13 +25,14 @@ class Bookings::SchoolSearch
   # amend the +ActiveRecord::Relation+ if no param is provided, meaning
   # they can be safely chained
   def results
+    Rails.logger.debug("sorting by '#{order_by(@requested_order)}'")
     Bookings::School
       .close_to(@point, radius: @radius)
       .that_provide(@subjects)
       .at_phases(@phases)
       .costing_upto(@max_fee)
       .search(@query)
-      .order(order_by(@requested_order))
+      .reorder(order_by(@requested_order))
       .page(@page)
       .includes(%i{subjects phases school_type})
   end

@@ -334,7 +334,7 @@ describe Bookings::SchoolSearch do
         end
 
         specify 'schools should be ordered alphabetically by name' do
-          expect(subject.map(&:name)).to eql([cardiff, bath].map(&:name))
+          expect(subject.map(&:name)).to eql([bath, cardiff].map(&:name))
         end
       end
 
