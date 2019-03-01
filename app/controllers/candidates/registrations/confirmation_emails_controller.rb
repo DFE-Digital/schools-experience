@@ -2,23 +2,23 @@ module Candidates
   module Registrations
     class ConfirmationEmailsController < RegistrationsController
       def show
-        @email = params[:email]
-        @school_name = params[:school_name]
-        @resend_path = candidates_school_registrations_resend_confirmation_email_path \
-          email: @email,
-          school_name: @school_name,
-          uuid: params[:uuid]
+        @email = current_registration.email
+        @school_name = current_registration.school.name
+        @resend_path = candidates_school_registrations_resend_confirmation_email_path
       end
 
       def create
-        uuid = RegistrationStore.instance.store! current_registration
+        current_registration.flag_as_pending_email_confirmation!
 
-        SendEmailConfirmationJob.perform_later uuid, request.host
+        RegistrationStore.instance.store! current_registration
 
-        redirect_to candidates_school_registrations_confirmation_email_path \
-          email: current_registration.email,
-          school_name: current_registration.school.name,
-          uuid: uuid
+        SendEmailConfirmationJob.perform_later \
+          current_registration.uuid,
+          request.host
+
+        redirect_to candidates_school_registrations_confirmation_email_path
+      rescue RegistrationSession::NotCompletedError
+        redirect_to candidates_school_registrations_application_preview_path
       end
     end
   end

@@ -12,10 +12,11 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
   end
 
   let! :registration_store do
-    double Candidates::Registrations::RegistrationStore, store!: uuid
+    double Candidates::Registrations::RegistrationStore, store!: 1
   end
 
   before do
+    allow(SecureRandom).to receive(:urlsafe_base64) { uuid }
     allow(Candidates::Registrations::RegistrationStore).to \
       receive(:instance) { registration_store }
     allow(Candidates::Registrations::RegistrationSession).to \
@@ -25,9 +26,38 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
   end
 
   context '#create' do
+    context 'failure' do
+      before do
+        allow(registration_session).to receive(:flag_as_pending_email_confirmation!) {
+          raise Candidates::Registrations::RegistrationSession::NotCompletedError
+        }
+
+        post candidates_school_registrations_confirmation_email_path(school)
+      end
+
+      it "doesn't store the session" do
+        expect(registration_store).not_to have_received(:store!).with \
+          registration_session
+      end
+
+      it "doesn't enqueues the confirmation email job" do
+        expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
+          have_received(:perform_later).with uuid, 'www.example.com'
+      end
+
+      it "redirects to the application preview path" do
+        expect(response).to redirect_to \
+          candidates_school_registrations_application_preview_path school
+      end
+    end
+
     context 'success' do
       before do
         post candidates_school_registrations_confirmation_email_path(school)
+      end
+
+      it 'marks the session as pending' do
+        expect(registration_session).to be_pending_email_confirmation
       end
 
       it 'stores the session' do
@@ -42,35 +72,27 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
 
       it 'redirects to the check your email page' do
         expect(response).to redirect_to \
-          candidates_school_registrations_confirmation_email_path \
-            school,
-            email: registration_session.email,
-            school_name: registration_session.school.name,
-            uuid: uuid
+          candidates_school_registrations_confirmation_email_path school
       end
     end
   end
 
   context '#show' do
     before do
-      get candidates_school_registrations_confirmation_email_path \
-        school,
-        email: 'test@test.com',
-        school_name: 'test school',
-        uuid: uuid
+      get candidates_school_registrations_confirmation_email_path school
     end
 
     it 'assigns email for the view' do
-      expect(assigns(:email)).to eq 'test@test.com'
+      expect(assigns(:email)).to eq 'test@example.com'
     end
 
     it 'assigns school name for the view' do
-      expect(assigns(:school_name)).to eq 'test school'
+      expect(assigns(:school_name)).to eq 'Test School'
     end
 
     it 'assigns retry path for the view' do
       expect(assigns(:resend_path)).to eq \
-        '/candidates/schools/11048/registrations/resend_confirmation_email?email=test%40test.com&school_name=test+school&uuid=some-uuid'
+        '/candidates/schools/11048/registrations/resend_confirmation_email'
     end
   end
 end

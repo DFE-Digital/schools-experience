@@ -2,15 +2,12 @@ module Candidates
   module Registrations
     class ResendConfirmationEmailsController < RegistrationsController
       def create
-        uuid = params[:uuid]
+        if current_registration.pending_email_confirmation?
+          SendEmailConfirmationJob.perform_later \
+            current_registration.uuid,
+            request.host
 
-        if RegistrationStore.instance.has_registration? uuid
-          SendEmailConfirmationJob.perform_later uuid
-
-          redirect_to candidates_school_registrations_confirmation_email_path \
-            email: params[:email],
-            school_name: params[:school_name],
-            uuid: uuid
+          redirect_to candidates_school_registrations_confirmation_email_path
         else
           render :session_expired
         end

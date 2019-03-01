@@ -13,9 +13,10 @@ module Candidates
       end
 
       def store!(registration_session)
-        uuid = SecureRandom.urlsafe_base64
-        @redis.set namespace(uuid), serialize(registration_session), ex: @ttl
-        uuid
+        @redis.set \
+          namespace(registration_session.uuid),
+          serialize(registration_session),
+          ex: @ttl
       end
 
       def retrieve!(uuid)
