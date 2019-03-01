@@ -5,7 +5,7 @@ module Candidates::ResultsHelper
   # columns) it uses the `#total_count` method provided by the supplied
   # Bookings::SchoolSearch object
   def school_results_info(school_search)
-    entry_name = school_search.total_count > 1 ? "results" : "result"
+    entry_name = "result".pluralize(school_search.total_count)
 
     if school_search.results.total_pages < 2
       t(
