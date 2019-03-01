@@ -34,7 +34,7 @@ module Candidates
         end
 
         def available_subject_choices
-          school.subjects.pluck :name
+          @available_subject_choices ||= school.subjects.pluck :name
         end
 
         def available_degree_stages
