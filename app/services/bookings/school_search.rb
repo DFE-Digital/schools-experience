@@ -26,14 +26,11 @@ class Bookings::SchoolSearch
     base_query
       .includes(%i{subjects phases school_type})
       .reorder(order_by(@requested_order))
-      .close_to(@point, radius: @radius)
       .page(@page)
   end
 
   def total_count
-    base_query
-      .close_to(@point, radius: @radius, include_distance: false)
-      .count
+    base_query(include_distance: false).count
   end
 
   class InvalidCoordinatesError < ArgumentError
@@ -47,8 +44,9 @@ private
   # Note, all of the scopes provided by +Bookings::School+ will not
   # amend the +ActiveRecord::Relation+ if no param is provided, meaning
   # they can be safely chained
-  def base_query
+  def base_query(include_distance: true)
     Bookings::School
+      .close_to(@point, radius: @radius, include_distance: include_distance)
       .that_provide(@subjects)
       .at_phases(@phases)
       .costing_upto(@max_fee)

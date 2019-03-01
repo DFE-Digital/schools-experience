@@ -353,4 +353,18 @@ describe Bookings::SchoolSearch do
       end
     end
   end
+
+  describe '#total_count' do
+    let!(:matching_schools) do
+      create_list(:bookings_school, 8)
+    end
+
+    let!(:non_matching_school) do
+      create(:bookings_school, name: "Non-matching establishment")
+    end
+
+    specify 'total count should match the number of matching schools' do
+      expect(Bookings::SchoolSearch.new("school").total_count).to eql(matching_schools.length)
+    end
+  end
 end
