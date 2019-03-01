@@ -20,12 +20,10 @@ describe Candidates::Registrations::PlacementRequest, type: :model do
     context 'invalid session' do
       let :invalid_session do
         Candidates::Registrations::RegistrationSession.new \
-          "registration" => {
-            "candidates_registrations_background_check" => {},
-            "candidates_registrations_contact_information" => {},
-            "candidates_registrations_placement_preference" => {},
-            "candidates_registrations_subject_preference" => {}
-          }
+          "candidates_registrations_background_check" => {},
+          "candidates_registrations_contact_information" => {},
+          "candidates_registrations_placement_preference" => {},
+          "candidates_registrations_subject_preference" => {}
       end
 
       it 'raises a validation error' do

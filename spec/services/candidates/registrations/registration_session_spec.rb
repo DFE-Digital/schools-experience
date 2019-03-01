@@ -20,24 +20,24 @@ describe Candidates::Registrations::RegistrationSession do
       end
 
       it 'adds the registration key to the session' do
-        expect(session['registration']).to eq({})
+        expect(session).to eq({})
       end
     end
 
     context 'when registration key is set' do
       let :session do
-        { 'registration' => { 'some' => 'information' } }
+        { 'some' => 'information' }
       end
 
       it "doesn't over write the registration key" do
-        expect(session['registration']).to eq 'some' => 'information'
+        expect(session).to eq 'some' => 'information'
       end
     end
   end
 
   context '#save' do
     let :session do
-      { 'registration' => { 'some' => 'information' } }
+      { 'some' => 'information' }
     end
 
     let :model do
@@ -50,7 +50,7 @@ describe Candidates::Registrations::RegistrationSession do
 
     it 'stores the models attributes under the correct key' do
       expect(
-        session['registration']['candidates_registrations_background_check']
+        session['candidates_registrations_background_check']
       ).to eq \
         'has_dbs_check' => true,
         'created_at' => date,
@@ -58,17 +58,15 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     it 'doesnt over write other keys' do
-      expect(session['registration']['some']).to eq 'information'
+      expect(session['some']).to eq 'information'
     end
   end
 
   context '#fetch' do
     let :session do
       {
-        'registration' => {
-          'candidates_registrations_background_check' => {
-            'has_dbs_check' => true
-          }
+        'candidates_registrations_background_check' => {
+          'has_dbs_check' => true
         }
       }
     end

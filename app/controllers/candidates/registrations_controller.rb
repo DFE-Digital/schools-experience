@@ -7,7 +7,11 @@ module Candidates
     end
 
     def current_registration
-      @current_registration ||= Registrations::RegistrationSession.new(session)
+      @current_registration ||= school_session.current_registration
+    end
+
+    def school_session
+      @school_session ||= Registrations::SchoolSession.new current_urn, session
     end
 
     def current_urn
