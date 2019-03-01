@@ -1,5 +1,7 @@
-Then("the {string} word count should say {string}") do |string, string2|
-  pending "awaiting patch to form builder enabling counts"
+Then("the {string} word count should say {string}") do |label_text, expectation|
+  within(page.find("label", text: label_text).ancestor('div.govuk-form-group')) do
+    expect(page).to have_css("span.govuk-character-count__message", text: expectation)
+  end
 end
 
 When("I enter {string} into the {string} text area") do |value, label|
