@@ -3,7 +3,7 @@ module Candidates::ResultsHelper
   # page_entries_info as provided by Kaminari. However, Instead of attempting
   # to build a subquery itself (which fails due to our reliance on calculated
   # columns) it uses the `#total_count` method provided by the supplied
-  # Bookings::SchoolSearch object
+  # Candidates:::SchoolSearch object
   def school_results_info(school_search)
     entry_name = "result".pluralize(school_search.total_count)
 
