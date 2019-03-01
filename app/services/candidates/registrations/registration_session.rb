@@ -5,6 +5,7 @@ module Candidates
   module Registrations
     class RegistrationSession
       PENDING_EMAIL_CONFIRMATION_STATUS = 'pending_email_confirmation'.freeze
+      COMPLETED_STATUS = 'completed'.freeze
 
       def initialize(session)
         @registration_session = session
@@ -27,6 +28,16 @@ module Candidates
 
       def pending_email_confirmation?
         @registration_session['status'] == PENDING_EMAIL_CONFIRMATION_STATUS
+      end
+
+      def flag_as_completed!
+        raise NotCompletedError unless all_steps_completed?
+
+        @registration_session['status'] = COMPLETED_STATUS
+      end
+
+      def completed?
+        @registration_session['status'] == COMPLETED_STATUS
       end
 
       # TODO add spec

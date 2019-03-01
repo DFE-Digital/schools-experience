@@ -9,14 +9,20 @@ module Candidates
       end
 
       def create
-        uuid = params[:uuid]
-        if RegistrationStore.instance.has_registration? uuid
-          PlacementRequestJob.perform_later uuid
-          redirect_to \
-            candidates_school_registrations_placement_request_path uuid: uuid
-        else
-          render :session_expired
+        registration_session = RegistrationStore.instance.retrieve! params[:uuid]
+
+        unless registration_session.completed?
+          registration_session.flag_as_completed!
+
+          RegistrationStore.instance.store! registration_session
+
+          PlacementRequestJob.perform_later registration_session.uuid
         end
+
+        redirect_to candidates_school_registrations_placement_request_path \
+          uuid: registration_session.uuid
+      rescue RegistrationStore::SessionNotFound
+        render :session_expired
       end
     end
   end
