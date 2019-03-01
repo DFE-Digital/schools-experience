@@ -23,7 +23,10 @@
       :to_s,
       :to_s,
       { prompt: 'Select' },
-      { class: 'govuk-select' } %>
+      {
+        class: 'govuk-select',
+        label_options: { class: 'govuk-heading-m' }
+      } %>
   </div>
 
   <%= f.radio_button_fieldset :teaching_stage do |fieldset| %>
