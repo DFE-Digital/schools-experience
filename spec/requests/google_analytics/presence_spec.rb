@@ -13,11 +13,7 @@ describe "candidates/home/index.html.erb", type: :request do
 
   context 'When GA_TRACKING_ID is present in the environment' do
     before do
-      allow(ENV).to(
-        receive(:has_key?)
-          .with(tracking_id_key)
-          .and_return(true)
-      )
+      allow(ENV).to(receive(:[]).and_return(tracking_id_key))
       allow(ENV).to(
         receive(:fetch)
           .with(tracking_id_key)
