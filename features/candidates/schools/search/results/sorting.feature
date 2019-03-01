@@ -10,10 +10,10 @@ Feature: Schools search page sorting
             | Rochdale School   | 10  | Rochdale   |
             | Burnley School    | 20  | Burnley    |
 
-    @javascript @not_cd
+    @javascript
     Scenario: Sorting by distance
         Given I have searched for 'School' and provided 'Bury' for my location
-        When I sort the results by distance
+        When I select 'Distance' in the 'Sorted by' select box
         Then the results should be sorted by distance, nearest to furthest
 
     @javascript

@@ -30,7 +30,7 @@ Then("the results should be sorted by fee, lowest to highest") do
 end
 
 Given("I have searched for {string} and provided {string} for my location") do |query, location|
-  path = candidates_schools_path(query: query, location: location, radius: 50)
+  path = candidates_schools_path(query: query, location: location, distance: 25)
   visit(path)
 
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
@@ -50,18 +50,4 @@ Then("the results should be sorted by distance, nearest to furthest") do
       .all('#search-results > ul > li')
       .map{ |ele| ele['data-school-urn'].to_i }
   ).to eql(urns_in_distance_order)
-end
-
-When("I sort the results by distance") do
-  RSpec::Mocks.with_temporary_scope do
-
-    bury_coordinates = [
-      OpenStruct.new(data: { "lat" => "53.596", "lon" => "-2.29" })
-    ]
-
-    allow(Geocoder).to receive(:search).and_return(bury_coordinates)
-
-    label = page.find('label', text: 'Sorted by')
-    select('Distance', from: label[:for])
-  end
 end

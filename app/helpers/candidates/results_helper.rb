@@ -22,7 +22,8 @@ module Candidates::ResultsHelper
           school_search.results.offset_value + school_search.results.limit_value,
           school_search.total_count
         ].min,
-        total: school_search.total_count)
+        total: school_search.total_count
+      )
     end.html_safe
   end
 end
