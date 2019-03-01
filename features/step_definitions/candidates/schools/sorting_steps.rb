@@ -1,5 +1,3 @@
-require 'cucumber/rspec/doubles'
-
 Given("there there are schools with the following attributes:") do |table|
   def locate(place)
     {
