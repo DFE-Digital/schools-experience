@@ -7,11 +7,7 @@ describe GoogleAnalyticsHelper, type: :helper do
   describe '#google_analytics_enabled?' do
     context 'when GA_TRACKING_ID is present' do
       before do
-        allow(ENV).to(
-          receive(:has_key?)
-            .with(tracking_id_key)
-            .and_return(true)
-        )
+        allow(ENV).to(receive(:[]).and_return(tracking_id_key))
       end
 
       specify { expect(google_analytics_enabled?).to be true }

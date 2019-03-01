@@ -1,6 +1,6 @@
 module GoogleAnalyticsHelper
   def google_analytics_enabled?
-    ENV.has_key?('GA_TRACKING_ID')
+    ENV['GA_TRACKING_ID'].present?
   end
 
   def google_analytics_tracking_id
