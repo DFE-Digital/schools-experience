@@ -4,10 +4,8 @@
 module Candidates
   module Registrations
     class RegistrationSession
-      NAMESPACE = 'registration'.freeze
-
       def initialize(session)
-        @registration_session = session[NAMESPACE] ||= {}
+        @registration_session = session
       end
 
       def save(model)
@@ -46,7 +44,7 @@ module Candidates
       end
 
       def to_h
-        { NAMESPACE => @registration_session }
+        @registration_session
       end
 
       def to_json
