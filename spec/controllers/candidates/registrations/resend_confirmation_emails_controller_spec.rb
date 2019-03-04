@@ -7,53 +7,50 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
     FactoryBot.build :registration_session
   end
 
-  let! :uuid do
-    Candidates::Registrations::RegistrationStore.instance.store! \
-      registration_session
-  end
-
   before do
     allow(Candidates::Registrations::SendEmailConfirmationJob).to \
       receive :perform_later
+
+    allow(Candidates::Registrations::RegistrationSession).to \
+      receive(:new) { registration_session }
   end
 
   context '#create' do
-    context 'registration not found' do
+    context 'session not pending email confirmation' do
       before do
-        post \
-          candidates_school_registrations_resend_confirmation_email_path \
-            registration_session.school,
-            uuid: '12345'
+        post candidates_school_registrations_resend_confirmation_email_path \
+          registration_session.school
       end
 
-      it 'shows the user the session expired page' do
+      it "doesn't resend the confirmation email" do
+        expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
+          have_received(:perform_later).with \
+            registration_session.uuid, 'www.example.com'
+      end
+
+      it 'renders the session expired template' do
         expect(response).to render_template :session_expired
       end
     end
 
-    context 'registration found' do
+    context 'session pending email confirmation' do
       before do
-        post \
-          candidates_school_registrations_resend_confirmation_email_path \
-            registration_session.school,
-            email: registration_session.email,
-            school_name: registration_session.school.name,
-            uuid: uuid
+        registration_session.flag_as_pending_email_confirmation!
+
+        post candidates_school_registrations_resend_confirmation_email_path \
+          registration_session.school
       end
 
       it 'resends the confirmation email' do
         expect(Candidates::Registrations::SendEmailConfirmationJob).to \
-          have_received(:perform_later).with uuid
+          have_received(:perform_later).with \
+            registration_session.uuid, 'www.example.com'
       end
 
       it 'redirects to confirmation email show' do
         expect(response).to redirect_to \
-          candidates_school_registrations_confirmation_email_path(
-            registration_session.school,
-            email: registration_session.email,
-            school_name: registration_session.school.name,
-            uuid: uuid
-        )
+          candidates_school_registrations_confirmation_email_path \
+            registration_session.school
       end
     end
   end

@@ -28,10 +28,6 @@ describe Candidates::Registrations::RegistrationStore do
     it 'stores the key with the correct ttl' do
       expect(redis.ttl("test:registrations:sekret")).to eq 86400
     end
-
-    it 'returns the uuid' do
-      expect(returned_uuid).to eq 'sekret'
-    end
   end
 
   context '#get!' do
@@ -94,7 +90,7 @@ describe Candidates::Registrations::RegistrationStore do
 
     context 'when registration exists' do
       it 'returns true' do
-        expect(subject.has_registration?(returned_uuid)).to eq true
+        expect(subject.has_registration?(session.uuid)).to eq true
       end
     end
   end

@@ -62,6 +62,73 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
+  context '#uuid' do
+    before do
+      allow(SecureRandom).to receive(:urlsafe_base64) { 'sekret' }
+    end
+
+    context 'when uuid not already set' do
+      it 'generates and returns a new uuid' do
+        expect(described_class.new({}).uuid).to eq 'sekret'
+      end
+    end
+
+    context 'when uuid is already set' do
+      it 'returns the existing uuid' do
+        expect(described_class.new('uuid' => '17').uuid).to eq '17'
+      end
+    end
+  end
+
+  context '#pending_email_confirmation?' do
+    context 'when not pending email confirmation' do
+      it 'returns false' do
+        expect(described_class.new({})).not_to be_pending_email_confirmation
+      end
+    end
+
+    context 'when pending email confirmation' do
+      it 'returns true' do
+        expect(
+          described_class.new('status' => 'pending_email_confirmation')
+        ).to be_pending_email_confirmation
+      end
+    end
+  end
+
+  context '#flag_as_pending_email_confirmation!' do
+    context 'when registration is not complete' do
+      subject do
+        described_class.new({})
+      end
+
+      it 'raises an error' do
+        expect { subject.flag_as_pending_email_confirmation! }.to \
+          raise_error described_class::NotCompletedError
+      end
+
+      it "doesn't mark the session as pending_email_confirmation" do
+        expect(subject).not_to be_pending_email_confirmation
+      end
+    end
+
+    context 'when registration is complete' do
+      include_context 'Stubbed candidates school'
+
+      subject do
+        FactoryBot.build :registration_session
+      end
+
+      before do
+        subject.flag_as_pending_email_confirmation!
+      end
+
+      it 'marks the session as pending_email_confirmation' do
+        expect(subject).to be_pending_email_confirmation
+      end
+    end
+  end
+
   context '#fetch' do
     let :session do
       {
