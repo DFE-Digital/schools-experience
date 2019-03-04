@@ -112,4 +112,24 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       end
     end
   end
+
+  context '.school_location_map_url' do
+    include Candidates::MapsHelper
+
+    before do
+      @latitude = "53.4782"
+      @longitude = "-2.2299"
+      @school = OpenStruct.new(
+        name: 'Stub School',
+        coordinates: OpenStruct.new(latitude: @latitude, longitude: @longitude)
+        )
+    end
+
+    subject { school_location_map @school }
+
+    it('should return a correct Bing Maps url') do
+      expect(subject).to match(/^<img /)
+      expect(subject).to match("#{@latitude}%2C#{@longitude}")
+    end
+  end
 end

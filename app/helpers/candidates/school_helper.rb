@@ -35,4 +35,17 @@ module Candidates::SchoolHelper
   def show_lower_navigation?(count)
     count >= 10
   end
+
+  def school_location_map(school, zoom: 10, html_class: nil)
+    return unless school&.coordinates
+
+    url = static_map_url(
+      school.coordinates.latitude,
+      school.coordinates.longitude,
+      zoom: zoom,
+      mapsize: "628,420"
+    )
+
+    image_tag url, class: html_class
+  end
 end
