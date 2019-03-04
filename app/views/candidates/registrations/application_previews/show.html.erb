@@ -1,7 +1,9 @@
 <div class="govuk-grid-row" id="application-preview">
+  <%= form_for @privacy_policy, url: candidates_school_registrations_confirmation_email_path do |f| %>
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Check your answers before requesting your placement</h1>
     <p>A copy of the following details will be emailed to you once you've sent your placement request.</p>
+    <%= GovukElementsErrorsHelper.error_summary @privacy_policy, 'There is a problem', '' %>
     <dl class="govuk-summary-list">
 
       <h2 class="govuk-heading-m">Personal details</h2>
@@ -76,11 +78,10 @@
   </div>
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Send your placement request</h2>
-    <%= form_for @privacy_policy, url: candidates_school_registrations_confirmation_email_path do |f| %>
       <div class="govuk-form-group">
         <%= f.check_box_input :acceptance %>
       </div>
       <%= f.submit 'Accept and send', class: 'govuk-button' %>
-    <% end %>
   </div>
+  <% end %>
 </div>

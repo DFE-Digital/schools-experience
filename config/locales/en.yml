@@ -62,6 +62,11 @@ en:
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
 
+        candidates/registrations/privacy_policy:
+          attributes:
+            acceptance:
+              accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
+
   activerecord:
     errors:
       models:
