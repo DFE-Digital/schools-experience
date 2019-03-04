@@ -39,6 +39,12 @@ class Bookings::SchoolSearch
     end
   end
 
+  class InvalidGeocoderResultError < ArgumentError
+    def initialize(msg = "Invalid geocoder result - :latitude or :longitude keys are missing", *args)
+      super(msg, *args)
+    end
+  end
+
 private
 
   # Note, all of the scopes provided by +Bookings::School+ will not
@@ -78,21 +84,42 @@ private
     end
   end
 
-  def geolocate(location)
-    result = Rails.cache.fetch(
-      Digest::SHA1.hexdigest(location.downcase.chomp),
-      expires_in: 1.month,
-      namespace: 'geocoder'
-    ) do
-      Geocoder.search(location)&.first
+  def geolocate(location, namespace: 'geocoder')
+    location_key = Digest::SHA1.hexdigest(location.downcase.chomp)
+
+    # check if it's cached - if it is, read it and return the point
+    if (cached_result = Rails.cache.read(location_key, namespace: namespace))
+      return geofactory_point(cached_result.latitude, cached_result.longitude)
     end
 
-    if result
-      Bookings::School::GEOFACTORY.point(
-        result.data.dig('lon'),
-        result.data.dig('lat')
-      )
+    # if it's not, geocode it, cache it and return the point
+    result = Geocoder.search(location)&.first
+
+    if result.nil?
+      Rails.logger.info("No Geocoder results found for #{location}")
+      return
     end
+
+    fail InvalidGeocoderResultError unless valid_geocoder_result?(result)
+
+    Rails.cache.write(
+      location_key,
+      result,
+      expires_in: 1.month,
+      namespace: namespace
+    )
+
+    geofactory_point(result.latitude, result.longitude)
+  end
+
+  def geofactory_point(lat, lon)
+    Bookings::School::GEOFACTORY.point(lon, lat)
+  end
+
+  def valid_geocoder_result?(result)
+    result.is_a?(Geocoder::Result::Base) &&
+      result.longitude.present? &&
+      result.latitude.present?
   end
 
   def order_by(requested_order)
