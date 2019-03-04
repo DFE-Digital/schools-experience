@@ -13,3 +13,9 @@ Geocoder.configure(
 
   units: :miles
 )
+
+# hardcode geocoder to return a specific single result when we're in the servertest
+# environment
+if Rails.env.eql?('servertest')
+  require Rails.root.join("lib", "servertest", "geocoder")
+end
