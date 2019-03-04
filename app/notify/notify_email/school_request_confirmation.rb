@@ -9,9 +9,8 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     :candidate_teaching_stage,
     :candidate_teaching_subject_first_choice,
     :candidate_teaching_subject_second_choice,
-    :placement_finish_date,
     :placement_outcome,
-    :placement_start_date,
+    :placement_availability,
     :school_name,
     :school_admin_name
 
@@ -27,9 +26,8 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     candidate_teaching_stage:,
     candidate_teaching_subject_first_choice:,
     candidate_teaching_subject_second_choice:,
-    placement_finish_date:,
     placement_outcome:,
-    placement_start_date:,
+    placement_availability:,
     school_name:,
     school_admin_name:
   )
@@ -44,9 +42,8 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     self.candidate_teaching_stage                 =        candidate_teaching_stage
     self.candidate_teaching_subject_first_choice  =        candidate_teaching_subject_first_choice
     self.candidate_teaching_subject_second_choice =        candidate_teaching_subject_second_choice
-    self.placement_finish_date                    =        placement_finish_date
     self.placement_outcome                        =        placement_outcome
-    self.placement_start_date                     =        placement_start_date
+    self.placement_availability                   =        placement_availability
     self.school_name                              =        school_name
     self.school_admin_name                        =        school_admin_name
 
@@ -57,7 +54,8 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     NotifyEmail::SchoolRequestConfirmation.new(
       to: to,
       candidate_address: application_preview.full_address,
-      candidate_dbs_check_document: application_preview.dbs_check_document, candidate_degree_stage: application_preview.degree_stage,
+      candidate_dbs_check_document: application_preview.dbs_check_document,
+      candidate_degree_stage: application_preview.degree_stage,
       candidate_degree_subject: application_preview.degree_subject,
       candidate_email_address: application_preview.email_address,
       candidate_name: application_preview.full_name,
@@ -65,9 +63,8 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
       candidate_teaching_stage: application_preview.teaching_stage,
       candidate_teaching_subject_first_choice: application_preview.teaching_subject_first_choice,
       candidate_teaching_subject_second_choice: application_preview.teaching_subject_second_choice,
-      placement_finish_date: application_preview.placement_date_end,
       placement_outcome: application_preview.placement_outcome,
-      placement_start_date: application_preview.placement_date_start,
+      placement_availability: application_preview.placement_availability,
       school_name: application_preview.school,
       school_admin_name: "PLACEHOLDER FOR SCHOOL ADMIN"
     )
@@ -91,9 +88,8 @@ private
       candidate_teaching_stage: candidate_teaching_stage,
       candidate_teaching_subject_first_choice: candidate_teaching_subject_first_choice,
       candidate_teaching_subject_second_choice: candidate_teaching_subject_second_choice,
-      placement_finish_date: placement_finish_date,
       placement_outcome: placement_outcome,
-      placement_start_date: placement_start_date,
+      placement_availability: placement_availability,
       school_name: school_name,
       school_admin_name: school_admin_name
     }

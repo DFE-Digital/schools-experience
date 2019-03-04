@@ -1,6 +1,6 @@
 Dear ((school_admin_name)),
 
-((candidate_name)) has sent you a request for school experience from ((placement_start_date)) to ((placement_finish_date)) at ((school_name)).
+((candidate_name)) has sent you a request for school experience at ((school_name)).
 
 # ((candidate_name)) request details
 
@@ -17,7 +17,7 @@ Request details
 Request details:
 
 School or college: ((school_name))
-Placement availability: ((placement_start_date))-((placement_finish_date))
+Placement availability: ((placement_availability))
 Placement outcome: ((placement_outcome))
 Degree stage: ((candidate_degree_stage))
 Degree subject: ((candidate_degree_subject))

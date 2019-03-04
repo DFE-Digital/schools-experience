@@ -1,14 +1,6 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ApplicationPreview do
-  let! :placement_date_start do
-    Date.tomorrow
-  end
-
-  let! :placement_date_end do
-    placement_date_start + 7.days
-  end
-
   let :has_dbs_check do
     true
   end
@@ -32,9 +24,8 @@ describe Candidates::Registrations::ApplicationPreview do
 
   let :placement_preference do
     double Candidates::Registrations::PlacementPreference,
-      date_start: placement_date_start,
-      date_end: placement_date_end,
-      objectives: "test the software"
+      objectives: "test the software",
+      availability: 'From Epiphany to Whitsunday'
   end
 
   let :subject_preference do
@@ -91,25 +82,9 @@ describe Candidates::Registrations::ApplicationPreview do
     end
   end
 
-  context '#placement_date_start' do
-    it 'returns the correct value' do
-      expect(subject.placement_date_start).to eq \
-        placement_date_start.strftime('%d %B %Y')
-    end
-  end
-
-  context '#placement_date_end' do
-    it 'returns the correct value' do
-      expect(subject.placement_date_end).to eq \
-        placement_date_end.strftime('%d %B %Y')
-    end
-  end
-
   context '#placement_availability' do
     it 'returns the correct value' do
-      expect(subject.placement_availability).to eq \
-        placement_date_start.strftime('%d %B %Y') + ' to ' +
-        placement_date_end.strftime('%d %B %Y')
+      expect(subject.placement_availability).to eq 'From Epiphany to Whitsunday'
     end
   end
 

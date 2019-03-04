@@ -4,17 +4,12 @@ en:
 
   placement_preference_errors: &placement_preference_errors
     attributes:
-      date_end:
-        blank: "Enter an end date"
-        is_not_a_date: "Enter a valid date"
-        should_not_be_before_date_start: "End date must not be earlier than start date"
-      date_start:
-        blank: "Enter a start date"
-        is_not_a_date: "Enter a valid date"
-        should_not_be_in_past: "Must not be in the past"
+      availability:
+        blank: "Enter your availability"
+        use_fewer_words: "Please use 150 words or fewer"
       objectives:
         blank: "Enter what you want to get out of a placement"
-        use_fifty_words_or_fewer: "Please use 50 words or fewer"
+        use_fewer_words: "Please use 150 words or fewer"
 
   subject_preference_errors: &subject_preference_errors
     attributes:
@@ -77,9 +72,6 @@ en:
       subject: Subject
       candidates_registrations_background_check:
         has_dbs_check: Do you have a DBS certificate?
-      candidates_registrations_placement_preference:
-        date_start: "Start date"
-        date_end: "End date"
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
@@ -87,6 +79,21 @@ en:
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
+      candidates_registrations_subject_preference:
+        degree_subject: Select the nearest or equivalent subject.
+      candidates_registrations_placement_preference:
+        availability:
+          - Tell us about your availability. For example, when you'll be
+            available for placements or any particular days or periods when you
+            won't.
+          - The school will contact you to arrange the exact date of your
+            placement and will use this information to offer you the best dates
+            it has available.
+          - Depending on availability and time of year, schools may not always
+            be able to offer you the exact dates you’re looking for.
+        objectives:
+          - Provide a short explanation about what you want to gain from your placement.
+          - This will help the school see if it can offer you the kind of placement you’re looking for.
 
     label:
       candidates_registrations_contact_information:
@@ -104,7 +111,8 @@ en:
           true: "Yes"
           false: "No"
       candidates_registrations_placement_preference:
-        objectives: What do you want to get out of a placement?
+        availability: When are you available for placements?
+        objectives: What do you want to get out of your placement?
       order: Sorted by
       query: Find what?
       location: Where?

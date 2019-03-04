@@ -1,0 +1,14 @@
+#placement-preference {
+  form {
+    label.govuk-heading-m {
+      .govuk-hint {
+        color: #0b0c0c;
+      }
+    }
+    span.govuk-hint {
+      &:first-child {
+        @include govuk-responsive-margin(3, "top");
+      }
+    }
+  }
+}

@@ -10,7 +10,10 @@ describe Bookings::SchoolSearch do
 
   describe '#geolocation' do
     let(:location) { 'Springfield' }
+    let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
+
     before do
+      allow(Rails).to receive(:cache).and_return(memory_store)
       allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
     end
 

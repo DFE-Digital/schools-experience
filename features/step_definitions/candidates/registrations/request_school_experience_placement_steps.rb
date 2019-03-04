@@ -14,7 +14,6 @@ Then("the {string} section should have {string} and {string} radio buttons") do 
   end
 end
 
-
 When("I click the {string} option in the {string} section") do |option, section|
   within(".#{section.parameterize}") do
     expect(choose(option)).to be_checked
@@ -30,9 +29,6 @@ Then("a text area labelled {string} should have appeared") do |string|
 end
 
 Given("I have filled in the form with accurate data") do
-  steps %(
-    When I fill in the date field "Start date" with 20-02-2022
-    And I fill in the date field "End date" with 27-02-2022
-  )
-  fill_in "What do you want to get out of a placement?", with: "I love teaching"
+  fill_in "When are you available for placements?", with: "Anytime!"
+  fill_in "What do you want to get out of your placement?", with: "I love teaching"
 end
