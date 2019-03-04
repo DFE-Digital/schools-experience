@@ -18,6 +18,7 @@ module Candidates
       validates :county, presence: true
       validates :postcode, presence: true
       validates :phone, presence: true
+      validates :phone, phone: true, if: :phone
     end
   end
 end

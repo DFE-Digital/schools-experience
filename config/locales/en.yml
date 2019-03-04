@@ -48,7 +48,7 @@ en:
             full_name:
               blank: "Enter your full name"
             phone:
-              blank: "Enter a telephone number"
+              invalid: "Enter a valid telephone number"
             postcode:
               blank: "Enter a postcode"
             street:
