@@ -80,35 +80,6 @@
   }
 }
 
-.embedded-map {
-  box-sizing: border-box;
-  position: relative;
-  width: 100%;
-  margin-top: 0;
-  @include govuk-responsive-margin(4, "bottom");
-  height: 0;
-  padding-bottom: 67%;
-
-  .embedded-map__inner-container {
-    box-sizing: border-box;
-    position: absolute;
-    margin: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    border: 1px solid $govuk-border-colour;
-    overflow: hidden;
-
-    img.embedded-map__nojs-img {
-      display: block;
-      margin: auto auto;
-      width: 100%;
-      height: auto;
-    }
-  }
-}
-
 #candidate-school-profile {
   ul {
     @extend .govuk-list ;

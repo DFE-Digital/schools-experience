@@ -57,11 +57,7 @@
         <div>
             <h1 class="govuk-heading-m">Location</h1>
 
-            <div class="embedded-map">
-                <div class="embedded-map__inner-container" id="candidate-school-profile-map">
-                    <%= school_location_map @school, html_class: "embedded-map__nojs-img" %>
-                </div>
-            </div>
+            <%= school_location_map @school %>
         </div>
 
         <p>

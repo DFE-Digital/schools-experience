@@ -113,10 +113,12 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.school_location_map_url' do
+  context '.school_location_map' do
     include Candidates::MapsHelper
 
     before do
+      @orig_api_key = ENV['BING_MAPS_KEY']
+      ENV['BING_MAPS_KEY'] = '12345'
       @latitude = "53.4782"
       @longitude = "-2.2299"
       @school = OpenStruct.new(
@@ -125,10 +127,12 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         )
     end
 
+    after { ENV['BING_MAPS_KEY'] = @orig_api_key }
+
     subject { school_location_map @school }
 
-    it('should return a correct Bing Maps url') do
-      expect(subject).to match(/^<img /)
+    it('should return a correct Bing Maps for schools location') do
+      expect(subject).to match(/<img /)
       expect(subject).to match("#{@latitude}%2C#{@longitude}")
     end
   end
