@@ -54,7 +54,7 @@ private
   end
 
   def parse_location(location)
-    if location.is_a?(Hash) || location.is_a?(OpenStruct)
+    if location.is_a?(Hash)
       extract_coords(location) || raise(InvalidCoordinatesError)
     elsif location.present?
       geolocate(location)
