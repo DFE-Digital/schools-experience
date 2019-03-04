@@ -13,9 +13,6 @@ module Candidates
       validates :full_name, presence: true
       validates :email, presence: true
       validates :building, presence: true
-      validates :street, presence: true
-      validates :town_or_city, presence: true
-      validates :county, presence: true
       validates :postcode, presence: true
       validates :phone, presence: true
       validates :phone, phone: true, if: :phone

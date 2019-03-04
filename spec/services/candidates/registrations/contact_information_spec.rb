@@ -18,9 +18,6 @@ describe Candidates::Registrations::ContactInformation, type: :model do
     it { is_expected.to validate_presence_of :full_name }
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_presence_of :building }
-    it { is_expected.to validate_presence_of :street }
-    it { is_expected.to validate_presence_of :town_or_city }
-    it { is_expected.to validate_presence_of :county }
     it { is_expected.to validate_presence_of :postcode }
     it { is_expected.to validate_presence_of :phone }
 
