@@ -1,0 +1,122 @@
+<div class="govuk-grid-row govuk-!-margin-top-4">
+    <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
+        <div>
+            <h2 class="govuk-heading-m">Address</h2>
+            <p>
+                <%= format_school_address @school %>
+            </p>
+        </div>
+
+        <div>
+            <h2 class="govuk-heading-m">About our school</h2>
+            <%= simple_format @school.description %>
+        </div>
+
+        <div>
+            <p>
+                <b>Age range:</b> <%= @school.age_range %>
+            </p>
+
+            <p>
+                <b>Specialisms:</b> <%= @school.specialisms %>.
+            </p>
+
+            <% unless @school.links.empty? %>
+            <p>
+                <b>For more information about our school use the following links:</b>
+            </p>
+
+            <ul>
+                <%- if @school.website.present? -%>
+                <li>
+                    <%= link_to "#{@school.name} website", @school.website %>
+                </li>
+                <%- end -%>
+
+                <li>
+                    <%= link_to "#{@school.name} Get Information About Schools",
+                        gias_school_url(@school.urn) %>
+                </li>
+
+                <li>
+                    <%= link_to "Offsted report: #{@school.name}",
+                        offsted_report_url(@school.urn) %>
+                </li>
+
+                <li>
+                    <%= link_to "Performance information: #{@school.name}",
+                        performance_report_url(@school.urn) %>
+                </li>
+            </ul>
+            <% end %>
+        </div>
+
+        <div>
+            <h2 class="govuk-heading-m">Placement information</h2>
+
+            <p>
+                <b>Individual requirements:</b> Must have a degree and be planning
+                to become a teacher.
+            </p>
+
+            <p>
+                <b>Placement details:</b> Attendees will observe lessons in their
+                chosen subjects and may get the chance to interact with pupils and
+                classroom activities. Only offer key stage 1 experience for primary
+                placements.
+            </p>
+
+            <p>
+                <b>Placement subjects:</b> <%= format_school_subjects @school %>.
+            </p>
+        </div>
+
+        <div>
+            <h1 class="govuk-heading-m">Location</h1>
+
+            <%= school_location_map @school %>
+        </div>
+    </div>
+
+    <div class="govuk-grid-column-one-third column-top-border">
+        <h3 class="govuk-heading-m">Address</h3>
+        <p class="govuk-body">
+            <%= format_school_address @school %>.
+        </p>
+
+        <h3 class="govuk-heading-s">DBS check required</h3>
+        <p class="govuk-body">
+          <%= @school.dbs ? 'Yes' : 'No' %>
+        </p>
+
+        <h3 class="govuk-heading-s">Fee</h3>
+        <p class="govuk-body">
+          <%= @school.fee %>
+        </p>
+
+        <h3 class="govuk-heading-s">Dress code</h3>
+        <p class="govuk-body">
+            <%= @school.dress_code %>
+        </p>
+
+        <h3 class="govuk-heading-s">Start and finish times</h3>
+        <p class="govuk-body">
+            <%= @school.times %>
+        </p>
+
+        <h3 class="govuk-heading-s">Parking</h3>
+        <p class="govuk-body">
+            <%= @school.parking %>
+        </p>
+
+        <h3 class="govuk-heading-s">Accessibility details</h3>
+        <p class="govuk-body">
+            <%= @school.accessibility %>
+        </p>
+
+        <h3 class="govuk-heading-s">Teacher training offered</h3>
+        <p class="govuk-body">
+            <%= @school.training_offered %>
+        </p>
+    </div>
+</div>
