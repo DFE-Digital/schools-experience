@@ -3,6 +3,7 @@ module Candidates::RegistrationsHelper
     action = change_path ? link_to('Change', change_path) : nil
 
     render \
-      partial: "list_row", locals: { key: key, value: value, action: action }
+      partial: "candidates/registrations/application_previews/list_row",
+      locals: { key: key, value: value, action: action }
   end
 end

@@ -26,53 +26,82 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
   end
 
   context '#create' do
-    context 'failure' do
-      before do
-        allow(registration_session).to receive(:flag_as_pending_email_confirmation!) {
-          raise Candidates::Registrations::RegistrationSession::NotCompletedError
-        }
-
-        post candidates_school_registrations_confirmation_email_path(school)
+    context 'privacy policy not accepted' do
+      let :privacy_policy_params do
+        { candidates_registrations_privacy_policy: { acceptance: '0' } }
       end
 
-      it "doesn't store the session" do
-        expect(registration_store).not_to have_received(:store!).with \
-          registration_session
+      before do
+        post candidates_school_registrations_confirmation_email_path(school),
+          params: privacy_policy_params
+      end
+
+      it 'renders the application_preview show template' do
+        expect(response).to render_template \
+          'candidates/registrations/application_previews/show'
       end
 
       it "doesn't enqueues the confirmation email job" do
         expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
-          have_received(:perform_later).with uuid, 'www.example.com'
-      end
-
-      it "redirects to the application preview path" do
-        expect(response).to redirect_to \
-          candidates_school_registrations_application_preview_path school
+          have_received :perform_later
       end
     end
 
-    context 'success' do
-      before do
-        post candidates_school_registrations_confirmation_email_path(school)
+    context 'privacy policy accepted' do
+      let :privacy_policy_params do
+        { candidates_registrations_privacy_policy: { acceptance: '1' } }
       end
 
-      it 'marks the session as pending' do
-        expect(registration_session).to be_pending_email_confirmation
+      context 'skipped step' do
+        before do
+          allow(registration_session).to receive(:flag_as_pending_email_confirmation!) {
+            raise Candidates::Registrations::RegistrationSession::NotCompletedError
+          }
+
+          post candidates_school_registrations_confirmation_email_path(school),
+            params: privacy_policy_params
+        end
+
+        it "doesn't store the session" do
+          expect(registration_store).not_to have_received(:store!).with \
+            registration_session
+        end
+
+        it "doesn't enqueues the confirmation email job" do
+          expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
+            have_received(:perform_later).with uuid, 'www.example.com'
+        end
+
+        it "redirects to the application preview path" do
+          expect(response).to redirect_to \
+            candidates_school_registrations_application_preview_path school
+        end
       end
 
-      it 'stores the session' do
-        expect(registration_store).to have_received(:store!).with \
-          registration_session
-      end
+      context 'no skipped steps' do
+        before do
+          post candidates_school_registrations_confirmation_email_path(school),
+            params: privacy_policy_params
+        end
 
-      it 'enqueues the confirmation email job' do
-        expect(Candidates::Registrations::SendEmailConfirmationJob).to \
-          have_received(:perform_later).with uuid, 'www.example.com'
-      end
+        it 'marks the session as pending' do
+          expect(registration_session).to be_pending_email_confirmation
+        end
 
-      it 'redirects to the check your email page' do
-        expect(response).to redirect_to \
-          candidates_school_registrations_confirmation_email_path school
+        it 'stores the session' do
+          expect(registration_store).to have_received(:store!).with \
+            registration_session
+        end
+
+        it 'enqueues the confirmation email job' do
+          expect(Candidates::Registrations::SendEmailConfirmationJob).to \
+            have_received(:perform_later).with uuid, 'www.example.com'
+        end
+
+        it 'redirects to the check your email page' do
+          expect(response).to redirect_to \
+            candidates_school_registrations_confirmation_email_path school
+        end
       end
     end
   end

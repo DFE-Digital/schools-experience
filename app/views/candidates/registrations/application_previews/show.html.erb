@@ -68,7 +68,7 @@
         edit_candidates_school_registrations_subject_preference_path %>
 
       <%= summary_row \
-        'DBS check document',
+        'DBS certificate',
         @application_preview.dbs_check_document,
         edit_candidates_school_registrations_background_check_path %>
 
@@ -76,10 +76,11 @@
   </div>
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Send your placement request</h2>
-    <p class="govuk-body">
-      By submitting this notification you’re confirming, to the best of your knowledge, the details you’re providing are correct.
-    </p>
-    <p>GDPR STATEMENT AND CONTENT PATTERN HERE</p>
-    <%= button_to 'Accept and send', candidates_school_registrations_confirmation_email_path, class: 'govuk-button' %>
+    <%= form_for @privacy_policy, url: candidates_school_registrations_confirmation_email_path do |f| %>
+      <div class="govuk-form-group">
+        <%= f.check_box_input :acceptance %>
+      </div>
+      <%= f.submit 'Accept and send', class: 'govuk-button' %>
+    <% end %>
   </div>
 </div>
