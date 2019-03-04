@@ -141,6 +141,14 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
+  context '.total_count' do
+    subject { described_class.new(query: 'Test School') }
+
+    it 'returns array of Schools' do
+      expect(subject.total_count).to be_kind_of Integer
+    end
+  end
+
   context '.valid_search?' do
     context 'with query' do
       subject { described_class.new(query: 'Test School') }

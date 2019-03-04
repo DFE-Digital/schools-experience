@@ -2,6 +2,7 @@ class Bookings::SchoolSearch
   attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :page, :requested_order
 
   AVAILABLE_ORDERS = [
+    %w{relevance Relevance},
     %w{distance Distance},
     %w{fee Fee}
   ].freeze
@@ -21,19 +22,15 @@ class Bookings::SchoolSearch
     self.requested_order = requested_order
   end
 
-  # Note, all of the scopes provided by +Bookings::School+ will not
-  # amend the +ActiveRecord::Relation+ if no param is provided, meaning
-  # they can be safely chained
   def results
-    Bookings::School
-      .close_to(@point, radius: @radius)
-      .that_provide(@subjects)
-      .at_phases(@phases)
-      .costing_upto(@max_fee)
-      .search(@query)
-      .order(order_by(@requested_order))
-      .page(@page)
+    base_query
       .includes(%i{subjects phases school_type})
+      .reorder(order_by(@requested_order))
+      .page(@page)
+  end
+
+  def total_count
+    base_query(include_distance: false).count
   end
 
   class InvalidCoordinatesError < ArgumentError
@@ -43,6 +40,18 @@ class Bookings::SchoolSearch
   end
 
 private
+
+  # Note, all of the scopes provided by +Bookings::School+ will not
+  # amend the +ActiveRecord::Relation+ if no param is provided, meaning
+  # they can be safely chained
+  def base_query(include_distance: true)
+    Bookings::School
+      .close_to(@point, radius: @radius, include_distance: include_distance)
+      .that_provide(@subjects)
+      .at_phases(@phases)
+      .costing_upto(@max_fee)
+      .search(@query)
+  end
 
   def parse_location(location)
     if location.is_a?(Hash)

@@ -30,7 +30,7 @@
 
         <div class="pagination-info higher">
           <div class="pagination-slice">
-            <%= page_entries_info @search.results, entry_name: 'result' %>
+            <%= school_results_info @search %>
           </div>
 
           <%= paginate @search.results %>
@@ -59,7 +59,7 @@
 
         <ul id="results">
             <% @search.results.each_with_index do |result, index| %>
-            <li class="school-result">
+            <li class="school-result" data-school-urn="<%= result.urn %>">
                 <strong class="name"><%= link_to result.name, candidates_school_path(result) %></strong>
                 <ul>
                     <li><strong>Address:</strong> <%= format_school_address result %></li>

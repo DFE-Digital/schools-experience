@@ -35,15 +35,6 @@ Given("I have searched for {string} and am on the results page") do |string|
   expect(path_with_query).to eql(path)
 end
 
-Given("I have searched for {string} and provided my location") do |string|
-  pending "candidate providing location not implemented just yet"
-  path = candidates_schools_path(query: string)
-  visit(path)
-  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
-  expect(path_with_query).to eql(path)
-end
-
-
 Given("there are {int} results") do |quantity|
   expect(page).to have_css('ul > li.school-result', count: quantity)
 end
@@ -86,7 +77,6 @@ Given("there are some subjects") do
 end
 
 Then("it should have checkboxes for all subjects") do
-  pending "these are currently hardcoded"
   within('#search-filter') do
     @subjects.each do |subject|
       expect(page).to have_field(subject.name, type: 'checkbox')
@@ -97,19 +87,4 @@ end
 When("I select {string} in the {string} select box") do |option, label_text|
   label = page.find('label', text: label_text)
   select(option, from: label[:for])
-end
-
-Then("the results should be sorted by distance, nearest to furthest") do
-  pending "sorting not yet implemented"
-  # should be ol, results will always be ordered by something?
-  # below is pseudocode
-  within('ul#results') do
-    actual = page.all('li.school-result .name').map(&:text).map(&:name)
-    expected = Bookings::School.close_to(@point, radius: 20).reorder('distance asc')
-    expect(expected).to eql(actual)
-  end
-end
-
-Then("the results should be sorted by fee, lowest to highest") do
-  pending "sorting not yet implemented"
 end

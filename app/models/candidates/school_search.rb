@@ -69,6 +69,10 @@ module Candidates
       school_search.results
     end
 
+    def total_count
+      school_search.total_count
+    end
+
     def valid_search?
       query.present? ||
         (location.present? && distance.present?) ||

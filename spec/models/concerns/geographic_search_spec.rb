@@ -47,6 +47,24 @@ describe 'Concerns' do
           expect(subject.close_to(mcr_centre, radius: 1.2)).not_to include(leeds_station)
         end
       end
+
+      context 'include_distance: true' do
+        specify 'should return records with a included distance attribute' do
+          expect(subject.close_to(mcr_centre, radius: 50)).to all(respond_to(:distance))
+        end
+
+        specify 'all distances should be floating point numbers' do
+          expect(subject.close_to(mcr_centre, radius: 50).map(&:distance)).to all(be_a(Float))
+        end
+      end
+
+      context 'include_distance: false' do
+        specify 'should return records without an included distance attribute' do
+          subject.close_to(mcr_centre, radius: 50, include_distance: false).each do |result|
+            expect(result).not_to respond_to(:distance)
+          end
+        end
+      end
     end
   end
 end

@@ -12,6 +12,7 @@ variables:
   SECRET_KEY_BASE: stubbed
   REDIS_IMAGE: redis:5-alpine
   REDIS_URL: redis://redis:6379/1
+  CUCUMBER_PROFILE: continuous_integration
 
 steps:
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
@@ -35,7 +36,7 @@ steps:
     displayName: Create Testing databases, import schema and fixtures
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rspec
     displayName: Run the Specs
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true $(dockerRegistry)/$(imageName):$(imageTag) cucumber --profile=$(CUCUMBER_PROFILE)
     displayName: Run the Cucumber features
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
