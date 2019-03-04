@@ -4,6 +4,8 @@
 module Candidates
   module Registrations
     class RegistrationSession
+      class NotCompletedError < StandardError; end
+
       PENDING_EMAIL_CONFIRMATION_STATUS = 'pending_email_confirmation'.freeze
 
       def initialize(session)
@@ -57,6 +59,8 @@ module Candidates
 
       def fetch(klass)
         klass.new @registration_session.fetch(klass.model_name.param_key)
+      rescue KeyError => e
+        raise StepNotFound, e.key
       end
 
       def to_h
@@ -74,8 +78,6 @@ module Candidates
 
     private
 
-      class NotCompletedError < StandardError; end
-
       def all_steps_completed?
         [
           background_check,
@@ -83,7 +85,7 @@ module Candidates
           placement_preference,
           subject_preference
         ].all?(&:valid?)
-      rescue KeyError
+      rescue StepNotFound
         false
       end
     end
