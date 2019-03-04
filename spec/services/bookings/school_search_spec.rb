@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Bookings::SchoolSearch do
   let(:manchester_coordinates) {
     [
-      OpenStruct.new(data: { "lat" => "53.488", "lon" => "-2.242" }),
-      OpenStruct.new(data: { "lat" => "53.476", "lon" => "-2.229" })
+      OpenStruct.new(latitude: 53.488, longitude: -2.242),
+      OpenStruct.new(latitude: 53.476, longitude: -2.229)
     ]
   }
 
@@ -73,12 +73,12 @@ describe Bookings::SchoolSearch do
       end
 
       context 'When coodinates are supplied' do
-        let!(:latlng) { manchester_coordinates[0].data }
+        let!(:coords) { manchester_coordinates[0] }
 
         context 'When text and latitude and longitude are supplied' do
           subject do
             Bookings::SchoolSearch.new('Springfield', location: {
-              latitude: latlng['lat'], longitude: latlng['lon']
+              latitude: coords.latitude, longitude: coords.longitude
             }).results
           end
 
@@ -92,7 +92,7 @@ describe Bookings::SchoolSearch do
         end
 
         context 'When only lat and lon are supplied' do
-          subject { Bookings::SchoolSearch.new('', location: latlng).results }
+          subject { Bookings::SchoolSearch.new('', location: coords.to_h).results }
 
           let!(:matching_school) do
             create(:bookings_school, name: "Springfield Primary School")
@@ -110,7 +110,7 @@ describe Bookings::SchoolSearch do
         context 'When only latitude is supplied' do
           subject do
             Bookings::SchoolSearch.new('', location: {
-              latitude: latlng['lat']
+              latitude: coords.latitude
             })
           end
 
@@ -124,7 +124,7 @@ describe Bookings::SchoolSearch do
         context 'When only longitude is supplied' do
           subject do
             Bookings::SchoolSearch.new('', location: {
-              longitude: latlng['lon']
+              longitude: coords.longitude
             })
           end
 
