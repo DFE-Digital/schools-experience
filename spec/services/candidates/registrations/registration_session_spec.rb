@@ -151,4 +151,59 @@ describe Candidates::Registrations::RegistrationSession do
       expect(returned_model.has_dbs_check).to be true
     end
   end
+
+  context '#completed?' do
+    context 'not completed' do
+      let :session do
+        {}
+      end
+
+      it 'returns false' do
+        expect(described_class.new(session).completed?).to be false
+      end
+    end
+
+    context 'completed' do
+      let :session do
+        { 'status' => 'completed' }
+      end
+
+      it 'returns true' do
+        expect(described_class.new(session).completed?).to be true
+      end
+    end
+  end
+
+  context '#flag_as_completed!' do
+    context 'when not completed' do
+      let :registration_session do
+        described_class.new({})
+      end
+
+      it 'raises an error' do
+        expect { registration_session.flag_as_completed! }.to raise_error \
+          described_class::NotCompletedError
+      end
+
+      it "doesn't mark the session as completed" do
+        expect(registration_session).not_to be_completed
+      end
+    end
+
+    context 'when completed' do
+      include_context 'Stubbed candidates school'
+
+      let :registration_session do
+        FactoryBot.build :registration_session
+      end
+
+      before do
+        registration_session.flag_as_completed!
+      end
+
+      it 'marks the registration_session as completed' do
+        expect(registration_session).to be_completed
+      end
+    end
+  end
 end
