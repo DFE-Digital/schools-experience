@@ -24,9 +24,8 @@ module Candidates
           @application_preview = ApplicationPreview.new current_registration
           render 'candidates/registrations/application_previews/show'
         end
-
-        rescue RegistrationSession::NotCompletedError
-          redirect_to candidates_school_registrations_application_preview_path
+      rescue RegistrationSession::NotCompletedError
+        redirect_to candidates_school_registrations_application_preview_path
       end
 
     private
