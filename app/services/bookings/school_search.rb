@@ -89,7 +89,10 @@ private
 
     # check if it's cached - if it is, read it and return the point
     if (cached_result = Rails.cache.read(location_key, namespace: namespace))
-      return geofactory_point(cached_result.latitude, cached_result.longitude)
+      return extract_coords(
+        latitude: cached_result.latitude,
+        longitude: cached_result.longitude
+      )
     end
 
     # if it's not, geocode it, cache it and return the point
@@ -109,11 +112,7 @@ private
       namespace: namespace
     )
 
-    geofactory_point(result.latitude, result.longitude)
-  end
-
-  def geofactory_point(lat, lon)
-    Bookings::School::GEOFACTORY.point(lon, lat)
+    extract_coords(latitude: result.latitude, longitude: result.longitude)
   end
 
   def valid_geocoder_result?(result)
