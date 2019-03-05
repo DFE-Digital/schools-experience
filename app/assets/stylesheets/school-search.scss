@@ -80,18 +80,21 @@
   }
 }
 
-#candidate-school-details ul {
-  @extend .govuk-list ;
-  @extend .govuk-list--bullet ;
-  @extend .govuk-body-s ;
+#candidate-school-profile {
+  ul {
+    @extend .govuk-list ;
+    @extend .govuk-list--bullet ;
+    @extend .govuk-body-s ;
 
-  a {
-    @extend .govuk-link ;
-  }
+    a {
+      @extend .govuk-link ;
+    }
 
-  li {
-    @include govuk-responsive-margin(4, "top") ;
-    @include govuk-responsive-margin(4, "bottom") ;
+    li {
+      @include govuk-responsive-margin(4, "top") ;
+      @include govuk-responsive-margin(4, "bottom") ;
+    }
   }
 }
+
 
