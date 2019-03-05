@@ -25,7 +25,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "degree_stage" => "I don't have a degree and am not studying for one",
     "degree_stage_explaination" => "",
     "degree_subject" => "Not applicable",
-    "teaching_stage" => "I'm thinking about teaching and want to find out more",
+    "teaching_stage" => "I’m very sure and think I’ll apply",
     "subject_first_choice" => "Architecture",
     "subject_second_choice" => "Mathematics",
     "urn" => 11048,

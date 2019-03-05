@@ -8,9 +8,11 @@ DEGREE_STAGES:
   - Other
 
 TEACHING_STAGES:
-  - I'm thinking about teaching and want to find out more
-  - I want to become a teacher
-  - I've applied for teacher training
+  - It's just an idea
+  - I’m not sure and finding out more
+  - I'm fairly sure and exploring my options
+  - I’m very sure and think I’ll apply
+  - I’ve applied for teacher training
   - I've been accepted on teacher training
 
 DEGREE_SUBJECTS:
