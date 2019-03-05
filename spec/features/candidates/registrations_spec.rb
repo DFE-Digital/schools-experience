@@ -139,7 +139,7 @@ feature 'Candidate Registrations', type: :feature do
 
     # Submit email confirmation form with errors
     click_button 'Accept and send'
-    expect(page).to have_text 'must be accepted'
+    expect(page).to have_text 'You need to confirm your details are correct and accept our privacy policy to continue'
     expect(page).not_to have_text \
       "Click the confirmation link in the email we’ve sent to the following email address to confirm your request for a placement at Test School:\ntest@example.com"
 

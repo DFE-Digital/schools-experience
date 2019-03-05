@@ -32,7 +32,7 @@ shared_examples 'a placement preference' do
 
       it 'adds an error to availability' do
         expect(placement_preference.errors[:availability]).to eq \
-          ["Please use 150 words or fewer"]
+          ["Use 150 words or fewer"]
       end
     end
 
@@ -55,7 +55,7 @@ shared_examples 'a placement preference' do
 
       it 'adds an error to objectives' do
         expect(placement_preference.errors[:objectives]).to eq \
-          ["Please use 150 words or fewer"]
+          ["Use 150 words or fewer"]
       end
     end
   end

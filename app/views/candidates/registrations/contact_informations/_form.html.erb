@@ -10,20 +10,20 @@
         <%= form_for contact_information, url: candidates_school_registrations_contact_information_path do |f| %>
           <%= GovukElementsErrorsHelper.error_summary contact_information, 'There is a problem', '' %>
 
-          <%= f.text_field :full_name %>
-          <%= f.telephone_field :phone %>
-          <%= f.email_field :email %>
+          <%= f.text_field :full_name, autocomplete: 'on' %>
+          <%= f.telephone_field :phone, autocomplete: 'on' %>
+          <%= f.email_field :email, autocomplete: 'on' %>
 
           <h2 class="govuk-heading-m">Address</h2>
-          <%= f.text_field :building %>
+          <%= f.text_field :building, autocomplete: 'on' %>
           <% if f.object.errors[:street].any? %>
-            <%= f.text_field :street %>
+            <%= f.text_field :street, autocomplete: 'on' %>
           <% else %>
-            <%= f.text_field :street, label_options: { class: 'govuk-visually-hidden' } %>
+            <%= f.text_field :street, autocomplete: 'on', label_options: { class: 'govuk-visually-hidden' } %>
           <% end %>
-          <%= f.text_field :town_or_city, class: 'govuk-!-width-two-thirds' %>
-          <%= f.text_field :county, class: 'govuk-!-width-two-thirds' %>
-          <%= f.text_field :postcode, class: 'govuk-input govuk-input--width-10' %>
+          <%= f.text_field :town_or_city, autocomplete: 'on', class: 'govuk-!-width-two-thirds' %>
+          <%= f.text_field :county, autocomplete: 'on', class: 'govuk-!-width-two-thirds' %>
+          <%= f.text_field :postcode, autocomplete: 'on', class: 'govuk-input govuk-input--width-10' %>
 
           <%= f.submit 'Continue' %>
         <% end %>

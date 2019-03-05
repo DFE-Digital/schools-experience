@@ -6,25 +6,27 @@ en:
     attributes:
       availability:
         blank: "Enter your availability"
-        use_fewer_words: "Please use 150 words or fewer"
+        use_fewer_words: "Use 150 words or fewer"
       objectives:
         blank: "Enter what you want to get out of a placement"
-        use_fewer_words: "Please use 150 words or fewer"
+        use_fewer_words: "Use 150 words or fewer"
 
   subject_preference_errors: &subject_preference_errors
     attributes:
       degree_stage:
-        blank: "Select a stage"
+        blank: "Select a degree stage"
       degree_stage_explaination:
         blank: "Enter an explaination"
       degree_subject:
         blank: "Select a subject"
+        inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
+        exclusion: "Select a subject if you have a degree or are studying for one"
       subject_first_choice:
         blank: "Select a subject"
       subject_second_choice:
         blank: "Select a subject"
       teaching_stage:
-        blank: "Select a stage"
+        blank: "Select a teaching stage"
 
   activemodel:
     errors:
@@ -40,24 +42,30 @@ en:
         candidates/registrations/contact_information:
           attributes:
             building:
-              blank: "Enter a building"
+              blank: "Enter your building"
             county:
-              blank: "Enter a county"
+              blank: "Enter your county"
             email:
-              blank: "Enter an email address"
+              blank: "Enter your email address"
             full_name:
               blank: "Enter your full name"
             phone:
-              blank: "Enter a telephone number"
+              blank: "Enter your telephone number"
+              invalid: "Enter a valid telephone number"
             postcode:
-              blank: "Enter a postcode"
+              blank: "Enter your postcode"
             street:
-              blank: "Enter a street"
+              blank: "Enter your street"
             town_or_city:
-              blank: "Enter a town or city"
+              blank: "Enter your town or city"
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
+
+        candidates/registrations/privacy_policy:
+          attributes:
+            acceptance:
+              accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
   activerecord:
     errors:
