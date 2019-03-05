@@ -10,5 +10,8 @@
         @include govuk-responsive-margin(3, "top");
       }
     }
+    textarea.govuk-input--error {
+      @extend .govuk-textarea--error;
+    }
   }
 }
