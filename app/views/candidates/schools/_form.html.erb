@@ -1,5 +1,3 @@
-<%= link_to 'Back', root_path, class: 'govuk-back-link' %>
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <div id="search-form">
@@ -10,11 +8,15 @@
                             Find school experience placements
                         </h1>
                     </legend>
-                    <p>This service is only available in England</p>
+
+                    <p class="govuk-hint">
+                      Search by location, postcode, school type and subject or
+                      any combination of these
+                    </p>
 
                     <div class="govuk-grid-row school-search-form">
                         <div class="school-search-form__search-field">
-                            <%= f.search_field :query, placeholder: 'e.g. maths, special school' %>
+                            <%= f.search_field :query, placeholder: 'For example, maths, special school' %>
                         </div>
 
                         <div class="school-search-form__location-pair">
@@ -22,7 +24,7 @@
                                 data-controller="grab-location">
 
                                 <%= f.search_field :location,
-                                        placeholder: 'e.g. Manchester, M1 3BD',
+                                        placeholder: 'For example, Manchester, M1 3BD',
                                         data: {
                                             action: "focus->grab-location#clearLocationInfo",
                                             target: "grab-location.location"
