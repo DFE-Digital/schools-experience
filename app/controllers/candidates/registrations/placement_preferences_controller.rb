@@ -2,7 +2,7 @@ module Candidates
   module Registrations
     class PlacementPreferencesController < RegistrationsController
       def new
-        @placement_preference = PlacementPreference.new
+        @placement_preference = PlacementPreference.new attributes_from_session
       end
 
       def create
@@ -39,6 +39,10 @@ module Candidates
         params.require(:candidates_registrations_placement_preference).permit \
           :availability,
           :objectives
+      end
+
+      def attributes_from_session
+        current_registration.placement_preference_attributes.except 'created_at'
       end
     end
   end

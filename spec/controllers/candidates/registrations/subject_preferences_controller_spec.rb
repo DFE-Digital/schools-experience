@@ -8,7 +8,8 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
   let :registration_session do
     double Candidates::Registrations::RegistrationSession,
       save: true,
-      subject_preference: existing_subject_preference
+      subject_preference: existing_subject_preference,
+      subject_preference_attributes: subject_preference_attributes
   end
 
   let :subjects do
@@ -34,6 +35,10 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
   context 'without existing subject_preference in session' do
     let :existing_subject_preference do
       nil
+    end
+
+    let :subject_preference_attributes do
+      {}
     end
 
     context '#new' do
@@ -117,6 +122,24 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
         subject_first_choice: "Astronomy",
         subject_second_choice: "History",
         urn: 11048
+    end
+
+    let :subject_preference_attributes do
+      existing_subject_preference.attributes
+    end
+
+    context '#new' do
+      before do
+        get '/candidates/schools/11048/registrations/subject_preference/new'
+      end
+
+      it 'populates the new form with values from the session' do
+        expect(assigns(:subject_preference)).to eq existing_subject_preference
+      end
+
+      it 'renders the new template' do
+        expect(response).to render_template :new
+      end
     end
 
     context '#edit' do
