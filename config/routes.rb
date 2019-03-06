@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'
 
-
   namespace :candidates do
     root to: 'home#index'
+    get "splash", to: "home#splash"
 
     resources :schools, only: %i{index show} do
       namespace :registrations do
