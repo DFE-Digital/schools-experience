@@ -53,7 +53,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
 
   config.after_initialize do
-    Bullet.enable = true
+    Bullet.enable = false
     Bullet.raise = true
   end
 

@@ -49,3 +49,17 @@ Then("the results should be sorted by distance, nearest to furthest") do
       .map{ |ele| ele['data-school-urn'].to_i }
   ).to eql(urns_in_distance_order)
 end
+
+Then("the results should be sorted by relevance, highest to lowest") do
+  urns_in_distance_order = [
+    @schools.detect { |s| s.name == "Manchester School" },
+    @schools.detect { |s| s.name == "Rochdale School" },
+    @schools.detect { |s| s.name == "Burnley School" }
+  ].map(&:urn)
+
+  expect(
+    page
+      .all('#search-results > ul > li')
+      .map{ |ele| ele['data-school-urn'].to_i }
+  ).to eql(urns_in_distance_order)
+end
