@@ -14,27 +14,60 @@ describe Bookings::SchoolSearch do
 
     before do
       allow(Rails).to receive(:cache).and_return(memory_store)
-      allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
     end
 
-    subject { Bookings::SchoolSearch.new('') }
+    context 'when Geocoder returns results' do
+      before do
+        allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
+      end
 
-    before do
-      3.times do
-        subject.send(:geolocate, location)
+      subject { Bookings::SchoolSearch.new('') }
+
+      before do
+        3.times do
+          subject.send(:geolocate, location)
+        end
+      end
+
+      specify "should cache search results" do
+        expect(
+          Rails.cache.read(
+            "geocoder:#{Digest::SHA1.hexdigest(location.downcase.chomp)}"
+          ).coordinates
+        ).to eql(manchester_coordinates.first.coordinates)
+      end
+
+      specify "should hit the cache for subsequent searches" do
+        expect(Geocoder).to have_received(:search).with(location).at_most(:once)
       end
     end
 
-    specify "should cache search results" do
-      expect(
-        Rails.cache.read(
-          "geocoder:#{Digest::SHA1.hexdigest(location.downcase.chomp)}"
-        ).coordinates
-      ).to eql(manchester_coordinates.first.coordinates)
+    context 'when Geocoder returns no results' do
+      before do
+        allow(Geocoder).to receive(:search).and_return([])
+        allow(Rails.cache).to receive(:write).and_return(true)
+      end
+
+      subject { Bookings::SchoolSearch.new('', location: 'France') }
+
+      specify 'nothing should be cached' do
+        expect(subject.point).to be_nil
+        expect(Rails.cache).not_to have_received(:write)
+      end
     end
 
-    specify "should hit the cache for subsequent searches" do
-      expect(Geocoder).to have_received(:search).with(location).at_most(:once)
+    context 'when Geocoder returns invalid results' do
+      let(:expected_error) { Bookings::SchoolSearch::InvalidGeocoderResultError }
+      before do
+        allow(Geocoder).to receive(:search).and_return('something bad')
+        allow(Rails.cache).to receive(:write).and_return(true)
+      end
+
+      subject { Bookings::SchoolSearch.new('', location: 'France') }
+
+      specify 'nothing should be cached' do
+        expect(Rails.cache).not_to have_received(:write)
+      end
     end
   end
 
@@ -214,7 +247,7 @@ describe Bookings::SchoolSearch do
           end
         end
 
-        context 'When GeoCoder returns an invalid location' do
+        context 'When Geocoder returns an invalid location' do
           context 'When the query matches a school' do
             before do
               allow(Geocoder).to receive(:search).and_return("ABC123")
