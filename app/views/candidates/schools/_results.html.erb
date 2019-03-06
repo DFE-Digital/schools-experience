@@ -1,84 +1,83 @@
 <%= link_to 'Back', candidates_schools_path, class: 'govuk-back-link' %>
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-l">School experience placements <%= describe_current_search @search %></h1>
-    </div>
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">School experience placements <%= describe_current_search @search %></h1>
+  </div>
 </div>
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third filter-list" id="search-filter">
-        <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
-            <%= f.hidden_field :query %>
-            <%= f.hidden_field :location %>
-            <%= f.hidden_field :distance %>
+  <div class="govuk-grid-column-one-third filter-list" id="search-filter">
+    <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
+      <%= f.hidden_field :query %>
+      <%= f.hidden_field :location %>
+      <%= f.hidden_field :distance %>
+                    
+      <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
+                    
+      <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
+      <%= f.hidden_field :order %>
+                    
+      <%= f.submit 'Update schools list', name: nil %>
+    <% end %>
+  </div>
 
-            <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
+  <div class="govuk-grid-column-two-thirds" id="search-results">
+    <div class="pagination-info higher">
+      <div class="pagination-slice">
+        <%= school_results_info @search %>
+      </div>
 
-            <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
-            <%= f.hidden_field :order %>
-
-            <%= f.submit 'Update schools list', name: nil %>
-        <% end %>
+      <%= paginate @search.results %>
     </div>
 
-    <div class="govuk-grid-column-two-thirds" id="search-results">
+    <hr />
 
-        <div class="pagination-info higher">
-          <div class="pagination-slice">
-            <%= school_results_info @search %>
-          </div>
-
-          <%= paginate @search.results %>
-        </div>
-
-        <hr />
-
-        <div class="sortby inline-fields">
-            <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
-                <%= f.hidden_field :query %>
-                <%= f.hidden_field :location %>
-                <%= f.hidden_field :distance %>
-                <% for phase_id in f.object.phases %>
-                    <%= f.hidden_field :phases, multiple: true, value: phase_id, id: nil %>
-                <% end %>
-                <% for subject_id in f.object.subjects %>
-                    <%= f.hidden_field :subjects, multiple: true, value: subject_id, id: nil %>
-                <% end %>
-                <%= f.hidden_field :max_fee %>
-                <%= f.collection_select :order, f.object.class.available_orders, :first, :last %>
-                <%= f.submit "Change sort order", name: nil %>
-            <% end %>
-        </div>
-
-        <hr />
-
-        <ul id="results">
-            <% @search.results.each_with_index do |school, index| %>
-            <li data-school-urn="<%= school.urn %>">
-              <div class="school-result">
-								<h3 class="govuk-heading-l">
-                  <%= school.name %>
-									<span class="govuk-caption-m">{{'1 mile' if item.Distance == 1 else item.Distance + ' miles'}} away</span>
-								</h3>
-
-								<dl class="govuk-summary-list">
-                  <%= summary_row 'Address', format_school_address(school) %>
-                  <%= summary_row 'Education phases', format_school_phases(school) %>
-                  <%= summary_row 'Fees', "£#{school.fee}" %>
-                  <%= summary_row 'Placement subjects', format_school_subjects(school) %>
-								</dl>
-
-                <%= link_to 'View school details', candidates_school_path(school), class: 'govuk-button' %>
-              </div>
-            </li>
-            <% end %>
-        </ul>
-
-        <%- if show_lower_navigation?(@search.results.length) %>
-          <div class="pagination-info lower">
-            <%= paginate @search.results %>
-          </div>
+    <div class="sortby inline-fields">
+      <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
+        <%= f.hidden_field :query %>
+        <%= f.hidden_field :location %>
+        <%= f.hidden_field :distance %>
+        <% for phase_id in f.object.phases %>
+          <%= f.hidden_field :phases, multiple: true, value: phase_id, id: nil %>
         <% end %>
+        <% for subject_id in f.object.subjects %>
+          <%= f.hidden_field :subjects, multiple: true, value: subject_id, id: nil %>
+        <% end %>
+        <%= f.hidden_field :max_fee %>
+        <%= f.collection_select :order, f.object.class.available_orders, :first, :last %>
+        <%= f.submit "Change sort order", name: nil %>
+      <% end %>
     </div>
+
+    <hr />
+
+    <ul id="results">
+      <% @search.results.each_with_index do |school, index| %>
+      <li data-school-urn="<%= school.urn %>">
+        <div class="school-result">
+          <h3 class="govuk-heading-l">
+            <%= school.name %>
+            <span class="govuk-caption-m">{{'1 mile' if item.Distance == 1 else item.Distance + ' miles'}} away</span>
+          </h3>
+
+          <dl class="govuk-summary-list">
+            <%= summary_row 'Address', format_school_address(school) %>
+            <%= summary_row 'Education phases', format_school_phases(school) %>
+            <%= summary_row 'Fees', "£#{school.fee}" %>
+            <%= summary_row 'Placement subjects', format_school_subjects(school) %>
+          </dl>
+
+          <%= link_to 'View school details', candidates_school_path(school), class: 'govuk-button' %>
+        </div>
+      </li>
+      <% end %>
+    </ul>
+
+    <%- if show_lower_navigation?(@search.results.length) %>
+    <div class="pagination-info lower">
+      <%= paginate @search.results %>
+    </div>
+    <% end %>
+  </div>
 </div>
