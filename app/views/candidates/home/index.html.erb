@@ -1,68 +1,79 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-  	<div class="govuk-se-masthead">
-  		<h1 class="govuk-heading-l">
-        How the service works
-      </h1>
+    <h1 class="govuk-heading-xl">Request school experience placements</h1>
 
-  		<p>
-        After you’ve requested a school experience placement, schools will
-        contact you to discuss your placement request.
-      </p>
+    <p class="govuk-body-lead">
+      Use this service if you're interested in becoming a teacher and want
+      to find and request school experience placements in schools across
+      England.
+    </p>
 
-  		<p>
-        Be aware, during term time it could typically take up to 2 weeks for them
-        to get in touch.
-      </p>
+    <p>
+      School experience allows you to find out more about teaching by
+      providing in-school placements within the current academic year.
+    </p>
 
-  		<p>
-        The school will email or call you to discuss your request and placement
-        date and use this contact to:
-      </p>
+    <p>
+      It's up to schools to contact you and book you on placements and some
+      require you to undergo a
+      <a href="https://www.gov.uk/government/organisations/disclosure-and-barring-service/about">
+        Disclosure and Barring Service (DBS) check
+      </a>.
+    </p>
 
-  		<ul class="govuk-list govuk-list--bullet">
-  			<li>
-          discuss your suitability for a placement at their site
-        </li>
+    <p>
+      This is a safeguarding check to confirm you’re suitable and able to work
+      with children and young people.
+    </p>
 
-  			<li>
-          offer and arrange the best placement date they have available
-        </li>
+    <p class="govuk-inset-text warning-location-phase">
+      This service is only available for placements at primary and secondary
+      schools in England.
+    </p>
 
-        <li>
-          find out more about your placement requirements - including any
-          disability or access needs
-        </li>
+    <%= link_to 'Start now', candidates_schools_path,
+        role:'button',
+        class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' %>
 
-  			<li>
-          let you know about any background and security checks you might need to
-          go through
-        </li>
-
-  			<li>
-          let you know about any fees you might have to pay as part of your
-          placement - including any related placement, parking or other fees
-        </li>
-  		</ul>
+    <section class="before-you-start">
+      <h2 class="govuk-heading-m">Before you start</h2>
 
       <p>
-  			To help cover costs, some schools charge a fee for placements. You’ll
+        To request a school experience placement, you’ll need to provide:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>personal details - including your address</li>
+        <li>contact details - including your email and telephone number</li>
+      </ul>
+
+      <p>
+        You’ll get a confirmation email after you’ve requested a school
+        experience placement.
+      </p>
+
+      <p class="govuk-inset-text">
+        To help cover costs, some schools charge a fee for placements. You’ll
         need to pay any fees direct to the individual schools.
-  		</p>
-
-  		<p>
-  			You’ll receive emails after you’ve requested a placement and to confirm
-        when a school has booked you on a placement.
-  		</p>
-
-      <%= link_to 'Start now', candidates_schools_path,
-            role:'button',
-            class:'govuk-button govuk-se-button--start' %>
-  	</div>
+      </p>
+    </section>
   </div>
 
   <div class="govuk-grid-column-one-third">
-    
+    <aside class="app-related-items" role="complementary">
+      <h2 class="govuk-heading-m" id="subsection-title">
+        Teaching resources
+      </h2>
+      <nav role="navigation" aria-labelledby="subsection-title">
+        <ul class="govuk-list govuk-!-font-size-16">
+          <li>
+            <a href="https://getintoteaching.education.gov.uk/" class="govuk-!-font-weight-bold">
+              Get Into Teaching<span class="govuk-visually-hidden">in Subsection</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
   </div>
 </div>
