@@ -58,7 +58,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
             candidates_registrations_subject_preference: {
               degree_stage: "I don't have a degree and am not studying for one",
               degree_subject: "geology &amp; earth science",
-              teaching_stage: "I want to become a teacher",
+              teaching_stage: "I’m very sure and think I’ll apply",
               subject_first_choice: "Astronomy",
               subject_second_choice: "History"
             }
@@ -80,7 +80,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
             candidates_registrations_subject_preference: {
               degree_stage: "I don't have a degree and am not studying for one",
               degree_subject: "Not applicable",
-              teaching_stage: "I want to become a teacher",
+              teaching_stage: "I’m very sure and think I’ll apply",
               subject_first_choice: "Astronomy",
               subject_second_choice: "History"
             }
@@ -93,7 +93,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
               degree_stage: "I don't have a degree and am not studying for one",
               degree_stage_explaination: nil,
               degree_subject: "Not applicable",
-              teaching_stage: "I want to become a teacher",
+              teaching_stage: "I’m very sure and think I’ll apply",
               subject_first_choice: "Astronomy",
               subject_second_choice: "History",
               urn: 11048
@@ -113,7 +113,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
         degree_stage: "I don't have a degree and am not studying for one",
         degree_stage_explaination: nil,
         degree_subject: "Not applicable",
-        teaching_stage: "I want to become a teacher",
+        teaching_stage: "I’m very sure and think I’ll apply",
         subject_first_choice: "Astronomy",
         subject_second_choice: "History",
         urn: 11048
@@ -145,7 +145,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
             candidates_registrations_subject_preference: {
               degree_stage: "I don't have a degree and am not studying for one",
               degree_subject: "Not applicable",
-              teaching_stage: "I want to become a teacher",
+              teaching_stage: "I’m very sure and think I’ll apply",
               subject_first_choice: "Astrology",
               subject_second_choice: "History"
             }
@@ -168,7 +168,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
               degree_stage: "Other",
               degree_stage_explaination: 'Sabbatical',
               degree_subject: "History",
-              teaching_stage: "I want to become a teacher",
+              teaching_stage: "I’m very sure and think I’ll apply",
               subject_first_choice: "Astronomy",
               subject_second_choice: "History"
             }
@@ -181,7 +181,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
               degree_stage: "Other",
               degree_stage_explaination: 'Sabbatical',
               degree_subject: "History",
-              teaching_stage: "I want to become a teacher",
+              teaching_stage: "I’m very sure and think I’ll apply",
               subject_first_choice: "Astronomy",
               subject_second_choice: "History",
               urn: 11048

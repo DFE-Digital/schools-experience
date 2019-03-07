@@ -31,7 +31,7 @@
 
   <%= f.radio_button_fieldset :teaching_stage do |fieldset| %>
     <% f.object.available_teaching_stages.each do |teaching_stage| %>
-      <%= fieldset.radio_input teaching_stage %>
+      <%= fieldset.radio_input teaching_stage, text_method: :to_s %>
     <% end %>
   <% end %>
 

@@ -96,7 +96,7 @@ feature 'Candidate Registrations', type: :feature do
     # Submit registrations/subject_preference form with errors
     choose 'Graduate or postgraduate'
     select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
-    choose 'I want to become a teacher'
+    choose "I’m very sure and think I’ll apply"
     select 'Physics', from: 'First choice'
     click_button 'Continue'
     expect(page).to have_text "There is a problem"
@@ -104,7 +104,7 @@ feature 'Candidate Registrations', type: :feature do
     # Submit registrations/subject_preference form successfully
     choose 'Graduate or postgraduate'
     select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
-    choose 'I want to become a teacher'
+    choose "I’m very sure and think I’ll apply"
     select 'Physics', from: 'First choice'
     select 'Mathematics', from: 'Second choice'
     click_button 'Continue'
@@ -132,7 +132,7 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "Placement outcome I enjoy teaching"
     expect(page).to have_text "Degree stage Graduate or postgraduate"
     expect(page).to have_text "Degree subject Physics"
-    expect(page).to have_text "Teaching stage I want to become a teacher"
+    expect(page).to have_text "I’m very sure and think I’ll apply"
     expect(page).to have_text "Teaching subject - first choice Physics"
     expect(page).to have_text "Teaching subject - second choice Mathematics"
     expect(page).to have_text "DBS certificate Yes"
