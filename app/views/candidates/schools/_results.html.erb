@@ -12,12 +12,12 @@
       <%= f.hidden_field :query %>
       <%= f.hidden_field :location %>
       <%= f.hidden_field :distance %>
-                    
+
       <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
-                    
+
       <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
       <%= f.hidden_field :order %>
-                    
+
       <%= f.submit 'Update schools list', name: nil %>
     <% end %>
   </div>
@@ -58,7 +58,12 @@
         <div class="school-result">
           <h3 class="govuk-heading-l">
             <%= school.name %>
-            <span class="govuk-caption-m">{{'1 mile' if item.Distance == 1 else item.Distance + ' miles'}} away</span>
+            <%- if school.respond_to? :distance -%>
+            <span class="govuk-caption-m">
+              <%= pluralize Conversions::Distance::Metres::ToMiles.convert(school.distance), 'mile' %>
+              away
+            </span>
+            <%- end -%>
           </h3>
 
           <dl class="govuk-summary-list">
