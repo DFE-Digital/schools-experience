@@ -1,5 +1,5 @@
 class Candidates::HomeController < ApplicationController
-  def index
-    # stop lint complaining
-  end
+  def index; end
+
+  def splash; end
 end

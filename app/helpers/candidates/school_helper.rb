@@ -46,4 +46,16 @@ module Candidates::SchoolHelper
       description: format_school_address(school, tag(:br))
     )
   end
+
+  def gias_school_url(urn)
+    "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{urn}"
+  end
+
+  def offsted_report_url(urn)
+    "http://www.ofsted.gov.uk/oxedu_providers/full/(urn)/#{urn}"
+  end
+
+  def performance_report_url(urn)
+    "https://www.compare-school-performance.service.gov.uk/school/#{urn}"
+  end
 end

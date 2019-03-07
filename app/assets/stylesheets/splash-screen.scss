@@ -1,0 +1,34 @@
+.govuk-se-masthead {
+  @include govuk-font(16);
+  @include govuk-responsive-padding(6);
+  background-color: govuk-colour("blue");
+
+  * {
+    color: govuk-colour("white");
+
+    a.govuk-link {
+      color: govuk-colour("white");
+    }
+  }
+
+  .govuk-button {
+    background-color: govuk-colour("white");
+    color: govuk-colour("blue");
+    margin: 0;
+  }
+
+  .govuk-se-button--start {
+    @include govuk-typography-weight-bold;
+    @include govuk-typography-responsive($size: 24, $override-line-height: 1);
+
+    min-height: auto;
+    padding-top: govuk-spacing(2) - $govuk-border-width-form-element;
+    padding-right: govuk-spacing(7);
+    padding-bottom: govuk-spacing(2) - $govuk-border-width-form-element;
+    padding-left: govuk-spacing(3);
+
+    background-image: image-url("icon-pointer--blue.png");
+    background-repeat: no-repeat;
+    background-position: 100% 50%;
+  }
+}

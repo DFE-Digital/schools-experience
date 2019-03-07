@@ -1,0 +1,72 @@
+<div class="govuk-grid-row govuk-!-margin-top-4">
+  <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
+    <div>
+      <%= simple_format @school.description %>
+    </div>
+    <div>
+      <p>
+        <b>Age range:</b> <%= @school.age_range %>
+      </p>
+      
+      <p>
+        <b>For more information about our school use the following links:</b>
+      </p>
+      
+      <ul>
+        <%- if @school.website.present? -%>
+        <li>
+          <%= link_to "#{@school.name} website", @school.website %>
+        </li>
+        <%- end -%>
+        
+        <li>
+          <%= link_to "#{@school.name} Get Information About Schools",
+                      gias_school_url(@school.urn) %>
+        </li>
+        
+        <li>
+          <%= link_to "Offsted report: #{@school.name}",
+                      offsted_report_url(@school.urn) %>
+        </li>
+        
+        <li>
+          <%= link_to "Performance information: #{@school.name}",
+                      performance_report_url(@school.urn) %>
+        </li>
+      </ul>
+    </div>
+    
+    <div>
+      <h2 class="govuk-heading-m">
+        Placement information
+      </h2>
+      
+      <p>
+        <b>Availability:</b>
+        <%= @school.availability_text.presence || 'Not specified' %>
+      </p>
+      
+      <p>
+        <b>Placement subjects:</b> <%= format_school_subjects @school %>.
+      </p>
+    </div>
+    
+    <div>
+      <h1 class="govuk-heading-m">
+        Location
+      </h1>
+      
+      <%= school_location_map @school %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-column-one-third column-top-border">
+    <h3 class="govuk-heading-m">
+      Address
+    </h3>
+    
+    <p class="govuk-body">
+      <%= format_school_address @school, tag(:br) %>.
+    </p>
+  </div>
+</div>

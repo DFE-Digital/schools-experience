@@ -53,16 +53,10 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       expect(rendered).to have_unchecked_field 'phases[]', count: 2
     end
 
-    it "shows filled in max fee filter" do
-      expect(rendered).to have_css '#search-filter'
-      expect(rendered).to have_checked_field 'max_fee', count: 1
-      expect(rendered).to have_unchecked_field 'max_fee', count: 3
-    end
-
     it "shows results" do
-      expect(rendered).to have_css 'li.school-result'
-      expect(rendered).to have_css 'li.school-result>strong a', text: @school.name
-      expect(rendered).to have_css 'li.school-result ul li', count: 5
+      expect(rendered).to have_css '.school-result'
+      expect(rendered).to have_css '.school-result h3', text: @school.name
+      expect(rendered).to have_css '.school-result .govuk-summary-list__key', count: 4
     end
   end
 end

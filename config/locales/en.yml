@@ -75,9 +75,9 @@ en:
 
   helpers:
     fieldset:
-      phase: Education phase
+      phases: Education phases
       fees: Fees
-      subject: Subject
+      subjects: Placement subjects
       candidates_registrations_background_check:
         has_dbs_check: Do you have a DBS certificate?
       candidates_registrations_subject_preference:

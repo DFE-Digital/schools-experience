@@ -68,4 +68,10 @@ class Bookings::School < ApplicationRecord
     # TODO
     'CONTACT_EMAIL'
   end
+
+  def private_beta?
+    false # FIXME this should check if they're in the Private Beta program
+  end
+
+  def availability_text; end
 end

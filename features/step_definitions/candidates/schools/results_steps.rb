@@ -36,7 +36,7 @@ Given("I have searched for {string} and am on the results page") do |string|
 end
 
 Given("there are {int} results") do |quantity|
-  expect(page).to have_css('ul > li.school-result', count: quantity)
+  expect(page).to have_css('ul > li > .school-result', count: quantity)
 end
 
 Then("each result should have the following information") do |table|
