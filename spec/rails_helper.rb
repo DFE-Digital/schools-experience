@@ -71,6 +71,10 @@ RSpec.configure do |config|
     ])
   end
 
+  config.before :suite do
+    Webpacker.compile
+  end
+
   config.after :suite do
     Redis.current.keys("test:*").each { |k| Redis.current.del k }
   end
