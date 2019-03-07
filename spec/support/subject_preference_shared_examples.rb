@@ -96,4 +96,30 @@ shared_examples 'a subject preference' do
       expect(Candidates::School).to have_received(:find).with(school_urn)
     end
   end
+
+  context '#requires_subject_for_degree_stage?' do
+    let :result do
+      described_class.new.requires_subject_for_degree_stage? stage
+    end
+
+    context 'when degree stage does not require subject' do
+      let :stage do
+        "I don't have a degree and am not studying for one"
+      end
+
+      it 'returns false' do
+        expect(result).to be false
+      end
+    end
+
+    context 'when degree stage requires subject' do
+      let :stage do
+        "Graduate or postgraduate"
+      end
+
+      it 'returns true' do
+        expect(result).to be true
+      end
+    end
+  end
 end
