@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Bookings::SchoolSearch do
   let(:manchester_coordinates) {
     [
-      OpenStruct.new(data: { "lat" => "53.488", "lon" => "-2.242" }),
-      OpenStruct.new(data: { "lat" => "53.476", "lon" => "-2.229" })
+      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242),
+      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229)
     ]
   }
 
@@ -14,27 +14,60 @@ describe Bookings::SchoolSearch do
 
     before do
       allow(Rails).to receive(:cache).and_return(memory_store)
-      allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
     end
 
-    subject { Bookings::SchoolSearch.new('') }
+    context 'when Geocoder returns results' do
+      before do
+        allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
+      end
 
-    before do
-      3.times do
-        subject.send(:geolocate, location)
+      subject { Bookings::SchoolSearch.new('') }
+
+      before do
+        3.times do
+          subject.send(:geolocate, location)
+        end
+      end
+
+      specify "should cache search results" do
+        expect(
+          Rails.cache.read(
+            "geocoder:#{Digest::SHA1.hexdigest(location.downcase.chomp)}"
+          ).coordinates
+        ).to eql(manchester_coordinates.first.coordinates)
+      end
+
+      specify "should hit the cache for subsequent searches" do
+        expect(Geocoder).to have_received(:search).with(location).at_most(:once)
       end
     end
 
-    specify "should cache search results" do
-      expect(
-        Rails.cache.read(
-          "geocoder:#{Digest::SHA1.hexdigest(location.downcase.chomp)}"
-        )
-      ).to eql(manchester_coordinates.first)
+    context 'when Geocoder returns no results' do
+      before do
+        allow(Geocoder).to receive(:search).and_return([])
+        allow(Rails.cache).to receive(:write).and_return(true)
+      end
+
+      subject { Bookings::SchoolSearch.new('', location: 'France') }
+
+      specify 'nothing should be cached' do
+        expect(subject.point).to be_nil
+        expect(Rails.cache).not_to have_received(:write)
+      end
     end
 
-    specify "should hit the cache for subsequent searches" do
-      expect(Geocoder).to have_received(:search).with(location).at_most(:once)
+    context 'when Geocoder returns invalid results' do
+      let(:expected_error) { Bookings::SchoolSearch::InvalidGeocoderResultError }
+      before do
+        allow(Geocoder).to receive(:search).and_return('something bad')
+        allow(Rails.cache).to receive(:write).and_return(true)
+      end
+
+      subject { Bookings::SchoolSearch.new('', location: 'France') }
+
+      specify 'nothing should be cached' do
+        expect(Rails.cache).not_to have_received(:write)
+      end
     end
   end
 
@@ -73,12 +106,12 @@ describe Bookings::SchoolSearch do
       end
 
       context 'When coodinates are supplied' do
-        let!(:latlng) { manchester_coordinates[0].data }
+        let!(:coords) { manchester_coordinates[0] }
 
         context 'When text and latitude and longitude are supplied' do
           subject do
             Bookings::SchoolSearch.new('Springfield', location: {
-              latitude: latlng['lat'], longitude: latlng['lon']
+              latitude: coords.latitude, longitude: coords.longitude
             }).results
           end
 
@@ -92,7 +125,12 @@ describe Bookings::SchoolSearch do
         end
 
         context 'When only lat and lon are supplied' do
-          subject { Bookings::SchoolSearch.new('', location: latlng).results }
+          subject do
+            Bookings::SchoolSearch.new(
+              '',
+              location: { latitude: coords.latitude, longitude: coords.longitude }
+            ).results
+          end
 
           let!(:matching_school) do
             create(:bookings_school, name: "Springfield Primary School")
@@ -110,7 +148,7 @@ describe Bookings::SchoolSearch do
         context 'When only latitude is supplied' do
           subject do
             Bookings::SchoolSearch.new('', location: {
-              latitude: latlng['lat']
+              latitude: coords.latitude
             })
           end
 
@@ -124,7 +162,7 @@ describe Bookings::SchoolSearch do
         context 'When only longitude is supplied' do
           subject do
             Bookings::SchoolSearch.new('', location: {
-              longitude: latlng['lon']
+              longitude: coords.longitude
             })
           end
 
@@ -136,70 +174,90 @@ describe Bookings::SchoolSearch do
         end
       end
 
-      context 'When Geocoder finds a location' do
-        before do
-          allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
-        end
-
-        context 'When text and location are supplied' do
-          subject { Bookings::SchoolSearch.new('Springfield', location: 'Manchester').results }
-
-          specify 'results should include matching records' do
-            expect(subject).to include(matching_school)
+      context 'Geocoder' do
+        context 'When Geocoder finds a location' do
+          before do
+            allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
           end
 
-          specify 'results should not include non-matching records' do
-            expect(subject).not_to include(non_matching_school)
-          end
-        end
+          context 'When text and location are supplied' do
+            subject { Bookings::SchoolSearch.new('Springfield', location: 'Manchester').results }
 
-        context 'When only text is supplied' do
-          subject { Bookings::SchoolSearch.new('Springfield').results }
+            specify 'results should include matching records' do
+              expect(subject).to include(matching_school)
+            end
 
-          let!(:matching_school) do
-            create(:bookings_school, name: "Springfield Primary School")
-          end
-
-          specify 'results should include matching records' do
-            expect(subject).to include(matching_school)
+            specify 'results should not include non-matching records' do
+              expect(subject).not_to include(non_matching_school)
+            end
           end
 
-          specify 'results should not include non-matching records' do
-            expect(subject).not_to include(non_matching_school)
+          context 'When only text is supplied' do
+            subject { Bookings::SchoolSearch.new('Springfield').results }
+
+            let!(:matching_school) do
+              create(:bookings_school, name: "Springfield Primary School")
+            end
+
+            specify 'results should include matching records' do
+              expect(subject).to include(matching_school)
+            end
+
+            specify 'results should not include non-matching records' do
+              expect(subject).not_to include(non_matching_school)
+            end
           end
-        end
 
-        context 'When only a location is supplied' do
-          subject { Bookings::SchoolSearch.new('', location: 'Manchester').results }
+          context 'When only a location is supplied' do
+            subject { Bookings::SchoolSearch.new('', location: 'Manchester').results }
 
-          let!(:matching_school) do
-            create(:bookings_school, name: "Springfield Primary School")
-          end
+            let!(:matching_school) do
+              create(:bookings_school, name: "Springfield Primary School")
+            end
 
-          specify 'results should include matching records' do
-            expect(subject).to include(matching_school)
-          end
+            specify 'results should include matching records' do
+              expect(subject).to include(matching_school)
+            end
 
-          specify 'results should not include non-matching records' do
-            expect(subject).not_to include(non_matching_school)
-          end
-        end
-      end
-
-      context 'When GeoCoder finds no location' do
-        context 'When the query matches a school' do
-          subject { Bookings::SchoolSearch.new('Springfield', location: 'Madrid').results }
-
-          specify 'results should include records that match the query' do
-            expect(subject).to include(matching_school)
+            specify 'results should not include non-matching records' do
+              expect(subject).not_to include(non_matching_school)
+            end
           end
         end
 
-        context 'When the query does not match a school' do
-          subject { Bookings::SchoolSearch.new('William McKinley High', location: 'Chippewa, Michigan').results }
+        context 'When Geocoder finds no location' do
+          context 'When the query matches a school' do
+            before do
+              allow(Geocoder).to receive(:search).and_return([])
+            end
 
-          specify 'results should include records that match the query' do
-            expect(subject).to be_empty
+            subject { Bookings::SchoolSearch.new('Springfield', location: 'Madrid').results }
+
+            specify 'results should include records that match the query' do
+              expect(subject).to include(matching_school)
+            end
+          end
+
+          context 'When the query does not match a school' do
+            subject { Bookings::SchoolSearch.new('William McKinley High', location: 'Chippewa, Michigan').results }
+
+            specify 'results should include records that match the query' do
+              expect(subject).to be_empty
+            end
+          end
+        end
+
+        context 'When Geocoder returns an invalid location' do
+          context 'When the query matches a school' do
+            before do
+              allow(Geocoder).to receive(:search).and_return("ABC123")
+            end
+
+            subject { Bookings::SchoolSearch.new('', location: 'Madrid') }
+
+            specify 'should fail with a InvalidGeocoderResultError' do
+              expect { subject.results }.to raise_error(Bookings::SchoolSearch::InvalidGeocoderResultError)
+            end
           end
         end
       end
