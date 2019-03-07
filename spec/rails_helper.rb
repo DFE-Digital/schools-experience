@@ -64,10 +64,6 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
 
-  config.before :suite do
-    Webpacker.compile
-  end
-
   # Prevent unintended API access from Geocoder
   config.before :each do
     allow(Geocoder).to receive(:search).and_return([
