@@ -24,7 +24,7 @@ class Bookings::SchoolSearch
 
   def results
     base_query
-      .includes(%i{subjects phases school_type})
+      .includes(%i{subjects phases})
       .reorder(order_by(@requested_order))
       .page(@page)
   end
