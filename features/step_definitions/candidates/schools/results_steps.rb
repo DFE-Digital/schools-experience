@@ -78,9 +78,11 @@ end
 
 Then("it should have checkboxes for all subjects") do
   within('#search-filter') do
-    @subjects.each do |subject|
-      expect(page).to have_field(subject.name, type: 'checkbox')
-    end
+    form_group = page
+      .find('.govuk-label', text: 'Placement subjects')
+      .ancestor('div.govuk-form-group')
+
+    ensure_check_boxes_exist(form_group, @subjects.map(&:name))
   end
 end
 
