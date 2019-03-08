@@ -1,34 +1,50 @@
 [data-controller="collapsible"] {
-  background: govuk-colour('grey-3') ;
   /*padding: govuk-spacing(1);*/
   padding: 0;
 
   & > button[data-action], & > link[data-action] {
     @extend %govuk-heading-s ;
     width: 100%;
-    display: block;
+    display: none;
     border: none;
     background: none;
     padding: govuk-spacing(1) govuk-spacing(3) ;
     text-align: left;
     margin: 0;
-
-    background-repeat: no-repeat;
-    background-image: image-url('collapsible-toggle-sprite.png');
-    background-position: 90% 75px;
   }
 
-  [data-target="collapsible.panel"] {
-    display: none;
-    padding: govuk-spacing(0) govuk-spacing(1) govuk-spacing(1) ;
-  }
+  @include govuk-media-query($until: tablet) {
+    background: govuk-colour('grey-3') ;
 
+    & > button[data-action], & > link[data-action] {
+      display: block;
+    }
+
+    [data-target="collapsible.panel"] {
+      padding: govuk-spacing(0) govuk-spacing(1) govuk-spacing(1) ;
+    }
+
+    .collapsible__content {
+      background: govuk-colour('white') ;
+      padding: govuk-spacing(2) ;
+    }
+  }
+}
+
+body.js-enabled [data-controller="collapsible"] {
   &.show [data-target="collapsible.panel"] {
     display: block;
   }
 
-  .collapsible__content {
-    background: govuk-colour('white') ;
-    padding: govuk-spacing(2) ;
+  @include govuk-media-query($until: tablet) {
+    [data-target="collapsible.panel"] {
+      display: none;
+    }
+
+    & > button[data-action], & > link[data-action] {
+      background-repeat: no-repeat;
+      background-image: image-url('collapsible-toggle-sprite.png');
+      background-position: right top;
+    }
   }
 }
