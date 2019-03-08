@@ -67,7 +67,7 @@ RSpec.configure do |config|
   # Prevent unintended API access from Geocoder
   config.before :each do
     allow(Geocoder).to receive(:search).and_return([
-      OpenStruct.new(latitude: 53.4794892, longitude: -2.2451148)
+      Geocoder::Result::Test.new(latitude: 53.4794892, longitude: -2.2451148)
     ])
   end
 

@@ -69,6 +69,28 @@ describe Bookings::SchoolSearch do
         expect(Rails.cache).not_to have_received(:write)
       end
     end
+
+    context 'when the cache returns invalid results' do
+      let(:location) { "Geneva" }
+      let(:location_key) { Digest::SHA1.hexdigest(location.downcase.chomp) }
+
+
+      before do
+        allow(Rails.cache).to receive(:read).and_return("an invalid value")
+        allow(Rails.cache).to receive(:delete).and_return(true)
+        allow(Rails.logger).to receive(:error).and_return(true)
+      end
+
+      subject! { Bookings::SchoolSearch.new('', location: location) }
+
+      specify "should write an error to the log" do
+        expect(Rails.logger).to have_received(:error).with("Invalid result read from cache: an invalid value")
+      end
+
+      specify "should delete the invalid entry from the cache" do
+        expect(Rails.cache).to have_received(:delete).with(location_key)
+      end
+    end
   end
 
   describe '#results' do
