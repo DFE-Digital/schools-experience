@@ -4,11 +4,13 @@
 
   & > button[data-action], & > link[data-action] {
     @extend %govuk-heading-s ;
+    position: relative;
     width: 100%;
     display: none;
     border: none;
     background: none;
-    padding: govuk-spacing(1) govuk-spacing(3) ;
+    padding: govuk-spacing(1) ;
+    padding-left: govuk-spacing(3) ;
     text-align: left;
     margin: 0;
   }
@@ -42,9 +44,25 @@ body.js-enabled [data-controller="collapsible"] {
     }
 
     & > button[data-action], & > link[data-action] {
-      background-repeat: no-repeat;
-      background-image: image-url('collapsible-toggle-sprite.png');
-      background-position: right top;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 30px;
+        width: 30px;
+        background-repeat: no-repeat;
+        background-image: image-url('collapsible-toggle-sprite.png');
+        background-position: 0 -80px;
+      }
+    }
+
+    &.show {
+      & > button[data-action], & > link[data-action] {
+        &::after {
+          background-position: 0 2px;
+        }
+      }
     }
   }
 }
