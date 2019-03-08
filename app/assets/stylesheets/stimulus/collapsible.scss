@@ -12,10 +12,19 @@
     padding: govuk-spacing(1) govuk-spacing(3) ;
     text-align: left;
     margin: 0;
+
+    background-repeat: no-repeat;
+    background-image: image-url('collapsible-toggle-sprite.png');
+    background-position: 90% 75px;
   }
 
   [data-target="collapsible.panel"] {
+    display: none;
     padding: govuk-spacing(0) govuk-spacing(1) govuk-spacing(1) ;
+  }
+
+  &.show [data-target="collapsible.panel"] {
+    display: block;
   }
 
   .collapsible__content {
