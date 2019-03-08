@@ -31,3 +31,15 @@ Feature: Entering candidate contact details
         And I make my degree and teaching preference selections
         When I submit the form
         Then I should be on the 'background checks' page for my school of choice
+
+    @javascript
+    Scenario: Hiding degree subject choice when candidate has no degree
+        Given I am on the 'candidate subjects' page for my school of choice
+        When I choose 'I don\'t have a degree and am not studying for one' as my degree stage
+        Then I should not see any subject choices
+
+    @javascript
+    Scenario: Showing degree subject choice when candidate has a degree
+        Given I am on the 'candidate subjects' page for my school of choice
+        When I choose 'Final year' as my degree stage
+        Then I should see some subject choices
