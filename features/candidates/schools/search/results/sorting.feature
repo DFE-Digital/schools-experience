@@ -21,7 +21,7 @@ Feature: Schools search page sorting
         Given I have searched for 'School' and am on the results page
         When I select 'Fee' in the 'Sorted by' select box
         Then the results should be sorted by fee, lowest to highest
-        
+
     @javascript
     Scenario: Sorting by relevance
         Given I have searched for 'School' and am on the results page
