@@ -89,6 +89,8 @@ private
 
     # check if it's cached - if it is, read it and return the point
     if (cached_result = Rails.cache.read(location_key, namespace: namespace))
+      Rails.logger.debug("extracting coords from #{cached_result}")
+
       return extract_coords(
         latitude: cached_result.latitude,
         longitude: cached_result.longitude
