@@ -28,11 +28,11 @@ Then("the results should be sorted by fee, lowest to highest") do
 end
 
 Given("I have searched for {string} and provided {string} for my location") do |query, location|
-  path = candidates_schools_path(query: query, location: location, distance: 25)
-  visit(path)
-
-  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
-  expect(path_with_query).to eql(path)
+  visit(candidates_schools_path)
+  fill_in "Find what?", with: query
+  fill_in "Where?", with: location
+  select "25", from: "Distance"
+  click_button "Find"
 end
 
 Then("the results should be sorted by distance, nearest to furthest") do
