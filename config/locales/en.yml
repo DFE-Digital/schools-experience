@@ -70,7 +70,7 @@ en:
   activerecord:
     errors:
       models:
-        candidates/registrations/placement_request:
+        bookings/placement_request:
           <<: [ *placement_preference_errors, *subject_preference_errors ]
 
   helpers:
