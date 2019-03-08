@@ -87,6 +87,5 @@ Then("it should have checkboxes for all subjects") do
 end
 
 When("I select {string} in the {string} select box") do |option, label_text|
-  label = page.find('label', text: label_text)
-  select(option, from: label[:for])
+  select(option, from: label_text)
 end
