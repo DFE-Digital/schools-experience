@@ -1,0 +1,25 @@
+[data-controller="collapsible"] {
+  background: govuk-colour('grey-3') ;
+  /*padding: govuk-spacing(1);*/
+  padding: 0;
+
+  & > button[data-action], & > link[data-action] {
+    @extend %govuk-heading-s ;
+    width: 100%;
+    display: block;
+    border: none;
+    background: none;
+    padding: govuk-spacing(1) govuk-spacing(3) ;
+    text-align: left;
+    margin: 0;
+  }
+
+  [data-target="collapsible.panel"] {
+    padding: govuk-spacing(0) govuk-spacing(1) govuk-spacing(1) ;
+  }
+
+  .collapsible__content {
+    background: govuk-colour('white') ;
+    padding: govuk-spacing(2) ;
+  }
+}
