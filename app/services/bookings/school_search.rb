@@ -87,17 +87,21 @@ private
   def geolocate(location, namespace: 'geocoder')
     location_key = Digest::SHA1.hexdigest(location.downcase.chomp)
 
-    # check if it's cached - if it is, read it and return the point
-    if (cached_result = Rails.cache.read(location_key, namespace: namespace))
-      Rails.logger.debug("extracting coords from #{cached_result}")
+    # check if it's cached
+    cached_result = Rails.cache.read(location_key, namespace: namespace)
 
+    # if it is present and valid return it, if invalid purge
+    if cached_result.present? && valid_geocoder_result?(cached_result)
       return extract_coords(
         latitude: cached_result.latitude,
         longitude: cached_result.longitude
       )
+    else
+      Rails.logger.error("Invalid result read from cache: #{cached_result}")
+      Rails.cache.delete(location_key)
     end
 
-    # if it's not, geocode it, cache it and return the point
+    # if it's not present, geocode it, cache it and return the point
     result = Geocoder.search(location)&.first
 
     if result.nil?
