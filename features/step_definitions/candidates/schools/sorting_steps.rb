@@ -27,9 +27,8 @@ Then("the results should be sorted by fee, lowest to highest") do
   ).to eql(@schools.sort_by(&:fee).map(&:urn))
 end
 
-Given("I have searched for {string} and provided {string} for my location") do |query, location|
+Given("I have provided {string} as my location") do |location|
   visit(candidates_schools_path)
-  fill_in "Find what?", with: query
   fill_in "Where?", with: location
   select "25", from: "Distance"
   click_button "Find"
