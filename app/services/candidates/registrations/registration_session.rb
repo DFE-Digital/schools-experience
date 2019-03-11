@@ -55,23 +55,43 @@ module Candidates
         fetch BackgroundCheck
       end
 
+      def background_check_attributes
+        fetch_attributes BackgroundCheck
+      end
+
       # TODO add specs for these
       def contact_information
         fetch ContactInformation
+      end
+
+      def contact_information_attributes
+        fetch_attributes ContactInformation
       end
 
       def placement_preference
         fetch PlacementPreference
       end
 
+      def placement_preference_attributes
+        fetch_attributes PlacementPreference
+      end
+
       def subject_preference
         fetch SubjectPreference
+      end
+
+      def subject_preference_attributes
+        fetch_attributes SubjectPreference
       end
 
       def fetch(klass)
         klass.new @registration_session.fetch(klass.model_name.param_key)
       rescue KeyError => e
         raise StepNotFound, e.key
+      end
+
+      def fetch_attributes(klass)
+        @registration_session.fetch(klass.model_name.param_key, {})
       end
 
       def to_h

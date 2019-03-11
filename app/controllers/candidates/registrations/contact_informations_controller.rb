@@ -2,7 +2,7 @@ module Candidates
   module Registrations
     class ContactInformationsController < RegistrationsController
       def new
-        @contact_information = ContactInformation.new
+        @contact_information = ContactInformation.new attributes_from_session
       end
 
       def create
@@ -43,6 +43,10 @@ module Candidates
           :county,
           :postcode,
           :phone
+      end
+
+      def attributes_from_session
+        current_registration.contact_information_attributes.except 'created_at'
       end
     end
   end
