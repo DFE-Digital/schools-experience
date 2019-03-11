@@ -14,6 +14,7 @@ private
     when 'home' then 'pages/home'
     when 'privacy_policy' then 'pages/privacy_policy'
     when 'cookies_policy' then 'pages/cookies_policy'
+    when 'migration' then 'pages/migration'
     else
       raise ActiveRecord::RecordNotFound
     end
