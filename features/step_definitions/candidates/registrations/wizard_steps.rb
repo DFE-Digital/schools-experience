@@ -29,7 +29,7 @@ Given("I have completed the subject preference form") do
   make_inputs_opaque if opaquify_inputs?
   choose 'Graduate or postgraduate'
   select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
-  choose 'I want to become a teacher'
+  choose 'I’ve applied for teacher training'
   select 'Physics', from: 'First choice'
   select 'Mathematics', from: 'Second choice'
   click_button 'Continue'
@@ -76,7 +76,7 @@ Then("the subject preference form should populated with the details I've entered
   expect(find_field('Graduate or postgraduate')).to be_checked
   expect(find_field('If you have or are studying for a degree, tell us about your degree subject').value).to eq \
    'Physics'
-  expect(find_field('I want to become a teacher')).to be_checked
+  expect(find_field('I’ve applied for teacher training')).to be_checked
   expect(find_field('First choice').value).to eq 'Physics'
   expect(find_field('Second choice').value).to eq 'Mathematics'
 end
