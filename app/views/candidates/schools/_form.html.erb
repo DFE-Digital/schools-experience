@@ -1,53 +1,47 @@
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <div id="search-form">
-            <%= form_for @search, as: '', method: :get do |f| %>
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">
-                            Find school experience placements
-                        </h1>
-                    </legend>
+  <div class="govuk-grid-column-full">
+    <div id="search-form">
+      <%= form_for @search, as: '', method: :get do |f| %>
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+              Find school experience placements
+            </h1>
+          </legend>
 
-                    <p class="govuk-hint">
-                      Search by location, postcode, school type and subject or
-                      any combination of these
-                    </p>
+          <p class="govuk-hint">
+            Search by location, postcode, school type and subject or
+            any combination of these
+          </p>
 
-                    <div class="govuk-grid-row school-search-form">
-                        <div class="school-search-form__search-field">
-                            <%= f.search_field :query, placeholder: 'For example, maths, special school' %>
-                        </div>
+          <div class="govuk-grid-row school-search-form">
+            <div class="school-search-form__location-field"
+                  data-controller="grab-location">
 
-                        <div class="school-search-form__location-pair">
-                            <div class="school-search-form__location-field"
-                                data-controller="grab-location">
+              <%= f.search_field :location,
+                    placeholder: 'e.g. Manchester, M1 3BD',
+                    data: {
+                      action: "focus->grab-location#clearLocationInfo",
+                      target: "grab-location.location"
+                    } %>
+              <%= f.hidden_field :latitude, data: { target: 'grab-location.latitude' } %>
+              <%= f.hidden_field :longitude, data: { target: 'grab-location.longitude' } %>
+            </div>
 
-                                <%= f.search_field :location,
-                                        placeholder: 'For example, Manchester, M1 3BD',
-                                        data: {
-                                            action: "focus->grab-location#clearLocationInfo",
-                                            target: "grab-location.location"
-                                        } %>
-                                <%= f.hidden_field :latitude, data: { target: 'grab-location.latitude' } %>
-                                <%= f.hidden_field :longitude, data: { target: 'grab-location.longitude' } %>
-                            </div>
+            <div class="school-search-form__distance-field">
+              <%= f.collection_select :distance,
+                    Candidates::SchoolSearch.distances, :first, :last,
+                    include_blank: 'distance' %>
+            </div>
 
-                            <div class="school-search-form__distance-field">
-                                <%= f.collection_select :distance,
-                                    Candidates::SchoolSearch.distances, :first, :last,
-                                    include_blank: 'distance' %>
-                            </div>
-                        </div>
-
-                        <div class="school-search-form__submit">
-                            <div class="govuk-form-group">
-                                <%= f.submit 'Find', name: nil %>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-            <% end %>
-        </div>
+            <div class="school-search-form__submit">
+              <div class="govuk-form-group">
+                <%= f.submit 'Find', name: nil %>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      <% end %>
     </div>
+  </div>
 </div>
