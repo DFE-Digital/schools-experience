@@ -10,7 +10,7 @@ class NotifyEmail::CandidateMagicLink < Notify
 private
 
   def template_id
-    '74dc6510-c89d-4b5b-9608-075d3f2de32d'
+    'a06fe38a-5f7f-4c68-8612-6aae9495a8ab'
   end
 
   def personalisation
