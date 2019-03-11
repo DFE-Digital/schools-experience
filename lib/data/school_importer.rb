@@ -56,7 +56,9 @@ private
       coordinates:  convert_to_point(row['Easting'], row['Northing']),
       school_type:  school_types[row['TypeOfEstablishment (code)'].to_i]
     ).tap do |school|
-      school.phases << phases[row['PhaseOfEducation (code)'].to_i]
+      if (p = map_phase(row['PhaseOfEducation (code)'].to_i))
+        school.phases << p
+      end
     end
   end
 
@@ -64,8 +66,34 @@ private
     val.present? ? val : nil
   end
 
+  def map_phase(edubase_id)
+    # 0: Not applicable              -> ¯\_(ツ)_/¯
+    # 1: Nursery                     -> Nursery
+    # 2: Primary                     -> Primary
+    # 3: Middle deemed primary       -> Primary
+    # 4: Secondary                   -> Secondary
+    # 5: Middle deemed secondary     -> Secondary
+    # 6: 16 plus                     -> 16 plus
+    # 7: All through                 -> Nursery + Primary + Secondary + 16 plus
+
+    nursery      = phases['Nursery']
+    primary      = phases['Primary']
+    secondary    = phases['Secondary']
+    sixteen_plus = phases['16 plus']
+
+    {
+      1 => nursery,
+      2 => primary,
+      3 => primary,
+      4 => secondary,
+      5 => secondary,
+      6 => sixteen_plus,
+      7 => [nursery, primary, secondary, sixteen_plus]
+    }[edubase_id]
+  end
+
   def phases
-    @phases ||= Bookings::Phase.all.index_by(&:edubase_id)
+    @phases ||= Bookings::Phase.all.index_by(&:name)
   end
 
   def school_types
