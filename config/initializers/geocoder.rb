@@ -29,9 +29,3 @@ if ENV['BING_MAPS_KEY'].present?
 else
   Geocoder.configure(units: :miles)
 end
-
-# hardcode geocoder to return a specific single result when we're in the servertest
-# environment
-if Rails.env.eql?('servertest')
-  require Rails.root.join("lib", "servertest", "geocoder")
-end
