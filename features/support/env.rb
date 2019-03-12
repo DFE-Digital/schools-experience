@@ -126,12 +126,12 @@ end
 
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
   Capybara.run_server = false
-  Capybara.javascript_driver = :chrome
-  Capybara.default_driver = :selenium_remote
   Capybara.register_driver :selenium_remote do |app|
     Capybara::Selenium::Driver.new(app,
         :browser => :remote,
         :url => "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:4444/wd/hub",
         :desired_capabilities => :chrome)
   end
+  Capybara.javascript_driver = :selenium_remote
+  Capybara.default_driver = :selenium_remote
 end
