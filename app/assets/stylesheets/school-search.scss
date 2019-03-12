@@ -105,6 +105,10 @@
   }
 }
 
+.school-search-filter-info {
+  @include govuk-responsive-margin(4, "bottom") ;
+}
+
 #candidate-school-profile {
   ul {
     @extend .govuk-list ;

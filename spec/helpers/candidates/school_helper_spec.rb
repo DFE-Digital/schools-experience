@@ -136,4 +136,57 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       expect(subject).to match("#{@latitude}%2C#{@longitude}")
     end
   end
+
+  context '.filter_description' do
+    context 'with no filters' do
+      subject do
+        double('Bookings::SchoolSeach',
+          subjects: [], subject_names: [],
+          phases: [], phase_names: [])
+      end
+
+      it("should return a nil") do
+        expect(school_search_filter_description(subject)).to be_nil
+      end
+    end
+
+    context 'with subject filters' do
+      subject do
+        double('Bookings::SchoolSeach',
+          subjects: [1, 3], subject_names: %w{first third},
+          phases: [], phase_names: [])
+      end
+
+      it("should return a nil") do
+        expect(school_search_filter_description(subject)).to \
+          eq("Filtering by Placement subject: first and third")
+      end
+    end
+
+    context 'with phase filters' do
+      subject do
+        double('Bookings::SchoolSeach',
+          subjects: [], subject_names: [],
+          phases: [1, 3], phase_names: %w{first third})
+      end
+
+      it("should return a nil") do
+        expect(school_search_filter_description(subject)).to \
+          eq("Filtering by Education phase: first and third")
+      end
+    end
+
+    context 'with subject and phase filters' do
+      subject do
+        double('Bookings::SchoolSeach',
+          subjects: [1, 3], subject_names: %w{first third},
+          phases: [1, 3], phase_names: %w{first third})
+      end
+
+      it("should return a nil") do
+        expect(school_search_filter_description(subject)).to \
+          eq("Filtering by Education phase and Placement subject: first, third and first, third")
+      end
+    end
+  end
 end

@@ -35,6 +35,12 @@
   </aside>
 
   <section class="govuk-grid-column-two-thirds" id="search-results">
+    <%- if desc = school_search_filter_description(@search) -%>
+    <div class="school-search-filter-info">
+      <%= desc %>
+    </div>
+    <%- end -%>
+
     <div class="pagination-info higher">
       <div class="pagination-slice">
         <%= school_results_info @search %>

@@ -136,6 +136,12 @@ en:
       more_pages:
         display_entries: "Showing %{first}&ndash;%{last} of %{total} %{entry_name}"
 
+    candidates:
+      school_search:
+        phases_filter: "Filtering by Education phase: %{phase_names}"
+        subjects_filter: "Filtering by Placement subject: %{subject_names}"
+        phases_and_subjects_filter: "Filtering by Education phase and Placement subject: %{phase_names} and %{subject_names}"
+
   views:
     pagination:
       next: Next
