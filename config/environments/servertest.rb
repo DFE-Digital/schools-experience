@@ -1,5 +1,6 @@
 require File.expand_path('production.rb', __dir__)
 require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
+require Rails.root.join("lib", "servertest", "geocoder")
 
 Rails.application.configure do
   # Override production environment settings here
