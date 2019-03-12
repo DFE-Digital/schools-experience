@@ -10,21 +10,21 @@ class NotifySync
     local_templates.each do |template_id, local_body|
       # check the remote template is present based on the local template's guid
       unless (rt = remote_templates_copy.delete(template_id))
-        puts "#{template_id} Missing remote template"
+        puts output_line(template_id, "Unknown", "Missing remote template")
         next
       end
 
       if local_body == reencode(rt.body)
-        puts "#{template_id} Matches"
+        puts output_line(rt.id, rt.name, "Matches")
       else
-        puts "#{template_id} Doesn't match"
+        puts output_line(rt.id, rt.name, "Doesn't match")
       end
     end
 
     # Any templates remaining aren't present locally
     if remote_templates_copy.size.positive?
       remote_templates_copy.each do |_, template|
-        puts "#{template.id} Missing local template"
+        puts output_line(template.id, template.name, "Missing local template")
       end
     end
   end
@@ -42,6 +42,18 @@ class NotifySync
   end
 
 private
+
+  def output_line(template_id, template_name, status)
+    [
+      justify(template_id || "", 18),
+      justify(template_name || "", 40),
+      justify(status)
+    ].join(" ")
+  end
+
+  def justify(str, amount = 20)
+    str.ljust(amount)
+  end
 
   # extract the body text, standardise newlines and chomp trailing lines
   def reencode(body)

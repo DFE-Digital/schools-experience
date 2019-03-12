@@ -25,7 +25,7 @@ class NotifyEmail::SchoolRequestCancellation < Notify
 private
 
   def template_id
-    '1997e48f-33bd-4ce8-8aa7-c680f1e33e98'
+    '1d2b44bc-9d73-4839-b06b-41f35012c14d'
   end
 
   def personalisation

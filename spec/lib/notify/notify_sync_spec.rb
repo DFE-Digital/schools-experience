@@ -26,6 +26,7 @@ describe NotifySync do
   context 'Comparing templates' do
     context 'Present in both repositories' do
       let(:matching_template_id) { 'aaaaaaaa-bbbb-cccc-dddd-111111111111' }
+      let(:matching_template_name) { 'A story about a fox' }
 
       before do
         allow(subject).to receive(:local_templates).and_return(
@@ -39,6 +40,7 @@ describe NotifySync do
         allow(subject).to receive(:remote_templates).and_return(
           matching_template_id => OpenStruct.new(
             id: matching_template_id,
+            name: matching_template_name,
             body: <<~TEMPLATE_ONE
               The quick brown fox jumped
               over the lazy dog
@@ -50,7 +52,13 @@ describe NotifySync do
       after { subject.compare }
 
       specify "should state that exact templates match" do
-        expect(STDOUT).to receive(:puts).with("#{matching_template_id} Matches")
+        expect(STDOUT).to receive(:puts).with(
+          [
+            matching_template_id.ljust(18),
+            matching_template_name.ljust(40),
+            "Matches".ljust(20)
+          ].join(' ')
+        )
       end
     end
 
@@ -71,12 +79,19 @@ describe NotifySync do
       after { subject.compare }
 
       specify "should state that local-only templates are missing from remote repository" do
-        expect(STDOUT).to receive(:puts).with("#{local_only_template_id} Missing remote template")
+        expect(STDOUT).to receive(:puts).with(
+          [
+            local_only_template_id.ljust(18),
+            "Unknown".ljust(40),
+            "Missing remote template".ljust(20)
+          ].join(' ')
+        )
       end
     end
 
     context 'Missing local templates' do
       let(:remote_only_template_id) { 'aaaaaaaa-bbbb-cccc-dddd-333333333333' }
+      let(:remote_only_template_name) { 'A story about a fox' }
 
       before do
         allow(subject).to receive(:local_templates).and_return({})
@@ -84,6 +99,7 @@ describe NotifySync do
         allow(subject).to receive(:remote_templates).and_return(
           remote_only_template_id => OpenStruct.new(
             id: remote_only_template_id,
+            name: remote_only_template_name,
             body: <<~TEMPLATE_THREE
               The quick brown fox jumped
               over the lazy dog
@@ -95,7 +111,13 @@ describe NotifySync do
       after { subject.compare }
 
       specify "should state that local-only templates are missing from local repository" do
-        expect(STDOUT).to receive(:puts).with("#{remote_only_template_id} Missing local template")
+        expect(STDOUT).to receive(:puts).with(
+          [
+            remote_only_template_id.ljust(18),
+            remote_only_template_name.ljust(40),
+            "Missing local template".ljust(20)
+          ].join(' ')
+        )
       end
     end
   end

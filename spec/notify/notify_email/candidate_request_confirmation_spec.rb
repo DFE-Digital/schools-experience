@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateRequestConfirmation do
-  it_should_behave_like "email template", "8bd7e9b3-8c3f-4702-b642-1ccff32a264f",
+  it_should_behave_like "email template", "3860fb06-9af2-49c8-ac0b-007b9f360033",
     school_name: "Springfield Elementary School",
     candidate_address: "23 Railway Cuttings, East Cheam, CR3 0HD",
     candidate_dbs_check_document: "Yes",

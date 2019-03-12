@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::SchoolRequestCancellation do
-  it_should_behave_like "email template", "1997e48f-33bd-4ce8-8aa7-c680f1e33e98",
+  it_should_behave_like "email template", "1d2b44bc-9d73-4839-b06b-41f35012c14d",
     school_admin_name: "Seymour Skinner",
     school_name: "Springfield Elementary School",
     candidate_name: "Otto Mann",

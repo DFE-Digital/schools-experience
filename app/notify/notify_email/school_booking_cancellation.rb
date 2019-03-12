@@ -25,7 +25,7 @@ class NotifyEmail::SchoolBookingCancellation < Notify
 private
 
   def template_id
-    '02cef1a1-230f-4fbf-8249-9d4f2ec769d3'
+    '1e0073e2-1334-4a50-a386-acc57f380e14'
   end
 
   def personalisation

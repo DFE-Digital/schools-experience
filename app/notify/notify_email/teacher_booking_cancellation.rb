@@ -29,7 +29,7 @@ class NotifyEmail::TeacherBookingCancellation < Notify
 private
 
   def template_id
-    '394cf3c3-cea1-4999-99c5-1dc51449ccf4'
+    '7445560b-46da-4c23-9017-e8d45b2a6c84'
   end
 
   def personalisation

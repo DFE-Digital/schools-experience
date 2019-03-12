@@ -12,7 +12,7 @@ class NotifyEmail::CandidateBookingCancellation < Notify
 private
 
   def template_id
-    'ec830a0d-d032-4d4b-a107-882d6f3b471f'
+    '12b5984b-be09-44fe-9f79-68aea6108f91'
   end
 
   def personalisation

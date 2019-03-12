@@ -17,7 +17,7 @@ class NotifyEmail::SchoolRegistrationConfirmation < Notify
 private
 
   def template_id
-    '1b805620-1910-40b0-afe4-4ce9e5deebbf'
+    '9b32a2f9-47b7-4069-897b-5ce637c5d5ba'
   end
 
   def personalisation
