@@ -16,15 +16,6 @@ class GeocoderAutoexpireCache
     store.write(url, value, expires_in: ttl)
   end
 
-  def keys
-    if store.is_a?(ActiveSupport::Cache::RedisCacheStore)
-      store.redis.keys
-    else
-      Rails.logger.warn("Cache is not Redis, keys not available")
-      []
-    end
-  end
-
   def del(url)
     store.delete(url)
   end
