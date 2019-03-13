@@ -10,85 +10,15 @@ describe Bookings::SchoolSearch do
 
   describe '#geolocation' do
     let(:location) { 'Springfield' }
-    let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
-
-    before do
-      allow(Rails).to receive(:cache).and_return(memory_store)
-    end
-
-    context 'when Geocoder returns results' do
-      before do
-        allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
-      end
-
-      subject { Bookings::SchoolSearch.new('') }
-
-      before do
-        3.times do
-          subject.send(:geolocate, location)
-        end
-      end
-
-      specify "should cache search results" do
-        expect(
-          Rails.cache.read(
-            "geocoder:#{Digest::SHA1.hexdigest(location.downcase.chomp)}"
-          ).coordinates
-        ).to eql(manchester_coordinates.first.coordinates)
-      end
-
-      specify "should hit the cache for subsequent searches" do
-        expect(Geocoder).to have_received(:search).with(location).at_most(:once)
-      end
-    end
-
-    context 'when Geocoder returns no results' do
-      before do
-        allow(Geocoder).to receive(:search).and_return([])
-        allow(Rails.cache).to receive(:write).and_return(true)
-      end
-
-      subject { Bookings::SchoolSearch.new('', location: 'France') }
-
-      specify 'nothing should be cached' do
-        expect(subject.point).to be_nil
-        expect(Rails.cache).not_to have_received(:write)
-      end
-    end
 
     context 'when Geocoder returns invalid results' do
       let(:expected_error) { Bookings::SchoolSearch::InvalidGeocoderResultError }
       before do
         allow(Geocoder).to receive(:search).and_return('something bad')
-        allow(Rails.cache).to receive(:write).and_return(true)
       end
 
-      subject { Bookings::SchoolSearch.new('', location: 'France') }
-
-      specify 'nothing should be cached' do
-        expect(Rails.cache).not_to have_received(:write)
-      end
-    end
-
-    context 'when the cache returns invalid results' do
-      let(:location) { "Geneva" }
-      let(:location_key) { Digest::SHA1.hexdigest(location.downcase.chomp) }
-
-
-      before do
-        allow(Rails.cache).to receive(:read).and_return("an invalid value")
-        allow(Rails.cache).to receive(:delete).and_return(true)
-        allow(Rails.logger).to receive(:error).and_return(true)
-      end
-
-      subject! { Bookings::SchoolSearch.new('', location: location) }
-
-      specify "should write an error to the log" do
-        expect(Rails.logger).to have_received(:error).with("Invalid result read from cache: an invalid value")
-      end
-
-      specify "should delete the invalid entry from the cache" do
-        expect(Rails.cache).to have_received(:delete).with(location_key)
+      specify 'an error should be raised' do
+        expect { Bookings::SchoolSearch.new('', location: 'France') }.to raise_error(expected_error)
       end
     end
   end
