@@ -1,7 +1,7 @@
 require 'rails_helper'
-require Rails.root.join('lib', 'autoexpire_cache_redis')
+require Rails.root.join('lib', 'geocoder_autoexpire_cache')
 
-describe AutoexpireCacheRedis do
+describe GeocoderAutoexpireCache do
   let(:store) { ActiveSupport::Cache.lookup_store(:memory_store) }
   subject { described_class.new(store) }
 

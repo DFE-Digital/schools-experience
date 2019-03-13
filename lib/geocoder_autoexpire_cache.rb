@@ -1,5 +1,6 @@
-# This is adapted from the Geocoder examples dir
-class AutoexpireCacheRedis
+# This is adapted from the Geocoder examples dir but
+# it wraps Rails.cache instead of Redis.current
+class GeocoderAutoexpireCache
   attr_accessor :store, :ttl
 
   def initialize(store, ttl = 1.month)

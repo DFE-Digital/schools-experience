@@ -20,11 +20,11 @@
 #  units: :miles
 #)
 
-require Rails.root.join('lib', 'autoexpire_cache_redis')
+require Rails.root.join('lib', 'geocoder_autoexpire_cache')
 
 defaults = {
   units: :miles,
-  cache: AutoexpireCacheRedis.new(Rails.cache)
+  cache: GeocoderAutoexpireCache.new(Rails.cache)
 }
 
 if ENV['BING_MAPS_KEY'].present?
