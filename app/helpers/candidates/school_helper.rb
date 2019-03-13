@@ -59,25 +59,21 @@ module Candidates::SchoolHelper
     "https://www.compare-school-performance.service.gov.uk/school/#{urn}"
   end
 
-  def school_search_filter_description(search)
-    if search.subjects.empty?
-      if search.phases.any?
-        t(
-          'helpers.candidates.school_search.phases_filter',
-          phase_names: search.phase_names.to_sentence
-        )
-      end
-    elsif search.phases.empty?
-      t(
-        'helpers.candidates.school_search.subjects_filter',
-        subject_names: search.subject_names.to_sentence
-      )
-    else
-      t(
-        'helpers.candidates.school_search.phases_and_subjects_filter',
-        phase_names: search.phase_names.join(', '),
-        subject_names: search.subject_names.join(', ')
-      )
-    end
+  def school_search_phase_filter_description(search)
+    return if search.phases.empty?
+
+    t(
+      'helpers.candidates.school_search.phases_filter_html',
+      phase_names: to_sentence(search.phase_names.map { |name| content_tag(:strong, name) })
+    )
+  end
+
+  def school_search_subject_filter_description(search)
+    return if search.subjects.empty?
+
+    t(
+      'helpers.candidates.school_search.subjects_filter_html',
+      subject_names: to_sentence(search.subject_names.map { |name| content_tag(:strong, name) })
+    )
   end
 end

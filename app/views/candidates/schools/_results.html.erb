@@ -35,10 +35,16 @@
   </aside>
 
   <section class="govuk-grid-column-two-thirds" id="search-results">
-    <%- if desc = school_search_filter_description(@search) -%>
+    <%- if @search.subjects.any? || @search.phases.any? -%>
     <div class="school-search-filter-info">
-      <%= desc %>
-    </div>
+      <div>
+        <%= school_search_phase_filter_description @search %>
+      </div>
+      
+      <div>
+        <%= school_search_subject_filter_description @search %>
+      </div>
+    </p>
     <%- end -%>
 
     <div class="pagination-info higher">

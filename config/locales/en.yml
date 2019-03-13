@@ -138,9 +138,8 @@ en:
 
     candidates:
       school_search:
-        phases_filter: "Filtering by Education phase: %{phase_names}"
-        subjects_filter: "Filtering by Placement subject: %{subject_names}"
-        phases_and_subjects_filter: "Filtering by Education phase and Placement subject: %{phase_names} and %{subject_names}"
+        phases_filter_html: "Education phases: %{phase_names}"
+        subjects_filter_html: "Placement subjects: %{subject_names}"
 
   views:
     pagination:

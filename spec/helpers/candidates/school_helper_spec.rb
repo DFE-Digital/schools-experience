@@ -137,55 +137,52 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.filter_description' do
-    context 'with no filters' do
+  context '.school_search_phase_filter_description' do
+    context 'with no subjects' do
       subject do
-        double('Bookings::SchoolSeach',
-          subjects: [], subject_names: [],
+        double('Bookings::SchoolSearch',
           phases: [], phase_names: [])
       end
 
       it("should return a nil") do
-        expect(school_search_filter_description(subject)).to be_nil
+        expect(school_search_phase_filter_description(subject)).to be_nil
       end
     end
 
     context 'with subject filters' do
       subject do
-        double('Bookings::SchoolSeach',
-          subjects: [1, 3], subject_names: %w{first third},
-          phases: [], phase_names: [])
-      end
-
-      it("should return a nil") do
-        expect(school_search_filter_description(subject)).to \
-          eq("Filtering by Placement subject: first and third")
-      end
-    end
-
-    context 'with phase filters' do
-      subject do
-        double('Bookings::SchoolSeach',
-          subjects: [], subject_names: [],
+        double('Bookings::SchoolSearch',
           phases: [1, 3], phase_names: %w{first third})
       end
 
       it("should return a nil") do
-        expect(school_search_filter_description(subject)).to \
-          eq("Filtering by Education phase: first and third")
+        expect(school_search_phase_filter_description(subject)).to \
+          eq("Education phases: <strong>first</strong> and <strong>third</strong>")
       end
     end
+  end
 
-    context 'with subject and phase filters' do
+  context '.school_search_subject_filter' do
+    context 'with no subjects' do
       subject do
-        double('Bookings::SchoolSeach',
-          subjects: [1, 3], subject_names: %w{first third},
-          phases: [1, 3], phase_names: %w{first third})
+        double('Bookings::SchoolSearch',
+          subjects: [], subject_names: [])
       end
 
       it("should return a nil") do
-        expect(school_search_filter_description(subject)).to \
-          eq("Filtering by Education phase and Placement subject: first, third and first, third")
+        expect(school_search_subject_filter_description(subject)).to be_nil
+      end
+    end
+
+    context 'with subject filters' do
+      subject do
+        double('Bookings::SchoolSearch',
+          subjects: [1, 3], subject_names: %w{first third})
+      end
+
+      it("should return a nil") do
+        expect(school_search_subject_filter_description(subject)).to \
+          eq("Placement subjects: <strong>first</strong> and <strong>third</strong>")
       end
     end
   end
