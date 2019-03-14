@@ -1,5 +1,10 @@
 require 'breasal'
 
+# SchoolImporter takes raw data from TPUK and EduBase and combines them to
+# create Bookings::School (and associated) objects.
+#
+# If any validation fails (including if the URNs provided in the TPUK dataset
+# already exist), the whole import will fail and roll back.
 class SchoolImporter
   attr_accessor :tpuk_data, :edubase_data
   def initialize(tpuk_data, edubase_data)
