@@ -20,12 +20,20 @@
 #  units: :miles
 #)
 
+require Rails.root.join('lib', 'geocoder_autoexpire_cache')
+
+defaults = {
+  units: :miles,
+  cache: GeocoderAutoexpireCache.new(Rails.cache)
+}
+
 if ENV['BING_MAPS_KEY'].present?
   Geocoder.configure(
-    lookup: :bing,
-    api_key: ENV['BING_MAPS_KEY'],
-    units: :miles
+    defaults.merge(
+      lookup: :bing,
+      api_key: ENV['BING_MAPS_KEY']
+    )
   )
 else
-  Geocoder.configure(units: :miles)
+  Geocoder.configure(defaults)
 end
