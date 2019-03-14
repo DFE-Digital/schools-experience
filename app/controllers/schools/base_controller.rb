@@ -9,7 +9,7 @@ module Schools
     end
 
     # https://github.com/DFE-Digital/login.dfe.profile/blob/9948fc80984f44efb1df84f54a8559b7c9b4c2b3/test/unit/app/addOrganisation/review.get.test.js#L17
-    SAMPLE_SCHOOL_JSON = <<-JSON
+    SAMPLE_SCHOOL_JSON = <<-JSON.freeze
       {
         "id": "org1",
         "name": "organisation one",
@@ -34,7 +34,7 @@ module Schools
       }
     JSON
 
-    SAMPLE_USER_JSON = <<-JSON
+    SAMPLE_USER_JSON = <<-JSON.freeze
     {
       "firstName": "Testy",
       "lastName": "McTest",
