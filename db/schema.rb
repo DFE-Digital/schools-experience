@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_26_120359) do
+ActiveRecord::Schema.define(version: 2019_03_13_160927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 2019_02_26_120359) do
     t.string "county"
     t.string "postcode", null: false
     t.integer "bookings_school_type_id", null: false
+    t.string "contact_email", limit: 64
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
     t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true
