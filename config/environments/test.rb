@@ -59,4 +59,6 @@ Rails.application.configure do
 
   # Don't actually attempt to delivery emails during tests
   Notify.notification_class = NotifyFakeClient
+
+  config.x.phase_two.enabled = true
 end

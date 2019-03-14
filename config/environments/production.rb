@@ -96,4 +96,6 @@ Rails.application.configure do
   config.session_store :cache_store, key: 'schoolex-session'
 
   config.active_job.queue_adapter = :delayed_job
+
+  config.x.phase_two.enabled = ENV["PHASE_TWO"].present?
 end

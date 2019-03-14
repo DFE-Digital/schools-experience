@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'
 
-  if PHASE_TWO
+  if Rails.application.config.x.phase_two.enabled
     namespace :schools do
       resource :dashboard, only: :show
     end
