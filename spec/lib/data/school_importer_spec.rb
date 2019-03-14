@@ -4,8 +4,13 @@ require File.join(Rails.root, "lib", "data", "school_importer")
 
 describe SchoolImporter do
   context 'Initialization' do
-    # note URNs will be read from a CSV so are all strings at this point
-    let(:urns) { %w{URN 100492 SCITT 100494 TRUST TSA} }
+    let(:tpuk_data) do
+      CSV.parse(
+        File.read(File.join(Rails.root, 'spec', 'sample_data', 'tpuk.csv')).scrub,
+        headers: true
+      )
+    end
+
     let(:edubase_data) do
       CSV.parse(
         File.read(File.join(Rails.root, 'spec', 'sample_data', 'edubase.csv')).scrub,
@@ -13,12 +18,11 @@ describe SchoolImporter do
       )
     end
 
-
     context 'URNS' do
-      subject { SchoolImporter.new(urns, []) }
+      subject { SchoolImporter.new(tpuk_data, []) }
 
       specify 'should remove markers from URN list' do
-        expect(subject.urns).to eql([100492, 100494])
+        expect(subject.tpuk_data.keys).to eql([100492, 100494, 100171])
       end
     end
 
@@ -41,7 +45,6 @@ describe SchoolImporter do
     context 'Importing' do
       let!(:count_before) { Bookings::School.count }
       let(:school_type_id) { 2 }
-      let(:urns) { %w{100492 100494 100171} }
 
       before do
         # note these values are present in spec/sample_data/edubase.csv
@@ -57,12 +60,12 @@ describe SchoolImporter do
         create(:bookings_school_type, edubase_id: school_type_id)
       end
 
-      subject { SchoolImporter.new(urns, edubase_data) }
+      subject { SchoolImporter.new(tpuk_data, edubase_data) }
 
       before { subject.import }
 
       specify 'it should import the correct number of rows' do
-        expect(Bookings::School.count).to eql(count_before + subject.urns.size)
+        expect(Bookings::School.count).to eql(count_before + subject.tpuk_data.keys.size)
       end
 
       specify 'the new records should have the correct attributes' do
