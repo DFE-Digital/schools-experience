@@ -4,6 +4,12 @@ Rails.application.routes.draw do
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'
 
+  if PHASE_TWO
+    namespace :schools do
+      resource :dashboard, only: :show
+    end
+  end
+
   namespace :candidates do
     root to: 'home#index'
     get "splash", to: "home#splash"
