@@ -10,4 +10,6 @@ Rails.application.configure do
 
   # default to true but allow overriding in CI
   config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
+
+  config.x.phase_two.enabled = true
 end

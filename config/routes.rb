@@ -10,6 +10,11 @@ Rails.application.routes.draw do
   if Rails.application.config.x.phase_two.enabled
     namespace :schools do
       resource :dashboard, only: :show
+
+      namespace :on_boarding do
+        resource :candidate_requirement, only: %i(new create)
+        resource :fees, only: %i(new)
+      end
     end
   end
 
