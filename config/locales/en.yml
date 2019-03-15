@@ -67,6 +67,19 @@ en:
             acceptance:
               accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
+        schools/on_boarding/candidate_requirement:
+          attributes:
+            dbs_requirement:
+              blank: 'Select an option'
+              inclusion: 'Select an option'
+            dbs_policy:
+              blank: 'Details required'
+            requirements:
+              blank: 'Select an option'
+              inclusion: 'Select an option'
+            requirements_details:
+              blank: 'Details required'
+
   activerecord:
     errors:
       models:
@@ -83,6 +96,10 @@ en:
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
+      schools_on_boarding_candidate_requirement:
+        dbs_requirement: 'Do you require candidates to be DBS-checked?'
+        requirements: 'Do you have any requirements for school experience candidates?'
+
     hint:
       phases: Select all that apply
       max_fee: Schools may charge
@@ -102,6 +119,8 @@ en:
         objectives:
           - Provide a short explanation about what you want to gain from your placement.
           - This will help the school see if it can offer you the kind of placement you’re looking for.
+      schools_on_boarding_candidate_requirement:
+        requirements: 'For example, they must want to apply for teacher training at your school or they must be local and live within 20 miles of your school.'
 
     label:
       candidates_registrations_contact_information:
@@ -126,6 +145,16 @@ en:
       order: Sorted by
       query: Find what?
       location: Where?
+      schools_on_boarding_candidate_requirement:
+        dbs_requirement:
+          always: 'Yes - Always'
+          sometimes: 'Yes - Sometimes'
+          never: 'No - Never'
+        dbs_policy: 'Outline your DBS policy in 50 words or fewer.'
+        requirements:
+          true: 'Yes'
+          false: 'No'
+        requirements_details: 'Provide details'
 
     page_entries_info:
       one_page:
