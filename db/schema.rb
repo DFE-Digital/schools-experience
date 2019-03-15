@@ -127,6 +127,16 @@ ActiveRecord::Schema.define(version: 2019_03_18_121139) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "schools_school_profiles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "urn", null: false
+    t.string "candidate_requirement_dbs_requirement"
+    t.text "candidate_requirement_dbs_policy"
+    t.boolean "candidate_requirement_requirements"
+    t.text "candidate_requirement_requirements_details"
+  end
+
   add_foreign_key "bookings_schools", "bookings_school_types"
   add_foreign_key "bookings_schools_phases", "bookings_phases"
   add_foreign_key "bookings_schools_phases", "bookings_schools"
