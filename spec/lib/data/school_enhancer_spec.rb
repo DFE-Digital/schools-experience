@@ -55,11 +55,11 @@ describe SchoolEnhancer do
 
     specify 'should correctly set provided attributes' do
       Bookings::School.find_by(urn: 100492).tap do |school|
-        expect(school.school_experience_description).to match(/We can arrange this informally by prior email/)
-        expect(school.school_experience_availability_details).to match(/Spring Term 2019/)
-        expect(school.primary_key_stage_details).to match(/Primary Key Stages 1 and 2/)
-        expect(school.teacher_training_details).to match(/We are a lead school/)
-        expect(school.itt_website).to eql("http://summer-heights.co.uk/")
+        expect(school.placement_info).to match(/We can arrange this informally by prior email/)
+        expect(school.availability_info).to match(/Spring Term 2019/)
+        expect(school.primary_key_stage_info).to match(/Primary Key Stages 1 and 2/)
+        expect(school.teacher_training_info).to match(/We are a lead school/)
+        expect(school.teacher_training_website).to eql("http://summer-heights.co.uk/")
       end
     end
 

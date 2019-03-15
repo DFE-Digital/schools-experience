@@ -36,12 +36,12 @@ class SchoolEnhancer
         end
 
         school.update_attributes(
-          school_experience_description: cleanse_text(row['school_experience_description']),
+          availability_info: cleanse_text(row['school_experience_availability_details']),
+          placement_info: cleanse_text(row['school_experience_description']),
+          primary_key_stage_info: cleanse_text(row['primary_key_stage_details']),
+          teacher_training_info: cleanse_text(row['teacher_training_details']),
           teacher_training_provider: row['teacher_training_details'].present?,
-          teacher_training_details: cleanse_text(row['teacher_training_details']),
-          primary_key_stage_details: cleanse_text(row['primary_key_stage_details']),
-          school_experience_availability_details: cleanse_text(row['school_experience_availability_details']),
-          itt_website: row['itt_website']
+          teacher_training_website: row['itt_website']
         )
 
         if row['secondary_subjects'].present?
