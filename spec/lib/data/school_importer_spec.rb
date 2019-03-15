@@ -78,7 +78,8 @@ describe SchoolImporter do
             address_3: nil,
             town: "London",
             county: nil,
-            postcode: "W10 5EF"
+            postcode: "W10 5EF",
+            contact_email: "email.100492@school.org"
           },
           100494 => {
             name: "Saint Francis of Assisi Catholic Primary School",
@@ -88,7 +89,8 @@ describe SchoolImporter do
             address_3: nil,
             town: "London",
             county: nil,
-            postcode: "W11 4BJ"
+            postcode: "W11 4BJ",
+            contact_email: "email.100494@school.org"
           }
         }.each do |urn, attributes|
           Bookings::School.find_by(urn: urn).tap do |school|
@@ -116,6 +118,17 @@ describe SchoolImporter do
         # they're populated
         Bookings::School.all.each do |school|
           expect(school.coordinates).to be_present
+        end
+      end
+
+      context 'Overriding email addresses' do
+        let(:email_override) { "someone@someschool.org" }
+        subject { SchoolImporter.new(tpuk_data, edubase_data, email_override) }
+
+        specify "all emails should be set to the override email address" do
+          Bookings::School.all.each do |school|
+            expect(school.contact_email).to eql(email_override)
+          end
         end
       end
     end

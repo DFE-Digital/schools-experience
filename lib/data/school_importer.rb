@@ -6,8 +6,8 @@ require 'breasal'
 # If any validation fails (including if the URNs provided in the TPUK dataset
 # already exist), the whole import will fail and roll back.
 class SchoolImporter
-  attr_accessor :tpuk_data, :edubase_data
-  def initialize(tpuk_data, edubase_data)
+  attr_accessor :tpuk_data, :edubase_data, :email_override
+  def initialize(tpuk_data, edubase_data, email_override = nil)
     self.tpuk_data = tpuk_data
       .reject { |l| l['urn'].in?(%w{URN SCITT TRUST TSA ??????}) }
       .each
@@ -20,6 +20,8 @@ class SchoolImporter
       .with_object({}) do |record, h|
         h[record['URN'].to_i] = record
       end
+
+    self.email_override = email_override
   end
 
   def import
@@ -54,7 +56,7 @@ private
       urn:           nilify(edubase_row['URN']),
       name:          nilify(edubase_row['EstablishmentName']),
       website:       nilify(edubase_row['SchoolWebsite']),
-      contact_email: nilify(tpuk_row['contact_email'])&.downcase,
+      contact_email: email_override.present? ? email_override : nilify(tpuk_row['contact_email'])&.downcase,
       address_1:     nilify(edubase_row['Street']),
       address_2:     nilify(edubase_row['Locality']),
       address_3:     nilify(edubase_row['Address3']),

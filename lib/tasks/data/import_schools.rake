@@ -10,8 +10,14 @@ namespace :data do
     # downloads page
     #
     # https://get-information-schools.service.gov.uk/Downloads
+    #
+    # If we don't want to run the risk of accidentally emailing anyone, provide
+    # an email address in email_override and that will be set on all imported
+    # records
     desc "Import GiaS (EduBase) data based on a list of URNs"
-    task :import, %i{tpuk edubase} => :environment do |_t, args|
+    task :import, %i{tpuk edubase email_override} => :environment do |_t, args|
+      args.with_defaults(email_override: nil)
+
       tpuk_data = CSV.parse(
         File.read(args[:tpuk]).scrub,
         headers: true
@@ -22,7 +28,7 @@ namespace :data do
         headers: true
       )
 
-      SchoolImporter.new(tpuk_data, edubase_data).import
+      SchoolImporter.new(tpuk_data, edubase_data, args[:email_override]).import
     end
 
     desc "Enhance school data using information captured in the questionnaire"
