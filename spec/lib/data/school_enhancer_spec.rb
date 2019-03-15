@@ -28,12 +28,13 @@ describe SchoolEnhancer do
   end
 
   context '#enhance' do
+    let(:subject_names) { %w{Biology Chemistry English Maths} }
     let!(:imported_school) { FactoryBot.create(:bookings_school, urn: 100492) }
     subject { described_class.new(raw_response_data) }
 
     before do
-      YAML.load_file(Rails.root.join('db', 'data', 'subjects.yml')).each do |name|
-        Bookings::Subject.create(name: name)
+      subject_names.each do |subject|
+        FactoryBot.create(:bookings_subject, name: subject)
       end
     end
 
@@ -58,12 +59,12 @@ describe SchoolEnhancer do
         expect(school.school_experience_availability_details).to match(/Spring Term 2019/)
         expect(school.primary_key_stage_details).to match(/Primary Key Stages 1 and 2/)
         expect(school.teacher_training_details).to match(/We are a lead school/)
-        expect(school.website).to eql("http://summer-heights.co.uk/")
+        expect(school.itt_website).to eql("http://summer-heights.co.uk/")
       end
     end
 
     specify 'should correctly assign provided subjects' do
-      expect(Bookings::School.find_by(urn: 100492).subjects.map(&:name).sort).to eql(%w{Biology Chemistry English Maths})
+      expect(Bookings::School.find_by(urn: 100492).subjects.map(&:name).sort).to eql(subject_names)
     end
   end
 end

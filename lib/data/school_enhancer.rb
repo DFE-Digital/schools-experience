@@ -7,7 +7,7 @@ class SchoolEnhancer
 
   REQUIRED_HEADERS = %w{
     urn secondary_subjects easter_availability school_experience_description
-    primary_key_stage_details teacher_training_details website
+    primary_key_stage_details teacher_training_details itt_website
     school_experience_availability_details
   }.freeze
 
@@ -41,7 +41,7 @@ class SchoolEnhancer
           teacher_training_details: cleanse_text(row['teacher_training_details']),
           primary_key_stage_details: cleanse_text(row['primary_key_stage_details']),
           school_experience_availability_details: cleanse_text(row['school_experience_availability_details']),
-          website: row['website']
+          itt_website: row['itt_website']
         )
 
         if row['secondary_subjects'].present?
