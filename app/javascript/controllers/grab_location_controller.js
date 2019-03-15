@@ -81,8 +81,9 @@ export default class extends Controller {
           this.setCoords(position.coords) ;
           this.hideSpinner()
         },
-        () => {
+        (err) => {
           this.hideSpinner()
+          window.alert("Your location is not available") ;
         }
       ) ;
     }
