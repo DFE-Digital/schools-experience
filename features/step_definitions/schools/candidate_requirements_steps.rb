@@ -3,6 +3,7 @@ Given("I outline our dbs policy") do
 end
 
 Given("I choose {string} from the {string}") do |string, string2|
+  make_inputs_opaque if opaquify_inputs?
   choose 'Yes'
 end
 
