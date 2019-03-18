@@ -22,6 +22,10 @@ module Candidates::SchoolHelper
     safe_join school.phases.map(&:name), ', '
   end
 
+  def format_school_availability(school)
+    simple_format school.try(:availability_info) || 'Not specified'
+  end
+
   def describe_current_search(search)
     if search.latitude.present? && search.longitude.present?
       "near me"

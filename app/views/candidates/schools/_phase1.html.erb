@@ -43,7 +43,7 @@
       
       <p>
         <b>Availability:</b>
-        <%= @school.availability_text.presence || 'Not specified' %>
+        <%= format_school_availability @school %>
       </p>
       
       <p>
