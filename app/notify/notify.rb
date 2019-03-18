@@ -1,7 +1,7 @@
 class Notify
   attr_accessor :notify_client, :to
 
-  API_KEY = Rails.application.credentials[:notify_api_key].freeze
+  API_KEY = ENV['NOTIFY_API_KEY'].presence || Rails.application.credentials[:notify_api_key].freeze
 
   class RetryableError < ArgumentError; end
 
