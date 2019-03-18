@@ -7,22 +7,46 @@
 </div>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-third filter-list" id="search-filter">
-    <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
-      <%= f.hidden_field :query %>
-      <%= f.hidden_field :location %>
-      <%= f.hidden_field :distance %>
+  <aside class="govuk-grid-column-one-third filter-list">
+    <div data-controller="collapsible" id="search-filter">
+      <button data-action="collapsible#toggle">
+        Filter the results
+      </button>
 
-      <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
+      <div data-target="collapsible.panel">
+        <%= form_for @search, as: '',
+              method: :get,
+              data: {controller: 'instant-filter'},
+              html: {class: "collapsible__content"} do |f| %>
 
-      <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
-      <%= f.hidden_field :order %>
+          <%= f.hidden_field :query %>
+          <%= f.hidden_field :location %>
+          <%= f.hidden_field :distance %>
 
-      <%= f.submit 'Update schools list', name: nil %>
-    <% end %>
-  </div>
+          <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
 
-  <div class="govuk-grid-column-two-thirds" id="search-results">
+          <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
+          <%= f.hidden_field :order %>
+
+          <%= f.submit 'Update schools list', name: nil %>
+        <% end %>
+      </div>
+    </div>
+  </aside>
+
+  <section class="govuk-grid-column-two-thirds" id="search-results">
+    <%- if @search.subjects.any? || @search.phases.any? -%>
+    <div class="school-search-filter-info">
+      <div>
+        <%= school_search_phase_filter_description @search %>
+      </div>
+      
+      <div>
+        <%= school_search_subject_filter_description @search %>
+      </div>
+    </p>
+    <%- end -%>
+
     <div class="pagination-info higher">
       <div class="pagination-slice">
         <%= school_results_info @search %>
@@ -55,7 +79,7 @@
     <ul id="results">
       <% @search.results.each_with_index do |school, index| %>
       <li data-school-urn="<%= school.urn %>">
-        <div class="school-result">
+        <article class="school-result">
           <h3 class="govuk-heading-l">
             <%= school.name %>
             <%- if school.respond_to? :distance -%>
@@ -74,7 +98,7 @@
           </dl>
 
           <%= link_to 'View school details', candidates_school_path(school), class: 'govuk-button' %>
-        </div>
+        </article>
       </li>
       <% end %>
     </ul>
@@ -84,5 +108,5 @@
       <%= paginate @search.results %>
     </div>
     <% end %>
-  </div>
+  </section>
 </div>

@@ -19,14 +19,6 @@ Given("there there are schools with the following attributes:") do |table|
   expect(Bookings::School.count).to eql(table.rows.length)
 end
 
-Then("the results should be sorted by fee, lowest to highest") do
-  expect(
-    page
-      .all('#search-results > ul > li')
-      .map{ |ele| ele['data-school-urn'].to_i }
-  ).to eql(@schools.sort_by(&:fee).map(&:urn))
-end
-
 Given("I have provided {string} as my location") do |location|
   visit(candidates_schools_path)
   fill_in "Where?", with: location
@@ -49,16 +41,17 @@ Then("the results should be sorted by distance, nearest to furthest") do
   ).to eql(urns_in_distance_order)
 end
 
-Then("the results should be sorted by relevance, highest to lowest") do
-  urns_in_relevance_order = [
-    @schools.detect { |s| s.name == "Manton School" },
+Then("the results should be sorted by name, lowest to highest") do
+  # proximity from Man
+  urns_in_name_order = [
+    @schools.detect { |s| s.name == "Manningtree Primary School" },
     @schools.detect { |s| s.name == "Mansfield School" },
-    @schools.detect { |s| s.name == "Manningtree Primary School" }
+    @schools.detect { |s| s.name == "Manton School" }
   ].map(&:urn)
 
   expect(
     page
       .all('#search-results > ul > li')
       .map{ |ele| ele['data-school-urn'].to_i }
-  ).to eql(urns_in_relevance_order)
+  ).to eql(urns_in_name_order)
 end

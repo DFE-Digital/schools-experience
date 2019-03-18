@@ -2,9 +2,8 @@ class Bookings::SchoolSearch < ApplicationRecord
   attr_accessor :requested_order
 
   AVAILABLE_ORDERS = [
-    %w{relevance Relevance},
     %w{distance Distance},
-    %w{fee Fee}
+    %w{name Name}
   ].freeze
 
   def self.available_orders
@@ -116,12 +115,8 @@ private
       # Bookings::School so we can't use hash syntax
       # as Rails will complain
       'distance asc'
-    elsif option == 'fee'
-      { fee: 'asc' }
-    elsif option == 'name'
+    else
       { name: 'asc' }
-    else # revert to pg_search's rank which is default
-      {}
     end
   end
 end
