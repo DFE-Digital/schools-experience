@@ -3,6 +3,7 @@ Feature: Candidate requirements
   As a school administrator
   I want to specify candidate requirements
 
+  @javascript
   Scenario: Completing step
     Given I am on the 'candidate requirements' page
     And I choose 'Yes - Sometimes' from the 'Do you require candidates to be DBS-checked?' radio buttons
