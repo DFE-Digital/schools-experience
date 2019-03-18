@@ -379,5 +379,44 @@ describe Bookings::SchoolSearch do
     specify 'total count should match the number of matching schools' do
       expect(Bookings::SchoolSearch.new(query: "school").total_count).to eql(matching_schools.length)
     end
+
+    context 'Saving results' do
+      subject { Bookings::SchoolSearch.new(query: "school") }
+
+      before { subject.total_count }
+
+      specify 'should save the record' do
+        expect(subject).to be_persisted
+      end
+
+      specify 'should save the total number of results' do
+        expect(subject.number_of_results).to eql(matching_schools.length)
+      end
+
+      context 'filtering' do
+        let(:query) { "school" }
+        let(:phases) { [1, 2, 3] }
+        let(:subjects) { [2, 3, 4] }
+        let(:max_fee) { 30 }
+        let(:location) { "Birmingham" }
+        subject do
+          Bookings::SchoolSearch.new(
+            query: query,
+            location: location,
+            phases: phases,
+            subjects: subjects,
+            max_fee: max_fee
+          )
+        end
+
+        specify 'should record all search parameters' do
+          expect(subject.query).to eql(query)
+          expect(subject.phases).to eql(phases)
+          expect(subject.subjects).to eql(subjects)
+          expect(subject.max_fee).to eql(max_fee)
+          expect(subject.location).to eql(location)
+        end
+      end
+    end
   end
 end

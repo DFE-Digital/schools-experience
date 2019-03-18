@@ -50,7 +50,7 @@ class Bookings::SchoolSearch < ApplicationRecord
 private
 
   def save_with_result_count(count)
-    self.results = count
+    self.number_of_results = count
     save
   end
 

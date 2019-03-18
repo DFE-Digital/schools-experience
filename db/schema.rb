@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_18_100422) do
+ActiveRecord::Schema.define(version: 2019_03_18_121139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2019_03_18_100422) do
     t.integer "phases", array: true
     t.integer "max_fee"
     t.integer "page"
-    t.integer "results", default: 0
+    t.integer "number_of_results", default: 0
     t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
