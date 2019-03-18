@@ -65,8 +65,7 @@ class Bookings::School < ApplicationRecord
   end
 
   def contact_email
-    # TODO
-    'CONTACT_EMAIL'
+    ENV['STUBBED_SCHOOL_EMAIL'].presence
   end
 
   def private_beta?
