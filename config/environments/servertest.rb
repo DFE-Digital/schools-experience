@@ -7,4 +7,5 @@ Rails.application.configure do
 
   # Don't actually attempt to delivery emails in Staging environment
   Notify.notification_class = NotifyFakeClient
+  config.x.phase_two.enabled = true
 end
