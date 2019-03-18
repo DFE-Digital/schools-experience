@@ -323,34 +323,6 @@ describe Bookings::SchoolSearch do
         end
       end
 
-      context 'Fee ordering' do
-        let!(:reasonable) { create(:bookings_school, name: "Reasonable", fee: 15) }
-        let!(:cheap) { create(:bookings_school, name: "Cheap", fee: 0) }
-        let!(:expensive) { create(:bookings_school, name: "Expensive", fee: 30) }
-
-        subject do
-          Bookings::SchoolSearch.new('', requested_order: 'fee').results
-        end
-
-        specify 'schools should be ordered by fee, low to high' do
-          expect(subject.map(&:name)).to eql([cheap, reasonable, expensive].map(&:name))
-        end
-      end
-
-      context 'Search relevance ordering' do
-        let!(:bath) { create(:bookings_school, name: "Bath High School") }
-        let!(:coventry) { create(:bookings_school, name: "Coventry Academy") }
-        let!(:cardiff) { create(:bookings_school, name: "Cardiff Comprehensive") }
-
-        subject do
-          Bookings::SchoolSearch.new('Cardiff High').results
-        end
-
-        specify 'schools should be ordered alphabetically by name' do
-          expect(subject.map(&:name)).to eql([bath, cardiff].map(&:name))
-        end
-      end
-
       context 'Sorting by name' do
         let!(:cardiff) { create(:bookings_school, name: "Cardiff Comprehensive") }
         let!(:bath) { create(:bookings_school, name: "Bath High School") }

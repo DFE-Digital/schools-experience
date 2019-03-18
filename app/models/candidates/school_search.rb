@@ -36,6 +36,7 @@ module Candidates
 
     def initialize(*args)
       @distance = 3
+      @order = 'distance'
 
       super
     end
