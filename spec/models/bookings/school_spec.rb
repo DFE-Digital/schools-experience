@@ -86,10 +86,10 @@ describe Bookings::School, type: :model do
       let!(:school_c) { create(:bookings_school) }
 
       context 'By subject' do
-        let!(:maths) { create(:bookings_subject, name: "Maths") }
-        let!(:physics) { create(:bookings_subject, name: "Physics") }
-        let!(:chemistry) { create(:bookings_subject, name: "Chemistry") }
-        let!(:biology) { create(:bookings_subject, name: "Biology") }
+        let!(:maths) { Bookings::Subject.find_by! name: 'Maths' }
+        let!(:physics) { Bookings::Subject.find_by! name: "Physics" }
+        let!(:chemistry) { Bookings::Subject.find_by! name: "Chemistry" }
+        let!(:biology) { Bookings::Subject.find_by! name: "Biology" }
 
         before do
           school_a.subjects << [maths, physics]

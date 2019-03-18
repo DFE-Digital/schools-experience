@@ -12,24 +12,11 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
       subject_preference_attributes: subject_preference_attributes
   end
 
-  let :subjects do
-    [
-      { name: 'Astronomy' },
-      { name: 'History' }
-    ]
-  end
-
-  let :school do
-    double Candidates::School, subjects: subjects
-  end
-
   before do
     allow(DateTime).to receive(:now) { date }
 
     allow(Candidates::Registrations::RegistrationSession).to \
       receive(:new) { registration_session }
-
-    allow(Candidates::School).to receive(:find) { school }
   end
 
   context 'without existing subject_preference in session' do

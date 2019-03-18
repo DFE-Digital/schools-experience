@@ -23,7 +23,7 @@ module Candidates
           validates :subject_first_choice, presence: true
           validates :subject_first_choice, inclusion: { in: :available_subject_choices }, if: -> { subject_first_choice.present? }
           validates :subject_second_choice, presence: true
-          validates :subject_second_choice, inclusion: { in: :available_subject_choices }, if: -> { subject_second_choice.present? }
+          validates :subject_second_choice, inclusion: { in: :second_subject_choices }, if: -> { subject_second_choice.present? }
         end
 
         def school
@@ -35,7 +35,12 @@ module Candidates
         end
 
         def available_subject_choices
-          @available_subject_choices ||= school.subjects.pluck :name
+          @available_subject_choices ||= Candidates::School.subjects.map(&:last)
+        end
+
+        def second_subject_choices
+          ["I don't have a second subject preference"] +
+            available_subject_choices
         end
 
         def available_degree_stages

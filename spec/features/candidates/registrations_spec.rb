@@ -21,15 +21,8 @@ feature 'Candidate Registrations', type: :feature do
     11048
   end
 
-  let :subjects do
-    [
-      { name: 'Mathematics' },
-      { name: 'Physics' }
-    ]
-  end
-
   let :school do
-    double Candidates::School, subjects: subjects, name: 'Test School'
+    double Candidates::School, name: 'Test School'
   end
 
   let :uuid do
@@ -106,7 +99,7 @@ feature 'Candidate Registrations', type: :feature do
     select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
     choose "I’m very sure and think I’ll apply"
     select 'Physics', from: 'First choice'
-    select 'Mathematics', from: 'Second choice'
+    select 'Maths', from: 'Second choice'
     click_button 'Continue'
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/background_check/new"
@@ -134,7 +127,7 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "Degree subject Physics"
     expect(page).to have_text "I’m very sure and think I’ll apply"
     expect(page).to have_text "Teaching subject - first choice Physics"
-    expect(page).to have_text "Teaching subject - second choice Mathematics"
+    expect(page).to have_text "Teaching subject - second choice Maths"
     expect(page).to have_text "DBS certificate Yes"
 
     # Submit email confirmation form with errors
