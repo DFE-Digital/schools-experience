@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_26_120359) do
+ActiveRecord::Schema.define(version: 2019_03_18_121139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,20 @@ ActiveRecord::Schema.define(version: 2019_02_26_120359) do
     t.integer "edubase_id"
     t.index ["name"], name: "index_bookings_phases_on_name"
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
+  end
+
+  create_table "bookings_school_searches", force: :cascade do |t|
+    t.string "query", limit: 128
+    t.string "location", limit: 128
+    t.integer "radius", default: 10
+    t.integer "subjects", array: true
+    t.integer "phases", array: true
+    t.integer "max_fee"
+    t.integer "page"
+    t.integer "number_of_results", default: 0
+    t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "bookings_school_types", force: :cascade do |t|
@@ -49,6 +63,13 @@ ActiveRecord::Schema.define(version: 2019_02_26_120359) do
     t.string "county"
     t.string "postcode", null: false
     t.integer "bookings_school_type_id", null: false
+    t.string "contact_email", limit: 64
+    t.text "placement_info"
+    t.boolean "teacher_training_provider", default: false, null: false
+    t.text "teacher_training_info"
+    t.text "primary_key_stage_info"
+    t.text "availability_info"
+    t.string "teacher_training_website"
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
     t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true

@@ -18,7 +18,7 @@ describe Bookings::SchoolSearch do
       end
 
       specify 'an error should be raised' do
-        expect { Bookings::SchoolSearch.new('', location: 'France') }.to raise_error(expected_error)
+        expect { Bookings::SchoolSearch.new(query: '', location: 'France') }.to raise_error(expected_error)
       end
     end
   end
@@ -51,7 +51,7 @@ describe Bookings::SchoolSearch do
       end
 
       context 'When no conditions are supplied' do
-        subject { Bookings::SchoolSearch.new('', location: '').results }
+        subject { Bookings::SchoolSearch.new(query: '', location: '').results }
         specify 'results should include all schools' do
           expect(subject.count).to eql(Bookings::School.count)
         end
@@ -62,7 +62,7 @@ describe Bookings::SchoolSearch do
 
         context 'When text and latitude and longitude are supplied' do
           subject do
-            Bookings::SchoolSearch.new('Springfield', location: {
+            Bookings::SchoolSearch.new(query: 'Springfield', location: {
               latitude: coords.latitude, longitude: coords.longitude
             }).results
           end
@@ -79,7 +79,7 @@ describe Bookings::SchoolSearch do
         context 'When only lat and lon are supplied' do
           subject do
             Bookings::SchoolSearch.new(
-              '',
+              query: '',
               location: { latitude: coords.latitude, longitude: coords.longitude }
             ).results
           end
@@ -99,7 +99,7 @@ describe Bookings::SchoolSearch do
 
         context 'When only latitude is supplied' do
           subject do
-            Bookings::SchoolSearch.new('', location: {
+            Bookings::SchoolSearch.new(query: '', location: {
               latitude: coords.latitude
             })
           end
@@ -113,7 +113,7 @@ describe Bookings::SchoolSearch do
 
         context 'When only longitude is supplied' do
           subject do
-            Bookings::SchoolSearch.new('', location: {
+            Bookings::SchoolSearch.new(query: '', location: {
               longitude: coords.longitude
             })
           end
@@ -133,7 +133,7 @@ describe Bookings::SchoolSearch do
           end
 
           context 'When text and location are supplied' do
-            subject { Bookings::SchoolSearch.new('Springfield', location: 'Manchester').results }
+            subject { Bookings::SchoolSearch.new(query: 'Springfield', location: 'Manchester').results }
 
             specify 'results should include matching records' do
               expect(subject).to include(matching_school)
@@ -145,7 +145,7 @@ describe Bookings::SchoolSearch do
           end
 
           context 'When only text is supplied' do
-            subject { Bookings::SchoolSearch.new('Springfield').results }
+            subject { Bookings::SchoolSearch.new(query: 'Springfield').results }
 
             let!(:matching_school) do
               create(:bookings_school, name: "Springfield Primary School")
@@ -161,7 +161,7 @@ describe Bookings::SchoolSearch do
           end
 
           context 'When only a location is supplied' do
-            subject { Bookings::SchoolSearch.new('', location: 'Manchester').results }
+            subject { Bookings::SchoolSearch.new(query: '', location: 'Manchester').results }
 
             let!(:matching_school) do
               create(:bookings_school, name: "Springfield Primary School")
@@ -183,7 +183,7 @@ describe Bookings::SchoolSearch do
               allow(Geocoder).to receive(:search).and_return([])
             end
 
-            subject { Bookings::SchoolSearch.new('Springfield', location: 'Madrid').results }
+            subject { Bookings::SchoolSearch.new(query: 'Springfield', location: 'Madrid').results }
 
             specify 'results should include records that match the query' do
               expect(subject).to include(matching_school)
@@ -191,7 +191,7 @@ describe Bookings::SchoolSearch do
           end
 
           context 'When the query does not match a school' do
-            subject { Bookings::SchoolSearch.new('William McKinley High', location: 'Chippewa, Michigan').results }
+            subject { Bookings::SchoolSearch.new(query: 'William McKinley High', location: 'Chippewa, Michigan').results }
 
             specify 'results should include records that match the query' do
               expect(subject).to be_empty
@@ -205,7 +205,7 @@ describe Bookings::SchoolSearch do
               allow(Geocoder).to receive(:search).and_return("ABC123")
             end
 
-            subject { Bookings::SchoolSearch.new('', location: 'Madrid') }
+            subject { Bookings::SchoolSearch.new(query: '', location: 'Madrid') }
 
             specify 'should fail with a InvalidGeocoderResultError' do
               expect { subject.results }.to raise_error(Bookings::SchoolSearch::InvalidGeocoderResultError)
@@ -228,7 +228,7 @@ describe Bookings::SchoolSearch do
             non_matching_school.subjects << physics
           end
 
-          subject { Bookings::SchoolSearch.new('', location: '', subjects: maths).results }
+          subject { Bookings::SchoolSearch.new(query: '', location: '', subjects: maths.id).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -245,7 +245,7 @@ describe Bookings::SchoolSearch do
             non_matching_school.phases << secondary
           end
 
-          subject { Bookings::SchoolSearch.new('', location: '', phases: college).results }
+          subject { Bookings::SchoolSearch.new(query: '', location: '', phases: college.id).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -257,7 +257,7 @@ describe Bookings::SchoolSearch do
         end
 
         context 'Filtering on fees' do
-          subject { Bookings::SchoolSearch.new('', location: '', max_fee: 20).results }
+          subject { Bookings::SchoolSearch.new(query: '', location: '', max_fee: 20).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -284,7 +284,7 @@ describe Bookings::SchoolSearch do
 
         subject do
           Bookings::SchoolSearch.new(
-            'Springf',
+            query: 'Springf',
             location: 'Cheetham Hill',
             subjects: physics,
             phases: secondary,
@@ -315,7 +315,7 @@ describe Bookings::SchoolSearch do
         end
 
         subject do
-          Bookings::SchoolSearch.new('', location: 'Cheetham Hill', radius: 500, requested_order: 'distance').results
+          Bookings::SchoolSearch.new(query: '', location: 'Cheetham Hill', radius: 500, requested_order: 'distance').results
         end
 
         specify 'schools should be ordered by distance, near to far' do
@@ -329,7 +329,7 @@ describe Bookings::SchoolSearch do
         let!(:coventry) { create(:bookings_school, name: "Coventry Academy") }
 
         subject do
-          Bookings::SchoolSearch.new('', requested_order: 'name').results
+          Bookings::SchoolSearch.new(query: '', requested_order: 'name').results
         end
 
         specify 'schools should be ordered alphabetically by name' do
@@ -349,7 +349,46 @@ describe Bookings::SchoolSearch do
     end
 
     specify 'total count should match the number of matching schools' do
-      expect(Bookings::SchoolSearch.new("school").total_count).to eql(matching_schools.length)
+      expect(Bookings::SchoolSearch.new(query: "school").total_count).to eql(matching_schools.length)
+    end
+
+    context 'Saving results' do
+      subject { Bookings::SchoolSearch.new(query: "school") }
+
+      before { subject.total_count }
+
+      specify 'should save the record' do
+        expect(subject).to be_persisted
+      end
+
+      specify 'should save the total number of results' do
+        expect(subject.number_of_results).to eql(matching_schools.length)
+      end
+
+      context 'filtering' do
+        let(:query) { "school" }
+        let(:phases) { [1, 2, 3] }
+        let(:subjects) { [2, 3, 4] }
+        let(:max_fee) { 30 }
+        let(:location) { "Birmingham" }
+        subject do
+          Bookings::SchoolSearch.new(
+            query: query,
+            location: location,
+            phases: phases,
+            subjects: subjects,
+            max_fee: max_fee
+          )
+        end
+
+        specify 'should record all search parameters' do
+          expect(subject.query).to eql(query)
+          expect(subject.phases).to eql(phases)
+          expect(subject.subjects).to eql(subjects)
+          expect(subject.max_fee).to eql(max_fee)
+          expect(subject.location).to eql(location)
+        end
+      end
     end
   end
 end
