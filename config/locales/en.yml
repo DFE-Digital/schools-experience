@@ -153,6 +153,10 @@ en:
           true: 'Yes'
           false: 'No'
         requirements_details: 'Provide details'
+      schools_on_boarding_fees:
+        administration_fees: 'Administration costs'
+        dbs_fees: 'DBS check costs'
+        other_fees: 'Other costs'
 
     page_entries_info:
       one_page:
