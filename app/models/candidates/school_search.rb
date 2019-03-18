@@ -36,6 +36,7 @@ module Candidates
 
     def initialize(*args)
       @distance = 3
+      @order = 'distance'
 
       super
     end
@@ -58,6 +59,18 @@ module Candidates
 
     def phases=(phase_ids)
       @phases = Array.wrap(phase_ids).map(&:presence).compact.map(&:to_i)
+    end
+
+    def subject_names
+      Candidates::School.subjects.map { |s|
+        subjects.include?(s.first) ? s.last : nil
+      }.compact
+    end
+
+    def phase_names
+      Candidates::School.phases.map { |p|
+        phases.include?(p.first) ? p.last : nil
+      }.compact
     end
 
     def max_fee=(max_f)
@@ -90,8 +103,8 @@ module Candidates
   private
 
     def school_search
-      Bookings::SchoolSearch.new(
-        query,
+      @school_search ||= Bookings::SchoolSearch.new(
+        query: query,
         location: location_or_coords,
         radius: distance,
         subjects: subjects,

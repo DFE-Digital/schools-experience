@@ -9,7 +9,7 @@ class Candidates::SchoolStub
   end
 
   def respond_to_missing?(method, _include_private = false)
-    @school.respond_to?(method, false) || @fallback.keys?(method.to_s)
+    @school.respond_to?(method, false) || @fallback.key?(method.to_s)
   end
 
   def method_missing(method, *args, &block)
