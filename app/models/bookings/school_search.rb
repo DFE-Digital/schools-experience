@@ -12,8 +12,14 @@ class Bookings::SchoolSearch < ApplicationRecord
   end
 
   def initialize(attributes = {})
+    # location can be passed in as a hash or a string, we don't want to write a
+    # hash to a string field so wipe it if necessary.
+    @location_attribute = attributes[:location]
+    attributes[:location] = nil if @location_attribute.is_a?(Hash)
+
     super
-    self.coordinates = parse_location(self.location) if self.location.present?
+
+    self.coordinates = parse_location(@location_attribute)
   end
 
   def results
@@ -104,15 +110,15 @@ private
       result.latitude.present?
   end
 
-  def order_by(requested_order)
-    if (requested_order == 'distance') && @point.present?
+  def order_by(option)
+    if (option == 'distance') && coordinates.present?
       # note distance isn't actually an attribute of
       # Bookings::School so we can't use hash syntax
       # as Rails will complain
       'distance asc'
-    elsif requested_order == 'fee'
+    elsif option == 'fee'
       { fee: 'asc' }
-    elsif requested_order == 'name'
+    elsif option == 'name'
       { name: 'asc' }
     else # revert to pg_search's rank which is default
       {}
