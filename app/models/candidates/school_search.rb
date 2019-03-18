@@ -60,6 +60,18 @@ module Candidates
       @phases = Array.wrap(phase_ids).map(&:presence).compact.map(&:to_i)
     end
 
+    def subject_names
+      Candidates::School.subjects.map { |s|
+        subjects.include?(s.first) ? s.last : nil
+      }.compact
+    end
+
+    def phase_names
+      Candidates::School.phases.map { |p|
+        phases.include?(p.first) ? p.last : nil
+      }.compact
+    end
+
     def max_fee=(max_f)
       max_f = max_f.to_s.strip
       @max_fee = FEES.map(&:first).include?(max_f) ? max_f : ''
