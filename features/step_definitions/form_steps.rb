@@ -69,7 +69,6 @@ Given("I have entered the following details into the form:") do |table|
 end
 
 Given("I choose {string} from the {string} radio buttons") do |option, field|
-  make_inputs_opaque if opaquify_inputs?
   within(get_form_group(page, field)) do
     choose option
   end
