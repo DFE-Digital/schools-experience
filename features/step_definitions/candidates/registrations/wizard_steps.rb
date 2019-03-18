@@ -26,7 +26,6 @@ end
 
 Given("I have completed the subject preference form") do
   visit path_for 'candidate subjects', school: @school
-  make_inputs_opaque if opaquify_inputs?
   choose 'Graduate or postgraduate'
   select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
   choose 'I’ve applied for teacher training'
@@ -37,7 +36,6 @@ end
 
 Given("I have completed the background check form") do
   visit path_for 'background checks', school: @school
-  make_inputs_opaque if opaquify_inputs?
   choose 'Yes'
   click_button 'Continue'
 end
@@ -72,7 +70,6 @@ end
 
 Then("the subject preference form should populated with the details I've entered so far") do
   visit path_for 'candidate subjects', school: @school
-  make_inputs_opaque if opaquify_inputs?
   expect(find_field('Graduate or postgraduate')).to be_checked
   expect(find_field('If you have or are studying for a degree, tell us about your degree subject').value).to eq \
    'Physics'
@@ -83,6 +80,5 @@ end
 
 Then("the background check form should populated with the details I've entered so far") do
   visit path_for 'background checks', school: @school
-  make_inputs_opaque if opaquify_inputs?
   expect(find_field('Yes')).to be_checked
 end
