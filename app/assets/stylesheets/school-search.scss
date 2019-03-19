@@ -33,9 +33,9 @@
     @extend .govuk-section-break--visible ;
   }
 
-  .school-result{
-    padding: 0rem 1rem 0.3rem 2rem;
-    margin: 1rem;
+  .school-result {
+    padding: 0 govuk-spacing(4) 0 govuk-spacing(6);
+    margin: govuk-spacing(4) 0;
     border-left: 5px solid govuk-colour('turquoise');
 
     dl.govuk-summary-list {
@@ -59,46 +59,39 @@
   @extend %govuk-heading-m ;
 }
 
+.filter-list {
+  margin-bottom: govuk-spacing(4);
+}
+
 .school-search-form {
-  .school-search-form__search-field {
+  .school-search-form__location-field {
     @include govuk-grid-column(one-third, $at: desktop, $class: false) ;
   }
 
-  .school-search-form__location-field {
-    @include govuk-grid-column(two-thirds, $class: false) ;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
   .school-search-form__distance-field {
-    @include govuk-grid-column(one-third, $class: false) ;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
+    @include govuk-grid-column(one-third, $at: desktop, $class: false) ;
 
     select {
       width: 100%;
     }
   }
 
-  .school-search-form__location-pair {
-    @include govuk-grid-column(one-half, $at: desktop, $class: false) ;
-  }
-
   .school-search-form__submit {
-    @include govuk-grid-column(two-twelths, $at: desktop, $class: false) ;
+    @include govuk-grid-column(one-third, $at: desktop, $class: false) ;
 
     .govuk-button {
       width: 100%;
 
       @include govuk-media-query($from: desktop) {
+        width: auto;
         margin-top: govuk-spacing(6);
       }
     }
   }
+}
+
+.school-search-filter-info {
+  @include govuk-responsive-margin(4, "bottom") ;
 }
 
 #candidate-school-profile {

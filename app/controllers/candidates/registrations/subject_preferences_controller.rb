@@ -2,7 +2,8 @@ module Candidates
   module Registrations
     class SubjectPreferencesController < RegistrationsController
       def new
-        @subject_preference = SubjectPreference.new urn: current_urn
+        @subject_preference = SubjectPreference.new \
+          attributes_from_session.merge(urn: current_urn)
       end
 
       def create
@@ -43,6 +44,10 @@ module Candidates
           :teaching_stage,
           :subject_first_choice,
           :subject_second_choice
+      end
+
+      def attributes_from_session
+        current_registration.subject_preference_attributes.except 'created_at'
       end
     end
   end

@@ -12,7 +12,7 @@ class NotifyEmail::CandidateRequestCancellation < Notify
 private
 
   def template_id
-    '17e87d47-afe9-477d-969d-8a4ab67280f3'
+    '12370ef4-5146-4732-87c9-76f852b4bfa9'
   end
 
   def personalisation

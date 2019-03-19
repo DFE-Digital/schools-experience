@@ -68,7 +68,7 @@ class NotifyEmail::CandidateRequestConfirmation < Notify
 private
 
   def template_id
-    '8bd7e9b3-8c3f-4702-b642-1ccff32a264f'
+    '3860fb06-9af2-49c8-ac0b-007b9f360033'
   end
 
   def personalisation

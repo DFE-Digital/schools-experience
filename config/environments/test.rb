@@ -53,10 +53,12 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
 
   config.after_initialize do
-    Bullet.enable = false
+    Bullet.enable = true
     Bullet.raise = true
   end
 
   # Don't actually attempt to delivery emails during tests
   Notify.notification_class = NotifyFakeClient
+
+  config.x.phase_two.enabled = true
 end

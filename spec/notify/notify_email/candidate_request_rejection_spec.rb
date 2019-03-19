@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateRequestRejection do
-  it_should_behave_like "email template", "7693242f-1ae4-40b9-9e4a-061f94e0587b",
+  it_should_behave_like "email template", "577100df-1dae-405e-8500-947b85edf76e",
     school_name: "Springfield Elementary School",
     candidate_name: "Nelson Muntz",
     rejection_reasons: "Failed security checks",

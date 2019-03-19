@@ -8,7 +8,8 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
   let :registration_session do
     double Candidates::Registrations::RegistrationSession,
       save: true,
-      background_check: existing_background_check
+      background_check: existing_background_check,
+      background_check_attributes: background_check_attributes
   end
 
   before do
@@ -21,6 +22,10 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
   context 'without existing background_check in session' do
     let :existing_background_check do
       nil
+    end
+
+    let :background_check_attributes do
+      {}
     end
 
     context '#new' do
@@ -80,6 +85,24 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
     let :existing_background_check do
       Candidates::Registrations::BackgroundCheck.new \
         has_dbs_check: true
+    end
+
+    let :background_check_attributes do
+      existing_background_check.attributes
+    end
+
+    context '#new' do
+      before do
+        get '/candidates/schools/11048/registrations/background_check/new'
+      end
+
+      it 'populates the new form with values from the session' do
+        expect(assigns(:background_check)).to eq existing_background_check
+      end
+
+      it 'renders the new template' do
+        expect(response).to render_template :new
+      end
     end
 
     context '#edit' do

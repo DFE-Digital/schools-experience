@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::TeacherBookingCancellation do
-  it_should_behave_like "email template", "394cf3c3-cea1-4999-99c5-1dc51449ccf4",
+  it_should_behave_like "email template", "7445560b-46da-4c23-9017-e8d45b2a6c84",
     school_teacher_name: "Edna Krabappel",
     school_name: "Springfield Elementary School",
     candidate_name: "Dolph Starbeam",

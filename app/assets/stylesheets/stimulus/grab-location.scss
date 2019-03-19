@@ -3,10 +3,14 @@ div[data-controller="grab-location"] {
     @extend .govuk-link ;
     float: right;
     line-height: 20px ;
+    text-decoration: none;
 
     @include govuk-media-query($from: tablet) {
       line-height: 25px;
-      margin-right: 6px;
+    }
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 

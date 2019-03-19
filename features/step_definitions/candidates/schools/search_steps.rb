@@ -6,7 +6,7 @@ end
 
 Then("it should have a blank search field") do
   within(@form) do
-    field = page.find_field('Find what?', type: 'search')
+    field = page.find_field('Where?', type: 'search')
     expect(field.text).to be_blank
   end
 end

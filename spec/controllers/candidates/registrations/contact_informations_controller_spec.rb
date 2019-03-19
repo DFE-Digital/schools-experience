@@ -4,7 +4,8 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
   let :registration_session do
     double Candidates::Registrations::RegistrationSession,
       contact_information: existing_contact_information,
-      save: true
+      save: true,
+      contact_information_attributes: contact_information_attributes
   end
 
   before do
@@ -14,6 +15,10 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
   let :contact_information do
     FactoryBot.build :contact_information
+  end
+
+  let :contact_information_attributes do
+    {}
   end
 
   context 'without existing contact information in the session' do
@@ -80,6 +85,24 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
   context 'with existing contact information in session' do
     let :existing_contact_information do
       contact_information
+    end
+
+    let :contact_information_attributes do
+      existing_contact_information.attributes
+    end
+
+    context '#new' do
+      before do
+        get '/candidates/schools/11048/registrations/contact_information/new'
+      end
+
+      it 'populates the form with the values from the session' do
+        expect(assigns(:contact_information)).to eq existing_contact_information
+      end
+
+      it 'renders the new template' do
+        expect(response).to render_template :new
+      end
     end
 
     context '#edit' do

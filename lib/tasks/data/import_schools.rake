@@ -1,19 +1,43 @@
 require File.join(Rails.root, "lib", "data", "school_importer")
+require File.join(Rails.root, "lib", "data", "school_enhancer")
 
 namespace :data do
-  namespace :import do
-    # The URNs should be provided in a file with one URN per line, the GiaS
-    # data is a dump taken from the Get Information About Schools downloads
-    # page
+  namespace :schools do
+    # The URNs should be provided in a CSV with the following two headings:
+    # urn, contact_email
+    #
+    # The GiaS data is a dump taken from the Get Information About Schools
+    # downloads page
+    #
     # https://get-information-schools.service.gov.uk/Downloads
+    #
+    # If we don't want to run the risk of accidentally emailing anyone, provide
+    # an email address in email_override and that will be set on all imported
+    # records
     desc "Import GiaS (EduBase) data based on a list of URNs"
-    task :schools, %i{urnlist edubasedump} => :environment do |_t, args|
-      urns = File.readlines(args[:urnlist])
-      edubase_data = CSV.parse(
-        File.read(args[:edubasedump]).scrub, headers: true
+    task :import, %i{tpuk edubase email_override} => :environment do |_t, args|
+      args.with_defaults(email_override: nil)
+
+      tpuk_data = CSV.parse(
+        File.read(args[:tpuk]).scrub,
+        headers: true
       )
 
-      SchoolImporter.new(urns, edubase_data).import
+      edubase_data = CSV.parse(
+        File.read(args[:edubase]).scrub,
+        headers: true
+      )
+
+      SchoolImporter.new(tpuk_data, edubase_data, args[:email_override]).import
+    end
+
+    desc "Enhance school data using information captured in the questionnaire"
+    task :enhance, %i{questionnaire} => :environment do |_t, args|
+      response_data = CSV.parse(
+        File.read(args[:questionnaire]).scrub,
+        headers: true
+      )
+      SchoolEnhancer.new(response_data).enhance
     end
   end
 end

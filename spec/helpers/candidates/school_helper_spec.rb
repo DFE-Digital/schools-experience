@@ -136,4 +136,54 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       expect(subject).to match("#{@latitude}%2C#{@longitude}")
     end
   end
+
+  context '.school_search_phase_filter_description' do
+    context 'with no subjects' do
+      subject do
+        double('Bookings::SchoolSearch',
+          phases: [], phase_names: [])
+      end
+
+      it("should return a nil") do
+        expect(school_search_phase_filter_description(subject)).to be_nil
+      end
+    end
+
+    context 'with subject filters' do
+      subject do
+        double('Bookings::SchoolSearch',
+          phases: [1, 3], phase_names: %w{first third})
+      end
+
+      it("should return a nil") do
+        expect(school_search_phase_filter_description(subject)).to \
+          eq("Education phases: <strong>first</strong> and <strong>third</strong>")
+      end
+    end
+  end
+
+  context '.school_search_subject_filter' do
+    context 'with no subjects' do
+      subject do
+        double('Bookings::SchoolSearch',
+          subjects: [], subject_names: [])
+      end
+
+      it("should return a nil") do
+        expect(school_search_subject_filter_description(subject)).to be_nil
+      end
+    end
+
+    context 'with subject filters' do
+      subject do
+        double('Bookings::SchoolSearch',
+          subjects: [1, 3], subject_names: %w{first third})
+      end
+
+      it("should return a nil") do
+        expect(school_search_subject_filter_description(subject)).to \
+          eq("Placement subjects: <strong>first</strong> and <strong>third</strong>")
+      end
+    end
+  end
 end

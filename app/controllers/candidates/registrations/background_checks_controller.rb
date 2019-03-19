@@ -2,7 +2,7 @@ module Candidates
   module Registrations
     class BackgroundChecksController < RegistrationsController
       def new
-        @background_check = BackgroundCheck.new
+        @background_check = BackgroundCheck.new attributes_from_session
       end
 
       def create
@@ -36,6 +36,10 @@ module Candidates
       def background_check_params
         params.require(:candidates_registrations_background_check).permit \
           :has_dbs_check
+      end
+
+      def attributes_from_session
+        current_registration.background_check_attributes.except 'created_at'
       end
     end
   end

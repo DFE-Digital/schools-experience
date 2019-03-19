@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::SchoolRequestConfirmation do
-  it_should_behave_like "email template", "dd4490f8-1d7b-455b-8502-47f57a65179a",
+  it_should_behave_like "email template", "3da1cb35-efd2-4aa6-8416-27efc5611d06",
     candidate_address: "392 Firwood Crescent",
     candidate_dbs_check_document: "Yes",
     candidate_degree_stage: "Postgraduate",

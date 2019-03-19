@@ -1,36 +1,45 @@
 require 'breasal'
 
+# SchoolImporter takes raw data from TPUK and EduBase and combines them to
+# create Bookings::School (and associated) objects.
+#
+# If any validation fails (including if the URNs provided in the TPUK dataset
+# already exist), the whole import will fail and roll back.
 class SchoolImporter
-  attr_accessor :urns, :edubase_data
-  def initialize(urns, edubase_data)
-    self.urns = urns
-      .reject { |l| l.in?(%w{URN SCITT TRUST TSA}) }
-      .map(&:strip)
-      .map(&:to_i)
+  attr_accessor :tpuk_data, :edubase_data, :email_override
+  def initialize(tpuk_data, edubase_data, email_override = nil)
+    self.tpuk_data = tpuk_data
+      .reject { |l| l['urn'].in?(%w{URN SCITT TRUST TSA ??????}) }
+      .each
+      .with_object({}) do |record, h|
+        h[record['urn'].to_i] = record
+      end
 
     self.edubase_data = edubase_data
       .each
       .with_object({}) do |record, h|
         h[record['URN'].to_i] = record
       end
+
+    self.email_override = email_override
   end
 
   def import
-    total = @urns.length
+    total = @tpuk_data.length
 
     Bookings::School.transaction do
-      @urns.each.with_index(1) do |urn, i|
-        unless (row = @edubase_data[urn])
+      @tpuk_data.each.with_index(1) do |(urn, tpuk_row), i|
+        unless (edubase_row = @edubase_data[urn])
           raise "URN #{urn} cannot be found in dataset"
         end
 
-        if build_school(row).save
-          if Rails.env != 'test'
+        if build_school(edubase_row, tpuk_row).save
+          unless Rails.env.test?
             puts("%<count>s of %<total>d | %<urn>s | %<name>s" % {
               count: i.to_s.rjust(3),
               total: total,
               urn: urn.to_s.rjust(8),
-              name: row['EstablishmentName']
+              name: edubase_row['EstablishmentName']
             })
           end
         else
@@ -42,30 +51,59 @@ class SchoolImporter
 
 private
 
-  def build_school(row)
+  def build_school(edubase_row, tpuk_row)
     Bookings::School.new(
-      urn:          nilify(row['URN']),
-      name:         nilify(row['EstablishmentName']),
-      website:      nilify(row['SchoolWebsite']),
-      address_1:    nilify(row['Street']),
-      address_2:    nilify(row['Locality']),
-      address_3:    nilify(row['Address3']),
-      town:         nilify(row['Town']),
-      county:       nilify(row['County (name)']),
-      postcode:     nilify(row['Postcode']),
-      coordinates:  convert_to_point(row['Easting'], row['Northing']),
-      school_type:  school_types[row['TypeOfEstablishment (code)'].to_i]
+      urn:           nilify(edubase_row['URN']),
+      name:          nilify(edubase_row['EstablishmentName']),
+      website:       nilify(edubase_row['SchoolWebsite']),
+      contact_email: email_override.present? ? email_override : nilify(tpuk_row['contact_email'])&.downcase,
+      address_1:     nilify(edubase_row['Street']),
+      address_2:     nilify(edubase_row['Locality']),
+      address_3:     nilify(edubase_row['Address3']),
+      town:          nilify(edubase_row['Town']),
+      county:        nilify(edubase_row['County (name)']),
+      postcode:      nilify(edubase_row['Postcode']),
+      coordinates:   convert_to_point(edubase_row['Easting'], edubase_row['Northing']),
+      school_type:   school_types[edubase_row['TypeOfEstablishment (code)'].to_i]
     ).tap do |school|
-      school.phases << phases[row['PhaseOfEducation (code)'].to_i]
+      if (p = map_phase(edubase_row['PhaseOfEducation (code)'].to_i))
+        school.phases << p
+      end
     end
   end
 
   def nilify(val)
-    val.present? ? val : nil
+    val.present? ? val.strip : nil
+  end
+
+  def map_phase(edubase_id)
+    # 0: Not applicable              -> ¯\_(ツ)_/¯
+    # 1: Nursery                     -> Nursery
+    # 2: Primary                     -> Primary
+    # 3: Middle deemed primary       -> Primary
+    # 4: Secondary                   -> Secondary
+    # 5: Middle deemed secondary     -> Secondary
+    # 6: 16 plus                     -> 16 plus
+    # 7: All through                 -> Nursery + Primary + Secondary + 16 plus
+
+    nursery      = phases['Nursery']
+    primary      = phases['Primary']
+    secondary    = phases['Secondary']
+    sixteen_plus = phases['16 plus']
+
+    {
+      1 => nursery,
+      2 => primary,
+      3 => primary,
+      4 => secondary,
+      5 => secondary,
+      6 => sixteen_plus,
+      7 => [nursery, primary, secondary, sixteen_plus]
+    }[edubase_id]
   end
 
   def phases
-    @phases ||= Bookings::Phase.all.index_by(&:edubase_id)
+    @phases ||= Bookings::Phase.all.index_by(&:name)
   end
 
   def school_types
