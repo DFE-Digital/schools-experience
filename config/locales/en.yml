@@ -89,19 +89,6 @@ en:
       subjects: Select all that apply
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
-      candidates_registrations_placement_preference:
-        availability:
-          - Tell us about your availability. For example, when you'll be
-            available for placements or any particular days or periods when you
-            won't.
-          - The school will contact you to arrange the exact date of your
-            placement and will use this information to offer you the best dates
-            it has available.
-          - Depending on availability and time of year, schools may not always
-            be able to offer you the exact dates you’re looking for.
-        objectives:
-          - Provide a short explanation about what you want to gain from your placement.
-          - This will help the school see if it can offer you the kind of placement you’re looking for.
 
     label:
       candidates_registrations_contact_information:
@@ -119,7 +106,7 @@ en:
           true: "Yes"
           false: "No"
       candidates_registrations_placement_preference:
-        availability: When are you available for placements?
+        availability: Is there anything schools need to know about your availability for placements?
         objectives: What do you want to get out of your placement?
       candidates_registrations_privacy_policy:
         acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="#" class="govuk-link">privacy policy</a>'
