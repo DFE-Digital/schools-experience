@@ -44,7 +44,7 @@ describe Candidates::Registrations::PlacementRequestAction do
       allow(NotifyEmail::CandidateRequestConfirmation).to \
         receive(:from_application_preview) { candidate_request_confirmation }
 
-      allow(Candidates::Registrations::PlacementRequest).to \
+      allow(Bookings::PlacementRequest).to \
         receive :create_from_registration_session!
     end
 
@@ -57,7 +57,7 @@ describe Candidates::Registrations::PlacementRequestAction do
 
       it 'doesnt persist the data to postgres' do
         expect { subject.perform! }.to raise_error RuntimeError
-        expect(Candidates::Registrations::PlacementRequest).not_to \
+        expect(Bookings::PlacementRequest).not_to \
           have_received :create_from_registration_session!
       end
     end
@@ -72,7 +72,7 @@ describe Candidates::Registrations::PlacementRequestAction do
 
         it 'doesnt persist the data to postgres' do
           expect { subject.perform! }.to raise_error RuntimeError
-          expect(Candidates::Registrations::PlacementRequest).not_to \
+          expect(Bookings::PlacementRequest).not_to \
             have_received :create_from_registration_session!
         end
       end
@@ -104,7 +104,7 @@ describe Candidates::Registrations::PlacementRequestAction do
         end
 
         it 'persists the registration in postgres' do
-          expect(Candidates::Registrations::PlacementRequest).to \
+          expect(Bookings::PlacementRequest).to \
             have_received(:create_from_registration_session!).with \
               registration_session
         end

@@ -26,6 +26,21 @@ ActiveRecord::Schema.define(version: 2019_03_18_121139) do
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
   end
 
+  create_table "bookings_placement_requests", force: :cascade do |t|
+    t.text "objectives", null: false
+    t.integer "urn", null: false
+    t.string "degree_stage", null: false
+    t.text "degree_stage_explaination"
+    t.string "degree_subject", null: false
+    t.string "teaching_stage", null: false
+    t.string "subject_first_choice", null: false
+    t.string "subject_second_choice", null: false
+    t.boolean "has_dbs_check", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "availability", null: false
+  end
+
   create_table "bookings_school_searches", force: :cascade do |t|
     t.string "query", limit: 128
     t.string "location", limit: 128
@@ -95,21 +110,6 @@ ActiveRecord::Schema.define(version: 2019_03_18_121139) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
-  end
-
-  create_table "candidates_registrations_placement_requests", force: :cascade do |t|
-    t.text "objectives", null: false
-    t.integer "urn", null: false
-    t.string "degree_stage", null: false
-    t.text "degree_stage_explaination"
-    t.string "degree_subject", null: false
-    t.string "teaching_stage", null: false
-    t.string "subject_first_choice", null: false
-    t.string "subject_second_choice", null: false
-    t.boolean "has_dbs_check", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "availability", null: false
   end
 
   create_table "delayed_jobs", force: :cascade do |t|

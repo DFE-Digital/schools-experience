@@ -8,7 +8,8 @@ module Candidates
       def perform!
         school_request_confirmation.despatch!
         candidate_request_confirmation.despatch!
-        PlacementRequest.create_from_registration_session! registration_session
+        Bookings::PlacementRequest.create_from_registration_session! \
+          registration_session
       end
 
     private
