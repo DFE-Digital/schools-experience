@@ -1,16 +1,32 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
     <div>
-      <%= simple_format @school.description %>
+      <%= simple_format @school.placement_info %>
     </div>
-    <div>
-      <p>
-        <b>Age range:</b> <%= @school.age_range %>
-      </p>
 
-      <p>
-        <b>For more information about our school use the following links:</b>
-      </p>
+    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Age range
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= format_phases(@school) %>
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Placement subjects
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= format_school_subjects @school %>
+        </dd>
+      </div>
+    </dl>
+
+
+    <section id="school-useful-links">
+      <h3>For more information about our school use the following links:</h3>
 
       <ul>
         <%- if @school.website.present? -%>
@@ -33,23 +49,15 @@
           <%= link_to "Performance information: #{@school.name}",
                       performance_report_url(@school.urn) %>
         </li>
+
+        <%- if @school.teacher_training_website.present? -%>
+        <li>
+          <%= link_to "Teacher training: #{@school.name}",
+            @school.teacher_training_website %>
+        </li>
+        <%- end -%>
       </ul>
-    </div>
-
-    <div>
-      <h2 class="govuk-heading-m">
-        Placement information
-      </h2>
-
-      <p>
-        <b>Availability:</b>
-        <%= format_school_availability @school %>
-      </p>
-
-      <p>
-        <b>Placement subjects:</b> <%= format_school_subjects @school %>.
-      </p>
-    </div>
+    </section>
 
     <div>
       <h1 class="govuk-heading-m">
@@ -61,12 +69,37 @@
   </div>
 
   <div class="govuk-grid-column-one-third column-top-border">
-    <h3 class="govuk-heading-m">
-      Address
-    </h3>
 
-    <p class="govuk-body">
-      <%= format_school_address @school, tag(:br) %>.
-    </p>
+    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= format_school_address @school, tag(:br) %>
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Placement availability
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= simple_format(@school.availability_info) %>
+        </dd>
+      </div>
+
+      <%- if @school.teacher_training_provider? -%>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Teacher training offered
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= simple_format(@school.teacher_training_info) %>
+        </dd>
+      </div>
+      <%- end -%>
+    </dl>
+
   </div>
 </div>

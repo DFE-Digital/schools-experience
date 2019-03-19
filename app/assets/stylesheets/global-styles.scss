@@ -7,3 +7,23 @@ body {
   @include govuk-responsive-padding(2, "top") ;
   border-top: govuk-spacing(2) solid govuk-colour("blue");
 }
+
+dl.govuk-summary-list.vertical {
+  .govuk-summary-list__row {
+    display: block;
+
+    dt.govuk-summary-list__key, dd.govuk-summary-list__value {
+      width: inherit;
+      display: block;
+    }
+
+    dt.govuk-summary-list__key {
+      padding-bottom: 0px;
+    }
+
+    dd.govuk-summary-list__value {
+      padding-top: 0px;
+      word-break: keep-all;
+    }
+  }
+}
