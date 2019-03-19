@@ -10,6 +10,8 @@ module Candidates
         candidate_request_confirmation.despatch!
         Bookings::PlacementRequest.create_from_registration_session! \
           registration_session
+
+        RegistrationStore.instance.delete! registration_session.uuid
       end
 
     private
