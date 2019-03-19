@@ -33,12 +33,6 @@ describe SchoolEnhancer do
     subject { described_class.new(raw_response_data) }
 
     before do
-      subject_names.each do |subject|
-        FactoryBot.create(:bookings_subject, name: subject)
-      end
-    end
-
-    before do
       allow(STDOUT).to receive(:puts).and_return(true)
       allow(Rails.logger).to receive(:warn).and_return(true)
     end

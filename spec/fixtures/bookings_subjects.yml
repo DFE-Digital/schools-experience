@@ -14,6 +14,10 @@ chemistry:
   name: Chemistry
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
+english:
+  name: English
+  created_at: <%= Time.now.to_s(:db) %>
+  updated_at: <%= Time.now.to_s(:db) %>
 maths:
   name: Maths
   created_at: <%= Time.now.to_s(:db) %>
