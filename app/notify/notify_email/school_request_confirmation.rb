@@ -11,8 +11,7 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     :candidate_teaching_subject_second_choice,
     :placement_outcome,
     :placement_availability,
-    :school_name,
-    :school_admin_name
+    :school_name
 
   def initialize(
     to:,
@@ -28,8 +27,7 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     candidate_teaching_subject_second_choice:,
     placement_outcome:,
     placement_availability:,
-    school_name:,
-    school_admin_name:
+    school_name:
   )
 
     self.candidate_address                        =        candidate_address
@@ -45,7 +43,6 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     self.placement_outcome                        =        placement_outcome
     self.placement_availability                   =        placement_availability
     self.school_name                              =        school_name
-    self.school_admin_name                        =        school_admin_name
 
     super(to: to)
   end
@@ -65,8 +62,7 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
       candidate_teaching_subject_second_choice: application_preview.teaching_subject_second_choice,
       placement_outcome: application_preview.placement_outcome,
       placement_availability: application_preview.placement_availability,
-      school_name: application_preview.school,
-      school_admin_name: "PLACEHOLDER FOR SCHOOL ADMIN"
+      school_name: application_preview.school
     )
   end
 
@@ -90,8 +86,7 @@ private
       candidate_teaching_subject_second_choice: candidate_teaching_subject_second_choice,
       placement_outcome: placement_outcome,
       placement_availability: placement_availability,
-      school_name: school_name,
-      school_admin_name: school_admin_name
+      school_name: school_name
     }
   end
 end

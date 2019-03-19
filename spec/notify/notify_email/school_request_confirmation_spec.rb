@@ -14,8 +14,7 @@ describe NotifyEmail::SchoolRequestConfirmation do
     candidate_teaching_subject_second_choice: "Philosophy",
     placement_outcome: "I enjoy teaching",
     placement_availability: "Late Smarch",
-    school_name: "Springfield Elementary School",
-    school_admin_name: "Seymour Skinner"
+    school_name: "Springfield Elementary School"
 
   it_should_behave_like "email template from application preview", true
 end
