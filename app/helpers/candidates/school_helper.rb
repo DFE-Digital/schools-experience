@@ -55,7 +55,7 @@ module Candidates::SchoolHelper
     "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{urn}"
   end
 
-  def offsted_report_url(urn)
+  def ofsted_report_url(urn)
     "http://www.ofsted.gov.uk/oxedu_providers/full/(urn)/#{urn}"
   end
 
