@@ -3,25 +3,20 @@ shared_context 'Stubbed candidates school' do
     11048
   end
 
-  let :subjects do
-    [
-      { name: 'Geography' },
-      { name: 'Architecture' },
-      { name: 'Mathematics' },
-    ]
-  end
-
   let :school do
     double Bookings::School, \
       id: school_urn,
-      subjects: subjects,
       name: 'Test School',
       to_param: school_urn.to_s,
       contact_email: 'test@test.com'
   end
 
   let :allowed_subject_choices do
-    school.subjects.pluck :name
+    Bookings::Subject.all.pluck(:name)
+  end
+
+  let :second_subject_choices do
+    ["I don't have a second subject preference"] + allowed_subject_choices
   end
 
   before do

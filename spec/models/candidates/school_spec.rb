@@ -39,6 +39,7 @@ describe Candidates::School do
 
   context '.subjects' do
     before do
+      Bookings::Subject.destroy_all
       @later = create(:bookings_subject, name: 'Later')
       @earlier = create(:bookings_subject, name: 'Earlier')
       @subjects = described_class.subjects

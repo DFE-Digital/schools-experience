@@ -64,7 +64,7 @@
     <div class="govuk-form-group">
       <%= f.collection_select \
         :subject_second_choice,
-        subject_preference.available_subject_choices,
+        subject_preference.second_subject_choices,
         :to_s,
         :to_s,
         { prompt: 'Select' },

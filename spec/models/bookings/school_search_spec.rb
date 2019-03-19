@@ -216,8 +216,8 @@ describe Bookings::SchoolSearch do
 
       context 'Filtering' do
         # subjects
-        let(:maths) { create(:bookings_subject, name: "Maths") }
-        let(:physics) { create(:bookings_subject, name: "Physics") }
+        let(:maths) { Bookings::Subject.find_by! name: "Maths" }
+        let(:physics) { Bookings::Subject.find_by! name: "Physics" }
         # phases
         let(:college) { create(:bookings_phase, name: "College") }
         let(:secondary) { create(:bookings_phase, name: "Secondary") }
@@ -271,7 +271,7 @@ describe Bookings::SchoolSearch do
 
       context 'Chaining' do
         let(:secondary) { create(:bookings_phase, name: "Secondary") }
-        let(:physics) { create(:bookings_subject, name: "Physics") }
+        let(:physics) { Bookings::Subject.find_by! name: "Physics" }
 
         before do
           allow(Geocoder).to receive(:search).and_return(manchester_coordinates)

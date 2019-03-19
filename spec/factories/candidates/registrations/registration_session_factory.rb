@@ -34,8 +34,8 @@ FactoryBot.define do
            "degree_stage_explaination" => "",
            "degree_subject" => "Not applicable",
            "teaching_stage" => "I’m very sure and think I’ll apply",
-           "subject_first_choice" => "Architecture",
-           "subject_second_choice" => "Mathematics",
+           "subject_first_choice" => "Maths",
+           "subject_second_choice" => "Physics",
            "urn" => 11048,
            "created_at" => current_time,
            "updated_at" => current_time

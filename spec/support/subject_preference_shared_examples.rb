@@ -82,18 +82,26 @@ shared_examples 'a subject preference' do
 
     it do
       is_expected.to validate_inclusion_of(:subject_second_choice).in_array \
-        allowed_subject_choices
+        second_subject_choices
     end
   end
 
-  context '#subject_choices' do
+  context '#available_subject_choices' do
     it "returns the list of subjects from it's school" do
       expect(subject.available_subject_choices).to \
-        eq school.subjects.pluck :name
+        eq Candidates::School.subjects.map(&:last)
+    end
+  end
 
-      # Test we're passing the correct argument to find as we're stubbing
-      # the real return value.
-      expect(Candidates::School).to have_received(:find).with(school_urn)
+  context '#second_subject_choices' do
+    it "returns the list of subjects from it's school" do
+      choices = subject.second_subject_choices
+      no_choice = choices.shift
+
+      expect(choices).to \
+        eq subject.available_subject_choices
+
+      expect(no_choice).to match(/don't have/)
     end
   end
 
