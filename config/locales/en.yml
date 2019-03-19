@@ -37,7 +37,7 @@ en:
         candidates/registrations/background_check:
           attributes:
             has_dbs_check:
-              inclusion: "Select an option"
+              inclusion: "Select an Yes or No"
 
         candidates/registrations/contact_information:
           attributes:
