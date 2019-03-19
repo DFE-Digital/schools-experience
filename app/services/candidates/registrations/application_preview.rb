@@ -36,11 +36,11 @@ module Candidates
 
       def full_address
         [
-          building,
-          street,
-          town_or_city,
-          county,
-          postcode
+          building.presence,
+          street.presence,
+          town_or_city.presence,
+          county.presence,
+          postcode.presence
         ].compact.join(', ')
       end
 

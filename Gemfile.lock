@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DFE-Digital/govuk_elements_form_builder.git
-  revision: d34f0649effd1833b4d3629a58dd4eb057787cde
+  revision: b1d26c2bc489957aca7750a663ed371364ad2504
   specs:
     govuk_elements_form_builder (1.2.0)
       govuk_elements_rails (>= 3.0.0)
@@ -74,7 +74,7 @@ GEM
     bullet (5.9.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
-    byebug (11.0.0)
+    byebug (11.0.1)
     canonical-rails (0.2.5)
       rails (>= 4.1, < 6.1)
     capybara (3.14.0)

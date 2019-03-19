@@ -62,7 +62,7 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text 'There is a problem'
 
     # Submit registrations/placement_preference form successfully
-    fill_in 'When are you available for placements?', with: 'From Epiphany to Whitsunday'
+    fill_in 'Is there anything schools need to know about your availability for placements?', with: 'Only free from Epiphany to Whitsunday'
     fill_in 'What do you want to get out of your placement?', with: 'I enjoy teaching'
     click_button 'Continue'
     expect(page.current_path).to eq \
@@ -121,7 +121,7 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text 'UK telephone number 01234567890'
     expect(page).to have_text 'Email address test@example.com'
     expect(page).to have_text "School or college #{school.name}"
-    expect(page).to have_text 'Placement availability From Epiphany to Whitsunday'
+    expect(page).to have_text 'Placement availability Only free from Epiphany to Whitsunday'
     expect(page).to have_text "Placement outcome I enjoy teaching"
     expect(page).to have_text "Degree stage Graduate or postgraduate"
     expect(page).to have_text "Degree subject Physics"

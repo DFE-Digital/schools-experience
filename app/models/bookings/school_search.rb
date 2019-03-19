@@ -1,5 +1,5 @@
-class Bookings::SchoolSearch
-  attr_accessor :query, :point, :radius, :subjects, :phases, :max_fee, :page, :requested_order
+class Bookings::SchoolSearch < ApplicationRecord
+  attr_accessor :requested_order
 
   AVAILABLE_ORDERS = [
     %w{distance Distance},
@@ -10,26 +10,28 @@ class Bookings::SchoolSearch
     AVAILABLE_ORDERS.map
   end
 
-  def initialize(query, location: nil, radius: 10, subjects: nil, phases: nil, max_fee: nil, requested_order: nil, page: nil)
-    self.query           = query
-    self.point           = parse_location(location)
-    self.radius          = radius
-    self.subjects        = subjects
-    self.phases          = phases
-    self.max_fee         = max_fee
-    self.page            = page
-    self.requested_order = requested_order
+  def initialize(attributes = {})
+    # location can be passed in as a hash or a string, we don't want to write a
+    # hash to a string field so wipe it if necessary.
+    @location_attribute = attributes[:location]
+    attributes[:location] = nil if @location_attribute.is_a?(Hash)
+
+    super
+
+    self.coordinates = parse_location(@location_attribute)
   end
 
   def results
     base_query
       .includes(%i{subjects phases})
-      .reorder(order_by(@requested_order))
-      .page(@page)
+      .reorder(order_by(requested_order))
+      .page(self.page)
   end
 
   def total_count
-    base_query(include_distance: false).count
+    base_query(include_distance: false).count.tap do |count|
+      save_with_result_count(count)
+    end
   end
 
   class InvalidCoordinatesError < ArgumentError
@@ -46,16 +48,21 @@ class Bookings::SchoolSearch
 
 private
 
+  def save_with_result_count(count)
+    self.number_of_results = count
+    save
+  end
+
   # Note, all of the scopes provided by +Bookings::School+ will not
   # amend the +ActiveRecord::Relation+ if no param is provided, meaning
   # they can be safely chained
   def base_query(include_distance: true)
     Bookings::School
-      .close_to(@point, radius: @radius, include_distance: include_distance)
-      .that_provide(@subjects)
-      .at_phases(@phases)
-      .costing_upto(@max_fee)
-      .search(@query)
+      .close_to(coordinates, radius: radius, include_distance: include_distance)
+      .that_provide(subjects)
+      .at_phases(phases)
+      .costing_upto(max_fee)
+      .search(query)
   end
 
   def parse_location(location)
@@ -102,8 +109,8 @@ private
       result.latitude.present?
   end
 
-  def order_by(requested_order)
-    if (requested_order == 'distance') && @point.present?
+  def order_by(option)
+    if (option == 'distance') && coordinates.present?
       # note distance isn't actually an attribute of
       # Bookings::School so we can't use hash syntax
       # as Rails will complain

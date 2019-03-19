@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Candidates::Registrations::PlacementRequest, type: :model do
+describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: false }
   it { is_expected.to have_db_column(:objectives).of_type(:text).with_options null: false }
   it { is_expected.to have_db_column(:urn).of_type(:integer).with_options null: false }

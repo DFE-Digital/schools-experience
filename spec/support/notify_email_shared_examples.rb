@@ -112,7 +112,7 @@ shared_examples_for "email template" do |template_id, personalisation|
 end
 
 
-shared_examples_for "email template from application preview" do |school_admin_included|
+shared_examples_for "email template from application preview" do
   describe ".from_application_preview" do
     before do
       stub_const(
@@ -179,12 +179,6 @@ shared_examples_for "email template from application preview" do |school_admin_i
 
       specify 'school_name is correctly-assigned' do
         expect(subject.school_name).to eql(ap.school)
-      end
-
-      if school_admin_included
-        specify 'school_admin_name is correctly-assigned' do
-          expect(subject.school_admin_name).to match(/PLACEHOLDER/)
-        end
       end
     end
   end

@@ -64,13 +64,7 @@ class Bookings::School < ApplicationRecord
     urn.to_s.presence
   end
 
-  def contact_email
-    ENV['STUBBED_SCHOOL_EMAIL'].presence
-  end
-
   def private_beta?
     false # FIXME this should check if they're in the Private Beta program
   end
-
-  def availability_text; end
 end

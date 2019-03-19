@@ -103,8 +103,8 @@ module Candidates
   private
 
     def school_search
-      Bookings::SchoolSearch.new(
-        query,
+      @school_search ||= Bookings::SchoolSearch.new(
+        query: query,
         location: location_or_coords,
         radius: distance,
         subjects: subjects,
