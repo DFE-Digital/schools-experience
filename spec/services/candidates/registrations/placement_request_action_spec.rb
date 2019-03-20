@@ -13,7 +13,8 @@ describe Candidates::Registrations::PlacementRequestAction do
 
   let :registration_store do
     double Candidates::Registrations::RegistrationStore,
-      retrieve!: registration_session
+      retrieve!: registration_session,
+      delete!: true
   end
 
   let :application_preview do
@@ -75,6 +76,11 @@ describe Candidates::Registrations::PlacementRequestAction do
           expect(Bookings::PlacementRequest).not_to \
             have_received :create_from_registration_session!
         end
+
+        it 'doesnt remove the registration_session from redis' do
+          expect(registration_store).not_to have_received(:delete!).with \
+            registration_session.uuid
+        end
       end
 
       context 'candidate notification succeeds' do
@@ -107,6 +113,11 @@ describe Candidates::Registrations::PlacementRequestAction do
           expect(Bookings::PlacementRequest).to \
             have_received(:create_from_registration_session!).with \
               registration_session
+        end
+
+        it 'removes the registration_session from redis' do
+          expect(registration_store).to have_received(:delete!).with \
+            registration_session.uuid
         end
       end
     end
