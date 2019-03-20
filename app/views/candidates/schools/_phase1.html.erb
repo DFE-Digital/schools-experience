@@ -1,8 +1,11 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
+
+    <%- if @school.placement_info.present? -%>
     <section id="school-placement-info">
       <%= simple_format @school.placement_info %>
     </section>
+    <%- end -%>
 
     <dl class="govuk-summary-list govuk-summary-list--no-border inline">
 
@@ -15,6 +18,7 @@
         </dd>
       </div>
 
+      <%- if @school.subjects.any? -%>
       <div id="school-subjects" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Placement subjects:
@@ -23,6 +27,7 @@
           <%= format_school_subjects @school %>
         </dd>
       </div>
+    <%- end -%>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -84,6 +89,7 @@
         </dd>
       </div>
 
+      <%- if @school.availability_info.present? -%>
       <div id="school-availability-info" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Placement availability
@@ -92,6 +98,7 @@
           <%= simple_format(@school.availability_info) %>
         </dd>
       </div>
+      <%- end -%>
 
       <%- if @school.teacher_training_provider? -%>
       <div id="school-teacher-training-info" class="govuk-summary-list__row">

@@ -142,3 +142,19 @@ Then("there should be a button called {string} that begins the wizard") do |stri
   # and make sure it's button-like
   expect(page).to have_css(".govuk-button", text: "Request placement")
 end
+
+Given("my chosen school has no subjects") do
+  expect(@school.subjects).to be_empty
+end
+
+Then("the subjects section should not be displayed") do
+  expect(page).not_to have_css("#school-subjects")
+end
+
+Given("my chosen school has no placement information") do
+  expect(@school.placement_info).to be_blank
+end
+
+Then("the placement information section should not be visible") do
+  expect(page).not_to have_css("#school-placement-info")
+end

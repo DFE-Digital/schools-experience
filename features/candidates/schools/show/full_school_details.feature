@@ -1,4 +1,4 @@
-Feature: Schools search page
+Feature: School show page (enhanced data)
     To help me evaluate a school
     As a potential candidate
     I want to be able to view a scohol's details
