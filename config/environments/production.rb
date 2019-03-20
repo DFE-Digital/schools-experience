@@ -98,4 +98,6 @@ Rails.application.configure do
   config.active_job.queue_adapter = :delayed_job
 
   config.x.phase_two.enabled = ENV["PHASE_TWO"].present?
+
+  config.force_ssl = true
 end
