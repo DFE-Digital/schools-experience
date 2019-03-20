@@ -8,22 +8,41 @@ body {
   border-top: govuk-spacing(2) solid govuk-colour("blue");
 }
 
-dl.govuk-summary-list.vertical {
-  .govuk-summary-list__row {
-    display: block;
-
-    dt.govuk-summary-list__key, dd.govuk-summary-list__value {
-      width: inherit;
+dl.govuk-summary-list {
+  // vertical definition lists, title above definition
+  &.vertical {
+    .govuk-summary-list__row {
       display: block;
-    }
 
-    dt.govuk-summary-list__key {
-      padding-bottom: 0px;
-    }
+      dt.govuk-summary-list__key, dd.govuk-summary-list__value {
+        width: inherit;
+        display: block;
+      }
 
-    dd.govuk-summary-list__value {
-      padding-top: 0px;
-      word-break: keep-all;
+      dt.govuk-summary-list__key {
+        padding-bottom: 0px;
+      }
+
+      dd.govuk-summary-list__value {
+        padding-top: 0px;
+        word-break: keep-all;
+      }
+    }
+  }
+
+  // inline definition lists, title before defintion inline
+  &.inline {
+    .govuk-summary-list__row {
+      display: block;
+      margin: 0.5rem 0rem;
+
+      dt.govuk-summary-list__key, dd.govuk-summary-list__value {
+        display: inline;
+      }
+
+      dt.govuk-summary-list__key {
+        padding-right: 0.2rem;
+      }
     }
   }
 }

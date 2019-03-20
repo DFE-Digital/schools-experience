@@ -4,10 +4,10 @@
       <%= simple_format @school.placement_info %>
     </div>
 
-    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+    <dl class="govuk-summary-list govuk-summary-list--no-border inline">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Age range
+          Age range:
         </dt>
         <dd class="govuk-summary-list__value">
           <%= format_phases(@school) %>
@@ -16,48 +16,50 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Placement subjects
+          Placement subjects:
         </dt>
         <dd class="govuk-summary-list__value">
           <%= format_school_subjects @school %>
         </dd>
       </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          For more information about our school use the following links:
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul>
+            <%- if @school.website.present? -%>
+            <li>
+              <%= link_to "#{@school.name} website", @school.website %>
+            </li>
+            <%- end -%>
+
+            <li>
+              <%= link_to "#{@school.name} Get Information About Schools",
+                          gias_school_url(@school.urn) %>
+            </li>
+
+            <li>
+              <%= link_to "Ofsted report: #{@school.name}",
+                          ofsted_report_url(@school.urn) %>
+            </li>
+
+            <li>
+              <%= link_to "Performance information: #{@school.name}",
+                          performance_report_url(@school.urn) %>
+            </li>
+
+            <%- if @school.teacher_training_website.present? -%>
+            <li>
+              <%= link_to "Teacher training: #{@school.name}",
+                @school.teacher_training_website %>
+            </li>
+            <%- end -%>
+          </ul>
+        </dd>
+      </div>
     </dl>
-
-
-    <section id="school-useful-links">
-      <h3>For more information about our school use the following links:</h3>
-
-      <ul>
-        <%- if @school.website.present? -%>
-        <li>
-          <%= link_to "#{@school.name} website", @school.website %>
-        </li>
-        <%- end -%>
-
-        <li>
-          <%= link_to "#{@school.name} Get Information About Schools",
-                      gias_school_url(@school.urn) %>
-        </li>
-
-        <li>
-          <%= link_to "Ofsted report: #{@school.name}",
-                      ofsted_report_url(@school.urn) %>
-        </li>
-
-        <li>
-          <%= link_to "Performance information: #{@school.name}",
-                      performance_report_url(@school.urn) %>
-        </li>
-
-        <%- if @school.teacher_training_website.present? -%>
-        <li>
-          <%= link_to "Teacher training: #{@school.name}",
-            @school.teacher_training_website %>
-        </li>
-        <%- end -%>
-      </ul>
-    </section>
 
     <div>
       <h1 class="govuk-heading-m">
