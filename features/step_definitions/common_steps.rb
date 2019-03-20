@@ -13,7 +13,7 @@ Given("I am on the {string} page for my school of choice") do |string|
   end
 end
 
-Then("the page's main header should be {string}") do |string|
+Then("the page's main header/heading should be {string}") do |string|
   expect(page).to have_css("h1", text: string)
 end
 

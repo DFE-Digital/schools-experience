@@ -1,11 +1,12 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
-    <div>
+    <section id="school-placement-info">
       <%= simple_format @school.placement_info %>
-    </div>
+    </section>
 
     <dl class="govuk-summary-list govuk-summary-list--no-border inline">
-      <div class="govuk-summary-list__row">
+
+      <div id="school-phases" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Age range:
         </dt>
@@ -14,7 +15,7 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <div id="school-subjects" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Placement subjects:
         </dt>
@@ -28,9 +29,9 @@
           For more information about our school use the following links:
         </dt>
         <dd class="govuk-summary-list__value">
-          <ul>
+          <ul id="school-websites">
             <%- if @school.website.present? -%>
-            <li>
+            <li id="school-website">
               <%= link_to "#{@school.name} website", @school.website %>
             </li>
             <%- end -%>
@@ -50,7 +51,7 @@
                           performance_report_url(@school.urn) %>
             </li>
 
-            <%- if @school.teacher_training_website.present? -%>
+            <%- if @school.teacher_training_provider? && @school.teacher_training_website.present? -%>
             <li>
               <%= link_to "Teacher training: #{@school.name}",
                 @school.teacher_training_website %>
@@ -59,6 +60,7 @@
           </ul>
         </dd>
       </div>
+
     </dl>
 
     <div>
@@ -73,7 +75,7 @@
   <div class="govuk-grid-column-one-third column-top-border">
 
     <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
-      <div class="govuk-summary-list__row">
+      <div id="school-address" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Address
         </dt>
@@ -82,7 +84,7 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <div id="school-availability-info" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Placement availability
         </dt>
@@ -92,7 +94,7 @@
       </div>
 
       <%- if @school.teacher_training_provider? -%>
-      <div class="govuk-summary-list__row">
+      <div id="school-teacher-training-info" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Teacher training offered
         </dt>
