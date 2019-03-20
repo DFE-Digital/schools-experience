@@ -12,6 +12,7 @@ private
   def sanitise_page
     case params[:page]
     when 'home' then 'pages/home'
+    when 'privacy_policy' then 'pages/privacy_policy'
     else
       raise ActiveRecord::RecordNotFound
     end
