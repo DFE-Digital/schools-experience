@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "candidates/schools/show.html.erb", type: :view do
   before do
-    @school = Candidates::SchoolStub.new(create(:bookings_school))
+    @school = Candidates::School.find(create(:bookings_school).urn)
     assign :school, @school
 
     render
