@@ -93,6 +93,7 @@ Rails.application.configure do
   config.cache_store = :redis_cache_store, {
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
     reconnect_attempts: 1,
+    tcp_keepalive: 60,
     error_handler: -> (method:, returning:, exception:) do
       ExceptionNotifier.notify_exception(
         exception,
