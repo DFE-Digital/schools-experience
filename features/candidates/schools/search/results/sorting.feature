@@ -6,10 +6,10 @@ Feature: Schools search page sorting
     @javascript
     Scenario: Sorting by distance when searching by a specified location
         Given there there are schools with the following attributes:
-            | Name              | Fee | Location   |
-            | Manchester School | 30  | Manchester |
-            | Rochdale School   | 10  | Rochdale   |
-            | Burnley School    | 20  | Burnley    |
+            | Name              | Location   |
+            | Manchester School | Manchester |
+            | Rochdale School   | Rochdale   |
+            | Burnley School    | Burnley    |
         And I have provided 'Bury' as my location
         When I select 'Distance' in the 'Sorted by' select box
         Then the results should be sorted by distance, nearest to furthest
@@ -17,10 +17,10 @@ Feature: Schools search page sorting
     @javascript
     Scenario: Sorting by distance when searching by current location
         Given there there are schools with the following attributes:
-            | Name              | Fee | Location   |
-            | Manchester School | 30  | Manchester |
-            | Rochdale School   | 10  | Rochdale   |
-            | Burnley School    | 20  | Burnley    |
+            | Name              | Location   |
+            | Manchester School | Manchester |
+            | Rochdale School   | Rochdale   |
+            | Burnley School    | Burnley    |
         And I have provided a point in 'Bury' as my location
         When I select 'Distance' in the 'Sorted by' select box
         Then the results should be sorted by distance, nearest to furthest
@@ -28,10 +28,10 @@ Feature: Schools search page sorting
     @javascript
     Scenario: Sorting by name
         Given there there are schools with the following attributes:
-            | Name                       | Fee | Location    |
-            | Manton School              | 30  | Manton      |
-            | Mansfield School           | 10  | Mansfield   |
-            | Manningtree Primary School | 20  | Manningtree |
+            | Name                       | Location    |
+            | Manton School              | Manton      |
+            | Mansfield School           | Mansfield   |
+            | Manningtree Primary School | Manningtree |
         And I have searched for 'Man' and am on the results page
         When I select 'Name' in the 'Sorted by' select box
         Then the results should be sorted by name, lowest to highest

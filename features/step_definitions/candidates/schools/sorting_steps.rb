@@ -11,7 +11,6 @@ Given("there there are schools with the following attributes:") do |table|
     schools << FactoryBot.create(
       :bookings_school,
       name: attributes["Name"],
-      fee: attributes["Fee"].to_i,
       phases: Bookings::Phase.where(name: attributes["Phase"]),
       coordinates: locate(attributes["Location"])
     )
