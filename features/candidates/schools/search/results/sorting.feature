@@ -3,15 +3,25 @@ Feature: Schools search page sorting
     As a potential candidate
     I want to be able to sort results by various criteria
 
-
     @javascript
-    Scenario: Sorting by distance
+    Scenario: Sorting by distance when searching by a specified location
         Given there there are schools with the following attributes:
             | Name              | Fee | Location   |
             | Manchester School | 30  | Manchester |
             | Rochdale School   | 10  | Rochdale   |
             | Burnley School    | 20  | Burnley    |
         And I have provided 'Bury' as my location
+        When I select 'Distance' in the 'Sorted by' select box
+        Then the results should be sorted by distance, nearest to furthest
+
+    @javascript
+    Scenario: Sorting by distance when searching by current location
+        Given there there are schools with the following attributes:
+            | Name              | Fee | Location   |
+            | Manchester School | 30  | Manchester |
+            | Rochdale School   | 10  | Rochdale   |
+            | Burnley School    | 20  | Burnley    |
+        And I have provided a point in 'Bury' as my location
         When I select 'Distance' in the 'Sorted by' select box
         Then the results should be sorted by distance, nearest to furthest
 

@@ -12,6 +12,7 @@ Given("there there are schools with the following attributes:") do |table|
       :bookings_school,
       name: attributes["Name"],
       fee: attributes["Fee"].to_i,
+      phases: Bookings::Phase.where(name: attributes["Phase"]),
       coordinates: locate(attributes["Location"])
     )
   end
@@ -20,10 +21,27 @@ Given("there there are schools with the following attributes:") do |table|
 end
 
 Given("I have provided {string} as my location") do |location|
-  visit(candidates_schools_path)
-  fill_in "Where?", with: location
-  select "25", from: "Distance"
-  click_button "Find"
+  path = candidates_schools_path(location: location, distance: 25)
+  visit(path)
+  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
+  expect(path_with_query).to eql(path)
+end
+
+Given("I have provided a point in {string} as my location") do |centre|
+  points = {
+    "Bury" => {
+      "latitude" => 53.593,
+      "longitude" => -2.289
+    }
+  }
+
+  point = points[centre]
+  fail "No point found for #{centre}" unless point.present?
+
+  path = candidates_schools_path(latitude: point["latitude"], longitude: point["longitude"], distance: 25)
+  visit(path)
+  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
+  expect(path_with_query).to eql(path)
 end
 
 Then("the results should be sorted by distance, nearest to furthest") do
