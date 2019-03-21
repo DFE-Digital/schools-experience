@@ -15,7 +15,11 @@ module Candidates::SchoolHelper
       ERB::Util.h(subj)
     end
 
-    safe_subjects.to_sentence.html_safe
+    if safe_subjects.empty?
+      'Not specified'
+    else
+      safe_subjects.to_sentence.html_safe
+    end
   end
 
   def format_school_phases(school)

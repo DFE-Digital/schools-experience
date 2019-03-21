@@ -26,23 +26,37 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
 
   context '.format_school_subjects' do
     before do
-      @school = OpenStruct.new(
-        subjects: [
-          OpenStruct.new(id: 1, name: 'First'),
-          OpenStruct.new(id: 2, name: 'Second'),
-          OpenStruct.new(id: 3, name: 'Third')
-        ]
-      )
+      @school = OpenStruct.new(subjects: subjects)
 
       @formatted = format_school_subjects(@school)
     end
 
-    it 'should be html_safe' do
-      expect(@formatted.html_safe?).to be true
+    context 'without subjects' do
+      let :subjects do
+        []
+      end
+
+      it 'should return "Not specified"' do
+        expect(@formatted).to eq 'Not specified'
+      end
     end
 
-    it 'should turn them into a sentence' do
-      expect(@formatted).to eq "First, Second, and Third"
+    context 'with subjects' do
+      let :subjects do
+        [
+          OpenStruct.new(id: 1, name: 'First'),
+          OpenStruct.new(id: 2, name: 'Second'),
+          OpenStruct.new(id: 3, name: 'Third')
+        ]
+      end
+
+      it 'should be html_safe' do
+        expect(@formatted.html_safe?).to be true
+      end
+
+      it 'should turn them into a sentence' do
+        expect(@formatted).to eq "First, Second, and Third"
+      end
     end
   end
 
