@@ -30,6 +30,10 @@ module Candidates::SchoolHelper
     simple_format school.try(:availability_info) || 'Not specified'
   end
 
+  def format_phases(school)
+    school.phases.map(&:name).to_sentence
+  end
+
   def describe_current_search(search)
     if search.latitude.present? && search.longitude.present?
       "near me"
@@ -59,7 +63,7 @@ module Candidates::SchoolHelper
     "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{urn}"
   end
 
-  def offsted_report_url(urn)
+  def ofsted_report_url(urn)
     "http://www.ofsted.gov.uk/oxedu_providers/full/(urn)/#{urn}"
   end
 

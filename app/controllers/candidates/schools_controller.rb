@@ -4,7 +4,7 @@ class Candidates::SchoolsController < ApplicationController
   end
 
   def show
-    @school = Candidates::SchoolStub.find(params[:id])
+    @school = Candidates::School.find(params[:id])
   end
 
 private

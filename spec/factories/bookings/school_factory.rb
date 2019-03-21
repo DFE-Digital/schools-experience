@@ -7,5 +7,12 @@ FactoryBot.define do
     sequence(:address_1) { |n| "#{n} Something Street" }
     sequence(:postcode) { |n| "M#{n} 2JF" }
     association :school_type, factory: :bookings_school_type
+
+    trait :full_address do
+      sequence(:address_2) { |n| "#{n} Something area" }
+      sequence(:address_3) { |n| "#{n} Something area" }
+      sequence(:town) { |n| "#{n} Something town" }
+      sequence(:county) { |n| "#{n} Something county" }
+    end
   end
 end
