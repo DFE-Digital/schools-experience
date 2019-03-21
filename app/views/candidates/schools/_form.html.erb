@@ -10,8 +10,7 @@
           </legend>
 
           <p class="govuk-hint">
-            Search by location, postcode, school type and subject or
-            any combination of these
+            Search by location or postcode
           </p>
 
           <div class="govuk-grid-row school-search-form">
@@ -19,7 +18,7 @@
                   data-controller="grab-location">
 
               <%= f.search_field :location,
-                    placeholder: 'e.g. Manchester, M1 3BD',
+                    placeholder: 'Such as Manchester, M1 3BD',
                     data: {
                       action: "focus->grab-location#clearLocationInfo",
                       target: "grab-location.location"
