@@ -9,6 +9,9 @@ module Candidates
       def initialize
         @namespace = 'registrations'.freeze
         @ttl = 1.day.to_i
+
+        # Note this is using the same connection as was created during boot
+        # so no need for reconnection params here
         @redis = Redis.current
       end
 

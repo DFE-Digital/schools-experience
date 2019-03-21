@@ -92,6 +92,7 @@ Rails.application.configure do
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
   config.cache_store = :redis_cache_store, {
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
+    reconnect_attempts: 1,
     error_handler: -> (method:, returning:, exception:) do
       ExceptionNotifier.notify_exception(
         exception,
