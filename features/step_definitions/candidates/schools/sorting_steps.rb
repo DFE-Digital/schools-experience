@@ -72,3 +72,21 @@ Then("the results should be sorted by name, lowest to highest") do
       .map{ |ele| ele['data-school-urn'].to_i }
   ).to eql(urns_in_name_order)
 end
+
+Given("I have changed the sort order to {string}") do |sort_by|
+  select(sort_by, from: 'Sorted by')
+end
+
+Given("the sort order has defaulted to {string}") do |string|
+  expect(page.find("select#order").value).to eql(string.downcase)
+end
+
+Then("the distance should be ordered from low to high") do
+  distances = page
+    .all(".distance")
+    .map(&:text)
+    .map { |distance| distance.split(" ").first }
+    .map(&:to_f)
+
+  expect(distances).to eql(distances.sort)
+end
