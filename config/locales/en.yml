@@ -109,7 +109,7 @@ en:
         availability: Is there anything schools need to know about your availability for placements?
         objectives: What do you want to get out of your placement?
       candidates_registrations_privacy_policy:
-        acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="#" class="govuk-link">privacy policy</a>'
+        acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/pages/privacy_policy" class="govuk-link">privacy policy</a>'
       order: Sorted by
       query: Find what?
       location: Where?
