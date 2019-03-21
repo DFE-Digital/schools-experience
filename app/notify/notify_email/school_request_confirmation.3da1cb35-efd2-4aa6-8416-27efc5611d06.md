@@ -1,6 +1,6 @@
 Hello,
 
-((candidate_name)) has sent you a request for school experience at ((school_name)).
+((candidate_name)) has requested school experience at ((school_name)).
 
 # ((candidate_name)) request details
 
@@ -16,11 +16,11 @@ Personal details:
 Request details:
 
 * School or college: ((school_name))
-* Placement availability: ((placement_availability))
-* Placement outcome: ((placement_outcome))
+* Experience availability: ((placement_availability))
+* Experience outcome: ((placement_outcome))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))
 * Teaching stage: ((candidate_teaching_stage))
 * Teaching subject – first choice: ((candidate_teaching_subject_first_choice))
 * Teaching subject – second choice: ((candidate_teaching_subject_second_choice))
-* DBS Check Document: ((candidate_dbs_check_document))
+* DBS certificate: ((candidate_dbs_check_document))
