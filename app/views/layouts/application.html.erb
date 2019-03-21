@@ -2,7 +2,7 @@
 <html lang="en" class="govuk-template ">
   <head>
     <%= render partial: 'google_analytics' if google_analytics_enabled? %>
-    <title>DfE School Experience</title>
+    <title><%= page_title %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= canonical_tag %>
