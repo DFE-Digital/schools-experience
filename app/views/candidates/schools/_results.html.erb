@@ -22,6 +22,8 @@
           <%= f.hidden_field :query %>
           <%= f.hidden_field :location %>
           <%= f.hidden_field :distance %>
+          <%= f.hidden_field :latitude %>
+          <%= f.hidden_field :longitude %>
 
           <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
 
