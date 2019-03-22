@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     root to: 'home#index'
     get "splash", to: "home#splash"
 
+    # email confirmation link
+    get 'confirm', to: 'registrations/placement_requests#create'
+
     resources :schools, only: %i{index show} do
       namespace :registrations do
         resource :placement_preference, only: %i(new create edit update)
@@ -24,8 +27,6 @@ Rails.application.routes.draw do
         resource :confirmation_email, only: %i(show create)
         resource :resend_confirmation_email, only: %i(create)
         resource :placement_request, only: %i(show create)
-        # email confirmation link
-        get 'placement_request/new', to: 'placement_requests#create'
       end
     end
   end

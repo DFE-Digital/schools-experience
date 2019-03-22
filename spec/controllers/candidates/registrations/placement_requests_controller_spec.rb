@@ -32,8 +32,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           raise Candidates::Registrations::RegistrationStore::SessionNotFound
         end
 
-        get \
-          "/candidates/schools/URN/registrations/placement_request/new?uuid=#{uuid}"
+        get "/candidates/confirm?uuid=#{uuid}"
       end
 
       it "doesn't queue a PlacementRequestJob" do
@@ -51,15 +50,15 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
         allow(Candidates::Registrations::PlacementRequestJob).to \
           receive(:perform_later) { true }
 
-        get \
-          "/candidates/schools/URN/registrations/placement_request/new?uuid=#{uuid}"
+        get "/candidates/confirm?uuid=#{uuid}"
       end
 
       context 'registration job already enqueued' do
         let :registration_session do
           double Candidates::Registrations::RegistrationSession,
             completed?: true,
-            uuid: uuid
+            uuid: uuid,
+            school: school
         end
 
         it "doesn't queue a PlacementRequestJob" do
@@ -70,7 +69,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
         it 'redirects to placement request show' do
           expect(response).to redirect_to \
             candidates_school_registrations_placement_request_path(
-              'URN',
+              school,
               uuid: uuid
             )
         end
@@ -81,7 +80,8 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           double Candidates::Registrations::RegistrationSession,
             completed?: false,
             flag_as_completed!: true,
-            uuid: uuid
+            uuid: uuid,
+            school: school
         end
 
         it 'marks the registration as completed' do
@@ -101,7 +101,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
         it 'redirects to placement request show' do
           expect(response).to redirect_to \
             candidates_school_registrations_placement_request_path(
-              'URN',
+              school,
               uuid: uuid
             )
         end
