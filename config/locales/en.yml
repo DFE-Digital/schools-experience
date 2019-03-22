@@ -106,8 +106,8 @@ en:
           true: "Yes"
           false: "No"
       candidates_registrations_placement_preference:
-        availability: Is there anything schools need to know about your availability for placements?
-        objectives: What do you want to get out of your placement?
+        availability: Is there anything schools need to know about your availability for school experience?
+        objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
         acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="#" class="govuk-link">privacy policy</a>'
       order: Sorted by
