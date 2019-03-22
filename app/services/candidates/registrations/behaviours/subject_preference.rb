@@ -39,7 +39,7 @@ module Candidates
         end
 
         def second_subject_choices
-          ["I don't have a second subject preference"] +
+          ["I don't have a second subject"] +
             available_subject_choices
         end
 

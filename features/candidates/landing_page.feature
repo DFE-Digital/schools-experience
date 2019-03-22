@@ -5,7 +5,7 @@ Feature: Candidate landing page
 
     Scenario: Page heading
         Given I am on the 'landing' page
-        Then the page's main header should be 'Request school experience placements'
+        Then the page's main header should be 'Get school experience'
 
     Scenario: Leading paragraph
         Given I am on the 'landing' page
@@ -17,7 +17,7 @@ Feature: Candidate landing page
 
     Scenario: Location availability warning
         Given I am on the 'landing' page
-        Then I should see a warning informing me that placements are only available in England
+        Then I should see a warning informing me that school experiences are only available in England
 
     Scenario: The start now button
         Given I am on the 'landing' page

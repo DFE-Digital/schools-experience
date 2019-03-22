@@ -137,10 +137,10 @@ end
 
 Then("there should be a button called {string} that begins the wizard") do |string|
   # ensure there's a link
-  expect(page).to have_link("Request placement", href: new_candidates_school_registrations_placement_preference_path(@school.urn))
+  expect(page).to have_link(string, href: new_candidates_school_registrations_placement_preference_path(@school.urn))
 
   # and make sure it's button-like
-  expect(page).to have_css(".govuk-button", text: "Request placement")
+  expect(page).to have_css(".govuk-button", text: string)
 end
 
 Given("my chosen school has no subjects") do

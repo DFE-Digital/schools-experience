@@ -16,7 +16,7 @@ shared_context 'Stubbed candidates school' do
   end
 
   let :second_subject_choices do
-    ["I don't have a second subject preference"] + allowed_subject_choices
+    ["I don't have a second subject"] + allowed_subject_choices
   end
 
   before do

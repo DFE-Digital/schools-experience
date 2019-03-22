@@ -9,11 +9,11 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     end
 
     it "includes the search form" do
-      expect(response.body).to match(/Find.*placement/i)
+      expect(response.body).to match(/Find.*experience/i)
     end
 
     it "excludes the search results" do
-      expect(response.body).to_not match(/placements near/i)
+      expect(response.body).to_not match(/experience near/i)
     end
   end
 
