@@ -23,8 +23,6 @@ en:
         exclusion: "Select a subject if you have a degree or are studying for one"
       subject_first_choice:
         blank: "Select a subject"
-      subject_second_choice:
-        blank: "Select a subject"
       teaching_stage:
         blank: "Select a teaching stage"
 
