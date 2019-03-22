@@ -54,16 +54,16 @@ feature 'Candidate Registrations', type: :feature do
   scenario 'Candidate Registraion Journey' do
     # Begin wizard journey
     visit "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
-    expect(page).to have_text 'Request school experience placement'
+    expect(page).to have_text 'Request school experience'
 
     # Submit registrations/placement_preference form with errors
-    fill_in 'What do you want to get out of your placement?', with: 'I enjoy teaching'
+    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 
     # Submit registrations/placement_preference form successfully
-    fill_in 'Is there anything schools need to know about your availability for placements?', with: 'Only free from Epiphany to Whitsunday'
-    fill_in 'What do you want to get out of your placement?', with: 'I enjoy teaching'
+    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
+    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
     click_button 'Continue'
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/contact_information/new"
@@ -90,7 +90,7 @@ feature 'Candidate Registrations', type: :feature do
     choose 'Graduate or postgraduate'
     select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
     choose "I’m very sure and think I’ll apply"
-    select 'Physics', from: 'First choice'
+    select 'Maths', from: 'Second choice'
     click_button 'Continue'
     expect(page).to have_text "There is a problem"
 
@@ -99,7 +99,6 @@ feature 'Candidate Registrations', type: :feature do
     select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
     choose "I’m very sure and think I’ll apply"
     select 'Physics', from: 'First choice'
-    select 'Maths', from: 'Second choice'
     click_button 'Continue'
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/background_check/new"
@@ -121,8 +120,8 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text 'UK telephone number 01234567890'
     expect(page).to have_text 'Email address test@example.com'
     expect(page).to have_text "School or college #{school.name}"
-    expect(page).to have_text 'Placement availability Only free from Epiphany to Whitsunday'
-    expect(page).to have_text "Placement outcome I enjoy teaching"
+    expect(page).to have_text 'Experience availability Only free from Epiphany to Whitsunday'
+    expect(page).to have_text "Experience outcome I enjoy teaching"
     expect(page).to have_text "Degree stage Graduate or postgraduate"
     expect(page).to have_text "Degree subject Physics"
     expect(page).to have_text "I’m very sure and think I’ll apply"
@@ -134,20 +133,20 @@ feature 'Candidate Registrations', type: :feature do
     click_button 'Accept and send'
     expect(page).to have_text 'You need to confirm your details are correct and accept our privacy policy to continue'
     expect(page).not_to have_text \
-      "Click the confirmation link in the email we’ve sent to the following email address to confirm your request for a placement at Test School:\ntest@example.com"
+      "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
 
     # Submit email confirmation form successfully
     check \
       "By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our privacy policy"
     click_button 'Accept and send'
     expect(page).to have_text \
-      "Click the confirmation link in the email we’ve sent to the following email address to confirm your request for a placement at Test School:\ntest@example.com"
+      "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
 
     # Click email confirmation link
     visit \
       "/candidates/schools/#{school_urn}/registrations/placement_request/new?uuid=#{uuid}"
 
     expect(page).to have_text \
-      "Your request for a school experience placement will be forwarded to Test School."
+      "Your request for school experience will be forwarded to Test School."
   end
 end

@@ -5,10 +5,11 @@
     <h1 class="govuk-heading-l">Enter your contact details</h1>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <p>
-          Your details will be used by schools to contact you about placements once
-          you’ve sent them a school experience request.
+        <p class="govuk-body">
+          Your details will be used by schools to contact you about school
+          experience once you’ve sent them a request.
         </p>
+
         <%= form_for contact_information, url: candidates_school_registrations_contact_information_path do |f| %>
           <%= GovukElementsErrorsHelper.error_summary contact_information, 'There is a problem', '' %>
 

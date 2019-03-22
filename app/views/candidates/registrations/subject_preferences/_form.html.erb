@@ -1,78 +1,82 @@
 <% self.page_title = 'We need some more details' %>
 
-<h1 class="govuk-heading-l">We need some more details</h1>
-<p>The following will be used to help schools offer you school experience placements.</p>
+<div id="subject-preference">
+  <h1 class="govuk-heading-l">We need some more details</h1>
+  <p>The following will be used to help schools offer you school experience.</p>
 
-<%= form_for subject_preference, url: candidates_school_registrations_subject_preference_path, data: { controller: 'subject-preference-form' } do |f| %>
-  <%= GovukElementsErrorsHelper.error_summary subject_preference, 'There is a problem', '' %>
+  <%= form_for subject_preference, url: candidates_school_registrations_subject_preference_path, data: { controller: 'subject-preference-form' } do |f| %>
+    <%= GovukElementsErrorsHelper.error_summary subject_preference, 'There is a problem', '' %>
 
-  <div data-target="subject-preference-form.degreeStagesContainer">
-    <%= f.radio_button_fieldset :degree_stage do |fieldset| %>
-      <% f.object.available_degree_stages.each do |degree_stage| %>
-        <% if f.object.requires_explanation_for_degree_stage? degree_stage %>
-          <%= fieldset.radio_input degree_stage, data: {
-            action: 'click->subject-preference-form#degreeStageSelected',
-            requires_subject: f.object.requires_subject_for_degree_stage?(degree_stage)
-          } do %>
-            <%= fieldset.text_area :degree_stage_explaination %>
+    <div data-target="subject-preference-form.degreeStagesContainer">
+      <%= f.radio_button_fieldset :degree_stage do |fieldset| %>
+        <% f.object.available_degree_stages.each do |degree_stage| %>
+          <% if f.object.requires_explanation_for_degree_stage? degree_stage %>
+            <%= fieldset.radio_input degree_stage, data: {
+              action: 'click->subject-preference-form#degreeStageSelected',
+              requires_subject: f.object.requires_subject_for_degree_stage?(degree_stage)
+            } do %>
+              <%= fieldset.text_area :degree_stage_explaination %>
+            <% end %>
+          <% else %>
+            <%= fieldset.radio_input degree_stage, data: {
+              action: 'click->subject-preference-form#degreeStageSelected',
+              requires_subject: f.object.requires_subject_for_degree_stage?(degree_stage)
+            } %>
           <% end %>
-        <% else %>
-          <%= fieldset.radio_input degree_stage, data: {
-            action: 'click->subject-preference-form#degreeStageSelected',
-            requires_subject: f.object.requires_subject_for_degree_stage?(degree_stage)
-          } %>
         <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
 
-  <div data-target="subject-preference-form.degreeSubjectContainer">
-    <%= f.collection_select \
-      :degree_subject,
-      subject_preference.available_degree_subjects,
-      :to_s,
-      :to_s,
-      { include_blank: 'Select' },
-      {
-        class: 'govuk-select',
-        data: {
-          target: 'subject-preference-form.degreeSubject',
-          value_for_no_degree: subject_preference.no_degree_subject
-        },
-        label_options: { class: 'govuk-heading-m' }
-      } %>
-  </div>
+    <div data-target="subject-preference-form.degreeSubjectContainer">
+      <%= f.collection_select \
+        :degree_subject,
+        subject_preference.available_degree_subjects,
+        :to_s,
+        :to_s,
+        { include_blank: 'Select' },
+        {
+          class: 'govuk-select',
+          data: {
+            target: 'subject-preference-form.degreeSubject',
+            value_for_no_degree: subject_preference.no_degree_subject
+          },
+          label_options: { class: 'govuk-heading-m' }
+        } %>
+    </div>
 
-  <%= f.radio_button_fieldset :teaching_stage do |fieldset| %>
-    <% f.object.available_teaching_stages.each do |teaching_stage| %>
-      <%= fieldset.radio_input teaching_stage, text_method: :to_s %>
+    <%= f.radio_button_fieldset :teaching_stage do |fieldset| %>
+      <% f.object.available_teaching_stages.each do |teaching_stage| %>
+        <%= fieldset.radio_input teaching_stage, text_method: :to_s %>
+      <% end %>
     <% end %>
+
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h1 class="govuk-fieldset__heading">What subject do you want to teach?</h1>
+      </legend>
+      <p>
+        Select the nearest or equivalent subject and at least 1 subject.
+      </p>
+      <div class="govuk-form-group">
+        <%= f.collection_select \
+          :subject_first_choice,
+          subject_preference.available_subject_choices,
+          :to_s,
+          :to_s,
+          { prompt: 'Select' },
+          { class: 'govuk-select' } %>
+      </div>
+
+      <div class="govuk-form-group">
+        <%= f.collection_select \
+          :subject_second_choice,
+          subject_preference.second_subject_choices,
+          :to_s,
+          :to_s,
+          { class: 'govuk-select' } %>
+      </div>
+    </fieldset>
+
+    <%= f.submit 'Continue' %>
   <% end %>
-
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      <h1 class="govuk-fieldset__heading">What subject do you want to teach?</h1>
-    </legend>
-    <div class="govuk-form-group">
-      <%= f.collection_select \
-        :subject_first_choice,
-        subject_preference.available_subject_choices,
-        :to_s,
-        :to_s,
-        { prompt: 'Select' },
-        { class: 'govuk-select' } %>
-    </div>
-
-    <div class="govuk-form-group">
-      <%= f.collection_select \
-        :subject_second_choice,
-        subject_preference.second_subject_choices,
-        :to_s,
-        :to_s,
-        { prompt: 'Select' },
-        { class: 'govuk-select' } %>
-    </div>
-  </fieldset>
-
-  <%= f.submit 'Continue' %>
-<% end %>
+</div>

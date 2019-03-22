@@ -23,8 +23,6 @@ en:
         exclusion: "Select a subject if you have a degree or are studying for one"
       subject_first_choice:
         blank: "Select a subject"
-      subject_second_choice:
-        blank: "Select a subject"
       teaching_stage:
         blank: "Select a teaching stage"
 
@@ -106,8 +104,8 @@ en:
           true: "Yes"
           false: "No"
       candidates_registrations_placement_preference:
-        availability: Is there anything schools need to know about your availability for placements?
-        objectives: What do you want to get out of your placement?
+        availability: Is there anything schools need to know about your availability for school experience?
+        objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
         acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="#" class="govuk-link">privacy policy</a>'
       order: Sorted by
@@ -132,3 +130,9 @@ en:
     pagination:
       next: Next
       previous: Previous
+
+  candidates:
+    registrations:
+      placement_preferences:
+        form:
+          availability_placeholder: Such as, from 4 to 8 May, from the start of next term, any time during May, June or July or I can only do Thursdays and Fridays
