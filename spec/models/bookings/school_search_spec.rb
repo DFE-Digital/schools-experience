@@ -144,22 +144,6 @@ describe Bookings::SchoolSearch do
             end
           end
 
-          context 'When only text is supplied' do
-            subject { Bookings::SchoolSearch.new(query: 'Springfield').results }
-
-            let!(:matching_school) do
-              create(:bookings_school, name: "Springfield Primary School")
-            end
-
-            specify 'results should include matching records' do
-              expect(subject).to include(matching_school)
-            end
-
-            specify 'results should not include non-matching records' do
-              expect(subject).not_to include(non_matching_school)
-            end
-          end
-
           context 'When only a location is supplied' do
             subject { Bookings::SchoolSearch.new(query: '', location: 'Manchester').results }
 
@@ -178,23 +162,15 @@ describe Bookings::SchoolSearch do
         end
 
         context 'When Geocoder finds no location' do
-          context 'When the query matches a school' do
+          context 'When the query does not match a school' do
             before do
               allow(Geocoder).to receive(:search).and_return([])
             end
 
-            subject { Bookings::SchoolSearch.new(query: 'Springfield', location: 'Madrid').results }
+            subject { Bookings::SchoolSearch.new(location: 'Chippewa, Michigan').results }
 
-            specify 'results should include records that match the query' do
-              expect(subject).to include(matching_school)
-            end
-          end
-
-          context 'When the query does not match a school' do
-            subject { Bookings::SchoolSearch.new(query: 'William McKinley High', location: 'Chippewa, Michigan').results }
-
-            specify 'results should include records that match the query' do
-              expect(subject).to be_empty
+            specify 'results should include all schools' do
+              expect(subject.size).to eql(Bookings::School.count)
             end
           end
         end
@@ -205,7 +181,7 @@ describe Bookings::SchoolSearch do
               allow(Geocoder).to receive(:search).and_return("ABC123")
             end
 
-            subject { Bookings::SchoolSearch.new(query: '', location: 'Madrid') }
+            subject { Bookings::SchoolSearch.new(location: 'Madrid') }
 
             specify 'should fail with a InvalidGeocoderResultError' do
               expect { subject.results }.to raise_error(Bookings::SchoolSearch::InvalidGeocoderResultError)
@@ -345,15 +321,15 @@ describe Bookings::SchoolSearch do
     end
 
     let!(:non_matching_school) do
-      create(:bookings_school, name: "Non-matching establishment")
+      create(:bookings_school, coordinates: Bookings::School::GEOFACTORY.point(-1.148, 52.794))
     end
 
     specify 'total count should match the number of matching schools' do
-      expect(Bookings::SchoolSearch.new(query: "school").total_count).to eql(matching_schools.length)
+      expect(Bookings::SchoolSearch.new(location: "Bury", radius: 50).total_count).to eql(matching_schools.length)
     end
 
     context 'Saving results' do
-      subject { Bookings::SchoolSearch.new(query: "school") }
+      subject { Bookings::SchoolSearch.new(location: "Bury", radius: 50) }
 
       before { subject.total_count }
 
@@ -366,14 +342,12 @@ describe Bookings::SchoolSearch do
       end
 
       context 'filtering' do
-        let(:query) { "school" }
         let(:phases) { [1, 2, 3] }
         let(:subjects) { [2, 3, 4] }
         let(:max_fee) { 30 }
         let(:location) { "Birmingham" }
         subject do
           Bookings::SchoolSearch.new(
-            query: query,
             location: location,
             phases: phases,
             subjects: subjects,
@@ -382,7 +356,6 @@ describe Bookings::SchoolSearch do
         end
 
         specify 'should record all search parameters' do
-          expect(subject.query).to eql(query)
           expect(subject.phases).to eql(phases)
           expect(subject.subjects).to eql(subjects)
           expect(subject.max_fee).to eql(max_fee)

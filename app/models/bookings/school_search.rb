@@ -62,7 +62,7 @@ private
       .that_provide(subjects)
       .at_phases(phases)
       .costing_upto(max_fee)
-      .search(query)
+      .distinct
   end
 
   def parse_location(location)
