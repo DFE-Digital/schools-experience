@@ -5,7 +5,7 @@ Feature: Schools search page
 
     Scenario: Page contents
         Given I am on the 'find a school' page
-        Then the page should have a heading called 'Find school experience placements'
+        Then the page should have a heading called 'Find school experience'
 
     Scenario: Search form
         Given I am on the 'find a school' page

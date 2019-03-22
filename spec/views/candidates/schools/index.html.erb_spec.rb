@@ -8,7 +8,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     end
 
     it "shows search form" do
-      expect(rendered).to match(/Find.*placements/i)
+      expect(rendered).to match(/Find.*experience/i)
     end
   end
 
@@ -37,7 +37,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     end
 
     it "shows search results" do
-      expect(rendered).to match(/School experience placements matching/)
+      expect(rendered).to match(/School experience matching/)
       expect(rendered).to have_css '#search-results'
     end
 
