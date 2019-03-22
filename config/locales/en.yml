@@ -132,3 +132,9 @@ en:
     pagination:
       next: Next
       previous: Previous
+
+  candidates:
+    registrations:
+      placement_preferences:
+        form:
+          availability_placeholder: Such as, from 4 to 8 May, from the start of next term, any time during May, June or July or I can only do Thursdays and Fridays
