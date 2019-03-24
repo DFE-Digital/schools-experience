@@ -9,7 +9,7 @@ module Candidates
 
           redirect_to candidates_school_registrations_confirmation_email_path
         else
-          render :session_expired
+          render 'shared/session_expired'
         end
       end
     end
