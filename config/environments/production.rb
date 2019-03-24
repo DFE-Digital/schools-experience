@@ -103,7 +103,10 @@ Rails.application.configure do
       )
     end
   }
-  config.session_store :cache_store, key: 'schoolex-session'
+
+  config.session_store :cache_store,
+    key: 'schoolex-session',
+    expire_after: 24.hours # Sets explicit TTL for Session Redis keys
 
   config.active_job.queue_adapter = :delayed_job
 
