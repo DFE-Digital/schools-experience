@@ -1,5 +1,6 @@
 class Bookings::SchoolSearch < ApplicationRecord
   attr_accessor :requested_order
+  attr_reader :location_name
 
   AVAILABLE_ORDERS = [
     %w{distance Distance},
@@ -100,6 +101,7 @@ private
 
     fail InvalidGeocoderResultError unless valid_geocoder_result?(result)
 
+    @location_name = result.name
     extract_coords(latitude: result.latitude, longitude: result.longitude)
   end
 
