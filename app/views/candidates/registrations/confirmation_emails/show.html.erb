@@ -3,12 +3,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-heading-l">
-      Confirm your placement request
+      Verify your school experience request
     </div>
     <p>
-      Click the confirmation link in the email we’ve sent to the following email
-      address to confirm your request for a placement at <%= @school_name %>:
+      Click the link in the email we’ve sent to the following email address to
+      verify your request for school experience at <%= @school_name %>:
     </p>
+
     <ul class="govuk-list govuk-list--bullet">
       <li><%= @email %></li>
     </ul>
@@ -19,9 +20,9 @@
       <li>check your spam and any other mailbox folders</li>
     </ul>
     <p>
-      If you can’t find or haven’t received the email and confirmation link
-      within the next 3 hours please click the following link to resend it:
+      If you can’t find or haven’t received the email use the following link to
+      resend it:
     </p>
-    <%= button_to 'Resend confirmation link', @resend_path, class: 'govuk-button' %>
+    <%= button_to 'Resend link', @resend_path, class: 'govuk-button govuk-button--secondary' %>
   </div>
 </div>

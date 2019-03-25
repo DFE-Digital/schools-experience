@@ -6,8 +6,8 @@ end
 
 Given("I have completed the placement preference form") do
   visit path_for 'request school experience placement', school: @school
-  fill_in 'Is there anything schools need to know about your availability for placements?', with: 'From Epiphany to Whitsunday'
-  fill_in 'What do you want to get out of your placement?', with: 'I enjoy teaching'
+  fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'From Epiphany to Whitsunday'
+  fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
   click_button 'Continue'
 end
 
@@ -51,9 +51,9 @@ end
 Then("the placement preference form should populated with the details I've entered so far") do
   visit path_for 'request school experience placement', school: @school
   expect(find_field(
-    'Is there anything schools need to know about your availability for placements?'
+    'Is there anything schools need to know about your availability for school experience?'
   ).value).to eq 'From Epiphany to Whitsunday'
-  expect(find_field('What do you want to get out of your placement?').value).to eq \
+  expect(find_field('What do you want to get out of your school experience?').value).to eq \
    'I enjoy teaching'
 end
 

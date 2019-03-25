@@ -11,7 +11,7 @@ Given("there there are schools with the following attributes:") do |table|
     schools << FactoryBot.create(
       :bookings_school,
       name: attributes["Name"],
-      fee: attributes["Fee"].to_i,
+      phases: Bookings::Phase.where(name: attributes["Phase"]),
       coordinates: locate(attributes["Location"])
     )
   end
@@ -20,10 +20,27 @@ Given("there there are schools with the following attributes:") do |table|
 end
 
 Given("I have provided {string} as my location") do |location|
-  visit(candidates_schools_path)
-  fill_in "Where?", with: location
-  select "25", from: "Distance"
-  click_button "Find"
+  path = candidates_schools_path(location: location, distance: 25)
+  visit(path)
+  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
+  expect(path_with_query).to eql(path)
+end
+
+Given("I have provided a point in {string} as my location") do |centre|
+  points = {
+    "Bury" => {
+      "latitude" => 53.593,
+      "longitude" => -2.289
+    }
+  }
+
+  point = points[centre]
+  fail "No point found for #{centre}" unless point.present?
+
+  path = candidates_schools_path(latitude: point["latitude"], longitude: point["longitude"], distance: 25)
+  visit(path)
+  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
+  expect(path_with_query).to eql(path)
 end
 
 Then("the results should be sorted by distance, nearest to furthest") do
@@ -54,4 +71,22 @@ Then("the results should be sorted by name, lowest to highest") do
       .all('#search-results > ul > li')
       .map{ |ele| ele['data-school-urn'].to_i }
   ).to eql(urns_in_name_order)
+end
+
+Given("I have changed the sort order to {string}") do |sort_by|
+  select(sort_by, from: 'Sorted by')
+end
+
+Given("the sort order has defaulted to {string}") do |string|
+  expect(page.find("select#order").value).to eql(string.downcase)
+end
+
+Then("the distance should be ordered from low to high") do
+  distances = page
+    .all(".distance")
+    .map(&:text)
+    .map { |distance| distance.split(" ").first }
+    .map(&:to_f)
+
+  expect(distances).to eql(distances.sort)
 end

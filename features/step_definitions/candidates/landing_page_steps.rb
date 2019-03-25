@@ -2,7 +2,7 @@ Then("the leading paragraph should provide me with a summary of the service") do
   within('p.govuk-body-lead') do
     [
       'interested in becoming a teacher',
-      'find and request school experience placements',
+      'find and request school experience',
       'England'
     ].each do |snippet|
       expect(page).to have_text(snippet)
@@ -19,9 +19,9 @@ Then("the page should include a paragraph on DBS checks with a link to the servi
   end
 end
 
-Then("I should see a warning informing me that placements are only available in England") do
+Then("I should see a warning informing me that school experiences are only available in England") do
   within('p.govuk-inset-text.warning-location-phase') do
-    expect(page).to have_text('This service is only available for placements at primary and secondary schools in England.')
+    expect(page).to have_text('This service is only available for school experience at primary and secondary schools in England.')
   end
 end
 

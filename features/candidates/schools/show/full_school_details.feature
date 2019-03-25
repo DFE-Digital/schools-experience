@@ -79,4 +79,4 @@ Feature: School show page (enhanced data)
 
     Scenario: Request placement button
         Given I am on the profile page for the chosen school
-        Then there should be a button called 'Request placement' that begins the wizard
+        Then there should be a button called 'Start request' that begins the wizard

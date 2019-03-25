@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">School experience placements <%= describe_current_search @search %></h1>
+    <h1 class="govuk-heading-l">School experience <%= describe_current_search @search %></h1>
   </div>
 </div>
 
@@ -23,6 +23,8 @@
           <%= f.hidden_field :query %>
           <%= f.hidden_field :location %>
           <%= f.hidden_field :distance %>
+          <%= f.hidden_field :latitude %>
+          <%= f.hidden_field :longitude %>
 
           <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
 
@@ -41,7 +43,7 @@
       <div>
         <%= school_search_phase_filter_description @search %>
       </div>
-      
+
       <div>
         <%= school_search_subject_filter_description @search %>
       </div>
@@ -63,6 +65,8 @@
         <%= f.hidden_field :query %>
         <%= f.hidden_field :location %>
         <%= f.hidden_field :distance %>
+        <%= f.hidden_field :latitude %>
+        <%= f.hidden_field :longitude %>
         <% for phase_id in f.object.phases %>
           <%= f.hidden_field :phases, multiple: true, value: phase_id, id: nil %>
         <% end %>
@@ -84,7 +88,7 @@
           <h3 class="govuk-heading-l">
             <%= school.name %>
             <%- if school.respond_to? :distance -%>
-            <span class="govuk-caption-m">
+            <span class="govuk-caption-m distance">
               <%= pluralize Conversions::Distance::Metres::ToMiles.convert(school.distance), 'mile' %>
               away
             </span>
@@ -94,7 +98,7 @@
           <dl class="govuk-summary-list">
             <%= summary_row 'Address', format_school_address(school) %>
             <%= summary_row 'Education phases', format_school_phases(school) %>
-            <%= summary_row 'Placement subjects', format_school_subjects(school) %>
+            <%= summary_row 'Experience subjects', format_school_subjects(school) %>
           </dl>
 
           <%= link_to 'View school details', candidates_school_path(school), class: 'govuk-button' %>
