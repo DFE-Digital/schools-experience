@@ -1,5 +1,5 @@
-# Confirm your placement
+# Verify your school experience
 
-Click the confirmation link below to confirm your request for a placement at ((school_name))
+Click the link below to verify your request for school experience at ((school_name))
 
 ((confirmation_link))

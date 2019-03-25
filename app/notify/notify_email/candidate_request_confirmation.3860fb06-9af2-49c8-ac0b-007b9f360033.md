@@ -1,8 +1,8 @@
 Dear ((candidate_name))
 
-You've requested a placement at ((school_name)).
+You've requested school experience at ((school_name)).
 
-^ The school will be in touch with you shortly. For example, during term time this could typically mean within two weeks.
+^ The school will be in touch with you shortly. For example, during term time this could typically mean within 2 weeks.
 
 # Your placement request details
 
@@ -18,11 +18,11 @@ Personal details
 Request details
 
 * School or college: ((school_name))
-* Placement availability: ((placement_availability))
-* Placement outcome: ((placement_outcome))
+* Experience availability: ((placement_availability))
+* Experience outcome: ((placement_outcome))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))
 * Teaching stage: ((candidate_teaching_stage))
 * Teaching subject - first choice: ((candidate_teaching_subject_first_choice))
 * Teaching subject - second choice: ((candidate_teaching_subject_second_choice))
-* DBS Check Document: ((candidate_dbs_check_document))
+* DBS certificate: ((candidate_dbs_check_document))
