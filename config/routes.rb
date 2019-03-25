@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'
 
+  get '/privacy_policy', to: 'pages#privacy_policy'
+  get '/cookies_policy', to: 'pages#cookies_policy'
+
   if Rails.application.config.x.phase_two.enabled
     namespace :schools do
       resource :dashboard, only: :show
