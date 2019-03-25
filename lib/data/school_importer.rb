@@ -55,7 +55,7 @@ private
     Bookings::School.new(
       urn:           nilify(edubase_row['URN']),
       name:          nilify(edubase_row['EstablishmentName']),
-      website:       nilify(edubase_row['SchoolWebsite']),
+      website:       cleanup_website(edubase_row['URN'], edubase_row['SchoolWebsite']),
       contact_email: email_override.present? ? email_override : nilify(tpuk_row['contact_email'])&.downcase,
       address_1:     nilify(edubase_row['Street']),
       address_2:     nilify(edubase_row['Locality']),
@@ -66,14 +66,38 @@ private
       coordinates:   convert_to_point(edubase_row['Easting'], edubase_row['Northing']),
       school_type:   school_types[edubase_row['TypeOfEstablishment (code)'].to_i]
     ).tap do |school|
-      if (p = map_phase(edubase_row['PhaseOfEducation (code)'].to_i))
-        school.phases << p
-      end
+      assign_phases(school, edubase_row['PhaseOfEducation (code)'].to_i)
     end
+  end
+
+  def cleanup_website(urn, url)
+    return nil unless url.present?
+
+    fail "invalid hostname for #{urn}, #{url}" unless url.split(".").size > 1
+
+    # add a prefix if none present, most common error
+    url_with_prefix = if url.starts_with?("http")
+                        url
+                      else
+                        "http://#{url}"
+                      end
+
+    fail "invalid website for #{urn}, #{url}" unless url_with_prefix =~ URI::regexp(%w(http https))
+
+    url_with_prefix.downcase
   end
 
   def nilify(val)
     val.present? ? val.strip : nil
+  end
+
+  def assign_phases(school, edubase_id)
+    overrides = {
+      105271 => 4
+    }
+    if (p = map_phase(overrides.has_key?(school.urn) ? overrides.fetch(school.urn) : edubase_id))
+      school.phases << p
+    end
   end
 
   def map_phase(edubase_id)
