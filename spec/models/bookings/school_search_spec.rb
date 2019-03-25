@@ -32,9 +32,6 @@ describe Bookings::SchoolSearch do
         allow(Geocoder).to receive(:search).and_return([])
       end
 
-      let(:point_in_manchester) { Bookings::School::GEOFACTORY.point(-2.241, 53.481) }
-      let(:point_in_leeds) { Bookings::School::GEOFACTORY.point(-1.548, 53.794) }
-
       let!(:matching_school) do
         create(
           :bookings_school,
@@ -57,6 +54,21 @@ describe Bookings::SchoolSearch do
         subject { Bookings::SchoolSearch.new(query: '', location: '').results }
         specify 'results should include all schools' do
           expect(subject.count).to eql(Bookings::School.count)
+        end
+      end
+
+      context 'Only enabled schools should be returned' do
+        let!(:enabled_school) { create(:bookings_school, coordinates: point_in_manchester) }
+        let!(:disabled_school) { create(:bookings_school, :disabled, coordinates: point_in_manchester) }
+
+        subject { Bookings::SchoolSearch.new(location: 'Manchester').results }
+
+        specify 'should return enabled schools' do
+          expect(subject).to include(enabled_school)
+        end
+
+        specify 'should not return non-enabled schools' do
+          expect(subject).not_to include(disabled_school)
         end
       end
 
