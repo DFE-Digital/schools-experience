@@ -35,7 +35,7 @@
         :to_s,
         { include_blank: 'Select' },
         {
-          class: 'govuk-select',
+          class: 'govuk-select govuk-!-width-one-half',
           data: {
             target: 'subject-preference-form.degreeSubject',
             value_for_no_degree: subject_preference.no_degree_subject
@@ -64,7 +64,7 @@
           :to_s,
           :to_s,
           { prompt: 'Select' },
-          { class: 'govuk-select' } %>
+          { class: 'govuk-select govuk-!-width-one-half' } %>
       </div>
 
       <div class="govuk-form-group">
@@ -73,7 +73,8 @@
           subject_preference.second_subject_choices,
           :to_s,
           :to_s,
-          { class: 'govuk-select' } %>
+          {},
+          { class: 'govuk-select govuk-!-width-one-half' } %>
       </div>
     </fieldset>
 
