@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe Bookings::SchoolSearch do
+  let(:point_in_manchester) { Bookings::School::GEOFACTORY.point(-2.241, 53.481) }
+  let(:point_in_leeds) { Bookings::School::GEOFACTORY.point(-1.548, 53.794) }
+
   let(:manchester_coordinates) {
     [
       Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK'),

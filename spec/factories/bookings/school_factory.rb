@@ -8,6 +8,10 @@ FactoryBot.define do
     sequence(:postcode) { |n| "M#{n} 2JF" }
     association :school_type, factory: :bookings_school_type
 
+    trait :disabled do
+      enabled { false }
+    end
+
     trait :full_address do
       sequence(:address_2) { |n| "#{n} Something area" }
       sequence(:address_3) { |n| "#{n} Something area" }

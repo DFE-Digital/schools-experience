@@ -38,6 +38,8 @@ class Bookings::School < ApplicationRecord
     class_name: "Bookings::SchoolType",
     foreign_key: :bookings_school_type_id
 
+  scope :enabled, -> { where(enabled: true) }
+
   scope :that_provide, ->(subject_ids) do
     if subject_ids.present?
       left_outer_joins(:bookings_schools_subjects)
