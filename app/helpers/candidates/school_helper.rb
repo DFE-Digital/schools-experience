@@ -88,4 +88,16 @@ module Candidates::SchoolHelper
       subject_names: to_sentence(search.subject_names.map { |name| content_tag(:strong, name) })
     )
   end
+
+  def cleanup_school_url(url)
+    if url.blank?
+      '#'
+    elsif url =~ /:/
+      url
+    elsif url =~ /.*@.*/
+      "mailto:#{url}"
+    else
+      "http://#{url}"
+    end
+  end
 end

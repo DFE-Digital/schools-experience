@@ -200,4 +200,31 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       end
     end
   end
+
+  describe '.cleanup_school_url' do
+    context 'with blank url' do
+      subject { cleanup_school_url(' ') }
+      it('should return a same page url') { expect(subject).to eq('#') }
+    end
+
+    context 'with protocol present' do
+      subject { cleanup_school_url('https://www.gov.uk') }
+      it('should return as is') { expect(subject).to eq('https://www.gov.uk') }
+    end
+
+    context 'with email mailto link' do
+      subject { cleanup_school_url('mailto:me@you.com') }
+      it('should return as is') { expect(subject).to eq('mailto:me@you.com') }
+    end
+
+    context 'with email address' do
+      subject { cleanup_school_url('me@you.com') }
+      it('should add mailto protocol') { expect(subject).to eq('mailto:me@you.com') }
+    end
+
+    context 'with no protocol' do
+      subject { cleanup_school_url('www.gov.uk') }
+      it('should use http protocol') { expect(subject).to eq('http://www.gov.uk') }
+    end
+  end
 end
