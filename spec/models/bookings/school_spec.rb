@@ -2,15 +2,45 @@ require 'rails_helper'
 
 describe Bookings::School, type: :model do
   describe 'Validation' do
-    context 'Name' do
+    context 'name' do
       it { is_expected.to validate_presence_of(:name) }
       it { is_expected.to validate_length_of(:name).is_at_most(128) }
     end
 
-    context 'Fee' do
+    context 'fee' do
       it { is_expected.to validate_presence_of(:fee) }
       it { is_expected.to validate_numericality_of(:fee).is_greater_than_or_equal_to(0) }
     end
+
+    shared_examples "websites" do |field_name|
+      valid_urls = %w{http://www.bbc.co.uk https://bbc.co.uk http://news.bbc.com}
+      invalid_urls = [
+        "www.bbc.co.uk",
+        "lizo.mzimba@bbc.co.uk",
+        "ftp://bbc.co.uk",
+        "//bbc.co.uk",
+        "07865 432 321"
+      ]
+
+      subject { Bookings::School.new }
+
+      context field_name do
+        context 'valid' do
+          valid_urls.each do |valid_url|
+            it { should allow_value(valid_url).for(field_name) }
+          end
+        end
+
+        context 'invalid' do
+          invalid_urls.each do |invalid_url|
+            it { should_not allow_value(invalid_url).for(field_name) }
+          end
+        end
+      end
+    end
+
+    include_examples "websites", :website
+    include_examples "websites", :teacher_training_website
   end
 
   describe 'Relationships' do

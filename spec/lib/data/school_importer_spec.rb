@@ -102,6 +102,20 @@ describe SchoolImporter do
         end
       end
 
+      context 'Cleaning up websites' do
+        specify 'invalid websites should raise errors' do
+          expect { subject.send(:cleanup_website, 101010, "invalidcom") }.to raise_error(
+            RuntimeError, "invalid hostname for 101010, invalidcom"
+          )
+        end
+
+        specify 'invalid protocols should raise errors' do
+          expect { subject.send(:cleanup_website, 101010, "httpppp://invalid.com") }.to raise_error(
+            RuntimeError, "invalid website for 101010, httpppp://invalid.com"
+          )
+        end
+      end
+
       specify 'the new records should have the corret phases' do
         {
           100492 => %w{Primary},
