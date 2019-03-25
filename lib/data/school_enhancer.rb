@@ -47,9 +47,9 @@ class SchoolEnhancer
             school.subjects << extract_secondary_subjects(row['secondary_subjects'])
           end
 
-          puts "#{i} of #{total} #{school.name} enhanced"
+          puts "#{i} of #{total} #{school.urn} - #{school.name} enhanced"
         else
-          fail "#{i} of #{total} #{school.name} failed"
+          fail "#{i} of #{total} #{school.urn} - #{school.name} failed"
         end
       end
     end
