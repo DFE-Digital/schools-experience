@@ -22,7 +22,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
   context '#create' do
     context 'uuid not found' do
       before do
-        get "/candidates/confirm?uuid=bad-uuid"
+        get "/candidates/confirm/bad-uuid"
       end
 
       it "doesn't queue a PlacementRequestJob" do
@@ -37,12 +37,12 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
     context 'uuid found' do
       before do
-        get "/candidates/confirm?uuid=#{uuid}"
+        get "/candidates/confirm/#{uuid}"
       end
 
       context 'registration job already enqueued' do
         before do
-          get "/candidates/confirm?uuid=#{uuid}"
+          get "/candidates/confirm/#{uuid}"
         end
 
         it "doesn't requeue a PlacementRequestJob" do

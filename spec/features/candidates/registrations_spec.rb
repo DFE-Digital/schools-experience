@@ -144,7 +144,7 @@ feature 'Candidate Registrations', type: :feature do
       "Click the confirmation link in the email we’ve sent to the following email address to confirm your request for a placement at Test School:\ntest@example.com"
 
     # Click email confirmation link
-    visit "/candidates/confirm?uuid=#{uuid}"
+    visit "/candidates/confirm/#{uuid}"
 
     expect(page).to have_text \
       "Your request for a school experience placement will be forwarded to Test School."

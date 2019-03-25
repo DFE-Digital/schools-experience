@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     get "splash", to: "home#splash"
 
     # email confirmation link
-    get 'confirm', to: 'registrations/placement_requests#create'
+    get 'confirm/:uuid', to: 'registrations/placement_requests#create', as: :confirm
 
     resources :schools, only: %i{index show} do
       namespace :registrations do
