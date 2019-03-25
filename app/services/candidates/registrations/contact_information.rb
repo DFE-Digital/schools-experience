@@ -15,7 +15,7 @@ module Candidates
       validates :building, presence: true
       validates :postcode, presence: true
       validates :phone, presence: true
-      validates :phone, phone: true, if: :phone
+      validates :phone, phone: true, if: -> { phone.present? }
     end
   end
 end
