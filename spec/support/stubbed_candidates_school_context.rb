@@ -8,7 +8,8 @@ shared_context 'Stubbed candidates school' do
       id: school_urn,
       name: 'Test School',
       to_param: school_urn.to_s,
-      contact_email: 'test@test.com'
+      contact_email: 'test@test.com',
+      urn: school_urn
   end
 
   let :allowed_subject_choices do

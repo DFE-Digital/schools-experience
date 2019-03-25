@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :registration_session, class: Candidates::Registrations::RegistrationSession do
     transient do
       current_time { DateTime.current }
+      urn { 11048 }
     end
 
     initialize_with do
@@ -36,7 +37,7 @@ FactoryBot.define do
            "teaching_stage" => "I’m very sure and think I’ll apply",
            "subject_first_choice" => "Maths",
            "subject_second_choice" => "Physics",
-           "urn" => 11048,
+           "urn" => urn,
            "created_at" => current_time,
            "updated_at" => current_time
         }

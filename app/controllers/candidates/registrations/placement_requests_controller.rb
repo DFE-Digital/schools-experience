@@ -20,6 +20,7 @@ module Candidates
         end
 
         redirect_to candidates_school_registrations_placement_request_path \
+          registration_session.school,
           uuid: registration_session.uuid
       rescue RegistrationStore::SessionNotFound
         render :session_expired

@@ -143,8 +143,7 @@ feature 'Candidate Registrations', type: :feature do
       "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
 
     # Click email confirmation link
-    visit \
-      "/candidates/schools/#{school_urn}/registrations/placement_request/new?uuid=#{uuid}"
+    visit "/candidates/confirm/#{uuid}"
 
     expect(page).to have_text \
       "Your request for school experience will be forwarded to Test School."

@@ -3,37 +3,26 @@ require 'rails_helper'
 describe Candidates::Registrations::PlacementRequestsController, type: :request do
   include_context 'Stubbed candidates school'
 
-  let :uuid do
-    'some-uuid'
+  let :registration_session do
+    FactoryBot.build :registration_session, urn: school.urn
   end
 
-  let :registration_store do
-    double Candidates::Registrations::RegistrationStore,
-      retrieve!: registration_session,
-      store!: 1
+  let :uuid do
+    registration_session.uuid
   end
 
   before do
-    allow(Candidates::Registrations::RegistrationStore).to \
-      receive(:instance) { registration_store }
+    Candidates::Registrations::RegistrationStore.instance.store! \
+      registration_session
+
+    allow(Candidates::Registrations::PlacementRequestJob).to \
+      receive(:perform_later) { true }
   end
 
   context '#create' do
     context 'uuid not found' do
-      let :registration_session do
-        nil
-      end
-
       before do
-        allow(Candidates::Registrations::PlacementRequestJob).to \
-          receive(:perform_later) { true }
-
-        allow(registration_store).to receive(:retrieve!) do
-          raise Candidates::Registrations::RegistrationStore::SessionNotFound
-        end
-
-        get \
-          "/candidates/schools/URN/registrations/placement_request/new?uuid=#{uuid}"
+        get "/candidates/confirm/bad-uuid"
       end
 
       it "doesn't queue a PlacementRequestJob" do
@@ -48,49 +37,35 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
     context 'uuid found' do
       before do
-        allow(Candidates::Registrations::PlacementRequestJob).to \
-          receive(:perform_later) { true }
-
-        get \
-          "/candidates/schools/URN/registrations/placement_request/new?uuid=#{uuid}"
+        get "/candidates/confirm/#{uuid}"
       end
 
       context 'registration job already enqueued' do
-        let :registration_session do
-          double Candidates::Registrations::RegistrationSession,
-            completed?: true,
-            uuid: uuid
+        before do
+          get "/candidates/confirm/#{uuid}"
         end
 
-        it "doesn't queue a PlacementRequestJob" do
-          expect(Candidates::Registrations::PlacementRequestJob).not_to \
-            have_received :perform_later
+        it "doesn't requeue a PlacementRequestJob" do
+          expect(Candidates::Registrations::PlacementRequestJob).to \
+            have_received(:perform_later).exactly(:once)
         end
 
         it 'redirects to placement request show' do
           expect(response).to redirect_to \
             candidates_school_registrations_placement_request_path(
-              'URN',
+              school,
               uuid: uuid
             )
         end
       end
 
       context 'registration job not already enqueued' do
-        let :registration_session do
-          double Candidates::Registrations::RegistrationSession,
-            completed?: false,
-            flag_as_completed!: true,
-            uuid: uuid
+        let :stored_registration_session do
+          Candidates::Registrations::RegistrationStore.instance.retrieve! uuid
         end
 
-        it 'marks the registration as completed' do
-          expect(registration_session).to have_received :flag_as_completed!
-        end
-
-        it 're-stores the updated registration in the registration_store' do
-          expect(registration_store).to have_received(:store!).with \
-            registration_session
+        it 'marks the registration as completed and re-stores it in redis' do
+          expect(stored_registration_session).to be_completed
         end
 
         it 'enqueues the placement request job' do
@@ -101,7 +76,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
         it 'redirects to placement request show' do
           expect(response).to redirect_to \
             candidates_school_registrations_placement_request_path(
-              'URN',
+              school,
               uuid: uuid
             )
         end
@@ -111,17 +86,9 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
   context '#show' do
     context 'uuid not found' do
-      let :registration_session do
-        nil
-      end
-
       before do
-        allow(registration_store).to receive(:retrieve!) do
-          raise Candidates::Registrations::RegistrationStore::SessionNotFound
-        end
-
         get \
-          "/candidates/schools/URN/registrations/placement_request?uuid=#{uuid}"
+          "/candidates/schools/URN/registrations/placement_request?uuid=bad-uuid"
       end
 
       it 'renders the session expired view' do
@@ -130,10 +97,6 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
     end
 
     context 'uuid found' do
-      let :registration_session do
-        FactoryBot.build :registration_session
-      end
-
       before do
         get \
           "/candidates/schools/URN/registrations/placement_request?uuid=#{uuid}"
