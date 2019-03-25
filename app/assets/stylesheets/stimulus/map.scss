@@ -1,9 +1,11 @@
 .embedded-map {
   box-sizing: border-box;
   position: relative;
-  width: 100%;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 0;
-  @include govuk-responsive-margin(4, "bottom");
+  @include govuk-responsive-margin(2, "bottom");
   height: 0;
   padding-bottom: 67%;
 
@@ -24,6 +26,10 @@
       width: 100%;
       height: auto;
     }
+  }
+
+  @include govuk-media-query($from: tablet) {
+    width: 100%;
   }
 }
 

@@ -2,6 +2,7 @@ require 'addressable'
 
 module Candidates::MapsHelper
   BING_BASE_URL = "https://dev.virtualearth.net/REST/v1".freeze
+  EXTERNAL_MAP_URL = "https://bing.com/maps/default.aspx?mode=D&rtp=~pos.{latitude}_{longitude}_{name}".freeze
   STATIC_MAP_URL = "#{BING_BASE_URL}/Imagery/Map/Road/{center_point}/{zoom_level}{?params*}".freeze
 
   def include_maps_in_head
@@ -58,5 +59,10 @@ module Candidates::MapsHelper
         image_tag static_url, class: "embedded-map__nojs-img"
       end
     end
+  end
+
+  def external_map_url(latitude:, longitude:, name:)
+    tmpl = Addressable::Template.new(EXTERNAL_MAP_URL)
+    tmpl.expand(latitude: latitude, longitude: longitude, name: name).to_s
   end
 end

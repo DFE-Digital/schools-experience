@@ -28,44 +28,6 @@
         </dd>
       </div>
       <%- end -%>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          For more information about our school use the following links:
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul id="school-websites">
-            <%- if @school.website.present? -%>
-            <li id="school-website">
-              <%= link_to "#{@school.name} website", @school.website %>
-            </li>
-            <%- end -%>
-
-            <li>
-              <%= link_to "#{@school.name} Get Information About Schools",
-                          gias_school_url(@school.urn) %>
-            </li>
-
-            <li>
-              <%= link_to "Ofsted report: #{@school.name}",
-                          ofsted_report_url(@school.urn) %>
-            </li>
-
-            <li>
-              <%= link_to "Performance information: #{@school.name}",
-                          performance_report_url(@school.urn) %>
-            </li>
-
-            <%- if @school.teacher_training_provider? && @school.teacher_training_website.present? -%>
-            <li>
-              <%= link_to "Teacher training: #{@school.name}",
-                @school.teacher_training_website %>
-            </li>
-            <%- end -%>
-          </ul>
-        </dd>
-      </div>
-
     </dl>
 
     <div>
@@ -74,7 +36,56 @@
       </h1>
 
       <%= school_location_map @school %>
+
+      <p class="directions-link">
+        <%= link_to 'Get directions', external_map_url(
+              latitude: @school.coordinates.latitude,
+              longitude: @school.coordinates.longitude,
+              name: @school.name) %>
+      </p>
     </div>
+
+    <p>
+      <%= link_to "Start request",
+                  new_candidates_school_registrations_placement_preference_path(@school),
+                  class:"govuk-button" %>
+    </p>
+
+    <p>
+      <strong>
+        For more information about our school use the following links:
+      </strong>
+    </p>
+
+    <ul id="school-websites">
+      <%- if @school.website.present? -%>
+      <li id="school-website">
+        <%= link_to "#{@school.name} website", @school.website %>
+      </li>
+      <%- end -%>
+
+      <li>
+        <%= link_to "#{@school.name} Get Information About Schools",
+                    gias_school_url(@school.urn) %>
+      </li>
+
+      <li>
+        <%= link_to "Ofsted report: #{@school.name}",
+                    ofsted_report_url(@school.urn) %>
+      </li>
+
+      <li>
+        <%= link_to "Performance information: #{@school.name}",
+                    performance_report_url(@school.urn) %>
+      </li>
+
+      <%- if @school.teacher_training_provider? && @school.teacher_training_website.present? -%>
+      <li>
+        <%= link_to "Teacher training: #{@school.name}",
+          cleanup_school_url(@school.teacher_training_website) %>
+      </li>
+      <%- end -%>
+    </ul>
   </div>
 
   <div class="govuk-grid-column-one-third column-top-border">

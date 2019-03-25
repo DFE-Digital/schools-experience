@@ -11,72 +11,91 @@
       <p>
         <b>Specialisms:</b> <%= @school.specialisms %>.
       </p>
-
-      <%unless @school.links.empty? %>
-      <p>
-        <b>For more information about our school use the following links:</b>
-      </p>
-
-      <ul>
-        <%- if @school.website.present? -%>
-        <li>
-          <%= link_to "#{@school.name} website", @school.website %>
-        </li>
-        <%- end -%>
-
-        <li>
-          <%= link_to "#{@school.name} Get Information About Schools",
-                      gias_school_url(@school.urn) %>
-        </li>
-
-        <li>
-          <%= link_to "Ofsted report: #{@school.name}",
-                      ofsted_report_url(@school.urn) %>
-        </li>
-
-        <li>
-          <%= link_to "Performance information: #{@school.name}",
-                      performance_report_url(@school.urn) %>
-        </li>
-      </ul>
-      <% end %>
     </div>
+
     <div>
       <h2 class="govuk-heading-m">
         Placement information
       </h2>
-      
+
       <p>
-        <b>Individual requirements:</b> 
+        <b>Individual requirements:</b>
         Must have a degree and be planning to become a teacher.
       </p>
-      
+
       <p>
-        <b>Placement details:</b> 
-        Attendees will observe lessons in their chosen subjects and may get the 
-        chance to interact with pupils and classroom activities. Only offer key 
+        <b>Placement details:</b>
+        Attendees will observe lessons in their chosen subjects and may get the
+        chance to interact with pupils and classroom activities. Only offer key
         stage 1 experience for primary placements.
       </p>
-      
+
       <p>
         <b>Placement subjects:</b> <%= format_school_subjects @school %>.
       </p>
     </div>
-    
+
     <div>
       <h1 class="govuk-heading-m">
         Location
       </h1>
-      
+
       <%= school_location_map @school %>
+
+      <p class="directions-link">
+        <%= link_to 'Get directions', external_map_url(
+              latitude: @school.coordinates.latitude,
+              longitude: @school.coordinates.longitude,
+              name: @school.name) %>
+      </p>
     </div>
+
+    <p>
+      <%= link_to "Start request",
+                  new_candidates_school_registrations_placement_preference_path(@school),
+                  class:"govuk-button" %>
+    </p>
+
+    <p>
+      For more information about our school use the following links:
+    </p>
+
+    <ul id="school-websites">
+      <%- if @school.website.present? -%>
+      <li id="school-website">
+        <%= link_to "#{@school.name} website", @school.website %>
+      </li>
+      <%- end -%>
+
+      <li>
+        <%= link_to "#{@school.name} Get Information About Schools",
+                    gias_school_url(@school.urn) %>
+      </li>
+
+      <li>
+        <%= link_to "Ofsted report: #{@school.name}",
+                    ofsted_report_url(@school.urn) %>
+      </li>
+
+      <li>
+        <%= link_to "Performance information: #{@school.name}",
+                    performance_report_url(@school.urn) %>
+      </li>
+
+      <%- if @school.teacher_training_provider? && @school.teacher_training_website.present? -%>
+      <li>
+        <%= link_to "Teacher training: #{@school.name}",
+          cleanup_school_url(@school.teacher_training_website) %>
+      </li>
+      <%- end -%>
+    </ul>
   </div>
-  
+
   <div class="govuk-grid-column-one-third column-top-border">
     <h3 class="govuk-heading-m">
       Address
     </h3>
-  
+
     <p class="govuk-body">
       <%= format_school_address @school %>.
     </p>
@@ -88,59 +107,59 @@
     <div class="govuk-body">
       <%= format_school_availability @school %>
     </div>
-    
+
     <h3 class="govuk-heading-s">
       DBS check required
     </h3>
-    
+
     <p class="govuk-body">
       <%= @school.dbs ? 'Yes' : 'No' %>
     </p>
-    
+
     <h3 class="govuk-heading-s">
       Fee
     </h3>
-    
+
     <p class="govuk-body">
       <%= @school.fee %>
     </p>
-    
+
     <h3 class="govuk-heading-s">
       Dress code
     </h3>
-    
+
     <p class="govuk-body">
       <%= @school.dress_code %>
     </p>
-    
+
     <h3 class="govuk-heading-s">
       Start and finish times
     </h3>
-    
+
     <p class="govuk-body">
       <%= @school.times %>
     </p>
-    
+
     <h3 class="govuk-heading-s">
       Parking
     </h3>
-    
+
     <p class="govuk-body">
       <%= @school.parking %>
     </p>
-    
+
     <h3 class="govuk-heading-s">
       Accessibility details
     </h3>
-    
+
     <p class="govuk-body">
       <%= @school.accessibility %>
     </p>
-    
+
     <h3 class="govuk-heading-s">
       Teacher training offered
     </h3>
-    
+
     <p class="govuk-body">
       <%= @school.training_offered %>
     </p>
