@@ -23,7 +23,8 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
     context 'phone is present' do
       VALID_NUMBERS = ['01434 634996', '+441434634996', '01234567890'].freeze
-      INVALID_NUMBERS = ['7', 'q', '+4414346349', ' ', '   '].freeze
+      INVALID_NUMBERS = ['7', 'q', '+4414346349'].freeze
+      BLANK_NUMBERS = ['', ' ', '   '].freeze
 
       context 'valid numbers' do
         VALID_NUMBERS.each do |number|
@@ -42,8 +43,18 @@ describe Candidates::Registrations::ContactInformation, type: :model do
           before { subject.validate }
 
           it "doesn't permit #{number}" do
-            expect(subject.errors[:phone]).to include \
-              "Enter a valid telephone number"
+            expect(subject.errors[:phone]).to eq ["Enter a valid telephone number"]
+          end
+        end
+      end
+
+      context 'blank number' do
+        BLANK_NUMBERS.each do |number|
+          subject { described_class.new phone: number }
+          before { subject.validate }
+
+          it "doesn't permit #{number}" do
+            expect(subject.errors[:phone]).to eq ["Enter your telephone number"]
           end
         end
       end
