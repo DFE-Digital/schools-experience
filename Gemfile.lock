@@ -226,6 +226,7 @@ GEM
     rack (2.0.6)
     rack-proxy (0.6.5)
       rack
+    rack-rewrite (1.5.1)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.2.1)
@@ -394,6 +395,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma (~> 3.11)
+  rack-rewrite
   rails (~> 5.2.2)
   rails-controller-testing
   redis (~> 4.0)

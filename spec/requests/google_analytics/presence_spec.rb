@@ -13,13 +13,11 @@ describe "candidates/home/index.html.erb", type: :request do
 
   context 'When GA_TRACKING_ID is present in the environment' do
     before do
-      allow(ENV).to(receive(:[]).and_return(tracking_id_key))
-      allow(ENV).to(
-        receive(:fetch)
-          .with(tracking_id_key)
-          .and_return(tracking_id)
-      )
+      @orig_tracking_id = ENV[tracking_id_key]
+      ENV[tracking_id_key] = tracking_id
     end
+
+    after { ENV[tracking_id_key] = @orig_tracking_id }
 
     specify "google analytics partial should be present" do
       get '/'
@@ -30,12 +28,11 @@ describe "candidates/home/index.html.erb", type: :request do
 
   context "When GA_TRACKING_ID is not present in the environment" do
     before do
-      allow(ENV).to(
-        receive(:has_key?)
-          .with(tracking_id_key)
-          .and_return(false)
-      )
+      @orig_tracking_id = ENV[tracking_id_key]
+      ENV[tracking_id_key] = ""
     end
+
+    after { ENV[tracking_id_key] = @orig_tracking_id }
 
     specify "google analytics partial should not be present" do
       get '/'
