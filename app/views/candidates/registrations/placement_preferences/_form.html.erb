@@ -2,8 +2,8 @@
 
 <div class="govuk-grid-row" id="placement-preference">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Request school experience placement</h1>
-    <p>Tell us a few details so we can forward your placement requirements to the school.</p>
+    <h1 class="govuk-heading-l">Request school experience</h1>
+    <p>Tell us a few details so we can forward your expereince requirements to the school.</p>
 
     <%= form_for placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary placement_preference, 'There is a problem', '' %>
@@ -11,20 +11,21 @@
           :availability,
           rows: 5,
           maxwords: { count: 150 },
+          placeholder: t('.availability_placeholder'),
           label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
           <p>
             Tell us about your availability. For example, if you're:
           </p>
           <ul class="govuk-list govuk-list--bullet">
             <li>
-              available for any specific placement dates offered by schools
+              available for any specific experience dates offered by schools
             </li>
             <li>
-              only available or unavailable for placements on particular days, dates or for certain periods of time
+              only available or unavailable for experience on particular days, dates or for certain periods of time
             </li>
           </ul>
           <p>
-            The school will use this information to offer you the best dates it has available and will contact you to arrange the exact date of your placement.
+            The school will use this information to offer you the best dates it has available and may contact you to arrange the exact date of your experience.
           </p>
           <p>
             Depending on availability and time of year, schools may not always be able to offer you the exact dates you’re looking for.
@@ -54,7 +55,7 @@
             </li>
           </ul>
           <p>
-            This will help the school see if it can offer you the kind of placement you’re looking for.
+            This will help the school see if it can offer you the kind of experience you’re looking for.
           </p>
         <% end %>
 

@@ -108,7 +108,10 @@ Capybara.register_driver :firefox_headless do |app|
 end
 
 Capybara.register_driver :ie do |app|
-  Capybara::Selenium::Driver.new(app, browser: :internet_explorer)
+  options = Selenium::WebDriver::IE::Options.new
+  options.require_window_focus = true
+  options.ignore_protected_mode_settings = true
+  Capybara::Selenium::Driver.new(app, browser: :internet_explorer, options: options)
 end
 
 if (driver = ENV['CUC_DRIVER']) && driver.present?

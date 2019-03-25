@@ -10,6 +10,10 @@ class Bookings::School < ApplicationRecord
     presence: true,
     numericality: { greater_than_or_equal_to: 0, only_integer: true }
 
+  validates :website, allow_nil: true, website: true
+
+  validates :teacher_training_website, allow_nil: true, website: true
+
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
     inverse_of: :bookings_school,

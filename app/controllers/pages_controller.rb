@@ -7,6 +7,12 @@ class PagesController < ApplicationController
     render plain: 'healthy'
   end
 
+  def privacy_policy; end
+
+  def cookies_policy; end
+
+  def migration; end
+
 private
 
   def sanitise_page
