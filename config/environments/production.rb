@@ -101,6 +101,8 @@ Rails.application.configure do
           returning: returning.inspect
         }
       )
+
+      Raven.capture_exception(exception)
     end
   }
   config.session_store :cache_store, key: 'schoolex-session'
