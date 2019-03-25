@@ -82,13 +82,14 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  context '.current_search' do
+  context '.describe_current_search' do
     context 'with coordinates search' do
       subject do
         double('Coords search',
           latitude: '1',
           longitude: '2',
           location: '',
+          location_name: nil,
           query: '')
       end
 
@@ -98,16 +99,34 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
 
     context 'with location search' do
-      subject do
-        double('Location search',
-          latitude: '',
-          longitude: '',
-          location: 'Manchester',
-          query: '')
+      context 'and name supplied by search' do
+        subject do
+          double('Location search',
+            latitude: '',
+            longitude: '',
+            location: 'Manchester',
+            location_name: 'Manchester, United Kingdom',
+            query: '')
+        end
+
+        it('should say near Manchester') do
+          expect(describe_current_search(subject)).to match(/near Manchester, United Kingdom/)
+        end
       end
 
-      it('should say near Manchester') do
-        expect(describe_current_search(subject)).to match(/near Manchester/i)
+      context 'without name supplied by search' do
+        subject do
+          double('Location search',
+            latitude: '',
+            longitude: '',
+            location: 'Manchester',
+            location_name: nil,
+            query: '')
+        end
+
+        it('should say near Manchester') do
+          expect(describe_current_search(subject)).to match(/near Manchester$/)
+        end
       end
     end
 
@@ -117,6 +136,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
           latitude: '',
           longitude: '',
           location: '',
+          location_name: nil,
           query: 'special school')
       end
 

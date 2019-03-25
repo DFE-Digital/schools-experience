@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Bookings::SchoolSearch do
   let(:manchester_coordinates) {
     [
-      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242),
-      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229)
+      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK'),
+      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK')
     ]
   }
 
