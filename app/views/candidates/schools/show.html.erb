@@ -8,9 +8,4 @@
 
 <%= render @school.private_beta? ? 'phase2' : 'phase1', school: @school %>
 
-<p>
-    <%= link_to "Start request",
-                new_candidates_school_registrations_placement_preference_path(@school),
-                class:"govuk-button" %>
-</p>
 
