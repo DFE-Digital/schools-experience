@@ -38,4 +38,13 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
       expect(subject).to match("/#{@latitude}%2C#{@longitude}/")
     end
   end
+
+  context '.external_map_url' do
+    subject { external_map_url(latitude: @latitude, longitude: @longitude, name: 'test') }
+
+    it "should add in latitude and longitude" do
+      expect(subject).to \
+        eq("https://bing.com/maps/default.aspx?mode=D&rtp=~pos.#{@latitude}_#{@longitude}_test")
+    end
+  end
 end

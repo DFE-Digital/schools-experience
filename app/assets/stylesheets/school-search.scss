@@ -109,6 +109,11 @@
       @include govuk-responsive-margin(4, "bottom") ;
     }
   }
+
+  .directions-link {
+    margin-top: 0;
+    @include govuk-font($size: 16) ;
+  }
 }
 
 

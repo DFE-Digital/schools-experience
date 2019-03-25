@@ -36,14 +36,21 @@
       </h1>
 
       <%= school_location_map @school %>
+
+      <p class="directions-link">
+        <%= link_to 'Get directions', external_map_url(
+              latitude: @school.coordinates.latitude,
+              longitude: @school.coordinates.longitude,
+              name: @school.name) %>
+      </p>
     </div>
-    
+
     <p>
       <%= link_to "Start request",
                   new_candidates_school_registrations_placement_preference_path(@school),
                   class:"govuk-button" %>
-    </p>    
-    
+    </p>
+
     <p>
       <strong>
         For more information about our school use the following links:
