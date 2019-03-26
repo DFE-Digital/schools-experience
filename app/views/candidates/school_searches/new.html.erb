@@ -3,7 +3,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <div id="search-form">
-      <%= form_for @search, as: '', method: :get do |f| %>
+      <%= form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h1 class="govuk-fieldset__heading">
