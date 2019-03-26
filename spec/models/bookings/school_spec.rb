@@ -41,6 +41,32 @@ describe Bookings::School, type: :model do
 
     include_examples "websites", :website
     include_examples "websites", :teacher_training_website
+
+    context 'contact_email' do
+      valid_addresses = %w{hello@bbc.co.uk hi.there@bbc.com}
+      invalid_addresses = [
+        "www.bbc.co.uk",
+        "0161 123 4567",
+        "address including whitespace@something.org",
+        "this@does@not.work.com",
+        "@twitter_handle2",
+        "trailing@",
+        "nodomain@.com",
+        "trailingdot@somewhere."
+      ]
+
+      context 'valid' do
+        valid_addresses.each do |valid_address|
+          it { should allow_value(valid_address).for(:contact_email) }
+        end
+      end
+
+      context 'invalid' do
+        invalid_addresses.each do |invalid_address|
+          it { should_not allow_value(invalid_address).for(:contact_email) }
+        end
+      end
+    end
   end
 
   describe 'Relationships' do
