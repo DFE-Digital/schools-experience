@@ -101,8 +101,6 @@ Rails.application.configure do
           returning: returning.inspect
         }
       )
-
-      Raven.capture_exception(exception)
     end
   }
 

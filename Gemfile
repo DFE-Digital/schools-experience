@@ -56,7 +56,6 @@ gem "font-awesome-rails"
 gem 'kaminari'
 
 gem 'phonelib'
-gem 'sentry-raven'
 
 gem 'rack-rewrite'
 

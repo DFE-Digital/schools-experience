@@ -22,8 +22,6 @@ protected
 
   def session_expired(exception)
     ExceptionNotifier.notify_exception(exception)
-    Raven.capture_exception(exception)
-
     render 'shared/session_expired'
   end
 end
