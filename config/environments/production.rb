@@ -113,4 +113,6 @@ Rails.application.configure do
   config.x.phase_two.enabled = ENV["PHASE_TWO"].present?
 
   config.force_ssl = true
+
+  Rails.application.routes.default_url_options = { protocol: 'https' }
 end
