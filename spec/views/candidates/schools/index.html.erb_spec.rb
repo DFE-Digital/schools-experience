@@ -6,7 +6,6 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       assign(:search, Candidates::SchoolSearch.new)
       render
     end
-
   end
 
   context 'filtering existing search' do
