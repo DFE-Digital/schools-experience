@@ -45,6 +45,7 @@ en:
               blank: "Enter your county"
             email:
               blank: "Enter your email address"
+              invalid: "Enter a valid email address"
             full_name:
               blank: "Enter your full name"
             phone:
