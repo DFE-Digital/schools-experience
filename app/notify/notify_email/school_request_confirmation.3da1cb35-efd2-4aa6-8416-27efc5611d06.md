@@ -39,7 +39,7 @@ offer and arrange the best available school experience dates
 
 Once you’ve made your decision you’ll need to confirm this with the candidate via email or telephone.
 
-[h2] Service development and updates
+# Service development and updates
 
 This service is still in development and we’ll be adding new functions to help you better manage your school experience including:
 
