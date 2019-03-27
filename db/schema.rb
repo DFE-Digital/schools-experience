@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_18_121139) do
+ActiveRecord::Schema.define(version: 2019_03_27_114344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 2019_03_18_121139) do
     t.text "candidate_requirement_dbs_policy"
     t.boolean "candidate_requirement_requirements"
     t.text "candidate_requirement_requirements_details"
+    t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 
   add_foreign_key "bookings_schools", "bookings_school_types"
