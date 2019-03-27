@@ -3,6 +3,7 @@ import { Controller } from "stimulus"
 export default class extends Controller {
   static targets = [ "latitude", "longitude", "location", "icon", "error-msg" ] ;
   currentLocationString = 'Using your current location' ;
+  originalPlaceholder = 'currentLocationString' ;
   crossHairsIcon = 'fa-crosshairs' ;
   spinnerIcon = 'fa-refresh' ;
   spinIcon = 'fa-spin' ;
