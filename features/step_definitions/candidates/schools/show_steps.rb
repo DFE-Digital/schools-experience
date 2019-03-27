@@ -158,3 +158,14 @@ end
 Then("the placement information section should not be visible") do
   expect(page).not_to have_css("#school-placement-info")
 end
+
+Given("the chosen school has no availability information") do
+  @school.update_attributes(availability_info: nil)
+  expect(@school.availability_info).to be_nil
+end
+
+Then("the availability information in the sidebar should read {string}") do |string|
+  within("#school-availability-info") do
+    expect(page).to have_css('dd', text: string)
+  end
+end
