@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_18_121139) do
+ActiveRecord::Schema.define(version: 2019_03_26_112400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 2019_03_18_121139) do
     t.string "county"
     t.string "postcode", null: false
     t.integer "bookings_school_type_id", null: false
-    t.string "contact_email", limit: 64
+    t.string "contact_email", limit: 64, null: false
     t.text "placement_info"
     t.boolean "teacher_training_provider", default: false, null: false
     t.text "teacher_training_info"

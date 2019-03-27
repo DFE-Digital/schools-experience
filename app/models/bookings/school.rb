@@ -14,6 +14,11 @@ class Bookings::School < ApplicationRecord
 
   validates :teacher_training_website, allow_nil: true, website: true
 
+  validates :contact_email, format: {
+    with: URI::MailTo::EMAIL_REGEXP,
+    message: "isn't a valid email address"
+  }
+
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
     inverse_of: :bookings_school,
