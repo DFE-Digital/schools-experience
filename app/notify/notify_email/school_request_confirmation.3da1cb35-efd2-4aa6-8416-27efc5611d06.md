@@ -49,4 +49,4 @@ This service is still in development and we’ll be adding new functions to help
 * auto-generated emails and reminders - to save you time and keep candidates informed
 * the ability to confirm candidate attendance - to reduce candidate no-shows and repeated cancellations
 
-In the meantime, if you’ve got any any feedback, questions or would like to take part in user testing contact us at organise.schoolexperience@education.gov.uk.
+In the meantime, if you’ve got any any feedback, questions or would like to take part in user testing contact us at organise.school-experience@education.gov.uk.
