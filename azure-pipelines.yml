@@ -3,7 +3,6 @@ pool:
 
 variables:
   imageName: school-experience
-  imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
   # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
@@ -15,6 +14,16 @@ variables:
   CUCUMBER_PROFILE: continuous_integration
 
 steps:
+  - script: |
+      echo "##vso[task.setvariable variable=imageTag]v$(Build.BuildId)"
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/phase2')
+    displayName: Setting image tag name (not on phase 2 branch)
+
+  - script: |
+      echo "##vso[task.setvariable variable=imageTag]v$(Build.BuildId)-phase2"
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/phase2')
+    displayName: Setting image tag name (on phase 2 branch), suffixed with -phase2
+
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
     env:
       pswd: $(dockerPassword)
@@ -23,12 +32,15 @@ steps:
     displayName: Launch Postgres # done early to give it time to boot
   - script: docker run --name=redis -d $(REDIS_IMAGE)
     displayName: Launch Redis # done early to give it time to boot
-  - script: docker pull $(dockerRegistry)/$(imageName):latest || true
+
+  - script: docker pull $(dockerRegistry)/$(imageName):phase2 || true
     displayName: Retrieve latest Docker build to use as cache
-    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
-  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):latest -t $(dockerRegistry)/$(imageName):$(imageTag) .
+    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'),ne(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+
+  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):phase2 -t $(dockerRegistry)/$(imageName):$(imageTag) .
     displayName: Build Docker Image using Cache
-    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'),ne(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+
   - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
     displayName: Build Docker Image without Cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
@@ -58,12 +70,21 @@ steps:
     displayName: Launch Selenium Firefox
   - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
     displayName: Run Cucumber via Selenium Firefox
+
   - script: |
       docker push $(dockerRegistry)/$(imageName):$(imageTag)
       docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):latest
       docker push $(dockerRegistry)/$(imageName):latest
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-    displayName: 'Push Docker image'
+    displayName: 'Push Docker image (built from master)'
+
+  - script: |
+      docker push $(dockerRegistry)/$(imageName):$(imageTag)
+      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):phase2
+      docker push $(dockerRegistry)/$(imageName):phase2
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/phase2')
+    displayName: 'Push Docker image (built from phase2)'
+
   - task: CopyFiles@2
     inputs:
       contents: 'script/compose-school-experience.sh'
