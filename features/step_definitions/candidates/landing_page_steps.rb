@@ -59,9 +59,7 @@ Then("it should contain some useful information about the process") do
       "personal details",
       "address",
       "telephone number",
-      "email",
-      "cover costs, some schools charge a fee",
-      "direct to the individual schools"
+      "email"
     ].each do |snippet|
       expect(page).to have_content(snippet)
     end

@@ -11,14 +11,6 @@ Feature: Candidate landing page
         Given I am on the 'landing' page
         Then the leading paragraph should provide me with a summary of the service
 
-    Scenario: DBS information
-        Given I am on the 'landing' page
-        Then the page should include a paragraph on DBS checks with a link to the service
-
-    Scenario: Location availability warning
-        Given I am on the 'landing' page
-        Then I should see a warning informing me that school experiences are only available in England
-
     Scenario: The start now button
         Given I am on the 'landing' page
         When I click the 'Start now' button
