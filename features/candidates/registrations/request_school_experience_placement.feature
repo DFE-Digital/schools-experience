@@ -14,6 +14,16 @@ Feature: Request a school experience placement
             | Is there anything schools need to know about your availability for school experience? | textarea |         |
             | What do you want to get out of your school experience?                                | textarea |         |
 
+    Scenario: Displaying a warning if the school has availability information
+        Given my school has availability information set
+        When I am on the 'Request school experience placement' page for my school of choice
+        Then I should see a warning containing the availability information
+
+    Scenario: No warning should be displayed if the availability information is absent
+        Given my school has availability no information set
+        When I am on the 'Request school experience placement' page for my school of choice
+        Then I should see no warning containing the availability information
+
     @javascript
     Scenario: Word counting in placement objectives
         Given I am on the 'Request school experience placement' page for my school of choice
