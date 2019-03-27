@@ -6,6 +6,9 @@ export default class extends Controller {
   crossHairsIcon = 'fa-crosshairs' ;
   spinnerIcon = 'fa-refresh' ;
   spinIcon = 'fa-spin' ;
+  timedOut = false ;
+  locationSearchFinished = false ;
+  timeOutLengthSeconds = 10 ;
 
   connect() {
     if (this.enableGeolocation()) {
@@ -86,19 +89,41 @@ export default class extends Controller {
     ev.preventDefault() ;
 
     this.showSpinner() ;
+    this.startTimeout() ;
 
     if (this.enableGeolocation()) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          this.setCoords(position.coords) ;
-          this.hideSpinner()
+          if (!this.timedOut) {
+            this.locationSearchFinished = true ;
+            this.setCoords(position.coords) ;
+            this.hideSpinner() ;
+          }
         },
         (err) => {
-          this.hideSpinner()
-          window.alert("Your location is not available") ;
+          this.locationSearchFinished = true ;
+          this.locationUnavailable() ;
         }
       ) ;
     }
+  }
+
+  startTimeout() {
+    this.timedOut = false ;
+    this.locationSearchFinished = false ;
+    let that = this ;
+
+    setTimeout(function() {
+      if (!that.locationSearchFinished) {
+        that.timedOut = true ;
+        that.locationUnavailable("Location retrieval took too long") ;
+      }
+    }, this.timeOutLengthSeconds * 1000) ;
+  }
+
+  locationUnavailable(msg) {
+    this.hideSpinner() ;
+    window.alert(msg || "Your location is not available") ;
   }
 
   showSpinner() {
