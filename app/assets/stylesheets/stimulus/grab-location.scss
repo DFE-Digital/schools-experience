@@ -22,4 +22,10 @@ div[data-controller="grab-location"] {
     color: $govuk-brand-colour;
     background-color: rgb(221,221,221) ;
   }
+
+  .grab-location--error-message {
+    @include govuk-responsive-margin(1, "top");
+    color: $govuk-error-colour;
+    text-align: right;
+  }
 }

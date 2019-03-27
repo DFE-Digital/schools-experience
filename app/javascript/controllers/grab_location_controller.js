@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "latitude", "longitude", "location", "icon" ] ;
+  static targets = [ "latitude", "longitude", "location", "icon", "error-msg" ] ;
   currentLocationString = 'Using your current location' ;
   crossHairsIcon = 'fa-crosshairs' ;
   spinnerIcon = 'fa-refresh' ;
@@ -9,6 +9,7 @@ export default class extends Controller {
   timedOut = false ;
   locationSearchFinished = false ;
   timeOutLengthSeconds = 10 ;
+  errorMessage = null ;
 
   connect() {
     if (this.enableGeolocation()) {
@@ -26,6 +27,8 @@ export default class extends Controller {
   }
 
   clearLocationInfo() {
+    this.clearErrorMsg() ;
+
     if (this.latitudeTarget.value != '' || this.longitudeTarget != '' ||
       this.longitudeTarget.value == this.currentLocationString) {
         this.removeCoords() ;
@@ -90,6 +93,7 @@ export default class extends Controller {
 
     this.showSpinner() ;
     this.startTimeout() ;
+    this.clearErrorMsg() ;
 
     if (this.enableGeolocation()) {
       navigator.geolocation.getCurrentPosition(
@@ -123,7 +127,22 @@ export default class extends Controller {
 
   locationUnavailable(msg) {
     this.hideSpinner() ;
-    window.alert(msg || "Your location is not available") ;
+    this.showErrorMsg(msg || "Your location is not available") ;
+  }
+
+  showErrorMsg(msg) {
+    if (!this.errorMessage) {
+      this.errorMessage = document.createElement('div') ;
+      this.errorMessage.setAttribute('class', 'grab-location--error-message') ;
+      this.locationTarget.parentNode.appendChild(this.errorMessage) ;
+    }
+
+    this.errorMessage.innerHTML = msg ;
+  }
+
+  clearErrorMsg() {
+    if (this.errorMessage)
+      this.errorMessage.innerHTML = '' ;
   }
 
   showSpinner() {
