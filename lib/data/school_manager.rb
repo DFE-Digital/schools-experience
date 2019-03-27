@@ -19,7 +19,8 @@ private
     Bookings::School.transaction do
       urns.each do |row|
         Bookings::School.find_by(urn: row['urn']).tap do |bs|
-          fail "no school found with urn #{urn}" unless bs.present?
+          fail "no school found with urn #{row['urn']}" unless bs.present?
+
           puts "Updating #{bs.name}, enabled: #{enabled}"
           bs.update_attributes(enabled: enabled)
         end
