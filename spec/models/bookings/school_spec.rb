@@ -136,6 +136,21 @@ describe Bookings::School, type: :model do
       it { is_expected.to respond_to(:close_to) }
     end
 
+    context 'Enabled' do
+      let!(:enabled_school) { create(:bookings_school) }
+      let!(:disabled_school) { create(:bookings_school, :disabled) }
+
+      it { is_expected.to respond_to(:enabled) }
+
+      specify 'should return enabled schools' do
+        expect(subject.enabled).to include(enabled_school)
+      end
+
+      specify 'should not return non-enabled schools' do
+        expect(subject.enabled).not_to include(disabled_school)
+      end
+    end
+
     context 'Filtering' do
       let!(:school_a) { create(:bookings_school) }
       let!(:school_b) { create(:bookings_school) }

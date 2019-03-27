@@ -9,6 +9,10 @@ FactoryBot.define do
     association :school_type, factory: :bookings_school_type
     sequence(:contact_email) { |n| "admin#{n}@school.org" }
 
+    trait :disabled do
+      enabled { false }
+    end
+
     trait :full_address do
       sequence(:address_2) { |n| "#{n} Something area" }
       sequence(:address_3) { |n| "#{n} Something area" }

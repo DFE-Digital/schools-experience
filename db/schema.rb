@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 2019_03_26_112400) do
     t.text "primary_key_stage_info"
     t.text "availability_info"
     t.string "teacher_training_website"
+    t.boolean "enabled", default: true, null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
     t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true
