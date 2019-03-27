@@ -107,6 +107,7 @@ export default class extends Controller {
         (err) => {
           this.locationSearchFinished = true ;
           this.locationUnavailable() ;
+          this.hideSpinner() ;
         }
       ) ;
     }
@@ -115,12 +116,11 @@ export default class extends Controller {
   startTimeout() {
     this.timedOut = false ;
     this.locationSearchFinished = false ;
-    let that = this ;
 
-    setTimeout(function() {
-      if (!that.locationSearchFinished) {
-        that.timedOut = true ;
-        that.locationUnavailable("Location retrieval took too long") ;
+    setTimeout(() => {
+      if (!this.locationSearchFinished) {
+        this.timedOut = true ;
+        this.locationUnavailable("Location retrieval took too long") ;
       }
     }, this.timeOutLengthSeconds * 1000) ;
   }
