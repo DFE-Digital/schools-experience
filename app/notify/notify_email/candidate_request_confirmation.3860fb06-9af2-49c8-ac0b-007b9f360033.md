@@ -2,7 +2,7 @@ Dear ((candidate_name))
 
 You've requested school experience at ((school_name)).
 
-^ The school will be in touch with you shortly. For example, during term time this could typically mean within 2 weeks.
+^ The school will be in touch with you. For example, during term time this could typically mean within 2 weeks.
 
 # Your placement request details
 
@@ -26,3 +26,9 @@ Request details
 * Teaching subject - first choice: ((candidate_teaching_subject_first_choice))
 * Teaching subject - second choice: ((candidate_teaching_subject_second_choice))
 * DBS certificate: ((candidate_dbs_check_document))
+
+---
+
+# Help and support
+
+If you haven’t heard from the school after 2 weeks or would like to withdraw your school experience request contact schoolexperience@ta-recruit.education.gov.uk
