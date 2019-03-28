@@ -4,10 +4,9 @@ shared_context 'Stubbed candidates school' do
   end
 
   let :school do
-    double Bookings::School, \
-      id: school_urn,
+    FactoryBot.create \
+      :bookings_school,
       name: 'Test School',
-      to_param: school_urn.to_s,
       contact_email: 'test@test.com',
       urn: school_urn
   end
