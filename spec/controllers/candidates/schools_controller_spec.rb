@@ -1,18 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolsController, type: :request do
-  context "GET #index" do
-    before { get candidates_schools_path }
-
-    it "returns http success" do
-      expect(response).to have_http_status(:success)
-    end
-
-    it "excludes the search results" do
-      expect(response.body).to_not match(/experience near/i)
-    end
-  end
-
   context "GET #index with search params" do
     let(:query_params) {
       {
@@ -40,6 +28,46 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       expect(assigns(:search).subjects).to eq([2, 3])
       expect(assigns(:search).max_fee).to eq('30')
       expect(assigns(:search).order).to eq('Name')
+    end
+
+    context 'when location and coordinates are blank' do
+      let(:query_params) do
+        {
+          query: 'Something',
+          location: '',
+          latitude: '',
+          longitude: '',
+          distance: '10',
+          phases: %w{1},
+          subjects: %w{2 3},
+          max_fee: '30',
+          order: 'Name'
+        }
+      end
+
+      it 'redirects to the search page' do
+        expect(subject).to redirect_to(new_candidates_school_search_path)
+      end
+
+      context 'when coordinates are blank and location is present' do
+        let(:query_params_with_location) do
+          query_params.merge(location: 'Rochdale')
+        end
+
+        before { get candidates_schools_path(query_params_with_location) }
+
+        specify { expect(response).to have_http_status(:success) }
+      end
+
+      context 'when coordinates are present and location is blank' do
+        let(:query_params_with_coordinates) do
+          query_params.merge(latitude: 53.479, longitude: -245)
+        end
+
+        before { get candidates_schools_path(query_params_with_coordinates) }
+
+        specify { expect(response).to have_http_status(:success) }
+      end
     end
   end
 
