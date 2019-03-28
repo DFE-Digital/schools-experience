@@ -28,9 +28,8 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
     context 'invalid' do
       let :params do
         {
-          schools_on_boarding_candidate_requirement: {
-            dbs_requirement: 'nah'
-          }
+          schools_on_boarding_candidate_requirement: \
+            Schools::OnBoarding::CandidateRequirement.new.attributes
         }
       end
 
