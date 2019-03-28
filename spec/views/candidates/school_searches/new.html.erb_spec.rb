@@ -14,7 +14,7 @@ RSpec.describe "candidates/school_searches/new.html.erb", type: :view do
     expect(rendered).to have_css('label', text: 'Where?')
     expect(rendered).to have_css('label', text: 'Distance')
 
-    expect(rendered).to have_css('input#location')
+    expect(rendered).to have_css("input#location[required='required']")
     expect(rendered).to have_css('select#distance')
 
     expect(rendered).to have_button('Find')

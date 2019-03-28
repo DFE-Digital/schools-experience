@@ -21,6 +21,7 @@
 
               <%= f.search_field :location,
                     placeholder: 'Such as Manchester, M1 3BD',
+                    required: true,
                     data: {
                       action: "focus->grab-location#clearLocationInfo",
                       target: "grab-location.location"
