@@ -32,3 +32,23 @@ Given("I have filled in the form with accurate data") do
   fill_in "Is there anything schools need to know about your availability for school experience?", with: "Anytime!"
   fill_in "What do you want to get out of your school experience?", with: "I love teaching"
 end
+
+Given("my school has availability information set") do
+  @availability_info = "Tuesday afternoons only"
+  @school = FactoryBot.create(:bookings_school, availability_info: @availability_info)
+end
+
+Then("I should see a warning containing the availability information") do
+  within('section.govuk-se-warning') do
+    expect(page).to have_content("The school has provided the following information")
+    expect(page).to have_content(@availability_info)
+  end
+end
+
+Given("my school has availability no information set") do
+  # do nothing
+end
+
+Then("I should see no warning containing the availability information") do
+  expect(page).not_to have_css('section.govuk-se-warning')
+end

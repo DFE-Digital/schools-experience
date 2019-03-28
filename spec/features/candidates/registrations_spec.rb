@@ -22,7 +22,7 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   let :school do
-    double Candidates::School, name: 'Test School'
+    double Candidates::School, name: 'Test School', availability_info: 'Tuesdays only'
   end
 
   let :uuid do
