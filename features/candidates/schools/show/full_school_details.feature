@@ -66,6 +66,11 @@ Feature: School show page (enhanced data)
         When I am on the profile page for the chosen school
         Then I should see availability information in the sidebar
 
+    Scenario: Placement availability (sidebar)
+        Given the chosen school has no availability information
+        When I am on the profile page for the chosen school
+        Then the availability information in the sidebar should read 'No information supplied'
+
     Scenario: Teacher training offered (sidebar)
         Given the chosen school offers teacher training and has the following info
             """

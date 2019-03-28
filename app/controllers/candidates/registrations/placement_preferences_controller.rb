@@ -1,6 +1,8 @@
 module Candidates
   module Registrations
     class PlacementPreferencesController < RegistrationsController
+      before_action :set_school
+
       def new
         @placement_preference = PlacementPreference.new attributes_from_session
       end
@@ -34,6 +36,11 @@ module Candidates
       end
 
     private
+
+      def set_school
+        # FIXME modify to use current_registration.school
+        @school = Candidates::School.find(params[:school_id])
+      end
 
       def placement_preference_params
         params.require(:candidates_registrations_placement_preference).permit \

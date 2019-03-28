@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementPreferencesController, type: :request do
+  include_context 'Stubbed candidates school'
+
   let! :date do
     DateTime.now
   end

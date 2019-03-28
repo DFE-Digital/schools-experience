@@ -27,7 +27,7 @@ module Candidates::SchoolHelper
   end
 
   def format_school_availability(school)
-    simple_format school.try(:availability_info) || 'Not specified'
+    simple_format school.try(:availability_info) || 'No information supplied'
   end
 
   def format_phases(school)
