@@ -43,7 +43,8 @@ steps:
 
   - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
     displayName: Build Docker Image without Cache
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:test:prepare
     displayName: Create Testing databases, import schema and fixtures
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rspec
