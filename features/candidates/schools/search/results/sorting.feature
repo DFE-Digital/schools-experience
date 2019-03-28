@@ -42,10 +42,10 @@ Feature: Schools search page sorting
     @javascript
     Scenario: Sorting by name
         Given there there are schools with the following attributes:
-            | Name                       | Location    |
-            | Manton School              | Manton      |
-            | Mansfield School           | Mansfield   |
-            | Manningtree Primary School | Manningtree |
+            | Name                       | Location   |
+            | Manton School              | Manchester |
+            | Mansfield School           | Rochdale   |
+            | Manningtree Primary School | Burnley    |
         And I have searched for 'Man' and am on the results page
         And the sort order has defaulted to 'Distance'
         When I select 'Name' in the 'Sorted by' select box

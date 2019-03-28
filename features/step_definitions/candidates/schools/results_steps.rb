@@ -29,7 +29,7 @@ Given("there are some schools with a range of fees containing the word {string}"
 end
 
 Given("I have searched for {string} and am on the results page") do |string|
-  path = candidates_schools_path(query: string)
+  path = candidates_schools_path(location: string, distance: 100)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
   expect(path_with_query).to eql(path)
