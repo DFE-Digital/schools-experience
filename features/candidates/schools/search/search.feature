@@ -20,3 +20,8 @@ Feature: Schools search page
             | 20 | 20 miles |
             | 25 | 25 miles |
         And the submit button should be labelled 'Find'
+
+    Scenario: Navigating back to the search form
+        Given I search for schools near 'Rochdale'
+        When I click back on the results screen
+        Then the location input should be populated with 'Rochdale'

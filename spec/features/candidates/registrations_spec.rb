@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 feature 'Candidate Registrations', type: :feature do
+  include_context 'Stubbed candidates school'
+
   let! :today do
     Date.today
   end
@@ -15,14 +17,6 @@ feature 'Candidate Registrations', type: :feature do
 
   let! :tomorrow_in_words do
     tomorrow.strftime '%d %B %Y'
-  end
-
-  let! :school_urn do
-    11048
-  end
-
-  let :school do
-    double Candidates::School, name: 'Test School', availability_info: 'Tuesdays only'
   end
 
   let :uuid do

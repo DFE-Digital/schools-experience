@@ -102,4 +102,8 @@ module Candidates::SchoolHelper
       "http://#{url}"
     end
   end
+
+  def school_new_search_params
+    params.permit(:location, :latitude, :longitude).reject { |_, v| v.blank? }
+  end
 end
