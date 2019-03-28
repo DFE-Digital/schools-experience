@@ -4,7 +4,7 @@
   "dependencies": {
     "@rails/webpacker": "3.5",
     "@stimulus/polyfills": "^1.1.1",
-    "govuk-frontend": "^2.5",
+    "govuk-frontend": "^2.9",
     "stimulus": "^1.1"
   },
   "devDependencies": {
