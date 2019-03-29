@@ -131,3 +131,14 @@ end
 Then("the results from further out are displayed") do
   expect(page).to have_css('article.school-result', count: Bookings::School.count)
 end
+
+Given("there are no schools in or around my search location") do
+  # do nothing
+end
+
+Then("the results page should include a warning that no results were found") do
+  within('#results li.expanded-search-radius') do
+    expect(page).to have_css('h3', text: '0 results found within 5 miles')
+    expect(page).to have_content("There aren't any results within 50 miles of your location")
+  end
+end

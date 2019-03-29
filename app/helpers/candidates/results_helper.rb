@@ -30,4 +30,15 @@ module Candidates::ResultsHelper
   def expanded_search_radius_header_text
     "0 results found within #{pluralize(params[:distance], 'mile')}"
   end
+
+  def expanded_search_nearby_info_text
+    if @search.results.empty?
+      "There aren't any results within %<expanded_radius>s of your location, try a %<link>s" % {
+        expanded_radius: pluralize(Candidates::SchoolsController::EXPANDED_SEARCH_RADIUS, "mile"),
+        link: link_to('new search', new_candidates_school_search_path)
+      }
+    else
+      "However, we did find the following schools nearby:"
+    end.html_safe
+  end
 end
