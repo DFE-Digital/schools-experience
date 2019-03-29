@@ -26,6 +26,28 @@ en:
       teaching_stage:
         blank: "Select a teaching stage"
 
+  schools_on_boarding_school_fee_errors: &schools_on_boarding_school_fee_errors
+    attributes:
+      amount_pounds:
+        blank: 'Enter an amount'
+        greater_than_or_equal_to: 'Must be greater than or equal to %{count}'
+        less_than: 'Must be less than %{count}'
+      description:
+        blank: 'Explanation required'
+      interval:
+        blank: 'Select an option'
+        inclusion: 'Select an option'
+      payment_method:
+        blank: 'Explanation required'
+
+  schools_on_boarding_school_fee_helpers: &schools_on_boarding_school_fee_helpers
+    interval: 'Is this a daily or one-off fee?'
+
+  schools_on_boarding_school_fee_labels: &schools_on_boarding_school_fee_labels
+    amount_pounds: 'Enter the number of pounds.'
+    description: 'Explain what the fee covers.'
+    payment_method: 'Explain how the fee is paid. For example, by bank transfer, in cash or via PayPal.'
+
   activemodel:
     errors:
       models:
@@ -78,18 +100,9 @@ en:
             requirements_details:
               blank: 'Details required'
         schools/on_boarding/administration_fee:
-          attributes:
-            amount_pounds:
-              blank: 'Enter an amount'
-              greater_than_or_equal_to: 'Must be greater than or equal to %{count}'
-              less_than: 'Must be less than %{count}'
-            description:
-              blank: 'Explanation required'
-            interval:
-              blank: 'Select an option'
-              inclusion: 'Select an option'
-            payment_method:
-              blank: 'Explanation required'
+          <<: *schools_on_boarding_school_fee_errors
+        schools/on_boarding/dbs_fee:
+          <<: *schools_on_boarding_school_fee_errors
 
   activerecord:
     errors:
@@ -111,7 +124,9 @@ en:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
       schools_on_boarding_administration_fee:
-        interval: 'Is this a daily or one-off fee?'
+        <<: *schools_on_boarding_school_fee_helpers
+      schools_on_boarding_dbs_fee:
+        <<: *schools_on_boarding_school_fee_helpers
 
     hint:
       phases: Select all that apply
@@ -173,9 +188,9 @@ en:
         dbs_fees: 'DBS check costs'
         other_fees: 'Other costs'
       schools_on_boarding_administration_fee:
-        amount_pounds: 'Enter the number of pounds.'
-        description: 'Explain what the fee covers.'
-        payment_method: 'Explain how the fee is paid. For example, by bank transfer, in cash or via PayPal.'
+        <<: *schools_on_boarding_school_fee_labels
+      schools_on_boarding_dbs_fee:
+        <<: *schools_on_boarding_school_fee_labels
 
     page_entries_info:
       one_page:

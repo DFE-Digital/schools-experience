@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_29_113747) do
+ActiveRecord::Schema.define(version: 2019_03_29_150543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,10 @@ ActiveRecord::Schema.define(version: 2019_03_29_113747) do
     t.text "administration_fee_description"
     t.string "administration_fee_interval"
     t.text "administration_fee_payment_method"
+    t.decimal "dbs_fee_amount_pounds", precision: 6, scale: 2
+    t.text "dbs_fee_description"
+    t.string "dbs_fee_interval"
+    t.text "dbs_fee_payment_method"
     t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 
