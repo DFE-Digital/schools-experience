@@ -105,3 +105,29 @@ end
 Then("the location input should be populated with {string}") do |string|
   expect(page.find('input#location').value).to eql(string)
 end
+
+Given("there are no schools near my search location") do
+  # do nothing, my location is Bury, Greater Manchester
+end
+
+Given("there are some schools just outside it") do
+  FactoryBot.create_list(:bookings_school, 2, coordinates: Bookings::School::GEOFACTORY.point(-2.421, 53.624))
+end
+
+When("I search for schools within {int} miles") do |int|
+  path = candidates_schools_path(location: 'Bury', distance: int)
+  visit(path)
+  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
+  expect(path_with_query).to eql(path)
+end
+
+Then("the results page should include a warning that my search radius was expanded") do
+  within('#results li.expanded-search-radius') do
+    expect(page).to have_css('h3', text: '0 results found within 5 miles')
+    expect(page).to have_content('However, we did find the following schools nearby:')
+  end
+end
+
+Then("the results from further out are displayed") do
+  expect(page).to have_css('article.school-result', count: Bookings::School.count)
+end
