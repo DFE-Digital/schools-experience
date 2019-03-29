@@ -15,8 +15,11 @@ export default class extends Controller {
   connect() {
     if (this.enableGeolocation()) {
       this.addLocationLink() ;
+      this.addInputFieldWrapper() ;
       this.toggleCoordsState() ;
     }
+
+    this.showErrorMsg('Hello Jeremy') ;
   }
 
   isIE() {
@@ -48,7 +51,7 @@ export default class extends Controller {
     this.toggleCoordsState() ;
   }
 
-  addLocationLink(el) {
+  addLocationLink() {
     const inputId = this.locationTarget.getAttribute('id') ;
     const label = this.element.querySelectorAll('label[for="' + inputId + '"]')[0] ;
 
@@ -71,6 +74,14 @@ export default class extends Controller {
     label.parentNode.insertBefore(link, label) ;
 
     return link ;
+  }
+
+  addInputFieldWrapper() {
+    const container = document.createElement('div') ;
+    container.className = 'school-search-form__location-field-container' ;
+
+    this.locationTarget.parentNode.appendChild(container) ;
+    container.appendChild(this.locationTarget) ;
   }
 
   toggleCoordsState() {

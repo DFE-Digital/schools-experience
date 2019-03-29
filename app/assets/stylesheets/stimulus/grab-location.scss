@@ -23,9 +23,19 @@ div[data-controller="grab-location"] {
     background-color: govuk-colour("grey-2") ;
   }
 
+  .school-search-form__location-field-container {
+    position: relative;
+  }
+
   .grab-location--error-message {
     @include govuk-responsive-margin(1, "top");
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
     color: $govuk-error-colour;
-    text-align: right;
+    @include govuk-font($size: 19);
+    padding: govuk-spacing(1);
+    border: $govuk-border-width-form-element solid transparent;
   }
 }
