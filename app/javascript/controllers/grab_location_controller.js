@@ -11,7 +11,7 @@ export default class extends Controller {
   spinIcon = 'fa-spin' ;
   timedOut = false ;
   locationSearchFinished = false ;
-  timeOutLengthSeconds = 10 ;
+  timeOutLengthSeconds = 60 ;
 
   connect() {
     if (this.enableGeolocation()) {
