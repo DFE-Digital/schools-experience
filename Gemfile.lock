@@ -58,13 +58,16 @@ GEM
       activerecord (>= 3.0)
     addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
+    aes_key_wrap (1.0.1)
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
     ast (2.4.0)
+    attr_required (1.0.1)
     autoprefixer-rails (9.5.0)
       execjs
     backports (3.12.0)
+    bindata (2.4.4)
     bindex (0.5.0)
     bootsnap (1.4.2)
       msgpack (~> 1.0)
@@ -156,10 +159,15 @@ GEM
     govuk_frontend_toolkit (8.1.0)
       railties (>= 3.1.0)
       sass (>= 3.2.0)
+    httpclient (2.8.3)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     io-like (0.3.0)
     jaro_winkler (1.5.2)
+    json-jwt (1.10.0)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      bindata
     jwt (2.1.0)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
@@ -200,6 +208,16 @@ GEM
       mini_portile2 (~> 2.4.0)
     notifications-ruby-client (3.1.0)
       jwt (>= 1.5, < 3)
+    openid_connect (1.1.6)
+      activemodel
+      attr_required (>= 1.0.0)
+      json-jwt (>= 1.5.0)
+      rack-oauth2 (>= 1.6.1)
+      swd (>= 1.0.0)
+      tzinfo
+      validate_email
+      validate_url
+      webfinger (>= 1.0.1)
     parallel (1.14.0)
     parser (2.6.0.0)
       ast (~> 2.4.0)
@@ -221,6 +239,12 @@ GEM
     public_suffix (3.0.3)
     puma (3.12.1)
     rack (2.0.6)
+    rack-oauth2 (1.9.3)
+      activesupport
+      attr_required
+      httpclient
+      json-jwt (>= 1.9.0)
+      rack
     rack-proxy (0.6.5)
       rack
     rack-rewrite (1.5.1)
@@ -331,6 +355,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    swd (1.1.2)
+      activesupport (>= 3)
+      attr_required (>= 0.0.5)
+      httpclient (>= 2.4)
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.9)
@@ -340,11 +368,20 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.4.1)
     uniform_notifier (1.12.1)
+    validate_email (0.1.6)
+      activemodel (>= 3.0)
+      mail (>= 2.2.5)
+    validate_url (1.0.6)
+      activemodel (>= 3.0.0)
+      public_suffix
     web-console (3.7.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
+    webfinger (1.1.0)
+      activesupport
+      httpclient (>= 2.4)
     webpacker (3.5.5)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
@@ -384,6 +421,7 @@ DEPENDENCIES
   kaminari
   listen (>= 3.0.5, < 3.2)
   notifications-ruby-client
+  openid_connect
   pg (>= 0.18, < 2.0)
   pg_search
   phonelib
