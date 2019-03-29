@@ -48,6 +48,12 @@ module Schools
     composed_of \
       :other_fee,
       class_name: 'Schools::OnBoarding::OtherFee',
-      mapping: []
+      mapping: [
+        %w(other_fee_amount_pounds amount_pounds),
+        %w(other_fee_description description),
+        %w(other_fee_interval interval),
+        %w(other_fee_payment_method payment_method),
+      ],
+      constructor: :compose
   end
 end
