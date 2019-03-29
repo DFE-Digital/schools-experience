@@ -39,6 +39,27 @@ describe Schools::SchoolProfile, type: :model do
       it do
         is_expected.to have_db_column(:fees_other_fees).of_type :boolean
       end
+
+      it do
+        is_expected.to \
+          have_db_column(:administration_fee_amount_pounds)
+            .of_type(:decimal).with_options(precision: 6, scale: 2)
+      end
+
+      it do
+        is_expected.to \
+          have_db_column(:administration_fee_description).of_type :text
+      end
+
+      it do
+        is_expected.to \
+          have_db_column(:administration_fee_interval).of_type :string
+      end
+
+      it do
+        is_expected.to \
+          have_db_column(:administration_fee_payment_method).of_type :text
+      end
     end
 
     context 'validations' do
@@ -110,6 +131,39 @@ describe Schools::SchoolProfile, type: :model do
 
         it 'returns the form model' do
           expect(model.fees).to eq form_model
+        end
+      end
+
+      context '#administration_fee' do
+        let :form_model do
+          FactoryBot.build :administration_fee
+        end
+
+        before do
+          model.administration_fee = form_model
+        end
+
+        it 'sets administration_fee_amount_pounds' do
+          expect(model.administration_fee_amount_pounds).to \
+            eq form_model.amount_pounds
+        end
+
+        it 'sets administration_fee_description' do
+          expect(model.administration_fee_description).to \
+            eq form_model.description
+        end
+
+        it 'sets administration_fee_interval' do
+          expect(model.administration_fee_interval).to eq form_model.interval
+        end
+
+        it 'sets administration_fee_payment_method' do
+          expect(model.administration_fee_payment_method).to \
+            eq form_model.payment_method
+        end
+
+        it 'returns the form model' do
+          expect(model.administration_fee).to eq form_model
         end
       end
     end

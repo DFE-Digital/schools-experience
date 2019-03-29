@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       namespace :on_boarding do
         resource :candidate_requirement, only: %i(new create)
         resource :fees, only: %i(new create)
-        resource :administration_fee, only: %i(new)
+        resource :administration_fee, only: %i(new create)
         resource :dbs_fee, only: %i(new)
         resource :other_fee, only: %i(new)
         resource :phase, only: %i(new)
