@@ -12,6 +12,7 @@ module Candidates
 
       validates :full_name, presence: true
       validates :email, presence: true
+      validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: -> { email.present? }
       validates :building, presence: true
       validates :postcode, presence: true
       validates :phone, presence: true

@@ -74,4 +74,8 @@ section.govuk-se-warning {
   padding: 1rem;
   margin-bottom: 1rem;
   background-color: lighten(govuk-colour("yellow"), 25%);
+
+  p {
+    margin-bottom: 0.1rem;
+  }
 }

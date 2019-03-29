@@ -65,7 +65,11 @@ export default class extends Controller {
     } else {
       this.latitudeTarget.value = '' ;
       this.longitudeTarget.value = '' ;
-      this.locationTarget.value = '' ;
+
+      if (this.locationTarget.value == this.currentLocationString) {
+        this.locationTarget.value = '' ;
+      }
+
       this.element.classList.remove('school-search-form__location-field--using-coords') ;
     }
   }
