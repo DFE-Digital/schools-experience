@@ -1,7 +1,9 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "latitude", "longitude", "location", "icon", "error-msg" ] ;
+  static targets = [
+    "latitude", "longitude", "location", "icon", "container", "message"
+  ] ;
   currentLocationString = 'Using your current location' ;
   originalPlaceholder = 'currentLocationString' ;
   crossHairsIcon = 'fa-crosshairs' ;
@@ -10,16 +12,14 @@ export default class extends Controller {
   timedOut = false ;
   locationSearchFinished = false ;
   timeOutLengthSeconds = 10 ;
-  errorMessage = null ;
 
   connect() {
     if (this.enableGeolocation()) {
       this.addLocationLink() ;
       this.addInputFieldWrapper() ;
+      this.createOverlayMsg() ;
       this.toggleCoordsState() ;
     }
-
-    this.showErrorMsg('Hello Jeremy') ;
   }
 
   isIE() {
@@ -31,7 +31,7 @@ export default class extends Controller {
   }
 
   clearLocationInfo() {
-    this.clearErrorMsg() ;
+    this.clearOverlayMsg() ;
 
     if (this.latitudeTarget.value != '' || this.longitudeTarget != '' ||
       this.longitudeTarget.value == this.currentLocationString) {
@@ -78,7 +78,8 @@ export default class extends Controller {
 
   addInputFieldWrapper() {
     const container = document.createElement('div') ;
-    container.className = 'school-search-form__location-field-container' ;
+    container.className = 'grab-location__container' ;
+    container.setAttribute('data-target', 'grab-location.container') ;
 
     this.locationTarget.parentNode.appendChild(container) ;
     container.appendChild(this.locationTarget) ;
@@ -105,7 +106,7 @@ export default class extends Controller {
 
     this.showSpinner() ;
     this.startTimeout() ;
-    this.clearErrorMsg() ;
+    this.clearOverlayMsg() ;
 
     if (this.enableGeolocation()) {
       navigator.geolocation.getCurrentPosition(
@@ -142,19 +143,24 @@ export default class extends Controller {
     this.showErrorMsg(msg || "Your location is not available") ;
   }
 
-  showErrorMsg(msg) {
-    if (!this.errorMessage) {
-      this.errorMessage = document.createElement('div') ;
-      this.errorMessage.setAttribute('class', 'grab-location--error-message') ;
-      this.locationTarget.parentNode.appendChild(this.errorMessage) ;
-    }
-
-    this.errorMessage.innerHTML = msg ;
+  createOverlayMsg(msg) {
+    const overlayMessage = document.createElement('div') ;
+    overlayMessage.setAttribute('class', 'grab-location__overlay-message') ;
+    overlayMessage.setAttribute('data-action', 'click->grab-location#clearOverlayMsg') ;
+    overlayMessage.setAttribute('data-target', 'grab-location.message') ;
+    this.locationTarget.parentNode.appendChild(overlayMessage) ;
   }
 
-  clearErrorMsg() {
-    if (this.errorMessage)
-      this.errorMessage.innerHTML = '' ;
+  showErrorMsg(msg) {
+    this.element.classList.add('school-search-form__location-field--error')
+    this.messageTarget.innerHTML = msg ;
+  }
+
+  clearOverlayMsg() {
+    if (this.messageTarget)
+      this.messageTarget.innerHTML = '' ;
+
+    this.element.className = 'school-search-form__location-field' ;
   }
 
   showSpinner() {
