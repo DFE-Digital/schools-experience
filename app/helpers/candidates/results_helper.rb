@@ -26,4 +26,8 @@ module Candidates::ResultsHelper
       )
     end.html_safe
   end
+
+  def expanded_search_radius_header_text
+    "0 results found within #{pluralize(params[:distance], 'mile')}"
+  end
 end

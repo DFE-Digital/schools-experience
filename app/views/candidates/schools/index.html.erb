@@ -82,6 +82,16 @@
     <hr />
 
     <ul id="results">
+      <%- if @expanded_search_radius -%>
+      <li class="expanded-search-radius">
+        <h3 class="govuk-heading-l"><%= expanded_search_radius_header_text %></h3>
+
+        <p class="nearby-info">
+          However, we did find the following schools nearby:
+        </p>
+      </li>
+      <%- end -%>
+
       <% @search.results.each_with_index do |school, index| %>
       <li data-school-urn="<%= school.urn %>">
         <article class="school-result">
