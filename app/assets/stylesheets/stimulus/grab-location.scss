@@ -19,7 +19,6 @@ div[data-controller="grab-location"] {
   }
 
   &.school-search-form__location-field--using-coords input {
-    color: $govuk-brand-colour;
     background-color: govuk-colour("grey-2") ;
   }
 
@@ -50,6 +49,14 @@ div[data-controller="grab-location"] {
     }
   }
 
+  &.school-search-form__location-field--using-coords {
+    .grab-location__overlay-message {
+      display: block;
+      color: $govuk-brand-colour;
+    }
 
-
+    input[type="search"]::placeholder {
+      visibility: hidden;
+    }
+  }
 }

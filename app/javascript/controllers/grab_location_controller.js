@@ -5,7 +5,7 @@ export default class extends Controller {
     "latitude", "longitude", "location", "icon", "container", "message"
   ] ;
   currentLocationString = 'Using your current location' ;
-  originalPlaceholder = 'currentLocationString' ;
+  defaultWidgetClassName = 'school-search-form__location-field' ;
   crossHairsIcon = 'fa-crosshairs' ;
   spinnerIcon = 'fa-refresh' ;
   spinIcon = 'fa-spin' ;
@@ -31,11 +31,9 @@ export default class extends Controller {
   }
 
   clearLocationInfo() {
-    this.clearOverlayMsg() ;
-
-    if (this.latitudeTarget.value != '' || this.longitudeTarget != '' ||
-      this.longitudeTarget.value == this.currentLocationString) {
-        this.removeCoords() ;
+    if (this.latitudeTarget.value != '' || this.longitudeTarget != '') {
+      this.clearOverlayMsg() ;
+      this.removeCoords() ;
     }
   }
 
@@ -87,18 +85,15 @@ export default class extends Controller {
 
   toggleCoordsState() {
     if (this.latitudeTarget.value != '' && this.longitudeTarget.value != '') {
-      this.locationTarget.value = this.currentLocationString ;
-      this.element.classList.add('school-search-form__location-field--using-coords') ;
+      this.showLocationMsg(this.currentLocationString) ;
     } else {
-      this.latitudeTarget.value = '' ;
-      this.longitudeTarget.value = '' ;
-
-      if (this.locationTarget.value == this.currentLocationString) {
-        this.locationTarget.value = '' ;
-      }
-
-      this.element.classList.remove('school-search-form__location-field--using-coords') ;
+      this.clearOverlayMsg() ;
     }
+  }
+
+  clearCoordsState() {
+    this.latitudeTarget.value = '' ;
+    this.longitudeTarget.value = '' ;
   }
 
   requestLocation(ev) {
@@ -156,11 +151,17 @@ export default class extends Controller {
     this.messageTarget.innerHTML = msg ;
   }
 
+  showLocationMsg(msg) {
+    this.element.classList.add('school-search-form__location-field--using-coords') ;
+    this.messageTarget.innerHTML = msg ;
+  }
+
   clearOverlayMsg() {
     if (this.messageTarget)
       this.messageTarget.innerHTML = '' ;
 
-    this.element.className = 'school-search-form__location-field' ;
+    this.element.className = this.defaultWidgetClassName ;
+    this.clearCoordsState() ; // If we're clearing the message, we definitely want the coords cleared
   }
 
   showSpinner() {
