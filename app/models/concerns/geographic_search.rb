@@ -3,6 +3,7 @@ require 'active_support/concern'
 module GeographicSearch
   extend ActiveSupport::Concern
   GEOFACTORY = RGeo::Geographic.spherical_factory(srid: 4326)
+  DEFAULT_RADIUS = 10
 
   included do
     # Returns records that fall within a radius of a point using PostGIS
@@ -16,12 +17,12 @@ module GeographicSearch
     # @param [String] column The name of the geographic column, defaults
     #   to 'coordinates'
     # @return [School::ActiveRecord_Relation] All matching records
-    scope :close_to, ->(point, radius: 10, column: 'coordinates', include_distance: true) do
+    scope :close_to, ->(point, radius: DEFAULT_RADIUS, column: 'coordinates', include_distance: true) do
       if point.present?
         query = where("st_dwithin(%<column>s, '%<coordinates>s', %<radius>d)" % {
           column: column,
           coordinates: point,
-          radius: Conversions::Distance::Miles::ToMetres.convert(radius)
+          radius: Conversions::Distance::Miles::ToMetres.convert(radius || DEFAULT_RADIUS)
         })
 
         if include_distance
