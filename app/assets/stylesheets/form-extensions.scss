@@ -22,3 +22,18 @@
     width: auto;
   }
 }
+
+.govuk-currency-input {
+  display: flex;
+  .govuk-currency-input__symbol {
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 2px solid #0b0c0c;
+    border-right: none;
+    background-color: #dee0e2;
+    font-weight: bold;
+  }
+  input {
+    text-align: right;
+  }
+}

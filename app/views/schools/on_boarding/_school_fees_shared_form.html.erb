@@ -6,7 +6,7 @@
 
     <%= form_for model, url: submission_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary model, 'There is a problem', '' %>
-      £<%= f.number_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.99 %>
+      <%= f.pounds_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.99 %>
       <%= f.text_area :description, rows: 7, width: 'two-thirds' %>
       <%= f.radio_button_fieldset :interval do |fieldset| %>
         <% f.object.available_intervals.each do |interval| %>
