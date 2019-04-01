@@ -1,0 +1,25 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Select school experience phases
+    </h1>
+    <p>
+      Tell us which phases you offer. This will help candidates select a school experience.
+    </p>
+
+    <%= form_for @phases_list, url: schools_on_boarding_phases_list_path do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary @phases_list, 'There is a problem', '' %>
+      <div class="govuk-form-group">
+        <div class="govuk-fieldset">
+          <div class="govuk-checkboxes">
+            <%= f.check_box_input :primary %>
+            <%= f.check_box_input :secondary %>
+            <%= f.check_box_input :college %>
+          </div>
+        </div>
+      </div>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

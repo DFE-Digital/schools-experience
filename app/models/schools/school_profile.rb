@@ -55,5 +55,15 @@ module Schools
         %w(other_fee_payment_method payment_method),
       ],
       constructor: :compose
+
+    composed_of \
+      :phases_list,
+      class_name: 'Schools::OnBoarding::PhasesList',
+      mapping: [
+        %w(phases_list_primary primary),
+        %w(phases_list_secondary secondary),
+        %w(phases_list_college college)
+      ],
+      constructor: :compose
   end
 end

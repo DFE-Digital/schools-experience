@@ -57,7 +57,7 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to new_schools_on_boarding_phase_path
+        expect(response).to redirect_to new_schools_on_boarding_phases_list_path
       end
     end
   end

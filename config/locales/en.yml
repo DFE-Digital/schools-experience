@@ -105,6 +105,19 @@ en:
           <<: *schools_on_boarding_school_fee_errors
         schools/on_boarding/other_fee:
           <<: *schools_on_boarding_school_fee_errors
+        schools/on_boarding/phases_list:
+          attributes:
+            base:
+              no_phase_offered: 'Select at least one phase'
+        schools/on_boarding/key_stage_list:
+          attributes:
+            base:
+              no_key_stage_offered: 'Select at least one key stage'
+        schools/on_boarding/subject_list:
+          attributes:
+            base:
+              no_subject_selected: 'Select at least one subject'
+              invalid_subject_selected: 'Subject not available'
 
   activerecord:
     errors:
@@ -197,6 +210,8 @@ en:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels
+      schools_on_boarding_phases_list:
+        college: '16 to 18 years'
 
     page_entries_info:
       one_page:

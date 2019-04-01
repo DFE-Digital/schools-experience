@@ -15,7 +15,7 @@ Feature: Other Fee
     When I submit the form
     Then I should see a validation error message
 
-  Scenario: Completing the Other costs step with error
+  Scenario: Completing the Other costs step
     Given I have entered the following details into the form:
       | Enter the number of pounds.  | 300                        |
       | Explain what the fee covers. | Falconry lessons |
