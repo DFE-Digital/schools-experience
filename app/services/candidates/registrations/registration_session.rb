@@ -98,8 +98,8 @@ module Candidates
         @registration_session
       end
 
-      def to_json
-        to_h.to_json
+      def to_json(*args)
+        to_h.to_json(*args)
       end
 
       def ==(other)
