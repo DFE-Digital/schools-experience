@@ -1,0 +1,26 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Confirm number of primary key stages
+    </h1>
+    <p>
+      Tell us which key stages you offer for your primary school experience.
+    </p>
+    <p>
+      This will help candidates select a primary school experience.
+    </p>
+    <%= form_for @key_stage_list, url: schools_on_boarding_key_stage_list_path do |f| %>
+      <div class="govuk-form-group">
+        <div class="govuk-fieldset">
+          <div class="govuk-checkboxes">
+            <%= f.check_box_input :early_years %>
+            <%= f.check_box_input :key_stage_1 %>
+            <%= f.check_box_input :key_stage_2 %>
+          </div>
+        </div>
+      </div>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

@@ -65,5 +65,45 @@ module Schools
         %w(phases_list_college college)
       ],
       constructor: :compose
+
+    composed_of \
+      :key_stage_list,
+      class_name: 'Schools::OnBoarding::KeyStageList',
+      mapping: [
+        %w(key_stage_list_early_years early_years),
+        %w(key_stage_list_key_stage_1 key_stage_1),
+        %w(key_stage_list_key_stage_2 key_stage_2)
+      ],
+      constructor: :compose
+
+    has_many :secondary_phase_subjects,
+      -> { at_phase Bookings::Phase.secondary },
+      class_name: 'Schools::OnBoarding::PhaseSubject',
+      foreign_key: :schools_school_profile_id
+
+    has_many :college_phase_subjects,
+      -> { at_phase Bookings::Phase.college },
+      class_name: 'Schools::OnBoarding::PhaseSubject',
+      foreign_key: :schools_school_profile_id
+
+    has_many :secondary_subjects,
+      class_name: 'Bookings::Subject',
+      source: :subject,
+      through: :secondary_phase_subjects,
+      dependent: :destroy
+
+    has_many :college_subjects,
+      class_name: 'Bookings::Subject',
+      source: :subject,
+      through: :college_phase_subjects,
+      dependent: :destroy
+
+    def available_secondary_subjects
+      Bookings::Subject.all
+    end
+
+    def available_college_subjects
+      Bookings::Subject.all
+    end
   end
 end

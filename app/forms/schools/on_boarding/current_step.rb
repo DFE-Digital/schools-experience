@@ -29,6 +29,8 @@ module Schools
           :secondary_subjects
         elsif college_subjects_required?
           :college_subjects
+        elsif specialisms_required?
+          :specialisms
         else
           raise 'Wizard incomplete' # NOTE: temp until wizard is finished
         end
@@ -62,15 +64,22 @@ module Schools
       end
 
       def key_stage_list_required?
-        @school_profile.phases_list.primary
+        @school_profile.phases_list.primary &&
+          !@school_profile.key_stage_list.dup.valid?
       end
 
       def secondary_subjects_required?
-        @school_profile.phases_list.secondary
+        @school_profile.phases_list.secondary &&
+          @school_profile.secondary_subjects.empty?
       end
 
       def college_subjects_required?
-        @school_profile.phases_list.college
+        @school_profile.phases_list.college &&
+          @school_profile.college_subjects.empty?
+      end
+
+      def specialisms_required?
+        true # NOTE temp
       end
     end
   end
