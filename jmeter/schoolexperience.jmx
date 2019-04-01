@@ -15,9 +15,9 @@
       <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
         <collectionProp name="AuthManager.auth_list">
           <elementProp name="" elementType="Authorization">
-            <stringProp name="Authorization.url">https://${__P(hostname, localhost)}</stringProp>
-            <stringProp name="Authorization.username">${__P(username)}</stringProp>
-            <stringProp name="Authorization.password">${__P(password)}</stringProp>
+            <stringProp name="Authorization.url">https://${__P(hn, localhost)}</stringProp>
+            <stringProp name="Authorization.username">${__P(un)}</stringProp>
+            <stringProp name="Authorization.password">${__P(pw)}</stringProp>
             <stringProp name="Authorization.domain"></stringProp>
             <stringProp name="Authorization.realm"></stringProp>
           </elementProp>
@@ -28,10 +28,10 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">${__P(loopCount, 1)}</stringProp>
+          <stringProp name="LoopController.loops">${__P(lc, 1)}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(numberOfThreads, 1)}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(rampUpPeriod, 1)}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(not, 1)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(rup, 1)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
