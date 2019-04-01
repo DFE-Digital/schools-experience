@@ -28,3 +28,9 @@ yarn-debug.log*
 .env
 .env.local
 .env.*.local
+
+# Ignore master key for decrypting credentials and more.
+/config/master-staging.key
+
+# Ignore master key for decrypting credentials and more.
+/config/master-research.key
