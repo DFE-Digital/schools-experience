@@ -1,0 +1,32 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Select secondary school experience subjects
+    </h1>
+
+    <%= form_for @subject_list, url: schools_on_boarding_secondary_subjects_path, method: :post do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary @subject_list, 'There is a problem', '' %>
+      <p>
+        Tick all the secondary school experience subjects you offer and select continue.
+      </p>
+      <p>
+        This will help candidates select a secondary school experience.
+      </p>
+
+      <div class="govuk-form-group">
+        <div class="govuk-fieldset">
+          <div class="govuk-checkboxes">
+            <%= f.collection_check_boxes \
+              :subject_ids,
+              f.object.available_subjects,
+              :id,
+              :name
+            %>
+          </div>
+        </div>
+      </div>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>
