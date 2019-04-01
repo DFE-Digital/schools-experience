@@ -3,7 +3,7 @@ require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
-if Rails.env.production? || Rails.env.servertest?
+if Rails.env.production? || Rails.env.servertest? || Rails.env.staging? || Rails.env.research?
   abort("The Rails environment is running in production mode!")
 end
 

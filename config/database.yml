@@ -90,3 +90,9 @@ production: &production
 
 servertest:
   <<: *production
+
+staging:
+  <<: *production
+
+research:
+  <<: *production
