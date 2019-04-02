@@ -1,8 +1,7 @@
 module Schools
   class BaseController < ApplicationController
-    def current_user
-      @current_user ||= User.from_json SAMPLE_USER_JSON
-    end
+    include DFEAuthentication
+    before_action :require_auth
 
     def current_school
       @current_school ||= School.from_json SAMPLE_SCHOOL_JSON
@@ -32,14 +31,6 @@ module Schools
         "closedOn": null,
         "address": null
       }
-    JSON
-
-    SAMPLE_USER_JSON = <<-JSON.freeze
-    {
-      "firstName": "Testy",
-      "lastName": "McTest",
-      "email": "test@example.com"
-    }
     JSON
   end
 end

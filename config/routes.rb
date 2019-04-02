@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/cookies_policy', to: 'pages#cookies_policy'
 
+
   if Rails.application.config.x.phase_two.enabled
+    get '/auth/callback', to: 'schools/auth#auth_callback'
     namespace :schools do
       resource :dashboard, only: :show
     end
