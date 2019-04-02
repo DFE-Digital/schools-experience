@@ -3,6 +3,7 @@ module Schools
     include DFEAuthentication
 
     def show
+      # nothing yet
     end
 
     def destroy

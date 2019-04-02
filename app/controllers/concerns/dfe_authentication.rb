@@ -23,7 +23,7 @@ module DFEAuthentication
         redirect_to client.authorization_uri(
           state: session[:state],
           nonce: session[:nonce],
-          scope: [:profile, :email, :address, :phone]
+          scope: %i(profile email address phone)
         )
       end
     end
