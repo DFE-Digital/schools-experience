@@ -116,6 +116,8 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         'B3333 1BB'
       ].freeze
 
+      BLANK_POSTCODES = ['', ' ', '  '].freeze
+
       context 'valid postcodes' do
         VALID_POSTCODES.each do |postcode|
           subject { described_class.new postcode: postcode }
@@ -134,6 +136,17 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
           it "permits #{postcode}" do
             expect(subject.errors[:postcode]).to eq ['Enter a valid postcode']
+          end
+        end
+      end
+
+      context 'blank postcodes' do
+        BLANK_POSTCODES.each do |postcode|
+          subject { described_class.new postcode: postcode }
+          before { subject.validate }
+
+          it "permits #{postcode}" do
+            expect(subject.errors[:postcode]).to eq ['Enter your postcode']
           end
         end
       end
