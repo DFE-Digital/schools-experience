@@ -1,7 +1,10 @@
 require 'rails_helper'
+require_relative 'session_context'
 
 describe Schools::DashboardsController, type: :request do
   context '#show' do
+    include_context "logged in DfE user"
+
     before do
       get '/schools/dashboard'
     end
