@@ -98,5 +98,45 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         end
       end
     end
+
+    context 'postcode is present' do
+      VALID_POSTCODES = [
+        'DN55 1PT',
+        'CR2 6XH',
+        'B33 8TH',
+        'M1 1AE',
+        'W1A 0AX',
+        'EC1A 1BB',
+        'ch63 7ns'
+      ].freeze
+
+      INVALID_POSTCODES = [
+        'horses',
+        'N0T AP057C0D3',
+        'B3333 1BB'
+      ].freeze
+
+      context 'valid postcodes' do
+        VALID_POSTCODES.each do |postcode|
+          subject { described_class.new postcode: postcode }
+          before { subject.validate }
+
+          it "permits #{postcode}" do
+            expect(subject.errors[:postcode]).to be_empty
+          end
+        end
+      end
+
+      context 'invalid postcodes' do
+        INVALID_POSTCODES.each do |postcode|
+          subject { described_class.new postcode: postcode }
+          before { subject.validate }
+
+          it "permits #{postcode}" do
+            expect(subject.errors[:postcode]).to eq ['Enter a valid postcode']
+          end
+        end
+      end
+    end
   end
 end
