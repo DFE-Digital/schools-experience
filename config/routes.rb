@@ -13,6 +13,11 @@ Rails.application.routes.draw do
     namespace :schools do
       resource :session, only: %i(show destroy)
       resource :dashboard, only: :show
+
+      namespace :errors do
+        resource :not_registered, controller: :not_registered, only: :show
+        resource :no_school, controller: :no_school, only: :show
+      end
     end
   end
 
