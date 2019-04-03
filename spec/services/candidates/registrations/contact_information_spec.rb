@@ -113,7 +113,8 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       INVALID_POSTCODES = [
         'horses',
         'N0T AP057C0D3',
-        'B3333 1BB'
+        'B3333 1BB',
+        'CH3',
       ].freeze
 
       BLANK_POSTCODES = ['', ' ', '  '].freeze
