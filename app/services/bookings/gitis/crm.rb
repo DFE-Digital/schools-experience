@@ -19,6 +19,13 @@ module Bookings
         end
       end
 
+      def write(contact)
+        raise ArgumentError unless contact.is_a?(Contact)
+        return false unless contact.valid?
+
+        contact.id = write_data(contact.crm_data)
+      end
+
     private
 
       def normalise_ids(*account_ids)
@@ -47,6 +54,10 @@ module Bookings
           'Address1_StateOrProvince' => 'Manchester',
           'Address1_PostalCode' => 'MA1 1AM'
         }
+      end
+
+      def write_data(crm_contact_data)
+        crm_contact_data['AccountId'].presence || 1
       end
     end
   end

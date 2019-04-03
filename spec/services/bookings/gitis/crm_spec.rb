@@ -51,4 +51,35 @@ describe Bookings::Gitis::CRM, type: :model do
       end
     end
   end
+
+  describe '.write' do
+    before { @crm = Bookings::Gitis::CRM.new('a-token') }
+
+    # Note: this is just stubbed functionality for now
+    context 'with a valid contact' do
+      before { @contact = build(:gitis_contact) }
+
+      it "will succeed" do
+        expect(@crm.write(@contact)).to eq(1)
+      end
+    end
+
+    context 'without a contact' do
+      it "will raise an exception" do
+        expect {
+          @crm.write(OpenStruct.new)
+        }.to raise_exception(ArgumentError)
+      end
+    end
+
+    context 'with an invalid contact' do
+      before do
+        @contact = build(:gitis_contact, email: '')
+      end
+
+      it "will return false" do
+        expect(@crm.write(@contact)).to be false
+      end
+    end
+  end
 end

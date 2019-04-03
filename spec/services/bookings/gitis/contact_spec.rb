@@ -46,10 +46,8 @@ describe Bookings::Gitis::Contact, type: :model do
     end
 
     context "without data" do
-      it "will raise an ArgumentError" do
-        expect {
-          Bookings::Gitis::Contact.new
-        }.to raise_exception ArgumentError
+      it "will return an empty Contact" do
+        expect(Bookings::Gitis::Contact.new.id).to be_nil
       end
     end
   end
