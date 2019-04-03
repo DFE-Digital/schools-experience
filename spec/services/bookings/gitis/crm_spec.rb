@@ -1,22 +1,20 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::CRM, type: :model do
+  let(:gitis) { described_class.new('a-token') }
+
   describe '.initialize' do
     it "will succeed with access token" do
-      expect(Bookings::Gitis::CRM.new('something')).to \
+      expect(described_class.new('something')).to \
         be_instance_of(Bookings::Gitis::CRM)
     end
 
     it "will raise an exception without an access token" do
-      expect {
-        Bookings::Gitis::CRM.new
-      }.to raise_exception(ArgumentError)
+      expect { subject }.to raise_exception(ArgumentError)
     end
   end
 
   describe '.find' do
-    let(:gitis) { Bookings::Gitis::CRM.new('something') }
-
     context 'with no account_ids' do
       it "will raise an exception" do
         expect {
@@ -52,22 +50,28 @@ describe Bookings::Gitis::CRM, type: :model do
     end
   end
 
-  describe '.write' do
-    before { @crm = Bookings::Gitis::CRM.new('a-token') }
+  describe '.find_by_email' do
+    let(:email) { 'me@something.com' }
 
+    it "will return a contact record" do
+      expect(gitis.find_by_email(email).email).to eq(email)
+    end
+  end
+
+  describe '.write' do
     # Note: this is just stubbed functionality for now
     context 'with a valid contact' do
       before { @contact = build(:gitis_contact) }
 
       it "will succeed" do
-        expect(@crm.write(@contact)).to eq(1)
+        expect(gitis.write(@contact)).to eq(1)
       end
     end
 
     context 'without a contact' do
       it "will raise an exception" do
         expect {
-          @crm.write(OpenStruct.new)
+          gitis.write(OpenStruct.new)
         }.to raise_exception(ArgumentError)
       end
     end
@@ -78,7 +82,7 @@ describe Bookings::Gitis::CRM, type: :model do
       end
 
       it "will return false" do
-        expect(@crm.write(@contact)).to be false
+        expect(gitis.write(@contact)).to be false
       end
     end
   end

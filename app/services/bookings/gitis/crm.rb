@@ -19,6 +19,12 @@ module Bookings
         end
       end
 
+      def find_by_email(address)
+        Contact.new(fake_account_data).tap do |contact|
+          contact.email = address
+        end
+      end
+
       def write(contact)
         raise ArgumentError unless contact.is_a?(Contact)
         return false unless contact.valid?
