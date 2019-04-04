@@ -77,6 +77,20 @@ shared_examples_for "email template" do |template_id, personalisation|
         end
       end
     end
+
+    describe '#despatch_later!' do
+      specify { expect(subject).to respond_to(:despatch_later!) }
+
+      before do
+        allow(NotifyJob).to receive(:perform_later).and_return(true)
+      end
+
+      before { subject.despatch_later! }
+
+      specify 'should call @notify_client.send_email with correct args' do
+        expect(NotifyJob).to have_received(:perform_later).with(subject)
+      end
+    end
   end
 
   describe 'Template' do
