@@ -53,6 +53,7 @@ en:
               invalid: "Enter a valid telephone number"
             postcode:
               blank: "Enter your postcode"
+              invalid: 'Enter a valid postcode'
             street:
               blank: "Enter your street"
             town_or_city:
