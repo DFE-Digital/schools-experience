@@ -5,6 +5,7 @@ module Schools
 
     def current_school
       raise ActionController::ParameterMissing unless session[:urn].present?
+
       Rails.logger.debug("Looking for school #{session[:urn]}")
       @current_school ||= Bookings::School.find_by!(urn: session[:urn])
     end
