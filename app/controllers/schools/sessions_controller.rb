@@ -3,7 +3,7 @@ module Schools
     include DFEAuthentication
 
     def show
-      # nothing yet
+      # nothing yet, the view just contains a 'logout' button
     end
 
     def destroy
