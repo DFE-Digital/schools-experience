@@ -10,6 +10,11 @@ Rails.application.routes.draw do
   if Rails.application.config.x.phase_two.enabled
     namespace :schools do
       resource :dashboard, only: :show
+      resources :placement_requests do
+        collection do
+          resources :upcoming, only: :index, controller: 'placement_requests/upcoming'
+        end
+      end
     end
   end
 
