@@ -1,3 +1,59 @@
 <h1>Upcoming placement requests</h1>
 
-<p>List all upcoming placement requests here</p>
+<div id="school-requests">
+  <%- @placement_requests.each do |pr| -%>
+  <div>
+    <h2 class="govuk-heading-m">Request from <%= pr.candidate.full_name %></h2>
+
+    <dl class="govuk-summary-list">
+      <div class="date-requested govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Dates requested
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= pr.dates_requested %>
+        </dd>
+      </div>
+
+      <div class="date-received-on govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Request received
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= pr.received_on %>
+        </dd>
+      </div>
+
+      <div class="contact-details govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Contact details
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= pr.teaching_stage %>
+        </dd>
+      </div>
+
+      <div class="teaching-stage govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Teaching stage
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= pr.teaching_stage %>
+        </dd>
+      </div>
+
+      <div class="teaching-subject govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Teaching subject
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= pr.teaching_subject %>
+        </dd>
+      </div>
+    </dl>
+
+    <%= link_to "Open request", "#", class: 'govuk-button' %>
+
+  </div>
+  <%- end -%>
+</div>

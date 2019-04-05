@@ -47,7 +47,7 @@ module Bookings
       def fake_account_data
         {
           'AccountId' => '1',
-          'AccountIdName' => 'Timbuktoo',
+          'AccountIdName' => 'Firstname Lastname',
           'MobilePhone' => '07123 456789',
           'Telephone1' => '01234 567890',
           'EmailAddress1' => 'first@thisaddress.com',
