@@ -9,6 +9,7 @@ describe Schools::SessionsController, type: :request do
       let(:state) { 'd18ce84b-423e-4696-bee4-b74caa47163e' }
       let(:code) { 'OTA4MTU0ZTgtMjBhZC00YmNmLThmMmQtOGZiZDhmNTYxMTA2vLY8wh-MpR-WR3vsn4C2J_oBkN-KGjD9-XVcDFS8UyADwt5DrIrYe0Gjgsj2gpvAt5L2cka5n8ZZmiojr6zgWg' }
       let(:session_state) { '652b5afc63d7c4875c42de4231f66e4940226f840b2a7ea02441544751ea0a2a.h3bd7bc2438a84dc' }
+      let(:access_token) { 'abc123' }
 
       let(:urn) { 123456 }
 
@@ -21,48 +22,48 @@ describe Schools::SessionsController, type: :request do
       end
 
       before do
-        stub_request(:post, "https://some-oidc-host.education.gov.uk/token")
+        stub_request(:post, "https://#{Rails.configuration.x.oidc_host}/token")
           .with(
             body: {
-              "code"         => code,
-              "grant_type"   => "authorization_code",
-              "redirect_uri" => "https://some-host/auth/callback"
+              'code'         => code,
+              'grant_type'   => 'authorization_code',
+              'redirect_uri' => "#{Rails.configuration.x.base_url}/auth/callback"
             },
             headers: {
               'Accept'        => '*/*',
               'Authorization' => 'Basic c2UtdGVzdDphYmMxMjM=',
               'Content-Type'  => 'application/x-www-form-urlencoded',
               'Date'          => /.*/,
-              'User-Agent'    => 'Rack::OAuth2 (1.9.3) (2.8.3, ruby 2.5.5 (2019-03-15))'
+              'User-Agent'    => /Rack::OAuth2/
             }
           )
           .to_return(
             status: 200,
+            headers: {},
             body: {
-              token_type: "bearer",
-              access_token: 'abc123'
-            }.to_json,
-            headers: {}
+              token_type: 'Bearer',
+              access_token: access_token
+            }.to_json
           )
 
-        stub_request(:get, "https://some-oidc-host.education.gov.uk/me")
+        stub_request(:get, "https://#{Rails.configuration.x.oidc_host}/me")
           .with(
             headers: {
               'Accept'        => '*/*',
-              'Authorization' => 'Bearer abc123',
+              'Authorization' => "Bearer #{access_token}",
               'Date'          => /.*/,
-              'User-Agent'    => 'OpenIDConnect::AccessToken (1.9.3) (2.8.3, ruby 2.5.5 (2019-03-15))'
+              'User-Agent'    => /OpenIDConnect::AccessToken/
             }
           )
           .to_return(
             status: 200,
+            headers: {},
             body: {
               organisation: {
                 urn: urn
               }
-            }.to_json,
-            headers: {}
-         )
+            }.to_json
+          )
       end
 
       let(:callback) { "/auth/callback?code=#{code}&state=#{state}&session_state=#{session_state}" }
@@ -85,10 +86,9 @@ describe Schools::SessionsController, type: :request do
 
   context '#destroy' do
     include_context "logged in DfE user"
-    subject { delete schools_session_path }
+    subject! { delete schools_session_path }
 
     specify "should clear the session" do
-      subject
       expect(session).to be_empty
     end
 
