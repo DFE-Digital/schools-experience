@@ -1,0 +1,13 @@
+#school-requests {
+
+  .school-request {
+    margin: 2rem 0rem 1rem;
+    padding: 2rem 0rem;
+
+    &:not(:last-child) {
+      border-bottom: 10px solid govuk-colour('blue');
+    }
+
+  }
+
+}

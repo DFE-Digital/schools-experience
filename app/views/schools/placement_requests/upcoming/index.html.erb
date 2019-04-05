@@ -2,10 +2,10 @@
 
 <div id="school-requests">
   <%- @placement_requests.each do |pr| -%>
-  <div>
+  <div class="school-request">
     <h2 class="govuk-heading-m">Request from <%= pr.candidate.full_name %></h2>
 
-    <dl class="govuk-summary-list">
+    <dl class="placement-details govuk-summary-list">
       <div class="date-requested govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Dates requested
@@ -29,7 +29,49 @@
           Contact details
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= pr.teaching_stage %>
+
+          <details class="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Contact details
+              </span>
+            </summary>
+
+            <div class="govuk-details__text">
+              <dl class="govuk-summary-list govuk-summary-list--no-border govuk-body govuk-!-font-size-16">
+                <div class="date-requested govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Address
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <%= pr.candidate.building %>,
+                    <%= pr.candidate.town_or_city %>,
+                    <%= pr.candidate.postcode %>
+                  </dd>
+                </div>
+
+                <div class="date-requested govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    UK Telephone Number
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <%= pr.candidate.phone %>,
+                  </dd>
+                </div>
+
+                <div class="date-requested govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Email address
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <%= pr.candidate.email %>,
+                  </dd>
+                </div>
+
+              </dl>
+            </div>
+          </details>
+
         </dd>
       </div>
 
