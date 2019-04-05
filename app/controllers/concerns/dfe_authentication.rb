@@ -4,9 +4,6 @@ module DFEAuthentication
   included do
     before_action :set_current_user
 
-    rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_to schools_errors_not_registered_path }
-    rescue_from ActionController::ParameterMissing, with: -> { redirect_to schools_errors_no_school }
-
     def current_user
       @current_user ||= session[:current_user]
     end

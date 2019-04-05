@@ -11,8 +11,6 @@ shared_context "logged in DfE user" do
 end
 
 shared_examples "a protected page" do
-  subject { get '/schools/dashboard' }
-
   let(:protocol) { "https://" }
   let(:host) { Rails.configuration.x.oidc_host }
   let(:auth_path) { "/auth" }
