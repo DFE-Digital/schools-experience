@@ -1,13 +1,48 @@
 #school-requests {
-
   .school-request {
-    margin: 2rem 0rem 1rem;
     padding: 2rem 0rem;
+    margin: 2rem 0rem 1rem;
+
+    &:first-child {
+      padding: 0rem 0rem 2rem;
+      margin: 1rem 0rem 1rem;
+    }
 
     &:not(:last-child) {
       border-bottom: 10px solid govuk-colour('blue');
     }
 
+    .status .govuk-tag {
+      background-color: govuk-colour('grey-1');
+    }
+  }
+}
+
+#school-request {
+  section {
+    &:not(:first-child) {
+      margin: 3rem 0rem 2rem;
+    }
   }
 
+  .accept-or-reject {
+    margin-top: 2rem;
+
+    .govuk-se-button-container {
+      &:not(:first-child) {
+        margin: 0rem 1.2rem;
+      }
+      display: inline-block;
+
+      .govuk-se-button--reject {
+        background-color: transparent;
+        color: govuk-colour('red');
+        box-shadow: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }

@@ -1,0 +1,143 @@
+<%= link_to 'Back', schools_upcoming_index_path, class: 'govuk-back-link' %>
+
+<h1>Request from <%= @placement_request.candidate.full_name %></h1>
+
+<div id="school-request">
+  <section id="personal-details">
+    <h2>Personal details</h2>
+
+    <dl class="placement-details govuk-summary-list">
+
+      <div class="address govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.candidate.address %>
+        </dd>
+      </div>
+
+      <div class="phone-number govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          UK Telephone Number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.candidate.phone %>
+        </dd>
+      </div>
+
+      <div class="email-address govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Email address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.candidate.email %>
+        </dd>
+      </div>
+
+    </dl>
+  </section>
+
+  <section id="request-details">
+    <h2>Request details</h2>
+
+    <dl class="placement-details govuk-summary-list">
+
+      <div class="date-requested govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Dates requested
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.dates_requested %>
+        </dd>
+      </div>
+
+      <div class="date-received-on govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Request received
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.received_on %>
+        </dd>
+      </div>
+
+      <div class="dbs-certificate govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          DBS certificate
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.dbs %>
+        </dd>
+      </div>
+
+    </dl>
+  </section>
+
+  <section id="candidate-details">
+    <h2>Candidate details</h2>
+
+    <dl class="candidate-details govuk-summary-list">
+
+      <div class="objectives govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          What they want out of school experience
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.objectives %>
+        </dd>
+      </div>
+
+      <div class="degree-stage govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Degree stage
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.degree_stage %>
+        </dd>
+      </div>
+
+      <div class="degree-subject govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Degree subject
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.degree_subject %>
+        </dd>
+      </div>
+
+      <div class="teaching-tage govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Teaching stage
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.teaching_stage %>
+        </dd>
+      </div>
+
+      <div class="teaching-tage govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Preferred subjects
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ol class="govuk-list govuk-list--number">
+            <%- @placement_request.teaching_subjects.each do |subject| -%>
+            <li><%= subject %></li>
+            <%- end -%>
+          </ol>
+        </dd>
+      </div>
+
+    </dl>
+  </section>
+
+  <div class="accept-or-reject">
+    <div class="govuk-se-button-container">
+      <%= button_to "Accept request", '#', class: 'govuk-button' %>
+    </div>
+    <div class="govuk-se-button-container">
+      <div>
+        <%= link_to "Reject request", '#', class: 'govuk-button govuk-se-button--reject' %>
+      </div>
+    </div>
+  </div>
+</div>

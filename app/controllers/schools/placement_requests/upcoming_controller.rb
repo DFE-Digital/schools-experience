@@ -7,6 +7,8 @@ module Schools
 
     private
 
+      # assuming placement requests returned from the CRM API won't
+      # match a Bookings::PlacementRequest
       def placement_requests
         Array.new(
           5,

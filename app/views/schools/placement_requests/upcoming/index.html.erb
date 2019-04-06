@@ -1,4 +1,4 @@
-<h1>Upcoming placement requests</h1>
+<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
 
 <div id="school-requests">
   <%- @placement_requests.each do |pr| -%>
@@ -33,13 +33,13 @@
           <details class="govuk-details">
             <summary class="govuk-details__summary">
               <span class="govuk-details__summary-text">
-                Contact details
+                View contact details
               </span>
             </summary>
 
             <div class="govuk-details__text">
               <dl class="govuk-summary-list govuk-summary-list--no-border govuk-body govuk-!-font-size-16">
-                <div class="date-requested govuk-summary-list__row">
+                <div class="address govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Address
                   </dt>
@@ -50,21 +50,21 @@
                   </dd>
                 </div>
 
-                <div class="date-requested govuk-summary-list__row">
+                <div class="phone-number govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     UK Telephone Number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <%= pr.candidate.phone %>,
+                    <%= pr.candidate.phone %>
                   </dd>
                 </div>
 
-                <div class="date-requested govuk-summary-list__row">
+                <div class="email-address govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Email address
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <%= pr.candidate.email %>,
+                    <%= pr.candidate.email %>
                   </dd>
                 </div>
 
@@ -92,9 +92,18 @@
           <%= pr.teaching_subject %>
         </dd>
       </div>
+
+      <div class="status govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span class="govuk-tag"><%= pr.status %></span>
+        </dd>
+      </div>
     </dl>
 
-    <%= link_to "Open request", "#", class: 'govuk-button' %>
+    <%= link_to "Open request", schools_placement_request_path('abc123'), class: 'govuk-button' %>
 
   </div>
   <%- end -%>

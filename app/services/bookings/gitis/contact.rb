@@ -22,6 +22,10 @@ module Bookings
         @postcode     = @crm_data['Address1_PostalCode']
       end
 
+      def address
+        [@building, @street, @town_or_city, @county, @postcode].compact.join(", ")
+      end
+
       def id=(assigned_id)
         if @id.blank?
           @id = assigned_id.to_s
