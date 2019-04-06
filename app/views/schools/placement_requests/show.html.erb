@@ -2,7 +2,7 @@
 
 <h1>Request from <%= @placement_request.candidate.full_name %></h1>
 
-<div id="school-request">
+<div class="school-request">
   <section id="personal-details">
     <h2>Personal details</h2>
 
@@ -19,7 +19,7 @@
 
       <div class="phone-number govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          UK Telephone Number
+          UK telephone number
         </dt>
         <dd class="govuk-summary-list__value">
           <%= @placement_request.candidate.phone %>
@@ -67,6 +67,15 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <%= @placement_request.dbs %>
+        </dd>
+      </div>
+
+      <div class="status govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span class="govuk-tag"><%= @placement_request.status %></span>
         </dd>
       </div>
 

@@ -1,6 +1,7 @@
 module Schools
   class PlacementRequestsController < Schools::BaseController
     def index
+      # nothing yet
     end
 
     def show
@@ -22,9 +23,7 @@ module Schools
         objectives: 'To learn different teaching styles and what life is like in a classroom.',
         degree_stage: 'Final year',
         degree_subject: 'Maths',
-        teaching_stage: "I've applied for teacher training",
         teaching_subjects: %w(Maths Physics)
-
       )
     end
   end

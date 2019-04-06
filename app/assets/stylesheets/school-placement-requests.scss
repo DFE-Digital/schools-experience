@@ -12,17 +12,18 @@
       border-bottom: 10px solid govuk-colour('blue');
     }
 
-    .status .govuk-tag {
-      background-color: govuk-colour('grey-1');
-    }
   }
 }
 
-#school-request {
+.school-request {
   section {
     &:not(:first-child) {
       margin: 3rem 0rem 2rem;
     }
+  }
+
+  .status .govuk-tag {
+    background-color: govuk-colour('grey-1');
   }
 
   .accept-or-reject {
