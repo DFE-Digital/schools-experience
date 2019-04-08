@@ -33,8 +33,12 @@ module Schools
           :specialism
         elsif candidate_experience_detail_required?
           :candidate_experience_detail
-        elsif availability_required?
-          :availability
+        #elsif availability_required?
+        #  :availability
+        elsif experience_outline_required?
+          :experience_outline
+        elsif admin_contact_information_required?
+          :admin_contact_information
         else
           raise 'Wizard incomplete' # NOTE: temp until wizard is finished
         end
@@ -91,7 +95,15 @@ module Schools
       end
 
       def availability_required?
-        true
+        false # NOTE temp
+      end
+
+      def experience_outline_required?
+        !@school_profile.experience_outline.dup.valid?
+      end
+
+      def admin_contact_information_required?
+        true # NOTE temp
       end
     end
   end

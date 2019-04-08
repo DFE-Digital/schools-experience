@@ -1,0 +1,25 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Outline experience and teacher training details
+    </h1>
+    <p>
+      These details will help candidates select your school experience.
+    </p>
+
+    <%= form_for @experience_outline, url: schools_on_boarding_experience_outline_path do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <%= f.text_area :candidate_experience, rows: 4, label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } %>
+
+      <%= f.radio_button_fieldset :provides_teacher_training do |fieldset| %>
+        <%= fieldset.radio_input true do %>
+          <%= f.text_area :teacher_training_details, rows: 7 %>
+          <%= f.url_field :teacher_training_url %>
+        <% end %>
+        <%= fieldset.radio_input false %>
+      <% end %>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

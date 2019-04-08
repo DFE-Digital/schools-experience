@@ -192,6 +192,32 @@ describe Schools::OnBoarding::CurrentStep do
                         end
 
                         context 'candidate_experience_detail not required' do
+                          xcontext 'availability required' do
+                          end
+
+                          context 'availability not required' do
+                            context 'experience_outline requred' do
+                              let :school_profile do
+                                FactoryBot.create :school_profile,
+                                  :with_candidate_requirement,
+                                  :with_fees,
+                                  :with_administration_fee,
+                                  :with_dbs_fee,
+                                  :with_other_fee,
+                                  :with_phases,
+                                  :with_key_stage_list,
+                                  :with_secondary_subjects,
+                                  :with_college_subjects,
+                                  :with_specialism,
+                                  :with_candidate_experience_detail
+                              end
+
+                              it 'returns :experience_outline' do
+                                expect(returned_step).to \
+                                  eq :experience_outline
+                              end
+                            end
+                          end
                         end
                       end
                     end

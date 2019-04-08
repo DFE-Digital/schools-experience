@@ -134,6 +134,26 @@ describe Schools::SchoolProfile, type: :model do
     it do
       is_expected.to have_db_column(:candidate_experience_detail_times_flexible).of_type :boolean
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:experience_outline_candidate_experience).of_type :text
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:experience_outline_provides_teacher_training).of_type :boolean
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:experience_outline_teacher_training_details).of_type :text
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:experience_outline_teacher_training_url).of_type :string
+    end
   end
 
   context 'validations' do
@@ -388,6 +408,32 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.candidate_experience_detail).to eq form_model
+      end
+    end
+
+    context '#experience_outline' do
+      let :form_model do
+        FactoryBot.build :experience_outline
+      end
+
+      before do
+        model.experience_outline = form_model
+      end
+
+      %i(
+        candidate_experience
+        provides_teacher_training
+        teacher_training_details
+        teacher_training_url
+      ).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("experience_outline_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.experience_outline).to eq form_model
       end
     end
   end

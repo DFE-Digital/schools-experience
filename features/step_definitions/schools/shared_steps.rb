@@ -83,6 +83,22 @@ Given "I have completed the Specialisms step" do
   )
 end
 
+Given "I have completed the Candidate experience details step" do
+  steps %Q(
+    Given I am on the 'Candidate experience details' page
+    And I check 'Business dress'
+    And I check 'Other'
+    And I enter 'Must have nice hat' into the 'For example no denim, jeans, shorts, short skirts, trainers' text area
+    And I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
+    And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
+    And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
+    And I enter '8:15 am' into the 'Start time' text area
+    And I enter '4:30 pm' into the 'Finish time' text area
+    And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
+    When I submit the form
+  )
+end
+
 Then "I should see a validation error message" do
   within '.govuk-error-summary' do
     expect(page).to have_content 'There is a problem'
