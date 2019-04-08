@@ -65,7 +65,7 @@ steps:
     displayName: Run the GovUK Lint check
   - script: docker run --name=selenium -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-chrome
     displayName: Launch Selenium Chrome
-  - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+  - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL='https://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
     displayName: Run Cucumber via Selenium Chrome
 
   - script: |
