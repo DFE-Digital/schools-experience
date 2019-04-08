@@ -11,6 +11,10 @@ Rails.application.routes.draw do
     namespace :schools do
       resource :dashboard, only: :show
       resources :placement_requests do
+        member do
+          resource :accept, only: [:show, :create], controller: 'placement_requests/accept', as: 'placement_request_accept'
+          resource :reject, only: [:show, :create], controller: 'placement_requests/reject', as: 'placement_request_reject'
+        end
         collection do
           resources :upcoming, only: :index, controller: 'placement_requests/upcoming'
         end
