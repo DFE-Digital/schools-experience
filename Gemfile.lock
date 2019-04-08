@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DFE-Digital/govuk_elements_form_builder.git
-  revision: ff959cbc847a749ac6b5a1c68e6753be1cf4d4af
+  revision: 1b326d2385a8104ee757079aa0972bdad93e8a0d
   specs:
     govuk_elements_form_builder (1.2.0)
       govuk_elements_rails (>= 3.0.0)
