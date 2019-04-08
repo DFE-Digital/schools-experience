@@ -168,6 +168,32 @@ describe Schools::OnBoarding::CurrentStep do
                           expect(returned_step).to eq :specialism
                         end
                       end
+
+                      context 'specialism not required' do
+                        context 'candidate_experience_detail required' do
+                          let :school_profile do
+                            FactoryBot.create :school_profile,
+                              :with_candidate_requirement,
+                              :with_fees,
+                              :with_administration_fee,
+                              :with_dbs_fee,
+                              :with_other_fee,
+                              :with_phases,
+                              :with_key_stage_list,
+                              :with_secondary_subjects,
+                              :with_college_subjects,
+                              :with_specialism
+                          end
+
+                          it 'returns :candidate_experience_detail' do
+                            expect(returned_step).to \
+                              eq :candidate_experience_detail
+                          end
+                        end
+
+                        context 'candidate_experience_detail not required' do
+                        end
+                      end
                     end
                   end
                 end

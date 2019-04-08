@@ -11,9 +11,9 @@ Feature: Specialisms
     And I have completed the Candidate Requirements step
     And I have completes the Fees step, choosing only Other costs
     And I have completed the Other costs step
-    And I have complete the Phases step
-    And I have complete the Secondary subjects step
-    And I have complete the College subjects step
+    And I have completed the Phases step
+    And I have completed the Secondary subjects step
+    And I have completed the College subjects step
 
   Scenario: Completing the step without choosing an option
     Given I am on the 'Specialisms' page
@@ -24,11 +24,11 @@ Feature: Specialisms
     Given I am on the 'Specialisms' page
     And I choose 'No' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
     When I submit the form
-    Then I should be on the 'Candidate details' page
+    Then I should be on the 'Candidate experience details' page
 
   Scenario: Completing the step without specialisms
     Given I am on the 'Specialisms' page
     And I choose 'Yes' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
     And I enter 'Race track' into the 'Provide details' text area
     When I submit the form
-    Then I should be on the 'Candidate details' page
+    Then I should be on the 'Candidate experience details' page

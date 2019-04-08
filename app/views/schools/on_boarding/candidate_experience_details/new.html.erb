@@ -1,0 +1,59 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="gouvk-heading-l">
+      Enter school experience details for candidates
+    </h1>
+    <p>
+      These details will help candidates select a school experience.
+    </p>
+
+    <%= form_for @candidate_experience_detail, url: schools_on_boarding_candidate_experience_detail_path do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+
+      <%= f.check_box_fieldset :dress_code, %i(business_dress cover_up_tattoos remove_piercings smart_casual ) do |fieldset| %>
+        <%= fieldset.check_box_input :business_dress %>
+        <%= fieldset.check_box_input :cover_up_tattoos %>
+        <%= fieldset.check_box_input :remove_piercings %>
+        <%= fieldset.check_box_input :smart_casual %>
+        <%= fieldset.check_box_input :other_dress_requirements do %>
+          <%= f.text_field :other_dress_requirements_detail %>
+        <% end %>
+      <% end %>
+
+      <%= f.radio_button_fieldset :parking_provided do |fieldset| %>
+        <%= f.radio_input true do %>
+          <%= f.text_area :parking_details, rows: 7 %>
+        <% end %>
+        <%= f.radio_input false do %>
+          <%= f.text_area :nearby_parking_details, rows: 7 %>
+        <% end %>
+      <% end %>
+
+      <%= f.radio_button_fieldset :disabled_facilities do |fieldset| %>
+        <%= f.radio_input true do %>
+          <%= f.text_area :disabled_facilities_details, rows: 7 %>
+        <% end %>
+        <%= f.radio_input false %>
+      <% end %>
+
+      <div class="govuk-form-group">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h1 class="govuk-fieldset__heading">
+            What are your start and finish times for candidates?
+          </h1>
+        </legend>
+        <fieldset class="govuk-fieldset">
+          <%= f.text_field :start_time, class: 'govuk-!-width-one-quarter' %>
+          <%= f.text_field :end_time, class: 'govuk-!-width-one-quarter' %>
+        </fieldset>
+      </div>
+
+      <%= f.radio_button_fieldset :times_flexible do |fieldset| %>
+        <%= f.radio_input true %>
+        <%= f.radio_input false %>
+      <% end %>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

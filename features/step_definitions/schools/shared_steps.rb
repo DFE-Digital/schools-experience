@@ -74,6 +74,15 @@ Given "I have complete the College subjects step" do
   )
 end
 
+Given "I have completed the Specialisms step" do
+  steps %Q(
+    Given I am on the 'Specialisms' page
+    And I choose 'Yes' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
+    And I enter 'Race track' into the 'Provide details' text area
+    When I submit the form
+  )
+end
+
 Then "I should see a validation error message" do
   within '.govuk-error-summary' do
     expect(page).to have_content 'There is a problem'
