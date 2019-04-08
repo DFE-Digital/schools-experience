@@ -29,8 +29,10 @@ module Schools
           :secondary_subjects
         elsif college_subjects_required?
           :college_subjects
-        elsif specialisms_required?
-          :specialisms
+        elsif specialism_required?
+          :specialism
+        elsif candidate_detail_required?
+          :candidate_detail
         else
           raise 'Wizard incomplete' # NOTE: temp until wizard is finished
         end
@@ -78,8 +80,12 @@ module Schools
           @school_profile.college_subjects.empty?
       end
 
-      def specialisms_required?
-        true # NOTE temp
+      def specialism_required?
+        !@school_profile.specialism.dup.valid?
+      end
+
+      def candidate_detail_required?
+        true
       end
     end
   end
