@@ -66,6 +66,14 @@ Given "I have complete the Secondary subjects step" do
   )
 end
 
+Given "I have complete the College subjects step" do
+  steps %Q(
+    Given I am on the 'College subjects' page
+    And I check 'Maths'
+    When I submit the form
+  )
+end
+
 Then "I should see a validation error message" do
   within '.govuk-error-summary' do
     expect(page).to have_content 'There is a problem'

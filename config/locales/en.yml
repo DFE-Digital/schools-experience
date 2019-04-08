@@ -118,6 +118,12 @@ en:
             base:
               no_subject_selected: 'Select at least one subject'
               invalid_subject_selected: 'Subject not available'
+        schools/on_boarding/specialism:
+          attributes:
+            has_specialism:
+              inclusion: 'Select an option'
+            details:
+              blank: 'Provide details'
 
   activerecord:
     errors:
@@ -144,6 +150,17 @@ en:
         <<: *schools_on_boarding_school_fee_helpers
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_helpers
+      schools_on_boarding_specialism:
+        has_specialism_html: >
+          <p>
+            Tell us about what might make your school interesting to candidates.
+          </p>
+          <p>
+            For example, if your school offers any unique opportunities via links to outside organisations or specialises in certain educational phases, subject areas or subjects.
+          </p>
+          <p>
+            These details will help candidates select your school experience.
+          </p>
 
     hint:
       phases: Select all that apply
@@ -212,6 +229,11 @@ en:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:
         college: '16 to 18 years'
+      schools_on_boarding_specialism:
+        has_specialism:
+          true: 'Yes'
+          false: 'No'
+        details: 'Provide details'
 
     page_entries_info:
       one_page:
