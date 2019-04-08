@@ -33,8 +33,14 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
 
-ssl_bind '127.0.0.1', '3000', {
-  cert: Rails.root.join('config', 'ssl', 'localhost.crt'),
-  key: Rails.root.join('config', 'ssl', 'localhost.key'),
-  verify_mode: 'none'
-}
+# SSL in development (as DFE Signin redirects to https://localhost:3000 but
+# just listen on port 3000 elsewhere
+if Rails.env.development?
+  ssl_bind '127.0.0.1', '3000', {
+    cert: Rails.root.join('config', 'ssl', 'localhost.crt'),
+    key: Rails.root.join('config', 'ssl', 'localhost.key'),
+    verify_mode: 'none'
+  }
+else
+  port ENV.fetch("PORT") { 3000 }
+end
