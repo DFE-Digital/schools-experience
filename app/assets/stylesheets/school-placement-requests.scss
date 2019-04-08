@@ -26,22 +26,22 @@
     background-color: govuk-colour('grey-1');
   }
 
-  .accept-or-reject {
-    margin-top: 2rem;
+  .request-options {
+    h3 {
+      margin-bottom: 1rem;
+    }
 
-    .govuk-se-button-container {
-      &:not(:first-child) {
-        margin: 0rem 1.2rem;
-      }
-      display: inline-block;
+    .accept-or-reject {
+      padding-left: 0rem;
 
-      .govuk-se-button--reject {
-        background-color: transparent;
-        color: govuk-colour('red');
-        box-shadow: none;
+      .govuk-se-button-container {
+        .govuk-button--secondary {
+          background-color: govuk-colour('grey-4');
+          color: govuk-colour('black');
 
-        &:hover {
-          text-decoration: underline;
+          &:hover {
+            background-color: govuk-colour('grey-3');
+          }
         }
       }
     }
