@@ -35,12 +35,14 @@ plugin :tmp_restart
 
 # SSL in development (as DFE Signin redirects to https://localhost:3000 but
 # just listen on port 3000 elsewhere
+listen_port = ENV.fetch("PORT") { 3000 }
+
 if Rails.env.development?
-  ssl_bind '127.0.0.1', '3000', {
+  ssl_bind '127.0.0.1', listen_port, {
     cert: Rails.root.join('config', 'ssl', 'localhost.crt'),
     key: Rails.root.join('config', 'ssl', 'localhost.key'),
     verify_mode: 'none'
   }
 else
-  port ENV.fetch("PORT") { 3000 }
+  port listen_port
 end
