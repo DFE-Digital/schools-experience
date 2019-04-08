@@ -88,12 +88,14 @@ module Schools
     has_many :secondary_phase_subjects,
       -> { at_phase Bookings::Phase.secondary },
       class_name: 'Schools::OnBoarding::PhaseSubject',
-      foreign_key: :schools_school_profile_id
+      foreign_key: :schools_school_profile_id,
+      dependent: :destroy
 
     has_many :college_phase_subjects,
       -> { at_phase Bookings::Phase.college },
       class_name: 'Schools::OnBoarding::PhaseSubject',
-      foreign_key: :schools_school_profile_id
+      foreign_key: :schools_school_profile_id,
+      dependent: :destroy
 
     has_many :secondary_subjects,
       class_name: 'Bookings::Subject',
