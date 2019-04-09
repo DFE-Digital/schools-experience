@@ -14,7 +14,7 @@ describe DFEAuthentication do
         end
 
         specify 'should return the current user' do
-          expect(subject.current_user).to eql(teacher)
+          expect(subject.send(:current_user)).to eql(teacher)
         end
       end
 
@@ -23,7 +23,7 @@ describe DFEAuthentication do
         before { controller.session[:current_user] = teacher }
 
         specify 'should retrieve the current user from the session' do
-          expect(subject.current_user).to eql(teacher)
+          expect(subject.send(:current_user)).to eql(teacher)
         end
       end
     end
@@ -35,13 +35,13 @@ describe DFEAuthentication do
         end
 
         it 'should be true' do
-          expect(subject.user_signed_in?).to be(true)
+          expect(subject.send(:user_signed_in?)).to be(true)
         end
       end
 
       context 'when a user is not signed in' do
         it 'should be false' do
-          expect(subject.user_signed_in?).to be(false)
+          expect(subject.send(:user_signed_in?)).to be(false)
         end
       end
     end

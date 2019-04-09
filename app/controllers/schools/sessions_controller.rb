@@ -25,7 +25,7 @@ module Schools
 
       Rails.logger.info("Logged in #{session[:current_user]}, urn: #{session[:urn]}")
 
-      redirect_to session[:return_url]
+      redirect_to(session.delete(:return_url) || schools_dashboard_path)
     end
   end
 end

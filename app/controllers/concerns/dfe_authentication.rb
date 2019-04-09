@@ -4,6 +4,8 @@ module DFEAuthentication
   included do
     before_action :set_current_user
 
+  protected
+
     def current_user
       @current_user ||= session[:current_user]
     end
@@ -14,18 +16,18 @@ module DFEAuthentication
     end
 
     def require_auth
-      unless user_signed_in?
-        client = get_oidc_client
+      return if user_signed_in?
 
-        session[:state] = SecureRandom.uuid # You can specify or pass in your own state here
-        session[:nonce] = SecureRandom.hex(16) # You should store this and validate it on return.
-        session[:return_url] = request.original_url
-        redirect_to client.authorization_uri(
-          state: session[:state],
-          nonce: session[:nonce],
-          scope: %i(organisation)
-        )
-      end
+      client = get_oidc_client
+
+      session[:state] = SecureRandom.uuid # You can specify or pass in your own state here
+      session[:nonce] = SecureRandom.hex(16) # You should store this and validate it on return.
+      session[:return_url] = request.original_url
+      redirect_to client.authorization_uri(
+        state: session[:state],
+        nonce: session[:nonce],
+        scope: %i(organisation)
+      )
     end
   end
 
