@@ -167,6 +167,10 @@ en:
             email:
               blank: "Enter admin contact's email address"
               invalid: 'Enter a valid email address'
+        schools/on_boarding/availability_description:
+          attributes:
+            description:
+              blank: "Outline is required"
 
   activerecord:
     errors:
@@ -325,6 +329,8 @@ en:
         full_name: 'Full name'
         phone: 'UK telephone number'
         email: 'Email address'
+      schools_on_boarding_availability_description:
+        description: 'Outline when you offer school experience at your school.'
 
     page_entries_info:
       one_page:

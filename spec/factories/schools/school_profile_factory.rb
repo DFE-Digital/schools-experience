@@ -82,5 +82,17 @@ FactoryBot.define do
         profile.experience_outline = FactoryBot.build :experience_outline
       end
     end
+
+    trait :with_admin_contact do
+      after :build do |profile|
+        profile.admin_contact = FactoryBot.build :admin_contact
+      end
+    end
+
+    trait :with_availability_description do
+      after :build do |profile|
+        profile.availability_description = FactoryBot.build :availability_description
+      end
+    end
   end
 end

@@ -166,6 +166,11 @@ describe Schools::SchoolProfile, type: :model do
     it do
       is_expected.to have_db_column(:admin_contact_email).of_type :string
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:availability_description_description).of_type :text
+    end
   end
 
   context 'validations' do
@@ -467,6 +472,25 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.admin_contact).to eq form_model
+      end
+    end
+
+    context '#availability_description' do
+      let :form_model do
+        FactoryBot.build :availability_description
+      end
+
+      before do
+        model.availability_description = form_model
+      end
+
+      it 'sets description correctly' do
+        expect(model.availability_description.description).to \
+          eq form_model.description
+      end
+
+      it 'returns the form model' do
+        expect(model.availability_description).to eq form_model
       end
     end
   end

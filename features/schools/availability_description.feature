@@ -1,7 +1,7 @@
-Feature: Admin contact
-  So candidates know who to contact
+Feature: Availability description
+  So candidates know when we offer school experience
   As a school administrator
-  I want to be able to specify the school experience admin contact's details
+  I want to specify our availability
 
   Background: I have completed the wizard thus far
     Given The secondary school phase is availble
@@ -15,20 +15,15 @@ Feature: Admin contact
     And I have completed the College subjects step
     And I have completed the Specialisms step
     And I have completed the Candidate experience details step
-    And I have completed the Availability description step
-    And I have completed the Experience Outline step
 
   Scenario: Completing the step with error
-    Given I am on the 'Admin contact' page
-    And I enter 'Gary Chalmers' into the 'Full name' text area
-    And I enter '01234567890' into the 'UK telephone number' text area
+    Given I am on the 'Availability description' page
     When I submit the form
     Then I should see a validation error message
 
-  Scenario: Completing the step with error
-    Given I am on the 'Admin contact' page
-    And I enter 'Gary Chalmers' into the 'Full name' text area
-    And I enter '01234567890' into the 'UK telephone number' text area
-    And I enter 'g.chalmers@springfield.edu' into the 'Email address' text area
+  Scenario: Completing the step
+    Given I am on the 'Availability description' page
+    Given I save the page
+    And I enter 'Whenever really' into the 'Outline when you offer school experience at your school.' text area
     When I submit the form
-    Then I should be on the 'Profile' page
+    Then I should be on the 'Experience Outline' page

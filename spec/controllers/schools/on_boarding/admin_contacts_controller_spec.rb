@@ -13,6 +13,7 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
       :with_key_stage_list,
       :with_specialism,
       :with_candidate_experience_detail,
+      :with_availability_description,
       :with_experience_outline
   end
 

@@ -31,6 +31,7 @@ def path_for(descriptor, school: nil)
     "candidate experience details" => [:new_schools_on_boarding_candidate_experience_detail_path],
     "availability" => [:new_schools_on_boarding_availability_path],
     "experience outline" => [:new_schools_on_boarding_experience_outline_path],
+    "availability description" => [:new_schools_on_boarding_availability_description_path],
     "admin contact" => [:new_schools_on_boarding_admin_contact_path],
     "profile" => [:schools_on_boarding_profile_path]
   }

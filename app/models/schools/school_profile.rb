@@ -127,6 +127,14 @@ module Schools
       ],
       constructor: :compose
 
+    composed_of \
+      :availability_description,
+      class_name: 'Schools::OnBoarding::AvailabilityDescription',
+      mapping: [
+        %w(availability_description_description description)
+      ],
+      constructor: :compose
+
     has_many :secondary_phase_subjects,
       -> { at_phase Bookings::Phase.secondary },
       class_name: 'Schools::OnBoarding::PhaseSubject',

@@ -84,7 +84,7 @@ Given "I have completed the Specialisms step" do
 end
 
 Given "I have completed the Candidate experience details step" do
-  steps %Q(
+  steps %(
     Given I am on the 'Candidate experience details' page
     And I check 'Business dress'
     And I check 'Other'
@@ -99,8 +99,17 @@ Given "I have completed the Candidate experience details step" do
   )
 end
 
+Given "I have completed the Availability description step" do
+  steps %(
+    Given I am on the 'Availability description' page
+    Given I save the page
+    And I enter 'Whenever really' into the 'Outline when you offer school experience at your school.' text area
+    When I submit the form
+  )
+end
+
 Given "I have completed the Experience Outline step" do
-  steps %Q(
+  steps %(
     Given I am on the 'Experience Outline' page
     And I enter 'A really good one' into the 'What kind of school experience do you offer candidates?' text area
     And I choose 'Yes' from the 'Do you run your own teacher training or have any links to teacher training organisations and providers?' radio buttons
