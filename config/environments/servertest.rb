@@ -11,6 +11,8 @@ Rails.application.configure do
   # default to true but allow overriding in CI
   config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
 
+  config.x.phase_two.enabled = true
+
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = "https://localhost:#{ENV.fetch("PORT") { 3000 }}"
   config.x.oidc_client_id = 'schoolexperience'

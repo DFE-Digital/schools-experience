@@ -18,6 +18,11 @@ Rails.application.routes.draw do
         resource :not_registered, controller: :not_registered, only: :show
         resource :no_school, controller: :no_school, only: :show
       end
+
+      namespace :on_boarding do
+        resource :candidate_requirement, only: %i(new create)
+        resource :fees, only: %i(new)
+      end
     end
   end
 

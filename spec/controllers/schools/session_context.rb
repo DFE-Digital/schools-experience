@@ -1,10 +1,16 @@
 shared_context "logged in DfE user" do
+  let(:urn) { 356127 }
+
   before do
+    if Bookings::School.find_by(urn: urn).nil?
+      @current_user_school = FactoryBot.create(:bookings_school, urn: urn)
+    end
+
     allow_any_instance_of(ActionDispatch::Request)
       .to(
         receive(:session).and_return(
           current_user: { name: "joey" },
-          urn: 356127
+          urn: urn
         )
       )
   end

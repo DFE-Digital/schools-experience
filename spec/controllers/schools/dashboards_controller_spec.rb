@@ -30,7 +30,11 @@ describe Schools::DashboardsController, type: :request do
 
     context "when the school doesn't exist" do
       include_context "logged in DfE user"
-      subject! { get '/schools/dashboard' }
+      subject { get '/schools/dashboard' }
+
+      before do
+        @current_user_school.destroy!
+      end
 
       specify 'should redirect to school not registered error page' do
         expect(subject).to redirect_to(schools_errors_not_registered_path)
