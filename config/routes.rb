@@ -25,6 +25,8 @@ Rails.application.routes.draw do
     # email confirmation link
     get 'confirm/:uuid', to: 'registrations/placement_requests#create', as: :confirm
 
+    resources :school_searches, only: %i{new}
+
     resources :schools, only: %i{index show} do
       namespace :registrations do
         resource :placement_preference, only: %i(new create edit update)

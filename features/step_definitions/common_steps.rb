@@ -6,7 +6,7 @@ Given("I am on the {string} page") do |string|
 end
 
 Given("I am on the {string} page for my school of choice") do |string|
-  @school = FactoryBot.create(:bookings_school)
+  @school ||= FactoryBot.create(:bookings_school)
   path_for(string, school: @school).tap do |p|
     visit(p)
     expect(page.current_path).to eql(p)

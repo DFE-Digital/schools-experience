@@ -35,7 +35,7 @@ module Candidates
         end
 
         def available_subject_choices
-          @available_subject_choices ||= Candidates::School.subjects.map(&:last)
+          @available_subject_choices ||= get_available_subject_choices
         end
 
         def second_subject_choices
@@ -75,6 +75,18 @@ module Candidates
 
         def degree_stage_explaination_required?
           requires_explanation_for_degree_stage? degree_stage
+        end
+
+        def get_available_subject_choices
+          if school.subjects.any?
+            school.subjects.pluck(:name)
+          else
+            all_available_subject_choices
+          end
+        end
+
+        def all_available_subject_choices
+          Candidates::School.subjects.map(&:last)
         end
       end
     end
