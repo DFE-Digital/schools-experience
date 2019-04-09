@@ -55,7 +55,7 @@ steps:
     displayName: Run the Brakeman security scan
   - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:schema:load
     displayName: Create Smoketest database and import schema
-  - script: docker run --name=smoketest --health-interval=4s --link postgres:postgres --link redis:redis -e RAILS_ENV=servertest -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed -e SKIP_FORCE_SSL=true $(dockerRegistry)/$(imageName):$(imageTag)
+  - script: docker run -d --name=smoketest --health-interval=4s --link postgres:postgres --link redis:redis -e RAILS_ENV=servertest -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed -e SKIP_FORCE_SSL=true $(dockerRegistry)/$(imageName):$(imageTag)
     displayName: Spin up app
   - script: sleep 15 # ugly but gives the web app time to boot
     displayName: Pause to allow app to boot
