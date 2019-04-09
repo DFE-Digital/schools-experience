@@ -37,10 +37,10 @@ module Schools
         #  :availability
         elsif experience_outline_required?
           :experience_outline
-        elsif admin_contact_information_required?
-          :admin_contact_information
+        elsif admin_contact_required?
+          :admin_contact
         else
-          raise 'Wizard incomplete' # NOTE: temp until wizard is finished
+          :COMPLETED
         end
       end
 
@@ -102,8 +102,8 @@ module Schools
         !@school_profile.experience_outline.dup.valid?
       end
 
-      def admin_contact_information_required?
-        true # NOTE temp
+      def admin_contact_required?
+        !@school_profile.admin_contact.dup.valid?
       end
     end
   end

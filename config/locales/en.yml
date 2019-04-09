@@ -148,7 +148,7 @@ en:
               inclusion: 'Select an option'
         schools/on_boarding/experience_outline:
           attributes:
-            candidate_experience: 
+            candidate_experience:
               blank: 'Provide details'
             provides_teacher_training:
               inclusion: 'Select an option'
@@ -157,6 +157,16 @@ en:
             teacher_training_url:
               blank: 'Web address required'
               invalid: 'Enter a valid web address'
+        schools/on_boarding/admin_contact:
+          attributes:
+            full_name:
+              blank: "Enter admin contact's full name"
+            phone:
+              blank: "Enter admin contact's UK telephone number"
+              invalid: 'Enter a valid UK telephone number'
+            email:
+              blank: "Enter admin contact's email address"
+              invalid: 'Enter a valid email address'
 
   activerecord:
     errors:
@@ -311,6 +321,10 @@ en:
           false: 'No'
         teacher_training_details: 'Provide details.'
         teacher_training_url: 'Enter a web address.'
+      schools_on_boarding_admin_contact:
+        full_name: 'Full name'
+        phone: 'UK telephone number'
+        email: 'Email address'
 
     page_entries_info:
       one_page:

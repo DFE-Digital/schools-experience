@@ -99,6 +99,17 @@ Given "I have completed the Candidate experience details step" do
   )
 end
 
+Given "I have completed the Experience Outline step" do
+  steps %Q(
+    Given I am on the 'Experience Outline' page
+    And I enter 'A really good one' into the 'What kind of school experience do you offer candidates?' text area
+    And I choose 'Yes' from the 'Do you run your own teacher training or have any links to teacher training organisations and providers?' radio buttons
+    And I enter 'We run our own training' into the 'Provide details.' text area
+    And I enter 'http://example.com' into the 'Enter a web address.' text area
+    When I submit the form
+  )
+end
+
 Then "I should see a validation error message" do
   within '.govuk-error-summary' do
     expect(page).to have_content 'There is a problem'

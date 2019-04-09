@@ -117,6 +117,16 @@ module Schools
       ],
       constructor: :compose
 
+    composed_of \
+      :admin_contact,
+      class_name: 'Schools::OnBoarding::AdminContact',
+      mapping: [
+        %w(admin_contact_full_name full_name),
+        %w(admin_contact_email email),
+        %w(admin_contact_phone phone)
+      ],
+      constructor: :compose
+
     has_many :secondary_phase_subjects,
       -> { at_phase Bookings::Phase.secondary },
       class_name: 'Schools::OnBoarding::PhaseSubject',

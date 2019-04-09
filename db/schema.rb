@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_08_154736) do
+ActiveRecord::Schema.define(version: 2019_04_09_094117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -188,6 +188,9 @@ ActiveRecord::Schema.define(version: 2019_04_08_154736) do
     t.boolean "experience_outline_provides_teacher_training"
     t.text "experience_outline_teacher_training_details"
     t.string "experience_outline_teacher_training_url"
+    t.string "admin_contact_full_name"
+    t.string "admin_contact_email"
+    t.string "admin_contact_phone"
     t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 

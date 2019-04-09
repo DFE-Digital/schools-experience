@@ -68,7 +68,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
 
       it 'redirects to the next_step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_admin_contact_information_path
+          new_schools_on_boarding_admin_contact_path
       end
     end
   end

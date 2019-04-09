@@ -154,6 +154,18 @@ describe Schools::SchoolProfile, type: :model do
       is_expected.to \
         have_db_column(:experience_outline_teacher_training_url).of_type :string
     end
+
+    it do
+      is_expected.to have_db_column(:admin_contact_full_name).of_type :string
+    end
+
+    it do
+      is_expected.to have_db_column(:admin_contact_email).of_type :string
+    end
+
+    it do
+      is_expected.to have_db_column(:admin_contact_email).of_type :string
+    end
   end
 
   context 'validations' do
@@ -434,6 +446,27 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.experience_outline).to eq form_model
+      end
+    end
+
+    context '#admin_contact' do
+      let :form_model do
+        FactoryBot.build :admin_contact
+      end
+
+      before do
+        model.admin_contact = form_model
+      end
+
+      %i(full_name phone email).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("admin_contact_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.admin_contact).to eq form_model
       end
     end
   end

@@ -30,4 +30,4 @@ Feature: Experience Outline
     And I enter 'We run our own training' into the 'Provide details.' text area
     And I enter 'http://example.com' into the 'Enter a web address.' text area
     When I submit the form
-    Then I should be on the 'Admin contact information' page
+    Then I should be on the 'Admin contact' page

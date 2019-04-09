@@ -1,7 +1,7 @@
 module Schools
   module OnBoarding
-    class AdminContactInformationsController < OnBoardingsController
-      def new
+    class ProfilesController < OnBoardingsController
+      def show
         render plain: 'todo'
       end
     end

@@ -1,0 +1,43 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      School experience admin contact details
+    </h1>
+    <p>
+      Provide us with the contact details for the person who deals with the administrative side of school experience at your school.
+    </p>
+    <p>
+      This means the main person who receives and manages your school experience requests and bookings.
+    </p>
+    <p>
+      These details will be used to send your school the following school experience information:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        requests for school experience and candidate details
+      </li>
+      <li>
+        booking confirmations, reminders and other messages
+      </li>
+      <li>
+        important information and updates about the service
+      </li>
+    </ul>
+    <p>
+      These details will not be shared publicly or with candidates until you have confirmed their school experience booking.
+    </p>
+
+
+    <%= form_for @admin_contact, url: schools_on_boarding_admin_contact_path do |f| %>
+      <h2 class="govuk-heading-m">
+        Provide admin contact details
+      </h2>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+
+      <%= f.text_field :full_name %>
+      <%= f.text_field :phone %>
+      <%= f.text_field :email %>
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

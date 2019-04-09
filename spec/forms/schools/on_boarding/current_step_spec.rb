@@ -217,6 +217,33 @@ describe Schools::OnBoarding::CurrentStep do
                                   eq :experience_outline
                               end
                             end
+
+                            context 'experience_outline not required' do
+                              context 'admin_contact required' do
+                                let :school_profile do
+                                  FactoryBot.create :school_profile,
+                                    :with_candidate_requirement,
+                                    :with_fees,
+                                    :with_administration_fee,
+                                    :with_dbs_fee,
+                                    :with_other_fee,
+                                    :with_phases,
+                                    :with_key_stage_list,
+                                    :with_secondary_subjects,
+                                    :with_college_subjects,
+                                    :with_specialism,
+                                    :with_candidate_experience_detail,
+                                    :with_experience_outline
+                                end
+
+                                it 'returns :admin_contact' do
+                                  expect(returned_step).to eq :admin_contact
+                                end
+                              end
+
+                              context 'admin_contact not required' do
+                              end
+                            end
                           end
                         end
                       end
