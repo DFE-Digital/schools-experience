@@ -136,9 +136,6 @@ ActiveRecord::Schema.define(version: 2019_03_27_114344) do
     t.text "candidate_requirement_dbs_policy"
     t.boolean "candidate_requirement_requirements"
     t.text "candidate_requirement_requirements_details"
-    t.boolean "fees_administration_fees"
-    t.boolean "fees_dbs_fees"
-    t.boolean "fees_other_fees"
     t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 

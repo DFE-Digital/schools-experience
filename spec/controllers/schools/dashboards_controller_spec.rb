@@ -8,7 +8,7 @@ describe Schools::DashboardsController, type: :request do
 
     it 'sets the correct school' do
       expect(assigns(:school)).to eq \
-        Schools::School.new name: 'organisation one', urn: 1234567890
+        Schools::School.new name: 'organisation one', urn: '356127'
     end
 
     it 'renders the show template' do

@@ -1,7 +1,5 @@
 module Schools
   class SchoolProfile < ApplicationRecord
-    validates :urn, presence: true, uniqueness: true
-
     composed_of \
       :candidate_requirement,
       class_name: 'Schools::OnBoarding::CandidateRequirement',
@@ -13,29 +11,6 @@ module Schools
       ],
       constructor: :compose
 
-    composed_of \
-      :fees,
-      class_name: 'Schools::OnBoarding::Fees',
-      mapping: [
-        %w(fees_administration_fees administration_fees),
-        %w(fees_dbs_fees dbs_fees),
-        %w(fees_other_fees other_fees)
-      ],
-      constructor: :compose
-
-    composed_of \
-      :administration_fee,
-      class_name: 'Schools::OnBoarding::AdministrationFee',
-      mapping: []
-
-    composed_of \
-      :dbs_fee,
-      class_name: 'Schools::OnBoarding::DBSFee',
-      mapping: []
-
-    composed_of \
-      :other_fee,
-      class_name: 'Schools::OnBoarding::OtherFee',
-      mapping: []
+    validates :urn, presence: true
   end
 end

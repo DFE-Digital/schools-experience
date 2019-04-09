@@ -3,7 +3,7 @@ Given("I outline our dbs policy") do
 end
 
 Given("I choose {string} from the {string}") do |option, field|
-  choose option
+  choose string
 end
 
 Given("I provide details") do
