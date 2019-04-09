@@ -3,6 +3,9 @@ Feature: Candidate requirements
   As a school administrator
   I want to specify candidate requirements
 
+  Background:
+    Given I am logged in as a DfE user
+
   @javascript
   Scenario: Completing step
     Given I am on the 'candidate requirements' page

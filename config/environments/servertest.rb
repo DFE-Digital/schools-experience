@@ -2,6 +2,10 @@ require File.expand_path('production.rb', __dir__)
 require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
 require Rails.root.join("lib", "servertest", "geocoder")
 
+# Override the create method in the sessions controller for simplier (OIDC-free)
+# access during testing
+require Rails.root.join("features", "support", "sessions_controller")
+
 Rails.application.configure do
   # Override production environment settings here
 
