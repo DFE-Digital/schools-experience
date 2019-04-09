@@ -26,6 +26,19 @@ describe Schools::SchoolProfile, type: :model do
         is_expected.to \
           have_db_column(:candidate_requirement_requirements_details).of_type :text
       end
+
+      it do
+        is_expected.to \
+          have_db_column(:fees_administration_fees).of_type :boolean
+      end
+
+      it do
+        is_expected.to have_db_column(:fees_dbs_fees).of_type :boolean
+      end
+
+      it do
+        is_expected.to have_db_column(:fees_other_fees).of_type :boolean
+      end
     end
 
     context 'validations' do
@@ -70,6 +83,33 @@ describe Schools::SchoolProfile, type: :model do
 
         it 'returns the form model' do
           expect(model.candidate_requirement).to eq form_model
+        end
+      end
+
+      context '#fees' do
+        let :form_model do
+          FactoryBot.build :fees
+        end
+
+        before do
+          model.fees = form_model
+        end
+
+        it 'sets fees_administration_fees' do
+          expect(model.fees_administration_fees).to eq \
+            form_model.administration_fees
+        end
+
+        it 'sets fees_dbs_fees' do
+          expect(model.fees_dbs_fees).to eq form_model.dbs_fees
+        end
+
+        it 'sets fees_other_fees' do
+          expect(model.fees_other_fees).to eq form_model.other_fees
+        end
+
+        it 'returns the form model' do
+          expect(model.fees).to eq form_model
         end
       end
     end

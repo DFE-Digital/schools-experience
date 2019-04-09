@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
   let! :school_profile do
-    Schools::SchoolProfile.create! urn: 356127
+    Schools::SchoolProfile.create! urn: 1234567890
   end
 
   context '#new' do
