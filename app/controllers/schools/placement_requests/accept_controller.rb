@@ -1,6 +1,5 @@
 module Schools
   module PlacementRequests
-
     class DummyContact
       include ActiveModel::Model
       attr_accessor :contact_name, :telephone_number, :email_address, :location, :other_details

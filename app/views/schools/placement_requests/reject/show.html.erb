@@ -1,3 +1,5 @@
+<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1>Reject request</h1>
@@ -14,7 +16,7 @@
 
     <%= form_for @reject_reason, url: schools_placement_request_reject_path, method: :post do |f| %>
       <%= f.text_area :reason, 'Reasons for rejecting the request' %>
-      <%= f.submit 'Continue' %>
+      <%= f.submit "Reject request" %>
     <% end %>
   </div>
 </div>

@@ -9,7 +9,7 @@ Feature: Upcoming placement requests
     Scenario: Back link
         Given there is at least once placement request
         When I am on a 'placement request' page
-        Then I should a 'Back' link to the 'upcoming requests' page
+        Then I should see a 'Back' link to the 'upcoming requests' page
 
     Scenario: Personal details
         Given there is at least once placement request
@@ -47,3 +47,9 @@ Feature: Upcoming placement requests
         Then there should be the following buttons:
             | Accept request |
             | Reject request |
+
+    Scenario: Accepting a request
+        Given there is at least once placement request
+        And I am on a 'placement request' page
+        When I click the 'Accept request' button
+        Then I should be on the 'accept placement request' page

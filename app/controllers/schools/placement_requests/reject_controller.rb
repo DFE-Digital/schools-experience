@@ -1,6 +1,5 @@
 module Schools
   module PlacementRequests
-
     class DummyRejection
       include ActiveModel::Model
       attr_accessor :reason

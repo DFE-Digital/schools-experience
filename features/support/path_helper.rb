@@ -14,8 +14,10 @@ def path_for(descriptor, school: nil)
     "check your answers" => [:candidates_school_registrations_application_preview_path, school],
 
     "schools dashboard" => [:schools_dashboard_path],
-    "placement request" => [:schools_placement_request_path, 'abc123'],
     "upcoming requests" => [:schools_upcoming_index_path],
+    "placement request" => [:schools_placement_request_path, 'abc123'],
+    "accept placement request" => [:schools_placement_request_accept_path, 'abc123'],
+    "reject placement request" => [:schools_placement_request_reject_path, 'abc123'],
   }
 
   (path = mappings[descriptor.downcase]) ? send(*path) : fail("No mapping for #{descriptor}")

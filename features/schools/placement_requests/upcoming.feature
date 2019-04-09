@@ -9,7 +9,7 @@ Feature: Upcoming placement requests
     Scenario: Back link
         Given there are some upcoming requests
         When I am on the 'upcoming requests' page
-        Then I should a 'Back' link to the 'schools dashboard'
+        Then I should see a 'Back' link to the 'schools dashboard'
 
     Scenario: List presence
         Given there are some upcoming requests

@@ -30,7 +30,7 @@ When("I click the {string} button") do |string|
 end
 
 Then("I should be on the {string} page") do |string|
-  expect(page.current_path).to eql(path_for(string))
+  expect(path_for(string)).to eql(page.current_path)
 end
 
 Then("I should be on the {string} page for my school of choice") do |string|
