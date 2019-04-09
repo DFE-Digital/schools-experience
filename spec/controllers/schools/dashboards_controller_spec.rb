@@ -5,7 +5,7 @@ describe Schools::DashboardsController, type: :request do
   context '#show' do
     context 'when a school exists' do
       let!(:school) do
-        FactoryBot.create(:bookings_school, name: 'organisation one', urn: '356127')
+        FactoryBot.create(:bookings_school, name: 'organisation one', urn: '123456')
       end
 
       context 'when logged in' do

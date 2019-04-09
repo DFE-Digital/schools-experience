@@ -5,7 +5,7 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
   include_context "logged in DfE user"
 
   let! :school_profile do
-    Schools::SchoolProfile.create! urn: 356127
+    create :school_profile
   end
 
   context '#new' do

@@ -1,5 +1,5 @@
 shared_context "logged in DfE user" do
-  let(:urn) { 356127 }
+  let(:urn) { 123456 }
 
   before do
     if Bookings::School.find_by(urn: urn).nil?
