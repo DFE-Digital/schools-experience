@@ -65,8 +65,9 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
+  gem 'rubocop', '~> 0.65.0', require: false
   # GOV.UK interpretation of rubocop for linting Ruby
-  gem 'govuk-lint'
+  gem 'govuk-lint', require: false
 
   # Debugging
   gem 'pry-rails'
@@ -107,6 +108,7 @@ group :test do
 
   gem 'shoulda-matchers', '~> 4.0'
   gem 'rails-controller-testing'
+  gem 'capybara-screenshot'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -88,6 +88,7 @@ end
 
 When("I select {string} in the {string} select box") do |option, label_text|
   select(option, from: label_text)
+  sleep(2)
 end
 
 Given("I search for schools near {string}") do |string|
