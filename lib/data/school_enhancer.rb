@@ -44,7 +44,8 @@ class SchoolEnhancer
           teacher_training_website: cleanup_website(urn, row['itt_website'])
         )
           if row['secondary_subjects'].present?
-            school.subjects << extract_secondary_subjects(row['secondary_subjects'])
+            extract_secondary_subjects(row['secondary_subjects'])
+              .each { |s| school.subjects << s unless s.in?(school.subjects) }
           end
 
           puts "#{i} of #{total} #{school.urn} - #{school.name} enhanced"

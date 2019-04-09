@@ -15,9 +15,9 @@
       <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
         <collectionProp name="AuthManager.auth_list">
           <elementProp name="" elementType="Authorization">
-            <stringProp name="Authorization.url">https://${__P(hostname, localhost)}</stringProp>
-            <stringProp name="Authorization.username">${__P(username)}</stringProp>
-            <stringProp name="Authorization.password">${__P(password)}</stringProp>
+            <stringProp name="Authorization.url">https://${__P(hn, localhost)}</stringProp>
+            <stringProp name="Authorization.username">${__P(un)}</stringProp>
+            <stringProp name="Authorization.password">${__P(pw)}</stringProp>
             <stringProp name="Authorization.domain"></stringProp>
             <stringProp name="Authorization.realm"></stringProp>
           </elementProp>
@@ -28,10 +28,10 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">${__P(loopCount, 1)}</stringProp>
+          <stringProp name="LoopController.loops">${__P(lc, 1)}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(numberOfThreads, 1)}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(rampUpPeriod, 1)}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(not, 1)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(rup, 1)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -41,7 +41,7 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(hostname, localhost)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${__P(hn, localhost)}</stringProp>
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -68,7 +68,7 @@
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-237431259">Request school experience</stringProp>
+              <stringProp name="-237431259">Get school experience</stringProp>
             </collectionProp>
             <stringProp name="Assertion.custom_message"></stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -118,7 +118,7 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(hostname, localhost)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${__P(hn, localhost)}</stringProp>
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -195,7 +195,7 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(hostname, localhost)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${__P(hn, localhost)}</stringProp>
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -308,7 +308,7 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(hostname, localhost)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${__P(hn, localhost)}</stringProp>
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
