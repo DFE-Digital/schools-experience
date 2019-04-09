@@ -34,11 +34,15 @@ plugin :tmp_restart
 listen_port = ENV.fetch("PORT") { 3000 }
 
 if Rails.env.development?
-  ssl_bind '127.0.0.1', listen_port, {
-    cert: Rails.root.join('config', 'ssl', 'localhost.crt'),
-    key: Rails.root.join('config', 'ssl', 'localhost.key'),
-    verify_mode: 'none'
-  }
+
+  cert = Rails.root.join('config', 'ssl', 'localhost.crt')
+  key = Rails.root.join('config', 'ssl', 'localhost.key')
+
+  unless File.exists?(cert) && File.exists?(key)
+    fail "No SSL certificate found, run `rails dev:ssl:generate` to proceed"
+  end
+
+  ssl_bind '127.0.0.1', listen_port, { cert: cert, key: key, verify_mode: 'none' }
 else
   port listen_port
 end
