@@ -13,7 +13,7 @@ module Schools
           current_school_profile.update! \
             candidate_requirement: @candidate_requirement
 
-          redirect_to new_schools_on_boarding_fees_path
+          redirect_to next_step_path(current_school_profile)
         else
           render :new
         end
