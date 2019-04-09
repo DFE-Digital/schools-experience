@@ -13,7 +13,7 @@ module Schools
 
       validates :dbs_requirement, presence: true
       validates :dbs_requirement, inclusion: { in: :dbs_requirements }, if: -> { dbs_requirement.present? }
-      validates :dbs_policy, presence: true, if: :requires_policy_explination?
+      validates :dbs_policy, presence: true, if: :requires_policy_explanation?
       validates :requirements, inclusion: [true, false]
       validates :requirements_details, presence: true, if: :requirements
 
@@ -33,14 +33,14 @@ module Schools
         DBS_REQUIRMENTS
       end
 
-      def policy_explination_required?(some_dbs_requirement)
+      def policy_explanation_required?(some_dbs_requirement)
         some_dbs_requirement == 'sometimes'
       end
 
     private
 
-      def requires_policy_explination?
-        policy_explination_required? dbs_requirement
+      def requires_policy_explanation?
+        policy_explanation_required? dbs_requirement
       end
     end
   end
