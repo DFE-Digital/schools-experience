@@ -26,7 +26,13 @@ module Schools
     composed_of \
       :administration_fee,
       class_name: 'Schools::OnBoarding::AdministrationFee',
-      mapping: []
+      mapping: [
+        %w(administration_fee_amount_pounds amount_pounds),
+        %w(administration_fee_description description),
+        %w(administration_fee_interval interval),
+        %w(administration_fee_payment_method payment_method),
+      ],
+      constructor: :compose
 
     composed_of \
       :dbs_fee,
