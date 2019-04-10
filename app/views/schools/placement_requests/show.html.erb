@@ -136,11 +136,11 @@
   <div class="request-options">
     <div class="accept-or-reject">
       <div class="govuk-se-button-container">
-        <%= link_to "Accept request", schools_placement_request_accept_path, class: 'govuk-button' %>
+        <%= link_to "Accept request", schools_placement_request_accept_path(@placement_request.urn), class: 'govuk-button' %>
       </div>
       <div class="govuk-se-button-container">
         <div>
-          <%= link_to "Reject request", schools_placement_request_reject_path, class: 'govuk-button govuk-button--secondary' %>
+          <%= link_to "Reject request", schools_placement_request_reject_path(@placement_request.urn), class: 'govuk-button govuk-button--secondary' %>
         </div>
       </div>
     </div>

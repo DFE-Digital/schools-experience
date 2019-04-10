@@ -12,6 +12,7 @@ module Schools
 
     def placement_request
       OpenStruct.new(
+        urn: 'abc123',
         dates_requested: 'Any time during November 2019',
         received_on: '08 February 2019',
         teaching_stage: "I've applied for teacher training",
