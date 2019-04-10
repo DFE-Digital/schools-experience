@@ -8,10 +8,18 @@ export default class extends Controller {
   spinIcon = 'fa-spin' ;
 
   connect() {
-    if ("geolocation" in navigator) {
+    if (this.enableGeolocation()) {
       this.addLocationLink() ;
       this.toggleCoordsState() ;
     }
+  }
+
+  isIE() {
+    return (!!window.MSInputMethodContext && !!document.documentMode) ;
+  }
+
+  enableGeolocation() {
+    return (("geolocation" in navigator) && !this.isIE()) ;
   }
 
   clearLocationInfo() {
@@ -79,7 +87,7 @@ export default class extends Controller {
 
     this.showSpinner() ;
 
-    if ("geolocation" in navigator) {
+    if (this.enableGeolocation()) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           this.setCoords(position.coords) ;

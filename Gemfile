@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.2'
+gem 'rails', '~> 5.2.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -60,13 +60,15 @@ gem 'phonelib'
 gem 'rack-rewrite'
 
 gem 'openid_connect'
+gem 'uk_postcode'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
+  gem 'rubocop', '~> 0.65.0', require: false
   # GOV.UK interpretation of rubocop for linting Ruby
-  gem 'govuk-lint'
+  gem 'govuk-lint', require: false
 
   # Debugging
   gem 'pry-rails'
@@ -109,6 +111,7 @@ group :test do
   gem 'rails-controller-testing'
 
   gem 'webmock'
+  gem 'capybara-screenshot'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
