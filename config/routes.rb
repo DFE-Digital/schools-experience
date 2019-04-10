@@ -10,6 +10,10 @@ Rails.application.routes.draw do
   if Rails.application.config.x.phase_two.enabled
     get '/auth/callback', to: 'schools/sessions#create'
 
+    if Rails.env.servertest? || Rails.env.test?
+      get '/auth/insecure_callback', to: 'schools/insecure_sessions#create', as: :insecure_auth_callback
+    end
+
     namespace :schools do
       resource :session, only: %i(show destroy)
       resource :dashboard, only: :show

@@ -2,8 +2,10 @@
 # users without having to mimic an entire OIDC stack.
 #
 # **It should only be used by Cucumber**
-Schools::SessionsController.class_eval do
+class Schools::InsecureSessionsController < ApplicationController
   def create
+    fail unless Rails.env.servertest? || Rails.env.test?
+
     Bookings::School.find_or_create_by(urn: 123456) do |school|
       school.name = "Some school"
       school.contact_email = "someone@someschool.org"
@@ -13,7 +15,7 @@ Schools::SessionsController.class_eval do
     end
 
     session[:id_token]     = 'abc123'
-    session[:current_user] = { name: params[:name] || 'Joey' }
+    session[:current_user] = OpenIDConnect::ResponseObject::UserInfo.new(name: params[:name] || "Joey")
     session[:urn]          = 123456
     redirect_to '/schools/dashboard'
   end
