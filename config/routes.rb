@@ -8,8 +8,16 @@ Rails.application.routes.draw do
   get '/cookies_policy', to: 'pages#cookies_policy'
 
   if Rails.application.config.x.phase_two.enabled
+    get '/auth/callback', to: 'schools/sessions#create'
+
+    if Rails.env.servertest? || Rails.env.test?
+      get '/auth/insecure_callback', to: 'schools/insecure_sessions#create', as: :insecure_auth_callback
+    end
+
     namespace :schools do
+      resource :session, only: %i(show destroy)
       resource :dashboard, only: :show
+
       resources :placement_requests do
         member do
           resource :accept, only: [:show, :create], controller: 'placement_requests/accept', as: 'placement_request_accept'
@@ -18,6 +26,20 @@ Rails.application.routes.draw do
         collection do
           resources :upcoming, only: :index, controller: 'placement_requests/upcoming'
         end
+      end
+
+      namespace :errors do
+        resource :not_registered, controller: :not_registered, only: :show
+        resource :no_school, controller: :no_school, only: :show
+      end
+
+      namespace :on_boarding do
+        resource :candidate_requirement, only: %i(new create)
+        resource :fees, only: %i(new create)
+        resource :administration_fee, only: %i(new)
+        resource :dbs_fee, only: %i(new)
+        resource :other_fee, only: %i(new)
+        resource :phase, only: %i(new)
       end
     end
   end

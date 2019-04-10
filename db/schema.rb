@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_26_112400) do
+ActiveRecord::Schema.define(version: 2019_03_27_114344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,6 +126,20 @@ ActiveRecord::Schema.define(version: 2019_03_26_112400) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "schools_school_profiles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "urn", null: false
+    t.string "candidate_requirement_dbs_requirement"
+    t.text "candidate_requirement_dbs_policy"
+    t.boolean "candidate_requirement_requirements"
+    t.text "candidate_requirement_requirements_details"
+    t.boolean "fees_administration_fees"
+    t.boolean "fees_dbs_fees"
+    t.boolean "fees_other_fees"
+    t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 
   add_foreign_key "bookings_schools", "bookings_school_types"

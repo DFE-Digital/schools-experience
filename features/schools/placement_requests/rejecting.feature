@@ -4,7 +4,7 @@ Feature: Rejecting placement requests
     I want to be able to reject placement requests
 
     Background:
-        Given I am logged in
+        Given I am logged in as a DfE user
 
     Scenario: Back link
         Given there are some upcoming requests

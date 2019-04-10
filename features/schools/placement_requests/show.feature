@@ -4,7 +4,7 @@ Feature: Upcoming placement requests
     I want to be able to view all submitted information
 
     Background:
-        Given I am logged in
+        Given I am logged in as a DfE user
 
     Scenario: Back link
         Given there is at least once placement request

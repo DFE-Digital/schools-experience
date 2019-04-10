@@ -32,8 +32,7 @@
 
             <div class="school-search-form__distance-field">
               <%= f.collection_select :distance,
-                    Candidates::SchoolSearch.distances, :first, :last,
-                    include_blank: 'distance' %>
+                    Candidates::SchoolSearch.distances, :first, :last %>
             </div>
 
             <div class="school-search-form__submit">

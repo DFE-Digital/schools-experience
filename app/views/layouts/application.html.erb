@@ -42,7 +42,7 @@
           <% end %>
         </div>
         <div class="govuk-header__content">
-          <%= link_to "Get School Experience", root_path, class: 'govuk-header__link govuk-header__link--service-name' %>
+          <%= link_to "Get school experience", root_path, class: 'govuk-header__link govuk-header__link--service-name' %>
         </div>
       </div>
     </header>
@@ -50,16 +50,22 @@
     <div class="govuk-width-container">
 
       <div class="govuk-phase-banner">
-        <p class="govuk-phase-banner__content">
+        <div class="govuk-phase-banner__content">
           <strong class="govuk-tag govuk-phase-banner__content__tag ">
             beta
           </strong>
-          <span class="govuk-phase-banner__text">
+          <div class="govuk-phase-banner__text phase">
             This is a new service – your
             <a class="govuk-link" href="mailto:organise.school-experience@education.gov.uk">feedback</a>
             will help us to improve it.
-          </span>
-        </p>
+          </div>
+          <%- if @current_user.present? -%>
+          <div class="govuk-phase-banner__text auth">
+            <%= link_to "Logout", schools_session_path %>
+          </div>
+          <%- end -%>
+        </div>
+
       </div>
 
       <main class="govuk-main-wrapper " id="main-content" role="main">
