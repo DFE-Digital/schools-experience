@@ -8,6 +8,24 @@ body {
   border-top: govuk-spacing(2) solid govuk-colour("blue");
 }
 
+div.govuk-phase-banner {
+  .govuk-phase-banner__content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .govuk-phase-banner__content__tag, .govuk-phase-banner__text {
+      display: inline-block;
+    }
+
+    .govuk-phase-banner__text {
+      &.phase {
+        flex-grow: 1;
+      }
+    }
+  }
+}
+
 dl.govuk-summary-list {
 
   .govuk-summary-list__row > dt.govuk-summary-list__key, dd.govuk-summary-list__value {

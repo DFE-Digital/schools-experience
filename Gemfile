@@ -59,6 +59,7 @@ gem 'phonelib'
 
 gem 'rack-rewrite'
 
+gem 'openid_connect'
 gem 'uk_postcode'
 
 group :development, :test do
@@ -108,6 +109,8 @@ group :test do
 
   gem 'shoulda-matchers', '~> 4.0'
   gem 'rails-controller-testing'
+
+  gem 'webmock'
   gem 'capybara-screenshot'
 end
 

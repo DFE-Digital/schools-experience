@@ -4,7 +4,8 @@ Feature: Fees
   I want to specify the fees we charge candidates for their placement
 
   Background: I have completed the candidate requirement step
-    Given I have completed the Candidate Requirements step
+    Given I am logged in as a DfE user
+    And I have completed the Candidate Requirements step
 
   Scenario: Completing step choosing Adminsitration costs only
     Given I am on the 'fees charged' page

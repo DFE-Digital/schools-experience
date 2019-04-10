@@ -1,45 +1,29 @@
 module Schools
+  class SchoolNotRegistered < StandardError; end
+
   class BaseController < ApplicationController
-    def current_user
-      @current_user ||= User.from_json SAMPLE_USER_JSON
-    end
+    include DFEAuthentication
+    before_action :require_auth
+
+    rescue_from ActionController::ParameterMissing, with: -> { redirect_to schools_errors_no_school_path }
+    rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
 
     def current_school
-      @current_school ||= School.from_json SAMPLE_SCHOOL_JSON
+      urn = session[:urn]
+      raise ActionController::ParameterMissing, 'urn is missing, unable to match with school' unless urn.present?
+
+      Rails.logger.debug("Looking for school #{urn}")
+      @current_school ||= retrieve_school(urn)
     end
 
-    # https://github.com/DFE-Digital/login.dfe.profile/blob/9948fc80984f44efb1df84f54a8559b7c9b4c2b3/test/unit/app/addOrganisation/review.get.test.js#L17
-    SAMPLE_SCHOOL_JSON = <<-JSON.freeze
-      {
-        "id": "org1",
-        "name": "organisation one",
-        "category": {
-          "id": "001",
-          "name": "Establishment"
-        },
-        "type": {
-          "id": "44",
-          "name": "Academy Special Converter"
-        },
-        "urn": "1234567890",
-        "uid": null,
-        "ukprn": "123456789",
-        "establishmentNumber": "3535",
-        "status": {
-          "id": 1,
-          "name": "Open"
-        },
-        "closedOn": null,
-        "address": null
-      }
-    JSON
+  private
 
-    SAMPLE_USER_JSON = <<-JSON.freeze
-    {
-      "firstName": "Testy",
-      "lastName": "McTest",
-      "email": "test@example.com"
-    }
-    JSON
+    def retrieve_school(urn)
+      unless (school = Bookings::School.find_by(urn: urn))
+        raise SchoolNotRegistered, "school #{urn} not found" unless school.present?
+      end
+
+      school
+    end
   end
 end

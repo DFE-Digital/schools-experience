@@ -1,8 +1,11 @@
 require 'rails_helper'
+require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
+  include_context "logged in DfE user"
+
   let! :school_profile do
-    Schools::SchoolProfile.create! urn: 1234567890
+    create :school_profile
   end
 
   context '#new' do
