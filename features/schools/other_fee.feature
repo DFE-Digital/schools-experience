@@ -4,6 +4,7 @@ Feature: Other Fee
   I want to provide details of the Other fees we charge
 
   Background: I have completed the previous steps
+    Given I am logged in as a DfE user
     Given I have completed the Candidate Requirements step
     And I have completes the Fees step, choosing only Other costs
 
