@@ -4,6 +4,7 @@ Feature: Secondary subjects
   I want to specify what subjects we offer for school experience
 
   Background: I have completed the wizard thus far
+    Given I am logged in as a DfE user
     Given The secondary school phase is availble
     Given The college phase is availble
     And There are some subjects available
