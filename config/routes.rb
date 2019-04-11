@@ -18,6 +18,14 @@ Rails.application.routes.draw do
       resource :session, only: %i(show destroy)
       resource :dashboard, only: :show
 
+      resources :placement_requests do
+        resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
+        resource :reject, only: [:show, :create], controller: 'placement_requests/reject'
+        collection do
+          resources :upcoming, only: :index, controller: 'placement_requests/upcoming'
+        end
+      end
+
       namespace :errors do
         resource :not_registered, controller: :not_registered, only: :show
         resource :no_school, controller: :no_school, only: :show
@@ -28,7 +36,7 @@ Rails.application.routes.draw do
         resource :fees, only: %i(new create)
         resource :administration_fee, only: %i(new create)
         resource :dbs_fee, only: %i(new create)
-        resource :other_fee, only: %i(new)
+        resource :other_fee, only: %i(new create)
         resource :phase, only: %i(new)
       end
     end

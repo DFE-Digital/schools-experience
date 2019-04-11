@@ -21,5 +21,12 @@ FactoryBot.define do
       administration_fee_interval { 'Daily' }
       administration_fee_payment_method { 'Travelers Cheques' }
     end
+
+    trait :with_dbs_fee do
+      dbs_fee_amount_pounds { 200 }
+      dbs_fee_description { 'DBS check' }
+      dbs_fee_interval { 'One-off' }
+      dbs_fee_payment_method { 'Ethereum' }
+    end
   end
 end

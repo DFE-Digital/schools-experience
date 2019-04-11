@@ -40,7 +40,7 @@ describe Schools::SchoolProfile, type: :model do
         is_expected.to have_db_column(:fees_other_fees).of_type :boolean
       end
 
-      %w(administration_fee dbs_fee).each do |fee|
+      %w(administration_fee dbs_fee other_fee).each do |fee|
         it do
           is_expected.to \
             have_db_column(:"#{fee}_amount_pounds")
@@ -134,7 +134,7 @@ describe Schools::SchoolProfile, type: :model do
       end
 
       context 'school_fees' do
-        %w(administration_fee dbs_fee).each do |fee|
+        %w(administration_fee dbs_fee other_fee).each do |fee|
           context fee do
             let :form_model do
               FactoryBot.build fee

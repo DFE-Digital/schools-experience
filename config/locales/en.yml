@@ -105,6 +105,8 @@ en:
           <<: *schools_on_boarding_school_fee_errors
         schools/on_boarding/dbs_fee:
           <<: *schools_on_boarding_school_fee_errors
+        schools/on_boarding/other_fee:
+          <<: *schools_on_boarding_school_fee_errors
 
   activerecord:
     errors:
@@ -128,6 +130,8 @@ en:
       schools_on_boarding_administration_fee:
         <<: *schools_on_boarding_school_fee_helpers
       schools_on_boarding_dbs_fee:
+        <<: *schools_on_boarding_school_fee_helpers
+      schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_helpers
 
     hint:
@@ -192,6 +196,8 @@ en:
       schools_on_boarding_administration_fee:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_dbs_fee:
+        <<: *schools_on_boarding_school_fee_labels
+      schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels
 
     page_entries_info:

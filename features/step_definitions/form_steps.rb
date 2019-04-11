@@ -23,6 +23,12 @@ When("I submit the form") do
   end
 end
 
+Then("the submit button should contain text {string}") do |string|
+  within('#main-content form') do
+    expect(page).to have_button(string)
+  end
+end
+
 Then("I should see radio buttons for {string} with the following options:") do |string, table|
   ensure_radio_buttons_exist(
     get_form_group(page, string),
@@ -72,6 +78,10 @@ Given("I choose {string} from the {string} radio buttons") do |option, field|
   within(get_form_group(page, field)) do
     choose option
   end
+end
+
+Given("there should be a {string} text area") do |string|
+  expect(page).to have_field(string, type: 'textarea')
 end
 
 LABEL_SELECTORS = %w(.govuk-label legend label).freeze
