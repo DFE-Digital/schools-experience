@@ -24,4 +24,3 @@ Feature: Other Fee
     And I choose 'Daily' from the 'Is this a daily or one-off fee?' radio buttons
     When I submit the form
     Then I should be on the 'Phases' page
-

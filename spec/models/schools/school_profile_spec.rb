@@ -59,6 +59,18 @@ describe Schools::SchoolProfile, type: :model do
           is_expected.to have_db_column(:"#{fee}_payment_method").of_type :text
         end
       end
+
+      it do
+        is_expected.to have_db_column(:phases_list_primary).of_type :boolean
+      end
+
+      it do
+        is_expected.to have_db_column(:phases_list_secondary).of_type :boolean
+      end
+
+      it do
+        is_expected.to have_db_column(:phases_list_college).of_type :boolean
+      end
     end
 
     context 'validations' do
@@ -168,6 +180,32 @@ describe Schools::SchoolProfile, type: :model do
               expect(model.public_send(fee)).to eq form_model
             end
           end
+        end
+      end
+
+      context '#phases_list' do
+        let :form_model do
+          FactoryBot.build :phases_list
+        end
+
+        before do
+          model.phases_list = form_model
+        end
+
+        it 'sets phases_list_primary' do
+          expect(model.phases_list_primary).to eq form_model.primary
+        end
+
+        it 'sets phases_list_secondary' do
+          expect(model.phases_list_secondary).to eq form_model.secondary
+        end
+
+        it 'sets phases_list_college' do
+          expect(model.phases_list_college).to eq form_model.college
+        end
+
+        it 'returns the form model' do
+          expect(model.phases_list).to eq form_model
         end
       end
     end

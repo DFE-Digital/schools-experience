@@ -13,6 +13,10 @@ Given("I am on the {string} page for my school of choice") do |string|
   end
 end
 
+Given("I save the page") do
+  save_page
+end
+
 Then("the page's main header/heading should be {string}") do |string|
   expect(page).to have_css("h1", text: string)
 end
