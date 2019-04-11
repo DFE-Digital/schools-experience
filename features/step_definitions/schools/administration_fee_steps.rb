@@ -1,5 +1,5 @@
 Given("I have completes the Fees step, choosing only Administration costs") do
-  steps %Q(
+  steps %(
     Given I have completed the Candidate Requirements step
     Given I am on the 'fees charged' page
     And I check 'Administration costs'

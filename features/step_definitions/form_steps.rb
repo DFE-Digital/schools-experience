@@ -86,8 +86,8 @@ end
 
 LABEL_SELECTORS = %w(.govuk-label legend label).freeze
 def get_form_group(page, label_text)
-  selector = LABEL_SELECTORS.detect do |selector|
-    page.has_css?(selector, text: label_text)
+  selector = LABEL_SELECTORS.detect do |s|
+    page.has_css?(s, text: label_text)
   end
   label = page.find(selector, text: label_text)
   label.ancestor('div.govuk-form-group')
