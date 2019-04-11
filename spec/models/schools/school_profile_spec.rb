@@ -40,25 +40,24 @@ describe Schools::SchoolProfile, type: :model do
         is_expected.to have_db_column(:fees_other_fees).of_type :boolean
       end
 
-      it do
-        is_expected.to \
-          have_db_column(:administration_fee_amount_pounds)
-            .of_type(:decimal).with_options(precision: 6, scale: 2)
-      end
+      %w(administration_fee dbs_fee other_fee).each do |fee|
+        it do
+          is_expected.to \
+            have_db_column(:"#{fee}_amount_pounds")
+              .of_type(:decimal).with_options(precision: 6, scale: 2)
+        end
 
-      it do
-        is_expected.to \
-          have_db_column(:administration_fee_description).of_type :text
-      end
+        it do
+          is_expected.to have_db_column(:"#{fee}_description").of_type :text
+        end
 
-      it do
-        is_expected.to \
-          have_db_column(:administration_fee_interval).of_type :string
-      end
+        it do
+          is_expected.to have_db_column(:"#{fee}_interval").of_type :string
+        end
 
-      it do
-        is_expected.to \
-          have_db_column(:administration_fee_payment_method).of_type :text
+        it do
+          is_expected.to have_db_column(:"#{fee}_payment_method").of_type :text
+        end
       end
     end
 
@@ -134,36 +133,41 @@ describe Schools::SchoolProfile, type: :model do
         end
       end
 
-      context '#administration_fee' do
-        let :form_model do
-          FactoryBot.build :administration_fee
-        end
+      context 'school_fees' do
+        %w(administration_fee dbs_fee other_fee).each do |fee|
+          context fee do
+            let :form_model do
+              FactoryBot.build fee
+            end
 
-        before do
-          model.administration_fee = form_model
-        end
+            before do
+              model.public_send "#{fee}=", form_model
+            end
 
-        it 'sets administration_fee_amount_pounds' do
-          expect(model.administration_fee_amount_pounds).to \
-            eq form_model.amount_pounds
-        end
+            it "sets #{fee}_amount_pounds" do
+              expect(model.public_send("#{fee}_amount_pounds")).to \
+                eq form_model.amount_pounds
+            end
 
-        it 'sets administration_fee_description' do
-          expect(model.administration_fee_description).to \
-            eq form_model.description
-        end
+            it "sets #{fee}_description" do
+              expect(model.public_send("#{fee}_description")).to \
+                eq form_model.description
+            end
 
-        it 'sets administration_fee_interval' do
-          expect(model.administration_fee_interval).to eq form_model.interval
-        end
+            it "sets #{fee}_interval" do
+              expect(model.public_send("#{fee}_interval")).to eq \
+                form_model.interval
+            end
 
-        it 'sets administration_fee_payment_method' do
-          expect(model.administration_fee_payment_method).to \
-            eq form_model.payment_method
-        end
+            it "sets #{fee}_payment_method" do
+              expect(model.public_send("#{fee}_payment_method")).to \
+                eq form_model.payment_method
+            end
 
-        it 'returns the form model' do
-          expect(model.administration_fee).to eq form_model
+            it 'returns the form model' do
+              expect(model.public_send(fee)).to eq form_model
+            end
+          end
         end
       end
     end

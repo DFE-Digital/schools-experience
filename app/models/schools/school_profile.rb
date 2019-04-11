@@ -37,11 +37,23 @@ module Schools
     composed_of \
       :dbs_fee,
       class_name: 'Schools::OnBoarding::DBSFee',
-      mapping: []
+      mapping: [
+        %w(dbs_fee_amount_pounds amount_pounds),
+        %w(dbs_fee_description description),
+        %w(dbs_fee_interval interval),
+        %w(dbs_fee_payment_method payment_method),
+      ],
+      constructor: :compose
 
     composed_of \
       :other_fee,
       class_name: 'Schools::OnBoarding::OtherFee',
-      mapping: []
+      mapping: [
+        %w(other_fee_amount_pounds amount_pounds),
+        %w(other_fee_description description),
+        %w(other_fee_interval interval),
+        %w(other_fee_payment_method payment_method),
+      ],
+      constructor: :compose
   end
 end
