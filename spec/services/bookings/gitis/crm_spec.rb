@@ -15,6 +15,14 @@ describe Bookings::Gitis::CRM, type: :model do
   end
 
   describe '.find' do
+    let!(:uuids) do
+      [
+        "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
+        "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
+        "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
+      ]
+    end
+
     context 'with no account_ids' do
       it "will raise an exception" do
         expect {
@@ -24,40 +32,39 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with single account_ids' do
-      before { @contacts = gitis.find("75c5a32d-d603-4483-956f-236fee7c5784") }
+      before { @contacts = gitis.find(uuids[1]) }
 
       it "will return a single account" do
         expect(@contacts).to be_instance_of Bookings::Gitis::Contact
+        expect(@contacts.id).to eq(uuids[1])
       end
     end
 
     context 'with multiple account_ids' do
       before do
-        @contacts = gitis.find(
-          "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
-          "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
-          "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
-        )
+        @contacts = gitis.find(*uuids)
       end
 
       it "will return an account per id" do
         expect(@contacts.length).to eq(3)
         expect(@contacts).to all be_instance_of(Bookings::Gitis::Contact)
+        @contacts.each_with_index do |contact, index|
+          expect(contact.id).to eq(uuids[index])
+        end
       end
     end
 
     context 'with array of account_ids' do
       before do
-        @contacts = gitis.find([
-          "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
-          "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
-          "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
-        ])
+        @contacts = gitis.find(*uuids)
       end
 
       it "will return an account per id" do
         expect(@contacts.length).to eq(3)
         expect(@contacts).to all be_instance_of(Bookings::Gitis::Contact)
+        @contacts.each_with_index do |contact, index|
+          expect(contact.id).to eq(uuids[index])
+        end
       end
     end
   end

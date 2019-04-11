@@ -11,10 +11,10 @@ module Bookings
         validate_ids(ids)
 
         if ids.length == 1
-          Contact.new(fake_account_data)
+          Contact.new(fake_account_data.merge('contactid' => ids[0]))
         else
           ids.map do |id|
-            Contact.new(fake_account_data)
+            Contact.new(fake_account_data.merge('contactid' => id))
           end
         end
       end
