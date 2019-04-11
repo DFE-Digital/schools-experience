@@ -71,9 +71,24 @@ FactoryBot.define do
       specialism_details { 'Falconry' }
     end
 
+    transient do
+      parking { true }
+      disabled_facilities { false }
+    end
+
     trait :with_candidate_experience_detail do
-      after :build do |profile|
-        profile.candidate_experience_detail = FactoryBot.build :candidate_experience_detail
+      after :build do |profile, evaluator|
+        traits = []
+
+        if evaluator.parking == false
+          traits << :without_parking
+        end
+
+        if evaluator.disabled_facilities
+          traits << :with_disabled_facilities
+        end
+
+        profile.candidate_experience_detail = FactoryBot.build :candidate_experience_detail, *traits
       end
     end
 

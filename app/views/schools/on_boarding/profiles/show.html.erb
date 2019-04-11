@@ -1,0 +1,46 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      Check your answers before setting up your school experience profile
+    </h1>
+
+    <h2 class="govuk-heading-m">School details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Full name', @profile.school_name, '' %>
+      <%= summary_row 'Address', @profile.school_address, '' %>
+      <%= summary_row 'Email address', @profile.school_email, '' %>
+    </dl>
+
+    <h2 class="govuk-heading-m">School experience details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Fees', @profile.fees, 'Change' %>
+      <%= summary_row 'DBS check required', @profile.dbs_check_required, 'Change' %>
+      <%= summary_row 'Individual requirements', @profile.individual_requirements, 'Change' %>
+      <%= summary_row 'School experience phases', @profile.school_experience_phases, 'Change' %>
+      <%= summary_row 'Primary key stages', @profile.primary_key_stages, 'Change' %>
+      <%= summary_row 'Secondary subjects', @profile.secondary_subjects, 'Change' %>
+      <%= summary_row '16 to 18 years', @profile.college_subjects, 'Change' %>
+      <%= summary_row 'Specialisms', @profile.specialisms, 'Change' %>
+      <%= summary_row 'School experience details', @profile.school_experience_details, 'Change' %>
+      <%= summary_row 'Teacher training links', @profile.teacher_training_links, 'Change' %>
+    </dl>
+
+    <h2 class="govuk-heading-m">Candidate information</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Dress code', @profile.dress_code, 'Change' %>
+      <%= summary_row 'Parking', @profile.parking, 'Change' %>
+      <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs, 'Change' %>
+      <%= summary_row 'Start time', @profile.start_time, 'Change' %>
+      <%= summary_row 'Finish time', @profile.end_time, 'Change' %>
+      <%= summary_row 'Flexible on times', @profile.flexible_on_times, 'Change' %>
+      <%= summary_row 'Availability', @profile.availability, 'Change' %>
+    </dl>
+
+    <h2 class="ogvuk-heading-m">Admin contact details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Full name', @profile.admin_contact_full_name, 'Change' %>
+      <%= summary_row 'UK telephone number', @profile.admin_contact_phone, 'Change' %>
+      <%= summary_row 'Email address', @profile.admin_contact_email, 'Change' %>
+    </dl>
+  </div>
+</div>

@@ -180,7 +180,7 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   context 'associations' do
-    context 'subjects' do
+    context '#subjects' do
       subject { described_class.create! urn: 1234567890 }
 
       let! :secondary_phase do

@@ -5,6 +5,7 @@ Feature: Admin contact
 
   Background: I have completed the wizard thus far
     Given I am logged in as a DfE user
+    Given A school is returned from DFE sign in
     Given The secondary school phase is availble
     Given The college phase is availble
     And There are some subjects available
