@@ -37,7 +37,7 @@ Then("every upcoming request should contain a title starting with {string}") do 
   within('#school-requests') do
     page.all('.school-request').each do |sr|
       within(sr) do
-        expect(page).to have_css('h2', text: /Request from/)
+        expect(page).to have_css('h2', text: /#{string}/)
       end
     end
   end
@@ -77,7 +77,7 @@ end
 When("I click {string} on the first request") do |string|
   within('#school-requests') do
     within(page.all('.school-request').first) do
-      page.find('summary span').click
+      page.find('summary span', text: string).click
     end
   end
 end
