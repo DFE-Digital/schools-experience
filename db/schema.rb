@@ -78,13 +78,14 @@ ActiveRecord::Schema.define(version: 2019_04_01_162830) do
     t.string "county"
     t.string "postcode", null: false
     t.integer "bookings_school_type_id", null: false
-    t.string "contact_email", limit: 64
+    t.string "contact_email", limit: 64, null: false
     t.text "placement_info"
     t.boolean "teacher_training_provider", default: false, null: false
     t.text "teacher_training_info"
     t.text "primary_key_stage_info"
     t.text "availability_info"
     t.string "teacher_training_website"
+    t.boolean "enabled", default: true, null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
     t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true

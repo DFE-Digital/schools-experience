@@ -100,16 +100,14 @@
         </dd>
       </div>
 
-      <%- if @school.availability_info.present? -%>
       <div id="school-availability-info" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Placement availability
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= simple_format(@school.availability_info) %>
+          <%= format_school_availability(@school) %>
         </dd>
       </div>
-      <%- end -%>
 
       <%- if @school.teacher_training_provider? -%>
       <div id="school-teacher-training-info" class="govuk-summary-list__row">

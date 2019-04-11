@@ -67,6 +67,7 @@ en:
               blank: "Enter your county"
             email:
               blank: "Enter your email address"
+              invalid: "Enter a valid email address"
             full_name:
               blank: "Enter your full name"
             phone:
@@ -74,6 +75,7 @@ en:
               invalid: "Enter a valid telephone number"
             postcode:
               blank: "Enter your postcode"
+              invalid: 'Enter a valid postcode'
             street:
               blank: "Enter your street"
             town_or_city:

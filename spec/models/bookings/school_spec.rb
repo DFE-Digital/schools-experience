@@ -41,6 +41,32 @@ describe Bookings::School, type: :model do
 
     include_examples "websites", :website
     include_examples "websites", :teacher_training_website
+
+    context 'contact_email' do
+      valid_addresses = %w{hello@bbc.co.uk hi.there@bbc.com}
+      invalid_addresses = [
+        "www.bbc.co.uk",
+        "0161 123 4567",
+        "address including whitespace@something.org",
+        "this@does@not.work.com",
+        "@twitter_handle2",
+        "trailing@",
+        "nodomain@.com",
+        "trailingdot@somewhere."
+      ]
+
+      context 'valid' do
+        valid_addresses.each do |valid_address|
+          it { should allow_value(valid_address).for(:contact_email) }
+        end
+      end
+
+      context 'invalid' do
+        invalid_addresses.each do |invalid_address|
+          it { should_not allow_value(invalid_address).for(:contact_email) }
+        end
+      end
+    end
   end
 
   describe 'Relationships' do
@@ -108,6 +134,21 @@ describe Bookings::School, type: :model do
     context 'Geographic searching by Coordinates' do
       # provided by FullTextSearch
       it { is_expected.to respond_to(:close_to) }
+    end
+
+    context 'Enabled' do
+      let!(:enabled_school) { create(:bookings_school) }
+      let!(:disabled_school) { create(:bookings_school, :disabled) }
+
+      it { is_expected.to respond_to(:enabled) }
+
+      specify 'should return enabled schools' do
+        expect(subject.enabled).to include(enabled_school)
+      end
+
+      specify 'should not return non-enabled schools' do
+        expect(subject.enabled).not_to include(disabled_school)
+      end
     end
 
     context 'Filtering' do

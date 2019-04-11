@@ -4,7 +4,8 @@ Feature: Administration Fee
   I want to provide details of the adminstration fees we charge
 
   Background: I have completed the previous steps
-    Given I have completed the Candidate Requirements step
+    Given I am logged in as a DfE user
+    And I have completed the Candidate Requirements step
     And I have completes the Fees step, choosing only Administration costs
 
   Scenario: Completing the Administration costs step with error

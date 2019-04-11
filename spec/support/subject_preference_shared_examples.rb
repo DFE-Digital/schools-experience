@@ -87,9 +87,22 @@ shared_examples 'a subject preference' do
   end
 
   context '#available_subject_choices' do
-    it "returns the list of subjects from it's school" do
-      expect(subject.available_subject_choices).to \
-        eq Candidates::School.subjects.map(&:last)
+    context 'when the school has subjects' do
+      before do
+        school.subjects << FactoryBot.build_list(:bookings_subject, 8)
+      end
+
+      it "returns the list of subjects from it's school" do
+        expect(subject.available_subject_choices).to \
+          eq school.subjects.pluck(:name)
+      end
+    end
+
+    context "when the school doesn't have subjects" do
+      it 'returns the list of all subjects' do
+        expect(subject.available_subject_choices).to \
+          eq Candidates::School.subjects.map(&:last)
+      end
     end
   end
 

@@ -1,5 +1,7 @@
 class Candidates::SchoolsController < ApplicationController
   def index
+    redirect_to new_candidates_school_search_path unless location_present?
+
     @search = Candidates::SchoolSearch.new(search_params)
   end
 
@@ -8,6 +10,12 @@ class Candidates::SchoolsController < ApplicationController
   end
 
 private
+
+  def location_present?
+    search_params[:location].present? || (
+      search_params[:latitude].present? && search_params[:latitude].present?
+    )
+  end
 
   def search_params
     params.permit(

@@ -54,7 +54,7 @@ Then("the results should be sorted by distance, nearest to furthest") do
   expect(
     page
       .all('#search-results > ul > li')
-      .map{ |ele| ele['data-school-urn'].to_i }
+      .map { |ele| ele['data-school-urn'].to_i }
   ).to eql(urns_in_distance_order)
 end
 
@@ -69,12 +69,13 @@ Then("the results should be sorted by name, lowest to highest") do
   expect(
     page
       .all('#search-results > ul > li')
-      .map{ |ele| ele['data-school-urn'].to_i }
+      .map { |ele| ele['data-school-urn'].to_i }
   ).to eql(urns_in_name_order)
 end
 
 Given("I have changed the sort order to {string}") do |sort_by|
   select(sort_by, from: 'Sorted by')
+  sleep(2)
 end
 
 Given("the sort order has defaulted to {string}") do |string|
