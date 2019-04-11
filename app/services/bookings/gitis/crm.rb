@@ -47,15 +47,15 @@ module Bookings
       def fake_account_data
         {
           'AccountId' => '1',
-          'AccountIdName' => 'Timbuktoo',
+          'AccountIdName' => 'Matthew Richards',
           'MobilePhone' => '07123 456789',
           'Telephone1' => '01234 567890',
           'EmailAddress1' => 'first@thisaddress.com',
           'EmailAddress2' => 'second@thisaddress.com',
           'EmailAddress3' => 'third@thisaddress.com',
-          'Address1_Line1' => 'First Address Line',
-          'Address1_Line2' => 'Second Address Line',
-          'Address1_Line3' => 'Third Address Line',
+          'Address1_Line1' => 'First Line',
+          'Address1_Line2' => 'Second Line',
+          'Address1_Line3' => 'Third Line',
           'Address1_City' => 'Manchester',
           'Address1_StateOrProvince' => 'Manchester',
           'Address1_PostalCode' => 'MA1 1AM'
