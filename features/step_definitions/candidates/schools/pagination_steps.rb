@@ -13,13 +13,13 @@ end
 
 Then("pagination page {int} should not be a hyperlink") do |int|
   within('.pagination-info.higher > nav.pagination') do
-    expect(page).to have_css('span.current', text: '1')
+    expect(page).to have_css('span.current', text: int)
   end
 end
 
 Then("pagination page {int} should be a hyperlink") do |int|
   within('.pagination-info.higher > nav.pagination') do
-    expect(page).to have_css('a', text: '2')
+    expect(page).to have_css('a', text: int)
   end
 end
 

@@ -8,7 +8,7 @@
 
       <%= f.radio_button_fieldset :dbs_requirement do |fieldset| %>
         <% @candidate_requirement.dbs_requirements.each do |requirement| %>
-          <% if @candidate_requirement.policy_explination_required? requirement %>
+          <% if @candidate_requirement.policy_explanation_required? requirement %>
             <%= fieldset.radio_input requirement do %>
               <%= fieldset.text_area :dbs_policy, class: 'govuk-!-width-two-thirds', rows: 7 %>
             <% end %>

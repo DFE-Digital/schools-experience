@@ -1,5 +1,6 @@
 require File.join(Rails.root, "lib", "data", "school_importer")
 require File.join(Rails.root, "lib", "data", "school_enhancer")
+require File.join(Rails.root, "lib", "data", "school_manager")
 
 namespace :data do
   namespace :schools do
@@ -38,6 +39,24 @@ namespace :data do
         headers: true
       )
       SchoolEnhancer.new(response_data).enhance
+    end
+
+    desc "Enable schools"
+    task :enable, %i{urns} => :environment do |_t, args|
+      response_data = CSV.parse(
+        File.read(args[:urns]).scrub,
+        headers: true
+      )
+      SchoolManager.new(response_data).enable_urns
+    end
+
+    desc "Disable schools"
+    task :disable, %i{urns} => :environment do |_t, args|
+      response_data = CSV.parse(
+        File.read(args[:urns]).scrub,
+        headers: true
+      )
+      SchoolManager.new(response_data).disable_urns
     end
   end
 end

@@ -29,7 +29,7 @@ Given("there are some schools with a range of fees containing the word {string}"
 end
 
 Given("I have searched for {string} and am on the results page") do |string|
-  path = candidates_schools_path(query: string)
+  path = candidates_schools_path(location: string, distance: 100)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
   expect(path_with_query).to eql(path)
@@ -88,4 +88,21 @@ end
 
 When("I select {string} in the {string} select box") do |option, label_text|
   select(option, from: label_text)
+  sleep(2)
+end
+
+Given("I search for schools near {string}") do |string|
+  visit(new_candidates_school_search_path)
+  fill_in 'Where?', with: string
+  click_button 'Find'
+  expect(page.current_path).to eql(candidates_schools_path)
+end
+
+When("I click back on the results screen") do
+  click_link 'Back'
+  expect(page.current_path).to eql(new_candidates_school_search_path)
+end
+
+Then("the location input should be populated with {string}") do |string|
+  expect(page.find('input#location').value).to eql(string)
 end

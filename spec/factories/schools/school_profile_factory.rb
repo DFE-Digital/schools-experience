@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :school_profile, class: 'Schools::SchoolProfile' do
-    urn { 1234567890 }
+    urn { 123456 }
 
     trait :with_candidate_requirement do
       candidate_requirement_dbs_requirement { 'sometimes' }

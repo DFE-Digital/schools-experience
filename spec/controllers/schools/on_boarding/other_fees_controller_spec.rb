@@ -1,6 +1,10 @@
 require 'rails_helper'
 
+require Rails.root.join("spec", "controllers", "schools", "session_context")
+
 describe Schools::OnBoarding::OtherFeesController, type: :request do
+  include_context "logged in DfE user"
+
   let! :school_profile do
     FactoryBot.create \
       :school_profile,

@@ -27,7 +27,7 @@ module Candidates::SchoolHelper
   end
 
   def format_school_availability(school)
-    simple_format school.try(:availability_info) || 'Not specified'
+    simple_format school.try(:availability_info) || 'No information supplied'
   end
 
   def format_phases(school)
@@ -101,5 +101,9 @@ module Candidates::SchoolHelper
     else
       "http://#{url}"
     end
+  end
+
+  def school_new_search_params
+    params.permit(:location, :latitude, :longitude).reject { |_, v| v.blank? }
   end
 end

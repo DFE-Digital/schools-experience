@@ -8,6 +8,7 @@ if Rails.env.production? || Rails.env.servertest?
 end
 
 require 'rspec/rails'
+require 'webmock/rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -68,7 +69,7 @@ RSpec.configure do |config|
   # Prevent unintended API access from Geocoder
   config.before :each do
     allow(Geocoder).to receive(:search).and_return([
-      Geocoder::Result::Test.new(latitude: 53.4794892, longitude: -2.2451148)
+      Geocoder::Result::Test.new(name: 'Bury', latitude: 53.4794892, longitude: -2.2451148)
     ])
   end
 

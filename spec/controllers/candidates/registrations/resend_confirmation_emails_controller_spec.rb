@@ -13,44 +13,75 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
 
     allow(Candidates::Registrations::RegistrationSession).to \
       receive(:new) { registration_session }
+
+    Candidates::Registrations::RegistrationStore.instance.store! \
+      registration_session
   end
 
   context '#create' do
-    context 'session not pending email confirmation' do
-      before do
-        post candidates_school_registrations_resend_confirmation_email_path \
-          registration_session.school
+    context 'session found' do
+      context 'session not pending email confirmation' do
+        before do
+          post candidates_school_registrations_resend_confirmation_email_path \
+            registration_session.school
+        end
+
+        it "doesn't resend the confirmation email" do
+          expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
+            have_received(:perform_later).with \
+              registration_session.uuid, 'www.example.com'
+        end
+
+        it 'renders the session expired template' do
+          expect(response).to render_template :session_expired
+        end
       end
 
-      it "doesn't resend the confirmation email" do
-        expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
-          have_received(:perform_later).with \
-            registration_session.uuid, 'www.example.com'
-      end
+      context 'session pending email confirmation' do
+        before do
+          registration_session.flag_as_pending_email_confirmation!
 
-      it 'renders the session expired template' do
-        expect(response).to render_template :session_expired
+          post candidates_school_registrations_resend_confirmation_email_path \
+            registration_session.school
+        end
+
+        it 'resends the confirmation email' do
+          expect(Candidates::Registrations::SendEmailConfirmationJob).to \
+            have_received(:perform_later).with \
+              registration_session.uuid, 'www.example.com'
+        end
+
+        it 'redirects to confirmation email show' do
+          expect(response).to redirect_to \
+            candidates_school_registrations_confirmation_email_path \
+              registration_session.school
+        end
       end
     end
 
-    context 'session pending email confirmation' do
+    context 'session not found' do
       before do
-        registration_session.flag_as_pending_email_confirmation!
+        allow(ExceptionNotifier).to receive :notify_exception
+
+        Candidates::Registrations::RegistrationStore.instance.delete! \
+          registration_session.uuid
 
         post candidates_school_registrations_resend_confirmation_email_path \
           registration_session.school
       end
 
-      it 'resends the confirmation email' do
-        expect(Candidates::Registrations::SendEmailConfirmationJob).to \
-          have_received(:perform_later).with \
-            registration_session.uuid, 'www.example.com'
+      it 'notifys exception monitoring' do
+        expect(ExceptionNotifier).to have_received(:notify_exception).with(
+          Candidates::Registrations::RegistrationStore::SessionNotFound,
+          data: {
+            action: 'ResendConfirmationEmailsController#create',
+            uuid: registration_session.uuid
+          }
+        )
       end
 
-      it 'redirects to confirmation email show' do
-        expect(response).to redirect_to \
-          candidates_school_registrations_confirmation_email_path \
-            registration_session.school
+      it 'renders the shared/session_expired?' do
+        expect(response).to render_template 'shared/session_expired'
       end
     end
   end

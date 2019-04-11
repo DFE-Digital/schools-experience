@@ -14,6 +14,11 @@ class Bookings::School < ApplicationRecord
 
   validates :teacher_training_website, allow_nil: true, website: true
 
+  validates :contact_email, format: {
+    with: URI::MailTo::EMAIL_REGEXP,
+    message: "isn't a valid email address"
+  }
+
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
     inverse_of: :bookings_school,
@@ -37,6 +42,8 @@ class Bookings::School < ApplicationRecord
   belongs_to :school_type,
     class_name: "Bookings::SchoolType",
     foreign_key: :bookings_school_type_id
+
+  scope :enabled, -> { where(enabled: true) }
 
   scope :that_provide, ->(subject_ids) do
     if subject_ids.present?
@@ -70,5 +77,9 @@ class Bookings::School < ApplicationRecord
 
   def private_beta?
     false # FIXME this should check if they're in the Private Beta program
+  end
+
+  def disabled?
+    !enabled?
   end
 end

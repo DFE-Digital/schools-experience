@@ -30,6 +30,22 @@
           <p>
             Depending on availability and time of year, schools may not always be able to offer you the exact dates you’re looking for.
           </p>
+
+          <%- if @school.availability_info.present? -%>
+            <section class="govuk-se-warning">
+
+              <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                  <span class="govuk-warning-text__assistive">Warning</span>
+                  The school has provided the following information
+                </strong>
+              </div>
+
+              <%= format_school_availability(@school) %>
+            </section>
+          <%- end -%>
+
       <% end %>
 
       <%= f.text_area_with_maxwords \
