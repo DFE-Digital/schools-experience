@@ -3,6 +3,7 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
   include_context "logged in DfE user"
+  include_context 'with phases'
 
   let! :school_profile do
     create :school_profile

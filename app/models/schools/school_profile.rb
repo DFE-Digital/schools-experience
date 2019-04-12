@@ -2,6 +2,31 @@ module Schools
   class SchoolProfile < ApplicationRecord
     validates :urn, presence: true, uniqueness: true
 
+    before_validation do
+      # Some steps in the wizard depend on previous steps and don't make
+      # sense if the profile is edited to uncheck the options that require
+      # these steps. If this is the case we want to reset those steps to their
+      # initial state.
+      unless fees.administration_fees
+        self.administration_fee = Schools::OnBoarding::AdministrationFee.new
+      end
+      unless fees.dbs_fees
+        self.dbs_fee = Schools::OnBoarding::DBSFee.new
+      end
+      unless fees.other_fees
+        self.other_fee = Schools::OnBoarding::OtherFee.new
+      end
+      unless phases_list.primary
+        self.key_stage_list = Schools::OnBoarding::KeyStageList.new
+      end
+      unless phases_list.secondary
+        self.secondary_subjects.destroy_all
+      end
+      unless phases_list.college
+        self.college_subjects.destroy_all
+      end
+    end
+
     composed_of \
       :candidate_requirement,
       class_name: 'Schools::OnBoarding::CandidateRequirement',

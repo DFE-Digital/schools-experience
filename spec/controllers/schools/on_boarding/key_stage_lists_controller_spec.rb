@@ -4,6 +4,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::KeyStageListsController, type: :request do
   include_context "logged in DfE user"
+  include_context 'with phases'
 
   let! :school_profile do
     FactoryBot.create \
@@ -14,10 +15,6 @@ describe Schools::OnBoarding::KeyStageListsController, type: :request do
       :with_dbs_fee,
       :with_other_fee,
       :with_phases
-  end
-
-  let! :secondary_phase do
-    FactoryBot.create :bookings_phase, :secondary
   end
 
   context '#new' do

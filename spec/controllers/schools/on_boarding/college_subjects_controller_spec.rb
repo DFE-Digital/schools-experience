@@ -4,14 +4,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
   include_context "logged in DfE user"
-
-  let! :secondary_phase do
-    FactoryBot.create :bookings_phase, :secondary
-  end
-
-  let! :college_phase do
-    FactoryBot.create :bookings_phase, :college
-  end
+  include_context 'with phases'
 
   let! :bookings_subject do
     FactoryBot.create :bookings_subject
