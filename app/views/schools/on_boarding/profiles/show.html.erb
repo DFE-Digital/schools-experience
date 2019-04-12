@@ -13,7 +13,7 @@
 
     <h2 class="govuk-heading-m">School experience details</h2>
     <dl class="govuk-summary-list">
-      <%= summary_row 'Fees', @profile.fees, 'Change' %>
+      <%= summary_row 'Fees', @profile.fees, edit_schools_on_boarding_fees_path %>
       <%= summary_row 'DBS check required', @profile.dbs_check_required, 'Change' %>
       <%= summary_row 'Individual requirements', @profile.individual_requirements, 'Change' %>
       <%= summary_row 'School experience phases', @profile.school_experience_phases, 'Change' %>
