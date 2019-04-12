@@ -1,4 +1,4 @@
-<%= link_to 'Back', schools_upcoming_index_path, class: 'govuk-back-link' %>
+<%= link_to 'Back', schools_upcoming_requests_path, class: 'govuk-back-link' %>
 
 <h1>Request from <%= @placement_request.candidate.full_name %></h1>
 
@@ -145,7 +145,7 @@
       </div>
     </div>
     <div>
-      <%= link_to 'Your upcoming requests', schools_upcoming_index_path, class: 'govuk-link' %>
+      <%= link_to 'Your upcoming requests', schools_upcoming_requests_path, class: 'govuk-link' %>
     </div>
   </div>
 </div>

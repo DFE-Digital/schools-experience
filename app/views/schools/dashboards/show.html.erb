@@ -1,5 +1,61 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l"><%= @school.name %></h1>
+
+    <article id="dashboard">
+      <section class="requests-and-bookings">
+        <div class="subsection requests">
+          <header class="dashboard-high-priority">
+            <%= link_to "Accept and reject requests", schools_upcoming_requests_path %>
+            <%= numbered_circle(@new_requests, id: 'new-requests-counter') %>
+          </header>
+          <p class="govuk-hint">Candidates have requested school experience</p>
+        </div>
+
+        <div class="subsection bookings">
+          <header class="dashboard-high-priority">
+            <%= link_to "Accept and reject bookings", "#" %>
+            <%= numbered_circle(@new_bookings, id: 'new-bookings-counter') %>
+          </header>
+          <p class="govuk-hint">A candidate has asked to change a booking</p>
+        </div>
+      </section>
+
+      <section class="candidate-attendance">
+        <header class="dashboard-medium-priority">
+          <%= link_to "Confirm candidate attendance", "#" %>
+          <%= numbered_circle(@candidate_attendances, id: 'candidate-attendances-counter') %>
+        </header>
+        <p class="govuk-hint">
+          Confirm the attendance of candidates who've been on school experience
+        </p>
+      </section>
+
+      <section class="upcoming-bookings">
+        <header class="dashboard-medium-priority">
+          <%= link_to "View upcoming bookings", "#" %>
+        </header>
+      </section>
+
+      <section class="other-tasks">
+        <ul class="govuk-list dashboard-low-priority">
+          <li>
+            <%= link_to "Read about service updates and changes", "#" %>
+          </li>
+          <li>
+            <%= link_to "Edit school profile", "#" %>
+          </li>
+          <li>
+            <%= link_to "View old bookings Read service guidance", "#" %>
+          </li>
+          <li>
+            <%= link_to "View rejected requests", "#" %>
+          </li>
+          <li>
+            <%= link_to "Give feedback on this service", "#" %>
+          </li>
+        </ul>
+      </section>
+    </article>
   </div>
 </div>
