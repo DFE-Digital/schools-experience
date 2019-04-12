@@ -115,6 +115,10 @@ Capybara.register_driver :ie do |app|
   Capybara::Selenium::Driver.new(app, browser: :internet_explorer, options: options)
 end
 
+Capybara.register_driver :safari do |app|
+  Capybara::Selenium::Driver.new(app, browser: :safari)
+end
+
 if (driver = ENV['CUC_DRIVER']) && driver.present?
   Capybara.default_driver = driver.to_sym
 else
