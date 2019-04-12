@@ -1,5 +1,14 @@
 module Apimock
   class GitisCrm
+    attr_reader :client_id, :client_secret, :auth_tenant_id, :service_url
+
+    def initialize(client_id, client_secret, auth_tenant_id, service_url)
+      @client_id = client_id
+      @client_secret = client_secret
+      @auth_tenant_id = auth_tenant_id
+      @service_url = service_url
+    end
+
     def stub_contact_request(uuid, params = {})
       stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})").
         with(headers: get_headers).
@@ -30,15 +39,15 @@ module Apimock
         )
     end
 
-    def stub_access_token
+    def stub_access_token(id: client_id, secret: client_secret)
       stub_request(:post, "#{auth_url}/#{auth_tenant_id}/oauth2/token").
         with(
           headers: { 'Accept' => 'application/json' },
           body: {
             "grant_type" => "client_credentials",
             "scope" => "",
-            "client_id" => client_id,
-            "client_secret" => client_secret,
+            "client_id" => id,
+            "client_secret" => secret,
             "resource" => service_url,
           }.to_query
         ).
@@ -50,6 +59,28 @@ module Apimock
             'expires_in' => 3600,
             'resource' => service_url,
             'access_token' => "MY.STUB.TOKEN"
+          }.to_json
+        )
+    end
+
+    def stub_invalid_access_token(id: client_id, secret: 'invalid')
+      stub_request(:post, "#{auth_url}/#{auth_tenant_id}/oauth2/token").
+        with(
+          headers: { 'Accept' => 'application/json' },
+          body: {
+            "grant_type" => "client_credentials",
+            "scope" => "",
+            "client_id" => id,
+            "client_secret" => secret,
+            "resource" => service_url,
+          }.to_query
+        ).
+        to_return(
+          status: 401,
+          headers: { 'Content-Type' => 'application/json' },
+          body: {
+            "error" => "invalid_client",
+            "error_description" => "AADSTS7000215: Invalid client secret is provided."
           }.to_json
         )
     end
@@ -162,22 +193,6 @@ module Apimock
       "https://login.microsoftonline.com"
     end
 
-    def service_url
-      ENV.fetch('CRM_SERVICE_URL')
-    end
-
-    def client_id
-      ENV.fetch('CRM_CLIENT_ID')
-    end
-
-    def client_secret
-      ENV.fetch('CRM_CLIENT_SECRET')
-    end
-
-    def auth_tenant_id
-      ENV.fetch('CRM_AUTH_TENANT_ID')
-    end
-
     def endpoint
       "/api/data/v9.1"
     end
@@ -185,7 +200,7 @@ module Apimock
     def get_headers
       {
         'Accept' => 'application/json',
-        'Authorization' => /Bearer \w+\.\w+\.\w/,
+        'Authorization' => /\ABearer \w+\.\w+\.\w+\z/,
         "OData-MaxVersion" => "4.0",
         "OData-Version" => "4.0",
       }
@@ -194,7 +209,7 @@ module Apimock
     def post_headers
       {
         'Accept' => 'application/json',
-        'Authorization' => /Bearer \w+\.\w+\.\w/,
+        'Authorization' => /\ABearer \w+\.\w+\.\w+\z/,
         "OData-MaxVersion" => "4.0",
         "OData-Version" => "4.0",
         "Content-Type" => "application/json"
