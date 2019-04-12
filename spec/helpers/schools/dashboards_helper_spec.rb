@@ -6,6 +6,22 @@ describe Schools::DashboardsHelper, type: 'helper' do
     let(:circle) { numbered_circle(text) }
     subject { Nokogiri.parse(circle) }
 
+    context 'id' do
+      context 'when not set' do
+        specify 'should be absent' do
+          expect(subject['id']).to be_nil
+        end
+      end
+
+      context 'when set' do
+        let(:id) { 'what-a-nice-circle' }
+        let(:circle) { numbered_circle(text, id: id) }
+        specify 'should be set to the overridden value' do
+          expect(subject.at_css('svg')['id']).to eql(id)
+        end
+      end
+    end
+
     context 'shape and colour' do
       specify 'should default to a red circle' do
         expect(subject).to have_css('svg > circle.red')

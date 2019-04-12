@@ -16,17 +16,17 @@ article#dashboard {
       }
 
       &.dashboard-medium-priority {
-        @include govuk-font($size: 24, $weight: bold);
+        @include govuk-font($size: 19, $weight: bold);
       }
 
       &.dashboard-low-priority {
-        @include govuk-font($size: 19, $weight: bold);
+        @include govuk-font($size: 16, $weight: bold);
       }
     }
 
     ul.other-tasks {
       li.dashboard-low-priority > a {
-        @include govuk-font($size: 19, $weight: bold);
+        @include govuk-font($size: 16, $weight: bold);
       }
     }
 

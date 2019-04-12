@@ -7,7 +7,7 @@
         <div class="subsection requests">
           <header class="dashboard-high-priority">
             <%= link_to "Accept and reject requests", schools_upcoming_requests_path %>
-            <%= numbered_circle(4) %>
+            <%= numbered_circle(@new_requests, id: 'new-requests-counter') %>
           </header>
           <p class="govuk-hint">Candidates have requested school experience</p>
         </div>
@@ -15,7 +15,7 @@
         <div class="subsection bookings">
           <header class="dashboard-high-priority">
             <%= link_to "Accept and reject bookings", "#" %>
-            <%= numbered_circle(16) %>
+            <%= numbered_circle(@new_bookings, id: 'new-bookings-counter') %>
           </header>
           <p class="govuk-hint">A candidate has asked to change a booking</p>
         </div>
@@ -23,8 +23,8 @@
 
       <section class="candidate-attendance">
         <header class="dashboard-medium-priority">
-          <%= link_to "Accept and reject bookings", "#" %>
-          <%= numbered_circle(3) %>
+          <%= link_to "Confirm candidate attendance", "#" %>
+          <%= numbered_circle(@candidate_attendances, id: 'candidate-attendances-counter') %>
         </header>
         <p class="govuk-hint">
           Confirm the attendance of candidates who've been on school experience
@@ -38,8 +38,8 @@
       </section>
 
       <section class="other-tasks">
-        <ul class="govuk-list">
-          <li class="dashboard-low-priority">
+        <ul class="govuk-list dashboard-low-priority">
+          <li>
             <%= link_to "Read about service updates and changes", "#" %>
           </li>
           <li>
