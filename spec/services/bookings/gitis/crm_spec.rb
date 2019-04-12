@@ -24,7 +24,7 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with single account_ids' do
-      before { @contacts = gitis.find(1) }
+      before { @contacts = gitis.find("75c5a32d-d603-4483-956f-236fee7c5784") }
 
       it "will return a single account" do
         expect(@contacts).to be_instance_of Bookings::Gitis::Contact
@@ -32,7 +32,13 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with multiple account_ids' do
-      before { @contacts = gitis.find(1, 2, 3) }
+      before do
+        @contacts = gitis.find(
+          "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
+          "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
+          "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
+        )
+      end
 
       it "will return an account per id" do
         expect(@contacts.length).to eq(3)
@@ -41,7 +47,13 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with array of account_ids' do
-      before { @contacts = gitis.find([1, 2, 3]) }
+      before do
+        @contacts = gitis.find([
+          "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
+          "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
+          "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
+        ])
+      end
 
       it "will return an account per id" do
         expect(@contacts.length).to eq(3)
@@ -64,7 +76,7 @@ describe Bookings::Gitis::CRM, type: :model do
       before { @contact = build(:gitis_contact) }
 
       it "will succeed" do
-        expect(gitis.write(@contact)).to eq(1)
+        expect(gitis.write(@contact)).to eq("75c5a32d-d603-4483-956f-236fee7c5784")
       end
     end
 

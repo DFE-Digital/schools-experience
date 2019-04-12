@@ -5,24 +5,25 @@ describe Bookings::Gitis::Contact, type: :model do
     context "with data" do
       before do
         @contact = Bookings::Gitis::Contact.new(
-          'AccountId' => '1',
-          'AccountIdName' => 'Testing 123',
-          'MobilePhone' => '07123 456789',
-          'Telephone1' => '01234 567890',
-          'EmailAddress1' => 'first@thisaddress.com',
-          'EmailAddress2' => 'second@thisaddress.com',
-          'EmailAddress3' => 'third@thisaddress.com',
-          'Address1_Line1' => 'First Address Line',
-          'Address1_Line2' => 'Second Address Line',
-          'Address1_Line3' => 'Third Address Line',
-          'Address1_City' => 'Manchester',
-          'Address1_StateOrProvince' => 'Manchester',
-          'Address1_PostalCode' => 'MA1 1AM'
+          'contactid' => "d778d663-a022-4c4b-9962-e469ee179f4a",
+          'firstname' => 'Testing',
+          'lastname' => '123',
+          'mobilephone' => '07123 456789',
+          'telephone1' => '01234 567890',
+          'emailaddress1' => 'first@thisaddress.com',
+          'emailaddress2' => 'second@thisaddress.com',
+          'emailaddress3' => 'third@thisaddress.com',
+          'address1_line1' => 'First Address Line',
+          'address1_line2' => 'Second Address Line',
+          'address1_line3' => 'Third Address Line',
+          'address1_city' => 'Manchester',
+          'address1_stateorprovince' => 'Manchester',
+          'address1_postalcode' => 'MA1 1AM'
         )
       end
 
       it "will assign id" do
-        expect(@contact.id).to eq "1"
+        expect(@contact.id).to eq "d778d663-a022-4c4b-9962-e469ee179f4a"
       end
 
       it "will assign name" do

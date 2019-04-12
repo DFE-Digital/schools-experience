@@ -4,22 +4,23 @@ module Bookings
       include ActiveModel::Model
 
       attr_reader :id
-      attr_accessor :full_name, :email, :phone
+      attr_accessor :firstname, :lastname, :email, :phone
       attr_accessor :building, :street, :town_or_city, :county, :postcode
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
       def initialize(crm_contact_data = {})
         @crm_data     = crm_contact_data
-        @id           = @crm_data['AccountId']
-        @full_name    = @crm_data['AccountIdName']
+        @id           = @crm_data['contactid']
+        @firstname    = @crm_data['firstname']
+        @lastname     = @crm_data['lastname']
         @email        = parse_email_from_crm(@crm_data)
         @phone        = parse_phone_from_crm(@crm_data)
-        @building     = @crm_data['Address1_Line1']
+        @building     = @crm_data['address1_line1']
         @street       = parse_street_from_crm(@crm_data)
-        @town_or_city = @crm_data['Address1_City']
-        @county       = @crm_data['Address1_StateOrProvince']
-        @postcode     = @crm_data['Address1_PostalCode']
+        @town_or_city = @crm_data['address1_city']
+        @county       = @crm_data['address1_stateorprovince']
+        @postcode     = @crm_data['address1_postalcode']
       end
 
       def address
@@ -38,24 +39,28 @@ module Bookings
         {} # STUBBED FOR NOW
       end
 
+      def full_name
+        "#{@firstname} #{@lastname}"
+      end
+
       class ContactIdChangedUnexpectedly < RuntimeError; end
 
     private
 
       def parse_email_from_crm(data)
-        data['EmailAddress1'].presence ||
-          data['EmailAddress2'].presence ||
-          data['EmailAddress3']
+        data['emailaddress1'].presence ||
+          data['emailaddress2'].presence ||
+          data['emailaddress3']
       end
 
       def parse_phone_from_crm(data)
-        data['MobilePhone'].presence || data['Telephone1']
+        data['mobilephone'].presence || data['telephone1']
       end
 
       def parse_street_from_crm(data)
         [
-          data['Address1_Line2'].presence,
-          data['Address1_Line3'].presence
+          data['address1_line2'].presence,
+          data['address1_line3'].presence
         ].compact.join(', ')
       end
     end
