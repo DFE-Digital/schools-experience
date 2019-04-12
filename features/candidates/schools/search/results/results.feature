@@ -16,3 +16,10 @@ Feature: Schools search page contents
             | Fees        |
             | School type |
             | Subjects    |
+
+    Scenario: No closeby results
+        Given there are no schools near my search location
+        But there are some schools just outside it
+        When I search for schools within 5 miles
+        Then the results page should include a warning that my search radius was expanded
+        And the results from further out are displayed
