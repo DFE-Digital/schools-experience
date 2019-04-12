@@ -35,7 +35,8 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
 
     let :params do
       {
-        schools_on_boarding_candidate_requirement: candidate_requirement.attributes
+        schools_on_boarding_candidate_requirement: \
+          candidate_requirement.attributes
       }
     end
 
