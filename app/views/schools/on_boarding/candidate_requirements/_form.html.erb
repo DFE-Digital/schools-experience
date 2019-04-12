@@ -1,0 +1,31 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Enter your school experience details</h1>
+    <p>Enter your school experience details</p>
+
+    <%= form_for candidate_requirement, url: url, method: method do |f|  %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+
+      <%= f.radio_button_fieldset :dbs_requirement do |fieldset| %>
+        <% f.object.dbs_requirements.each do |requirement| %>
+          <% if f.object.policy_explanation_required? requirement %>
+            <%= fieldset.radio_input requirement do %>
+              <%= fieldset.text_area :dbs_policy, class: 'govuk-!-width-two-thirds', rows: 7 %>
+            <% end %>
+          <% else %>
+            <%= fieldset.radio_input requirement %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= f.radio_button_fieldset :requirements do |fieldset| %>
+         <%= fieldset.radio_input true do %>
+           <%= fieldset.text_area :requirements_details, class: 'govuk-!-width-two-thirds', rows: 7 %>
+         <% end %>
+         <%= fieldset.radio_input false %>
+      <% end %>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

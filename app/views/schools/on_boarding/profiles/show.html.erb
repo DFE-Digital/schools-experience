@@ -14,8 +14,8 @@
     <h2 class="govuk-heading-m">School experience details</h2>
     <dl class="govuk-summary-list">
       <%= summary_row 'Fees', @profile.fees, edit_schools_on_boarding_fees_path %>
-      <%= summary_row 'DBS check required', @profile.dbs_check_required, 'Change' %>
-      <%= summary_row 'Individual requirements', @profile.individual_requirements, 'Change' %>
+      <%= summary_row 'DBS check required', @profile.dbs_check_required, edit_schools_on_boarding_candidate_requirement_path %>
+      <%= summary_row 'Individual requirements', @profile.individual_requirements, edit_schools_on_boarding_candidate_requirement_path %>
       <%= summary_row 'School experience phases', @profile.school_experience_phases, 'Change' %>
       <%= summary_row 'Primary key stages', @profile.primary_key_stages, 'Change' %>
       <%= summary_row 'Secondary subjects', @profile.secondary_subjects, 'Change' %>

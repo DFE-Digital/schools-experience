@@ -32,7 +32,7 @@ Rails.application.routes.draw do
       end
 
       namespace :on_boarding do
-        resource :candidate_requirement, only: %i(new create)
+        resource :candidate_requirement, only: %i(new create edit update)
         resource :fees, only: %i(new create edit update)
         resource :administration_fee, only: %i(new create)
         resource :dbs_fee, only: %i(new create)
