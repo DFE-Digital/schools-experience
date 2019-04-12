@@ -418,6 +418,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgis-adapter
   acts_as_list
+  addressable
   autoprefixer-rails
   bootsnap (>= 1.1.0)
   brakeman (>= 4.4.0)
