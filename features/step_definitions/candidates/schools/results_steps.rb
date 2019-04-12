@@ -139,6 +139,13 @@ end
 Then("the results page should include a warning that no results were found") do
   within('#results li.expanded-search-radius') do
     expect(page).to have_css('h3', text: '0 results found within 5 miles')
-    expect(page).to have_content("There aren't any results within 50 miles of your location")
+    expect(page).to have_content("Not all schools in your area have signed up to use this website.")
+    expect(page).to have_content("To find out about arranging school experience with schools who are not yet on this website visit")
+  end
+end
+
+Then("there should be a link to Get into teaching") do
+  within('#results li.expanded-search-radius') do
+    expect(page).to have_link("Get into teaching", href: 'https://getintoteaching.education.gov.uk/school-experience/arranging-school-experience-independently')
   end
 end

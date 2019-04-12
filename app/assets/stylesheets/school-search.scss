@@ -63,8 +63,11 @@
       margin-bottom: govuk-spacing(1) ;
     }
 
-    p.nearby-info {
+    .nearby-info {
       margin-bottom: 0rem;
+      p:last-child {
+        margin-bottom: 0rem;
+      }
     }
   }
 }
