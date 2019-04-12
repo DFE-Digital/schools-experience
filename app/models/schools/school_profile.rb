@@ -27,6 +27,37 @@ module Schools
       end
     end
 
+    validate :administration_fee_not_set, unless: -> { fees.administration_fees }
+    validate :dbs_fee_not_set, unless: -> { fees.dbs_fees }
+    validate :other_fee_not_set, unless: -> { fees.other_fees }
+    validate :key_stage_list_not_set, unless: -> { phases_list.primary }
+    validate :no_secondary_subjects, unless: -> { phases_list.secondary }
+    validate :no_college_subjects, unless: -> { phases_list.college }
+
+    DEPENDENT_STAGES = [
+      [:administration_fee, 'fees.administration_fees'],
+      [:dbs_fee, 'fees.dbs_fees'],
+      [:other_fee, 'fees.other_fees'],
+      [:key_stage_list, 'phases_list.primary']
+    ].freeze
+
+    DEPENDENT_STAGES.each do |attr, dependency|
+      define_method "#{attr}_not_set" do
+        unless send(attr) == send(attr).class.new
+          errors.add :base, "#{attr} should not be set when `#{dependency} == false`"
+        end
+      end
+    end
+
+    # FIXME eagar load these in create/update if we're using them every time
+    %i(secondary college).each do |association|
+      define_method "no_#{association}_subjects" do
+        if send("#{association}_subjects").any?
+          errors.add :base, "#{association}_subjects should be empty when `phase_list.#{association}` == false"
+        end
+      end
+    end
+
     composed_of \
       :candidate_requirement,
       class_name: 'Schools::OnBoarding::CandidateRequirement',
