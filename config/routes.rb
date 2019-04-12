@@ -22,7 +22,7 @@ Rails.application.routes.draw do
         resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
         resource :reject, only: [:show, :create], controller: 'placement_requests/reject'
         collection do
-          resources :upcoming, only: :index, controller: 'placement_requests/upcoming'
+          resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
         end
       end
 
