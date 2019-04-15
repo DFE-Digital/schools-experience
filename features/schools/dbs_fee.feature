@@ -6,7 +6,7 @@ Feature: DBS Fee
   Background: I have completed the previous steps
     Given I am logged in as a DfE user
     Given I have completed the Candidate Requirements step
-    And I have completes the Fees step, choosing only DBS costs
+    And I have completed the Fees step, choosing only DBS costs
 
   Scenario: Completing the DBS costs step with error
     Given I have entered the following details into the form:
