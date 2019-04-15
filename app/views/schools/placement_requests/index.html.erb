@@ -1,3 +1,10 @@
-<h1>Placement requests</h1>
+<%= self.page_title = "All placement requests" %>
+<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
 
-<p>List all placement requests here</p>
+<h1>All placement requests</h1>
+
+<div id="school-requests">
+  <%= render partial: 'schools/placement_requests/placement_request',
+    collection: @placement_requests
+  %>
+</div>

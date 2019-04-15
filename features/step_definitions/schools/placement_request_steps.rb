@@ -2,11 +2,21 @@ Given("there are some upcoming requests") do
   # currently hardcoded in the controller
 end
 
+Given("there are some placement requests") do
+  # currently hardcoded in the controller
+end
+
 Given("there is at least once placement request") do
   # currently hardcoded in the controller
 end
 
 Then("I should see all the upcoming requests listed") do
+  within("#school-requests") do
+    expect(page).to have_css('.school-request', count: 5)
+  end
+end
+
+Then("I should see all the placement requests listed") do
   within("#school-requests") do
     expect(page).to have_css('.school-request', count: 5)
   end
@@ -23,7 +33,7 @@ Then("the placement listings should have the following values:") do |table|
   end
 end
 
-Then("every upcoming request should contain a link to view more details") do
+Then("every request should contain a link to view more details") do
   within('#school-requests') do
     page.all('.school-request').each do |sr|
       within(sr) do
@@ -33,7 +43,7 @@ Then("every upcoming request should contain a link to view more details") do
   end
 end
 
-Then("every upcoming request should contain a title starting with {string}") do |string|
+Then("every request should contain a title starting with {string}") do |string|
   within('#school-requests') do
     page.all('.school-request').each do |sr|
       within(sr) do
