@@ -173,6 +173,10 @@ module Schools
           output << 'remove piercings'
         end
 
+        if @school_profile.candidate_experience_detail.smart_casual
+          output << 'smart casual'
+        end
+
         if @school_profile.candidate_experience_detail.other_dress_requirements
           output << @school_profile.candidate_experience_detail.other_dress_requirements_detail
         end

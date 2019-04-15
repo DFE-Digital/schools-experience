@@ -364,7 +364,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
     it 'returns the selected dress code options' do
       expect(subject.dress_code).to \
-        eq "business dress, cover up tattoos, remove piercings, and Must have nice hat"
+        eq "business dress, cover up tattoos, remove piercings, smart casual, and Must have nice hat"
     end
   end
 

@@ -19,6 +19,25 @@ module Schools
         end
       end
 
+      def edit
+        @candidate_experience_detail = \
+          current_school_profile.candidate_experience_detail
+      end
+
+      def update
+        @candidate_experience_detail = CandidateExperienceDetail.new \
+          candidate_experience_detail_params
+
+        if @candidate_experience_detail.valid?
+          current_school_profile.update! \
+            candidate_experience_detail: @candidate_experience_detail
+
+          redirect_to next_step_path(current_school_profile)
+        else
+          render :edit
+        end
+      end
+
     private
 
       def candidate_experience_detail_params
