@@ -6,6 +6,10 @@ Feature: Upcoming placement requests
     Background:
         Given I am logged in as a DfE user
 
+    Scenario: Page title
+        Given I am on the 'upcoming requests' page
+        Then the page title should be 'Upcoming placement requests'
+
     Scenario: Back link
         Given there are some upcoming requests
         When I am on the 'upcoming requests' page

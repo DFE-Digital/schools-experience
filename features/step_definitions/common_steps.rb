@@ -36,3 +36,8 @@ end
 Then("I should see a {string} link to the {string} page") do |link_text, path|
   expect(page).to have_link(link_text, href: path_for(path))
 end
+
+Then("the page title should be {string}") do |title|
+  title_suffix = "DfE School Experience"
+  expect(page.title).to eql([title, title_suffix].join(' | '))
+end
