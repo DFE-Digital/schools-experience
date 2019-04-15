@@ -16,6 +16,21 @@ module Schools
         end
       end
 
+      def edit
+        @specialism = current_school_profile.specialism
+      end
+
+      def update
+        @specialism = Specialism.new specialism_params
+
+        if @specialism.valid?
+          current_school_profile.update! specialism: @specialism
+          redirect_to next_step_path(current_school_profile)
+        else
+          render :edit
+        end
+      end
+
     private
 
       def specialism_params

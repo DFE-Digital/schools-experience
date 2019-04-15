@@ -41,7 +41,7 @@ Rails.application.routes.draw do
         resource :key_stage_list, only: %i(new create edit update)
         resource :secondary_subjects, only: %i(new create edit update)
         resource :college_subjects, only: %i(new create edit update)
-        resource :specialism, only: %i(new create)
+        resource :specialism, only: %i(new create edit update)
         resource :candidate_experience_detail, only: %i(new create)
         resource :availability_description, only: %i(new create)
         resource :experience_outline, only: %i(new create)
