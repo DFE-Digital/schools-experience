@@ -275,6 +275,30 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
+  context '#college_subjects_offered?' do
+    context 'when offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_college: true
+      end
+
+      it 'returns true' do
+        expect(subject.college_subjects_offered?).to eq true
+      end
+    end
+
+    context 'when not offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_college: false
+      end
+
+      it 'returns false' do
+        expect(subject.college_subjects_offered?).to eq false
+      end
+    end
+  end
+
   context '#college_subjects' do
     context 'when college phase not selected' do
       let :profile do

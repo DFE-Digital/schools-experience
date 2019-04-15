@@ -126,6 +126,10 @@ module Schools
         @school_profile.secondary_subjects.pluck(:name).to_sentence
       end
 
+      def college_subjects_offered?
+        @school_profile.phases_list.college
+      end
+
       def college_subjects
         return 'None' unless @school_profile.phases_list.college
 
