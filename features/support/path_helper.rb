@@ -13,6 +13,7 @@ def path_for(descriptor, school: nil)
     "background checks" => [:new_candidates_school_registrations_background_check_path, school],
     "check your answers" => [:candidates_school_registrations_application_preview_path, school],
     "schools dashboard" => [:schools_dashboard_path],
+    "placement requests" => [:schools_placement_requests_path],
     "upcoming requests" => [:schools_upcoming_requests_path],
     "placement request" => [:schools_placement_request_path, 'abc123'],
     "accept placement request" => [:schools_placement_request_accept_path, 'abc123'],
