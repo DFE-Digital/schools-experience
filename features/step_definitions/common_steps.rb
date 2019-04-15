@@ -39,5 +39,6 @@ end
 
 Then("the page title should be {string}") do |title|
   title_suffix = "DfE School Experience"
+  expect(title).to be_present
   expect(page.title).to eql([title, title_suffix].join(' | '))
 end
