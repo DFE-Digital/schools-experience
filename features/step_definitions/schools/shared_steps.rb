@@ -58,6 +58,14 @@ Given "I have complete the Phases step" do
   )
 end
 
+Given "I have complete the Secondary subjects step" do
+  steps %(
+    Given I am on the 'Secondary subjects' page
+    And I check 'Maths'
+    When I submit the form
+  )
+end
+
 Then "I should see a validation error message" do
   within '.govuk-error-summary' do
     expect(page).to have_content 'There is a problem'
@@ -70,4 +78,8 @@ end
 
 Given "The college phase is availble" do
   FactoryBot.create :bookings_phase, :college
+end
+
+Given "There are some subjects available" do
+  FactoryBot.create :bookings_subject, name: 'Maths'
 end

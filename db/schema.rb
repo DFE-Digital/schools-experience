@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_01_162830) do
+ActiveRecord::Schema.define(version: 2019_04_03_151747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,6 +128,17 @@ ActiveRecord::Schema.define(version: 2019_04_01_162830) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "schools_on_boarding_phase_subjects", force: :cascade do |t|
+    t.bigint "schools_school_profile_id"
+    t.bigint "bookings_phase_id"
+    t.bigint "bookings_subject_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bookings_phase_id"], name: "index_schools_on_boarding_phase_subjects_on_bookings_phase_id"
+    t.index ["bookings_subject_id"], name: "index_schools_on_boarding_phase_subjects_on_bookings_subject_id"
+    t.index ["schools_school_profile_id"], name: "index_phase_subjects_on_school_profile_id"
+  end
+
   create_table "schools_school_profiles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -154,6 +165,9 @@ ActiveRecord::Schema.define(version: 2019_04_01_162830) do
     t.boolean "phases_list_primary", default: false, null: false
     t.boolean "phases_list_secondary", default: false, null: false
     t.boolean "phases_list_college", default: false, null: false
+    t.boolean "key_stage_list_early_years", default: false
+    t.boolean "key_stage_list_key_stage_1", default: false
+    t.boolean "key_stage_list_key_stage_2", default: false
     t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 
@@ -162,4 +176,7 @@ ActiveRecord::Schema.define(version: 2019_04_01_162830) do
   add_foreign_key "bookings_schools_phases", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_subjects"
+  add_foreign_key "schools_on_boarding_phase_subjects", "bookings_phases"
+  add_foreign_key "schools_on_boarding_phase_subjects", "bookings_subjects"
+  add_foreign_key "schools_on_boarding_phase_subjects", "schools_school_profiles"
 end
