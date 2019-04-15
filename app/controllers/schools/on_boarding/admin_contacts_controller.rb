@@ -16,6 +16,21 @@ module Schools
         end
       end
 
+      def edit
+        @admin_contact = current_school_profile.admin_contact
+      end
+
+      def update
+        @admin_contact = AdminContact.new admin_contact_params
+
+        if @admin_contact.valid?
+          current_school_profile.update admin_contact: @admin_contact
+          redirect_to next_step_path(current_school_profile)
+        else
+          render :edit
+        end
+      end
+
     private
 
       def admin_contact_params
