@@ -76,15 +76,26 @@ module Schools
       ],
       constructor: :compose
 
+    composed_of \
+      :specialism,
+      class_name: 'Schools::OnBoarding::Specialism',
+      mapping: [
+        %w(specialism_has_specialism has_specialism),
+        %w(specialism_details details)
+      ],
+      constructor: :compose
+
     has_many :secondary_phase_subjects,
       -> { at_phase Bookings::Phase.secondary },
       class_name: 'Schools::OnBoarding::PhaseSubject',
-      foreign_key: :schools_school_profile_id
+      foreign_key: :schools_school_profile_id,
+      dependent: :destroy
 
     has_many :college_phase_subjects,
       -> { at_phase Bookings::Phase.college },
       class_name: 'Schools::OnBoarding::PhaseSubject',
-      foreign_key: :schools_school_profile_id
+      foreign_key: :schools_school_profile_id,
+      dependent: :destroy
 
     has_many :secondary_subjects,
       class_name: 'Bookings::Subject',

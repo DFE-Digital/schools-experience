@@ -42,6 +42,12 @@ FactoryBot.define do
       phases_list_college { true }
     end
 
+    trait :with_only_early_years_phase do
+      phases_list_primary { true }
+      phases_list_secondary { false }
+      phases_list_college { false }
+    end
+
     trait :with_key_stage_list do
       key_stage_list_early_years { true }
       key_stage_list_key_stage_1 { true }
@@ -51,6 +57,12 @@ FactoryBot.define do
     trait :with_secondary_subjects do
       after :create do |profile|
         profile.secondary_subjects << FactoryBot.create(:bookings_subject)
+      end
+    end
+
+    trait :with_college_subjects do
+      after :create do |profile|
+        profile.college_subjects << FactoryBot.create(:bookings_subject)
       end
     end
   end

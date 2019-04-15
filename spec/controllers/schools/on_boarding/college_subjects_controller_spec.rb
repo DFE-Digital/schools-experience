@@ -79,7 +79,7 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to new_schools_on_boarding_specialisms_path
+        expect(response).to redirect_to new_schools_on_boarding_specialism_path
       end
     end
   end
