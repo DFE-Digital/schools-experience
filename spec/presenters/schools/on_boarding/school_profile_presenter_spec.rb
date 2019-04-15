@@ -176,6 +176,30 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
+  context '#primary_key_stages_offered?' do
+    context 'when offerd' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_primary: true
+      end
+
+      it 'returns true' do
+        expect(subject.primary_key_stages_offered?).to eq true
+      end
+    end
+
+    context 'when not offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_primary: false
+      end
+
+      it 'returns false' do
+        expect(subject.primary_key_stages_offered?).to eq false
+      end
+    end
+  end
+
   context '#primary_key_stages' do
     context 'when primary phase not selected' do
       let :profile do

@@ -92,6 +92,10 @@ module Schools
         output.to_sentence
       end
 
+      def primary_key_stages_offered?
+        @school_profile.phases_list.primary
+      end
+
       def primary_key_stages
         return 'None' unless @school_profile.phases_list.primary
 
