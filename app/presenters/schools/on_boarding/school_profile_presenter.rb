@@ -116,6 +116,10 @@ module Schools
         output.to_sentence
       end
 
+      def secondary_subjects_offered?
+        @school_profile.phases_list.secondary
+      end
+
       def secondary_subjects
         return 'None' unless @school_profile.phases_list.secondary
 

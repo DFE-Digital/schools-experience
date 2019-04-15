@@ -177,7 +177,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   end
 
   context '#primary_key_stages_offered?' do
-    context 'when offerd' do
+    context 'when offered' do
       let :profile do
         FactoryBot.build \
           :school_profile, :with_phases, phases_list_primary: true
@@ -221,6 +221,30 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       it 'returns the key stages' do
         expect(subject.primary_key_stages).to \
           eq 'early years, key stage 1, and key stage 2'
+      end
+    end
+  end
+
+  context '#secondary_subjects_offered?' do
+    context 'when offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_secondary: true
+      end
+
+      it 'returns true' do
+        expect(subject.secondary_subjects_offered?).to eq true
+      end
+    end
+
+    context 'when not offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_secondary: false
+      end
+
+      it 'returns false' do
+        expect(subject.secondary_subjects_offered?).to eq false
       end
     end
   end
