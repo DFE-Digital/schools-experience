@@ -24,8 +24,8 @@
       <%= summary_row '16 to 18 years', @profile.college_subjects, \
         @profile.college_subjects_offered? ? edit_schools_on_boarding_college_subjects_path : edit_schools_on_boarding_phases_list_path %>
       <%= summary_row 'Specialisms', @profile.specialisms, edit_schools_on_boarding_specialism_path %>
-      <%= summary_row 'School experience details', @profile.school_experience_details, 'Change' %>
-      <%= summary_row 'Teacher training links', @profile.teacher_training_links, 'Change' %>
+      <%= summary_row 'School experience details', @profile.school_experience_details, edit_schools_on_boarding_experience_outline_path %>
+      <%= summary_row 'Teacher training links', @profile.teacher_training_links, edit_schools_on_boarding_experience_outline_path %>
     </dl>
 
     <h2 class="govuk-heading-m">Candidate information</h2>
