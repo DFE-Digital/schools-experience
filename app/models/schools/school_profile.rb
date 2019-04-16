@@ -106,6 +106,35 @@ module Schools
       ],
       constructor: :compose
 
+    composed_of \
+      :experience_outline,
+      class_name: 'Schools::OnBoarding::ExperienceOutline',
+      mapping: [
+        %w(experience_outline_candidate_experience candidate_experience),
+        %w(experience_outline_provides_teacher_training provides_teacher_training),
+        %w(experience_outline_teacher_training_details teacher_training_details),
+        %w(experience_outline_teacher_training_url teacher_training_url)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :admin_contact,
+      class_name: 'Schools::OnBoarding::AdminContact',
+      mapping: [
+        %w(admin_contact_full_name full_name),
+        %w(admin_contact_email email),
+        %w(admin_contact_phone phone)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :availability_description,
+      class_name: 'Schools::OnBoarding::AvailabilityDescription',
+      mapping: [
+        %w(availability_description_description description)
+      ],
+      constructor: :compose
+
     has_many :secondary_phase_subjects,
       -> { at_phase Bookings::Phase.secondary },
       class_name: 'Schools::OnBoarding::PhaseSubject',

@@ -70,5 +70,29 @@ FactoryBot.define do
       specialism_has_specialism { true }
       specialism_details { 'Falconry' }
     end
+
+    trait :with_candidate_experience_detail do
+      after :build do |profile|
+        profile.candidate_experience_detail = FactoryBot.build :candidate_experience_detail
+      end
+    end
+
+    trait :with_experience_outline do
+      after :build do |profile|
+        profile.experience_outline = FactoryBot.build :experience_outline
+      end
+    end
+
+    trait :with_admin_contact do
+      after :build do |profile|
+        profile.admin_contact = FactoryBot.build :admin_contact
+      end
+    end
+
+    trait :with_availability_description do
+      after :build do |profile|
+        profile.availability_description = FactoryBot.build :availability_description
+      end
+    end
   end
 end
