@@ -110,9 +110,16 @@ Rails.application.configure do
 
   config.active_job.queue_adapter = :delayed_job
 
-  config.x.phase_two.enabled = ENV["PHASE_TWO"].present?
-
   config.force_ssl = true
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
+
+  config.x.phase_two.enabled = ENV["PHASE_TWO"].present?
+
+  if config.x.phase_two.enabled
+    config.x.base_url = ENV.fetch('DFE_SIGNIN_BASE_URL') { 'https://schoolexperience.education.gov.uk' }
+    config.x.oidc_client_id = ENV.fetch('DFE_SIGNIN_CLIENT_ID') { 'schoolexperience' }
+    config.x.oidc_client_secret = ENV.fetch('DFE_SIGNIN_SECRET')
+    config.x.oidc_host = ENV.fetch('DFE_SIGNIN_HOST') { 'pp-oidc.signin.education.gov.uk' }
+  end
 end
