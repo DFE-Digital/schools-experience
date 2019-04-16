@@ -47,6 +47,7 @@ Rails.application.routes.draw do
         resource :experience_outline, only: %i(new create edit update)
         resource :admin_contact, only: %i(new create edit update)
         resource :profile, only: :show
+        resource :confirmation, only: %i(create show)
       end
     end
   end
