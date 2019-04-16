@@ -1,6 +1,6 @@
 module Schools
   module OnBoarding
-    class CandidateDetailsController < OnBoardingsController
+    class AvailabilitiesController < OnBoardingsController
       def new
         render plain: 'todo'
       end

@@ -126,6 +126,26 @@ en:
               inclusion: 'Select an option'
             details:
               blank: 'Provide details'
+        schools/on_boarding/candidate_experience_detail:
+          attributes:
+            other_dress_requirements_detail:
+              blank: 'Provide details'
+            parking_provided:
+              inclusion: 'Select an option'
+            parking_details:
+              blank: 'Provide details'
+            nearby_parking_details:
+              blank: 'Provide details'
+            disabled_facilities:
+              inclusion: 'Select an option'
+            disabled_facilities_details:
+                blank: 'Provide details'
+            start_time:
+              blank: 'Provide details'
+            end_time:
+              blank: 'Provide details'
+            times_flexible:
+              inclusion: 'Select an option'
 
   activerecord:
     errors:
@@ -164,6 +184,12 @@ en:
             These details will help candidates select your school experience.
           </p>
 
+      schools_on_boarding_candidate_experience_detail:
+        dress_code: 'Do you have a dress code for candidates?'
+        parking_provided: 'Do you provide parking for candidates?'
+        disabled_facilities: 'Do you provide facilities or support for candidates with disabilities or access needs?'
+        times_flexible: 'Are your start and finish times flexible? '
+
     hint:
       phases: Select all that apply
       max_fee: Schools may charge
@@ -185,6 +211,9 @@ en:
           - This will help the school see if it can offer you the kind of placement you’re looking for.
       schools_on_boarding_candidate_requirement:
         requirements: 'For example, they must want to apply for teacher training at your school or they must be local and live within 20 miles of your school.'
+      schools_on_boarding_candidate_experience_detail:
+        dress_code: 'Select all that apply or leave blank if you have no dress code.'
+        disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
 
     label:
       candidates_registrations_contact_information:
@@ -236,6 +265,26 @@ en:
           true: 'Yes'
           false: 'No'
         details: 'Provide details'
+      schools_on_boarding_candidate_experience_detail:
+        business_dress: 'Business dress'
+        cover_up_tattoos: 'Cover up tattoos'
+        remove_piercings: 'Remove piercings'
+        smart_casual: 'Smart casual'
+        other_dress_requirements: 'Other'
+        other_dress_requirements_detail: 'For example no denim, jeans, shorts, short skirts, trainers'
+        parking_provided:
+          true: 'Yes'
+          false: 'No'
+        parking_details: 'Provide details.'
+        nearby_parking_details: 'Provide details of where candidates can park near your school.'
+        disabled_facilities:
+          true: 'Yes'
+          false: 'No'
+        start_time: 'Start time. For example, 8:15am.'
+        end_time: 'Finish time. For example, 4:30pm'
+        times_flexible:
+          true: 'Yes'
+          false: 'No'
 
     page_entries_info:
       one_page:

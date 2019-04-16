@@ -78,6 +78,62 @@ describe Schools::SchoolProfile, type: :model do
     it do
       is_expected.to have_db_column(:specialism_details).of_type :text
     end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_business_dress).of_type :boolean
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_cover_up_tattoos).of_type :boolean
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_remove_piercings).of_type :boolean
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_smart_casual).of_type :boolean
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_other_dress_requirements).of_type :boolean
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_other_dress_requirements_detail).of_type :string
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_parking_provided).of_type :boolean
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_parking_details).of_type :string
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_nearby_parking_details).of_type :string
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_disabled_facilities).of_type :boolean
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_disabled_facilities_details).of_type :string
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_start_time).of_type :string
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_end_time).of_type :string
+    end
+
+    it do
+      is_expected.to have_db_column(:candidate_experience_detail_times_flexible).of_type :boolean
+    end
   end
 
   context 'validations' do
@@ -296,6 +352,42 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.specialism).to eq form_model
+      end
+    end
+
+    context '#candidate_experience_detail' do
+      let :form_model do
+        FactoryBot.build :candidate_experience_detail
+      end
+
+      before do
+        model.candidate_experience_detail = form_model
+      end
+
+      %i(
+        business_dress
+        cover_up_tattoos
+        remove_piercings
+        smart_casual
+        other_dress_requirements
+        other_dress_requirements_detail
+        parking_provided
+        parking_details
+        nearby_parking_details
+        disabled_facilities
+        disabled_facilities_details
+        start_time
+        end_time
+        times_flexible
+      ).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("candidate_experience_detail_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.candidate_experience_detail).to eq form_model
       end
     end
   end

@@ -8,7 +8,7 @@ Feature: Phases
     Given The secondary school phase is availble
     Given The college phase is availble
     Given I have completed the Candidate Requirements step
-    And I have completes the Fees step, choosing only Other costs
+    And I have completed the Fees step, choosing only Other costs
     And I have completed the Other costs step
 
   Scenario: Completing step choosing Primary phase only

@@ -65,5 +65,10 @@ FactoryBot.define do
         profile.college_subjects << FactoryBot.create(:bookings_subject)
       end
     end
+
+    trait :with_specialism do
+      specialism_has_specialism { true }
+      specialism_details { 'Falconry' }
+    end
   end
 end

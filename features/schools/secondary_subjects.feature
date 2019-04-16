@@ -9,9 +9,9 @@ Feature: Secondary subjects
     Given The college phase is availble
     And There are some subjects available
     And I have completed the Candidate Requirements step
-    And I have completes the Fees step, choosing only Other costs
+    And I have completed the Fees step, choosing only Other costs
     And I have completed the Other costs step
-    And I have complete the Phases step
+    And I have completed the Phases step
 
   Scenario: Completing the step choosing no subjects
     Given I am on the 'Secondary subjects' page

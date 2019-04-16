@@ -31,8 +31,10 @@ module Schools
           :college_subjects
         elsif specialism_required?
           :specialism
-        elsif candidate_detail_required?
-          :candidate_detail
+        elsif candidate_experience_detail_required?
+          :candidate_experience_detail
+        elsif availability_required?
+          :availability
         else
           raise 'Wizard incomplete' # NOTE: temp until wizard is finished
         end
@@ -84,7 +86,11 @@ module Schools
         !@school_profile.specialism.dup.valid?
       end
 
-      def candidate_detail_required?
+      def candidate_experience_detail_required?
+        !@school_profile.candidate_experience_detail.dup.valid?
+      end
+
+      def availability_required?
         true
       end
     end

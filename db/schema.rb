@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_08_080917) do
+ActiveRecord::Schema.define(version: 2019_04_08_123541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,6 +170,20 @@ ActiveRecord::Schema.define(version: 2019_04_08_080917) do
     t.boolean "key_stage_list_key_stage_2", default: false
     t.boolean "specialism_has_specialism"
     t.text "specialism_details"
+    t.boolean "candidate_experience_detail_business_dress", default: false
+    t.boolean "candidate_experience_detail_cover_up_tattoos", default: false
+    t.boolean "candidate_experience_detail_remove_piercings", default: false
+    t.boolean "candidate_experience_detail_smart_casual", default: false
+    t.boolean "candidate_experience_detail_other_dress_requirements", default: false
+    t.string "candidate_experience_detail_other_dress_requirements_detail"
+    t.boolean "candidate_experience_detail_parking_provided"
+    t.string "candidate_experience_detail_parking_details"
+    t.string "candidate_experience_detail_nearby_parking_details"
+    t.boolean "candidate_experience_detail_disabled_facilities"
+    t.string "candidate_experience_detail_disabled_facilities_details"
+    t.string "candidate_experience_detail_start_time"
+    t.string "candidate_experience_detail_end_time"
+    t.boolean "candidate_experience_detail_times_flexible"
     t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 

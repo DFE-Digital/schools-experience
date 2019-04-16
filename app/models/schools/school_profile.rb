@@ -85,6 +85,27 @@ module Schools
       ],
       constructor: :compose
 
+    composed_of \
+      :candidate_experience_detail,
+      class_name: 'Schools::OnBoarding::CandidateExperienceDetail',
+      mapping: [
+        %w(candidate_experience_detail_business_dress business_dress),
+        %w(candidate_experience_detail_cover_up_tattoos cover_up_tattoos),
+        %w(candidate_experience_detail_remove_piercings remove_piercings),
+        %w(candidate_experience_detail_smart_casual smart_casual),
+        %w(candidate_experience_detail_other_dress_requirements other_dress_requirements),
+        %w(candidate_experience_detail_other_dress_requirements_detail other_dress_requirements_detail),
+        %w(candidate_experience_detail_parking_provided parking_provided),
+        %w(candidate_experience_detail_parking_details parking_details),
+        %w(candidate_experience_detail_nearby_parking_details nearby_parking_details),
+        %w(candidate_experience_detail_disabled_facilities disabled_facilities),
+        %w(candidate_experience_detail_disabled_facilities_details disabled_facilities_details),
+        %w(candidate_experience_detail_start_time start_time),
+        %w(candidate_experience_detail_end_time end_time),
+        %w(candidate_experience_detail_times_flexible times_flexible)
+      ],
+      constructor: :compose
+
     has_many :secondary_phase_subjects,
       -> { at_phase Bookings::Phase.secondary },
       class_name: 'Schools::OnBoarding::PhaseSubject',

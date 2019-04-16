@@ -13,7 +13,7 @@ Given "I have completed the Candidate Requirements step" do
   )
 end
 
-Given "I have completes the Fees step, choosing only Administration costs" do
+Given "I have completed the Fees step, choosing only Administration costs" do
   steps %(
     Given I have completed the Candidate Requirements step
     Given I am on the 'fees charged' page
@@ -22,7 +22,7 @@ Given "I have completes the Fees step, choosing only Administration costs" do
   )
 end
 
-Given "I have completes the Fees step, choosing only DBS costs" do
+Given "I have completed the Fees step, choosing only DBS costs" do
   steps %(
     Given I am on the 'fees charged' page
     And I check 'DBS check costs'
@@ -30,7 +30,7 @@ Given "I have completes the Fees step, choosing only DBS costs" do
   )
 end
 
-Given "I have completes the Fees step, choosing only Other costs" do
+Given "I have completed the Fees step, choosing only Other costs" do
   steps %(
     Given I am on the 'fees charged' page
     And I check 'Other costs'
@@ -49,7 +49,7 @@ Given "I have completed the Other costs step" do
   )
 end
 
-Given "I have complete the Phases step" do
+Given "I have completed the Phases step" do
   steps %(
     Given I am on the 'phases' page
     And I check 'Secondary'
@@ -58,7 +58,7 @@ Given "I have complete the Phases step" do
   )
 end
 
-Given "I have complete the Secondary subjects step" do
+Given "I have completed the Secondary subjects step" do
   steps %(
     Given I am on the 'Secondary subjects' page
     And I check 'Maths'
@@ -66,10 +66,19 @@ Given "I have complete the Secondary subjects step" do
   )
 end
 
-Given "I have complete the College subjects step" do
+Given "I have completed the College subjects step" do
   steps %(
     Given I am on the 'College subjects' page
     And I check 'Maths'
+    When I submit the form
+  )
+end
+
+Given "I have completed the Specialisms step" do
+  steps %Q(
+    Given I am on the 'Specialisms' page
+    And I choose 'Yes' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
+    And I enter 'Race track' into the 'Provide details' text area
     When I submit the form
   )
 end

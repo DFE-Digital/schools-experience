@@ -42,7 +42,8 @@ Rails.application.routes.draw do
         resource :secondary_subjects, only: %i(new create)
         resource :college_subjects, only: %i(new create)
         resource :specialism, only: %i(new create)
-        resource :candidate_detail, only: %i(new)
+        resource :candidate_experience_detail, only: %i(new create)
+        resource :availability, only: %i(new)
       end
     end
   end

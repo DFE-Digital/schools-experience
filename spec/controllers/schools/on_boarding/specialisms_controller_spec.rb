@@ -65,7 +65,7 @@ describe Schools::OnBoarding::SpecialismsController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_candidate_detail_path
+          new_schools_on_boarding_candidate_experience_detail_path
       end
     end
   end

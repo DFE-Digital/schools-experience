@@ -1,0 +1,75 @@
+module Schools
+  module OnBoarding
+    class CandidateExperienceDetail
+      include ActiveModel::Model
+      include ActiveModel::Attributes
+
+      attribute :business_dress, :boolean, default: false
+      attribute :cover_up_tattoos, :boolean, default: false
+      attribute :remove_piercings, :boolean, default: false
+      attribute :smart_casual, :boolean, default: false
+      attribute :other_dress_requirements, :boolean, default: false
+      attribute :other_dress_requirements_detail, :string
+      attribute :parking_provided, :boolean
+      attribute :parking_details, :string
+      attribute :nearby_parking_details, :string
+      attribute :disabled_facilities, :boolean
+      attribute :disabled_facilities_details, :string
+      attribute :start_time, :string
+      attribute :end_time, :string
+      attribute :times_flexible, :boolean
+
+      validates :business_dress, inclusion: [true, false]
+      validates :cover_up_tattoos, inclusion: [true, false]
+      validates :remove_piercings, inclusion: [true, false]
+      validates :smart_casual, inclusion: [true, false]
+      validates :other_dress_requirements, inclusion: [true, false]
+      validates :other_dress_requirements_detail, presence: true, if: :other_dress_requirements
+      validates :parking_provided, inclusion: [true, false]
+      validates :parking_details, presence: true, if: :parking_provided
+      validates :nearby_parking_details, presence: true, unless: :parking_provided
+      validates :disabled_facilities, inclusion: [true, false]
+      validates :disabled_facilities_details, presence: true, if: :disabled_facilities
+      validates :start_time, presence: true
+      validates :end_time, presence: true
+      validates :times_flexible, inclusion: [true, false]
+
+      def self.compose(
+          business_dress,
+          cover_up_tattoos,
+          remove_piercings,
+          smart_casual,
+          other_dress_requirements,
+          other_dress_requirements_detail,
+          parking_provided,
+          parking_details,
+          nearby_parking_details,
+          disabled_facilities,
+          disabled_facilities_details,
+          start_time,
+          end_time,
+          times_flexible
+      )
+        new \
+          business_dress: business_dress,
+          cover_up_tattoos: cover_up_tattoos,
+          remove_piercings: remove_piercings,
+          smart_casual: smart_casual,
+          other_dress_requirements: other_dress_requirements,
+          other_dress_requirements_detail: other_dress_requirements_detail,
+          parking_provided: parking_provided,
+          parking_details: parking_details,
+          nearby_parking_details: nearby_parking_details,
+          disabled_facilities: disabled_facilities,
+          disabled_facilities_details: disabled_facilities_details,
+          start_time: start_time,
+          end_time: end_time,
+          times_flexible: times_flexible
+      end
+
+      def ==(other)
+        other.respond_to?(:attributes) && other.attributes == self.attributes
+      end
+    end
+  end
+end
