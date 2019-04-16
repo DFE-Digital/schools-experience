@@ -1,0 +1,9 @@
+<%- self.page_title = "All bookings" %>
+
+<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+
+<h1>All bookings</h1>
+
+<div id="bookings">
+  <%= render partial: 'schools/bookings/booking', collection: @bookings %>
+</div>

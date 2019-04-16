@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       end if Rails.application.config.x.phase >= 3
 
       resources :placement_dates
+      resources :bookings
 
       namespace :errors do
         resource :not_registered, controller: :not_registered, only: :show
