@@ -9,7 +9,7 @@ module Schools
         @admin_contact = AdminContact.new admin_contact_params
 
         if @admin_contact.valid?
-          current_school_profile.update admin_contact: @admin_contact
+          current_school_profile.update! admin_contact: @admin_contact
           redirect_to next_step_path(current_school_profile)
         else
           render :new
