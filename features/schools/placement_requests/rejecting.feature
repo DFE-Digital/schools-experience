@@ -12,12 +12,12 @@ Feature: Rejecting placement requests
         Then I should see a 'Back' link to the 'schools dashboard'
 
     Scenario: Page heading
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on the 'reject placement request' page
         Then the page's main heading should be 'Reject request'
 
     Scenario: Reject information
-        Given there is at least once placement request
+        Given there is at least one placement request
         And the candidate's name is "Robert Terwilliger"
         When I am on the 'reject placement request' page
         Then the following text should be present:
@@ -26,7 +26,7 @@ Feature: Rejecting placement requests
         """
 
     Scenario: Reject information
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on the 'reject placement request' page
         Then the following text should be present:
         """
@@ -34,7 +34,7 @@ Feature: Rejecting placement requests
         """
 
     Scenario: Reject form
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on the 'reject placement request' page
         Then there should be a 'Reason' text area
         And the submit button should contain text 'Reject request'

@@ -18,6 +18,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil)
     "schools" => [:schools_root_path],
     "schools dashboard" => [:schools_dashboard_path],
     "bookings" => [:schools_bookings_path],
+    "booking" => [:schools_booking_path, 'abc123'],
     "placement requests" => [:schools_placement_requests_path],
     "upcoming requests" => [:schools_upcoming_requests_path],
     "placement request" => [:schools_placement_request_path, 'abc123'],

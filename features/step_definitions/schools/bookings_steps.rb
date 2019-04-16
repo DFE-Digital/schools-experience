@@ -2,6 +2,10 @@ Given("there are some bookings") do
   # currently hardcoded in the controller
 end
 
+Given("there is at least one booking") do
+  # currently hardcoded in the controller
+end
+
 Then("I should see all the bookings listed") do
   within("#bookings") do
     expect(page).to have_css('.booking', count: 5)
