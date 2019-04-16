@@ -4,11 +4,12 @@ Feature: Admin contact
   I want to be able to specify the school experience admin contact's details
 
   Background: I have completed the wizard thus far
+    Given I am logged in as a DfE user
     Given The secondary school phase is availble
     Given The college phase is availble
     And There are some subjects available
     And I have completed the Candidate Requirements step
-    And I have completes the Fees step, choosing only Other costs
+    And I have completed the Fees step, choosing only Other costs
     And I have completed the Other costs step
     And I have completed the Phases step
     And I have completed the Secondary subjects step
