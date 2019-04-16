@@ -136,6 +136,14 @@ describe Schools::SchoolProfile, type: :model do
     end
   end
 
+  context 'relationships' do
+    it { is_expected.to have_many(:secondary_phase_subjects) }
+    it { is_expected.to have_many(:college_phase_subjects) }
+    it { is_expected.to have_many(:secondary_subjects) }
+    it { is_expected.to have_many(:college_subjects) }
+    it { is_expected.to have_many(:placement_dates) }
+  end
+
   context 'validations' do
     it do
       is_expected.to validate_presence_of :urn

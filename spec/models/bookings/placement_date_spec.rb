@@ -7,6 +7,11 @@ describe Bookings::PlacementDate, type: :model do
     it { expect(subject).to validate_presence_of(:school_profile) }
   end
 
+  describe 'Relationships' do
+    subject { described_class.new }
+    it { expect(subject).to belong_to(:school_profile) }
+  end
+
   describe 'Scopes' do
     let(:future_date) { create(:bookings_placement_date) }
     let(:past_date) { create(:bookings_placement_date, :in_the_past) }

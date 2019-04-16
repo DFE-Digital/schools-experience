@@ -131,7 +131,8 @@ module Schools
       dependent: :destroy
 
     has_many :placement_dates,
-      class_name: 'Bookings::PlacementDate'
+      class_name: 'Bookings::PlacementDate',
+      foreign_key: :schools_school_profile_id
 
     def available_secondary_subjects
       Bookings::Subject.all
