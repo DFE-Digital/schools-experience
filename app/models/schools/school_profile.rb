@@ -130,6 +130,9 @@ module Schools
       through: :college_phase_subjects,
       dependent: :destroy
 
+    has_many :placement_dates,
+      class_name: 'Bookings::PlacementDate'
+
     def available_secondary_subjects
       Bookings::Subject.all
     end

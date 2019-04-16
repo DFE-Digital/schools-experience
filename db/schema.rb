@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_08_123541) do
+ActiveRecord::Schema.define(version: 2019_04_16_141343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,14 @@ ActiveRecord::Schema.define(version: 2019_04_08_123541) do
     t.integer "edubase_id"
     t.index ["name"], name: "index_bookings_phases_on_name"
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
+  end
+
+  create_table "bookings_placement_dates", force: :cascade do |t|
+    t.date "date", null: false
+    t.integer "schools_school_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["schools_school_profile_id"], name: "index_bookings_placement_dates_on_schools_school_profile_id"
   end
 
   create_table "bookings_placement_requests", force: :cascade do |t|
@@ -187,6 +195,7 @@ ActiveRecord::Schema.define(version: 2019_04_08_123541) do
     t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 
+  add_foreign_key "bookings_placement_dates", "schools_school_profiles"
   add_foreign_key "bookings_schools", "bookings_school_types"
   add_foreign_key "bookings_schools_phases", "bookings_phases"
   add_foreign_key "bookings_schools_phases", "bookings_schools"
