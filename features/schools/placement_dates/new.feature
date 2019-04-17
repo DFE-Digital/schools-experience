@@ -22,3 +22,9 @@ Feature: Creating new placement dates
             | Enter a start date          | date   |
             | How many days will it last? | number |
 
+    Scenario: Filling in and submitting the form
+        Given I am on the 'new placement date' page
+        And I fill in the form with a future date and duration of 3
+        When I submit the form
+        Then I should be on the 'placement dates' page
+        And my newly-created placement date should be listed

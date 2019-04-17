@@ -5,7 +5,7 @@ Given("my school has a profile") do
 end
 
 Given("my school has {int} placement dates") do |int|
-  FactoryBot.create_list(:bookings_placement_date, int, school_profile: @school_profile)
+  @placement_dates = FactoryBot.create_list(:bookings_placement_date, int, school_profile: @school_profile)
   expect(@school_profile.placement_dates.count).to eql(int)
 end
 
@@ -26,13 +26,14 @@ end
 
 Then("I should my placement date listed") do
   within('#placement-dates .placement-date') do
+    expect(page).to have_css('dt', text: @placement_date.date.to_formatted_s(:govuk))
     expect(page).to have_css('dd', text: "#{@placement_date.duration} days")
   end
 end
 
 Then("it should include a {string} link to the edit page") do |string|
   within('#placement-dates .placement-date') do
-    expect(page).to have_link('Change', href: edit_schools_placement_date_path(@placement_date))
+    expect(page).to have_link(string, href: edit_schools_placement_date_path(@placement_date))
   end
 end
 

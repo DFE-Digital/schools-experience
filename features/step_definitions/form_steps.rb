@@ -1,26 +1,22 @@
 Then("I should see a form with the following fields:") do |table|
-  within('#main-content form') do
-    table.hashes.each do |row|
-      label_text = row['Label']
-      options = row['Options']&.split(',')&.map(&:strip)
+  table.hashes.each do |row|
+    label_text = row['Label']
+    options = row['Options']&.split(',')&.map(&:strip)
 
-      within(get_form_group(page, label_text)) do
-        case row['Type']
-        when 'date' then ensure_date_field_exists(page)
-        when /radio/ then ensure_radio_buttons_exist(page, options)
-        when /select/ then ensure_select_options_exist(page, options)
-        else # regular inputs
-          expect(page).to have_field(label_text, type: row['Type'])
-        end
+    within(get_form_group(page, label_text)) do
+      case row['Type']
+      when 'date' then ensure_date_field_exists(page)
+      when /radio/ then ensure_radio_buttons_exist(page, options)
+      when /select/ then ensure_select_options_exist(page, options)
+      else # regular inputs
+        expect(page).to have_field(label_text, type: row['Type'])
       end
     end
   end
 end
 
 When("I submit the form") do
-  within('#main-content form') do
-    click_on "Continue"
-  end
+  click_on "Continue"
 end
 
 Then("the submit button should contain text {string}") do |string|
