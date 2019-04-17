@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_17_081149) do
+ActiveRecord::Schema.define(version: 2019_04_17_093501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2019_04_17_081149) do
     t.integer "schools_school_profile_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "duration", default: 1, null: false
     t.index ["schools_school_profile_id"], name: "index_bookings_placement_dates_on_schools_school_profile_id"
   end
 
