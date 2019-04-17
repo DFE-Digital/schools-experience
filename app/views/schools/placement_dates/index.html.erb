@@ -1,0 +1,31 @@
+<h1>Placement dates</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%- if @placement_dates.any? -%>
+      <dl class="govuk-summary-list">
+        <%- @placement_dates.each do |placement_date| -%>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+            <%= placement_date.date.to_formatted_s(:govuk) %>
+            </dt>
+            <dd class="govuk-summary-list__value">
+            <%= pluralize(placement_date.duration, 'day') %>
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
+              Change
+              <span class="govuk-visually-hidden"> name</span>
+            <%- end -%>
+            </dd>
+
+          </div>
+        <%- end -%>
+      </dl>
+    <%- else -%>
+      <h2>None</h2>
+    <%- end -%>
+
+  </div>
+</div>
