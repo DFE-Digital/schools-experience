@@ -1,0 +1,6 @@
+<%= link_to 'Back', schools_placement_dates_path, class: 'govuk-back-link' %>
+
+<%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |form| %>
+  <%= render partial: 'form', locals: { form: form } %>
+  <%= form.submit 'Create placement date' %>
+<%- end -%>
