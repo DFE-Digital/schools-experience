@@ -245,7 +245,6 @@ en:
           - Provide a short explanation about what you want to gain from your placement.
           - This will help the school see if it can offer you the kind of placement you’re looking for.
       schools_on_boarding_candidate_experience_detail:
-        dress_code: 'Select all that apply or leave blank if you have no dress code.'
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
         candidate_experience:
@@ -307,7 +306,7 @@ en:
         has_specialism:
           true: 'Yes'
           false: 'No'
-        details: 'Provide details'
+        details: 'Provide details.'
       schools_on_boarding_candidate_experience_detail:
         business_dress: 'Business dress'
         cover_up_tattoos: 'Cover up tattoos'
@@ -323,6 +322,7 @@ en:
         disabled_facilities:
           true: 'Yes'
           false: 'No'
+        disabled_facilities_details: 'Provide details.'
         start_time: 'Start time. For example, 8:15am.'
         end_time: 'Finish time. For example, 4:30pm'
         times_flexible:

@@ -11,6 +11,7 @@
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
       <%= f.check_box_fieldset :dress_code, %i(business_dress cover_up_tattoos remove_piercings smart_casual ) do |fieldset| %>
+        <p>Select all that apply or leave blank if you have no dress code.</p>
         <%= fieldset.check_box_input :business_dress %>
         <%= fieldset.check_box_input :cover_up_tattoos %>
         <%= fieldset.check_box_input :remove_piercings %>
@@ -49,6 +50,11 @@
       </div>
 
       <%= f.radio_button_fieldset :times_flexible do |fieldset| %>
+        <p>
+          Can candidates start later or finish earlier depending on their
+          individual needs. For example, around child care or any other
+          responsibilities.
+        </p>
         <%= f.radio_input true %>
         <%= f.radio_input false %>
       <% end %>
