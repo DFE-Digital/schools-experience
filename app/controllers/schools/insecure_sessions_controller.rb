@@ -1,5 +1,5 @@
-# This method overwrites SessionsController#create so that it can log in
-# users without having to mimic an entire OIDC stack.
+# This controller allows sessions to be set up without requirng
+# DfE Signin, for use in testing environments
 #
 # **It should only be used by Cucumber**
 class Schools::InsecureSessionsController < ApplicationController
