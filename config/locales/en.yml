@@ -343,6 +343,8 @@ en:
         description: 'Outline when you offer school experience at your school.'
       schools_on_boarding_confirmation:
         acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/privacy_policy" class="govuk-link">privacy policy</a>'
+      schools_on_boarding_key_stage_list:
+        early_years: 'Early years foundation stage (EYFS)'
 
     page_entries_info:
       one_page:
