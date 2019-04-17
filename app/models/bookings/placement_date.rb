@@ -6,6 +6,12 @@ module Bookings
 
     validates :school_profile, presence: true
     validates :date, presence: true
+    validates :duration,
+      presence: true,
+      numericality: {
+        greater_than_or_equal_to: 1,
+        less_than: 100
+      }
 
     scope :future, -> { where(arel_table[:date].gteq(Time.now)) }
     scope :past, -> { where(arel_table[:date].lt(Time.now)) }

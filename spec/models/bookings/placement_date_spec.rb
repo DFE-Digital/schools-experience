@@ -3,8 +3,26 @@ require 'rails_helper'
 describe Bookings::PlacementDate, type: :model do
   describe 'Valiation' do
     subject { described_class.new }
-    it { expect(subject).to validate_presence_of(:date) }
-    it { expect(subject).to validate_presence_of(:school_profile) }
+
+    context '#date' do
+      it { expect(subject).to validate_presence_of(:date) }
+      # FIXME should we prevent weekends?
+    end
+
+    context '#school_profile' do
+      it { expect(subject).to validate_presence_of(:school_profile) }
+    end
+
+    context '#duration' do
+      specify do
+        expect(subject).to(
+          validate_numericality_of(:duration)
+            .is_greater_than_or_equal_to(1)
+            .is_less_than(100)
+          )
+      end
+      it { expect(subject).to validate_presence_of(:duration) }
+    end
   end
 
   describe 'Relationships' do
