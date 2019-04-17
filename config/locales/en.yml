@@ -244,8 +244,6 @@ en:
         objectives:
           - Provide a short explanation about what you want to gain from your placement.
           - This will help the school see if it can offer you the kind of placement you’re looking for.
-      schools_on_boarding_candidate_requirement:
-        requirements: 'For example, they must want to apply for teacher training at your school or they must be local and live within 20 miles of your school.'
       schools_on_boarding_candidate_experience_detail:
         dress_code: 'Select all that apply or leave blank if you have no dress code.'
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
@@ -287,11 +285,11 @@ en:
           always: 'Yes - Always'
           sometimes: 'Yes - Sometimes'
           never: 'No - Never'
-        dbs_policy: 'Outline your DBS policy in 50 words or fewer.'
+        dbs_policy: 'Outline your DBS policy in 50 words or less.'
         requirements:
           true: 'Yes'
           false: 'No'
-        requirements_details: 'Provide details'
+        requirements_details: 'Provide details.'
       schools_on_boarding_fees:
         administration_fees: 'Administration costs'
         dbs_fees: 'DBS check costs'
