@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_16_141343) do
+ActiveRecord::Schema.define(version: 2019_04_17_081149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,7 +150,6 @@ ActiveRecord::Schema.define(version: 2019_04_16_141343) do
   create_table "schools_school_profiles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "urn", null: false
     t.string "candidate_requirement_dbs_requirement"
     t.text "candidate_requirement_dbs_policy"
     t.boolean "candidate_requirement_requirements"
@@ -192,7 +191,7 @@ ActiveRecord::Schema.define(version: 2019_04_16_141343) do
     t.string "candidate_experience_detail_start_time"
     t.string "candidate_experience_detail_end_time"
     t.boolean "candidate_experience_detail_times_flexible"
-    t.index ["urn"], name: "index_schools_school_profiles_on_urn"
+    t.integer "bookings_school_id", null: false
   end
 
   add_foreign_key "bookings_placement_dates", "schools_school_profiles"
@@ -204,4 +203,5 @@ ActiveRecord::Schema.define(version: 2019_04_16_141343) do
   add_foreign_key "schools_on_boarding_phase_subjects", "bookings_phases"
   add_foreign_key "schools_on_boarding_phase_subjects", "bookings_subjects"
   add_foreign_key "schools_on_boarding_phase_subjects", "schools_school_profiles"
+  add_foreign_key "schools_school_profiles", "bookings_schools"
 end

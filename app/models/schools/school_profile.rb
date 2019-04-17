@@ -1,6 +1,8 @@
 module Schools
   class SchoolProfile < ApplicationRecord
-    validates :urn, presence: true, uniqueness: true
+    delegate :urn, to: :bookings_school
+
+    validates :bookings_school, presence: true
 
     composed_of \
       :candidate_requirement,
@@ -133,6 +135,10 @@ module Schools
     has_many :placement_dates,
       class_name: 'Bookings::PlacementDate',
       foreign_key: :schools_school_profile_id
+
+    belongs_to :bookings_school,
+      class_name: 'Bookings::School',
+      foreign_key: 'bookings_school_id'
 
     def available_secondary_subjects
       Bookings::Subject.all

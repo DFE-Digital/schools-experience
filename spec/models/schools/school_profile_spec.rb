@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Schools::SchoolProfile, type: :model do
   context 'attributes' do
     it do
-      is_expected.to have_db_column(:urn).of_type :integer
+      is_expected.to have_db_column(:bookings_school_id).of_type :integer
     end
 
     it do
@@ -142,17 +142,23 @@ describe Schools::SchoolProfile, type: :model do
     it { is_expected.to have_many(:secondary_subjects) }
     it { is_expected.to have_many(:college_subjects) }
     it { is_expected.to have_many(:placement_dates) }
+    it { is_expected.to belong_to(:bookings_school) }
+  end
+
+  context 'delegation' do
+    it { is_expected.to delegate_method(:urn).to(:bookings_school) }
   end
 
   context 'validations' do
     it do
-      is_expected.to validate_presence_of :urn
+      is_expected.to validate_presence_of :bookings_school
     end
   end
 
   context 'associations' do
     context 'subjects' do
-      subject { described_class.create! urn: 1234567890 }
+      let(:bookings_school) { create(:bookings_school) }
+      subject { described_class.create!(bookings_school: bookings_school) }
 
       let! :secondary_phase do
         FactoryBot.create :bookings_phase, :secondary
@@ -190,8 +196,9 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   context 'values from form models' do
+    let(:bookings_school) { create(:bookings_school) }
     let :model do
-      described_class.new urn: 1234567890
+      described_class.new bookings_school: bookings_school
     end
 
     context '#candidate_requirement' do

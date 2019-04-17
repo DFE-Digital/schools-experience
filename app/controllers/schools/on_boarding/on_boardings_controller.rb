@@ -8,7 +8,7 @@ module Schools
       end
 
       def get_current_school_profile
-        Schools::SchoolProfile.find_or_create_by! urn: current_school.urn
+        current_school.school_profile || current_school.create_school_profile!
       end
 
       def next_step_path(school_profile)
