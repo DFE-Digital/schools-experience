@@ -155,6 +155,8 @@ en:
 
   helpers:
     fieldset:
+      bookings_placement_date:
+        date: Enter a placement date
       phases: Education phases
       fees: Fees
       subjects: Placement subjects
@@ -216,6 +218,8 @@ en:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
 
     label:
+      bookings_placement_date:
+        duration: Enter the number of days a candidate will be invited to visit
       candidates_registrations_contact_information:
         email: 'Email address'
         building: "Building and street"

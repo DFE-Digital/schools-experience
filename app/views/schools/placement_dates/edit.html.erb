@@ -1,11 +1,13 @@
-<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+<%= link_to 'Back', schools_placement_dates_path, class: 'govuk-back-link' %>
+
+<h1>Modify placement date</h1>
 
 <%= form_for @placement_date, url: schools_placement_date_path(@placement_date), method: :put do |form| %>
   <%= render partial: 'form', locals: { form: form } %>
-  <%= form.submit 'Modify placement date' %>
+  <%= form.submit 'Save' %>
 <%- end -%>
 
-<%= button_to 'Delete',
+<%= button_to 'Delete this placement',
   schools_placement_date_path,
   method: 'delete',
   class: 'govuk-button govuk-button--secondary'
