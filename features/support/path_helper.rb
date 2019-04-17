@@ -29,7 +29,9 @@ def path_for(descriptor, school: nil)
     "college subjects" => [:new_schools_on_boarding_college_subjects_path],
     "specialisms" => [:new_schools_on_boarding_specialism_path],
     "candidate experience details" => [:new_schools_on_boarding_candidate_experience_detail_path],
-    "availability" => [:new_schools_on_boarding_availability_path]
+    "availability" => [:new_schools_on_boarding_availability_path],
+    "placement dates" => [:schools_placement_dates_path],
+    "new placement date" => [:new_schools_placement_date_path]
   }
 
   (path = mappings[descriptor.downcase]) ? send(*path) : fail("No mapping for #{descriptor}")
