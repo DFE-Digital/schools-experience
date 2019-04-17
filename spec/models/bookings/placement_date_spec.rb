@@ -52,5 +52,18 @@ describe Bookings::PlacementDate, type: :model do
         expect(described_class.future).not_to include(past_date)
       end
     end
+
+    context '.in_date_order' do
+      let!(:later) { create(:bookings_placement_date, date: 2.weeks.from_now) }
+      let!(:early) { create(:bookings_placement_date, date: 1.week.from_now) }
+      let!(:latest) { create(:bookings_placement_date, date: 3.weeks.from_now) }
+
+      let(:correct_order) { [early, later, latest] }
+
+      specify 'should return dates in date order when applied' do
+        expect(described_class.all.to_a).not_to eql(correct_order)
+        expect(described_class.all.in_date_order.to_a).to eql(correct_order)
+      end
+    end
   end
 end

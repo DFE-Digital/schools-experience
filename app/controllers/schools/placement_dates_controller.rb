@@ -2,7 +2,11 @@ class Schools::PlacementDatesController < Schools::BaseController
   before_action :set_placement_date, only: %w(destroy edit update)
 
   def index
-    @placement_dates = current_school.school_profile.placement_dates.future
+    @placement_dates = current_school
+      .school_profile
+      .placement_dates
+      .future
+      .in_date_order
   end
 
   def new
