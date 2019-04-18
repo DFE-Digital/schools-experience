@@ -7,7 +7,7 @@ end
 
 Then("my newly-created placement date should be listed") do
   within('#placement-dates .placement-date') do
-    expect(page).to have_css('dt', text: @date.to_date.to_formatted_s(:govuk))
-    expect(page).to have_css('dd', text: "#{@duration} days")
+    expect(page).to have_css('th', text: @date.to_date.to_formatted_s(:govuk))
+    expect(page).to have_css('td', text: "#{@duration} days")
   end
 end

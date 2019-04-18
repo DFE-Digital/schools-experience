@@ -26,8 +26,8 @@ end
 
 Then("I should my placement date listed") do
   within('#placement-dates .placement-date') do
-    expect(page).to have_css('dt', text: @placement_date.date.to_formatted_s(:govuk))
-    expect(page).to have_css('dd', text: "#{@placement_date.duration} days")
+    expect(page).to have_css('th', text: @placement_date.date.to_formatted_s(:govuk))
+    expect(page).to have_css('td', text: "#{@placement_date.duration} days")
   end
 end
 
@@ -39,4 +39,8 @@ end
 
 Then("there should be a {string} link to the new placement date page") do |string|
   expect(page).to have_link(string, href: new_schools_placement_date_path)
+end
+
+Given("my school has no placement dates") do
+  expect(@school_profile.placement_dates).to be_empty
 end

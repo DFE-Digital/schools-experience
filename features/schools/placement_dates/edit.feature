@@ -21,6 +21,7 @@ Feature: Editing placement dates
             | Label                       | Type   |
             | Enter a start date          | date   |
             | How many days will it last? | number |
+        And there should be a 'Make this date available to candidates?' checkbox
 
     Scenario: Filling in and submitting the form
         Given I am on the edit page for my placement
@@ -29,9 +30,16 @@ Feature: Editing placement dates
         Then I should be on the 'placement dates' page
         And my newly-created placement date should be listed
 
-    Scenario: Deleting a placement date
-        Given my school has 2 placement dates
-        And I am on the edit page for my placement
-        When I click the 'Delete' button
+    Scenario: Activating a placement date
+        Given I am on the edit page for my 'inactive' placement
+        When I check the 'Make this date available to candidates?' checkbox
+        And I submit the form
         Then I should be on the 'placement dates' page
-        And my placement should have been deleted
+        And my placement should have been 'activated'
+
+    Scenario: Deactivating a placement date
+        Given I am on the edit page for my 'active' placement
+        When I uncheck the 'Make this date available to candidates?' checkbox
+        And I submit the form
+        Then I should be on the 'placement dates' page
+        And my placement should have been 'deactivated'

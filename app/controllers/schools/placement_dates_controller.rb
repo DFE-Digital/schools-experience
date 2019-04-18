@@ -39,10 +39,6 @@ class Schools::PlacementDatesController < Schools::BaseController
     end
   end
 
-  def destroy
-    redirect_to schools_placement_dates_path if @placement_date.destroy
-  end
-
 private
 
   def set_placement_date
@@ -50,6 +46,6 @@ private
   end
 
   def placement_date_params
-    params.require(:bookings_placement_date).permit(:date, :duration)
+    params.require(:bookings_placement_date).permit(:date, :duration, :active)
   end
 end

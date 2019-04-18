@@ -8,27 +8,48 @@
   <div class="govuk-grid-column-two-thirds">
 
     <%- if @placement_dates.any? -%>
-      <dl id="placement-dates" class="govuk-summary-list">
-        <%- @placement_dates.each do |placement_date| -%>
-          <div data-placement-date-id="<%= placement_date.id %>" class="placement-date govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            <%= placement_date.date.to_formatted_s(:govuk) %>
-            </dt>
-            <dd class="govuk-summary-list__value">
-            <%= pluralize(placement_date.duration, 'day') %>
-            </dd>
-            <dd class="govuk-summary-list__actions">
-            <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
-              Change
-              <span class="govuk-visually-hidden"> name</span>
-            <%- end -%>
-            </dd>
+      <table id="placement-dates" class="govuk-table">
 
-          </div>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Date</th>
+            <th class="govuk-table__header" scope="col">Duration</th>
+            <th class="govuk-table__header" scope="col">Status</th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+
+        <tbody class="govuk-table__body">
+        <%- @placement_dates.each do |placement_date| -%>
+          <tr data-placement-date-id="<%= placement_date.id %>" class="placement-date govuk-table__row">
+            <th class="govuk-table__header" scope="row">
+              <%= placement_date.date.to_formatted_s(:govuk) %>
+            </th>
+            <td class="govuk-table__cell">
+              <%= pluralize(placement_date.duration, 'day') %>
+            </td>
+            <td class="govuk-table__cell status">
+              <%= display_status(placement_date.active) %>
+            </td>
+            <td class="govuk-summary-list__actions">
+              <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
+                Change
+                <span class="govuk-visually-hidden"> name</span>
+              <%- end -%>
+            </td>
+          </tr>
         <%- end -%>
-      </dl>
+        </tbody>
+      </table>
     <%- else -%>
-      <h2>None</h2>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          You have no placement dates, your school will not appear in candidate
+          searches
+        </strong>
+      </div>
     <%- end -%>
 
   </div>

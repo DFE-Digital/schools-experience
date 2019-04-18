@@ -6,11 +6,12 @@
 
 <%= form_for @placement_date, url: schools_placement_date_path(@placement_date), method: :put do |form| %>
   <%= render partial: 'form', locals: { form: form } %>
+
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+      <%= form.check_box_input :active %>
+    </fieldset>
+  </div>
+
   <%= form.submit 'Continue' %>
 <%- end -%>
-
-<%= button_to 'Delete this placement',
-  schools_placement_date_path,
-  method: 'delete',
-  class: 'govuk-button govuk-button--secondary'
-%>

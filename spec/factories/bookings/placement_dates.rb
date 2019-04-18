@@ -6,5 +6,13 @@ FactoryBot.define do
     trait :in_the_past do
       date { 6.weeks.ago }
     end
+
+    trait :active do
+      active { true }
+    end
+
+    trait :inactive do
+      active { false }
+    end
   end
 end
