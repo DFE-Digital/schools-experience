@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 describe Bookings::PlacementDate, type: :model do
+  describe 'Columns' do
+    it { is_expected.to have_db_column(:schools_school_profile_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:date).of_type(:date) }
+    it { is_expected.to have_db_column(:duration).of_type(:integer) }
+    it { is_expected.to have_db_column(:active).of_type(:boolean) }
+  end
+
   describe 'Valiation' do
     subject { described_class.new }
 
