@@ -5,6 +5,8 @@ Feature: Fees
 
   Background: I have completed the candidate requirement step
     Given I am logged in as a DfE user
+    Given The secondary school phase is availble
+    Given The college phase is availble
     And I have completed the Candidate Requirements step
 
   Scenario: Completing step choosing Adminsitration costs only

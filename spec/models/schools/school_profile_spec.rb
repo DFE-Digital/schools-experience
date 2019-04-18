@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Schools::SchoolProfile, type: :model do
+  include_context 'with phases'
+
   context 'attributes' do
     it do
       is_expected.to have_db_column(:urn).of_type :integer
@@ -182,14 +184,6 @@ describe Schools::SchoolProfile, type: :model do
   context 'associations' do
     context '#subjects' do
       subject { described_class.create! urn: 1234567890 }
-
-      let! :secondary_phase do
-        FactoryBot.create :bookings_phase, :secondary
-      end
-
-      let! :college_phase do
-        FactoryBot.create :bookings_phase, :college
-      end
 
       let :secondary_subject do
         FactoryBot.create :bookings_subject
@@ -491,6 +485,105 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.availability_description).to eq form_model
+      end
+    end
+  end
+
+  context 'callbacks' do
+    context 'before_validation' do
+      context 'when administration_fee no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create \
+            :school_profile, :with_fees, :with_administration_fee
+        end
+
+        before do
+          school_profile.update! \
+            fees: FactoryBot.build(:fees, administration_fees: false)
+        end
+
+        it 'resets administration_fee' do
+          expect(school_profile.administration_fee).to \
+            eq Schools::OnBoarding::AdministrationFee.new
+        end
+      end
+
+      context 'when dbs_fee no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create :school_profile, :with_fees, :with_dbs_fee
+        end
+
+        before do
+          school_profile.update! fees: FactoryBot.build(:fees, dbs_fees: false)
+        end
+
+        it 'resets dbs_fee' do
+          expect(school_profile.dbs_fee).to eq Schools::OnBoarding::DBSFee.new
+        end
+      end
+
+      context 'when other_fee no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create :school_profile, :with_fees, :with_other_fee
+        end
+
+        before do
+          school_profile.update! \
+            fees: FactoryBot.build(:fees, other_fees: false)
+        end
+
+        it 'resets other_fee' do
+          expect(school_profile.other_fee).to \
+            eq Schools::OnBoarding::OtherFee.new
+        end
+      end
+
+      context 'when key_stage_list no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create :school_profile, :with_phases, :with_key_stage_list
+        end
+
+        before do
+          school_profile.update! \
+            phases_list: Schools::OnBoarding::PhasesList.new(primary: false)
+        end
+
+        it 'resets key stage list' do
+          expect(school_profile.reload.key_stage_list).to \
+            eq Schools::OnBoarding::KeyStageList.new
+        end
+      end
+
+      context 'when secondary_subjects no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create \
+            :school_profile, :with_phases, :with_secondary_subjects
+        end
+
+        before do
+          school_profile.update! \
+            phases_list: Schools::OnBoarding::PhasesList.new(secondary: false)
+        end
+
+        it 'removes secondary_subjects' do
+          expect(school_profile.reload.secondary_subjects).to be_empty
+        end
+      end
+
+      context 'when college_subjects no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create \
+            :school_profile, :with_phases, :with_college_subjects
+        end
+
+        before do
+          school_profile.update! \
+            phases_list: Schools::OnBoarding::PhasesList.new(college: false)
+        end
+
+        it 'removes secondary_subjects' do
+          expect(school_profile.reload.college_subjects).to be_empty
+        end
       end
     end
   end

@@ -109,5 +109,22 @@ FactoryBot.define do
         profile.availability_description = FactoryBot.build :availability_description
       end
     end
+
+    trait :completed do
+      with_candidate_requirement
+      with_fees
+      with_administration_fee
+      with_dbs_fee
+      with_other_fee
+      with_only_early_years_phase
+      with_key_stage_list
+      with_secondary_subjects
+      with_college_subjects
+      with_specialism
+      with_candidate_experience_detail
+      with_availability_description
+      with_experience_outline
+      with_admin_contact
+    end
   end
 end

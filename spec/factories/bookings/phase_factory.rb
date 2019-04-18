@@ -3,6 +3,10 @@ FactoryBot.define do
     sequence(:name) { |n| "phase #{n}" }
   end
 
+  trait :primary do
+    name { 'Primary' }
+  end
+
   trait :secondary do
     name { 'Secondary' }
   end
