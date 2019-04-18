@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_18_100938) do
+ActiveRecord::Schema.define(version: 2019_04_18_134919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(version: 2019_04_18_100938) do
     t.string "candidate_experience_detail_end_time"
     t.boolean "candidate_experience_detail_times_flexible"
     t.integer "bookings_school_id", null: false
+    t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 
   add_foreign_key "bookings_placement_dates", "schools_school_profiles"

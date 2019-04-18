@@ -45,7 +45,8 @@ class Bookings::School < ApplicationRecord
 
   has_one :school_profile,
     class_name: "Schools::SchoolProfile",
-    foreign_key: :bookings_school_id
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
 
   scope :enabled, -> { where(enabled: true) }
 
