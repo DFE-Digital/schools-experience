@@ -24,6 +24,18 @@ module Schools
 
         other.attributes == self.attributes
       end
+
+      def administration_fees?
+        administration_fees
+      end
+
+      def dbs_fees?
+        dbs_fees
+      end
+
+      def other_fees?
+        other_fees
+      end
     end
   end
 end

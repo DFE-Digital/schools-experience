@@ -22,6 +22,18 @@ module Schools
         other.respond_to?(:attributes) && other.attributes == self.attributes
       end
 
+      def primary?
+        primary
+      end
+
+      def secondary?
+        secondary
+      end
+
+      def college?
+        college
+      end
+
     private
 
       def at_least_one_phase_offered

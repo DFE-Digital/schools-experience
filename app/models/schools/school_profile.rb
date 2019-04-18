@@ -7,32 +7,32 @@ module Schools
       # sense if the profile is edited to uncheck the options that require
       # these steps. If this is the case we want to reset those steps to their
       # initial state.
-      unless fees.administration_fees
+      unless fees.administration_fees?
         self.administration_fee = Schools::OnBoarding::AdministrationFee.new
       end
-      unless fees.dbs_fees
+      unless fees.dbs_fees?
         self.dbs_fee = Schools::OnBoarding::DBSFee.new
       end
-      unless fees.other_fees
+      unless fees.other_fees?
         self.other_fee = Schools::OnBoarding::OtherFee.new
       end
-      unless phases_list.primary
+      unless phases_list.primary?
         self.key_stage_list = Schools::OnBoarding::KeyStageList.new
       end
-      unless phases_list.secondary
+      unless phases_list.secondary?
         self.secondary_subjects.destroy_all
       end
-      unless phases_list.college
+      unless phases_list.college?
         self.college_subjects.destroy_all
       end
     end
 
-    validate :administration_fee_not_set, unless: -> { fees.administration_fees }
-    validate :dbs_fee_not_set, unless: -> { fees.dbs_fees }
-    validate :other_fee_not_set, unless: -> { fees.other_fees }
-    validate :key_stage_list_not_set, unless: -> { phases_list.primary }
-    validate :no_secondary_subjects, unless: -> { phases_list.secondary }
-    validate :no_college_subjects, unless: -> { phases_list.college }
+    validate :administration_fee_not_set, unless: -> { fees.administration_fees? }
+    validate :dbs_fee_not_set, unless: -> { fees.dbs_fees? }
+    validate :other_fee_not_set, unless: -> { fees.other_fees? }
+    validate :key_stage_list_not_set, unless: -> { phases_list.primary? }
+    validate :no_secondary_subjects, unless: -> { phases_list.secondary? }
+    validate :no_college_subjects, unless: -> { phases_list.college? }
 
     DEPENDENT_STAGES = [
       [:administration_fee, 'fees.administration_fees'],
