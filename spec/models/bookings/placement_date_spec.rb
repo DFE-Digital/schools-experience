@@ -72,5 +72,31 @@ describe Bookings::PlacementDate, type: :model do
         expect(described_class.all.in_date_order.to_a).to eql(correct_order)
       end
     end
+
+    context '.active' do
+      let!(:active) { create(:bookings_placement_date, active: true) }
+      let!(:inactive) { create(:bookings_placement_date, active: false) }
+
+      specify 'should return active placement dates' do
+        expect(described_class.active).to include(active)
+      end
+
+      specify 'should not return inactive placement dates' do
+        expect(described_class.active).not_to include(inactive)
+      end
+    end
+
+    context '.inactive' do
+      let!(:active) { create(:bookings_placement_date, active: true) }
+      let!(:inactive) { create(:bookings_placement_date, active: false) }
+
+      specify 'should return inactive placement dates' do
+        expect(described_class.inactive).to include(inactive)
+      end
+
+      specify 'should not return active placement dates' do
+        expect(described_class.inactive).not_to include(active)
+      end
+    end
   end
 end

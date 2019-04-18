@@ -16,5 +16,7 @@ module Bookings
     scope :future, -> { where(arel_table[:date].gteq(Time.now)) }
     scope :past, -> { where(arel_table[:date].lt(Time.now)) }
     scope :in_date_order, -> { order(date: 'asc') }
+    scope :active, -> { where(active: true) }
+    scope :inactive, -> { where(active: false) }
   end
 end
