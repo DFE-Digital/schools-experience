@@ -34,18 +34,21 @@ Rails.application.routes.draw do
       end
 
       namespace :on_boarding do
-        resource :candidate_requirement, only: %i(new create)
-        resource :fees, only: %i(new create)
+        resource :candidate_requirement, only: %i(new create edit update)
+        resource :fees, only: %i(new create edit update)
         resource :administration_fee, only: %i(new create)
         resource :dbs_fee, only: %i(new create)
         resource :other_fee, only: %i(new create)
-        resource :phases_list, only: %i(new create)
-        resource :key_stage_list, only: %i(new create)
-        resource :secondary_subjects, only: %i(new create)
-        resource :college_subjects, only: %i(new create)
-        resource :specialism, only: %i(new create)
-        resource :candidate_experience_detail, only: %i(new create)
-        resource :availability, only: %i(new)
+        resource :phases_list, only: %i(new create edit update)
+        resource :key_stage_list, only: %i(new create edit update)
+        resource :secondary_subjects, only: %i(new create edit update)
+        resource :college_subjects, only: %i(new create edit update)
+        resource :specialism, only: %i(new create edit update)
+        resource :candidate_experience_detail, only: %i(new create edit update)
+        resource :availability_description, only: %i(new create edit update)
+        resource :experience_outline, only: %i(new create edit update)
+        resource :admin_contact, only: %i(new create edit update)
+        resource :profile, only: :show
       end
     end
   end

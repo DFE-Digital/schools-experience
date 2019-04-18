@@ -1,17 +1,5 @@
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      Is there anything which makes your school unique?
-    </h1>
-    <%= form_for @specialism, url: schools_on_boarding_specialism_path do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary @specialism, 'There is a problem', '' %>
-      <%= f.radio_button_fieldset :has_specialism, fieldset_heading: false do |fieldset| %>
-        <%= fieldset.radio_input true do %>
-          <%= fieldset.text_area :details, class: 'govuk-!-width-two-thirds', rows: 7 %>
-        <% end %>
-        <%= f.radio_input false %>
-      <% end %>
-      <%= f.submit 'Continue' %>
-    <% end %>
-  </div>
-</div>
+<%= render partial: "form", locals: {
+  specialism: @specialism,
+  url: schools_on_boarding_specialism_path,
+  method: :post
+} %>

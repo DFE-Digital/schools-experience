@@ -195,6 +195,14 @@ ActiveRecord::Schema.define(version: 2019_04_18_134919) do
     t.boolean "candidate_experience_detail_times_flexible"
     t.integer "bookings_school_id", null: false
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
+    t.text "experience_outline_candidate_experience"
+    t.boolean "experience_outline_provides_teacher_training"
+    t.text "experience_outline_teacher_training_details"
+    t.string "experience_outline_teacher_training_url"
+    t.string "admin_contact_full_name"
+    t.string "admin_contact_email"
+    t.string "admin_contact_phone"
+    t.text "availability_description_description"
   end
 
   add_foreign_key "bookings_placement_dates", "schools_school_profiles"

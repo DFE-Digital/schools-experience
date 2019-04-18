@@ -72,5 +72,62 @@ FactoryBot.define do
       specialism_has_specialism { true }
       specialism_details { 'Falconry' }
     end
+
+    transient do
+      parking { true }
+      disabled_facilities { false }
+    end
+
+    trait :with_candidate_experience_detail do
+      after :build do |profile, evaluator|
+        traits = []
+
+        if evaluator.parking == false
+          traits << :without_parking
+        end
+
+        if evaluator.disabled_facilities
+          traits << :with_disabled_facilities
+        end
+
+        profile.candidate_experience_detail = FactoryBot.build :candidate_experience_detail, *traits
+      end
+    end
+
+    trait :with_experience_outline do
+      after :build do |profile|
+        profile.experience_outline = FactoryBot.build :experience_outline
+      end
+    end
+
+    trait :with_admin_contact do
+      after :build do |profile|
+        profile.admin_contact = FactoryBot.build :admin_contact
+      end
+    end
+
+    trait :with_availability_description do
+      after :build do |profile|
+        profile.availability_description = FactoryBot.build :availability_description
+      end
+    end
+
+    trait :completed do
+      with_candidate_requirement
+      with_fees
+      with_administration_fee
+      with_dbs_fee
+      with_other_fee
+      with_only_early_years_phase
+      with_phases
+      with_key_stage_list
+      with_secondary_subjects
+      with_college_subjects
+      with_specialism
+      with_candidate_experience_detail
+      with_availability_description
+      with_experience_outline
+      with_admin_contact
+    end
   end
 end

@@ -146,6 +146,31 @@ en:
               blank: 'Provide details'
             times_flexible:
               inclusion: 'Select an option'
+        schools/on_boarding/experience_outline:
+          attributes:
+            candidate_experience:
+              blank: 'Provide details'
+            provides_teacher_training:
+              inclusion: 'Select an option'
+            teacher_training_details:
+              blank: 'Provide details'
+            teacher_training_url:
+              blank: 'Web address required'
+              invalid: 'Enter a valid web address'
+        schools/on_boarding/admin_contact:
+          attributes:
+            full_name:
+              blank: "Enter admin contact's full name"
+            phone:
+              blank: "Enter admin contact's UK telephone number"
+              invalid: 'Enter a valid UK telephone number'
+            email:
+              blank: "Enter admin contact's email address"
+              invalid: 'Enter a valid email address'
+        schools/on_boarding/availability_description:
+          attributes:
+            description:
+              blank: "Outline is required"
 
   activerecord:
     errors:
@@ -191,6 +216,8 @@ en:
         parking_provided: 'Do you provide parking for candidates?'
         disabled_facilities: 'Do you provide facilities or support for candidates with disabilities or access needs?'
         times_flexible: 'Are your start and finish times flexible? '
+      schools_on_boarding_experience_outline:
+        provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
 
     hint:
       bookings_placement_date:
@@ -218,6 +245,12 @@ en:
       schools_on_boarding_candidate_experience_detail:
         dress_code: 'Select all that apply or leave blank if you have no dress code.'
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
+      schools_on_boarding_experience_outline:
+        candidate_experience:
+          Tell us about what candidates can expect to do while they’re at your school.
+          For example, explain whether candidates will observe lessons or get the chance
+          to interact with pupils and classroom activities.
+        provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
 
     label:
       bookings_placement_date:
@@ -292,6 +325,19 @@ en:
         times_flexible:
           true: 'Yes'
           false: 'No'
+      schools_on_boarding_experience_outline:
+        candidate_experience: 'What kind of school experience do you offer candidates?'
+        provides_teacher_training:
+          true: 'Yes'
+          false: 'No'
+        teacher_training_details: 'Provide details.'
+        teacher_training_url: 'Enter a web address.'
+      schools_on_boarding_admin_contact:
+        full_name: 'Full name'
+        phone: 'UK telephone number'
+        email: 'Email address'
+      schools_on_boarding_availability_description:
+        description: 'Outline when you offer school experience at your school.'
 
     page_entries_info:
       one_page:

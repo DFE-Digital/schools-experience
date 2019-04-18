@@ -1,0 +1,49 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      Check your answers before setting up your school experience profile
+    </h1>
+
+    <h2 class="govuk-heading-m">School details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Full name', @profile.school_name, '' %>
+      <%= summary_row 'Address', @profile.school_address, '' %>
+      <%= summary_row 'Email address', @profile.school_email, '' %>
+    </dl>
+
+    <h2 class="govuk-heading-m">School experience details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Fees', @profile.fees, edit_schools_on_boarding_fees_path %>
+      <%= summary_row 'DBS check required', @profile.dbs_check_required, edit_schools_on_boarding_candidate_requirement_path %>
+      <%= summary_row 'Individual requirements', @profile.individual_requirements, edit_schools_on_boarding_candidate_requirement_path %>
+      <%= summary_row 'School experience phases', @profile.school_experience_phases, edit_schools_on_boarding_phases_list_path %>
+      <%= summary_row 'Primary key stages', @profile.primary_key_stages, \
+        @profile.primary_key_stages_offered? ? edit_schools_on_boarding_key_stage_list_path : edit_schools_on_boarding_phases_list_path %>
+      <%= summary_row 'Secondary subjects', @profile.secondary_subjects, \
+        @profile.secondary_subjects_offered? ? edit_schools_on_boarding_secondary_subjects_path : edit_schools_on_boarding_phases_list_path %>
+      <%= summary_row '16 to 18 years', @profile.college_subjects, \
+        @profile.college_subjects_offered? ? edit_schools_on_boarding_college_subjects_path : edit_schools_on_boarding_phases_list_path %>
+      <%= summary_row 'Specialisms', @profile.specialisms, edit_schools_on_boarding_specialism_path %>
+      <%= summary_row 'School experience details', @profile.school_experience_details, edit_schools_on_boarding_experience_outline_path %>
+      <%= summary_row 'Teacher training links', @profile.teacher_training_links, edit_schools_on_boarding_experience_outline_path %>
+    </dl>
+
+    <h2 class="govuk-heading-m">Candidate information</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Dress code', @profile.dress_code, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Parking', @profile.parking, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Start time', @profile.start_time, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Finish time', @profile.end_time, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Flexible on times', @profile.flexible_on_times, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Availability', @profile.availability, edit_schools_on_boarding_availability_description_path %>
+    </dl>
+
+    <h2 class="ogvuk-heading-m">Admin contact details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Full name', @profile.admin_contact_full_name, edit_schools_on_boarding_admin_contact_path %>
+      <%= summary_row 'UK telephone number', @profile.admin_contact_phone, edit_schools_on_boarding_admin_contact_path %>
+      <%= summary_row 'Email address', @profile.admin_contact_email, edit_schools_on_boarding_admin_contact_path %>
+    </dl>
+  </div>
+</div>

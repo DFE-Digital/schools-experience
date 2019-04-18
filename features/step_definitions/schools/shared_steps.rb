@@ -83,9 +83,62 @@ Given "I have completed the Specialisms step" do
   )
 end
 
+Given "I have completed the Candidate experience details step" do
+  steps %(
+    Given I am on the 'Candidate experience details' page
+    And I check 'Business dress'
+    And I check 'Other'
+    And I enter 'Must have nice hat' into the 'For example no denim, jeans, shorts, short skirts, trainers' text area
+    And I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
+    And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
+    And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
+    And I enter '8:15 am' into the 'Start time' text area
+    And I enter '4:30 pm' into the 'Finish time' text area
+    And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
+    When I submit the form
+  )
+end
+
+Given "I have completed the Availability description step" do
+  steps %(
+    Given I am on the 'Availability description' page
+    Given I save the page
+    And I enter 'Whenever really' into the 'Outline when you offer school experience at your school.' text area
+    When I submit the form
+  )
+end
+
+Given "I have completed the Experience Outline step" do
+  steps %(
+    Given I am on the 'Experience Outline' page
+    And I enter 'A really good one' into the 'What kind of school experience do you offer candidates?' text area
+    And I choose 'Yes' from the 'Do you run your own teacher training or have any links to teacher training organisations and providers?' radio buttons
+    And I enter 'We run our own training' into the 'Provide details.' text area
+    And I enter 'http://example.com' into the 'Enter a web address.' text area
+    When I submit the form
+  )
+end
+
+Given "I have completed the Admin contact" do
+  steps %(
+    Given I am on the 'Admin contact' page
+    And I enter 'Gary Chalmers' into the 'Full name' text area
+    And I enter '01234567890' into the 'UK telephone number' text area
+    And I enter 'g.chalmers@springfield.edu' into the 'Email address' text area
+    When I submit the form
+    Then I should be on the 'Profile' page
+  )
+end
+
 Then "I should see a validation error message" do
   within '.govuk-error-summary' do
     expect(page).to have_content 'There is a problem'
+  end
+end
+
+Then "The page should have the following summary list information:" do |table|
+  table.raw.to_h.each do |key, value|
+    expect(page).to have_text %r{#{key} #{value}}
   end
 end
 
@@ -99,4 +152,9 @@ end
 
 Given "There are some subjects available" do
   FactoryBot.create :bookings_subject, name: 'Maths'
+end
+
+Given "A school is returned from DFE sign in" do
+  # FIXME change this once we merge in phase2
+  FactoryBot.create :bookings_school, urn: 1234567890
 end
