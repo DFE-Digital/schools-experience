@@ -171,6 +171,10 @@ en:
           attributes:
             description:
               blank: "Outline is required"
+        schools/on_boarding/confirmation:
+          attributes:
+            acceptance:
+              accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
   activerecord:
     errors:
@@ -338,6 +342,8 @@ en:
         email: 'Email address'
       schools_on_boarding_availability_description:
         description: 'Outline when you offer school experience at your school.'
+      schools_on_boarding_confirmation:
+        acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/privacy_policy" class="govuk-link">privacy policy</a>'
 
     page_entries_info:
       one_page:
