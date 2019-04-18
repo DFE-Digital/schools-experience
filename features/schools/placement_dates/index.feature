@@ -33,4 +33,4 @@ Feature: Listing placement dates
     Scenario: Warning displayed when there are no dates
         Given my school has no placement dates
         When I am on the 'placement dates' page
-        Then there should be a 'Warning You have no placement dates, your school will not appear in candidate searches' warning
+        Then there should be a 'You have no placement dates, your school will not appear in candidate searches' warning
