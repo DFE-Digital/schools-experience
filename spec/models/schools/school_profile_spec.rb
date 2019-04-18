@@ -538,9 +538,53 @@ describe Schools::SchoolProfile, type: :model do
         end
       end
 
-      context 'when key_stage_list no longer makes sense'
-      context 'when secondary_subjects no longer makes sense'
-      context 'when college_subjects no longer makes sense'
+      context 'when key_stage_list no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create :school_profile, :with_phases, :with_key_stage_list
+        end
+
+        before do
+          school_profile.update! \
+            phases_list: Schools::OnBoarding::PhasesList.new(primary: false)
+        end
+
+        it 'resets key stage list' do
+          expect(school_profile.reload.key_stage_list).to \
+            eq Schools::OnBoarding::KeyStageList.new
+        end
+      end
+
+      context 'when secondary_subjects no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create \
+            :school_profile, :with_phases, :with_secondary_subjects
+        end
+
+        before do
+          school_profile.update! \
+            phases_list: Schools::OnBoarding::PhasesList.new(secondary: false)
+        end
+
+        it 'removes secondary_subjects' do
+          expect(school_profile.reload.secondary_subjects).to be_empty
+        end
+      end
+
+      context 'when college_subjects no longer makes sense' do
+        let :school_profile do
+          FactoryBot.create \
+            :school_profile, :with_phases, :with_college_subjects
+        end
+
+        before do
+          school_profile.update! \
+            phases_list: Schools::OnBoarding::PhasesList.new(college: false)
+        end
+
+        it 'removes secondary_subjects' do
+          expect(school_profile.reload.college_subjects).to be_empty
+        end
+      end
     end
   end
 end
