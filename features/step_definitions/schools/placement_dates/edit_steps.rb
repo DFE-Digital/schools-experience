@@ -12,7 +12,7 @@ end
 
 Then("my placement should have been deleted") do
   def selector(id)
-    "div[data-placement-date-id=#{id}]"
+    "div[data-placement-date-id='#{id}']"
   end
 
   expect(page).not_to have_css(selector(@placement_date.id))
