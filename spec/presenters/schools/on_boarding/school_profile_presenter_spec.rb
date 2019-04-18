@@ -4,7 +4,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   subject { described_class.new profile }
 
   let! :school do
-    # FIXME remove this once we've changed the profile to belong_to a school
     FactoryBot.create :bookings_school, :full_address, urn: 123456
   end
 
@@ -15,7 +14,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#school_name' do
     let :profile do
-      FactoryBot.build :school_profile
+      FactoryBot.create :school_profile, bookings_school: school
     end
 
     it "returns the school's name" do
@@ -25,7 +24,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#school_address' do
     let :profile do
-      FactoryBot.build :school_profile
+      FactoryBot.build :school_profile, bookings_school: school
     end
 
     it "returns the school's address" do
@@ -36,7 +35,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#school_email' do
     let :profile do
-      FactoryBot.build :school_profile
+      FactoryBot.build :school_profile, bookings_school: school
     end
 
     it "returns the school's contact email" do

@@ -26,8 +26,13 @@ Then("I should see a warning informing me that school experiences are only avail
 end
 
 When("I click the {string} button") do |string|
-  click_link(string)
-  sleep(2)
+  begin
+    click_link(string)
+    sleep(2)
+  rescue Capybara::ElementNotFound
+    click_button(string)
+    sleep(2)
+  end
 end
 
 Then("I should be on the {string} page") do |string|

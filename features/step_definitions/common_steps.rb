@@ -42,3 +42,9 @@ Then("the page title should be {string}") do |title|
   expect(title).to be_present
   expect(page.title).to eql([title, title_suffix].join(' | '))
 end
+
+Then("there should be a {string} warning") do |string|
+  within('.govuk-warning-text') do
+    expect(page).to have_content(string)
+  end
+end

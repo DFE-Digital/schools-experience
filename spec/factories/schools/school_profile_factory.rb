@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :school_profile, class: 'Schools::SchoolProfile' do
-    urn { 123456 }
+    before(:create) do |sp|
+      sp.bookings_school = Bookings::School.find_by(urn: 123456) || create(:bookings_school, urn: 123456)
+    end
 
     trait :with_candidate_requirement do
       candidate_requirement_dbs_requirement { 'sometimes' }

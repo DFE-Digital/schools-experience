@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_09_163958) do
+ActiveRecord::Schema.define(version: 2019_04_18_134919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,16 @@ ActiveRecord::Schema.define(version: 2019_04_09_163958) do
     t.integer "edubase_id"
     t.index ["name"], name: "index_bookings_phases_on_name"
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
+  end
+
+  create_table "bookings_placement_dates", force: :cascade do |t|
+    t.date "date", null: false
+    t.integer "schools_school_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "duration", default: 1, null: false
+    t.boolean "active", default: true, null: false
+    t.index ["schools_school_profile_id"], name: "index_bookings_placement_dates_on_schools_school_profile_id"
   end
 
   create_table "bookings_placement_requests", force: :cascade do |t|
@@ -142,7 +152,6 @@ ActiveRecord::Schema.define(version: 2019_04_09_163958) do
   create_table "schools_school_profiles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "urn", null: false
     t.string "candidate_requirement_dbs_requirement"
     t.text "candidate_requirement_dbs_policy"
     t.boolean "candidate_requirement_requirements"
@@ -184,6 +193,8 @@ ActiveRecord::Schema.define(version: 2019_04_09_163958) do
     t.string "candidate_experience_detail_start_time"
     t.string "candidate_experience_detail_end_time"
     t.boolean "candidate_experience_detail_times_flexible"
+    t.integer "bookings_school_id", null: false
+    t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
     t.text "experience_outline_candidate_experience"
     t.boolean "experience_outline_provides_teacher_training"
     t.text "experience_outline_teacher_training_details"
@@ -192,9 +203,9 @@ ActiveRecord::Schema.define(version: 2019_04_09_163958) do
     t.string "admin_contact_email"
     t.string "admin_contact_phone"
     t.text "availability_description_description"
-    t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 
+  add_foreign_key "bookings_placement_dates", "schools_school_profiles"
   add_foreign_key "bookings_schools", "bookings_school_types"
   add_foreign_key "bookings_schools_phases", "bookings_phases"
   add_foreign_key "bookings_schools_phases", "bookings_schools"
@@ -203,4 +214,5 @@ ActiveRecord::Schema.define(version: 2019_04_09_163958) do
   add_foreign_key "schools_on_boarding_phase_subjects", "bookings_phases"
   add_foreign_key "schools_on_boarding_phase_subjects", "bookings_subjects"
   add_foreign_key "schools_on_boarding_phase_subjects", "schools_school_profiles"
+  add_foreign_key "schools_school_profiles", "bookings_schools"
 end

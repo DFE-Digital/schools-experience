@@ -5,9 +5,7 @@ module Schools
 
       def initialize(school_profile)
         @school_profile = school_profile
-        # FIXME temp until this is merged with Pete's work and we associate
-        # school profile with a bookings school properly
-        @school = Bookings::School.find_by! urn: @school_profile.urn
+        @school = school_profile.bookings_school
       end
 
       def school_name

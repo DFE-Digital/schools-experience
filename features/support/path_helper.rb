@@ -1,4 +1,4 @@
-def path_for(descriptor, school: nil)
+def path_for(descriptor, school: nil, placement_date_id: nil)
   if school && school.respond_to?(:to_param)
     school = school.to_param
   end
@@ -29,6 +29,10 @@ def path_for(descriptor, school: nil)
     "college subjects" => [:new_schools_on_boarding_college_subjects_path],
     "specialisms" => [:new_schools_on_boarding_specialism_path],
     "candidate experience details" => [:new_schools_on_boarding_candidate_experience_detail_path],
+    "availability" => [:new_schools_on_boarding_availability_path],
+    "placement dates" => [:schools_placement_dates_path],
+    "new placement date" => [:new_schools_placement_date_path],
+    "edit placement date" => [:edit_schools_placement_date_path, placement_date_id],
     "experience outline" => [:new_schools_on_boarding_experience_outline_path],
     "availability description" => [:new_schools_on_boarding_availability_description_path],
     "admin contact" => [:new_schools_on_boarding_admin_contact_path],

@@ -138,7 +138,7 @@ end
 
 Then "The page should have the following summary list information:" do |table|
   table.raw.to_h.each do |key, value|
-    expect(page).to have_text /#{key} #{value}/
+    expect(page).to have_text %r{#{key} #{value}}
   end
 end
 

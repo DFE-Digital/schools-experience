@@ -1,0 +1,60 @@
+<%- self.page_title = "Placement dates" %>
+
+<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+
+<h1>Placement dates</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%- if @placement_dates.any? -%>
+      <table id="placement-dates" class="govuk-table">
+
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Date</th>
+            <th class="govuk-table__header" scope="col">Duration</th>
+            <th class="govuk-table__header" scope="col">Status</th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+
+        <tbody class="govuk-table__body">
+        <%- @placement_dates.each do |placement_date| -%>
+          <tr data-placement-date-id="<%= placement_date.id %>" class="placement-date govuk-table__row">
+            <th class="govuk-table__header" scope="row">
+              <%= placement_date.date.to_formatted_s(:govuk) %>
+            </th>
+            <td class="govuk-table__cell">
+              <%= pluralize(placement_date.duration, 'day') %>
+            </td>
+            <td class="govuk-table__cell status">
+              <%= display_status(placement_date.active) %>
+            </td>
+            <td class="govuk-summary-list__actions">
+              <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
+                Change
+                <span class="govuk-visually-hidden"> name</span>
+              <%- end -%>
+            </td>
+          </tr>
+        <%- end -%>
+        </tbody>
+      </table>
+    <%- else -%>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          You have no placement dates, your school will not appear in candidate
+          searches
+        </strong>
+      </div>
+    <%- end -%>
+
+  </div>
+</div>
+
+<div>
+  <%= link_to "Add new placement date", new_schools_placement_date_path, class: 'govuk-button' %>
+</div>

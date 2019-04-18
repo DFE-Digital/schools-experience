@@ -180,6 +180,8 @@ en:
 
   helpers:
     fieldset:
+      bookings_placement_date:
+        date: Enter a start date
       phases: Education phases
       fees: Fees
       subjects: Placement subjects
@@ -218,6 +220,8 @@ en:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
 
     hint:
+      bookings_placement_date:
+        date: For example, 01 09 2019
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
@@ -249,6 +253,9 @@ en:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
 
     label:
+      bookings_placement_date:
+        duration: How many days will it last?
+        active: Make this date available to candidates?
       candidates_registrations_contact_information:
         email: 'Email address'
         building: "Building and street"

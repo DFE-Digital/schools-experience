@@ -1,26 +1,23 @@
 Then("I should see a form with the following fields:") do |table|
-  within('#main-content form') do
-    table.hashes.each do |row|
-      label_text = row['Label']
-      options = row['Options']&.split(',')&.map(&:strip)
+  table.hashes.each do |row|
+    label_text = row['Label']
+    options = row['Options']&.split(',')&.map(&:strip)
 
-      within(get_form_group(page, label_text)) do
-        case row['Type']
-        when 'date' then ensure_date_field_exists(page)
-        when /radio/ then ensure_radio_buttons_exist(page, options)
-        when /select/ then ensure_select_options_exist(page, options)
-        else # regular inputs
-          expect(page).to have_field(label_text, type: row['Type'])
-        end
+    within(get_form_group(page, label_text)) do
+      case row['Type']
+      when 'date' then ensure_date_field_exists(page)
+      when /radio/ then ensure_radio_buttons_exist(page, options)
+      when /select/ then ensure_select_options_exist(page, options)
+      when /checkbox/ then ensure_check_boxes_exist(page, options)
+      else # regular inputs
+        expect(page).to have_field(label_text, type: row['Type'])
       end
     end
   end
 end
 
 When("I submit the form") do
-  within('#main-content form') do
-    click_on "Continue"
-  end
+  click_on "Continue"
 end
 
 Then("the submit button should contain text {string}") do |string|
@@ -82,6 +79,18 @@ end
 
 Given("there should be a {string} text area") do |string|
   expect(page).to have_field(string, type: 'textarea')
+end
+
+Then("there should be a {string} checkbox") do |string|
+  expect(page).to have_field(string, type: 'checkbox')
+end
+
+When("I check the {string} checkbox") do |string|
+  check string
+end
+
+When("I uncheck the {string} checkbox") do |string|
+  uncheck string
 end
 
 LABEL_SELECTORS = %w(.govuk-label legend label).freeze

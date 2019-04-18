@@ -26,6 +26,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :placement_dates
+
       namespace :errors do
         resource :not_registered, controller: :not_registered, only: :show
         resource :no_school, controller: :no_school, only: :show

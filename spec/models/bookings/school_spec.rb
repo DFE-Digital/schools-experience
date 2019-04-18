@@ -70,6 +70,13 @@ describe Bookings::School, type: :model do
   end
 
   describe 'Relationships' do
+    it do
+      is_expected.to(
+        have_one(:school_profile)
+          .with_foreign_key(:bookings_school_id)
+      )
+    end
+
     specify do
       is_expected.to(
         have_many(:bookings_schools_subjects)

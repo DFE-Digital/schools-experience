@@ -43,6 +43,11 @@ class Bookings::School < ApplicationRecord
     class_name: "Bookings::SchoolType",
     foreign_key: :bookings_school_type_id
 
+  has_one :school_profile,
+    class_name: "Schools::SchoolProfile",
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
+
   scope :enabled, -> { where(enabled: true) }
 
   scope :that_provide, ->(subject_ids) do
