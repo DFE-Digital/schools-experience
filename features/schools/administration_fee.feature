@@ -9,7 +9,6 @@ Feature: Administration Fee
     Given The college phase is availble
     And I have completed the Candidate Requirements step
     And I have completed the Fees step, choosing only Administration costs
-    And I have completed the Fees step, choosing only Administration costs
 
   Scenario: Completing the Administration costs step with error
     Given I have entered the following details into the form:
