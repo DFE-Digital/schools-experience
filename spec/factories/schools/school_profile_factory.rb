@@ -117,6 +117,7 @@ FactoryBot.define do
       with_dbs_fee
       with_other_fee
       with_only_early_years_phase
+      with_phases
       with_key_stage_list
       with_secondary_subjects
       with_college_subjects

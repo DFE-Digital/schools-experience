@@ -176,6 +176,30 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
+  context '#primary_key_stages_offered?' do
+    context 'when offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_primary: true
+      end
+
+      it 'returns true' do
+        expect(subject.primary_key_stages_offered?).to eq true
+      end
+    end
+
+    context 'when not offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_primary: false
+      end
+
+      it 'returns false' do
+        expect(subject.primary_key_stages_offered?).to eq false
+      end
+    end
+  end
+
   context '#primary_key_stages' do
     context 'when primary phase not selected' do
       let :profile do
@@ -197,6 +221,30 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       it 'returns the key stages' do
         expect(subject.primary_key_stages).to \
           eq 'early years, key stage 1, and key stage 2'
+      end
+    end
+  end
+
+  context '#secondary_subjects_offered?' do
+    context 'when offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_secondary: true
+      end
+
+      it 'returns true' do
+        expect(subject.secondary_subjects_offered?).to eq true
+      end
+    end
+
+    context 'when not offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_secondary: false
+      end
+
+      it 'returns false' do
+        expect(subject.secondary_subjects_offered?).to eq false
       end
     end
   end
@@ -223,6 +271,30 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       it 'returns the list of secondary subjects' do
         expect(subject.secondary_subjects).to \
           eq profile.secondary_subjects.pluck(:name).to_sentence
+      end
+    end
+  end
+
+  context '#college_subjects_offered?' do
+    context 'when offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_college: true
+      end
+
+      it 'returns true' do
+        expect(subject.college_subjects_offered?).to eq true
+      end
+    end
+
+    context 'when not offered' do
+      let :profile do
+        FactoryBot.build \
+          :school_profile, :with_phases, phases_list_college: false
+      end
+
+      it 'returns false' do
+        expect(subject.college_subjects_offered?).to eq false
       end
     end
   end
@@ -292,7 +364,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
     it 'returns the selected dress code options' do
       expect(subject.dress_code).to \
-        eq "business dress, cover up tattoos, remove piercings, and Must have nice hat"
+        eq "business dress, cover up tattoos, remove piercings, smart casual, and Must have nice hat"
     end
   end
 

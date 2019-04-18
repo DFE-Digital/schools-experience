@@ -92,6 +92,10 @@ module Schools
         output.to_sentence
       end
 
+      def primary_key_stages_offered?
+        @school_profile.phases_list.primary
+      end
+
       def primary_key_stages
         return 'None' unless @school_profile.phases_list.primary
 
@@ -112,10 +116,18 @@ module Schools
         output.to_sentence
       end
 
+      def secondary_subjects_offered?
+        @school_profile.phases_list.secondary
+      end
+
       def secondary_subjects
         return 'None' unless @school_profile.phases_list.secondary
 
         @school_profile.secondary_subjects.pluck(:name).to_sentence
+      end
+
+      def college_subjects_offered?
+        @school_profile.phases_list.college
       end
 
       def college_subjects
@@ -159,6 +171,10 @@ module Schools
 
         if @school_profile.candidate_experience_detail.remove_piercings
           output << 'remove piercings'
+        end
+
+        if @school_profile.candidate_experience_detail.smart_casual
+          output << 'smart casual'
         end
 
         if @school_profile.candidate_experience_detail.other_dress_requirements

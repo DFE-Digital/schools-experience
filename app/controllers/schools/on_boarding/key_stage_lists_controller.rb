@@ -16,6 +16,21 @@ module Schools
         end
       end
 
+      def edit
+        @key_stage_list = current_school_profile.key_stage_list
+      end
+
+      def update
+        @key_stage_list = KeyStageList.new key_stage_list_params
+
+        if @key_stage_list.valid?
+          current_school_profile.update! key_stage_list: @key_stage_list
+          redirect_to next_step_path(current_school_profile)
+        else
+          render :edit
+        end
+      end
+
     private
 
       def key_stage_list_params

@@ -16,6 +16,21 @@ module Schools
         end
       end
 
+      def edit
+        @experience_outline = current_school_profile.experience_outline
+      end
+
+      def update
+        @experience_outline = ExperienceOutline.new experience_outline_params
+
+        if @experience_outline.valid?
+          current_school_profile.update! experience_outline: @experience_outline
+          redirect_to next_step_path(current_school_profile)
+        else
+          render :edit
+        end
+      end
+
     private
 
       def experience_outline_params
