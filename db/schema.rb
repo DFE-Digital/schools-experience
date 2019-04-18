@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_18_134919) do
+ActiveRecord::Schema.define(version: 2019_04_18_151613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -203,6 +203,8 @@ ActiveRecord::Schema.define(version: 2019_04_18_134919) do
     t.string "admin_contact_email"
     t.string "admin_contact_phone"
     t.text "availability_description_description"
+    t.boolean "availability_preference_fixed"
+    t.index ["urn"], name: "index_schools_school_profiles_on_urn"
   end
 
   add_foreign_key "bookings_placement_dates", "schools_school_profiles"

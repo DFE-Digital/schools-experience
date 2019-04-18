@@ -167,6 +167,10 @@ en:
             email:
               blank: "Enter admin contact's email address"
               invalid: 'Enter a valid email address'
+        schools/on_boarding/availability_preference:
+          attributes:
+            fixed:
+              inclusion: 'Select an option'
         schools/on_boarding/availability_description:
           attributes:
             description:
@@ -214,6 +218,8 @@ en:
           <p>
             These details will help candidates select your school experience.
           </p>
+      schools_on_boarding_availability_preference:
+        fixed: 'Enter school experience availability or fixed dates'
 
       schools_on_boarding_candidate_experience_detail:
         dress_code: 'Do you have a dress code for candidates?'
@@ -340,6 +346,10 @@ en:
         full_name: 'Full name'
         phone: 'UK telephone number'
         email: 'Email address'
+      schools_on_boarding_availability_preference:
+        fixed:
+          true_html: 'If you only offer <strong>fixed</strong> dates, state when you provide school experience.<span id="more-detail-hint" class="govuk-hint">For example, on 10 May 2020.</span>'
+          false_html: "If you're <strong>flexible</strong> on dates, describe your school experience availability.<span id='more-detail-hint' class='govuk-hint'>For example, on specific days of the week and open days or around exams, holidays and term times.</span>"
       schools_on_boarding_availability_description:
         description: 'Outline when you offer school experience at your school.'
       schools_on_boarding_confirmation:

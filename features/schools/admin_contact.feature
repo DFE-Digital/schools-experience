@@ -17,6 +17,7 @@ Feature: Admin contact
     And I have completed the College subjects step
     And I have completed the Specialisms step
     And I have completed the Candidate experience details step
+    And I have completed the Availability preference step
     And I have completed the Availability description step
     And I have completed the Experience Outline step
 
