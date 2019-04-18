@@ -119,9 +119,26 @@ Given "I have completed the Experience Outline step" do
   )
 end
 
+Given "I have completed the Admin contact" do
+  steps %(
+    Given I am on the 'Admin contact' page
+    And I enter 'Gary Chalmers' into the 'Full name' text area
+    And I enter '01234567890' into the 'UK telephone number' text area
+    And I enter 'g.chalmers@springfield.edu' into the 'Email address' text area
+    When I submit the form
+    Then I should be on the 'Profile' page
+  )
+end
+
 Then "I should see a validation error message" do
   within '.govuk-error-summary' do
     expect(page).to have_content 'There is a problem'
+  end
+end
+
+Then "The page should have the following summary list information:" do |table|
+  table.raw.to_h.each do |key, value|
+    expect(page).to have_text /#{key} #{value}/
   end
 end
 
@@ -135,4 +152,9 @@ end
 
 Given "There are some subjects available" do
   FactoryBot.create :bookings_subject, name: 'Maths'
+end
+
+Given "A school is returned from DFE sign in" do
+  # FIXME change this once we merge in phase2
+  FactoryBot.create :bookings_school, urn: 1234567890
 end

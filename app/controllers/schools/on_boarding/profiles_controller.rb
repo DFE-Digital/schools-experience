@@ -2,7 +2,7 @@ module Schools
   module OnBoarding
     class ProfilesController < OnBoardingsController
       def show
-        render plain: 'todo'
+        @profile = SchoolProfilePresenter.new(current_school_profile)
       end
     end
   end

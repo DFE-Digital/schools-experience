@@ -8,6 +8,7 @@ module Schools
       end
 
       def get_current_school_profile
+        # TODO update this to build the record from the bookings school
         Schools::SchoolProfile.find_or_create_by! urn: current_school.urn
       end
 

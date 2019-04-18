@@ -30,7 +30,7 @@ module Schools
         %w(administration_fee_amount_pounds amount_pounds),
         %w(administration_fee_description description),
         %w(administration_fee_interval interval),
-        %w(administration_fee_payment_method payment_method),
+        %w(administration_fee_payment_method payment_method)
       ],
       constructor: :compose
 
@@ -41,7 +41,7 @@ module Schools
         %w(dbs_fee_amount_pounds amount_pounds),
         %w(dbs_fee_description description),
         %w(dbs_fee_interval interval),
-        %w(dbs_fee_payment_method payment_method),
+        %w(dbs_fee_payment_method payment_method)
       ],
       constructor: :compose
 
@@ -52,7 +52,7 @@ module Schools
         %w(other_fee_amount_pounds amount_pounds),
         %w(other_fee_description description),
         %w(other_fee_interval interval),
-        %w(other_fee_payment_method payment_method),
+        %w(other_fee_payment_method payment_method)
       ],
       constructor: :compose
 
