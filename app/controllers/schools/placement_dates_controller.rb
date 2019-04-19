@@ -42,7 +42,10 @@ class Schools::PlacementDatesController < Schools::BaseController
 private
 
   def set_placement_date
-    @placement_date = current_school.school_profile.bookings_placement_dates.find(params[:id])
+    @placement_date = current_school
+      .school_profile
+      .bookings_placement_dates
+      .find(params[:id])
   end
 
   def placement_date_params

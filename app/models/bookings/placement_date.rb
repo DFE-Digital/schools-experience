@@ -18,5 +18,13 @@ module Bookings
     scope :in_date_order, -> { order(date: 'asc') }
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
+
+    def to_s
+      "%<date>s (%<duration>d %<unit>s)" % {
+        date: date.to_formatted_s(:govuk),
+        duration: duration,
+        unit: "day".pluralize(duration)
+      }
+    end
   end
 end

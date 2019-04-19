@@ -76,6 +76,11 @@ class Bookings::School < ApplicationRecord
     end
   end
 
+  def availability_preference_fixed?
+    # school_profile.availability_preference.fixed?
+    false
+  end
+
   def to_param
     urn.to_s.presence
   end
