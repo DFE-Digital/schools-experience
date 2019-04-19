@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2019_04_18_180420) do
     t.boolean "has_dbs_check", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "availability", null: false
+    t.text "availability"
     t.integer "bookings_placement_date_id"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
   end
