@@ -228,7 +228,7 @@ module Schools
       through: :college_phase_subjects,
       dependent: :destroy
 
-    has_many :placement_dates,
+    has_many :bookings_placement_dates,
       class_name: 'Bookings::PlacementDate',
       foreign_key: :schools_school_profile_id
 
