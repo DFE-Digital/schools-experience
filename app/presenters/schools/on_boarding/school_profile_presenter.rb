@@ -8,6 +8,10 @@ module Schools
         @school = school_profile.bookings_school
       end
 
+      def ==(other)
+        other.instance_variable_get(:@school_profile) == @school_profile
+      end
+
       def school_name
         @school.name
       end
