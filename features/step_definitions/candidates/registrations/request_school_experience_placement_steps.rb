@@ -52,3 +52,19 @@ end
 Then("I should see no warning containing the availability information") do
   expect(page).not_to have_css('section.govuk-se-warning')
 end
+
+Given("the school I'm applying to is flexible on dates") do
+  # do nothing, this is the default
+end
+
+Given("the school I'm applying to is not flexible on dates") do
+  pending # make the school inflexible... somehow!
+end
+
+Given("the school has {int} placements available in the upcoming weeks") do |int|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then("there should be a radio button per date the school has specified") do
+  pending # Write code here that turns the phrase above into concrete actions
+end

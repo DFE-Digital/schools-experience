@@ -7,13 +7,6 @@ Feature: Request a school experience placement
         Given I am on the 'Request school experience placement' page for my school of choice
         Then the page's main header should be 'Request school experience'
 
-    Scenario: Form contents
-        Given I am on the 'Request school experience placement' page for my school of choice
-        Then I should see a form with the following fields:
-            | Label                                                                                 | Type     | Options |
-            | Is there anything schools need to know about your availability for school experience? | textarea |         |
-            | What do you want to get out of your school experience?                                | textarea |         |
-
     Scenario: Displaying a warning if the school has availability information
         Given my school has availability information set
         When I am on the 'Request school experience placement' page for my school of choice
@@ -45,9 +38,3 @@ Feature: Request a school experience placement
         Given I am on the 'Request school experience placement' page for my school of choice
         When I enter 'The quick brown fox' into the 'Is there anything schools need to know about your availability for school experience?' text area
         Then the 'Is there anything schools need to know about your availability for school experience?' word count should say 'You have 146 words remaining'
-
-    Scenario: Submitting my data
-        Given I am on the 'Request school experience placement' page for my school of choice
-        And I have filled in the form with accurate data
-        When I submit the form
-        Then I should be on the 'Enter your contact details' page for my school of choice
