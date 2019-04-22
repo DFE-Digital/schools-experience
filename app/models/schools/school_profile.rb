@@ -233,5 +233,13 @@ module Schools
     def available_college_subjects
       Bookings::Subject.all
     end
+
+    def current_step
+      OnBoarding::CurrentStep.for self
+    end
+
+    def completed?
+      current_step == :COMPLETED
+    end
   end
 end
