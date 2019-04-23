@@ -76,4 +76,70 @@ describe Schools::OnBoarding::AvailabilityPreferencesController, type: :request 
       end
     end
   end
+
+  context '#edit' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    before do
+      get '/schools/on_boarding/availability_preference/edit'
+    end
+
+    it 'assigns the model' do
+      expect(assigns(:availability_preference)).to \
+        eq school_profile.availability_preference
+    end
+
+    it 'renders the edit template' do
+      expect(response).to render_template :edit
+    end
+  end
+
+  context '#update' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    let :params do
+      {
+        schools_on_boarding_availability_preference: \
+          availability_preference.attributes
+      }
+    end
+
+    before do
+      patch '/schools/on_boarding/availability_preference', params: params
+    end
+
+    context 'invalid' do
+      let :availability_preference do
+        Schools::OnBoarding::AvailabilityPreference.new
+      end
+
+      it "doesn't update the school_profile" do
+        expect(school_profile.reload.availability_preference).not_to \
+          eq availability_preference
+      end
+
+      it 'rerenders the edit template' do
+        expect(response).to render_template :edit
+      end
+    end
+
+    context 'valid' do
+      let :availability_preference do
+        FactoryBot.build :availability_preference, :flexible
+      end
+
+      it 'updates the school_profile' do
+        expect(school_profile.reload.availability_preference).to \
+          eq availability_preference
+      end
+
+      it 'redirects to the school_profile' do
+        expect(response).to redirect_to schools_on_boarding_profile_path
+      end
+    end
+  end
 end
