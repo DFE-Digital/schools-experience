@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :gitis_contact, class: 'Bookings::Gitis::Contact' do
-    sequence(:full_name) { |n| "Test User#{n}" }
+    firstname { "Test" }
+    sequence(:lastname) { |n| "User#{n}" }
     sequence(:email) { |n| "testuser#{n}@testdomain.com" }
     phone { "01234 567890" }
     building { "My Building" }
