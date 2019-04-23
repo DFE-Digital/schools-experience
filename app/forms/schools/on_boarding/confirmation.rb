@@ -6,6 +6,10 @@ module Schools
 
       attribute :acceptance, :boolean
       validates :acceptance, acceptance: true
+
+      def ==(other)
+        other.respond_to?(:attributes) && other.attributes == self.attributes
+      end
     end
   end
 end

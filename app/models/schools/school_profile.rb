@@ -245,6 +245,14 @@ module Schools
       Bookings::Subject.all
     end
 
+    def current_step
+      OnBoarding::CurrentStep.for self
+    end
+
+    def completed?
+      current_step == :COMPLETED
+    end
+
     def flexible_dates?
       availability_preference.flexible?
     end

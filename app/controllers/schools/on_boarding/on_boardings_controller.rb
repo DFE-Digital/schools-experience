@@ -12,12 +12,10 @@ module Schools
       end
 
       def next_step_path(school_profile)
-        current_step = CurrentStep.for school_profile
-
-        if current_step == :COMPLETED
+        if school_profile.completed?
           schools_on_boarding_profile_path
         else
-          public_send "new_schools_on_boarding_#{current_step}_path"
+          public_send "new_schools_on_boarding_#{school_profile.current_step}_path"
         end
       end
     end
