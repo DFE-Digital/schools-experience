@@ -165,7 +165,7 @@ ActiveRecord::Schema.define(version: 2019_04_18_134919) do
     t.text "administration_fee_payment_method"
     t.decimal "dbs_fee_amount_pounds", precision: 6, scale: 2
     t.text "dbs_fee_description"
-    t.string "dbs_fee_interval"
+    t.string "dbs_fee_interval", default: "One-off"
     t.text "dbs_fee_payment_method"
     t.decimal "other_fee_amount_pounds", precision: 6, scale: 2
     t.text "other_fee_description"

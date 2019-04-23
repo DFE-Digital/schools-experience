@@ -1,4 +1,20 @@
-<%= render partial: 'schools/on_boarding/school_fees_shared_form', locals: {
-  model: @dbs_fee,
-  title: 'DBS check costs',
-  submission_path: schools_on_boarding_dbs_fee_path } %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-heading-l">
+      DBS check costs
+    </div>
+
+    <%= form_for @dbs_fee, url: schools_on_boarding_dbs_fee_path do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <%= f.pounds_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.99 %>
+      <%= f.text_area :description, rows: 4, width: 20 %>
+      <%= f.text_area :payment_method, rows: 4, width: 20, label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
+        <span class="govuk-label">
+          For example, by bank transfer, in cash or via PayPal.
+        </span>
+      <% end %>
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>
+

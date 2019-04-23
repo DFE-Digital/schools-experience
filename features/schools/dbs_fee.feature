@@ -14,7 +14,6 @@ Feature: DBS Fee
     Given I have entered the following details into the form:
       | Explain what the fee covers. | Background checks |
       | Explain how the fee is paid. | Ethereum          |
-    And I choose 'Daily' from the 'Is this a daily or one-off fee?' radio buttons
     When I submit the form
     Then I should see a validation error message
 
@@ -23,6 +22,5 @@ Feature: DBS Fee
       | Enter the number of pounds.  | 200               |
       | Explain what the fee covers. | Background checks |
       | Explain how the fee is paid. | Ethereum          |
-    And I choose 'Daily' from the 'Is this a daily or one-off fee?' radio buttons
     When I submit the form
     Then I should be on the 'Phases' page

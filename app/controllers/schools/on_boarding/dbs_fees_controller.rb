@@ -22,7 +22,6 @@ module Schools
         params.require(:schools_on_boarding_dbs_fee).permit \
           :amount_pounds,
           :description,
-          :interval,
           :payment_method
       end
     end
