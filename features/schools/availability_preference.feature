@@ -1,7 +1,7 @@
-Feature: Availability description
-  So candidates know when we offer school experience
+Feature: Availability preference
+  So I am presented with the correct screen to enter our availablity
   As a school administrator
-  I want to specify our availability
+  I want to specify what kind of dates we offer for school experience
 
   Background: I have completed the wizard thus far
     Given I am logged in as a DfE user
@@ -16,15 +16,20 @@ Feature: Availability description
     And I have completed the College subjects step
     And I have completed the Specialisms step
     And I have completed the Candidate experience details step
-    And I have completed the Availability preference step
 
   Scenario: Completing the step with error
-    Given I am on the 'Availability description' page
+    Given I am on the 'Availability preference' page
     When I submit the form
     Then I should see a validation error message
 
-  Scenario: Completing the step
-    Given I am on the 'Availability description' page
-    And I enter 'Whenever really' into the 'Outline when you offer school experience at your school.' text area
+  Scenario: Completing the step with flexible dates
+    Given I am on the 'Availability preference' page
+    And I choose "If you're flexible on dates, describe your school experience availability." from the 'Enter school experience availability or fixed dates' radio buttons
+    When I submit the form
+    Then I should be on the 'Availability description' page
+
+  Scenario: Completing the step with fixed dates
+    Given I am on the 'Availability preference' page
+    And I choose 'If you only offer fixed dates, state when you provide school experience.' from the 'Enter school experience availability or fixed dates' radio buttons
     When I submit the form
     Then I should be on the 'Experience Outline' page

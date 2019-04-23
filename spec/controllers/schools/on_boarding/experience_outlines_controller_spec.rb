@@ -18,6 +18,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_key_stage_list,
         :with_specialism,
         :with_candidate_experience_detail,
+        :with_availability_preference,
         :with_availability_description
     end
 
@@ -48,6 +49,7 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_key_stage_list,
         :with_specialism,
         :with_candidate_experience_detail,
+        :with_availability_preference,
         :with_availability_description
     end
 

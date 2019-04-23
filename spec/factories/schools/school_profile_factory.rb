@@ -112,6 +112,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_availability_preference do
+      after :build do |profile|
+        profile.availability_preference = FactoryBot.build :availability_preference
+      end
+    end
+
     trait :completed do
       with_candidate_requirement
       with_fees
@@ -125,6 +131,7 @@ FactoryBot.define do
       with_college_subjects
       with_specialism
       with_candidate_experience_detail
+      with_availability_preference
       with_availability_description
       with_experience_outline
       with_admin_contact

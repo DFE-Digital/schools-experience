@@ -17,7 +17,8 @@ describe Schools::OnBoarding::AvailabilityDescriptionsController, type: :request
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_specialism,
-        :with_candidate_experience_detail
+        :with_candidate_experience_detail,
+        :with_availability_preference
     end
 
     before do
@@ -46,7 +47,8 @@ describe Schools::OnBoarding::AvailabilityDescriptionsController, type: :request
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_specialism,
-        :with_candidate_experience_detail
+        :with_candidate_experience_detail,
+        :with_availability_preference
     end
 
     let :params do
