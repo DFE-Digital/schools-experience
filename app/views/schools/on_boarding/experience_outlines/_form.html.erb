@@ -14,7 +14,7 @@
       <%= f.radio_button_fieldset :provides_teacher_training do |fieldset| %>
         <%= fieldset.radio_input true do %>
           <%= f.text_area :teacher_training_details, rows: 7 %>
-          <%= f.url_field :teacher_training_url %>
+          <%= f.url_field :teacher_training_url, placeholder: 'https://example.org' %>
         <% end %>
         <%= fieldset.radio_input false %>
       <% end %>
