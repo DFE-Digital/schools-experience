@@ -99,6 +99,14 @@ Given "I have completed the Candidate experience details step" do
   )
 end
 
+Given "I have completed the Availability preference step" do
+  steps %(
+    Given I am on the 'Availability preference' page
+    And I choose "If you're flexible on dates, describe your school experience availability." from the 'Enter school experience availability or fixed dates' radio buttons
+    When I submit the form
+  )
+end
+
 Given "I have completed the Availability description step" do
   steps %(
     Given I am on the 'Availability description' page

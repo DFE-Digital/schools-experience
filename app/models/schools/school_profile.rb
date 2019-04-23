@@ -10,22 +10,25 @@ module Schools
       # these steps. If this is the case we want to reset those steps to their
       # initial state.
       unless fees.administration_fees?
-        self.administration_fee = Schools::OnBoarding::AdministrationFee.new
+        self.administration_fee = OnBoarding::AdministrationFee.new
       end
       unless fees.dbs_fees?
-        self.dbs_fee = Schools::OnBoarding::DBSFee.new
+        self.dbs_fee = OnBoarding::DBSFee.new
       end
       unless fees.other_fees?
-        self.other_fee = Schools::OnBoarding::OtherFee.new
+        self.other_fee = OnBoarding::OtherFee.new
       end
       unless phases_list.primary?
-        self.key_stage_list = Schools::OnBoarding::KeyStageList.new
+        self.key_stage_list = OnBoarding::KeyStageList.new
       end
       unless phases_list.secondary?
         self.secondary_subjects.destroy_all
       end
       unless phases_list.college?
         self.college_subjects.destroy_all
+      end
+      if availability_preference.fixed?
+        self.availability_description = OnBoarding::AvailabilityDescription.new
       end
     end
 
@@ -186,6 +189,14 @@ module Schools
       constructor: :compose
 
     composed_of \
+      :availability_preference,
+      class_name: 'Schools::OnBoarding::AvailabilityPreference',
+      mapping: [
+        %w(availability_preference_fixed fixed)
+      ],
+      constructor: :compose
+
+    composed_of \
       :availability_description,
       class_name: 'Schools::OnBoarding::AvailabilityDescription',
       mapping: [
@@ -240,6 +251,14 @@ module Schools
 
     def completed?
       current_step == :COMPLETED
+    end
+
+    def flexible_dates?
+      availability_preference.flexible?
+    end
+
+    def fixed_dates?
+      availability_preference.fixed?
     end
   end
 end

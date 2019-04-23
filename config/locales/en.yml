@@ -167,6 +167,10 @@ en:
             email:
               blank: "Enter admin contact's email address"
               invalid: 'Enter a valid email address'
+        schools/on_boarding/availability_preference:
+          attributes:
+            fixed:
+              inclusion: 'Select an option'
         schools/on_boarding/availability_description:
           attributes:
             description:
@@ -214,6 +218,8 @@ en:
           <p>
             These details will help candidates select your school experience.
           </p>
+      schools_on_boarding_availability_preference:
+        fixed: 'Enter school experience availability or fixed dates'
 
       schools_on_boarding_candidate_experience_detail:
         dress_code: 'Do you have a dress code for candidates?'
@@ -244,10 +250,7 @@ en:
         objectives:
           - Provide a short explanation about what you want to gain from your placement.
           - This will help the school see if it can offer you the kind of placement you’re looking for.
-      schools_on_boarding_candidate_requirement:
-        requirements: 'For example, they must want to apply for teacher training at your school or they must be local and live within 20 miles of your school.'
       schools_on_boarding_candidate_experience_detail:
-        dress_code: 'Select all that apply or leave blank if you have no dress code.'
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
         candidate_experience:
@@ -287,11 +290,11 @@ en:
           always: 'Yes - Always'
           sometimes: 'Yes - Sometimes'
           never: 'No - Never'
-        dbs_policy: 'Outline your DBS policy in 50 words or fewer.'
+        dbs_policy: 'Outline your DBS policy in 50 words or less.'
         requirements:
           true: 'Yes'
           false: 'No'
-        requirements_details: 'Provide details'
+        requirements_details: 'Provide details.'
       schools_on_boarding_fees:
         administration_fees: 'Administration costs'
         dbs_fees: 'DBS check costs'
@@ -300,6 +303,7 @@ en:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_labels
+        payment_method: 'Explain how the fee is paid.'
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:
@@ -308,7 +312,7 @@ en:
         has_specialism:
           true: 'Yes'
           false: 'No'
-        details: 'Provide details'
+        details: 'Provide details.'
       schools_on_boarding_candidate_experience_detail:
         business_dress: 'Business dress'
         cover_up_tattoos: 'Cover up tattoos'
@@ -324,6 +328,7 @@ en:
         disabled_facilities:
           true: 'Yes'
           false: 'No'
+        disabled_facilities_details: 'Provide details.'
         start_time: 'Start time. For example, 8:15am.'
         end_time: 'Finish time. For example, 4:30pm'
         times_flexible:
@@ -340,10 +345,16 @@ en:
         full_name: 'Full name'
         phone: 'UK telephone number'
         email: 'Email address'
+      schools_on_boarding_availability_preference:
+        fixed:
+          true_html: 'If you only offer <strong>fixed</strong> dates, state when you provide school experience.<span id="more-detail-hint" class="govuk-hint">For example, on 10 May 2020.</span>'
+          false_html: "If you're <strong>flexible</strong> on dates, describe your school experience availability.<span id='more-detail-hint' class='govuk-hint'>For example, on specific days of the week and open days or around exams, holidays and term times.</span>"
       schools_on_boarding_availability_description:
         description: 'Outline when you offer school experience at your school.'
       schools_on_boarding_confirmation:
         acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/privacy_policy" class="govuk-link">privacy policy</a>'
+      schools_on_boarding_key_stage_list:
+        early_years: 'Early years foundation stage (EYFS)'
 
     page_entries_info:
       one_page:

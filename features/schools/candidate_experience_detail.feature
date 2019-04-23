@@ -41,4 +41,4 @@ Feature: Candidate experience details
     And I enter '4:30 pm' into the 'Finish time' text area
     And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
     When I submit the form
-    Then I should be on the 'Availability Description' page
+    Then I should be on the 'Availability Preference' page
