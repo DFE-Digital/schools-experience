@@ -58,13 +58,24 @@ Given("the school I'm applying to is flexible on dates") do
 end
 
 Given("the school I'm applying to is not flexible on dates") do
-  pending # make the school inflexible... somehow!
+  @school_profile = FactoryBot.create(:school_profile, :with_fixed_availability_preference)
+  @school = @school_profile.bookings_school
 end
 
 Given("the school has {int} placements available in the upcoming weeks") do |int|
-  pending # Write code here that turns the phrase above into concrete actions
+  (1..int).to_a.map { |i| i.weeks.from_now.to_date }.each do |date|
+    FactoryBot.create(
+      :bookings_placement_date,
+      date: date,
+      school_profile: @school_profile
+    )
+  end
+
+  expect(@school_profile.bookings_placement_dates.count).to eql(int)
 end
 
 Then("there should be a radio button per date the school has specified") do
-  pending # Write code here that turns the phrase above into concrete actions
+  @school_profile.bookings_placement_dates.map(&:to_s).each do |date_string|
+    expect(page).to have_field(date_string, type: 'radio')
+  end
 end
