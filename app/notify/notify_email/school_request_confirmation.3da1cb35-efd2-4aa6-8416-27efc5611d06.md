@@ -18,11 +18,11 @@ Request details:
 * School or college: ((school_name))
 * Experience availability: ((placement_availability))
 * Experience outcome: ((placement_outcome))
+* Experience subject – first choice: ((candidate_teaching_subject_first_choice))
+* Experience subject – second choice: ((candidate_teaching_subject_second_choice))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))
 * Teaching stage (multiple choice): ((candidate_teaching_stage))
-* Teaching subject – first choice: ((candidate_teaching_subject_first_choice))
-* Teaching subject – second choice: ((candidate_teaching_subject_second_choice))
 * DBS certificate: ((candidate_dbs_check_document))
 
 # Accept or reject their request
@@ -31,8 +31,8 @@ The candidate is aware you may be in touch to discuss their school experience re
 
 It's your responsibility to book them on experience at your school and you can email or call them to:
 
-* discuss their suitability for school experience at your site
-offer and arrange the best available school experience dates
+* discuss their request and suitability for school experience at your site
+* offer and arrange the best available school experience dates
 * find out more about their requirements - including any disability or access needs
 * explain any background and security checks they might need to go through
 * explain any fees they might need to pay - including any administration, DBS check, parking or other fees

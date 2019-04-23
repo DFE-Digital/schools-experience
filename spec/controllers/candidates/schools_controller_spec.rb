@@ -23,11 +23,14 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       expect(assigns(:search).location).to eq('Manchester')
       expect(assigns(:search).latitude).to eq('53.481')
       expect(assigns(:search).longitude).to eq('-2.241')
-      expect(assigns(:search).distance).to eq(10)
       expect(assigns(:search).phases).to eq([1])
       expect(assigns(:search).subjects).to eq([2, 3])
       expect(assigns(:search).max_fee).to eq('30')
       expect(assigns(:search).order).to eq('Name')
+
+      # note, this search will yield no results so the search radius will
+      # automatically be expanded from 10 to the value at EXPANDED_SEARCH_RADIUS
+      expect(assigns(:search).distance).to eq(Candidates::SchoolsController::EXPANDED_SEARCH_RADIUS)
     end
 
     context 'when location and coordinates are blank' do
