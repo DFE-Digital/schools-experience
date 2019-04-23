@@ -91,4 +91,8 @@ class Bookings::School < ApplicationRecord
   def disabled?
     !enabled?
   end
+
+  def fixed_dates?
+    school_profile&.fixed_dates?
+  end
 end

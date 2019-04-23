@@ -25,6 +25,7 @@ FactoryBot.define do
           "updated_at" => current_time
         },
          "candidates_registrations_placement_preference" => {
+           "urn" => urn,
            "availability" => "Every third Tuesday",
            "objectives" => "test the software",
            "created_at" => current_time,

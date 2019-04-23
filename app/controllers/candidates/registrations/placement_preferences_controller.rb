@@ -4,7 +4,8 @@ module Candidates
       before_action :set_school
 
       def new
-        @placement_preference = PlacementPreference.new attributes_from_session
+        @placement_preference = PlacementPreference.new \
+          attributes_from_session.merge(urn: current_urn)
       end
 
       def create
@@ -43,9 +44,10 @@ module Candidates
       end
 
       def placement_preference_params
-        params.require(:candidates_registrations_placement_preference).permit \
+        params.require(:candidates_registrations_placement_preference).permit(
           :availability,
           :objectives
+        ).merge(urn: current_urn)
       end
 
       def attributes_from_session
