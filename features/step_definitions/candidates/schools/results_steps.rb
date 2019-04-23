@@ -106,3 +106,47 @@ end
 Then("the location input should be populated with {string}") do |string|
   expect(page.find('input#location').value).to eql(string)
 end
+
+Given("there are no schools near my search location") do
+  # do nothing, my location is Bury, Greater Manchester
+end
+
+Given("there are some schools just outside it") do
+  FactoryBot.create_list(:bookings_school, 2, coordinates: Bookings::School::GEOFACTORY.point(-2.421, 53.624))
+end
+
+When("I search for schools within {int} miles") do |int|
+  path = candidates_schools_path(location: 'Bury', distance: int)
+  visit(path)
+  path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
+  expect(path_with_query).to eql(path)
+end
+
+Then("the results page should include a warning that my search radius was expanded") do
+  within('#results li.expanded-search-radius') do
+    expect(page).to have_css('h3', text: '0 results found within 5 miles')
+    expect(page).to have_content('However, we did find the following schools nearby:')
+  end
+end
+
+Then("the results from further out are displayed") do
+  expect(page).to have_css('article.school-result', count: Bookings::School.count)
+end
+
+Given("there are no schools in or around my search location") do
+  # do nothing
+end
+
+Then("the results page should include a warning that no results were found") do
+  within('#results li.expanded-search-radius') do
+    expect(page).to have_css('h3', text: '0 results found within 5 miles')
+    expect(page).to have_content("Not all schools in your area have signed up to use this website.")
+    expect(page).to have_content("To find out about arranging school experience with schools who are not yet on this website visit")
+  end
+end
+
+Then("there should be a link to Get into teaching") do
+  within('#results li.expanded-search-radius') do
+    expect(page).to have_link("Get into teaching", href: 'https://getintoteaching.education.gov.uk/school-experience/arranging-school-experience-independently')
+  end
+end
