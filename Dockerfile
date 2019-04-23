@@ -1,4 +1,6 @@
-FROM ruby:2.5.5
+############# DEPLOY IMAGE ####################
+
+FROM ruby:2.5.5 AS deploy
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -12,6 +14,16 @@ EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
 HEALTHCHECK CMD bin/check_health.sh || exit 1
+
+# Install Gems removing artifacts
+COPY .ruby-version Gemfile Gemfile.lock ./
+RUN bundle install --without development --jobs=$(nproc --all) && \
+    rm -rf /root/.bundle/cache && \
+    rm -rf /usr/local/bundle/cache
+
+############# BUILD IMAGE #######################
+
+FROM deploy AS build
 
 # Install node, leaving as few artifacts as possible
 RUN apt-get update && apt-get install apt-transport-https && \
@@ -27,15 +39,18 @@ RUN apt-get update && apt-get install apt-transport-https && \
 COPY package.json yarn.lock ./
 RUN yarn install && yarn cache clean
 
-# Install Gems removing artifacts
-COPY .ruby-version Gemfile Gemfile.lock ./
-RUN bundle install --without development --jobs=$(nproc --all) && \
-    rm -rf /root/.bundle/cache && \
-    rm -rf /usr/local/bundle/cache
-
 # Add code and compile assets
 COPY . .
 RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 # Create symlinks for CSS files without digest hashes for use in error pages
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
+############# FINISH DEPLOY IMAGE ####################
+
+FROM deploy
+
+# Add code and compiled assets from build stage
+COPY . .
+COPY --from=build /app/public/assets /app/public/assets
+COPY --from=build /app/public/packs /app/public/packs
