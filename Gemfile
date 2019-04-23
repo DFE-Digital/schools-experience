@@ -22,7 +22,6 @@ gem 'puma', '~> 3.12'
 
 # Use SCSS for stylesheets
 gem 'sassc-rails'
-gem "autoprefixer-rails"
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker'

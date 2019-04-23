@@ -71,8 +71,6 @@ GEM
     arel (9.0.0)
     ast (2.4.0)
     attr_required (1.0.1)
-    autoprefixer-rails (9.6.1)
-      execjs
     backports (3.13.0)
     bindata (2.4.4)
     bindex (0.7.0)
@@ -145,7 +143,6 @@ GEM
     exception_notification (4.3.0)
       actionmailer (>= 4.0, < 6)
       activesupport (>= 4.0, < 6)
-    execjs (2.7.0)
     factory_bot (5.0.2)
       activesupport (>= 4.2.0)
     factory_bot_rails (5.0.2)
@@ -429,7 +426,6 @@ DEPENDENCIES
   acts_as_list
   addressable
   application_insights!
-  autoprefixer-rails
   bootsnap (>= 1.1.0)
   brakeman (>= 4.4.0)
   breasal

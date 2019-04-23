@@ -26,7 +26,6 @@
 - SassC (replacement for deprecated sass-rails)
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 - [GOV.UK Lint](https://github.com/alphagov/govuk-lint)
-- Autoprefixer rails
 - RSpec
 - Dotenv (managing environment variables)
 - Dockerfile to package app for deployment
