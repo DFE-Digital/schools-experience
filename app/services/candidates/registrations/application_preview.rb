@@ -17,6 +17,7 @@ module Candidates
         to: :@contact_information
 
       delegate \
+        :school,
         :school_name,
         :degree_stage,
         :degree_subject,
@@ -52,8 +53,8 @@ module Candidates
         email
       end
 
-      def school
-        school_name
+      def placement_date
+        placement_preference.placement_date
       end
 
       def placement_availability

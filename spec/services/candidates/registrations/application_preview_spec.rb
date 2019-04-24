@@ -28,6 +28,8 @@ describe Candidates::Registrations::ApplicationPreview do
       availability: 'From Epiphany to Whitsunday'
   end
 
+  let(:school) { build(:bookings_school) }
+
   let :subject_preference do
     double Candidates::Registrations::SubjectPreference,
       degree_stage: "I don't have a degree and am not studying for one",
@@ -36,7 +38,8 @@ describe Candidates::Registrations::ApplicationPreview do
       teaching_stage: "I'm thinking about teaching and want to find out more",
       subject_first_choice: "Architecture",
       subject_second_choice: "Maths",
-      school_name: 'Test school'
+      school_name: 'Test school',
+      school: school
   end
 
   let :registration_session do
@@ -78,7 +81,13 @@ describe Candidates::Registrations::ApplicationPreview do
 
   context '#school' do
     it 'returns the correct value' do
-      expect(subject.school).to eq "Test school"
+      expect(subject.school).to eq school
+    end
+  end
+
+  context '#school_name' do
+    it 'returns the correct value' do
+      expect(subject.school_name).to eq "Test school"
     end
   end
 
