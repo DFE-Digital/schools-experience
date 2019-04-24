@@ -43,6 +43,21 @@ shared_examples 'a placement preference' do
       end
     end
 
+    context 'when the school mandates fixed dates' do
+      let(:placement_preference) { described_class.new(urn: school_urn) }
+
+      before do
+        allow(placement_preference).to receive(:school_offers_fixed_dates?).and_return(true)
+      end
+
+      before(:each) { placement_preference.validate }
+
+      it 'adds an error to availability' do
+        expect(placement_preference.errors[:bookings_placement_date_id]).to include \
+          "Choose a placement date"
+      end
+    end
+
     context 'when objectives are not present' do
       let :placement_preference do
         described_class.new
