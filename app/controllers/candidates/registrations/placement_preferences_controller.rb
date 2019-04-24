@@ -46,7 +46,8 @@ module Candidates
       def placement_preference_params
         params.require(:candidates_registrations_placement_preference).permit(
           :availability,
-          :objectives
+          :objectives,
+          :bookings_placement_date_id
         ).merge(urn: current_urn)
       end
 

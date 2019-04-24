@@ -79,3 +79,8 @@ Then("there should be a radio button per date the school has specified") do
     expect(page).to have_field(date_string, type: 'radio')
   end
 end
+
+When("I choose a placement date") do
+  @last_date = @school_profile.bookings_placement_dates.last
+  choose @last_date.to_s
+end
