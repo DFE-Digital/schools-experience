@@ -1,7 +1,7 @@
 Feature: School show page (enhanced data)
     To help me evaluate a school
     As a potential candidate
-    I want to be able to view a scohol's details
+    I want to be able to view a school's details
 
     Background:
         Given there is a school called 'Springfield Elementary'
@@ -10,7 +10,7 @@ Feature: School show page (enhanced data)
         Given I am on the profile page for the chosen school
         Then the page's main heading should be "Springfield Elementary"
 
-    Scenario: School placement information:
+    Scenario: School placement information
         Given the school has placement information text:
             """
             Paragraph one
