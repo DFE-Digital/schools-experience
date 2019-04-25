@@ -72,6 +72,7 @@ Given("the school has {int} placements available in the upcoming weeks") do |int
   end
 
   expect(@school_profile.bookings_placement_dates.count).to eql(int)
+  @placement_dates = @school_profile.bookings_placement_dates.map(&:to_s)
 end
 
 Then("there should be a radio button per date the school has specified") do

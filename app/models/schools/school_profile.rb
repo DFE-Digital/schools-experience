@@ -252,5 +252,9 @@ module Schools
     def fixed_dates?
       availability_preference.fixed?
     end
+
+    def has_available_dates?
+      fixed_dates? && bookings_placement_dates.available.exists?
+    end
   end
 end

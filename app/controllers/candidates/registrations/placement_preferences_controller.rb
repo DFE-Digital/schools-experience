@@ -1,7 +1,7 @@
 module Candidates
   module Registrations
     class PlacementPreferencesController < RegistrationsController
-      before_action :set_school
+      before_action :set_school, :set_placement_dates
 
       def new
         @placement_preference = PlacementPreference.new \
@@ -41,6 +41,15 @@ module Candidates
       def set_school
         # FIXME modify to use current_registration.school
         @school = Candidates::School.find(params[:school_id])
+      end
+
+      def set_placement_dates
+        if @school.fixed_dates?
+          @placement_dates = @school
+            .school_profile
+            .bookings_placement_dates
+            .available
+        end
       end
 
       def placement_preference_params

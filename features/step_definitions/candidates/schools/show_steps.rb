@@ -169,3 +169,12 @@ Then("the availability information in the sidebar should read {string}") do |str
     expect(page).to have_css('dd', text: string)
   end
 end
+
+Then("I should see the list of {string} in the sidebar") do |string|
+  within('#school-availability-info') do
+    expect(page).to have_css('dt', text: string)
+    @placement_dates.each do |pd|
+      expect(page).to have_css('li', text: pd.to_s)
+    end
+  end
+end
