@@ -187,12 +187,23 @@ shared_examples_for "email template from application preview" do
         expect(subject.placement_outcome).to eql(ap.placement_outcome)
       end
 
-      specify 'placement_availability is correctly-assigned' do
-        expect(subject.placement_availability).to eql(ap.placement_availability)
-      end
-
       specify 'school_name is correctly-assigned' do
         expect(subject.school_name).to eql(ap.school)
+      end
+
+      context 'placement availability/dates' do
+        context 'when school availability is flexible' do
+          specify 'placement_availability is correctly-assigned' do
+            expect(subject.placement_availability).to eql(ap.placement_availability)
+          end
+        end
+
+        context 'when the school has set dates' do
+          let(:rs) { build(:registration_session, :with_placement_date) }
+          specify 'bookings_placement_date_id is correctly-assigned' do
+            expect(subject.placement_availability).to eql(Bookings::PlacementDate.last.to_s)
+          end
+        end
       end
     end
   end
