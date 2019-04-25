@@ -18,7 +18,7 @@ Personal details
 Request details
 
 * School or college: ((school_name))
-* Experience availability: ((placement_availability))
+* Availability/preferred dates: ((placement_availability))
 * Experience outcome: ((placement_outcome))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))

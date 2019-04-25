@@ -51,7 +51,8 @@ class NotifyEmail::CandidateRequestConfirmation < Notify
     NotifyEmail::CandidateRequestConfirmation.new(
       to: to,
       candidate_address: application_preview.full_address,
-      candidate_dbs_check_document: application_preview.dbs_check_document, candidate_degree_stage: application_preview.degree_stage,
+      candidate_dbs_check_document: application_preview.dbs_check_document,
+      candidate_degree_stage: application_preview.degree_stage,
       candidate_degree_subject: application_preview.degree_subject,
       candidate_email_address: application_preview.email_address,
       candidate_name: application_preview.full_name,
