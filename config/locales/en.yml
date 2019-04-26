@@ -1,6 +1,8 @@
 en:
   errors:
    format: "%{message}"
+   messages:
+     use_fewer_words: "Use %{count} words or fewer"
 
   placement_preference_errors: &placement_preference_errors
     attributes:
