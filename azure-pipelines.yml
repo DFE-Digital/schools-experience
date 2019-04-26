@@ -3,6 +3,7 @@ pool:
 
 variables:
   imageName: school-experience
+  imageTag: v$(Build.BuildNumber)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
   # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
@@ -80,7 +81,8 @@ steps:
     displayName: 'Push Docker image (built from master)'
 
   - script: |
-      docker push $(dockerRegistry)/$(imageName):$(imageTag)
+      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):$(imageTag)-phase2
+      docker push $(dockerRegistry)/$(imageName):$(imageTag)-phase2
       docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):phase2
       docker push $(dockerRegistry)/$(imageName):phase2
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/phase2')
