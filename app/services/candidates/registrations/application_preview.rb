@@ -62,7 +62,7 @@ module Candidates
       end
 
       def placement_availability_description
-        placement_preference.availability || placement_preference.placement_date
+        placement_preference.availability || placement_preference.placement_date.to_s
       end
 
       def placement_outcome
