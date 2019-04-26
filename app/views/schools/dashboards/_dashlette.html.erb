@@ -11,7 +11,7 @@
     </li>
 
     <li>
-      <%= link_to "Turn requests on / off", "#" %>
+      <%= link_to "Turn requests on / off", edit_schools_enabled_path %>
       <span class="govuk-hint">
         Choose to stop / start receiving requests from candidates.
         Requests are currently <strong><%= school_enabled_description(@current_school) %></strong>.

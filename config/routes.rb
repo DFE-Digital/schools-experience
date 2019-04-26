@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     namespace :schools do
       resource :session, only: %i(show destroy)
       resource :dashboard, only: :show
+      resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
       resources :placement_requests do
         resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
