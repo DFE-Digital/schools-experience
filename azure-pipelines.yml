@@ -3,7 +3,7 @@ pool:
 
 variables:
   imageName: school-experience
-  imageTag: v$(Build.BuildId)
+  imageTag: v$(Build.BuildNumber)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
   # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
