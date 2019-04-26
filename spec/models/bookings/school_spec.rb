@@ -120,6 +120,10 @@ describe Bookings::School, type: :model do
         .class_name("Bookings::SchoolType")
       )
     end
+
+    specify do
+      is_expected.to have_one(:profile).class_name("Bookings::Profile")
+    end
   end
 
   describe 'Paramterisation' do
