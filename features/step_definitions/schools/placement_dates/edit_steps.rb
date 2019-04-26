@@ -3,7 +3,7 @@ Given("I am on the edit page for my placement") do
     :bookings_placement_date,
     date: 3.weeks.from_now,
     duration: 6,
-    school_profile: @school_profile
+    bookings_school: @school
   )
   path = edit_schools_placement_date_path(@placement_date)
   visit path
@@ -16,7 +16,7 @@ Given("I am on the edit page for my {string} placement") do |state|
     state.to_sym,
     date: 3.weeks.from_now,
     duration: 6,
-    school_profile: @school_profile
+    bookings_school: @school
   )
   path = edit_schools_placement_date_path(@placement_date)
   visit path

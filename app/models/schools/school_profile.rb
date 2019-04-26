@@ -228,10 +228,6 @@ module Schools
       through: :college_phase_subjects,
       dependent: :destroy
 
-    has_many :bookings_placement_dates,
-      class_name: 'Bookings::PlacementDate',
-      foreign_key: :schools_school_profile_id
-
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
       foreign_key: 'bookings_school_id',
@@ -259,10 +255,6 @@ module Schools
 
     def fixed_dates?
       availability_preference.fixed?
-    end
-
-    def has_available_dates?
-      fixed_dates? && bookings_placement_dates.available.exists?
     end
   end
 end

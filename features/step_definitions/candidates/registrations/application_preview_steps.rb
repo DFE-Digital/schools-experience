@@ -61,17 +61,16 @@ end
 
 Given("my school has fixed dates") do
   @fixed_dates = true
-  @school_profile.update_attributes(availability_preference_fixed: true)
+  @school.update_attributes(availability_preference_fixed: true)
   (1..3).each { |i| i.weeks.from_now }.each do |date|
-    @school_profile.bookings_placement_dates.create(date: date.weeks.from_now)
-    @wanted_bookings_placement_date = @school_profile.bookings_placement_dates.last.to_s
+    @school.bookings_placement_dates.create(date: date.weeks.from_now)
+    @wanted_bookings_placement_date = @school.bookings_placement_dates.last.to_s
   end
   # do nothing, it's the default
 end
 
 Given("my school of choice exists") do
-  @school_profile = FactoryBot.create(:school_profile)
-  @school = @school_profile.bookings_school
+  @school = FactoryBot.create(:bookings_school, urn: 123456)
 end
 
 Given("my school of choice offers {string}") do |string|

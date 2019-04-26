@@ -116,8 +116,16 @@ describe Bookings::School, type: :model do
     specify do
       is_expected.to(
         belong_to(:school_type)
-        .with_foreign_key(:bookings_school_type_id)
-        .class_name("Bookings::SchoolType")
+          .with_foreign_key(:bookings_school_type_id)
+          .class_name("Bookings::SchoolType")
+      )
+    end
+
+    specify do
+      is_expected.to(
+        have_many(:bookings_placement_dates)
+          .with_foreign_key(:bookings_school_id)
+          .class_name('Bookings::PlacementDate')
       )
     end
   end

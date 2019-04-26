@@ -48,6 +48,10 @@ class Bookings::School < ApplicationRecord
     foreign_key: :bookings_school_id,
     dependent: :destroy
 
+  has_many :bookings_placement_dates,
+    class_name: 'Bookings::PlacementDate',
+    foreign_key: :bookings_school_id
+
   scope :enabled, -> { where(enabled: true) }
 
   scope :that_provide, ->(subject_ids) do
@@ -76,10 +80,6 @@ class Bookings::School < ApplicationRecord
     end
   end
 
-  def availability_preference_fixed?
-    school_profile&.availability_preference&.fixed?
-  end
-
   def to_param
     urn.to_s.presence
   end
@@ -92,7 +92,7 @@ class Bookings::School < ApplicationRecord
     !enabled?
   end
 
-  def fixed_dates?
-    school_profile&.fixed_dates?
+  def has_available_dates?
+    bookings_placement_dates.available.any?
   end
 end

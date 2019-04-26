@@ -44,9 +44,8 @@ module Candidates
       end
 
       def set_placement_dates
-        if @school.fixed_dates?
+        if @school.availability_preference_fixed?
           @placement_dates = @school
-            .school_profile
             .bookings_placement_dates
             .available
         end

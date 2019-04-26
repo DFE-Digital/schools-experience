@@ -23,7 +23,7 @@ module Candidates
       private
 
         def school_offers_fixed_dates?
-          school.fixed_dates?
+          school.availability_preference_fixed?
         end
 
         def availability_not_too_long
