@@ -27,7 +27,7 @@ module Schools
       validates :other_dress_requirements_detail, presence: true, if: :other_dress_requirements
       validates :parking_provided, inclusion: [true, false]
       validates :parking_details, presence: true, if: :parking_provided
-      validates :nearby_parking_details, presence: true, unless: :parking_provided
+      validates :nearby_parking_details, presence: true, if: -> { !parking_provided && !parking_provided.nil? }
       validates :disabled_facilities, inclusion: [true, false]
       validates :disabled_facilities_details, presence: true, if: :disabled_facilities
       validates :start_time, presence: true
