@@ -8,13 +8,10 @@ en:
     attributes:
       availability:
         blank: "Enter your availability"
-        use_fewer_words: "Use 150 words or fewer"
       objectives:
         blank: "Enter what you want to get out of a placement"
-        use_fewer_words: "Use 150 words or fewer"
       bookings_placement_date_id:
         blank: "Choose a placement date"
-
 
   subject_preference_errors: &subject_preference_errors
     attributes:
