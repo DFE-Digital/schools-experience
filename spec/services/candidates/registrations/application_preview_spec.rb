@@ -91,12 +91,6 @@ describe Candidates::Registrations::ApplicationPreview do
     end
   end
 
-  context '#placement_availability' do
-    it 'returns the correct value' do
-      expect(subject.placement_availability).to eq 'From Epiphany to Whitsunday'
-    end
-  end
-
   context '#placement_outcome' do
     it 'returns the correct value' do
       expect(subject.placement_outcome).to eq "test the software"
@@ -153,6 +147,45 @@ describe Candidates::Registrations::ApplicationPreview do
 
       it 'returns the correct value' do
         expect(subject.dbs_check_document).to eq "No"
+      end
+    end
+  end
+
+  context 'placement dates' do
+    context 'when school has flexible dates' do
+      let(:pa) { 'From Epiphany to Whitsunday' }
+      context '#placement_availability' do
+        it 'returns the correct value' do
+          expect(subject.placement_availability).to eq pa
+        end
+      end
+
+      context '#placement_availability_description' do
+        it 'returns the #placement_availability when it is present' do
+          expect(subject.placement_availability_description).to eq pa
+        end
+      end
+    end
+
+    context 'when school has fixed dates' do
+      let(:pd) { '02 May 2019' }
+      let :placement_preference do
+        double Candidates::Registrations::PlacementPreference,
+          objectives: "test the software",
+          placement_date: pd,
+          availability: nil
+      end
+
+      context '#placement_availability' do
+        it 'returns the correct value' do
+          expect(subject.placement_date).to eq pd
+        end
+      end
+
+      context '#placement_availability_description' do
+        it 'returns the placement date when #placement_availability is absent' do
+          expect(subject.placement_availability_description).to eq pd
+        end
       end
     end
   end
