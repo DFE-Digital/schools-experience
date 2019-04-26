@@ -101,12 +101,17 @@
       </div>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Placement availability
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= format_school_availability(@school) %>
-        </dd>
+
+        <%- if @school.fixed_dates? -%>
+          <%= render partial: 'placement_dates', locals: { school: @school } %>
+        <%- else -%>
+          <dt class="govuk-summary-list__key">
+            Placement availability
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= format_school_availability(@school) %>
+          </dd>
+        <%- end -%>
       </div>
 
       <%- if @school.teacher_training_provider? -%>

@@ -86,7 +86,8 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
           expect(registration_session).to have_received(:save).with \
             Candidates::Registrations::PlacementPreference.new \
               availability: 'Every second Friday',
-              objectives: 'Become a teacher'
+              objectives: 'Become a teacher',
+              urn: 11048
         end
 
         it 'redirects to the next step' do
@@ -100,6 +101,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
   context 'with existing placement_preference in session' do
     let :existing_placement_preference do
       Candidates::Registrations::PlacementPreference.new \
+        urn: 11048,
         objectives: 'Become a teacher'
     end
 
@@ -174,6 +176,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         it 'updates the session with the new details' do
           expect(registration_session).to have_received(:save).with \
             Candidates::Registrations::PlacementPreference.new \
+              urn: school_urn,
               availability: 'Every second Friday',
               objectives: 'I would like to become a teacher'
         end

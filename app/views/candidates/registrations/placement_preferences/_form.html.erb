@@ -3,50 +3,66 @@
 <div class="govuk-grid-row" id="placement-preference">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Request school experience</h1>
-    <p>Tell us a few details so we can forward your experience requirements to the school.</p>
 
     <%= form_for placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary placement_preference, 'There is a problem', '' %>
-      <%= f.text_area_with_maxwords \
-          :availability,
-          rows: 5,
-          maxwords: { count: 150 },
-          placeholder: t('.availability_placeholder'),
-          label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
-          <p>
-            Tell us about your availability. For example, if you're:
-          </p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>
-              available for any specific experience dates offered by schools
-            </li>
-            <li>
-              only available or unavailable for experience on particular days, dates or for certain periods of time
-            </li>
-          </ul>
-          <p>
-            The school will use this information to offer you the best dates it has available and may contact you to arrange the exact date of your experience.
-          </p>
-          <p>
-            Depending on availability and time of year, schools may not always be able to offer you the exact dates you’re looking for.
-          </p>
 
-          <%- if @school.availability_info.present? -%>
-            <section class="govuk-se-warning">
+      <%- if @school.availability_preference_fixed? %>
 
-              <div class="govuk-warning-text">
-                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                <strong class="govuk-warning-text__text">
-                  <span class="govuk-warning-text__assistive">Warning</span>
-                  The school has provided the following information
-                </strong>
-              </div>
+        <mark>FIXME add a caption</mark>
+        <%= f.radio_button_fieldset :bookings_placement_date_id,
+          choices: @placement_dates,
+          value_method: :id,
+          text_method: :to_s
+        -%>
 
-              <%= format_school_availability(@school) %>
-            </section>
-          <%- end -%>
+      <%- else -%>
+        <%= f.text_area_with_maxwords \
+            :availability,
+            rows: 5,
+            maxwords: { count: 150 },
+            placeholder: t('.availability_placeholder'),
+            label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
 
-      <% end %>
+            <p>
+              We need a few details so we can forward your experience requirements to the school.
+            </p>
+
+            <p>
+              Tell us about your availability. For example, if you're:
+            </p>
+
+            <ul class="govuk-list govuk-list--bullet">
+              <li>
+                available for any specific experience dates offered by schools
+              </li>
+              <li>
+                only available or unavailable for experience on particular days, dates or for certain periods of time
+              </li>
+            </ul>
+            <p>
+              The school will use this information to offer you the best dates it has available and may contact you to arrange the exact date of your experience.
+            </p>
+            <p>
+              Depending on availability and time of year, schools may not always be able to offer you the exact dates you’re looking for.
+            </p>
+
+            <%- if @school.availability_info.present? -%>
+              <section class="govuk-se-warning">
+
+                <div class="govuk-warning-text">
+                  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                  <strong class="govuk-warning-text__text">
+                    <span class="govuk-warning-text__assistive">Warning</span>
+                    The school has provided the following information
+                  </strong>
+                </div>
+
+                <%= format_school_availability(@school) %>
+              </section>
+            <%- end -%>
+        <% end %>
+      <%- end -%>
 
       <%= f.text_area_with_maxwords \
           :objectives,

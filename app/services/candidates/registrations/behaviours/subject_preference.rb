@@ -26,14 +26,6 @@ module Candidates
           validates :subject_second_choice, inclusion: { in: :second_subject_choices }, if: -> { subject_second_choice.present? }
         end
 
-        def school
-          @school ||= Candidates::School.find urn
-        end
-
-        def school_name
-          school.name
-        end
-
         def available_subject_choices
           @available_subject_choices ||= get_available_subject_choices
         end

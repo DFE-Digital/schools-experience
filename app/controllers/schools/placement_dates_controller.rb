@@ -4,7 +4,7 @@ class Schools::PlacementDatesController < Schools::BaseController
   def index
     @placement_dates = current_school
       .school_profile
-      .placement_dates
+      .bookings_placement_dates
       .future
       .in_date_order
   end
@@ -12,14 +12,14 @@ class Schools::PlacementDatesController < Schools::BaseController
   def new
     @placement_date = current_school
       .school_profile
-      .placement_dates
+      .bookings_placement_dates
       .new
   end
 
   def create
     @placement_date = current_school
       .school_profile
-      .placement_dates
+      .bookings_placement_dates
       .new(placement_date_params)
 
     if @placement_date.save
@@ -42,7 +42,10 @@ class Schools::PlacementDatesController < Schools::BaseController
 private
 
   def set_placement_date
-    @placement_date = current_school.school_profile.placement_dates.find(params[:id])
+    @placement_date = current_school
+      .school_profile
+      .bookings_placement_dates
+      .find(params[:id])
   end
 
   def placement_date_params

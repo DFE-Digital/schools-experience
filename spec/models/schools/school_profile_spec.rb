@@ -185,7 +185,7 @@ describe Schools::SchoolProfile, type: :model do
     it { is_expected.to have_many(:college_phase_subjects) }
     it { is_expected.to have_many(:secondary_subjects) }
     it { is_expected.to have_many(:college_subjects) }
-    it { is_expected.to have_many(:placement_dates) }
+    it { is_expected.to have_many(:bookings_placement_dates) }
     it { is_expected.to belong_to(:bookings_school) }
   end
 

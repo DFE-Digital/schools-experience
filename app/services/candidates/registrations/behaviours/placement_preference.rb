@@ -8,13 +8,23 @@ module Candidates
         MAX_WORDS_FOR_OBJECTIVE = 149
 
         included do
-          validates :availability, presence: true
+          validates :urn, presence: true
+          validates :bookings_placement_date_id,
+            presence: true,
+            if: -> { urn.present? && school_offers_fixed_dates? }
+          validates :availability,
+            presence: true,
+            unless: -> { urn.present? && school_offers_fixed_dates? }
           validate :availability_not_too_long, if: -> { availability.present? }
           validates :objectives, presence: true
           validate  :objectives_not_too_long, if: -> { objectives.present? }
         end
 
       private
+
+        def school_offers_fixed_dates?
+          school.fixed_dates?
+        end
 
         def availability_not_too_long
           if availability_too_long?

@@ -98,5 +98,12 @@ describe Bookings::PlacementDate, type: :model do
         expect(described_class.inactive).not_to include(active)
       end
     end
+
+    context '.available' do
+      after { described_class.available }
+      specify 'should combine the future, active and in_date_order scopes' do
+        expect(described_class).to receive_message_chain(:active, :future, :in_date_order)
+      end
+    end
   end
 end

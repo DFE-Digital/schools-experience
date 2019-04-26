@@ -9,8 +9,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 2019_04_18_151613) do
+ActiveRecord::Schema.define(version: 2019_04_18_180420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,7 +47,9 @@ ActiveRecord::Schema.define(version: 2019_04_18_151613) do
     t.boolean "has_dbs_check", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "availability", null: false
+    t.text "availability"
+    t.integer "bookings_placement_date_id"
+    t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
   end
 
   create_table "bookings_school_searches", force: :cascade do |t|
@@ -193,6 +194,7 @@ ActiveRecord::Schema.define(version: 2019_04_18_151613) do
     t.string "candidate_experience_detail_start_time"
     t.string "candidate_experience_detail_end_time"
     t.boolean "candidate_experience_detail_times_flexible"
+    t.integer "bookings_school_id", null: false
     t.text "experience_outline_candidate_experience"
     t.boolean "experience_outline_provides_teacher_training"
     t.text "experience_outline_teacher_training_details"
@@ -207,6 +209,7 @@ ActiveRecord::Schema.define(version: 2019_04_18_151613) do
   end
 
   add_foreign_key "bookings_placement_dates", "schools_school_profiles"
+  add_foreign_key "bookings_placement_requests", "bookings_placement_dates"
   add_foreign_key "bookings_schools", "bookings_school_types"
   add_foreign_key "bookings_schools_phases", "bookings_phases"
   add_foreign_key "bookings_schools_phases", "bookings_schools"

@@ -21,6 +21,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
   EXPECTED_ATTRIBUTES = {
     "has_dbs_check" => true,
     "availability" => "Every third Tuesday",
+    "bookings_placement_date_id" => nil,
     "objectives" => "test the software",
     "degree_stage" => "I don't have a degree and am not studying for one",
     "degree_stage_explaination" => "",

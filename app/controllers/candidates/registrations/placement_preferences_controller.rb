@@ -1,10 +1,11 @@
 module Candidates
   module Registrations
     class PlacementPreferencesController < RegistrationsController
-      before_action :set_school
+      before_action :set_school, :set_placement_dates
 
       def new
-        @placement_preference = PlacementPreference.new attributes_from_session
+        @placement_preference = PlacementPreference.new \
+          attributes_from_session.merge(urn: current_urn)
       end
 
       def create
@@ -42,10 +43,21 @@ module Candidates
         @school = Candidates::School.find(params[:school_id])
       end
 
+      def set_placement_dates
+        if @school.fixed_dates?
+          @placement_dates = @school
+            .school_profile
+            .bookings_placement_dates
+            .available
+        end
+      end
+
       def placement_preference_params
-        params.require(:candidates_registrations_placement_preference).permit \
+        params.require(:candidates_registrations_placement_preference).permit(
           :availability,
-          :objectives
+          :objectives,
+          :bookings_placement_date_id
+        ).merge(urn: current_urn)
       end
 
       def attributes_from_session

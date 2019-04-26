@@ -6,7 +6,7 @@ end
 
 Given("my school has {int} placement dates") do |int|
   @placement_dates = FactoryBot.create_list(:bookings_placement_date, int, school_profile: @school_profile)
-  expect(@school_profile.placement_dates.count).to eql(int)
+  expect(@school_profile.bookings_placement_dates.count).to eql(int)
 end
 
 Then("I should see a list with {int} entries") do |int|
@@ -42,5 +42,5 @@ Then("there should be a {string} link to the new placement date page") do |strin
 end
 
 Given("my school has no placement dates") do
-  expect(@school_profile.placement_dates).to be_empty
+  expect(@school_profile.bookings_placement_dates).to be_empty
 end
