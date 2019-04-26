@@ -234,8 +234,7 @@ module Schools
 
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
-      foreign_key: 'bookings_school_id',
-      dependent: :destroy
+      foreign_key: 'bookings_school_id'
 
     def available_secondary_subjects
       Bookings::Subject.all
