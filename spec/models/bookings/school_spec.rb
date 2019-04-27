@@ -266,5 +266,66 @@ describe Bookings::School, type: :model do
         end
       end
     end
+
+    context 'Availability and placement dates' do
+      specify { expect(described_class).to respond_to(:flexible) }
+      specify { expect(described_class).to respond_to(:fixed) }
+      specify { expect(described_class).to respond_to(:fixed_with_available_dates) }
+      specify { expect(described_class).to respond_to(:with_availability) }
+
+      let!(:flexible) { create(:bookings_school) } # flexible by default
+      let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
+      let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
+
+      let!(:inactive_date) { create(:bookings_placement_date, bookings_school: fixed_without_dates, active: false) }
+      let!(:active_date) { create(:bookings_placement_date, bookings_school: fixed_with_dates) }
+
+      context '.flexible' do
+        subject { described_class.flexible }
+
+        specify 'should include schools that offer flexible dates' do
+          expect(subject).to include(flexible)
+        end
+
+        specify 'should not include schools that offer fixed dates' do
+          expect(subject).not_to include(fixed_with_dates, fixed_without_dates)
+        end
+      end
+
+      context '.fixed' do
+        subject { described_class.fixed }
+
+        specify 'should include schools that offer fixed dates' do
+          expect(subject).to include(fixed_with_dates, fixed_without_dates)
+        end
+
+        specify 'should not include schools that offer flexible dates' do
+          expect(subject).not_to include(flexible)
+        end
+      end
+
+      context '.fixed_with_available_dates' do
+        subject { described_class.fixed_with_available_dates }
+        specify 'should include schools that offer fixed dates and have available dates' do
+          expect(subject).to include(fixed_with_dates)
+        end
+
+        specify 'should not include schools that offer fixed dates but have no available dates' do
+          expect(subject).not_to include(fixed_without_dates)
+        end
+      end
+
+      context '.with_availability' do
+        subject { described_class.with_availability }
+
+        specify 'should include schools that are either flexible or fixed with available dates' do
+          expect(subject).to include(flexible, fixed_with_dates)
+        end
+
+        specify 'should not include schools that are fixed with no available dates' do
+          expect(subject).not_to include(fixed_without_dates)
+        end
+      end
+    end
   end
 end

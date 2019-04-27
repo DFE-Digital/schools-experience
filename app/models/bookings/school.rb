@@ -80,6 +80,22 @@ class Bookings::School < ApplicationRecord
     end
   end
 
+  scope :flexible, -> { where(availability_preference_fixed: false) }
+
+  scope :fixed, -> { where(availability_preference_fixed: true) }
+
+  scope :fixed_with_available_dates, -> {
+    fixed.where(
+      id: Bookings::School
+        .joins(:bookings_placement_dates)
+        .merge(Bookings::PlacementDate.available)
+        .except(:select)
+        .select(:id)
+    )
+  }
+
+  scope :with_availability, -> { flexible.or(fixed_with_available_dates) }
+
   def to_param
     urn.to_s.presence
   end
