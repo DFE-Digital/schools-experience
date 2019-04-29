@@ -4,6 +4,7 @@ FactoryBot.define do
       current_time { DateTime.current }
       urn { 11048 }
       placement_date { create(:bookings_placement_date) }
+      uuid { 'some-uuid' }
 
       candidates_registrations_contact_information do
         {
@@ -55,6 +56,7 @@ FactoryBot.define do
 
     initialize_with do
       new \
+        "uuid" => uuid,
         "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
         "candidates_registrations_background_check"     => candidates_registrations_background_check,
         "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
@@ -64,6 +66,7 @@ FactoryBot.define do
     trait :with_placement_date do
       initialize_with do
         new \
+          "uuid" => uuid,
           "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
           "candidates_registrations_background_check"     => candidates_registrations_background_check,
           "candidates_registrations_subject_preference"   => candidates_registrations_subject_preference,
