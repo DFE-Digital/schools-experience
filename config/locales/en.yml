@@ -145,8 +145,10 @@ en:
                 blank: 'Provide details'
             start_time:
               blank: 'Provide details'
+              invalid: 'Enter a valid start time'
             end_time:
               blank: 'Provide details'
+              invalid: 'Enter a valid end time'
             times_flexible:
               inclusion: 'Select an option'
         schools/on_boarding/experience_outline:

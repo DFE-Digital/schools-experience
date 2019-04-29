@@ -57,5 +57,30 @@ describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
       subject { described_class.new disabled_facilities: true }
       it { is_expected.to validate_presence_of :disabled_facilities_details }
     end
+
+    context 'start and end times' do
+      valid_times = ['8AM', '8:30AM', '8:30 AM', '8am', '3pm', '3 pm', '17:00']
+      invalid_times = [
+        '8A', '9;00am', 'nine forty in the morning', 'mid-morning', -2
+      ]
+
+      context 'valid times' do
+        valid_times.each do |vt|
+          specify "should allow #{vt} to be assigned to both start_time, end_time" do
+            is_expected.to allow_value(vt).for(:start_time)
+            is_expected.to allow_value(vt).for(:end_time)
+          end
+        end
+      end
+
+      context 'invalid times' do
+        invalid_times.each do |ivt|
+          specify "should not allow #{ivt} to be assigned to both start_time, end_time" do
+            is_expected.not_to allow_value(ivt).for(:start_time)
+            is_expected.not_to allow_value(ivt).for(:end_time)
+          end
+        end
+      end
+    end
   end
 end
