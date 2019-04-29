@@ -2,26 +2,24 @@ require 'rails_helper'
 
 describe Candidates::Registrations::ResendConfirmationEmailsController, type: :request do
   include_context 'Stubbed candidates school'
+  include_context 'Stubbed current_registration'
 
-  let! :registration_session do
+  let :registration_session do
     FactoryBot.build :registration_session
   end
 
   before do
     allow(Candidates::Registrations::SendEmailConfirmationJob).to \
       receive :perform_later
-
-    allow(Candidates::Registrations::RegistrationSession).to \
-      receive(:new) { registration_session }
-
-    Candidates::Registrations::RegistrationStore.instance.store! \
-      registration_session
   end
 
   context '#create' do
     context 'session found' do
       context 'session not pending email confirmation' do
         before do
+          Candidates::Registrations::RegistrationStore.instance.store! \
+            registration_session
+
           post candidates_school_registrations_resend_confirmation_email_path \
             registration_session.school
         end
@@ -40,6 +38,9 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
       context 'session pending email confirmation' do
         before do
           registration_session.flag_as_pending_email_confirmation!
+
+          Candidates::Registrations::RegistrationStore.instance.store! \
+            registration_session
 
           post candidates_school_registrations_resend_confirmation_email_path \
             registration_session.school
@@ -62,6 +63,9 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
     context 'session not found' do
       before do
         allow(ExceptionNotifier).to receive :notify_exception
+
+        Candidates::Registrations::RegistrationStore.instance.store! \
+          registration_session
 
         Candidates::Registrations::RegistrationStore.instance.delete! \
           registration_session.uuid
