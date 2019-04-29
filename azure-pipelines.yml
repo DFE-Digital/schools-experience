@@ -15,16 +15,6 @@ variables:
   CUCUMBER_PROFILE: continuous_integration
 
 steps:
-  - script: |
-      echo "##vso[task.setvariable variable=imageTag]v$(Build.BuildId)"
-    condition: ne(variables['Build.SourceBranch'], 'refs/heads/phase2')
-    displayName: Setting image tag name (not on phase 2 branch)
-
-  - script: |
-      echo "##vso[task.setvariable variable=imageTag]v$(Build.BuildId)-phase2"
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/phase2')
-    displayName: Setting image tag name (on phase 2 branch), suffixed with -phase2
-
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
     env:
       pswd: $(dockerPassword)
