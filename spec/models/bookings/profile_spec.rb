@@ -180,17 +180,17 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.to allow_value('x').for(:teacher_training_info) }
     end
 
-    describe "teacher_training_website" do
+    describe "teacher_training_url" do
       context "with blank teacher_training_info" do
-        it { is_expected.to allow_value('').for(:teacher_training_website) }
+        it { is_expected.to allow_value('').for(:teacher_training_url) }
       end
 
       context 'with assigned teacher_training_info' do
         subject { described_class.new(teacher_training_info: 'hello world') }
-        it { is_expected.not_to allow_value('').for(:teacher_training_website) }
-        it { is_expected.to allow_value('https://test.com').for(:teacher_training_website) }
-        it { is_expected.to allow_value('http://test.com').for(:teacher_training_website) }
-        it { is_expected.not_to allow_value('test.com').for(:teacher_training_website) }
+        it { is_expected.not_to allow_value('').for(:teacher_training_url) }
+        it { is_expected.to allow_value('https://test.com').for(:teacher_training_url) }
+        it { is_expected.to allow_value('http://test.com').for(:teacher_training_url) }
+        it { is_expected.not_to allow_value('test.com').for(:teacher_training_url) }
       end
     end
 

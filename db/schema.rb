@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 2019_04_24_145543) do
     t.boolean "flexible_on_times", null: false
     t.text "placement_info", null: false
     t.text "teacher_training_info"
-    t.string "teacher_training_website"
+    t.string "teacher_training_url"
     t.string "admin_contact_full_name", null: false
     t.string "admin_contact_email", null: false
     t.string "admin_contact_phone", null: false

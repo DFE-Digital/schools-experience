@@ -4,7 +4,7 @@ class Bookings::Profile < ApplicationRecord
   TIME_FORMAT = /\A([0-9]|([01][0-9])|2[0-3]):[0-5][0-9]\z/.freeze
   EMAIL_FORMAT = /\A.*@.*\..*\z/.freeze
 
-  FIELDS_TO_NILIFY = %i{dbs_policy teacher_training_info teacher_training_website}.freeze
+  FIELDS_TO_NILIFY = %i{dbs_policy teacher_training_info teacher_training_url}.freeze
 
   FIELDS_TO_STRIP = %i{
     start_time end_time admin_contact_full_name admin_contact_email admin_contact_phone
@@ -47,7 +47,7 @@ class Bookings::Profile < ApplicationRecord
 
   validates :placement_info, presence: true
 
-  validates :teacher_training_website, format: URI::regexp(%w{http https}), if: :teacher_training_info
+  validates :teacher_training_url, format: URI::regexp(%w{http https}), if: :teacher_training_info
 
   validates :admin_contact_full_name, presence: true
   validates :admin_contact_email, presence: true
