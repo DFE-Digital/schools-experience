@@ -40,7 +40,7 @@ steps:
     displayName: Create Testing databases, import schema and fixtures
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rspec
     displayName: Run the Specs
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true $(dockerRegistry)/$(imageName):$(imageTag) cucumber --profile=$(CUCUMBER_PROFILE)
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 $(dockerRegistry)/$(imageName):$(imageTag) cucumber --profile=$(CUCUMBER_PROFILE)
     displayName: Run the Cucumber features
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
@@ -56,11 +56,11 @@ steps:
     displayName: Run the GovUK Lint check
   - script: docker run --name=selenium-chrome -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-chrome
     displayName: Launch Selenium Chrome
-  - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+  - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
     displayName: Run Cucumber via Selenium Chrome
   - script: docker run --name=selenium-firefox -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-firefox
     displayName: Launch Selenium Firefox
-  - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+  - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
     displayName: Run Cucumber via Selenium Firefox
 
   - script: |
