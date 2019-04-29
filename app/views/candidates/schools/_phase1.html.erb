@@ -45,11 +45,13 @@
       </p>
     </div>
 
+    <%- if @school.has_availability? -%>
     <p>
       <%= link_to "Start request",
                   new_candidates_school_registrations_placement_preference_path(@school),
                   class:"govuk-button" %>
     </p>
+    <%- end -%>
 
     <p>
       <strong>

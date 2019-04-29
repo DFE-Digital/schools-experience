@@ -108,6 +108,12 @@ class Bookings::School < ApplicationRecord
     !enabled?
   end
 
+  def has_availability?
+    !availability_preference_fixed? || has_available_dates?
+  end
+
+private
+
   def has_available_dates?
     bookings_placement_dates.available.any?
   end
