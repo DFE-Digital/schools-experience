@@ -2,7 +2,8 @@ module Schools
   module OnBoarding
     class AvailabilityPreferencesController < OnBoardingsController
       def new
-        @availability_preference = AvailabilityPreference.new
+        @availability_preference = \
+          AvailabilityPreference.new_from_bookings_school current_school
       end
 
       def create
