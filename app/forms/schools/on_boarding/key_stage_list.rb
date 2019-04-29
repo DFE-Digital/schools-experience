@@ -17,6 +17,14 @@ module Schools
           key_stage_2: key_stage2
       end
 
+      def self.new_from_bookings_school(bookings_school)
+        stages = bookings_school.primary_key_stage_info.to_s.split(', ')
+        new \
+          early_years: stages.include?('Early years foundation stage (EYFS)'),
+          key_stage_1: stages.include?('Key stage 1'),
+          key_stage_2: stages.include?('Key stage 2')
+      end
+
       def ==(other)
         other.respond_to?(:attributes) && other.attributes == self.attributes
       end

@@ -23,5 +23,9 @@ FactoryBot.define do
     trait :with_fixed_availability_preference do
       availability_preference_fixed { true }
     end
+
+    trait :with_primary_key_stage_info do
+      primary_key_stage_info { 'Early years foundation stage (EYFS), Key stage 1, Key stage 2' }
+    end
   end
 end
