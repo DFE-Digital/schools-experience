@@ -67,7 +67,7 @@ module Bookings
         output[:admin_contact_email] = input[:admin_contact_email]
         output[:admin_contact_phone] = input[:admin_contact_phone]
       else
-        input[:admin_contact_email] = input[:admin_contact_phone] = nil
+        output[:admin_contact_email] = output[:admin_contact_phone] = nil
       end
     end
 
