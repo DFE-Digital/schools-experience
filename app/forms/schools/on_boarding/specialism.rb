@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class Specialism
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class Specialism < Step
       attribute :has_specialism, :boolean
       attribute :details, :string
 
@@ -12,10 +9,6 @@ module Schools
 
       def self.compose(has_specialism, details)
         new has_specialism: has_specialism, details: details
-      end
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
       end
     end
   end

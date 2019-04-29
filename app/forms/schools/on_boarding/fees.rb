@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class Fees
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class Fees < Step
       attribute :administration_fees, :boolean
       attribute :dbs_fees, :boolean
       attribute :other_fees, :boolean
@@ -17,12 +14,6 @@ module Schools
           administration_fees: administration_fees,
           dbs_fees: dbs_fees,
           other_fees: other_fees
-      end
-
-      def ==(other)
-        return false unless other.respond_to? :attributes
-
-        other.attributes == self.attributes
       end
 
       def administration_fees?

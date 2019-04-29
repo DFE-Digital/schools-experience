@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class CandidateExperienceDetail
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class CandidateExperienceDetail < Step
       # Ensure that times look *roughly* valid. Note that it is
       # still possible to input invalid ones like '25:00'.
       # FIXME do we need to tighten this up/use a real timepicker?
@@ -70,10 +67,6 @@ module Schools
           start_time: start_time,
           end_time: end_time,
           times_flexible: times_flexible
-      end
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
       end
     end
   end
