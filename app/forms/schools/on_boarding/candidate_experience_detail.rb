@@ -4,6 +4,11 @@ module Schools
       include ActiveModel::Model
       include ActiveModel::Attributes
 
+      # Ensure that times look *roughly* valid. Note that it is
+      # still possible to input invalid ones like '25:00'.
+      # FIXME do we need to tighten this up/use a real timepicker?
+      SCHOOL_TIME_FORMAT = %r{\A((\d{1,2}):(\d{1,2})\s*((?:(am|pm)))?)|\A([\d{1,2}]\s*(am|pm))}i.freeze
+
       attribute :business_dress, :boolean, default: false
       attribute :cover_up_tattoos, :boolean, default: false
       attribute :remove_piercings, :boolean, default: false
@@ -30,9 +35,9 @@ module Schools
       validates :nearby_parking_details, presence: true, if: -> { !parking_provided && !parking_provided.nil? }
       validates :disabled_facilities, inclusion: [true, false]
       validates :disabled_facilities_details, presence: true, if: :disabled_facilities
-      validates :start_time, presence: true
-      validates :end_time, presence: true
       validates :times_flexible, inclusion: [true, false]
+      validates :start_time, presence: true, format: { with: SCHOOL_TIME_FORMAT }
+      validates :end_time, presence: true, format: { with: SCHOOL_TIME_FORMAT }
 
       def self.compose(
           business_dress,
