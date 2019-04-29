@@ -102,7 +102,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns No - Never' do
-        expect(subject.dbs_check_required).to eq 'No - Never'
+        expect(subject.dbs_check_required).to eq 'No - Candidates will be accompanied at all times'
       end
     end
 
