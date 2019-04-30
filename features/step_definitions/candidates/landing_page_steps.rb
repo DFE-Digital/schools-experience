@@ -27,7 +27,7 @@ end
 
 When("I click the {string} button") do |string|
   click_link(string)
-  sleep(2)
+  delay_page_load
 end
 
 Then("I should be on the {string} page") do |string|
