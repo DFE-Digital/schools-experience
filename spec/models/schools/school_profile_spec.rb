@@ -622,4 +622,38 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
   end
+
+  context '#requires_subjects?' do
+    let :school_profile do
+      FactoryBot.create :school_profile
+    end
+
+    context 'when phases_list includes secondary' do
+      before do
+        school_profile.phases_list = \
+          FactoryBot.build :phases_list, secondary: true, college: false
+      end
+
+      it 'returns true' do
+        expect(school_profile.requires_subjects?).to be true
+      end
+    end
+
+    context 'when phases_list includes college' do
+      before do
+        school_profile.phases_list = \
+          FactoryBot.build :phases_list, secondary: false, college: true
+      end
+
+      it 'returns true' do
+        expect(school_profile.requires_subjects?).to be true
+      end
+    end
+
+    context "when phases_list doesn't include college or secondary" do
+      it 'returns false' do
+        expect(school_profile.requires_subjects?).to be false
+      end
+    end
+  end
 end

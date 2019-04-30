@@ -219,7 +219,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  # TODO account for college subject
   context '#subjects_offered?' do
     context 'when offered' do
       let :profile do
@@ -244,7 +243,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   end
 
   context '#subjects' do
-    context 'when secondary phase not selected' do
+    context 'when subjects not offered' do
       let :profile do
         FactoryBot.build :school_profile, :with_only_early_years_phase
       end
@@ -254,7 +253,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
     end
 
-    context 'when secondary phase selected' do
+    context 'when subjects offered' do
       let :profile do
         FactoryBot.create :school_profile, :with_phases, :with_subjects
       end
