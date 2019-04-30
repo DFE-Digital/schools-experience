@@ -13,7 +13,6 @@ Feature: Candidate experience details
     And I have completed the Other costs step
     And I have completed the Phases step
     And I have completed the Secondary subjects step
-    And I have completed the College subjects step
     And I have completed the Specialisms step
 
   Scenario: Completing the step with error

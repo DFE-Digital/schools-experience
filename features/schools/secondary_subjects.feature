@@ -22,4 +22,4 @@ Feature: Secondary subjects
     Given I am on the 'Secondary subjects' page
     And I check 'Maths'
     When I submit the form
-    Then I should be on the 'College subjects' page
+    Then I should be on the 'Specialisms' page

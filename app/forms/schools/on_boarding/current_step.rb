@@ -27,8 +27,6 @@ module Schools
           :key_stage_list
         elsif secondary_subjects_required?
           :secondary_subjects
-        elsif college_subjects_required?
-          :college_subjects
         elsif specialism_required?
           :specialism
         elsif candidate_experience_detail_required?
@@ -81,11 +79,6 @@ module Schools
       def secondary_subjects_required?
         @school_profile.phases_list.secondary? &&
           @school_profile.secondary_subjects.empty?
-      end
-
-      def college_subjects_required?
-        @school_profile.phases_list.college? &&
-          @school_profile.college_subjects.empty?
       end
 
       def specialism_required?
