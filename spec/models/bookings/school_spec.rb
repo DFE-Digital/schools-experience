@@ -126,6 +126,7 @@ describe Bookings::School, type: :model do
         have_many(:bookings_placement_dates)
           .with_foreign_key(:bookings_school_id)
           .class_name('Bookings::PlacementDate')
+          .dependent(:destroy)
       )
     end
   end
