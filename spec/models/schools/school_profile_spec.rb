@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe Schools::SchoolProfile, type: :model do
-  include_context 'with phases'
-
   context 'attributes' do
     it do
       is_expected.to have_db_column(:bookings_school_id).of_type :integer

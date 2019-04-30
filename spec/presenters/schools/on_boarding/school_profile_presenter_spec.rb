@@ -7,11 +7,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     FactoryBot.create :bookings_school, :full_address, urn: 123456
   end
 
-  before do
-    FactoryBot.create :bookings_phase, :secondary
-    FactoryBot.create :bookings_phase, :college
-  end
-
   context '#school_name' do
     let :profile do
       FactoryBot.create :school_profile, bookings_school: school
