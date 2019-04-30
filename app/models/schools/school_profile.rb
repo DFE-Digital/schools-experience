@@ -21,8 +21,7 @@ module Schools
       unless phases_list.primary?
         self.key_stage_list = OnBoarding::KeyStageList.new
       end
-      # TODO collapse this conditional
-      unless phases_list.secondary? || phases_list.college?
+      unless requires_subjects?
         self.subjects.destroy_all
       end
       if availability_preference.fixed?
@@ -34,8 +33,7 @@ module Schools
     validate :dbs_fee_not_set, unless: -> { fees.dbs_fees? }
     validate :other_fee_not_set, unless: -> { fees.other_fees? }
     validate :key_stage_list_not_set, unless: -> { phases_list.primary? }
-    validates :subjects, absence: true, unless: -> { phases_list.secondary? || phases_list.college? }
-    # TODO remove this
+    validates :subjects, absence: true, unless: :requires_subjects?
 
     DEPENDENT_STAGES = [
       [:administration_fee, 'fees.administration_fees'],
@@ -235,6 +233,10 @@ module Schools
 
     def has_available_dates?
       fixed_dates? && bookings_placement_dates.available.exists?
+    end
+
+    def requires_subjects?
+      phases_list.secondary? || phases_list.college?
     end
   end
 end

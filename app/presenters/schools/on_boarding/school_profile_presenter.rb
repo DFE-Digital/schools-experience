@@ -123,7 +123,7 @@ module Schools
       end
 
       def subjects_offered?
-        @school_profile.phases_list.secondary? || @school_profile.phases_list.college?
+        @school_profile.requires_subjects?
       end
 
       def subjects
