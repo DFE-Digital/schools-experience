@@ -77,8 +77,13 @@ module Schools
       end
 
       def secondary_subjects_required?
-        @school_profile.phases_list.secondary? &&
-          @school_profile.secondary_subjects.empty?
+        return false if @school_profile.secondary_subjects.present?
+
+        return true if @school_profile.phases_list.secondary?
+
+        return true if @school_profile.phases_list.college?
+
+        false
       end
 
       def specialism_required?

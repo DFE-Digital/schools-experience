@@ -81,15 +81,15 @@ module Schools
       def school_experience_phases
         output = []
 
-        if @school_profile.phases_list.primary
+        if @school_profile.phases_list.primary?
           output << 'primary'
         end
 
-        if @school_profile.phases_list.secondary
+        if @school_profile.phases_list.secondary?
           output << 'secondary'
         end
 
-        if @school_profile.phases_list.college
+        if @school_profile.phases_list.college?
           output << 'college'
         end
 
@@ -99,11 +99,11 @@ module Schools
       end
 
       def primary_key_stages_offered?
-        @school_profile.phases_list.primary
+        @school_profile.phases_list.primary?
       end
 
       def primary_key_stages
-        return 'None' unless @school_profile.phases_list.primary
+        return 'None' unless primary_key_stages_offered?
 
         output = []
 
@@ -123,21 +123,21 @@ module Schools
       end
 
       def secondary_subjects_offered?
-        @school_profile.phases_list.secondary
+        @school_profile.phases_list.secondary?
       end
 
       def secondary_subjects
-        return 'None' unless @school_profile.phases_list.secondary
+        return 'None' unless secondary_subjects_offered?
 
         @school_profile.secondary_subjects.pluck(:name).to_sentence
       end
 
       def college_subjects_offered?
-        @school_profile.phases_list.college
+        @school_profile.phases_list.college?
       end
 
       def college_subjects
-        return 'None' unless @school_profile.phases_list.college
+        return 'None' unless college_subjects_offered?
 
         @school_profile.college_subjects.pluck(:name).to_sentence
       end
