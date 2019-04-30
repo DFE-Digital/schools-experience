@@ -6,6 +6,7 @@
 
 require 'cucumber/rails'
 require 'selenium/webdriver'
+require 'capybara-screenshot/cucumber'
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -114,6 +115,10 @@ Capybara.register_driver :ie do |app|
   Capybara::Selenium::Driver.new(app, browser: :internet_explorer, options: options)
 end
 
+Capybara.register_driver :safari do |app|
+  Capybara::Selenium::Driver.new(app, browser: :safari)
+end
+
 if (driver = ENV['CUC_DRIVER']) && driver.present?
   Capybara.default_driver = driver.to_sym
 else
@@ -128,12 +133,14 @@ else
 end
 
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
+  capabilities = ENV.fetch('CUC_DRIVER') { 'chrome' }
+
   Capybara.run_server = false
   Capybara.register_driver :selenium_remote do |app|
     Capybara::Selenium::Driver.new(app,
         :browser => :remote,
         :url => "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:4444/wd/hub",
-        :desired_capabilities => :chrome)
+        :desired_capabilities => capabilities.to_sym)
   end
   Capybara.javascript_driver = :selenium_remote
   Capybara.default_driver = :selenium_remote
