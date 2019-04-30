@@ -74,6 +74,11 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
+      is_expected.to \
+        have_db_column(:phases_list_secondary_and_college).of_type :boolean
+    end
+
+    it do
       is_expected.to have_db_column(:specialism_has_specialism).of_type :boolean
     end
 
@@ -355,6 +360,11 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'sets phases_list_college' do
         expect(model.phases_list_college).to eq form_model.college
+      end
+
+      it 'sets phases_list_secondary_and_college' do
+        expect(model.phases_list_secondary_and_college).to \
+          eq form_model.secondary_and_college
       end
 
       it 'returns the form model' do

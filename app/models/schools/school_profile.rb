@@ -123,7 +123,8 @@ module Schools
       mapping: [
         %w(phases_list_primary primary),
         %w(phases_list_secondary secondary),
-        %w(phases_list_college college)
+        %w(phases_list_college college),
+        %w(phases_list_secondary_and_college secondary_and_college)
       ],
       constructor: :compose
 

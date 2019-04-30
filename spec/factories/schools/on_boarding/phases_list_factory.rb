@@ -3,5 +3,6 @@ FactoryBot.define do
     primary { true }
     secondary { true }
     college { true }
+    secondary_and_college { true }
   end
 end
