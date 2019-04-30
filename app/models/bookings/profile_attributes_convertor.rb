@@ -6,7 +6,7 @@ module Bookings
       @input = schools_profile_attrs.symbolize_keys
     end
 
-    def profile_attributes
+    def attributes
       reset_output
 
       convert_dbs

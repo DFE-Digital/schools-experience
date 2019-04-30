@@ -10,7 +10,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       end
 
       subject do
-        described_class.new(completed_attrs).profile_attributes
+        described_class.new(completed_attrs).attributes
       end
 
       it { is_expected.to include(dbs_required: 'sometimes') }
@@ -78,7 +78,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       end
 
       subject do
-        described_class.new(model_attrs).profile_attributes
+        described_class.new(model_attrs).attributes
       end
 
       it { is_expected.to include(dbs_required: 'never') }
