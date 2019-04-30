@@ -24,10 +24,6 @@ module Schools
       unless phases_list.secondary? || phases_list.college?
         self.secondary_subjects.destroy_all
       end
-      unless phases_list.college?
-        # TODO remove me
-        self.college_subjects.destroy_all
-      end
       if availability_preference.fixed?
         self.availability_description = OnBoarding::AvailabilityDescription.new
       end
@@ -39,7 +35,6 @@ module Schools
     validate :key_stage_list_not_set, unless: -> { phases_list.primary? }
     validate :no_secondary_subjects, unless: -> { phases_list.secondary? || phases_list.college? }
     # TODO remove this
-    validate :no_college_subjects, unless: -> { phases_list.college? }
 
     DEPENDENT_STAGES = [
       [:administration_fee, 'fees.administration_fees'],
@@ -57,7 +52,7 @@ module Schools
     end
 
     # FIXME eagar load these in create/update if we're using them every time
-    %i(secondary college).each do |association|
+    %i(secondary).each do |association|
       define_method "no_#{association}_subjects" do
         if send("#{association}_subjects").any?
           errors.add :base, "#{association}_subjects should be empty when `phase_list.#{association}` == false"
@@ -207,28 +202,15 @@ module Schools
       ],
       constructor: :compose
 
-    has_many :secondary_phase_subjects,
-      -> { at_phase Bookings::Phase.secondary },
-      class_name: 'Schools::OnBoarding::PhaseSubject',
-      foreign_key: :schools_school_profile_id,
-      dependent: :destroy
-
-    has_many :college_phase_subjects,
-      -> { at_phase Bookings::Phase.college },
-      class_name: 'Schools::OnBoarding::PhaseSubject',
+    has_many :profile_subjects,
+      class_name: 'Schools::OnBoarding::ProfileSubject',
       foreign_key: :schools_school_profile_id,
       dependent: :destroy
 
     has_many :secondary_subjects,
       class_name: 'Bookings::Subject',
       source: :subject,
-      through: :secondary_phase_subjects,
-      dependent: :destroy
-
-    has_many :college_subjects,
-      class_name: 'Bookings::Subject',
-      source: :subject,
-      through: :college_phase_subjects,
+      through: :profile_subjects,
       dependent: :destroy
 
     has_many :bookings_placement_dates,
@@ -237,14 +219,9 @@ module Schools
 
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
-      foreign_key: 'bookings_school_id',
-      dependent: :destroy
+      foreign_key: 'bookings_school_id'
 
     def available_secondary_subjects
-      Bookings::Subject.all
-    end
-
-    def available_college_subjects
       Bookings::Subject.all
     end
 

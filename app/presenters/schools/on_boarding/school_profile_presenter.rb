@@ -126,20 +126,14 @@ module Schools
         @school_profile.phases_list.secondary?
       end
 
-      def secondary_subjects
-        return 'None' unless secondary_subjects_offered?
-
-        @school_profile.secondary_subjects.pluck(:name).to_sentence
-      end
-
       def college_subjects_offered?
         @school_profile.phases_list.college?
       end
 
-      def college_subjects
-        return 'None' unless college_subjects_offered?
+      def secondary_subjects
+        return 'None' unless secondary_subjects_offered? || college_subjects_offered?
 
-        @school_profile.college_subjects.pluck(:name).to_sentence
+        @school_profile.secondary_subjects.pluck(:name).to_sentence
       end
 
       def specialisms

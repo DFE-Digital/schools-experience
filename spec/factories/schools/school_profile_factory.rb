@@ -62,12 +62,6 @@ FactoryBot.define do
       end
     end
 
-    trait :with_college_subjects do
-      after :create do |profile|
-        profile.college_subjects << FactoryBot.create(:bookings_subject)
-      end
-    end
-
     trait :with_specialism do
       specialism_has_specialism { true }
       specialism_details { 'Falconry' }
@@ -134,7 +128,6 @@ FactoryBot.define do
       with_phases
       with_key_stage_list
       with_secondary_subjects
-      with_college_subjects
       with_specialism
       with_candidate_experience_detail
       with_availability_preference

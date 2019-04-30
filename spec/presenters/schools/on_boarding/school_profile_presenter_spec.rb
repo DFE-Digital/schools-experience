@@ -274,56 +274,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#college_subjects_offered?' do
-    context 'when offered' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile, :with_phases, phases_list_college: true
-      end
-
-      it 'returns true' do
-        expect(subject.college_subjects_offered?).to eq true
-      end
-    end
-
-    context 'when not offered' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile, :with_phases, phases_list_college: false
-      end
-
-      it 'returns false' do
-        expect(subject.college_subjects_offered?).to eq false
-      end
-    end
-  end
-
-  context '#college_subjects' do
-    context 'when college phase not selected' do
-      let :profile do
-        FactoryBot.build :school_profile, :with_only_early_years_phase
-      end
-
-      it 'returns None' do
-        expect(subject.college_subjects).to eq 'None'
-      end
-    end
-
-    context 'when college phase selected' do
-      let :profile do
-        FactoryBot.create \
-          :school_profile,
-          :with_phases,
-          :with_college_subjects
-      end
-
-      it 'returns the list of secondary subjects' do
-        expect(subject.college_subjects).to \
-          eq profile.college_subjects.pluck(:name).to_sentence
-      end
-    end
-  end
-
   context '#specialisms' do
     context 'without specialisms' do
       let :profile do
