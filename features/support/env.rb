@@ -133,7 +133,7 @@ else
 end
 
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
-  capabilities = ENV.fetch('CUC_DRIVER') { 'chrome'}
+  capabilities = ENV.fetch('CUC_DRIVER') { 'chrome' }
 
   Capybara.run_server = false
   Capybara.register_driver :selenium_remote do |app|
