@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
     namespace :schools do
       resource :session, only: %i(show destroy)
+      resource :switch, only: %i(new), controller: 'switch'
       resource :dashboard, only: :show
 
       resources :placement_requests do
