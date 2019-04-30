@@ -187,7 +187,7 @@ describe Schools::SchoolProfile, type: :model do
 
   context 'relationships' do
     it { is_expected.to have_many(:profile_subjects) }
-    it { is_expected.to have_many(:secondary_subjects) }
+    it { is_expected.to have_many(:subjects) }
     it { is_expected.to have_many(:bookings_placement_dates) }
     it { is_expected.to belong_to(:bookings_school) }
   end
@@ -207,17 +207,17 @@ describe Schools::SchoolProfile, type: :model do
       let(:bookings_school) { create(:bookings_school) }
       subject { described_class.create!(bookings_school: bookings_school) }
 
-      let :secondary_subject do
+      let :bookings_subject do
         FactoryBot.create :bookings_subject
       end
 
       before do
-        subject.secondary_subjects << secondary_subject
+        subject.subjects << bookings_subject
       end
 
-      context '#secondary_subjects' do
-        it 'only returns secondary subjects' do
-          expect(subject.secondary_subjects.to_a).to eq [secondary_subject]
+      context '#subjects' do
+        it 'only returns subjects' do
+          expect(subject.subjects.to_a).to eq [bookings_subject]
         end
       end
     end
@@ -591,8 +591,7 @@ describe Schools::SchoolProfile, type: :model do
 
       context 'when secondary_subjects no longer makes sense' do
         let :school_profile do
-          FactoryBot.create \
-            :school_profile, :with_phases, :with_secondary_subjects
+          FactoryBot.create :school_profile, :with_phases, :with_subjects
         end
 
         before do
@@ -600,8 +599,8 @@ describe Schools::SchoolProfile, type: :model do
             phases_list: Schools::OnBoarding::PhasesList.new(secondary: false)
         end
 
-        it 'removes secondary_subjects' do
-          expect(school_profile.reload.secondary_subjects).to be_empty
+        it 'removes subjects' do
+          expect(school_profile.reload.subjects).to be_empty
         end
       end
 

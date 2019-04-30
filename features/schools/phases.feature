@@ -21,13 +21,13 @@ Feature: Phases
     Given I am on the 'phases' page
     And I check 'Secondary'
     When I submit the form
-    Then I should be on the 'Secondary subjects' page
+    Then I should be on the 'Subjects' page
 
   Scenario: Completing step chooisng Secondary and College phase
     Given I am on the 'phases' page
     And I check 'Secondary and 16 to 18 years'
     When I submit the form
-    Then I should be on the 'Secondary subjects' page
+    Then I should be on the 'Subjects' page
 
   Scenario: Completing step choosing multiple phases
     Given I am on the 'phases' page
@@ -35,4 +35,4 @@ Feature: Phases
     And I check '16 to 18 years'
     And I check 'Secondary and 16 to 18 years'
     When I submit the form
-    Then I should be on the 'Secondary subjects' page
+    Then I should be on the 'Subjects' page

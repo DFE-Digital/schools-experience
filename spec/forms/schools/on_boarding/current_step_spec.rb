@@ -113,7 +113,7 @@ describe Schools::OnBoarding::CurrentStep do
                 end
 
                 context 'key_stage_list not required' do
-                  context 'secondary_subjects required' do
+                  context 'subjects required' do
                     let :school_profile do
                       FactoryBot.build_stubbed :school_profile,
                         :with_candidate_requirement,
@@ -125,12 +125,12 @@ describe Schools::OnBoarding::CurrentStep do
                         :with_key_stage_list
                     end
 
-                    it 'returns secondary_subjects' do
-                      expect(returned_step).to eq :secondary_subjects
+                    it 'returns subjects' do
+                      expect(returned_step).to eq :subjects
                     end
                   end
 
-                  context 'secondary_subjects not required' do
+                  context 'subjects not required' do
                     context 'specialism required' do
                       let :school_profile do
                         FactoryBot.create :school_profile,
@@ -141,7 +141,7 @@ describe Schools::OnBoarding::CurrentStep do
                           :with_other_fee,
                           :with_phases,
                           :with_key_stage_list,
-                          :with_secondary_subjects
+                          :with_subjects
                       end
 
                       it 'returns :specialism' do
@@ -160,7 +160,7 @@ describe Schools::OnBoarding::CurrentStep do
                             :with_other_fee,
                             :with_phases,
                             :with_key_stage_list,
-                            :with_secondary_subjects,
+                            :with_subjects,
                             :with_specialism
                         end
 
@@ -181,7 +181,7 @@ describe Schools::OnBoarding::CurrentStep do
                               :with_other_fee,
                               :with_phases,
                               :with_key_stage_list,
-                              :with_secondary_subjects,
+                              :with_subjects,
                               :with_specialism,
                               :with_candidate_experience_detail
                           end
@@ -203,7 +203,7 @@ describe Schools::OnBoarding::CurrentStep do
                                 :with_other_fee,
                                 :with_phases,
                                 :with_key_stage_list,
-                                :with_secondary_subjects,
+                                :with_subjects,
                                 :with_specialism,
                                 :with_candidate_experience_detail,
                                 :with_availability_preference
@@ -225,7 +225,7 @@ describe Schools::OnBoarding::CurrentStep do
                                   :with_other_fee,
                                   :with_phases,
                                   :with_key_stage_list,
-                                  :with_secondary_subjects,
+                                  :with_subjects,
                                   :with_specialism,
                                   :with_candidate_experience_detail,
                                   :with_availability_preference,
@@ -249,7 +249,7 @@ describe Schools::OnBoarding::CurrentStep do
                                     :with_other_fee,
                                     :with_phases,
                                     :with_key_stage_list,
-                                    :with_secondary_subjects,
+                                    :with_subjects,
                                     :with_specialism,
                                     :with_candidate_experience_detail,
                                     :with_availability_preference,
@@ -272,7 +272,7 @@ describe Schools::OnBoarding::CurrentStep do
                                     :with_other_fee,
                                     :with_phases,
                                     :with_key_stage_list,
-                                    :with_secondary_subjects,
+                                    :with_subjects,
                                     :with_specialism,
                                     :with_candidate_experience_detail,
                                     :with_availability_preference,

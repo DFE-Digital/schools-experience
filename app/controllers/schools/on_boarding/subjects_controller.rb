@@ -1,6 +1,6 @@
 module Schools
   module OnBoarding
-    class SecondarySubjectsController < OnBoardingsController
+    class SubjectsController < OnBoardingsController
       def new
         @subject_list = SubjectList.new
       end
@@ -9,8 +9,7 @@ module Schools
         @subject_list = SubjectList.new subjects_params
 
         if @subject_list.valid?
-          current_school_profile.update! \
-            secondary_subject_ids: @subject_list.subject_ids
+          current_school_profile.update! subject_ids: @subject_list.subject_ids
 
           redirect_to next_step_path(current_school_profile)
         else
@@ -20,15 +19,14 @@ module Schools
 
       def edit
         @subject_list = SubjectList.new \
-          subject_ids: current_school_profile.secondary_subject_ids
+          subject_ids: current_school_profile.subject_ids
       end
 
       def update
         @subject_list = SubjectList.new subjects_params
 
         if @subject_list.valid?
-          current_school_profile.update! \
-            secondary_subject_ids: @subject_list.subject_ids
+          current_school_profile.update! subject_ids: @subject_list.subject_ids
 
           redirect_to next_step_path(current_school_profile)
         else

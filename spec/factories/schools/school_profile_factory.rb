@@ -56,9 +56,9 @@ FactoryBot.define do
       key_stage_list_key_stage_2 { true }
     end
 
-    trait :with_secondary_subjects do
+    trait :with_subjects do
       after :create do |profile|
-        profile.secondary_subjects << FactoryBot.create(:bookings_subject)
+        profile.subjects << FactoryBot.create(:bookings_subject)
       end
     end
 
@@ -127,7 +127,7 @@ FactoryBot.define do
       with_only_early_years_phase
       with_phases
       with_key_stage_list
-      with_secondary_subjects
+      with_subjects
       with_specialism
       with_candidate_experience_detail
       with_availability_preference

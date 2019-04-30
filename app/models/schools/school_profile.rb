@@ -21,8 +21,9 @@ module Schools
       unless phases_list.primary?
         self.key_stage_list = OnBoarding::KeyStageList.new
       end
+      # TODO collapse this conditional
       unless phases_list.secondary? || phases_list.college?
-        self.secondary_subjects.destroy_all
+        self.subjects.destroy_all
       end
       if availability_preference.fixed?
         self.availability_description = OnBoarding::AvailabilityDescription.new
@@ -33,7 +34,7 @@ module Schools
     validate :dbs_fee_not_set, unless: -> { fees.dbs_fees? }
     validate :other_fee_not_set, unless: -> { fees.other_fees? }
     validate :key_stage_list_not_set, unless: -> { phases_list.primary? }
-    validate :no_secondary_subjects, unless: -> { phases_list.secondary? || phases_list.college? }
+    validates :subjects, absence: true, unless: -> { phases_list.secondary? || phases_list.college? }
     # TODO remove this
 
     DEPENDENT_STAGES = [
@@ -47,15 +48,6 @@ module Schools
       define_method "#{attr}_not_set" do
         unless send(attr) == send(attr).class.new
           errors.add :base, "#{attr} should not be set when `#{dependency} == false`"
-        end
-      end
-    end
-
-    # FIXME eagar load these in create/update if we're using them every time
-    %i(secondary).each do |association|
-      define_method "no_#{association}_subjects" do
-        if send("#{association}_subjects").any?
-          errors.add :base, "#{association}_subjects should be empty when `phase_list.#{association}` == false"
         end
       end
     end
@@ -207,7 +199,7 @@ module Schools
       foreign_key: :schools_school_profile_id,
       dependent: :destroy
 
-    has_many :secondary_subjects,
+    has_many :subjects,
       class_name: 'Bookings::Subject',
       source: :subject,
       through: :profile_subjects,
@@ -221,7 +213,7 @@ module Schools
       class_name: 'Bookings::School',
       foreign_key: 'bookings_school_id'
 
-    def available_secondary_subjects
+    def available_subjects
       Bookings::Subject.all
     end
 

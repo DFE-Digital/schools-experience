@@ -224,7 +224,8 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#secondary_subjects_offered?' do
+  # TODO account for college subject
+  context '#subjects_offered?' do
     context 'when offered' do
       let :profile do
         FactoryBot.build \
@@ -232,44 +233,39 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns true' do
-        expect(subject.secondary_subjects_offered?).to eq true
+        expect(subject.subjects_offered?).to eq true
       end
     end
 
     context 'when not offered' do
       let :profile do
-        FactoryBot.build \
-          :school_profile, :with_phases, phases_list_secondary: false
+        FactoryBot.build :school_profile
       end
 
       it 'returns false' do
-        expect(subject.secondary_subjects_offered?).to eq false
+        expect(subject.subjects_offered?).to eq false
       end
     end
   end
 
-  context '#secondary_subjects' do
+  context '#subjects' do
     context 'when secondary phase not selected' do
       let :profile do
         FactoryBot.build :school_profile, :with_only_early_years_phase
       end
 
       it 'returns None' do
-        expect(subject.secondary_subjects).to eq 'None'
+        expect(subject.subjects).to eq 'None'
       end
     end
 
     context 'when secondary phase selected' do
       let :profile do
-        FactoryBot.create \
-          :school_profile,
-          :with_phases,
-          :with_secondary_subjects
+        FactoryBot.create :school_profile, :with_phases, :with_subjects
       end
 
-      it 'returns the list of secondary subjects' do
-        expect(subject.secondary_subjects).to \
-          eq profile.secondary_subjects.pluck(:name).to_sentence
+      it 'returns the list of subjects' do
+        expect(subject.subjects).to eq profile.subjects.pluck(:name).to_sentence
       end
     end
   end
