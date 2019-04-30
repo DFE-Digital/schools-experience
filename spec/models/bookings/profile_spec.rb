@@ -149,8 +149,11 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.to allow_value('9:00').for(:start_time) }
       it { is_expected.to allow_value('09:00').for(:start_time) }
       it { is_expected.to allow_value(' 9:00 ').for(:start_time) }
-      it { is_expected.not_to allow_value('29:00').for(:start_time) }
-      it { is_expected.not_to allow_value('foobar').for(:start_time) }
+      it { is_expected.to allow_value('9:00am').for(:start_time) }
+      it { is_expected.to allow_value('09:00am').for(:start_time) }
+      it { is_expected.to allow_value('11:15pm').for(:start_time) }
+      it { is_expected.to allow_value('12:15am').for(:start_time) }
+      it { is_expected.to allow_value('12:15pm').for(:start_time) }
     end
 
     describe "end_time" do
@@ -160,8 +163,11 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.to allow_value('9:00').for(:end_time) }
       it { is_expected.to allow_value('09:00').for(:end_time) }
       it { is_expected.to allow_value(' 9:00 ').for(:end_time) }
-      it { is_expected.not_to allow_value('29:00').for(:end_time) }
-      it { is_expected.not_to allow_value('foobar').for(:end_time) }
+      it { is_expected.to allow_value('9:00am').for(:end_time) }
+      it { is_expected.to allow_value('09:00am').for(:end_time) }
+      it { is_expected.to allow_value('11:15pm').for(:end_time) }
+      it { is_expected.to allow_value('12:15am').for(:end_time) }
+      it { is_expected.to allow_value('12:15pm').for(:end_time) }
     end
 
     describe "flexible_on_times" do

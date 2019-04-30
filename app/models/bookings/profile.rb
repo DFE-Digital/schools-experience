@@ -1,7 +1,6 @@
 class Bookings::Profile < ApplicationRecord
   DBS_REQUIREMENTS = %w(always sometimes never).freeze
   AVAILABLE_INTERVALS = %w(Daily One-off).freeze
-  TIME_FORMAT = /\A([0-9]|([01][0-9])|2[0-3]):[0-5][0-9]\z/.freeze
   EMAIL_FORMAT = /\A.*@.*\..*\z/.freeze
 
   FIELDS_TO_NILIFY = %i{dbs_policy teacher_training_info teacher_training_url}.freeze
@@ -41,8 +40,8 @@ class Bookings::Profile < ApplicationRecord
 
   validates :disabled_facilities, length: { minimum: 1 }, if: :disabled_facilities
 
-  validates :start_time, presence: true, format: TIME_FORMAT
-  validates :end_time, presence: true, format: TIME_FORMAT
+  validates :start_time, presence: true
+  validates :end_time, presence: true
   validates :flexible_on_times, inclusion: [true, false]
 
   validates :placement_info, presence: true
