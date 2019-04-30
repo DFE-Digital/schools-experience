@@ -28,10 +28,10 @@ end
 When("I click the {string} button") do |string|
   begin
     click_link(string)
-    sleep(2)
   rescue Capybara::ElementNotFound
     click_button(string)
-    sleep(2)
+  ensure
+    delay_page_load
   end
 end
 

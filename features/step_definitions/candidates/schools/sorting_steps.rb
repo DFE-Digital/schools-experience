@@ -75,7 +75,7 @@ end
 
 Given("I have changed the sort order to {string}") do |sort_by|
   select(sort_by, from: 'Sorted by')
-  sleep(2)
+  delay_page_load
 end
 
 Given("the sort order has defaulted to {string}") do |string|
