@@ -178,3 +178,23 @@ Then("I should see the list of {string} in the sidebar") do |string|
     end
   end
 end
+
+Given("my school of choice has {string} dates") do |option|
+  @school = if option == 'fixed'
+              FactoryBot.create(:bookings_school, :with_fixed_availability_preference)
+            elsif option == 'flexible'
+              FactoryBot.create(:bookings_school)
+            else
+              fail 'invalid flexibility option'
+            end
+end
+
+Then("there should not be a button called {string} that begins the wizard") do |string|
+  expect(page).not_to have_link(string, href: new_candidates_school_registrations_placement_preference_path(@school.urn))
+end
+
+Given("there are some available dates in the future") do
+  [1, 2, 3].each do |i|
+    FactoryBot.create(:bookings_placement_date, date: i.weeks.from_now, bookings_school: @school)
+  end
+end

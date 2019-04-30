@@ -3,10 +3,10 @@
 </dt>
 
 <dd class="govuk-summary-list__value">
-  <%- if school.school_profile.has_available_dates? -%>
+  <%- if available_dates.any? -%>
 
     <ul class="govuk-list">
-      <%- school.school_profile.bookings_placement_dates.available.each do |pd| -%>
+      <%- available_dates.each do |pd| -%>
         <li><%= pd.to_s %></li>
       <%- end -%>
     </ul>

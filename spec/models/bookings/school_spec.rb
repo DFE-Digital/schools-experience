@@ -116,8 +116,17 @@ describe Bookings::School, type: :model do
     specify do
       is_expected.to(
         belong_to(:school_type)
-        .with_foreign_key(:bookings_school_type_id)
-        .class_name("Bookings::SchoolType")
+          .with_foreign_key(:bookings_school_type_id)
+          .class_name("Bookings::SchoolType")
+      )
+    end
+
+    specify do
+      is_expected.to(
+        have_many(:bookings_placement_dates)
+          .with_foreign_key(:bookings_school_id)
+          .class_name('Bookings::PlacementDate')
+          .dependent(:destroy)
       )
     end
   end
@@ -256,6 +265,90 @@ describe Bookings::School, type: :model do
         specify 'should not return schools with a higher fee than provided amount' do
           expect(subject.costing_upto(20)).not_to include(school_c)
         end
+      end
+    end
+
+    context 'Availability and placement dates' do
+      specify { expect(described_class).to respond_to(:flexible) }
+      specify { expect(described_class).to respond_to(:fixed) }
+      specify { expect(described_class).to respond_to(:fixed_with_available_dates) }
+      specify { expect(described_class).to respond_to(:with_availability) }
+
+      let!(:flexible) { create(:bookings_school) } # flexible by default
+      let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
+      let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
+
+      let!(:inactive_date) { create(:bookings_placement_date, bookings_school: fixed_without_dates, active: false) }
+      let!(:active_date) { create(:bookings_placement_date, bookings_school: fixed_with_dates) }
+
+      context '.flexible' do
+        subject { described_class.flexible }
+
+        specify 'should include schools that offer flexible dates' do
+          expect(subject).to include(flexible)
+        end
+
+        specify 'should not include schools that offer fixed dates' do
+          expect(subject).not_to include(fixed_with_dates, fixed_without_dates)
+        end
+      end
+
+      context '.fixed' do
+        subject { described_class.fixed }
+
+        specify 'should include schools that offer fixed dates' do
+          expect(subject).to include(fixed_with_dates, fixed_without_dates)
+        end
+
+        specify 'should not include schools that offer flexible dates' do
+          expect(subject).not_to include(flexible)
+        end
+      end
+
+      context '.fixed_with_available_dates' do
+        subject { described_class.fixed_with_available_dates }
+        specify 'should include schools that offer fixed dates and have available dates' do
+          expect(subject).to include(fixed_with_dates)
+        end
+
+        specify 'should not include schools that offer fixed dates but have no available dates' do
+          expect(subject).not_to include(fixed_without_dates)
+        end
+      end
+
+      context '.with_availability' do
+        subject { described_class.with_availability }
+
+        specify 'should include schools that are either flexible or fixed with available dates' do
+          expect(subject).to include(flexible, fixed_with_dates)
+        end
+
+        specify 'should not include schools that are fixed with no available dates' do
+          expect(subject).not_to include(fixed_without_dates)
+        end
+      end
+    end
+  end
+
+  describe 'Methods' do
+    describe '#has_availability?' do
+      context 'when flexible' do
+        subject { build(:bookings_school) }
+        it { is_expected.to have_availability }
+      end
+
+      context 'when fixed with no dates' do
+        subject { build(:bookings_school, :with_fixed_availability_preference) }
+        it { is_expected.not_to have_availability }
+      end
+
+      context 'when fixed with no dates' do
+        subject { create(:bookings_school, :with_fixed_availability_preference) }
+        let!(:available_date) do
+          create(:bookings_placement_date, date: 1.week.from_now, bookings_school: subject)
+        end
+
+        it { is_expected.to have_availability }
       end
     end
   end
