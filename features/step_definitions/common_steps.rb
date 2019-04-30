@@ -5,6 +5,10 @@ Given("I am on a/the {string} page") do |string|
   end
 end
 
+Given("I navigate to the {string} path") do |string|
+  step "I am on the '#{string}' page"
+end
+
 Given("I am on the {string} page for my school of choice") do |string|
   @school ||= FactoryBot.create(:bookings_school)
   path_for(string, school: @school).tap do |p|
