@@ -48,3 +48,7 @@ Then("there should be a {string} warning") do |string|
     expect(page).to have_content(string)
   end
 end
+
+Then("there should be a {string} link to the {string}") do |link, target|
+  expect(page).to have_link(link, href: path_for(target))
+end
