@@ -1,10 +1,10 @@
 module Bookings
   class PlacementDate < ApplicationRecord
-    belongs_to :school_profile,
-      class_name: 'Schools::SchoolProfile',
-      foreign_key: 'schools_school_profile_id'
+    belongs_to :bookings_school,
+      class_name: 'Bookings::School',
+      foreign_key: 'bookings_school_id'
 
-    validates :school_profile, presence: true
+    validates :bookings_school, presence: true
     validates :date, presence: true
     validates :duration,
       presence: true,

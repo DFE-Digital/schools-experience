@@ -31,7 +31,7 @@ Feature: School Profile
       | Fees                        | Yes - £300.00 daily other fee                     |
       | DBS check required          | Yes - Sometimes. policy details                   |
       | Individual requirements     | Yes - Candidates need to be good                  |
-      | School experience phases    | secondary and college                             |
+      | School experience phases    | secondary and 16 - 18 years                       |
       | Primary key stages          | None                                              |
       | Secondary subjects          | Maths                                             |
       | 16 to 18 years              | Maths                                             |

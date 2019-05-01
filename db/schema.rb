@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_24_145543) do
+ActiveRecord::Schema.define(version: 2019_04_26_165445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,12 +28,12 @@ ActiveRecord::Schema.define(version: 2019_04_24_145543) do
 
   create_table "bookings_placement_dates", force: :cascade do |t|
     t.date "date", null: false
-    t.integer "schools_school_profile_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "duration", default: 1, null: false
     t.boolean "active", default: true, null: false
-    t.index ["schools_school_profile_id"], name: "index_bookings_placement_dates_on_schools_school_profile_id"
+    t.integer "bookings_school_id", null: false
+    t.index ["bookings_school_id"], name: "index_bookings_placement_dates_on_bookings_school_id"
   end
 
   create_table "bookings_placement_requests", force: :cascade do |t|
@@ -146,6 +146,7 @@ ActiveRecord::Schema.define(version: 2019_04_24_145543) do
     t.text "availability_info"
     t.string "teacher_training_website"
     t.boolean "enabled", default: true, null: false
+    t.boolean "availability_preference_fixed", default: false, null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
     t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true
@@ -252,12 +253,11 @@ ActiveRecord::Schema.define(version: 2019_04_24_145543) do
     t.string "admin_contact_email"
     t.string "admin_contact_phone"
     t.text "availability_description_description"
-    t.integer "bookings_school_id", null: false
     t.boolean "availability_preference_fixed"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 
-  add_foreign_key "bookings_placement_dates", "schools_school_profiles"
+  add_foreign_key "bookings_placement_dates", "bookings_schools"
   add_foreign_key "bookings_placement_requests", "bookings_placement_dates"
   add_foreign_key "bookings_profiles", "bookings_schools", column: "school_id"
   add_foreign_key "bookings_schools", "bookings_school_types"
