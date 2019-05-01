@@ -114,13 +114,17 @@ Rails.application.configure do
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
-  config.x.default_phase = 1
+  config.x.default_phase = 2
   config.x.phase = Integer(ENV['PHASE'].presence || (ENV['PHASE_TWO'].present? && 2) || config.x.default_phase)
 
   if config.x.phase >= 2
     config.x.base_url = ENV.fetch('DFE_SIGNIN_BASE_URL') { 'https://schoolexperience.education.gov.uk' }
     config.x.oidc_client_id = ENV.fetch('DFE_SIGNIN_CLIENT_ID') { 'schoolexperience' }
-    config.x.oidc_client_secret = ENV.fetch('DFE_SIGNIN_SECRET')
+    config.x.oidc_client_secret = ENV.fetch('DFE_SIGNIN_SECRET') do
+      msg = "DFE_SIGNIN_SECRET has not been set"
+      config.logger ? config.logger.warn(msg) : puts(msg)
+      ''
+    end
     config.x.oidc_host = ENV.fetch('DFE_SIGNIN_HOST') { 'pp-oidc.signin.education.gov.uk' }
   end
 end
