@@ -75,7 +75,7 @@ Rails.application.configure do
     Bullet.rails_logger = true
   end
 
-  config.x.phase_two.enabled = true
+  config.x.phase = 10000
 
   # dfe signin redirects back to https, so force it
   config.force_ssl = true
