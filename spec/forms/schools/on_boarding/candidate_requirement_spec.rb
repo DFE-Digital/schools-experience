@@ -22,6 +22,22 @@ describe Schools::OnBoarding::CandidateRequirement, type: :model do
         it do
           is_expected.to validate_presence_of :dbs_policy
         end
+
+        context 'when dbs_policy is present' do
+          let :dbs_policy do
+            51.times.map { 'word' }.join(' ')
+          end
+
+          subject do
+            described_class.new \
+              dbs_requirement: 'sometimes', dbs_policy: dbs_policy
+          end
+
+          it "is expected to validate dbs_policy isn't too long" do
+            expect(subject.tap(&:validate).errors[:dbs_policy]).to \
+              eq ['Use 50 words or fewer']
+          end
+        end
       end
 
       context "when dbs_requirement not 'Yes - sometimes'" do

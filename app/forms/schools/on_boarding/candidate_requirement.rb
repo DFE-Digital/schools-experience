@@ -14,6 +14,7 @@ module Schools
       validates :dbs_requirement, presence: true
       validates :dbs_requirement, inclusion: { in: :dbs_requirements }, if: -> { dbs_requirement.present? }
       validates :dbs_policy, presence: true, if: :requires_policy_explanation?
+      validates :dbs_policy, number_of_words: { less_than: 50 }, if: -> { dbs_policy.present? }
       validates :requirements, inclusion: [true, false]
       validates :requirements_details, presence: true, if: :requirements
 
