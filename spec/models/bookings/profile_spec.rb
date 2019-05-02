@@ -6,6 +6,11 @@ RSpec.describe Bookings::Profile, type: :model do
   end
 
   describe "validations" do
+    describe "bookings_school_id" do
+      before { create(:bookings_profile) }
+      it { is_expected.to validate_uniqueness_of :school_id }
+    end
+
     describe "dbs" do
       it { is_expected.to validate_presence_of :dbs_required }
       described_class::DBS_REQUIREMENTS.each do |req|
