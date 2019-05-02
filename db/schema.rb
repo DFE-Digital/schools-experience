@@ -189,15 +189,13 @@ ActiveRecord::Schema.define(version: 2019_05_02_084101) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "schools_on_boarding_phase_subjects", force: :cascade do |t|
+  create_table "schools_on_boarding_profile_subjects", force: :cascade do |t|
     t.bigint "schools_school_profile_id"
-    t.bigint "bookings_phase_id"
     t.bigint "bookings_subject_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bookings_phase_id"], name: "index_schools_on_boarding_phase_subjects_on_bookings_phase_id"
-    t.index ["bookings_subject_id"], name: "index_schools_on_boarding_phase_subjects_on_bookings_subject_id"
-    t.index ["schools_school_profile_id"], name: "index_phase_subjects_on_school_profile_id"
+    t.index ["bookings_subject_id"], name: "index_profile_subjects_on_school_profile_i"
+    t.index ["schools_school_profile_id"], name: "index_profile_subjects_on_school_profile_id"
   end
 
   create_table "schools_school_profiles", force: :cascade do |t|
@@ -254,6 +252,7 @@ ActiveRecord::Schema.define(version: 2019_05_02_084101) do
     t.string "admin_contact_phone"
     t.text "availability_description_description"
     t.boolean "availability_preference_fixed"
+    t.boolean "phases_list_secondary_and_college", default: false, null: false
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 
@@ -265,8 +264,5 @@ ActiveRecord::Schema.define(version: 2019_05_02_084101) do
   add_foreign_key "bookings_schools_phases", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_subjects"
-  add_foreign_key "schools_on_boarding_phase_subjects", "bookings_phases"
-  add_foreign_key "schools_on_boarding_phase_subjects", "bookings_subjects"
-  add_foreign_key "schools_on_boarding_phase_subjects", "schools_school_profiles"
   add_foreign_key "schools_school_profiles", "bookings_schools"
 end

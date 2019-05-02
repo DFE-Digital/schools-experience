@@ -312,6 +312,7 @@ en:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:
         college: '16 to 18 years'
+        secondary_and_college: 'Secondary and 16 to 18 years'
       schools_on_boarding_specialism:
         has_specialism:
           true: 'Yes'

@@ -25,10 +25,8 @@ module Schools
           :phases_list
         elsif key_stage_list_required?
           :key_stage_list
-        elsif secondary_subjects_required?
-          :secondary_subjects
-        elsif college_subjects_required?
-          :college_subjects
+        elsif subjects_required?
+          :subjects
         elsif specialism_required?
           :specialism
         elsif candidate_experience_detail_required?
@@ -74,18 +72,18 @@ module Schools
       end
 
       def key_stage_list_required?
-        @school_profile.phases_list.primary &&
+        @school_profile.phases_list.primary? &&
           !@school_profile.key_stage_list.dup.valid?
       end
 
-      def secondary_subjects_required?
-        @school_profile.phases_list.secondary &&
-          @school_profile.secondary_subjects.empty?
-      end
+      def subjects_required?
+        return false if @school_profile.subjects.any?
 
-      def college_subjects_required?
-        @school_profile.phases_list.college &&
-          @school_profile.college_subjects.empty?
+        return true if @school_profile.phases_list.secondary?
+
+        return true if @school_profile.phases_list.college?
+
+        false
       end
 
       def specialism_required?

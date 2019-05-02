@@ -2,9 +2,8 @@ require 'rails_helper'
 
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
-describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
+describe Schools::OnBoarding::SubjectsController, type: :request do
   include_context "logged in DfE user"
-  include_context 'with phases'
 
   let! :bookings_subject do
     FactoryBot.create :bookings_subject
@@ -19,13 +18,12 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
       :with_dbs_fee,
       :with_other_fee,
       :with_phases,
-      :with_key_stage_list,
-      :with_secondary_subjects
+      :with_key_stage_list
   end
 
   context '#new' do
     before do
-      get '/schools/on_boarding/college_subjects/new'
+      get '/schools/on_boarding/subjects/new'
     end
 
     it 'assigns the model' do
@@ -39,7 +37,7 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
 
   context '#create' do
     before do
-      post '/schools/on_boarding/college_subjects', params: params
+      post '/schools/on_boarding/subjects', params: params
     end
 
     context 'invalid' do
@@ -50,7 +48,7 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
       end
 
       it "doesn't update the school profile" do
-        expect(school_profile.reload.college_subjects).to be_empty
+        expect(school_profile.reload.subjects).to be_empty
       end
 
       it 'rerenders the new template' do
@@ -67,8 +65,9 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
         }
       end
 
-      it 'updates the school profile with the college subjects' do
-        expect(school_profile.reload.college_subjects).to eq [bookings_subject]
+      it 'updates the school profile with the subjects' do
+        expect(school_profile.reload.subjects).to \
+          eq [bookings_subject]
       end
 
       it 'redirects to the next step' do
@@ -83,12 +82,12 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
     end
 
     before do
-      get '/schools/on_boarding/college_subjects/edit'
+      get '/schools/on_boarding/subjects/edit'
     end
 
     it 'assigns the model' do
       expect(assigns(:subject_list).subject_ids).to \
-        eq school_profile.college_subject_ids
+        eq school_profile.subject_ids
     end
 
     it 'renders the edit template' do
@@ -108,7 +107,7 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
     end
 
     before do
-      patch '/schools/on_boarding/college_subjects', params: params
+      patch '/schools/on_boarding/subjects', params: params
     end
 
     context 'invalid' do
@@ -117,7 +116,7 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
       end
 
       it "doesn't update the school_profile" do
-        expect(school_profile.reload.college_subject_ids).not_to \
+        expect(school_profile.reload.subject_ids).not_to \
           eq subject_list
       end
 
@@ -132,7 +131,7 @@ describe Schools::OnBoarding::CollegeSubjectsController, type: :request do
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.college_subject_ids).to eq subject_list
+        expect(school_profile.reload.subject_ids).to eq subject_list
       end
 
       it 'redirects to the school_profile' do

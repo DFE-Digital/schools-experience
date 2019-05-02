@@ -37,7 +37,8 @@ module Schools
         params.require(:schools_on_boarding_phases_list).permit \
           :primary,
           :secondary,
-          :college
+          :college,
+          :secondary_and_college
       end
     end
   end

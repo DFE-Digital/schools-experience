@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::ProfilePublisher, type: :model do
-  include_context 'with phases'
-
   describe "#new" do
     context "with complete School Profile" do
       let(:completed_profile) { create(:school_profile, :completed) }
