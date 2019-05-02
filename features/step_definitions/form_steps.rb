@@ -74,6 +74,11 @@ Given("I choose {string} from the {string} radio buttons") do |option, field|
   end
 end
 
+Then("the {string} input should require at least {string} characters") do |field, length|
+  input = page.find("input##{field}")
+  expect(input['minlength']).to eql(length)
+end
+
 LABEL_SELECTORS = %w(.govuk-label legend label).freeze
 def get_form_group(page, label_text)
   selector = LABEL_SELECTORS.detect do |selector|

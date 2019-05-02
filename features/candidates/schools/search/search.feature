@@ -21,7 +21,15 @@ Feature: Schools search page
             | 25 | 25 miles |
         And the submit button should be labelled 'Find'
 
+    Scenario: Search form client-side validation
+        Given I am on the 'find a school' page
+        Then the 'location' input should require at least '3' characters
+
     Scenario: Navigating back to the search form
         Given I search for schools near 'Rochdale'
         When I click back on the results screen
         Then the location input should be populated with 'Rochdale'
+
+    Scenario: Entering an invalid search
+        Given I search for schools near 'Ex'
+        Then I should see an error message stating 'Must be at least 3 characters'
