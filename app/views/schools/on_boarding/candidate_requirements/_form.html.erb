@@ -10,7 +10,7 @@
         <% f.object.dbs_requirements.each do |requirement| %>
           <% if f.object.policy_explanation_required? requirement %>
             <%= fieldset.radio_input requirement do %>
-              <%= fieldset.text_area :dbs_policy, class: 'govuk-!-width-two-thirds', rows: 7 %>
+              <%= fieldset.text_area_with_maxwords :dbs_policy, maxwords: { count: 50 }, class: 'govuk-!-width-two-thirds', rows: 7 %>
             <% end %>
           <% else %>
             <%= fieldset.radio_input requirement %>

@@ -1,18 +1,17 @@
 en:
   errors:
    format: "%{message}"
+   messages:
+     use_fewer_words: "Use %{count} words or fewer"
 
   placement_preference_errors: &placement_preference_errors
     attributes:
       availability:
         blank: "Enter your availability"
-        use_fewer_words: "Use 150 words or fewer"
       objectives:
         blank: "Enter what you want to get out of a placement"
-        use_fewer_words: "Use 150 words or fewer"
       bookings_placement_date_id:
         blank: "Choose a placement date"
-
 
   subject_preference_errors: &subject_preference_errors
     attributes:
@@ -33,7 +32,7 @@ en:
     attributes:
       amount_pounds:
         blank: 'Enter an amount'
-        greater_than_or_equal_to: 'Must be greater than or equal to %{count}'
+        greater_than: 'Must be greater than %{count}'
         less_than: 'Must be less than %{count}'
       description:
         blank: 'Explanation required'

@@ -203,10 +203,6 @@ module Schools
       through: :profile_subjects,
       dependent: :destroy
 
-    has_many :bookings_placement_dates,
-      class_name: 'Bookings::PlacementDate',
-      foreign_key: :schools_school_profile_id
-
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
       foreign_key: 'bookings_school_id'

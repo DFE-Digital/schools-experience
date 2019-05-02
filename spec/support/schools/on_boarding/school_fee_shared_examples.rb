@@ -35,7 +35,18 @@ shared_examples 'a school fee' do
 
         it 'add an error' do
           expect(subject.errors[:amount_pounds]).to \
-            eq ['Must be greater than or equal to 0']
+            eq ['Must be greater than 0']
+        end
+      end
+
+      context '0' do
+        let :amount do
+          0
+        end
+
+        it 'adds an error' do
+          expect(subject.errors[:amount_pounds]).to \
+            eq ['Must be greater than 0']
         end
       end
     end

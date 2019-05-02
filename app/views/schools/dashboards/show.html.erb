@@ -1,4 +1,4 @@
-<%- if true -%>
+<%- if Rails.application.config.x.phase <= 2 -%>
   <%= render partial: 'dashlette' %>
 <%- else -%>
   <%= render partial: 'full_dashboard' %>

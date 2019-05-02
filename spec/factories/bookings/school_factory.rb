@@ -19,5 +19,9 @@ FactoryBot.define do
       sequence(:town) { |n| "#{n} Something town" }
       sequence(:county) { |n| "#{n} Something county" }
     end
+
+    trait :with_fixed_availability_preference do
+      availability_preference_fixed { true }
+    end
   end
 end

@@ -11,7 +11,7 @@ Rails.application.configure do
   # default to true but allow overriding in CI
   config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
 
-  config.x.phase_two.enabled = true
+  config.x.phase = 10000
 
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = "https://localhost:#{ENV.fetch("PORT") { 3000 }}"

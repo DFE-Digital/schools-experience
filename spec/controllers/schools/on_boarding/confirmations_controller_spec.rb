@@ -27,6 +27,10 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
       it 'rerenders the profile show page' do
         expect(response).to render_template 'schools/on_boarding/profiles/show'
       end
+
+      it 'does not create a Bookings::Profile' do
+        expect(school_profile.bookings_school.profile).to be_nil
+      end
     end
 
     context 'valid' do
@@ -36,6 +40,10 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
 
       it 'redirects the to the confirmation show path' do
         expect(response).to redirect_to schools_on_boarding_confirmation_path
+      end
+
+      it 'creates a Bookings::Profile' do
+        expect(school_profile.bookings_school.profile).to be_persisted
       end
     end
   end

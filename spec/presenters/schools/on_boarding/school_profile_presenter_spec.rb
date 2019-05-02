@@ -155,7 +155,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
       it 'adds each selected phase to the output' do
         expect(subject.school_experience_phases).to \
-          eq 'primary, secondary, and college'
+          eq 'primary, secondary, and 16 - 18 years'
       end
     end
 

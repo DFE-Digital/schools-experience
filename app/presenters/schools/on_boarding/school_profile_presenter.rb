@@ -90,7 +90,7 @@ module Schools
         end
 
         if @school_profile.phases_list.college?
-          output << 'college'
+          output << '16 - 18 years'
         end
 
         fail "No phases for #{@school_profile.inspect}" if output.empty?
