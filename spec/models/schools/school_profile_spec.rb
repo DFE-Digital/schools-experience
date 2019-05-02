@@ -186,7 +186,6 @@ describe Schools::SchoolProfile, type: :model do
   context 'relationships' do
     it { is_expected.to have_many(:profile_subjects) }
     it { is_expected.to have_many(:subjects) }
-    it { is_expected.to have_many(:bookings_placement_dates) }
     it { is_expected.to belong_to(:bookings_school) }
   end
 
