@@ -10,6 +10,7 @@ class Bookings::Profile < ApplicationRecord
   }.freeze
 
   belongs_to :school, class_name: 'Bookings::School'
+  validates :school_id, uniqueness: true
 
   validates :dbs_required, presence: true
   validates :dbs_required, inclusion: DBS_REQUIREMENTS, unless: -> { dbs_required.nil? }
