@@ -77,7 +77,7 @@ module Schools
       end
 
       def subjects_required?
-        return false if @school_profile.subjects.present?
+        return false if @school_profile.subjects.any?
 
         return true if @school_profile.phases_list.secondary?
 
