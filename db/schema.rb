@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_26_165445) do
+ActiveRecord::Schema.define(version: 2019_05_02_084101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 2019_04_26_165445) do
     t.text "other_fee_payment_method"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["school_id"], name: "index_bookings_profiles_on_school_id"
+    t.index ["school_id"], name: "index_bookings_profiles_on_school_id", unique: true
   end
 
   create_table "bookings_school_searches", force: :cascade do |t|
