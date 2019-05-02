@@ -48,6 +48,11 @@ class Bookings::School < ApplicationRecord
     foreign_key: :bookings_school_id,
     dependent: :destroy
 
+  has_one :profile,
+    class_name: "Bookings::Profile",
+    foreign_key: :school_id,
+    dependent: :destroy
+
   has_many :bookings_placement_dates,
     class_name: 'Bookings::PlacementDate',
     foreign_key: :bookings_school_id,

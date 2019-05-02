@@ -129,6 +129,10 @@ describe Bookings::School, type: :model do
           .dependent(:destroy)
       )
     end
+
+    specify do
+      is_expected.to have_one(:profile).class_name("Bookings::Profile")
+    end
   end
 
   describe 'Paramterisation' do
