@@ -178,6 +178,11 @@ describe Schools::SchoolProfile, type: :model do
       is_expected.to \
         have_db_column(:availability_preference_fixed).of_type(:boolean)
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:confirmation_acceptance).of_type(:boolean)
+    end
   end
 
   context 'relationships' do
@@ -522,6 +527,20 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.availability_preference).to eq form_model
+      end
+    end
+
+    context '#confirmation' do
+      let :form_model do
+        FactoryBot.build :confirmation
+      end
+
+      before do
+        model.confirmation = form_model
+      end
+
+      it 'returns the form model' do
+        expect(model.confirmation).to eq form_model
       end
     end
   end

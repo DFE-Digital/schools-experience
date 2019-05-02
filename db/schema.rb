@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(version: 2019_05_02_084101) do
     t.string "admin_contact_phone"
     t.text "availability_description_description"
     t.boolean "availability_preference_fixed"
+    t.boolean "confirmation_acceptance", default: false
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

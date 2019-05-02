@@ -204,6 +204,14 @@ module Schools
       ],
       constructor: :compose
 
+    composed_of \
+      :confirmation,
+      class_name: 'Schools::OnBoarding::Confirmation',
+      mapping: [
+        %w(confirmation_acceptance acceptance)
+      ],
+      constructor: :compose
+
     has_many :secondary_phase_subjects,
       -> { at_phase Bookings::Phase.secondary },
       class_name: 'Schools::OnBoarding::PhaseSubject',
