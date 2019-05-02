@@ -32,7 +32,7 @@ en:
     attributes:
       amount_pounds:
         blank: 'Enter an amount'
-        greater_than_or_equal_to: 'Must be greater than or equal to %{count}'
+        greater_than: 'Must be greater than %{count}'
         less_than: 'Must be less than %{count}'
       description:
         blank: 'Explanation required'
