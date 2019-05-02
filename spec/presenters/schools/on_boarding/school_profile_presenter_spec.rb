@@ -264,25 +264,13 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#specialisms' do
-    context 'without specialisms' do
-      let :profile do
-        FactoryBot.build :school_profile
-      end
-
-      it 'returns no' do
-        expect(subject.specialisms).to eq 'No'
-      end
+  context '#descriptions' do
+    let :profile do
+      FactoryBot.build :school_profile, :with_description
     end
 
-    context 'with specialims' do
-      let :profile do
-        FactoryBot.build :school_profile, :with_specialism
-      end
-
-      it 'returns the specialism' do
-        expect(subject.specialisms).to eq 'Yes - Falconry'
-      end
+    it 'returns the description' do
+      expect(subject.descriptions).to eq 'Horse archery'
     end
   end
 

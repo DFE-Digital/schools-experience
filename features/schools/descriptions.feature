@@ -1,4 +1,4 @@
-Feature: Specialisms
+Feature: Description
   So candidates know what makes our school unique
   As a school administrator
   I want to be able to highlight my schools specialisms
@@ -14,20 +14,13 @@ Feature: Specialisms
     And I have completed the Phases step
     And I have completed the Subjects step
 
-  Scenario: Completing the step without choosing an option
-    Given I am on the 'Specialisms' page
+  Scenario: Completing the step without entering a description
+    Given I am on the 'Description' page
     When I submit the form
     Then I should see a validation error message
 
-  Scenario: Completing the step with specialisms
-    Given I am on the 'Specialisms' page
-    And I choose 'No' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
-    When I submit the form
-    Then I should be on the 'Candidate experience details' page
-
-  Scenario: Completing the step without specialisms
-    Given I am on the 'Specialisms' page
-    And I choose 'Yes' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
-    And I enter 'Race track' into the 'Provide details' text area
+  Scenario: Completing the step with description
+    Given I am on the 'Description' page
+    And I enter 'We have a race track' into the 'Tell us about your school. Provide a summary to help candidates choose your school.' text area
     When I submit the form
     Then I should be on the 'Candidate experience details' page

@@ -45,7 +45,7 @@ Rails.application.routes.draw do
         resource :phases_list, only: %i(new create edit update)
         resource :key_stage_list, only: %i(new create edit update)
         resource :subjects, only: %i(new create edit update)
-        resource :specialism, only: %i(new create edit update)
+        resource :description, only: %i(new create edit update)
         resource :candidate_experience_detail, only: %i(new create edit update)
         resource :availability_preference, only: %i(new create edit update)
         resource :availability_description, only: %i(new create edit update)

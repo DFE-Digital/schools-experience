@@ -9,7 +9,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 2019_05_02_084101) do
+ActiveRecord::Schema.define(version: 2019_05_03_095630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 2019_05_02_084101) do
     t.boolean "key_stage_early_years", null: false
     t.boolean "key_stage_1", null: false
     t.boolean "key_stage_2", null: false
-    t.text "specialism_details"
+    t.text "description_details"
     t.boolean "dress_code_business", null: false
     t.boolean "dress_code_cover_tattoos", null: false
     t.boolean "dress_code_remove_piercings", null: false
@@ -225,8 +225,7 @@ ActiveRecord::Schema.define(version: 2019_05_02_084101) do
     t.boolean "key_stage_list_early_years", default: false
     t.boolean "key_stage_list_key_stage_1", default: false
     t.boolean "key_stage_list_key_stage_2", default: false
-    t.boolean "specialism_has_specialism"
-    t.text "specialism_details"
+    t.text "description_details"
     t.boolean "candidate_experience_detail_business_dress", default: false
     t.boolean "candidate_experience_detail_cover_up_tattoos", default: false
     t.boolean "candidate_experience_detail_remove_piercings", default: false

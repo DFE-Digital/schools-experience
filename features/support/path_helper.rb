@@ -27,7 +27,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil)
     "phases" => [:new_schools_on_boarding_phases_list_path],
     "primary subjects list" => [:new_schools_on_boarding_key_stage_list_path],
     "subjects" => [:new_schools_on_boarding_subjects_path],
-    "specialisms" => [:new_schools_on_boarding_specialism_path],
+    "description" => [:new_schools_on_boarding_description_path],
     "candidate experience details" => [:new_schools_on_boarding_candidate_experience_detail_path],
     "availability" => [:new_schools_on_boarding_availability_path],
     "placement dates" => [:schools_placement_dates_path],

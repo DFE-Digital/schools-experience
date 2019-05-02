@@ -22,4 +22,4 @@ Feature: Subjects
     Given I am on the 'Subjects' page
     And I check 'Maths'
     When I submit the form
-    Then I should be on the 'Specialisms' page
+    Then I should be on the 'Description' page

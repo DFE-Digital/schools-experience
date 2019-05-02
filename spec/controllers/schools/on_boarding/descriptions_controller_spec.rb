@@ -2,7 +2,7 @@ require 'rails_helper'
 
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
-describe Schools::OnBoarding::SpecialismsController, type: :request do
+describe Schools::OnBoarding::DescriptionsController, type: :request do
   include_context "logged in DfE user"
 
   context '#new' do
@@ -19,11 +19,11 @@ describe Schools::OnBoarding::SpecialismsController, type: :request do
     end
 
     before do
-      get '/schools/on_boarding/specialism/new'
+      get '/schools/on_boarding/description/new'
     end
 
     it 'assigns the model' do
-      expect(assigns(:specialism)).to eq Schools::OnBoarding::Specialism.new
+      expect(assigns(:description)).to eq Schools::OnBoarding::Description.new
     end
 
     it 'renders the new template' do
@@ -45,20 +45,20 @@ describe Schools::OnBoarding::SpecialismsController, type: :request do
     end
 
     let :params do
-      { schools_on_boarding_specialism: specialism.attributes }
+      { schools_on_boarding_description: description.attributes }
     end
 
     before do
-      post '/schools/on_boarding/specialism', params: params
+      post '/schools/on_boarding/description', params: params
     end
 
     context 'invalid' do
-      let :specialism do
-        Schools::OnBoarding::Specialism.new
+      let :description do
+        Schools::OnBoarding::Description.new
       end
 
       it "doesn't update the school_profile" do
-        expect(school_profile.reload.specialism).to eq specialism
+        expect(school_profile.reload.description).to eq description
       end
 
       it 'rerenders the new template' do
@@ -67,12 +67,12 @@ describe Schools::OnBoarding::SpecialismsController, type: :request do
     end
 
     context 'valid' do
-      let :specialism do
-        FactoryBot.build :specialism
+      let :description do
+        FactoryBot.build :description
       end
 
       it 'updates the school profile' do
-        expect(school_profile.reload.specialism).to eq specialism
+        expect(school_profile.reload.description).to eq description
       end
 
       it 'redirects to the next step' do
@@ -88,11 +88,11 @@ describe Schools::OnBoarding::SpecialismsController, type: :request do
     end
 
     before do
-      get '/schools/on_boarding/specialism/edit'
+      get '/schools/on_boarding/description/edit'
     end
 
     it 'assigns the model' do
-      expect(assigns(:specialism)).to eq school_profile.specialism
+      expect(assigns(:description)).to eq school_profile.description
     end
 
     it 'renders the edit template' do
@@ -107,21 +107,21 @@ describe Schools::OnBoarding::SpecialismsController, type: :request do
 
     let :params do
       {
-        schools_on_boarding_specialism: specialism.attributes
+        schools_on_boarding_description: description.attributes
       }
     end
 
     before do
-      patch '/schools/on_boarding/specialism', params: params
+      patch '/schools/on_boarding/description', params: params
     end
 
     context 'invalid' do
-      let :specialism do
-        Schools::OnBoarding::Specialism.new
+      let :description do
+        Schools::OnBoarding::Description.new
       end
 
       it "doesn't update the school_profile" do
-        expect(school_profile.reload.specialism).not_to eq specialism
+        expect(school_profile.reload.description).not_to eq description
       end
 
       it 'rerenders the edit template' do
@@ -130,12 +130,12 @@ describe Schools::OnBoarding::SpecialismsController, type: :request do
     end
 
     context 'valid' do
-      let :specialism do
-        FactoryBot.build :specialism, has_specialism: false
+      let :description do
+        FactoryBot.build :description
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.specialism).to eq specialism
+        expect(school_profile.reload.description).to eq description
       end
 
       it 'redirects to the school_profile' do
