@@ -16,9 +16,7 @@ Then("I should see the following {string} links:") do |string, table|
 end
 
 Then("I should see the dashboard") do
-  # FIXME this will need adjusting when the updated dashlette is merged
-  # and again when the dashlette is replaced
-  expect(page).to have_css('h1', text: 'Dashboard')
+  expect(page).to have_css('h1', text: "Manage school experience at #{@school.name}")
 end
 
 Given("there are {int} new requests/bookings") do |qty|
