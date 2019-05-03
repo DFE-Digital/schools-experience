@@ -64,7 +64,7 @@ module Schools
         when 'sometimes'
           'Yes - Sometimes. ' + @school_profile.candidate_requirement.dbs_policy
         when 'never'
-          'No - Never'
+          'No - Candidates will be accompanied at all times'
         else
           fail "Unknown dbs_requirement profile: #{@school_profile.inspect}"
         end

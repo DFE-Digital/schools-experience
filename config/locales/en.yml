@@ -303,7 +303,7 @@ en:
         dbs_requirement:
           always: 'Yes - Always'
           sometimes: 'Yes - Sometimes'
-          never: 'No - Never'
+          never: 'No - Candidates will be accompanied at all times'
         dbs_policy: 'Outline your DBS policy in 50 words or less.'
         requirements:
           true: 'Yes'
