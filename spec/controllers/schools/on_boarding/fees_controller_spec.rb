@@ -37,7 +37,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
 
     context 'invalid' do
       let :fees do
-        Schools::OnBoarding::Fees.new
+        Schools::OnBoarding::Fees.new(administration_fees: nil, dbs_fees: nil, other_fees: nil)
       end
 
       it "doesn't update the school_profile" do
@@ -100,7 +100,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
 
     context 'invalid' do
       let :fees do
-        Schools::OnBoarding::Fees.new
+        Schools::OnBoarding::Fees.new(administration_fees: nil, dbs_fees: nil, other_fees: nil)
       end
 
       it "doesn't update the school_profile" do

@@ -4,9 +4,9 @@ module Schools
       include ActiveModel::Model
       include ActiveModel::Attributes
 
-      attribute :administration_fees, :boolean
-      attribute :dbs_fees, :boolean
-      attribute :other_fees, :boolean
+      attribute :administration_fees, :boolean, default: false
+      attribute :dbs_fees, :boolean, default: false
+      attribute :other_fees, :boolean, default: false
 
       validates :administration_fees, inclusion: [true, false]
       validates :dbs_fees, inclusion: [true, false]

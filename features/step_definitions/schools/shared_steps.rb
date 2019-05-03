@@ -17,7 +17,7 @@ Given "I have completed the Fees step, choosing only Administration costs" do
   steps %(
     Given I have completed the Candidate Requirements step
     Given I am on the 'fees charged' page
-    And I check 'Administration costs'
+    And I choose 'Yes' from the 'Administration costs' radio buttons
     When I submit the form
   )
 end
@@ -25,7 +25,7 @@ end
 Given "I have completed the Fees step, choosing only DBS costs" do
   steps %(
     Given I am on the 'fees charged' page
-    And I check 'DBS check costs'
+    And I choose 'Yes' from the 'DBS check costs' radio buttons
     When I submit the form
   )
 end
@@ -33,7 +33,7 @@ end
 Given "I have completed the Fees step, choosing only Other costs" do
   steps %(
     Given I am on the 'fees charged' page
-    And I check 'Other costs'
+    And I choose 'Yes' from the 'Other costs' radio buttons
     When I submit the form
   )
 end
