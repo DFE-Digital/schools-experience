@@ -9,7 +9,6 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
 ActiveRecord::Schema.define(version: 2019_05_02_084101) do
 
   # These are extensions that must be enabled in order to support this database
@@ -22,7 +21,7 @@ ActiveRecord::Schema.define(version: 2019_05_02_084101) do
     t.datetime "updated_at", null: false
     t.integer "position"
     t.integer "edubase_id"
-    t.index ["name"], name: "index_bookings_phases_on_name"
+    t.index ["name"], name: "index_bookings_phases_on_name", unique: true
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
   end
 
