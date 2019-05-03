@@ -106,4 +106,45 @@ module Candidates::SchoolHelper
   def school_new_search_params
     params.permit(:location, :latitude, :longitude).reject { |_, v| v.blank? }
   end
+
+  def dlist_item(key, attrs = {}, &block)
+    classes = ['govuk-summary-list__row', attrs[:class]].flatten.compact.join(' ')
+
+    content_tag :div, attrs.merge(class: classes) do
+      content_tag(:dt, key, class: 'govuk-summary-list__key') +
+      content_tag(:dd, class: 'govuk-summary-list__value', &block)
+    end
+  end
+
+  def content_or_msg(content, msg = nil, &block)
+    if block_given?
+      msg = yield
+    elsif msg
+      msg = content_tag(:em, msg)
+    end
+
+    content.presence || msg
+  end
+
+  def array_to_paragraphs(*items)
+    items = Array.wrap(items).flatten.map(&:presence).compact
+    return unless items.any?
+
+    safe_join(items.map do |item|
+      content_tag(:p, item)
+    end, "\n")
+  end
+
+  def format_dress_code(profile)
+    requirements = []
+
+    requirements << 'Business dress' if profile.dress_code_business
+    requirements << 'Cover up tattoos' if profile.dress_code_cover_tattoos
+    requirements << 'Remove piercings' if profile.dress_code_remove_piercings
+    requirements << 'Smart casual' if profile.dress_code_smart_casual
+
+    array_to_paragraphs(
+      requirements.join(', '),
+      profile.dress_code_other_details)
+  end
 end

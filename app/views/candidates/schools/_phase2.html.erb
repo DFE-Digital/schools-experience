@@ -1,8 +1,8 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
-    <div>
-      <%= simple_format @school.description %>
-    </div>
+    <section id="school-placement-info">
+      <%= simple_format @school.profile.placement_info %>
+    </section>
 
     <div>
       <p>
@@ -14,31 +14,27 @@
     </div>
 
     <div>
-      <h2 class="govuk-heading-m">
-        Placement information
+      <h2>
+        Experience information
       </h2>
 
-      <p>
-        <b>Individual requirements:</b>
-        Must have a degree and be planning to become a teacher.
-      </p>
+      <dl class="govuk-summary-list govuk-summary-list--no-border inline">
+        <%= dlist_item 'Individual requirements:' do %>
+          <%= content_or_msg @profile.individual_requirements, "No requirements specified" %>
+        <% end %>
 
-      <p>
-        <b>Placement details:</b>
-        Attendees will observe lessons in their chosen subjects and may get the
-        chance to interact with pupils and classroom activities. Only offer key
-        stage 1 experience for primary placements.
-      </p>
+        <%= dlist_item 'Experience details:' do %>
+          <%= @profile.placement_info %>
+        <% end %>
 
-      <p>
-        <b>Placement subjects:</b> <%= format_school_subjects @school %>.
-      </p>
+        <%= dlist_item 'Experience subjects:' do %>
+          <%= format_school_subjects @school %>
+        <% end %>
+      </dl>
     </div>
 
     <div>
-      <h1 class="govuk-heading-m">
-        Location
-      </h1>
+      <h2>Location</h2>
 
       <%= school_location_map @school %>
 
@@ -56,112 +52,126 @@
                   class:"govuk-button" %>
     </p>
 
-    <p>
-      For more information about our school use the following links:
-    </p>
+    <div>
+      <h2>About our school</h2>
 
-    <ul id="school-websites">
-      <%- if @school.website.present? -%>
-      <li id="school-website">
-        <%= link_to "#{@school.name} website", @school.website %>
-      </li>
-      <%- end -%>
+      <dl class="govuk-summary-list govuk-summary-list--no-border inline">
+        <%= dlist_item 'Age range:', id: 'school-phases' do %>
+          <%= format_phases(@school) %>
+        <% end %>
 
-      <li>
-        <%= link_to "#{@school.name} Get Information About Schools",
-                    gias_school_url(@school.urn) %>
-      </li>
+        <%= dlist_item 'Specialisms:' do %>
+          <%= simple_format @profile.specialism_details %>
+        <% end if @profile.specialism_details.present? %>
+      </dl>
 
-      <li>
-        <%= link_to "Ofsted report: #{@school.name}",
-                    ofsted_report_url(@school.urn) %>
-      </li>
+      <p>
+        <strong>
+          For more information about our school use the following links:
+        </strong>
+      </p>
 
-      <li>
-        <%= link_to "Performance information: #{@school.name}",
-                    performance_report_url(@school.urn) %>
-      </li>
+      <ul id="school-websites">
+        <%- if @school.website.present? -%>
+        <li id="school-website">
+          <%= link_to "#{@school.name} website", @school.website %>
+        </li>
+        <%- end -%>
 
-      <%- if @school.teacher_training_provider? && @school.teacher_training_website.present? -%>
-      <li>
-        <%= link_to "Teacher training: #{@school.name}",
-          cleanup_school_url(@school.teacher_training_website) %>
-      </li>
-      <%- end -%>
-    </ul>
-  </div>
+        <li>
+          <%= link_to "#{@school.name} Get Information About Schools",
+                      gias_school_url(@school.urn) %>
+        </li>
 
-  <div class="govuk-grid-column-one-third column-top-border">
-    <h3 class="govuk-heading-m">
-      Address
-    </h3>
+        <li>
+          <%= link_to "Ofsted report: #{@school.name}",
+                      ofsted_report_url(@school.urn) %>
+        </li>
 
-    <p class="govuk-body">
-      <%= format_school_address @school %>.
-    </p>
+        <li>
+          <%= link_to "Performance information: #{@school.name}",
+                      performance_report_url(@school.urn) %>
+        </li>
 
-    <h3 class="govuk-heading-m">
-      Availability
-    </h3>
-
-    <div class="govuk-body">
-      <%= format_school_availability @school %>
+        <%- if @school.teacher_training_provider? && @school.teacher_training_website.present? -%>
+        <li>
+          <%= link_to "Teacher training: #{@school.name}",
+            cleanup_school_url(@school.teacher_training_website) %>
+        </li>
+        <%- end -%>
+      </ul>
     </div>
 
-    <h3 class="govuk-heading-s">
-      DBS check required
-    </h3>
-
-    <p class="govuk-body">
-      <%= @school.dbs ? 'Yes' : 'No' %>
+    <p>
+      <%= link_to 'Back to Search Results', :back,
+                  data: {controller: 'back-link'} %>
     </p>
+  </div>
 
-    <h3 class="govuk-heading-s">
-      Fee
-    </h3>
+  <div class="candidate-profile-sidebar govuk-grid-column-one-third column-top-border">
+    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+      <%= dlist_item 'Address', id: 'school-address' do %>
+        <%= format_school_address @school, tag(:br) %>
+      <% end %>
 
-    <p class="govuk-body">
-      <%= @school.fee %>
-    </p>
+      <div id="school-availability-info" class="govuk-summary-list__row">
+        <%- if @school.availability_preference_fixed? -%>
+          <%= render partial: 'placement_dates', locals: { available_dates: @available_dates } %>
+        <%- else -%>
+          <dt class="govuk-summary-list__key">
+            Placement availability
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= format_school_availability(@school) %>
+          </dd>
+        <%- end -%>
+      </div>
 
-    <h3 class="govuk-heading-s">
-      Dress code
-    </h3>
+      <%= dlist_item 'DBS check required' do %>
+        <%= @profile.dbs_required %>
+      <% end %>
 
-    <p class="govuk-body">
-      <%= @school.dress_code %>
-    </p>
+      <%= dlist_item 'Fees' do %>
+        <strong style="color:#ff0000">To be done</strong>
+      <% end %>
 
-    <h3 class="govuk-heading-s">
-      Start and finish times
-    </h3>
+      <%= dlist_item 'Dress code' do %>
+        <%= content_or_msg format_dress_code(@profile), "No dress code supplied" %>
+      <% end %>
 
-    <p class="govuk-body">
-      <%= @school.times %>
-    </p>
+      <%= dlist_item 'Experience start and finish times' do %>
+        <%= @profile.start_time %> to <%= @profile.end_time %>
 
-    <h3 class="govuk-heading-s">
-      Parking
-    </h3>
+        <%- if @profile.flexible_on_times -%>
+          - Flexible
+        <%- end -%>
+      <% end %>
 
-    <p class="govuk-body">
-      <%= @school.parking %>
-    </p>
+      <%= dlist_item 'Parking' do %>
+        <%- if @profile.parking_provided -%>
+          <p>Yes - on site parking provided</p>
+        <%- else -%>
+          <p>Not available on site</p>
+        <%- end -%>
 
-    <h3 class="govuk-heading-s">
-      Accessibility details
-    </h3>
+        <%= simple_format @profile.parking_details %>
+      <% end %>
 
-    <p class="govuk-body">
-      <%= @school.accessibility %>
-    </p>
+      <%= dlist_item 'Accessibility details' do %>
+        <%- if @profile.disabled_facilities.present? -%>
+          <%= simple_format @profile.disabled_facilities %>
+        <%- else -%>
+          <em>No information supplied</em>
+        <%- end -%>
+      <% end %>
 
-    <h3 class="govuk-heading-s">
-      Teacher training offered
-    </h3>
+      <%= dlist_item 'Teacher training offered' do %>
+        <%= simple_format @profile.teacher_training_info %>
 
-    <p class="govuk-body">
-      <%= @school.training_offered %>
-    </p>
+        <p>
+          <%= link_to 'More information', @profile.teacher_training_url %>
+        </p>
+      <% end if @profile.teacher_training_info.present? %>
+    </dl>
   </div>
 </div>
