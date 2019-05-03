@@ -1,0 +1,6 @@
+<% self.page_title = "Toggle requests" %>
+
+<%= form_for @current_school, url: schools_enabled_path, method: 'patch' do |form| %>
+  <%= form.radio_button_fieldset :enabled, choices: %w(true false) %>
+  <%= form.submit 'Continue' %>
+<% end %>

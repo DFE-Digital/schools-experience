@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Schools::DashboardsHelper, type: 'helper' do
-  context '#numbered_circle' do
+  describe '#numbered_circle' do
     let(:text) { '15' }
     let(:circle) { numbered_circle(text) }
     subject { Nokogiri.parse(circle) }
@@ -83,6 +83,24 @@ describe Schools::DashboardsHelper, type: 'helper' do
         specify "should be sized at the custom size" do
           expect(subject.at_css('svg > text')['font-size']).to eql(fs)
         end
+      end
+    end
+  end
+
+  describe '#school_enabled_description' do
+    subject { school_enabled_description(school) }
+
+    context 'when enabled' do
+      let(:school) { build(:bookings_school) }
+      specify "should be 'enabled' when enabled is true" do
+        expect(subject).to eql('enabled')
+      end
+    end
+
+    context 'when disabled' do
+      let(:school) { build(:bookings_school, :disabled) }
+      specify "should be 'disabled' when enabled is false" do
+        expect(subject).to eql('disabled')
       end
     end
   end

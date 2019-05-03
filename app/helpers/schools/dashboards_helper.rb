@@ -9,4 +9,8 @@ module Schools::DashboardsHelper
       ])
     end
   end
+
+  def school_enabled_description(school)
+    school.enabled? ? "enabled" : "disabled"
+  end
 end
