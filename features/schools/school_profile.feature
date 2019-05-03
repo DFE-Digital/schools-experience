@@ -13,8 +13,7 @@ Feature: School Profile
     And I have completed the Fees step, choosing only Other costs
     And I have completed the Other costs step
     And I have completed the Phases step
-    And I have completed the Secondary subjects step
-    And I have completed the College subjects step
+    And I have completed the Subjects step
     And I have completed the Specialisms step
     And I have completed the Candidate experience details step
     And I have completed the Availability preference step
@@ -33,8 +32,7 @@ Feature: School Profile
       | Individual requirements     | Yes - Candidates need to be good                  |
       | School experience phases    | secondary and 16 - 18 years                       |
       | Primary key stages          | None                                              |
-      | Secondary subjects          | Maths                                             |
-      | 16 to 18 years              | Maths                                             |
+      | Subjects                    | Maths                                             |
       | Specialisms                 | Yes - Race track                                  |
       | School experience details   | A really good one                                 |
       | Teacher training links      | Yes - We run our own training. http://example.com |

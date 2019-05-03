@@ -58,9 +58,9 @@ Given "I have completed the Phases step" do
   )
 end
 
-Given "I have completed the Secondary subjects step" do
+Given "I have completed the Subjects step" do
   steps %(
-    Given I am on the 'Secondary subjects' page
+    Given I am on the 'Subjects' page
     And I check 'Maths'
     When I submit the form
   )

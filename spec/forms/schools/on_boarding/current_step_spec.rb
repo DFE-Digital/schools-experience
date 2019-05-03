@@ -113,7 +113,7 @@ describe Schools::OnBoarding::CurrentStep do
                 end
 
                 context 'key_stage_list not required' do
-                  context 'secondary_subjects required' do
+                  context 'subjects required' do
                     let :school_profile do
                       FactoryBot.build_stubbed :school_profile,
                         :with_candidate_requirement,
@@ -125,13 +125,13 @@ describe Schools::OnBoarding::CurrentStep do
                         :with_key_stage_list
                     end
 
-                    it 'returns secondary_subjects' do
-                      expect(returned_step).to eq :secondary_subjects
+                    it 'returns subjects' do
+                      expect(returned_step).to eq :subjects
                     end
                   end
 
-                  context 'secondary_subjects not required' do
-                    context 'college_subjects required' do
+                  context 'subjects not required' do
+                    context 'specialism required' do
                       let :school_profile do
                         FactoryBot.create :school_profile,
                           :with_candidate_requirement,
@@ -141,16 +141,16 @@ describe Schools::OnBoarding::CurrentStep do
                           :with_other_fee,
                           :with_phases,
                           :with_key_stage_list,
-                          :with_secondary_subjects
+                          :with_subjects
                       end
 
-                      it 'returns college_subjects' do
-                        expect(returned_step).to eq :college_subjects
+                      it 'returns :specialism' do
+                        expect(returned_step).to eq :specialism
                       end
                     end
 
-                    context 'college_subjects not required' do
-                      context 'specialism required' do
+                    context 'specialism not required' do
+                      context 'candidate_experience_detail required' do
                         let :school_profile do
                           FactoryBot.create :school_profile,
                             :with_candidate_requirement,
@@ -160,17 +160,18 @@ describe Schools::OnBoarding::CurrentStep do
                             :with_other_fee,
                             :with_phases,
                             :with_key_stage_list,
-                            :with_secondary_subjects,
-                            :with_college_subjects
+                            :with_subjects,
+                            :with_specialism
                         end
 
-                        it 'returns :specialism' do
-                          expect(returned_step).to eq :specialism
+                        it 'returns :candidate_experience_detail' do
+                          expect(returned_step).to \
+                            eq :candidate_experience_detail
                         end
                       end
 
-                      context 'specialism not required' do
-                        context 'candidate_experience_detail required' do
+                      context 'candidate_experience_detail not required' do
+                        context 'availability_preference required' do
                           let :school_profile do
                             FactoryBot.create :school_profile,
                               :with_candidate_requirement,
@@ -180,19 +181,19 @@ describe Schools::OnBoarding::CurrentStep do
                               :with_other_fee,
                               :with_phases,
                               :with_key_stage_list,
-                              :with_secondary_subjects,
-                              :with_college_subjects,
-                              :with_specialism
+                              :with_subjects,
+                              :with_specialism,
+                              :with_candidate_experience_detail
                           end
 
-                          it 'returns :candidate_experience_detail' do
+                          it 'returns :availability_preference' do
                             expect(returned_step).to \
-                              eq :candidate_experience_detail
+                              eq :availability_preference
                           end
                         end
 
-                        context 'candidate_experience_detail not required' do
-                          context 'availability_preference required' do
+                        context 'availability_preference not required' do
+                          context 'availability required' do
                             let :school_profile do
                               FactoryBot.create :school_profile,
                                 :with_candidate_requirement,
@@ -202,20 +203,19 @@ describe Schools::OnBoarding::CurrentStep do
                                 :with_other_fee,
                                 :with_phases,
                                 :with_key_stage_list,
-                                :with_secondary_subjects,
-                                :with_college_subjects,
+                                :with_subjects,
                                 :with_specialism,
-                                :with_candidate_experience_detail
+                                :with_candidate_experience_detail,
+                                :with_availability_preference
                             end
 
-                            it 'returns :availability_preference' do
-                              expect(returned_step).to \
-                                eq :availability_preference
+                            it 'returns :availability' do
+                              expect(returned_step).to eq :availability_description
                             end
                           end
 
-                          context 'availability_preference not required' do
-                            context 'availability required' do
+                          context 'availability not required' do
+                            context 'experience_outline requred' do
                               let :school_profile do
                                 FactoryBot.create :school_profile,
                                   :with_candidate_requirement,
@@ -225,20 +225,21 @@ describe Schools::OnBoarding::CurrentStep do
                                   :with_other_fee,
                                   :with_phases,
                                   :with_key_stage_list,
-                                  :with_secondary_subjects,
-                                  :with_college_subjects,
+                                  :with_subjects,
                                   :with_specialism,
                                   :with_candidate_experience_detail,
-                                  :with_availability_preference
+                                  :with_availability_preference,
+                                  :with_availability_description
                               end
 
-                              it 'returns :availability' do
-                                expect(returned_step).to eq :availability_description
+                              it 'returns :experience_outline' do
+                                expect(returned_step).to \
+                                  eq :experience_outline
                               end
                             end
 
-                            context 'availability not required' do
-                              context 'experience_outline requred' do
+                            context 'experience_outline not required' do
+                              context 'admin_contact required' do
                                 let :school_profile do
                                   FactoryBot.create :school_profile,
                                     :with_candidate_requirement,
@@ -248,68 +249,40 @@ describe Schools::OnBoarding::CurrentStep do
                                     :with_other_fee,
                                     :with_phases,
                                     :with_key_stage_list,
-                                    :with_secondary_subjects,
-                                    :with_college_subjects,
+                                    :with_subjects,
                                     :with_specialism,
                                     :with_candidate_experience_detail,
                                     :with_availability_preference,
-                                    :with_availability_description
+                                    :with_availability_description,
+                                    :with_experience_outline
                                 end
 
-                                it 'returns :experience_outline' do
-                                  expect(returned_step).to \
-                                    eq :experience_outline
+                                it 'returns :admin_contact' do
+                                  expect(returned_step).to eq :admin_contact
                                 end
                               end
 
-                              context 'experience_outline not required' do
-                                context 'admin_contact required' do
-                                  let :school_profile do
-                                    FactoryBot.create :school_profile,
-                                      :with_candidate_requirement,
-                                      :with_fees,
-                                      :with_administration_fee,
-                                      :with_dbs_fee,
-                                      :with_other_fee,
-                                      :with_phases,
-                                      :with_key_stage_list,
-                                      :with_secondary_subjects,
-                                      :with_college_subjects,
-                                      :with_specialism,
-                                      :with_candidate_experience_detail,
-                                      :with_availability_preference,
-                                      :with_availability_description,
-                                      :with_experience_outline
-                                  end
-
-                                  it 'returns :admin_contact' do
-                                    expect(returned_step).to eq :admin_contact
-                                  end
+                              context 'admin_contact not required' do
+                                let :school_profile do
+                                  FactoryBot.create :school_profile,
+                                    :with_candidate_requirement,
+                                    :with_fees,
+                                    :with_administration_fee,
+                                    :with_dbs_fee,
+                                    :with_other_fee,
+                                    :with_phases,
+                                    :with_key_stage_list,
+                                    :with_subjects,
+                                    :with_specialism,
+                                    :with_candidate_experience_detail,
+                                    :with_availability_preference,
+                                    :with_availability_description,
+                                    :with_experience_outline,
+                                    :with_admin_contact
                                 end
 
-                                context 'admin_contact not required' do
-                                  let :school_profile do
-                                    FactoryBot.create :school_profile,
-                                      :with_candidate_requirement,
-                                      :with_fees,
-                                      :with_administration_fee,
-                                      :with_dbs_fee,
-                                      :with_other_fee,
-                                      :with_phases,
-                                      :with_key_stage_list,
-                                      :with_secondary_subjects,
-                                      :with_college_subjects,
-                                      :with_specialism,
-                                      :with_candidate_experience_detail,
-                                      :with_availability_preference,
-                                      :with_availability_description,
-                                      :with_experience_outline,
-                                      :with_admin_contact
-                                  end
-
-                                  it 'returns :COMPLETED' do
-                                    expect(returned_step).to eq :COMPLETED
-                                  end
+                                it 'returns :COMPLETED' do
+                                  expect(returned_step).to eq :COMPLETED
                                 end
                               end
                             end

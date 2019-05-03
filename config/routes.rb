@@ -15,8 +15,11 @@ Rails.application.routes.draw do
     end
 
     namespace :schools do
+      root to: 'dashboards#show'
+
       resource :session, only: %i(show destroy)
       resource :dashboard, only: :show
+      resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
       resources :placement_requests do
         resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
@@ -41,8 +44,7 @@ Rails.application.routes.draw do
         resource :other_fee, only: %i(new create)
         resource :phases_list, only: %i(new create edit update)
         resource :key_stage_list, only: %i(new create edit update)
-        resource :secondary_subjects, only: %i(new create edit update)
-        resource :college_subjects, only: %i(new create edit update)
+        resource :subjects, only: %i(new create edit update)
         resource :specialism, only: %i(new create edit update)
         resource :candidate_experience_detail, only: %i(new create edit update)
         resource :availability_preference, only: %i(new create edit update)
