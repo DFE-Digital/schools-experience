@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       root to: 'dashboards#show'
 
       resource :session, only: %i(show destroy)
+      resource :switch, only: %i(new), controller: 'switch'
       resource :dashboard, only: :show
       resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
