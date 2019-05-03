@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     end
 
     namespace :schools do
+      root to: 'dashboards#show'
+
       resource :session, only: %i(show destroy)
       resource :dashboard, only: :show
 
