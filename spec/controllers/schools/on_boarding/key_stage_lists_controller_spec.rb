@@ -4,7 +4,6 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::KeyStageListsController, type: :request do
   include_context "logged in DfE user"
-  include_context 'with phases'
 
   context '#new' do
     let! :school_profile do
@@ -76,8 +75,7 @@ describe Schools::OnBoarding::KeyStageListsController, type: :request do
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to \
-          new_schools_on_boarding_secondary_subjects_path
+        expect(response).to redirect_to new_schools_on_boarding_subjects_path
       end
     end
   end

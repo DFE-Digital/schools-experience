@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Bookings::PlacementDate, type: :model do
   describe 'Columns' do
-    it { is_expected.to have_db_column(:schools_school_profile_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:bookings_school_id).of_type(:integer) }
     it { is_expected.to have_db_column(:date).of_type(:date) }
     it { is_expected.to have_db_column(:duration).of_type(:integer) }
     it { is_expected.to have_db_column(:active).of_type(:boolean) }
@@ -16,8 +16,8 @@ describe Bookings::PlacementDate, type: :model do
       # FIXME should we prevent weekends?
     end
 
-    context '#school_profile' do
-      it { expect(subject).to validate_presence_of(:school_profile) }
+    context '#bookings_school' do
+      it { expect(subject).to validate_presence_of(:bookings_school) }
     end
 
     context '#duration' do
@@ -34,7 +34,7 @@ describe Bookings::PlacementDate, type: :model do
 
   describe 'Relationships' do
     subject { described_class.new }
-    it { expect(subject).to belong_to(:school_profile) }
+    it { expect(subject).to belong_to(:bookings_school) }
   end
 
   describe 'Scopes' do

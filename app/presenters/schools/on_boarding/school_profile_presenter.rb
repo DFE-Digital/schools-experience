@@ -64,7 +64,7 @@ module Schools
         when 'sometimes'
           'Yes - Sometimes. ' + @school_profile.candidate_requirement.dbs_policy
         when 'never'
-          'No - Never'
+          'No - Candidates will be accompanied at all times'
         else
           fail "Unknown dbs_requirement profile: #{@school_profile.inspect}"
         end
@@ -81,16 +81,16 @@ module Schools
       def school_experience_phases
         output = []
 
-        if @school_profile.phases_list.primary
+        if @school_profile.phases_list.primary?
           output << 'primary'
         end
 
-        if @school_profile.phases_list.secondary
+        if @school_profile.phases_list.secondary?
           output << 'secondary'
         end
 
-        if @school_profile.phases_list.college
-          output << 'college'
+        if @school_profile.phases_list.college?
+          output << '16 - 18 years'
         end
 
         fail "No phases for #{@school_profile.inspect}" if output.empty?
@@ -99,11 +99,11 @@ module Schools
       end
 
       def primary_key_stages_offered?
-        @school_profile.phases_list.primary
+        @school_profile.phases_list.primary?
       end
 
       def primary_key_stages
-        return 'None' unless @school_profile.phases_list.primary
+        return 'None' unless primary_key_stages_offered?
 
         output = []
 
@@ -122,32 +122,18 @@ module Schools
         output.to_sentence
       end
 
-      def secondary_subjects_offered?
-        @school_profile.phases_list.secondary
+      def subjects_offered?
+        @school_profile.requires_subjects?
       end
 
-      def secondary_subjects
-        return 'None' unless @school_profile.phases_list.secondary
+      def subjects
+        return 'None' unless subjects_offered?
 
-        @school_profile.secondary_subjects.pluck(:name).to_sentence
+        @school_profile.subjects.pluck(:name).to_sentence
       end
 
-      def college_subjects_offered?
-        @school_profile.phases_list.college
-      end
-
-      def college_subjects
-        return 'None' unless @school_profile.phases_list.college
-
-        @school_profile.college_subjects.pluck(:name).to_sentence
-      end
-
-      def specialisms
-        if @school_profile.specialism.has_specialism
-          'Yes - ' + @school_profile.specialism.details
-        else
-          'No'
-        end
+      def descriptions
+        @school_profile.description.details
       end
 
       def school_experience_details

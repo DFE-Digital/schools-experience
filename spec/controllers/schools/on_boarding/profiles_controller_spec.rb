@@ -4,7 +4,6 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::OnBoarding::ProfilesController, type: :request do
   include_context "logged in DfE user"
-  include_context 'with phases'
 
   context '#show' do
     context 'with an incomplete profile' do

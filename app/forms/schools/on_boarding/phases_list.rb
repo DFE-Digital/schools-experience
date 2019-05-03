@@ -7,15 +7,21 @@ module Schools
       attribute :primary, :boolean, default: false
       attribute :secondary, :boolean, default: false
       attribute :college, :boolean, default: false
+      attribute :secondary_and_college, :boolean, default: false
 
       validates :primary, inclusion: [true, false]
       validates :secondary, inclusion: [true, false]
       validates :college, inclusion: [true, false]
+      validates :secondary_and_college, inclusion: [true, false]
 
       validate :at_least_one_phase_offered
 
-      def self.compose(primary, secondary, college)
-        new primary: primary, secondary: secondary, college: college
+      def self.compose(primary, secondary, college, secondary_and_college)
+        new \
+          primary: primary,
+          secondary: secondary,
+          college: college,
+          secondary_and_college: secondary_and_college
       end
 
       def ==(other)
@@ -27,11 +33,11 @@ module Schools
       end
 
       def secondary?
-        secondary
+        secondary || secondary_and_college
       end
 
       def college?
-        college
+        college || secondary_and_college
       end
 
     private
@@ -41,7 +47,7 @@ module Schools
       end
 
       def at_least_one_phase_offered?
-        [primary, secondary, college].any?
+        [primary?, secondary?, college?].any?
       end
     end
   end

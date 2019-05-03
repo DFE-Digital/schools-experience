@@ -328,6 +328,41 @@ describe Bookings::SchoolSearch do
         end
       end
     end
+
+    context 'Other scopes/criteria' do
+      let(:phases) { create_list(:bookings_phase, 2).map(&:id) }
+      let(:subjects) { create_list(:bookings_subject, 2).map(&:id) }
+      let(:max_fee) { 20 }
+
+      after do
+        Bookings::SchoolSearch.new(
+          location: 'Bury',
+          phases: phases,
+          subjects: subjects,
+          max_fee: max_fee
+        ).results
+      end
+
+      specify 'should apply the :enabled scope' do
+        expect(Bookings::School).to receive(:enabled).and_call_original
+      end
+
+      specify 'should apply the :with_availability scope' do
+        expect(Bookings::School).to receive(:enabled).and_call_original
+      end
+
+      specify 'should apply the :at_phases scope with supplied phases' do
+        expect(Bookings::School).to receive(:at_phases).with(phases).and_call_original
+      end
+
+      specify 'should apply the :that_provide scope with supplied subjects' do
+        expect(Bookings::School).to receive(:that_provide).with(subjects).and_call_original
+      end
+
+      specify 'should apply the :costing_upto scope with max fee' do
+        expect(Bookings::School).to receive(:costing_upto).with(max_fee).and_call_original
+      end
+    end
   end
 
   describe '#total_count' do

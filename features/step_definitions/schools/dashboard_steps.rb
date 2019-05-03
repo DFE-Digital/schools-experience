@@ -15,6 +15,10 @@ Then("I should see the following {string} links:") do |string, table|
   end
 end
 
+Then("I should see the dashboard") do
+  expect(page).to have_css('h1', text: "Manage school experience at #{@school.name}")
+end
+
 Given("there are {int} new requests/bookings") do |qty|
   qty
   #  do nothing, currently hard-coded in controller

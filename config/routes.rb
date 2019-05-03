@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/cookies_policy', to: 'pages#cookies_policy'
 
-  if Rails.application.config.x.phase_two.enabled
+  if Rails.application.config.x.phase >= 2
     get '/auth/callback', to: 'schools/sessions#create'
 
     if Rails.env.servertest? || Rails.env.test?
@@ -15,9 +15,12 @@ Rails.application.routes.draw do
     end
 
     namespace :schools do
+      root to: 'dashboards#show'
+
       resource :session, only: %i(show destroy)
       resource :switch, only: %i(new), controller: 'switch'
       resource :dashboard, only: :show
+      resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
       resources :placement_requests do
         resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
@@ -42,9 +45,8 @@ Rails.application.routes.draw do
         resource :other_fee, only: %i(new create)
         resource :phases_list, only: %i(new create edit update)
         resource :key_stage_list, only: %i(new create edit update)
-        resource :secondary_subjects, only: %i(new create edit update)
-        resource :college_subjects, only: %i(new create edit update)
-        resource :specialism, only: %i(new create edit update)
+        resource :subjects, only: %i(new create edit update)
+        resource :description, only: %i(new create edit update)
         resource :candidate_experience_detail, only: %i(new create edit update)
         resource :availability_preference, only: %i(new create edit update)
         resource :availability_description, only: %i(new create edit update)

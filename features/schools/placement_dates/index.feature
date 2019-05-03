@@ -5,7 +5,6 @@ Feature: Listing placement dates
 
     Background:
         Given I am logged in as a DfE user
-        And my school has a profile
 
     Scenario: Page title
         Given I am on the 'placement dates' page

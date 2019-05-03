@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe Schools::SchoolProfile, type: :model do
-  include_context 'with phases'
-
   context 'attributes' do
     it do
       is_expected.to have_db_column(:bookings_school_id).of_type :integer
@@ -74,11 +72,12 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:specialism_has_specialism).of_type :boolean
+      is_expected.to \
+        have_db_column(:phases_list_secondary_and_college).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:specialism_details).of_type :text
+      is_expected.to have_db_column(:description_details).of_type :text
     end
 
     it do
@@ -181,11 +180,8 @@ describe Schools::SchoolProfile, type: :model do
   end
 
   context 'relationships' do
-    it { is_expected.to have_many(:secondary_phase_subjects) }
-    it { is_expected.to have_many(:college_phase_subjects) }
-    it { is_expected.to have_many(:secondary_subjects) }
-    it { is_expected.to have_many(:college_subjects) }
-    it { is_expected.to have_many(:bookings_placement_dates) }
+    it { is_expected.to have_many(:profile_subjects) }
+    it { is_expected.to have_many(:subjects) }
     it { is_expected.to belong_to(:bookings_school) }
   end
 
@@ -204,28 +200,17 @@ describe Schools::SchoolProfile, type: :model do
       let(:bookings_school) { create(:bookings_school) }
       subject { described_class.create!(bookings_school: bookings_school) }
 
-      let :secondary_subject do
-        FactoryBot.create :bookings_subject
-      end
-
-      let :college_subject do
+      let :bookings_subject do
         FactoryBot.create :bookings_subject
       end
 
       before do
-        subject.secondary_subjects << secondary_subject
-        subject.college_subjects << college_subject
+        subject.subjects << bookings_subject
       end
 
-      context '#secondary_subjects' do
-        it 'only returns secondary subjects' do
-          expect(subject.secondary_subjects.to_a).to eq [secondary_subject]
-        end
-      end
-
-      context '#college_subjects' do
-        it 'only returns college subjects' do
-          expect(subject.college_subjects.to_a).to eq [college_subject]
+      context '#subjects' do
+        it 'only returns subjects' do
+          expect(subject.subjects.to_a).to eq [bookings_subject]
         end
       end
     end
@@ -357,6 +342,11 @@ describe Schools::SchoolProfile, type: :model do
         expect(model.phases_list_college).to eq form_model.college
       end
 
+      it 'sets phases_list_secondary_and_college' do
+        expect(model.phases_list_secondary_and_college).to \
+          eq form_model.secondary_and_college
+      end
+
       it 'returns the form model' do
         expect(model.phases_list).to eq form_model
       end
@@ -384,25 +374,21 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#specialism' do
+    context '#description' do
       let :form_model do
-        FactoryBot.build :specialism
+        FactoryBot.build :description
       end
 
       before do
-        model.specialism = form_model
-      end
-
-      it 'sets has_specialism' do
-        expect(model.specialism_has_specialism).to eq form_model.has_specialism
+        model.description = form_model
       end
 
       it 'sets details' do
-        expect(model.specialism_details).to eq form_model.details
+        expect(model.description_details).to eq form_model.details
       end
 
       it 'returns the form model' do
-        expect(model.specialism).to eq form_model
+        expect(model.description).to eq form_model
       end
     end
 
@@ -594,8 +580,7 @@ describe Schools::SchoolProfile, type: :model do
 
       context 'when secondary_subjects no longer makes sense' do
         let :school_profile do
-          FactoryBot.create \
-            :school_profile, :with_phases, :with_secondary_subjects
+          FactoryBot.create :school_profile, :with_phases, :with_subjects
         end
 
         before do
@@ -603,24 +588,8 @@ describe Schools::SchoolProfile, type: :model do
             phases_list: Schools::OnBoarding::PhasesList.new(secondary: false)
         end
 
-        it 'removes secondary_subjects' do
-          expect(school_profile.reload.secondary_subjects).to be_empty
-        end
-      end
-
-      context 'when college_subjects no longer makes sense' do
-        let :school_profile do
-          FactoryBot.create \
-            :school_profile, :with_phases, :with_college_subjects
-        end
-
-        before do
-          school_profile.update! \
-            phases_list: Schools::OnBoarding::PhasesList.new(college: false)
-        end
-
-        it 'removes secondary_subjects' do
-          expect(school_profile.reload.college_subjects).to be_empty
+        it 'removes subjects' do
+          expect(school_profile.reload.subjects).to be_empty
         end
       end
 
@@ -641,6 +610,40 @@ describe Schools::SchoolProfile, type: :model do
           expect(school_profile.reload.availability_description).to \
             eq Schools::OnBoarding::AvailabilityDescription.new
         end
+      end
+    end
+  end
+
+  context '#requires_subjects?' do
+    let :school_profile do
+      FactoryBot.create :school_profile
+    end
+
+    context 'when phases_list includes secondary' do
+      before do
+        school_profile.phases_list = \
+          FactoryBot.build :phases_list, secondary: true, college: false
+      end
+
+      it 'returns true' do
+        expect(school_profile.requires_subjects?).to be true
+      end
+    end
+
+    context 'when phases_list includes college' do
+      before do
+        school_profile.phases_list = \
+          FactoryBot.build :phases_list, secondary: false, college: true
+      end
+
+      it 'returns true' do
+        expect(school_profile.requires_subjects?).to be true
+      end
+    end
+
+    context "when phases_list doesn't include college or secondary" do
+      it 'returns false' do
+        expect(school_profile.requires_subjects?).to be false
       end
     end
   end

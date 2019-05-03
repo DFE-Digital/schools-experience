@@ -12,9 +12,8 @@ Feature: Availability preference
     And I have completed the Fees step, choosing only Other costs
     And I have completed the Other costs step
     And I have completed the Phases step
-    And I have completed the Secondary subjects step
-    And I have completed the College subjects step
-    And I have completed the Specialisms step
+    And I have completed the Subjects step
+    And I have completed the Description step
     And I have completed the Candidate experience details step
 
   Scenario: Completing the step with error

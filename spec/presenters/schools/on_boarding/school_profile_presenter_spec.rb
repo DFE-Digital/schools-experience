@@ -7,11 +7,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     FactoryBot.create :bookings_school, :full_address, urn: 123456
   end
 
-  before do
-    FactoryBot.create :bookings_phase, :secondary
-    FactoryBot.create :bookings_phase, :college
-  end
-
   context '#school_name' do
     let :profile do
       FactoryBot.create :school_profile, bookings_school: school
@@ -102,7 +97,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns No - Never' do
-        expect(subject.dbs_check_required).to eq 'No - Never'
+        expect(subject.dbs_check_required).to eq 'No - Candidates will be accompanied at all times'
       end
     end
 
@@ -160,7 +155,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
       it 'adds each selected phase to the output' do
         expect(subject.school_experience_phases).to \
-          eq 'primary, secondary, and college'
+          eq 'primary, secondary, and 16 - 18 years'
       end
     end
 
@@ -224,7 +219,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#secondary_subjects_offered?' do
+  context '#subjects_offered?' do
     context 'when offered' do
       let :profile do
         FactoryBot.build \
@@ -232,117 +227,50 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns true' do
-        expect(subject.secondary_subjects_offered?).to eq true
+        expect(subject.subjects_offered?).to eq true
       end
     end
 
     context 'when not offered' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile, :with_phases, phases_list_secondary: false
-      end
-
-      it 'returns false' do
-        expect(subject.secondary_subjects_offered?).to eq false
-      end
-    end
-  end
-
-  context '#secondary_subjects' do
-    context 'when secondary phase not selected' do
-      let :profile do
-        FactoryBot.build :school_profile, :with_only_early_years_phase
-      end
-
-      it 'returns None' do
-        expect(subject.secondary_subjects).to eq 'None'
-      end
-    end
-
-    context 'when secondary phase selected' do
-      let :profile do
-        FactoryBot.create \
-          :school_profile,
-          :with_phases,
-          :with_secondary_subjects
-      end
-
-      it 'returns the list of secondary subjects' do
-        expect(subject.secondary_subjects).to \
-          eq profile.secondary_subjects.pluck(:name).to_sentence
-      end
-    end
-  end
-
-  context '#college_subjects_offered?' do
-    context 'when offered' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile, :with_phases, phases_list_college: true
-      end
-
-      it 'returns true' do
-        expect(subject.college_subjects_offered?).to eq true
-      end
-    end
-
-    context 'when not offered' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile, :with_phases, phases_list_college: false
-      end
-
-      it 'returns false' do
-        expect(subject.college_subjects_offered?).to eq false
-      end
-    end
-  end
-
-  context '#college_subjects' do
-    context 'when college phase not selected' do
-      let :profile do
-        FactoryBot.build :school_profile, :with_only_early_years_phase
-      end
-
-      it 'returns None' do
-        expect(subject.college_subjects).to eq 'None'
-      end
-    end
-
-    context 'when college phase selected' do
-      let :profile do
-        FactoryBot.create \
-          :school_profile,
-          :with_phases,
-          :with_college_subjects
-      end
-
-      it 'returns the list of secondary subjects' do
-        expect(subject.college_subjects).to \
-          eq profile.college_subjects.pluck(:name).to_sentence
-      end
-    end
-  end
-
-  context '#specialisms' do
-    context 'without specialisms' do
       let :profile do
         FactoryBot.build :school_profile
       end
 
-      it 'returns no' do
-        expect(subject.specialisms).to eq 'No'
+      it 'returns false' do
+        expect(subject.subjects_offered?).to eq false
+      end
+    end
+  end
+
+  context '#subjects' do
+    context 'when subjects not offered' do
+      let :profile do
+        FactoryBot.build :school_profile, :with_only_early_years_phase
+      end
+
+      it 'returns None' do
+        expect(subject.subjects).to eq 'None'
       end
     end
 
-    context 'with specialims' do
+    context 'when subjects offered' do
       let :profile do
-        FactoryBot.build :school_profile, :with_specialism
+        FactoryBot.create :school_profile, :with_phases, :with_subjects
       end
 
-      it 'returns the specialism' do
-        expect(subject.specialisms).to eq 'Yes - Falconry'
+      it 'returns the list of subjects' do
+        expect(subject.subjects).to eq profile.subjects.pluck(:name).to_sentence
       end
+    end
+  end
+
+  context '#descriptions' do
+    let :profile do
+      FactoryBot.build :school_profile, :with_description
+    end
+
+    it 'returns the description' do
+      expect(subject.descriptions).to eq 'Horse archery'
     end
   end
 

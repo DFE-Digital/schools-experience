@@ -3,7 +3,6 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::OnBoarding::AvailabilityPreferencesController, type: :request do
   include_context "logged in DfE user"
-  include_context 'with phases'
 
   context '#new' do
     let! :school_profile do
@@ -16,7 +15,7 @@ describe Schools::OnBoarding::AvailabilityPreferencesController, type: :request 
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list,
-        :with_specialism,
+        :with_description,
         :with_candidate_experience_detail
     end
 
@@ -45,7 +44,7 @@ describe Schools::OnBoarding::AvailabilityPreferencesController, type: :request 
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list,
-        :with_specialism,
+        :with_description,
         :with_candidate_experience_detail
     end
 
