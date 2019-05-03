@@ -105,10 +105,10 @@ RSpec.describe Bookings::Profile, type: :model do
       end
     end
 
-    describe "specialism_details" do
-      it { is_expected.to allow_value(nil).for(:specialism_details) }
-      it { is_expected.to allow_value('x').for(:specialism_details) }
-      it { is_expected.not_to allow_value('').for(:specialism_details) }
+    describe "description_details" do
+      it { is_expected.to allow_value(nil).for(:description_details) }
+      it { is_expected.to allow_value('x').for(:description_details) }
+      it { is_expected.not_to allow_value('').for(:description_details) }
     end
 
     describe "dress_code" do

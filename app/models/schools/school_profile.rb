@@ -126,11 +126,10 @@ module Schools
       constructor: :compose
 
     composed_of \
-      :specialism,
-      class_name: 'Schools::OnBoarding::Specialism',
+      :description,
+      class_name: 'Schools::OnBoarding::Description',
       mapping: [
-        %w(specialism_has_specialism has_specialism),
-        %w(specialism_details details)
+        %w(description_details details)
       ],
       constructor: :compose
 

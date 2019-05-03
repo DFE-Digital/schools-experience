@@ -14,7 +14,7 @@ Feature: School Profile
     And I have completed the Other costs step
     And I have completed the Phases step
     And I have completed the Subjects step
-    And I have completed the Specialisms step
+    And I have completed the Description step
     And I have completed the Candidate experience details step
     And I have completed the Availability preference step
     And I have completed the Availability description step
@@ -33,7 +33,7 @@ Feature: School Profile
       | School experience phases    | secondary and 16 - 18 years                       |
       | Primary key stages          | None                                              |
       | Subjects                    | Maths                                             |
-      | Specialisms                 | Yes - Race track                                  |
+      | Description                 | We have a race track                              |
       | School experience details   | A really good one                                 |
       | Teacher training links      | Yes - We run our own training. http://example.com |
       | Dress code                  | business dress and Must have nice hat             |
