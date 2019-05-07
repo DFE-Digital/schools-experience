@@ -27,8 +27,8 @@ module Schools
           :key_stage_list
         elsif subjects_required?
           :subjects
-        elsif specialism_required?
-          :specialism
+        elsif description_required?
+          :description
         elsif candidate_experience_detail_required?
           :candidate_experience_detail
         elsif availability_preference_required?
@@ -86,8 +86,8 @@ module Schools
         false
       end
 
-      def specialism_required?
-        !@school_profile.specialism.dup.valid?
+      def description_required?
+        !@school_profile.description.dup.valid?
       end
 
       def candidate_experience_detail_required?

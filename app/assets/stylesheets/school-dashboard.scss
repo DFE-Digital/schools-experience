@@ -1,7 +1,14 @@
 article#dashlette {
   // FIXME remove post phase 3
   ul > li {
-    margin-bottom: 1rem;
+    @include govuk-font($size: 19, $weight: normal);
+    margin: 1rem 0rem;
+
+    a {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
   }
 }
 

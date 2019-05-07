@@ -122,10 +122,8 @@ en:
             base:
               no_subject_selected: 'Select at least one subject'
               invalid_subject_selected: 'Subject not available'
-        schools/on_boarding/specialism:
+        schools/on_boarding/description:
           attributes:
-            has_specialism:
-              inclusion: 'Select an option'
             details:
               blank: 'Provide details'
         schools/on_boarding/candidate_experience_detail:
@@ -192,6 +190,8 @@ en:
 
   helpers:
     fieldset:
+      bookings_school:
+        enabled: Turn requests on or off
       bookings_placement_date:
         date: Enter a start date
       phases: Education phases
@@ -238,6 +238,10 @@ en:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
 
     hint:
+      bookings_school:
+        enabled: |
+          Turning requests off will prevent your school from appearing in candidate searches.
+          Requests that are already in-progress will continue as normal.
       bookings_placement_date:
         date: For example, 01 09 2019
       phases: Select all that apply
@@ -268,6 +272,10 @@ en:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
 
     label:
+      bookings_school:
+        enabled:
+          true: Allow requests
+          false: Do not allow requests
       bookings_placement_date:
         duration: How many days will it last?
         active: Make this date available to candidates?
@@ -297,7 +305,7 @@ en:
         dbs_requirement:
           always: 'Yes - Always'
           sometimes: 'Yes - Sometimes'
-          never: 'No - Never'
+          never: 'No - Candidates will be accompanied at all times'
         dbs_policy: 'Outline your DBS policy in 50 words or less.'
         requirements:
           true: 'Yes'
@@ -323,11 +331,8 @@ en:
       schools_on_boarding_phases_list:
         college: '16 to 18 years'
         secondary_and_college: 'Secondary and 16 to 18 years'
-      schools_on_boarding_specialism:
-        has_specialism:
-          true: 'Yes'
-          false: 'No'
-        details: 'Provide details.'
+      schools_on_boarding_description:
+        details: 'Tell us about your school. Provide a summary to help candidates choose your school.'
       schools_on_boarding_candidate_experience_detail:
         business_dress: 'Business dress'
         cover_up_tattoos: 'Cover up tattoos'

@@ -1,4 +1,3 @@
-@wip
 Feature: The School Dashboard
     To help me gain an insight into tasks that need to be addressed
     As a school administrator
@@ -9,6 +8,11 @@ Feature: The School Dashboard
 
     # FIXME back link? Back to where?
 
+    Scenario: Root redirect
+        Given I navigate to the 'schools' path
+        Then I should see the dashboard
+
+    @wip
     Scenario: High priority headings
         Given I am on the 'schools dashboard' page
         Then I should see the following 'high-priority' links:
@@ -16,6 +20,7 @@ Feature: The School Dashboard
             | Accept and reject requests | Candidates have requested school experience | /schools/placement_requests/upcoming |
             | Accept and reject bookings | A candidate has asked to change a booking   | #                                    |
 
+    @wip
     Scenario: Medium priority headings
         Given I am on the 'schools dashboard' page
         Then I should see the following 'medium-priority' links:
@@ -23,6 +28,7 @@ Feature: The School Dashboard
             | Confirm candidate attendance | Confirm the attendance of candidates who've been on school experience | #    |
             | View upcoming bookings       | None                                                                  | #    |
 
+    @wip
     Scenario: Low priority headings
         Given I am on the 'schools dashboard' page
         Then I should see the following 'low-priority' links:
@@ -33,16 +39,19 @@ Feature: The School Dashboard
             | View rejected requests                  | None | #    |
             | Give feedback on this service           | None | #    |
 
+    @wip
     Scenario: Candidate requests counter
         Given there are 5 new requests
         When I am on the 'schools dashboard' page
         Then the 'new requests counter' should be 5
 
+    @wip
     Scenario: Candidate bookings counter
         Given there are 3 new bookings
         When I am on the 'schools dashboard' page
         Then the 'new bookings counter' should be 3
 
+    @wip
     Scenario: Candidate attendances counter
         Given there are 4 new candidate attendances
         When I am on the 'schools dashboard' page

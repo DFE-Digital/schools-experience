@@ -62,9 +62,10 @@ FactoryBot.define do
       end
     end
 
-    trait :with_specialism do
-      specialism_has_specialism { true }
-      specialism_details { 'Falconry' }
+    trait :with_description do
+      after :build do |profile|
+        profile.description = FactoryBot.build :description
+      end
     end
 
     transient do
@@ -128,7 +129,7 @@ FactoryBot.define do
       with_phases
       with_key_stage_list
       with_subjects
-      with_specialism
+      with_description
       with_candidate_experience_detail
       with_availability_preference
       with_availability_description

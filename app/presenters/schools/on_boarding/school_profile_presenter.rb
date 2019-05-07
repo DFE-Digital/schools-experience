@@ -64,7 +64,7 @@ module Schools
         when 'sometimes'
           'Yes - Sometimes. ' + @school_profile.candidate_requirement.dbs_policy
         when 'never'
-          'No - Never'
+          'No - Candidates will be accompanied at all times'
         else
           fail "Unknown dbs_requirement profile: #{@school_profile.inspect}"
         end
@@ -132,12 +132,8 @@ module Schools
         @school_profile.subjects.pluck(:name).to_sentence
       end
 
-      def specialisms
-        if @school_profile.specialism.has_specialism
-          'Yes - ' + @school_profile.specialism.details
-        else
-          'No'
-        end
+      def descriptions
+        @school_profile.description.details
       end
 
       def school_experience_details

@@ -74,11 +74,10 @@ Given "I have completed the College subjects step" do
   )
 end
 
-Given "I have completed the Specialisms step" do
+Given "I have completed the Description step" do
   steps %(
-    Given I am on the 'Specialisms' page
-    And I choose 'Yes' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
-    And I enter 'Race track' into the 'Provide details' text area
+    Given I am on the 'Description' page
+    And I enter 'We have a race track' into the 'Tell us about your school. Provide a summary to help candidates choose your school.' text area
     When I submit the form
   )
 end

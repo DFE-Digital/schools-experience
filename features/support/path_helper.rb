@@ -12,6 +12,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil)
     "candidate subjects" => [:new_candidates_school_registrations_subject_preference_path, school],
     "background checks" => [:new_candidates_school_registrations_background_check_path, school],
     "check your answers" => [:candidates_school_registrations_application_preview_path, school],
+    "schools" => [:schools_root_path],
     "schools dashboard" => [:schools_dashboard_path],
     "placement requests" => [:schools_placement_requests_path],
     "upcoming requests" => [:schools_upcoming_requests_path],
@@ -26,7 +27,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil)
     "phases" => [:new_schools_on_boarding_phases_list_path],
     "primary subjects list" => [:new_schools_on_boarding_key_stage_list_path],
     "subjects" => [:new_schools_on_boarding_subjects_path],
-    "specialisms" => [:new_schools_on_boarding_specialism_path],
+    "description" => [:new_schools_on_boarding_description_path],
     "candidate experience details" => [:new_schools_on_boarding_candidate_experience_detail_path],
     "availability" => [:new_schools_on_boarding_availability_path],
     "placement dates" => [:schools_placement_dates_path],
@@ -36,7 +37,8 @@ def path_for(descriptor, school: nil, placement_date_id: nil)
     "availability preference" => [:new_schools_on_boarding_availability_preference_path],
     "availability description" => [:new_schools_on_boarding_availability_description_path],
     "admin contact" => [:new_schools_on_boarding_admin_contact_path],
-    "profile" => [:schools_on_boarding_profile_path]
+    "profile" => [:schools_on_boarding_profile_path],
+    "toggle requests" => [:edit_schools_enabled_path]
   }
 
   (path = mappings[descriptor.downcase]) ? send(*path) : fail("No mapping for #{descriptor}")

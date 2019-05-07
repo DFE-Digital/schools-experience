@@ -1,18 +1,36 @@
 <article id="dashlette">
-  <h1 class="govuk-heading-l">Dashboard</h1>
+  <h1 class="govuk-heading-l">Manage school experience at <%= @current_school.name %></h1>
 
   <ul class="govuk-list">
+
     <li>
-      <%= link_to "Manage your school profile", schools_on_boarding_profile_path %>
+      <%= link_to "Change school", new_schools_switch_path %>
+      <span class="govuk-hint">
+        Manage school experience for another school
+      </span>
     </li>
+
     <li>
-      <%= link_to "Add or modify placement dates", schools_placement_dates_path %>
+      <%= link_to "Turn requests on / off", edit_schools_enabled_path %>
+      <span class="govuk-hint">
+        Choose to stop / start receiving requests from candidates.
+        Requests are currently <strong><%= school_enabled_description(@current_school) %></strong>.
+      </span>
     </li>
+
     <li>
-      <%= link_to "Toggle your school's inclusion in candidate searches", "#" %>
+      <%= link_to "Update school profile", schools_on_boarding_profile_path %>
+      <span class="govuk-hint">
+        Add, edit and remove school profile details
+      </span>
     </li>
+
     <li>
-      <%= link_to "Change school", "#" %>
+      <%= link_to "Update school experience dates", schools_placement_dates_path %>
+      <span class="govuk-hint">
+        Add, edit and disable <strong>fixed</strong> dates for candidates
+      </span>
     </li>
+
   </ul>
 </article>

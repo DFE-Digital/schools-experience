@@ -1,0 +1,12 @@
+table#placement-dates {
+  td.status {
+    strong {
+      &.govuk-tag--available {
+        background-color: govuk-colour('green');
+      }
+      &.govuk-tag--taken {
+        background-color: govuk-colour('red');
+      }
+    }
+  }
+}

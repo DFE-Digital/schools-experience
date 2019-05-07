@@ -28,7 +28,7 @@ class Bookings::Profile < ApplicationRecord
   validates :key_stage_2, inclusion: [true, false], if: :primary_phase
   validate  :at_least_one_key_stage, if: :primary_phase
 
-  validates :specialism_details, length: { minimum: 1 }, if: :specialism_details
+  validates :description_details, length: { minimum: 1 }, if: :description_details
 
   validates :dress_code_business, inclusion: [true, false]
   validates :dress_code_cover_tattoos, inclusion: [true, false]

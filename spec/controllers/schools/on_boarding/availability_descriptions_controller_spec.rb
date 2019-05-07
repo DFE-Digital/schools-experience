@@ -15,7 +15,7 @@ describe Schools::OnBoarding::AvailabilityDescriptionsController, type: :request
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list,
-        :with_specialism,
+        :with_description,
         :with_candidate_experience_detail,
         :with_availability_preference
     end
@@ -45,7 +45,7 @@ describe Schools::OnBoarding::AvailabilityDescriptionsController, type: :request
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list,
-        :with_specialism,
+        :with_description,
         :with_candidate_experience_detail,
         :with_availability_preference
     end

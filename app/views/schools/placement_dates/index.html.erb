@@ -29,12 +29,14 @@
               <%= pluralize(placement_date.duration, 'day') %>
             </td>
             <td class="govuk-table__cell status">
-              <%= display_status(placement_date.active) %>
+              <strong class="govuk-tag <%= placement_date_display_class(placement_date.active) %>">
+                <%= placement_date_display_status(placement_date.active) %>
+              </strong>
             </td>
-            <td class="govuk-summary-list__actions">
+            <td class="govuk-table__cell">
               <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
                 Change
-                <span class="govuk-visually-hidden"> name</span>
+                <span class="govuk-visually-hidden"> placement date</span>
               <%- end -%>
             </td>
           </tr>
@@ -57,4 +59,8 @@
 
 <div>
   <%= link_to "Add new placement date", new_schools_placement_date_path, class: 'govuk-button' %>
+</div>
+
+<div>
+  <%= link_to "Return to dashboard", schools_dashboard_path, class: 'govuk-button govuk-button--secondary' %>
 </div>
