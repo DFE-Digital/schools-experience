@@ -61,7 +61,7 @@
         <% end %>
 
         <%= dlist_item 'Specialisms:' do %>
-          <%= simple_format @presenter.specialism_details %>
+          <%= @presenter.specialism_details %>
         <% end if @presenter.specialism_details.present? %>
       </dl>
 
@@ -92,13 +92,6 @@
           <%= link_to "Performance information: #{@school.name}",
                       performance_report_url(@presenter.urn) %>
         </li>
-
-        <%- if @presenter.teacher_training_url.present? -%>
-        <li>
-          <%= link_to "Teacher training: #{@presenter.name}",
-            cleanup_school_url(@presenter.teacher_training_url) %>
-        </li>
-        <%- end -%>
       </ul>
     </div>
 
