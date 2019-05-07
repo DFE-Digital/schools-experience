@@ -18,7 +18,7 @@
           <%= @presenter.experience_details %>
         <% end %>
 
-        <%= dlist_item 'Experience subjects:' do %>
+        <%= dlist_item 'Experience subjects:', id: "school-subjects" do %>
           <%= format_school_subjects @school %>
         <% end %>
       </dl>
@@ -79,6 +79,13 @@
           <%= link_to "Performance information: #{@school.name}",
                       performance_report_url(@presenter.urn) %>
         </li>
+
+        <%- if @presenter.teacher_training_url.present? -%>
+        <li>
+          <%= link_to "Teacher training: #{@presenter.name}",
+            cleanup_school_url(@presenter.teacher_training_url) %>
+        </li>
+        <%- end -%>
       </ul>
     </div>
 
@@ -115,7 +122,7 @@
         <%= simple_format @presenter.dbs_policy if @presenter.dbs_policy %>
       <% end %>
 
-      <%= dlist_item 'Administration fees' do %>
+      <%= dlist_item 'Administration fees', id: 'administration-fee-info' do %>
         <p>
           <%= number_to_currency @presenter.administration_fee_amount_pounds %>
           <%= @presenter.administration_fee_interval %>,
@@ -125,7 +132,7 @@
         <%= simple_format @presenter.administration_fee_description %>
       <% end if @presenter.administration_fee_amount_pounds %>
 
-      <%= dlist_item 'DBS check fees' do %>
+      <%= dlist_item 'DBS check fees', id: 'dbs-fee-info' do %>
         <p>
           <%= number_to_currency @presenter.dbs_fee_amount_pounds %>
           <%= @presenter.dbs_fee_interval %>,
@@ -135,7 +142,7 @@
         <%= simple_format @presenter.dbs_fee_description %>
       <% end if @presenter.dbs_fee_amount_pounds %>
 
-      <%= dlist_item 'Other fees' do %>
+      <%= dlist_item 'Other fees', id: 'other-fee-info' do %>
         <p>
           <%= number_to_currency @presenter.other_fee_amount_pounds %>
           <%= @presenter.other_fee_interval %>,
@@ -175,7 +182,7 @@
         <%- end -%>
       <% end %>
 
-      <%= dlist_item 'Teacher training offered' do %>
+      <%= dlist_item 'Teacher training offered', id: 'school-teacher-training-info' do %>
         <%= simple_format @presenter.teacher_training_info %>
 
         <p>
