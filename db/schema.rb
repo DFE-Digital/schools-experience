@@ -240,7 +240,6 @@ ActiveRecord::Schema.define(version: 2019_05_03_095630) do
     t.string "candidate_experience_detail_start_time"
     t.string "candidate_experience_detail_end_time"
     t.boolean "candidate_experience_detail_times_flexible"
-    t.integer "bookings_school_id", null: false
     t.text "experience_outline_candidate_experience"
     t.boolean "experience_outline_provides_teacher_training"
     t.text "experience_outline_teacher_training_details"
@@ -249,8 +248,10 @@ ActiveRecord::Schema.define(version: 2019_05_03_095630) do
     t.string "admin_contact_email"
     t.string "admin_contact_phone"
     t.text "availability_description_description"
+    t.integer "bookings_school_id", null: false
     t.boolean "availability_preference_fixed"
     t.boolean "phases_list_secondary_and_college", default: false, null: false
+    t.boolean "confirmation_acceptance", default: false
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

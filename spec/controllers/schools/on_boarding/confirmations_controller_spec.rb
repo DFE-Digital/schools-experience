@@ -28,6 +28,10 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
         expect(response).to render_template 'schools/on_boarding/profiles/show'
       end
 
+      it 'does not updated the school profile' do
+        expect(school_profile.reload.confirmation).to eq confirmation
+      end
+
       it 'does not create a Bookings::Profile' do
         expect(school_profile.bookings_school.profile).to be_nil
       end
@@ -40,6 +44,10 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
 
       it 'redirects the to the confirmation show path' do
         expect(response).to redirect_to schools_on_boarding_confirmation_path
+      end
+
+      it 'updates the school profile' do
+        expect(school_profile.reload.confirmation).to eq confirmation
       end
 
       it 'creates a Bookings::Profile' do

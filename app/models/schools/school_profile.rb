@@ -191,6 +191,14 @@ module Schools
       ],
       constructor: :compose
 
+    composed_of \
+      :confirmation,
+      class_name: 'Schools::OnBoarding::Confirmation',
+      mapping: [
+        %w(confirmation_acceptance acceptance)
+      ],
+      constructor: :compose
+
     has_many :profile_subjects,
       class_name: 'Schools::OnBoarding::ProfileSubject',
       foreign_key: :schools_school_profile_id,
