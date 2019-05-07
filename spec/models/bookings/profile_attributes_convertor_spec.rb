@@ -16,7 +16,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(dbs_required: 'sometimes') }
       it { is_expected.to include(dbs_policy: 'Super secure') }
       it { is_expected.to include(individual_requirements: 'Gotta go fast') }
-      it { is_expected.to include(specialism_details: 'Falconry') }
+      it { is_expected.to include(description_details: 'Horse archery') }
       it { is_expected.to include(disabled_facilities: 'Full wheelchair access and hearing loops') }
       it { is_expected.to include(dress_code_business: true) }
       it { is_expected.to include(dress_code_cover_tattoos: true) }
@@ -61,7 +61,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model = build(:school_profile, :completed, disabled_facilities: true)
         model.candidate_requirement_dbs_requirement = 'never'
         model.candidate_requirement_requirements = false
-        model.specialism_has_specialism = false
+        model.description_details = ' '
         model.candidate_experience_detail_disabled_facilities = false
         model.candidate_experience_detail_other_dress_requirements = false
         model.admin_contact_full_name = ' '
@@ -84,7 +84,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(dbs_required: 'never') }
       it { is_expected.to include(dbs_policy: nil) }
       it { is_expected.to include(individual_requirements: nil) }
-      it { is_expected.to include(specialism_details: nil) }
+      it { is_expected.to include(description_details: nil) }
       it { is_expected.to include(disabled_facilities: nil) }
       it { is_expected.to include(dress_code_other_details: nil) }
       it { is_expected.to include(admin_contact_full_name: nil) }

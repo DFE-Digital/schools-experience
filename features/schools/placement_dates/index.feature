@@ -33,3 +33,7 @@ Feature: Listing placement dates
         Given my school has no placement dates
         When I am on the 'placement dates' page
         Then there should be a 'You have no placement dates, your school will not appear in candidate searches' warning
+
+    Scenario: The return to dashboard button
+        Given I am on the 'placement dates' page
+        Then there should be a 'Return to dashboard' link to the 'schools dashboard'

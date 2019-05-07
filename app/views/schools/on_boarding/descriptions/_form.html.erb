@@ -1,0 +1,45 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for description, url: schools_on_boarding_description_path, method: method do |f| %>
+      <h1 class="govuk-heading-l">
+        Enter a short description of your school
+      </h1>
+
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <%= f.text_area :details, rows: 10 do %>
+
+        <p>
+          We recommend your summary includes and outlines the following kind of details:
+        </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>your area, catchment and the kind and numbers of pupils you teach</li>
+          <li>any unique opportunities you offer via links to outside agencies and organisations</li>
+          <li>any activities, educational phases or subjects and subject areas you specialise in</li>
+        </ul>
+
+        <details class="govuk-details" role="group">
+          <summary class="govuk-details__summary" role="button">
+            <span class="govuk-details__summary-text">View description example</span>
+          </summary>
+          <div class="govuk-details__text">
+            <p>
+              We’re a thriving community school serving a cosmopolitan community with more than 1,700 pupils.
+            </p>
+            <p>
+              Our GCSE scores are above the national average and, with multiple languages spoken at our school, we’re highly-skilled in meeting the needs of bilingual children.
+            </p>
+            <p>
+              We’re a barrier-free school and cater for pupils with movement difficulties while our work with hearing-impaired children is supported by the local authority and other agencies.
+            </p>
+            <p>
+              We also specialise in art and drama and have strong sporting connections with local community organisations.
+            </p>
+          </div>
+        </details>
+      <% end %>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>
