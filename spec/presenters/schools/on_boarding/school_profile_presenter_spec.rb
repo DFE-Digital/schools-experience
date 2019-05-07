@@ -364,6 +364,30 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
+  context '#flexible_on_times' do
+    context 'when flexible_on_times' do
+      let :profile do
+        FactoryBot.build :school_profile, \
+          :with_candidate_experience_detail, times_flexible: true
+      end
+
+      it 'returns Yes with details' do
+        expect(subject.flexible_on_times).to eq 'Yes - We are very accommodating'
+      end
+    end
+
+    context 'when not flexible_on_times' do
+      let :profile do
+        FactoryBot.build :school_profile,
+          :with_candidate_experience_detail, times_flexible: false
+      end
+
+      it 'returns no' do
+        expect(subject.flexible_on_times).to eq 'No'
+      end
+    end
+  end
+
   context '#availability' do
     let :profile do
       FactoryBot.build :school_profile, :with_availability_description

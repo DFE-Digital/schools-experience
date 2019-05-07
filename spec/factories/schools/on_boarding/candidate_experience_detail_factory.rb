@@ -25,5 +25,10 @@ FactoryBot.define do
       disabled_facilities { true }
       disabled_facilities_details { 'Full wheelchair access and hearing loops' }
     end
+
+    trait :without_flexible_times do
+      times_flexible { false }
+      times_flexible_details { nil }
+    end
   end
 end

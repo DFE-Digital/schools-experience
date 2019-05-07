@@ -71,6 +71,7 @@ FactoryBot.define do
     transient do
       parking { true }
       disabled_facilities { false }
+      times_flexible { true }
     end
 
     trait :with_candidate_experience_detail do
@@ -83,6 +84,10 @@ FactoryBot.define do
 
         if evaluator.disabled_facilities
           traits << :with_disabled_facilities
+        end
+
+        if evaluator.times_flexible == false
+          traits << :without_flexible_times
         end
 
         profile.candidate_experience_detail = FactoryBot.build :candidate_experience_detail, *traits
