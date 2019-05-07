@@ -24,3 +24,7 @@ end
 Then("the page should have a heading called {string}") do |string|
   expect(page).to have_css("h1.govuk-fieldset__heading", text: string)
 end
+
+Then("I should see an error message stating {string}") do |string|
+  expect(page).to have_css('span.govuk-error-message', text: string)
+end

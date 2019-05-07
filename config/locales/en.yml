@@ -73,6 +73,11 @@ en:
         bookings/placement_request:
           <<: [ *placement_preference_errors, *subject_preference_errors ]
 
+        bookings/school_search:
+          attributes:
+            location:
+              too_short: Must be at least 3 characters
+
   helpers:
     fieldset:
       phases: Education phases

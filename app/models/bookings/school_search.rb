@@ -2,6 +2,8 @@ class Bookings::SchoolSearch < ApplicationRecord
   attr_accessor :requested_order
   attr_reader :location_name
 
+  validates :location, length: { minimum: 3 }, allow_nil: true
+
   AVAILABLE_ORDERS = [
     %w{distance Distance},
     %w{name Name}
@@ -93,7 +95,13 @@ private
   end
 
   def geolocate(location)
-    result = Geocoder.search(location)&.first
+    result = Geocoder.search(
+      location,
+      params: {
+        region: 'gb',
+        maxRes: 1
+      }
+    )&.first
 
     if result.blank?
       Rails.logger.info("No Geocoder results found for #{location}")
