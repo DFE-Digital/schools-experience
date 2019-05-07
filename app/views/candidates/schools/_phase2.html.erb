@@ -1,17 +1,8 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
     <section id="school-placement-info">
-      <%= simple_format @presenter.placement_info %>
+      <%= simple_format @presenter.description_details %>
     </section>
-
-    <div>
-      <p>
-        <b>Age range:</b> <%= @school.age_range %>
-      </p>
-      <p>
-        <b>Description:</b> <%= @school.description %>.
-      </p>
-    </div>
 
     <div>
       <h2>
@@ -59,10 +50,6 @@
         <%= dlist_item 'Age range:', id: 'school-phases' do %>
           <%= format_phases(@presenter.school) %>
         <% end %>
-
-        <%= dlist_item 'Specialisms:' do %>
-          <%= @presenter.specialism_details %>
-        <% end if @presenter.specialism_details.present? %>
       </dl>
 
       <p>

@@ -8,7 +8,7 @@ module Candidates
     delegate :availability_preference_fixed?, to: :school
 
     delegate :placement_info, :individual_requirements, to: :profile
-    delegate :specialism_details, :disabled_facilities, to: :profile
+    delegate :description_details, :disabled_facilities, to: :profile
     delegate :teacher_training_info, :teacher_training_url, to: :profile
     delegate :dbs_policy, :parking_provided, :parking_details, to: :profile
     delegate :start_time, :end_time, :flexible_on_times, to: :profile

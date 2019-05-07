@@ -28,7 +28,7 @@ RSpec.describe Candidates::SchoolPresenter do
   describe "attributes delegated to the profile" do
     it { expect(subject.placement_info).to eql(profile.placement_info) }
     it { expect(subject.individual_requirements).to eql(profile.individual_requirements) }
-    it { expect(subject.specialism_details).to eql(profile.specialism_details) }
+    it { expect(subject.description_details).to eql(profile.description_details) }
     it { expect(subject.disabled_facilities).to eql(profile.disabled_facilities) }
     it { expect(subject.teacher_training_info).to eql(profile.teacher_training_info) }
     it { expect(subject.teacher_training_url).to eql(profile.teacher_training_url) }
