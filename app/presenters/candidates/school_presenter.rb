@@ -29,14 +29,16 @@ module Candidates
     end
 
     def dress_code
-      profile.attributes.map do |key, value|
+      dc_attrs = profile.attributes.map do |key, value|
         if key.to_s =~ /dress_code_/ &&
-          key.to_s != 'dress_code_other_details' &&
-          value == true
+            key.to_s != 'dress_code_other_details' &&
+            value == true
 
           profile.class.human_attribute_name(key)
         end
-      end.compact.join(', ')
+      end
+
+      dc_attrs.compact.join(', ')
     end
 
     def dress_code?
@@ -46,7 +48,7 @@ module Candidates
     def formatted_dress_code
       return unless dress_code?
 
-      simple_format [ dress_code, dress_code_other_details ].join("\n\n")
+      simple_format [dress_code, dress_code_other_details].join("\n\n")
     end
 
     def dbs_required

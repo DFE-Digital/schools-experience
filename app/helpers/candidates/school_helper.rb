@@ -112,11 +112,11 @@ module Candidates::SchoolHelper
 
     content_tag :div, attrs.merge(class: classes) do
       content_tag(:dt, key, class: 'govuk-summary-list__key') +
-      content_tag(:dd, class: 'govuk-summary-list__value', &block)
+        content_tag(:dd, class: 'govuk-summary-list__value', &block)
     end
   end
 
-  def content_or_msg(content, msg = nil, &block)
+  def content_or_msg(content, msg = nil)
     if block_given?
       msg = yield
     elsif msg

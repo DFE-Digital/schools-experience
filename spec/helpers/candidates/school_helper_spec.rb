@@ -270,7 +270,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
 
     context 'without content but block msg' do
-      subject { content_or_msg('') { '<b>no content</b>'} }
+      subject { content_or_msg('') { '<b>no content</b>' } }
       it { is_expected.to have_css('b', text: 'no content') }
     end
   end
