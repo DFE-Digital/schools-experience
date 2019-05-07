@@ -121,7 +121,11 @@
       </div>
 
       <%= dlist_item 'DBS check required' do %>
-        <%= @presenter.dbs_required.to_s.humanize %>
+        <p>
+          <%= @presenter.dbs_required %>
+        </p>
+
+        <%= simple_format @presenter.dbs_policy if @presenter.dbs_policy %>
       <% end %>
 
       <%= dlist_item 'Administration fees' do %>

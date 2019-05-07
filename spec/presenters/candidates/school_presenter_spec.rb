@@ -32,7 +32,6 @@ RSpec.describe Candidates::SchoolPresenter do
     it { expect(subject.disabled_facilities).to eql(profile.disabled_facilities) }
     it { expect(subject.teacher_training_info).to eql(profile.teacher_training_info) }
     it { expect(subject.teacher_training_url).to eql(profile.teacher_training_url) }
-    it { expect(subject.dbs_required).to eql(profile.dbs_required) }
     it { expect(subject.parking_provided).to eql(profile.parking_provided) }
     it { expect(subject.parking_details).to eql(profile.parking_details) }
     it { expect(subject.start_time).to eql(profile.start_time) }
@@ -41,7 +40,7 @@ RSpec.describe Candidates::SchoolPresenter do
     it { expect(subject.dress_code_other_details).to eql(profile.dress_code_other_details) }
   end
 
-  describe '.dress_code' do
+  describe '#dress_code' do
     before do
       profile.dress_code_business = true
       profile.dress_code_cover_tattoos = true
@@ -52,8 +51,8 @@ RSpec.describe Candidates::SchoolPresenter do
     end
   end
 
-  describe '.dress_code?' do
-    subject { Candidates::SchoolPresenter.new(school, profile).dress_code? }
+  describe '#dress_code?' do
+    subject { described_class.new(school, profile).dress_code? }
 
     context 'with booleans' do
       before { profile.dress_code_business = true }
@@ -79,8 +78,8 @@ RSpec.describe Candidates::SchoolPresenter do
     end
   end
 
-  describe '.formatted_dress_code' do
-    subject { Candidates::SchoolPresenter.new(school, profile).formatted_dress_code }
+  describe '#formatted_dress_code' do
+    subject { described_class.new(school, profile).formatted_dress_code }
 
     context 'with content' do
       before { profile.dress_code_other_details = 'lorem ipsum' }
@@ -89,6 +88,25 @@ RSpec.describe Candidates::SchoolPresenter do
 
     context 'without content' do
       it { is_expected.to be_blank }
+    end
+  end
+
+  describe '#dbs_required' do
+    subject { described_class.new(school, profile).dbs_required }
+
+    context 'when yes' do
+      before { profile.dbs_required = 'yes' }
+      it { is_expected.to eql "Yes - Always" }
+    end
+
+    context 'when no' do
+      before { profile.dbs_required = 'no' }
+      it { is_expected.to eql "No - Never" }
+    end
+
+    context 'when yes' do
+      before { profile.dbs_required = 'sometimes' }
+      it { is_expected.to eql "Yes - Sometimes" }
     end
   end
 end

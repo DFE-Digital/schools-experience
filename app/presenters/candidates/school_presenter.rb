@@ -10,7 +10,7 @@ module Candidates
     delegate :placement_info, :individual_requirements, to: :profile
     delegate :specialism_details, :disabled_facilities, to: :profile
     delegate :teacher_training_info, :teacher_training_url, to: :profile
-    delegate :dbs_required, :parking_provided, :parking_details, to: :profile
+    delegate :dbs_policy, :parking_provided, :parking_details, to: :profile
     delegate :start_time, :end_time, :flexible_on_times, to: :profile
     delegate :dress_code_other_details, to: :profile
 
@@ -47,6 +47,14 @@ module Candidates
       return unless dress_code?
 
       simple_format [ dress_code, dress_code_other_details ].join("\n\n")
+    end
+
+    def dbs_required
+      case profile.dbs_required
+      when 'yes' then 'Yes - Always'
+      when 'sometimes' then 'Yes - Sometimes'
+      when 'no' then 'No - Never'
+      end
     end
   end
 end
