@@ -16,7 +16,9 @@ class Candidates::SchoolsController < ApplicationController
 
   def show
     @school = Candidates::School.find(params[:id])
-    @profile = @school.profile
+    if @school.private_beta?
+      @presenter = Candidates::SchoolPresenter.new(@school, @school.profile)
+    end
     @available_dates = @school.bookings_placement_dates.available
   end
 

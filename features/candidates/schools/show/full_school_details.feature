@@ -70,6 +70,18 @@ Feature: School show page (enhanced data)
         Given the chosen school has no availability information
         When I am on the profile page for the chosen school
         Then the availability information in the sidebar should read 'No information supplied'
+    
+    Scenario: DBS Check info (sidebar)
+        Given I am on the profile page for the chosen school
+        Then I should see information about DBS requirements
+    
+    Scenario: Fees information (sidebar)
+        Given I am on the profile page for the chosen school
+        Then I should see the TBD
+
+    Scenario: Dress code information (sidebar)
+        Given I am on the profile page for the chosen school
+        Then I should see the TBD
 
     Scenario: Teacher training offered (sidebar)
         Given the chosen school offers teacher training and has the following info

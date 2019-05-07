@@ -1,7 +1,7 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
     <section id="school-placement-info">
-      <%= simple_format @school.profile.placement_info %>
+      <%= simple_format @presenter.placement_info %>
     </section>
 
     <div>
@@ -20,11 +20,11 @@
 
       <dl class="govuk-summary-list govuk-summary-list--no-border inline">
         <%= dlist_item 'Individual requirements:' do %>
-          <%= content_or_msg @profile.individual_requirements, "No requirements specified" %>
+          <%= content_or_msg @presenter.individual_requirements, "No requirements specified" %>
         <% end %>
 
         <%= dlist_item 'Experience details:' do %>
-          <%= @profile.placement_info %>
+          <%= @presenter.placement_info %>
         <% end %>
 
         <%= dlist_item 'Experience subjects:' do %>
@@ -36,7 +36,7 @@
     <div>
       <h2>Location</h2>
 
-      <%= school_location_map @school %>
+      <%= school_location_map @presenter.school %>
 
       <p class="directions-link">
         <%= link_to 'Get directions', external_map_url(
@@ -48,7 +48,7 @@
 
     <p>
       <%= link_to "Start request",
-                  new_candidates_school_registrations_placement_preference_path(@school),
+                  new_candidates_school_registrations_placement_preference_path(@presenter.school),
                   class:"govuk-button" %>
     </p>
 
@@ -57,12 +57,12 @@
 
       <dl class="govuk-summary-list govuk-summary-list--no-border inline">
         <%= dlist_item 'Age range:', id: 'school-phases' do %>
-          <%= format_phases(@school) %>
+          <%= format_phases(@presenter.school) %>
         <% end %>
 
         <%= dlist_item 'Specialisms:' do %>
-          <%= simple_format @profile.specialism_details %>
-        <% end if @profile.specialism_details.present? %>
+          <%= simple_format @presenter.specialism_details %>
+        <% end if @presenter.specialism_details.present? %>
       </dl>
 
       <p>
@@ -72,31 +72,31 @@
       </p>
 
       <ul id="school-websites">
-        <%- if @school.website.present? -%>
+        <%- if @presenter.website.present? -%>
         <li id="school-website">
-          <%= link_to "#{@school.name} website", @school.website %>
+          <%= link_to "#{@school.name} website", @presenter.website %>
         </li>
         <%- end -%>
 
         <li>
           <%= link_to "#{@school.name} Get Information About Schools",
-                      gias_school_url(@school.urn) %>
+                      gias_school_url(@presenter.urn) %>
         </li>
 
         <li>
           <%= link_to "Ofsted report: #{@school.name}",
-                      ofsted_report_url(@school.urn) %>
+                      ofsted_report_url(@presenter.urn) %>
         </li>
 
         <li>
           <%= link_to "Performance information: #{@school.name}",
-                      performance_report_url(@school.urn) %>
+                      performance_report_url(@presenter.urn) %>
         </li>
 
-        <%- if @school.teacher_training_provider? && @school.teacher_training_website.present? -%>
+        <%- if @presenter.teacher_training_url.present? -%>
         <li>
-          <%= link_to "Teacher training: #{@school.name}",
-            cleanup_school_url(@school.teacher_training_website) %>
+          <%= link_to "Teacher training: #{@presenter.name}",
+            cleanup_school_url(@presenter.teacher_training_url) %>
         </li>
         <%- end -%>
       </ul>
@@ -111,11 +111,11 @@
   <div class="candidate-profile-sidebar govuk-grid-column-one-third column-top-border">
     <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
       <%= dlist_item 'Address', id: 'school-address' do %>
-        <%= format_school_address @school, tag(:br) %>
+        <%= format_school_address @presenter.school, tag(:br) %>
       <% end %>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-        <%- if @school.availability_preference_fixed? -%>
+        <%- if @presenter.availability_preference_fixed? -%>
           <%= render partial: 'placement_dates', locals: { available_dates: @available_dates } %>
         <%- else -%>
           <dt class="govuk-summary-list__key">
@@ -128,50 +128,50 @@
       </div>
 
       <%= dlist_item 'DBS check required' do %>
-        <%= @profile.dbs_required %>
+        <%= @presenter.dbs_required %>
       <% end %>
 
       <%= dlist_item 'Fees' do %>
         <strong style="color:#ff0000">To be done</strong>
       <% end %>
 
-      <%= dlist_item 'Dress code' do %>
-        <%= content_or_msg format_dress_code(@profile), "No dress code supplied" %>
+      <%= dlist_item 'Dress code', id: 'dress-code' do %>
+        <%= content_or_msg @presenter.formatted_dress_code, "No dress code supplied" %>
       <% end %>
 
       <%= dlist_item 'Experience start and finish times' do %>
-        <%= @profile.start_time %> to <%= @profile.end_time %>
+        <%= @presenter.start_time %> to <%= @presenter.end_time %>
 
-        <%- if @profile.flexible_on_times -%>
+        <%- if @presenter.flexible_on_times -%>
           - Flexible
         <%- end -%>
       <% end %>
 
       <%= dlist_item 'Parking' do %>
-        <%- if @profile.parking_provided -%>
+        <%- if @presenter.parking_provided -%>
           <p>Yes - on site parking provided</p>
         <%- else -%>
           <p>Not available on site</p>
         <%- end -%>
 
-        <%= simple_format @profile.parking_details %>
+        <%= simple_format @presenter.parking_details %>
       <% end %>
 
       <%= dlist_item 'Accessibility details' do %>
-        <%- if @profile.disabled_facilities.present? -%>
-          <%= simple_format @profile.disabled_facilities %>
+        <%- if @presenter.disabled_facilities.present? -%>
+          <%= simple_format @presenter.disabled_facilities %>
         <%- else -%>
           <em>No information supplied</em>
         <%- end -%>
       <% end %>
 
       <%= dlist_item 'Teacher training offered' do %>
-        <%= simple_format @profile.teacher_training_info %>
+        <%= simple_format @presenter.teacher_training_info %>
 
         <p>
-          <%= link_to 'More information', @profile.teacher_training_url %>
+          <%= link_to 'More information', @presenter.teacher_training_url %>
         </p>
-      <% end if @profile.teacher_training_info.present? %>
+      <% end if @presenter.teacher_training_info.present? %>
     </dl>
   </div>
 </div>

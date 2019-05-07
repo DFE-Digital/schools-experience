@@ -134,17 +134,4 @@ module Candidates::SchoolHelper
       content_tag(:p, item)
     end, "\n")
   end
-
-  def format_dress_code(profile)
-    requirements = []
-
-    requirements << 'Business dress' if profile.dress_code_business
-    requirements << 'Cover up tattoos' if profile.dress_code_cover_tattoos
-    requirements << 'Remove piercings' if profile.dress_code_remove_piercings
-    requirements << 'Smart casual' if profile.dress_code_smart_casual
-
-    array_to_paragraphs(
-      requirements.join(', '),
-      profile.dress_code_other_details)
-  end
 end
