@@ -128,12 +128,38 @@
       </div>
 
       <%= dlist_item 'DBS check required' do %>
-        <%= @presenter.dbs_required %>
+        <%= @presenter.dbs_required.to_s.humanize %>
       <% end %>
 
-      <%= dlist_item 'Fees' do %>
-        <strong style="color:#ff0000">To be done</strong>
-      <% end %>
+      <%= dlist_item 'Administration fees' do %>
+        <p>
+          <%= number_to_currency @presenter.administration_fee_amount_pounds %>
+          <%= @presenter.administration_fee_interval %>,
+          <%= @presenter.administration_fee_payment_method %>
+        </p>
+
+        <%= simple_format @presenter.administration_fee_description %>
+      <% end if @presenter.administration_fee_amount_pounds %>
+
+      <%= dlist_item 'DBS check fees' do %>
+        <p>
+          <%= number_to_currency @presenter.dbs_fee_amount_pounds %>
+          <%= @presenter.dbs_fee_interval %>,
+          <%= @presenter.dbs_fee_payment_method %>
+        </p>
+
+        <%= simple_format @presenter.dbs_fee_description %>
+      <% end if @presenter.dbs_fee_amount_pounds %>
+
+      <%= dlist_item 'Other fees' do %>
+        <p>
+          <%= number_to_currency @presenter.other_fee_amount_pounds %>
+          <%= @presenter.other_fee_interval %>,
+          <%= @presenter.other_fee_payment_method %>
+        </p>
+
+        <%= simple_format @presenter.other_fee_description %>
+      <% end if @presenter.other_fee_amount_pounds %>
 
       <%= dlist_item 'Dress code', id: 'dress-code' do %>
         <%= content_or_msg @presenter.formatted_dress_code, "No dress code supplied" %>

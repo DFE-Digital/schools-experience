@@ -4,6 +4,12 @@ en:
    messages:
      use_fewer_words: "Use %{count} words or fewer"
 
+  number:
+    currency:
+      format:
+        unit: '£'
+        delimiter: ''
+
   placement_preference_errors: &placement_preference_errors
     attributes:
       availability:

@@ -125,13 +125,4 @@ module Candidates::SchoolHelper
 
     content.presence || msg
   end
-
-  def array_to_paragraphs(*items)
-    items = Array.wrap(items).flatten.map(&:presence).compact
-    return unless items.any?
-
-    safe_join(items.map do |item|
-      content_tag(:p, item)
-    end, "\n")
-  end
 end

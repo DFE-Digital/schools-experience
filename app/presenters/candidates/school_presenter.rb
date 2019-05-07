@@ -14,6 +14,15 @@ module Candidates
     delegate :start_time, :end_time, :flexible_on_times, to: :profile
     delegate :dress_code_other_details, to: :profile
 
+    delegate :administration_fee_amount_pounds, :administration_fee_interval, \
+      :administration_fee_description, :administration_fee_payment_method, to: :profile
+
+    delegate :dbs_fee_amount_pounds, :dbs_fee_interval, \
+      :dbs_fee_description, :dbs_fee_payment_method, to: :profile
+
+    delegate :other_fee_amount_pounds, :other_fee_interval, \
+      :other_fee_description, :other_fee_payment_method, to: :profile
+
     def initialize(school, profile)
       @school = school
       @profile = profile
