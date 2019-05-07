@@ -45,7 +45,7 @@ gem 'notifications-ruby-client'
 gem 'acts_as_list'
 gem 'delayed_job_active_record'
 
-gem "redis", "~> 4.0"
+gem "redis", "~> 4.1"
 
 gem 'exception_notification'
 gem 'slack-notifier'

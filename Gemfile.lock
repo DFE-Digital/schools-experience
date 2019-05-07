@@ -264,7 +264,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    redis (4.1.0)
+    redis (4.1.1)
     regexp_parser (1.4.0)
     rgeo (2.0.1)
     rgeo-activerecord (6.1.0)
@@ -400,7 +400,7 @@ DEPENDENCIES
   rack-rewrite
   rails (~> 5.2.3)
   rails-controller-testing
-  redis (~> 4.0)
+  redis (~> 4.1)
   rspec-rails (~> 3.8)
   rubocop (~> 0.65.0)
   sassc-rails
