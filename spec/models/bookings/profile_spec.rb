@@ -181,8 +181,8 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.not_to allow_value(nil).for(:flexible_on_times) }
     end
 
-    describe "placement_info" do
-      it { is_expected.to validate_presence_of(:placement_info) }
+    describe "experience_details" do
+      it { is_expected.to validate_presence_of(:experience_details) }
     end
 
     describe "teacher_training_info" do

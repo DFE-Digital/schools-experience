@@ -26,7 +26,7 @@ RSpec.describe Candidates::SchoolPresenter do
   end
 
   describe "attributes delegated to the profile" do
-    it { expect(subject.placement_info).to eql(profile.placement_info) }
+    it { expect(subject.experience_details).to eql(profile.experience_details) }
     it { expect(subject.individual_requirements).to eql(profile.individual_requirements) }
     it { expect(subject.description_details).to eql(profile.description_details) }
     it { expect(subject.disabled_facilities).to eql(profile.disabled_facilities) }
@@ -95,12 +95,12 @@ RSpec.describe Candidates::SchoolPresenter do
     subject { described_class.new(school, profile).dbs_required }
 
     context 'when yes' do
-      before { profile.dbs_required = 'yes' }
+      before { profile.dbs_required = 'always' }
       it { is_expected.to eql "Yes - Always" }
     end
 
     context 'when no' do
-      before { profile.dbs_required = 'no' }
+      before { profile.dbs_required = 'never' }
       it { is_expected.to eql "No - Never" }
     end
 

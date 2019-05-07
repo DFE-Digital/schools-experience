@@ -35,7 +35,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(start_time: '8:15am') }
       it { is_expected.to include(end_time: '4:30pm') }
       it { is_expected.to include(flexible_on_times: true) }
-      it { is_expected.to include(placement_info: 'Mostly teaching') }
+      it { is_expected.to include(experience_details: 'Mostly teaching') }
       it { is_expected.to include(parking_provided: true) }
       it { is_expected.to include(parking_details: 'Plenty of spaces') }
       it { is_expected.to include(teacher_training_info: 'We offer teach training in house') }

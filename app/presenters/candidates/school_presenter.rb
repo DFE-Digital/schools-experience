@@ -7,7 +7,7 @@ module Candidates
     delegate :name, :urn, :coordinates, :website, to: :school
     delegate :availability_preference_fixed?, to: :school
 
-    delegate :placement_info, :individual_requirements, to: :profile
+    delegate :experience_details, :individual_requirements, to: :profile
     delegate :description_details, :disabled_facilities, to: :profile
     delegate :teacher_training_info, :teacher_training_url, to: :profile
     delegate :dbs_policy, :parking_provided, :parking_details, to: :profile
@@ -51,9 +51,9 @@ module Candidates
 
     def dbs_required
       case profile.dbs_required
-      when 'yes' then 'Yes - Always'
+      when 'always' then 'Yes - Always'
       when 'sometimes' then 'Yes - Sometimes'
-      when 'no' then 'No - Never'
+      when 'never' then 'No - Never'
       end
     end
   end

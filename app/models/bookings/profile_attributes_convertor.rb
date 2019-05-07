@@ -92,7 +92,7 @@ module Bookings
       output[:start_time]         = input[:candidate_experience_detail_start_time]
       output[:end_time]           = input[:candidate_experience_detail_end_time]
       output[:flexible_on_times]  = !!input[:candidate_experience_detail_times_flexible]
-      output[:placement_info]     = input[:experience_outline_candidate_experience]
+      output[:experience_details] = input[:experience_outline_candidate_experience]
     end
 
     def copy_parking

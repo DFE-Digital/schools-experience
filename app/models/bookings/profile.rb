@@ -45,7 +45,7 @@ class Bookings::Profile < ApplicationRecord
   validates :end_time, presence: true
   validates :flexible_on_times, inclusion: [true, false]
 
-  validates :placement_info, presence: true
+  validates :experience_details, presence: true
 
   validates :teacher_training_url, format: URI::regexp(%w{http https}), if: :teacher_training_info
 

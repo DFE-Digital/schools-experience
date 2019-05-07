@@ -15,7 +15,7 @@
         <% end %>
 
         <%= dlist_item 'Experience details:' do %>
-          <%= @presenter.placement_info %>
+          <%= @presenter.experience_details %>
         <% end %>
 
         <%= dlist_item 'Experience subjects:' do %>
@@ -107,7 +107,7 @@
         <%- end -%>
       </div>
 
-      <%= dlist_item 'DBS check required' do %>
+      <%= dlist_item 'DBS check required', id: 'dbs-check-info' do %>
         <p>
           <%= @presenter.dbs_required %>
         </p>
