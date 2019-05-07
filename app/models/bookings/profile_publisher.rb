@@ -10,8 +10,11 @@ module Bookings
     end
 
     def update!
-      profile.attributes = converted_attributes
-      profile.tap(&:save!)
+      profile.transaction do
+        profile.attributes = converted_attributes
+        school.subject_ids = @school_profile.subject_ids
+        profile.tap(&:save!)
+      end
     end
 
     class IncompleteSourceProfileError < RuntimeError; end

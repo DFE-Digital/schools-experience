@@ -24,8 +24,8 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
   end
 
   describe '#update!' do
-    let(:school) { create(:bookings_school) }
-    let(:school_profile) { create(:school_profile, :completed) }
+    let(:school) { create(:bookings_school, :with_subjects) }
+    let(:school_profile) { create(:school_profile, :completed, :with_subjects) }
 
     context "for School with Profile" do
       subject { described_class.new(school, school_profile).update! }
@@ -34,6 +34,7 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       it { is_expected.to be_persisted }
       it { is_expected.to be_valid }
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
+      it { expect(subject.school.subject_ids).to eql(school_profile.subject_ids) }
     end
 
     context "for School without Profile" do
@@ -52,6 +53,7 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       it { is_expected.to be_valid }
       it { is_expected.to eql @initial_profile }
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
+      it { expect(subject.school.subject_ids).to eql(school_profile.subject_ids) }
     end
   end
 end
