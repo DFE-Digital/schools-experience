@@ -9,7 +9,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 2019_05_03_095630) do
+
+ActiveRecord::Schema.define(version: 2019_05_07_133302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -252,6 +253,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_095630) do
     t.boolean "availability_preference_fixed"
     t.boolean "phases_list_secondary_and_college", default: false, null: false
     t.boolean "confirmation_acceptance", default: false
+    t.text "candidate_experience_detail_times_flexible_details"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

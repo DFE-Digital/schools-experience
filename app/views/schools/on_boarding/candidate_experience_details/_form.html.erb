@@ -7,7 +7,7 @@
       These details will help candidates select a school experience.
     </p>
 
-    <%= form_for @candidate_experience_detail, url: url, method: method do |f| %>
+    <%= form_for candidate_experience_detail, url: url, method: method do |f| %>
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
       <%= f.check_box_fieldset :dress_code, %i(business_dress cover_up_tattoos remove_piercings smart_casual ) do |fieldset| %>
@@ -55,7 +55,9 @@
           individual needs. For example, around child care or any other
           responsibilities.
         </p>
-        <%= f.radio_input true %>
+        <%= f.radio_input true do %>
+          <%= f.text_area :times_flexible_details %>
+        <% end %>
         <%= f.radio_input false %>
       <% end %>
 

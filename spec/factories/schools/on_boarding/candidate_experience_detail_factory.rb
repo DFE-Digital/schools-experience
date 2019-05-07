@@ -14,6 +14,7 @@ FactoryBot.define do
     start_time { '8:15am' }
     end_time { '4:30pm' }
     times_flexible { true }
+    times_flexible_details { 'We are very accommodating' }
 
     trait :without_parking do
       parking_provided { false }

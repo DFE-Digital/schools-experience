@@ -38,6 +38,6 @@ Feature: Candidate experience details
     And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
     And I enter '8:15 am' into the 'Start time' text area
     And I enter '4:30 pm' into the 'Finish time' text area
-    And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
+    And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
     When I submit the form
     Then I should be on the 'Availability Preference' page
