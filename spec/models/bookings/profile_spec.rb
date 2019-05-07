@@ -181,6 +181,18 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.not_to allow_value(nil).for(:flexible_on_times) }
     end
 
+    describe "flexible_on_times_details" do
+      context 'when flexible_on_times' do
+        subject { described_class.new flexible_on_times: true }
+
+        it { is_expected.to validate_presence_of(:flexible_on_times_details) }
+      end
+
+      context 'when not flexible_on_times' do
+        it { is_expected.not_to validate_presence_of(:flexible_on_times_details) }
+      end
+    end
+
     describe "placement_info" do
       it { is_expected.to validate_presence_of(:placement_info) }
     end
