@@ -97,8 +97,10 @@ private
   def geolocate(location)
     result = Geocoder.search(
       location,
-      region: 'gb',
-      params: { maxRes: 1 }
+      params: {
+        region: 'gb',
+        maxRes: 1
+      }
     )&.first
 
     if result.blank?
