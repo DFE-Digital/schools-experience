@@ -10,9 +10,13 @@ Feature: Creating new placement dates
         Given I am on the 'new placement date' page
         Then the page title should be 'Create a placement date'
 
-    Scenario: Back link
-        Given I am on the 'new placement date' page
-        Then I should see a 'Back' link to the 'placement dates' page
+  Scenario: Breadcrumbs
+    Given I am on the 'new placement date' page
+    Then I should see the following breadcrumbs:
+        | Text                    | Link                     |
+        | Some school             | /schools                 |
+        | Placement dates         | /schools/placement_dates |
+        | Create a placement date | None                     |
 
     Scenario: Placement date form
         Given I am on the 'new placement date' page
