@@ -4,6 +4,7 @@ module Schools
   class BaseController < ApplicationController
     include DFEAuthentication
     before_action :require_auth
+    before_action :set_current_school
 
     rescue_from ActionController::ParameterMissing, with: -> { redirect_to schools_errors_no_school_path }
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
@@ -15,6 +16,7 @@ module Schools
       Rails.logger.debug("Looking for school #{urn}")
       @current_school ||= retrieve_school(urn)
     end
+    alias_method :set_current_school, :current_school
 
   private
 

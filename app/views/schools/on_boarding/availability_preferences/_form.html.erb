@@ -1,3 +1,10 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'School experience availability or fixed dates' => nil
+  }
+%>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for availability_preference, url: url, method: method do |f| %>
