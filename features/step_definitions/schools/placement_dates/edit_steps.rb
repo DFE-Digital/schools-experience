@@ -30,6 +30,6 @@ Then("my placement should have been {string}") do |operation|
   }[operation]
 
   within("tr[data-placement-date-id='#{@placement_date.id}']") do
-    expect(page).to have_css('td.status', text: description)
+    expect(page).to have_css('td.status', text: /#{description}/i)
   end
 end

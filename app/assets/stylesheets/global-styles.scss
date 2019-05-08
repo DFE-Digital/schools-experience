@@ -71,11 +71,12 @@ dl.govuk-summary-list {
   }
 }
 
-.govuk-button--secondary {
-  $govuk-button-secondary-colour: govuk-colour("grey-1");
+.govuk-button.govuk-button--secondary {
+  $govuk-button-secondary-colour: govuk-colour("grey-3");
   $govuk-button-secondary-hover-colour: darken($govuk-button-secondary-colour, 5%);
   $govuk-button-secondary-shadow-colour: darken($govuk-button-secondary-colour, 15%);
   $button-shadow-size: $govuk-border-width-form-element;
+  color: $govuk-text-colour;
 
   background-color: $govuk-button-secondary-colour;
   box-shadow: 0 $button-shadow-size 0 $govuk-button-secondary-shadow-colour; // s0

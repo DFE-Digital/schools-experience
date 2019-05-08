@@ -5,33 +5,33 @@ Feature: Fees
 
   Background: I have completed the candidate requirement step
     Given I am logged in as a DfE user
-    Given The secondary school phase is availble
-    Given The college phase is availble
+    And the secondary school phase is availble
+    And the college phase is availble
     And I have completed the Candidate Requirements step
 
   Scenario: Completing step choosing Adminsitration costs only
     Given I am on the 'fees charged' page
-    And I check 'Administration costs'
+    And I choose 'Yes' from the 'Administration costs' radio buttons
     When I submit the form
     Then I should be on the 'Administration costs' page
 
   Scenario: Completing step choosing DBS costs only
     Given I am on the 'fees charged' page
-    And I check 'DBS check costs'
+    And I choose 'Yes' from the 'DBS check costs' radio buttons
     When I submit the form
     Then I should be on the 'DBS check costs' page
 
   Scenario: Completing step choosing Other costs only
     Given I am on the 'fees charged' page
-    And I check 'Other costs'
+    And I choose 'Yes' from the 'Other costs' radio buttons
     When I submit the form
     Then I should be on the 'Other costs' page
 
   Scenario: Completing step choosing all costs
     Given I am on the 'fees charged' page
-    And I check 'Administration costs'
-    And I check 'DBS check costs'
-    And I check 'Other costs'
+    And I choose 'Yes' from the 'Administration costs' radio buttons
+    And I choose 'Yes' from the 'DBS check costs' radio buttons
+    And I choose 'Yes' from the 'Other costs' radio buttons
     When I submit the form
     Then I should be on the 'Administration costs' page
 

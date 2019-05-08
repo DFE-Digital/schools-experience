@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class CandidateRequirement
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class CandidateRequirement < Step
       DBS_REQUIRMENTS = %w(always sometimes never).freeze
 
       attribute :dbs_requirement, :string
@@ -24,10 +21,6 @@ module Schools
           dbs_policy: dbs_policy,
           requirements: requirements,
           requirements_details: requirements_details
-      end
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
       end
 
       def dbs_requirements

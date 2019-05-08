@@ -1,14 +1,10 @@
 module Schools
   module OnBoarding
-    class Confirmation
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class Confirmation < Step
       attribute :acceptance, :boolean
       validates :acceptance, acceptance: true
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
+      def self.compose(acceptance)
+        new acceptance: acceptance
       end
     end
   end

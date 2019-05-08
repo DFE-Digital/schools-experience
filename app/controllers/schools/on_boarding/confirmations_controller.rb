@@ -7,6 +7,7 @@ module Schools
         @confirmation = Confirmation.new confirmation_params
 
         if @confirmation.valid?
+          current_school_profile.update! confirmation: @confirmation
           publish_profile!
           redirect_to schools_on_boarding_confirmation_path
         else

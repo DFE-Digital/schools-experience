@@ -9,7 +9,6 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
 ActiveRecord::Schema.define(version: 2019_05_03_120209) do
 
   # These are extensions that must be enabled in order to support this database
@@ -64,7 +63,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_120209) do
     t.boolean "key_stage_early_years", null: false
     t.boolean "key_stage_1", null: false
     t.boolean "key_stage_2", null: false
-    t.text "specialism_details"
+    t.text "description_details"
     t.boolean "dress_code_business", null: false
     t.boolean "dress_code_cover_tattoos", null: false
     t.boolean "dress_code_remove_piercings", null: false
@@ -226,8 +225,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_120209) do
     t.boolean "key_stage_list_early_years", default: false
     t.boolean "key_stage_list_key_stage_1", default: false
     t.boolean "key_stage_list_key_stage_2", default: false
-    t.boolean "specialism_has_specialism"
-    t.text "specialism_details"
+    t.text "description_details"
     t.boolean "candidate_experience_detail_business_dress", default: false
     t.boolean "candidate_experience_detail_cover_up_tattoos", default: false
     t.boolean "candidate_experience_detail_remove_piercings", default: false
@@ -242,7 +240,6 @@ ActiveRecord::Schema.define(version: 2019_05_03_120209) do
     t.string "candidate_experience_detail_start_time"
     t.string "candidate_experience_detail_end_time"
     t.boolean "candidate_experience_detail_times_flexible"
-    t.integer "bookings_school_id", null: false
     t.text "experience_outline_candidate_experience"
     t.boolean "experience_outline_provides_teacher_training"
     t.text "experience_outline_teacher_training_details"
@@ -251,8 +248,10 @@ ActiveRecord::Schema.define(version: 2019_05_03_120209) do
     t.string "admin_contact_email"
     t.string "admin_contact_phone"
     t.text "availability_description_description"
+    t.integer "bookings_school_id", null: false
     t.boolean "availability_preference_fixed"
     t.boolean "phases_list_secondary_and_college", default: false, null: false
+    t.boolean "confirmation_acceptance", default: false
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

@@ -155,7 +155,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
       it 'adds each selected phase to the output' do
         expect(subject.school_experience_phases).to \
-          eq 'primary, secondary, and 16 - 18 years'
+          eq 'Primary, secondary, and 16 - 18 years'
       end
     end
 
@@ -165,7 +165,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'only adds the selected phases' do
-        expect(subject.school_experience_phases).to eq 'primary'
+        expect(subject.school_experience_phases).to eq 'Primary'
       end
     end
   end
@@ -214,7 +214,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
       it 'returns the key stages' do
         expect(subject.primary_key_stages).to \
-          eq 'early years, key stage 1, and key stage 2'
+          eq 'Early years, key stage 1, and key stage 2'
       end
     end
   end
@@ -264,25 +264,13 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#specialisms' do
-    context 'without specialisms' do
-      let :profile do
-        FactoryBot.build :school_profile
-      end
-
-      it 'returns no' do
-        expect(subject.specialisms).to eq 'No'
-      end
+  context '#descriptions' do
+    let :profile do
+      FactoryBot.build :school_profile, :with_description
     end
 
-    context 'with specialims' do
-      let :profile do
-        FactoryBot.build :school_profile, :with_specialism
-      end
-
-      it 'returns the specialism' do
-        expect(subject.specialisms).to eq 'Yes - Falconry'
-      end
+    it 'returns the description' do
+      expect(subject.descriptions).to eq 'Horse archery'
     end
   end
 
@@ -303,7 +291,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
     it 'returns the selected dress code options' do
       expect(subject.dress_code).to \
-        eq "business dress, cover up tattoos, remove piercings, smart casual, and Must have nice hat"
+        eq "Business dress, cover up tattoos, remove piercings, smart casual, and must have nice hat"
     end
   end
 

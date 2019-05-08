@@ -5,10 +5,12 @@ Feature: DBS Fee
 
   Background: I have completed the previous steps
     Given I am logged in as a DfE user
-    Given The secondary school phase is availble
-    Given The college phase is availble
-    Given I have completed the Candidate Requirements step
-    And I have completed the Fees step, choosing only DBS costs
+    And the secondary school phase is availble
+    And the college phase is availble
+    And I have completed the following steps:
+        | Step name              | Extra                              |
+        | Candidate Requirements |                                    |
+        | Fees                   | choosing only DBS costs |
 
   Scenario: Completing the DBS costs step with error
     Given I have entered the following details into the form:

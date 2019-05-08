@@ -5,10 +5,19 @@ Feature: Other Fee
 
   Background: I have completed the previous steps
     Given I am logged in as a DfE user
-    Given The secondary school phase is availble
-    Given The college phase is availble
-    And I have completed the Candidate Requirements step
-    And I have completed the Fees step, choosing only Other costs
+    And the secondary school phase is availble
+    And the college phase is availble
+    And I have completed the following steps:
+        | Step name                    | Extra                     |
+        | Candidate Requirements       |                           |
+        | Fees                         | choosing only Other costs |
+
+  Scenario: Breadcrumbs
+    Given I am already on the 'other costs' page
+    Then I should see the following breadcrumbs:
+        | Text        | Link     |
+        | Some school | /schools |
+        | Other costs | None     |
 
   Scenario: Completing the Other costs step with error
     Given I have entered the following details into the form:

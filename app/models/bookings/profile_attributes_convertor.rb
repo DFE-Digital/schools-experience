@@ -19,6 +19,7 @@ module Bookings
       copy_parking
       copy_fields
       convert_availability
+      convert_description
       convert_fees(:administration)
       convert_fees(:dbs)
       convert_fees(:other)
@@ -39,10 +40,6 @@ module Bookings
       output[:individual_requirements] = \
         conditional_assign(:candidate_requirement_requirements,
           :candidate_requirement_requirements_details)
-
-      output[:specialism_details] = \
-        conditional_assign(:specialism_has_specialism,
-          :specialism_details)
 
       output[:disabled_facilities] = \
         conditional_assign(:candidate_experience_detail_disabled_facilities,
@@ -115,6 +112,10 @@ module Bookings
       else
         output[:teacher_training_info] = output[:teacher_training_url] = nil
       end
+    end
+
+    def convert_description
+      output[:description_details] = input[:description_details].presence
     end
 
     def convert_fees(type)

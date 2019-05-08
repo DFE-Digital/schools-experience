@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class CandidateExperienceDetail
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class CandidateExperienceDetail < Step
       # Ensure that times look *roughly* valid. Note that it is
       # still possible to input invalid ones like '25:00'.
       # FIXME do we need to tighten this up/use a real timepicker?
@@ -36,8 +33,10 @@ module Schools
       validates :disabled_facilities, inclusion: [true, false]
       validates :disabled_facilities_details, presence: true, if: :disabled_facilities
       validates :times_flexible, inclusion: [true, false]
-      validates :start_time, presence: true, format: { with: SCHOOL_TIME_FORMAT }
-      validates :end_time, presence: true, format: { with: SCHOOL_TIME_FORMAT }
+      validates :start_time, presence: true
+      validates :start_time, format: { with: SCHOOL_TIME_FORMAT }, if: -> { start_time.present? }
+      validates :end_time, presence: true
+      validates :end_time, format: { with: SCHOOL_TIME_FORMAT }, if: -> { end_time.present? }
 
       def self.compose(
           business_dress,
@@ -70,10 +69,6 @@ module Schools
           start_time: start_time,
           end_time: end_time,
           times_flexible: times_flexible
-      end
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
       end
     end
   end

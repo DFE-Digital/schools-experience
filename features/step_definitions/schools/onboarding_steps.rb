@@ -17,7 +17,7 @@ Given "I have completed the Fees step, choosing only Administration costs" do
   steps %(
     Given I have completed the Candidate Requirements step
     Given I am on the 'fees charged' page
-    And I check 'Administration costs'
+    And I choose 'Yes' from the 'Administration costs' radio buttons
     When I submit the form
   )
 end
@@ -25,7 +25,7 @@ end
 Given "I have completed the Fees step, choosing only DBS costs" do
   steps %(
     Given I am on the 'fees charged' page
-    And I check 'DBS check costs'
+    And I choose 'Yes' from the 'DBS check costs' radio buttons
     When I submit the form
   )
 end
@@ -33,7 +33,7 @@ end
 Given "I have completed the Fees step, choosing only Other costs" do
   steps %(
     Given I am on the 'fees charged' page
-    And I check 'Other costs'
+    And I choose 'Yes' from the 'Other costs' radio buttons
     When I submit the form
   )
 end
@@ -74,11 +74,10 @@ Given "I have completed the College subjects step" do
   )
 end
 
-Given "I have completed the Specialisms step" do
+Given "I have completed the Description step" do
   steps %(
-    Given I am on the 'Specialisms' page
-    And I choose 'Yes' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
-    And I enter 'Race track' into the 'Provide details' text area
+    Given I am on the 'Description' page
+    And I enter 'We have a race track' into the 'Tell us about your school. Provide a summary to help candidates choose your school.' text area
     When I submit the form
   )
 end
@@ -127,7 +126,7 @@ Given "I have completed the Experience Outline step" do
   )
 end
 
-Given "I have completed the Admin contact" do
+Given "I have completed the Admin contact step" do
   steps %(
     Given I am on the 'Admin contact' page
     And I enter 'Gary Chalmers' into the 'Full name' text area
@@ -144,25 +143,65 @@ Then "I should see a validation error message" do
   end
 end
 
-Then "The page should have the following summary list information:" do |table|
+Then "the page should have the following summary list information:" do |table|
   table.raw.to_h.each do |key, value|
     expect(page).to have_text %r{#{key} #{value}}
   end
 end
 
-Given "The secondary school phase is availble" do
+Given "the secondary school phase is availble" do
   FactoryBot.create :bookings_phase, :secondary
 end
 
-Given "The college phase is availble" do
+Given "the college phase is availble" do
   FactoryBot.create :bookings_phase, :college
 end
 
-Given "There are some subjects available" do
+Given "there are some subjects available" do
   FactoryBot.create :bookings_subject, name: 'Maths'
 end
 
 Given "A school is returned from DFE sign in" do
   # FIXME change this once we merge in phase2
   FactoryBot.create :bookings_school, urn: 1234567890
+end
+
+Given "I have completed the following steps:" do |table|
+  table.hashes.each do |row|
+    step_name = row['Step name']
+    extra     = row['Extra']
+
+    if row['Extra'].present?
+      step "I have completed the #{step_name} step, #{extra}"
+    else
+      step "I have completed the #{step_name} step"
+    end
+  end
+end
+
+And "I complete the candidate experience form with invalid data" do
+  steps %(
+    Given I check 'Business dress'
+    And I check 'Other'
+    And I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
+    And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
+    And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
+    And I enter '8:15 am' into the 'Start time' text area
+    And I enter '4:30 pm' into the 'Finish time' text area
+    And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
+  )
+end
+
+And "I complete the candidate experience form with valid data" do
+  steps %(
+    Given I check 'Business dress'
+    And I check 'Other'
+    And I enter 'Must have nice hat' into the 'For example no denim, jeans, shorts, short skirts, trainers' text area
+    And I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
+    And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
+    And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
+    And I enter '8:15 am' into the 'Start time' text area
+    And I enter '4:30 pm' into the 'Finish time' text area
+    And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
+  )
 end
