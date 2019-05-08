@@ -5,13 +5,16 @@ FactoryBot.define do
 
   trait :primary do
     name { 'Primary' }
+    edubase_id { 2 }
   end
 
   trait :secondary do
     name { 'Secondary' }
+    edubase_id { 4 }
   end
 
   trait :college do
     name { '16 plus' }
+    edubase_id { 6 }
   end
 end

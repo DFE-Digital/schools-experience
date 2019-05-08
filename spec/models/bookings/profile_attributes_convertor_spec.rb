@@ -116,4 +116,16 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(other_fee_payment_method: nil) }
     end
   end
+
+  describe '#phase_ids' do
+    before { @primary = create(:bookings_phase, :primary) }
+    before { @secondary = create(:bookings_phase, :secondary) }
+    before { @college = create(:bookings_phase, :college) }
+    let(:attrs) { build(:school_profile, :completed).attributes }
+    subject { described_class.new(attrs).phase_ids }
+
+    it { is_expected.to include(@primary.id) }
+    it { is_expected.to include(@secondary.id) }
+    it { is_expected.to include(@college.id) }
+  end
 end

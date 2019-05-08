@@ -27,6 +27,22 @@ module Bookings
       output
     end
 
+    def phase_ids
+      Set.new.tap do |ids|
+        if input[:phases_list_primary]
+          ids << edubase_ids[2]
+        end
+
+        if input[:phases_list_secondary] || input[:phases_list_secondary_or_college]
+          ids << edubase_ids[4]
+        end
+
+        if input[:phases_list_college] || input[:phases_list_secondary_or_college]
+          ids << edubase_ids[6]
+        end
+      end
+    end
+
   private
 
     def convert_dbs
@@ -150,6 +166,10 @@ module Bookings
 
     def assign_or_nil(test_result, input_key)
       test_result ? input[input_key] : nil
+    end
+
+    def edubase_ids
+      @edubase_ids ||= Hash[Bookings::Phase.pluck(:edubase_id, :id)]
     end
   end
 end

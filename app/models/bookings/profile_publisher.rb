@@ -13,6 +13,7 @@ module Bookings
       profile.transaction do
         profile.attributes = converted_attributes
         school.subject_ids = @school_profile.subject_ids
+        school.phase_ids = converted_phase_ids
         profile.tap(&:save!)
       end
     end
@@ -31,8 +32,15 @@ module Bookings
     end
 
     def converted_attributes
-      @converted_attributes ||= \
-        ProfileAttributesConvertor.new(@school_profile.attributes).attributes
+      @converted_attributes ||= convertor.attributes
+    end
+
+    def converted_phase_ids
+      @converted_phase_ids ||= convertor.phase_ids
+    end
+
+    def convertor
+      @convertor ||= ProfileAttributesConvertor.new(@school_profile.attributes)
     end
 
     def profile
