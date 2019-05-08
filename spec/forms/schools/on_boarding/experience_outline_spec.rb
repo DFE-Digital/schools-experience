@@ -9,13 +9,11 @@ describe Schools::OnBoarding::ExperienceOutline, type: :model do
   end
 
   context 'validates' do
-    it { is_expected.to validate_presence_of :candidate_experience }
     it { is_expected.not_to allow_value(nil).for :provides_teacher_training }
 
     context 'when provides_teacher_training' do
       subject { described_class.new provides_teacher_training: true }
       it { is_expected.to validate_presence_of :teacher_training_details }
-      it { is_expected.to validate_presence_of :teacher_training_url }
     end
 
     context 'when not provides_teacher_training' do
