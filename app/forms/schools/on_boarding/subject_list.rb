@@ -1,7 +1,8 @@
 module Schools
   module OnBoarding
-    class SubjectList
-      include ActiveModel::Model
+    class SubjectList < Step
+      validate :at_least_one_subject_selected
+      validate :all_subjects_are_available, if: -> { at_least_one_subject_selected? }
 
       attr_reader :subject_ids
 
@@ -9,11 +10,10 @@ module Schools
         @subject_ids = array.reject(&:blank?).map(&:to_i)
       end
 
-      validate :at_least_one_subject_selected
-      validate :all_subjects_are_available, if: -> { at_least_one_subject_selected? }
-
       def ==(other)
         return false unless other.respond_to? :subject_ids
+
+        return false unless Array(other.subject_ids).size == Array(self.subject_ids).size
 
         Array(other.subject_ids).all? do |subject_id|
           Array(self.subject_ids).include? subject_id

@@ -38,4 +38,16 @@ describe Schools::OnBoarding::SubjectList, type: :model do
       end
     end
   end
+
+  context '.new_from_bookings_school' do
+    let :bookings_school do
+      FactoryBot.create :bookings_school, :with_subjects
+    end
+
+    subject { described_class.new_from_bookings_school bookings_school }
+
+    it 'sets the subjects from the bookings school' do
+      expect(subject.subject_ids).to eq bookings_school.subject_ids
+    end
+  end
 end

@@ -2,7 +2,7 @@ module Schools
   module OnBoarding
     class PhasesListsController < OnBoardingsController
       def new
-        @phases_list = PhasesList.new
+        @phases_list = PhasesList.new_from_bookings_school current_school
       end
 
       def create

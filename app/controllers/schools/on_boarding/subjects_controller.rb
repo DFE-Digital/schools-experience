@@ -2,7 +2,7 @@ module Schools
   module OnBoarding
     class SubjectsController < OnBoardingsController
       def new
-        @subject_list = SubjectList.new
+        @subject_list = SubjectList.new_from_bookings_school current_school
       end
 
       def create

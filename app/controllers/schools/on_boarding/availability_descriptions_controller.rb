@@ -2,7 +2,8 @@ module Schools
   module OnBoarding
     class AvailabilityDescriptionsController < OnBoardingsController
       def new
-        @availability_description = AvailabilityDescription.new
+        @availability_description = \
+          AvailabilityDescription.new_from_bookings_school current_school
       end
 
       def create
