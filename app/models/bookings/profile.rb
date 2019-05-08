@@ -44,6 +44,7 @@ class Bookings::Profile < ApplicationRecord
   validates :start_time, presence: true
   validates :end_time, presence: true
   validates :flexible_on_times, inclusion: [true, false]
+  validates :flexible_on_times_details, presence: true, if: :flexible_on_times
 
   validates :placement_info, presence: true
 
