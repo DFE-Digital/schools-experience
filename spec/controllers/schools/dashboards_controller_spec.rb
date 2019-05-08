@@ -53,5 +53,28 @@ describe Schools::DashboardsController, type: :request do
         expect(subject).to redirect_to(schools_errors_no_school_path)
       end
     end
+
+    context 'dashlette' do
+      include_context "logged in DfE user"
+      before { allow(Rails.application.config.x).to receive(:phase).and_return(2) }
+
+      context 'when the school has fixed dates' do
+        before { @current_user_school.update(availability_preference_fixed: true) }
+        before { get '/schools/dashboard' }
+
+        specify 'should have the link' do
+          expect(response.body).to match(/Update school experience dates/)
+        end
+      end
+
+      context 'when the school has flexible dates' do
+        before { @current_user_school.update(availability_preference_fixed: false) }
+        before { get '/schools/dashboard' }
+
+        specify 'should have the link' do
+          expect(response.body).not_to match(/Update school experience dates/)
+        end
+      end
+    end
   end
 end
