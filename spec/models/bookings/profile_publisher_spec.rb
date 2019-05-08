@@ -37,7 +37,7 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       it { is_expected.to be_valid }
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
       it { expect(subject.school.subject_ids).to eql(school_profile.subject_ids) }
-      it { expect(subject.school.phase_ids.length).to eql(3) }
+      it { expect(subject.school.phase_ids.length).to eql(4) }
     end
 
     context "for School with Profile" do
@@ -53,7 +53,7 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       it { is_expected.to eql @initial_profile }
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
       it { expect(subject.school.subject_ids).to eql(school_profile.subject_ids) }
-      it { expect(subject.school.phase_ids.length).to eql(3) }
+      it { expect(subject.school.phase_ids.length).to eql(4) }
     end
   end
 end

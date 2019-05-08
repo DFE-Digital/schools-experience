@@ -30,6 +30,7 @@ module Bookings
     def phase_ids
       Set.new.tap do |ids|
         if input[:phases_list_primary]
+          ids << edubase_ids[1] if input[:key_stage_list_early_years]
           ids << edubase_ids[2]
         end
 

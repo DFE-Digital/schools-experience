@@ -58,6 +58,12 @@ FactoryBot.define do
 
     trait :primary do
       after(:create) do |school, _evaluator|
+        school.phases << Bookings::Phase.find_by!(edubase_id: 1)
+      end
+    end
+
+    trait :primary do
+      after(:create) do |school, _evaluator|
         school.phases << Bookings::Phase.find_by!(edubase_id: 2)
       end
     end
