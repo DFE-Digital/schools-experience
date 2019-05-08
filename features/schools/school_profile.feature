@@ -30,13 +30,13 @@ Feature: School Profile
       | Fees                        | Yes - £300.00 daily other fee                     |
       | DBS check required          | Yes - Sometimes. policy details                   |
       | Individual requirements     | Yes - Candidates need to be good                  |
-      | School experience phases    | secondary and 16 - 18 years                       |
+      | School experience phases    | Secondary and 16 - 18 years                       |
       | Primary key stages          | None                                              |
       | Subjects                    | Maths                                             |
       | Description                 | We have a race track                              |
       | School experience details   | A really good one                                 |
       | Teacher training links      | Yes - We run our own training. http://example.com |
-      | Dress code                  | business dress and Must have nice hat             |
+      | Dress code                  | Business dress and must have nice hat             |
       | Parking                     | Carpark next door                                 |
       | Disability and access needs | No                                                |
       | Start time                  | 8:15 am                                           |
