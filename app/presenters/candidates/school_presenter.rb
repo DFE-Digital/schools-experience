@@ -6,6 +6,7 @@ module Candidates
 
     delegate :name, :urn, :coordinates, :website, to: :school
     delegate :availability_preference_fixed?, to: :school
+    delegate :availability_info, to: :school
 
     delegate :experience_details, :individual_requirements, to: :profile
     delegate :description_details, :disabled_facilities, to: :profile
@@ -55,7 +56,7 @@ module Candidates
       case profile.dbs_required
       when 'always' then 'Yes - Always'
       when 'sometimes' then 'Yes - Sometimes'
-      when 'never' then 'No - Never'
+      when 'never' then 'No - Candidates will be accompanied at all times'
       end
     end
   end

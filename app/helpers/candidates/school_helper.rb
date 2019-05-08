@@ -26,8 +26,8 @@ module Candidates::SchoolHelper
     safe_join school.phases.map(&:name), ', '
   end
 
-  def format_school_availability(school)
-    simple_format school.try(:availability_info) || 'No information supplied'
+  def format_school_availability(availability_info)
+    availability_info.present? ? simple_format(availability_info) : 'No information supplied'
   end
 
   def format_phases(school)

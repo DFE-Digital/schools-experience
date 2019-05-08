@@ -101,7 +101,7 @@ RSpec.describe Candidates::SchoolPresenter do
 
     context 'when no' do
       before { profile.dbs_required = 'never' }
-      it { is_expected.to eql "No - Never" }
+      it { is_expected.to eql "No - Candidates will be accompanied at all times" }
     end
 
     context 'when yes' do
