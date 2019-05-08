@@ -1,6 +1,12 @@
 <%- self.page_title = "Create a placement date" %>
 
-<%= link_to 'Back', schools_placement_dates_path, class: 'govuk-back-link' %>
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'Placement dates' => schools_placement_dates_path,
+    'Create a placement date' => nil
+  }
+%>
 
 <h1>Create a placement date</h1>
 

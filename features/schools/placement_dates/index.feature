@@ -10,9 +10,12 @@ Feature: Listing placement dates
         Given I am on the 'placement dates' page
         Then the page title should be 'Placement dates'
 
-    Scenario: Back link
-        Given I am on the 'placement dates' page
-        Then I should see a 'Back' link to the 'schools dashboard'
+  Scenario: Breadcrumbs
+    Given I am on the 'placement dates' page
+    Then I should see the following breadcrumbs:
+        | Text            | Link     |
+        | Some school     | /schools |
+        | Placement dates | None     |
 
     Scenario: List contents
         Given my school has 5 placement dates

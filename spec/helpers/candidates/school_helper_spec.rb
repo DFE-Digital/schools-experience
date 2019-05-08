@@ -69,16 +69,20 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
           OpenStruct.new(id: 3, name: 'Third')
         ]
       )
-
-      @formatted = format_school_phases(@school)
     end
+
+    let(:formatted) do
+      format_school_phases(@school)
+    end
+
+    let(:parsed) { Nokogiri.parse(formatted) }
 
     it 'should be html_safe' do
-      expect(@formatted.html_safe?).to be true
+      expect(formatted.html_safe?).to be true
     end
 
-    it 'should turn them into a sentence' do
-      expect(@formatted).to eq "First, Second, Third"
+    it 'should turn them into a list' do
+      expect(parsed.css('ul.govuk-list > li').map(&:text)).to eql(@school.phases.map(&:name))
     end
   end
 

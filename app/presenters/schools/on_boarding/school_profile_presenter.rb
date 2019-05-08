@@ -95,7 +95,7 @@ module Schools
 
         fail "No phases for #{@school_profile.inspect}" if output.empty?
 
-        output.to_sentence
+        output.to_sentence.capitalize
       end
 
       def primary_key_stages_offered?
@@ -119,7 +119,7 @@ module Schools
           output << 'key stage 2'
         end
 
-        output.to_sentence
+        output.to_sentence.capitalize
       end
 
       def subjects_offered?
@@ -173,7 +173,7 @@ module Schools
           output << @school_profile.candidate_experience_detail.other_dress_requirements_detail
         end
 
-        output.to_sentence
+        output.to_sentence.capitalize
       end
 
       def parking
