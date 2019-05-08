@@ -56,7 +56,7 @@ FactoryBot.define do
       teacher_training_website { 'http://teacher-training.example.com' }
     end
 
-    trait :primary do
+    trait :early_years do
       after(:create) do |school, _evaluator|
         school.phases << Bookings::Phase.find_by!(edubase_id: 1)
       end
