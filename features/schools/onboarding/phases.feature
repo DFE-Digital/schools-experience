@@ -5,11 +5,13 @@ Feature: Phases
 
   Background: I have completed the wizard thus far
     Given I am logged in as a DfE user
-    Given The secondary school phase is availble
-    Given The college phase is availble
-    Given I have completed the Candidate Requirements step
-    And I have completed the Fees step, choosing only Other costs
-    And I have completed the Other costs step
+    And the secondary school phase is availble
+    And the college phase is availble
+    And I have completed the following steps:
+        | Step name                    | Extra                     |
+        | Candidate Requirements       |                           |
+        | Fees                         | choosing only Other costs |
+        | Other costs                  |                           |
 
   Scenario: Breadcrumbs
     Given I am on the 'phases' page

@@ -5,10 +5,12 @@ Feature: Administration Fee
 
   Background: I have completed the previous steps
     Given I am logged in as a DfE user
-    And The secondary school phase is availble
-    And The college phase is availble
-    And I have completed the Candidate Requirements step
-    And I have completed the Fees step, choosing only Administration costs
+    And the secondary school phase is availble
+    And the college phase is availble
+    And I have completed the following steps:
+        | Step name              | Extra                              |
+        | Candidate Requirements |                                    |
+        | Fees                   | choosing only Administration costs |
 
   Scenario: Breadcrumbs
     Given I am already on the 'administration costs' page

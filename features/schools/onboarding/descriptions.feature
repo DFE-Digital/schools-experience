@@ -5,14 +5,16 @@ Feature: Description
 
   Background: I have completed the wizard thus far
     Given I am logged in as a DfE user
-    Given The secondary school phase is availble
-    Given The college phase is availble
-    And There are some subjects available
-    And I have completed the Candidate Requirements step
-    And I have completed the Fees step, choosing only Other costs
-    And I have completed the Other costs step
-    And I have completed the Phases step
-    And I have completed the Subjects step
+    Given the secondary school phase is availble
+    Given the college phase is availble
+    And there are some subjects available
+    And I have completed the following steps:
+        | Step name                    | Extra                     |
+        | Candidate Requirements       |                           |
+        | Fees                         | choosing only Other costs |
+        | Other costs                  |                           |
+        | Phases                       |                           |
+        | Subjects                     |                           |
 
   Scenario: Breadcrumbs
     Given I am already on the 'description' page

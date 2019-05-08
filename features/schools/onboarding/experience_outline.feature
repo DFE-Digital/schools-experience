@@ -5,16 +5,18 @@ Feature: Experience Outline
 
   Background: I have completed the wizard thus far
     Given I am logged in as a DfE user
-    Given The secondary school phase is availble
-    Given The college phase is availble
-    And There are some subjects available
-    And I have completed the Candidate Requirements step
-    And I have completed the Fees step, choosing only Other costs
-    And I have completed the Other costs step
-    And I have completed the Phases step
-    And I have completed the Subjects step
-    And I have completed the Description step
-    And I have completed the Candidate experience details step
+    And the secondary school phase is availble
+    And the college phase is availble
+    And there are some subjects available
+    And I have completed the following steps:
+        | Step name                    | Extra                     |
+        | Candidate Requirements       |                           |
+        | Fees                         | choosing only Other costs |
+        | Other costs                  |                           |
+        | Phases                       |                           |
+        | Subjects                     |                           |
+        | Description                  |                           |
+        | Candidate experience details |                           |
 
   Scenario: Breadcrumbs
     Given I am on the 'Experience Outline' page
