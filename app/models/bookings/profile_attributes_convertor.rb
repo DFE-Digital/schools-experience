@@ -78,8 +78,8 @@ module Bookings
 
     def copy_phases
       output[:primary_phase]    = !!input[:phases_list_primary]
-      output[:secondary_phase]  = !!input[:phases_list_secondary]
-      output[:college_phase]    = !!input[:phases_list_college]
+      output[:secondary_phase]  = !!input[:phases_list_secondary] || !!input[:phases_list_secondary_and_college]
+      output[:college_phase]    = !!input[:phases_list_college] || !!input[:phases_list_secondary_and_college]
     end
 
     def copy_key_stages

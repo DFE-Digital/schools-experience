@@ -23,7 +23,9 @@ module Candidates::SchoolHelper
   end
 
   def format_school_phases(school)
-    safe_join school.phases.map(&:name), ', '
+    content_tag(:ul, class: 'govuk-list') do
+      safe_join(school.phases.map { |p| tag.li(p.name) })
+    end
   end
 
   def format_school_availability(availability_info)

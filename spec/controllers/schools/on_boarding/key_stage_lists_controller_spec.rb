@@ -22,8 +22,8 @@ describe Schools::OnBoarding::KeyStageListsController, type: :request do
     end
 
     it 'assings the model' do
-      expect(assigns(:key_stage_list)).to \
-        eq Schools::OnBoarding::KeyStageList.new
+      expect(assigns(:key_stage_list).attributes).to \
+        eq Schools::OnBoarding::KeyStageList.new.attributes
     end
 
     it 'renders the new template' do

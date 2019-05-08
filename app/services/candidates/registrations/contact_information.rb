@@ -11,13 +11,13 @@ module Candidates
       attribute :phone
 
       validates :full_name, presence: true
+      validates :phone, presence: true
+      validates :phone, phone: true, if: -> { phone.present? }
       validates :email, presence: true
       validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: -> { email.present? }
       validates :building, presence: true
       validates :postcode, presence: true
       validate :postcode_is_valid, if: -> { postcode.present? }
-      validates :phone, presence: true
-      validates :phone, phone: true, if: -> { phone.present? }
 
     private
 

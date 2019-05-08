@@ -1,3 +1,10 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    "You've successfully set up your school experience profile" => nil
+  }
+%>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-panel govuk-panel--confirmation">
@@ -29,7 +36,7 @@
     </p>
 
     <p>
-      <strong>You should try and respond to requests within 10 working days.</strong>
+      <strong>You should try and respond to requests within 10 working days during term time.</strong>
     </p>
     <p>
       You should email or call each candidate to discuss their request and placement date and use this contact to:

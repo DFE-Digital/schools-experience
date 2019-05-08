@@ -2,7 +2,8 @@ module Schools
   module OnBoarding
     class ExperienceOutlinesController < OnBoardingsController
       def new
-        @experience_outline = ExperienceOutline.new
+        @experience_outline = \
+          ExperienceOutline.new_from_bookings_school current_school
       end
 
       def create
