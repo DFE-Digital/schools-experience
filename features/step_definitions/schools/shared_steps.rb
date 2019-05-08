@@ -17,7 +17,7 @@ Given "I have completed the Fees step, choosing only Administration costs" do
   steps %(
     Given I have completed the Candidate Requirements step
     Given I am on the 'fees charged' page
-    And I check 'Administration costs'
+    And I choose 'Yes' from the 'Administration costs' radio buttons
     When I submit the form
   )
 end
@@ -25,7 +25,7 @@ end
 Given "I have completed the Fees step, choosing only DBS costs" do
   steps %(
     Given I am on the 'fees charged' page
-    And I check 'DBS check costs'
+    And I choose 'Yes' from the 'DBS check costs' radio buttons
     When I submit the form
   )
 end
@@ -33,7 +33,7 @@ end
 Given "I have completed the Fees step, choosing only Other costs" do
   steps %(
     Given I am on the 'fees charged' page
-    And I check 'Other costs'
+    And I choose 'Yes' from the 'Other costs' radio buttons
     When I submit the form
   )
 end
@@ -74,11 +74,10 @@ Given "I have completed the College subjects step" do
   )
 end
 
-Given "I have completed the Specialisms step" do
+Given "I have completed the Description step" do
   steps %(
-    Given I am on the 'Specialisms' page
-    And I choose 'Yes' from the 'Tell us about what might make your school interesting to candidates.' radio buttons
-    And I enter 'Race track' into the 'Provide details' text area
+    Given I am on the 'Description' page
+    And I enter 'We have a race track' into the 'Tell us about your school. Provide a summary to help candidates choose your school.' text area
     When I submit the form
   )
 end

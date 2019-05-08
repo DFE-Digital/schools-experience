@@ -131,7 +131,7 @@ describe Schools::OnBoarding::CurrentStep do
                   end
 
                   context 'subjects not required' do
-                    context 'specialism required' do
+                    context 'description required' do
                       let :school_profile do
                         FactoryBot.create :school_profile,
                           :with_candidate_requirement,
@@ -144,12 +144,12 @@ describe Schools::OnBoarding::CurrentStep do
                           :with_subjects
                       end
 
-                      it 'returns :specialism' do
-                        expect(returned_step).to eq :specialism
+                      it 'returns :description' do
+                        expect(returned_step).to eq :description
                       end
                     end
 
-                    context 'specialism not required' do
+                    context 'description not required' do
                       context 'candidate_experience_detail required' do
                         let :school_profile do
                           FactoryBot.create :school_profile,
@@ -161,7 +161,7 @@ describe Schools::OnBoarding::CurrentStep do
                             :with_phases,
                             :with_key_stage_list,
                             :with_subjects,
-                            :with_specialism
+                            :with_description
                         end
 
                         it 'returns :candidate_experience_detail' do
@@ -182,7 +182,7 @@ describe Schools::OnBoarding::CurrentStep do
                               :with_phases,
                               :with_key_stage_list,
                               :with_subjects,
-                              :with_specialism,
+                              :with_description,
                               :with_candidate_experience_detail
                           end
 
@@ -204,7 +204,7 @@ describe Schools::OnBoarding::CurrentStep do
                                 :with_phases,
                                 :with_key_stage_list,
                                 :with_subjects,
-                                :with_specialism,
+                                :with_description,
                                 :with_candidate_experience_detail,
                                 :with_availability_preference
                             end
@@ -226,7 +226,7 @@ describe Schools::OnBoarding::CurrentStep do
                                   :with_phases,
                                   :with_key_stage_list,
                                   :with_subjects,
-                                  :with_specialism,
+                                  :with_description,
                                   :with_candidate_experience_detail,
                                   :with_availability_preference,
                                   :with_availability_description
@@ -250,7 +250,7 @@ describe Schools::OnBoarding::CurrentStep do
                                     :with_phases,
                                     :with_key_stage_list,
                                     :with_subjects,
-                                    :with_specialism,
+                                    :with_description,
                                     :with_candidate_experience_detail,
                                     :with_availability_preference,
                                     :with_availability_description,
@@ -273,7 +273,7 @@ describe Schools::OnBoarding::CurrentStep do
                                     :with_phases,
                                     :with_key_stage_list,
                                     :with_subjects,
-                                    :with_specialism,
+                                    :with_description,
                                     :with_candidate_experience_detail,
                                     :with_availability_preference,
                                     :with_availability_description,

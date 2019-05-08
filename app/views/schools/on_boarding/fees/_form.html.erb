@@ -15,13 +15,9 @@
         This includes fees to cover administration costs, background and security ‘DBS check’ charges or any other school experience-related costs schools might incur.
       </p>
 
-      <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
-          <%= f.check_box_input :administration_fees %>
-          <%= f.check_box_input :dbs_fees %>
-          <%= f.check_box_input :other_fees %>
-        </fieldset>
-      </div>
+      <%= f.radio_button_fieldset :administration_fees, choices: [true, false] %>
+      <%= f.radio_button_fieldset :dbs_fees, choices: [true, false] %>
+      <%= f.radio_button_fieldset :other_fees, choices: [true, false] %>
       <%= f.submit 'Continue' %>
     <% end %>
   </div>

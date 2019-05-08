@@ -77,11 +77,7 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:specialism_has_specialism).of_type :boolean
-    end
-
-    it do
-      is_expected.to have_db_column(:specialism_details).of_type :text
+      is_expected.to have_db_column(:description_details).of_type :text
     end
 
     it do
@@ -180,6 +176,11 @@ describe Schools::SchoolProfile, type: :model do
     it do
       is_expected.to \
         have_db_column(:availability_preference_fixed).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:confirmation_acceptance).of_type(:boolean)
     end
   end
 
@@ -378,25 +379,21 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#specialism' do
+    context '#description' do
       let :form_model do
-        FactoryBot.build :specialism
+        FactoryBot.build :description
       end
 
       before do
-        model.specialism = form_model
-      end
-
-      it 'sets has_specialism' do
-        expect(model.specialism_has_specialism).to eq form_model.has_specialism
+        model.description = form_model
       end
 
       it 'sets details' do
-        expect(model.specialism_details).to eq form_model.details
+        expect(model.description_details).to eq form_model.details
       end
 
       it 'returns the form model' do
-        expect(model.specialism).to eq form_model
+        expect(model.description).to eq form_model
       end
     end
 
@@ -517,6 +514,20 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.availability_preference).to eq form_model
+      end
+    end
+
+    context '#confirmation' do
+      let :form_model do
+        FactoryBot.build :confirmation
+      end
+
+      before do
+        model.confirmation = form_model
+      end
+
+      it 'returns the form model' do
+        expect(model.confirmation).to eq form_model
       end
     end
   end

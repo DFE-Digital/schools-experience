@@ -13,7 +13,7 @@ Feature: Candidate experience details
     And I have completed the Other costs step
     And I have completed the Phases step
     And I have completed the Subjects step
-    And I have completed the Specialisms step
+    And I have completed the Description step
 
   Scenario: Completing the step with error
     Given I am on the 'Candidate experience details' page

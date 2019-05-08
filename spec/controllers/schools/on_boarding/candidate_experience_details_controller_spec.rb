@@ -16,7 +16,7 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list,
-        :with_specialism
+        :with_description
     end
 
     before do
@@ -44,7 +44,7 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list,
-        :with_specialism
+        :with_description
     end
 
     let :params do
