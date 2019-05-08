@@ -102,18 +102,18 @@ private
 
   def map_phase(edubase_id)
     # 0: Not applicable              -> ¯\_(ツ)_/¯
-    # 1: Nursery                     -> Nursery
-    # 2: Primary                     -> Primary
-    # 3: Middle deemed primary       -> Primary
-    # 4: Secondary                   -> Secondary
-    # 5: Middle deemed secondary     -> Secondary
-    # 6: 16 plus                     -> 16 plus
-    # 7: All through                 -> Nursery + Primary + Secondary + 16 plus
+    # 1: Nursery                     -> Early years
+    # 2: Primary                     -> Primary (4 to 11)
+    # 3: Middle deemed primary       -> Primary (4 to 11)
+    # 4: Secondary                   -> Secondary (11 to 16)
+    # 5: Middle deemed secondary     -> Secondary (11 to 16)
+    # 6: 16 plus                     -> 16 to 18
+    # 7: All through                 -> Nursery + Primary + Secondary + College
 
-    nursery      = phases['Nursery']
-    primary      = phases['Primary']
-    secondary    = phases['Secondary']
-    sixteen_plus = phases['16 plus']
+    nursery   = phases['Early years']
+    primary   = phases['Primary (4 to 11)']
+    secondary = phases['Secondary (11 to 16)']
+    college   = phases['16 to 18']
 
     {
       1 => nursery,
@@ -121,8 +121,8 @@ private
       3 => primary,
       4 => secondary,
       5 => secondary,
-      6 => sixteen_plus,
-      7 => [nursery, primary, secondary, sixteen_plus]
+      6 => college,
+      7 => [nursery, primary, secondary, college]
     }[edubase_id]
   end
 
