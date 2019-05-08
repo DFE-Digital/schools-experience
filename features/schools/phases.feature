@@ -11,8 +11,15 @@ Feature: Phases
     And I have completed the Fees step, choosing only Other costs
     And I have completed the Other costs step
 
-  Scenario: Completing step choosing Primary phase only
+  Scenario: Breadcrumbs
     Given I am on the 'phases' page
+    Then I should see the following breadcrumbs:
+        | Text                            | Link     |
+        | Some school                     | /schools |
+        | Select school experience phases | None     |
+
+  Scenario: Completing step choosing Primary phase only
+    Given I am already on the 'phases' page
     And I check 'Primary'
     When I submit the form
     Then I should be on the 'Primary subjects list' page

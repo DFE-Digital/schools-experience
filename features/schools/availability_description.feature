@@ -17,6 +17,13 @@ Feature: Availability description
     And I have completed the Candidate experience details step
     And I have completed the Availability preference step
 
+  Scenario: Breadcrumbs
+    Given I am already on the 'availability description' page
+    Then I should see the following breadcrumbs:
+        | Text                                         | Link     |
+        | Some school                                  | /schools |
+        | Describe your school experience availability | None     |
+
   Scenario: Completing the step with error
     Given I am on the 'Availability description' page
     When I submit the form

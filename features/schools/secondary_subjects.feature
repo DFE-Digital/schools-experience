@@ -13,6 +13,13 @@ Feature: Subjects
     And I have completed the Other costs step
     And I have completed the Phases step
 
+  Scenario: Breadcrumbs
+    Given I am already on the 'Subjects' page
+    Then I should see the following breadcrumbs:
+        | Text                              | Link     |
+        | Some school                       | /schools |
+        | Select school experience subjects | None     |
+
   Scenario: Completing the step choosing no subjects
     Given I am on the 'Subjects' page
     When I submit the form

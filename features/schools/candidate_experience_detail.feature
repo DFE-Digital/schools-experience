@@ -15,6 +15,13 @@ Feature: Candidate experience details
     And I have completed the Subjects step
     And I have completed the Description step
 
+  Scenario: Breadcrumbs
+    Given I am already on the 'candidate experience details' page
+    Then I should see the following breadcrumbs:
+        | Text                                           | Link     |
+        | Some school                                    | /schools |
+        | Enter school experience details for candidates | None     |
+
   Scenario: Completing the step with error
     Given I am on the 'Candidate experience details' page
     And I check 'Business dress'

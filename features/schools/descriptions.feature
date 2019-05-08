@@ -14,6 +14,13 @@ Feature: Description
     And I have completed the Phases step
     And I have completed the Subjects step
 
+  Scenario: Breadcrumbs
+    Given I am already on the 'description' page
+    Then I should see the following breadcrumbs:
+        | Text                                     | Link     |
+        | Some school                              | /schools |
+        | Enter a short description of your school | None     |
+
   Scenario: Completing the step without entering a description
     Given I am on the 'Description' page
     When I submit the form

@@ -16,6 +16,13 @@ Feature: Experience Outline
     And I have completed the Description step
     And I have completed the Candidate experience details step
 
+  Scenario: Breadcrumbs
+    Given I am on the 'Experience Outline' page
+    Then I should see the following breadcrumbs:
+        | Text                                    | Link     |
+        | Some school                             | /schools |
+        | Outline experience and teacher training | None     |
+
   Scenario: Completing the step with error
     Given I am on the 'Experience Outline' page
     And I enter 'A really good one' into the 'What kind of school experience do you offer candidates?' text area
