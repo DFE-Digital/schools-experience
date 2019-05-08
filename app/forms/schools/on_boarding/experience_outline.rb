@@ -6,10 +6,8 @@ module Schools
       attribute :teacher_training_details, :string
       attribute :teacher_training_url, :string
 
-      validates :candidate_experience, presence: true
       validates :provides_teacher_training, inclusion: [true, false]
       validates :teacher_training_details, presence: true, if: :provides_teacher_training
-      validates :teacher_training_url, presence: true, if: :provides_teacher_training
       validates :teacher_training_url, format: URI::regexp(%w(http https)), if: -> { teacher_training_url.present? }
 
       def self.compose(
