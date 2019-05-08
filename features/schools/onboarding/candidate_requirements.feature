@@ -6,6 +6,13 @@ Feature: Candidate requirements
   Background:
     Given I am logged in as a DfE user
 
+  Scenario: Breadcrumbs
+    Given I am on the 'candidate requirements' page
+    Then I should see the following breadcrumbs:
+        | Text                                 | Link     |
+        | Some school                          | /schools |
+        | Enter your school experience details | None     |
+
   @javascript
   Scenario: Completing step
     Given I am on the 'candidate requirements' page

@@ -16,12 +16,4 @@ class Bookings::Phase < ApplicationRecord
 
   acts_as_list
   default_scope -> { order(:position) }
-
-  def self.secondary
-    find_by! name: 'Secondary'.freeze
-  end
-
-  def self.college
-    find_by! name: '16 plus'.freeze
-  end
 end

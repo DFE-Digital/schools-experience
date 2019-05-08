@@ -1,3 +1,10 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'School experience availability or fixed dates' => nil
+  }
+%>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for availability_preference, url: url, method: method do |f| %>
@@ -9,7 +16,7 @@
         You need to contact individual candidates to discuss, arrange and offer them a placement date after you’ve received their school experience request.
       </p>
       <p>
-        You should try and respond to requests within 10 working days.
+        You should try and respond to requests within 10 working days during term time.
       </p>
       <p>
         Once you’ve accepted a request you’ll be asked to confirm the candidate’s placement dates as part of confirming their school experience booking. 

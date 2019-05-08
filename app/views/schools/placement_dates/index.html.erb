@@ -1,6 +1,11 @@
 <%- self.page_title = "Placement dates" %>
 
-<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'Placement dates' => nil
+  }
+%>
 
 <h1>Placement dates</h1>
 

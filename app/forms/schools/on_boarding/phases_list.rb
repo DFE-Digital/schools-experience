@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class PhasesList
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class PhasesList < Step
       attribute :primary, :boolean, default: false
       attribute :secondary, :boolean, default: false
       attribute :college, :boolean, default: false
@@ -22,10 +19,6 @@ module Schools
           secondary: secondary,
           college: college,
           secondary_and_college: secondary_and_college
-      end
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
       end
 
       def primary?

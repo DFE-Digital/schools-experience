@@ -5,6 +5,10 @@ Given("I am on a/the {string} page") do |string|
   end
 end
 
+Given("I am already on the {string} page") do |string|
+  expect(page.current_path).to eql(path_for(string))
+end
+
 Given("I navigate to the {string} path") do |string|
   step "I am on the '#{string}' page"
 end
@@ -55,4 +59,16 @@ end
 
 Then("there should be a {string} link to the {string}") do |link, target|
   expect(page).to have_link(link, href: path_for(target))
+end
+
+Then("I should see the following breadcrumbs:") do |table|
+  within('nav.govuk-breadcrumbs') do
+    table.hashes.each do |row|
+      if row['Link'] == 'None'
+        expect(page).to have_css('li', text: row['Text'])
+      else
+        expect(page).to have_link(row['Text'], href: row['Link'])
+      end
+    end
+  end
 end

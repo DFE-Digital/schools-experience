@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class SchoolFee
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class SchoolFee < Step
       AVAILABLE_INTERVALS = %w(Daily One-off).freeze
 
       attribute :amount_pounds, :decimal, scale: 2, precision: 4
@@ -28,12 +25,6 @@ module Schools
 
       def available_intervals
         AVAILABLE_INTERVALS
-      end
-
-      def ==(other)
-        return false unless other.respond_to? :attributes
-
-        other.attributes == self.attributes
       end
     end
   end
