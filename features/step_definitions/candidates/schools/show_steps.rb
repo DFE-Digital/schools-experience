@@ -104,8 +104,8 @@ end
 
 Given("the chosen school has the following availability information") do |string|
   @raw_availability_info = string
-  @school.update_attributes(availability_info: string)
-  expect(@school.availability_info).to eql(string)
+  @school.profile.update_attributes(availability_info: string)
+  expect(@school.profile.availability_info).to eql(string)
 end
 
 Then("I should see availability information in the sidebar") do
@@ -164,8 +164,8 @@ Then("the placement information section should not be visible") do
 end
 
 Given("the chosen school has no availability information") do
-  @school.update_attributes(availability_info: nil)
-  expect(@school.availability_info).to be_nil
+  @school.profile.update!(availability_info: nil, fixed_availability: true)
+  expect(@school.profile.availability_info).to be_nil
 end
 
 Then("the availability information in the sidebar should read {string}") do |string|

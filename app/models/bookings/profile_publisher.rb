@@ -10,8 +10,12 @@ module Bookings
     end
 
     def update!
-      profile.attributes = converted_attributes
-      profile.tap(&:save!)
+      profile.transaction do
+        profile.attributes = converted_attributes
+        school.availability_preference_fixed = profile.fixed_availability # FIXME this needs refactoring to avoid the duplicate column
+        school.save!
+        profile.tap(&:save!)
+      end
     end
 
     class IncompleteSourceProfileError < RuntimeError; end

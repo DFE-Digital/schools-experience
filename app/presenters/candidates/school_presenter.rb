@@ -6,7 +6,6 @@ module Candidates
 
     delegate :name, :urn, :coordinates, :website, to: :school
     delegate :availability_preference_fixed?, to: :school
-    delegate :availability_info, to: :school
 
     delegate :experience_details, :individual_requirements, to: :profile
     delegate :description_details, :disabled_facilities, to: :profile
@@ -14,6 +13,7 @@ module Candidates
     delegate :dbs_policy, :parking_provided, :parking_details, to: :profile
     delegate :start_time, :end_time, :flexible_on_times, to: :profile
     delegate :dress_code_other_details, to: :profile
+    delegate :availability_info, to: :profile
 
     delegate :administration_fee_amount_pounds, :administration_fee_interval, \
       :administration_fee_description, :administration_fee_payment_method, to: :profile
