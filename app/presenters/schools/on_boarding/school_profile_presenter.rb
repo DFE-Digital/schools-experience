@@ -202,7 +202,7 @@ module Schools
 
       def flexible_on_times
         if @school_profile.candidate_experience_detail.times_flexible
-          'Yes'
+          'Yes - ' + @school_profile.candidate_experience_detail.times_flexible_details
         else
           'No'
         end

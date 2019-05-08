@@ -44,7 +44,7 @@ Feature: School Profile
       | Disability and access needs | No                                                |
       | Start time                  | 8:15 am                                           |
       | Finish time                 | 4:30 pm                                           |
-      | Flexible on times           | Yes                                               |
+      | Flexible on times           | No                                                |
       | Availability                | Whenever really                                   |
       | Full name                   | Gary Chalmers                                     |
       | UK telephone number         | 01234567890                                       |

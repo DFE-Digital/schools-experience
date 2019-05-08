@@ -20,6 +20,7 @@ module Schools
       attribute :start_time, :string
       attribute :end_time, :string
       attribute :times_flexible, :boolean
+      attribute :times_flexible_details, :string
 
       validates :business_dress, inclusion: [true, false]
       validates :cover_up_tattoos, inclusion: [true, false]
@@ -32,11 +33,12 @@ module Schools
       validates :nearby_parking_details, presence: true, if: -> { !parking_provided && !parking_provided.nil? }
       validates :disabled_facilities, inclusion: [true, false]
       validates :disabled_facilities_details, presence: true, if: :disabled_facilities
-      validates :times_flexible, inclusion: [true, false]
       validates :start_time, presence: true
       validates :start_time, format: { with: SCHOOL_TIME_FORMAT }, if: -> { start_time.present? }
       validates :end_time, presence: true
       validates :end_time, format: { with: SCHOOL_TIME_FORMAT }, if: -> { end_time.present? }
+      validates :times_flexible, inclusion: [true, false]
+      validates :times_flexible_details, presence: true, if: :times_flexible
 
       def self.compose(
           business_dress,
@@ -52,7 +54,8 @@ module Schools
           disabled_facilities_details,
           start_time,
           end_time,
-          times_flexible
+          times_flexible,
+          times_flexible_details
       )
         new \
           business_dress: business_dress,
@@ -68,7 +71,8 @@ module Schools
           disabled_facilities_details: disabled_facilities_details,
           start_time: start_time,
           end_time: end_time,
-          times_flexible: times_flexible
+          times_flexible: times_flexible,
+          times_flexible_details: times_flexible_details
       end
     end
   end
