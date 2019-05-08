@@ -2,7 +2,7 @@ module Schools
   module OnBoarding
     class KeyStageListsController < OnBoardingsController
       def new
-        @key_stage_list = KeyStageList.new
+        @key_stage_list = KeyStageList.new_from_bookings_school current_school
       end
 
       def create

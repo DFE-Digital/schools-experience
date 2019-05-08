@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class ExperienceOutline
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class ExperienceOutline < Step
       attribute :candidate_experience, :string
       attribute :provides_teacher_training, :boolean
       attribute :teacher_training_details, :string
@@ -26,10 +23,6 @@ module Schools
           provides_teacher_training: provides_teacher_training,
           teacher_training_details: teacher_training_details,
           teacher_training_url: teacher_training_url
-      end
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
       end
     end
   end

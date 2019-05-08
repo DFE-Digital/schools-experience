@@ -96,4 +96,18 @@ describe Schools::OnBoarding::PhasesList, type: :model do
       end
     end
   end
+
+  context '.new_from_bookings_school' do
+    let :school do
+      FactoryBot.create :bookings_school, :with_primary_key_stage_info
+    end
+
+    subject { described_class.new_from_bookings_school school }
+
+    it 'sets the attributes from the bookings_school' do
+      expect(subject.primary?).to be true
+      expect(subject.secondary?).to be false
+      expect(subject.college?).to be false
+    end
+  end
 end

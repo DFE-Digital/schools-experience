@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class AvailabilityPreference
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class AvailabilityPreference < Step
       attribute :fixed, :boolean
       validates :fixed, inclusion: [true, false]
 
@@ -17,10 +14,6 @@ module Schools
 
       def flexible?
         !fixed?
-      end
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
       end
     end
   end

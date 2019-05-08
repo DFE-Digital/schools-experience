@@ -13,4 +13,18 @@ describe Schools::OnBoarding::KeyStageList, type: :model do
         eq ['Select at least one key stage']
     end
   end
+
+  context '.new_from_bookings_school' do
+    let :school do
+      FactoryBot.build :bookings_school, :with_primary_key_stage_info
+    end
+
+    subject { described_class.new_from_bookings_school school }
+
+    it 'sets the attributes from the bookings_school' do
+      expect(subject.early_years).to be true
+      expect(subject.key_stage_1).to be true
+      expect(subject.key_stage_2).to be true
+    end
+  end
 end
