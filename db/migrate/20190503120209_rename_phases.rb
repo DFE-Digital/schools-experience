@@ -12,8 +12,8 @@ private
   def modify(edubase_id, name)
     Rails.logger.debug("renaming phase with edubase_id #{edubase_id} to '#{name}'")
     Bookings::Phase
-      .find_by!(edubase_id: edubase_id)
-      .update(name: name)
+      .find_by(edubase_id: edubase_id)
+      &.update(name: name)
   end
 
   # note, we're using the edubase_id field
