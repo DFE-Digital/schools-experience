@@ -54,13 +54,17 @@ steps:
     displayName: Check app reports as Healthy
   - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
-  - script: docker run --name=selenium-chrome -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-chrome
-    displayName: Launch Selenium Chrome
-  - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+
+  - script: |
+      docker run --name=selenium-chrome -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-chrome
+      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
     displayName: Run Cucumber via Selenium Chrome
-  - script: docker run --name=selenium-firefox -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-firefox
-    displayName: Launch Selenium Firefox
-  - script: docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+
+  - script: |
+      docker run --name=selenium-firefox -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-firefox
+      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
     displayName: Run Cucumber via Selenium Firefox
 
   - script: |
