@@ -25,6 +25,8 @@ Request details:
 * Teaching stage (multiple choice): ((candidate_teaching_stage))
 * DBS certificate: ((candidate_dbs_check_document))
 
+^ Note that DBS certificates have not been checked and verified by DfE
+
 # Accept or reject their request
 
 The candidate is aware you may be in touch to discuss their school experience request.
