@@ -9,6 +9,9 @@ class Bookings::SchoolSearch < ApplicationRecord
     %w{name Name}
   ].freeze
 
+  REGION = 'England'.freeze
+  GEOCODER_PARAMS = { maxRes: 1 }.freeze
+
   def self.available_orders
     AVAILABLE_ORDERS.map
   end
@@ -96,15 +99,12 @@ private
 
   def geolocate(location)
     result = Geocoder.search(
-      location,
-      params: {
-        region: 'gb',
-        maxRes: 1
-      }
+      [location, REGION].join(", "),
+      params: GEOCODER_PARAMS
     )&.first
 
-    if result.blank?
-      Rails.logger.info("No Geocoder results found for #{location}")
+    if empty_geocoder_result?(result)
+      Rails.logger.info("No Geocoder results found in #{REGION} for #{location}")
       return
     end
 
@@ -112,6 +112,10 @@ private
 
     @location_name = result.name
     extract_coords(latitude: result.latitude, longitude: result.longitude)
+  end
+
+  def empty_geocoder_result?(result)
+    result.blank? || result.try(:name) == REGION
   end
 
   def valid_geocoder_result?(result)
