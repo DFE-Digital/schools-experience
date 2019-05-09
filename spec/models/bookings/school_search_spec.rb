@@ -11,6 +11,11 @@ describe Bookings::SchoolSearch do
     ]
   }
 
+  describe 'Validation' do
+    subject { described_class.new({}) }
+    it { is_expected.to validate_length_of(:location).is_at_least(3).allow_nil }
+  end
+
   describe '#geolocation' do
     let(:location) { 'Springfield' }
 

@@ -77,6 +77,11 @@ Given("I choose {string} from the {string} radio buttons") do |option, field|
   end
 end
 
+Then("the {string} input should require at least {string} characters") do |field, length|
+  input = page.find("input##{field}")
+  expect(input['minlength']).to eql(length)
+end
+
 Given("there should be a {string} text area") do |string|
   expect(page).to have_field(string, type: 'textarea')
 end

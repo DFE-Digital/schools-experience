@@ -2,9 +2,11 @@ class Candidates::SchoolsController < ApplicationController
   EXPANDED_SEARCH_RADIUS = 50
 
   def index
-    redirect_to new_candidates_school_search_path unless location_present?
+    return redirect_to new_candidates_school_search_path unless location_present?
 
     @search = Candidates::SchoolSearch.new(search_params)
+
+    return render 'candidates/school_searches/new' unless @search.valid?
 
     if @search.results.empty?
       @expanded_search_radius = true
