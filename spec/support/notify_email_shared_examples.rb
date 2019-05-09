@@ -188,7 +188,7 @@ shared_examples_for "email template from application preview" do
       end
 
       specify 'school_name is correctly-assigned' do
-        expect(subject.school_name).to eql(ap.school)
+        expect(subject.school_name).to eql(ap.school.name)
       end
 
       context 'placement availability/dates' do

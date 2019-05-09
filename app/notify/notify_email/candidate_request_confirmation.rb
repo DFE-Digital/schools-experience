@@ -62,7 +62,7 @@ class NotifyEmail::CandidateRequestConfirmation < Notify
       candidate_teaching_subject_second_choice: application_preview.teaching_subject_second_choice,
       placement_outcome: application_preview.placement_outcome,
       placement_availability: application_preview.placement_availability_description,
-      school_name: application_preview.school
+      school_name: application_preview.school.name
     )
   end
 
