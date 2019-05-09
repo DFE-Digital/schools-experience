@@ -23,6 +23,12 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
+  context 'delegation' do
+    it { expect(subject).to delegate_method(:valid?).to(:school_search) }
+    it { expect(subject).to delegate_method(:errors).to(:school_search) }
+    it { expect(subject).to delegate_method(:location_name).to(:school_search) }
+  end
+
   context '.subjects=' do
     context 'with blank strings' do
       before { subject.subjects = [1, '', 3] }
