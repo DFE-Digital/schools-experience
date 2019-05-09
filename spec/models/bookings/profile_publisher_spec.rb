@@ -24,29 +24,29 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
   end
 
   describe '#update!' do
-    let(:school) { create(:bookings_school) }
+    include_context 'with phases'
+
+    let(:school) { create(:bookings_school, :with_subjects, :primary) }
 
     let(:school_profile) do
-      create(:school_profile, :completed, :with_fixed_availability_preference)
+      create(:school_profile, :completed, :with_subjects, :with_fixed_availability_preference)
     end
 
-    context "for School with Profile" do
+    context "for School without Profile" do
       subject { described_class.new(school, school_profile).update! }
 
       it { is_expected.to be_kind_of Bookings::Profile }
       it { is_expected.to be_persisted }
       it { is_expected.to be_valid }
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
+      it { expect(subject.school.subject_ids).to eql(school_profile.subject_ids) }
+      it { expect(subject.school.phase_ids.length).to eql(4) }
       it { expect(subject.school.availability_preference_fixed).to eql(true) }
     end
 
-    context "for School without Profile" do
+    context "for School with Profile" do
       before do
-        @initial_profile = create(:bookings_profile,
-          primary_phase: false,
-          secondary_phase: false,
-          college_phase: true,
-          school: school)
+        @initial_profile = create(:bookings_profile, school: school)
       end
 
       subject { described_class.new(school, school_profile).update! }
@@ -56,6 +56,8 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       it { is_expected.to be_valid }
       it { is_expected.to eql @initial_profile }
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
+      it { expect(subject.school.subject_ids).to eql(school_profile.subject_ids) }
+      it { expect(subject.school.phase_ids.length).to eql(4) }
       it { expect(subject.school.availability_preference_fixed).to eql(true) }
     end
   end

@@ -12,6 +12,8 @@ module Bookings
     def update!
       profile.transaction do
         profile.attributes = converted_attributes
+        school.subject_ids = @school_profile.subject_ids
+        school.phase_ids = converted_phase_ids
         school.availability_preference_fixed = profile.fixed_availability # FIXME this needs refactoring to avoid the duplicate column
         school.save!
         profile.tap(&:save!)
@@ -32,8 +34,15 @@ module Bookings
     end
 
     def converted_attributes
-      @converted_attributes ||= \
-        ProfileAttributesConvertor.new(@school_profile.attributes).attributes
+      @converted_attributes ||= convertor.attributes
+    end
+
+    def converted_phase_ids
+      @converted_phase_ids ||= convertor.phase_ids
+    end
+
+    def convertor
+      @convertor ||= ProfileAttributesConvertor.new(@school_profile.attributes)
     end
 
     def profile
