@@ -1,8 +1,10 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
+    <%- if @presenter.description_details.present? -%>
     <section id="school-placement-info">
       <%= simple_format @presenter.description_details %>
     </section>
+    <%- end -%>
 
     <div>
       <h2>
@@ -15,7 +17,7 @@
         <% end %>
 
         <%= dlist_item 'Experience details:' do %>
-          <%= @presenter.experience_details %>
+          <%= content_or_msg @presenter.experience_details, "No information supplied" %>
         <% end %>
 
         <%= dlist_item 'Experience subjects:', id: "school-subjects" do %>
@@ -157,10 +159,16 @@
       <% end %>
 
       <%= dlist_item 'Experience start and finish times' do %>
-        <%= @presenter.start_time %> to <%= @presenter.end_time %>
+        <p>
+          <%= @presenter.start_time %> to <%= @presenter.end_time %>
 
-        <%- if @presenter.flexible_on_times -%>
-          - Flexible
+          <%- if @presenter.flexible_on_times -%>
+            - Flexible
+          <%- end -%>
+        </p>
+
+        <%- if @presenter.flexible_on_times_details.present? -%>
+        <%= simple_format @presenter.flexible_on_times_details %>
         <%- end -%>
       <% end %>
 

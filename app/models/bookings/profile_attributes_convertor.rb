@@ -108,7 +108,7 @@ module Bookings
     def copy_fields
       output[:start_time]             = input[:candidate_experience_detail_start_time]
       output[:end_time]               = input[:candidate_experience_detail_end_time]
-      output[:experience_details]     = input[:experience_outline_candidate_experience]
+      output[:experience_details]     = input[:experience_outline_candidate_experience].presence
       output[:flexible_on_times]      = !!input[:candidate_experience_detail_times_flexible]
       output[:flexible_on_times_details] = conditional_assign(
         :candidate_experience_detail_times_flexible,
@@ -129,7 +129,7 @@ module Bookings
     def convert_teacher_training
       if input[:experience_outline_provides_teacher_training]
         output[:teacher_training_info]  = input[:experience_outline_teacher_training_details]
-        output[:teacher_training_url]   = input[:experience_outline_teacher_training_url]
+        output[:teacher_training_url]   = input[:experience_outline_teacher_training_url].presence
       else
         output[:teacher_training_info] = output[:teacher_training_url] = nil
       end
