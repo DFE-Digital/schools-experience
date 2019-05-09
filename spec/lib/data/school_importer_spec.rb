@@ -49,10 +49,10 @@ describe SchoolImporter do
       before do
         # note these values are present in spec/sample_data/edubase.csv
         {
-         1 => 'Nursery',
-         2 => 'Primary',
-         4 => 'Secondary',
-         6 => '16 plus',
+         1 => 'Early years',
+         2 => 'Primary (4 to 11)',
+         4 => 'Secondary (11 to 16)',
+         6 => '16 to 18',
          7 => 'All through'
         }.each do |i, name|
           create(:bookings_phase, name: name, edubase_id: i)
@@ -118,8 +118,8 @@ describe SchoolImporter do
 
       specify 'the new records should have the corret phases' do
         {
-          100492 => %w{Primary},
-          100171 => ['Nursery', 'Primary', 'Secondary', '16 plus']
+          100492 => ['Primary (4 to 11)'],
+          100171 => ['Early years', 'Primary (4 to 11)', 'Secondary (11 to 16)', '16 to 18']
         }.each do |urn, phase_names|
           Bookings::School.find_by(urn: urn).tap do |school|
             expect(school.phases.map(&:name)).to match_array(phase_names)

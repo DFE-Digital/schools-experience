@@ -14,6 +14,8 @@ module Bookings
         profile.attributes = converted_attributes
         school.subject_ids = @school_profile.subject_ids
         school.phase_ids = converted_phase_ids
+        school.availability_preference_fixed = profile.fixed_availability # FIXME this needs refactoring to avoid the duplicate column
+        school.save!
         profile.tap(&:save!)
       end
     end

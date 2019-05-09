@@ -150,7 +150,8 @@ module Schools
         %w(candidate_experience_detail_disabled_facilities_details disabled_facilities_details),
         %w(candidate_experience_detail_start_time start_time),
         %w(candidate_experience_detail_end_time end_time),
-        %w(candidate_experience_detail_times_flexible times_flexible)
+        %w(candidate_experience_detail_times_flexible times_flexible),
+        %w(candidate_experience_detail_times_flexible_details times_flexible_details)
       ],
       constructor: :compose
 

@@ -55,7 +55,8 @@ module Schools
           :disabled_facilities_details,
           :start_time,
           :end_time,
-          :times_flexible
+          :times_flexible,
+          :times_flexible_details
       end
     end
   end

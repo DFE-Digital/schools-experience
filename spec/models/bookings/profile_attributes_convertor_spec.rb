@@ -35,7 +35,8 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(start_time: '8:15am') }
       it { is_expected.to include(end_time: '4:30pm') }
       it { is_expected.to include(flexible_on_times: true) }
-      it { is_expected.to include(placement_info: 'Mostly teaching') }
+      it { is_expected.to include(flexible_on_times_details: 'We are very accommodating') }
+      it { is_expected.to include(experience_details: 'Mostly teaching') }
       it { is_expected.to include(parking_provided: true) }
       it { is_expected.to include(parking_details: 'Plenty of spaces') }
       it { is_expected.to include(teacher_training_info: 'We offer teach training in house') }
@@ -67,6 +68,9 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.admin_contact_full_name = ' '
         model.availability_preference_fixed = true
         model.phases_list_primary = false
+        model.phases_list_secondary = false
+        model.phases_list_college = true
+        model.phases_list_secondary_and_college = true
         model.candidate_experience_detail_parking_provided = false
         model.candidate_experience_detail_nearby_parking_details = 'somewhere further away'
         model.experience_outline_provides_teacher_training = false

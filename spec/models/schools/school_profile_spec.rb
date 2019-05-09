@@ -138,6 +138,11 @@ describe Schools::SchoolProfile, type: :model do
 
     it do
       is_expected.to \
+        have_db_column(:candidate_experience_detail_times_flexible_details).of_type :text
+    end
+
+    it do
+      is_expected.to \
         have_db_column(:experience_outline_candidate_experience).of_type :text
     end
 
@@ -421,6 +426,7 @@ describe Schools::SchoolProfile, type: :model do
         start_time
         end_time
         times_flexible
+        times_flexible_details
       ).each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("candidate_experience_detail_#{attribute}")).to \

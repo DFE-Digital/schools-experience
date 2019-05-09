@@ -95,8 +95,8 @@ module Bookings
 
     def copy_phases
       output[:primary_phase]    = !!input[:phases_list_primary]
-      output[:secondary_phase]  = !!input[:phases_list_secondary]
-      output[:college_phase]    = !!input[:phases_list_college]
+      output[:secondary_phase]  = !!input[:phases_list_secondary] || !!input[:phases_list_secondary_and_college]
+      output[:college_phase]    = !!input[:phases_list_college] || !!input[:phases_list_secondary_and_college]
     end
 
     def copy_key_stages
@@ -106,10 +106,14 @@ module Bookings
     end
 
     def copy_fields
-      output[:start_time]         = input[:candidate_experience_detail_start_time]
-      output[:end_time]           = input[:candidate_experience_detail_end_time]
-      output[:flexible_on_times]  = !!input[:candidate_experience_detail_times_flexible]
-      output[:placement_info]     = input[:experience_outline_candidate_experience]
+      output[:start_time]             = input[:candidate_experience_detail_start_time]
+      output[:end_time]               = input[:candidate_experience_detail_end_time]
+      output[:experience_details]     = input[:experience_outline_candidate_experience]
+      output[:flexible_on_times]      = !!input[:candidate_experience_detail_times_flexible]
+      output[:flexible_on_times_details] = conditional_assign(
+        :candidate_experience_detail_times_flexible,
+        :candidate_experience_detail_times_flexible_details
+      )
     end
 
     def copy_parking

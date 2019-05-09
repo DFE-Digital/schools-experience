@@ -9,7 +9,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 2019_05_03_095630) do
+ActiveRecord::Schema.define(version: 2019_05_07_145858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_095630) do
     t.string "start_time", null: false
     t.string "end_time", null: false
     t.boolean "flexible_on_times", null: false
-    t.text "placement_info", null: false
+    t.text "experience_details", null: false
     t.text "teacher_training_info"
     t.string "teacher_training_url"
     t.string "admin_contact_full_name", null: false
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_095630) do
     t.text "other_fee_payment_method"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "flexible_on_times_details"
     t.index ["school_id"], name: "index_bookings_profiles_on_school_id", unique: true
   end
 
@@ -252,6 +253,7 @@ ActiveRecord::Schema.define(version: 2019_05_03_095630) do
     t.boolean "availability_preference_fixed"
     t.boolean "phases_list_secondary_and_college", default: false, null: false
     t.boolean "confirmation_acceptance", default: false
+    t.text "candidate_experience_detail_times_flexible_details"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

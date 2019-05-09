@@ -17,6 +17,7 @@ describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
     it { is_expected.to respond_to :start_time }
     it { is_expected.to respond_to :end_time }
     it { is_expected.to respond_to :times_flexible }
+    it { is_expected.to respond_to :times_flexible_details }
   end
 
   context 'validations' do
@@ -80,6 +81,20 @@ describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
             is_expected.not_to allow_value(ivt).for(:end_time)
           end
         end
+      end
+    end
+
+    context 'times_flexible_details' do
+      context 'when times_flexible' do
+        subject { described_class.new times_flexible: true }
+
+        it { is_expected.to validate_presence_of :times_flexible_details }
+      end
+
+      context 'when not times_flexible' do
+        subject { described_class.new times_flexible: false }
+
+        it { is_expected.not_to validate_presence_of :times_flexible_details }
       end
     end
   end
