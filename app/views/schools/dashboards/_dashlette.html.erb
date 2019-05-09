@@ -25,12 +25,14 @@
       </span>
     </li>
 
-    <li>
-      <%= link_to "Update school experience dates", schools_placement_dates_path %>
-      <span class="govuk-hint">
-        Add, edit and disable <strong>fixed</strong> dates for candidates
-      </span>
-    </li>
+    <%- if @current_school.availability_preference_fixed? -%>
+      <li>
+        <%= link_to "Update school experience dates", schools_placement_dates_path %>
+        <span class="govuk-hint">
+          Add, edit and disable <strong>fixed</strong> dates for candidates
+        </span>
+      </li>
+    <%- end -%>
 
   </ul>
 </article>
