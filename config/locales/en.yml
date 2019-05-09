@@ -154,6 +154,8 @@ en:
               invalid: 'Enter a valid end time'
             times_flexible:
               inclusion: 'Select an option'
+            times_flexible_details:
+              blank: 'Provide details'
         schools/on_boarding/experience_outline:
           attributes:
             candidate_experience:
@@ -366,6 +368,7 @@ en:
         times_flexible:
           true: 'Yes'
           false: 'No'
+        times_flexible_details: 'Provide details.'
       schools_on_boarding_experience_outline:
         candidate_experience: 'What kind of school experience do you offer candidates?'
         provides_teacher_training:

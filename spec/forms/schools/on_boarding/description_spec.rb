@@ -6,6 +6,23 @@ describe Schools::OnBoarding::Description, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of :details }
+    context 'details' do
+      context 'when blank' do
+        subject { described_class.new details: '' }
+
+        it 'is valid' do
+          expect(subject).to be_valid
+        end
+      end
+
+      context 'when nil' do
+        subject { described_class.new }
+
+        it 'is not valid' do
+          expect(subject).not_to be_valid
+          expect(subject.errors[:details]).to eq ["can't be nil"]
+        end
+      end
+    end
   end
 end

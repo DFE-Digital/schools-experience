@@ -23,11 +23,6 @@ Feature: Description
         | Some school                              | /schools |
         | Enter a short description of your school | None     |
 
-  Scenario: Completing the step without entering a description
-    Given I am on the 'Description' page
-    When I submit the form
-    Then I should see a validation error message
-
   Scenario: Completing the step with description
     Given I am on the 'Description' page
     And I enter 'We have a race track' into the 'Tell us about your school. Provide a summary to help candidates choose your school.' text area

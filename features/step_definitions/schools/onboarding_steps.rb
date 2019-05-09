@@ -93,7 +93,7 @@ Given "I have completed the Candidate experience details step" do
     And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
     And I enter '8:15 am' into the 'Start time' text area
     And I enter '4:30 pm' into the 'Finish time' text area
-    And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
+    And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
     When I submit the form
   )
 end
@@ -188,7 +188,7 @@ And "I complete the candidate experience form with invalid data" do
     And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
     And I enter '8:15 am' into the 'Start time' text area
     And I enter '4:30 pm' into the 'Finish time' text area
-    And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
+    And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
   )
 end
 
@@ -202,6 +202,6 @@ And "I complete the candidate experience form with valid data" do
     And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
     And I enter '8:15 am' into the 'Start time' text area
     And I enter '4:30 pm' into the 'Finish time' text area
-    And I choose 'Yes' from the 'Are your start and finish times flexible?' radio buttons
+    And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
   )
 end
