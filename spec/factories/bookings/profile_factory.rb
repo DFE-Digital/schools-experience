@@ -17,11 +17,12 @@ FactoryBot.define do
     start_time { '09:00' }
     end_time { '16:00' }
     flexible_on_times { false }
-    placement_info { 'some info' }
+    experience_details { 'some info' }
     admin_contact_full_name { 'some one' }
     admin_contact_email { 'some@one.com' }
     admin_contact_phone { '07123456789' }
     fixed_availability { false }
     availability_info { 'whenever man' }
+    description_details { 'A rather short description of our school' }
   end
 end

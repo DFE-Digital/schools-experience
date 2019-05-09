@@ -355,5 +355,17 @@ describe Bookings::School, type: :model do
         it { is_expected.to have_availability }
       end
     end
+
+    describe '#private_beta?' do
+      context 'without profile' do
+        subject { create(:bookings_school) }
+        it { is_expected.not_to be_private_beta }
+      end
+
+      context 'with profile' do
+        subject { create(:bookings_profile).school }
+        it { is_expected.to be_private_beta }
+      end
+    end
   end
 end

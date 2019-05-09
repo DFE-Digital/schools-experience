@@ -3,16 +3,21 @@ Given("there is a school called {string}") do |name|
   expect(@school).to be_persisted
 end
 
+Given("the school has created their profile") do
+  @profile = FactoryBot.create(:bookings_profile, school: @school)
+  expect(@profile).to be_persisted
+end
+
 Given("I am on the profile page for the chosen school") do
   path = candidates_school_path(@school.urn)
   visit(path)
   expect(page.current_path).to eql(path)
 end
 
-Given("the school has placement information text:") do |pi|
+Given("the school profile has description details text:") do |pi|
   @raw_placement_info = pi
-  @school.update_attributes(placement_info: pi)
-  expect(@school.placement_info).to eql(pi)
+  @profile.update_attributes(description_details: pi)
+  expect(@profile.description_details).to eql(pi)
 end
 
 Then("I should see the correctly-formatted school placement information") do
@@ -99,8 +104,8 @@ end
 
 Given("the chosen school has the following availability information") do |string|
   @raw_availability_info = string
-  @school.update_attributes(availability_info: string)
-  expect(@school.availability_info).to eql(string)
+  @school.profile.update_attributes(availability_info: string)
+  expect(@school.profile.availability_info).to eql(string)
 end
 
 Then("I should see availability information in the sidebar") do
@@ -113,12 +118,11 @@ end
 
 Given("the chosen school offers teacher training and has the following info") do |string|
   @teacher_training_info = string
-  @school.update_attributes(
-    teacher_training_provider: true,
+  @profile.update_attributes(
     teacher_training_info: string,
-    teacher_training_website: "https://www.altervista.com/teacher-training"
+    teacher_training_url: "https://www.altervista.com/teacher-training"
   )
-  expect(@school.teacher_training_info).to eql(string)
+  expect(@profile.teacher_training_info).to eql(string)
 end
 
 Then("I should see teacher training information information in the sidebar") do
@@ -131,7 +135,7 @@ end
 
 Then("the teacher training website should be listed with the other hyperlinks") do
   within("#school-websites") do
-    expect(page).to have_link("Teacher training: #{@school.name}", href: @school.teacher_training_website)
+    expect(page).to have_link("Teacher training: #{@school.name}", href: @profile.teacher_training_url)
   end
 end
 
@@ -160,8 +164,8 @@ Then("the placement information section should not be visible") do
 end
 
 Given("the chosen school has no availability information") do
-  @school.update_attributes(availability_info: nil)
-  expect(@school.availability_info).to be_nil
+  @school.profile.update!(availability_info: nil, fixed_availability: true)
+  expect(@school.profile.availability_info).to be_nil
 end
 
 Then("the availability information in the sidebar should read {string}") do |string|
@@ -198,3 +202,54 @@ Given("there are some available dates in the future") do
     FactoryBot.create(:bookings_placement_date, date: i.weeks.from_now, bookings_school: @school)
   end
 end
+
+Then("the DBS Check information in the sidebar should read {string}") do |string|
+  within("#dbs-check-info") do
+    expect(page).to have_css('dd', text: string)
+  end
+end
+
+Given("the school charges a {string} fee of {string} for {string}") do |fee_type, amount, description|
+  @fee_type = fee_type
+  @amount = amount
+  @description = description
+
+  @profile.update!(
+    "#{fee_type}_fee_amount_pounds" => @amount,
+    "#{fee_type}_fee_interval" => 'One-off',
+    "#{fee_type}_fee_description" => @description,
+    "#{fee_type}_fee_payment_method" => 'Debit card'
+  )
+end
+
+Then('I should see the fee information') do
+  within("##{@fee_type}-fee-info") do
+    expect(page).to have_css('p', text: "£#{@amount} One-off, Debit card")
+    expect(page).to have_css('p', text: @description)
+  end
+end
+
+Given("the school does not charge a {string} fee") do |fee_type|
+  @fee_type = fee_type
+  @profile.update!("#{fee_type}_fee_amount_pounds" => nil)
+end
+
+Then("I should not see the fee information") do
+  expect(page).not_to have_css("##{@fee_type}")
+end
+
+Given("the school has a dress code policy") do
+  @profile.update!(
+    dress_code_cover_tattoos: true,
+    dress_code_smart_casual: true,
+    dress_code_other_details: "We were all blue on fridays"
+  )
+end
+
+Then("I should see the dress code policy information") do
+  within("#dress-code") do
+    expect(page).to have_css('p', text: 'Cover up tattoos, Smart casual')
+    expect(page).to have_css('p', text: 'We were all blue on fridays')
+  end
+end
+

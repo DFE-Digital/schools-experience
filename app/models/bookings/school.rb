@@ -107,7 +107,7 @@ class Bookings::School < ApplicationRecord
   end
 
   def private_beta?
-    false # FIXME this should check if they're in the Private Beta program
+    profile.present?
   end
 
   def disabled?

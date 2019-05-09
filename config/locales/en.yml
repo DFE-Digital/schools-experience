@@ -4,6 +4,12 @@ en:
    messages:
      use_fewer_words: "Use %{count} words or fewer"
 
+  number:
+    currency:
+      format:
+        unit: '£'
+        delimiter: ''
+
   placement_preference_errors: &placement_preference_errors
     attributes:
       availability:
@@ -189,6 +195,12 @@ en:
       models:
         bookings/placement_request:
           <<: [ *placement_preference_errors, *subject_preference_errors ]
+    attributes:
+      bookings/profile:
+        dress_code_business: Business dress
+        dress_code_cover_tattoos: Cover up tattoos
+        dress_code_remove_piercings: Remove piercings
+        dress_code_smart_casual: Smart casual
 
   helpers:
     fieldset:
