@@ -252,4 +252,3 @@ Then("I should see the dress code policy information") do
     expect(page).to have_css('p', text: 'We were all blue on fridays')
   end
 end
-
