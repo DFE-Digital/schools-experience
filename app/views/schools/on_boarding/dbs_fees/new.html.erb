@@ -9,7 +9,7 @@
       <%= f.pounds_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.99 %>
       <%= f.text_area :description, rows: 4, width: 20 %>
       <%= f.text_area :payment_method, rows: 4, width: 20, label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
-        <span class="govuk-label">
+        <span class="govuk-hint">
           For example, by bank transfer, in cash or via PayPal.
         </span>
       <% end %>

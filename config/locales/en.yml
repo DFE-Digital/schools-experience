@@ -283,10 +283,6 @@ en:
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
-        candidate_experience:
-          Tell us about what candidates can expect to do while they’re at your school.
-          For example, explain whether candidates will observe lessons or get the chance
-          to interact with pupils and classroom activities.
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
 
     label:
@@ -348,7 +344,7 @@ en:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:
         college: '16 to 18 years'
-        secondary_and_college: 'Secondary and 16 to 18 years'
+        secondary_and_college: 'Secondary with 16 to 18 years'
       schools_on_boarding_description:
         details: 'Tell us about your school. Provide a summary to help candidates choose your school.'
       schools_on_boarding_candidate_experience_detail:
