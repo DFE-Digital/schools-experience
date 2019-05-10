@@ -12,6 +12,10 @@ module ApplicationHelper
     end
   end
 
+  def site_header_text
+    @site_header_text || "Get school experience"
+  end
+
   def breadcrumbs
     content_for(:breadcrumbs)
   end

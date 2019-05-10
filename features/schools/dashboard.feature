@@ -6,7 +6,9 @@ Feature: The School Dashboard
     Background:
         Given I am logged in as a DfE user
 
-    # FIXME back link? Back to where?
+    Scenario: Site header
+        Given I am on the 'schools dashboard' page
+        Then the main site header should be 'Manage school experience'
 
     Scenario: Root redirect
         Given I navigate to the 'schools' path
