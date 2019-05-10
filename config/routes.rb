@@ -28,7 +28,7 @@ Rails.application.routes.draw do
         collection do
           resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
         end
-      end
+      end if Rails.application.config.x.phase >= 3
 
       resources :placement_dates
 
