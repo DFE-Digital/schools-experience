@@ -16,7 +16,13 @@
 
     <%= form_for experience_outline, url: url, method: method do |f| %>
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
-      <%= f.text_area :candidate_experience, rows: 4, label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } %>
+      <%= f.text_area :candidate_experience, rows: 4, label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
+        <p>
+          Tell us about what candidates can expect to do while they’re at your school.
+          For example, explain whether candidates will observe lessons or get the chance
+          to interact with pupils and classroom activities.
+        </p>
+      <% end %>
 
       <%= f.radio_button_fieldset :provides_teacher_training do |fieldset| %>
         <%= fieldset.radio_input true do %>
