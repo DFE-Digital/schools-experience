@@ -28,8 +28,6 @@ class Bookings::Profile < ApplicationRecord
   validates :key_stage_2, inclusion: [true, false], if: :primary_phase
   validate  :at_least_one_key_stage, if: :primary_phase
 
-  validates :description_details, length: { minimum: 1 }, if: :description_details
-
   validates :dress_code_business, inclusion: [true, false]
   validates :dress_code_cover_tattoos, inclusion: [true, false]
   validates :dress_code_remove_piercings, inclusion: [true, false]
@@ -46,9 +44,7 @@ class Bookings::Profile < ApplicationRecord
   validates :flexible_on_times, inclusion: [true, false]
   validates :flexible_on_times_details, presence: true, if: :flexible_on_times
 
-  validates :experience_details, presence: true
-
-  validates :teacher_training_url, format: URI::regexp(%w{http https}), if: :teacher_training_info
+  validates :teacher_training_url, format: URI::regexp(%w{http https}), if: :teacher_training_url
 
   validates :admin_contact_full_name, presence: true
   validates :admin_contact_email, presence: true

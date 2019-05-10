@@ -108,7 +108,7 @@ RSpec.describe Bookings::Profile, type: :model do
     describe "description_details" do
       it { is_expected.to allow_value(nil).for(:description_details) }
       it { is_expected.to allow_value('x').for(:description_details) }
-      it { is_expected.not_to allow_value('').for(:description_details) }
+      it { is_expected.to allow_value('').for(:description_details) }
     end
 
     describe "dress_code" do
@@ -193,10 +193,6 @@ RSpec.describe Bookings::Profile, type: :model do
       end
     end
 
-    describe "experience_details" do
-      it { is_expected.to validate_presence_of(:experience_details) }
-    end
-
     describe "teacher_training_info" do
       it { is_expected.to allow_value(nil).for(:teacher_training_info) }
       it { is_expected.to allow_value('').for(:teacher_training_info) }
@@ -210,7 +206,7 @@ RSpec.describe Bookings::Profile, type: :model do
 
       context 'with assigned teacher_training_info' do
         subject { described_class.new(teacher_training_info: 'hello world') }
-        it { is_expected.not_to allow_value('').for(:teacher_training_url) }
+        it { is_expected.to allow_value('').for(:teacher_training_url) }
         it { is_expected.to allow_value('https://test.com').for(:teacher_training_url) }
         it { is_expected.to allow_value('http://test.com').for(:teacher_training_url) }
         it { is_expected.not_to allow_value('test.com').for(:teacher_training_url) }

@@ -11,7 +11,8 @@ module Candidates
     delegate :description_details, :disabled_facilities, to: :profile
     delegate :teacher_training_info, :teacher_training_url, to: :profile
     delegate :dbs_policy, :parking_provided, :parking_details, to: :profile
-    delegate :start_time, :end_time, :flexible_on_times, to: :profile
+    delegate :start_time, :end_time, to: :profile
+    delegate :flexible_on_times, :flexible_on_times_details, to: :profile
     delegate :dress_code_other_details, to: :profile
     delegate :availability_info, to: :profile
 
