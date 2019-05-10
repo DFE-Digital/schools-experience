@@ -80,3 +80,10 @@ end
 Then("I should see a email link to {string}") do |string|
   expect(page).to have_link(string, href: "mailto:#{string}")
 end
+
+Then("the main site header should be {string}") do |title_text|
+  expect(page).to have_css(
+    ".govuk-header .govuk-header__content .govuk-header__link--service-name",
+    text: title_text
+  )
+end

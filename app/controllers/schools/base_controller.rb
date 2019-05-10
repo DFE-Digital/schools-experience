@@ -5,6 +5,7 @@ module Schools
     include DFEAuthentication
     before_action :require_auth
     before_action :set_current_school
+    before_action :set_site_header_text
 
     rescue_from ActionController::ParameterMissing, with: -> { redirect_to schools_errors_no_school_path }
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
@@ -17,6 +18,10 @@ module Schools
       @current_school ||= retrieve_school(urn)
     end
     alias_method :set_current_school, :current_school
+
+    def set_site_header_text
+      @site_header_text = "Manage school experience"
+    end
 
   private
 
