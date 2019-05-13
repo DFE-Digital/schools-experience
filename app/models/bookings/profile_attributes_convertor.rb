@@ -34,11 +34,11 @@ module Bookings
           ids << edubase_ids[2]
         end
 
-        if input[:phases_list_secondary] || input[:phases_list_secondary_or_college]
+        if input[:phases_list_secondary] || input.fetch(:phases_list_secondary_and_college)
           ids << edubase_ids[4]
         end
 
-        if input[:phases_list_college] || input[:phases_list_secondary_or_college]
+        if input[:phases_list_college] || input.fetch(:phases_list_secondary_and_college)
           ids << edubase_ids[6]
         end
       end
