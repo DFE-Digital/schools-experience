@@ -268,6 +268,7 @@ en:
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
+        bookings_placement_date_id: School experience is only available on the following days
         availability:
           - Tell us about your availability. For example, when you'll be
             available for placements or any particular days or periods when you
