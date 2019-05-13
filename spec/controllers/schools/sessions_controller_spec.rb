@@ -81,6 +81,35 @@ describe Schools::SessionsController, type: :request do
       specify 'should save the current user in the session' do
         expect(session[:current_user]).to be_a(OpenIDConnect::ResponseObject::UserInfo)
       end
+
+      context 'errors' do
+        context 'StateMissmatchError' do
+          let(:bad_state) { 'aaaaaaaa-bbbb-1111-2222-333333333333' }
+          let(:callback) { "/auth/callback?code=#{code}&state=#{bad_state}&session_state=#{session_state}" }
+          after { get callback }
+
+          specify 'should raise StateMissmatchError' do
+            expect(Rails.logger).to receive(:error).with(/doesn't match session state/)
+          end
+
+          specify 'should redirect to an error page' do
+            expect(response.status).to eql 302
+          end
+        end
+
+        context 'AuthFailedError' do
+          let(:code) { nil }
+          after { get callback }
+
+          specify 'should raise AuthFailedError' do
+            expect(Rails.logger).to receive(:error).with(/Login failed/)
+          end
+
+          specify 'should redirect to an error page' do
+            expect(response.status).to eql 302
+          end
+        end
+      end
     end
   end
 
