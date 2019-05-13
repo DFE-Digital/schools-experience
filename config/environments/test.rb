@@ -60,5 +60,10 @@ Rails.application.configure do
   # Don't actually attempt to delivery emails during tests
   Notify.notification_class = NotifyFakeClient
 
-  config.x.phase_two.enabled = true
+  config.x.phase = 10000
+
+  config.x.base_url = 'https://some-host'
+  config.x.oidc_client_id = 'se-test'
+  config.x.oidc_client_secret = 'abc123'
+  config.x.oidc_host = 'some-oidc-host.education.gov.uk'
 end

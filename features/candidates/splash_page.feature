@@ -7,6 +7,10 @@ Feature: Candidate splash page
         Given I am on the 'splash' page
         Then the page's main header should be 'How the service works'
 
+    Scenario: Site header
+        Given I am on the 'splash' page
+        Then the main site header should be 'Get school experience'
+
     Scenario: The continue button
         Given I am on the 'splash' page
         When I click the 'Continue' button

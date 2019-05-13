@@ -42,14 +42,27 @@
 
       <%= summary_row \
         'School or college',
-        @application_preview.school %>
+        @application_preview.school_name %>
 
-      <%= summary_row \
-        'Experience availability',
-        @application_preview.placement_availability,
-        edit_candidates_school_registrations_placement_preference_path(
-          anchor: 'candidates_registrations_placement_preference_availability_container'
-        ) %>
+      <%- if @application_preview.has_bookings_date? -%>
+
+        <%= summary_row \
+          'Placement date',
+          @application_preview.placement_date,
+          edit_candidates_school_registrations_placement_preference_path(
+            anchor: 'candidates_registrations_placement_preference_availability_container'
+          ) %>
+
+      <%- else -%>
+
+        <%= summary_row \
+          'Experience availability',
+          @application_preview.placement_availability,
+          edit_candidates_school_registrations_placement_preference_path(
+            anchor: 'candidates_registrations_placement_preference_availability_container'
+          ) %>
+
+      <%- end -%>
 
       <%= summary_row \
         'Experience outcome',
@@ -104,7 +117,7 @@
   </div>
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Send your school experience request</h2>
-      <div class="govuk-form-group">
+      <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
         <%= f.check_box_input :acceptance %>
       </div>
       <%= f.submit 'Accept and send', class: 'govuk-button' %>

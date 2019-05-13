@@ -1,0 +1,33 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'Select school experience phases' => nil
+  }
+%>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Select school experience phases
+    </h1>
+    <p>
+      Tell us which phases you offer. This will help candidates select a school experience.
+    </p>
+
+    <%= form_for phases_list, url: url, method: method do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <div class="govuk-form-group">
+        <div class="govuk-fieldset">
+          <div class="govuk-checkboxes">
+            <%= f.check_box_input :primary %>
+            <%= f.check_box_input :secondary %>
+            <%= f.check_box_input :secondary_and_college %>
+            <%= f.check_box_input :college %>
+          </div>
+        </div>
+      </div>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

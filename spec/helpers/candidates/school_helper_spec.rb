@@ -69,16 +69,20 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
           OpenStruct.new(id: 3, name: 'Third')
         ]
       )
-
-      @formatted = format_school_phases(@school)
     end
+
+    let(:formatted) do
+      format_school_phases(@school)
+    end
+
+    let(:parsed) { Nokogiri.parse(formatted) }
 
     it 'should be html_safe' do
-      expect(@formatted.html_safe?).to be true
+      expect(formatted.html_safe?).to be true
     end
 
-    it 'should turn them into a sentence' do
-      expect(@formatted).to eq "First, Second, Third"
+    it 'should turn them into a list' do
+      expect(parsed.css('ul.govuk-list > li').map(&:text)).to eql(@school.phases.map(&:name))
     end
   end
 
@@ -221,7 +225,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
-  describe '.cleanup_school_url' do
+  describe '#cleanup_school_url' do
     context 'with blank url' do
       subject { cleanup_school_url(' ') }
       it('should return a same page url') { expect(subject).to eq('#') }
@@ -245,6 +249,33 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     context 'with no protocol' do
       subject { cleanup_school_url('www.gov.uk') }
       it('should use http protocol') { expect(subject).to eq('http://www.gov.uk') }
+    end
+  end
+
+  describe '#dlist_item' do
+    subject do
+      dlist_item('list item', id: 'testid') { 'test123' }
+    end
+
+    it { is_expected.to have_css('div.govuk-summary-list__row#testid') }
+    it { is_expected.to have_css('div > dt') }
+    it { is_expected.to have_css('div > dd', text: 'test123') }
+  end
+
+  describe '#content_or_msg' do
+    context 'with content' do
+      subject { content_or_msg('<p>foobar</p>', 'no content') }
+      it { is_expected.to have_css('p', text: 'foobar') }
+    end
+
+    context 'without content but text msg' do
+      subject { content_or_msg('', 'no content') }
+      it { is_expected.to have_css('em', text: 'no content') }
+    end
+
+    context 'without content but block msg' do
+      subject { content_or_msg('') { '<b>no content</b>' } }
+      it { is_expected.to have_css('b', text: 'no content') }
     end
   end
 end

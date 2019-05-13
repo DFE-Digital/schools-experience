@@ -1,0 +1,23 @@
+<%- self.page_title = "Modify placement date" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'Placement dates' => schools_placement_dates_path,
+    'Modify placement date' => nil
+  }
+%>
+
+<h1>Modify placement date</h1>
+
+<%= form_for @placement_date, url: schools_placement_date_path(@placement_date), method: :put do |form| %>
+  <%= render partial: 'form', locals: { form: form } %>
+
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+      <%= form.check_box_input :active %>
+    </fieldset>
+  </div>
+
+  <%= form.submit 'Continue' %>
+<%- end -%>

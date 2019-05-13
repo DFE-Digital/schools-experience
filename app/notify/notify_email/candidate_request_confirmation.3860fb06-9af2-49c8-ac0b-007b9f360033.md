@@ -2,7 +2,7 @@ Dear ((candidate_name))
 
 You've requested school experience at ((school_name)).
 
-^ The school will be in touch with you. For example, during term time this could typically mean within 2 weeks. Many schools are currently in or approaching the Easter holidays so replies may take longer.
+^ The school will be in touch with you. For example, during term time this could typically mean within 2 weeks.
 
 # Your placement request details
 
@@ -18,7 +18,7 @@ Personal details
 Request details
 
 * School or college: ((school_name))
-* Experience availability: ((placement_availability))
+* Availability/preferred dates: ((placement_availability))
 * Experience outcome: ((placement_outcome))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))

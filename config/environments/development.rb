@@ -75,5 +75,14 @@ Rails.application.configure do
     Bullet.rails_logger = true
   end
 
-  config.x.phase_two.enabled = true
+  config.x.phase = Integer(ENV.fetch('PHASE') { 10000 })
+
+  # dfe signin redirects back to https, so force it
+  config.force_ssl = true
+
+  # dfe signin config, should be in credentials or env vars
+  config.x.base_url = 'https://localhost:3000'
+  config.x.oidc_client_id = 'schoolexperience'
+  config.x.oidc_client_secret = Rails.application.credentials.dig(:dfe_pp_signin_secret)
+  config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
 end

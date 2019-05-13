@@ -52,3 +52,35 @@ end
 Then("I should see no warning containing the availability information") do
   expect(page).not_to have_css('section.govuk-se-warning')
 end
+
+Given("the school I'm applying to is flexible on dates") do
+  # do nothing, this is the default
+end
+
+Given("the school I'm applying to is not flexible on dates") do
+  @school = FactoryBot.create(:bookings_school, :with_fixed_availability_preference)
+end
+
+Given("the school has {int} placements available in the upcoming weeks") do |int|
+  (1..int).to_a.map { |i| i.weeks.from_now.to_date }.each do |date|
+    FactoryBot.create(
+      :bookings_placement_date,
+      date: date,
+      bookings_school: @school
+    )
+  end
+
+  expect(@school.bookings_placement_dates.count).to eql(int)
+  @placement_dates = @school.bookings_placement_dates.map(&:to_s)
+end
+
+Then("there should be a radio button per date the school has specified") do
+  @school.bookings_placement_dates.map(&:to_s).each do |date_string|
+    expect(page).to have_field(date_string, type: 'radio')
+  end
+end
+
+When("I choose a placement date") do
+  @last_date = @school.bookings_placement_dates.last
+  choose @last_date.to_s
+end
