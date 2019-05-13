@@ -1,0 +1,21 @@
+<dt class="govuk-summary-list__key">
+  Upcoming placement dates
+</dt>
+
+<dd class="govuk-summary-list__value">
+  <%- if available_dates.any? -%>
+
+    <ul class="govuk-list">
+      <%- available_dates.each do |pd| -%>
+        <li><%= pd.to_s %></li>
+      <%- end -%>
+    </ul>
+
+  <%- else -%>
+
+    <div class="govuk-inset-text">
+      There are no upcoming placement dates
+    </div>
+
+  <%- end -%>
+</dd>

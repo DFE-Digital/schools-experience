@@ -42,14 +42,27 @@
 
       <%= summary_row \
         'School or college',
-        @application_preview.school %>
+        @application_preview.school_name %>
 
-      <%= summary_row \
-        'Experience availability',
-        @application_preview.placement_availability,
-        edit_candidates_school_registrations_placement_preference_path(
-          anchor: 'candidates_registrations_placement_preference_availability_container'
-        ) %>
+      <%- if @application_preview.school.availability_preference_fixed? -%>
+
+        <%= summary_row \
+          'Placement date',
+          @application_preview.placement_date,
+          edit_candidates_school_registrations_placement_preference_path(
+            anchor: 'candidates_registrations_placement_preference_availability_container'
+          ) %>
+
+      <%- else -%>
+
+        <%= summary_row \
+          'Experience availability',
+          @application_preview.placement_availability,
+          edit_candidates_school_registrations_placement_preference_path(
+            anchor: 'candidates_registrations_placement_preference_availability_container'
+          ) %>
+
+      <%- end -%>
 
       <%= summary_row \
         'Experience outcome',

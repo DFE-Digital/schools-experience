@@ -51,7 +51,8 @@ class NotifyEmail::CandidateRequestConfirmation < Notify
     NotifyEmail::CandidateRequestConfirmation.new(
       to: to,
       candidate_address: application_preview.full_address,
-      candidate_dbs_check_document: application_preview.dbs_check_document, candidate_degree_stage: application_preview.degree_stage,
+      candidate_dbs_check_document: application_preview.dbs_check_document,
+      candidate_degree_stage: application_preview.degree_stage,
       candidate_degree_subject: application_preview.degree_subject,
       candidate_email_address: application_preview.email_address,
       candidate_name: application_preview.full_name,
@@ -60,8 +61,8 @@ class NotifyEmail::CandidateRequestConfirmation < Notify
       candidate_teaching_subject_first_choice: application_preview.teaching_subject_first_choice,
       candidate_teaching_subject_second_choice: application_preview.teaching_subject_second_choice,
       placement_outcome: application_preview.placement_outcome,
-      placement_availability: application_preview.placement_availability,
-      school_name: application_preview.school
+      placement_availability: application_preview.placement_availability_description,
+      school_name: application_preview.school.name
     )
   end
 

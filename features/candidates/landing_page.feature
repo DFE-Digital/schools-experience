@@ -3,6 +3,10 @@ Feature: Candidate landing page
     As a potential candidate
     I want to read an overview of the what the service offers
 
+    Scenario: Site header
+        Given I am on the 'landing' page
+        Then the main site header should be 'Get school experience'
+
     Scenario: Page heading
         Given I am on the 'landing' page
         Then the page's main header should be 'Get school experience'

@@ -1,0 +1,75 @@
+article#dashlette {
+  // FIXME remove post phase 3
+  ul > li {
+    @include govuk-font($size: 19, $weight: normal);
+    margin: 1rem 0rem;
+
+    a {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+  }
+}
+
+article#dashboard {
+  section {
+    padding: 2rem 0rem;
+    margin: 0rem 0rem;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $govuk-border-colour;
+    }
+
+    header {
+      margin: 0rem 0rem 0.4rem;
+      padding: 0rem;
+
+      &.dashboard-high-priority {
+        @include govuk-font($size: 27, $weight: bold);
+      }
+
+      &.dashboard-medium-priority {
+        @include govuk-font($size: 19, $weight: bold);
+      }
+
+      &.dashboard-low-priority {
+        @include govuk-font($size: 16, $weight: bold);
+      }
+    }
+
+    ul.other-tasks {
+      li.dashboard-low-priority > a {
+        @include govuk-font($size: 16, $weight: bold);
+      }
+    }
+
+    p.govuk-hint {
+      margin: 0rem 0rem 0.4rem;
+      padding: 0rem;
+    }
+
+    .subsection {
+      padding: 1rem 0rem;
+    }
+
+    svg {
+      vertical-align: middle;
+      margin-left: 4px;
+      circle {
+        &.red {
+          fill: #A32526;
+        }
+      }
+      text {
+        text-anchor: middle;
+        font-family: sans-serif;
+        font-weight: bold;
+        fill: white;
+      }
+    }
+
+    &.requests-and-bookings {
+    }
+  }
+}

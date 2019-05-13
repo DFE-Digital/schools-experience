@@ -1,0 +1,38 @@
+#school-requests {
+  .school-request {
+    padding: 2rem 0rem;
+    margin: 2rem 0rem 1rem;
+
+    &:first-child {
+      padding: 1rem 0rem 2rem;
+      margin: 1rem 0rem 1rem;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 10px solid govuk-colour('blue');
+    }
+
+  }
+}
+
+.school-request {
+  section {
+    &:not(:first-child) {
+      margin: 3rem 0rem 2rem;
+    }
+  }
+
+  .status .govuk-tag {
+    background-color: govuk-colour('grey-1');
+  }
+
+  .request-options {
+    h3 {
+      margin-bottom: 1rem;
+    }
+
+    .accept-or-reject {
+      padding-left: 0rem;
+    }
+  }
+}

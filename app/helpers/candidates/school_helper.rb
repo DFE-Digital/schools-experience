@@ -23,11 +23,13 @@ module Candidates::SchoolHelper
   end
 
   def format_school_phases(school)
-    safe_join school.phases.map(&:name), ', '
+    content_tag(:ul, class: 'govuk-list') do
+      safe_join(school.phases.map { |p| tag.li(p.name) })
+    end
   end
 
-  def format_school_availability(school)
-    simple_format school.try(:availability_info) || 'No information supplied'
+  def format_school_availability(availability_info)
+    availability_info.present? ? simple_format(availability_info) : 'No information supplied'
   end
 
   def format_phases(school)
@@ -105,5 +107,24 @@ module Candidates::SchoolHelper
 
   def school_new_search_params
     params.permit(:location, :latitude, :longitude).reject { |_, v| v.blank? }
+  end
+
+  def dlist_item(key, attrs = {}, &block)
+    classes = ['govuk-summary-list__row', attrs[:class]].flatten.compact.join(' ')
+
+    content_tag :div, attrs.merge(class: classes) do
+      content_tag(:dt, key, class: 'govuk-summary-list__key') +
+        content_tag(:dd, class: 'govuk-summary-list__value', &block)
+    end
+  end
+
+  def content_or_msg(content, msg = nil)
+    if block_given?
+      msg = yield
+    elsif msg
+      msg = content_tag(:em, msg)
+    end
+
+    content.presence || msg
   end
 end

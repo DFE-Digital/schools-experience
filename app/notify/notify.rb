@@ -24,12 +24,16 @@ class Notify
     begin
       notify_client.send_email(
         template_id: template_id,
-        email_address: @to,
+        email_address: to,
         personalisation: personalisation
       )
     rescue Notifications::Client::ServerError => e
       raise RetryableError, e.message
     end
+  end
+
+  def despatch_later!
+    NotifyJob.perform_later(self)
   end
 
 private

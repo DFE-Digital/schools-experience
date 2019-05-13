@@ -120,6 +120,24 @@ describe Candidates::Registrations::PlacementRequestAction do
             registration_session.uuid
         end
       end
+
+      context 'candidate notification succeeds and school has a profile' do
+        before do
+          create :bookings_profile,
+            school: school,
+            admin_contact_email: 'profile@address.com'
+        end
+
+        before do
+          subject.perform!
+        end
+
+        it 'instantiates the school_request_confirmation correctly' do
+          expect(NotifyEmail::SchoolRequestConfirmation).to \
+            have_received(:from_application_preview)
+            .with(school.profile.admin_contact_email, application_preview)
+        end
+      end
     end
   end
 end

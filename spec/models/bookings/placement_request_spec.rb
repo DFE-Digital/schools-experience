@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe Bookings::PlacementRequest, type: :model do
-  it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: false }
   it { is_expected.to have_db_column(:objectives).of_type(:text).with_options null: false }
   it { is_expected.to have_db_column(:urn).of_type(:integer).with_options null: false }
   it { is_expected.to have_db_column(:degree_stage).of_type(:string).with_options null: false }
@@ -11,6 +10,8 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:subject_first_choice).of_type(:string).with_options null: false }
   it { is_expected.to have_db_column(:subject_second_choice).of_type(:string).with_options null: false }
   it { is_expected.to have_db_column(:has_dbs_check).of_type(:boolean).with_options null: false }
+  it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: true }
+  it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
 
   it_behaves_like 'a placement preference'
   it_behaves_like 'a subject preference'

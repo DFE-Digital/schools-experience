@@ -26,12 +26,17 @@ Then("I should see a warning informing me that school experiences are only avail
 end
 
 When("I click the {string} button") do |string|
-  click_link(string)
-  delay_page_load
+  begin
+    click_link(string)
+  rescue Capybara::ElementNotFound
+    click_button(string)
+  ensure
+    delay_page_load
+  end
 end
 
 Then("I should be on the {string} page") do |string|
-  expect(page.current_path).to eql(path_for(string))
+  expect(path_for(string)).to eql(page.current_path)
 end
 
 Then("I should be on the {string} page for my school of choice") do |string|
