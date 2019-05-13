@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       namespace :errors do
         resource :not_registered, controller: :not_registered, only: :show
         resource :no_school, controller: :no_school, only: :show
+        resource :auth_failed, controller: :auth_failed, only: :show
       end
 
       namespace :on_boarding do
