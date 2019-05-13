@@ -44,7 +44,7 @@
         'School or college',
         @application_preview.school_name %>
 
-      <%- if @application_preview.school.availability_preference_fixed? -%>
+      <%- if @application_preview.has_bookings_date? -%>
 
         <%= summary_row \
           'Placement date',
