@@ -20,35 +20,16 @@ Feature: Viewing all bookings
         When I am on the 'bookings' page
         Then I should see all the bookings listed
 
-    Scenario: List contents
+    Scenario: Table headings
         Given there are some bookings
         When I am on the 'bookings' page
-        Then the bookings should have the following values:
-			| Heading          | Value                             |
-            | Dates requested  | Any time during July 2019         |
-            | Request received | 01 January 2019                   |
-            | Contact details  | View contact details              |
-            | Teaching stage   | I've applied for teacher training |
-            | Teaching subject | Maths                             |
-            | Status           | New                               |
-
-    @javascript
-    Scenario: Expanding the contact details
-        Given there are some bookings
-        And I am on the 'bookings' page
-        When I click 'View contact details' on the first booking
-        Then I should see the following contact details for the first booking:
-			| Heading             | Value                           |
-            | Address             | First Line, Manchester, MA1 1AM |
-            | UK telephone number | 07123 456789                    |
-            | Email address       | first@thisaddress.com           |
+        Then the bookings table should have the following values:
+			| Heading | Value            |
+            | Name    | Matthew Richards |
+            | Subject | Biology          |
+            | Date    | 02 October 2019  |
 
     Scenario: Open request buttons
         Given there are some bookings
         When I am on the 'bookings' page
         Then every booking should contain a link to view more details
-
-    Scenario: List item titles
-        Given there are some bookings
-        When I am on the 'bookings' page
-        Then every booking should contain a title starting with 'Booking by'

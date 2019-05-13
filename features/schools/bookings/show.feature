@@ -24,11 +24,11 @@ Feature: Viewing a booking
         Given there is at least one booking
         When I am on a 'booking' page
         Then I should see a 'Booking details' section with the following values:
-            | Heading          | Value                         |
-            | Dates requested  | Any time during November 2019 |
-            | Request received | 08 February 2019              |
-            | DBS certificate  | Yes                           |
-            | Status           | New                           |
+            | Heading          | Value            |
+            | Date             | 02 October 2019  |
+            | Request received | 08 February 2019 |
+            | DBS certificate  | Yes              |
+            | Status           | New              |
 
     Scenario: Candidate details
         Given there is at least one booking

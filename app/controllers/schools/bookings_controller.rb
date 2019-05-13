@@ -13,26 +13,24 @@ module Schools
     # assuming bookings returned from the CRM API will resemble
     # placement requests
     def bookings
-      Array.new(
-        5,
+      5.times.map do
         OpenStruct.new(
-          dates_requested: 'Any time during July 2019',
+          date: '02 October 2019',
           received_on: '01 January 2019',
           teaching_stage: "I've applied for teacher training",
-          teaching_subject: 'Maths',
+          teaching_subjects: %w(Biology Physics Maths English Chemistry German),
           status: 'New',
           candidate: Bookings::Gitis::CRM.new('abc123').find(1)
         )
-      )
+      end
     end
 
     def booking
       OpenStruct.new(
         urn: 'abc123',
-        dates_requested: 'Any time during November 2019',
+        date: '02 October 2019',
         received_on: '08 February 2019',
         teaching_stage: "I've applied for teacher training",
-        teaching_subject: 'Physics',
         status: 'New',
         candidate: Bookings::Gitis::CRM.new('abc123').find(1),
 

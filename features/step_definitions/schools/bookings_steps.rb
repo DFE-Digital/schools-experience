@@ -12,12 +12,15 @@ Then("I should see all the bookings listed") do
   end
 end
 
-Then("the bookings should have the following values:") do |table|
-  within('#bookings') do
-    within(page.all('.booking').first) do
-      table.hashes.each do |row|
-        expect(page).to have_css('dt', text: row['Heading'])
-        expect(page).to have_css('dd', text: /#{row['Value']}/i)
+Then("the bookings table should have the following values:") do |table|
+  within('table#bookings') do
+    table.hashes.each do |row|
+      within(page.find('thead > tr')) do
+        expect(page).to have_css('th', text: row['Heading'])
+      end
+
+      within(page.find('tbody').all('tr').first) do
+        expect(page).to have_css('td', text: /#{row['Value']}/i)
       end
     end
   end
@@ -35,7 +38,7 @@ Then("every booking should contain a link to view more details") do
   within('#bookings') do
     page.all('.booking').each do |sr|
       within(sr) do
-        expect(page).to have_link('Open booking', href: schools_booking_path('abc123'))
+        expect(page).to have_link('Open', href: schools_booking_path('abc123'))
       end
     end
   end
