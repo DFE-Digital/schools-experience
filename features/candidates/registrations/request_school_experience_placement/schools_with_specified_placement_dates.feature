@@ -10,6 +10,7 @@ Feature: Request a school experience placement
         Given I am on the 'Request school experience placement' page for my school of choice
         When the school has 3 placements available in the upcoming weeks
         Then there should be a 'What do you want to get out of your school experience?' text area
+        And the "Bookings placement date" field should contain hint "School experience is only available on the following days"
 
     Scenario: Radio buttons
         Given the school has 3 placements available in the upcoming weeks

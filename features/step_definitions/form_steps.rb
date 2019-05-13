@@ -44,6 +44,12 @@ Given("there should be a hint stating {string}") do |string|
   expect(page).to have_css('.govuk-hint', text: string)
 end
 
+Then("the {string} field should contain hint {string}") do |label, hint|
+  within(get_form_group(page, label)) do
+    expect(page).to have_css('.govuk-hint', text: hint)
+  end
+end
+
 Then("I should see a select box containing degree subjects labelled {string}") do |string|
   @degree_subjects ||= YAML
     .load_file("#{Rails.root}/config/candidate_form_options.yml")['DEGREE_SUBJECTS']

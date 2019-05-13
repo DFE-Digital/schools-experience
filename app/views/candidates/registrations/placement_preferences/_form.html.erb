@@ -9,7 +9,6 @@
 
       <%- if @school.availability_preference_fixed? %>
 
-        <mark>FIXME add a caption</mark>
         <%= f.radio_button_fieldset :bookings_placement_date_id,
           choices: @placement_dates,
           value_method: :id,
