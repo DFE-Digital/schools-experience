@@ -117,7 +117,7 @@
   </div>
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Send your school experience request</h2>
-      <div class="govuk-form-group">
+      <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
         <%= f.check_box_input :acceptance %>
       </div>
       <%= f.submit 'Accept and send', class: 'govuk-button' %>
