@@ -43,6 +43,21 @@ class Bookings::School < ApplicationRecord
     class_name: "Bookings::SchoolType",
     foreign_key: :bookings_school_type_id
 
+  has_one :school_profile,
+    class_name: "Schools::SchoolProfile",
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
+
+  has_one :profile,
+    class_name: "Bookings::Profile",
+    foreign_key: :school_id,
+    dependent: :destroy
+
+  has_many :bookings_placement_dates,
+    class_name: 'Bookings::PlacementDate',
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
+
   scope :enabled, -> { where(enabled: true) }
 
   scope :that_provide, ->(subject_ids) do
@@ -71,15 +86,41 @@ class Bookings::School < ApplicationRecord
     end
   end
 
+  scope :flexible, -> { where(availability_preference_fixed: false) }
+
+  scope :fixed, -> { where(availability_preference_fixed: true) }
+
+  scope :fixed_with_available_dates, -> {
+    fixed.where(
+      id: Bookings::School
+        .joins(:bookings_placement_dates)
+        .merge(Bookings::PlacementDate.available)
+        .except(:select)
+        .select(:id)
+    )
+  }
+
+  scope :with_availability, -> { flexible.or(fixed_with_available_dates) }
+
   def to_param
     urn.to_s.presence
   end
 
   def private_beta?
-    false # FIXME this should check if they're in the Private Beta program
+    profile.present?
   end
 
   def disabled?
     !enabled?
+  end
+
+  def has_availability?
+    !availability_preference_fixed? || has_available_dates?
+  end
+
+private
+
+  def has_available_dates?
+    bookings_placement_dates.available.any?
   end
 end

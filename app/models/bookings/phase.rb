@@ -1,7 +1,8 @@
 class Bookings::Phase < ApplicationRecord
   validates :name,
     presence: true,
-    length: { minimum: 2, maximum: 32 }
+    length: { minimum: 2, maximum: 32 },
+    uniqueness: true
 
   has_many :bookings_schools_phases,
     class_name: "Bookings::SchoolsPhase",

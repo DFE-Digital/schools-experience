@@ -1,5 +1,5 @@
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l"><%= @school.name %></h1>
-  </div>
-</div>
+<%- if Rails.application.config.x.phase <= 2 -%>
+  <%= render partial: 'dashlette' %>
+<%- else -%>
+  <%= render partial: 'full_dashboard' %>
+<%- end -%>

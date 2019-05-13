@@ -12,6 +12,10 @@ RSpec.describe Bookings::Phase, type: :model do
     end
   end
 
+  describe "Indices" do
+    it { is_expected.to(have_db_index(:name).unique(true)) }
+  end
+
   describe "Relationsips" do
     specify do
       is_expected.to(

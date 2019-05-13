@@ -77,6 +77,20 @@ shared_examples_for "email template" do |template_id, personalisation|
         end
       end
     end
+
+    describe '#despatch_later!' do
+      specify { expect(subject).to respond_to(:despatch_later!) }
+
+      before do
+        allow(NotifyJob).to receive(:perform_later).and_return(true)
+      end
+
+      before { subject.despatch_later! }
+
+      specify 'should call @notify_client.send_email with correct args' do
+        expect(NotifyJob).to have_received(:perform_later).with(subject)
+      end
+    end
   end
 
   describe 'Template' do
@@ -173,12 +187,23 @@ shared_examples_for "email template from application preview" do
         expect(subject.placement_outcome).to eql(ap.placement_outcome)
       end
 
-      specify 'placement_availability is correctly-assigned' do
-        expect(subject.placement_availability).to eql(ap.placement_availability)
+      specify 'school_name is correctly-assigned' do
+        expect(subject.school_name).to eql(ap.school.name)
       end
 
-      specify 'school_name is correctly-assigned' do
-        expect(subject.school_name).to eql(ap.school)
+      context 'placement availability/dates' do
+        context 'when school availability is flexible' do
+          specify 'placement_availability is correctly-assigned' do
+            expect(subject.placement_availability).to eql(ap.placement_availability)
+          end
+        end
+
+        context 'when the school has set dates' do
+          let(:rs) { build(:registration_session, :with_placement_date) }
+          specify 'bookings_placement_date_id is correctly-assigned' do
+            expect(subject.placement_availability).to eql(Bookings::PlacementDate.last.to_s)
+          end
+        end
       end
     end
   end

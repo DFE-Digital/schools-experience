@@ -1,25 +1,28 @@
 Then("I should see a form with the following fields:") do |table|
-  within('#main-content form') do
-    table.hashes.each do |row|
-      label_text = row['Label']
-      options = row['Options']&.split(',')&.map(&:strip)
+  table.hashes.each do |row|
+    label_text = row['Label']
+    options = row['Options']&.split(',')&.map(&:strip)
 
-      within(get_form_group(page, label_text)) do
-        case row['Type']
-        when 'date' then ensure_date_field_exists(page)
-        when /radio/ then ensure_radio_buttons_exist(page, options)
-        when /select/ then ensure_select_options_exist(page, options)
-        else # regular inputs
-          expect(page).to have_field(label_text, type: row['Type'])
-        end
+    within(get_form_group(page, label_text)) do
+      case row['Type']
+      when 'date' then ensure_date_field_exists(page)
+      when /radio/ then ensure_radio_buttons_exist(page, options)
+      when /select/ then ensure_select_options_exist(page, options)
+      when /checkbox/ then ensure_check_boxes_exist(page, options)
+      else # regular inputs
+        expect(page).to have_field(label_text, type: row['Type'])
       end
     end
   end
 end
 
 When("I submit the form") do
+  click_on "Continue"
+end
+
+Then("the submit button should contain text {string}") do |string|
   within('#main-content form') do
-    click_on "Continue"
+    expect(page).to have_button(string)
   end
 end
 
@@ -39,6 +42,12 @@ end
 
 Given("there should be a hint stating {string}") do |string|
   expect(page).to have_css('.govuk-hint', text: string)
+end
+
+Then("the {string} field should contain hint {string}") do |label, hint|
+  within(get_form_group(page, label)) do
+    expect(page).to have_css('.govuk-hint', text: hint)
+  end
 end
 
 Then("I should see a select box containing degree subjects labelled {string}") do |string|
@@ -79,10 +88,26 @@ Then("the {string} input should require at least {string} characters") do |field
   expect(input['minlength']).to eql(length)
 end
 
+Given("there should be a {string} text area") do |string|
+  expect(page).to have_field(string, type: 'textarea')
+end
+
+Then("there should be a {string} checkbox") do |string|
+  expect(page).to have_field(string, type: 'checkbox')
+end
+
+When("I check the {string} checkbox") do |string|
+  check string
+end
+
+When("I uncheck the {string} checkbox") do |string|
+  uncheck string
+end
+
 LABEL_SELECTORS = %w(.govuk-label legend label).freeze
 def get_form_group(page, label_text)
-  selector = LABEL_SELECTORS.detect do |selector|
-    page.has_css?(selector, text: label_text)
+  selector = LABEL_SELECTORS.detect do |s|
+    page.has_css?(s, text: label_text)
   end
   label = page.find(selector, text: label_text)
   label.ancestor('div.govuk-form-group')

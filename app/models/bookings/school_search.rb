@@ -69,6 +69,7 @@ private
       .at_phases(phases)
       .costing_upto(max_fee)
       .enabled
+      .with_availability
       .distinct
   end
 

@@ -1,17 +1,18 @@
 Feature: School show page (enhanced data)
     To help me evaluate a school
     As a potential candidate
-    I want to be able to view a scohol's details
+    I want to be able to view a school's details
 
     Background:
         Given there is a school called 'Springfield Elementary'
+        And the school has created their profile
 
     Scenario: Page heading
         Given I am on the profile page for the chosen school
         Then the page's main heading should be "Springfield Elementary"
 
-    Scenario: School placement information:
-        Given the school has placement information text:
+    Scenario: School profile description details
+        Given the school profile has description details text:
             """
             Paragraph one
 
@@ -70,6 +71,45 @@ Feature: School show page (enhanced data)
         Given the chosen school has no availability information
         When I am on the profile page for the chosen school
         Then the availability information in the sidebar should read 'No information supplied'
+    
+    Scenario: DBS Check info (sidebar)
+        Given I am on the profile page for the chosen school
+        Then the DBS Check information in the sidebar should read 'No - Candidates will be accompanied at all times'
+    
+    Scenario: Admin Fees information (sidebar)
+        Given the school charges a 'administration' fee of '10.00' for 'general overheads'
+        When I am on the profile page for the chosen school
+        Then I should see the fee information
+    
+    Scenario: No Admin Fees information (sidebar)
+        Given the school does not charge a 'administration' fee
+        When I am on the profile page for the chosen school
+        Then I should not see the fee information
+
+    Scenario: DBS Fees information (sidebar)
+        Given the school charges a 'dbs' fee of '10.00' for 'general overheads'
+        When I am on the profile page for the chosen school
+        Then I should see the fee information
+    
+    Scenario: No DBS Fees information (sidebar)
+        Given the school does not charge a 'dbs' fee
+        When I am on the profile page for the chosen school
+        Then I should not see the fee information
+
+    Scenario: Other Fees information (sidebar)
+        Given the school charges a 'other' fee of '10.00' for 'general overheads'
+        When I am on the profile page for the chosen school
+        Then I should see the fee information
+    
+    Scenario: No Other Fees information (sidebar)
+        Given the school does not charge a 'other' fee
+        When I am on the profile page for the chosen school
+        Then I should not see the fee information
+
+    Scenario: Dress code information (sidebar)
+        Given the school has a dress code policy
+        When I am on the profile page for the chosen school
+        Then I should see the dress code policy information
 
     Scenario: Teacher training offered (sidebar)
         Given the chosen school offers teacher training and has the following info

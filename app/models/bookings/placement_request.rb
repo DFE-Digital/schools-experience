@@ -10,5 +10,9 @@ module Bookings
       self.create! \
         Candidates::Registrations::RegistrationAsPlacementRequest.new(registration_session).attributes
     end
+
+    def school
+      @school ||= Candidates::School.find urn
+    end
   end
 end

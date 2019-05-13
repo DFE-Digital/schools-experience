@@ -37,7 +37,13 @@ module Candidates
       end
 
       def school_contact_email
-        registration_session.school.contact_email
+        if registration_session.school.profile &&
+            registration_session.school.profile.admin_contact_email.present?
+
+          registration_session.school.profile.admin_contact_email
+        else
+          registration_session.school.contact_email
+        end
       end
 
       def candidate_email
