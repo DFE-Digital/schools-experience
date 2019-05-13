@@ -45,6 +45,10 @@ module Candidates
         ].compact.join(', ')
       end
 
+      def has_bookings_date?
+        @placement_preference.bookings_placement_date_id.present?
+      end
+
       def telephone_number
         phone
       end
