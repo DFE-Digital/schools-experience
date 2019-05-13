@@ -9,7 +9,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 2019_05_07_145858) do
+
+ActiveRecord::Schema.define(version: 2019_05_10_173936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,7 +76,7 @@ ActiveRecord::Schema.define(version: 2019_05_07_145858) do
     t.string "start_time", null: false
     t.string "end_time", null: false
     t.boolean "flexible_on_times", null: false
-    t.text "experience_details", null: false
+    t.text "experience_details"
     t.text "teacher_training_info"
     t.string "teacher_training_url"
     t.string "admin_contact_full_name", null: false
