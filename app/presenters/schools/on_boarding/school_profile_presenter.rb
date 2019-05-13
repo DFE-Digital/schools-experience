@@ -129,7 +129,7 @@ module Schools
       def subjects
         return 'None' unless subjects_offered?
 
-        @school_profile.subjects.pluck(:name).to_sentence
+        @school_profile.subjects.pluck(:name).sort.to_sentence
       end
 
       def descriptions

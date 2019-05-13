@@ -11,7 +11,7 @@ module Candidates::SchoolHelper
   end
 
   def format_school_subjects(school)
-    safe_subjects = school.subjects.map(&:name).map do |subj|
+    safe_subjects = school.subjects.map(&:name).sort.map do |subj|
       ERB::Util.h(subj)
     end
 
