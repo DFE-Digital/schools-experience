@@ -59,11 +59,11 @@ gem 'phonelib'
 gem 'sentry-raven'
 
 gem 'rack-rewrite'
+gem 'rack-timeout'
 
 gem 'openid_connect'
 gem 'uk_postcode'
-
-gem 'rack-timeout'
+gem 'faraday'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
