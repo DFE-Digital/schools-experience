@@ -115,17 +115,30 @@ module Candidates
         other.to_json == self.to_json
       end
 
+      def incomplete_steps
+        STEPS.reject do |step|
+          step_completed? step
+        end
+      end
+
     private
 
-      def all_steps_completed?
-        [
-          background_check,
-          contact_information,
-          placement_preference,
-          subject_preference
-        ].all?(&:valid?)
+      STEPS = %i(
+        placement_preference
+        contact_information
+        subject_preference
+        background_check
+      ).freeze
+
+      def step_completed?(step)
+        model = send step
+        model.valid?
       rescue StepNotFound
         false
+      end
+
+      def all_steps_completed?
+        STEPS.all? { |step| step_completed? step }
       end
     end
   end

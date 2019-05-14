@@ -206,4 +206,19 @@ describe Candidates::Registrations::RegistrationSession do
       end
     end
   end
+
+  context '#incomplete_steps' do
+    let :registration_session do
+      described_class.new({})
+    end
+
+    it 'returns the correct models' do
+      expect(registration_session.incomplete_steps).to eq %i(
+        placement_preference
+        contact_information
+        subject_preference
+        background_check
+      )
+    end
+  end
 end
