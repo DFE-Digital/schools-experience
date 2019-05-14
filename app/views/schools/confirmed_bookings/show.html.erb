@@ -1,4 +1,10 @@
-<%= link_to 'Back', schools_bookings_path, class: 'govuk-back-link' %>
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    "All bookings" => schools_bookings_path,
+    "Booking #{@booking.id}" => nil
+  }
+%>
 
 <h1>Booking by <%= @booking.candidate.full_name %></h1>
 

@@ -7,22 +7,25 @@ Feature: Viewing all bookings
         Given I am logged in as a DfE user
 
     Scenario: Page title
-        Given I am on the 'bookings' page
-        Then the page title should be 'All bookings'
+        Given I am on the 'upcoming bookings' page
+        Then the page title should be 'Upcoming bookings'
 
-    Scenario: Back link
-        Given there are some bookings
-        When I am on the 'bookings' page
-        Then I should see a 'Back' link to the 'schools dashboard'
+    Scenario: Breadcrumbs
+        Given I am on the 'upcoming bookings' page
+        Then I should see the following breadcrumbs:
+            | Text              | Link              |
+            | Some school       | /schools          |
+            | All bookings      | /schools/bookings |
+            | Upcoming bookings | None              |
 
     Scenario: List presence
         Given there are some bookings
-        When I am on the 'bookings' page
+        When I am on the 'upcoming bookings' page
         Then I should see all the bookings listed
 
     Scenario: Table headings
         Given there are some bookings
-        When I am on the 'bookings' page
+        When I am on the 'upcoming bookings' page
         Then the bookings table should have the following values:
 			| Heading | Value            |
             | Name    | Matthew Richards |
@@ -31,5 +34,5 @@ Feature: Viewing all bookings
 
     Scenario: Open request buttons
         Given there are some bookings
-        When I am on the 'bookings' page
+        When I am on the 'upcoming bookings' page
         Then every booking should contain a link to view more details

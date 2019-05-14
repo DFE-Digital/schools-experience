@@ -1,6 +1,12 @@
 <%- self.page_title = "Upcoming bookings" %>
 
-<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    "All bookings" => schools_bookings_path,
+    "Upcoming bookings" => nil
+  }
+%>
 
 <h2 class="Govuk-heading-m">Upcoming bookings</h2>
 

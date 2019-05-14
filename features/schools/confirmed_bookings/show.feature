@@ -6,10 +6,13 @@ Feature: Viewing a booking
     Background:
         Given I am logged in as a DfE user
 
-    Scenario: Back link
-        Given there is at least one booking
-        When I am on a 'booking' page
-        Then I should see a 'Back' link to the 'bookings' page
+    Scenario: Breadcrumbs
+        Given I am on a 'booking' page
+        Then I should see the following breadcrumbs:
+            | Text           | Link              |
+            | Some school    | /schools          |
+            | All bookings   | /schools/bookings |
+            | Booking abc123 | None              |
 
     Scenario: Personal details
         Given there is at least one booking

@@ -27,6 +27,7 @@ module Schools
 
     def booking
       OpenStruct.new(
+        id: 'abc123',
         urn: 'abc123',
         date: '02 October 2019',
         received_on: '08 February 2019',
