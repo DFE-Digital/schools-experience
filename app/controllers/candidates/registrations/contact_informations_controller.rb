@@ -35,7 +35,8 @@ module Candidates
 
       def contact_information_params
         params.require(:candidates_registrations_contact_information).permit \
-          :full_name,
+          :first_name,
+          :last_name,
           :email,
           :building,
           :street,

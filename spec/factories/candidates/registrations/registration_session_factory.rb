@@ -7,7 +7,8 @@ FactoryBot.define do
 
       candidates_registrations_contact_information do
         {
-          "full_name"    => 'Testy McTest',
+          "first_name"   => 'Testy',
+          "last_name"    => 'McTest',
           "email"        => 'test@example.com',
           "building"     => "Test building",
           "street"       => "Test street",
