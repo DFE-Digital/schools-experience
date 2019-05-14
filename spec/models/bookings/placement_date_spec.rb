@@ -13,7 +13,40 @@ describe Bookings::PlacementDate, type: :model do
 
     context '#date' do
       it { expect(subject).to validate_presence_of(:date) }
-      # FIXME should we prevent weekends?
+
+      context 'new placement dates must be in the future' do
+        specify 'should allow future dates' do
+          [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.years.from_now].each do |d|
+            expect(subject).to allow_value(d).for(:date)
+          end
+        end
+
+        specify 'new placement dates should not allow historic dates' do
+          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago].each do |d|
+            expect(subject).not_to allow_value(d).for(:date)
+          end
+        end
+
+        context 'error messages' do
+          let(:message) { 'Date must be in the future' }
+          let(:invalid_pd) { create(:bookings_placement_date, date: 3.weeks.ago) }
+
+          specify 'should show a suitable error message' do
+            expect { invalid_pd }.to(
+              raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Date must be in the future')
+            )
+          end
+        end
+
+        context 'updating expired placement dates' do
+          let(:expired_pd) { create(:bookings_placement_date, :active, :in_the_past) }
+
+          specify 'should allow updates' do
+            expect(expired_pd.update(active: false)).to be(true)
+            expect(expired_pd).to_not be_active
+          end
+        end
+      end
     end
 
     context '#bookings_school' do
