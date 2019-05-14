@@ -20,15 +20,17 @@ steps:
   - script: docker run --name=redis -d $(REDIS_IMAGE)
     displayName: Launch Redis # done early to give it time to boot
 
-  - script: docker pull $(DOCKER_HUB_REPO):latest || true
+  - script: docker pull $(DOCKER_HUB_REPO):build || true
     displayName: Retrieve latest Docker build to use as cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker build -f Dockerfile --cache-from=$(DOCKER_HUB_REPO):latest -t $(DOCKER_HUB_REPO):$(imageTag) .
+  - script: docker build -f Dockerfile --cache-from=$(DOCKER_HUB_REPO):build -t $(DOCKER_HUB_REPO):$(imageTag) .
     displayName: Build Docker Image using Cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker build -f Dockerfile -t $(DOCKER_HUB_REPO):$(imageTag) .
+  - script: |
+      docker build -f Dockerfile --target=build -t $(DOCKER_HUB_REPO):build .
+      docker build -f Dockerfile -t $(DOCKER_HUB_REPO):$(imageTag) .
     displayName: Build Docker Image without Cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
@@ -91,6 +93,15 @@ steps:
       repository: $(DOCKER_HUB_REPO)
       command: push
       tags: latest
+
+  - task: Docker@2
+    displayName: 'push to docker hub'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      repository: $(DOCKER_HUB_REPO)
+      command: push
+      tags: build
 
   - task: CopyFiles@2
     inputs:
