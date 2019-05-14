@@ -1,0 +1,7 @@
+<%- self.page_title = "All bookings" %>
+
+<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+
+<h2 class="govuk-heading-m">View bookings</h2>
+
+<%= render partial: 'schools/confirmed_bookings/booking_table', locals: { bookings: @bookings } %>

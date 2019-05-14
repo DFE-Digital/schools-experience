@@ -1,5 +1,5 @@
 module Schools
-  class BookingsController < Schools::BaseController
+  class ConfirmedBookingsController < Schools::BaseController
     def index
       @bookings = bookings
     end

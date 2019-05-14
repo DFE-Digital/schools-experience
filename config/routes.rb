@@ -31,7 +31,12 @@ Rails.application.routes.draw do
       end if Rails.application.config.x.phase >= 3
 
       resources :placement_dates
-      resources :bookings
+
+      resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
+        collection do
+          resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
+        end
+      end
 
       namespace :errors do
         resource :not_registered, controller: :not_registered, only: :show
