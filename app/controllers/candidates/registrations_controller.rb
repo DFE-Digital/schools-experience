@@ -22,5 +22,10 @@ module Candidates
     def current_urn
       params[:school_id]
     end
+
+    def next_step_path(registration_session)
+      step = registration_session.incomplete_steps.first
+      send "new_candidates_school_registrations_#{step}_path"
+    end
   end
 end

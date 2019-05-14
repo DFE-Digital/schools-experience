@@ -25,7 +25,10 @@ module Candidates
           render 'candidates/registrations/application_previews/show'
         end
       rescue RegistrationSession::NotCompletedError
-        redirect_to candidates_school_registrations_application_preview_path
+        # We can get here if the user skips a head to application preview and
+        # submits the form, or we push a code change mid way through a
+        # registration.
+        redirect_to next_step_path(current_registration)
       end
 
     private
