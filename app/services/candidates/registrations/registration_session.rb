@@ -5,6 +5,7 @@ module Candidates
   module Registrations
     class RegistrationSession
       class NotCompletedError < StandardError; end
+      class StepNotFound < StandardError; end
 
       PENDING_EMAIL_CONFIRMATION_STATUS = 'pending_email_confirmation'.freeze
       COMPLETED_STATUS = 'completed'.freeze
