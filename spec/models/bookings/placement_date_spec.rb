@@ -28,12 +28,12 @@ describe Bookings::PlacementDate, type: :model do
         end
 
         context 'error messages' do
-          let(:message) { 'Date must be in the future' }
+          let(:message) { 'Validation failed: Date must be in the future' }
           let(:invalid_pd) { create(:bookings_placement_date, date: 3.weeks.ago) }
 
           specify 'should show a suitable error message' do
             expect { invalid_pd }.to(
-              raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Date must be in the future')
+              raise_error(ActiveRecord::RecordInvalid, message)
             )
           end
         end
