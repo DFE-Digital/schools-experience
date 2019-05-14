@@ -55,3 +55,6 @@ FROM deploy
 COPY . .
 COPY --from=build /app/public/assets /app/public/assets
 COPY --from=build /app/public/packs /app/public/packs
+
+# Dual purpose - symlink directories, also build the BootSnap cache
+RUN bundle exec rake assets:symlink_packs SECRET_KEY_BASE=stubbed SKIP_REDIS=true
