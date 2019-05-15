@@ -1,6 +1,6 @@
 ############# DEPLOY IMAGE ####################
 
-FROM ruby:2.5.5 AS deploy
+FROM ruby:2.5.5-slim AS deploy
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -15,7 +15,12 @@ ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
 HEALTHCHECK CMD bin/check_health.sh || exit 1
 
-# Install Gems removing artifacts
+RUN apt-get update && \
+    apt-get install -y -o Dpkg::Options::="--force-confold" --no-install-recommends git gcc g++ make libpq-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/dpkg.log
+
+## Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
 RUN bundle install --without development --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
@@ -26,10 +31,11 @@ RUN bundle install --without development --jobs=$(nproc --all) && \
 FROM deploy AS build
 
 # Install node, leaving as few artifacts as possible
-RUN apt-get update && apt-get install apt-transport-https && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends apt-transport-https gnupg curl && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get update && \
     apt-get install -y -o Dpkg::Options::="--force-confold" --no-install-recommends yarn nodejs && \
     apt-get clean && \
