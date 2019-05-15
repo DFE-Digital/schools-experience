@@ -73,6 +73,12 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
+  if (app_insights_key = ENV["APP_INSIGHTS_INSTRUMENTATION_KEY"]) && app_insights_key.present?
+    # the optional extra params are buffer_size (= 500) and send_interval (= 60),
+    # leaving for now as they appear sensible
+    config.middleware.use(ApplicationInsights::Rack::TrackRequest, app_insights_key)
+  end
+
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
