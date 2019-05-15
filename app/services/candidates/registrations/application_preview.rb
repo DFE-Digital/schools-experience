@@ -63,6 +63,10 @@ module Candidates
         ].compact.join(', ')
       end
 
+      def date_of_birth
+        @contact_information.date_of_birth.strftime '%d/%m/%Y'
+      end
+
       def has_bookings_date?
         @placement_preference.bookings_placement_date_id.present?
       end

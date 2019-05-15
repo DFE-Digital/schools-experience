@@ -16,6 +16,9 @@ Given("I have completed the personal information form") do
   fill_in 'First name', with: 'testy'
   fill_in 'Last name', with: 'mctest'
   fill_in 'Email address', with: 'test@example.com'
+  fill_in 'Day', with: '01'
+  fill_in 'Month', with: '01'
+  fill_in 'Year', with: '2000'
   click_button 'Continue'
 end
 

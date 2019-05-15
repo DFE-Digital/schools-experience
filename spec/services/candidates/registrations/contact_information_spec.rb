@@ -109,5 +109,47 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         end
       end
     end
+
+    context '#date_of_birth' do
+      subject { described_class.new date_of_birth: date_of_birth }
+
+      before do
+        subject.validate
+      end
+
+      context 'too young' do
+        let :date_of_birth do
+          18.years.ago + 1.day
+        end
+
+        it 'is invalid' do
+          expect(subject.errors[:date_of_birth]).to eq [
+            'Enter a valid date of birth. You must be at least 18 years old'
+          ]
+        end
+      end
+
+      context 'too old' do
+        let :date_of_birth do
+          100.years.ago
+        end
+
+        it 'is invalid' do
+          expect(subject.errors[:date_of_birth]).to eq [
+            'Enter a valid date of birth. You must be at least 18 years old'
+          ]
+        end
+      end
+
+      context 'valid' do
+        let :date_of_birth do
+          25.years.ago
+        end
+
+        it 'is valid' do
+          expect(subject.errors[:date_of_birth]).to be_empty
+        end
+      end
+    end
   end
 end

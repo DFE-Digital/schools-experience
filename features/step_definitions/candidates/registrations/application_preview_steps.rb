@@ -12,6 +12,9 @@ Given("I have filled in my personal information successfully") do
   fill_in 'First name', with: 'testy'
   fill_in 'Last name', with: 'mctest'
   fill_in 'Email address', with: 'test@example.com'
+  fill_in 'Day', with: '01'
+  fill_in 'Month', with: '01'
+  fill_in 'Year', with: '2000'
   click_button 'Continue'
   expect(page.current_path).to eq \
     "/candidates/schools/#{@school.urn}/registrations/contact_information/new"
@@ -100,7 +103,9 @@ Then("I should see the following summary rows:") do |table|
   table.hashes.each do |row|
     within(".#{row['Heading'].tr(' ', '-').downcase}") do
       expect(page).to have_css('dd', text: row['Value'])
-      expect(page).to have_link('Change', href: /#{row['Change link path']}/)
+      if row['Change link path'].present?
+        expect(page).to have_link('Change', href: /#{row['Change link path']}/)
+      end
     end
   end
 end

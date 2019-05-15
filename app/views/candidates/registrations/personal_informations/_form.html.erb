@@ -16,6 +16,7 @@
           <%= f.text_field :first_name, autocomplete: 'given-name' %>
           <%= f.text_field :last_name, autocomplete: 'family-name' %>
           <%= f.email_field :email, autocomplete: 'on' %>
+          <%= f.date_field :date_of_birth, autocomplete: 'bday', heading: true %>
 
           <%= f.submit 'Continue' %>
         <% end %>

@@ -95,6 +95,8 @@ en:
               blank: 'Enter your last name'
             full_name:
               blank: "Enter your full name"
+            date_of_birth:
+              inclusion: "Enter a valid date of birth. You must be at least 18 years old"
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors

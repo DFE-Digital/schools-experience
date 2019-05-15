@@ -9,7 +9,8 @@ describe Candidates::Registrations::ApplicationPreview do
     build :personal_information,
       first_name: 'Testy',
       last_name: 'McTest',
-      email: 'test@example.com'
+      email: 'test@example.com',
+      date_of_birth: Date.parse('2000-01-01')
   end
 
   let :contact_information do
@@ -80,6 +81,12 @@ describe Candidates::Registrations::ApplicationPreview do
   context '#email_address' do
     it 'returns the correct value' do
       expect(subject.email_address).to eq "test@example.com"
+    end
+  end
+
+  context '#date_of_birth' do
+    it 'returns the correct value' do
+      expect(subject.date_of_birth).to eq '01/01/2000'
     end
   end
 
