@@ -6,6 +6,7 @@ Feature: Previewing my application
     Background:
         Given my school of choice exists
         And my school of choice offers 'Physics'
+        And my school of choice offers 'Mathematics'
 
     Scenario: Page contents (when the school has flexible availability)
         Given my school has flexible dates
@@ -25,7 +26,7 @@ Feature: Previewing my application
             | Degree subject                 | Physics                                                 | /candidates/schools/123456/registrations/subject_preference/edit#candidates_registrations_subject_preference_degree_stage_container          |
             | Teaching stage                 | I’m very sure and think I’ll apply                      | /candidates/schools/123456/registrations/subject_preference/edit#candidates_registrations_subject_preference_teaching_stage_container        |
             | Teaching subject first choice  | Physics                                                 | /candidates/schools/123456/registrations/subject_preference/edit#candidates_registrations_subject_preference_subject_first_choice_container  |
-            | Teaching subject second choice | I don't have a second subject                           | /candidates/schools/123456/registrations/subject_preference/edit#candidates_registrations_subject_preference_subject_second_choice_container |
+            | Teaching subject second choice | Mathematics                                             | /candidates/schools/123456/registrations/subject_preference/edit#candidates_registrations_subject_preference_subject_second_choice_container |
             | DBS certificate                | Yes                                                     | /candidates/schools/123456/registrations/background_check/edit#candidates_registrations_background_check_has_dbs_check_container             |
 
     Scenario: Page contents (when the school has fixed availability)

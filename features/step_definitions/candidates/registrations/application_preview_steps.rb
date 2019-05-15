@@ -39,6 +39,7 @@ Given("I have filled in my subject preferences successfully") do
   select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
   choose "I’m very sure and think I’ll apply"
   select 'Physics', from: 'First choice'
+  select 'Mathematics', from: 'Second choice'
   click_button 'Continue'
   expect(page.current_path).to eq \
     "/candidates/schools/#{@school.urn}/registrations/placement_preference/new"

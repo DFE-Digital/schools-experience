@@ -4,7 +4,9 @@ Feature: Persisting registration information on navigating away
   I want to be able to regain my place on a partially completed wizard
 
   Background:
-    Given I'm applying for a school
+    Given my school of choice exists
+    And my school of choice offers 'Physics'
+    And my school of choice offers 'Mathematics'
 
   Scenario: Returning to the wizard
     Given I have completed the personal information form
@@ -19,3 +21,4 @@ Feature: Persisting registration information on navigating away
     And  the subject preference form should populated with the details I've entered so far
     And  the placement preference form should populated with the details I've entered so far
     And  the background check form should populated with the details I've entered so far
+
