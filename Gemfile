@@ -61,6 +61,7 @@ gem 'rack-rewrite'
 
 gem 'openid_connect'
 gem 'uk_postcode'
+gem 'application_insights'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
