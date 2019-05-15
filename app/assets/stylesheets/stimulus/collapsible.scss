@@ -9,6 +9,7 @@
     display: none;
     border: none;
     background: none;
+    color: govuk-colour("white") ;
     padding: govuk-spacing(1) ;
     padding-left: govuk-spacing(3) ;
     text-align: left;
@@ -16,7 +17,8 @@
   }
 
   @include govuk-media-query($until: tablet) {
-    background: govuk-colour('grey-3') ;
+    background: govuk-colour("blue") ;
+    color: govuk-colour("white");
 
     & > button[data-action], & > link[data-action] {
       display: block;
