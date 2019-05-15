@@ -4,6 +4,9 @@
 Rails.application.config.filter_parameters += [
   :password,
   :full_name,
+  :first_name,
+  :last_name,
+  :date_of_birth,
   :email,
   :building,
   :street,
