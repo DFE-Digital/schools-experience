@@ -63,13 +63,6 @@ Rails.application.configure do
 
   config.sass.inline_source_maps = true
 
-  if (app_insights_key = ENV["APP_INSIGHTS_INSTRUMENTATION_KEY"]) && app_insights_key.present?
-    # the optional extra params are buffer_size (= 500) and send_interval (= 60),
-    # leaving for now as they appear sensible
-    puts "Initialising ApplicationInsights::Rack::TrackRequest middleware..."
-    config.middleware.use(ApplicationInsights::Rack::TrackRequest, app_insights_key)
-  end
-
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
   config.cache_store = :redis_cache_store, {
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
