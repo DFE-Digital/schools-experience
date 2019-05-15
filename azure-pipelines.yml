@@ -24,11 +24,11 @@ steps:
   - script: docker run --name=redis -d $(REDIS_IMAGE)
     displayName: Launch Redis # done early to give it time to boot
 
-  - script: docker pull $(dockerRegistry)/$(imageName):phase2 || true
+  - script: docker pull $(dockerRegistry)/$(imageName):latest || true
     displayName: Retrieve latest Docker build to use as cache
     condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'),ne(variables['Build.SourceBranch'], 'refs/heads/phase2'))
 
-  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):phase2 -t $(dockerRegistry)/$(imageName):$(imageTag) .
+  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):latest -t $(dockerRegistry)/$(imageName):$(imageTag) .
     displayName: Build Docker Image using Cache
     condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'),ne(variables['Build.SourceBranch'], 'refs/heads/phase2'))
 
