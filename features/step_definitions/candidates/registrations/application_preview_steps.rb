@@ -23,6 +23,9 @@ end
 Given("I have filled in my contact information successfully") do
   # Submit contact information form successfully
   fill_in 'Full name', with: 'testy mctest'
+  fill_in 'Day', with: '01'
+  fill_in 'Month', with: '01'
+  fill_in 'Year', with: '2000'
   fill_in 'Email address', with: 'test@example.com'
   fill_in 'Building', with: 'Test house'
   fill_in 'Street', with: 'Test street'
@@ -91,7 +94,9 @@ Then("I should see the following summary rows:") do |table|
   table.hashes.each do |row|
     within(".#{row['Heading'].tr(' ', '-').downcase}") do
       expect(page).to have_css('dd', text: row['Value'])
-      expect(page).to have_link('Change', href: /#{row['Change link path']}/)
+      if row['Change link path'].present?
+        expect(page).to have_link('Change', href: /#{row['Change link path']}/)
+      end
     end
   end
 end

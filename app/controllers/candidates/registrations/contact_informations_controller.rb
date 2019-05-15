@@ -37,6 +37,7 @@ module Candidates
         params.require(:candidates_registrations_contact_information).permit \
           :full_name,
           :email,
+          :date_of_birth,
           :building,
           :street,
           :town_or_city,

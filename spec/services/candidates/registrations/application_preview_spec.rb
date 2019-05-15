@@ -9,6 +9,7 @@ describe Candidates::Registrations::ApplicationPreview do
     double Candidates::Registrations::ContactInformation,
       full_name: 'Testy McTest',
       email: 'test@example.com',
+      date_of_birth: Date.parse('2000-01-01'),
       building: "Test building",
       street: "Test street",
       town_or_city: "Test town",
@@ -76,6 +77,12 @@ describe Candidates::Registrations::ApplicationPreview do
   context '#email_address' do
     it 'returns the correct value' do
       expect(subject.email_address).to eq "test@example.com"
+    end
+  end
+
+  context '#date_of_birth' do
+    it 'returns the correct value' do
+      expect(subject.date_of_birth).to eq '01/01/2000'
     end
   end
 

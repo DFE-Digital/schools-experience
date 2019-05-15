@@ -7,16 +7,17 @@ FactoryBot.define do
 
       candidates_registrations_contact_information do
         {
-          "full_name"    => 'Testy McTest',
-          "email"        => 'test@example.com',
-          "building"     => "Test building",
-          "street"       => "Test street",
-          "town_or_city" => "Test town",
-          "county"       => "Testshire",
-          "postcode"     => "TE57 1NG",
-          "phone"        => "01234567890",
-          "created_at"   => current_time,
-          "updated_at"   => current_time
+          "full_name"     => 'Testy McTest',
+          "email"         => 'test@example.com',
+          "date_of_birth" => "2000-01-01",
+          "building"      => "Test building",
+          "street"        => "Test street",
+          "town_or_city"  => "Test town",
+          "county"        => "Testshire",
+          "postcode"      => "TE57 1NG",
+          "phone"         => "01234567890",
+          "created_at"    => current_time,
+          "updated_at"    => current_time
         }
       end
 

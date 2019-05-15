@@ -13,6 +13,7 @@ Feature: Contact Information
         Then I should see a form with the following fields:
             | Label               | Type  |
             | Full name           | text  |
+            | Date of birth       | date  |
             | UK telephone number | tel   |
             | Email address       | email |
             | Building and street | text  |
@@ -24,14 +25,16 @@ Feature: Contact Information
       Given I am on the 'Enter your contact details' page for my school of choice
         And I have entered the following details into the form:
             | Full name           | Philip Gilbert         |
-            | UK telephone number | 01234567890            |
+            | UK telephone number | 07765 432 100          |
+            | Day                 | 01                     |
+            | Month               | 01                     |
+            | Year                | 2000                   |
             | Email address       | phil.gilbert@gmail.com |
-            | Building and street | 221B           |
-            | Street              | Baker Street   |
-            | Town or city        | London         |
-            | County              | Greater London |
-            | Postcode            | NW1 6XE        |
-            | UK telephone number | 07765 432 100  |
+            | Building and street | 221B                   |
+            | Street              | Baker Street           |
+            | Town or city        | London                 |
+            | County              | Greater London         |
+            | Postcode            | NW1 6XE                |
 
         When I submit the form
         Then I should be on the 'candidate subjects' page for my school of choice

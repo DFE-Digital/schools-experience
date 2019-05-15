@@ -70,6 +70,9 @@ feature 'Candidate Registrations', type: :feature do
     # Submit contact information form successfully
     fill_in 'Full name', with: 'testy mctest'
     fill_in 'Email address', with: 'test@example.com'
+    fill_in 'Day', with: '01'
+    fill_in 'Month', with: '01'
+    fill_in 'Year', with: '2000'
     fill_in 'Building', with: 'Test house'
     fill_in 'Street', with: 'Test street'
     fill_in 'Town or city', with: 'Test Town'
@@ -113,6 +116,7 @@ feature 'Candidate Registrations', type: :feature do
       'Address Test house, Test street, Test Town, Testshire, TE57 1NG'
     expect(page).to have_text 'UK telephone number 01234567890'
     expect(page).to have_text 'Email address test@example.com'
+    expect(page).to have_text 'Date of birth 01/01/2000'
     expect(page).to have_text "School or college #{school.name}"
     expect(page).to have_text 'Experience availability Only free from Epiphany to Whitsunday'
     expect(page).to have_text "Experience outcome I enjoy teaching"

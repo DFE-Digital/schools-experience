@@ -73,6 +73,8 @@ en:
               blank: "Enter your building"
             county:
               blank: "Enter your county"
+            date_of_birth:
+              inclusion: "Enter a valid date of birth. You must be at least 18 years old"
             email:
               blank: "Enter your email address"
               invalid: "Enter a valid email address"

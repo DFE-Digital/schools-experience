@@ -14,6 +14,9 @@ end
 Given("I have completed the contact information form") do
   visit path_for 'enter your contact details', school: @school
   fill_in 'Full name', with: 'testy mctest'
+  fill_in 'Day', with: '01'
+  fill_in 'Month', with: '01'
+  fill_in 'Year', with: '2000'
   fill_in 'Email address', with: 'test@example.com'
   fill_in 'Building', with: 'Test house'
   fill_in 'Street', with: 'Test street'

@@ -18,6 +18,13 @@
         ) %>
 
       <%= summary_row \
+        'Date of birth',
+        @application_preview.date_of_birth,
+        edit_candidates_school_registrations_contact_information_path(
+          anchor: 'candidates_registrations_contact_information_date_of_birth_container'
+        ) %>
+
+      <%= summary_row \
         'Address',
         @application_preview.full_address,
         edit_candidates_school_registrations_contact_information_path(
