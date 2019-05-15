@@ -1,0 +1,145 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    "All bookings" => schools_bookings_path,
+    "Booking #{@booking.id}" => nil
+  }
+%>
+
+<h1>Booking by <%= @booking.candidate.full_name %></h1>
+
+<div class="booking">
+  <section id="booking-details">
+    <h2>Booking details</h2>
+
+    <dl class="placement-details govuk-summary-list">
+      <div class="date-requested govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Date
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.date %>
+        </dd>
+      </div>
+
+      <div class="date-received-on govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Request received
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.received_on %>
+        </dd>
+      </div>
+
+      <div class="dbs-certificate govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          DBS certificate
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.dbs %>
+        </dd>
+      </div>
+
+      <div class="status govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span class="govuk-tag"><%= @booking.status %></span>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section id="candidate-details">
+    <h2>Candidate details</h2>
+
+    <dl class="candidate-details govuk-summary-list">
+      <div class="objectives govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          What they want out of school experience
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.objectives %>
+        </dd>
+      </div>
+
+      <div class="degree-stage govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Degree stage
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.degree_stage %>
+        </dd>
+      </div>
+
+      <div class="degree-subject govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Degree subject
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.degree_subject %>
+        </dd>
+      </div>
+
+      <div class="teaching-tage govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Teaching stage
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.teaching_stage %>
+        </dd>
+      </div>
+
+      <div class="teaching-tage govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Preferred subjects
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ol class="govuk-list govuk-list--number">
+            <%- @booking.teaching_subjects.each do |subject| -%>
+            <li><%= subject %></li>
+            <%- end -%>
+          </ol>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section id="personal-details">
+    <h2>Personal details</h2>
+
+    <dl class="placement-details govuk-summary-list">
+      <div class="address govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.candidate.address %>
+        </dd>
+      </div>
+
+      <div class="phone-number govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          UK telephone number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.candidate.phone %>
+        </dd>
+      </div>
+
+      <div class="email-address govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Email address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @booking.candidate.email %>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <div>
+    <%= link_to 'Cancel', '#', class: 'govuk-button govuk-button--secondary' %>
+  </div>
+</div>

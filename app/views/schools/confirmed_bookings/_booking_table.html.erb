@@ -1,0 +1,30 @@
+<table id="bookings" class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header">Name</th>
+      <th class="govuk-table__header">Subject</th>
+      <th class="govuk-table__header">Date</th>
+      <th class="govuk-table__header"/>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <%- @bookings.each do |booking| -%>
+    <tr class="booking govuk-table__row">
+      <td class="name govuk-table__cell">
+        <%= booking.candidate.full_name %>
+      </td>
+      <td class="subject govuk-table__cell">
+        <%= booking.teaching_subjects.first %>
+      </td>
+      <td class="date govuk-table__cell">
+        <%= booking.date %>
+      </td>
+      <td class="govuk-table__cell">
+        <%= link_to "Open", schools_booking_path('abc123') %>
+        <%= link_to 'Update', '#' %>
+        <%= link_to 'Cancel', '#' %>
+      </td>
+    </tr>
+    <%- end -%>
+  </tbody>
+</table>

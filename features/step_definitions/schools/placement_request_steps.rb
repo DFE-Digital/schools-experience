@@ -6,7 +6,7 @@ Given("there are some placement requests") do
   # currently hardcoded in the controller
 end
 
-Given("there is at least once placement request") do
+Given("there is at least one placement request") do
   # currently hardcoded in the controller
 end
 

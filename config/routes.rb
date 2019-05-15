@@ -32,6 +32,12 @@ Rails.application.routes.draw do
 
       resources :placement_dates
 
+      resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
+        collection do
+          resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
+        end
+      end
+
       namespace :errors do
         resource :not_registered, controller: :not_registered, only: :show
         resource :no_school, controller: :no_school, only: :show
