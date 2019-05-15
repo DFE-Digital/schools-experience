@@ -60,7 +60,7 @@
       <div class="govuk-form-group">
         <%= f.collection_select \
           :subject_first_choice,
-          subject_preference.available_subject_choices,
+          subject_preference.available_subject_choices.sort,
           :to_s,
           :to_s,
           { prompt: 'Select' },
