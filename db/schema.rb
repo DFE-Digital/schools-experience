@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_16_074703) do
+ActiveRecord::Schema.define(version: 2019_05_16_140550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,7 +62,9 @@ ActiveRecord::Schema.define(version: 2019_05_16_074703) do
     t.datetime "updated_at", null: false
     t.text "availability"
     t.integer "bookings_placement_date_id"
+    t.integer "bookings_school_id"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
+    t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
   end
 
   create_table "bookings_profiles", force: :cascade do |t|
@@ -275,6 +277,7 @@ ActiveRecord::Schema.define(version: 2019_05_16_074703) do
   add_foreign_key "bookings_bookings", "bookings_subjects"
   add_foreign_key "bookings_placement_dates", "bookings_schools"
   add_foreign_key "bookings_placement_requests", "bookings_placement_dates"
+  add_foreign_key "bookings_placement_requests", "bookings_schools"
   add_foreign_key "bookings_profiles", "bookings_schools", column: "school_id"
   add_foreign_key "bookings_schools", "bookings_school_types"
   add_foreign_key "bookings_schools_phases", "bookings_phases"
