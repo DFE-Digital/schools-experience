@@ -258,6 +258,7 @@ GEM
     rack-rewrite (1.5.1)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    rack-timeout (0.5.1)
     rails (5.2.3)
       actioncable (= 5.2.3)
       actionmailer (= 5.2.3)
@@ -444,6 +445,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.12)
   rack-rewrite
+  rack-timeout
   rails (~> 5.2.3)
   rails-controller-testing
   redis (~> 4.1)
