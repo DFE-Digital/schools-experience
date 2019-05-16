@@ -20,7 +20,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "phone" => "01234567890"
   }.freeze
 
-  let(:expected_attributes) do
+  let!(:expected_attributes) do
     {
       "has_dbs_check" => true,
       "availability" => "Every third Tuesday",
@@ -33,6 +33,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
       "subject_first_choice" => "Maths",
       "subject_second_choice" => "Physics",
       "urn" => urn,
+      "bookings_school_id" => school.id
     }
   end
 
