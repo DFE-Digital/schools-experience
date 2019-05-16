@@ -15,6 +15,11 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:has_dbs_check).of_type(:boolean).with_options null: false }
   it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: true }
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
+  it { is_expected.to have_secure_token }
+
+  it { is_expected.to have_one(:cancellation).dependent(:destroy) }
+
+  it { is_expected.to respond_to :sent_at }
 
   it_behaves_like 'a background check'
 
@@ -269,6 +274,24 @@ describe Bookings::PlacementRequest, type: :model do
       it 'adds an error to objectives' do
         expect(placement_preference.errors[:objectives]).to eq \
           ["Use 150 words or fewer"]
+      end
+    end
+  end
+
+  context '#closed?' do
+    context 'when cancelled' do
+      subject { FactoryBot.create :placement_request, :cancelled }
+
+      it 'returns true' do
+        expect(subject).to be_closed
+      end
+    end
+
+    context 'when not cancelled' do
+      subject { FactoryBot.create :placement_request }
+
+      it 'returns false' do
+        expect(subject).not_to be_closed
       end
     end
   end
