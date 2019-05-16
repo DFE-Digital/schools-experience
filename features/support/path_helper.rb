@@ -1,4 +1,4 @@
-def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil)
+def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil, placement_request: nil)
   if school && school.respond_to?(:to_param)
     school = school.to_param
   end
@@ -13,6 +13,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil)
     "candidate subjects" => [:new_candidates_school_registrations_subject_preference_path, school],
     "background checks" => [:new_candidates_school_registrations_background_check_path, school],
     "check your answers" => [:candidates_school_registrations_application_preview_path, school],
+    "cancel placement request" => [:new_candidates_placement_request_cancellation_path, placement_request&.token],
 
     #school paths
     "schools" => [:schools_root_path],
