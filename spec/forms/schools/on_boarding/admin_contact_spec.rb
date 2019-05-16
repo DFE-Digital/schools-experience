@@ -35,6 +35,16 @@ describe Schools::OnBoarding::AdminContact, type: :model do
           expect(subject.errors[:phone]).to be_empty
         end
       end
+
+      context 'correct format with extension' do
+        let :phone do
+          '01234567890 ext 123'
+        end
+
+        it 'is valid' do
+          expect(subject.errors[:phone]).to be_empty
+        end
+      end
     end
 
     context 'email address format' do
