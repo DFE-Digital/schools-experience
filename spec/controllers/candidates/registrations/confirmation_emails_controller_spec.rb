@@ -2,25 +2,17 @@ require 'rails_helper'
 
 describe Candidates::Registrations::ConfirmationEmailsController, type: :request do
   include_context 'Stubbed candidates school'
+  include_context 'Stubbed current_registration'
 
   let! :registration_session do
     FactoryBot.build :registration_session
   end
 
-  let! :uuid do
-    'some-uuid'
-  end
-
-  let! :registration_store do
-    double Candidates::Registrations::RegistrationStore, store!: 1
+  let :registration_store do
+    Candidates::Registrations::RegistrationStore.instance
   end
 
   before do
-    allow(SecureRandom).to receive(:urlsafe_base64) { uuid }
-    allow(Candidates::Registrations::RegistrationStore).to \
-      receive(:instance) { registration_store }
-    allow(Candidates::Registrations::RegistrationSession).to \
-      receive(:new) { registration_session }
     allow(Candidates::Registrations::SendEmailConfirmationJob).to \
       receive(:perform_later)
   end
@@ -63,13 +55,16 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
         end
 
         it "doesn't store the session" do
-          expect(registration_store).not_to have_received(:store!).with \
-            registration_session
+          expect {
+            registration_store.retrieve! registration_session.uuid
+          }.to raise_error \
+            Candidates::Registrations::RegistrationStore::SessionNotFound
         end
 
         it "doesn't enqueues the confirmation email job" do
           expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
-            have_received(:perform_later).with uuid, 'www.example.com'
+            have_received(:perform_later).with \
+              registration_session.uuid, 'www.example.com'
         end
 
         it "redirects to the application preview path" do
@@ -89,13 +84,14 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
         end
 
         it 'stores the session' do
-          expect(registration_store).to have_received(:store!).with \
-            registration_session
+          expect(registration_store.retrieve!(registration_session.uuid)).to \
+            eq registration_session
         end
 
         it 'enqueues the confirmation email job' do
           expect(Candidates::Registrations::SendEmailConfirmationJob).to \
-            have_received(:perform_later).with uuid, 'www.example.com'
+            have_received(:perform_later).with \
+              registration_session.uuid, 'www.example.com'
         end
 
         it 'redirects to the check your email page' do
