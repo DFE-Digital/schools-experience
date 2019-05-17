@@ -23,6 +23,12 @@ Feature: Viewing upcoming bookings
         When I am on the 'upcoming bookings' page
         Then I should see all the bookings listed
 
+    Scenario: Only viewing current school's bookings
+        Given there are some bookings
+        And there are some bookings belonging to other schools
+        When I am on the 'upcoming bookings' page
+        Then I should only see bookings belonging to my school
+
     Scenario: Non-upcoming dates shouldn't be listed
         Given there are some bookings
         And there are some non-upcoming bookings

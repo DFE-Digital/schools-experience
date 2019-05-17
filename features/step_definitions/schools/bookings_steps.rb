@@ -18,7 +18,6 @@ end
 
 And("there is/are {int} booking/bookings") do |count|
   @scheduled_booking_date ||= 1.week.from_now.strftime("%d %B %Y")
-  @school = FactoryBot.create(:bookings_school)
   @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
   @bookings = FactoryBot.create_list(
     :bookings_booking,
@@ -28,6 +27,24 @@ And("there is/are {int} booking/bookings") do |count|
     date: @scheduled_booking_date
   )
   @booking_id = @bookings.first.id
+end
+
+Given("there are some bookings belonging to other schools") do
+  @other_school_bookings = FactoryBot.create_list(:bookings_booking, 2, date: 1.week.from_now)
+  @other_school_bookings.each do |b|
+    expect(b.bookings_school).not_to eql(@school)
+  end
+end
+
+Then("I should only see bookings belonging to my school") do
+  within('table#bookings tbody') do
+    @bookings.map(&:id).each do |booking_id|
+      expect(page).to have_css(".booking-#{booking_id}")
+    end
+    @other_school_bookings.map(&:id).each do |booking_id|
+      expect(page).not_to have_css(".booking-#{booking_id}")
+    end
+  end
 end
 
 Then("I should see all the bookings listed") do
@@ -103,16 +120,16 @@ end
 
 Then("the upcoming bookings should be listed") do
   within('table#bookings tbody') do
-    @bookings.map(&:id).each do |bid|
-      expect(page).to have_css(".booking-#{bid}")
+    @bookings.map(&:id).each do |booking_id|
+      expect(page).to have_css(".booking-#{booking_id}")
     end
   end
 end
 
 Then("the non-upcoming bookings shouldn't") do
   within('table#bookings tbody') do
-    @non_upcoming_bookings.map(&:id).each do |bid|
-      expect(page).not_to have_css(".booking-#{bid}")
+    @non_upcoming_bookings.map(&:id).each do |booking_id|
+      expect(page).not_to have_css(".booking-#{booking_id}")
     end
   end
 end

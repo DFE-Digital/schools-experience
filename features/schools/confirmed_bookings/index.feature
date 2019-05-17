@@ -31,6 +31,12 @@ Feature: Viewing all bookings
             | Subject | Biology          |
         And the booking date should be correct
 
+    Scenario: Only viewing current school's bookings
+        Given there are some bookings
+        And there are some bookings belonging to other schools
+        When I am on the 'bookings' page
+        Then I should only see bookings belonging to my school
+
     Scenario: Open request buttons
         Given there are some bookings
         When I am on the 'bookings' page

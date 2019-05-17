@@ -1,14 +1,17 @@
 module Schools
   class ConfirmedBookingsController < Schools::BaseController
     def index
-      # FIXME limit to user's current school
-      @bookings = Bookings::Booking
+      @bookings = current_school
+        .bookings
         .eager_load(:bookings_subject)
         .all
     end
 
     def show
-      @booking = Bookings::Booking.find(params[:id])
+      @booking = current_school
+        .bookings
+        .eager_load(:bookings_subject)
+        .find(params[:id])
     end
   end
 end
