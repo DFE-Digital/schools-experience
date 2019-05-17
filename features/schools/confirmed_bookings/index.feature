@@ -5,7 +5,6 @@ Feature: Viewing all bookings
 
     Background:
         Given I am logged in as a DfE user
-        And the scheduled booking date is '02 October 2019'
 
     Scenario: Page title
         Given I am on the 'bookings' page
@@ -30,7 +29,7 @@ Feature: Viewing all bookings
 			| Heading | Value            |
             | Name    | Matthew Richards |
             | Subject | Biology          |
-            | Date    | 02 October 2019  |
+        And the booking date should be correct
 
     Scenario: Open request buttons
         Given there are some bookings

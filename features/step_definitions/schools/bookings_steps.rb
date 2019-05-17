@@ -17,7 +17,7 @@ Given("I am viewing my chosen booking") do
 end
 
 And("there is/are {int} booking/bookings") do |count|
-  @scheduled_booking_date ||= 3.weeks.from_now.to_formatted_s(:govuk)
+  @scheduled_booking_date ||= 1.week.from_now.strftime("%d %B %Y")
   @school = FactoryBot.create(:bookings_school)
   @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
   @bookings = FactoryBot.create_list(
@@ -46,6 +46,14 @@ Then("the bookings table should have the following values:") do |table|
       within(page.find('tbody').all('tr').first) do
         expect(page).to have_css('td', text: /#{row['Value']}/i)
       end
+    end
+  end
+end
+
+Then("the booking date should be correct") do
+  within('table#bookings') do
+    within(page.find('tbody').all('tr').first) do
+      expect(page).to have_css('td', text: @scheduled_booking_date)
     end
   end
 end
@@ -85,6 +93,26 @@ Then("I should see the following contact details for the first booking:") do |ta
         expect(page).to have_css('dt', text: row['Heading'])
         expect(page).to have_css('dd', text: /#{row['Value']}/i)
       end
+    end
+  end
+end
+
+Given("there are some non-upcoming bookings") do
+  @non_upcoming_bookings = FactoryBot.create_list(:bookings_booking, 3, date: 1.month.from_now)
+end
+
+Then("the upcoming bookings should be listed") do
+  within('table#bookings tbody') do
+    @bookings.map(&:id).each do |bid|
+      expect(page).to have_css(".booking-#{bid}")
+    end
+  end
+end
+
+Then("the non-upcoming bookings shouldn't") do
+  within('table#bookings tbody') do
+    @non_upcoming_bookings.map(&:id).each do |bid|
+      expect(page).not_to have_css(".booking-#{bid}")
     end
   end
 end

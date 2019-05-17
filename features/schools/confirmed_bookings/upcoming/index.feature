@@ -5,7 +5,6 @@ Feature: Viewing upcoming bookings
 
     Background:
         Given I am logged in as a DfE user
-        And the scheduled booking date is '02 October 2019'
 
     Scenario: Page title
         Given I am on the 'upcoming bookings' page
@@ -24,6 +23,13 @@ Feature: Viewing upcoming bookings
         When I am on the 'upcoming bookings' page
         Then I should see all the bookings listed
 
+    Scenario: Non-upcoming dates shouldn't be listed
+        Given there are some bookings
+        And there are some non-upcoming bookings
+        When I am on the 'upcoming bookings' page
+        Then the upcoming bookings should be listed
+        And the non-upcoming bookings shouldn't
+
     Scenario: Table headings
         Given there are some bookings
         When I am on the 'upcoming bookings' page
@@ -31,7 +37,7 @@ Feature: Viewing upcoming bookings
 			| Heading | Value            |
             | Name    | Matthew Richards |
             | Subject | Biology          |
-            | Date    | 02 October 2019  |
+        And the booking date should be correct
 
     Scenario: Open request buttons
         Given there are some bookings

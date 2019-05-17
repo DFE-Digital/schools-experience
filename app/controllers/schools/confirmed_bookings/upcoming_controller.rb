@@ -4,8 +4,7 @@ module Schools
       def index
         @bookings = Bookings::Booking
           .eager_load(:bookings_subject)
-          .all
-          # FIXME .upcoming
+          .upcoming
       end
     end
   end

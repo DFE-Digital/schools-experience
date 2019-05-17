@@ -9,7 +9,7 @@
   </thead>
   <tbody class="govuk-table__body">
     <%- @bookings.each do |booking| -%>
-    <tr class="booking govuk-table__row">
+    <tr class="booking govuk-table__row <%= "booking-#{booking.id}" %>">
       <td class="name govuk-table__cell">
         <%= booking.candidate.full_name %>
       </td>
