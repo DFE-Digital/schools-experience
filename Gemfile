@@ -63,6 +63,7 @@ gem 'rack-timeout'
 
 gem 'openid_connect'
 gem 'uk_postcode'
+gem 'application_insights'
 gem 'faraday'
 
 group :development, :test do
