@@ -25,7 +25,8 @@ describe Bookings::PlacementRequest, type: :model do
           "candidates_registrations_background_check" => {},
           "candidates_registrations_contact_information" => {},
           "candidates_registrations_placement_preference" => {},
-          "candidates_registrations_subject_preference" => {}
+          "candidates_registrations_subject_preference" => {},
+          "urn" => 123456
       end
 
       it 'raises a validation error' do
