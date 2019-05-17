@@ -18,6 +18,9 @@ module Candidates
           action: 'ResendConfirmationEmailsController#create',
           uuid: current_registration.uuid
         })
+
+        Raven.capture_exception(e)
+
         render 'shared/session_expired'
       end
     end
