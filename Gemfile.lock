@@ -213,7 +213,7 @@ GEM
     msgpack (1.2.10)
     multi_json (1.13.1)
     multi_test (0.1.2)
-    multipart-post (2.0.0)
+    multipart-post (2.1.0)
     nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
@@ -434,6 +434,7 @@ DEPENDENCIES
   dotenv-rails
   exception_notification
   factory_bot_rails
+  faraday
   font-awesome-rails
   foreman
   geocoder
