@@ -28,6 +28,8 @@ module Bookings
       :teaching_stage,
       to: :bookings_placement_request
 
+    scope :upcoming, -> { where(arel_table[:date].between(Time.now..2.weeks.from_now)) }
+
     # FIXME this will eventually be handled 'higher up', probably by
     # a helper or directly in the view
     def candidate
