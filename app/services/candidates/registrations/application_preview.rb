@@ -17,8 +17,6 @@ module Candidates
         to: :@contact_information
 
       delegate \
-        :school,
-        :school_name,
         :degree_stage,
         :degree_subject,
         :teaching_stage,
@@ -28,11 +26,18 @@ module Candidates
 
       delegate :has_dbs_check, to: :@background_check
 
+      delegate :school, to: :@registration_session
+
       def initialize(registration_session)
+        @registration_session = registration_session
         @contact_information = registration_session.contact_information
         @placement_preference = registration_session.placement_preference
         @subject_preference = registration_session.subject_preference
         @background_check = registration_session.background_check
+      end
+
+      def school_name
+        school.name
       end
 
       def full_address
@@ -58,7 +63,7 @@ module Candidates
       end
 
       def placement_date
-        placement_preference.placement_date
+        placement_preference.placement_date.to_s
       end
 
       def placement_availability

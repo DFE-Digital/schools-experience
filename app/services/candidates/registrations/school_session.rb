@@ -5,6 +5,7 @@ module Candidates
     class SchoolSession
       def initialize(urn, session)
         @school_session = session["schools/#{urn}/registrations"] ||= {}
+        @school_session.merge! 'urn' => urn
       end
 
       def current_registration

@@ -56,7 +56,8 @@ FactoryBot.define do
 
     initialize_with do
       new \
-        "uuid" => uuid,
+        "uuid"                                          => uuid,
+        "urn"                                           => urn,
         "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
         "candidates_registrations_background_check"     => candidates_registrations_background_check,
         "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
@@ -66,7 +67,8 @@ FactoryBot.define do
     trait :with_placement_date do
       initialize_with do
         new \
-          "uuid" => uuid,
+          "uuid"                                          => uuid,
+          "urn"                                           => urn,
           "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
           "candidates_registrations_background_check"     => candidates_registrations_background_check,
           "candidates_registrations_subject_preference"   => candidates_registrations_subject_preference,
