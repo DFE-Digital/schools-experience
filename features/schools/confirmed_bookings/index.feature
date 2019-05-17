@@ -5,13 +5,14 @@ Feature: Viewing all bookings
 
     Background:
         Given I am logged in as a DfE user
+        And the scheduled booking date is '02 October 2019'
 
     Scenario: Page title
         Given I am on the 'bookings' page
         Then the page title should be 'All bookings'
 
     Scenario: Breadcrumbs
-        Given I am on the 'upcoming bookings' page
+        Given I am on the 'bookings' page
         Then I should see the following breadcrumbs:
             | Text         | Link     |
             | Some school  | /schools |

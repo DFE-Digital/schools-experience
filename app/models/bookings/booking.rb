@@ -14,16 +14,32 @@ module Bookings
 
     validates :date, presence: true
     validates :bookings_placement_request, presence: true
+    validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true
     validates :bookings_school, presence: true
 
     delegate \
-      :objectives,
+      :availability,
       :degree_stage,
       :degree_stage_explaination,
       :degree_subject,
       :has_dbs_check,
-      :availability,
+      :objectives,
+      :teaching_stage,
       to: :bookings_placement_request
+
+    # FIXME this will eventually be handled 'higher up', probably by
+    # a helper or directly in the view
+    def candidate
+      Bookings::Gitis::CRM.new('abc123').find(1)
+    end
+
+    def received_on
+      bookings_placement_request.created_at.to_date
+    end
+
+    def status
+      "New"
+    end
   end
 end

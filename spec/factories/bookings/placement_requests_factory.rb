@@ -2,15 +2,13 @@ FactoryBot.define do
   factory :bookings_placement_request, class: 'Bookings::PlacementRequest' do
     objectives { "I want to be a teacher" }
     degree_stage { "Final year" }
-    degree_subject { "Biology" }
+    degree_subject { "Bioscience" }
     teaching_stage { "It’s just an idea" }
-    subject_first_choice { "Mathematics" }
-    subject_second_choice { "English" }
-    has_dbs_check { false }
+    subject_first_choice { "Biology" }
+    subject_second_choice { "Biology" }
+    has_dbs_check { true }
     availability { "Every second Thursday" }
-
-    before(:create) do |bpr|
-      bpr.urn = create(:bookings_school).urn
-    end
+    association :school, factory: :bookings_school
+    urn { 123456 }
   end
 end

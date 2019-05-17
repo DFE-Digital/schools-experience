@@ -1,10 +1,11 @@
-Feature: Viewing all bookings
-    To give me an oversight of booked placements
+Feature: Viewing upcoming bookings
+    To give me an oversight of upcoming booked placements
     As a school administrator
     I want to be able see a complete list of bookings
 
     Background:
         Given I am logged in as a DfE user
+        And the scheduled booking date is '02 October 2019'
 
     Scenario: Page title
         Given I am on the 'upcoming bookings' page

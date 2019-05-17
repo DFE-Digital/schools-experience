@@ -5,18 +5,20 @@ Feature: Viewing a booking
 
     Background:
         Given I am logged in as a DfE user
+        And the scheduled booking date is '02 October 2019'
 
     Scenario: Breadcrumbs
-        Given I am on a 'booking' page
+        Given there is at least one booking
+        When I am viewing my chosen booking
         Then I should see the following breadcrumbs:
             | Text           | Link              |
             | Some school    | /schools          |
             | All bookings   | /schools/bookings |
-            | Booking abc123 | None              |
+            | Booking        | None              |
 
     Scenario: Personal details
         Given there is at least one booking
-        When I am on a 'booking' page
+        When I am viewing my chosen booking
         Then I should see a 'Personal details' section with the following values:
             | Heading             | Value                                                                |
             | Address             | First Line, Second Line, Third Line, Manchester, Manchester, MA1 1AM |
@@ -25,7 +27,7 @@ Feature: Viewing a booking
 
     Scenario: Request details
         Given there is at least one booking
-        When I am on a 'booking' page
+        When I am viewing my chosen booking
         Then I should see a 'Booking details' section with the following values:
             | Heading          | Value            |
             | Date             | 02 October 2019  |
@@ -35,11 +37,11 @@ Feature: Viewing a booking
 
     Scenario: Candidate details
         Given there is at least one booking
-        When I am on a 'booking' page
+        When I am viewing my chosen booking
         Then I should see a 'Candidate details' section with the following values:
-            | Heading                                 | Value                                                                    |
-            | What they want out of school experience | To learn different teaching styles and what life is like in a classroom. |
-            | Degree stage                            | Final year                                                               |
-            | Degree subject                          | Maths                                                                    |
-            | Teaching stage                          | I've applied for teacher training                                        |
-            | Preferred subjects                      | Maths, Physics                                                           |
+            | Heading                                 | Value                             |
+            | What they want out of school experience | It’s just an idea                 |
+            | Degree stage                            | Final year                        |
+            | Degree subject                          | Bioscience                        |
+            | Teaching stage                          | I want to be a teacher |
+            | Preferred subjects                      | Biology                           |

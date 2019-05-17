@@ -1,14 +1,38 @@
+Given("the scheduled booking date is {string}") do |string|
+  @scheduled_booking_date = string
+end
+
 Given("there are some bookings") do
-  # currently hardcoded in the controller
+  step "there are 3 bookings"
 end
 
 Given("there is at least one booking") do
-  # currently hardcoded in the controller
+  step "there is 1 booking"
+end
+
+Given("I am viewing my chosen booking") do
+  path = path_for('booking', booking_id: @booking_id)
+  visit(path)
+  expect(page.current_path).to eql(path)
+end
+
+And("there is/are {int} booking/bookings") do |count|
+  @scheduled_booking_date ||= 3.weeks.from_now.to_formatted_s(:govuk)
+  @school = FactoryBot.create(:bookings_school)
+  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
+  @bookings = FactoryBot.create_list(
+    :bookings_booking,
+    count,
+    :with_existing_subject,
+    bookings_school: @school,
+    date: @scheduled_booking_date
+  )
+  @booking_id = @bookings.first.id
 end
 
 Then("I should see all the bookings listed") do
   within("#bookings") do
-    expect(page).to have_css('.booking', count: 5)
+    expect(page).to have_css('.booking', count: 3)
   end
 end
 
