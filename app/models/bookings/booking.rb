@@ -1,16 +1,13 @@
 module Bookings
   class Booking < ApplicationRecord
     belongs_to :bookings_placement_request,
-      class_name: 'Bookings::PlacementRequest',
-      dependent: :destroy
+      class_name: 'Bookings::PlacementRequest'
 
     belongs_to :bookings_subject,
-      class_name: 'Bookings::Subject',
-      dependent: :destroy
+      class_name: 'Bookings::Subject'
 
     belongs_to :bookings_school,
-      class_name: 'Bookings::School',
-      dependent: :destroy
+      class_name: 'Bookings::School'
 
     validates :date, presence: true
     validates :bookings_placement_request, presence: true
