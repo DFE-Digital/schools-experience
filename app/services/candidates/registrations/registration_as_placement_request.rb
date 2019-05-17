@@ -17,9 +17,9 @@ module Candidates
       end
 
       def attributes
-        NON_PII_MODELS.inject({}) do |kept_attrs, model_name|
+        NON_PII_MODELS.inject({}) { |kept_attrs, model_name|
           kept_attrs.merge attributes_for(model_name)
-        end
+        }.merge("bookings_school_id" => @registration_session.school.id)
       end
 
     private

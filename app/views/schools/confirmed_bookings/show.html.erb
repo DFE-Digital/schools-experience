@@ -18,7 +18,7 @@
           Date
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @booking.date %>
+          <%= @booking.date.to_formatted_s(:govuk) %>
         </dd>
       </div>
 
@@ -27,7 +27,7 @@
           Request received
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @booking.received_on %>
+          <%= @booking.received_on.to_formatted_s(:govuk) %>
         </dd>
       </div>
 
@@ -36,7 +36,7 @@
           DBS certificate
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @booking.dbs %>
+          <%= format_boolean(@booking.has_dbs_check) %>
         </dd>
       </div>
 
@@ -97,9 +97,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ol class="govuk-list govuk-list--number">
-            <%- @booking.teaching_subjects.each do |subject| -%>
-            <li><%= subject %></li>
-            <%- end -%>
+            <%= @booking.bookings_subject.name -%>
           </ol>
         </dd>
       </div>

@@ -11,7 +11,7 @@ Feature: Viewing all bookings
         Then the page title should be 'All bookings'
 
     Scenario: Breadcrumbs
-        Given I am on the 'upcoming bookings' page
+        Given I am on the 'bookings' page
         Then I should see the following breadcrumbs:
             | Text         | Link     |
             | Some school  | /schools |
@@ -29,7 +29,13 @@ Feature: Viewing all bookings
 			| Heading | Value            |
             | Name    | Matthew Richards |
             | Subject | Biology          |
-            | Date    | 02 October 2019  |
+        And the booking date should be correct
+
+    Scenario: Only viewing current school's bookings
+        Given there are some bookings
+        And there are some bookings belonging to other schools
+        When I am on the 'bookings' page
+        Then I should only see bookings belonging to my school
 
     Scenario: Open request buttons
         Given there are some bookings

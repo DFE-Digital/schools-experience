@@ -131,6 +131,15 @@ describe Bookings::School, type: :model do
     end
 
     specify do
+      is_expected.to(
+        have_many(:bookings)
+          .with_foreign_key(:bookings_school_id)
+          .class_name('Bookings::Booking')
+          .dependent(:destroy)
+      )
+    end
+
+    specify do
       is_expected.to have_one(:profile).class_name("Bookings::Profile")
     end
   end
