@@ -1,9 +1,10 @@
-def path_for(descriptor, school: nil, placement_date_id: nil)
+def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil)
   if school && school.respond_to?(:to_param)
     school = school.to_param
   end
 
   mappings = {
+    # candidate paths
     "landing" => [:root_path],
     "splash" => [:candidates_splash_path],
     "find a school" => [:new_candidates_school_search_path],
@@ -12,8 +13,13 @@ def path_for(descriptor, school: nil, placement_date_id: nil)
     "candidate subjects" => [:new_candidates_school_registrations_subject_preference_path, school],
     "background checks" => [:new_candidates_school_registrations_background_check_path, school],
     "check your answers" => [:candidates_school_registrations_application_preview_path, school],
+
+    #school paths
     "schools" => [:schools_root_path],
     "schools dashboard" => [:schools_dashboard_path],
+    "bookings" => [:schools_bookings_path],
+    "upcoming bookings" => [:schools_upcoming_bookings_path],
+    "booking" => [:schools_booking_path, booking_id],
     "placement requests" => [:schools_placement_requests_path],
     "upcoming requests" => [:schools_upcoming_requests_path],
     "placement request" => [:schools_placement_request_path, 'abc123'],

@@ -1,0 +1,17 @@
+<%- self.page_title = "All bookings" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'All bookings' => nil
+  }
+%>
+
+<h2 class="govuk-heading-m">All bookings</h2>
+
+<%= render partial: 'schools/confirmed_bookings/booking_table', locals: { bookings: @bookings } %>
+
+<div>
+  <%= link_to "Upcoming bookings", schools_upcoming_bookings_path, class: 'govuk-button govuk-button--secondary' %>
+</div>
+

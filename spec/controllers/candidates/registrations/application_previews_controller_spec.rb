@@ -2,27 +2,16 @@ require 'rails_helper'
 
 describe Candidates::Registrations::ApplicationPreviewsController, type: :request do
   include_context 'Stubbed candidates school'
-
-  let! :uncompleted_registration_session do
-    Candidates::Registrations::RegistrationSession.new({})
-  end
-
-  let! :completed_registration_session do
-    FactoryBot.build :registration_session
-  end
+  include_context 'Stubbed current_registration'
 
   context '#show' do
     before do
-      allow(Candidates::Registrations::RegistrationSession).to receive :new do
-        registration_session
-      end
-
       get '/candidates/schools/urn/registrations/application_preview'
     end
 
     context 'candidate skipped ahead' do
       let :registration_session do
-        uncompleted_registration_session
+        Candidates::Registrations::RegistrationSession.new({})
       end
 
       it 'redirects to the first missing step' do
@@ -33,7 +22,7 @@ describe Candidates::Registrations::ApplicationPreviewsController, type: :reques
 
     context 'candidate has not skipped ahead' do
       let :registration_session do
-        completed_registration_session
+        FactoryBot.build :registration_session
       end
 
       it 'renders the show template' do

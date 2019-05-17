@@ -8,10 +8,10 @@ module Candidates
           validates :urn, presence: true
           validates :bookings_placement_date_id,
             presence: true,
-            if: -> { urn.present? && school_offers_fixed_dates? }
+            if: -> { school.present? && school_offers_fixed_dates? }
           validates :availability,
             presence: true,
-            unless: -> { urn.present? && school_offers_fixed_dates? }
+            unless: -> { school.present? && school_offers_fixed_dates? }
           validates :availability, number_of_words: { less_than: 150 }, if: -> { availability.present? }
           validates :objectives, presence: true
           validates :objectives, number_of_words: { less_than: 150 }, if: -> { objectives.present? }
