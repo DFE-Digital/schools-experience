@@ -1,6 +1,6 @@
 unless Rails.env.test?
   Rails.application.configure do
-    if (app_insights_key = ENV["APP_INSIGHTS_INSTRUMENTATION_KEY"]) && app_insights_key.present?
+    if (app_insights_key = ENV["APPINSIGHTS_INSTRUMENTATIONKEY"]) && app_insights_key.present?
       # the optional extra params are buffer_size (= 500) and send_interval (= 60),
       # leaving for now as they appear sensible
       config.middleware.use(ApplicationInsights::Rack::TrackRequest, app_insights_key)
