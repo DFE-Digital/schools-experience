@@ -8,79 +8,67 @@ variables:
   # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
   DATABASE_URL: postgis://postgres:secret@postgres/school_experience_test
-  WEB_URL: postgis://postgres:secret@postgres/school_experience
   SECRET_KEY_BASE: stubbed
   REDIS_IMAGE: redis:5-alpine
-  REDIS_URL: redis://redis:6379/1
   CUCUMBER_PROFILE: continuous_integration
+  APP_URL: http://school-experience:3000
 
 steps:
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
     env:
       pswd: $(dockerPassword)
     displayName: 'Docker login'
-  - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
-    displayName: Launch Postgres # done early to give it time to boot
-  - script: docker run --name=redis -d $(REDIS_IMAGE)
-    displayName: Launch Redis # done early to give it time to boot
-
+  
   - script: docker pull $(dockerRegistry)/$(imageName):latest || true
     displayName: Retrieve latest Docker build to use as cache
-    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'),ne(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):latest -t $(dockerRegistry)/$(imageName):$(imageTag) .
+  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):latest -t $(imageName):latest .
     displayName: Build Docker Image using Cache
-    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'),ne(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
+  - script: docker build -f Dockerfile -t $(imageName):latest .
     displayName: Build Docker Image without Cache
-    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:test:prepare
+  - script: |
+      docker-compose up -d
+      sleep 15
+    displayName: bring up postgres, redis and create database (for the web app) and spin up application
+
+  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test school-experience rake db:create db:test:prepare
     displayName: Create Testing databases, import schema and fixtures
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rspec
+
+  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test school-experience rspec
     displayName: Run the Specs
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 $(dockerRegistry)/$(imageName):$(imageTag) cucumber --profile=$(CUCUMBER_PROFILE)
+
+  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true school-experience cucumber --profile=continuous_integration
     displayName: Run the Cucumber features
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) brakeman --no-pager
+
+  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test school-experience brakeman --no-pager
     displayName: Run the Brakeman security scan
-  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:schema:load
-    displayName: Create Smoketest database and import schema
-  - script: docker run -d --name=smoketest --health-interval=4s --link postgres:postgres --link redis:redis -e RAILS_ENV=servertest -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed -e SKIP_FORCE_SSL=true $(dockerRegistry)/$(imageName):$(imageTag)
-    displayName: Spin up app
-  - script: sleep 15 # ugly but gives the web app time to boot
-    displayName: Pause to allow app to boot
-  - script: docker ps | grep smoketest | grep '(healthy)' || false
-    displayName: Check app reports as Healthy
-  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
+
+  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test school-experience govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
 
-  - script: |
-      docker run --name=selenium-chrome -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-chrome
-      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
-    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+  - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
+    displayName: spin up selenium nodes
+
+  - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-chrome -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL school-experience cucumber
+    condition: not(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Run Cucumber via Selenium Chrome
 
-  - script: |
-      docker run --name=selenium-firefox -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-firefox
-      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
-    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+  - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=firefox school-experience cucumber
+    condition: not(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Run Cucumber via Selenium Firefox
 
   - script: |
-      docker push $(dockerRegistry)/$(imageName):$(imageTag)
-      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):latest
+      docker tag $(imageName):latest $(dockerRegistry)/$(imageName):latest
       docker push $(dockerRegistry)/$(imageName):latest
+      docker tag $(dockerRegistry)/$(imageName):latest $(dockerRegistry)/$(imageName):$(imageTag)
+      docker push $(dockerRegistry)/$(imageName):$(imageTag)
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: 'Push Docker image (built from master)'
-
-  - script: |
-      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):$(imageTag)-phase2
-      docker push $(dockerRegistry)/$(imageName):$(imageTag)-phase2
-      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):phase2
-      docker push $(dockerRegistry)/$(imageName):phase2
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/phase2')
-    displayName: 'Push Docker image (built from phase2)'
 
   - task: CopyFiles@2
     inputs:

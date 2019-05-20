@@ -7,7 +7,7 @@ services:
        - "3000:3000"
      restart: always
      healthcheck:
-       disable: true
+       disable: false
      environment:
        - RAILS_ENV=servertest
        - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
@@ -23,7 +23,7 @@ services:
      command: rake jobs:work
      restart: always
      healthcheck:
-       disable: true
+       disable: false
      environment:
        - RAILS_ENV=servertest
        - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
