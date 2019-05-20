@@ -10,7 +10,7 @@ module Bookings
       delegate :cache, to: Rails
 
       def initialize(client_id: nil, client_secret: nil, tenant_id: nil, service_url: nil)
-        @client_id = client_id || ENV.fech('CRM_CLIENT_ID')
+        @client_id = client_id || ENV.fetch('CRM_CLIENT_ID')
         @client_secret = client_secret || ENV.fetch('CRM_CLIENT_SECRET')
         @tenant_id = tenant_id || ENV.fetch('CRM_AUTH_TENANT_ID')
         @service_url = service_url || ENV.fetch('CRM_SERVICE_URL')
