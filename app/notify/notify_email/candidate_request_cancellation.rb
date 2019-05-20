@@ -1,11 +1,10 @@
 class NotifyEmail::CandidateRequestCancellation < Notify
-  attr_accessor :school_name, :candidate_name, :placement_start_date, :placement_finish_date
+  attr_accessor :school_name, :candidate_name, :requested_availability
 
-  def initialize(to:, school_name:, candidate_name:, placement_start_date:, placement_finish_date:)
+  def initialize(to:, school_name:, candidate_name:, requested_availability:)
     self.school_name    = school_name
     self.candidate_name = candidate_name
-    self.placement_start_date     = placement_start_date
-    self.placement_finish_date    = placement_finish_date
+    self.requested_availability = requested_availability
     super(to: to)
   end
 
@@ -19,8 +18,7 @@ private
     {
       school_name: school_name,
       candidate_name: candidate_name,
-      placement_start_date: placement_start_date,
-      placement_finish_date: placement_finish_date
+      requested_availability: requested_availability
     }
   end
 end
