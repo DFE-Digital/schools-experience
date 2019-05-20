@@ -21,13 +21,23 @@ module Bookings::Gitis
       parse_response response
     end
 
-    def post(url, params); end
+    def post(url, params, headers = {})
+      validate_url! url
+
+      response = connection.post do |req|
+        req.url url
+        req.headers = post_headers.merge(headers.stringify_keys)
+        req.body = params.to_json
+      end
+
+      parse_response response
+    end
 
     class UnsupportedAbsoluteUrlError < RuntimeError; end
 
     class BadResponseError < RuntimeError
       def initialize(resp)
-        if resp.headers['content-type'].match?(%r{application/json})
+        if resp.headers['content-type'].to_s.match?(%r{application/json})
           @data = JSON.parse(resp.body)
           @msg = "#{resp.status}: #{@data.dig('error', 'message') || resp.body}"
         else
@@ -39,6 +49,7 @@ module Bookings::Gitis
     end
 
     class UnknownUrlError < BadResponseError; end
+    class AccessDeniedError < BadResponseError; end
 
   private
 
@@ -55,6 +66,17 @@ module Bookings::Gitis
       }
     end
 
+    def post_headers
+      {
+        'Accept' => 'application/json',
+        'Authorization' => "Bearer #{access_token}",
+        'Content-Type' => 'application/json',
+        'OData-MaxVersion' => '4.0',
+        'OData-Version' => '4.0'
+      }
+    end
+
+    # don't allow absolute paths since they don't combine with the endpoint
     def validate_url!(url)
       if url.to_s.starts_with? '/'
         fail UnsupportedAbsoluteUrlError
@@ -66,11 +88,17 @@ module Bookings::Gitis
     def parse_response(resp)
       case resp.status
       when 200
-        if resp.headers['content-type'].match?(%r{application/json})
+        if resp.headers['content-type'].to_s.match?(%r{application/json})
           JSON.parse(resp.body)
         else
           resp.body
         end
+      when 201
+        resp.headers['odata-entityid'] || resp.body
+      when 204
+        resp.headers['odata-entityid'] || true
+      when 401
+        raise AccessDeniedError.new(resp)
       when 404
         raise UnknownUrlError.new(resp)
       else
