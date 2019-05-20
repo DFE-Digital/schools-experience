@@ -33,6 +33,18 @@ module Bookings::Gitis
       parse_response response
     end
 
+    def patch(url, params, headers = {})
+      validate_url! url
+
+      response = connection.patch do |req|
+        req.url url
+        req.headers = post_headers.merge(headers.stringify_keys)
+        req.body = params.to_json
+      end
+
+      parse_response response
+    end
+
     class UnsupportedAbsoluteUrlError < RuntimeError; end
 
     class BadResponseError < RuntimeError
