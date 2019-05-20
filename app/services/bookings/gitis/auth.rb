@@ -3,8 +3,11 @@ require 'apimock/gitis_crm'
 module Bookings
   module Gitis
     class Auth
+      CACHE_KEY = 'gitis-auth-token'.freeze
       AUTH_URL = "https://login.microsoftonline.com/{tenant_id}/oauth2/token".freeze
-      attr_reader :service_url, :expires_at
+      attr_reader :service_url, :expires_at, :expires_in
+
+      delegate :cache, to: Rails
 
       def initialize(client_id: nil, client_secret: nil, tenant_id: nil, service_url: nil)
         @client_id = client_id || ENV.fech('CRM_CLIENT_ID')
@@ -13,11 +16,17 @@ module Bookings
         @service_url = service_url || ENV.fetch('CRM_SERVICE_URL')
       end
 
-      def token
-        retrieve_token
+      def token(force_reload = false)
+        if !force_reload && (cached_token = fetch_cached_token)
+          cached_token
+        elsif (new_token = retrieve_token)
+          cache.write(CACHE_KEY, new_token, expires_in: expires_in)
+          new_token
+        end
       end
 
       class UnableToRetrieveToken < RuntimeError; end
+
     private
 
       def params
@@ -56,8 +65,13 @@ module Bookings
 
       def parse_successful_response(response)
         data = JSON.parse(response.body)
-        @expires_at = Time.zone.now + data['expires_in'].to_i
+        @expires_in = data['expires_in'].to_i
+        @expires_at = Time.zone.now + @expires_in
         @access_token = data['access_token']
+      end
+
+      def fetch_cached_token
+        cache.fetch(CACHE_KEY)
       end
     end
   end
