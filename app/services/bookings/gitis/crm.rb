@@ -1,8 +1,10 @@
 module Bookings
   module Gitis
     class CRM
-      def initialize(token)
+      def initialize(token, service_url: nil, endpoint: nil)
         @token = token
+        @service_url = service_url
+        @endpoint = endpoint
       end
 
       def find(*ids)
@@ -66,6 +68,10 @@ module Bookings
       def write_data(crm_contact_data)
         crm_contact_data['contactid'].presence ||
           "75c5a32d-d603-4483-956f-236fee7c5784"
+      end
+
+      def api
+        Api.new(@token, @service_url, @endpoint)
       end
     end
   end
