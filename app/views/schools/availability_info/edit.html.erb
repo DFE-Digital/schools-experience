@@ -1,17 +1,17 @@
-<%- self.page_title = "Modify availability information" %>
+<%- self.page_title = "Availability information" %>
 
 <%
   self.breadcrumbs = {
     @current_school.name => schools_root_path,
-    'Modify availability information' => nil
+    'Availability information' => nil
   }
 %>
 
-<h1>Modify placement date</h1>
+<h1>When are your school's placements available?</h1>
 
 <%= form_for @current_school, url: schools_availability_info_path, method: :patch do |form| %>
   <div class="govuk-form-group">
-    <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+    <fieldset class="govuk-fieldset">
       <%= form.text_area :availability_info %>
     </fieldset>
   </div>

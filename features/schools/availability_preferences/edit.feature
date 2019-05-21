@@ -5,6 +5,7 @@ Feature: Editing placement dates
 
     Background:
         Given I am logged in as a DfE user
+        And my school is set to use 'fixed' dates
 
     Scenario: Page title
         Given I am on the 'availability preferences' page
@@ -25,8 +26,7 @@ Feature: Editing placement dates
         And the submit button should contain text 'Continue'
 
     Scenario: Submitting the form
-        Given my school is set to use 'fixed' dates
-        And I am on the 'availability preferences' page
+        Given I am on the 'availability preferences' page
         When I choose 'Flexible dates' from the 'Choose your availability preference' radio buttons
         And I submit the form
         Then I should be on the 'schools dashboard' page
@@ -34,8 +34,7 @@ Feature: Editing placement dates
 
     @javascript
     Scenario: Warning
-        Given my school is set to use 'fixed' dates
-        And my school has 2 placement dates
+        Given my school has 2 placement dates
         When I am on the 'availability preferences' page
         And I choose 'Flexible dates' from the 'Choose your availability preference' radio buttons
         Then there should be a hint stating "If you change your school to use flexible dates"

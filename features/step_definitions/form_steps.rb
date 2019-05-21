@@ -104,6 +104,12 @@ When("I uncheck the {string} checkbox") do |string|
   uncheck string
 end
 
+When("I enter {string} into the {string} text area") do |value, label|
+  @filled_in_value = value
+  fill_in label, with: value
+end
+
+
 LABEL_SELECTORS = %w(.govuk-label legend label).freeze
 def get_form_group(page, label_text)
   selector = LABEL_SELECTORS.detect do |s|

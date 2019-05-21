@@ -37,6 +37,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil)
     "candidate experience details" => [:new_schools_on_boarding_candidate_experience_detail_path],
     "availability" => [:new_schools_on_boarding_availability_path],
     "availability preferences" => [:edit_schools_availability_preference_path],
+    "availability information" => [:edit_schools_availability_info_path],
     "placement dates" => [:schools_placement_dates_path],
     "new placement date" => [:new_schools_placement_date_path],
     "edit placement date" => [:edit_schools_placement_date_path, placement_date_id],

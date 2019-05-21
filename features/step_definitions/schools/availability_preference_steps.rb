@@ -1,7 +1,7 @@
 Given("my school is set to use {string} dates") do |option|
   fail 'must be fixed or flexible' unless option.in?(%w(fixed flexible))
 
-    @school.update(availability_preference_fixed: availability_preference_flag?(option))
+  @school.update(availability_preference_fixed: availability_preference_flag?(option))
 end
 
 Then("my school's availability preference should be {string}") do |option|
