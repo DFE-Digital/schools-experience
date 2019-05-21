@@ -46,7 +46,7 @@ Then("I should see a warning containing the availability information") do
 end
 
 Given("my school has availability no information set") do
-  # do nothing
+  @school = FactoryBot.create(:bookings_school, availability_info: nil)
 end
 
 Then("I should see no warning containing the availability information") do
