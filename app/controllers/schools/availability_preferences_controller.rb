@@ -1,9 +1,15 @@
 class Schools::AvailabilityPreferencesController < Schools::BaseController
-  def edit; end
+  def edit
+    @placement_dates = @current_school.bookings_placement_dates.available
+  end
 
   def update
     if @current_school.update(placement_date_params)
-      redirect_to schools_dashboard_path
+      if @current_school.availability_preference_fixed?
+        redirect_to schools_placement_dates_path
+      else
+        redirect_to schools_dashboard_path
+      end
     else
       render :edit
     end
