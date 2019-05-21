@@ -93,6 +93,8 @@ class Bookings::School < ApplicationRecord
 
   scope :flexible, -> { where(availability_preference_fixed: false) }
 
+  scope :flexible_with_description, -> { flexible.where.not(availability_info: nil) }
+
   scope :fixed, -> { where(availability_preference_fixed: true) }
 
   scope :fixed_with_available_dates, -> {
@@ -105,7 +107,7 @@ class Bookings::School < ApplicationRecord
     )
   }
 
-  scope :with_availability, -> { flexible.or(fixed_with_available_dates) }
+  scope :with_availability, -> { flexible_with_description.or(fixed_with_available_dates) }
 
   def to_param
     urn.to_s.presence

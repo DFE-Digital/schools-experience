@@ -24,6 +24,11 @@ FactoryBot.define do
       availability_preference_fixed { true }
     end
 
+    trait :with_flexible_availability do
+      availability_preference_fixed { false }
+      with_availability_info
+    end
+
     trait :with_availability_info do
       availability_info { 'We can offer placements throughout June and July for the remainder of this academic year (up to the 21st July).' }
     end
