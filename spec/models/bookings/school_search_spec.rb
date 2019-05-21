@@ -74,6 +74,7 @@ describe Bookings::SchoolSearch do
       let!(:matching_school) do
         create(
           :bookings_school,
+          :with_flexible_availability,
           name: "Springfield Primary School",
           coordinates: point_in_manchester,
           fee: 10
@@ -83,6 +84,7 @@ describe Bookings::SchoolSearch do
       let!(:non_matching_school) do
         create(
           :bookings_school,
+          :with_flexible_availability,
           name: "Pontefract Primary School",
           coordinates: point_in_leeds,
           fee: 30
@@ -97,8 +99,8 @@ describe Bookings::SchoolSearch do
       end
 
       context 'Only enabled schools should be returned' do
-        let!(:enabled_school) { create(:bookings_school, coordinates: point_in_manchester) }
-        let!(:disabled_school) { create(:bookings_school, :disabled, coordinates: point_in_manchester) }
+        let!(:enabled_school) { create(:bookings_school, :with_flexible_availability, coordinates: point_in_manchester) }
+        let!(:disabled_school) { create(:bookings_school, :disabled, :with_flexible_availability, coordinates: point_in_manchester) }
 
         subject { Bookings::SchoolSearch.new(location: 'Manchester').results }
 
@@ -139,7 +141,7 @@ describe Bookings::SchoolSearch do
           end
 
           let!(:matching_school) do
-            create(:bookings_school, name: "Springfield Primary School")
+            create(:bookings_school, :with_flexible_availability, name: "Springfield Primary School")
           end
 
           specify 'results should include matching records' do
@@ -202,7 +204,7 @@ describe Bookings::SchoolSearch do
             subject { Bookings::SchoolSearch.new(query: '', location: 'Manchester').results }
 
             let!(:matching_school) do
-              create(:bookings_school, name: "Springfield Primary School")
+              create(:bookings_school, :with_flexible_availability, name: "Springfield Primary School")
             end
 
             specify 'results should include matching records' do
@@ -335,10 +337,10 @@ describe Bookings::SchoolSearch do
         let(:point_in_glasgow) { Bookings::School::GEOFACTORY.point(-4.219, 55.859) }
         let(:point_in_york) { Bookings::School::GEOFACTORY.point(-1.095, 53.597) }
 
-        let!(:glasgow_school) { create(:bookings_school, name: "Glasgow", coordinates: point_in_glasgow) }
-        let!(:york_school) { create(:bookings_school, name: "York", coordinates: point_in_york) }
-        let!(:mcr_school) { create(:bookings_school, name: "Manchester", coordinates: point_in_manchester) }
-        let!(:leeds_school) { create(:bookings_school, name: "Leeds", coordinates: point_in_leeds) }
+        let!(:glasgow_school) { create(:bookings_school, :with_flexible_availability, name: "Glasgow", coordinates: point_in_glasgow) }
+        let!(:york_school) { create(:bookings_school, :with_flexible_availability, name: "York", coordinates: point_in_york) }
+        let!(:mcr_school) { create(:bookings_school, :with_flexible_availability, name: "Manchester", coordinates: point_in_manchester) }
+        let!(:leeds_school) { create(:bookings_school, :with_flexible_availability, name: "Leeds", coordinates: point_in_leeds) }
 
         before do
           allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
@@ -354,9 +356,9 @@ describe Bookings::SchoolSearch do
       end
 
       context 'Sorting by name' do
-        let!(:cardiff) { create(:bookings_school, name: "Cardiff Comprehensive", coordinates: point_in_manchester) }
-        let!(:bath) { create(:bookings_school, name: "Bath High School", coordinates: point_in_manchester) }
-        let!(:coventry) { create(:bookings_school, name: "Coventry Academy", coordinates: point_in_manchester) }
+        let!(:cardiff) { create(:bookings_school, :with_flexible_availability, name: "Cardiff Comprehensive", coordinates: point_in_manchester) }
+        let!(:bath) { create(:bookings_school, :with_flexible_availability, name: "Bath High School", coordinates: point_in_manchester) }
+        let!(:coventry) { create(:bookings_school, :with_flexible_availability, name: "Coventry Academy", coordinates: point_in_manchester) }
 
         subject do
           Bookings::SchoolSearch.new(location: coords_in_manchester, requested_order: 'name').results
@@ -406,11 +408,11 @@ describe Bookings::SchoolSearch do
 
   describe '#total_count' do
     let!(:matching_schools) do
-      create_list(:bookings_school, 8)
+      create_list(:bookings_school, 8, :with_flexible_availability)
     end
 
     let!(:non_matching_school) do
-      create(:bookings_school, coordinates: Bookings::School::GEOFACTORY.point(-1.148, 52.794))
+      create(:bookings_school, :with_flexible_availability, coordinates: Bookings::School::GEOFACTORY.point(-1.148, 52.794))
     end
 
     specify 'total count should match the number of matching schools' do

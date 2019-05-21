@@ -18,7 +18,6 @@ module Bookings
       copy_key_stages
       copy_parking
       copy_fields
-      convert_availability
       convert_description
       convert_fees(:administration)
       convert_fees(:dbs)
@@ -83,14 +82,6 @@ module Bookings
       else
         output[:admin_contact_email] = output[:admin_contact_phone] = nil
       end
-    end
-
-    def convert_availability
-      output[:fixed_availability] = input[:availability_preference_fixed]
-
-      output[:availability_info] = \
-        inverse_conditional_assign(:availability_preference_fixed,
-          :availability_description_description)
     end
 
     def copy_phases

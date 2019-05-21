@@ -175,16 +175,6 @@ describe Schools::SchoolProfile, type: :model do
 
     it do
       is_expected.to \
-        have_db_column(:availability_description_description).of_type :text
-    end
-
-    it do
-      is_expected.to \
-        have_db_column(:availability_preference_fixed).of_type(:boolean)
-    end
-
-    it do
-      is_expected.to \
         have_db_column(:confirmation_acceptance).of_type(:boolean)
     end
   end
@@ -486,43 +476,6 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#availability_description' do
-      let :form_model do
-        FactoryBot.build :availability_description
-      end
-
-      before do
-        model.availability_description = form_model
-      end
-
-      it 'sets description correctly' do
-        expect(model.availability_description.description).to \
-          eq form_model.description
-      end
-
-      it 'returns the form model' do
-        expect(model.availability_description).to eq form_model
-      end
-    end
-
-    context '#availability_preference' do
-      let :form_model do
-        FactoryBot.build :availability_preference, fixed: true
-      end
-
-      before do
-        model.availability_preference = form_model
-      end
-
-      it 'sets the availability fixed correctly' do
-        expect(model.availability_preference.fixed).to be true
-      end
-
-      it 'returns the form model' do
-        expect(model.availability_preference).to eq form_model
-      end
-    end
-
     context '#confirmation' do
       let :form_model do
         FactoryBot.build :confirmation
@@ -615,25 +568,6 @@ describe Schools::SchoolProfile, type: :model do
 
         it 'removes subjects' do
           expect(school_profile.reload.subjects).to be_empty
-        end
-      end
-
-      context 'when availability_description no longer makes sense' do
-        let :school_profile do
-          FactoryBot.create \
-            :school_profile,
-            :with_availability_preference,
-            :with_availability_description
-        end
-
-        before do
-          school_profile.update! availability_preference: \
-            Schools::OnBoarding::AvailabilityPreference.new(fixed: true)
-        end
-
-        it 'removes the availability_description' do
-          expect(school_profile.reload.availability_description).to \
-            eq Schools::OnBoarding::AvailabilityDescription.new
         end
       end
     end

@@ -14,7 +14,7 @@ module Candidates
     delegate :start_time, :end_time, to: :profile
     delegate :flexible_on_times, :flexible_on_times_details, to: :profile
     delegate :dress_code_other_details, to: :profile
-    delegate :availability_info, to: :profile
+    delegate :availability_info, to: :school
 
     delegate :administration_fee_amount_pounds, :administration_fee_interval, \
       :administration_fee_description, :administration_fee_payment_method, to: :profile

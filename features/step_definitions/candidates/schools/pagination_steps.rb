@@ -1,5 +1,5 @@
 Given("there are {int} schools in {string}") do |count, town|
-  FactoryBot.create_list(:bookings_school, count, name: town)
+  FactoryBot.create_list(:bookings_school, count, :with_flexible_availability, name: town)
   expect(Bookings::School.count).to eql(count)
 end
 

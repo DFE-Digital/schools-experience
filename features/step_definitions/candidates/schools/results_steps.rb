@@ -21,6 +21,7 @@ Given("there are some schools with a range of fees containing the word {string}"
     .map do |school_type, attributes|
     FactoryBot.create(
       :bookings_school,
+      :with_flexible_availability,
       name: "#{string} #{school_type}",
       phases: attributes[:phases],
       fee: attributes[:fee]
@@ -112,7 +113,7 @@ Given("there are no schools near my search location") do
 end
 
 Given("there are some schools just outside it") do
-  FactoryBot.create_list(:bookings_school, 2, coordinates: Bookings::School::GEOFACTORY.point(-2.421, 53.624))
+  FactoryBot.create_list(:bookings_school, 2, :with_flexible_availability, coordinates: Bookings::School::GEOFACTORY.point(-2.421, 53.624))
 end
 
 When("I search for schools within {int} miles") do |int|

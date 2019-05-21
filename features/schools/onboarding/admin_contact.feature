@@ -18,8 +18,6 @@ Feature: Admin contact
         | Subjects                     |                           |
         | Description                  |                           |
         | Candidate experience details |                           |
-        | Availability preference      |                           |
-        | Availability description     |                           |
         | Experience Outline           |                           |
 
   Scenario: Page title
