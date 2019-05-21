@@ -97,8 +97,6 @@ ActiveRecord::Schema.define(version: 2019_05_24_103626) do
     t.string "admin_contact_full_name", null: false
     t.string "admin_contact_email", null: false
     t.string "admin_contact_phone", null: false
-    t.boolean "fixed_availability", null: false
-    t.text "availability_info"
     t.decimal "administration_fee_amount_pounds", precision: 6, scale: 2
     t.text "administration_fee_description"
     t.string "administration_fee_interval"
@@ -265,9 +263,7 @@ ActiveRecord::Schema.define(version: 2019_05_24_103626) do
     t.string "admin_contact_full_name"
     t.string "admin_contact_email"
     t.string "admin_contact_phone"
-    t.text "availability_description_description"
     t.integer "bookings_school_id", null: false
-    t.boolean "availability_preference_fixed"
     t.boolean "phases_list_secondary_and_college", default: false, null: false
     t.boolean "confirmation_acceptance", default: false
     t.text "candidate_experience_detail_times_flexible_details"

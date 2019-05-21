@@ -24,9 +24,6 @@ module Schools
       unless requires_subjects?
         self.subjects.destroy_all
       end
-      if availability_preference.fixed?
-        self.availability_description = OnBoarding::AvailabilityDescription.new
-      end
     end
 
     validate :administration_fee_not_set, unless: -> { fees.administration_fees? }
@@ -177,22 +174,6 @@ module Schools
       constructor: :compose
 
     composed_of \
-      :availability_preference,
-      class_name: 'Schools::OnBoarding::AvailabilityPreference',
-      mapping: [
-        %w(availability_preference_fixed fixed)
-      ],
-      constructor: :compose
-
-    composed_of \
-      :availability_description,
-      class_name: 'Schools::OnBoarding::AvailabilityDescription',
-      mapping: [
-        %w(availability_description_description description)
-      ],
-      constructor: :compose
-
-    composed_of \
       :confirmation,
       class_name: 'Schools::OnBoarding::Confirmation',
       mapping: [
@@ -225,18 +206,6 @@ module Schools
 
     def completed?
       current_step == :COMPLETED
-    end
-
-    def flexible_dates?
-      availability_preference.flexible?
-    end
-
-    def fixed_dates?
-      availability_preference.fixed?
-    end
-
-    def has_available_dates?
-      fixed_dates? && bookings_placement_dates.available.exists?
     end
 
     def requires_subjects?

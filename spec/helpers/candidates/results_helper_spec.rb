@@ -11,12 +11,12 @@ describe Candidates::ResultsHelper, type: :helper do
     end
 
     context 'When there fewer than one page of results' do
-      let!(:schools) { create_list(:bookings_school, 5) }
+      let!(:schools) { create_list(:bookings_school, 5, :with_flexible_availability) }
       specify { expect(subject).to eql('Displaying all 5 results') }
     end
 
     context 'When there are more than one page of results' do
-      let!(:schools) { create_list(:bookings_school, 18) }
+      let!(:schools) { create_list(:bookings_school, 18, :with_flexible_availability) }
       specify { expect(subject).to eql("Showing 1&ndash;15 of 18 results") }
     end
   end

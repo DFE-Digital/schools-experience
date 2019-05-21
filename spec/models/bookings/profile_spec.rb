@@ -236,24 +236,6 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.not_to allow_value(nil).for :admin_contact_phone }
     end
 
-    describe "fixed_availibility" do
-      it { is_expected.to allow_value(true).for(:fixed_availability) }
-      it { is_expected.to allow_value(false).for(:fixed_availability) }
-      it { is_expected.not_to allow_value(nil).for(:fixed_availability) }
-    end
-
-    describe "availibility_info" do
-      context "for fixed_availibility" do
-        subject { described_class.new(fixed_availability: true) }
-        it { is_expected.not_to validate_presence_of :availability_info }
-      end
-
-      context "for flexible availibility" do
-        subject { described_class.new(fixed_availability: false) }
-        it { is_expected.to validate_presence_of :availability_info }
-      end
-    end
-
     describe "administration_fee_amount_pounds" do
       it { is_expected.to allow_value(10.00).for(:administration_fee_amount_pounds) }
       it { is_expected.to allow_value(1).for(:administration_fee_amount_pounds) }

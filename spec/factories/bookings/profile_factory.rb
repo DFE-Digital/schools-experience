@@ -21,8 +21,6 @@ FactoryBot.define do
     admin_contact_full_name { 'some one' }
     admin_contact_email { 'some@one.com' }
     admin_contact_phone { '07123456789' }
-    fixed_availability { false }
-    availability_info { 'whenever man' }
     description_details { 'A rather short description of our school' }
   end
 end
