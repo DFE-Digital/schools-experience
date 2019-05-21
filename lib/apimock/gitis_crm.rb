@@ -9,8 +9,8 @@ module Apimock
       @service_url = service_url
     end
 
-    def stub_contact_request(uuid, params = {})
-      stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})").
+    def stub_contact_request(uuid, return_params = {})
+      stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})?$top=1").
         with(headers: get_headers).
         to_return(
           status: 200,
@@ -20,12 +20,50 @@ module Apimock
           body: contact_data.merge(
             '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
             'contactid' => uuid
-          ).merge(params.stringify_keys).to_json
+          ).merge(return_params.stringify_keys).to_json
+        )
+    end
+
+    def stub_multiple_contact_request(uuids, return_params = {})
+      uuidfilter = uuids.map { |id| "contactid eq '#{id}'" }.join(' or ')
+
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=#{uuids.length}&$filter=#{uuidfilter}").
+        with(headers: get_headers).
+        to_return(
+          status: 200,
+          headers: {
+            'Content-Type' => 'application/json; odata.metadata=minimal',
+          },
+          body: {
+            '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
+            'value' => uuids.map { |uuid|
+              contact_data.merge('contactid' => uuid).
+                merge(return_params.stringify_keys)
+            }
+          }.to_json
+        )
+    end
+
+    def stub_contact_request_by_email(email, return_params = {})
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1&$filter=emailaddress1 eq '#{email}' or emailaddress2 eq '#{email}' or emailaddress3 eq '#{email}'").
+        with(headers: get_headers).
+        to_return(
+          status: 200,
+          headers: {
+            'Content-Type' => 'application/json; odata.metadata=minimal',
+          },
+          body: {
+            '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
+            'value' => [
+              contact_data.merge('emailaddress1' => email). \
+                merge(return_params.stringify_keys)
+            ]
+          }.to_json
         )
     end
 
     def stub_contact_listing_request(uuid = SecureRandom.uuid)
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1").
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=3").
         with(headers: get_headers).
         to_return(
           status: 200,

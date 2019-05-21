@@ -1,16 +1,27 @@
 require 'rails_helper'
+require 'apimock/gitis_crm'
 
 describe Bookings::Gitis::CRM, type: :model do
-  let(:gitis) { described_class.new('a-token') }
+  let(:client_id) { 'clientid' }
+  let(:client_secret) { 'clientsecret' }
+  let(:tenant_id) { SecureRandom.uuid }
+  let(:gitis_url) { 'https://gitis-crm.net' }
+  let(:token) { 'my.secret.token' }
+
+#  let(:api) { Bookings::Gitis::API.new('my.secret.token', service_url: gitis_url) }
+  let(:gitis) { described_class.new(token, service_url: gitis_url) }
+  let(:gitis_stub) do
+    Apimock::GitisCrm.new(client_id, client_secret, tenant_id, gitis_url)
+  end
 
   describe '.initialize' do
-    it "will succeed with access token" do
-      expect(described_class.new('something')).to \
+    it "will succeed with api object" do
+      expect(described_class.new(token)).to \
         be_instance_of(Bookings::Gitis::CRM)
     end
 
-    it "will raise an exception without an access token" do
-      expect { subject }.to raise_exception(ArgumentError)
+    it "will raise an exception without an api object" do
+      expect { described_class.new }.to raise_exception(ArgumentError)
     end
   end
 
@@ -32,37 +43,36 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with single account_ids' do
-      before { @contacts = gitis.find(uuids[1]) }
+      before { gitis_stub.stub_contact_request(uuids[1]) }
+      subject { gitis.find(uuids[1]) }
 
       it "will return a single account" do
-        expect(@contacts).to be_instance_of Bookings::Gitis::Contact
-        expect(@contacts.id).to eq(uuids[1])
+        is_expected.to be_instance_of Bookings::Gitis::Contact
+        is_expected.to have_attributes(id: uuids[1])
       end
     end
 
     context 'with multiple account_ids' do
-      before do
-        @contacts = gitis.find(*uuids)
-      end
+      before { gitis_stub.stub_multiple_contact_request(uuids) }
+      subject { gitis.find(*uuids) }
 
       it "will return an account per id" do
-        expect(@contacts.length).to eq(3)
-        expect(@contacts).to all be_instance_of(Bookings::Gitis::Contact)
-        @contacts.each_with_index do |contact, index|
+        is_expected.to have_attributes(length: 3)
+        is_expected.to all be_instance_of(Bookings::Gitis::Contact)
+        subject.each_with_index do |contact, index|
           expect(contact.id).to eq(uuids[index])
         end
       end
     end
 
     context 'with array of account_ids' do
-      before do
-        @contacts = gitis.find(*uuids)
-      end
+      before { gitis_stub.stub_multiple_contact_request(uuids) }
+      subject { gitis.find(uuids) }
 
       it "will return an account per id" do
-        expect(@contacts.length).to eq(3)
-        expect(@contacts).to all be_instance_of(Bookings::Gitis::Contact)
-        @contacts.each_with_index do |contact, index|
+        is_expected.to have_attributes(length: 3)
+        is_expected.to all be_instance_of(Bookings::Gitis::Contact)
+        subject.each_with_index do |contact, index|
           expect(contact.id).to eq(uuids[index])
         end
       end
@@ -71,9 +81,12 @@ describe Bookings::Gitis::CRM, type: :model do
 
   describe '.find_by_email' do
     let(:email) { 'me@something.com' }
+    before { gitis_stub.stub_contact_request_by_email(email) }
+    subject { gitis.find_by_email(email) }
 
     it "will return a contact record" do
-      expect(gitis.find_by_email(email).email).to eq(email)
+      is_expected.to be_instance_of(Bookings::Gitis::Contact)
+      is_expected.to have_attributes(email: email)
     end
   end
 
