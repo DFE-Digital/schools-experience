@@ -6,7 +6,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
   context '#[]' do
     context 'availability_description' do
       let :school do
-        FactoryBot.build :bookings_school, :with_availability_info
+        FactoryBot.build :bookings_school
       end
 
       it 'returns the correct attributes' do
@@ -18,7 +18,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
     context 'availability_preference' do
       context 'when the school has availability_info' do
         let :school do
-          FactoryBot.build :bookings_school, :with_availability_info
+          FactoryBot.build :bookings_school
         end
 
         it 'returns the correct attributes' do
@@ -28,7 +28,7 @@ describe Schools::OnBoarding::FromBookingsSchool do
 
       context 'when the school does not have availability_info' do
         let :school do
-          FactoryBot.build :bookings_school
+          FactoryBot.build :bookings_school, availability_info: nil
         end
 
         it 'returns the correct attributes' do
