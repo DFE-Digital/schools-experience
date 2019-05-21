@@ -1,6 +1,10 @@
 <article id="dashlette">
   <h1 class="govuk-heading-l">Manage school experience at <%= @current_school.name %></h1>
 
+  <%- if show_no_placement_dates_warning? -%>
+    <%= render partial: 'schools/dashboards/no_placement_dates_warning' %>
+  <%- end -%>
+
   <ul class="govuk-list">
 
     <li>

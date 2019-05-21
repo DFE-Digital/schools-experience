@@ -1,6 +1,6 @@
 module Schools::PlacementDatesHelper
   def placement_date_display_status(val)
-    val ? "Available" : "Taken"
+    val ? "Open" : "Closed"
   end
 
   def availability_status_display_status(val)
