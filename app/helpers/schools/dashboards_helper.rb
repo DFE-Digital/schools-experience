@@ -15,7 +15,12 @@ module Schools::DashboardsHelper
   end
 
   def show_no_placement_dates_warning?
-    @current_school.availability_preference_fixed &&
+    @current_school.availability_preference_fixed? &&
       @current_school.bookings_placement_dates.none?
+  end
+
+  def show_no_availability_info_warning?
+    !@current_school.availability_preference_fixed? &&
+      @current_school.availability_info.nil?
   end
 end
