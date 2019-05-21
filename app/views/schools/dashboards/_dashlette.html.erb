@@ -25,14 +25,29 @@
       </span>
     </li>
 
-    <%- if @current_school.availability_preference_fixed? -%>
+  </ul>
+
+  <section class="availability-preferences">
+    <h3 class="govuk-heading-m">Availability preferences</h3>
+
+    <ul class="govuk-list">
       <li>
-        <%= link_to "Update school experience dates", schools_placement_dates_path %>
+        <%= link_to "Change your flexibility preference", edit_schools_availability_preference_path %>
         <span class="govuk-hint">
-          Add, edit and disable <strong>fixed</strong> dates for candidates
+          <%= @current_school.name %> is currently set to
+          <strong><%= availability_status_display_status(@current_school.availability_preference_fixed?) %></strong>.
         </span>
       </li>
-    <%- end -%>
 
-  </ul>
+      <%- if @current_school.availability_preference_fixed? -%>
+        <li>
+          <%= link_to "Update school experience dates", schools_placement_dates_path %>
+          <span class="govuk-hint">
+            Add, edit and disable <strong>fixed</strong> dates for candidates
+          </span>
+        </li>
+      <%- end -%>
+
+    </ul>
+  </section>
 </article>
