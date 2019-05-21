@@ -10,7 +10,6 @@ Given("there there are schools with the following attributes:") do |table|
   @schools = table.hashes.each.with_object([]) do |attributes, schools|
     schools << FactoryBot.create(
       :bookings_school,
-      :with_flexible_availability,
       name: attributes["Name"],
       phases: Bookings::Phase.where(name: attributes["Phase"]),
       coordinates: locate(attributes["Location"])

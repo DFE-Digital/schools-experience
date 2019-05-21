@@ -304,8 +304,8 @@ describe Bookings::School, type: :model do
       specify { expect(described_class.new).to have_db_column(:availability_info).of_type(:text) }
       specify { expect(described_class.new).to have_db_column(:availability_preference_fixed).of_type(:boolean).with_options(default: false, null: false) }
 
-      let!(:flexible_with_description) { create(:bookings_school, :with_flexible_availability) }
-      let!(:flexible_without_description) { create(:bookings_school, :with_flexible_availability, availability_info: nil) }
+      let!(:flexible_with_description) { create(:bookings_school) }
+      let!(:flexible_without_description) { create(:bookings_school, availability_info: nil) }
       let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
       let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
 
