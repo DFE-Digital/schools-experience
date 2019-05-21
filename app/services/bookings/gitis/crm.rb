@@ -1,6 +1,8 @@
 module Bookings
   module Gitis
     class CRM
+      prepend FakeCrm if Rails.application.config.x.fake_crm
+
       def initialize(token, service_url: nil, endpoint: nil)
         @token = token
         @service_url = service_url
@@ -9,22 +11,23 @@ module Bookings
 
       def find(*ids)
         ids = normalise_ids(*ids)
-
         validate_ids(ids)
 
+        params = { '$top' => ids.length }
+
         if ids.length == 1
-          Contact.new(fake_account_data.merge('contactid' => ids[0]))
+          Contact.new api.get("contacts(#{uuid})", params)
         else
-          ids.map do |id|
-            Contact.new(fake_account_data.merge('contactid' => id))
+          params['$filter'] = multiple_contactid_filter(uuids)
+
+          api.get('contacts', params).map do |contact|
+            Contact.new contact
           end
         end
       end
 
       def find_by_email(address)
-        Contact.new(fake_account_data).tap do |contact|
-          contact.email = address
-        end
+        # FIXME TBD
       end
 
       def write(contact)
@@ -46,32 +49,16 @@ module Bookings
         end
       end
 
-      def fake_account_data
-        {
-          'contactid' => "d778d663-a022-4c4b-9962-e469ee179f4a",
-          'firstname' => 'Matthew',
-          'lastname' => 'Richards',
-          'mobilephone' => '07123 456789',
-          'telephone1' => '01234 567890',
-          'emailaddress1' => 'first@thisaddress.com',
-          'emailaddress2' => 'second@thisaddress.com',
-          'emailaddress3' => 'third@thisaddress.com',
-          'address1_line1' => 'First Line',
-          'address1_line2' => 'Second Line',
-          'address1_line3' => 'Third Line',
-          'address1_city' => 'Manchester',
-          'address1_stateorprovince' => 'Manchester',
-          'address1_postalcode' => 'MA1 1AM'
-        }
-      end
-
       def write_data(crm_contact_data)
-        crm_contact_data['contactid'].presence ||
-          "75c5a32d-d603-4483-956f-236fee7c5784"
+        # FIXME TBD
       end
 
       def api
-        Api.new(@token, @service_url, @endpoint)
+        API.new(@token, @service_url, @endpoint)
+      end
+
+      def multiple_contactid_filter(uuids)
+        uuids.map { |id| "contactid eq '#{id}'" }.join(' or ')
       end
     end
   end
