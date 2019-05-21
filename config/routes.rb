@@ -38,7 +38,7 @@ Rails.application.routes.draw do
       end
 
       resource :availability_preference, only: %i(edit update)
-      resource :availability_info, only: %i(edit update)
+      resource :availability_info, only: %i(edit update), controller: 'availability_info'
       resources :placement_dates
 
       namespace :errors do

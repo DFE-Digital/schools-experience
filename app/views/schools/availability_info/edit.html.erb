@@ -1,0 +1,20 @@
+<%- self.page_title = "Modify availability information" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'Modify availability information' => nil
+  }
+%>
+
+<h1>Modify placement date</h1>
+
+<%= form_for @current_school, url: schools_availability_info_path, method: :patch do |form| %>
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+      <%= form.text_area :availability_info %>
+    </fieldset>
+  </div>
+
+  <%= form.submit 'Continue' %>
+<%- end -%>

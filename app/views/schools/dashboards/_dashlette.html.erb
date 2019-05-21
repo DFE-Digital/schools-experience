@@ -28,7 +28,7 @@
   </ul>
 
   <section class="availability-preferences">
-    <h3 class="govuk-heading-m">Availability preferences</h3>
+    <h3 class="govuk-heading-s">Availability preferences</h3>
 
     <ul class="govuk-list">
       <li>
@@ -46,8 +46,15 @@
             Add, edit and disable <strong>fixed</strong> dates for candidates
           </span>
         </li>
+      <%- else -%>
+        <li>
+          <%= link_to "Modify your availability description", edit_schools_availability_info_path %>
+          <span class="govuk-hint">
+            Change the description of your school's availability to inform
+            candidates when is best to apply
+          </span>
+        </li>
       <%- end -%>
-
     </ul>
   </section>
 </article>
