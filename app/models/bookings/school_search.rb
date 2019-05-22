@@ -52,6 +52,10 @@ class Bookings::SchoolSearch < ApplicationRecord
     end
   end
 
+  def has_coordinates?
+    coordinates.present?
+  end
+
 private
 
   def save_with_result_count(count)

@@ -453,4 +453,18 @@ describe Bookings::SchoolSearch do
       end
     end
   end
+
+  describe '#has_coordinates?' do
+    subject { Bookings::SchoolSearch.new(location: "Bury") }
+
+    context 'when coordinates are present' do
+      before { allow(subject).to receive(:coordinates).and_return(point_in_leeds) }
+      it { is_expected.to have_coordinates }
+    end
+
+    context 'when coordinates are absent' do
+      before { allow(subject).to receive(:coordinates).and_return([]) }
+      it { is_expected.not_to have_coordinates }
+    end
+  end
 end

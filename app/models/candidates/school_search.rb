@@ -22,7 +22,7 @@ module Candidates
     attr_accessor :query, :location, :order, :latitude, :longitude, :page
     attr_reader :distance, :max_fee
 
-    delegate :location_name, :valid?, :errors, to: :school_search
+    delegate :location_name, :has_coordinates?, :valid?, :errors, to: :school_search
 
     class << self
       delegate :available_orders, to: Bookings::SchoolSearch
