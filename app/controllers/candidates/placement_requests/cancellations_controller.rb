@@ -17,6 +17,8 @@ module Candidates
           placement_request_params
 
         if @cancellation.save
+          notify_school @cancellation
+          notify_candidate @cancellation
           redirect_to candidates_placement_request_cancellation_path \
             @placement_request.token
         else
@@ -45,6 +47,27 @@ module Candidates
           redirect_to candidates_placement_request_cancellation_path \
             @placement_request.token
         end
+      end
+
+      def notify_school(cancellation)
+        NotifyEmail::SchoolRequestCancellation.new(
+          to: cancellation.school_email,
+          school_name: cancellation.school_name,
+          school_admin_name: cancellation.school_admin_name,
+          candidate_name: cancellation.candidate_name,
+          cancellation_reasons: cancellation.reason,
+          requested_availability: cancellation.requested_availability,
+          placement_request_url: schools_placement_request_url(cancellation.placement_request)
+        ).despatch_later!
+      end
+
+      def notify_candidate(cancellation)
+        NotifyEmail::CandidateRequestCancellation.new(
+          to: cancellation.candidate_email,
+          school_name: cancellation.school_name,
+          candidate_name: cancellation.candidate_name,
+          requested_availability: cancellation.requested_availability
+        ).despatch_later!
       end
     end
   end
