@@ -9,14 +9,16 @@ module Candidates
         registration_session = RegistrationStore.instance.retrieve! params[:uuid]
 
         unless registration_session.completed?
-          Bookings::PlacementRequest.create_from_registration_session! \
+          placement_request = Bookings::PlacementRequest.create_from_registration_session! \
             registration_session
 
           registration_session.flag_as_completed!
 
           RegistrationStore.instance.store! registration_session
 
-          PlacementRequestJob.perform_later registration_session.uuid
+          PlacementRequestJob.perform_later \
+            registration_session.uuid,
+            new_candidates_placement_request_cancellation_url(placement_request.token)
         end
 
         redirect_to candidates_school_registrations_placement_request_path \

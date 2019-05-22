@@ -30,6 +30,11 @@ module Bookings
       cancelled? || completed?
     end
 
+    # FIXME update this model to belong_to a candidate
+    def candidate
+      @candidate ||= Bookings::Gitis::CRM.new('abc123').find(1)
+    end
+
   private
 
     def cancelled?

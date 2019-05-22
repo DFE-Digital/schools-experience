@@ -131,6 +131,10 @@ class Bookings::School < ApplicationRecord
     end
   end
 
+  def admin_contact_name
+    profile&.admin_contact_full_name
+  end
+
 private
 
   def has_available_dates?

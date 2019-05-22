@@ -79,5 +79,9 @@ FactoryBot.define do
         school.phases << Bookings::Phase.find_by!(edubase_id: 6)
       end
     end
+
+    trait :with_profile do
+      association :profile, factory: :bookings_profile
+    end
   end
 end
