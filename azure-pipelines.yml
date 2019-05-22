@@ -7,7 +7,6 @@ variables:
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
   # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
-  DATABASE_URL: postgis://postgres:secret@postgres/school_experience_test
   SECRET_KEY_BASE: stubbed
   REDIS_IMAGE: redis:5-alpine
   CUCUMBER_PROFILE: continuous_integration
@@ -36,19 +35,16 @@ steps:
       sleep 15
     displayName: bring up postgres, redis and create database (for the web app) and spin up application
 
-  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test school-experience rake db:create db:test:prepare
-    displayName: Create Testing databases, import schema and fixtures
-
-  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test school-experience rspec
+  - script: docker-compose run --rm db-tasks rspec
     displayName: Run the Specs
 
-  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true school-experience cucumber --profile=continuous_integration
+  - script: docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks cucumber --profile=continuous_integration
     displayName: Run the Cucumber features
 
-  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test school-experience brakeman --no-pager
+  - script: docker-compose run --rm db-tasks brakeman --no-pager
     displayName: Run the Brakeman security scan
 
-  - script: docker-compose run --rm -e DATABASE_URL -e RAILS_ENV=test school-experience govuk-lint-ruby app lib spec
+  - script: docker-compose run --rm db-tasks govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
 
   - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
