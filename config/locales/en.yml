@@ -195,6 +195,10 @@ en:
       models:
         bookings/placement_request:
           <<: [ *placement_preference_errors, *subject_preference_errors ]
+        bookings/placement_request/cancellation:
+          attributes:
+            reason:
+              blank: 'Cancellation reason is required'
         bookings/school_search:
           attributes:
             location:

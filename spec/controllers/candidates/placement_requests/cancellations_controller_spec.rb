@@ -1,6 +1,24 @@
 require 'rails_helper'
 
 describe Candidates::PlacementRequests::CancellationsController, type: :request do
+  let :notify_school_request_cancellation do
+    double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
+  end
+
+  let :notify_candidate_request_cancellation do
+    double NotifyEmail::CandidateRequestCancellation, despatch_later!: true
+  end
+
+  before do
+    allow(NotifyEmail::SchoolRequestCancellation).to receive :new do
+      notify_school_request_cancellation
+    end
+
+    allow(NotifyEmail::CandidateRequestCancellation).to receive :new do
+      notify_candidate_request_cancellation
+    end
+  end
+
   context '#new' do
     before do
       get "/candidates/placement_requests/#{placement_request.token}/cancellation/new"
@@ -55,7 +73,15 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           eq cancellation.reason
       end
 
-      xit 'does not notify the school'
+      it 'does not notify the school' do
+        expect(notify_school_request_cancellation).not_to \
+          have_received :despatch_later!
+      end
+
+      it 'does not notify the candidate' do
+        expect(notify_candidate_request_cancellation).not_to \
+          have_received :despatch_later!
+      end
 
       it 'redirects to the show action' do
         expect(response).to redirect_to \
@@ -73,7 +99,15 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           Bookings::PlacementRequest::Cancellation.new
         end
 
-        xit 'does not notify the school'
+        it 'does not notify the school' do
+          expect(notify_school_request_cancellation).not_to \
+            have_received :despatch_later!
+        end
+
+        it 'does not notify the candidate' do
+          expect(notify_candidate_request_cancellation).not_to \
+            have_received :despatch_later!
+        end
 
         it 'does not cancel the placement request' do
           expect(placement_request).not_to be_closed
@@ -89,14 +123,36 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           FactoryBot.build :cancellation, placement_request: placement_request
         end
 
-        xit 'notifies the school'
+        it 'notifies the school' do
+          expect(NotifyEmail::SchoolRequestCancellation).to have_received(:new).with \
+            to: cancellation.school_email,
+            school_name: cancellation.school_name,
+            school_admin_name: cancellation.school_admin_name,
+            candidate_name: cancellation.candidate_name,
+            cancellation_reasons: cancellation.reason,
+            requested_availability: cancellation.requested_availability,
+            placement_request_url: schools_placement_request_url(cancellation.placement_request)
+
+          expect(notify_school_request_cancellation).to \
+            have_received :despatch_later!
+        end
+
+        it 'notifies the candidate' do
+          expect(NotifyEmail::CandidateRequestCancellation).to have_received(:new).with \
+            to: cancellation.candidate_email,
+            school_name: cancellation.school_name,
+            candidate_name: cancellation.candidate_name,
+            requested_availability: cancellation.requested_availability
+
+          expect(notify_candidate_request_cancellation).to \
+            have_received :despatch_later!
+        end
 
         it 'cancels the placement request' do
           expect(placement_request).to be_closed
         end
 
         it 'redirects to the show action' do
-          # need to make sure the show action isn't accessable by id for security
           expect(response).to redirect_to \
             candidates_placement_request_cancellation_path(placement_request.token)
         end

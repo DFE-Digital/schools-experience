@@ -1,7 +1,12 @@
 FactoryBot.define do
   factory :placement_request, class: Bookings::PlacementRequest do
-    association :school,
-      :with_subjects, factory: :bookings_school, urn: 11048, subject_count: 2
+    association \
+      :school,
+      :with_profile,
+      :with_subjects,
+      factory: :bookings_school,
+      urn: 11048,
+      subject_count: 2
 
     after :build do |placement_request|
       placement_request.subject_first_choice = placement_request.school.subjects.first.name
