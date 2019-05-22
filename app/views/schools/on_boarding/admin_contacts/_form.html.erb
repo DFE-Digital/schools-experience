@@ -10,36 +10,37 @@
     <h1 class="govuk-heading-l">
       Enter school experience admin contact details
     </h1>
-    <p>
-      Tell us the contact details of the person who manages school experience for your school.
-    </p>
-    <p>
-      The email will be used to send your school the following details:
-    </p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>
-        school experience requests and candidate details
-      </li>
-      <li>
-        notifications, reminders and other messages
-      </li>
-      <li>
-        important information and updates about the service
-      </li>
-    </ul>
-    <p>
-      <strong>
-        We recommend you provide a general email address so more than 1 person can access the requests, messages and other information we’ll send you.
-      </strong>
-    </p>
-    <p>
-      These details will not be shared publicly or with candidates until you've confirmed their school experience booking.
-    </p>
     <%= form_for admin_contact, url: url, method: method do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+
+      <p>
+        Tell us the contact details of the person who manages school experience for your school.
+      </p>
+      <p>
+        The email will be used to send your school the following details:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>
+          school experience requests and candidate details
+        </li>
+        <li>
+          notifications, reminders and other messages
+        </li>
+        <li>
+          important information and updates about the service
+        </li>
+      </ul>
+      <p>
+        <strong>
+          We recommend you provide a general email address so more than 1 person can access the requests, messages and other information we’ll send you.
+        </strong>
+      </p>
+      <p>
+        These details will not be shared publicly or with candidates until you've confirmed their school experience booking.
+      </p>
       <h2 class="govuk-heading-m">
         Provide admin contact details
       </h2>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
       <%= f.text_field :full_name %>
       <%= f.text_field :phone %>
