@@ -2,51 +2,69 @@ require 'rails_helper'
 
 describe Candidates::Registrations::PlacementRequestJob, type: :job do
   include ActiveSupport::Testing::TimeHelpers
+  include_context 'Stubbed candidates school'
 
-  let :uuid do
-    'some-uuid'
+  let :registration_store do
+    Candidates::Registrations::RegistrationStore.instance
   end
 
-  let :analytics_tracking_uuid do
-    'some-analytics-uuid'
+  let :registration_session do
+    FactoryBot.build :registration_session, urn: school.urn
   end
 
-  let :placement_request_action do
-    double Candidates::Registrations::PlacementRequestAction, perform!: true
+  let :placement_request do
+    FactoryBot.build :placement_request, school: school
+  end
+
+  let :school_request_confirmation_notification do
+    double NotifyEmail::SchoolRequestConfirmation, despatch!: true
+  end
+
+  let :candidate_request_confirmation_notification do
+    double NotifyEmail::CandidateRequestConfirmation, despatch!: true
   end
 
   before do
+    allow(NotifyEmail::SchoolRequestConfirmation).to \
+      receive(:from_application_preview) { school_request_confirmation_notification }
+
+    allow(NotifyEmail::CandidateRequestConfirmation).to \
+      receive(:from_application_preview) { candidate_request_confirmation_notification }
+
+    registration_store.store! registration_session
+
     ActiveJob::Base.queue_adapter = :inline
-    allow(Candidates::Registrations::PlacementRequestAction).to \
-      receive(:new) { placement_request_action }
   end
 
   context '#perform' do
     context 'no errors' do
-      context 'with only a uuid' do
-        before do
-          described_class.perform_later uuid
-        end
-
-        it 'calls PlacementRequestAction with a uuid' do
-          expect(Candidates::Registrations::PlacementRequestAction).to \
-            have_received(:new).with(uuid, nil)
-
-          expect(placement_request_action).to have_received(:perform!)
-        end
+      before do
+        described_class.perform_later registration_session.uuid
       end
 
-      context 'with a uuid and an analytics_tracking_uuid' do
-        before do
-          described_class.perform_later uuid, analytics_tracking_uuid
-        end
+      it 'notifies the school' do
+        expect(NotifyEmail::SchoolRequestConfirmation).to \
+          have_received(:from_application_preview).with \
+            school.notifications_email,
+            Candidates::Registrations::ApplicationPreview.new(registration_session)
 
-        it 'calls PlacementRequestAction with a uuid and a analytics_tracking_uuid' do
-          expect(Candidates::Registrations::PlacementRequestAction).to \
-            have_received(:new).with(uuid, analytics_tracking_uuid)
+        expect(school_request_confirmation_notification).to \
+          have_received :despatch!
+      end
 
-          expect(placement_request_action).to have_received :perform!
-        end
+      it 'notifies the candidate' do
+        expect(NotifyEmail::CandidateRequestConfirmation).to \
+          have_received(:from_application_preview).with \
+            registration_session.email,
+            Candidates::Registrations::ApplicationPreview.new(registration_session)
+
+        expect(candidate_request_confirmation_notification).to \
+          have_received :despatch!
+      end
+
+      it 'deletes the registration session from redis' do
+        expect { registration_store.retrieve! registration_session.uuid }.to \
+          raise_error Candidates::Registrations::RegistrationStore::SessionNotFound
       end
     end
 
@@ -56,12 +74,8 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
           3
         end
 
-        let :expected_error do
-          double StandardError
-        end
-
         before do
-          allow(placement_request_action).to receive :perform! do
+          allow(school_request_confirmation_notification).to receive :despatch! do
             raise 'Oh no!'
           end
 
@@ -71,8 +85,8 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         end
 
         it 'lets the error propogate' do
-          expect { described_class.perform_later uuid }.to raise_error \
-            RuntimeError, 'Oh no!'
+          expect { described_class.perform_later registration_session.uuid }.to \
+            raise_error RuntimeError, 'Oh no!'
         end
       end
 
@@ -90,7 +104,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
             number_of_executions
           end
 
-          allow(placement_request_action).to receive :perform! do
+          allow(candidate_request_confirmation_notification).to receive :despatch! do
             raise Notify::RetryableError
           end
 
@@ -98,7 +112,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
           freeze_time # so we can easily compare a decent_amount_longer from now
 
-          described_class.perform_later uuid
+          described_class.perform_later registration_session.uuid
         end
 
         it 'reenqueues the job' do
