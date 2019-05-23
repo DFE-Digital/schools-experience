@@ -45,14 +45,6 @@
       </p>
     </div>
 
-    <%- if @school.has_availability? -%>
-    <p>
-      <%= link_to "Start request",
-                  new_candidates_school_registrations_placement_preference_path(@school),
-                  class:"govuk-button" %>
-    </p>
-    <%- end -%>
-
     <p>
       <strong>
         For more information about our school use the following links:
@@ -88,6 +80,15 @@
       </li>
       <%- end -%>
     </ul>
+
+    <%- if @school.has_availability? -%>
+    <div class="school-start-request-button__tablet_plus">
+      <%= link_to "Start request",
+                  new_candidates_school_registrations_placement_preference_path(@school),
+                  class:"govuk-button" %>
+    </div>
+    <%- end -%>
+
   </div>
 
   <div class="govuk-grid-column-one-third column-top-border">
@@ -127,6 +128,14 @@
       </div>
       <%- end -%>
     </dl>
+
+    <%- if @school.has_availability? -%>
+    <div class="school-start-request-button__mobile">
+      <%= link_to "Start request",
+                  new_candidates_school_registrations_placement_preference_path(@school),
+                  class:"govuk-button" %>
+    </div>
+  <%- end -%>
 
   </div>
 </div>
