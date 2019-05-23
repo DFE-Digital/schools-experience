@@ -210,7 +210,7 @@ en:
     fieldset:
       bookings_school:
         enabled: Turn requests on or off
-        availability_preference_fixed: Choose your availability preference
+        availability_preference_fixed: Change how availability and dates are displayed
       bookings_placement_date:
         date: Enter a start date
       phases: Education phases
@@ -293,8 +293,10 @@ en:
           true: Allow requests
           false: Do not allow requests
         availability_preference_fixed:
-          true: Fixed dates
-          false: Flexible dates
+          true_html: <strong>Fixed dates</strong> - display set dates
+          false_html: <strong>Flexible dates</strong> - display a description of your availability
+        availability_info: Describe your school experience availability
+
       bookings_placement_date:
         duration: How many days will it last?
         active: Make this date available to candidates?

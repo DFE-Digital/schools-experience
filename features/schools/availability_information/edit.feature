@@ -9,23 +9,23 @@ Feature: Editing availability info
 
     Scenario: Page title
         Given I am on the 'availability information' page
-        Then the page title should be 'Availability information'
+        Then the page title should be 'Describe your school experience availability'
 
     Scenario: Breadcrumbs
         Given I am on the 'availability information' page
         Then I should see the following breadcrumbs:
-            | Text                     | Link     |
-            | Some school              | /schools |
-            | Availability information | None     |
+            | Text                                         | Link     |
+            | Some school                                  | /schools |
+            | Describe your school experience availability | None     |
 
     Scenario: Page contents
         Given I am on the 'availability information' page
-        Then there should be a 'Availability info' text area
+        Then there should be a 'Describe your school experience availability' text area
         And the submit button should contain text 'Continue'
 
     Scenario: Submitting the form
         Given I am on the 'availability information' page
-        When I enter 'Every third Tuesday' into the 'Availability info' text area
+        When I enter 'Every third Tuesday' into the 'Describe your school experience availability' text area
         And I submit the form
         Then I should be on the 'schools dashboard' page
         And my school's availabiltiy info should have been updated

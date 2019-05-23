@@ -1,9 +1,9 @@
-<%- self.page_title = "Availability preference" %>
+<%- self.page_title = "Change how availability and dates are displayed" %>
 
 <%
   self.breadcrumbs = {
     @current_school.name => schools_root_path,
-    'Availability preference' => nil
+    'Change how availability and dates are displayed' => nil
   }
 %>
 
@@ -14,41 +14,24 @@
 
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
-      <p>
-        You need to contact individual candidates to discuss, arrange and offer
-        them a placement date after you’ve received their school experience
-        request.
-      </p>
-      <p>
-        You should try and respond to requests within 10 working days during
-        term time.
-      </p>
-      <p>
-        Once you’ve accepted a request you’ll be asked to confirm the
-        candidate’s placement dates as part of confirming their school
-        experience booking.
-      </p>
-
       <%= f.hidden_field :fixed, value: nil %>
 
       <%= f.radio_button_fieldset :availability_preference_fixed do |fieldset| %>
         <p>
-          Select whether you’d like to tell candidates about your school
-          experience by outlining your school's availability or telling them
-          about fixed dates:
+          Select how you’d like to show about your school experience availability
+          and dates to candidates:
         </p>
-        <%= fieldset.radio_input true %>
+        <%= fieldset.radio_input(true, 'aria-describedby' => 'availability-preference-fixed-true-hint') %>
+        <span id="availability-preference-fixed-true-hint" class="govuk-hint govuk-hint__indented">
+          Any existing flexible date description will be hidden from candidates
+          and <strong>will not be lost</strong>
+        </span>
 
-        <%- if @current_school.availability_preference_fixed? && @placement_dates.any? %>
-          <%= fieldset.radio_input false do %>
-            <span class="govuk-hint">
-              If you change your school to use flexible dates all your existing fixed dates
-              will be hidden from candidates.
-            </span>
-          <%- end -%>
-        <%- else -%>
-          <%= fieldset.radio_input false %>
-        <%- end -%>
+        <%= fieldset.radio_input(false, 'aria-describedby' => 'availability-preference-fixed-false-hint') %>
+        <span id="availability-preference-fixed-false-hint" class="govuk-hint govuk-hint__indented">
+          All your existing fixed dates will be hidden from candidates and <strong>will
+          not be lost</strong>
+        </span>
       <% end %>
 
       <%= f.submit 'Continue' %>
