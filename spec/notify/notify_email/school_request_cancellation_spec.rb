@@ -5,6 +5,7 @@ describe NotifyEmail::SchoolRequestCancellation do
     school_admin_name: "Seymour Skinner",
     school_name: "Springfield Elementary School",
     candidate_name: "Otto Mann",
-    placement_start_date: "2022-04-01",
-    placement_finish_date: "2022-04-20"
+    cancellation_reasons: 'Spinal Tap playing same day',
+    requested_availability: 'whenever',
+    placement_request_url: 'http://example.com/schools/placement_requests/1'
 end
