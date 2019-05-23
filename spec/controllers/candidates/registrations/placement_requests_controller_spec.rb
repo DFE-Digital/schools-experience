@@ -107,26 +107,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
   end
 
   context '#show' do
-    context 'uuid not found' do
-      before do
-        get \
-          "/candidates/schools/URN/registrations/placement_request?uuid=bad-uuid"
-      end
-
-      it 'renders the session expired view' do
-        expect(response).to render_template :session_expired
-      end
+    before do
+      get \
+        "/candidates/schools/#{school.urn}/registrations/placement_request?uuid=#{uuid}"
     end
 
-    context 'uuid found' do
-      before do
-        get \
-          "/candidates/schools/URN/registrations/placement_request?uuid=#{uuid}"
-      end
-
-      it 'renders the show template' do
-        expect(response).to render_template :show
-      end
+    it 'renders the show template' do
+      expect(response).to render_template :show
     end
   end
 end
