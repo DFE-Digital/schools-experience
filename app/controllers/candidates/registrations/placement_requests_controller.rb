@@ -12,6 +12,9 @@ module Candidates
         registration_session = RegistrationStore.instance.retrieve! params[:uuid]
 
         unless registration_session.completed?
+          Bookings::PlacementRequest.create_from_registration_session! \
+            registration_session
+
           registration_session.flag_as_completed!
 
           RegistrationStore.instance.store! registration_session

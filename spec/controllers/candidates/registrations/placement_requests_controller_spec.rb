@@ -20,9 +20,18 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
   end
 
   context '#create' do
+    before :each do
+      @placement_request_count = Bookings::PlacementRequest.count
+    end
+
     context 'uuid not found' do
       before do
         get "/candidates/confirm/bad-uuid"
+      end
+
+      it "doesn't create a new PlacementRequest" do
+        expect(Bookings::PlacementRequest.count).to \
+          eq @placement_request_count
       end
 
       it "doesn't queue a PlacementRequestJob" do
@@ -42,7 +51,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
       context 'registration job already enqueued' do
         before do
+          @placement_request_count = Bookings::PlacementRequest.count
           get "/candidates/confirm/#{uuid}"
+        end
+
+        it "doesn't create a new PlacementRequest" do
+          expect(Bookings::PlacementRequest.count).to \
+            eq @placement_request_count
         end
 
         it "doesn't requeue a PlacementRequestJob" do
@@ -66,6 +81,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
         it 'marks the registration as completed and re-stores it in redis' do
           expect(stored_registration_session).to be_completed
+        end
+
+        it 'creates a bookings placement request' do
+          expect(Bookings::PlacementRequest.count).to \
+            eq @placement_request_count + 1
+          expect(Bookings::PlacementRequest.last.school).to \
+            eq stored_registration_session.school
         end
 
         it 'enqueues the placement request job' do
