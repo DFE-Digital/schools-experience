@@ -172,7 +172,7 @@ describe Bookings::Gitis::API do
 
       subject { api.post('contacts', 'firstname' => 'test', 'lastname' => 'user') }
 
-      it { is_expected.to eq("#{service_url}#{endpoint}/contacts(#{uuid})") }
+      it { is_expected.to eq("contacts(#{uuid})") }
     end
 
     context "for invalid url" do
@@ -267,7 +267,7 @@ describe Bookings::Gitis::API do
 
       subject { api.patch("contacts(#{uuid})", 'firstname' => 'test', 'lastname' => 'user') }
 
-      it { is_expected.to eq("#{service_url}#{endpoint}/contacts(#{uuid})") }
+      it { is_expected.to eq("contacts(#{uuid})") }
     end
 
     context "for invalid url" do

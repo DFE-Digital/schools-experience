@@ -1,46 +1,42 @@
 module Bookings
   module Gitis
     class Contact
-      include ActiveModel::Model
+      include Entity
 
       attr_reader :id
-      attr_accessor :firstname, :lastname, :email, :phone
-      attr_accessor :building, :street, :town_or_city, :county, :postcode
+      entity_attributes :firstname, :lastname, :email, :phone
+      entity_attributes :building, :street, :town_or_city, :county, :postcode
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
       def initialize(crm_contact_data = {})
-        @crm_data     = crm_contact_data
-        @id           = @crm_data['contactid']
-        @firstname    = @crm_data['firstname']
-        @lastname     = @crm_data['lastname']
-        @email        = parse_email_from_crm(@crm_data)
-        @phone        = parse_phone_from_crm(@crm_data)
-        @building     = @crm_data['address1_line1']
-        @street       = parse_street_from_crm(@crm_data)
-        @town_or_city = @crm_data['address1_city']
-        @county       = @crm_data['address1_stateorprovince']
-        @postcode     = @crm_data['address1_postalcode']
+        @crm_data         = crm_contact_data.stringify_keys
+        self.id           = @crm_data['contactid']
+        self.firstname    = @crm_data['firstname']
+        self.lastname     = @crm_data['lastname']
+        self.email        = parse_email_from_crm(@crm_data)
+        self.phone        = parse_phone_from_crm(@crm_data)
+        self.building     = @crm_data['address1_line1']
+        self.street       = parse_street_from_crm(@crm_data)
+        self.town_or_city = @crm_data['address1_city']
+        self.county       = @crm_data['address1_stateorprovince']
+        self.postcode     = @crm_data['address1_postalcode']
       end
 
       def address
-        [@building, @street, @town_or_city, @county, @postcode].compact.join(", ")
+        [building, street, town_or_city, county, postcode].compact.join(", ")
       end
 
       def id=(assigned_id)
         if @id.blank?
-          @id = assigned_id.to_s
+          @id = assigned_id
         elsif @id.to_s != assigned_id.to_s
           fail ContactIdChangedUnexpectedly
         end
       end
 
-      def crm_data
-        {} # STUBBED FOR NOW
-      end
-
       def full_name
-        "#{@firstname} #{@lastname}"
+        "#{firstname} #{lastname}"
       end
 
       class ContactIdChangedUnexpectedly < RuntimeError; end

@@ -38,11 +38,21 @@ module Bookings
         Contact.new(contacts[0]) if contacts.any?
       end
 
-      def write(contact)
-        raise ArgumentError unless contact.is_a?(Contact)
-        return false unless contact.valid?
+      def write(entity)
+        raise ArgumentError unless entity.class < Entity
+        return false unless entity.valid?
 
-        contact.id = write_data(contact.crm_data)
+        # Sorting to allow stubbing http requests
+        # webmock compares the request body as a serialized string
+        data = entity.changed_attributes.sort.to_h
+
+        if entity.id
+          api.patch(entity.entity_id, data)
+        else
+          entity.entity_id = api.post(entity.entity_id, data)
+        end
+
+        entity.id
       end
 
       class InvalidApiError < RuntimeError; end
@@ -63,11 +73,6 @@ module Bookings
         end
       end
 
-      def write_data(crm_contact_data)
-        crm_contact_data['contactid'].presence ||
-          "75c5a32d-d603-4483-956f-236fee7c5784"
-      end
-
       def filter_pairs(filter_data, join_with = 'or')
         parts = filter_data.map do |key, values|
           Array.wrap(values).map do |value|
@@ -76,10 +81,6 @@ module Bookings
         end
 
         parts.join(" #{join_with} ")
-      end
-
-      def multiple_contactid_filter(uuids)
-        uuids.map { |id| "contactid eq '#{id}'" }.join(' or ')
       end
 
       def fake_account_data

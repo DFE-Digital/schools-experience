@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::Contact, type: :model do
+  describe '.entity_path' do
+    subject { described_class.entity_path }
+    it { is_expected.to eq('contacts') }
+  end
+
   describe '.initialize' do
     context "with data" do
       before do
@@ -24,6 +29,11 @@ describe Bookings::Gitis::Contact, type: :model do
 
       it "will assign id" do
         expect(@contact.id).to eq "d778d663-a022-4c4b-9962-e469ee179f4a"
+      end
+
+      it "will assign entity_id" do
+        expect(@contact.entity_id).to \
+          eq("contacts(d778d663-a022-4c4b-9962-e469ee179f4a)")
       end
 
       it "will assign name" do

@@ -106,9 +106,9 @@ module Bookings::Gitis
           resp.body
         end
       when 201
-        resp.headers['odata-entityid'] || resp.body
+        parse_entity_id(resp.headers['odata-entityid']) || resp.body
       when 204
-        resp.headers['odata-entityid'] || true
+        parse_entity_id(resp.headers['odata-entityid']) || true
       when 401
         raise AccessDeniedError.new(resp)
       when 404
@@ -116,6 +116,10 @@ module Bookings::Gitis
       else
         raise BadResponseError.new(resp)
       end
+    end
+
+    def parse_entity_id(entity_id)
+      entity_id&.gsub(%r{\A#{endpoint_url}\/}, '')
     end
   end
 end

@@ -91,12 +91,38 @@ describe Bookings::Gitis::CRM, type: :model do
   end
 
   describe '.write' do
-    # Note: this is just stubbed functionality for now
-    context 'with a valid contact' do
-      before { @contact = build(:gitis_contact) }
+    let(:contactid) { SecureRandom.uuid }
+    let(:contact_attributes) { attributes_for(:gitis_contact) }
+
+    context 'with a valid new contact' do
+      let(:contact) { build(:gitis_contact, contact_attributes) }
+
+      before do
+        sorted_attrs = contact_attributes.sort.to_h
+        gitis_stub.stub_create_contact_request(sorted_attrs, contactid)
+      end
+
+      subject { gitis.write(contact) }
+
+      it "will return the id of the inserted record" do
+        is_expected.to eq(contactid)
+      end
+    end
+
+    context 'with a valid existing contact' do
+      before do
+        @contact = build(:gitis_contact, contact_attributes.merge(id: contactid))
+        @contact.reset_dirty_attributes
+        @contact.firstname = 'Changed'
+        @contact.lastname = 'Name'
+        gitis_stub.stub_update_contact_request(
+          { 'firstname' => 'Changed', 'lastname' => 'Name' },
+          contactid
+        )
+      end
 
       it "will succeed" do
-        expect(gitis.write(@contact)).to eq("75c5a32d-d603-4483-956f-236fee7c5784")
+        expect(gitis.write(@contact)).to eq(contactid)
       end
     end
 

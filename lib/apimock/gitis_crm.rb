@@ -123,25 +123,28 @@ module Apimock
         )
     end
 
-    def stub_create_contact_request(params)
+    def stub_create_contact_request(params, return_uuid = SecureRandom.uuid)
       stub_request(:post, "#{service_url}#{endpoint}/contacts").
-        with(headers: post_headers, body: params.to_json).
+        with(headers: post_headers, body: params.stringify_keys.to_json).
         to_return(
           status: 204,
           headers: {
             'content-type' => 'application/json',
-            'odata-entityid' => "#{service_url}#{endpoint}/contacts(#{SecureRandom.uuid})"
+            'odata-entityid' => "#{service_url}#{endpoint}/contacts(#{return_uuid})"
           },
           body: ''
         )
     end
 
-    def stub_update_contact_request(uuid, params)
+    def stub_update_contact_request(params, uuid)
       stub_request(:patch, "#{service_url}#{endpoint}/contacts(#{uuid})").
         with(headers: post_headers, body: params.to_json).
         to_return(
           status: 204,
-          headers: { 'content-type' => 'application/json' },
+          headers: {
+            'content-type' => 'application/json',
+            'odata-entityid' => "#{service_url}#{endpoint}/contacts(#{uuid})"
+          },
           body: ''
         )
     end
