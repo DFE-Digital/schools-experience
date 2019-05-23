@@ -24,18 +24,24 @@ Feature: Fees
   Scenario: Completing step choosing Adminsitration costs only
     Given I am on the 'fees charged' page
     And I choose 'Yes' from the 'Administration costs' radio buttons
+    And I choose 'No' from the 'DBS check costs' radio buttons
+    And I choose 'No' from the 'Other costs' radio buttons
     When I submit the form
     Then I should be on the 'Administration costs' page
 
   Scenario: Completing step choosing DBS costs only
     Given I am on the 'fees charged' page
     And I choose 'Yes' from the 'DBS check costs' radio buttons
+    And I choose 'No' from the 'Administration costs' radio buttons
+    And I choose 'No' from the 'Other costs' radio buttons
     When I submit the form
     Then I should be on the 'DBS check costs' page
 
   Scenario: Completing step choosing Other costs only
     Given I am on the 'fees charged' page
     And I choose 'Yes' from the 'Other costs' radio buttons
+    And I choose 'No' from the 'DBS check costs' radio buttons
+    And I choose 'No' from the 'Administration costs' radio buttons
     When I submit the form
     Then I should be on the 'Other costs' page
 
@@ -46,8 +52,3 @@ Feature: Fees
     And I choose 'Yes' from the 'Other costs' radio buttons
     When I submit the form
     Then I should be on the 'Administration costs' page
-
-  Scenario: Completing step choosing no costs
-    Given I am on the 'fees charged' page
-    When I submit the form
-    Then I should be on the 'Phases' page

@@ -24,6 +24,9 @@
         This includes fees to cover administration costs, background and security ‘DBS check’ charges or any other school experience-related costs schools might incur.
       </p>
 
+      <% # hidden_field ensures the form is submitted if no radios selected %>
+      <%= f.hidden_field :administration_fees %>
+
       <%= f.radio_button_fieldset :administration_fees, choices: [true, false] %>
       <%= f.radio_button_fieldset :dbs_fees, choices: [true, false] %>
       <%= f.radio_button_fieldset :other_fees, choices: [true, false] %>
