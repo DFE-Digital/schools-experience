@@ -17,7 +17,12 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
   it { is_expected.to have_secure_token }
 
-  it { is_expected.to have_one(:cancellation).dependent(:destroy) }
+  it do
+    is_expected.to \
+      have_one(:candidate_cancellation)
+        .dependent(:destroy)
+        .class_name('Bookings::PlacementRequest::Cancellation')
+  end
 
   it { is_expected.to respond_to :sent_at }
 
