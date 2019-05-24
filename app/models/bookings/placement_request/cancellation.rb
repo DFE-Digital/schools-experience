@@ -5,6 +5,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
 
   validates :bookings_placement_request_id, uniqueness: true
   validates :reason, presence: true
+  validates :cancelled_by, inclusion: %w(candidate school)
 
   def school_email
     placement_request.school.contact_email
