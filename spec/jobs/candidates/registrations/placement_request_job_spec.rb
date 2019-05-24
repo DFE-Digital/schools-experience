@@ -7,6 +7,10 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
     'some-uuid'
   end
 
+  let :analytics_tracking_uuid do
+    'some-analytics-uuid'
+  end
+
   let :placement_request_action do
     double Candidates::Registrations::PlacementRequestAction, perform!: true
   end
@@ -19,15 +23,30 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
   context '#perform' do
     context 'no errors' do
-      before do
-        described_class.perform_later uuid
+      context 'with only a uuid' do
+        before do
+          described_class.perform_later uuid
+        end
+
+        it 'calls PlacementRequestAction with a uuid' do
+          expect(Candidates::Registrations::PlacementRequestAction).to \
+            have_received(:new).with(uuid, nil)
+
+          expect(placement_request_action).to have_received(:perform!)
+        end
       end
 
-      it 'calls PlacementRequestAction with the correct arguments' do
-        expect(Candidates::Registrations::PlacementRequestAction).to \
-          have_received(:new).with(uuid)
+      context 'with a uuid and an analytics_tracking_uuid' do
+        before do
+          described_class.perform_later uuid, analytics_tracking_uuid
+        end
 
-        expect(placement_request_action).to have_received :perform!
+        it 'calls PlacementRequestAction with a uuid and a analytics_tracking_uuid' do
+          expect(Candidates::Registrations::PlacementRequestAction).to \
+            have_received(:new).with(uuid, analytics_tracking_uuid)
+
+          expect(placement_request_action).to have_received :perform!
+        end
       end
     end
 

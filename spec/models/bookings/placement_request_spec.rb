@@ -50,6 +50,24 @@ describe Bookings::PlacementRequest, type: :model do
         }.to change { described_class.count }.by 1
       end
     end
+
+    context 'with analytics_tracking_uuid' do
+      let! :analytics_tracking_uuid do
+        SecureRandom.uuid
+      end
+
+      let :registration_session do
+        FactoryBot.build :registration_session
+      end
+
+      subject do
+        described_class.create_from_registration_session! registration_session, analytics_tracking_uuid
+      end
+
+      specify 'it stores the analytics_tracking_uuid correctly if supplied' do
+        expect(subject.analytics_tracking_uuid).to eql(analytics_tracking_uuid)
+      end
+    end
   end
 
   context 'attributes' do

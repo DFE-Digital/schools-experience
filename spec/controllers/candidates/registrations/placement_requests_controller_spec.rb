@@ -70,7 +70,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
         it 'enqueues the placement request job' do
           expect(Candidates::Registrations::PlacementRequestJob).to \
-            have_received(:perform_later).with uuid
+            have_received(:perform_later).with uuid, nil
         end
 
         it 'redirects to placement request show' do
