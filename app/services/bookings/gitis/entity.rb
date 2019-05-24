@@ -42,7 +42,7 @@ module Bookings::Gitis
       if id_match && id_match[1]
         self.id = id_match[1]
       else
-        raise InvalidEntityId
+        raise InvalidEntityIdError
       end
     end
 
@@ -50,7 +50,7 @@ module Bookings::Gitis
       id ? "#{entity_path}(#{id})" : entity_path
     end
 
-    class InvalidEntityId < RuntimeError; end
+    class InvalidEntityIdError < RuntimeError; end
 
     module ClassMethods
     protected
@@ -80,7 +80,7 @@ module Bookings::Gitis
       end
 
       def derive_primary_key
-        model_name.to_s.underscore.split('/').last.to_s + 'id'
+        model_name.to_s.underscore.split('/').last + 'id'
       end
     end
   end
