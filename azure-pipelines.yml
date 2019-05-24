@@ -2,10 +2,9 @@ pool:
   vmImage: 'ubuntu-16.04'
 
 variables:
-  imageName: school-experience
   imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
-  # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
+  # define four more variables imageName, dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
   SECRET_KEY_BASE: stubbed
   REDIS_IMAGE: redis:5-alpine
@@ -13,6 +12,7 @@ variables:
   APP_URL: http://school-experience:3000
 
 steps:
+
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
     env:
       pswd: $(dockerPassword)
@@ -63,14 +63,32 @@ steps:
       docker push $(dockerRegistry)/$(imageName):latest
       docker tag $(dockerRegistry)/$(imageName):latest $(dockerRegistry)/$(imageName):$(imageTag)
       docker push $(dockerRegistry)/$(imageName):$(imageTag)
+      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: 'Push Docker image (built from master)'
+
+  - task: Docker@2
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    displayName: login
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      command: login
+
+  - task: Docker@2
+    displayName: 'push to docker hub'
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      repository: $(DOCKER_HUB_REPO)
+      command: push
+      tags: $(imageTag)
 
   - task: CopyFiles@2
     inputs:
       contents: 'script/compose-school-experience.sh'
       targetFolder: $(Build.ArtifactStagingDirectory)
     displayName: 'Copy Docker Compose file to staging area'
+
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: $(Build.ArtifactStagingDirectory)/script/compose-school-experience.sh
