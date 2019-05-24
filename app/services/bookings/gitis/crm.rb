@@ -9,7 +9,7 @@ module Bookings
         @endpoint = endpoint
       end
 
-      def find(*uuids)
+      def find(*uuids, entity_type: Contact)
         uuids = normalise_ids(*uuids)
         validate_ids(uuids)
 
@@ -17,12 +17,12 @@ module Bookings
         params = { '$top' => uuids.length }
 
         if uuids.length == 1
-          Contact.new api.get("contacts(#{uuids[0]})", params)
+          entity_type.new api.get("#{entity_type.entity_path}(#{uuids[0]})", params)
         else
-          params['$filter'] = filter_pairs(contactid: uuids)
+          params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
 
-          api.get('contacts', params)['value'].map do |contact|
-            Contact.new contact
+          api.get(entity_type.entity_path, params)['value'].map do |entity_data|
+            entity_type.new entity_data
           end
         end
       end
@@ -33,7 +33,6 @@ module Bookings
           emailaddress2: address,
           emailaddress3: address
         ))['value']
-
 
         Contact.new(contacts[0]) if contacts.any?
       end

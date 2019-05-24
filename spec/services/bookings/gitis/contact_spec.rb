@@ -6,6 +6,11 @@ describe Bookings::Gitis::Contact, type: :model do
     it { is_expected.to eq('contacts') }
   end
 
+  describe '.primary_key' do
+    subject { described_class.primary_key }
+    it { is_expected.to eq('contactid') }
+  end
+
   describe '.initialize' do
     context "with data" do
       before do

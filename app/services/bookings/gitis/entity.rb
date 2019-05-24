@@ -7,6 +7,9 @@ module Bookings::Gitis
 
       class_attribute :entity_path
       self.entity_path = derive_entity_path
+
+      class_attribute :primary_key
+      self.primary_key = derive_primary_key
     end
 
     def initialize
@@ -74,6 +77,10 @@ module Bookings::Gitis
 
       def derive_entity_path
         model_name.to_s.underscore.split('/').last.pluralize
+      end
+
+      def derive_primary_key
+        model_name.to_s.underscore.split('/').last.to_s + 'id'
       end
     end
   end
