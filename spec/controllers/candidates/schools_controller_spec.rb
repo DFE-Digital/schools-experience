@@ -72,6 +72,24 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         specify { expect(response).to have_http_status(:success) }
       end
     end
+
+    context 'analytics tracking' do
+      # set the uuid in the session, grab it then do a search
+      before { get new_candidates_school_search_path }
+      before { @uuid = session[:analytics_tracking_uuid] }
+      before { get candidates_schools_path(query_params) }
+
+      specify 'should persist the analytics_tracking_uuid if present' do
+        expect(Bookings::SchoolSearch.last.analytics_tracking_uuid).to eql(@uuid)
+      end
+
+      specify 'make sure it looks like a UUID' do
+        @uuid.split('-').tap do |parts|
+          expect(parts.map(&:length)).to eql([8, 4, 4, 4, 12])
+          expect(parts).to all(match(/[0-9a-f]/))
+        end
+      end
+    end
   end
 
   context "GET #show" do

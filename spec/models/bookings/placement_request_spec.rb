@@ -15,6 +15,7 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:has_dbs_check).of_type(:boolean).with_options null: false }
   it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: true }
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
+  it { is_expected.to have_db_column(:analytics_tracking_uuid).of_type(:uuid).with_options null: true }
 
   it_behaves_like 'a background check'
 
