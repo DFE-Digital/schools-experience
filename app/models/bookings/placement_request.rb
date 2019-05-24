@@ -12,7 +12,8 @@ module Bookings
       class_name: 'Bookings::School',
       foreign_key: :bookings_school_id
 
-    has_one :cancellation,
+    has_one :candidate_cancellation,
+      -> { where cancelled_by: 'candidate' },
       class_name: 'Bookings::PlacementRequest::Cancellation',
       foreign_key: 'bookings_placement_request_id',
       dependent: :destroy
@@ -23,12 +24,6 @@ module Bookings
           .new(registration_session)
           .attributes
           .merge(analytics_tracking_uuid: analytics_tracking_uuid)
-    end
-
-    def build_candidate_cancellation(args = {})
-      build_cancellation(args).tap do |cancellation|
-        cancellation.cancelled_by = 'candidate'
-      end
     end
 
     def sent_at
@@ -47,7 +42,7 @@ module Bookings
   private
 
     def cancelled?
-      cancellation.present?
+      candidate_cancellation.present?
     end
 
     def completed?

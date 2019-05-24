@@ -24,7 +24,7 @@ FactoryBot.define do
 
     trait :cancelled do
       before :create do |placement_request|
-        placement_request.cancellation = \
+        placement_request.candidate_cancellation = \
           FactoryBot.build :cancellation, placement_request: placement_request
       end
     end
