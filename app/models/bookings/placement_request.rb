@@ -36,7 +36,7 @@ module Bookings
       cancelled? || completed?
     end
 
-    # FIXME update this model to belong_to a candidate
+    # FIXME SE-1095 update this model to belong_to a candidate
     def candidate
       @candidate ||= Bookings::Gitis::CRM.new('abc123').find(1)
     end
@@ -48,7 +48,7 @@ module Bookings
     end
 
     def completed?
-      # FIXME determine from booking
+      # FIXME SE-1096 determine from booking
       false
     end
   end
