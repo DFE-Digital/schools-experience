@@ -69,7 +69,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
       end
 
       it 'doesnt create the placement request' do
-        expect(placement_request.cancellation.reason).not_to \
+        expect(placement_request.candidate_cancellation.reason).not_to \
           eq cancellation.reason
       end
 
@@ -146,6 +146,11 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
 
           expect(notify_candidate_request_cancellation).to \
             have_received :despatch_later!
+        end
+
+        it 'creates the cancellation' do
+          expect(placement_request.candidate_cancellation.reason).to \
+            eq cancellation.reason
         end
 
         it 'cancels the placement request' do

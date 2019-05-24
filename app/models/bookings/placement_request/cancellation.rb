@@ -6,6 +6,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   validates :bookings_placement_request_id, uniqueness: true
   validates :reason, presence: true
   validates :cancelled_by, inclusion: %w(candidate school)
+  validate :placement_request_not_closed, on: :create, if: :placement_request
 
   def school_email
     placement_request.school.contact_email
@@ -29,5 +30,13 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
 
   def requested_availability
     placement_request.availability
+  end
+
+private
+
+  def placement_request_not_closed
+    if placement_request.closed?
+      errors.add :placement_request, 'is already closed'
+    end
   end
 end
