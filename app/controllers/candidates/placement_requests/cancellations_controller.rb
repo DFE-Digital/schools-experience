@@ -39,7 +39,7 @@ module Candidates
 
       def ensure_placement_request_is_open
         if @placement_request.closed?
-          # FIXME redirect to candidate's placment request dashboard if the
+          # FIXME SE-1097 redirect to candidate's placment request dashboard if the
           # the placement request is closed.
           # For the time being we're redirecting to cancellation#show
           # as that's the currenlty the only way a placement request can be
