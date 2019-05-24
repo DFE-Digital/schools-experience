@@ -22,6 +22,12 @@ module Bookings
         Candidates::Registrations::RegistrationAsPlacementRequest.new(registration_session).attributes
     end
 
+    def build_candidate_cancellation(args = {})
+      build_cancellation(args).tap do |cancellation|
+        cancellation.cancelled_by = 'candidate'
+      end
+    end
+
     def sent_at
       created_at
     end

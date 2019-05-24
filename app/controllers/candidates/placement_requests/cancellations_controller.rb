@@ -9,11 +9,11 @@ module Candidates
       end
 
       def new
-        @cancellation = @placement_request.build_cancellation
+        @cancellation = @placement_request.build_candidate_cancellation
       end
 
       def create
-        @cancellation = @placement_request.build_cancellation \
+        @cancellation = @placement_request.build_candidate_cancellation \
           placement_request_params
 
         if @cancellation.save
