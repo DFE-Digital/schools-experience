@@ -315,4 +315,14 @@ describe Bookings::PlacementRequest, type: :model do
       end
     end
   end
+
+  context 'build_candidate_cancellation' do
+    let :cancellation do
+      described_class.new.build_candidate_cancellation
+    end
+
+    it 'returns a new cancellation with cancelled_by set to "candidate"' do
+      expect(cancellation.cancelled_by).to eq 'candidate'
+    end
+  end
 end
