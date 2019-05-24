@@ -14,7 +14,7 @@ describe Bookings::Gitis::CRM, type: :model do
     end
   end
 
-  describe '.find' do
+  describe '#find' do
     let!(:uuids) do
       [
         "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
@@ -69,7 +69,7 @@ describe Bookings::Gitis::CRM, type: :model do
     end
   end
 
-  describe '.find_by_email' do
+  describe '#find_by_email' do
     let(:email) { 'me@something.com' }
 
     it "will return a contact record" do
@@ -77,7 +77,24 @@ describe Bookings::Gitis::CRM, type: :model do
     end
   end
 
-  describe '.write' do
+  describe '#find_contact_for_signin' do
+    let(:email) { 'me@something.com' }
+
+    subject do
+      gitis.find_contact_for_signin(
+        email: email,
+        firstname: 'ignore',
+        lastname: 'ignore',
+        date_of_birth: 'invalid'
+      )
+    end
+
+    it "will return a contact record" do
+      is_expected.to have_attributes(email: email)
+    end
+  end
+
+  describe '#write' do
     # Note: this is just stubbed functionality for now
     context 'with a valid contact' do
       before { @contact = build(:gitis_contact) }
