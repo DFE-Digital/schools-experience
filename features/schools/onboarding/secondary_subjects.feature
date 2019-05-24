@@ -15,6 +15,10 @@ Feature: Subjects
         | Other costs                  |                           |
         | Phases                       |                           |
 
+  Scenario: Page title
+    Given I am on the 'Subjects' page
+    Then the page title should be 'Select school experience subjects'
+
   Scenario: Breadcrumbs
     Given I am already on the 'Subjects' page
     Then I should see the following breadcrumbs:

@@ -16,6 +16,10 @@ Feature: Description
         | Phases                       |                           |
         | Subjects                     |                           |
 
+  Scenario: Page title
+    Given I am on the 'description' page
+    Then the page title should be 'Enter a short description of your school'
+
   Scenario: Breadcrumbs
     Given I am already on the 'description' page
     Then I should see the following breadcrumbs:

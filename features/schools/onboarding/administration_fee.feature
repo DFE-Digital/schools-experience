@@ -12,6 +12,10 @@ Feature: Administration Fee
         | Candidate Requirements |                                    |
         | Fees                   | choosing only Administration costs |
 
+  Scenario: Page title
+    Given I am already on the 'administration costs' page
+    Then the page title should be 'Administration costs'
+
   Scenario: Breadcrumbs
     Given I am already on the 'administration costs' page
     Then I should see the following breadcrumbs:
