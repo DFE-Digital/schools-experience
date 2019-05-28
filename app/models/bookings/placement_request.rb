@@ -10,9 +10,12 @@ module Bookings
       class_name: 'Bookings::School',
       foreign_key: :bookings_school_id
 
-    def self.create_from_registration_session!(registration_session)
+    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
       self.create! \
-        Candidates::Registrations::RegistrationAsPlacementRequest.new(registration_session).attributes
+        Candidates::Registrations::RegistrationAsPlacementRequest
+          .new(registration_session)
+          .attributes
+          .merge(analytics_tracking_uuid: analytics_tracking_uuid)
     end
   end
 end

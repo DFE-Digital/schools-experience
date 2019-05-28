@@ -1,17 +1,18 @@
 class Candidates::SchoolsController < ApplicationController
+  include AnalyticsTracking
   EXPANDED_SEARCH_RADIUS = 50
 
   def index
     return redirect_to new_candidates_school_search_path unless location_present?
 
-    @search = Candidates::SchoolSearch.new(search_params)
+    @search = Candidates::SchoolSearch.new(search_params_with_analytics_tracking)
 
     return render 'candidates/school_searches/new' unless @search.valid?
 
     if @search.results.empty?
       @expanded_search_radius = true
       @search = Candidates::SchoolSearch.new(
-        search_params.merge(distance: EXPANDED_SEARCH_RADIUS)
+        search_params_with_analytics_tracking.merge(distance: EXPANDED_SEARCH_RADIUS)
       )
     end
   end
@@ -37,5 +38,9 @@ private
       :query, :location, :latitude, :longitude, :page,
       :distance, :max_fee, :order, phases: [], subjects: []
     )
+  end
+
+  def search_params_with_analytics_tracking
+    search_params.merge(analytics_tracking_uuid: session[:analytics_tracking_uuid])
   end
 end
