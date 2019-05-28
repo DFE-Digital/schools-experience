@@ -23,7 +23,7 @@ module Candidates
                   :longitude, :page, :analytics_tracking_uuid
     attr_reader :distance, :max_fee
 
-    delegate :location_name, :valid?, :errors, to: :school_search
+    delegate :location_name, :has_coordinates?, :valid?, :errors, to: :school_search
 
     class << self
       delegate :available_orders, to: Bookings::SchoolSearch
