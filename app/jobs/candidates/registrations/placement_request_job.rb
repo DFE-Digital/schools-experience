@@ -5,8 +5,8 @@ module Candidates
 
       retry_on Notify::RetryableError, wait: A_DECENT_AMOUNT_LONGER, attempts: 5
 
-      def perform(uuid)
-        PlacementRequestAction.new(uuid).perform!
+      def perform(uuid, analytics_tracking_uuid = nil)
+        PlacementRequestAction.new(uuid, analytics_tracking_uuid).perform!
       end
     end
   end

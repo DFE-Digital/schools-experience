@@ -29,7 +29,8 @@ export default class extends Controller {
         showDashboard: true,
         enableSearchLogo: false,
         enableClickableLogo: false,
-        showCopyright: true
+        showCopyright: true,
+        disableScrollWheelZoom: true
     }) ;
 
     let pin = new Microsoft.Maps.Pushpin(location);
