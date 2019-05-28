@@ -1,15 +1,17 @@
 module Candidates
   module Registrations
     class PlacementRequestAction
-      def initialize(uuid)
+      def initialize(uuid, analytics_tracking_uuid = nil)
         @uuid = uuid
+        @analytics_tracking_uuid = analytics_tracking_uuid
       end
 
       def perform!
         school_request_confirmation.despatch!
         candidate_request_confirmation.despatch!
         Bookings::PlacementRequest.create_from_registration_session! \
-          registration_session
+          registration_session,
+          @analytics_tracking_uuid
 
         RegistrationStore.instance.delete! registration_session.uuid
       end

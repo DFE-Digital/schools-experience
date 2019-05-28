@@ -109,10 +109,25 @@ describe Candidates::Registrations::PlacementRequestAction do
             .with(registration_session.email, application_preview)
         end
 
-        it 'persists the registration in postgres' do
-          expect(Bookings::PlacementRequest).to \
-            have_received(:create_from_registration_session!).with \
-              registration_session
+        context 'when a analytics_tracking_uuid is not present' do
+          it 'persists the registration in postgres' do
+            expect(Bookings::PlacementRequest).to \
+              have_received(:create_from_registration_session!).with \
+                registration_session,
+                nil
+          end
+        end
+
+        context 'when a analytics_tracking_uuid is present' do
+          let(:analytics_tracking_uuid) { 'some-analytics-uuid' }
+          subject { described_class.new uuid, analytics_tracking_uuid }
+
+          it 'persists the registration in postgres' do
+            expect(Bookings::PlacementRequest).to \
+              have_received(:create_from_registration_session!).with \
+                registration_session,
+                analytics_tracking_uuid
+          end
         end
 
         it 'removes the registration_session from redis' do

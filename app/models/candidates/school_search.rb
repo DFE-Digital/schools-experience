@@ -19,7 +19,8 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location, :order, :latitude, :longitude, :page
+    attr_accessor :query, :location, :order, :latitude,
+                  :longitude, :page, :analytics_tracking_uuid
     attr_reader :distance, :max_fee
 
     delegate :location_name, :valid?, :errors, to: :school_search
@@ -113,7 +114,8 @@ module Candidates
         phases: phases,
         max_fee: max_fee,
         requested_order: order,
-        page: page
+        page: page,
+        analytics_tracking_uuid: analytics_tracking_uuid
       )
     end
 
