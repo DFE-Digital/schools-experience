@@ -28,13 +28,19 @@ module Candidates::ResultsHelper
   end
 
   def expanded_search_radius_header_text
-    "0 results found within #{pluralize(params[:distance], 'mile')}"
+    if @search.has_coordinates?
+      "0 results found within #{pluralize(params[:distance], 'mile')}"
+    else
+      "0 results found"
+    end
   end
 
   def expanded_search_nearby_info_text
     if @search.results.empty?
       capture do
-        concat(tag.p { 'Not all schools in your area have signed up to use this website.' })
+        if @search.has_coordinates?
+          concat(tag.p { 'Not all schools in your area have signed up to use this website.' })
+        end
 
         concat(tag.p do
           <<~FIND_OUT_MORE
