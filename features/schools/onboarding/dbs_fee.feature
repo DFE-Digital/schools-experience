@@ -8,9 +8,20 @@ Feature: DBS Fee
     And the secondary school phase is availble
     And the college phase is availble
     And I have completed the following steps:
-        | Step name              | Extra                              |
-        | Candidate Requirements |                                    |
+        | Step name              | Extra                   |
+        | Candidate Requirements |                         |
         | Fees                   | choosing only DBS costs |
+
+  Scenario: Page title
+    Given I am on the 'dbs check costs' page
+    Then the page title should be 'DBS check costs'
+
+  Scenario: Breadcrumbs
+    Given I am on the 'dbs check costs' page
+    Then I should see the following breadcrumbs:
+        | Text            | Link     |
+        | Some school     | /schools |
+        | DBS check costs | None     |
 
   Scenario: Completing the DBS costs step with error
     Given I have entered the following details into the form:

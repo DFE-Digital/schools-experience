@@ -19,6 +19,10 @@ Feature: Availability description
         | Candidate experience details |                           |
         | Availability preference      |                           |
 
+  Scenario: Page title
+    Given I am already on the 'availability description' page
+    Then the page title should be 'Describe your school experience availability'
+
   Scenario: Breadcrumbs
     Given I am already on the 'availability description' page
     Then I should see the following breadcrumbs:
