@@ -8,11 +8,13 @@
 
     <dl class="placement-details govuk-summary-list">
       <div class="date-requested govuk-summary-list__row">
+
+        <%# FIXME if it's got a date instead of availability show that instead %>
         <dt class="govuk-summary-list__key">
           Dates requested
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.dates_requested %>
+          <%= @placement_request.availability %>
         </dd>
       </div>
 
@@ -21,7 +23,7 @@
           Request received
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.received_on %>
+          <%= @placement_request.created_at.to_formatted_s(:govuk) %>
         </dd>
       </div>
 
@@ -30,18 +32,10 @@
           DBS certificate
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.dbs %>
+          <%= format_boolean(@placement_request.has_dbs_check?) %>
         </dd>
       </div>
 
-      <div class="status govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Status
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <span class="govuk-tag"><%= @placement_request.status %></span>
-        </dd>
-      </div>
     </dl>
   </section>
 
@@ -91,12 +85,15 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ol class="govuk-list govuk-list--number">
-            <%- @placement_request.teaching_subjects.each do |subject| -%>
-            <li><%= subject %></li>
+            <li><%= @placement_request.subject_first_choice %></li>
+
+            <%- if @placement_request.subject_second_choice.present? -%>
+              <li><%= @placement_request.subject_second_choice %></li>
             <%- end -%>
           </ol>
         </dd>
       </div>
+
     </dl>
   </section>
 

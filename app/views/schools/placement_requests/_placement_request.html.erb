@@ -1,4 +1,4 @@
-<div class="school-request">
+<div class="placement-request" data-placement-request="<%= placement_request.id %>">
   <h2 class="govuk-heading-m">Request from <%= placement_request.candidate.full_name %></h2>
 
   <dl class="placement-details govuk-summary-list">
@@ -7,7 +7,7 @@
         Dates requested
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= placement_request.dates_requested %>
+        <%= placement_request.availability %>
       </dd>
     </div>
 
@@ -16,7 +16,7 @@
         Request received
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= placement_request.received_on %>
+        <%= placement_request.created_at.to_formatted_s(:govuk) %>
       </dd>
     </div>
 
@@ -35,6 +35,7 @@
 
           <div class="govuk-details__text">
             <dl class="govuk-summary-list govuk-summary-list--no-border govuk-body govuk-!-font-size-16">
+
               <div class="address govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                   Address
@@ -85,20 +86,10 @@
         Teaching subject
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= placement_request.teaching_subject %>
-      </dd>
-    </div>
-
-    <div class="status govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Status
-      </dt>
-      <dd class="govuk-summary-list__value">
-        <span class="govuk-tag"><%= placement_request.status %></span>
+        <%= placement_request.subject_first_choice %>
       </dd>
     </div>
   </dl>
 
-  <%= link_to "Open request", schools_placement_request_path('abc123'), class: 'govuk-button' %>
-
+  <%= link_to "Open request", schools_placement_request_path(placement_request.id), class: 'govuk-button' %>
 </div>

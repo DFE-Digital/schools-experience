@@ -1,3 +1,13 @@
+Given("there is a new placement request") do
+  @placement_request = FactoryBot.create(:bookings_placement_request, school: @school)
+end
+
+Given("I am on the accept placement request page") do
+  path = path_for("accept placement request", placement_request_id: @placement_request.id)
+  visit(path)
+  expect(page.current_path).to eql(path)
+end
+
 Then("I should see the following booking details:") do |table|
   table.hashes.each do |row|
     within('#booking-details') do

@@ -1,4 +1,4 @@
-def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil)
+def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil, placement_request_id: nil)
   if school && school.respond_to?(:to_param)
     school = school.to_param
   end
@@ -22,9 +22,9 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil)
     "booking" => [:schools_booking_path, booking_id],
     "placement requests" => [:schools_placement_requests_path],
     "upcoming requests" => [:schools_upcoming_requests_path],
-    "placement request" => [:schools_placement_request_path, 'abc123'],
-    "accept placement request" => [:schools_placement_request_accept_path, 'abc123'],
-    "reject placement request" => [:schools_placement_request_reject_path, 'abc123'],
+    "placement request" => [:schools_placement_request_path, placement_request_id],
+    "accept placement request" => [:schools_placement_request_accept_path, placement_request_id],
+    "reject placement request" => [:schools_placement_request_reject_path, placement_request_id],
     "candidate requirements" => [:new_schools_on_boarding_candidate_requirement_path],
     "fees charged" => [:new_schools_on_boarding_fees_path],
     "administration costs" => [:new_schools_on_boarding_administration_fee_path],

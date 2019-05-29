@@ -5,15 +5,17 @@ Feature: Accepting placement requests
 
     Background:
         Given I am logged in as a DfE user
+        And the subjects 'Biology' and 'Chemistry' exist
+        And there is a new placement request
 
     Scenario: Back link
         Given there are some upcoming requests
-        When I am on the 'upcoming requests' page
+        When I am on the accept placement request page
         Then I should see a 'Back' link to the 'schools dashboard'
 
     Scenario: Booking details
         Given there is at least one placement request
-        When I am on the 'accept placement request' page
+        When I am on the accept placement request page
         Then I should see the following booking details:
             | Heading                   | Value                               |
             | School                    | Newton Heath School                 |
@@ -24,12 +26,12 @@ Feature: Accepting placement requests
 
     Scenario: Booking details
         Given there is at least one placement request
-        When I am on the 'accept placement request' page
+        When I am on the accept placement request page
         Then every row of the booking details list should have a 'Change' link
 
     Scenario: School contact form
         Given there is at least one placement request
-        When I am on the 'accept placement request' page
+        When I am on the accept placement request page
         Then I should see a form with the following fields:
             | Label            | Type  |
             | Contact name     | text  |

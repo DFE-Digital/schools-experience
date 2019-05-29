@@ -17,5 +17,11 @@ module Bookings
           .attributes
           .merge(analytics_tracking_uuid: analytics_tracking_uuid)
     end
+
+    # FIXME this will eventually be handled 'higher up', probably by
+    # a helper or directly in the view
+    def candidate
+      Bookings::Gitis::CRM.new('abc123').find(1)
+    end
   end
 end
