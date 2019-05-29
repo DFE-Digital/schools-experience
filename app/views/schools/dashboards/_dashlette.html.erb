@@ -1,6 +1,14 @@
 <article id="dashlette">
   <h1 class="govuk-heading-l">Manage school experience at <%= @current_school.name %></h1>
 
+  <%- if show_no_placement_dates_warning?(@current_school) -%>
+    <%= render partial: 'schools/dashboards/no_placement_dates_warning' %>
+  <%- end -%>
+
+  <%- if show_no_availability_info_warning?(@current_school) -%>
+    <%= render partial: 'schools/dashboards/no_availability_info_warning' %>
+  <%- end -%>
+
   <ul class="govuk-list">
 
     <li>
@@ -25,14 +33,36 @@
       </span>
     </li>
 
-    <%- if @current_school.availability_preference_fixed? -%>
+  </ul>
+
+  <section class="availability-preferences">
+    <h3 class="govuk-heading-s">Availability and dates</h3>
+
+    <ul class="govuk-list">
       <li>
-        <%= link_to "Update school experience dates", schools_placement_dates_path %>
+        <%= link_to "Change how availability and dates are displayed", edit_schools_availability_preference_path %>
         <span class="govuk-hint">
-          Add, edit and disable <strong>fixed</strong> dates for candidates
+          Your school currently displays
+          <strong><%= availability_status_display_status(@current_school.availability_preference_fixed?) %></strong>
+          to candidates
         </span>
       </li>
-    <%- end -%>
 
-  </ul>
+      <%- if @current_school.availability_preference_fixed? -%>
+        <li>
+          <%= link_to "Manage fixed dates", schools_placement_dates_path %>
+          <span class="govuk-hint">
+            Add, remove, close and open <strong>fixed dates</strong> for school experience
+          </span>
+        </li>
+      <%- else -%>
+        <li>
+          <%= link_to "Manage flexible dates", edit_schools_availability_info_path %>
+          <span class="govuk-hint">
+            Update your availability and <strong>flexible dates</strong> for school experience
+          </span>
+        </li>
+      <%- end -%>
+    </ul>
+  </section>
 </article>
