@@ -8,6 +8,8 @@ FactoryBot.define do
     sequence(:postcode) { |n| "M#{n} 2JF" }
     association :school_type, factory: :bookings_school_type
     sequence(:contact_email) { |n| "admin#{n}@school.org" }
+    availability_info { 'We can offer placements throughout June and July for the remainder of this academic year (up to the 21st July).' }
+    availability_preference_fixed { false }
 
     trait :disabled do
       enabled { false }
@@ -22,10 +24,6 @@ FactoryBot.define do
 
     trait :with_fixed_availability_preference do
       availability_preference_fixed { true }
-    end
-
-    trait :with_availability_info do
-      availability_info { 'We can offer placements throughout June and July for the remainder of this academic year (up to the 21st July).' }
     end
 
     trait :with_placement_info do
