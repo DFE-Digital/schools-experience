@@ -29,7 +29,7 @@ class Schools::PlacementDatesController < Schools::BaseController
   def edit; end
 
   def update
-    if @placement_date.update_attributes(placement_date_params)
+    if @placement_date.update(placement_date_params)
       redirect_to schools_placement_dates_path
     else
       render :edit

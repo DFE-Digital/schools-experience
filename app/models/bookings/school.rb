@@ -2,6 +2,8 @@ class Bookings::School < ApplicationRecord
   include FullTextSearch
   include GeographicSearch
 
+  before_validation :nilify_availability_info
+
   validates :name,
     presence: true,
     length: { maximum: 128 }
@@ -18,6 +20,10 @@ class Bookings::School < ApplicationRecord
     with: URI::MailTo::EMAIL_REGEXP,
     message: "isn't a valid email address"
   }
+
+  validates :availability_info,
+    allow_nil: true,
+    length: { minimum: 10 }
 
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
@@ -129,5 +135,9 @@ private
 
   def has_available_dates?
     bookings_placement_dates.available.any?
+  end
+
+  def nilify_availability_info
+    self.availability_info = nil if availability_info == ''
   end
 end

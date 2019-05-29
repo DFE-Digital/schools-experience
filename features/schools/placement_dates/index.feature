@@ -8,14 +8,14 @@ Feature: Listing placement dates
 
     Scenario: Page title
         Given I am on the 'placement dates' page
-        Then the page title should be 'Placement dates'
+        Then the page title should be 'Manage fixed dates'
 
   Scenario: Breadcrumbs
     Given I am on the 'placement dates' page
     Then I should see the following breadcrumbs:
-        | Text            | Link     |
-        | Some school     | /schools |
-        | Placement dates | None     |
+        | Text               | Link     |
+        | Some school        | /schools |
+        | Manage fixed dates | None     |
 
     Scenario: List contents
         Given my school has 5 placement dates
@@ -30,7 +30,7 @@ Feature: Listing placement dates
 
     Scenario: The add a new placement date button
         Given I am on the 'placement dates' page
-        Then there should be a 'Add new placement date' link to the new placement date page
+        Then there should be a 'Add dates' link to the new placement date page
 
     Scenario: Warning displayed when there are no dates
         Given my school has no placement dates

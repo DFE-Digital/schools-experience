@@ -20,6 +20,10 @@ Feature: Admin contact
         | Candidate experience details |                           |
         | Experience Outline           |                           |
 
+  Scenario: Page title
+    Given I am on the 'Admin contact' page
+    Then the page title should be 'Enter school experience admin contact details'
+
   Scenario: Completing the step with error
     Given I am on the 'Admin contact' page
     And I enter 'Gary Chalmers' into the 'Full name' text area

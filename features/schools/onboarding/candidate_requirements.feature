@@ -6,6 +6,10 @@ Feature: Candidate requirements
   Background:
     Given I am logged in as a DfE user
 
+  Scenario: Page title
+    Given I am on the 'candidate requirements' page
+    Then the page title should be 'Enter your school experience details'
+
   Scenario: Breadcrumbs
     Given I am on the 'candidate requirements' page
     Then I should see the following breadcrumbs:

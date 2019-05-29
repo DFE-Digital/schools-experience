@@ -22,6 +22,18 @@ Feature: School Profile
         | Admin contact                |                           |
 
 
+  Scenario: Page title
+    Given I am on the 'Profile' page
+    Then the page title should be 'Check your answers before setting up your school experience profile'
+
+  Scenario: Breadcrumbs
+    Given I am on the 'Profile' page
+    Then I should see the following breadcrumbs:
+        | Text                                                                | Link     |
+        | Some school                                                         | /schools |
+        | Check your answers before setting up your school experience profile | None     |
+
+
   Scenario: Viewing the profile
     Given I am on the 'Profile' page
     Then the page should have the following summary list information:

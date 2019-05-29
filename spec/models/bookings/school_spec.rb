@@ -12,6 +12,19 @@ describe Bookings::School, type: :model do
       it { is_expected.to validate_numericality_of(:fee).is_greater_than_or_equal_to(0) }
     end
 
+    context 'availability_info' do
+      it { is_expected.to allow_value(nil).for(:availability_info) }
+      it { is_expected.to validate_length_of(:availability_info).is_at_least(10) }
+
+      context 'overwriting empty strings before validation' do
+        subject { create(:bookings_school) }
+        before { subject.update(availability_info: '') }
+        specify 'should overwrite empty strings with nil' do
+          expect(subject.availability_info).to be_nil
+        end
+      end
+    end
+
     shared_examples "websites" do |field_name|
       valid_urls = %w{http://www.bbc.co.uk https://bbc.co.uk http://news.bbc.com}
       invalid_urls = [
