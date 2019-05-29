@@ -1,0 +1,40 @@
+<%- self.page_title = "Change how availability and dates are displayed" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'Change how availability and dates are displayed' => nil
+  }
+%>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @current_school, url: schools_availability_preference_path, method: 'patch' do |f| %>
+      <h1 class="govuk-heading-l">School experience availability or fixed dates</h1>
+
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+
+      <%= f.hidden_field :fixed, value: nil %>
+
+      <%= f.radio_button_fieldset :availability_preference_fixed do |fieldset| %>
+        <p>
+          Select how you’d like to show about your school experience availability
+          and dates to candidates:
+        </p>
+        <%= fieldset.radio_input(true, 'aria-describedby' => 'availability-preference-fixed-true-hint') %>
+        <span id="availability-preference-fixed-true-hint" class="govuk-hint govuk-hint__indented">
+          Any existing flexible date description will be hidden from candidates
+          and <strong>will not be lost</strong>
+        </span>
+
+        <%= fieldset.radio_input(false, 'aria-describedby' => 'availability-preference-fixed-false-hint') %>
+        <span id="availability-preference-fixed-false-hint" class="govuk-hint govuk-hint__indented">
+          All your existing fixed dates will be hidden from candidates and <strong>will
+          not be lost</strong>
+        </span>
+      <% end %>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

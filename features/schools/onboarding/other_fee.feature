@@ -12,6 +12,10 @@ Feature: Other Fee
         | Candidate Requirements       |                           |
         | Fees                         | choosing only Other costs |
 
+  Scenario: Page title
+    Given I am on the 'other costs' page
+    Then the page title should be 'Other costs'
+
   Scenario: Breadcrumbs
     Given I am already on the 'other costs' page
     Then I should see the following breadcrumbs:

@@ -13,6 +13,10 @@ Feature: Phases
         | Fees                         | choosing only Other costs |
         | Other costs                  |                           |
 
+  Scenario: Page title
+    Given I am on the 'phases' page
+    Then the page title should be 'Select school experience phases'
+
   Scenario: Breadcrumbs
     Given I am on the 'phases' page
     Then I should see the following breadcrumbs:

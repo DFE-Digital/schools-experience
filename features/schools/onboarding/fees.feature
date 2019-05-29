@@ -9,6 +9,18 @@ Feature: Fees
     And the college phase is availble
     And I have completed the Candidate Requirements step
 
+
+  Scenario: Page title
+    Given I am on the 'fees charged' page
+    Then the page title should be 'Do you charge fees to cover any of the following?'
+
+  Scenario: Breadcrumbs
+    Given I am already on the 'fees charged' page
+    Then I should see the following breadcrumbs:
+        | Text                                              | Link     |
+        | Some school                                       | /schools |
+        | Do you charge fees to cover any of the following? | None     |
+
   Scenario: Completing step choosing Adminsitration costs only
     Given I am on the 'fees charged' page
     And I choose 'Yes' from the 'Administration costs' radio buttons

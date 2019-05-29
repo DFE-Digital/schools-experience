@@ -4,10 +4,6 @@ Then("the {string} word count should say {string}") do |label_text, expectation|
   end
 end
 
-When("I enter {string} into the {string} text area") do |value, label|
-  fill_in label, with: value
-end
-
 Then("the {string} section should have {string} and {string} radio buttons") do |section, option_one, option_two|
   within(".#{section.parameterize}") do
     ensure_radio_buttons_exist(page, [option_one, option_two])
