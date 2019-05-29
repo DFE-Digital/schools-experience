@@ -74,9 +74,9 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     end
 
     context 'analytics tracking' do
-      # set the uuid in the session, grab it then do a search
+      # set the uuid cookie, grab it then do a search
       before { get new_candidates_school_search_path }
-      before { @uuid = session[:analytics_tracking_uuid] }
+      before { @uuid = cookies[:analytics_tracking_uuid] }
       before { get candidates_schools_path(query_params) }
 
       specify 'should persist the analytics_tracking_uuid if present' do

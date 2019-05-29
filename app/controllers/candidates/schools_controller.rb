@@ -41,6 +41,6 @@ private
   end
 
   def search_params_with_analytics_tracking
-    search_params.merge(analytics_tracking_uuid: session[:analytics_tracking_uuid])
+    search_params.merge(analytics_tracking_uuid: cookies[:analytics_tracking_uuid])
   end
 end

@@ -16,7 +16,7 @@ module Candidates
 
           RegistrationStore.instance.store! registration_session
 
-          PlacementRequestJob.perform_later registration_session.uuid, session[:analytics_tracking_uuid]
+          PlacementRequestJob.perform_later registration_session.uuid, cookies[:analytics_tracking_uuid]
         end
 
         redirect_to candidates_school_registrations_placement_request_path \
