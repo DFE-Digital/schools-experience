@@ -22,13 +22,13 @@ Feature: Editing placement dates
         Given I am on the edit page for my placement
         Then I should see a form with the following fields:
             | Label                       | Type   |
-            | Enter a start date          | date   |
             | How many days will it last? | number |
         And there should be a 'Make this date available to candidates?' checkbox
+        And the current start date should be present
 
     Scenario: Filling in and submitting the form
         Given I am on the edit page for my placement
-        And I fill in the form with a future date and duration of 6
+        And I fill in the form with a duration of 6
         When I submit the form
         Then I should be on the 'placement dates' page
         And my newly-created placement date should be listed

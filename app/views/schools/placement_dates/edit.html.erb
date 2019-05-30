@@ -11,7 +11,15 @@
 <h1>Modify placement date</h1>
 
 <%= form_for @placement_date, url: schools_placement_date_path(@placement_date), method: :put do |form| %>
-  <%= render partial: 'form', locals: { form: form } %>
+
+  <div>
+    <h3>Start date</h3>
+    <p class="placement-start-date">
+      <%= @placement_date.date.to_formatted_s(:govuk) %>
+    </p>
+  </div>
+
+  <%= form.number_field :duration, width: 3, required: true %>
 
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
