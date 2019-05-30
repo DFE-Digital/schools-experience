@@ -12,7 +12,7 @@
     <%= form_for @current_school, url: schools_availability_info_path, method: :patch do |form| %>
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
-          <%= form.text_area :availability_info, label_options: { overwrite_defaults!: true, class: 'govuk-heading-l' } do %>
+          <%= form.text_area :availability_info, rows: 7, label_options: { overwrite_defaults!: true, class: 'govuk-heading-l' } do %>
             <p>Outline when you offer school experience at your school.</p>
 
             <p>
