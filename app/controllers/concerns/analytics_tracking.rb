@@ -7,8 +7,8 @@ module AnalyticsTracking
   private
 
     def set_analytics_tracking_uuid
-      if session[:analytics_tracking_uuid].blank?
-        session[:analytics_tracking_uuid] = SecureRandom.uuid
+      if cookies[:analytics_tracking_uuid].blank?
+        cookies[:analytics_tracking_uuid] = SecureRandom.uuid
       end
     end
   end

@@ -11,7 +11,7 @@ module Candidates
         unless registration_session.completed?
           Bookings::PlacementRequest.create_from_registration_session! \
             registration_session,
-            session[:analytics_tracking_uuid]
+            cookies[:analytics_tracking_uuid]
 
           registration_session.flag_as_completed!
 
