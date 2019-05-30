@@ -5,6 +5,8 @@ module Candidates
       # pr is merged
       attr_reader :placement_preference
 
+      attr_reader :registration_session
+
       delegate \
         :full_name,
         :email,
@@ -34,6 +36,11 @@ module Candidates
         @placement_preference = registration_session.placement_preference
         @subject_preference = registration_session.subject_preference
         @background_check = registration_session.background_check
+      end
+
+      def ==(other)
+        other.is_a?(self.class) && \
+          other.registration_session == @registration_session
       end
 
       def school_name
