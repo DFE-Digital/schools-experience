@@ -24,8 +24,8 @@ Rails.application.routes.draw do
 
       if Rails.application.config.x.phase >= 3
         resources :placement_requests do
-          resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
-          resource :reject, only: [:show, :create], controller: 'placement_requests/reject'
+          resource :accept, only: [:new, :create], controller: 'placement_requests/accept'
+          resource :reject, only: [:new, :create], controller: 'placement_requests/reject'
           collection do
             resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
           end

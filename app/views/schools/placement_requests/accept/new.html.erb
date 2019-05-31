@@ -10,7 +10,7 @@
           School
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.school_name %>
+          <%= @placement_request.school.name %>
         </dd>
 
         <dd class="govuk-summary-list__actions">
@@ -26,7 +26,7 @@
           School experience dates
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.dates %>
+          <%= @placement_request.availability %>
         </dd>
 
         <dd class="govuk-summary-list__actions">
@@ -42,7 +42,7 @@
           School experience details
         </dt>
         <dd class="govuk-summary-list__value">
-         <%= @placement_request.details %>
+         <%= @placement_request.objectives %>
         </dd>
 
         <dd class="govuk-summary-list__actions">
@@ -58,7 +58,7 @@
           Requested subject
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.requested_subject %>
+          <%= @placement_request.subject_first_choice %>
         </dd>
 
         <dd class="govuk-summary-list__actions">
@@ -74,7 +74,7 @@
           Request received
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.received_on %>
+          <%= @placement_request.created_at.to_formatted_s(:govuk) %>
         </dd>
 
         <dd class="govuk-summary-list__actions">
@@ -91,10 +91,10 @@
       <div class="govuk-grid-column-two-thirds">
         <p>Some blurb about who the candidate should contact on the day</p>
 
-        <%= form_for @dummy_contact, url: schools_placement_request_accept_path, method: :post do |f| %>
+        <%= form_for @acceptance, url: schools_placement_request_accept_path, method: :post do |f| %>
           <%= f.text_field :contact_name, 'Contact name' %>
           <%= f.telephone_field :telephone_number, 'Telephone number' %>
-          <%= f.email_field :email_address, 'Email addressj' %>
+          <%= f.email_field :email_address, 'Email address' %>
           <%= f.text_field :location, 'Location' %>
           <%= f.text_field :other_details, 'Other details' %>
           <%= f.submit 'Continue' %>

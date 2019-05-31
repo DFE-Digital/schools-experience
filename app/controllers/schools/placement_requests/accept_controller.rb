@@ -6,7 +6,7 @@ module Schools
     end
 
     class AcceptController < Schools::BaseController
-      def show
+      def new
         @placement_request = placement_request
         @dummy_contact = dummy_contact
       end
