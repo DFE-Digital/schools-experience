@@ -135,12 +135,11 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with an invalid contact' do
-      before do
-        @contact = build(:gitis_contact, email: '')
-      end
+      let(:contact) { build(:gitis_contact, emailaddress1: '') }
+      before { gitis_stub.stub_create_contact_request(contact.attributes) }
 
       it "will return false" do
-        expect(gitis.write(@contact)).to be false
+        expect(gitis.write(contact)).to be false
       end
     end
   end

@@ -4,27 +4,52 @@ module Bookings
       include Entity
 
       attr_reader :id
-      entity_attributes :firstname, :lastname, :email, :phone
-      entity_attributes :building, :street, :town_or_city, :county, :postcode
+      entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
+      entity_attributes :address1_line1, :address1_line2, :address1_line3
+      entity_attributes :address1_city, :address1_stateorprovince
+      entity_attributes :address1_postalcode, :phone
+
+      alias_attribute :building, :address1_line1
+      alias_attribute :town_or_city, :address1_city
+      alias_attribute :county, :address1_stateorprovince
+      alias_attribute :postcode, :address1_postalcode
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
       def initialize(crm_contact_data = {})
-        @crm_data         = crm_contact_data.stringify_keys
-        self.id           = @crm_data['contactid']
-        self.firstname    = @crm_data['firstname']
-        self.lastname     = @crm_data['lastname']
-        self.email        = parse_email_from_crm(@crm_data)
-        self.phone        = parse_phone_from_crm(@crm_data)
-        self.building     = @crm_data['address1_line1']
-        self.street       = parse_street_from_crm(@crm_data)
-        self.town_or_city = @crm_data['address1_city']
-        self.county       = @crm_data['address1_stateorprovince']
-        self.postcode     = @crm_data['address1_postalcode']
+        @crm_data                     = crm_contact_data.stringify_keys
+        self.id                       = @crm_data['contactid']
+        self.firstname                = @crm_data['firstname']
+        self.lastname                 = @crm_data['lastname']
+        self.emailaddress1            = @crm_data['emailaddress1']
+        self.emailaddress2            = @crm_data['emailaddress2']
+        self.phone                    = parse_phone_from_crm(@crm_data)
+        self.address1_line1           = @crm_data['address1_line1']
+        self.address1_line2           = @crm_data['address1_line2']
+        self.address1_line3           = @crm_data['address1_line3']
+        self.address1_city            = @crm_data['address1_city']
+        self.address1_stateorprovince = @crm_data['address1_stateorprovince']
+        self.address1_postalcode      = @crm_data['address1_postalcode']
       end
 
       def address
         [building, street, town_or_city, county, postcode].compact.join(", ")
+      end
+
+      def email
+        emailaddress2.presence || emailaddress1
+      end
+
+      def email=(address)
+        if emailaddress1.blank?
+          self.emailaddress1 = address
+        elsif emailaddress1 != address
+          self.emailaddress2 = address
+        end
+      end
+
+      def street
+        [address1_line2, address1_line3].map(&:presence).compact.join(', ')
       end
 
       def id=(assigned_id)
@@ -43,21 +68,8 @@ module Bookings
 
     private
 
-      def parse_email_from_crm(data)
-        data['emailaddress1'].presence ||
-          data['emailaddress2'].presence ||
-          data['emailaddress3']
-      end
-
       def parse_phone_from_crm(data)
         data['mobilephone'].presence || data['telephone1']
-      end
-
-      def parse_street_from_crm(data)
-        [
-          data['address1_line2'].presence,
-          data['address1_line3'].presence
-        ].compact.join(', ')
       end
     end
   end
