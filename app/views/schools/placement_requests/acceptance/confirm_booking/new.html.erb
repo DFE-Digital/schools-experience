@@ -1,1 +1,48 @@
-<h1>Confirm booking</h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1>Confirm booking</h1>
+
+    <p>
+      Confirm the placement request for <%= [@placement_request.candidate.firstname, @placement_request.candidate.lastname].join(" ") %>
+    </p>
+
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          School
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.school.name %>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Request received
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.created_at.to_date.to_formatted_s(:govuk) %>
+        </dd>
+      </div>
+    </dl>
+
+    <%= form_for @booking, url: schools_placement_request_acceptance_confirm_booking_path do |form| %>
+
+      <%= form.date_field :date %>
+
+      <div class="govuk-form-group">
+        <%= form.collection_select \
+          :bookings_subject_id,
+          @available_subjects,
+          :id,
+          :name,
+          { prompt: 'Select' },
+          { class: 'govuk-select govuk-!-width-one-half' } %>
+      </div>
+
+      <%= form.text_area :placement_details %>
+
+      <%= form.submit 'Continue' %>
+
+    <% end %>
+  </div>
+</div>

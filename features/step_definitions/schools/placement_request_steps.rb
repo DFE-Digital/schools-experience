@@ -112,8 +112,8 @@ Then("I should see the following contact details:") do |table|
   end
 end
 
-Then("I should be on the accept placement request page") do
-  path = path_for('accept placement request', placement_request_id: @placement_request.id)
+Then("I should be on the confirm booking page") do
+  path = path_for('confirm booking', placement_request_id: @placement_request.id)
   visit(path)
   expect(page.current_path).to eql(path)
 end

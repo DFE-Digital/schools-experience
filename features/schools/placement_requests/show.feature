@@ -51,4 +51,4 @@ Feature: Viewing a placement request
         Given there is at least one placement request
         And I am on the placement request page
         When I click the 'Accept request' button
-        Then I should be on the accept placement request page
+        Then I should be on the confirm booking page
