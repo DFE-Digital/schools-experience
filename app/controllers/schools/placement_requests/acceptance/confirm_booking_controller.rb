@@ -5,30 +5,37 @@ module Schools
         before_action :set_placement_request, :set_available_subjects
 
         def new
-          @booking = Bookings::Booking.new
+          @confirm_booking = Schools::PlacementRequests::ConfirmBooking.new
         end
 
         def create
-          # FIXME check of there's already a booking
-          @booking = Bookings::Booking.new(bookings_booking_params)
+          @confirm_booking = Schools::PlacementRequests::ConfirmBooking.new(confirm_booking_params)
 
-          if @booking.save
+          return render :new if @confirm_booking.invalid?
+
+          booking = find_or_create_booking(@placement_request)
+
+          if booking.save
             redirect_to new_schools_placement_request_acceptance_add_more_details_path(@placement_request.id)
           else
+            Rails.logger.warn("ConfirmBooking was valid but Booking wasn't: #{params}")
             render :new
           end
         end
 
       private
 
-        def bookings_booking_params
+        def find_or_create_booking(placement_request)
+          placement_request.booking || Bookings::Booking.from_confirm_booking(@confirm_booking).tap do |booking|
+            booking.bookings_placement_request = placement_request
+            booking.bookings_school = @current_school
+          end
+        end
+
+        def confirm_booking_params
           params
-            .require(:bookings_booking)
+            .require(:confirm_booking)
             .permit(:bookings_subject_id, :date, :placement_details)
-            .merge(
-              bookings_placement_request_id: @placement_request.id,
-              bookings_school_id: @current_school.id
-            )
         end
 
         def set_placement_request

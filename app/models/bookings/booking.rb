@@ -27,6 +27,14 @@ module Bookings
 
     scope :upcoming, -> { where(arel_table[:date].between(Time.now..2.weeks.from_now)) }
 
+    def self.from_confirm_booking(confirm_booking)
+      new(
+        date: confirm_booking.date,
+        bookings_subject_id: confirm_booking.bookings_subject_id,
+        placement_details: confirm_booking.placement_details
+      )
+    end
+
     # FIXME this will eventually be handled 'higher up', probably by
     # a helper or directly in the view
     def candidate
