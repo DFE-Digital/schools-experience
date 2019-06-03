@@ -185,7 +185,6 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
             placement_request: placement_request
         end
 
-        # TODO need to define closed for prs when the school cancelled the request
         it 'rerenders the edit template' do
           expect(response).to render_template :edit
         end
