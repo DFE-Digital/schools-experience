@@ -19,6 +19,7 @@ module Candidates
         if @cancellation.save
           notify_school @cancellation
           notify_candidate @cancellation
+          @cancellation.sent!
           redirect_to candidates_placement_request_cancellation_path \
             @placement_request.token
         else
@@ -43,7 +44,7 @@ module Candidates
           # the placement request is closed.
           # For the time being we're redirecting to cancellation#show
           # as that's the currenlty the only way a placement request can be
-          # 'closed'.
+          # 'closed' by a candidate.
           redirect_to candidates_placement_request_cancellation_path \
             @placement_request.token
         end

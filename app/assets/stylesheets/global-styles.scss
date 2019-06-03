@@ -100,3 +100,10 @@ section.govuk-se-warning {
     margin-bottom: 0.1rem;
   }
 }
+
+section.govuk-se-letter {
+  padding: 1rem;
+  $govuk-se-light-blue: #f2f8fc;
+  background-color: $govuk-se-light-blue;
+  margin-bottom: 1rem;
+}

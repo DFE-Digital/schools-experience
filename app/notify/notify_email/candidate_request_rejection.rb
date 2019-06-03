@@ -1,12 +1,11 @@
 class NotifyEmail::CandidateRequestRejection < Notify
-  attr_accessor :school_name, :candidate_name, :rejection_reasons, :school_experience_admin, :teaching_line_telephone_number
+  attr_accessor :school_name, :candidate_name, :rejection_reasons, :school_experience_admin
 
-  def initialize(to:, school_name:, candidate_name:, rejection_reasons:, school_experience_admin:, teaching_line_telephone_number:)
+  def initialize(to:, school_name:, candidate_name:, rejection_reasons:, school_experience_admin:)
     self.school_name                    = school_name
     self.candidate_name                 = candidate_name
     self.rejection_reasons              = rejection_reasons
     self.school_experience_admin        = school_experience_admin
-    self.teaching_line_telephone_number = teaching_line_telephone_number
     super(to: to)
   end
 
@@ -21,8 +20,7 @@ private
       school_name: school_name,
       candidate_name: candidate_name,
       rejection_reasons: rejection_reasons,
-      school_experience_admin: school_experience_admin,
-      teaching_line_telephone_number: teaching_line_telephone_number
+      school_experience_admin: school_experience_admin
     }
   end
 end

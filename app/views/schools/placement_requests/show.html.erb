@@ -134,16 +134,18 @@
   </section>
 
   <div class="request-options">
-    <div class="accept-or-reject">
-      <div class="govuk-se-button-container">
-        <%= link_to "Accept request", schools_placement_request_accept_path(@placement_request.urn), class: 'govuk-button' %>
-      </div>
-      <div class="govuk-se-button-container">
-        <div>
-          <%= link_to "Reject request", schools_placement_request_reject_path(@placement_request.urn), class: 'govuk-button govuk-button--secondary' %>
+    <% if @placement_request.open? %>
+      <div class="accept-or-reject">
+        <div class="govuk-se-button-container">
+          <%= link_to "Accept request", schools_placement_request_accept_path(@placement_request), class: 'govuk-button' %>
+        </div>
+        <div class="govuk-se-button-container">
+          <div>
+            <%= link_to "Reject request", new_schools_placement_request_cancellation_path(@placement_request), class: 'govuk-button govuk-button--secondary' %>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
     <div>
       <%= link_to 'Your upcoming requests', schools_upcoming_requests_path, class: 'govuk-link' %>
     </div>

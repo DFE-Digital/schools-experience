@@ -10,7 +10,7 @@ FactoryBot.define do
 
     after :build do |placement_request|
       placement_request.subject_first_choice = placement_request.school.subjects.first.name
-      placement_request.subject_second_choice = placement_request.school.subjects.second.name
+      placement_request.subject_second_choice = placement_request.school.subjects.second&.name || "I don't have a second subject"
       placement_request.urn = placement_request.school.urn
     end
 
@@ -22,10 +22,28 @@ FactoryBot.define do
     degree_subject { "Not applicable" }
     teaching_stage { "I’m very sure and think I’ll apply" }
 
+    # FIXME change this to cancelled_by_candidate
     trait :cancelled do
       before :create do |placement_request|
         placement_request.candidate_cancellation = \
-          FactoryBot.build :cancellation, placement_request: placement_request
+          FactoryBot.build :cancellation,
+            :sent, placement_request: placement_request
+      end
+    end
+
+    trait :cancelled_by_school do
+      before :create do |placement_request|
+        placement_request.school_cancellation = \
+          FactoryBot.build :cancellation,
+            :sent, placement_request: placement_request, cancelled_by: 'school'
+      end
+    end
+
+    trait :with_school_cancellation do
+      before :create do |placement_request|
+        placement_request.school_cancellation = \
+          FactoryBot.build :cancellation,
+            placement_request: placement_request, cancelled_by: 'school'
       end
     end
   end

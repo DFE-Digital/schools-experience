@@ -8,28 +8,27 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   validates :cancelled_by, inclusion: %w(candidate school)
   validate :placement_request_not_closed, on: :create, if: :placement_request
 
-  def school_email
-    placement_request.school.notifications_email
-  end
-
-  def school_name
-    placement_request.school.name
-  end
-
-  def school_admin_name
-    placement_request.school.admin_contact_name
-  end
-
-  def candidate_email
-    placement_request.candidate.email
-  end
-
-  def candidate_name
-    placement_request.candidate.full_name
-  end
+  delegate \
+    :school_email,
+    :school_name,
+    :school_admin_name,
+    :school_admin_phone,
+    :dates_requested,
+    :candidate_email,
+    :candidate_name,
+    :requested_availability,
+    to: :placement_request
 
   def requested_availability
     placement_request.availability
+  end
+
+  def sent!
+    update! sent_at: DateTime.now
+  end
+
+  def sent?
+    sent_at.present?
   end
 
 private

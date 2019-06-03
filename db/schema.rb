@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2019_06_06_081440) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "cancelled_by", null: false
+    t.datetime "sent_at"
     t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id"
   end
 
