@@ -56,7 +56,7 @@ module Bookings
     end
 
     def dates_requested
-      # FIXME - availability or date
+      # FIXME SE-1129
       availability
     end
 
@@ -64,9 +64,8 @@ module Bookings
       created_at.to_date.to_formatted_s(:govuk)
     end
 
-    # use a presenter
+    # FIXME SE-1130
     def status
-      # FIXME check statuses in prototype
       return 'Cancelled' if cancelled?
 
       'New'
