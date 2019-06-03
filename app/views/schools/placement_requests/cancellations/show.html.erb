@@ -1,0 +1,44 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Send rejection email to candidate
+    </h1>
+
+    <p>
+      The following contains the wording of the rejection email which will be sent to Matthew Richards.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Preview rejection email
+    </h2>
+
+    <%= render partial: "letter", locals: {
+      cancellation: @cancellation,
+      extra_details: capture do %>
+      <p>
+        <%= @cancellation.reason %>
+      </p>
+    <% end } %>
+
+    <section>
+      <p>
+        By sending this email you’re confirming, to the best of your knowledge, the booking details you’re providing are correct.
+      </p>
+
+      <p>
+        <%= button_to 'Send rejection email',
+          schools_placement_request_cancellation_notification_delivery_path(@cancellation.placement_request),
+          class: 'govuk-button'
+        %>
+      </p>
+
+      <p>
+        <%= link_to 'Amend the rejection email', edit_schools_placement_request_cancellation_path(@cancellation.placement_request) %>
+      </p>
+
+      <p>
+        <%= link_to 'Back to request', schools_placement_request_path(@cancellation.placement_request) %>
+      </p>
+    </section>
+  </div>
+</div>

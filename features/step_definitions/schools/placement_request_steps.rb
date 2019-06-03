@@ -1,13 +1,37 @@
+Given("the school has subjects") do
+  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Maths')
+  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Physics')
+end
+
 Given("there are some upcoming requests") do
-  # currently hardcoded in the controller
+  step 'there are some placement requests'
 end
 
 Given("there are some placement requests") do
-  # currently hardcoded in the controller
+  @placement_requests = FactoryBot.create_list \
+    :placement_request,
+    5,
+    school: @school,
+    created_at: '2094-01-01',
+    teaching_stage: 'I’ve applied for teacher training',
+    availability: 'Any time during July 2094'
 end
 
 Given("there is at least one placement request") do
-  # currently hardcoded in the controller
+  @placement_request = FactoryBot.create \
+    :placement_request,
+    school: @school,
+    created_at: '2094-02-08',
+    availability: 'Any time during November 2019',
+    teaching_stage: 'I’ve applied for teacher training',
+    has_dbs_check: true,
+    objectives: 'To learn different teaching styles and what life is like in a classroom.',
+    degree_stage: 'Final year',
+    degree_subject: 'Law'
+end
+
+When("I am on a placement request page") do
+  visit path_for 'placement request', placement_request: @placement_request
 end
 
 Then("I should see all the upcoming requests listed") do
@@ -35,9 +59,10 @@ end
 
 Then("every request should contain a link to view more details") do
   within('#school-requests') do
-    page.all('.school-request').each do |sr|
+    page.all('.school-request').each_with_index do |sr, i|
+      placement_request = @placement_requests.reverse[i]
       within(sr) do
-        expect(page).to have_link('Open request', href: schools_placement_request_path('abc123'))
+        expect(page).to have_link('Open request', href: schools_placement_request_path(placement_request.id))
       end
     end
   end
@@ -101,4 +126,9 @@ Then("I should see the following contact details:") do |table|
       end
     end
   end
+end
+
+Then('I should be on the accept placement request page') do
+  expect(page.current_path).to eq path_for 'accept placement request',
+    placement_request: @placement_request
 end

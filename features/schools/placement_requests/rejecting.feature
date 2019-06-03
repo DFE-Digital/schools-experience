@@ -5,6 +5,7 @@ Feature: Rejecting placement requests
 
     Background:
         Given I am logged in as a DfE user
+        And the school has subjects
 
     Scenario: Back link
         Given there are some upcoming requests
@@ -13,28 +14,29 @@ Feature: Rejecting placement requests
 
     Scenario: Page heading
         Given there is at least one placement request
-        When I am on the 'reject placement request' page
-        Then the page's main heading should be 'Reject request'
+        When I am on the reject placement request page
+        Then the page's main heading should be 'Review and send rejection email to candidate'
 
     Scenario: Reject information
         Given there is at least one placement request
         And the candidate's name is "Robert Terwilliger"
-        When I am on the 'reject placement request' page
+        When I am on the reject placement request page
         Then the following text should be present:
         """
-        Enter and confirm the reasons for rejecting the school experience request by Robert Terwilliger.
+        Dear Matthew Richards
+        Some school has turned down your school experience request for the following dates:
         """
 
     Scenario: Reject information
         Given there is at least one placement request
-        When I am on the 'reject placement request' page
+        When I am on the reject placement request page
         Then the following text should be present:
         """
-        The reasons you enter will be sent to them in an email confirmation to let them know why their request has been turned down.
+        Review the following email which will be sent to the candidate. You can add extra details.
         """
 
     Scenario: Reject form
         Given there is at least one placement request
-        When I am on the 'reject placement request' page
-        Then there should be a 'Reason' text area
-        And the submit button should contain text 'Reject request'
+        When I am on the reject placement request page
+        Then there should be a 'Cancellation reasons' text area
+        And the submit button should contain text 'Preview rejection email'

@@ -1,4 +1,5 @@
-<div class="school-request">
+<% # TODO reorganise the layout to match the proto type %>
+<div class="school-request" data-urn="<%= placement_request.urn %>">
   <h2 class="govuk-heading-m">Request from <%= placement_request.candidate.full_name %></h2>
 
   <dl class="placement-details govuk-summary-list">
@@ -82,10 +83,19 @@
 
     <div class="teaching-subject govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        Teaching subject
+        Teaching subject first choice
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= placement_request.teaching_subject %>
+        <%= placement_request.subject_first_choice %>
+      </dd>
+    </div>
+
+    <div class="teaching-subject govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Teaching subject second choice
+      </dt>
+      <dd class="govuk-summary-list__value">
+        <%= placement_request.subject_second_choice %>
       </dd>
     </div>
 
@@ -99,6 +109,6 @@
     </div>
   </dl>
 
-  <%= link_to "Open request", schools_placement_request_path('abc123'), class: 'govuk-button' %>
+  <%= link_to "Open request", schools_placement_request_path(placement_request), class: 'govuk-button' %>
 
 </div>

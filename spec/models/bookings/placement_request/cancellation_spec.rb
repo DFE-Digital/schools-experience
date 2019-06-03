@@ -21,4 +21,21 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
       expect(subject.errors[:placement_request]).to eq ['is already closed']
     end
   end
+
+  context '#sent!' do
+    subject { FactoryBot.create :cancellation }
+
+    before do
+      subject.sent!
+    end
+
+    it 'marks the cancellation as sent' do
+      expect(subject).to be_sent
+      expect(subject.sent_at).to be_present
+    end
+
+    it 'closes the placement request' do
+      expect(subject.reload.placement_request).to be_closed
+    end
+  end
 end

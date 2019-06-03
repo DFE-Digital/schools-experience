@@ -1,0 +1,51 @@
+<section class="govuk-se-letter">
+  <section id="request-details">
+    <h2 class="govuk-heading-m">
+      Dear <%= cancellation.candidate_name %>
+    </h2>
+
+    <p>
+      <%= cancellation.school_name %> has turned down your school experience request for the following dates:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li><%= cancellation.dates_requested %></li>
+    </ul>
+  </section>
+
+  <section id="rejection-details">
+    <h3 class="govuk-heading-s">
+      Your request was turned down for the following reasons:
+    </h3>
+
+    <p>
+      The school is fully booked and has no school experience available on the date you requested.
+    </p>
+
+    <p>
+      If you have any questions about this decision contact
+      <%= cancellation.school_admin_name %> on <%= cancellation.school_admin_phone %>
+    </p>
+  </section>
+
+  <section id="extra-details">
+    <h3 class="govuk-heading-s">
+      Extra details from the school
+    </h3>
+    <%= extra_details %>
+  </section>
+
+  <section id="next-steps">
+    <h3 class="govuk-heading-s">
+      Next steps
+    </h3>
+
+    <p>
+      You can still apply to other schools for school experience using the <%= link_to 'get school experience service', new_candidates_school_search_path %>.
+    </p>
+
+    <p>
+      If you need any further help and support call the Teaching Line on 0161 234 5000
+    </p>
+  </section>
+</section>
