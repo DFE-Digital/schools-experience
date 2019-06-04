@@ -82,17 +82,12 @@ jobs:
   steps:
 
   - script: |
-      docker login $(dockerRegistry) -u $(dockerId) -p $pswd
-      docker pull $(dockerRegistry)/$(imageName):latest
-      docker tag $(dockerRegistry)/$(imageName):latest $(imageName):latest
+      docker pull $(DOCKER_HUB_REPO):$(imageTag)
+      docker tag  $(DOCKER_HUB_REPO):$(imageTag) $(imageName):latest
       docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
       sleep 15
-    env:
-      pswd: $(dockerPassword)
-    displayName: 'Docker login'
-
-  - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-chrome -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL school-experience cucumber
-    condition: not(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-chrome -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL school-experience cucumber
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: Run Cucumber via Selenium Chrome
 
 - job: FunctionalTestingFirefox
@@ -103,17 +98,12 @@ jobs:
   steps:
 
   - script: |
-      docker login $(dockerRegistry) -u $(dockerId) -p $pswd
-      docker pull $(dockerRegistry)/$(imageName):latest
-      docker tag $(dockerRegistry)/$(imageName):latest $(imageName):latest
+      docker pull $(DOCKER_HUB_REPO):$(imageTag)
+      docker tag  $(DOCKER_HUB_REPO):$(imageTag) $(imageName):latest
       docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
       sleep 15
-    env:
-      pswd: $(dockerPassword)
-    displayName: 'Docker login'
-
-  - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=firefox school-experience cucumber
-    condition: not(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=firefox school-experience cucumber
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: Run Cucumber via Selenium Firefox
 
 - job: PublishArtifacts
