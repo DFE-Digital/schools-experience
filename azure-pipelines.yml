@@ -1,6 +1,3 @@
-pool:
-  vmImage: 'ubuntu-16.04'
-
 variables:
   imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
@@ -11,7 +8,12 @@ variables:
   CUCUMBER_PROFILE: continuous_integration
   APP_URL: http://school-experience:3000
 
-steps:
+jobs:
+- job: BuildAndNonBrowserTesting
+  pool:
+    vmImage: 'ubuntu-16.04'
+
+  steps:
 
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
     env:
@@ -50,13 +52,36 @@ steps:
   - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
     displayName: spin up selenium nodes
 
+- job: FunctionalTestingChrome
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn: BuildAndNonBrowserTesting
+
+  steps:
+
   - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-chrome -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL school-experience cucumber
     condition: not(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Run Cucumber via Selenium Chrome
 
+- job: FunctionalTestingFirefox
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn: BuildAndNonBrowserTesting
+
+  steps:
+
   - script: docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=firefox school-experience cucumber
     condition: not(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Run Cucumber via Selenium Firefox
+
+- job: TagAndPushDockerImages
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn:
+  - FunctionalTestingChrome
+  - FunctionalTestingFirefox
+
+  steps:
 
   - script: |
       docker tag $(imageName):latest $(dockerRegistry)/$(imageName):latest
