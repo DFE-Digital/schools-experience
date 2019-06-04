@@ -3,6 +3,7 @@ module Schools
     module Acceptance
       class AddMoreDetailsController < Schools::BaseController
         before_action :set_placement_request
+        before_action :ensure_previous_step_complete
 
         def new
           @add_more_details = Schools::PlacementRequests::AddMoreDetails.new
@@ -35,6 +36,12 @@ module Schools
           @placement_request = @current_school
             .bookings_placement_requests
             .find(params[:placement_request_id])
+        end
+
+        def ensure_previous_step_complete
+          unless @placement_request.booking.booking_confirmed?
+            redirect_to new_schools_placement_request_acceptance_confirm_booking_path(@placement_request.id)
+          end
         end
 
         def add_more_details_params
