@@ -89,13 +89,16 @@ jobs:
   steps:
 
   - script: |
-      docker pull $(DOCKER_HUB_REPO):$(imageTag)
-      docker tag  $(DOCKER_HUB_REPO):$(imageTag) $(imageName):latest
+      docker login $(dockerRegistry) -u $(dockerId) -p $pswd	      
+      docker pull $(dockerRegistry)/$(imageName):latest	
+      docker tag $(dockerRegistry)/$(imageName):latest $(imageName):latest
       docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
       sleep 15
       docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) school-experience cucumber
     condition: not(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Run Cucumber via Selenium
+    env:
+      pswd: $(dockerPassword)
 
 - job: PublishArtifacts
   pool:
