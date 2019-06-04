@@ -81,7 +81,10 @@ jobs:
 
   steps:
 
-  - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
+  - script: |
+      docker login $(dockerRegistry) -u $(dockerId) -p $pswd
+      docker pull $(dockerRegistry)/$(imageName):latest
+      docker tag $(dockerRegistry)/$(imageName):latest $(imageName):latest
     env:
       pswd: $(dockerPassword)
     displayName: 'Docker login'
@@ -97,7 +100,10 @@ jobs:
 
   steps:
 
-  - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
+  - script: |
+      docker login $(dockerRegistry) -u $(dockerId) -p $pswd
+      docker pull $(dockerRegistry)/$(imageName):latest
+      docker tag $(dockerRegistry)/$(imageName):latest $(imageName):latest
     env:
       pswd: $(dockerPassword)
     displayName: 'Docker login'
