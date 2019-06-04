@@ -113,6 +113,8 @@ jobs:
   - FunctionalTestingChrome
   - FunctionalTestingFirefox
 
+  steps:
+
   - task: CopyFiles@2
     inputs:
       contents: 'script/compose-school-experience.sh'
