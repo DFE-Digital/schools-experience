@@ -1,6 +1,3 @@
-pool:
-  vmImage: 'ubuntu-16.04'
-
 variables:
   imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
@@ -13,7 +10,11 @@ variables:
   REDIS_URL: redis://redis:6379/1
   CUCUMBER_PROFILE: continuous_integration
 
-steps:
+jobs:
+- job: Build and non browser testing
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
 
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
     env:
@@ -56,11 +57,23 @@ steps:
   - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
 
+- job: Functional Testing Chrome
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn: Build and non browser testing
+  steps:
+
   - script: |
       docker run --name=selenium-chrome -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-chrome
       docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
     condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
     displayName: Run Cucumber via Selenium Chrome
+
+- job: Functional Testing Firefox
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn: Build and non browser testing
+  steps:
 
   - script: |
       docker run --name=selenium-firefox -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-firefox
@@ -68,6 +81,14 @@ steps:
     condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
     displayName: Run Cucumber via Selenium Firefox
 
+- job: Tag and push Docker images
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn:
+  - Functional Testing Firefox
+  - Functional Testing Chrome
+  
+  steps:
   - script: |
       docker push $(dockerRegistry)/$(imageName):$(imageTag)
       docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):latest
