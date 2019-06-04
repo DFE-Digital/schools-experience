@@ -74,10 +74,17 @@ jobs:
       command: push
       tags: $(imageTag)
 
-- job: FunctionalTestingChrome
+- job: FunctionalTesting
   pool:
     vmImage: 'ubuntu-16.04'
   dependsOn: BuildAndNonBrowserTesting
+  strategy:
+    maxParallel: 2
+    matrix: 
+      Chrome:
+        browser: chrome
+      Firefox:
+        browser: firefox
 
   steps:
 
@@ -86,32 +93,15 @@ jobs:
       docker tag  $(DOCKER_HUB_REPO):$(imageTag) $(imageName):latest
       docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
       sleep 15
-      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-chrome -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL school-experience cucumber
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-    displayName: Run Cucumber via Selenium Chrome
-
-- job: FunctionalTestingFirefox
-  pool:
-    vmImage: 'ubuntu-16.04'
-  dependsOn: BuildAndNonBrowserTesting
-
-  steps:
-
-  - script: |
-      docker pull $(DOCKER_HUB_REPO):$(imageTag)
-      docker tag  $(DOCKER_HUB_REPO):$(imageTag) $(imageName):latest
-      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
-      sleep 15
-      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=firefox school-experience cucumber
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-    displayName: Run Cucumber via Selenium Firefox
+      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) school-experience cucumber
+    condition: not(eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: Run Cucumber via Selenium
 
 - job: PublishArtifacts
   pool:
     vmImage: 'ubuntu-16.04'
   dependsOn:
-  - FunctionalTestingChrome
-  - FunctionalTestingFirefox
+  - FunctionalTesting
 
   steps:
 
