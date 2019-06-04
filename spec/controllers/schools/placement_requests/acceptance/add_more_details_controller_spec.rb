@@ -26,12 +26,12 @@ describe Schools::PlacementRequests::Acceptance::AddMoreDetailsController, type:
   context '#create' do
     before { post schools_placement_request_acceptance_add_more_details_path(pr.id, params: params) }
 
-    context 'with valid params' do
-      let(:contact_name) { "Edna Krabappel" }
-      let(:contact_number) { "01234 456 678" }
-      let(:contact_email) { "edna.krabappel@springfield.edu" }
-      let(:location) { "Reception" }
+    let(:contact_name) { "Edna Krabappel" }
+    let(:contact_number) { "01234 456 678" }
+    let(:contact_email) { "edna.krabappel@springfield.edu" }
+    let(:location) { "Reception" }
 
+    context 'with valid params' do
       let(:params) do
         {
           add_more_details: {
@@ -50,6 +50,31 @@ describe Schools::PlacementRequests::Acceptance::AddMoreDetailsController, type:
         expect(booking.contact_number).to eql(contact_number)
         expect(booking.contact_email).to eql(contact_email)
         expect(booking.location).to eql(location)
+      end
+    end
+
+    context 'with invalid params' do
+      let(:params) do
+        {
+          add_more_details: {
+            contact_name: contact_name,
+            # contact_number: contact_number,
+            contact_email: contact_email,
+            location: location
+          }
+        }
+      end
+
+      specify 'should rerender the new template' do
+        expect(response).to render_template(:new)
+      end
+
+      before { booking.reload }
+
+      specify 'should not update the booking' do
+        %i(contact_name contact_number contact_email location).each do |attribute|
+          expect(booking.send(attribute)).to be_nil
+        end
       end
     end
   end

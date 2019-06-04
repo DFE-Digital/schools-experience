@@ -66,7 +66,7 @@ describe Schools::PlacementRequests::Acceptance::ConfirmBookingController, type:
         expect(pr.booking).to be_nil
       end
 
-      specify 'should redirect to the add more details page' do
+      specify 'should rerender the new template' do
         expect(response).to render_template(:new)
       end
     end
