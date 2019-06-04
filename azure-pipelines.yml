@@ -85,6 +85,8 @@ jobs:
       docker login $(dockerRegistry) -u $(dockerId) -p $pswd
       docker pull $(dockerRegistry)/$(imageName):latest
       docker tag $(dockerRegistry)/$(imageName):latest $(imageName):latest
+      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
+      sleep 15
     env:
       pswd: $(dockerPassword)
     displayName: 'Docker login'
@@ -104,6 +106,8 @@ jobs:
       docker login $(dockerRegistry) -u $(dockerId) -p $pswd
       docker pull $(dockerRegistry)/$(imageName):latest
       docker tag $(dockerRegistry)/$(imageName):latest $(imageName):latest
+      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d
+      sleep 15
     env:
       pswd: $(dockerPassword)
     displayName: 'Docker login'
