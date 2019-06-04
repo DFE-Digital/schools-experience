@@ -5,6 +5,40 @@ RSpec.describe Bookings::Profile, type: :model do
     it { is_expected.to belong_to(:school).class_name("Bookings::School").required }
   end
 
+  describe 'methods' do
+    describe '#dress_code' do
+      context 'omitting other details' do
+        subject { create(:bookings_profile, :with_a_dress_code) }
+
+        specify 'should not include the contents of dress_code_other_details' do
+          expect(subject.dress_code).not_to include('pants')
+        end
+      end
+
+      context 'correctly adding code flags' do
+        subject { create(:bookings_profile, dress_code_cover_tattoos: true, dress_code_remove_piercings: true) }
+
+        specify 'should contain the correct information' do
+          %w(tattoos piercings).each do |dc|
+            expect(subject.dress_code).to include(dc)
+          end
+        end
+
+        specify 'should not include incorrect information' do
+          expect(subject.dress_code).not_to match(/casual/i)
+        end
+      end
+
+      context 'capitalising output' do
+        subject { create(:bookings_profile, dress_code_smart_casual: true) }
+
+        specify 'should not include incorrect information' do
+          expect(subject.dress_code).to eql('Smart casual')
+        end
+      end
+    end
+  end
+
   describe "validations" do
     describe "bookings_school_id" do
       before { create(:bookings_profile) }
