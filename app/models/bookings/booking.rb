@@ -48,5 +48,35 @@ module Bookings
     def status
       "New"
     end
+
+    # stage one of the placement request acceptance mini-wizard
+    def booking_confirmed?
+      Schools::PlacementRequests::ConfirmBooking.new(
+        date: date,
+        placement_details: placement_details,
+        bookings_subject_id: bookings_subject_id
+      ).valid?
+    end
+
+    # stage two of the placement request acceptance mini-wizard
+    def more_details_added?
+      Schools::PlacementRequests::AddMoreDetails.new(
+        contact_name: contact_name,
+        contact_number: contact_number,
+        contact_email:  contact_email,
+        location:  location
+      ).valid?
+    end
+
+    # stage three of the placement request acceptance mini-wizard
+    def reviewed_and_email_sent?
+      Schools::PlacementRequests::ReviewAndSendEmail.new(
+        candidate_instructions: candidate_instructions
+      ).valid?
+    end
+
+    def accepted?
+      [booking_confirmed?, more_details_added?, reviewed_and_email_sent?].all?
+    end
   end
 end
