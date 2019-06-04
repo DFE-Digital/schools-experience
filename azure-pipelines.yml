@@ -79,17 +79,47 @@ jobs:
     vmImage: 'ubuntu-16.04'
   dependsOn: BuildAndNonBrowserTesting
   strategy:
-    maxParallel: 4
-    matrix: 
+    maxParallel: 5
+    matrix:
       Chrome_Schools:
         browser: chrome
-        features: features/schools features/errors
+        features: features/schools/confirmed_bookings features/errors
+      Chrome_Schools:
+        browser: chrome
+        features: features/schools/errors
+      Chrome_Schools:
+        browser: chrome
+        features: features/schools/misc
+      Chrome_Schools:
+        browser: chrome
+        features: features/schools/onboarding
+      Chrome_Schools:
+        browser: chrome
+        features: features/schools/placement_dates
+      Chrome_Schools:
+        browser: chrome
+        features: features/schools/placement_requests
       Chrome_Candidates:
         browser: chrome
         features: features/candidates
       Firefox_Schools:
         browser: firefox
-        features: features/schools features/errors
+        features: features/schools/confirmed_bookings features/errors
+      Firefox_Schools:
+        browser: firefox
+        features: features/schools/errors 
+      Firefox_Schools:
+        browser: firefox
+        features: features/schools/misc 
+      Firefox_Schools:
+        browser: firefox
+        features: features/schools/onboarding 
+      Firefox_Schools:
+        browser: firefox
+        features: features/schools/placement_dates 
+      Firefox_Schools:
+        browser: firefox
+        features: features/schools/placement_requests
       Firefox_Candidates:
         browser: firefox
         features: features/candidates
