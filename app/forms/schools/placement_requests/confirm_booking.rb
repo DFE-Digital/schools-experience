@@ -10,7 +10,7 @@ module Schools
 
       validates :date, presence: true
       validates :placement_details, presence: true
-      attribute :bookings_subject_id, presence: true
+      validates :bookings_subject_id, presence: true
     end
   end
 end

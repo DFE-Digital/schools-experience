@@ -11,8 +11,8 @@ module Schools
 
       validates :contact_name, presence: true
       validates :contact_number, presence: true
-      attribute :contact_email, presence: true
-      attribute :location, presence: true
+      validates :contact_email, presence: true
+      validates :location, presence: true
     end
   end
 end
