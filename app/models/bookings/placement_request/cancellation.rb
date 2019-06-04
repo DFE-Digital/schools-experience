@@ -16,6 +16,8 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     :candidate_email,
     :candidate_name,
     :requested_availability,
+    :token,
+    :booking,
     to: :placement_request
 
   def requested_availability
@@ -28,6 +30,10 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
 
   def sent?
     sent_at.present?
+  end
+
+  def booking_date
+    booking.date.to_formatted_s(:govuk)
   end
 
 private

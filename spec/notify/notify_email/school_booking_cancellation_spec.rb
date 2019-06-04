@@ -5,6 +5,5 @@ describe NotifyEmail::SchoolBookingCancellation do
     school_admin_name: "Seymour Skinner",
     school_name: "Springfield Elementary School",
     candidate_name: "Otto Mann",
-    placement_start_date: "2022-04-01",
-    placement_finish_date: "2022-04-20"
+    placement_start_date_with_duration: "2022-04-01 for 1 day"
 end

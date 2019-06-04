@@ -9,6 +9,14 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
     double NotifyEmail::CandidateRequestCancellation, despatch_later!: true
   end
 
+  let :notify_school_booking_cancellation do
+    double NotifyEmail::SchoolBookingCancellation, despatch_later!: true
+  end
+
+  let :notify_candidate_booking_cancellation do
+    double NotifyEmail::CandidateBookingCancellation, despatch_later!: true
+  end
+
   before do
     allow(NotifyEmail::SchoolRequestCancellation).to receive :new do
       notify_school_request_cancellation
@@ -16,6 +24,14 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
 
     allow(NotifyEmail::CandidateRequestCancellation).to receive :new do
       notify_candidate_request_cancellation
+    end
+
+    allow(NotifyEmail::SchoolBookingCancellation).to receive :new do
+      notify_school_booking_cancellation
+    end
+
+    allow(NotifyEmail::CandidateBookingCancellation).to receive :new do
+      notify_candidate_booking_cancellation
     end
   end
 
@@ -36,12 +52,24 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
     end
 
     context 'when request not already closed' do
-      let :placement_request do
-        FactoryBot.create :placement_request
+      context 'when does not have a booking' do
+        let :placement_request do
+          FactoryBot.create :placement_request
+        end
+
+        it 'renders the new template' do
+          expect(response).to render_template :new
+        end
       end
 
-      it 'renders the new template' do
-        expect(response).to render_template :new
+      context 'when has a booking' do
+        let :placement_request do
+          FactoryBot.create :placement_request, :booked
+        end
+
+        it 'renders the new template' do
+          expect(response).to render_template :new
+        end
       end
     end
   end
@@ -90,76 +118,151 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
     end
 
     context 'when request not already closed' do
-      let :placement_request do
-        FactoryBot.create :placement_request
+      context 'when request does not have a booking' do
+        let :placement_request do
+          FactoryBot.create :placement_request
+        end
+
+        context 'invalid' do
+          let :cancellation do
+            Bookings::PlacementRequest::Cancellation.new
+          end
+
+          it 'does not notify the school' do
+            expect(notify_school_request_cancellation).not_to \
+              have_received :despatch_later!
+          end
+
+          it 'does not notify the candidate' do
+            expect(notify_candidate_request_cancellation).not_to \
+              have_received :despatch_later!
+          end
+
+          it 'does not cancel the placement request' do
+            expect(placement_request).not_to be_closed
+          end
+
+          it 'rerenders the new template' do
+            expect(response).to render_template :new
+          end
+        end
+
+        context 'valid' do
+          let :cancellation do
+            FactoryBot.build :cancellation, placement_request: placement_request
+          end
+
+          it 'notifies the school' do
+            expect(NotifyEmail::SchoolRequestCancellation).to have_received(:new).with \
+              to: cancellation.school_email,
+              school_name: cancellation.school_name,
+              school_admin_name: cancellation.school_admin_name,
+              candidate_name: cancellation.candidate_name,
+              cancellation_reasons: cancellation.reason,
+              requested_availability: cancellation.requested_availability,
+              placement_request_url: schools_placement_request_url(cancellation.placement_request)
+
+            expect(notify_school_request_cancellation).to \
+              have_received :despatch_later!
+          end
+
+          it 'notifies the candidate' do
+            expect(NotifyEmail::CandidateRequestCancellation).to have_received(:new).with \
+              to: cancellation.candidate_email,
+              school_name: cancellation.school_name,
+              candidate_name: cancellation.candidate_name,
+              requested_availability: cancellation.requested_availability
+
+            expect(notify_candidate_request_cancellation).to \
+              have_received :despatch_later!
+          end
+
+          it 'creates the cancellation' do
+            expect(placement_request.candidate_cancellation.reason).to \
+              eq cancellation.reason
+          end
+
+          it 'cancels the placement request' do
+            expect(placement_request).to be_closed
+          end
+
+          it 'redirects to the show action' do
+            expect(response).to redirect_to \
+              candidates_placement_request_cancellation_path(placement_request.token)
+          end
+        end
       end
 
-      context 'invalid' do
-        let :cancellation do
-          Bookings::PlacementRequest::Cancellation.new
+      context 'when the request has a booking' do
+        let :placement_request do
+          FactoryBot.create :placement_request, :booked
         end
 
-        it 'does not notify the school' do
-          expect(notify_school_request_cancellation).not_to \
-            have_received :despatch_later!
+        context 'invalid' do
+          let :cancellation do
+            Bookings::PlacementRequest::Cancellation.new
+          end
+
+          it 'does not notify the school' do
+            expect(notify_school_booking_cancellation).not_to \
+              have_received :despatch_later!
+          end
+
+          it 'does not notify the candidate' do
+            expect(notify_candidate_booking_cancellation).not_to \
+              have_received :despatch_later!
+          end
+
+          it 'does not cancel the placement request' do
+            expect(placement_request).not_to be_closed
+          end
+
+          it 'rerenders the new template' do
+            expect(response).to render_template :new
+          end
         end
 
-        it 'does not notify the candidate' do
-          expect(notify_candidate_request_cancellation).not_to \
-            have_received :despatch_later!
-        end
+        context 'valid' do
+          let :cancellation do
+            FactoryBot.build :cancellation, placement_request: placement_request
+          end
 
-        it 'does not cancel the placement request' do
-          expect(placement_request).not_to be_closed
-        end
+          it 'notifies the school' do
+            expect(NotifyEmail::SchoolBookingCancellation).to have_received(:new).with \
+              to: cancellation.school_email,
+              school_name: cancellation.school_name,
+              school_admin_name: cancellation.school_admin_name,
+              candidate_name: cancellation.candidate_name,
+              placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
 
-        it 'rerenders the new template' do
-          expect(response).to render_template :new
-        end
-      end
+            expect(notify_school_booking_cancellation).to \
+              have_received :despatch_later!
+          end
 
-      context 'valid' do
-        let :cancellation do
-          FactoryBot.build :cancellation, placement_request: placement_request
-        end
+          it 'notifies the candidate' do
+            expect(NotifyEmail::CandidateBookingCancellation).to have_received(:new).with \
+              to: cancellation.candidate_email,
+              school_name: cancellation.school_name,
+              candidate_name: cancellation.candidate_name,
+              placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
 
-        it 'notifies the school' do
-          expect(NotifyEmail::SchoolRequestCancellation).to have_received(:new).with \
-            to: cancellation.school_email,
-            school_name: cancellation.school_name,
-            school_admin_name: cancellation.school_admin_name,
-            candidate_name: cancellation.candidate_name,
-            cancellation_reasons: cancellation.reason,
-            requested_availability: cancellation.requested_availability,
-            placement_request_url: schools_placement_request_url(cancellation.placement_request)
+            expect(notify_candidate_booking_cancellation).to \
+              have_received :despatch_later!
+          end
 
-          expect(notify_school_request_cancellation).to \
-            have_received :despatch_later!
-        end
+          it 'creates the cancellation' do
+            expect(placement_request.candidate_cancellation.reason).to \
+              eq cancellation.reason
+          end
 
-        it 'notifies the candidate' do
-          expect(NotifyEmail::CandidateRequestCancellation).to have_received(:new).with \
-            to: cancellation.candidate_email,
-            school_name: cancellation.school_name,
-            candidate_name: cancellation.candidate_name,
-            requested_availability: cancellation.requested_availability
+          it 'cancels the placement request' do
+            expect(placement_request).to be_closed
+          end
 
-          expect(notify_candidate_request_cancellation).to \
-            have_received :despatch_later!
-        end
-
-        it 'creates the cancellation' do
-          expect(placement_request.candidate_cancellation.reason).to \
-            eq cancellation.reason
-        end
-
-        it 'cancels the placement request' do
-          expect(placement_request).to be_closed
-        end
-
-        it 'redirects to the show action' do
-          expect(response).to redirect_to \
-            candidates_placement_request_cancellation_path(placement_request.token)
+          it 'redirects to the show action' do
+            expect(response).to redirect_to \
+              candidates_placement_request_cancellation_path(placement_request.token)
+          end
         end
       end
     end
@@ -175,8 +278,16 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
         "/candidates/placement_requests/#{placement_request.token}/cancellation"
     end
 
-    it 'renders the show template' do
-      expect(response).to render_template :show
+    context 'when does not have a booking' do
+      it 'renders the show template' do
+        expect(response).to render_template :show
+      end
+    end
+
+    context 'when has a booking' do
+      it 'renders the show template' do
+        expect(response).to render_template :show
+      end
     end
   end
 end

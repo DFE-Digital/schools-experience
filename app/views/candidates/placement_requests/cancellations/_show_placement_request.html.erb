@@ -1,0 +1,47 @@
+<% self.page_title = 'Cancelled placement request' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Your school experience request has been cancelled
+      </h1>
+    </div>
+
+    <h2 class="govuk-heading-m">
+      What happens next
+    </h2>
+    <p>
+      Your request for school experience <%= cancellation.school_name %> at has been cancelled.
+    </p>
+    <p>
+      <strong>The school will be notified about this cancellation.</strong>
+    </p>
+    <p>
+      We'll also send you an email to confirm you've cancelled your request.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Get advice about teaching
+    </h2>
+    <p>
+      If you’d like to find out more about teaching or teacher training call our Get Into Teaching service on Freephone 0800 389 2500.
+    </p>
+    <p>
+      You can also chat to a Get Into Teaching Line adviser using our
+      <%= link_to "online chat service", "https://ta-chat.education.gov.uk/chat/chatstart.aspx?domain=www.education.gov.uk&department=GetIntoTeaching%27,%27new_win%27,%27width=0,height=0%27);return&SID=0" %>
+      between 8am and 8pm, Monday to Friday.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      View and request more school experience
+    </h2>
+    <% if false %>
+      <% # link to candidate dashboard when we have it %>
+    <% else %>
+      <p>
+        <%= link_to 'Find more school experience', candidates_root_path %>
+      </p>
+    <% end %>
+  </div>
+</div>

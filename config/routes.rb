@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     end
 
     if Rails.application.config.x.phase >= 3
+      get 'cancel/:placement_request_token', to: 'placement_requests/cancellations#new', as: :cancel
       resources :placement_requests, only: [], param: :token do
         resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
       end
