@@ -93,10 +93,10 @@ jobs:
       Chrome_Schools_4:
         browser: chrome
         features: features/schools/onboarding
-      Chrome_Schools_4:
+      Chrome_Schools_5:
         browser: chrome
         features: features/schools/placement_dates
-      Chrome_Schools_5:
+      Chrome_Schools_6:
         browser: chrome
         features: features/schools/placement_requests
       Chrome_Candidates:
