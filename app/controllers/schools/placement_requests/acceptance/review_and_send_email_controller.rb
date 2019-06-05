@@ -14,11 +14,10 @@ module Schools
 
           return render :new if @review_and_send_email.invalid?
 
-          # save the booking and if the booking is fully-complete trigger email sending
           booking = @placement_request.booking
           booking.candidate_instructions = @review_and_send_email.candidate_instructions
 
-          if booking.save
+          if booking.save && candidate_booking_notification(booking).despatch_later!
             redirect_to schools_placement_requests_path
           else
             render :new
@@ -26,6 +25,11 @@ module Schools
         end
 
       private
+
+        def candidate_booking_notification(booking)
+          NotifyEmail::CandidateBookingConfirmation
+            .from_booking(booking.candidate.email, booking)
+        end
 
         def review_and_send_email_params
           params.require(:review_and_send_email).permit(:candidate_instructions)

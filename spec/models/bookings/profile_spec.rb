@@ -8,7 +8,7 @@ RSpec.describe Bookings::Profile, type: :model do
   describe 'methods' do
     describe '#dress_code' do
       context 'omitting other details' do
-        subject { create(:bookings_profile, :with_a_dress_code) }
+        subject { create(:bookings_profile, dress_code_cover_tattoos: true, dress_code_other_details: 'any pants') }
 
         specify 'should not include the contents of dress_code_other_details' do
           expect(subject.dress_code).not_to include('pants')
