@@ -74,55 +74,20 @@ jobs:
       command: push
       tags: $(imageTag)
 
+  - task: Bash@3
+    name: mtrx
+    displayName: 'set up functional test matrix variable'
+    inputs:
+      targetType: filePath
+      filePath: ./script/generate_matrix.sh
+
 - job: FunctionalTesting
   pool:
     vmImage: 'ubuntu-16.04'
   dependsOn: BuildAndNonBrowserTesting
   strategy:
     maxParallel: 5
-    matrix:
-      Chrome_Schools_1:
-        browser: chrome
-        features: features/schools/confirmed_bookings features/errors
-      Chrome_Schools_2:
-        browser: chrome
-        features: features/schools/errors
-      Chrome_Schools_3:
-        browser: chrome
-        features: features/schools/misc
-      Chrome_Schools_4:
-        browser: chrome
-        features: features/schools/onboarding
-      Chrome_Schools_5:
-        browser: chrome
-        features: features/schools/placement_dates
-      Chrome_Schools_6:
-        browser: chrome
-        features: features/schools/placement_requests
-      Chrome_Candidates:
-        browser: chrome
-        features: features/candidates
-      Firefox_Schools_1:
-        browser: firefox
-        features: features/schools/confirmed_bookings features/errors
-      Firefox_Schools_2:
-        browser: firefox
-        features: features/schools/errors 
-      Firefox_Schools_3:
-        browser: firefox
-        features: features/schools/misc 
-      Firefox_Schools_4:
-        browser: firefox
-        features: features/schools/onboarding 
-      Firefox_Schools_5:
-        browser: firefox
-        features: features/schools/placement_dates 
-      Firefox_Schools_6:
-        browser: firefox
-        features: features/schools/placement_requests
-      Firefox_Candidates:
-        browser: firefox
-        features: features/candidates
+    matrix: $[ dependencies.BuildAndNonBrowserTesting.outputs['mtrx.legs'] ]
 
   steps:
 
