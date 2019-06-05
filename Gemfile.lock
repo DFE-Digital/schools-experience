@@ -7,6 +7,13 @@ GIT
       govuk_frontend_toolkit (>= 6.0.0)
       rails (>= 5.2.2)
 
+GIT
+  remote: https://github.com/microsoft/ApplicationInsights-Ruby.git
+  revision: a74292001cf12f6de957dfdcefaf8dbe415d7181
+  ref: a7429200
+  specs:
+    application_insights (0.5.7)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -59,7 +66,6 @@ GEM
     addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
     aes_key_wrap (1.0.1)
-    application_insights (0.5.6)
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
@@ -421,7 +427,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgis-adapter
   acts_as_list
-  application_insights
+  application_insights!
   autoprefixer-rails
   bootsnap (>= 1.1.0)
   brakeman (>= 4.4.0)
