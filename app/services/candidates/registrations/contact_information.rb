@@ -1,6 +1,8 @@
 module Candidates
   module Registrations
     class ContactInformation < RegistrationStep
+      attribute :first_name
+      attribute :last_name
       attribute :full_name
       attribute :email
       attribute :building
@@ -10,7 +12,8 @@ module Candidates
       attribute :postcode
       attribute :phone
 
-      validates :full_name, presence: true
+      validates :first_name, presence: true
+      validates :last_name, presence: true
       validates :phone, presence: true
       validates :phone, phone: true, if: -> { phone.present? }
       validates :email, presence: true
@@ -18,6 +21,20 @@ module Candidates
       validates :building, presence: true
       validates :postcode, presence: true
       validate :postcode_is_valid, if: -> { postcode.present? }
+
+      def full_name
+        full_name_attribute = super
+
+        if full_name_attribute.present?
+          return full_name_attribute
+        end
+
+        if first_name && last_name
+          return [first_name, last_name].map(&:to_s).join(' ')
+        end
+
+        nil
+      end
 
     private
 
