@@ -104,4 +104,62 @@ describe Schools::DashboardsHelper, type: 'helper' do
       end
     end
   end
+
+  context '#show_no_placement_dates_warning?' do
+    context 'when availability preference is fixed and dates are available' do
+      let(:school) { create(:bookings_school, :with_fixed_availability_preference, :with_placement_dates) }
+      subject { show_no_placement_dates_warning?(school) }
+
+      specify 'should be false' do
+        expect(subject).to be false
+      end
+    end
+
+    context 'when availability preference is flexible and dates are available' do
+      let(:school) { create(:bookings_school, :with_placement_dates) }
+      subject { show_no_placement_dates_warning?(school) }
+
+      specify 'should be false' do
+        expect(subject).to be false
+      end
+    end
+
+    context 'when availability preference is fixed and dates are not available' do
+      let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
+      subject { show_no_placement_dates_warning?(school) }
+
+      specify 'should be true' do
+        expect(subject).to be true
+      end
+    end
+  end
+
+  context '#show_no_availability_info_warning?' do
+    context 'when availability preference is flexible and availability info present' do
+      let(:school) { create(:bookings_school) }
+      subject { show_no_availability_info_warning?(school) }
+
+      specify 'should be false' do
+        expect(subject).to be false
+      end
+    end
+
+    context 'when availability preference is fixed and availability info is present' do
+      let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
+      subject { show_no_availability_info_warning?(school) }
+
+      specify 'should be false' do
+        expect(subject).to be false
+      end
+    end
+
+    context 'when availability preference is not fixed and dates are not available' do
+      let(:school) { create(:bookings_school, availability_info: nil) }
+      subject { show_no_availability_info_warning?(school) }
+
+      specify 'should be true' do
+        expect(subject).to be true
+      end
+    end
+  end
 end

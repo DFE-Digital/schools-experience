@@ -1,0 +1,34 @@
+<%- self.page_title = "Describe your school experience availability" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_root_path,
+    'Describe your school experience availability' => nil
+  }
+%>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @current_school, url: schools_availability_info_path, method: :patch do |form| %>
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <%= form.text_area :availability_info, rows: 7, label_options: { overwrite_defaults!: true, class: 'govuk-heading-l' } do %>
+            <p>Outline when you offer school experience at your school.</p>
+
+            <p>
+              For example, on specific days of the week and open days or around
+              exams, holidays and term times.
+            </p>
+
+            <p>
+              These details will be shown to candidates to help them choose
+              school experience at your school.
+            </p>
+          <%- end -%>
+        </fieldset>
+      </div>
+
+      <%= form.submit 'Continue' %>
+    <%- end -%>
+  </div>
+</div>

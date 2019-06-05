@@ -18,9 +18,11 @@ Feature: Admin contact
         | Subjects                     |                           |
         | Description                  |                           |
         | Candidate experience details |                           |
-        | Availability preference      |                           |
-        | Availability description     |                           |
         | Experience Outline           |                           |
+
+  Scenario: Page title
+    Given I am on the 'Admin contact' page
+    Then the page title should be 'Enter school experience admin contact details'
 
   Scenario: Completing the step with error
     Given I am on the 'Admin contact' page

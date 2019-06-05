@@ -37,6 +37,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resource :availability_preference, only: %i(edit update)
+      resource :availability_info, only: %i(edit update), controller: 'availability_info'
       resources :placement_dates
 
       namespace :errors do
@@ -56,8 +58,6 @@ Rails.application.routes.draw do
         resource :subjects, only: %i(new create edit update)
         resource :description, only: %i(new create edit update)
         resource :candidate_experience_detail, only: %i(new create edit update)
-        resource :availability_preference, only: %i(new create edit update)
-        resource :availability_description, only: %i(new create edit update)
         resource :experience_outline, only: %i(new create edit update)
         resource :admin_contact, only: %i(new create edit update)
         resource :profile, only: :show

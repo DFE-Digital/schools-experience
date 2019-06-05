@@ -25,6 +25,10 @@ Feature: Experience Outline
         | Some school                             | /schools |
         | Outline experience and teacher training | None     |
 
+  Scenario: Page title
+    Given I am on the 'Experience Outline' page
+    Then the page title should be 'Outline experience and teacher training'
+
   Scenario: Completing the step with error
     Given I am on the 'Experience Outline' page
     And I enter 'A really good one' into the 'What kind of school experience do you offer candidates?' text area
@@ -39,4 +43,4 @@ Feature: Experience Outline
     And I enter 'We run our own training' into the 'Provide details.' text area
     And I enter 'http://example.com' into the 'Enter a web address.' text area
     When I submit the form
-    Then I should be on the 'Availability preference' page
+    Then I should be on the 'Admin contact' page

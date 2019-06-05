@@ -1,3 +1,5 @@
+<%- self.page_title = 'Check your answers before setting up your school experience profile' -%>
+
 <%
   self.breadcrumbs = {
     @current_school.name => schools_root_path,
@@ -44,10 +46,6 @@
         <%= summary_row 'Start time', @profile.start_time, edit_schools_on_boarding_candidate_experience_detail_path %>
         <%= summary_row 'Finish time', @profile.end_time, edit_schools_on_boarding_candidate_experience_detail_path %>
         <%= summary_row 'Flexible on times', @profile.flexible_on_times, edit_schools_on_boarding_candidate_experience_detail_path %>
-        <%= summary_row 'Availability type', @profile.availability_type, edit_schools_on_boarding_availability_preference_path %>
-        <% if @profile.flexible_dates? %>
-          <%= summary_row 'Availability', @profile.availability, edit_schools_on_boarding_availability_description_path %>
-        <% end %>
       </dl>
 
       <h2 class="ogvuk-heading-m">Admin contact details</h2>

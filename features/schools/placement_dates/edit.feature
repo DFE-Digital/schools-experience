@@ -10,25 +10,25 @@ Feature: Editing placement dates
         Given I am on the edit page for my placement
         Then the page title should be 'Modify placement date'
 
-  Scenario: Breadcrumbs
-    Given I am on the edit page for my placement
-    Then I should see the following breadcrumbs:
-        | Text                  | Link                     |
-        | Some school           | /schools                 |
-        | Placement dates       | /schools/placement_dates |
-        | Modify placement date | None                     |
+    Scenario: Breadcrumbs
+        Given I am on the edit page for my placement
+        Then I should see the following breadcrumbs:
+            | Text                  | Link                     |
+            | Some school           | /schools                 |
+            | Placement dates       | /schools/placement_dates |
+            | Modify placement date | None                     |
 
     Scenario: Placement date form
         Given I am on the edit page for my placement
         Then I should see a form with the following fields:
             | Label                       | Type   |
-            | Enter a start date          | date   |
             | How many days will it last? | number |
         And there should be a 'Make this date available to candidates?' checkbox
+        And the current start date should be present
 
     Scenario: Filling in and submitting the form
         Given I am on the edit page for my placement
-        And I fill in the form with a future date and duration of 6
+        And I fill in the form with a duration of 6
         When I submit the form
         Then I should be on the 'placement dates' page
         And my newly-created placement date should be listed

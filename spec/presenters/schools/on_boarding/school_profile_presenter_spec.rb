@@ -388,16 +388,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#availability' do
-    let :profile do
-      FactoryBot.build :school_profile, :with_availability_description
-    end
-
-    it 'returns the availability' do
-      expect(subject.availability).to eq 'Whenever really'
-    end
-  end
-
   context '#admin_contact_full_name' do
     let :profile do
       FactoryBot.build :school_profile, :with_admin_contact

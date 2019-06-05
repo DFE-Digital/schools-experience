@@ -27,6 +27,7 @@ RSpec.describe Candidates::SchoolSearch do
     it { expect(subject).to delegate_method(:valid?).to(:school_search) }
     it { expect(subject).to delegate_method(:errors).to(:school_search) }
     it { expect(subject).to delegate_method(:location_name).to(:school_search) }
+    it { expect(subject).to delegate_method(:has_coordinates?).to(:school_search) }
   end
 
   context '.subjects=' do

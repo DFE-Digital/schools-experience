@@ -17,8 +17,6 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_key_stage_list,
         :with_description,
         :with_candidate_experience_detail,
-        :with_availability_preference,
-        :with_availability_description,
         :with_experience_outline
     end
 
@@ -49,8 +47,6 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_key_stage_list,
         :with_description,
         :with_candidate_experience_detail,
-        :with_availability_preference,
-        :with_availability_description,
         :with_experience_outline
     end
 

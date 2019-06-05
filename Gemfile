@@ -63,7 +63,7 @@ gem 'rack-timeout'
 
 gem 'openid_connect'
 gem 'uk_postcode'
-gem 'application_insights'
+gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: 'a7429200'
 gem 'faraday'
 
 group :development, :test do
@@ -95,6 +95,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-commands-rspec'
 
   # Manage multiple processes i.e. web server and webpack
   gem 'foreman'

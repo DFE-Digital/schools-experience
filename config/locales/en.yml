@@ -37,16 +37,16 @@ en:
   schools_on_boarding_school_fee_errors: &schools_on_boarding_school_fee_errors
     attributes:
       amount_pounds:
-        blank: 'Enter an amount'
+        blank: 'The fee amount is required'
         greater_than: 'Must be greater than %{count}'
         less_than: 'Must be less than %{count}'
       description:
-        blank: 'Explanation required'
+        blank: 'Explanation of what the fee covers is required'
       interval:
-        blank: 'Select an option'
+        blank: 'Select whether this a daily or one-off fee'
         inclusion: 'Select an option'
       payment_method:
-        blank: 'Explanation required'
+        blank: 'Explanation of how the fee is paid is required'
 
   schools_on_boarding_school_fee_helpers: &schools_on_boarding_school_fee_helpers
     interval: 'Is this a daily or one-off fee?'
@@ -100,13 +100,13 @@ en:
         schools/on_boarding/candidate_requirement:
           attributes:
             dbs_requirement:
-              blank: 'Select an option'
-              inclusion: 'Select an option'
+              blank: 'Select whether you require candidates to be DBS-checked'
+              inclusion: 'Select whether you require candidates to be DBS-checked'
             dbs_policy:
               blank: 'Details required'
             requirements:
-              blank: 'Select an option'
-              inclusion: 'Select an option'
+              blank: 'Select whether you have requirements for school experience candidates'
+              inclusion: 'Select whether you have requirements for school experience candidates'
             requirements_details:
               blank: 'Details required'
         schools/on_boarding/administration_fee:
@@ -135,35 +135,35 @@ en:
         schools/on_boarding/candidate_experience_detail:
           attributes:
             other_dress_requirements_detail:
-              blank: 'Provide details'
+              blank: 'Other dress code details are required'
             parking_provided:
-              inclusion: 'Select an option'
+              inclusion: 'Select whether parking is provided'
             parking_details:
-              blank: 'Provide details'
+              blank: 'Details of where candidates can park at your school are required'
             nearby_parking_details:
-              blank: 'Provide details'
+              blank: 'Details of where candidates can park near your school are required'
             disabled_facilities:
-              inclusion: 'Select an option'
+              inclusion: 'Select whether you provide facilities or support for candidates with disabilities or access needs'
             disabled_facilities_details:
-                blank: 'Provide details'
+                blank: 'Details of facilities or support for candidates with disabilities or access needs are required'
             start_time:
-              blank: 'Provide details'
+              blank: 'Start time is required'
               invalid: 'Enter a valid start time'
             end_time:
-              blank: 'Provide details'
+              blank: 'End time is required'
               invalid: 'Enter a valid end time'
             times_flexible:
-              inclusion: 'Select an option'
+              inclusion: 'Select whether your start and finish times are flexible'
             times_flexible_details:
-              blank: 'Provide details'
+              blank: 'Start and finish time details are required'
         schools/on_boarding/experience_outline:
           attributes:
             candidate_experience:
               blank: 'Provide details'
             provides_teacher_training:
-              inclusion: 'Select an option'
+              inclusion: 'Select whether you run your own teacher training or have any links to teacher training organisations'
             teacher_training_details:
-              blank: 'Provide details'
+              blank: 'Details of teacher training are required'
             teacher_training_url:
               blank: 'Web address required'
               invalid: 'Enter a valid web address'
@@ -210,6 +210,7 @@ en:
     fieldset:
       bookings_school:
         enabled: Turn requests on or off
+        availability_preference_fixed: Change how availability and dates are displayed
       bookings_placement_date:
         date: Enter a start date
       phases: Education phases
@@ -291,6 +292,11 @@ en:
         enabled:
           true: Allow requests
           false: Do not allow requests
+        availability_preference_fixed:
+          true_html: <strong>Fixed dates</strong> - display set dates
+          false_html: <strong>Flexible dates</strong> - display a description of your availability
+        availability_info: Describe your school experience availability
+
       bookings_placement_date:
         duration: How many days will it last?
         active: Make this date available to candidates?
