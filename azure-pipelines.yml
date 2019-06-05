@@ -2,10 +2,9 @@ pool:
   vmImage: 'ubuntu-16.04'
 
 variables:
-  imageName: school-experience
   imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
-  # define three more variables dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
+  # define four more variables imageName, dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
   DATABASE_URL: postgis://postgres:secret@postgres/school_experience_test
   WEB_URL: postgis://postgres:secret@postgres/school_experience
@@ -15,26 +14,28 @@ variables:
   CUCUMBER_PROFILE: continuous_integration
 
 steps:
+
   - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
     env:
       pswd: $(dockerPassword)
     displayName: 'Docker login'
+
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
   - script: docker run --name=redis -d $(REDIS_IMAGE)
     displayName: Launch Redis # done early to give it time to boot
 
-  - script: docker pull $(dockerRegistry)/$(imageName):phase2 || true
+  - script: docker pull $(dockerRegistry)/$(imageName):latest || true
     displayName: Retrieve latest Docker build to use as cache
-    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'),ne(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):phase2 -t $(dockerRegistry)/$(imageName):$(imageTag) .
+  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):latest -t $(dockerRegistry)/$(imageName):$(imageTag) .
     displayName: Build Docker Image using Cache
-    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'),ne(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
     displayName: Build Docker Image without Cache
-    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/phase2'))
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:test:prepare
     displayName: Create Testing databases, import schema and fixtures
@@ -71,22 +72,32 @@ steps:
       docker push $(dockerRegistry)/$(imageName):$(imageTag)
       docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):latest
       docker push $(dockerRegistry)/$(imageName):latest
+      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: 'Push Docker image (built from master)'
 
-  - script: |
-      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):$(imageTag)-phase2
-      docker push $(dockerRegistry)/$(imageName):$(imageTag)-phase2
-      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):phase2
-      docker push $(dockerRegistry)/$(imageName):phase2
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/phase2')
-    displayName: 'Push Docker image (built from phase2)'
+  - task: Docker@2
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    displayName: login
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      command: login
+
+  - task: Docker@2
+    displayName: 'push to docker hub'
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      repository: $(DOCKER_HUB_REPO)
+      command: push
+      tags: $(imageTag)
 
   - task: CopyFiles@2
     inputs:
       contents: 'script/compose-school-experience.sh'
       targetFolder: $(Build.ArtifactStagingDirectory)
     displayName: 'Copy Docker Compose file to staging area'
+
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: $(Build.ArtifactStagingDirectory)/script/compose-school-experience.sh

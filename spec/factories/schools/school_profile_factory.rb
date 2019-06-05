@@ -106,24 +106,6 @@ FactoryBot.define do
       end
     end
 
-    trait :with_availability_description do
-      after :build do |profile|
-        profile.availability_description = FactoryBot.build :availability_description
-      end
-    end
-
-    trait :with_availability_preference do
-      after :build do |profile|
-        profile.availability_preference = FactoryBot.build :availability_preference
-      end
-    end
-
-    trait :with_fixed_availability_preference do
-      after :build do |profile|
-        profile.availability_preference = FactoryBot.build(:availability_preference, :fixed)
-      end
-    end
-
     trait :completed do
       with_candidate_requirement
       with_fees
@@ -136,8 +118,6 @@ FactoryBot.define do
       with_subjects
       with_description
       with_candidate_experience_detail
-      with_availability_preference
-      with_availability_description
       with_experience_outline
       with_admin_contact
     end

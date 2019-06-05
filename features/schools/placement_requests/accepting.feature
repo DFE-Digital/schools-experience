@@ -12,7 +12,7 @@ Feature: Accepting placement requests
         Then I should see a 'Back' link to the 'schools dashboard'
 
     Scenario: Booking details
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on the 'accept placement request' page
         Then I should see the following booking details:
             | Heading                   | Value                               |
@@ -23,12 +23,12 @@ Feature: Accepting placement requests
             | Request received          | 02 February 2019                    |
 
     Scenario: Booking details
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on the 'accept placement request' page
         Then every row of the booking details list should have a 'Change' link
 
     Scenario: School contact form
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on the 'accept placement request' page
         Then I should see a form with the following fields:
             | Label            | Type  |

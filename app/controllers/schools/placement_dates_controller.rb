@@ -17,7 +17,7 @@ class Schools::PlacementDatesController < Schools::BaseController
   def create
     @placement_date = current_school
       .bookings_placement_dates
-      .new(placement_date_params)
+      .new(new_placement_date_params)
 
     if @placement_date.save
       redirect_to schools_placement_dates_path
@@ -29,7 +29,7 @@ class Schools::PlacementDatesController < Schools::BaseController
   def edit; end
 
   def update
-    if @placement_date.update_attributes(placement_date_params)
+    if @placement_date.update(edit_placement_date_params)
       redirect_to schools_placement_dates_path
     else
       render :edit
@@ -44,7 +44,11 @@ private
       .find(params[:id])
   end
 
-  def placement_date_params
+  def new_placement_date_params
     params.require(:bookings_placement_date).permit(:date, :duration, :active)
+  end
+
+  def edit_placement_date_params
+    params.require(:bookings_placement_date).permit(:duration, :active)
   end
 end

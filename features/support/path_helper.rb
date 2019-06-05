@@ -1,9 +1,10 @@
-def path_for(descriptor, school: nil, placement_date_id: nil)
+def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil)
   if school && school.respond_to?(:to_param)
     school = school.to_param
   end
 
   mappings = {
+    # candidate paths
     "landing" => [:root_path],
     "splash" => [:candidates_splash_path],
     "find a school" => [:new_candidates_school_search_path],
@@ -12,8 +13,13 @@ def path_for(descriptor, school: nil, placement_date_id: nil)
     "candidate subjects" => [:new_candidates_school_registrations_subject_preference_path, school],
     "background checks" => [:new_candidates_school_registrations_background_check_path, school],
     "check your answers" => [:candidates_school_registrations_application_preview_path, school],
+
+    #school paths
     "schools" => [:schools_root_path],
     "schools dashboard" => [:schools_dashboard_path],
+    "bookings" => [:schools_bookings_path],
+    "upcoming bookings" => [:schools_upcoming_bookings_path],
+    "booking" => [:schools_booking_path, booking_id],
     "placement requests" => [:schools_placement_requests_path],
     "upcoming requests" => [:schools_upcoming_requests_path],
     "placement request" => [:schools_placement_request_path, 'abc123'],
@@ -30,12 +36,12 @@ def path_for(descriptor, school: nil, placement_date_id: nil)
     "description" => [:new_schools_on_boarding_description_path],
     "candidate experience details" => [:new_schools_on_boarding_candidate_experience_detail_path],
     "availability" => [:new_schools_on_boarding_availability_path],
+    "availability preferences" => [:edit_schools_availability_preference_path],
+    "availability information" => [:edit_schools_availability_info_path],
     "placement dates" => [:schools_placement_dates_path],
     "new placement date" => [:new_schools_placement_date_path],
     "edit placement date" => [:edit_schools_placement_date_path, placement_date_id],
     "experience outline" => [:new_schools_on_boarding_experience_outline_path],
-    "availability preference" => [:new_schools_on_boarding_availability_preference_path],
-    "availability description" => [:new_schools_on_boarding_availability_description_path],
     "admin contact" => [:new_schools_on_boarding_admin_contact_path],
     "profile" => [:schools_on_boarding_profile_path],
     "toggle requests" => [:edit_schools_enabled_path],

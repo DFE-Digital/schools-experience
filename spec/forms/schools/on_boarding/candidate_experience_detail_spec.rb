@@ -60,7 +60,7 @@ describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
     end
 
     context 'start and end times' do
-      valid_times = ['8AM', '8:30AM', '8:30 AM', '8am', '3pm', '3 pm', '17:00']
+      valid_times = ['3', '19', '8AM', '8.15', '8:30AM', '8:30 AM', '8am', '8.00am', '3pm', '3 pm', '17:00']
       invalid_times = [
         '8A', '9;00am', 'nine forty in the morning', 'mid-morning', -2
       ]

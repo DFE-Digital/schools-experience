@@ -11,6 +11,7 @@
 <h1>Create a placement date</h1>
 
 <%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |form| %>
-  <%= render partial: 'form', locals: { form: form } %>
+  <%= form.date_field :date %>
+  <%= form.number_field :duration, width: 3, required: true %>
   <%= form.submit 'Continue' %>
 <%- end -%>

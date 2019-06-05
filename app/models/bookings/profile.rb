@@ -52,10 +52,6 @@ class Bookings::Profile < ApplicationRecord
   validates :admin_contact_phone, presence: true
   validates :admin_contact_phone, phone: true, allow_blank: true
 
-  validates :fixed_availability, inclusion: [true, false]
-  validates :availability_info, presence: true, unless: :fixed_availability
-  validate :availability_info_is_blank, if: :fixed_availability
-
   validates :administration_fee_amount_pounds, numericality: { greater_than: 0 }, allow_nil: true
   validates :administration_fee_description, presence: true, if: :administration_fee_assigned
   validates :administration_fee_interval, inclusion: AVAILABLE_INTERVALS, if: :administration_fee_assigned
@@ -97,12 +93,6 @@ private
   def strip_fields
     FIELDS_TO_STRIP.each do |f|
       send(:"#{f}=", send(f).strip) if send(f).present?
-    end
-  end
-
-  def availability_info_is_blank
-    if availability_info && !availability_info.blank?
-      errors.add :availability_info, 'cannot be set if using fixed availibility'
     end
   end
 

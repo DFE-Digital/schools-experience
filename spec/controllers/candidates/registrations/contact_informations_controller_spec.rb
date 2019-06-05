@@ -1,31 +1,13 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ContactInformationsController, type: :request do
+  include_context 'Stubbed current_registration'
+
   let :registration_session do
-    double Candidates::Registrations::RegistrationSession,
-      contact_information: existing_contact_information,
-      save: true,
-      contact_information_attributes: contact_information_attributes
-  end
-
-  before do
-    allow(Candidates::Registrations::RegistrationSession).to \
-      receive(:new) { registration_session }
-  end
-
-  let :contact_information do
-    FactoryBot.build :contact_information
-  end
-
-  let :contact_information_attributes do
-    {}
+    Candidates::Registrations::RegistrationSession.new({})
   end
 
   context 'without existing contact information in the session' do
-    let :existing_contact_information do
-      nil
-    end
-
     context '#new' do
       before do
         get '/candidates/schools/11048/registrations/contact_information/new'
@@ -37,6 +19,13 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
     end
 
     context '#create' do
+      let :contact_information_params do
+        {
+          candidates_registrations_contact_information: \
+            contact_information.attributes
+        }
+      end
+
       before do
         post \
           '/candidates/schools/11048/registrations/contact_information',
@@ -44,16 +33,13 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       end
 
       context 'invalid' do
-        let :contact_information_params do
-          {
-            candidates_registrations_contact_information: {
-              email: 'test@test.com'
-            }
-          }
+        let :contact_information do
+          Candidates::Registrations::ContactInformation.new
         end
 
         it 'doesnt modify the session' do
-          expect(registration_session).not_to have_received :save
+          expect { registration_session.contact_information }.to raise_error \
+            Candidates::Registrations::RegistrationSession::StepNotFound
         end
 
         it 'rerenders the new template' do
@@ -62,16 +48,13 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       end
 
       context 'valid' do
-        let :contact_information_params do
-          {
-            candidates_registrations_contact_information: \
-              contact_information.attributes
-          }
+        let :contact_information do
+          FactoryBot.build :contact_information
         end
 
         it 'updates the session with the new details' do
-          expect(registration_session).to have_received(:save).with \
-            contact_information
+          expect(registration_session.contact_information).to \
+            eq_model contact_information
         end
 
         it 'redirects to the next step' do
@@ -84,11 +67,11 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
   context 'with existing contact information in session' do
     let :existing_contact_information do
-      contact_information
+      FactoryBot.build :contact_information
     end
 
-    let :contact_information_attributes do
-      existing_contact_information.attributes
+    before do
+      registration_session.save existing_contact_information
     end
 
     context '#new' do
@@ -97,7 +80,8 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       end
 
       it 'populates the form with the values from the session' do
-        expect(assigns(:contact_information)).to eq existing_contact_information
+        expect(assigns(:contact_information)).to \
+          eq_model existing_contact_information
       end
 
       it 'renders the new template' do
@@ -120,6 +104,13 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
     end
 
     context '#update' do
+      let :contact_information_params do
+        {
+          candidates_registrations_contact_information: \
+            contact_information.attributes
+        }
+      end
+
       before do
         patch \
           '/candidates/schools/11048/registrations/contact_information',
@@ -127,16 +118,13 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       end
 
       context 'invalid' do
-        let :contact_information_params do
-          {
-            candidates_registrations_contact_information: {
-              email: ''
-            }
-          }
+        let :contact_information do
+          Candidates::Registrations::ContactInformation.new
         end
 
         it 'doesnt modify the session' do
-          expect(registration_session).not_to have_received :save
+          expect(registration_session.contact_information).not_to \
+            eq_model contact_information
         end
 
         it 'rerenders the edit form' do
@@ -145,20 +133,13 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
       end
 
       context 'valid' do
-        let :updated_contact_information do
+        let :contact_information do
           FactoryBot.build :contact_information, email: 'new-email@test.com'
         end
 
-        let :contact_information_params do
-          {
-            candidates_registrations_contact_information: \
-              updated_contact_information.attributes
-          }
-        end
-
         it 'updates the session' do
-          expect(registration_session).to have_received(:save).with \
-            updated_contact_information
+          expect(registration_session.contact_information).to \
+            eq_model contact_information
         end
 
         it 'redirects to application preview' do

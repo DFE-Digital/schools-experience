@@ -17,6 +17,10 @@ Feature: Candidate experience details
         | Subjects                     |                           |
         | Description                  |                           |
 
+  Scenario: Page title
+    Given I am already on the 'candidate experience details' page
+    Then the page title should be 'Enter school experience details for candidates'
+
   Scenario: Breadcrumbs
     Given I am already on the 'candidate experience details' page
     Then I should see the following breadcrumbs:
@@ -34,4 +38,4 @@ Feature: Candidate experience details
     Given I am on the 'Candidate experience details' page
     And I complete the candidate experience form with valid data
     When I submit the form
-    Then I should be on the 'Availability Preference' page
+    Then I should be on the 'Experience outline' page

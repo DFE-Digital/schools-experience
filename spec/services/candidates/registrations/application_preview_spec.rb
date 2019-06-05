@@ -6,7 +6,7 @@ describe Candidates::Registrations::ApplicationPreview do
   end
 
   let :contact_information do
-    double Candidates::Registrations::ContactInformation,
+    build :contact_information,
       full_name: 'Testy McTest',
       email: 'test@example.com',
       date_of_birth: Date.parse('2000-01-01'),
@@ -19,36 +19,34 @@ describe Candidates::Registrations::ApplicationPreview do
   end
 
   let :background_check do
-    double Candidates::Registrations::BackgroundCheck,
-      has_dbs_check: has_dbs_check
+    build :background_check, has_dbs_check: has_dbs_check
   end
 
   let :placement_preference do
-    double Candidates::Registrations::PlacementPreference,
+    build :placement_preference,
       objectives: "test the software",
       availability: 'From Epiphany to Whitsunday'
   end
 
-  let(:school) { build(:bookings_school) }
+  let(:school) { create(:bookings_school, name: 'Test school') }
 
   let :subject_preference do
-    double Candidates::Registrations::SubjectPreference,
+    build :subject_preference,
       degree_stage: "I don't have a degree and am not studying for one",
       degree_stage_explaination: "",
       degree_subject: "Not applicable",
       teaching_stage: "I'm thinking about teaching and want to find out more",
       subject_first_choice: "Architecture",
-      subject_second_choice: "Maths",
-      school_name: 'Test school',
-      school: school
+      subject_second_choice: "Maths"
   end
 
   let :registration_session do
-    double Candidates::Registrations::RegistrationSession,
-      contact_information: contact_information,
-      placement_preference: placement_preference,
-      subject_preference: subject_preference,
-      background_check: background_check
+    Candidates::Registrations::RegistrationSession.new \
+      'urn' => school.urn,
+      'candidates_registrations_contact_information' => contact_information.attributes,
+      'candidates_registrations_placement_preference' => placement_preference.attributes,
+      'candidates_registrations_subject_preference' => subject_preference.attributes,
+      'candidates_registrations_background_check' => background_check.attributes
   end
 
   subject do
@@ -175,23 +173,32 @@ describe Candidates::Registrations::ApplicationPreview do
     end
 
     context 'when school has fixed dates' do
-      let(:pd) { '02 May 2019' }
+      let :placement_date do
+        3.days.from_now.strftime "%d %B %Y"
+      end
+
+      let :bookings_placement_date do
+        create :bookings_placement_date,
+          date: placement_date, bookings_school: school
+      end
+
       let :placement_preference do
-        double Candidates::Registrations::PlacementPreference,
+        build :placement_preference,
           objectives: "test the software",
-          placement_date: pd,
+          bookings_placement_date_id: bookings_placement_date.id,
           availability: nil
       end
 
       context '#placement_availability' do
         it 'returns the correct value' do
-          expect(subject.placement_date).to eq pd
+          expect(subject.placement_date).to eq placement_date + ' (1 day)'
         end
       end
 
       context '#placement_availability_description' do
         it 'returns the placement date when #placement_availability is absent' do
-          expect(subject.placement_availability_description).to eq pd
+          expect(subject.placement_availability_description).to \
+            eq placement_date + ' (1 day)'
         end
       end
     end

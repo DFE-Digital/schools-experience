@@ -1,5 +1,6 @@
 module Schools
   class SchoolNotRegistered < StandardError; end
+  class MissingURN < StandardError; end
 
   class BaseController < ApplicationController
     include DFEAuthentication
@@ -7,12 +8,12 @@ module Schools
     before_action :set_current_school
     before_action :set_site_header_text
 
-    rescue_from ActionController::ParameterMissing, with: -> { redirect_to schools_errors_no_school_path }
+    rescue_from MissingURN, with: -> { redirect_to schools_errors_no_school_path }
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
 
     def current_school
       urn = session[:urn]
-      raise ActionController::ParameterMissing, 'urn is missing, unable to match with school' unless urn.present?
+      raise MissingURN, 'urn is missing, unable to match with school' unless urn.present?
 
       Rails.logger.debug("Looking for school #{urn}")
       @current_school ||= retrieve_school(urn)

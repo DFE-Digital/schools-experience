@@ -38,6 +38,7 @@ describe Candidates::Registrations::SchoolSession do
 
       it 'stores the registration in the session' do
         expect(session).to eq "schools/#{school_urn_1}/registrations" => {
+          'urn' => school_urn_1,
           contact_information_1.model_name.param_key => contact_information_1.attributes
         }
       end
@@ -68,9 +69,11 @@ describe Candidates::Registrations::SchoolSession do
       it 'stores the registratiosn for each school seperatley' do
         expect(session).to eq \
           "schools/#{school_urn_1}/registrations" => {
+            'urn' => school_urn_1,
             contact_information_1.model_name.param_key => contact_information_1.attributes
           },
           "schools/#{school_urn_2}/registrations" => {
+            'urn' => school_urn_2,
             contact_information_2.model_name.param_key => contact_information_2.attributes
           }
       end

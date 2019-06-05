@@ -5,6 +5,8 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
   context 'attributes' do
     it { is_expected.to respond_to :full_name }
+    it { is_expected.to respond_to :first_name }
+    it { is_expected.to respond_to :last_name }
     it { is_expected.to respond_to :email }
     it { is_expected.to respond_to :building }
     it { is_expected.to respond_to :street }
@@ -15,7 +17,8 @@ describe Candidates::Registrations::ContactInformation, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of :full_name }
+    it { is_expected.to validate_presence_of :first_name }
+    it { is_expected.to validate_presence_of :last_name }
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_presence_of :building }
     it { is_expected.to validate_presence_of :postcode }
@@ -191,6 +194,34 @@ describe Candidates::Registrations::ContactInformation, type: :model do
 
         it 'is valid' do
           expect(subject.errors[:date_of_birth]).to be_empty
+        end
+      end
+    end
+  end
+
+  context '#full_name' do
+    context 'when first_name last_name attributes are set' do
+      subject { described_class.new first_name: 'Testy', last_name: 'McTest' }
+
+      it 'returns combined first_name last_name' do
+        expect(subject.full_name).to eq 'Testy McTest'
+      end
+    end
+
+    context 'when first_name last_name attributes are not set' do
+      context 'when full_name is not set' do
+        subject { described_class.new }
+
+        it 'returns nil' do
+          expect(subject.full_name).to eq nil
+        end
+      end
+
+      context 'when full_name is set' do
+        subject { described_class.new full_name: 'Testy McTest' }
+
+        it 'returns the value for the full_name attribute' do
+          expect(subject.full_name).to eq 'Testy McTest'
         end
       end
     end

@@ -1,0 +1,13 @@
+.school-start-request-button__mobile {
+  // hide the button at every size bigger than mobile
+  @include govuk-media-query($from: tablet) {
+    display: none;
+  }
+}
+
+.school-start-request-button__tablet_plus {
+  // hide the button at sizes smaller than mobile
+  @include govuk-media-query($from: mobile, $until: tablet) {
+    display: none;
+  }
+}

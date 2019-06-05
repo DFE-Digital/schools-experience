@@ -2,38 +2,13 @@ require 'rails_helper'
 
 describe Candidates::Registrations::PlacementPreferencesController, type: :request do
   include_context 'Stubbed candidates school'
-
-  let! :date do
-    DateTime.now
-  end
-
-  let! :tomorrow do
-    date.tomorrow
-  end
+  include_context 'Stubbed current_registration'
 
   let :registration_session do
-    double Candidates::Registrations::RegistrationSession,
-      save: true,
-      placement_preference: existing_placement_preference,
-      placement_preference_attributes: placement_preference_attributes
-  end
-
-  before do
-    allow(DateTime).to receive(:now) { date }
-
-    allow(Candidates::Registrations::RegistrationSession).to \
-      receive(:new) { registration_session }
+    Candidates::Registrations::RegistrationSession.new({})
   end
 
   context 'without existing placement_preference in session' do
-    let :existing_placement_preference do
-      nil
-    end
-
-    let :placement_preference_attributes do
-      {}
-    end
-
     context '#new' do
       before do
         get '/candidates/schools/11048/registrations/placement_preference/new'
@@ -49,22 +24,26 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
     end
 
     context '#create' do
+      let :placement_preference_params do
+        {
+          candidates_registrations_placement_preference: \
+            placement_preference.attributes
+        }
+      end
+
       before do
         post '/candidates/schools/11048/registrations/placement_preference',
           params: placement_preference_params
       end
 
       context 'invalid' do
-        let :placement_preference_params do
-          {
-            candidates_registrations_placement_preference: {
-              availability: ''
-            }
-          }
+        let :placement_preference do
+          Candidates::Registrations::PlacementPreference.new
         end
 
         it 'doesnt modify the session' do
-          expect(registration_session).not_to have_received(:save)
+          expect { registration_session.placement_preference }.to raise_error \
+            Candidates::Registrations::RegistrationSession::StepNotFound
         end
 
         it 'rerenders the new form' do
@@ -73,21 +52,13 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
 
       context 'valid' do
-        let :placement_preference_params do
-          {
-            candidates_registrations_placement_preference: {
-              availability: 'Every second Friday',
-              objectives: 'Become a teacher'
-            }
-          }
+        let :placement_preference do
+          FactoryBot.build :placement_preference, urn: school.urn
         end
 
         it 'stores the placement_preference details in the session' do
-          expect(registration_session).to have_received(:save).with \
-            Candidates::Registrations::PlacementPreference.new \
-              availability: 'Every second Friday',
-              objectives: 'Become a teacher',
-              urn: 11048
+          expect(registration_session.placement_preference).to \
+            eq_model placement_preference
         end
 
         it 'redirects to the next step' do
@@ -100,13 +71,11 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
   context 'with existing placement_preference in session' do
     let :existing_placement_preference do
-      Candidates::Registrations::PlacementPreference.new \
-        urn: 11048,
-        objectives: 'Become a teacher'
+      FactoryBot.build :placement_preference, urn: school.urn
     end
 
-    let :placement_preference_attributes do
-      existing_placement_preference.attributes
+    before do
+      registration_session.save existing_placement_preference
     end
 
     context '#new' do
@@ -115,7 +84,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
 
       it 'populates the new form with values from the session' do
-        expect(assigns(:placement_preference)).to eq \
+        expect(assigns(:placement_preference)).to eq_model \
           existing_placement_preference
       end
 
@@ -130,7 +99,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
 
       it 'populates the edit form with values from the session' do
-        expect(assigns(:placement_preference)).to eq \
+        expect(assigns(:placement_preference)).to eq_model \
           existing_placement_preference
       end
 
@@ -140,22 +109,26 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
     end
 
     context '#update' do
+      let :placement_preference_params do
+        {
+          candidates_registrations_placement_preference: \
+            placement_preference.attributes
+        }
+      end
+
       before do
         patch '/candidates/schools/11048/registrations/placement_preference',
           params: placement_preference_params
       end
 
       context 'invalid' do
-        let :placement_preference_params do
-          {
-            candidates_registrations_placement_preference: {
-              objectives: 'Become a teacher'
-            }
-          }
+        let :placement_preference do
+          Candidates::Registrations::PlacementPreference.new
         end
 
         it 'doesnt modify the session' do
-          expect(registration_session).not_to have_received(:save)
+          expect(registration_session.placement_preference).to \
+            eq existing_placement_preference
         end
 
         it 'rerenders the edit template' do
@@ -164,21 +137,16 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       end
 
       context 'valid' do
-        let :placement_preference_params do
-          {
-            candidates_registrations_placement_preference: {
-              availability: 'Every second Friday',
-              objectives: 'I would like to become a teacher'
-            }
-          }
+        let :placement_preference do
+          FactoryBot.build :placement_preference,
+            urn: school.urn,
+            availability: 'Every second Friday',
+            objectives: 'I would like to become a teacher'
         end
 
         it 'updates the session with the new details' do
-          expect(registration_session).to have_received(:save).with \
-            Candidates::Registrations::PlacementPreference.new \
-              urn: school_urn,
-              availability: 'Every second Friday',
-              objectives: 'I would like to become a teacher'
+          expect(registration_session.placement_preference).to eq_model \
+            placement_preference
         end
 
         it 'redirects to the application preview' do

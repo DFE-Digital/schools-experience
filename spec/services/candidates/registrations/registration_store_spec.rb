@@ -6,11 +6,7 @@ describe Candidates::Registrations::RegistrationStore do
   end
 
   let :session do
-    FactoryBot.build :registration_session
-  end
-
-  before do
-    allow(SecureRandom).to receive(:urlsafe_base64) { 'sekret' }
+    FactoryBot.build :registration_session, uuid: 'sekret'
   end
 
   subject { described_class.instance }

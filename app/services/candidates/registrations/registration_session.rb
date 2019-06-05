@@ -47,8 +47,16 @@ module Candidates
         contact_information.email
       end
 
+      def urn
+        @registration_session.fetch 'urn'
+      end
+
       def school
-        subject_preference.school
+        @school ||= Candidates::School.find urn
+      end
+
+      def school_name
+        school.name
       end
 
       def background_check

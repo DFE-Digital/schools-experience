@@ -29,7 +29,7 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
     let(:school) { create(:bookings_school, :with_subjects, :primary) }
 
     let(:school_profile) do
-      create(:school_profile, :completed, :with_subjects, :with_fixed_availability_preference)
+      create(:school_profile, :completed, :with_subjects)
     end
 
     context "for School without Profile" do
@@ -41,7 +41,6 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
       it { expect(subject.school.subject_ids).to eql(school_profile.subject_ids) }
       it { expect(subject.school.phase_ids.length).to eql(4) }
-      it { expect(subject.school.availability_preference_fixed).to eql(true) }
     end
 
     context "for School with Profile" do
@@ -58,7 +57,6 @@ RSpec.describe Bookings::ProfilePublisher, type: :model do
       it { is_expected.to have_attributes(primary_phase: true, secondary_phase: true) }
       it { expect(subject.school.subject_ids).to eql(school_profile.subject_ids) }
       it { expect(subject.school.phase_ids.length).to eql(4) }
-      it { expect(subject.school.availability_preference_fixed).to eql(true) }
     end
   end
 end

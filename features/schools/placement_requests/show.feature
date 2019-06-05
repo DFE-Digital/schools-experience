@@ -1,4 +1,4 @@
-Feature: Upcoming placement requests
+Feature: Viewing a placement request
     To help me make decisions about school experience requests
     As a school administrator
     I want to be able to view all submitted information
@@ -7,12 +7,12 @@ Feature: Upcoming placement requests
         Given I am logged in as a DfE user
 
     Scenario: Back link
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on a 'placement request' page
         Then I should see a 'Back' link to the 'upcoming requests' page
 
     Scenario: Personal details
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on a 'placement request' page
         Then I should see a 'Personal details' section with the following values:
             | Heading             | Value                                                                |
@@ -21,7 +21,7 @@ Feature: Upcoming placement requests
             | Email address       | first@thisaddress.com                                                |
 
     Scenario: Request details
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on a 'placement request' page
         Then I should see a 'Request details' section with the following values:
             | Heading          | Value                         |
@@ -31,7 +31,7 @@ Feature: Upcoming placement requests
             | Status           | New                           |
 
     Scenario: Candidate details
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on a 'placement request' page
         Then I should see a 'Candidate details' section with the following values:
             | Heading                                 | Value                                                                    |
@@ -42,14 +42,14 @@ Feature: Upcoming placement requests
             | Preferred subjects                      | Maths, Physics                                                           |
 
     Scenario: Buttons
-        Given there is at least once placement request
+        Given there is at least one placement request
         When I am on a 'placement request' page
         Then there should be the following buttons:
             | Accept request |
             | Reject request |
 
     Scenario: Accepting a request
-        Given there is at least once placement request
+        Given there is at least one placement request
         And I am on a 'placement request' page
         When I click the 'Accept request' button
         Then I should be on the 'accept placement request' page

@@ -3,8 +3,11 @@ require 'rails_helper'
 describe Bookings::SchoolSearch do
   let(:point_in_manchester) { Bookings::School::GEOFACTORY.point(-2.241, 53.481) }
   let(:point_in_leeds) { Bookings::School::GEOFACTORY.point(-1.548, 53.794) }
+  let(:coords_in_manchester) do
+    { latitude: point_in_manchester.latitude, longitude: point_in_manchester.longitude }
+  end
 
-  let(:manchester_coordinates) {
+  let(:geocoder_manchester_search_result) {
     [
       Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK'),
       Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK')
@@ -65,7 +68,7 @@ describe Bookings::SchoolSearch do
   describe '#results' do
     context 'Search Criteria' do
       before do
-        allow(Geocoder).to receive(:search).and_return([])
+        allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
       end
 
       let!(:matching_school) do
@@ -88,8 +91,8 @@ describe Bookings::SchoolSearch do
 
       context 'When no conditions are supplied' do
         subject { Bookings::SchoolSearch.new(query: '', location: '').results }
-        specify 'results should include all schools' do
-          expect(subject.count).to eql(Bookings::School.count)
+        specify 'results should include no schools' do
+          expect(subject.count).to be_zero
         end
       end
 
@@ -109,7 +112,7 @@ describe Bookings::SchoolSearch do
       end
 
       context 'When coodinates are supplied' do
-        let!(:coords) { manchester_coordinates[0] }
+        let!(:coords) { geocoder_manchester_search_result[0] }
 
         context 'When text and latitude and longitude are supplied' do
           subject do
@@ -180,7 +183,7 @@ describe Bookings::SchoolSearch do
       context 'Geocoder' do
         context 'When Geocoder finds a location' do
           before do
-            allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
+            allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
           end
 
           context 'When text and location are supplied' do
@@ -221,7 +224,7 @@ describe Bookings::SchoolSearch do
             subject { Bookings::SchoolSearch.new(location: 'Chippewa, Michigan').results }
 
             specify 'results should include all schools' do
-              expect(subject.size).to eql(Bookings::School.count)
+              expect(subject.size).to be_zero
             end
           end
         end
@@ -255,7 +258,7 @@ describe Bookings::SchoolSearch do
             non_matching_school.subjects << physics
           end
 
-          subject { Bookings::SchoolSearch.new(query: '', location: '', subjects: maths.id).results }
+          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, subjects: maths.id).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -272,7 +275,7 @@ describe Bookings::SchoolSearch do
             non_matching_school.phases << secondary
           end
 
-          subject { Bookings::SchoolSearch.new(query: '', location: '', phases: college.id).results }
+          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, phases: college.id).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -284,7 +287,7 @@ describe Bookings::SchoolSearch do
         end
 
         context 'Filtering on fees' do
-          subject { Bookings::SchoolSearch.new(query: '', location: '', max_fee: 20).results }
+          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, max_fee: 20).results }
 
           specify 'should return matching results' do
             expect(subject).to include(matching_school)
@@ -301,7 +304,7 @@ describe Bookings::SchoolSearch do
         let(:physics) { Bookings::Subject.find_by! name: "Physics" }
 
         before do
-          allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
+          allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
         end
 
         before do
@@ -338,7 +341,7 @@ describe Bookings::SchoolSearch do
         let!(:leeds_school) { create(:bookings_school, name: "Leeds", coordinates: point_in_leeds) }
 
         before do
-          allow(Geocoder).to receive(:search).and_return(manchester_coordinates)
+          allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
         end
 
         subject do
@@ -351,12 +354,12 @@ describe Bookings::SchoolSearch do
       end
 
       context 'Sorting by name' do
-        let!(:cardiff) { create(:bookings_school, name: "Cardiff Comprehensive") }
-        let!(:bath) { create(:bookings_school, name: "Bath High School") }
-        let!(:coventry) { create(:bookings_school, name: "Coventry Academy") }
+        let!(:cardiff) { create(:bookings_school, name: "Cardiff Comprehensive", coordinates: point_in_manchester) }
+        let!(:bath) { create(:bookings_school, name: "Bath High School", coordinates: point_in_manchester) }
+        let!(:coventry) { create(:bookings_school, name: "Coventry Academy", coordinates: point_in_manchester) }
 
         subject do
-          Bookings::SchoolSearch.new(query: '', requested_order: 'name').results
+          Bookings::SchoolSearch.new(location: coords_in_manchester, requested_order: 'name').results
         end
 
         specify 'schools should be ordered alphabetically by name' do
@@ -448,6 +451,20 @@ describe Bookings::SchoolSearch do
           expect(subject.location).to eql(location)
         end
       end
+    end
+  end
+
+  describe '#has_coordinates?' do
+    subject { Bookings::SchoolSearch.new(location: "Bury") }
+
+    context 'when coordinates are present' do
+      before { allow(subject).to receive(:coordinates).and_return(point_in_leeds) }
+      it { is_expected.to have_coordinates }
+    end
+
+    context 'when coordinates are absent' do
+      before { allow(subject).to receive(:coordinates).and_return([]) }
+      it { is_expected.not_to have_coordinates }
     end
   end
 end

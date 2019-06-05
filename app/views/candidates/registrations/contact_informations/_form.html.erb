@@ -14,7 +14,8 @@
           <%= GovukElementsErrorsHelper.error_summary contact_information, 'There is a problem', '' %>
 
           <h2 class="govuk-heading-m">Personal details</h2>
-          <%= f.text_field :full_name, autocomplete: 'on' %>
+          <%= f.text_field :first_name, autocomplete: 'given-name' %>
+          <%= f.text_field :last_name, autocomplete: 'family-name' %>
           <%= f.telephone_field :phone, autocomplete: 'on' %>
           <%= f.email_field :email, autocomplete: 'on' %>
           <%= f.date_field :date_of_birth, autocomplete: 'bday', heading: true %>

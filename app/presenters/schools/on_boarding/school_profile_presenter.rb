@@ -129,7 +129,7 @@ module Schools
       def subjects
         return 'None' unless subjects_offered?
 
-        @school_profile.subjects.pluck(:name).to_sentence
+        @school_profile.subjects.pluck(:name).sort.to_sentence
       end
 
       def descriptions
@@ -206,18 +206,6 @@ module Schools
         else
           'No'
         end
-      end
-
-      def availability_type
-        if @school_profile.availability_preference.fixed?
-          'Fixed'
-        else
-          'Flexible'
-        end
-      end
-
-      def availability
-        @school_profile.availability_description.description
       end
 
       def admin_contact_full_name
