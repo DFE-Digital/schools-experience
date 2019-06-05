@@ -22,21 +22,24 @@ Rails.application.routes.draw do
       resource :dashboard, only: :show
       resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
-      resources :placement_requests do
-        resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
-        resource :reject, only: [:show, :create], controller: 'placement_requests/reject'
-        collection do
-          resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
+      if Rails.application.config.x.phase >= 3
+        resources :placement_requests do
+          resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
+          resource :reject, only: [:show, :create], controller: 'placement_requests/reject'
+          collection do
+            resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
+          end
         end
-      end if Rails.application.config.x.phase >= 3
-
-      resources :placement_dates
-
-      resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
-        collection do
-          resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
+        resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
+          collection do
+            resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
+          end
         end
       end
+
+      resource :availability_preference, only: %i(edit update)
+      resource :availability_info, only: %i(edit update), controller: 'availability_info'
+      resources :placement_dates
 
       namespace :errors do
         resource :not_registered, controller: :not_registered, only: :show
@@ -55,8 +58,6 @@ Rails.application.routes.draw do
         resource :subjects, only: %i(new create edit update)
         resource :description, only: %i(new create edit update)
         resource :candidate_experience_detail, only: %i(new create edit update)
-        resource :availability_preference, only: %i(new create edit update)
-        resource :availability_description, only: %i(new create edit update)
         resource :experience_outline, only: %i(new create edit update)
         resource :admin_contact, only: %i(new create edit update)
         resource :profile, only: :show

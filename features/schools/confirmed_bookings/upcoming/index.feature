@@ -1,5 +1,5 @@
-Feature: Viewing all bookings
-    To give me an oversight of booked placements
+Feature: Viewing upcoming bookings
+    To give me an oversight of upcoming booked placements
     As a school administrator
     I want to be able see a complete list of bookings
 
@@ -23,6 +23,19 @@ Feature: Viewing all bookings
         When I am on the 'upcoming bookings' page
         Then I should see all the bookings listed
 
+    Scenario: Only viewing current school's bookings
+        Given there are some bookings
+        And there are some bookings belonging to other schools
+        When I am on the 'upcoming bookings' page
+        Then I should only see bookings belonging to my school
+
+    Scenario: Non-upcoming dates shouldn't be listed
+        Given there are some bookings
+        And there are some non-upcoming bookings
+        When I am on the 'upcoming bookings' page
+        Then the upcoming bookings should be listed
+        And the non-upcoming bookings shouldn't
+
     Scenario: Table headings
         Given there are some bookings
         When I am on the 'upcoming bookings' page
@@ -30,7 +43,7 @@ Feature: Viewing all bookings
 			| Heading | Value            |
             | Name    | Matthew Richards |
             | Subject | Biology          |
-            | Date    | 02 October 2019  |
+        And the booking date should be correct
 
     Scenario: Open request buttons
         Given there are some bookings

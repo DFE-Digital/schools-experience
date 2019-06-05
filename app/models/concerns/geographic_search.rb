@@ -39,7 +39,7 @@ module GeographicSearch
 
         query
       else
-        all
+        none
       end
     end
   end

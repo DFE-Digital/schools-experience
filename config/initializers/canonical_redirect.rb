@@ -7,8 +7,8 @@ if ENV['CANONICAL_DOMAIN'].present? || Rails.env.test? || Rails.env.servertest?
       lambda { |match, rack_env| "#{proto}://#{ENV['CANONICAL_DOMAIN']}/pages/migration" },
       if: Proc.new { |rack_env|
         ENV['CANONICAL_DOMAIN'].present? &&
-          ENV['OLD_SEP_DOMAIN'].present? &&
-          rack_env['HTTP_HOST'] == ENV['OLD_SEP_DOMAIN']
+          ENV['OLD_SEP_DOMAINS'].present? &&
+          rack_env['HTTP_HOST'].in?(ENV['OLD_SEP_DOMAINS'].split(',').compact)
       }
 
     r302 %r{(.*)},

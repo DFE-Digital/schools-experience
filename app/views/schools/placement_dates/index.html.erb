@@ -1,13 +1,13 @@
-<%- self.page_title = "Placement dates" %>
+<%- self.page_title = "Manage fixed dates" %>
 
 <%
   self.breadcrumbs = {
     @current_school.name => schools_root_path,
-    'Placement dates' => nil
+    'Manage fixed dates' => nil
   }
 %>
 
-<h1>Placement dates</h1>
+<h1>Manage fixed dates</h1>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -49,21 +49,14 @@
         </tbody>
       </table>
     <%- else -%>
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          You have no placement dates, your school will not appear in candidate
-          searches
-        </strong>
-      </div>
+      <%= render partial: 'schools/dashboards/no_placement_dates_warning' %>
     <%- end -%>
 
   </div>
 </div>
 
 <div>
-  <%= link_to "Add new placement date", new_schools_placement_date_path, class: 'govuk-button' %>
+  <%= link_to "Add dates", new_schools_placement_date_path, class: 'govuk-button' %>
 </div>
 
 <div>

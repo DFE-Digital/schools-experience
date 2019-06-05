@@ -13,4 +13,14 @@ module Schools::DashboardsHelper
   def school_enabled_description(school)
     school.enabled? ? "enabled" : "disabled"
   end
+
+  def show_no_placement_dates_warning?(school)
+    school.availability_preference_fixed? &&
+      school.bookings_placement_dates.available.none?
+  end
+
+  def show_no_availability_info_warning?(school)
+    !school.availability_preference_fixed? &&
+      school.availability_info.nil?
+  end
 end

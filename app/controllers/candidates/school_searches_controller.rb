@@ -1,4 +1,6 @@
 class Candidates::SchoolSearchesController < ApplicationController
+  include AnalyticsTracking
+
   def new
     @search = Candidates::SchoolSearch.new(search_params)
   end

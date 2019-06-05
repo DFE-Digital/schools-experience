@@ -2,6 +2,8 @@ class Bookings::School < ApplicationRecord
   include FullTextSearch
   include GeographicSearch
 
+  before_validation :nilify_availability_info
+
   validates :name,
     presence: true,
     length: { maximum: 128 }
@@ -18,6 +20,10 @@ class Bookings::School < ApplicationRecord
     with: URI::MailTo::EMAIL_REGEXP,
     message: "isn't a valid email address"
   }
+
+  validates :availability_info,
+    allow_nil: true,
+    length: { minimum: 10 }
 
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
@@ -58,6 +64,11 @@ class Bookings::School < ApplicationRecord
     foreign_key: :bookings_school_id,
     dependent: :destroy
 
+  has_many :bookings,
+    class_name: 'Bookings::Booking',
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
+
   scope :enabled, -> { where(enabled: true) }
 
   scope :that_provide, ->(subject_ids) do
@@ -88,6 +99,8 @@ class Bookings::School < ApplicationRecord
 
   scope :flexible, -> { where(availability_preference_fixed: false) }
 
+  scope :flexible_with_description, -> { flexible.where.not(availability_info: nil) }
+
   scope :fixed, -> { where(availability_preference_fixed: true) }
 
   scope :fixed_with_available_dates, -> {
@@ -100,7 +113,7 @@ class Bookings::School < ApplicationRecord
     )
   }
 
-  scope :with_availability, -> { flexible.or(fixed_with_available_dates) }
+  scope :with_availability, -> { flexible_with_description.or(fixed_with_available_dates) }
 
   def to_param
     urn.to_s.presence
@@ -118,9 +131,21 @@ class Bookings::School < ApplicationRecord
     !availability_preference_fixed? || has_available_dates?
   end
 
+  def notifications_email
+    if profile && profile.admin_contact_email.present?
+      profile.admin_contact_email
+    else
+      contact_email
+    end
+  end
+
 private
 
   def has_available_dates?
     bookings_placement_dates.available.any?
+  end
+
+  def nilify_availability_info
+    self.availability_info = nil if availability_info == ''
   end
 end

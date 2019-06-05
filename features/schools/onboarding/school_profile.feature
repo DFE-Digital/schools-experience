@@ -18,10 +18,20 @@ Feature: School Profile
         | Subjects                     |                           |
         | Description                  |                           |
         | Candidate experience details |                           |
-        | Availability preference      |                           |
-        | Availability description     |                           |
         | Experience Outline           |                           |
         | Admin contact                |                           |
+
+
+  Scenario: Page title
+    Given I am on the 'Profile' page
+    Then the page title should be 'Check your answers before setting up your school experience profile'
+
+  Scenario: Breadcrumbs
+    Given I am on the 'Profile' page
+    Then I should see the following breadcrumbs:
+        | Text                                                                | Link     |
+        | Some school                                                         | /schools |
+        | Check your answers before setting up your school experience profile | None     |
 
 
   Scenario: Viewing the profile
@@ -45,7 +55,6 @@ Feature: School Profile
       | Start time                  | 8:15 am                                                     |
       | Finish time                 | 4:30 pm                                                     |
       | Flexible on times           | No                                                          |
-      | Availability                | Whenever really                                             |
       | Full name                   | Gary Chalmers                                               |
       | UK telephone number         | 01234567890                                                 |
       | Email address               | g.chalmers@springfield.edu                                  |

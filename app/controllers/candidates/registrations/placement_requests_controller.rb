@@ -2,16 +2,17 @@ module Candidates
   module Registrations
     class PlacementRequestsController < RegistrationsController
       def show
-        registration_session = RegistrationStore.instance.retrieve! params[:uuid]
-        @application_preview = ApplicationPreview.new registration_session
-      rescue RegistrationStore::SessionNotFound
-        render :session_expired, locals: { message: 'Start a new application' }
+        @school_name = Bookings::School.find_by!(urn: params[:school_id]).name
       end
 
       def create
         registration_session = RegistrationStore.instance.retrieve! params[:uuid]
 
         unless registration_session.completed?
+          Bookings::PlacementRequest.create_from_registration_session! \
+            registration_session,
+            cookies[:analytics_tracking_uuid]
+
           registration_session.flag_as_completed!
 
           RegistrationStore.instance.store! registration_session

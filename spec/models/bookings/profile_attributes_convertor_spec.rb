@@ -41,8 +41,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(parking_details: 'Plenty of spaces') }
       it { is_expected.to include(teacher_training_info: 'We offer teach training in house') }
       it { is_expected.to include(teacher_training_url: 'https://example.com') }
-      it { is_expected.to include(fixed_availability: false) }
-      it { is_expected.to include(availability_info: 'Whenever really') }
       it { is_expected.to include(administration_fee_amount_pounds: 123.45) }
       it { is_expected.to include(administration_fee_description: 'General administration') }
       it { is_expected.to include(administration_fee_interval: 'Daily') }
@@ -66,7 +64,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.candidate_experience_detail_disabled_facilities = false
         model.candidate_experience_detail_other_dress_requirements = false
         model.admin_contact_full_name = ' '
-        model.availability_preference_fixed = true
         model.phases_list_primary = false
         model.phases_list_secondary = false
         model.phases_list_college = true
@@ -104,8 +101,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(parking_details: 'somewhere further away') }
       it { is_expected.to include(teacher_training_info: nil) }
       it { is_expected.to include(teacher_training_url: nil) }
-      it { is_expected.to include(fixed_availability: true) }
-      it { is_expected.to include(availability_info: nil) }
       it { is_expected.to include(administration_fee_amount_pounds: nil) }
       it { is_expected.to include(administration_fee_description: nil) }
       it { is_expected.to include(administration_fee_interval: nil) }

@@ -25,11 +25,15 @@ end
 
 Then("my placement should have been {string}") do |operation|
   description = {
-    'deactivated' => 'Taken',
-    'activated'   => 'Available'
+    'deactivated' => 'Closed',
+    'activated'   => 'Open'
   }[operation]
 
   within("tr[data-placement-date-id='#{@placement_date.id}']") do
     expect(page).to have_css('td.status', text: /#{description}/i)
   end
+end
+
+Then("the current start date should be present") do
+  expect(page).to have_css('.placement-start-date', text: @placement_date.date.strftime('%d %B %Y'))
 end
