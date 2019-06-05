@@ -18,7 +18,7 @@ do
     then
       matrix+=","
     fi
-    matrix+="'$browser_$index':{'browser':'$browser', 'features':'$data'}"
+    matrix+="'${browser}${index}':{'browser':'${browser}', 'features':'${data}'}"
     echo $index $data
     ((index++))
   done
