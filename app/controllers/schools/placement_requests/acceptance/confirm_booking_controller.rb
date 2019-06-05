@@ -34,7 +34,7 @@ module Schools
 
         def confirm_booking_params
           params
-            .require(:confirm_booking)
+            .require(:schools_placement_requests_confirm_booking)
             .permit(:bookings_subject_id, :date, :placement_details)
         end
 

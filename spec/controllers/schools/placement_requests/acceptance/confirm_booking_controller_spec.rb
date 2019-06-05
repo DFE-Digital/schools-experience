@@ -26,9 +26,9 @@ describe Schools::PlacementRequests::Acceptance::ConfirmBookingController, type:
     context 'with valid params' do
       let(:params) do
         {
-          confirm_booking: {
+          schools_placement_requests_confirm_booking: {
             bookings_subject_id: bookings_subject.id,
-            date: date.strftime('%d %B %Y'),
+            date: date,
             placement_details: placement_details
           }
         }
@@ -54,7 +54,7 @@ describe Schools::PlacementRequests::Acceptance::ConfirmBookingController, type:
     context 'with invalid params' do
       let(:params) do
         {
-          confirm_booking: {
+          schools_placement_requests_confirm_booking: {
             bookings_subject_id: create(:bookings_subject).id,
             # date: '2019-07-03',
             placement_details: "you'll get to try out teaching"
