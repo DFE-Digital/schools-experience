@@ -26,4 +26,4 @@ done
 matrix+="}"
 echo $matrix
 
-echo "##vso[task.setVariable variable=legs]${matrix}"
+echo "##vso[task.setVariable variable=legs;isOutput=true]${matrix}"
