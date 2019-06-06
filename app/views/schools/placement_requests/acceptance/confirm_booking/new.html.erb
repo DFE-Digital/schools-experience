@@ -1,12 +1,12 @@
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full-width">
     <h1>Confirm booking</h1>
 
-    <p>
-      Confirm the placement request for <%= [@placement_request.candidate.firstname, @placement_request.candidate.lastname].join(" ") %>
-    </p>
+    <h3>
+      Confirm the booking for <%= [@placement_request.candidate.firstname, @placement_request.candidate.lastname].join(" ") %>.
+    </h3>
 
-    <dl class="govuk-summary-list govuk-summary-list--no-border">
+    <dl id="placement-request-details" class="govuk-summary-list govuk-summary-list--no-border">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           School
@@ -17,10 +17,14 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Request received
+          Availability/requested date
         </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @placement_request.created_at.to_date.to_formatted_s(:govuk) %>
+        <dd class="govuk-summary-list__value availability-requested-date">
+          <%- if @placement_request.placement_date.present? -%>
+            <%= @placement_request.placement_date.date.to_formatted_s(:govuk) %>
+          <%- else -%>
+            <%= @placement_request.availability %>
+          <%- end -%>
         </dd>
       </div>
     </dl>
@@ -29,15 +33,13 @@
 
       <%= form.date_field :date %>
 
-      <div class="govuk-form-group">
-        <%= form.collection_select \
-          :bookings_subject_id,
-          @available_subjects,
-          :id,
-          :name,
-          { prompt: 'Select' },
-          { class: 'govuk-select govuk-!-width-one-half' } %>
-      </div>
+      <%= form.collection_select \
+        :bookings_subject_id,
+        @available_subjects,
+        :id,
+        :name,
+        { prompt: 'Select' },
+        { class: 'govuk-select govuk-!-width-one-half' } %>
 
       <%= form.text_area :placement_details %>
 

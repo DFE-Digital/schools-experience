@@ -24,6 +24,8 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil, p
     "upcoming requests" => [:schools_upcoming_requests_path],
     "placement request" => [:schools_placement_request_path, placement_request_id],
     "confirm booking" => [:new_schools_placement_request_acceptance_confirm_booking_path, placement_request_id],
+    "add more details" => [:new_schools_placement_request_acceptance_add_more_details_path, placement_request_id],
+    "review and send email" => [:new_schools_placement_request_acceptance_review_and_send_email_path, placement_request_id],
     "reject placement request" => [:new_schools_placement_request_reject_path, placement_request_id],
     "candidate requirements" => [:new_schools_on_boarding_candidate_requirement_path],
     "fees charged" => [:new_schools_on_boarding_fees_path],

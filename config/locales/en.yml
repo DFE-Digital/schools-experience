@@ -208,6 +208,8 @@ en:
 
   helpers:
     fieldset:
+      schools_placement_requests_confirm_booking:
+        date: Confirm experience date
       bookings_school:
         enabled: Turn requests on or off
         availability_preference_fixed: Change how availability and dates are displayed
@@ -257,6 +259,8 @@ en:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
 
     hint:
+      schools_placement_requests_confirm_booking:
+        placement_details: You can add extra experience details
       bookings_school:
         enabled: |
           Turning requests off will prevent your school from appearing in candidate searches.
@@ -288,6 +292,9 @@ en:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
 
     label:
+      schools_placement_requests_confirm_booking:
+        bookings_subject_id: Confirm subject
+        placement_details: Confirm experience details
       bookings_school:
         enabled:
           true: Allow requests

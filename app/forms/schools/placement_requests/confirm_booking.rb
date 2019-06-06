@@ -9,7 +9,7 @@ module Schools
       attribute :placement_details
       attribute :bookings_subject_id, :integer
 
-      validates :date, presence: true, 
+      validates :date, presence: true
       validates :placement_details, presence: true
       validates :bookings_subject_id, presence: true
 

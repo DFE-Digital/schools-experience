@@ -9,6 +9,7 @@ Then("I should see a form with the following fields:") do |table|
       when /radio/ then ensure_radio_buttons_exist(page, options)
       when /select/ then ensure_select_options_exist(page, options)
       when /checkbox/ then ensure_check_boxes_exist(page, options)
+      when /textarea/ then ensure_textarea_exists(page)
       else # regular inputs
         expect(page).to have_field(label_text, type: row['Type'])
       end
@@ -131,6 +132,10 @@ def ensure_check_boxes_exist(form_group, options)
   options.each do |option|
     expect(form_group).to have_field(option, type: 'checkbox')
   end
+end
+
+def ensure_textarea_exists(form_group)
+  expect(form_group).to have_css('textarea.govuk-textarea')
 end
 
 def ensure_radio_buttons_exist(form_group, options)
