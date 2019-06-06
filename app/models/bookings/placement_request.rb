@@ -14,6 +14,11 @@ module Bookings
       class_name: 'Bookings::Booking',
       foreign_key: 'bookings_placement_request_id'
 
+    belongs_to :placement_date,
+      class_name: 'Bookings::PlacementDate',
+      foreign_key: :bookings_placement_date_id,
+      optional: true
+
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
       self.create! \
         Candidates::Registrations::RegistrationAsPlacementRequest

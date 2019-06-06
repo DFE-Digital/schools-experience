@@ -19,6 +19,12 @@ describe Bookings::PlacementRequest, type: :model do
 
   it_behaves_like 'a background check'
 
+  context 'relationships' do
+    it { is_expected.to belong_to(:school).class_name('Bookings::School').with_foreign_key(:bookings_school_id) }
+    it { is_expected.to have_one(:booking).class_name('Bookings::Booking').with_foreign_key(:bookings_placement_request_id) }
+    it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
+  end
+
   context '.create_from_registration_session' do
     context 'invalid session' do
       let :invalid_session do
