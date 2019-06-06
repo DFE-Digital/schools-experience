@@ -56,6 +56,15 @@ ActiveRecord::Schema.define(version: 2019_06_06_081440) do
     t.index ["bookings_school_id"], name: "index_bookings_placement_dates_on_bookings_school_id"
   end
 
+  create_table "bookings_placement_request_cancellations", force: :cascade do |t|
+    t.bigint "bookings_placement_request_id"
+    t.text "reason", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "cancelled_by", null: false
+    t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id"
+  end
+
   create_table "bookings_placement_requests", force: :cascade do |t|
     t.text "objectives", null: false
     t.integer "urn", null: false
@@ -71,9 +80,11 @@ ActiveRecord::Schema.define(version: 2019_06_06_081440) do
     t.text "availability"
     t.integer "bookings_placement_date_id"
     t.integer "bookings_school_id"
+    t.string "token"
     t.uuid "analytics_tracking_uuid"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
     t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
+    t.index ["token"], name: "index_bookings_placement_requests_on_token", unique: true
   end
 
   create_table "bookings_profiles", force: :cascade do |t|
@@ -282,6 +293,7 @@ ActiveRecord::Schema.define(version: 2019_06_06_081440) do
   add_foreign_key "bookings_bookings", "bookings_schools"
   add_foreign_key "bookings_bookings", "bookings_subjects"
   add_foreign_key "bookings_placement_dates", "bookings_schools"
+  add_foreign_key "bookings_placement_request_cancellations", "bookings_placement_requests"
   add_foreign_key "bookings_placement_requests", "bookings_placement_dates"
   add_foreign_key "bookings_placement_requests", "bookings_schools"
   add_foreign_key "bookings_profiles", "bookings_schools", column: "school_id"

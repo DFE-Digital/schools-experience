@@ -17,6 +17,17 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
   it { is_expected.to have_db_column(:analytics_tracking_uuid).of_type(:uuid).with_options null: true }
 
+  it { is_expected.to have_secure_token }
+
+  it do
+    is_expected.to \
+      have_one(:candidate_cancellation)
+        .dependent(:destroy)
+        .class_name('Bookings::PlacementRequest::Cancellation')
+  end
+
+  it { is_expected.to respond_to :sent_at }
+
   it_behaves_like 'a background check'
 
   context '.create_from_registration_session' do
@@ -289,6 +300,34 @@ describe Bookings::PlacementRequest, type: :model do
         expect(placement_preference.errors[:objectives]).to eq \
           ["Use 150 words or fewer"]
       end
+    end
+  end
+
+  context '#closed?' do
+    context 'when cancelled' do
+      subject { FactoryBot.create :placement_request, :cancelled }
+
+      it 'returns true' do
+        expect(subject).to be_closed
+      end
+    end
+
+    context 'when not cancelled' do
+      subject { FactoryBot.create :placement_request }
+
+      it 'returns false' do
+        expect(subject).not_to be_closed
+      end
+    end
+  end
+
+  context 'build_candidate_cancellation' do
+    let :cancellation do
+      described_class.new.build_candidate_cancellation
+    end
+
+    it 'returns a new cancellation with cancelled_by set to "candidate"' do
+      expect(cancellation.cancelled_by).to eq 'candidate'
     end
   end
 end

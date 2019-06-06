@@ -92,7 +92,9 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
         it 'enqueues the placement request job' do
           expect(Candidates::Registrations::PlacementRequestJob).to \
-            have_received(:perform_later).with uuid
+            have_received(:perform_later).with \
+              uuid,
+              new_candidates_placement_request_cancellation_url(Bookings::PlacementRequest.last.token)
         end
 
         it 'redirects to placement request show' do
