@@ -71,7 +71,7 @@ GEM
     arel (9.0.0)
     ast (2.4.0)
     attr_required (1.0.1)
-    autoprefixer-rails (9.5.1.1)
+    autoprefixer-rails (9.6.0)
       execjs
     backports (3.13.0)
     bindata (2.4.4)
