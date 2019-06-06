@@ -25,6 +25,15 @@ module Bookings
         end
       end
 
+      # Will return nil of it cannot match a Contact on final implementation
+      def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
+        # if condition is to keep the linter happy about unused variables
+        # temporary since this is a shim for now
+        if firstname && lastname && date_of_birth
+          find_by_email(email)
+        end
+      end
+
       def write(contact)
         raise ArgumentError unless contact.is_a?(Contact)
         return false unless contact.valid?

@@ -25,6 +25,12 @@ describe Bookings::Booking do
         .of_type(:date)
         .with_options(null: false)
     end
+
+    it do
+      is_expected.to have_db_column(:duration)
+        .of_type(:integer)
+        .with_options(default: 1, null: false)
+    end
   end
 
   describe 'Validation' do
@@ -32,6 +38,8 @@ describe Bookings::Booking do
     it { is_expected.to validate_presence_of(:bookings_placement_request) }
     it { is_expected.to validate_presence_of(:bookings_subject) }
     it { is_expected.to validate_presence_of(:bookings_school) }
+    it { is_expected.to validate_presence_of(:duration) }
+    it { is_expected.to validate_numericality_of(:duration).is_greater_than 0 }
   end
 
   describe 'Relationships' do
