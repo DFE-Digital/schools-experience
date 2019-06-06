@@ -32,7 +32,7 @@ module Schools
       end
 
       def school_email
-        @school.contact_email
+        @school.notifications_email
       end
 
       def fees
