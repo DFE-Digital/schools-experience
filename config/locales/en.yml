@@ -76,6 +76,10 @@ en:
             email:
               blank: "Enter your email address"
               invalid: "Enter a valid email address"
+            first_name:
+              blank: 'Enter your first name'
+            last_name:
+              blank: 'Enter your last name'
             full_name:
               blank: "Enter your full name"
             phone:

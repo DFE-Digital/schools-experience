@@ -25,7 +25,7 @@ describe Bookings::Gitis::CRM, type: :model do
     end
   end
 
-  describe '.find' do
+  describe '#find' do
     let!(:uuids) do
       [
         "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
@@ -79,13 +79,31 @@ describe Bookings::Gitis::CRM, type: :model do
     end
   end
 
-  describe '.find_by_email' do
+  describe '#find_by_email' do
     let(:email) { 'me@something.com' }
     before { gitis_stub.stub_contact_request_by_email(email) }
     subject { gitis.find_by_email(email) }
 
     it "will return a contact record" do
       is_expected.to be_instance_of(Bookings::Gitis::Contact)
+      is_expected.to have_attributes(email: email)
+    end
+  end
+
+  describe '#find_contact_for_signin' do
+    let(:email) { 'me@something.com' }
+    before { gitis_stub.stub_contact_request_by_email(email) }
+
+    subject do
+      gitis.find_contact_for_signin(
+        email: email,
+        firstname: 'ignore',
+        lastname: 'ignore',
+        date_of_birth: 'invalid'
+      )
+    end
+
+    it "will return a contact record" do
       is_expected.to have_attributes(email: email)
     end
   end

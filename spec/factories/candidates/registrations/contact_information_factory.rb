@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :contact_information, class: Candidates::Registrations::ContactInformation do
-    full_name { 'Testy McTest' }
+    first_name { 'Testy' }
+    last_name { 'Mc Test' }
     email { 'test@example.com' }
     building { 'New house' }
     street { 'Test street' }

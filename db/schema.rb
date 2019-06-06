@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_04_105251) do
+ActiveRecord::Schema.define(version: 2019_06_06_081440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,13 @@ ActiveRecord::Schema.define(version: 2019_06_04_105251) do
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
     t.index ["bookings_subject_id"], name: "index_bookings_bookings_on_bookings_subject_id"
+  end
+
+  create_table "bookings_candidates", force: :cascade do |t|
+    t.string "gitis_uuid", limit: 36, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gitis_uuid"], name: "index_bookings_candidates_on_gitis_uuid", unique: true
   end
 
   create_table "bookings_phases", force: :cascade do |t|
