@@ -69,7 +69,6 @@ module Candidates
         NotifyEmail::SchoolBookingCancellation.new(
           to: cancellation.school_email,
           school_name: cancellation.school_name,
-          school_admin_name: cancellation.school_admin_name,
           candidate_name: cancellation.candidate_name,
           placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
         ).despatch_later!
@@ -79,7 +78,6 @@ module Candidates
         NotifyEmail::SchoolRequestCancellation.new(
           to: cancellation.school_email,
           school_name: cancellation.school_name,
-          school_admin_name: cancellation.school_admin_name,
           candidate_name: cancellation.candidate_name,
           cancellation_reasons: cancellation.reason,
           requested_availability: cancellation.requested_availability,

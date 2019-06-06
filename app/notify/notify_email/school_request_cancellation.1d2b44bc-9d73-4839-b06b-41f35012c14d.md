@@ -1,4 +1,4 @@
-Dear ((school_admin_name)),
+Hello,
 
 ((candidate_name)) has cancelled their request for school experience at ((school_name)) with requested availability ((requested_availability))
 

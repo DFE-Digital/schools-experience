@@ -1,18 +1,15 @@
 class NotifyEmail::SchoolBookingCancellation < Notify
-  attr_accessor :school_admin_name,
-    :school_name,
+  attr_accessor :school_name,
     :candidate_name,
     :placement_start_date_with_duration
 
   def initialize(
     to:,
     school_name:,
-    school_admin_name:,
     candidate_name:,
     placement_start_date_with_duration:
   )
 
-    self.school_admin_name                   = school_admin_name
     self.school_name                         = school_name
     self.candidate_name                      = candidate_name
     self.placement_start_date_with_duration  = placement_start_date_with_duration
@@ -27,7 +24,6 @@ private
 
   def personalisation
     {
-      school_admin_name: school_admin_name,
       candidate_name: candidate_name,
       placement_start_date_with_duration: placement_start_date_with_duration,
       school_name: school_name
