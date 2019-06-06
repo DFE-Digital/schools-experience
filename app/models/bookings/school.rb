@@ -140,7 +140,7 @@ class Bookings::School < ApplicationRecord
   end
 
   def admin_contact_name
-    profile&.admin_contact_full_name
+    profile ? profile.admin_contact_full_name : contact_email
   end
 
 private
