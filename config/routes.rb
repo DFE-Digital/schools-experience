@@ -108,6 +108,8 @@ Rails.application.routes.draw do
         resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
       end
     end
+
+    resource :dashboard, only: :show if Rails.application.config.x.phase >= 4
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
 end
