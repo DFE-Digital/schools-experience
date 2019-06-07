@@ -16,5 +16,9 @@
       <%= form.text_area :location, required: true %>
       <%= form.submit 'Continue' %>
     <% end %>
+
+    <div>
+      <%= link_to 'Back to request', schools_placement_request_path(@placement_request.id), class: 'govuk-back-link' %>
+    </div>
   </div>
 </div>

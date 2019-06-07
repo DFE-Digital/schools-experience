@@ -53,3 +53,7 @@ Feature: Accepting placement requests
         And I enter "It's a really exciting day" into the "Confirm experience details" text area
         When I submit the form
         Then I should be on the 'add more details' page for my chosen placement request
+
+    Scenario: Back link
+        Given I am on the 'confirm booking' page for my chosen placement request
+        Then there should be a link back to the placement request

@@ -45,7 +45,7 @@ module Schools
         end
 
         def add_more_details_params
-          params.require(:add_more_details).permit(
+          params.require(:schools_placement_requests_add_more_details).permit(
             :contact_name,
             :contact_number,
             :contact_email,

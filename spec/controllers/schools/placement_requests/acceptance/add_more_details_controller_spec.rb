@@ -52,7 +52,7 @@ describe Schools::PlacementRequests::Acceptance::AddMoreDetailsController, type:
     context 'with valid params' do
       let(:params) do
         {
-          add_more_details: {
+          schools_placement_requests_add_more_details: {
             contact_name: contact_name,
             contact_number: contact_number,
             contact_email: contact_email,
@@ -74,7 +74,7 @@ describe Schools::PlacementRequests::Acceptance::AddMoreDetailsController, type:
     context 'with invalid params' do
       let(:params) do
         {
-          add_more_details: {
+          schools_placement_requests_add_more_details: {
             contact_name: contact_name,
             # contact_number: contact_number,
             contact_email: contact_email,
