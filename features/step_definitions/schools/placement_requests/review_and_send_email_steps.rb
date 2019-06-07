@@ -1,11 +1,10 @@
 Given("I have completed the 'add more details' page") do
-  @candidate_instructions = 'Please come to the reception in the East Buildingend'
   steps %(
     Given I have progressed to the 'add more details' page for my chosen placement request
     And I enter 'Dewey Largo' into the 'Contact name' field
     And I enter '01234 567 890' into the 'Contact number' field
     And I enter 'dlargo@springfield.edu' into the 'Contact email' field
-    And I enter '#{@candidate_instructions}' into the 'Location' field
+    And I enter 'Some location' into the 'Location' field
     When I submit the form
     Then I should be on the 'review and send email' page for my chosen placement request
   )

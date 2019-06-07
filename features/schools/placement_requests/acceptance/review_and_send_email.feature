@@ -57,7 +57,7 @@ Feature: Accepting placement requests
 
     Scenario: Filling in and submitting the form
         Given I have progressed to the 'review and send email' page for my chosen placement request
-        When I enter 'Please come to the main reception' into the 'Candidate instructions' text area
+        When I enter some candidate instructions
         And I submit the form
         Then I should be on the 'preview confirmation email' page for my chosen placement request
         And the candidate instructions should have been saved
