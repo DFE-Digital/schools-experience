@@ -22,6 +22,10 @@ class Candidates::SessionToken < ApplicationRecord
   end
 
   def invalidate_other_tokens
-    true
+    true # FIXME
+  end
+
+  def to_param
+    token
   end
 end

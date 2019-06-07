@@ -1,12 +1,28 @@
 class Candidates::Session
+  include ActiveModel::Model
+  include ActiveModelAttributes
+  include ActiveRecord::AttributeAssignment
+
   attr_reader :contact, :candidate, :token
 
-  def initialize(gitis)
+  attribute :email, :string
+  attribute :firstname, :string
+  attribute :lastname, :string
+  attribute :date_of_birth, :date
+
+  validates :email, presence: true
+  validates :email, format: /\A[^@]+@[^@]+\.[^@]+\z/, allow_blank: true
+  validates :firstname, presence: true
+  validates :lastname, presence: true
+  validates :date_of_birth, presence: true
+
+  def initialize(gitis, attrs = {})
     @gitis = gitis
+    assign_attributes attrs
   end
 
-  def login(attrs)
-    return false unless lookup_contact_in_gitis(attrs)
+  def signin
+    return false unless lookup_contact_in_gitis
 
     find_or_create_candidate
     generate_session_token
@@ -17,7 +33,7 @@ class Candidates::Session
 
 private
 
-  def lookup_contact_in_gitis(email:, firstname:, lastname:, date_of_birth:)
+  def lookup_contact_in_gitis
     contact = @gitis.find_contact_for_signin(
       email: email,
       firstname: firstname,

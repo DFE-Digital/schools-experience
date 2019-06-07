@@ -65,6 +65,7 @@ gem 'openid_connect'
 gem 'uk_postcode'
 gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: 'a7429200'
 gem 'faraday'
+gem 'active_model_attributes'
 
 gem 'addressable'
 gem 'faraday'

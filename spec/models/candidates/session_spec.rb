@@ -38,11 +38,22 @@ RSpec.describe Candidates::Session, type: :model do
     end
   end
 
+  describe 'validates' do
+    subject { described_class.new(gitis) }
+    it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to validate_presence_of(:firstname) }
+    it { is_expected.to validate_presence_of(:lastname) }
+    it { is_expected.to validate_presence_of(:date_of_birth) }
+    it { is_expected.to allow_value('test@testymctest.com').for(:email) }
+    it { is_expected.not_to allow_value('testymctest.com').for(:email) }
+    it { is_expected.not_to allow_value('test@testymctest').for(:email) }
+  end
+
   describe '#login' do
     before { NotifyFakeClient.reset_deliveries! }
     before { queue_adapter.perform_enqueued_jobs = true }
     after { queue_adapter.perform_enqueued_jobs = nil }
-    subject { described_class.new(gitis) }
+    subject { described_class.new(gitis, login_attrs) }
 
     context 'with known candidate' do
       let(:existing_attrs) { attrs.merge('contactid' => candidate.gitis_uuid) }
@@ -50,7 +61,7 @@ RSpec.describe Candidates::Session, type: :model do
 
       before do
         expect(gitis).to receive(:find_contact_for_signin).and_return(existing_contact)
-        @signed_in = subject.login(**login_attrs)
+        @signed_in = subject.signin
       end
 
       it "will return the logged in candidate" do
@@ -80,7 +91,7 @@ RSpec.describe Candidates::Session, type: :model do
       context 'who exists in Gitis' do
         before do
           expect(gitis).to receive(:find_contact_for_signin).and_return(new_contact)
-          @signed_in = subject.login(**login_attrs)
+          @signed_in = subject.signin
         end
 
         it "will return the logged in candidate" do
@@ -107,7 +118,7 @@ RSpec.describe Candidates::Session, type: :model do
       context 'who does not exist in Gitis' do
         before do
           expect(gitis).to receive(:find_contact_for_signin).and_return(false)
-          @signed_in = subject.login(**login_attrs)
+          @signed_in = subject.signin
         end
 
         it "will return false" do

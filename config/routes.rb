@@ -110,7 +110,10 @@ Rails.application.routes.draw do
     end
 
     if Rails.application.config.x.phase >= 4
-      get 'signin', to: 'candidates/sessions#new'
+      get 'signin', to: 'sessions#new'
+      post 'signin', to: 'sessions#create'
+      get 'signin/:authtoken', to: 'sessions#update', as: 'signin_confirmation'
+
       resource :dashboard, only: :show
     end
   end

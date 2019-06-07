@@ -12,13 +12,8 @@ RSpec.describe Candidates::DashboardBaseController, type: :request do
   })
 
   describe "GET #show" do
-    let(:contact_attrs) { attributes_for(:gitis_contact, :persisted) }
-
     context 'when logged in' do
-      before do
-        allow_any_instance_of(ActionDispatch::Request).to \
-          receive(:session).and_return(gitis_contact: contact_attrs)
-      end
+      include_context 'candidate signin'
 
       before { get '/restricted' }
 
