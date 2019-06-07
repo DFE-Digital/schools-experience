@@ -1,3 +1,3 @@
-class Candidates::DashboardsController < ApplicationController
+class Candidates::DashboardsController < Candidates::DashboardBaseController
   def show; end
 end
