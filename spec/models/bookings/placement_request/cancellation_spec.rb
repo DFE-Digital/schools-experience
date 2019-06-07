@@ -3,7 +3,9 @@ require 'rails_helper'
 describe Bookings::PlacementRequest::Cancellation, type: :model do
   it { is_expected.to belong_to :placement_request }
   it { is_expected.to have_db_column(:reason).of_type(:text).with_options null: false }
+  it { is_expected.to have_db_column(:extra_details).of_type(:text) }
   it { is_expected.to validate_presence_of :reason }
+  it { is_expected.not_to validate_presence_of :extra_details }
   it { is_expected.to validate_inclusion_of(:cancelled_by).in_array %w(candidate school) }
 
   context 'when placement_request is already closed' do

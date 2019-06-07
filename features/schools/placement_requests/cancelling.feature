@@ -39,4 +39,13 @@ Feature: Rejecting placement requests
         Given there is at least one placement request
         When I am on the reject placement request page
         Then there should be a 'Cancellation reasons' text area
+        And there should be a 'Extra details' text area
         And the submit button should contain text 'Preview rejection email'
+
+    Scenario: Rejecting the requests
+        Given there is at least one placement request
+        And I am on the reject placement request page
+        And I have entered a reason in the cancellation reasons text area
+        And I have entered a extra details in the extra details text area
+        When I click the 'Preview rejection email' button
+        Then I should see a preview of what I have entered

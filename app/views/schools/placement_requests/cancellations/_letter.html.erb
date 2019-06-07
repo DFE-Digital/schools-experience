@@ -17,35 +17,43 @@
     <h3 class="govuk-heading-s">
       Your request was turned down for the following reasons:
     </h3>
-
     <p>
-      The school is fully booked and has no school experience available on the date you requested.
-    </p>
-
-    <p>
-      If you have any questions about this decision contact
-      <%= cancellation.school_admin_name %> on <%= cancellation.school_admin_phone %>
+      <%= reason %>
     </p>
   </section>
 
-  <section id="extra-details">
+  <% if extra_details.present? %>
+    <section id="extra-details">
+      <h3 class="govuk-heading-s">
+        Extra details from the school
+      </h3>
+      <p>
+        <%= extra_details %>
+      </p>
+    </section>
+  <% end %>
+
+  <section id="Make a new request">
     <h3 class="govuk-heading-s">
-      Extra details from the school
+      Make a new request
     </h3>
-    <%= extra_details %>
+
+    <p>
+      Apply for school experience at other schools -
+      <%= link_to "Find school experience.", new_candidates_school_search_path %>
+    </p>
   </section>
 
-  <section id="next-steps">
+  <section id="help-and-support">
     <h3 class="govuk-heading-s">
-      Next steps
+      Help and support
     </h3>
 
     <p>
-      You can still apply to other schools for school experience using the <%= link_to 'get school experience service', new_candidates_school_search_path %>.
-    </p>
-
-    <p>
-      If you need any further help and support call the Teaching Line on 0161 234 5000
+      If you need any further help and support getting school experience or
+      becoming a teacher visit the
+      <%= link_to "Get Into Teaching", 'https://getintoteaching.education.gov.uk/school-experience' %>
+      website.
     </p>
   </section>
 </section>

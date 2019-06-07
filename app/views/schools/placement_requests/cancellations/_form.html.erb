@@ -17,10 +17,16 @@
 
           <%= render partial: "letter", locals: {
             cancellation: cancellation,
-            extra_details: capture do
+            reason: capture do
               f.text_area :reason,
                 rows: 7,
-                placeholder: 'Add extra details. For example, you may have availability on a different date or you can offer experience in another subject',
+                placeholder: "Explain why the request was rejected. For example, the school is fully booked or there's no longer school experience available on the requested date",
+                label_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
+            end,
+            extra_details: capture do
+              f.text_area :extra_details,
+                rows: 7,
+                placeholder: "Add any extra details. For example, you may have availability on a different date or you can offer school experience in another subject",
                 label_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
             end
           } %>

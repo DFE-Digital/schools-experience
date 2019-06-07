@@ -15,11 +15,9 @@
 
     <%= render partial: "letter", locals: {
       cancellation: @cancellation,
-      extra_details: capture do %>
-      <p>
-        <%= @cancellation.reason %>
-      </p>
-    <% end } %>
+      reason: @cancellation.reason,
+      extra_details: @cancellation.extra_details
+    } %>
 
     <section>
       <p>

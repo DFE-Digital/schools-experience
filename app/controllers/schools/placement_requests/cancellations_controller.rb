@@ -53,7 +53,8 @@ module Schools
       end
 
       def cancellation_params
-        params.require(:bookings_placement_request_cancellation).permit :reason
+        params.require(:bookings_placement_request_cancellation).permit \
+          :reason, :extra_details
       end
     end
   end
