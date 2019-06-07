@@ -36,7 +36,9 @@ module Schools
             school_name: cancellation.school_name,
             candidate_name: cancellation.candidate_name,
             rejection_reasons: cancellation.reason,
-            school_experience_admin: cancellation.school_admin_name
+            extra_details: cancellation.extra_details,
+            dates_requested: cancellation.dates_requested,
+            school_search_url: new_candidates_school_search_url
           ).despatch_later!
         end
       end

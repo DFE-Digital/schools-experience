@@ -1,9 +1,16 @@
-Dear ((candidate_name)),
+# Dear ((candidate_name)),
 
-The request you made for school experience at ((school_name)) has been turned down for the following reasons:
+((school_name)) has turned down your school experience request for the following dates: 
+* ((dates_requested))
 
+#  Your request was turned down for the following reasons: 
 ((rejection_reasons))
 
-If you have any questions about this decision contact ((school_experience_admin)).
+#  Extra details from the school 
+((extra_details))
 
-You can still apply to other schools for placements. If you need support contact schoolexperience@ta-recruit.education.gov.uk
+# Make a new request 
+Apply for school experience at other schools - ((school_search_url))
+
+# Help and support
+If you need any further help and support getting school experience or becoming a teacher visit the Get Into Teaching website - https://getintoteaching.education.gov.uk/school-experience

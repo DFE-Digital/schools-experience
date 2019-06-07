@@ -54,7 +54,9 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
           school_name: cancellation.school_name,
           candidate_name: cancellation.candidate_name,
           rejection_reasons: cancellation.reason,
-          school_experience_admin: cancellation.school_admin_name
+          extra_details: cancellation.extra_details,
+          dates_requested: cancellation.requested_availability,
+          school_search_url: new_candidates_school_search_url
 
         expect(candidate_request_rejection_notification).to \
           have_received :despatch_later!

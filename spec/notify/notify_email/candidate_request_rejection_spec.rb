@@ -5,5 +5,7 @@ describe NotifyEmail::CandidateRequestRejection do
     school_name: "Springfield Elementary School",
     candidate_name: "Nelson Muntz",
     rejection_reasons: "Failed security checks",
-    school_experience_admin: "school-experience-admin@dfe.gov.uk"
+    extra_details: 'HawHaw',
+    dates_requested: 'Whenever really',
+    school_search_url: 'https://example.com/'
 end
