@@ -9,7 +9,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   validate :placement_request_not_closed, on: :create, if: :placement_request
 
   def school_email
-    placement_request.school.contact_email
+    placement_request.school.notifications_email
   end
 
   def school_name
