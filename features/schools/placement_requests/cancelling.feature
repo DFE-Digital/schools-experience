@@ -19,7 +19,6 @@ Feature: Rejecting placement requests
 
     Scenario: Reject information
         Given there is at least one placement request
-        And the candidate's name is "Robert Terwilliger"
         When I am on the reject placement request page
         Then the following text should be present:
         """

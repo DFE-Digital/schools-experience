@@ -1,8 +1,3 @@
-Given("the candidate's name is {string}") do |string|
-  # currently hardcoded in the controller
-  # FIXME
-end
-
 When "I am on the reject placement request page" do
   visit \
     path_for 'reject placement request', placement_request: @placement_request
