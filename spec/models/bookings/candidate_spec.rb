@@ -24,4 +24,8 @@ RSpec.describe Bookings::Candidate, type: :model do
       it { is_expected.to validate_uniqueness_of(:gitis_uuid).case_insensitive }
     end
   end
+
+  describe 'associations' do
+    it { is_expected.to have_many :session_tokens }
+  end
 end
