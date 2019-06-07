@@ -35,6 +35,9 @@ Rails.application.routes.draw do
             resource :review_and_send_email,
               only: [:new, :create],
               controller: '/schools/placement_requests/acceptance/review_and_send_email'
+            resource :preview_confirmation_email,
+              only: [:new, :create],
+              controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
           end
 
           resource :reject, only: [:new, :create], controller: 'placement_requests/reject'

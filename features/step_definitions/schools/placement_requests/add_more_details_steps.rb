@@ -2,7 +2,7 @@ Given("I have progressed to the {string} page for my chosen placement request") 
   expect(page.current_path).to eql(path_for(string, placement_request_id: @placement_request.id))
 end
 
-Given("I have completed the {string} page") do |string|
+Given("I have completed the 'confirm booking' page") do
   steps %(
     Given I am on the 'confirm booking' page for my chosen placement request
     And I enter three weeks from now as the date

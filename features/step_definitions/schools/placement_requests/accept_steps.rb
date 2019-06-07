@@ -1,4 +1,5 @@
 Given("there is a new placement request") do
+  @profile = FactoryBot.create(:bookings_profile, school: @school)
   @placement_request = FactoryBot.create(:bookings_placement_request, school: @school)
 end
 

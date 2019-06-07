@@ -78,6 +78,10 @@ Given("I have entered the following details into the form:") do |table|
   end
 end
 
+Given("I enter {string} into the {string} field") do |value, field|
+  fill_in field, with: value
+end
+
 Given("I choose {string} from the {string} radio buttons") do |option, field|
   within(get_form_group(page, field)) do
     choose option

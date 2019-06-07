@@ -75,11 +75,7 @@ end
 
 Given("my school has some placement details") do
   @placement_details = "A long arduous day of shadowing a teacher"
-  @bookings_profile = FactoryBot.create(
-    :bookings_profile,
-    school: @school,
-    experience_details: @placement_details
-  )
+  @school.profile.update(experience_details: @placement_details)
 end
 
 Then("the placement details should match the school's placement details") do

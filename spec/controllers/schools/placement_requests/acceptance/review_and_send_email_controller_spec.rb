@@ -63,7 +63,7 @@ describe Schools::PlacementRequests::Acceptance::ReviewAndSendEmail, type: :requ
     context 'with valid params' do
       let(:params) do
         {
-          review_and_send_email: {
+          schools_placement_requests_review_and_send_email: {
             candidate_instructions: candidate_instructions
           }
         }
@@ -82,7 +82,7 @@ describe Schools::PlacementRequests::Acceptance::ReviewAndSendEmail, type: :requ
 
     context 'with invalid params' do
       let(:params) do
-        { review_and_send_email: { candidate_instructions: "" } }
+        { schools_placement_requests_review_and_send_email: { candidate_instructions: "" } }
       end
 
       specify 'should rerender the new template' do

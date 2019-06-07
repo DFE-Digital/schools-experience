@@ -6,67 +6,24 @@
       Review the following email which will be sent to the candidate. You can add extra details.
     </p>
 
-    <%= form_for @review_and_send_email, url: schools_placement_request_acceptance_add_more_details_path, method: 'post' do |form| %>
+    <%= form_for @review_and_send_email, url: schools_placement_request_acceptance_review_and_send_email_path, method: 'post' do |form| %>
       <div class="email-preview">
 
-        <p>Dear Matthew Richards,</p>
+        <p>Dear <%= @placement_request.candidate.firstname %> <%= @placement_request.candidate.lastname %>,</p>
 
         <p>Here are the details about your school experience at <%= @placement_request.school.name %>.</p>
 
-        <h3>School details</h3>
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_details' %>
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_contacts' %>
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_details' %>
 
-        <ul class="govuk-list govuk-list--bullet">
-          <li class="govuk-list__item">
-            School or college: Newton Heath School
-          </li>
-          <li class="govuk-list__item">
-            Address: Crescent Road, Crumpsall, Manchester M8 5UF.
-          </li>
-          <li class="govuk-list__item">
-            Dress code: Business attire with male attendees expected to wear a collar and tie
-          </li>
-          <li class="govuk-list__item">
-            Parking: Limited on-site parking arranged as part of placement. Local paid-for on-street parking around school site for £3 per day
-          </li>
-        </ul>
+        <section id="extra-details-from-the-school">
+          <h3>Extra details from the school</h3>
 
-        <h3>School experience contacts</h3>
+          <%= form.text_area :candidate_instructions %>
+        </section>
 
-        <p>On the day of your school experience, you’ll need to report to:</p>
-
-        <ul class="govuk-list govuk-list--bullet">
-          <li class="govuk-list__item">Name: Mrs I Teach</li>
-          <li class="govuk-list__item">Email address: iteach@newtonheath.co.uk</li>
-          <li class="govuk-list__item">UK telephone number: 0161 345 6355</li>
-        </ul>
-
-        <p>
-          You can also contact them if you have any questions about your experience.
-        </p>
-
-        <h3>School experience details</h3>
-
-        <p>Experience start and finish times: 9am to 5pm</p>
-
-        <ul class="govuk-list govuk-list--bullet">
-          <li class="govuk-list__item">Subject: Maths</li>
-          <li class="govuk-list__item">Experience details: You’ll be observing lessons and may get the chance to interact with pupils and classroom activities</li>
-          <li class="govuk-list__item">Experience start and finish times: 9am to 5pm </li>
-        </ul>
-
-        <h3>Extra details from the school</h3>
-
-        <%= form.text_area :candidate_instructions %>
-
-        <h3>Help and support</h3>
-
-        <p>If you have any questions about your booking contact:</p>
-
-        <ul class="govuk-list govuk-list--bullet">
-          <li class="govuk-list__item">Name: Billy Admin</li>
-          <li class="govuk-list__item">Email address: badmin@newtonheath.co.uk</li>
-          <li class="govuk-list__item">UK telephone number: 0161 345 6000</li>
-        </ul>
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/help_and_support' %>
 
       </div>
       <%= form.submit 'Continue' %>

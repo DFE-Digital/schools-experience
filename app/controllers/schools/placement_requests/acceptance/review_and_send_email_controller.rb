@@ -14,11 +14,8 @@ module Schools
 
           return render :new if @review_and_send_email.invalid?
 
-          booking = @placement_request.booking
-          booking.candidate_instructions = @review_and_send_email.candidate_instructions
-
-          if booking.save && candidate_booking_notification(booking).despatch_later!
-            redirect_to schools_placement_requests_path
+          if @placement_request.booking.update(review_and_send_email_params)
+            redirect_to new_schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id)
           else
             render :new
           end
@@ -26,13 +23,8 @@ module Schools
 
       private
 
-        def candidate_booking_notification(booking)
-          NotifyEmail::CandidateBookingConfirmation
-            .from_booking(booking.candidate.email, booking)
-        end
-
         def review_and_send_email_params
-          params.require(:review_and_send_email).permit(:candidate_instructions)
+          params.require(:schools_placement_requests_review_and_send_email).permit(:candidate_instructions)
         end
 
         def ensure_previous_step_complete
