@@ -135,14 +135,14 @@ describe Bookings::Booking do
       end
     end
 
-    describe '#reviewed_and_email_sent?' do
+    describe '#reviewed_and_candidate_instructions_added?' do
       context 'when the relevant attributes are present' do
         subject do
           create(:bookings_booking, **reviewed_and_email_sent_params)
         end
 
         specify 'should be true' do
-          expect(subject).to be_reviewed_and_email_sent
+          expect(subject).to be_reviewed_and_candidate_instructions_added
         end
       end
 
@@ -152,7 +152,7 @@ describe Bookings::Booking do
         end
 
         specify 'should be false' do
-          expect(subject).not_to be_reviewed_and_email_sent
+          expect(subject).not_to be_reviewed_and_candidate_instructions_added
         end
       end
     end
@@ -160,7 +160,7 @@ describe Bookings::Booking do
     describe '#accepted?' do
       context 'when the relevant attributes are present' do
         subject do
-          create(:bookings_booking, **reviewed_and_email_sent_params)
+          create(:bookings_booking, :accepted)
         end
 
         specify 'should be true' do
@@ -170,7 +170,7 @@ describe Bookings::Booking do
 
       context 'when the relevant attributes are absent' do
         subject do
-          create(:bookings_booking, **reviewed_and_email_sent_params.except(:candidate_instructions))
+          create(:bookings_booking)
         end
 
         specify 'should be false' do

@@ -20,7 +20,7 @@ module Schools
       private
 
         def ensure_previous_step_complete
-          unless @placement_request.booking.reviewed_and_email_sent?
+          unless @placement_request.booking.reviewed_and_candidate_instructions_added?
             redirect_to new_schools_placement_request_acceptance_add_more_details_path(@placement_request.id)
           end
         end

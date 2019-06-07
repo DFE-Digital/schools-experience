@@ -70,14 +70,14 @@ module Bookings
     end
 
     # stage three of the placement request acceptance mini-wizard
-    def reviewed_and_email_sent?
+    def reviewed_and_candidate_instructions_added?
       Schools::PlacementRequests::ReviewAndSendEmail.new(
         candidate_instructions: candidate_instructions
       ).valid?
     end
 
     def accepted?
-      [booking_confirmed?, more_details_added?, reviewed_and_email_sent?].all?
+      accepted_at.present?
     end
   end
 end
