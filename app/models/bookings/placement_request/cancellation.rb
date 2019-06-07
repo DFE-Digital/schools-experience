@@ -12,7 +12,6 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     :school_email,
     :school_name,
     :school_admin_name,
-    :school_admin_phone,
     :dates_requested,
     :candidate_email,
     :candidate_name,
