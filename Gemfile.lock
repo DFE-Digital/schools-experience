@@ -179,7 +179,7 @@ GEM
       concurrent-ruby (~> 1.0)
     io-like (0.3.0)
     jaro_winkler (1.5.2)
-    json-jwt (1.10.0)
+    json-jwt (1.10.1)
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
@@ -226,7 +226,7 @@ GEM
       mini_portile2 (~> 2.4.0)
     notifications-ruby-client (3.1.0)
       jwt (>= 1.5, < 3)
-    openid_connect (1.1.6)
+    openid_connect (1.1.7)
       activemodel
       attr_required (>= 1.0.0)
       json-jwt (>= 1.5.0)
@@ -257,7 +257,7 @@ GEM
     public_suffix (3.1.0)
     puma (3.12.1)
     rack (2.0.7)
-    rack-oauth2 (1.9.3)
+    rack-oauth2 (1.10.0)
       activesupport
       attr_required
       httpclient
