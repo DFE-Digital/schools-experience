@@ -109,7 +109,10 @@ Rails.application.routes.draw do
       end
     end
 
-    resource :dashboard, only: :show if Rails.application.config.x.phase >= 4
+    if Rails.application.config.x.phase >= 4
+      get 'signin', to: 'candidates/sessions#new'
+      resource :dashboard, only: :show
+    end
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
 end
