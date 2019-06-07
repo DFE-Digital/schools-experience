@@ -5,11 +5,12 @@ module Schools
         before_action :set_placement_request
         before_action :ensure_previous_step_complete
 
-        def new
-        end
+        def new; end
 
         def create
-          if candidate_booking_notification(@placement_request.booking).despatch_later!
+          booking = @placement_request.booking
+
+          if booking.update(accepted_at: Time.now) && candidate_booking_notification(booking).despatch_later!
             redirect_to schools_placement_requests_path
           else
             render :new

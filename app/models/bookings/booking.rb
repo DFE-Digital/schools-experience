@@ -26,6 +26,7 @@ module Bookings
       to: :bookings_placement_request
 
     scope :upcoming, -> { where(arel_table[:date].between(Time.now..2.weeks.from_now)) }
+    scope :accepted, -> { where.not(accepted_at: nil) }
 
     def self.from_confirm_booking(confirm_booking)
       new(

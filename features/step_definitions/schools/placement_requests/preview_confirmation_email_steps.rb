@@ -19,5 +19,5 @@ Given("I think the email looks good") do
 end
 
 Then("the placement request should be accepted") do
-    pending # Write code here that turns the phrase above into concrete actions
+  expect(@placement_request.booking.accepted_at).not_to be_nil
 end
