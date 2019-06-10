@@ -12,7 +12,7 @@ module Schools
 
     def placement_requests
       current_school.placement_requests
-        .eager_load(:candidate_cancellation, :school_cancellation, :bookings_placement_date)
+        .eager_load(:candidate_cancellation, :school_cancellation, :placement_date)
     end
 
     def placement_request

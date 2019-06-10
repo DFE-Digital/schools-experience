@@ -33,11 +33,6 @@ module Bookings
       foreign_key: 'bookings_placement_request_id',
       dependent: :destroy
 
-    belongs_to :bookings_placement_date,
-      class_name: 'Bookings::PlacementDate',
-      foreign_key: :bookings_placement_date_id,
-      optional: true
-
     scope :open, -> do
       left_joins(:candidate_cancellation, :school_cancellation)
         .where(bookings_placement_request_cancellations: { sent_at: nil })
@@ -70,8 +65,8 @@ module Bookings
     end
 
     def dates_requested
-      if bookings_placement_date.present?
-        bookings_placement_date.date.to_formatted_s(:govuk)
+      if placement_date.present?
+        placement_date.date.to_formatted_s(:govuk)
       else
         availability
       end
