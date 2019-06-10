@@ -23,7 +23,7 @@ Feature: Viewing a booking
             | Heading             | Value                                                                |
             | Address             | First Line, Second Line, Third Line, Manchester, Manchester, MA1 1AM |
             | UK telephone number | 07123 456789                                                         |
-            | Email address       | second@thisaddress.com                                               |
+            | Email address       | first@thisaddress.com                                                |
 
     Scenario: Request details
         Given there is at least one booking

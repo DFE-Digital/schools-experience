@@ -66,9 +66,6 @@ gem 'uk_postcode'
 gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: 'a7429200'
 gem 'faraday'
 
-gem 'addressable'
-gem 'faraday'
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

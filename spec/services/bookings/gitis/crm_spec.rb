@@ -1,27 +1,16 @@
 require 'rails_helper'
-require 'apimock/gitis_crm'
 
 describe Bookings::Gitis::CRM, type: :model do
-  let(:client_id) { 'clientid' }
-  let(:client_secret) { 'clientsecret' }
-  let(:tenant_id) { SecureRandom.uuid }
-  let(:gitis_url) { 'https://gitis-crm.net' }
-  let(:token) { 'my.secret.token' }
-
-#  let(:api) { Bookings::Gitis::API.new('my.secret.token', service_url: gitis_url) }
-  let(:gitis) { described_class.new(token, service_url: gitis_url) }
-  let(:gitis_stub) do
-    Apimock::GitisCrm.new(client_id, client_secret, tenant_id, gitis_url)
-  end
+  let(:gitis) { described_class.new('a-token') }
 
   describe '.initialize' do
-    it "will succeed with api object" do
-      expect(described_class.new(token)).to \
+    it "will succeed with access token" do
+      expect(described_class.new('something')).to \
         be_instance_of(Bookings::Gitis::CRM)
     end
 
-    it "will raise an exception without an api object" do
-      expect { described_class.new }.to raise_exception(ArgumentError)
+    it "will raise an exception without an access token" do
+      expect { subject }.to raise_exception(ArgumentError)
     end
   end
 
@@ -43,36 +32,37 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with single account_ids' do
-      before { gitis_stub.stub_contact_request(uuids[1]) }
-      subject { gitis.find(uuids[1]) }
+      before { @contacts = gitis.find(uuids[1]) }
 
       it "will return a single account" do
-        is_expected.to be_instance_of Bookings::Gitis::Contact
-        is_expected.to have_attributes(id: uuids[1])
+        expect(@contacts).to be_instance_of Bookings::Gitis::Contact
+        expect(@contacts.id).to eq(uuids[1])
       end
     end
 
     context 'with multiple account_ids' do
-      before { gitis_stub.stub_multiple_contact_request(uuids) }
-      subject { gitis.find(*uuids) }
+      before do
+        @contacts = gitis.find(*uuids)
+      end
 
       it "will return an account per id" do
-        is_expected.to have_attributes(length: 3)
-        is_expected.to all be_instance_of(Bookings::Gitis::Contact)
-        subject.each_with_index do |contact, index|
+        expect(@contacts.length).to eq(3)
+        expect(@contacts).to all be_instance_of(Bookings::Gitis::Contact)
+        @contacts.each_with_index do |contact, index|
           expect(contact.id).to eq(uuids[index])
         end
       end
     end
 
     context 'with array of account_ids' do
-      before { gitis_stub.stub_multiple_contact_request(uuids) }
-      subject { gitis.find(uuids) }
+      before do
+        @contacts = gitis.find(*uuids)
+      end
 
       it "will return an account per id" do
-        is_expected.to have_attributes(length: 3)
-        is_expected.to all be_instance_of(Bookings::Gitis::Contact)
-        subject.each_with_index do |contact, index|
+        expect(@contacts.length).to eq(3)
+        expect(@contacts).to all be_instance_of(Bookings::Gitis::Contact)
+        @contacts.each_with_index do |contact, index|
           expect(contact.id).to eq(uuids[index])
         end
       end
@@ -81,18 +71,14 @@ describe Bookings::Gitis::CRM, type: :model do
 
   describe '#find_by_email' do
     let(:email) { 'me@something.com' }
-    before { gitis_stub.stub_contact_request_by_email(email) }
-    subject { gitis.find_by_email(email) }
 
     it "will return a contact record" do
-      is_expected.to be_instance_of(Bookings::Gitis::Contact)
-      is_expected.to have_attributes(email: email)
+      expect(gitis.find_by_email(email).email).to eq(email)
     end
   end
 
   describe '#find_contact_for_signin' do
     let(:email) { 'me@something.com' }
-    before { gitis_stub.stub_contact_request_by_email(email) }
 
     subject do
       gitis.find_contact_for_signin(
@@ -108,39 +94,13 @@ describe Bookings::Gitis::CRM, type: :model do
     end
   end
 
-  describe '.write' do
-    let(:contactid) { SecureRandom.uuid }
-    let(:contact_attributes) { attributes_for(:gitis_contact) }
-
-    context 'with a valid new contact' do
-      let(:contact) { build(:gitis_contact, contact_attributes) }
-
-      before do
-        sorted_attrs = contact_attributes.sort.to_h
-        gitis_stub.stub_create_contact_request(sorted_attrs, contactid)
-      end
-
-      subject { gitis.write(contact) }
-
-      it "will return the id of the inserted record" do
-        is_expected.to eq(contactid)
-      end
-    end
-
-    context 'with a valid existing contact' do
-      before do
-        @contact = build(:gitis_contact, contact_attributes.merge(id: contactid))
-        @contact.reset_dirty_attributes
-        @contact.firstname = 'Changed'
-        @contact.lastname = 'Name'
-        gitis_stub.stub_update_contact_request(
-          { 'firstname' => 'Changed', 'lastname' => 'Name' },
-          contactid
-        )
-      end
+  describe '#write' do
+    # Note: this is just stubbed functionality for now
+    context 'with a valid contact' do
+      before { @contact = build(:gitis_contact) }
 
       it "will succeed" do
-        expect(gitis.write(@contact)).to eq(contactid)
+        expect(gitis.write(@contact)).to eq("75c5a32d-d603-4483-956f-236fee7c5784")
       end
     end
 
@@ -153,11 +113,12 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with an invalid contact' do
-      let(:contact) { build(:gitis_contact, emailaddress1: '') }
-      before { gitis_stub.stub_create_contact_request(contact.attributes) }
+      before do
+        @contact = build(:gitis_contact, email: '')
+      end
 
       it "will return false" do
-        expect(gitis.write(contact)).to be false
+        expect(gitis.write(@contact)).to be false
       end
     end
   end
