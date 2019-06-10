@@ -10,5 +10,10 @@ FactoryBot.define do
     availability { "Every second Thursday" }
     association :school, factory: :bookings_school
     urn { 123456 }
+
+    trait(:with_a_fixed_date) do
+      availability { nil }
+      association :placement_date, factory: :bookings_placement_date
+    end
   end
 end

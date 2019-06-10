@@ -9,8 +9,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 2019_06_06_081440) do
+ActiveRecord::Schema.define(version: 2019_06_07_121714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +22,13 @@ ActiveRecord::Schema.define(version: 2019_06_06_081440) do
     t.integer "bookings_school_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "placement_details"
+    t.string "contact_name"
+    t.string "contact_number"
+    t.string "contact_email"
+    t.text "location"
+    t.string "candidate_instructions"
+    t.datetime "accepted_at"
     t.integer "duration", default: 1, null: false
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"

@@ -4,7 +4,8 @@ Feature: Viewing all placement requests
     I want to be able see a complete list of placement requests
 
     Background:
-        Given I am logged in as a DfE user
+        Given the subjects 'Biology' and 'Chemistry' exist
+        And I am logged in as a DfE user
 
     Scenario: Page title
         Given I am on the 'placement requests' page
@@ -24,13 +25,11 @@ Feature: Viewing all placement requests
         Given there are some placement requests
         When I am on the 'placement requests' page
         Then the placement listings should have the following values:
-			| Heading          | Value                             |
-            | Dates requested  | Any time during July 2019         |
-            | Request received | 01 January 2019                   |
-            | Contact details  | View contact details              |
-            | Teaching stage   | I've applied for teacher training |
-            | Teaching subject | Maths                             |
-            | Status           | New                               |
+			| Heading          | Value                 |
+            | Dates requested  | Every second Thursday |
+            | Contact details  | View contact details  |
+            | Teaching stage   | It’s just an idea     |
+            | Teaching subject | Biology               |
 
     @javascript
     Scenario: Expanding the contact details

@@ -1,0 +1,40 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1>Send details to candidate</h1>
+
+    <p>
+      The following contains the wording of the confirmation email which will be
+      sent to <%= @placement_request.candidate.firstname %> <%= @placement_request.candidate.lastname %>
+      to confirm their booking.
+    </p>
+
+    <div class="email-preview">
+      <p>Dear <%= @placement_request.candidate.firstname %> <%= @placement_request.candidate.lastname %>,</p>
+
+      <p>Here are the details about your school experience at <%= @placement_request.school.name %>.</p>
+
+      <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_details' %>
+      <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_contacts' %>
+      <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_details' %>
+
+      <section id="extra-details-from-the-school">
+        <h3>Extra details from the school</h3>
+
+        <p><%= @placement_request.booking.candidate_instructions %></p>
+      </section>
+
+      <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/help_and_support' %>
+    </div>
+
+    <p>
+      By sending this email you’re confirming, to the best of your knowledge, the
+      booking details you’re providing are correct.
+    </p>
+
+    <%= form_tag schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id) do %>
+      <%= submit_tag 'Send confirmation email', class: 'govuk-button' %>
+    <%- end -%>
+
+  </div>
+</div>
+

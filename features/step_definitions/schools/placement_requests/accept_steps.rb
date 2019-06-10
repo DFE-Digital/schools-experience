@@ -1,10 +1,12 @@
-Then("I should see the following booking details:") do |table|
-  table.hashes.each do |row|
-    within('#booking-details') do
-      expect(page).to have_css('dt', text: row['Heading'])
-      expect(page).to have_css('dd', text: row['Value'])
-    end
-  end
+Given("there is a new placement request") do
+  @profile = FactoryBot.create(:bookings_profile, school: @school)
+  @placement_request = FactoryBot.create(:bookings_placement_request, school: @school)
+end
+
+Given("I am on the accept placement request page") do
+  path = path_for("accept placement request", placement_request: @placement_request)
+  visit(path)
+  expect(page.current_path).to eql(path)
 end
 
 Then("every row of the booking details list should have a {string} link") do |string|

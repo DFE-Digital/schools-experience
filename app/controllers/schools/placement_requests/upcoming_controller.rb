@@ -2,7 +2,8 @@ module Schools
   module PlacementRequests
     class UpcomingController < PlacementRequestsController
       def index
-        @placement_requests = placement_requests
+        # FIXME limit to upcoming PRs
+        @placement_requests = @current_school.bookings_placement_requests.all
       end
     end
   end

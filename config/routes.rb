@@ -24,8 +24,23 @@ Rails.application.routes.draw do
 
       if Rails.application.config.x.phase >= 3
         resources :placement_requests do
-          resource :accept, only: [:show, :create], controller: 'placement_requests/accept'
-          resource :reject, only: [:show, :create], controller: 'placement_requests/reject'
+
+          namespace :acceptance do
+            resource :confirm_booking,
+              only: [:new, :create],
+              controller: '/schools/placement_requests/acceptance/confirm_booking'
+            resource :add_more_details,
+              only: [:new, :create],
+              controller: '/schools/placement_requests/acceptance/add_more_details'
+            resource :review_and_send_email,
+              only: [:new, :create],
+              controller: '/schools/placement_requests/acceptance/review_and_send_email'
+            resource :preview_confirmation_email,
+              only: [:new, :create],
+              controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
+          end
+
+          resource :reject, only: [:new, :create], controller: 'placement_requests/reject'
           collection do
             resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
           end

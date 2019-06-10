@@ -1,0 +1,54 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full-width">
+    <h1>Confirm booking</h1>
+
+    <h3>
+      Confirm the booking for <%= [@placement_request.candidate.firstname, @placement_request.candidate.lastname].join(" ") %>.
+    </h3>
+
+    <dl id="placement-request-details" class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          School
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.school.name %>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Availability/requested date
+        </dt>
+        <dd class="govuk-summary-list__value availability-requested-date">
+          <%- if @placement_request.placement_date.present? -%>
+            <%= @placement_request.placement_date.date.to_formatted_s(:govuk) %>
+          <%- else -%>
+            <%= @placement_request.availability %>
+          <%- end -%>
+        </dd>
+      </div>
+    </dl>
+
+    <%= form_for @confirm_booking, url: schools_placement_request_acceptance_confirm_booking_path do |form| %>
+
+      <%= form.date_field :date %>
+
+      <%= form.collection_select \
+        :bookings_subject_id,
+        @available_subjects,
+        :id,
+        :name,
+        { prompt: 'Select' },
+        { class: 'govuk-select govuk-!-width-one-half' } %>
+
+      <%= form.text_area :placement_details %>
+
+      <%= form.submit 'Continue' %>
+
+    <% end %>
+
+    <div>
+      <%= link_to 'Back to request', schools_placement_request_path(@placement_request.id), class: 'govuk-back-link' %>
+    </div>
+  </div>
+</div>

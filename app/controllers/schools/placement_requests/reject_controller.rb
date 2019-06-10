@@ -6,7 +6,7 @@ module Schools
     end
 
     class RejectController < Schools::BaseController
-      def show
+      def new
         @placement_request = placement_request
         @reject_reason = DummyRejection.new
       end

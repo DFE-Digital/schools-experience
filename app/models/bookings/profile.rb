@@ -70,6 +70,18 @@ class Bookings::Profile < ApplicationRecord
   before_validation :nilify_blank_fields
   before_validation :strip_fields
 
+  def dress_code
+    attributes
+      .except('dress_code_other_details')
+      .select { |a| a.starts_with?('dress_code') }
+      .select { |_, v| v }
+      .keys
+      .map { |key| key.remove('dress_code_') }
+      .map(&:humanize)
+      .join(', ')
+      .capitalize
+  end
+
 private
 
   def at_least_one_phase
