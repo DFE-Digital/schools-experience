@@ -80,7 +80,7 @@ module Candidates
           school_name: cancellation.school_name,
           candidate_name: cancellation.candidate_name,
           cancellation_reasons: cancellation.reason,
-          requested_availability: cancellation.requested_availability,
+          requested_availability: cancellation.dates_requested,
           placement_request_url: schools_placement_request_url(cancellation.placement_request)
         ).despatch_later!
       end
@@ -99,7 +99,7 @@ module Candidates
           to: cancellation.candidate_email,
           school_name: cancellation.school_name,
           candidate_name: cancellation.candidate_name,
-          requested_availability: cancellation.requested_availability
+          requested_availability: cancellation.dates_requested
         ).despatch_later!
       end
     end

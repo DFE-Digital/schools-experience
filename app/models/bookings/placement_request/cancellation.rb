@@ -15,7 +15,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     :dates_requested,
     :candidate_email,
     :candidate_name,
-    :requested_availability,
+    :dates_requested,
     :token,
     :booking,
     to: :placement_request

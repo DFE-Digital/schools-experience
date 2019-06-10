@@ -158,7 +158,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
               school_name: cancellation.school_name,
               candidate_name: cancellation.candidate_name,
               cancellation_reasons: cancellation.reason,
-              requested_availability: cancellation.requested_availability,
+              requested_availability: cancellation.dates_requested,
               placement_request_url: schools_placement_request_url(cancellation.placement_request)
 
             expect(notify_school_request_cancellation).to \
@@ -170,7 +170,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
               to: cancellation.candidate_email,
               school_name: cancellation.school_name,
               candidate_name: cancellation.candidate_name,
-              requested_availability: cancellation.requested_availability
+              requested_availability: cancellation.dates_requested
 
             expect(notify_candidate_request_cancellation).to \
               have_received :despatch_later!
