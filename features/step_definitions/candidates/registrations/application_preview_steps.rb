@@ -22,7 +22,8 @@ end
 
 Given("I have filled in my contact information successfully") do
   # Submit contact information form successfully
-  fill_in 'Full name', with: 'testy mctest'
+  fill_in 'First name', with: 'testy'
+  fill_in 'Last name', with: 'mctest'
   fill_in 'Email address', with: 'test@example.com'
   fill_in 'Building', with: 'Test house'
   fill_in 'Street', with: 'Test street'

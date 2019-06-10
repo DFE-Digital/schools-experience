@@ -1,13 +1,13 @@
 Given("I am on the {string} page for my chosen placement request") do |identifier|
   @placement_request = FactoryBot.create(:bookings_placement_request, school: @school)
 
-  path = path_for(identifier, placement_request_id: @placement_request.id)
+  path = path_for(identifier, placement_request: @placement_request)
   visit(path)
   expect(page.current_path).to eql(path)
 end
 
 Then("I should be on the {string} page for my chosen placement request") do |identifier|
-  path = path_for(identifier, placement_request_id: @placement_request.id)
+  path = path_for(identifier, placement_request: @placement_request)
   expect(page.current_path).to eql(path)
 end
 
@@ -20,7 +20,7 @@ When("I am on the {string} page for my fixed placement request") do |identifier|
     placement_date: @placement_date
   )
 
-  path = path_for(identifier, placement_request_id: @placement_request.id)
+  path = path_for(identifier, placement_request: @placement_request)
   visit(path)
   expect(page.current_path).to eql(path)
 end

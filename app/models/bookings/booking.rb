@@ -14,6 +14,7 @@ module Bookings
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true
     validates :bookings_school, presence: true
+    validates :duration, presence: true, numericality: { greater_than: 0 }
 
     delegate \
       :availability,

@@ -76,6 +76,10 @@ en:
             email:
               blank: "Enter your email address"
               invalid: "Enter a valid email address"
+            first_name:
+              blank: 'Enter your first name'
+            last_name:
+              blank: 'Enter your last name'
             full_name:
               blank: "Enter your full name"
             phone:
@@ -195,6 +199,10 @@ en:
       models:
         bookings/placement_request:
           <<: [ *placement_preference_errors, *subject_preference_errors ]
+        bookings/placement_request/cancellation:
+          attributes:
+            reason:
+              blank: 'Cancellation reason is required'
         bookings/school_search:
           attributes:
             location:
@@ -307,6 +315,8 @@ en:
       bookings_placement_date:
         duration: How many days will it last?
         active: Make this date available to candidates?
+      bookings_placement_request_cancellation:
+        reason: Cancellation reasons
       candidates_registrations_contact_information:
         email: 'Email address'
         building: "Building and street"

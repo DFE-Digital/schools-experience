@@ -1,0 +1,29 @@
+<% self.page_title = 'Cancel placement request' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Cancel request</h1>
+      <%= form_for @cancellation, url: candidates_placement_request_cancellation_path(@cancellation.placement_request.token) do |f| %>
+        <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+
+      <p>
+      You've chosen to cancel your school experience request for <%= f.object.school_name %>.
+      </p>
+
+      <p class="govuk-hint">
+        Request sent: <%= f.object.placement_request.sent_at.to_date.to_formatted_s :govuk %>
+      </p>
+
+      <%= f.text_area :reason,
+          rows: 5,
+          label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
+
+          <p>
+            Tell us a why you want to cancel your request so we can let the school know you no longer want school experience.
+          </p>
+      <% end %>
+
+      <%= f.submit 'Cancel request' %>
+    <% end %>
+  </div>
+</div>

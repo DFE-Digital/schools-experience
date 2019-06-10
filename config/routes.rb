@@ -102,6 +102,12 @@ Rails.application.routes.draw do
         resource :placement_request, only: %i(show create)
       end
     end
+
+    if Rails.application.config.x.phase >= 3
+      resources :placement_requests, only: [], param: :token do
+        resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
+      end
+    end
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
 end

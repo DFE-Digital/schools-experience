@@ -13,7 +13,8 @@ end
 
 Given("I have completed the contact information form") do
   visit path_for 'enter your contact details', school: @school
-  fill_in 'Full name', with: 'testy mctest'
+  fill_in 'First name', with: 'testy'
+  fill_in 'Last name', with: 'mctest'
   fill_in 'Email address', with: 'test@example.com'
   fill_in 'Building', with: 'Test house'
   fill_in 'Street', with: 'Test street'
@@ -58,7 +59,8 @@ end
 
 Then("the contact information form should populated with the details I've entered so far") do
   visit path_for 'enter your contact details', school: @school
-  expect(find_field('Full name').value).to eq 'testy mctest'
+  expect(find_field('First name').value).to eq 'testy'
+  expect(find_field('Last name').value).to eq 'mctest'
   expect(find_field('Email address').value).to eq 'test@example.com'
   expect(find_field('Building').value).to eq 'Test house'
   expect(find_field('Street').value).to eq 'Test street'

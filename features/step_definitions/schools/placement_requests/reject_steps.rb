@@ -3,7 +3,7 @@ Given("the candidate's name is {string}") do |string|
 end
 
 Given("I am on the reject placement request page") do
-  path = path_for("reject placement request", placement_request_id: @placement_request.id)
+  path = path_for("reject placement request", placement_request: @placement_request)
   visit(path)
   expect(page.current_path).to eql(path)
 end
