@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::Session, type: :model do
+  include ActiveJob::TestHelper
+
   let(:gitis) { Bookings::Gitis::CRM.new('a-token') }
   let(:candidate) { create(:candidate) }
   let(:attrs) do
@@ -8,10 +10,18 @@ RSpec.describe Candidates::Session, type: :model do
       'firstname' => 'Test',
       'lastname' => 'User',
       'date_of_birth' => '1980-10-01',
-      'email' => 'existing@candidate.com'
+      'emailaddress1' => 'existing@candidate.com'
     }
   end
-  let(:login_attrs) { attrs.symbolize_keys }
+
+  let(:login_attrs) do
+    {
+      firstname: 'Test',
+      lastname: 'User',
+      date_of_birth: '1980-10-01',
+      email: 'existing@candidate.com'
+    }
+  end
 
   describe '.new' do
     context 'with crm instance' do
@@ -30,6 +40,8 @@ RSpec.describe Candidates::Session, type: :model do
 
   describe '#login' do
     before { NotifyFakeClient.reset_deliveries! }
+    before { queue_adapter.perform_enqueued_jobs = true }
+    after { queue_adapter.perform_enqueued_jobs = nil }
     subject { described_class.new(gitis) }
 
     context 'with known candidate' do
@@ -49,7 +61,16 @@ RSpec.describe Candidates::Session, type: :model do
         expect(candidate.session_tokens.count).to eql(1)
       end
 
-      it "will send email with token link"
+      it "will send email with token link" do
+        expect(NotifyFakeClient.deliveries.length).to eql(1)
+
+        delivery = NotifyFakeClient.deliveries.first
+        expect(delivery[:email_address]).to eql(attrs['emailaddress1'])
+
+        token = Candidates::SessionToken.reorder(:id).last.token
+        expect(delivery[:personalisation][:confirmation_link]).to \
+          match(Rails.application.routes.url_helpers.candidates_signin_url(token))
+      end
     end
 
     context 'with unknown candidate' do
@@ -71,7 +92,16 @@ RSpec.describe Candidates::Session, type: :model do
           expect(@signed_in.session_tokens.count).to eql(1)
         end
 
-        it "will send email with token link"
+        it "will send email with token link" do
+          expect(NotifyFakeClient.deliveries.length).to eql(1)
+
+          delivery = NotifyFakeClient.deliveries.first
+          expect(delivery[:email_address]).to eql(attrs['emailaddress1'])
+
+          token = Candidates::SessionToken.reorder(:id).last.token
+          expect(delivery[:personalisation][:confirmation_link]).to \
+            match(Rails.application.routes.url_helpers.candidates_signin_url(token))
+        end
       end
 
       context 'who does not exist in Gitis' do

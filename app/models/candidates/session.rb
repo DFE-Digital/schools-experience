@@ -1,5 +1,5 @@
 class Candidates::Session
-  attr_reader :contact, :candidate
+  attr_reader :contact, :candidate, :token
 
   def initialize(gitis)
     @gitis = gitis
@@ -37,10 +37,17 @@ private
   end
 
   def generate_session_token
-    @candidate.session_tokens.create!
+    @token = @candidate.session_tokens.create!
   end
 
   def email_token_to_client
-    # FIXME to be done
+    NotifyEmail::CandidateSigninLink.new(
+      to: contact.email,
+      confirmation_link: signin_url
+    ).despatch_later!
+  end
+
+  def signin_url
+    Rails.application.routes.url_helpers.candidates_signin_url(token.token)
   end
 end

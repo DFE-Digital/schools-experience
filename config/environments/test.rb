@@ -68,4 +68,6 @@ Rails.application.configure do
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
 
   config.x.fake_crm = false
+
+  Rails.application.routes.default_url_options = { protocol: 'https', host: 'test.host' }
 end
