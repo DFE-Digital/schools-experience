@@ -28,4 +28,13 @@ RSpec.describe Bookings::Candidate, type: :model do
   describe 'associations' do
     it { is_expected.to have_many :session_tokens }
   end
+
+  describe '.generate_session_token!' do
+    let(:candidate) { create(:candidate) }
+
+    it "should create a new token" do
+      expect(candidate.generate_session_token!).to be_kind_of(Candidates::SessionToken)
+      expect(candidate.session_tokens.count).to eql(1)
+    end
+  end
 end

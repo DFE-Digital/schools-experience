@@ -67,4 +67,8 @@ RSpec.describe Candidates::SessionToken, type: :model do
       end
     end
   end
+
+  describe '#invalidate_other_tokens!' do
+    it('should invalidate other login tokens')
+  end
 end

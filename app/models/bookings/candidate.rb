@@ -6,4 +6,8 @@ class Bookings::Candidate < ApplicationRecord
 
   validates :gitis_uuid, presence: true, format: { with: UUID_V4_FORMAT }
   validates :gitis_uuid, uniqueness: { case_sensitive: false }
+
+  def generate_session_token!
+    session_tokens.create!
+  end
 end
