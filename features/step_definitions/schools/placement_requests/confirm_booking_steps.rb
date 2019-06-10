@@ -69,7 +69,7 @@ end
 
 Then("the date fields should be empty") do
   within(page.find('.govuk-date-input')) do
-    expect(page.all('input').map(&:value).compact).to be_empty
+    expect(page.all('input').map(&:value).map(&:presence).compact).to be_empty
   end
 end
 
