@@ -1,4 +1,4 @@
-class Bookings::CandidateSessionToken < ApplicationRecord
+class Candidates::SessionToken < ApplicationRecord
   AUTO_EXPIRE = 1.day.freeze
 
   belongs_to :candidate, class_name: 'Bookings::Candidate'

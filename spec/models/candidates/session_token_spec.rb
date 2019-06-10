@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Bookings::CandidateSessionToken, type: :model do
+RSpec.describe Candidates::SessionToken, type: :model do
   let(:session_token) { create(:candidate_session_token) }
 
   describe 'database structure' do

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :candidate_session_token, class: 'Bookings::CandidateSessionToken' do
+  factory :candidate_session_token, class: 'Candidates::SessionToken' do
     association :candidate, factory: :candidate
 
     trait :expired do
@@ -7,7 +7,7 @@ FactoryBot.define do
     end
 
     trait :auto_expired do
-      created_at { Time.zone.now - 1.minute - Bookings::CandidateSessionToken::AUTO_EXPIRE }
+      created_at { Time.zone.now - 1.minute - Candidates::SessionToken::AUTO_EXPIRE }
     end
   end
 end
