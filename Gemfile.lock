@@ -427,6 +427,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgis-adapter
   acts_as_list
+  addressable
   application_insights!
   autoprefixer-rails
   bootsnap (>= 1.1.0)
