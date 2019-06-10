@@ -49,12 +49,11 @@ module Bookings
     end
 
     def placement_start_date_with_duration
-      # TODO add model spec
       [date.to_formatted_s(:govuk), duration_days].join(' ')
     end
 
     def duration_days
-      duration.to_s + 'day'.pluralize(duration)
+      duration.to_s + ' day'.pluralize(duration)
     end
 
     # stage one of the placement request acceptance mini-wizard

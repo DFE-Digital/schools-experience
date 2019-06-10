@@ -196,9 +196,9 @@ describe Bookings::Booking do
 
     subject { described_class.new date: date, duration: 2 }
 
-    # TODO fix this once I've merged in master
-    xspecify 'should return a descriptive string' do
-      expect(subject.placement_start_date_with_duration).to eq 7
+    specify 'should return a descriptive string' do
+      expect(subject.placement_start_date_with_duration).to eq \
+        "#{date.to_formatted_s(:govuk)} 2 days"
     end
   end
 end

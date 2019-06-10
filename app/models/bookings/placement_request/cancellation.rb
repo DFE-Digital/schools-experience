@@ -20,10 +20,6 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     :booking,
     to: :placement_request
 
-  def requested_availability
-    placement_request.availability
-  end
-
   def sent!
     update! sent_at: DateTime.now
   end
