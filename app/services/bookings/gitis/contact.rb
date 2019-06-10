@@ -40,11 +40,11 @@ module Bookings
         emailaddress2.presence || emailaddress1
       end
 
-      def email=(address)
+      def email=(emailaddress)
         if emailaddress1.blank?
-          self.emailaddress1 = address
-        elsif emailaddress1 != address
-          self.emailaddress2 = address
+          self.emailaddress1 = emailaddress
+        elsif emailaddress1 != emailaddress
+          self.emailaddress2 = emailaddress
         end
       end
 
