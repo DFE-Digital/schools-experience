@@ -19,7 +19,7 @@ module Candidates
 
           PlacementRequestJob.perform_later \
             registration_session.uuid,
-            new_candidates_placement_request_cancellation_url(placement_request.token)
+            candidates_cancel_url(placement_request.token)
         end
 
         redirect_to candidates_school_registrations_placement_request_path \
