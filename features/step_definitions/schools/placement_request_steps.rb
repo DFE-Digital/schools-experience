@@ -34,21 +34,31 @@ When("I am on a placement request page") do
   visit path_for 'placement request', placement_request: @placement_request
 end
 
+Given("the subjects {string} and {string} exist") do |subj1, subj2|
+  [subj1, subj2].each { |s| FactoryBot.create(:bookings_subject, name: s) }
+end
+
+Given("I am on the placement request page") do
+  path = path_for('placement request', placement_request: @placement_request)
+  visit(path)
+  expect(page.current_path).to eql(path)
+end
+
 Then("I should see all the upcoming requests listed") do
-  within("#school-requests") do
-    expect(page).to have_css('.school-request', count: 5)
+  within("#placement-requests") do
+    expect(page).to have_css('.placement-request', count: @placement_requests.size)
   end
 end
 
 Then("I should see all the placement requests listed") do
-  within("#school-requests") do
-    expect(page).to have_css('.school-request', count: 5)
+  within("#placement-requests") do
+    expect(page).to have_css('.placement-request', count: @placement_requests.size)
   end
 end
 
 Then("the placement listings should have the following values:") do |table|
-  within('#school-requests') do
-    within(page.all('.school-request').first) do
+  within('#placement-requests') do
+    within(page.all('.placement-request').first) do
       table.hashes.each do |row|
         expect(page).to have_css('dt', text: row['Heading'])
         expect(page).to have_css('dd', text: /#{row['Value']}/i)
@@ -58,10 +68,9 @@ Then("the placement listings should have the following values:") do |table|
 end
 
 Then("every request should contain a link to view more details") do
-  within('#school-requests') do
-    page.all('.school-request').each_with_index do |sr, i|
-      placement_request = @placement_requests.reverse[i]
-      within(sr) do
+  within('#placement-requests') do
+    @placement_requests.each do |placement_request|
+      within("div.placement-request[data-placement-request='#{placement_request.id}']") do
         expect(page).to have_link('Open request', href: schools_placement_request_path(placement_request.id))
       end
     end
@@ -69,8 +78,8 @@ Then("every request should contain a link to view more details") do
 end
 
 Then("every request should contain a title starting with {string}") do |string|
-  within('#school-requests') do
-    page.all('.school-request').each do |sr|
+  within('#placement-requests') do
+    page.all('.placement-request').each do |sr|
       within(sr) do
         expect(page).to have_css('h2', text: /#{string}/)
       end
@@ -110,15 +119,15 @@ Then("there should be the following buttons:") do |table|
 end
 
 When("I click {string} on the first request") do |string|
-  within('#school-requests') do
-    within(page.all('.school-request').first) do
+  within('#placement-requests') do
+    within(page.all('.placement-request').first) do
       page.find('summary span', text: string).click
     end
   end
 end
 
 Then("I should see the following contact details:") do |table|
-  within(page.all('.school-request').first) do
+  within(page.all('.placement-request').first) do
     within('.contact-details dl') do
       table.hashes.each do |row|
         expect(page).to have_css('dt', text: row['Heading'])
@@ -128,7 +137,8 @@ Then("I should see the following contact details:") do |table|
   end
 end
 
-Then('I should be on the accept placement request page') do
-  expect(page.current_path).to eq path_for 'accept placement request',
-    placement_request: @placement_request
+Then("I should be on the confirm booking page") do
+  path = path_for('confirm booking', placement_request: @placement_request)
+  visit(path)
+  expect(page.current_path).to eql(path)
 end

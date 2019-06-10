@@ -12,6 +12,15 @@ module Bookings
       class_name: 'Bookings::School',
       foreign_key: :bookings_school_id
 
+    has_one :booking,
+      class_name: 'Bookings::Booking',
+      foreign_key: 'bookings_placement_request_id'
+
+    belongs_to :placement_date,
+      class_name: 'Bookings::PlacementDate',
+      foreign_key: :bookings_placement_date_id,
+      optional: true
+
     has_one :candidate_cancellation,
       -> { where cancelled_by: 'candidate' },
       class_name: 'Bookings::PlacementRequest::Cancellation',

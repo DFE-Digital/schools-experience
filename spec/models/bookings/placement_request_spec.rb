@@ -19,18 +19,24 @@ describe Bookings::PlacementRequest, type: :model do
 
   it { is_expected.to have_secure_token }
 
-  it do
-    is_expected.to \
-      have_one(:candidate_cancellation)
-        .dependent(:destroy)
-        .class_name('Bookings::PlacementRequest::Cancellation')
-  end
+  context 'relationships' do
+    it do
+      is_expected.to \
+        have_one(:candidate_cancellation)
+          .dependent(:destroy)
+          .class_name('Bookings::PlacementRequest::Cancellation')
+    end
 
-  it do
-    is_expected.to \
-      have_one(:school_cancellation)
-        .dependent(:destroy)
-        .class_name('Bookings::PlacementRequest::Cancellation')
+    it do
+      is_expected.to \
+        have_one(:school_cancellation)
+          .dependent(:destroy)
+          .class_name('Bookings::PlacementRequest::Cancellation')
+    end
+
+    it { is_expected.to belong_to(:school).class_name('Bookings::School').with_foreign_key(:bookings_school_id) }
+    it { is_expected.to have_one(:booking).class_name('Bookings::Booking').with_foreign_key(:bookings_placement_request_id) }
+    it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
   end
 
   it { is_expected.to respond_to :sent_at }

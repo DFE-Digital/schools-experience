@@ -1,5 +1,4 @@
-<% # TODO SE-1128 reorganise the layout to match the proto type %>
-<div class="school-request" data-urn="<%= placement_request.urn %>">
+<div class="placement-request" data-placement-request="<%= placement_request.id %>" data-urn="<%= placement_request.urn %>">
   <h2 class="govuk-heading-m">Request from <%= placement_request.candidate.full_name %></h2>
 
   <dl class="placement-details govuk-summary-list">
@@ -8,7 +7,7 @@
         Dates requested
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= placement_request.dates_requested %>
+        <%= placement_request.availability %>
       </dd>
     </div>
 
@@ -36,6 +35,7 @@
 
           <div class="govuk-details__text">
             <dl class="govuk-summary-list govuk-summary-list--no-border govuk-body govuk-!-font-size-16">
+
               <div class="address govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                   Address
@@ -110,5 +110,4 @@
   </dl>
 
   <%= link_to "Open request", schools_placement_request_path(placement_request), class: 'govuk-button' %>
-
 </div>

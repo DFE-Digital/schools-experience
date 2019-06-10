@@ -5,15 +5,23 @@ class Notify
 
   class RetryableError < ArgumentError; end
 
+  # rubocop:disable Style/ClassVars
+  # Rubocop complains about classvars as they're inherited by subclasses,
+  # in this case that is the behaviour we want.
   class << self
     def notification_class
-      Thread.current[:notification_class] || Notifications::Client
+      if class_variable_defined?(:@@notification_class) && @@notification_class
+        @@notification_class
+      else
+        Notifications::Client
+      end
     end
 
     def notification_class=(klass)
-      Thread.current[:notification_class] = klass
+      @@notification_class = klass
     end
   end
+  # rubocop:enable Style/ClassVars
 
   def initialize(to:)
     self.to = to

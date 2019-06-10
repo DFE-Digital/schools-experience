@@ -1,0 +1,24 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1>Add more booking details</h1>
+
+    <h3>Enter contact and location details</h3>
+
+    <p>
+      This is the person the candidate will need to report to on the day of
+      their school experience.
+    </p>
+
+    <%= form_for @add_more_details, url: schools_placement_request_acceptance_add_more_details_path, method: 'post' do |form| %>
+      <%= form.text_field :contact_name, required: true %>
+      <%= form.phone_field :contact_number, required: true %>
+      <%= form.email_field :contact_email, required: true %>
+      <%= form.text_area :location, required: true %>
+      <%= form.submit 'Continue' %>
+    <% end %>
+
+    <div>
+      <%= link_to 'Back to request', schools_placement_request_path(@placement_request.id), class: 'govuk-back-link' %>
+    </div>
+  </div>
+</div>

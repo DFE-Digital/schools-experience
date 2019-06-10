@@ -1,0 +1,32 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1>Review and send confirmation email to candidate</h1>
+
+    <p>
+      Review the following email which will be sent to the candidate. You can add extra details.
+    </p>
+
+    <%= form_for @review_and_send_email, url: schools_placement_request_acceptance_review_and_send_email_path, method: 'post' do |form| %>
+      <div class="email-preview">
+
+        <p>Dear <%= @placement_request.candidate.firstname %> <%= @placement_request.candidate.lastname %>,</p>
+
+        <p>Here are the details about your school experience at <%= @placement_request.school.name %>.</p>
+
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_details' %>
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_contacts' %>
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_details' %>
+
+        <section id="extra-details-from-the-school">
+          <h3>Extra details from the school</h3>
+
+          <%= form.text_area :candidate_instructions %>
+        </section>
+
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/help_and_support' %>
+
+      </div>
+      <%= form.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

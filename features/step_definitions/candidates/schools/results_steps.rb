@@ -86,7 +86,7 @@ Then("it should have checkboxes for all subjects") do
   end
 end
 
-When("I select {string} in the {string} select box") do |option, label_text|
+When("I select {string} in/from the {string} select box") do |option, label_text|
   select(option, from: label_text)
   delay_page_load
 end

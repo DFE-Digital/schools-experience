@@ -5,37 +5,36 @@ Feature: Upcoming placement requests
     I want to be able see a list of upcoming requests
 
     Background:
-        Given I am logged in as a DfE user
+        Given the subjects 'Biology' and 'Chemistry' exist
+        And I am logged in as a DfE user
 
     Scenario: Page title
         Given I am on the 'upcoming requests' page
         Then the page title should be 'Upcoming placement requests'
 
     Scenario: Back link
-        Given there are some upcoming requests
+        Given there are some placement requests
         When I am on the 'upcoming requests' page
         Then I should see a 'Back' link to the 'schools dashboard'
 
     Scenario: List presence
-        Given there are some upcoming requests
+        Given there are some placement requests
         When I am on the 'upcoming requests' page
-        Then I should see all the upcoming requests listed
+        Then I should see all the placement requests listed
 
     Scenario: List contents
-        Given there are some upcoming requests
+        Given there are some placement requests
         When I am on the 'upcoming requests' page
         Then the placement listings should have the following values:
-			| Heading          | Value                             |
-            | Dates requested  | Any time during July 2019         |
-            | Request received | 01 January 2019                   |
-            | Contact details  | View contact details              |
-            | Teaching stage   | I've applied for teacher training |
-            | Teaching subject | Maths                             |
-            | Status           | New                               |
+			| Heading          | Value                 |
+            | Dates requested  | Every second Thursday |
+            | Contact details  | View contact details  |
+            | Teaching stage   | It’s just an idea     |
+            | Teaching subject | Biology               |
 
     @javascript
     Scenario: Expanding the contact details
-        Given there are some upcoming requests
+        Given there are some placement requests
         And I am on the 'upcoming requests' page
         When I click 'View contact details' on the first request
         Then I should see the following contact details:
@@ -45,11 +44,11 @@ Feature: Upcoming placement requests
             | Email address       | first@thisaddress.com           |
 
     Scenario: Open request buttons
-        Given there are some upcoming requests
+        Given there are some placement requests
         When I am on the 'upcoming requests' page
         Then every request should contain a link to view more details
 
     Scenario: List item titles
-        Given there are some upcoming requests
+        Given there are some placement requests
         When I am on the 'upcoming requests' page
         Then every request should contain a title starting with 'Request from'

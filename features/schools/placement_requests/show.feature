@@ -9,12 +9,12 @@ Feature: Viewing a placement request
 
     Scenario: Back link
         Given there is at least one placement request
-        When I am on a placement request page
+        When I am on the placement request page
         Then I should see a 'Back' link to the 'upcoming requests' page
 
     Scenario: Personal details
         Given there is at least one placement request
-        When I am on a placement request page
+        When I am on the placement request page
         Then I should see a 'Personal details' section with the following values:
             | Heading             | Value                                                                |
             | Address             | First Line, Second Line, Third Line, Manchester, Manchester, MA1 1AM |
@@ -23,17 +23,15 @@ Feature: Viewing a placement request
 
     Scenario: Request details
         Given there is at least one placement request
-        When I am on a placement request page
+        When I am on the placement request page
         Then I should see a 'Request details' section with the following values:
-            | Heading          | Value                         |
-            | Dates requested  | Any time during November 2019 |
-            | Request received | 08 February 2094              |
-            | DBS certificate  | Yes                           |
-            | Status           | New                           |
+            | Heading         | Value                         |
+            | Dates requested | Any time during November 2019 |
+            | DBS certificate | Yes                           |
 
     Scenario: Candidate details
         Given there is at least one placement request
-        When I am on a placement request page
+        When I am on the placement request page
         Then I should see a 'Candidate details' section with the following values:
             | Heading                                 | Value                                                                    |
             | What they want out of school experience | To learn different teaching styles and what life is like in a classroom. |
@@ -44,13 +42,13 @@ Feature: Viewing a placement request
 
     Scenario: Buttons
         Given there is at least one placement request
-        When I am on a placement request page
+        When I am on the placement request page
         Then there should be the following buttons:
             | Accept request |
             | Reject request |
 
     Scenario: Accepting a request
         Given there is at least one placement request
-        And I am on a placement request page
+        And I am on the placement request page
         When I click the 'Accept request' button
-        Then I should be on the accept placement request page
+        Then I should be on the confirm booking page
