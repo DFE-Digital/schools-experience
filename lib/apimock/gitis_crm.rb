@@ -1,16 +1,7 @@
 module Apimock
   class GitisCrm
-    attr_reader :client_id, :client_secret, :auth_tenant_id, :service_url
-
-    def initialize(client_id, client_secret, auth_tenant_id, service_url)
-      @client_id = client_id
-      @client_secret = client_secret
-      @auth_tenant_id = auth_tenant_id
-      @service_url = service_url
-    end
-
-    def stub_contact_request(uuid, return_params = {})
-      stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})?$top=1").
+    def stub_contact_request(uuid, params = {})
+      stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})").
         with(headers: get_headers).
         to_return(
           status: 200,
@@ -20,50 +11,12 @@ module Apimock
           body: contact_data.merge(
             '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
             'contactid' => uuid
-          ).merge(return_params.stringify_keys).to_json
-        )
-    end
-
-    def stub_multiple_contact_request(uuids, return_params = {})
-      uuidfilter = uuids.map { |id| "contactid eq '#{id}'" }.join(' or ')
-
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=#{uuids.length}&$filter=#{uuidfilter}").
-        with(headers: get_headers).
-        to_return(
-          status: 200,
-          headers: {
-            'Content-Type' => 'application/json; odata.metadata=minimal',
-          },
-          body: {
-            '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
-            'value' => uuids.map { |uuid|
-              contact_data.merge('contactid' => uuid).
-                merge(return_params.stringify_keys)
-            }
-          }.to_json
-        )
-    end
-
-    def stub_contact_request_by_email(email, return_params = {})
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1&$filter=emailaddress1 eq '#{email}' or emailaddress2 eq '#{email}' or emailaddress3 eq '#{email}'").
-        with(headers: get_headers).
-        to_return(
-          status: 200,
-          headers: {
-            'Content-Type' => 'application/json; odata.metadata=minimal',
-          },
-          body: {
-            '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
-            'value' => [
-              contact_data.merge('emailaddress1' => email). \
-                merge(return_params.stringify_keys)
-            ]
-          }.to_json
+          ).merge(params.stringify_keys).to_json
         )
     end
 
     def stub_contact_listing_request(uuid = SecureRandom.uuid)
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=3").
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1").
         with(headers: get_headers).
         to_return(
           status: 200,
@@ -77,15 +30,15 @@ module Apimock
         )
     end
 
-    def stub_access_token(id: client_id, secret: client_secret)
+    def stub_access_token
       stub_request(:post, "#{auth_url}/#{auth_tenant_id}/oauth2/token").
         with(
           headers: { 'Accept' => 'application/json' },
           body: {
             "grant_type" => "client_credentials",
             "scope" => "",
-            "client_id" => id,
-            "client_secret" => secret,
+            "client_id" => client_id,
+            "client_secret" => client_secret,
             "resource" => service_url,
           }.to_query
         ).
@@ -101,50 +54,25 @@ module Apimock
         )
     end
 
-    def stub_invalid_access_token(id: client_id, secret: 'invalid')
-      stub_request(:post, "#{auth_url}/#{auth_tenant_id}/oauth2/token").
-        with(
-          headers: { 'Accept' => 'application/json' },
-          body: {
-            "grant_type" => "client_credentials",
-            "scope" => "",
-            "client_id" => id,
-            "client_secret" => secret,
-            "resource" => service_url,
-          }.to_query
-        ).
-        to_return(
-          status: 401,
-          headers: { 'Content-Type' => 'application/json' },
-          body: {
-            "error" => "invalid_client",
-            "error_description" => "AADSTS7000215: Invalid client secret is provided."
-          }.to_json
-        )
-    end
-
-    def stub_create_contact_request(params, return_uuid = SecureRandom.uuid)
+    def stub_create_contact_request(params)
       stub_request(:post, "#{service_url}#{endpoint}/contacts").
-        with(headers: post_headers, body: params.stringify_keys.to_json).
-        to_return(
-          status: 204,
-          headers: {
-            'content-type' => 'application/json',
-            'odata-entityid' => "#{service_url}#{endpoint}/contacts(#{return_uuid})"
-          },
-          body: ''
-        )
-    end
-
-    def stub_update_contact_request(params, uuid)
-      stub_request(:patch, "#{service_url}#{endpoint}/contacts(#{uuid})").
         with(headers: post_headers, body: params.to_json).
         to_return(
           status: 204,
           headers: {
             'content-type' => 'application/json',
-            'odata-entityid' => "#{service_url}#{endpoint}/contacts(#{uuid})"
+            'odata-entityid' => "#{service_url}#{endpoint}/contacts(#{SecureRandom.uuid})"
           },
+          body: ''
+        )
+    end
+
+    def stub_update_contact_request(uuid, params)
+      stub_request(:patch, "#{service_url}#{endpoint}/contacts(#{uuid})").
+        with(headers: post_headers, body: params.to_json).
+        to_return(
+          status: 204,
+          headers: { 'content-type' => 'application/json' },
           body: ''
         )
     end
@@ -234,6 +162,22 @@ module Apimock
       "https://login.microsoftonline.com"
     end
 
+    def service_url
+      ENV.fetch('CRM_SERVICE_URL')
+    end
+
+    def client_id
+      ENV.fetch('CRM_CLIENT_ID')
+    end
+
+    def client_secret
+      ENV.fetch('CRM_CLIENT_SECRET')
+    end
+
+    def auth_tenant_id
+      ENV.fetch('CRM_AUTH_TENANT_ID')
+    end
+
     def endpoint
       "/api/data/v9.1"
     end
@@ -241,7 +185,7 @@ module Apimock
     def get_headers
       {
         'Accept' => 'application/json',
-        'Authorization' => /\ABearer \w+\.\w+\.\w+\z/,
+        'Authorization' => /Bearer \w+\.\w+\.\w/,
         "OData-MaxVersion" => "4.0",
         "OData-Version" => "4.0",
       }
@@ -250,7 +194,7 @@ module Apimock
     def post_headers
       {
         'Accept' => 'application/json',
-        'Authorization' => /\ABearer \w+\.\w+\.\w+\z/,
+        'Authorization' => /Bearer \w+\.\w+\.\w/,
         "OData-MaxVersion" => "4.0",
         "OData-Version" => "4.0",
         "Content-Type" => "application/json"

@@ -66,6 +66,4 @@ Rails.application.configure do
   config.x.oidc_client_id = 'se-test'
   config.x.oidc_client_secret = 'abc123'
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
-
-  config.x.fake_crm = false
 end

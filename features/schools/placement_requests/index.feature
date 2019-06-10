@@ -43,7 +43,7 @@ Feature: Viewing all placement requests
 			      | Heading             | Value                           |
             | Address             | First Line, Manchester, MA1 1AM |
             | UK telephone number | 07123 456789                    |
-            | Email address       | second@thisaddress.com          |
+            | Email address       | first@thisaddress.com           |
 
     Scenario: Open request buttons
         Given there are some placement requests
