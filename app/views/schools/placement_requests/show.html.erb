@@ -9,12 +9,11 @@
     <dl class="placement-details govuk-summary-list">
       <div class="date-requested govuk-summary-list__row">
 
-        <%# FIXME if it's got a date instead of availability show that instead %>
         <dt class="govuk-summary-list__key">
           Dates requested
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.availability %>
+          <%= @placement_request.dates_requested %>
         </dd>
       </div>
 
@@ -131,16 +130,18 @@
   </section>
 
   <div class="request-options">
-    <div class="accept-or-reject">
-      <div class="govuk-se-button-container">
-        <%= link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request.id), class: 'govuk-button' %>
-      </div>
-      <div class="govuk-se-button-container">
-        <div>
-          <%= link_to "Reject request", new_schools_placement_request_reject_path(@placement_request.urn), class: 'govuk-button govuk-button--secondary' %>
+    <% if @placement_request.open? %>
+      <div class="accept-or-reject">
+        <div class="govuk-se-button-container">
+          <%= link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request), class: 'govuk-button' %>
+        </div>
+        <div class="govuk-se-button-container">
+          <div>
+            <%= link_to "Reject request", new_schools_placement_request_cancellation_path(@placement_request), class: 'govuk-button govuk-button--secondary' %>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
     <div>
       <%= link_to 'Your upcoming requests', schools_upcoming_requests_path, class: 'govuk-link' %>
     </div>

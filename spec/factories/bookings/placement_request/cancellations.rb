@@ -3,5 +3,9 @@ FactoryBot.define do
     association :placement_request
     reason { "MyText" }
     cancelled_by { 'candidate' }
+
+    trait :sent do
+      after :build, &:sent!
+    end
   end
 end

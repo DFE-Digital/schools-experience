@@ -9,6 +9,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
+
 ActiveRecord::Schema.define(version: 2019_06_07_121714) do
 
   # These are extensions that must be enabled in order to support this database
@@ -28,8 +29,8 @@ ActiveRecord::Schema.define(version: 2019_06_07_121714) do
     t.string "contact_email"
     t.text "location"
     t.string "candidate_instructions"
-    t.datetime "accepted_at"
     t.integer "duration", default: 1, null: false
+    t.datetime "accepted_at"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
     t.index ["bookings_subject_id"], name: "index_bookings_bookings_on_bookings_subject_id"
@@ -68,6 +69,8 @@ ActiveRecord::Schema.define(version: 2019_06_07_121714) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "cancelled_by", null: false
+    t.datetime "sent_at"
+    t.text "extra_details"
     t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id"
   end
 

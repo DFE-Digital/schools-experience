@@ -19,21 +19,52 @@ describe Bookings::PlacementRequest, type: :model do
 
   it { is_expected.to have_secure_token }
 
-  it do
-    is_expected.to \
-      have_one(:candidate_cancellation)
-        .dependent(:destroy)
-        .class_name('Bookings::PlacementRequest::Cancellation')
+  context 'relationships' do
+    it do
+      is_expected.to \
+        have_one(:candidate_cancellation)
+          .dependent(:destroy)
+          .class_name('Bookings::PlacementRequest::Cancellation')
+    end
+
+    it do
+      is_expected.to \
+        have_one(:school_cancellation)
+          .dependent(:destroy)
+          .class_name('Bookings::PlacementRequest::Cancellation')
+    end
+
+    it { is_expected.to belong_to(:school).class_name('Bookings::School').with_foreign_key(:bookings_school_id) }
+    it { is_expected.to have_one(:booking).class_name('Bookings::Booking').with_foreign_key(:bookings_placement_request_id) }
+    it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
   end
 
   it { is_expected.to respond_to :sent_at }
 
   it_behaves_like 'a background check'
 
-  context 'relationships' do
-    it { is_expected.to belong_to(:school).class_name('Bookings::School').with_foreign_key(:bookings_school_id) }
-    it { is_expected.to have_one(:booking).class_name('Bookings::Booking').with_foreign_key(:bookings_placement_request_id) }
-    it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
+  context '.open' do
+    let :school do
+      FactoryBot.create :bookings_school, :with_subjects
+    end
+
+    let! :placement_request_closed_by_candidate do
+      FactoryBot.create :placement_request, :cancelled, school: school
+    end
+
+    let! :placement_request_closed_by_school do
+      FactoryBot.create :placement_request, :cancelled_by_school, school: school
+    end
+
+    let! :placement_request_open do
+      FactoryBot.create :placement_request, school: school
+    end
+
+    it 'only returns the open placement requests' do
+      expect(described_class.open).to include placement_request_open
+      expect(described_class.open).not_to include placement_request_closed_by_candidate
+      expect(described_class.open).not_to include placement_request_closed_by_school
+    end
   end
 
   context '.create_from_registration_session' do
@@ -311,10 +342,20 @@ describe Bookings::PlacementRequest, type: :model do
 
   context '#closed?' do
     context 'when cancelled' do
-      subject { FactoryBot.create :placement_request, :cancelled }
+      context 'when cancelled by candidate' do
+        subject { FactoryBot.create :placement_request, :cancelled }
 
-      it 'returns true' do
-        expect(subject).to be_closed
+        it 'returns true' do
+          expect(subject).to be_closed
+        end
+      end
+
+      context 'when cancelled by school' do
+        subject { FactoryBot.create :placement_request, :cancelled_by_school }
+
+        it 'returns true' do
+          expect(subject).to be_closed
+        end
       end
     end
 
@@ -334,6 +375,52 @@ describe Bookings::PlacementRequest, type: :model do
 
     it 'returns a new cancellation with cancelled_by set to "candidate"' do
       expect(cancellation.cancelled_by).to eq 'candidate'
+    end
+  end
+
+  context 'build_school_cancellation' do
+    let :cancellation do
+      described_class.new.build_school_cancellation
+    end
+
+    it 'returns a new cancellation with cancelled_by set to "school"' do
+      expect(cancellation.cancelled_by).to eq 'school'
+    end
+  end
+
+  context '#status' do
+    context 'default' do
+      subject { FactoryBot.create :placement_request }
+
+      it "returns 'pending'" do
+        expect(subject.status).to eq 'New'
+      end
+    end
+
+    context 'when cancelled?' do
+      subject { FactoryBot.create :placement_request, :cancelled }
+
+      it "returns 'cancelled'" do
+        expect(subject.status).to eq 'Cancelled'
+      end
+    end
+  end
+
+  context '#dbs' do
+    context 'when has_dbs_check' do
+      subject { FactoryBot.create :placement_request, has_dbs_check: true }
+
+      it "returns 'Yes'" do
+        expect(subject.dbs).to eq 'Yes'
+      end
+    end
+
+    context 'when not has_dbs_check' do
+      subject { FactoryBot.create :placement_request, has_dbs_check: false }
+
+      it "returns 'No'" do
+        expect(subject.dbs).to eq 'No'
+      end
     end
   end
 end

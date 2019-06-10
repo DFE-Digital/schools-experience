@@ -74,6 +74,11 @@ class Bookings::School < ApplicationRecord
     foreign_key: :bookings_school_id,
     dependent: :destroy
 
+  has_many :placement_requests,
+    class_name: 'Bookings::PlacementRequest',
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
+
   scope :enabled, -> { where(enabled: true) }
 
   scope :that_provide, ->(subject_ids) do
@@ -146,6 +151,10 @@ class Bookings::School < ApplicationRecord
 
   def admin_contact_name
     profile ? profile.admin_contact_full_name : contact_email
+  end
+
+  def admin_contact_phone
+    profile&.admin_contact_phone
   end
 
 private

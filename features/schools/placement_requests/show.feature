@@ -5,7 +5,7 @@ Feature: Viewing a placement request
 
     Background:
         Given I am logged in as a DfE user
-        And the subjects 'Biology' and 'Chemistry' exist
+        And the school has subjects
 
     Scenario: Back link
         Given there is at least one placement request
@@ -25,20 +25,20 @@ Feature: Viewing a placement request
         Given there is at least one placement request
         When I am on the placement request page
         Then I should see a 'Request details' section with the following values:
-            | Heading         | Value                 |
-            | Dates requested | Every second Thursday |
-            | DBS certificate | Yes                   |
+            | Heading         | Value                         |
+            | Dates requested | Any time during November 2019 |
+            | DBS certificate | Yes                           |
 
     Scenario: Candidate details
         Given there is at least one placement request
         When I am on the placement request page
         Then I should see a 'Candidate details' section with the following values:
-            | Heading                                 | Value                  |
-            | What they want out of school experience | I want to be a teacher |
-            | Degree stage                            | Final year             |
-            | Degree subject                          | Bioscience             |
-            | Teaching stage                          | I want to be a teacher |
-            | Preferred subjects                      | Biology                |
+            | Heading                                 | Value                                                                    |
+            | What they want out of school experience | To learn different teaching styles and what life is like in a classroom. |
+            | Degree stage                            | Final year                                                               |
+            | Degree subject                          | Law                                                                      |
+            | Teaching stage                          | I’ve applied for teacher training                                        |
+            | Preferred subjects                      | Maths, Physics                                                           |
 
     Scenario: Buttons
         Given there is at least one placement request

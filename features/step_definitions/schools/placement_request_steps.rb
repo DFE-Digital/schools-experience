@@ -1,16 +1,41 @@
-Given("the subjects {string} and {string} exist") do |subj1, subj2|
-  [subj1, subj2].each { |s| FactoryBot.create(:bookings_subject, name: s) }
+Given("the school has subjects") do
+  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Maths')
+  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Physics')
 end
 
 Given("there are some upcoming requests") do
+  step 'there are some placement requests'
 end
 
 Given("there are some placement requests") do
-  @placement_requests = FactoryBot.create_list(:bookings_placement_request, 3, school: @school)
+  @placement_requests = FactoryBot.create_list \
+    :placement_request,
+    5,
+    school: @school,
+    created_at: '2094-01-01',
+    teaching_stage: 'I’ve applied for teacher training',
+    availability: 'Any time during July 2094'
 end
 
 Given("there is at least one placement request") do
-  @placement_request = FactoryBot.create(:bookings_placement_request, school: @school)
+  @placement_request = FactoryBot.create \
+    :placement_request,
+    school: @school,
+    created_at: '2094-02-08',
+    availability: 'Any time during November 2019',
+    teaching_stage: 'I’ve applied for teacher training',
+    has_dbs_check: true,
+    objectives: 'To learn different teaching styles and what life is like in a classroom.',
+    degree_stage: 'Final year',
+    degree_subject: 'Law'
+end
+
+When("I am on a placement request page") do
+  visit path_for 'placement request', placement_request: @placement_request
+end
+
+Given("the subjects {string} and {string} exist") do |subj1, subj2|
+  [subj1, subj2].each { |s| FactoryBot.create(:bookings_subject, name: s) }
 end
 
 Given("I am on the placement request page") do

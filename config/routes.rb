@@ -24,7 +24,9 @@ Rails.application.routes.draw do
 
       if Rails.application.config.x.phase >= 3
         resources :placement_requests do
-
+          resource :cancellation, only: %i(show new create edit update), controller: 'placement_requests/cancellations' do
+            resource :notification_delivery, only: %i(show create), controller: 'placement_requests/cancellations/notification_deliveries'
+          end
           namespace :acceptance do
             resource :confirm_booking,
               only: [:new, :create],
@@ -39,8 +41,6 @@ Rails.application.routes.draw do
               only: [:new, :create],
               controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
           end
-
-          resource :reject, only: [:new, :create], controller: 'placement_requests/reject'
           collection do
             resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
           end

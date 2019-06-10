@@ -4,8 +4,8 @@ Feature: Viewing all placement requests
     I want to be able see a complete list of placement requests
 
     Background:
-        Given the subjects 'Biology' and 'Chemistry' exist
-        And I am logged in as a DfE user
+        Given I am logged in as a DfE user
+        And the school has subjects
 
     Scenario: Page title
         Given I am on the 'placement requests' page
@@ -25,11 +25,14 @@ Feature: Viewing all placement requests
         Given there are some placement requests
         When I am on the 'placement requests' page
         Then the placement listings should have the following values:
-			| Heading          | Value                 |
-            | Dates requested  | Every second Thursday |
-            | Contact details  | View contact details  |
-            | Teaching stage   | It’s just an idea     |
-            | Teaching subject | Biology               |
+			      | Heading                        | Value                             |
+            | Dates requested                | Any time during July 2094         |
+            | Request received               | 01 January 2094                   |
+            | Contact details                | View contact details              |
+            | Teaching stage                 | I’ve applied for teacher training |
+            | Teaching subject first choice  | Maths                             |
+            | Teaching subject second choice | Physics                           |
+            | Status                         | New                               |
 
     @javascript
     Scenario: Expanding the contact details
@@ -37,7 +40,7 @@ Feature: Viewing all placement requests
         And I am on the 'placement requests' page
         When I click 'View contact details' on the first request
         Then I should see the following contact details:
-			| Heading             | Value                           |
+			      | Heading             | Value                           |
             | Address             | First Line, Manchester, MA1 1AM |
             | UK telephone number | 07123 456789                    |
             | Email address       | second@thisaddress.com          |

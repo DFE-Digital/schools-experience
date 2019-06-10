@@ -164,6 +164,14 @@ describe Bookings::School, type: :model do
     specify do
       is_expected.to have_one(:profile).class_name("Bookings::Profile")
     end
+
+    specify do
+      is_expected.to \
+        have_many(:placement_requests)
+          .with_foreign_key(:bookings_school_id)
+          .class_name('Bookings::PlacementRequest')
+          .dependent(:destroy)
+    end
   end
 
   describe 'Paramterisation' do
