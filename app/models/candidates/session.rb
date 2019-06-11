@@ -64,6 +64,6 @@ private
   end
 
   def signin_url
-    Rails.application.routes.url_helpers.candidates_signin_url(token.token)
+    Rails.application.routes.url_helpers.candidates_signin_confirmation_url(token.token)
   end
 end

@@ -80,7 +80,9 @@ RSpec.describe Candidates::Session, type: :model do
 
         token = Candidates::SessionToken.reorder(:id).last.token
         expect(delivery[:personalisation][:confirmation_link]).to \
-          match(Rails.application.routes.url_helpers.candidates_signin_url(token))
+          match(%r{/signin/#{token}\z})
+        expect(delivery[:personalisation][:confirmation_link]).to \
+          match(Rails.application.routes.url_helpers.candidates_signin_confirmation_url(token))
       end
     end
 
