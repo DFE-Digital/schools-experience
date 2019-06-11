@@ -13,17 +13,17 @@ RSpec.describe "The GITIS CRM Api" do
 
   it "can read the from the CRM", :read do
     # Read the first contact
-    resp = crm_get("/contacts", "$top" => "1")
+    resp = crm_get("/contacts", "$top" => "3")
 
     expect(resp.status).to eql(200)
     expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
 
     data = JSON.parse(resp.body)
-    expect(data['value'].length).to eql(1)
+    expect(data['value'].length).to eql(3)
     firstcontact = data['value'][0]
     expect(firstcontact['contactid']).not_to be_blank
 
-    # Read the contact by Id
+    # Read a single contact by Id
     resp = crm_get("/contacts(#{firstcontact['contactid']})")
 
     expect(resp.status).to eql(200)
@@ -31,6 +31,13 @@ RSpec.describe "The GITIS CRM Api" do
 
     contact = JSON.parse(resp.body)
     expect(contact['contactid']).to eql(firstcontact['contactid'])
+
+    # Read multiple contacts in a single query
+    resp = crm_get("/contacts?$top=30&$filter=contactid eq '#{data['value'][0]['contactid']}' or contactid eq '#{data['value'][1]['contactid']}' or contactid eq '#{data['value'][2]['contactid']}'")
+    contacts = JSON.parse(resp.body)
+
+    expect(contacts['value'].length).to eql(3)
+    expect(contacts['value'].pluck('contactid')).to eql(data['value'].pluck('contactid'))
   end
 
   it "can write to the CRM", :write do
