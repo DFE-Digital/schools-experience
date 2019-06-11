@@ -20,7 +20,7 @@
         <%= booking.date.to_formatted_s(:govuk) %>
       </td>
       <td class="govuk-table__cell">
-        <%= link_to "Open", schools_booking_path('abc123') %>
+        <%= link_to "Open", schools_booking_path(booking) %>
         <%= link_to 'Update', '#' %>
         <%= link_to 'Cancel', '#' %>
       </td>
