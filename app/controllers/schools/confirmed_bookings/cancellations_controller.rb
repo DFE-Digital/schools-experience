@@ -2,6 +2,7 @@ module Schools
   module ConfirmedBookings
     class CancellationsController < Schools::BaseController
       before_action :set_booking_and_placement_request
+      before_action :ensure_booking_is_open
 
       def show
         @cancellation = @placement_request.school_cancellation
@@ -51,6 +52,12 @@ module Schools
       def cancellation_params
         params.require(:bookings_placement_request_cancellation).permit \
           :reason, :extra_details
+      end
+
+      def ensure_booking_is_open
+        if @placement_request.closed?
+          redirect_to schools_booking_path @booking
+        end
       end
     end
   end
