@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::PlacementRequests::CancellationsController, type: :request do
+  include_context 'stubbed out Gitis'
+
   let :notify_school_request_cancellation do
     double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
   end
