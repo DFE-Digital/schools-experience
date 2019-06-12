@@ -1,6 +1,5 @@
-class Candidates::SessionsController < Candidates::DashboardBaseController
-  include GitisAccess
-  skip_before_action :authenticate_user!
+class Candidates::SessionsController < ApplicationController
+  include GitisAuthentication
 
   def new
     @candidates_session = Candidates::Session.new(gitis_crm)

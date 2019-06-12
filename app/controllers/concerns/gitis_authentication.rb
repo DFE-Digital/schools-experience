@@ -1,6 +1,6 @@
 module GitisAuthentication
   extend ActiveSupport::Concern
-  extend GitisAccess
+  include GitisAccess
 
   class UnauthorizedCandidate < RuntimeError; end
   class InvalidContact < RuntimeError; end
