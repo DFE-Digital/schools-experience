@@ -175,35 +175,18 @@ describe Candidates::Registrations::RegistrationSession do
   end
 
   context '#flag_as_completed!' do
-    context 'when not completed' do
-      let :registration_session do
-        described_class.new({})
-      end
+    include_context 'Stubbed candidates school'
 
-      it 'raises an error' do
-        expect { registration_session.flag_as_completed! }.to raise_error \
-          described_class::NotCompletedError
-      end
-
-      it "doesn't mark the session as completed" do
-        expect(registration_session).not_to be_completed
-      end
+    let :registration_session do
+      FactoryBot.build :registration_session
     end
 
-    context 'when completed' do
-      include_context 'Stubbed candidates school'
+    before do
+      registration_session.flag_as_completed!
+    end
 
-      let :registration_session do
-        FactoryBot.build :registration_session
-      end
-
-      before do
-        registration_session.flag_as_completed!
-      end
-
-      it 'marks the registration_session as completed' do
-        expect(registration_session).to be_completed
-      end
+    it 'marks the registration_session as completed' do
+      expect(registration_session).to be_completed
     end
   end
 end
