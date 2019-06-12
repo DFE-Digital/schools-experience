@@ -32,3 +32,13 @@ end
 Then("I will see the Dashboard page") do
   expect(page.current_path).to eql(candidates_dashboard_path)
 end
+
+Given("I use an expired signin link") do
+  @token = FactoryBot.create(:candidate_session_token, :auto_expired)
+  visit candidates_signin_confirmation_path(@token)
+end
+
+Then("I will see the link expired page") do
+  expect(page.current_path).to eql(candidates_signin_confirmation_path(@token))
+  expect(page.body).to match(/Sign in link has expired/)
+end
