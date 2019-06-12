@@ -25,9 +25,9 @@ class Candidates::SessionToken < ApplicationRecord
   end
 
   def expire!
-    return if expired_at?
+    return if expired_at? && expired_at <= Time.zone.now
 
-    update(expired_at: Time.zone.now)
+    update!(expired_at: Time.zone.now)
   end
 
   def invalidate_other_tokens!
