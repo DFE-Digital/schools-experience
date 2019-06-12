@@ -1,6 +1,6 @@
 class Candidates::Session
   include ActiveModel::Model
-  include ActiveModelAttributes
+  include ActiveModel::Attributes
   include ActiveRecord::AttributeAssignment
 
   attr_reader :contact, :candidate, :token
@@ -16,9 +16,9 @@ class Candidates::Session
   validates :lastname, presence: true
   validates :date_of_birth, presence: true
 
-  def initialize(gitis, attrs = {})
+  def initialize(gitis, *args)
     @gitis = gitis
-    assign_attributes attrs
+    super(*args)
   end
 
   def create_signin_token
