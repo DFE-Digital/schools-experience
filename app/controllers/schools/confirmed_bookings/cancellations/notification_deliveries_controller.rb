@@ -27,15 +27,15 @@ module Schools
         end
 
         def notify_candidate(cancellation)
-        # NotifyEmail::CandidateRequestRejection.new(
-        #   to: cancellation.candidate_email,
-        #   school_name: cancellation.school_name,
-        #   candidate_name: cancellation.candidate_name,
-        #   rejection_reasons: cancellation.reason,
-        #   extra_details: cancellation.extra_details,
-        #   dates_requested: cancellation.dates_requested,
-        #   school_search_url: new_candidates_school_search_url
-        # ).despatch_later!
+          NotifyEmail::CandidateBookingSchoolCancelsBooking.new(
+            to: cancellation.candidate_email,
+            school_name: cancellation.school_name,
+            candidate_name: cancellation.candidate_name,
+            rejection_reasons: cancellation.reason,
+            extra_details: cancellation.extra_details,
+            dates_requested: cancellation.dates_requested,
+            school_search_url: new_candidates_school_search_url
+          ).despatch_later!
         end
       end
     end
