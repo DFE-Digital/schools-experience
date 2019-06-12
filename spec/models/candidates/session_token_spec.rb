@@ -12,6 +12,17 @@ RSpec.describe Candidates::SessionToken, type: :model do
     it { is_expected.to belong_to :candidate }
   end
 
+  describe '.unexpired' do
+    let!(:valid) { create(:candidate_session_token) }
+    let!(:expired) { create(:candidate_session_token, expired_at: 5.minutes.ago) }
+
+    subject { described_class.unexpired.to_a }
+
+    it "should only return the valid token" do
+      is_expected.to eq([valid])
+    end
+  end
+
   describe '.valid' do
     let!(:valid) { create(:candidate_session_token) }
     let!(:expired) { create(:candidate_session_token, expired_at: 5.minutes.ago) }
@@ -68,7 +79,19 @@ RSpec.describe Candidates::SessionToken, type: :model do
     end
   end
 
-  describe '#invalidate_other_tokens!' do
-    it('should invalidate other login tokens')
+  describe '.expire_all!' do
+    let!(:first) { create(:candidate_session_token) }
+    let!(:second) { create(:candidate_session_token, candidate: first.candidate) }
+    let!(:third) { create(:candidate_session_token, :expired, candidate: first.candidate) }
+
+    before { described_class.expire_all! }
+
+    it 'will invalidate other login tokens from same candidate' do
+      expect(second.reload.expired?).to be true
+    end
+
+    it 'will not expire already expired tokens' do
+      expect(third.reload.expired_at).to be < 3.minutes.ago
+    end
   end
 end

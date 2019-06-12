@@ -37,4 +37,25 @@ RSpec.describe Bookings::Candidate, type: :model do
       expect(candidate.session_tokens.count).to eql(1)
     end
   end
+
+  describe '.expire_session_tokens!' do
+    let!(:first) { create(:candidate_session_token) }
+    let!(:second) { create(:candidate_session_token, candidate: first.candidate) }
+    let!(:third) { create(:candidate_session_token, :expired, candidate: first.candidate) }
+    let!(:another) { create(:candidate_session_token) }
+
+    before { first.candidate.expire_session_tokens! }
+
+    it 'will invalidate other login tokens from same candidate' do
+      expect(second.reload.expired?).to be true
+    end
+
+    it 'will not expire already expired tokens' do
+      expect(third.reload.expired_at).to be < 3.minutes.ago
+    end
+
+    it "will not expire other candidates tokens" do
+      expect(another.reload.expired?).to be false
+    end
+  end
 end

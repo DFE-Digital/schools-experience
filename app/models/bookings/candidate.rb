@@ -10,4 +10,8 @@ class Bookings::Candidate < ApplicationRecord
   def generate_session_token!
     session_tokens.create!
   end
+
+  def expire_session_tokens!
+    session_tokens.expire_all!
+  end
 end

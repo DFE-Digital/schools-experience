@@ -4,10 +4,19 @@ class Candidates::SessionToken < ApplicationRecord
   belongs_to :candidate, class_name: 'Bookings::Candidate'
   has_secure_token
 
-  scope :valid, -> do
+  scope :unexpired, -> do
     where(arel_table[:expired_at].gt(Time.zone.now)).
-      or(where(expired_at: nil)).
-      where(arel_table[:created_at].gt(AUTO_EXPIRE.ago))
+      or(where(expired_at: nil))
+  end
+
+  scope :valid, -> do
+    unexpired.where(arel_table[:created_at].gt(AUTO_EXPIRE.ago))
+  end
+
+  class << self
+    def expire_all!
+      unexpired.update_all(expired_at: Time.zone.now)
+    end
   end
 
   def expired?
@@ -22,7 +31,7 @@ class Candidates::SessionToken < ApplicationRecord
   end
 
   def invalidate_other_tokens!
-    true # FIXME
+    candidate.session_tokens.unexpired.update_all(expired_at: Time.zone.now)
   end
 
   def to_param
