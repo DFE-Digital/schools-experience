@@ -10,7 +10,10 @@ class Candidates::SessionsController < Candidates::DashboardBaseController
     @candidates_session = Candidates::Session.new(gitis_crm, session_params)
 
     if @candidates_session.valid?
-      @candidates_session.signin
+      token = @candidates_session.create_signin_token
+      return unless token
+
+      deliver_signin_link(@candidates_session.email, token)
     else
       render 'new'
     end
@@ -29,5 +32,12 @@ private
 
   def session_params
     params.require(:candidates_session).permit(:email, :firstname, :lastname, :date_of_birth)
+  end
+
+  def deliver_signin_link(email_address, token)
+    NotifyEmail::CandidateSigninLink.new(
+      to: email_address,
+      confirmation_link: candidates_signin_confirmation_url(token)
+    ).despatch_later!
   end
 end

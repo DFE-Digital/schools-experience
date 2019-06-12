@@ -89,6 +89,4 @@ Rails.application.configure do
   config.x.fake_crm = true
 
   config.active_job.queue_adapter = :inline
-
-  Rails.application.routes.default_url_options = { protocol: 'https', host: 'localhost', port: 3000 }
 end

@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::Session, type: :model do
-  include ActiveJob::TestHelper
-
   let(:gitis) { Bookings::Gitis::CRM.new('a-token') }
   let(:candidate) { create(:candidate) }
   let(:attrs) do
@@ -50,9 +48,6 @@ RSpec.describe Candidates::Session, type: :model do
   end
 
   describe '#login' do
-    before { NotifyFakeClient.reset_deliveries! }
-    before { queue_adapter.perform_enqueued_jobs = true }
-    after { queue_adapter.perform_enqueued_jobs = nil }
     subject { described_class.new(gitis, login_attrs) }
 
     context 'with known candidate' do
@@ -61,28 +56,15 @@ RSpec.describe Candidates::Session, type: :model do
 
       before do
         expect(gitis).to receive(:find_contact_for_signin).and_return(existing_contact)
-        @signed_in = subject.signin
+        @token = subject.create_signin_token
       end
 
       it "will return the logged in candidate" do
-        expect(@signed_in).to eql(candidate)
+        expect(subject.candidate).to eql(candidate)
       end
 
       it "will create a token" do
         expect(candidate.session_tokens.count).to eql(1)
-      end
-
-      it "will send email with token link" do
-        expect(NotifyFakeClient.deliveries.length).to eql(1)
-
-        delivery = NotifyFakeClient.deliveries.first
-        expect(delivery[:email_address]).to eql(attrs['emailaddress1'])
-
-        token = Candidates::SessionToken.reorder(:id).last.token
-        expect(delivery[:personalisation][:confirmation_link]).to \
-          match(%r{/signin/#{token}\z})
-        expect(delivery[:personalisation][:confirmation_link]).to \
-          match(Rails.application.routes.url_helpers.candidates_signin_confirmation_url(token))
       end
     end
 
@@ -93,46 +75,36 @@ RSpec.describe Candidates::Session, type: :model do
       context 'who exists in Gitis' do
         before do
           expect(gitis).to receive(:find_contact_for_signin).and_return(new_contact)
-          @signed_in = subject.signin
+          @token = subject.create_signin_token
         end
 
         it "will return the logged in candidate" do
-          expect(@signed_in).to be_kind_of(Bookings::Candidate)
-          expect(@signed_in).not_to eql(candidate) # check created new candidate
+          expect(subject.candidate).to be_kind_of(Bookings::Candidate)
+          expect(subject.candidate).not_to eql(candidate) # check created new candidate
         end
 
         it "will create a token" do
-          expect(@signed_in.session_tokens.count).to eql(1)
-        end
-
-        it "will send email with token link" do
-          expect(NotifyFakeClient.deliveries.length).to eql(1)
-
-          delivery = NotifyFakeClient.deliveries.first
-          expect(delivery[:email_address]).to eql(attrs['emailaddress1'])
-
-          token = Candidates::SessionToken.reorder(:id).last.token
-          expect(delivery[:personalisation][:confirmation_link]).to \
-            match(Rails.application.routes.url_helpers.candidates_signin_url(token))
+          expect(subject.candidate.session_tokens.count).to eql(1)
         end
       end
 
       context 'who does not exist in Gitis' do
         before do
           expect(gitis).to receive(:find_contact_for_signin).and_return(false)
-          @signed_in = subject.signin
+          @token = subject.create_signin_token
         end
 
         it "will return false" do
-          expect(@signed_in).to be false
+          expect(@token).to be false
+        end
+
+        it "will not create candidate" do
+          expect(subject.candidate).to be_nil
+          expect(Bookings::Candidate.count).to eql(0)
         end
 
         it "will not create a token" do
           expect(Candidates::SessionToken.count).to eql(0)
-        end
-
-        it "will not send an email with token link" do
-          expect(NotifyFakeClient.deliveries).to eql([])
         end
       end
     end

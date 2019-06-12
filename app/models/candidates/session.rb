@@ -21,14 +21,11 @@ class Candidates::Session
     assign_attributes attrs
   end
 
-  def signin
+  def create_signin_token
     return false unless lookup_contact_in_gitis
 
     find_or_create_candidate
     generate_session_token
-    email_token_to_client
-
-    candidate
   end
 
 private
@@ -53,17 +50,6 @@ private
   end
 
   def generate_session_token
-    @token = @candidate.session_tokens.create!
-  end
-
-  def email_token_to_client
-    NotifyEmail::CandidateSigninLink.new(
-      to: contact.email,
-      confirmation_link: signin_url
-    ).despatch_later!
-  end
-
-  def signin_url
-    Rails.application.routes.url_helpers.candidates_signin_confirmation_url(token.token)
+    @token = @candidate.session_tokens.create!.token
   end
 end

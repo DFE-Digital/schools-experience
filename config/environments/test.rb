@@ -69,5 +69,5 @@ Rails.application.configure do
 
   config.x.fake_crm = false
 
-  Rails.application.routes.default_url_options = { protocol: 'https', host: 'test.host' }
+  Rails.application.routes.default_url_options = { protocol: 'https' }
 end
