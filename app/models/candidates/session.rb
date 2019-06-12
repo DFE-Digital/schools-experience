@@ -16,6 +16,14 @@ class Candidates::Session
   validates :lastname, presence: true
   validates :date_of_birth, presence: true
 
+  def self.signin!(token)
+    token = Candidates::SessionToken.valid.find_by(token: token)
+    return unless token
+
+    token.invalidate_other_tokens!
+    token.candidate
+  end
+
   def initialize(gitis, *args)
     @gitis = gitis
     super(*args)

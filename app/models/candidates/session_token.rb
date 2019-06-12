@@ -21,7 +21,7 @@ class Candidates::SessionToken < ApplicationRecord
     update(expired_at: Time.zone.now)
   end
 
-  def invalidate_other_tokens
+  def invalidate_other_tokens!
     true # FIXME
   end
 

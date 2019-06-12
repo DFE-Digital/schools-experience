@@ -20,12 +20,12 @@ class Candidates::SessionsController < Candidates::DashboardBaseController
   end
 
   def update
-    token = Candidates::SessionToken.valid.find_by(token: params[:authtoken])
-    return unless token
+    candidate = Candidates::Session.signin!(params[:authtoken])
 
-    self.current_candidate = token.candidate
-    token.invalidate_other_tokens
-    redirect_to candidates_dashboard_path
+    if candidate
+      self.current_candidate = candidate
+      redirect_to candidates_dashboard_path
+    end
   end
 
 private
