@@ -63,7 +63,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
           candidate_name: cancellation.candidate_name,
           rejection_reasons: cancellation.reason,
           extra_details: cancellation.extra_details,
-          dates_requested: cancellation.requested_availability,
+          dates_requested: cancellation.dates_requested,
           school_search_url: new_candidates_school_search_url
 
         expect(candidate_request_rejection_notification).to \
