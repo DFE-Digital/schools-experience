@@ -13,13 +13,13 @@ module Bookings
       }
 
     validates :date,
-      presence: true,
-      on: :create,
       timeliness: {
         on_or_after: :today,
         before: -> { 2.years.from_now },
         type: :date
-      }
+      },
+      presence: true,
+      on: :create
 
     scope :future, -> { where(arel_table[:date].gteq(Time.now)) }
     scope :past, -> { where(arel_table[:date].lt(Time.now)) }

@@ -16,8 +16,7 @@ Then("my newly-created placement date should be listed") do
   end
 end
 
-
-Given("I fill in the date field with an invalid date of 31st September next year") do
+Given("I fill in the {string} date field with an invalid date of 31st September next year") do |label|
   year = Date.today.year + 1
-  step "I fill in the date field 'Enter a start date' with 31-09-#{year}"
+  step "I fill in the date field '#{label}' with 31-09-#{year}"
 end

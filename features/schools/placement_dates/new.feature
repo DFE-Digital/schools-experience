@@ -34,6 +34,6 @@ Feature: Creating new placement dates
 
     Scenario: Preventing invalid dates from being added
         Given I am on the 'new placement date' page
-        And I fill in the date field with an invalid date of 31st September next year
+        And I fill in the 'Enter a start date' date field with an invalid date of 31st September next year
         When I submit the form
-        Then I should see an error message stating 'not a valid date'
+        Then I should see an error message stating 'is not a valid date'
