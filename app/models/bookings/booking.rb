@@ -9,7 +9,15 @@ module Bookings
     belongs_to :bookings_school,
       class_name: 'Bookings::School'
 
-    validates :date, presence: true
+    validates :date,
+      presence: true,
+      on: :create,
+      timeliness: {
+        on_or_after: :today,
+        before: -> { 2.years.from_now },
+        type: :date
+      }
+
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true

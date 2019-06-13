@@ -8,9 +8,13 @@ en:
       before: "must be before %{restriction}"
       on_or_before: "must be on or before %{restriction}"
       after: "must be after %{restriction}"
-      on_or_after: "must be on or after %{restriction}"
+
+      # note, this tranlsation only works when comparing
+      # the value to today
+      on_or_after: "Date must be in the future"
+
   validates_timeliness:
     error_value_formats:
-      date: '%Y-%m-%d'
+      date: "%d %B %Y"
       time: '%H:%M:%S'
-      datetime: '%Y-%m-%d %H:%M:%S'
+      datetime: '%d %B %Y %H:%M:%S'

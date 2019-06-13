@@ -16,7 +16,7 @@ describe Bookings::PlacementDate, type: :model do
 
       context 'new placement dates must be in the future' do
         specify 'should allow future dates' do
-          [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.years.from_now].each do |d|
+          [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
           end
         end
@@ -44,6 +44,13 @@ describe Bookings::PlacementDate, type: :model do
           specify 'should allow updates' do
             expect(expired_pd.update(active: false)).to be(true)
             expect(expired_pd).to_not be_active
+          end
+        end
+
+        context 'not too far in the future' do
+          specify 'should not allow dates more than 2 years in the future' do
+            expect(subject).not_to allow_value((2.years + 1.day).from_now).for(:date)
+            expect(subject).to allow_value((2.years - 1.day).from_now).for(:date)
           end
         end
       end
