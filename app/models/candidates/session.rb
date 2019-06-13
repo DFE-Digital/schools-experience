@@ -53,7 +53,7 @@ private
   end
 
   def find_or_create_candidate
-    @candidate = Bookings::Candidate.find_or_create_by(gitis_uuid: contact.id)
+    @candidate = Bookings::Candidate.find_or_create_by!(gitis_uuid: contact.id)
   end
 
   def generate_session_token
