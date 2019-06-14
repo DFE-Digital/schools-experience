@@ -13,6 +13,10 @@ FactoryBot.define do
       accepted_at { 5.minutes.ago }
     end
 
+    trait :upcoming do
+      date { Bookings::Booking::UPCOMING_TIMEFRAME.from_now }
+    end
+
     trait :with_existing_subject do
       before(:create) do |bb|
         bb.bookings_subject = bb.bookings_school.subjects.first
