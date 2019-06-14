@@ -6,7 +6,7 @@ module Schools
         before_action :ensure_previous_step_complete
 
         def new
-          @add_more_details = Schools::PlacementRequests::AddMoreDetails.new
+          @add_more_details = Schools::PlacementRequests::AddMoreDetails.for_school(@current_school)
         end
 
         def create

@@ -123,6 +123,14 @@ def get_form_group(page, label_text)
   label.ancestor('div.govuk-form-group')
 end
 
+def get_input(page, label_text)
+  selector = LABEL_SELECTORS.detect do |s|
+    page.has_css?(s, text: label_text)
+  end
+  label = page.find(selector, text: label_text)
+  page.find('input', id: label['for'])
+end
+
 def ensure_date_field_exists(form_group)
   %w{Day Month Year}.each do |date_part|
     form_group.find('label', text: date_part).tap do |inner_label|
