@@ -59,6 +59,12 @@ module Bookings
       !closed?
     end
 
+    def viewed!
+      if viewed_at.nil?
+        update(viewed_at: Time.now)
+      end
+    end
+
     # FIXME SE-1095 update this model to belong_to a candidate
     def candidate
       @candidate ||= Bookings::Gitis::CRM.new('abc123').find(1)

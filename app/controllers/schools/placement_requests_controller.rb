@@ -6,12 +6,14 @@ module Schools
 
     def show
       @placement_request = placement_request
+      @placement_request.viewed!
     end
 
   private
 
     def placement_requests
-      current_school.placement_requests
+      current_school
+        .placement_requests
         .eager_load(:candidate_cancellation, :school_cancellation, :placement_date)
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_07_121714) do
+ActiveRecord::Schema.define(version: 2019_06_14_143023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2019_06_07_121714) do
     t.integer "bookings_school_id"
     t.string "token"
     t.uuid "analytics_tracking_uuid"
+    t.datetime "viewed_at"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
     t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
     t.index ["token"], name: "index_bookings_placement_requests_on_token", unique: true
