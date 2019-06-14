@@ -14,9 +14,8 @@ Rails.application.routes.draw do
       get '/auth/insecure_callback', to: 'schools/insecure_sessions#create', as: :insecure_auth_callback
     end
 
+    resource :schools, only: :show
     namespace :schools do
-      root to: 'dashboards#show'
-
       resource :session, only: %i(show destroy)
       resource :switch, only: %i(new), controller: 'switch'
       resource :dashboard, only: :show
