@@ -13,9 +13,9 @@ Feature: Listing placement dates
   Scenario: Breadcrumbs
     Given I am on the 'placement dates' page
     Then I should see the following breadcrumbs:
-        | Text               | Link     |
-        | Some school        | /schools |
-        | Manage fixed dates | None     |
+        | Text               | Link               |
+        | Some school        | /schools/dashboard |
+        | Manage fixed dates | None               |
 
     Scenario: List contents
         Given my school has 5 placement dates

@@ -11,10 +11,10 @@ Feature: Viewing a booking
         Given there is at least one booking
         When I am viewing my chosen booking
         Then I should see the following breadcrumbs:
-            | Text           | Link              |
-            | Some school    | /schools          |
-            | All bookings   | /schools/bookings |
-            | Booking        | None              |
+            | Text           | Link               |
+            | Some school    | /schools/dashboard |
+            | All bookings   | /schools/bookings  |
+            | Booking        | None               |
 
     Scenario: Personal details
         Given there is at least one booking
