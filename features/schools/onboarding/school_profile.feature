@@ -39,6 +39,7 @@ Feature: School Profile
     Then the page should have the following summary list information:
       | Full name                   | school 1                                                    |
       | Address                     | \d{1,} something street, M\d{1,} 2JJ                        |
+      | UK telephone number         | 01234567890                                                 |
       | Email address               | school1@example.com                                         |
       | Fees                        | Yes - £300.00 daily other fee                               |
       | DBS check required          | Yes - Sometimes. policy details                             |
