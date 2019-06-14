@@ -101,6 +101,18 @@ en:
             acceptance:
               accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
+        candidates/session:
+          attributes:
+            email:
+              blank: Enter your email address
+              invalid: Enter a valid email address
+            firstname:
+              blank: Enter your first name
+            lastname:
+              blank: Enter your last name
+            date_of_birth:
+              blank: Enter your date of birth
+
         schools/on_boarding/candidate_requirement:
           attributes:
             dbs_requirement:

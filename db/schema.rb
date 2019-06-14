@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_07_121714) do
+ActiveRecord::Schema.define(version: 2019_06_07_140934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -217,6 +217,16 @@ ActiveRecord::Schema.define(version: 2019_06_07_121714) do
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
   end
 
+  create_table "candidates_session_tokens", force: :cascade do |t|
+    t.string "token", null: false
+    t.bigint "candidate_id", null: false
+    t.datetime "expired_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candidate_id"], name: "index_candidates_session_tokens_on_candidate_id"
+    t.index ["token"], name: "index_candidates_session_tokens_on_token", unique: true
+  end
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -311,5 +321,6 @@ ActiveRecord::Schema.define(version: 2019_06_07_121714) do
   add_foreign_key "bookings_schools_phases", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_subjects"
+  add_foreign_key "candidates_session_tokens", "bookings_candidates", column: "candidate_id"
   add_foreign_key "schools_school_profiles", "bookings_schools"
 end

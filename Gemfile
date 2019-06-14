@@ -64,7 +64,6 @@ gem 'rack-timeout'
 gem 'openid_connect'
 gem 'uk_postcode'
 gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: 'a7429200'
-gem 'faraday'
 
 gem 'addressable'
 gem 'faraday'
