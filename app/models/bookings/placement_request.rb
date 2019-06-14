@@ -34,9 +34,12 @@ module Bookings
       dependent: :destroy
 
     scope :open, -> do
-      left_joins(:candidate_cancellation, :school_cancellation)
-        .where(bookings_placement_request_cancellations: { sent_at: nil })
-        .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
+      not_cancelled.merge unbooked
+    end
+
+    scope :unbooked, -> do
+      left_joins(:booking)
+        .where(bookings_bookings: { bookings_placement_request_id: nil })
     end
 
     scope :cancelled, -> do
@@ -45,6 +48,12 @@ module Bookings
           bookings_placement_request_cancellations.sent_at IS NOT NULL
           OR school_cancellations_bookings_placement_requests.sent_at IS NOT NULL
         SQL
+    end
+
+    scope :not_cancelled, -> do
+      left_joins(:candidate_cancellation, :school_cancellation)
+        .where(bookings_placement_request_cancellations: { sent_at: nil })
+        .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)

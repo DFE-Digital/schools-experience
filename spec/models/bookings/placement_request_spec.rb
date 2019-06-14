@@ -60,6 +60,10 @@ describe Bookings::PlacementRequest, type: :model do
       FactoryBot.create :placement_request, school: school
     end
 
+    let! :booked_placement_request do
+      FactoryBot.create(:bookings_booking, bookings_school: school).bookings_placement_request
+    end
+
     let! :placement_request_open do
       FactoryBot.create :placement_request, school: school
     end
@@ -74,12 +78,35 @@ describe Bookings::PlacementRequest, type: :model do
       end
     end
 
+    context '.unbooked' do
+      subject { described_class.unbooked }
+      it do
+        is_expected.to match_array [
+          placement_request_open,
+          placement_request_cancelled_by_school_but_not_sent,
+          placement_request_closed_by_candidate,
+          placement_request_closed_by_school
+        ]
+      end
+    end
+
     context '.cancelled' do
       subject { described_class.cancelled }
       it do
         is_expected.to match_array [
           placement_request_closed_by_candidate,
           placement_request_closed_by_school
+        ]
+      end
+    end
+
+    context '.not_cancelled' do
+      subject { described_class.not_cancelled }
+      it do
+        is_expected.to match_array [
+          placement_request_open,
+          placement_request_cancelled_by_school_but_not_sent,
+          booked_placement_request
         ]
       end
     end
