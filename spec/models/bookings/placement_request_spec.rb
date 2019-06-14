@@ -43,7 +43,7 @@ describe Bookings::PlacementRequest, type: :model do
 
   it_behaves_like 'a background check'
 
-  context '.open' do
+  context '.scopes' do
     let :school do
       FactoryBot.create :bookings_school, :with_subjects
     end
@@ -56,14 +56,32 @@ describe Bookings::PlacementRequest, type: :model do
       FactoryBot.create :placement_request, :cancelled_by_school, school: school
     end
 
+    let! :placement_request_cancelled_by_school_but_not_sent do
+      FactoryBot.create :placement_request, school: school
+    end
+
     let! :placement_request_open do
       FactoryBot.create :placement_request, school: school
     end
 
-    it 'only returns the open placement requests' do
-      expect(described_class.open).to include placement_request_open
-      expect(described_class.open).not_to include placement_request_closed_by_candidate
-      expect(described_class.open).not_to include placement_request_closed_by_school
+    context '.open' do
+      subject { described_class.open }
+      it do
+        is_expected.to match_array [
+          placement_request_open,
+          placement_request_cancelled_by_school_but_not_sent
+        ]
+      end
+    end
+
+    context '.cancelled' do
+      subject { described_class.cancelled }
+      it do
+        is_expected.to match_array [
+          placement_request_closed_by_candidate,
+          placement_request_closed_by_school
+        ]
+      end
     end
   end
 

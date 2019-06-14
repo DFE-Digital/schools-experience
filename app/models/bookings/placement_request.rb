@@ -39,6 +39,14 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
+    scope :cancelled, -> do
+      left_joins(:candidate_cancellation, :school_cancellation)
+        .where <<~SQL
+          bookings_placement_request_cancellations.sent_at IS NOT NULL
+          OR school_cancellations_bookings_placement_requests.sent_at IS NOT NULL
+        SQL
+    end
+
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
       self.create! \
         Candidates::Registrations::RegistrationAsPlacementRequest
