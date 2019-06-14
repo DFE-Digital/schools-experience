@@ -5,6 +5,7 @@ Feature: The School Dashboard
 
     Background:
         Given I am logged in as a DfE user
+        And the school has subjects
 
     Scenario: Site header
         Given I am on the 'schools dashboard' page
@@ -47,7 +48,6 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then the 'new requests counter' should be 5
 
-    @wip
     Scenario: Candidate bookings counter
         Given there are 3 new bookings
         When I am on the 'schools dashboard' page
