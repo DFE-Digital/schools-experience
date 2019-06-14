@@ -25,5 +25,22 @@ FactoryBot.define do
       contact_number { '01234 456 245' }
       location { 'Come to reception in the East building' }
     end
+
+    trait :cancelled_by_candidate do
+      after :create do |bb|
+        FactoryBot.create :cancellation,
+          :sent,
+          placement_request: bb.bookings_placement_request
+      end
+    end
+
+    trait :cancelled_by_school do
+      after :create do |bb|
+        FactoryBot.create :cancellation,
+          :sent,
+          placement_request: bb.bookings_placement_request,
+          cancelled_by: 'school'
+      end
+    end
   end
 end
