@@ -70,8 +70,8 @@ end
 Then("every request should contain a link to view more details") do
   within('#placement-requests') do
     @placement_requests.each do |placement_request|
-      within("div.placement-request[data-placement-request='#{placement_request.id}']") do
-        expect(page).to have_link('Open request', href: schools_placement_request_path(placement_request.id))
+      within(".placement-request[data-placement-request='#{placement_request.id}']") do
+        expect(page).to have_link('View', href: schools_placement_request_path(placement_request.id))
       end
     end
   end
@@ -141,4 +141,10 @@ Then("I should be on the confirm booking page") do
   path = path_for('confirm booking', placement_request: @placement_request)
   visit(path)
   expect(page.current_path).to eql(path)
+end
+
+Then("I should see a table with the following headings:") do |table|
+  table.transpose.raw.flatten.each do |heading|
+    expect(page).to have_css('thead th', text: heading)
+  end
 end

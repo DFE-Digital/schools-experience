@@ -1,10 +1,26 @@
-<%= self.page_title = "All placement requests" %>
-<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full-width">
+    <%- self.page_title = "All placement requests" -%>
 
-<h1>All placement requests</h1>
+    <%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
 
-<div id="placement-requests">
-  <%= render partial: 'schools/placement_requests/placement_request',
-    collection: @placement_requests
-  %>
+    <h1>All placement requests</h1>
+
+    <table id="placement-requests" class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header">Name</th>
+          <th class="govuk-table__header">Status</th>
+          <th class="govuk-table__header">Subjects</th>
+          <th class="govuk-table__header">Date requested</th>
+          <th class="govuk-table__header"/>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <%= render partial: 'schools/placement_requests/placement_request',
+          collection: @placement_requests
+        %>
+      </tbody>
+    </table>
+  </div>
 </div>
