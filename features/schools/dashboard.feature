@@ -5,6 +5,7 @@ Feature: The School Dashboard
 
     Background:
         Given I am logged in as a DfE user
+        And the school has subjects
 
     Scenario: Site header
         Given I am on the 'schools dashboard' page
@@ -41,7 +42,6 @@ Feature: The School Dashboard
             | View rejected requests                  | None | #    |
             | Give feedback on this service           | None | #    |
 
-    @wip
     Scenario: Candidate requests counter
         Given there are 5 new requests
         When I am on the 'schools dashboard' page
