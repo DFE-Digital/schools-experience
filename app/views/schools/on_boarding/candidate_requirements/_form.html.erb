@@ -12,6 +12,7 @@
     <h1 class="govuk-heading-l">Enter your school experience details</h1>
 
     <p>These details will help candidates select a school experience.</p>
+    <p>You'll be given a chance to check and change the details you enter.</p>
 
     <%= form_for candidate_requirement, url: url, method: method do |f|  %>
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
