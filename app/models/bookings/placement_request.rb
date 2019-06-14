@@ -65,6 +65,10 @@ module Bookings
       end
     end
 
+    def viewed?
+      viewed_at.present?
+    end
+
     # FIXME SE-1095 update this model to belong_to a candidate
     def candidate
       @candidate ||= Bookings::Gitis::CRM.new('abc123').find(1)

@@ -3,9 +3,11 @@
     <%= placement_request.candidate.full_name %>
   </td>
   <td class="govuk-table__cell">
-    <span class="govuk-tag">
-      <%= placement_request.status %>
-    </span>
+    <% if !placement_request.viewed? %>
+      <span class="govuk-tag">
+        <%= placement_request.status %>
+      </span>
+    <% end %>
   </td>
   <td class="govuk-table__cell">
     <%= placement_request.subject_first_choice %>
