@@ -27,7 +27,7 @@ module Schools
 
         def candidate_booking_notification(booking)
           NotifyEmail::CandidateBookingConfirmation
-            .from_booking(booking.candidate.email, booking)
+            .from_booking(booking.candidate.email, booking, candidates_cancel_url(booking.token))
         end
 
         def set_placement_request
