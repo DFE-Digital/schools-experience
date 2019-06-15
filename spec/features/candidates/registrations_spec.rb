@@ -47,20 +47,8 @@ feature 'Candidate Registrations', type: :feature do
 
   scenario 'Candidate Registraion Journey' do
     # Begin wizard journey
-    visit "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
-    expect(page).to have_text 'Request school experience'
-
-    # Submit registrations/placement_preference form with errors
-    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
-    click_button 'Continue'
-    expect(page).to have_text 'There is a problem'
-
-    # Submit registrations/placement_preference form successfully
-    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
-    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
-    click_button 'Continue'
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
+    visit "/candidates/schools/#{school_urn}/registrations/contact_information/new"
+    expect(page).to have_text 'Enter your contact details'
 
     # Submit contact information form with errors
     fill_in 'First name', with: 'testy'
@@ -95,6 +83,18 @@ feature 'Candidate Registrations', type: :feature do
     select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
     choose "I’m very sure and think I’ll apply"
     select 'Physics', from: 'First choice'
+    click_button 'Continue'
+    expect(page.current_path).to eq \
+      "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
+
+    # Submit registrations/placement_preference form with errors
+    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+    click_button 'Continue'
+    expect(page).to have_text 'There is a problem'
+
+    # Submit registrations/placement_preference form successfully
+    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
+    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
     click_button 'Continue'
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/background_check/new"

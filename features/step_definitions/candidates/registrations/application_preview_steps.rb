@@ -1,23 +1,9 @@
 Given("I have completed the wizard") do
-  visit path_for('request school experience placement', school: @school)
-  step "I have filled in my placement preferences successfully"
+  visit path_for('enter your contact details', school: @school)
   step "I have filled in my contact information successfully"
   step "I have filled in my subject preferences successfully"
+  step "I have filled in my placement preferences successfully"
   step "I have filled in my background checks successfully"
-end
-
-Given("I have filled in my placement preferences successfully") do
-  # Submit registrations/placement_preference form successfully
-  if @fixed_dates
-    choose @wanted_bookings_placement_date
-  else
-    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
-  end
-  fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
-  click_button 'Continue'
-
-  expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/contact_information/new"
 end
 
 Given("I have filled in my contact information successfully") do
@@ -43,6 +29,20 @@ Given("I have filled in my subject preferences successfully") do
   choose "I’m very sure and think I’ll apply"
   select 'Physics', from: 'First choice'
   click_button 'Continue'
+  expect(page.current_path).to eq \
+    "/candidates/schools/#{@school.urn}/registrations/placement_preference/new"
+end
+
+Given("I have filled in my placement preferences successfully") do
+  # Submit registrations/placement_preference form successfully
+  if @fixed_dates
+    choose @wanted_bookings_placement_date
+  else
+    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
+  end
+  fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+  click_button 'Continue'
+
   expect(page.current_path).to eq \
     "/candidates/schools/#{@school.urn}/registrations/background_check/new"
 end

@@ -141,7 +141,7 @@ end
 
 Then("there should be a button called {string} that begins the wizard") do |string|
   # ensure there's a link
-  expect(page).to have_link(string, href: new_candidates_school_registrations_placement_preference_path(@school.urn))
+  expect(page).to have_link(string, href: new_candidates_school_registrations_contact_information_path(@school.urn))
 
   # and make sure it's button-like
   expect(page).to have_css(".govuk-button", text: string)
@@ -194,7 +194,7 @@ Given("my school of choice has {string} dates") do |option|
 end
 
 Then("there should not be a button called {string} that begins the wizard") do |string|
-  expect(page).not_to have_link(string, href: new_candidates_school_registrations_placement_preference_path(@school.urn))
+  expect(page).not_to have_link(string, href: new_candidates_school_registrations_contact_information_path(@school.urn))
 end
 
 Given("there are some available dates in the future") do
