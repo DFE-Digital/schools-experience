@@ -13,10 +13,7 @@
         <%= form_for contact_information, url: candidates_school_registrations_contact_information_path do |f| %>
           <%= GovukElementsErrorsHelper.error_summary contact_information, 'There is a problem', '' %>
 
-          <%= f.text_field :first_name, autocomplete: 'given-name' %>
-          <%= f.text_field :last_name, autocomplete: 'family-name' %>
           <%= f.telephone_field :phone, autocomplete: 'on' %>
-          <%= f.email_field :email, autocomplete: 'on' %>
 
           <h2 class="govuk-heading-m">Address</h2>
           <%= f.text_field :building, autocomplete: 'on' %>

@@ -5,10 +5,15 @@ describe Candidates::Registrations::ApplicationPreview do
     true
   end
 
+  let :personal_information do
+    build :personal_information,
+      first_name: 'Testy',
+      last_name: 'McTest',
+      email: 'test@example.com'
+  end
+
   let :contact_information do
     build :contact_information,
-      full_name: 'Testy McTest',
-      email: 'test@example.com',
       building: "Test building",
       street: "Test street",
       town_or_city: "Test town",
@@ -42,6 +47,7 @@ describe Candidates::Registrations::ApplicationPreview do
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new \
       'urn' => school.urn,
+      'candidates_registrations_personal_information' => personal_information.attributes,
       'candidates_registrations_contact_information' => contact_information.attributes,
       'candidates_registrations_placement_preference' => placement_preference.attributes,
       'candidates_registrations_subject_preference' => subject_preference.attributes,

@@ -65,15 +65,11 @@ feature 'Candidate Registrations', type: :feature do
       "/candidates/schools/#{school_urn}/registrations/contact_information/new"
 
     # Submit contact information form with errors
-    fill_in 'First name', with: 'testy'
-    fill_in 'Last name', with: 'mctest'
+    fill_in 'Building', with: 'Test house'
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 
     # Submit contact information form successfully
-    fill_in 'First name', with: 'testy'
-    fill_in 'Last name', with: 'mctest'
-    fill_in 'Email address', with: 'test@example.com'
     fill_in 'Building', with: 'Test house'
     fill_in 'Street', with: 'Test street'
     fill_in 'Town or city', with: 'Test Town'

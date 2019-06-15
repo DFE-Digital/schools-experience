@@ -15,7 +15,7 @@ Feature: Previewing my application
             | Heading                 | Value                  | Change link path                                                   |
             | Experience availability | Epiphany to Whitsunday | /candidates/schools/123456/registrations/placement_preference/edit |
 
-    Scenario: Page contents (when the school has flexible availability)
+    Scenario: Page contents (when the school has fixed availability)
         Given my school has fixed dates
         And I have completed the wizard
         When I am on the 'Check your answers' page for my choice of school

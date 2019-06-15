@@ -9,12 +9,12 @@ describe Candidates::Registrations::SchoolSession do
     100002
   end
 
-  let :contact_information_1 do
-    FactoryBot.build :contact_information
+  let :personal_information_1 do
+    FactoryBot.build :personal_information
   end
 
-  let :contact_information_2 do
-    FactoryBot.build :contact_information, full_name: 'Someone Else'
+  let :personal_information_2 do
+    FactoryBot.build :personal_information, full_name: 'Someone Else'
   end
 
   let :session do
@@ -28,18 +28,18 @@ describe Candidates::Registrations::SchoolSession do
       end
 
       before do
-        subject.current_registration.save contact_information_1
+        subject.current_registration.save personal_information_1
       end
 
       it 'returns the current_registration' do
-        expect(subject.current_registration.contact_information).to eq \
-          contact_information_1
+        expect(subject.current_registration.personal_information).to eq \
+          personal_information_1
       end
 
       it 'stores the registration in the session' do
         expect(session).to eq "schools/#{school_urn_1}/registrations" => {
           'urn' => school_urn_1,
-          contact_information_1.model_name.param_key => contact_information_1.attributes
+          personal_information_1.model_name.param_key => personal_information_1.attributes
         }
       end
     end
@@ -54,27 +54,27 @@ describe Candidates::Registrations::SchoolSession do
       end
 
       before do
-        school_session_1.current_registration.save contact_information_1
-        school_session_2.current_registration.save contact_information_2
+        school_session_1.current_registration.save personal_information_1
+        school_session_2.current_registration.save personal_information_2
       end
 
       it 'returns the correct current_registration for each school session' do
-        expect(school_session_1.current_registration.contact_information).to eq \
-          contact_information_1
+        expect(school_session_1.current_registration.personal_information).to eq \
+          personal_information_1
 
-        expect(school_session_2.current_registration.contact_information).to eq \
-          contact_information_2
+        expect(school_session_2.current_registration.personal_information).to eq \
+          personal_information_2
       end
 
       it 'stores the registratiosn for each school seperatley' do
         expect(session).to eq \
           "schools/#{school_urn_1}/registrations" => {
             'urn' => school_urn_1,
-            contact_information_1.model_name.param_key => contact_information_1.attributes
+            personal_information_1.model_name.param_key => personal_information_1.attributes
           },
           "schools/#{school_urn_2}/registrations" => {
             'urn' => school_urn_2,
-            contact_information_2.model_name.param_key => contact_information_2.attributes
+            personal_information_2.model_name.param_key => personal_information_2.attributes
           }
       end
     end

@@ -134,7 +134,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
       context 'valid' do
         let :contact_information do
-          FactoryBot.build :contact_information, email: 'new-email@test.com'
+          FactoryBot.build :contact_information, town_or_city: 'Manchester'
         end
 
         it 'updates the session' do
