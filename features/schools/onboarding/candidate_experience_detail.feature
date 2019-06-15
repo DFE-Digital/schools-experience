@@ -24,9 +24,9 @@ Feature: Candidate experience details
   Scenario: Breadcrumbs
     Given I am already on the 'candidate experience details' page
     Then I should see the following breadcrumbs:
-        | Text                                           | Link     |
-        | Some school                                    | /schools |
-        | Enter school experience details for candidates | None     |
+        | Text                                           | Link               |
+        | Some school                                    | /schools/dashboard |
+        | Enter school experience details for candidates | None               |
 
   Scenario: Completing the step with error
     Given I am on the 'Candidate experience details' page

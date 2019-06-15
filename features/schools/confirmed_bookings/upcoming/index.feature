@@ -13,10 +13,10 @@ Feature: Viewing upcoming bookings
     Scenario: Breadcrumbs
         Given I am on the 'upcoming bookings' page
         Then I should see the following breadcrumbs:
-            | Text              | Link              |
-            | Some school       | /schools          |
-            | All bookings      | /schools/bookings |
-            | Upcoming bookings | None              |
+            | Text              | Link               |
+            | Some school       | /schools/dashboard |
+            | All bookings      | /schools/bookings  |
+            | Upcoming bookings | None               |
 
     Scenario: List presence
         Given there are some bookings

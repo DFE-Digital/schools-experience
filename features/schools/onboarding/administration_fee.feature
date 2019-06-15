@@ -19,9 +19,9 @@ Feature: Administration Fee
   Scenario: Breadcrumbs
     Given I am already on the 'administration costs' page
     Then I should see the following breadcrumbs:
-        | Text                 | Link     |
-        | Some school          | /schools |
-        | Administration costs | None     |
+        | Text                 | Link               |
+        | Some school          | /schools/dashboard |
+        | Administration costs | None               |
 
   Scenario: Completing the Administration costs step with error
     Given I have entered the following details into the form:

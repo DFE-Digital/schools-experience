@@ -20,9 +20,9 @@ Feature: Phases
   Scenario: Breadcrumbs
     Given I am on the 'phases' page
     Then I should see the following breadcrumbs:
-        | Text                            | Link     |
-        | Some school                     | /schools |
-        | Select school experience phases | None     |
+        | Text                            | Link               |
+        | Some school                     | /schools/dashboard |
+        | Select school experience phases | None               |
 
   Scenario: Completing step choosing Primary phase only
     Given I am already on the 'phases' page

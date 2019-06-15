@@ -29,9 +29,9 @@ Feature: School Profile
   Scenario: Breadcrumbs
     Given I am on the 'Profile' page
     Then I should see the following breadcrumbs:
-        | Text                                                                | Link     |
-        | Some school                                                         | /schools |
-        | Check your answers before setting up your school experience profile | None     |
+        | Text                                                                | Link               |
+        | Some school                                                         | /schools/dashboard |
+        | Check your answers before setting up your school experience profile | None               |
 
 
   Scenario: Viewing the profile

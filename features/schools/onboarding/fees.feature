@@ -17,9 +17,9 @@ Feature: Fees
   Scenario: Breadcrumbs
     Given I am already on the 'fees charged' page
     Then I should see the following breadcrumbs:
-        | Text                                              | Link     |
-        | Some school                                       | /schools |
-        | Do you charge fees to cover any of the following? | None     |
+        | Text                                              | Link               |
+        | Some school                                       | /schools/dashboard |
+        | Do you charge fees to cover any of the following? | None               |
 
   Scenario: Completing step choosing Adminsitration costs only
     Given I am on the 'fees charged' page
