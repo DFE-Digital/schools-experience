@@ -44,7 +44,7 @@ module Candidates
 
       # TODO add spec
       def email
-        contact_information.email
+        personal_information.email
       end
 
       def urn
@@ -74,6 +74,14 @@ module Candidates
 
       def contact_information_attributes
         fetch_attributes ContactInformation
+      end
+
+      def personal_information
+        fetch PersonalInformation
+      end
+
+      def personal_information_attributes
+        fetch_attributes PersonalInformation
       end
 
       def placement_preference
@@ -121,6 +129,7 @@ module Candidates
         [
           background_check,
           contact_information,
+          personal_information,
           placement_preference,
           subject_preference
         ].all?(&:valid?)

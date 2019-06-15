@@ -11,6 +11,14 @@ Given("I have completed the placement preference form") do
   click_button 'Continue'
 end
 
+Given("I have completed the personal information form") do
+  visit path_for 'enter your contact details', school: @school
+  fill_in 'First name', with: 'testy'
+  fill_in 'Last name', with: 'mctest'
+  fill_in 'Email address', with: 'test@example.com'
+  click_button 'Continue'
+end
+
 Given("I have completed the contact information form") do
   visit path_for 'enter your contact details', school: @school
   fill_in 'First name', with: 'testy'
@@ -55,6 +63,13 @@ Then("the placement preference form should populated with the details I've enter
     'Is there anything schools need to know about your availability for school experience?'
   ).value).to eq 'From Epiphany to Whitsunday'
   expect(find_field('What do you want to get out of your school experience?').value).to eq 'I enjoy teaching'
+end
+
+Then("the personal information form should populated with the details I've entered so far") do
+  visit path_for 'enter your personal details', school: @school
+  expect(find_field('First name').value).to eq 'testy'
+  expect(find_field('Last name').value).to eq 'mctest'
+  expect(find_field('Email address').value).to eq 'test@example.com'
 end
 
 Then("the contact information form should populated with the details I've entered so far") do

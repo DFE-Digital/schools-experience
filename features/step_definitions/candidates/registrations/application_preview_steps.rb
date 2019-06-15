@@ -1,9 +1,20 @@
 Given("I have completed the wizard") do
-  visit path_for('enter your contact details', school: @school)
+  visit path_for('enter your personal details', school: @school)
+  step "I have filled in my personal information successfully"
   step "I have filled in my contact information successfully"
   step "I have filled in my subject preferences successfully"
   step "I have filled in my placement preferences successfully"
   step "I have filled in my background checks successfully"
+end
+
+Given("I have filled in my personal information successfully") do
+  # Submit contact information form successfully
+  fill_in 'First name', with: 'testy'
+  fill_in 'Last name', with: 'mctest'
+  fill_in 'Email address', with: 'test@example.com'
+  click_button 'Continue'
+  expect(page.current_path).to eq \
+    "/candidates/schools/#{@school.urn}/registrations/contact_information/new"
 end
 
 Given("I have filled in my contact information successfully") do

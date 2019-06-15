@@ -8,6 +8,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil, p
     "landing" => [:root_path],
     "splash" => [:candidates_splash_path],
     "find a school" => [:new_candidates_school_search_path],
+    "enter your personal details" => [:new_candidates_school_registrations_personal_information_path, school],
     "enter your contact details" => [:new_candidates_school_registrations_contact_information_path, school],
     "candidate subjects" => [:new_candidates_school_registrations_subject_preference_path, school],
     "request school experience placement" => [:new_candidates_school_registrations_placement_preference_path, school],

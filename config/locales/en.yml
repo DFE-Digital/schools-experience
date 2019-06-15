@@ -93,6 +93,18 @@ en:
             town_or_city:
               blank: "Enter your town or city"
 
+        candidates/registrations/personal_information:
+          attributes:
+            email:
+              blank: "Enter your email address"
+              invalid: "Enter a valid email address"
+            first_name:
+              blank: 'Enter your first name'
+            last_name:
+              blank: 'Enter your last name'
+            full_name:
+              blank: "Enter your full name"
+
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
 
@@ -333,6 +345,8 @@ en:
         email: 'Email address'
         building: "Building and street"
         phone: "UK telephone number"
+      candidates_registrations_personal_information:
+        email: 'Email address'
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"

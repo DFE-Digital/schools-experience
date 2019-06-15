@@ -6,6 +6,16 @@ FactoryBot.define do
       placement_date { create(:bookings_placement_date) }
       uuid { 'some-uuid' }
 
+      candidates_registrations_personal_information do
+        {
+          "first_name"   => 'Testy',
+          "last_name"    => 'McTest',
+          "email"        => 'test@example.com',
+          "created_at"   => current_time,
+          "updated_at"   => current_time
+        }
+      end
+
       candidates_registrations_contact_information do
         {
           "first_name"   => 'Testy',
@@ -59,6 +69,7 @@ FactoryBot.define do
       new \
         "uuid"                                          => uuid,
         "urn"                                           => urn,
+        "candidates_registrations_personal_information" => candidates_registrations_personal_information,
         "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
         "candidates_registrations_background_check"     => candidates_registrations_background_check,
         "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
@@ -70,6 +81,7 @@ FactoryBot.define do
         new \
           "uuid"                                          => uuid,
           "urn"                                           => urn,
+          "candidates_registrations_personal_information" => candidates_registrations_personal_information,
           "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
           "candidates_registrations_background_check"     => candidates_registrations_background_check,
           "candidates_registrations_subject_preference"   => candidates_registrations_subject_preference,

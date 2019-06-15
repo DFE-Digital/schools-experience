@@ -19,7 +19,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
     end
 
     it "will provide a link to apply" do
-      link = new_candidates_school_registrations_contact_information_path(school)
+      link = new_candidates_school_registrations_personal_information_path(school)
       expect(rendered).to have_css("a.govuk-button[href=\"#{link}\"]")
     end
 
@@ -45,7 +45,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
     end
 
     it "will provide a link to apply" do
-      link = new_candidates_school_registrations_contact_information_path(school)
+      link = new_candidates_school_registrations_personal_information_path(school)
       expect(rendered).to have_css("a.govuk-button[href=\"#{link}\"]")
     end
 
