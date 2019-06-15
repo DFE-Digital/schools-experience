@@ -1,6 +1,7 @@
 class SchoolsController < ApplicationController
-  before_action :redirect_to_dashboard,
-    if: -> { session[:current_user].present? }
+  include DFEAuthentication
+
+  before_action :redirect_to_dashboard, if: :user_signed_in?
 
   def show; end
 
