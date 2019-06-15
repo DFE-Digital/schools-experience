@@ -15,7 +15,7 @@ module Schools
     def destroy
       Rails.logger.warn("Clearing session: #{session.to_json}")
       session.clear
-      redirect_to root_path
+      redirect_to schools_path
     end
 
     def create
