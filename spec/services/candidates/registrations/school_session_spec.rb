@@ -14,7 +14,7 @@ describe Candidates::Registrations::SchoolSession do
   end
 
   let :personal_information_2 do
-    FactoryBot.build :personal_information, full_name: 'Someone Else'
+    FactoryBot.build :personal_information, first_name: 'Someone', last_name: 'Else'
   end
 
   let :session do

@@ -74,7 +74,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       end
 
       context 'when full_name is set' do
-        subject { described_class.new full_name: 'Testy McTest' }
+        subject { described_class.new first_name: 'Testy', last_name: 'McTest' }
 
         it 'returns the value for the full_name attribute' do
           expect(subject.full_name).to eq 'Testy McTest'
