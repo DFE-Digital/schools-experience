@@ -96,6 +96,10 @@ Rails.application.routes.draw do
     resources :schools, only: %i{index show} do
       namespace :registrations do
         resource :personal_information, only: %i(new create edit update)
+        if Rails.application.config.x.phase >= 3
+          resources :sign_ins, only: %i(index create)
+          get 'sign_ins/:id', to: 'sign_ins#update', as: 'sign_in'
+        end
         resource :contact_information, only: %i(new create edit update)
         resource :subject_preference, only: %i(new create edit update)
         resource :placement_preference, only: %i(new create edit update)
