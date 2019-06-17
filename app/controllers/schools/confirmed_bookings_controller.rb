@@ -10,7 +10,7 @@ module Schools
     def show
       @booking = current_school
         .bookings
-        .eager_load(:bookings_subject)
+        .eager_load(:bookings_subject, :bookings_placement_request)
         .find(params[:id])
     end
   end

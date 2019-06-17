@@ -47,3 +47,9 @@
     }
   }
 }
+
+#school-booking-show {
+  section {
+    @include govuk-responsive-margin(9, "bottom");
+  }
+}

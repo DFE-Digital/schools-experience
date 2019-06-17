@@ -47,6 +47,6 @@ module ApplicationHelper
 
     render \
       partial: "shared/list_row",
-      locals: { key: key, value: value, action: action, id: id}
+      locals: { key: key, value: value, action: action, id: id }
   end
 end
