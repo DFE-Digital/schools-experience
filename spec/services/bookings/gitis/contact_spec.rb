@@ -1,6 +1,16 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::Contact, type: :model do
+  describe '.entity_path' do
+    subject { described_class.entity_path }
+    it { is_expected.to eq('contacts') }
+  end
+
+  describe '.primary_key' do
+    subject { described_class.primary_key }
+    it { is_expected.to eq('contactid') }
+  end
+
   describe '.initialize' do
     context "with data" do
       before do
@@ -11,8 +21,6 @@ describe Bookings::Gitis::Contact, type: :model do
           'mobilephone' => '07123 456789',
           'telephone1' => '01234 567890',
           'emailaddress1' => 'first@thisaddress.com',
-          'emailaddress2' => 'second@thisaddress.com',
-          'emailaddress3' => 'third@thisaddress.com',
           'address1_line1' => 'First Address Line',
           'address1_line2' => 'Second Address Line',
           'address1_line3' => 'Third Address Line',
@@ -24,6 +32,11 @@ describe Bookings::Gitis::Contact, type: :model do
 
       it "will assign id" do
         expect(@contact.id).to eq "d778d663-a022-4c4b-9962-e469ee179f4a"
+      end
+
+      it "will assign entity_id" do
+        expect(@contact.entity_id).to \
+          eq("contacts(d778d663-a022-4c4b-9962-e469ee179f4a)")
       end
 
       it "will assign name" do
@@ -50,6 +63,24 @@ describe Bookings::Gitis::Contact, type: :model do
       it "will return an empty Contact" do
         expect(Bookings::Gitis::Contact.new.id).to be_nil
       end
+    end
+  end
+
+  describe "#email" do
+    context "with primary address set" do
+      subject { described_class.new(emailaddress1: 'first@test.com') }
+      it { expect(subject.email).to eql('first@test.com') }
+    end
+
+    context "with both addresses set" do
+      subject do
+        described_class.new(
+          emailaddress1: 'first@test.com',
+          emailaddress2: 'second@test.com'
+        )
+      end
+
+      it { expect(subject.email).to eql('second@test.com') }
     end
   end
 end

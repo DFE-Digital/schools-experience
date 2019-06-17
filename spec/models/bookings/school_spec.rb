@@ -14,7 +14,7 @@ describe Bookings::School, type: :model do
 
     context 'availability_info' do
       it { is_expected.to allow_value(nil).for(:availability_info) }
-      it { is_expected.to validate_length_of(:availability_info).is_at_least(10) }
+      it { is_expected.to validate_length_of(:availability_info).is_at_least(3) }
 
       context 'overwriting empty strings before validation' do
         subject { create(:bookings_school) }

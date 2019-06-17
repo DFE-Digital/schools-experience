@@ -13,6 +13,17 @@ module Schools
       validates :contact_number, presence: true
       validates :contact_email, presence: true
       validates :location, presence: true
+
+      def self.for_school(school)
+        return new unless (last_booking = school.bookings.accepted.order(id: 'desc').first)
+
+        new(
+          contact_name: last_booking.contact_name,
+          contact_number: last_booking.contact_number,
+          contact_email: last_booking.contact_email,
+          location: last_booking.location
+        )
+      end
     end
   end
 end

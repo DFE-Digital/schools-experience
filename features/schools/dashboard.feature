@@ -10,10 +10,6 @@ Feature: The School Dashboard
         Given I am on the 'schools dashboard' page
         Then the main site header should be 'Manage school experience'
 
-    Scenario: Root redirect
-        Given I navigate to the 'schools' path
-        Then I should see the dashboard
-
     @wip
     Scenario: High priority headings
         Given I am on the 'schools dashboard' page

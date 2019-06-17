@@ -14,9 +14,8 @@ Rails.application.routes.draw do
       get '/auth/insecure_callback', to: 'schools/insecure_sessions#create', as: :insecure_auth_callback
     end
 
+    resource :schools, only: :show
     namespace :schools do
-      root to: 'dashboards#show'
-
       resource :session, only: %i(show destroy)
       resource :switch, only: %i(new), controller: 'switch'
       resource :dashboard, only: :show
@@ -108,6 +107,14 @@ Rails.application.routes.draw do
       resources :placement_requests, only: [], param: :token do
         resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
       end
+    end
+
+    if Rails.application.config.x.phase >= 4
+      get 'signin', to: 'sessions#new'
+      post 'signin', to: 'sessions#create'
+      get 'signin/:authtoken', to: 'sessions#update', as: 'signin_confirmation'
+
+      resource :dashboard, only: :show
     end
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }

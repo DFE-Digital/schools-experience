@@ -21,9 +21,9 @@ Feature: Experience Outline
   Scenario: Breadcrumbs
     Given I am on the 'Experience Outline' page
     Then I should see the following breadcrumbs:
-        | Text                                    | Link     |
-        | Some school                             | /schools |
-        | Outline experience and teacher training | None     |
+        | Text                                    | Link               |
+        | Some school                             | /schools/dashboard |
+        | Outline experience and teacher training | None               |
 
   Scenario: Page title
     Given I am on the 'Experience Outline' page

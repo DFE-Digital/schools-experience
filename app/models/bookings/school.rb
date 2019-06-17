@@ -23,7 +23,7 @@ class Bookings::School < ApplicationRecord
 
   validates :availability_info,
     allow_nil: true,
-    length: { minimum: 10 }
+    length: { minimum: 3 }
 
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",

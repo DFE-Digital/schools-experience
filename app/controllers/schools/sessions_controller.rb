@@ -5,8 +5,8 @@ module Schools
   class SessionsController < ApplicationController
     include DFEAuthentication
 
-    rescue_from AuthFailedError,     with: -> { redirect_to schools_errors_auth_failed_path }
-    rescue_from StateMissmatchError, with: -> { redirect_to schools_errors_auth_failed_path }
+    rescue_from AuthFailedError,     with: :authentication_failure
+    rescue_from StateMissmatchError, with: :authentication_failure
 
     def show
       # nothing yet, the view just contains a 'logout' button
@@ -15,7 +15,7 @@ module Schools
     def destroy
       Rails.logger.warn("Clearing session: #{session.to_json}")
       session.clear
-      redirect_to root_path
+      redirect_to schools_path
     end
 
     def create
@@ -53,6 +53,13 @@ module Schools
 
         raise StateMissmatchError
       end
+    end
+
+    def authentication_failure(exception)
+      ExceptionNotifier.notify_exception(exception)
+      Raven.capture_exception(exception)
+
+      redirect_to schools_errors_auth_failed_path
     end
   end
 end
