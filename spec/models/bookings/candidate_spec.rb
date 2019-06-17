@@ -29,6 +29,29 @@ RSpec.describe Bookings::Candidate, type: :model do
     it { is_expected.to have_many :session_tokens }
   end
 
+  describe 'scopes' do
+    context 'for confirmations' do
+      let!(:confirmed) { create(:candidate, :confirmed) }
+      let!(:unconfirmed) { create(:candidate) }
+
+      describe '.confirmed' do
+        subject { described_class.confirmed.to_a }
+
+        it "will only include confirmed" do
+          is_expected.to eql([confirmed])
+        end
+      end
+
+      describe '.unconfirmed' do
+        subject { described_class.unconfirmed.to_a }
+
+        it "will only include unconfirmed" do
+          is_expected.to eql([unconfirmed])
+        end
+      end
+    end
+  end
+
   describe '.generate_session_token!' do
     let(:candidate) { create(:candidate) }
 
@@ -56,6 +79,28 @@ RSpec.describe Bookings::Candidate, type: :model do
 
     it "will not expire other candidates tokens" do
       expect(another.reload.expired?).to be false
+    end
+  end
+
+  describe '.last_signed_in_at' do
+    let!(:first) { create(:candidate_session_token, :confirmed) }
+
+    let!(:second) do
+      create(:candidate_session_token, candidate: first.candidate).tap(&:confirm!)
+    end
+
+    context 'for confirmed candidate' do
+      it "will return last confirmed token timestamp" do
+        expect(first.candidate.last_signed_in_at.to_i).to eql(second.confirmed_at.to_i)
+      end
+    end
+
+    context 'for subsequently deconfirmed candidate' do
+      before { first.candidate.update!(confirmed_at: nil) }
+
+      it "will return last confirmed token timestamp" do
+        expect(first.candidate.last_signed_in_at.to_i).to eql(second.confirmed_at.to_i)
+      end
     end
   end
 end

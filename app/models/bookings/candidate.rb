@@ -7,11 +7,22 @@ class Bookings::Candidate < ApplicationRecord
   validates :gitis_uuid, presence: true, format: { with: UUID_V4_FORMAT }
   validates :gitis_uuid, uniqueness: { case_sensitive: false }
 
+  scope :confirmed, -> { where.not(confirmed_at: nil) }
+  scope :unconfirmed, -> { where(confirmed_at: nil) }
+
   def generate_session_token!
     session_tokens.create!
   end
 
   def expire_session_tokens!
     session_tokens.expire_all!
+  end
+
+  def confirmed?
+    confirmed_at?
+  end
+
+  def last_signed_in_at
+    confirmed_at || session_tokens.confirmed.maximum(:confirmed_at)
   end
 end
