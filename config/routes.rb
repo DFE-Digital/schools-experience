@@ -41,9 +41,6 @@ Rails.application.routes.draw do
               only: [:new, :create],
               controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
           end
-          collection do
-            resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
-          end
         end
         resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
           collection do
