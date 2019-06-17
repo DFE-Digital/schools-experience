@@ -11,11 +11,16 @@ Given("I have completed the placement preference form") do
   click_button 'Continue'
 end
 
-Given("I have completed the contact information form") do
-  visit path_for 'enter your contact details', school: @school
+Given("I have completed the personal information form") do
+  visit path_for 'enter your personal details', school: @school
   fill_in 'First name', with: 'testy'
   fill_in 'Last name', with: 'mctest'
   fill_in 'Email address', with: 'test@example.com'
+  click_button 'Continue'
+end
+
+Given("I have completed the contact information form") do
+  visit path_for 'enter your contact details', school: @school
   fill_in 'Building', with: 'Test house'
   fill_in 'Street', with: 'Test street'
   fill_in 'Town or city', with: 'Test Town'
@@ -57,11 +62,15 @@ Then("the placement preference form should populated with the details I've enter
   expect(find_field('What do you want to get out of your school experience?').value).to eq 'I enjoy teaching'
 end
 
-Then("the contact information form should populated with the details I've entered so far") do
-  visit path_for 'enter your contact details', school: @school
+Then("the personal information form should populated with the details I've entered so far") do
+  visit path_for 'enter your personal details', school: @school
   expect(find_field('First name').value).to eq 'testy'
   expect(find_field('Last name').value).to eq 'mctest'
   expect(find_field('Email address').value).to eq 'test@example.com'
+end
+
+Then("the contact information form should populated with the details I've entered so far") do
+  visit path_for 'enter your contact details', school: @school
   expect(find_field('Building').value).to eq 'Test house'
   expect(find_field('Street').value).to eq 'Test street'
   expect(find_field('Town or city').value).to eq 'Test Town'

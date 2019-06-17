@@ -47,31 +47,29 @@ feature 'Candidate Registrations', type: :feature do
 
   scenario 'Candidate Registraion Journey' do
     # Begin wizard journey
-    visit "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
-    expect(page).to have_text 'Request school experience'
+    visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
+    expect(page).to have_text 'Enter your personal details'
 
-    # Submit registrations/placement_preference form with errors
-    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+    # Submit personal information form with errors
+    fill_in 'First name', with: 'testy'
+    fill_in 'Last name', with: 'mctest'
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 
-    # Submit registrations/placement_preference form successfully
-    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
-    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+    # Submit personal information form successfully
+    fill_in 'First name', with: 'testy'
+    fill_in 'Last name', with: 'mctest'
+    fill_in 'Email address', with: 'test@example.com'
     click_button 'Continue'
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/contact_information/new"
 
     # Submit contact information form with errors
-    fill_in 'First name', with: 'testy'
-    fill_in 'Last name', with: 'mctest'
+    fill_in 'Building', with: 'Test house'
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 
     # Submit contact information form successfully
-    fill_in 'First name', with: 'testy'
-    fill_in 'Last name', with: 'mctest'
-    fill_in 'Email address', with: 'test@example.com'
     fill_in 'Building', with: 'Test house'
     fill_in 'Street', with: 'Test street'
     fill_in 'Town or city', with: 'Test Town'
@@ -95,6 +93,18 @@ feature 'Candidate Registrations', type: :feature do
     select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
     choose "I’m very sure and think I’ll apply"
     select 'Physics', from: 'First choice'
+    click_button 'Continue'
+    expect(page.current_path).to eq \
+      "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
+
+    # Submit registrations/placement_preference form with errors
+    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+    click_button 'Continue'
+    expect(page).to have_text 'There is a problem'
+
+    # Submit registrations/placement_preference form successfully
+    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
+    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
     click_button 'Continue'
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/background_check/new"

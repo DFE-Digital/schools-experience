@@ -91,9 +91,10 @@ Rails.application.routes.draw do
 
     resources :schools, only: %i{index show} do
       namespace :registrations do
-        resource :placement_preference, only: %i(new create edit update)
+        resource :personal_information, only: %i(new create edit update)
         resource :contact_information, only: %i(new create edit update)
         resource :subject_preference, only: %i(new create edit update)
+        resource :placement_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
         resource :confirmation_email, only: %i(show create)

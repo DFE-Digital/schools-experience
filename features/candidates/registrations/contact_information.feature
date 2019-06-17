@@ -12,10 +12,7 @@ Feature: Contact Information
         Given I am on the 'Enter your contact details' page for my school of choice
         Then I should see a form with the following fields:
             | Label               | Type  |
-            | First name          | text  |
-            | Last name           | text  |
             | UK telephone number | tel   |
-            | Email address       | email |
             | Building and street | text  |
             | Town or city        | text  |
             | County              | text  |
@@ -24,10 +21,7 @@ Feature: Contact Information
     Scenario: Submitting my data
       Given I am on the 'Enter your contact details' page for my school of choice
         And I have entered the following details into the form:
-            | First name          | Philip                 |
-            | Last name           | Gilbert                |
             | UK telephone number | 01234567890            |
-            | Email address       | phil.gilbert@gmail.com |
             | Building and street | 221B           |
             | Street              | Baker Street   |
             | Town or city        | London         |
