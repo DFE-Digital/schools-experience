@@ -1,0 +1,13 @@
+<div id="<%= id || key.parameterize %>" class="govuk-summary-list__row <%= key.parameterize %>">
+  <dt class="govuk-summary-list__key">
+    <%= key %>
+  </dt>
+  <dd class="govuk-summary-list__value">
+    <%= value %>
+  </dd>
+  <% if action.present? %>
+    <dd class="govuk-summary-list__actions">
+      <%= action %>
+    </dd>
+  <% end %>
+</div>

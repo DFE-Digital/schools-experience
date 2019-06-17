@@ -41,4 +41,12 @@ module ApplicationHelper
       end
     end
   end
+
+  def summary_row(key, value, change_path = nil, id: nil)
+    action = change_path ? link_to('Change', change_path) : nil
+
+    render \
+      partial: "shared/list_row",
+      locals: { key: key, value: value, action: action, id: id}
+  end
 end
