@@ -41,4 +41,8 @@ module ApplicationHelper
       end
     end
   end
+
+  def service_update_last_updated_at
+    # TODO - update this on deploy
+  end
 end

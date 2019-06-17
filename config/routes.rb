@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/cookies_policy', to: 'pages#cookies_policy'
+  get '/service_update', to: 'pages#service_update'
 
   if Rails.application.config.x.phase >= 2
     get '/auth/callback', to: 'schools/sessions#create'
