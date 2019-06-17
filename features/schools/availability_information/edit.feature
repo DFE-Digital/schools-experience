@@ -14,9 +14,9 @@ Feature: Editing availability info
     Scenario: Breadcrumbs
         Given I am on the 'availability information' page
         Then I should see the following breadcrumbs:
-            | Text                                         | Link     |
-            | Some school                                  | /schools |
-            | Describe your school experience availability | None     |
+            | Text                                         | Link               |
+            | Some school                                  | /schools/dashboard |
+            | Describe your school experience availability | None               |
 
     Scenario: Page contents
         Given I am on the 'availability information' page

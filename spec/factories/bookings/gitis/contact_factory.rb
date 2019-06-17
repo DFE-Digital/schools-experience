@@ -9,5 +9,9 @@ FactoryBot.define do
     address1_city { "Test Town" }
     address1_stateorprovince { "Test County" }
     address1_postalcode { "MA1 1AM" }
+
+    trait :persisted do
+      id { SecureRandom.uuid }
+    end
   end
 end

@@ -1,0 +1,39 @@
+<% self.page_title = 'Confirm your email' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Verify your school experience sign in
+    </h1>
+
+    <p>
+      Click the link in the email we’ve sent to the following email address to
+      sign in to you school experience dashboard.
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li><%= @candidates_session.email %></li>
+    </ul>
+
+    <p>
+      If you can’t find the message in your inbox:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>check your spam and any other mailbox folders</li>
+      <li>
+        check the email address provided is one you've previously used with the
+        school experience service
+      </li>
+    </ul>
+
+    <p>
+      If you can’t find or haven’t received the email please return to the
+      Sign in page to try again:
+    </p>
+
+    <p>
+      <%= link_to 'Return to Sign in', candidates_signin_path, class: 'govuk-link' %>
+    </p>
+  </div>
+</div>

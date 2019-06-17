@@ -14,7 +14,7 @@ Feature: Editing placement dates
         Given I am on the edit page for my placement
         Then I should see the following breadcrumbs:
             | Text                  | Link                     |
-            | Some school           | /schools                 |
+            | Some school           | /schools/dashboard       |
             | Placement dates       | /schools/placement_dates |
             | Modify placement date | None                     |
 
