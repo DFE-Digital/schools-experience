@@ -19,7 +19,7 @@ module Candidates
 
           PlacementRequestJob.perform_later \
             registration_session.uuid,
-            new_candidates_placement_request_cancellation_url(placement_request.token)
+            cancellation_url(placement_request)
         end
 
         redirect_to candidates_school_registrations_placement_request_path \
@@ -27,6 +27,16 @@ module Candidates
           uuid: registration_session.uuid
       rescue RegistrationStore::SessionNotFound
         render :session_expired
+      end
+
+    private
+
+      def cancellation_url(placement_request)
+        if Rails.application.config.x.phase > 2
+          new_candidates_placement_request_cancellation_url(placement_request.token)
+        else
+          ''
+        end
       end
     end
   end
