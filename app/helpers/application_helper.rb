@@ -49,8 +49,6 @@ module ApplicationHelper
                  "Welcome #{@current_user.given_name} #{@current_user.family_name}"
                end
 
-    content_tag(:span) do
-      safe_join([greeting, logout_link].compact, ". ")
-    end
+    safe_join([greeting, logout_link].compact, ". ")
   end
 end
