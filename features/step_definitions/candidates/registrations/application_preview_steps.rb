@@ -11,7 +11,7 @@ Given("I have filled in my personal information successfully") do
   # Submit contact information form successfully
   fill_in 'First name', with: 'testy'
   fill_in 'Last name', with: 'mctest'
-  fill_in 'Email address', with: 'test@example.com'
+  fill_in 'Email address', with: 'unknown@example.com'
   click_button 'Continue'
   expect(page.current_path).to eq \
     "/candidates/schools/#{@school.urn}/registrations/contact_information/new"

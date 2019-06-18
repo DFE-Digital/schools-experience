@@ -26,13 +26,13 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         }
       end
 
-      before do
-        post \
-          '/candidates/schools/11048/registrations/personal_information',
-          params: personal_information_params
-      end
-
       context 'invalid' do
+        before do
+          post \
+            '/candidates/schools/11048/registrations/personal_information',
+            params: personal_information_params
+        end
+
         let :personal_information do
           Candidates::Registrations::PersonalInformation.new
         end
@@ -47,9 +47,17 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
       end
 
-      context 'valid' do
+      context 'valid and known to gitis' do
         let :personal_information do
           FactoryBot.build :personal_information
+        end
+
+        let(:token) { create(:candidate_session_token) }
+
+        before do
+          post \
+            '/candidates/schools/11048/registrations/personal_information',
+            params: personal_information_params
         end
 
         it 'updates the session with the new details' do
@@ -57,7 +65,33 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             eq_model personal_information
         end
 
+        it "sends a sign in email"
+
         it 'redirects to the next step' do
+          expect(response).to redirect_to \
+            '/candidates/schools/11048/registrations/sign_ins'
+        end
+      end
+
+      context 'valid but not known to gitis' do
+        let :personal_information do
+          FactoryBot.build :personal_information, email: 'unknown@mctest.com'
+        end
+
+        before do
+          post \
+            '/candidates/schools/11048/registrations/personal_information',
+            params: personal_information_params
+        end
+
+        it 'updates the session with the new details' do
+          expect(registration_session.personal_information).to \
+            eq_model personal_information
+        end
+
+        it 'does not send sign in email'
+
+        it 'redirects to the contact information step' do
           expect(response).to redirect_to \
             '/candidates/schools/11048/registrations/contact_information/new'
         end

@@ -2,6 +2,7 @@ module Bookings::Gitis
   module FakeCrm
     def find_by_email(address)
       return super unless stubbed?
+      return nil if address =~ /unknown/
 
       Contact.new(fake_contact_data).tap do |contact|
         contact.email = address

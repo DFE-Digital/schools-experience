@@ -16,7 +16,17 @@ Feature: Personal Information
             | Last name           | text  |
             | Email address       | email |
 
-    Scenario: Submitting my data
+    Scenario: Submitting my data with unknown Candidate
+      Given I am on the 'Enter your personal details' page for my school of choice
+        And I have entered the following details into the form:
+            | First name          | Philip                 |
+            | Last name           | Gilbert                |
+            | Email address       | phil.unknown@gmail.com |
+
+        When I submit the form
+        Then I should be on the 'enter your contact details' page for my school of choice
+
+    Scenario: Submitting my data with known Candidate
       Given I am on the 'Enter your personal details' page for my school of choice
         And I have entered the following details into the form:
             | First name          | Philip                 |
@@ -24,4 +34,4 @@ Feature: Personal Information
             | Email address       | phil.gilbert@gmail.com |
 
         When I submit the form
-        Then I should be on the 'enter your contact details' page for my school of choice
+        Then I should be on the 'verify your email' page for my school of choice

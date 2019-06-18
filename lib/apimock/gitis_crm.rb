@@ -45,6 +45,12 @@ module Apimock
     end
 
     def stub_contact_request_by_email(email, return_params = {})
+      data = return_params.delete(:data)
+      stringified_params = return_params.stringify_keys
+      data ||= [
+        contact_data.merge('emailaddress1' => email).merge(stringified_params)
+      ]
+
       stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1&$filter=emailaddress1 eq '#{email}' or emailaddress2 eq '#{email}' or emailaddress3 eq '#{email}'").
         with(headers: get_headers).
         to_return(
@@ -54,10 +60,7 @@ module Apimock
           },
           body: {
             '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
-            'value' => [
-              contact_data.merge('emailaddress1' => email). \
-                merge(return_params.stringify_keys)
-            ]
+            'value' => data
           }.to_json
         )
     end

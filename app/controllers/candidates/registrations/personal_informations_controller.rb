@@ -9,7 +9,13 @@ module Candidates
         @personal_information = PersonalInformation.new personal_information_params
         if @personal_information.valid?
           persist @personal_information
-          redirect_to new_candidates_school_registrations_contact_information_path
+
+          if @personal_information.create_signin_token(gitis_crm)
+            # FIXME should send the email to the user
+            redirect_to candidates_school_registrations_sign_ins_path
+          else
+            redirect_to new_candidates_school_registrations_contact_information_path
+          end
         else
           render :new
         end
@@ -25,6 +31,7 @@ module Candidates
 
         if @personal_information.valid?
           persist @personal_information
+          # FIXME need to consider scenario where the user swaps out email address after confirming
           redirect_to candidates_school_registrations_application_preview_path
         else
           render :edit

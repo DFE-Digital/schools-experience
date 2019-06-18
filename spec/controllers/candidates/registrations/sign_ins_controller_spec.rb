@@ -3,9 +3,13 @@ require 'rails_helper'
 RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   let(:school_id) { 11048 }
   include_context 'Stubbed current_registration'
+  include_context "stubbed out Gitis"
 
   let :registration_session do
-    Candidates::Registrations::RegistrationSession.new({})
+    Candidates::Registrations::RegistrationSession.new(
+      Candidates::Registrations::PersonalInformation.model_name.param_key => \
+        { 'email' => 'testy@mctest.com' }
+    )
   end
 
   describe 'GET #index' do
@@ -21,6 +25,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
     context 'with valid token' do
       before do
+        gitis_stubs.stub_contact_request(token.candidate.gitis_uuid)
         get candidates_school_registrations_sign_in_path(school_id, token)
       end
 
@@ -36,7 +41,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
     context 'with invalid token' do
       before do
-        token.expire!
+        expect(Candidates::Session).to receive(:signin!).and_return(nil)
         get candidates_school_registrations_sign_in_path(school_id, token)
       end
 

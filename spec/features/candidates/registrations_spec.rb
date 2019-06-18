@@ -45,25 +45,115 @@ feature 'Candidate Registrations', type: :feature do
     end
   end
 
-  scenario 'Candidate Registraion Journey' do
-    # Begin wizard journey
-    visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
-    expect(page).to have_text 'Enter your personal details'
+  feature 'Candidate Registration' do
+    context 'for unknown Candidate' do
+      before do
+        allow_any_instance_of(Candidates::Registrations::PersonalInformation).to \
+          receive(:create_signin_token).and_return(nil)
+      end
 
-    # Submit personal information form with errors
-    fill_in 'First name', with: 'testy'
-    fill_in 'Last name', with: 'mctest'
-    click_button 'Continue'
-    expect(page).to have_text 'There is a problem'
+      scenario "completing the Journey" do
+        # Begin wizard journey
+        visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
+        expect(page).to have_text 'Enter your personal details'
 
-    # Submit personal information form successfully
-    fill_in 'First name', with: 'testy'
-    fill_in 'Last name', with: 'mctest'
-    fill_in 'Email address', with: 'test@example.com'
-    click_button 'Continue'
-    expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
+        # Submit personal information form with errors
+        fill_in 'First name', with: 'testy'
+        fill_in 'Last name', with: 'mctest'
+        click_button 'Continue'
+        expect(page).to have_text 'There is a problem'
 
+        # Submit personal information form successfully
+        fill_in 'First name', with: 'testy'
+        fill_in 'Last name', with: 'mctest'
+        fill_in 'Email address', with: 'test@example.com'
+        click_button 'Continue'
+        expect(page.current_path).to eq \
+          "/candidates/schools/#{school_urn}/registrations/contact_information/new"
+
+        # Run steps common for both known and unknown users
+        common_registration_steps(page)
+
+        # Submit email confirmation form with errors
+        click_button 'Accept and send'
+        expect(page).to have_text 'You need to confirm your details are correct and accept our privacy policy to continue'
+        expect(page).not_to have_text \
+          "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
+
+        # Submit email confirmation form successfully
+        check \
+          "By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our privacy policy"
+        click_button 'Accept and send'
+        expect(page).to have_text \
+          "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
+
+        # Click email confirmation link
+        visit "/candidates/confirm/#{uuid}"
+
+        expect(page).to have_text \
+          "Your request for school experience will be forwarded to Test School."
+      end
+    end
+
+    context 'for known Candidate' do
+      let(:token) { create(:candidate_session_token) }
+
+      before do
+        allow_any_instance_of(Candidates::Registrations::PersonalInformation).to \
+          receive(:create_signin_token).and_return(token.token)
+      end
+
+      scenario "completing the Journey" do
+        # Begin wizard journey
+        visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
+        expect(page).to have_text 'Enter your personal details'
+
+        # Submit personal information form with errors
+        fill_in 'First name', with: 'testy'
+        fill_in 'Last name', with: 'mctest'
+        click_button 'Continue'
+        expect(page).to have_text 'There is a problem'
+
+        # Submit personal information form successfully
+        fill_in 'First name', with: 'testy'
+        fill_in 'Last name', with: 'mctest'
+        fill_in 'Email address', with: 'test@example.com'
+        click_button 'Continue'
+        expect(page.current_path).to eq \
+          "/candidates/schools/#{school_urn}/registrations/sign_ins"
+        expect(page).to have_text 'Verify your email address'
+
+        # Follow the link from email
+        visit "/candidates/schools/#{school_urn}/registrations/sign_ins/#{token.token}"
+        expect(page.current_path).to eq \
+          "/candidates/schools/#{school_urn}/registrations/contact_information/new"
+
+        # Run steps common for both known and unknown users
+        common_registration_steps(page)
+
+        # Submit email confirmation form with errors
+        click_button 'Accept and send'
+        expect(page).to have_text 'You need to confirm your details are correct and accept our privacy policy to continue'
+        expect(page).not_to have_text \
+          "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
+
+        # Submit email confirmation form successfully
+        check \
+          "By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our privacy policy"
+        click_button 'Accept and send'
+        expect(page).to have_text \
+          "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
+
+        # Click email confirmation link
+        visit "/candidates/confirm/#{uuid}"
+
+        expect(page).to have_text \
+          "Your request for school experience will be forwarded to Test School."
+      end
+    end
+  end
+
+  def common_registration_steps(page)
     # Submit contact information form with errors
     fill_in 'Building', with: 'Test house'
     click_button 'Continue'
@@ -134,24 +224,5 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "Teaching subject - first choice Physics"
     expect(page).to have_text "Teaching subject - second choice Maths"
     expect(page).to have_text "DBS certificate Yes"
-
-    # Submit email confirmation form with errors
-    click_button 'Accept and send'
-    expect(page).to have_text 'You need to confirm your details are correct and accept our privacy policy to continue'
-    expect(page).not_to have_text \
-      "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
-
-    # Submit email confirmation form successfully
-    check \
-      "By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our privacy policy"
-    click_button 'Accept and send'
-    expect(page).to have_text \
-      "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
-
-    # Click email confirmation link
-    visit "/candidates/confirm/#{uuid}"
-
-    expect(page).to have_text \
-      "Your request for school experience will be forwarded to Test School."
   end
 end
