@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_07_140934) do
+ActiveRecord::Schema.define(version: 2019_06_18_152627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,8 +91,10 @@ ActiveRecord::Schema.define(version: 2019_06_07_140934) do
     t.integer "bookings_school_id"
     t.string "token"
     t.uuid "analytics_tracking_uuid"
+    t.bigint "candidate_id"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
     t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
+    t.index ["candidate_id"], name: "index_bookings_placement_requests_on_candidate_id"
     t.index ["token"], name: "index_bookings_placement_requests_on_token", unique: true
   end
 
@@ -313,6 +315,7 @@ ActiveRecord::Schema.define(version: 2019_06_07_140934) do
   add_foreign_key "bookings_bookings", "bookings_subjects"
   add_foreign_key "bookings_placement_dates", "bookings_schools"
   add_foreign_key "bookings_placement_request_cancellations", "bookings_placement_requests"
+  add_foreign_key "bookings_placement_requests", "bookings_candidates", column: "candidate_id"
   add_foreign_key "bookings_placement_requests", "bookings_placement_dates"
   add_foreign_key "bookings_placement_requests", "bookings_schools"
   add_foreign_key "bookings_profiles", "bookings_schools", column: "school_id"
