@@ -12,7 +12,6 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     :school_email,
     :school_name,
     :school_admin_name,
-    :dates_requested,
     :candidate_email,
     :candidate_name,
     :requested_availability,
@@ -28,6 +27,14 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
 
   def sent?
     sent_at.present?
+  end
+
+  def dates_requested
+    if placement_request&.booking.present?
+      placement_request.booking.date.to_formatted_s(:govuk)
+    else
+      placement_request.dates_requested
+    end
   end
 
 private
