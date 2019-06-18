@@ -73,6 +73,10 @@ RSpec.configure do |config|
     ])
   end
 
+  config.before :each do
+    Rails.cache.clear
+  end
+
   config.before :suite do
     Webpacker.compile
   end
