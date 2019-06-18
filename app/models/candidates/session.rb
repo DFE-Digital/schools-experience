@@ -20,7 +20,7 @@ class Candidates::Session
     token = Candidates::SessionToken.valid.find_by(token: token_string)
     return unless token
 
-    token.candidate.tap(&:expire_session_tokens!)
+    token.confirm!.candidate
   end
 
   def initialize(gitis, *args)

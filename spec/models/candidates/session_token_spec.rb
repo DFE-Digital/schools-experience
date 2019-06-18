@@ -12,9 +12,30 @@ RSpec.describe Candidates::SessionToken, type: :model do
     it { is_expected.to belong_to :candidate }
   end
 
+  describe 'confirmation scopes' do
+    let!(:unconfirmed) { create(:candidate_session_token) }
+    let!(:confirmed) { create(:candidate_session_token, :confirmed) }
+
+    describe '.unconfirmed' do
+      subject { described_class.unconfirmed.to_a }
+
+      it "should only return confirmed token" do
+        is_expected.to eq([unconfirmed])
+      end
+    end
+
+    describe '.confirmed' do
+      subject { described_class.confirmed.to_a }
+
+      it "should only return confirmed token" do
+        is_expected.to eq([confirmed])
+      end
+    end
+  end
+
   describe '.unexpired' do
     let!(:valid) { create(:candidate_session_token) }
-    let!(:expired) { create(:candidate_session_token, expired_at: 5.minutes.ago) }
+    let!(:expired) { create(:candidate_session_token, :expired) }
 
     subject { described_class.unexpired.to_a }
 
@@ -25,7 +46,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
 
   describe '.valid' do
     let!(:valid) { create(:candidate_session_token) }
-    let!(:expired) { create(:candidate_session_token, expired_at: 5.minutes.ago) }
+    let!(:expired) { create(:candidate_session_token, :expired) }
     let!(:first) { create(:candidate_session_token, created_at: 10.days.ago) }
 
     subject { described_class.valid.to_a }
@@ -92,6 +113,33 @@ RSpec.describe Candidates::SessionToken, type: :model do
 
     it 'will not expire already expired tokens' do
       expect(third.reload.expired_at).to be < 3.minutes.ago
+    end
+  end
+
+  describe 'confirm!' do
+    let!(:first) { create(:candidate_session_token) }
+    let!(:second) { create(:candidate_session_token, candidate: first.candidate) }
+    let!(:third) { create(:candidate_session_token) }
+
+    before { first.confirm! }
+
+    it "will confirm current_token" do
+      expect(first.reload).to be_confirmed
+      expect(first).not_to be_expired
+    end
+
+    it "will expire other tokens for same candidate" do
+      expect(second.reload).to be_expired
+      expect(second).not_to be_confirmed
+    end
+
+    it "will not affect other candidates tokens" do
+      expect(third.reload).not_to be_expired
+      expect(third.reload).not_to be_confirmed
+    end
+
+    it "will confirm the candidate" do
+      expect(first.candidate.reload).to be_confirmed
     end
   end
 end
