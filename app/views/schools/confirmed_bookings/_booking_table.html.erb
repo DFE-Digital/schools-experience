@@ -1,15 +1,15 @@
 <table id="bookings" class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th class="govuk-table__header">Name</th>
-      <th class="govuk-table__header">Subject</th>
-      <th class="govuk-table__header">Date</th>
+      <th class="govuk-table__header" scope="col">Name</th>
+      <th class="govuk-table__header" scope="col">Subject</th>
+      <th class="govuk-table__header" scope="col">Date booked</th>
       <th class="govuk-table__header"/>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
     <%- @bookings.each do |booking| -%>
-    <tr class="booking govuk-table__row <%= "booking-#{booking.id}" %>">
+      <tr class="booking govuk-table__row <%= "booking-#{booking.id}" %>" data-booking-id="<%= booking.id %>">
       <td class="name govuk-table__cell">
         <%= booking.candidate.full_name %>
       </td>
@@ -20,11 +20,13 @@
         <%= booking.date.to_formatted_s(:govuk) %>
       </td>
       <td class="govuk-table__cell">
-        <%= link_to "Open", schools_booking_path('abc123') %>
-        <%= link_to 'Update', '#' %>
-        <%= link_to 'Cancel', '#' %>
+        <%= link_to "View", schools_booking_path(booking) %>
       </td>
     </tr>
     <%- end -%>
   </tbody>
 </table>
+
+<div class="pagination-info lower">
+  <%= paginate @bookings %>
+</div>

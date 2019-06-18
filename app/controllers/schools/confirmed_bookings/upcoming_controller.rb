@@ -4,9 +4,11 @@ module Schools
       def index
         @bookings = current_school
           .bookings
-          .upcoming
           .eager_load(:bookings_subject)
-          .all
+          .upcoming
+          .order(date: :asc)
+          .page(params[:page])
+          .per(10)
       end
     end
   end

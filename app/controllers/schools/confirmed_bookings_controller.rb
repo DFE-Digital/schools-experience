@@ -4,7 +4,9 @@ module Schools
       @bookings = current_school
         .bookings
         .eager_load(:bookings_subject)
-        .all
+        .order(date: :asc)
+        .page(params[:page])
+        .per(10)
     end
 
     def show

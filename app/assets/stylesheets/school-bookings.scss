@@ -47,3 +47,25 @@
     }
   }
 }
+
+table#bookings {
+  tr {
+    td.name, td.date {
+      font-weight: bold;
+    }
+
+    td:first-of-type {
+      width: 14rem;
+    }
+  }
+
+  .govuk-table__header, .govuk-table__cell {
+    border: none;
+  }
+}
+
+#bookings-index {
+  p {
+    line-height: 2;
+  }
+}

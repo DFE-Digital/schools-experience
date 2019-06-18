@@ -1,17 +1,26 @@
-<%- self.page_title = "All bookings" %>
+<%- self.page_title = "Manage bookings" %>
 
 <%
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
-    'All bookings' => nil
+    'Manage bookings' => nil
   }
 %>
 
-<h2 class="govuk-heading-m">All bookings</h2>
+<div id="bookings-index" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">Manage bookings</h1>
 
-<%= render partial: 'schools/confirmed_bookings/booking_table', locals: { bookings: @bookings } %>
+    <p>
+      The following <strong>only lists bookings</strong> made on or after <strong>20 June 2019</strong>.
+      <br>
+      You'll need to refer to <strong>your own records</strong> for any bookings made before this date.
+    </p>
 
-<div>
-  <%= link_to "Upcoming bookings", schools_upcoming_bookings_path, class: 'govuk-button govuk-button--secondary' %>
+    <%= render partial: 'schools/confirmed_bookings/booking_table', locals: { bookings: @bookings } %>
+
+    <div>
+      <%= link_to "Return to requests and bookings", schools_dashboard_path, class: 'govuk-button govuk-button--secondary' %>
+    </div>
+  </div>
 </div>
-
