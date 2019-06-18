@@ -1,4 +1,4 @@
-Feature:
+Feature: The School Landing Page
     So I can learn about managing school experience for my school
     As a school administrator
     I want to be able to read some useful information on the topic
