@@ -56,7 +56,7 @@ describe Schools::ConfirmedBookings::CancellationsController, type: :request do
     end
 
     before do
-      post "/schools/placement_requests/#{placement_request.id}/cancellation",
+      post "/schools/bookings/#{booking.id}/cancellation",
         params: cancellation_params
     end
 
@@ -71,7 +71,7 @@ describe Schools::ConfirmedBookings::CancellationsController, type: :request do
 
       it 'redirects to the placement_show path' do
         expect(response).to redirect_to \
-          schools_placement_request_path(placement_request)
+          schools_booking_path(booking)
       end
     end
 
@@ -108,7 +108,7 @@ describe Schools::ConfirmedBookings::CancellationsController, type: :request do
 
         it 'redirects to the show action' do
           expect(response).to redirect_to \
-            schools_placement_request_cancellation_path(placement_request)
+            schools_booking_cancellation_path(booking)
         end
       end
     end
@@ -116,7 +116,6 @@ describe Schools::ConfirmedBookings::CancellationsController, type: :request do
 
   context '#edit' do
     before do
-      #get "/schools/placement_requests/#{placement_request.id}/cancellation/edit"
       get edit_schools_booking_cancellation_path(booking.id)
     end
 
