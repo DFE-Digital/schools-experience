@@ -2,6 +2,7 @@
 # registration
 module Bookings
   class PlacementRequest < ApplicationRecord
+    attr_accessor :gitis_contact
     include Candidates::Registrations::Behaviours::PlacementPreference
     include Candidates::Registrations::Behaviours::SubjectPreference
     include Candidates::Registrations::Behaviours::BackgroundCheck
@@ -112,6 +113,14 @@ module Bookings
 
     def school_admin_name
       school.admin_contact_name
+    end
+
+    def candidate_email
+      gitis_contact.email
+    end
+
+    def candidate_name
+      gitis_contact.full_name
     end
 
     def cancellation

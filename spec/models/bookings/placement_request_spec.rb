@@ -119,6 +119,7 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   context 'attributes' do
+    it { is_expected.to respond_to :gitis_contact }
     it { is_expected.to respond_to :urn }
     it { is_expected.to respond_to :degree_stage }
     it { is_expected.to respond_to :degree_stage_explaination }
