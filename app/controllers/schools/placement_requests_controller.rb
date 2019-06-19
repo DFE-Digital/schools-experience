@@ -1,5 +1,7 @@
 module Schools
   class PlacementRequestsController < Schools::BaseController
+    include Schools::RestrictAccessUnlessOnboarded
+
     def index
       @placement_requests = placement_requests
     end

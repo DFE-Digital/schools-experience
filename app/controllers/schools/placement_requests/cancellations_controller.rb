@@ -1,6 +1,7 @@
 module Schools
   module PlacementRequests
     class CancellationsController < Schools::BaseController
+      include Schools::RestrictAccessUnlessOnboarded
       before_action :set_placement_request
       before_action :ensure_placement_request_is_open
 
