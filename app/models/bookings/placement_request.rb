@@ -25,12 +25,14 @@ module Bookings
       -> { where cancelled_by: 'candidate' },
       class_name: 'Bookings::PlacementRequest::Cancellation',
       foreign_key: 'bookings_placement_request_id',
+      inverse_of: :placement_request,
       dependent: :destroy
 
     has_one :school_cancellation,
       -> { where cancelled_by: 'school' },
       class_name: 'Bookings::PlacementRequest::Cancellation',
       foreign_key: 'bookings_placement_request_id',
+      inverse_of: :placement_request,
       dependent: :destroy
 
     scope :open, -> do
