@@ -127,7 +127,7 @@ module Bookings
       candidate_cancellation || school_cancellation
     end
 
-    def load_gitis_contact(crm)
+    def fetch_gitis_contact(crm)
       self.gitis_contact = crm.find(contact_uuid)
     end
 

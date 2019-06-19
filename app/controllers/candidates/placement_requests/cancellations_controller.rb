@@ -17,7 +17,7 @@ module Candidates
           placement_request_params
 
         if @cancellation.save
-          @placement_request.gitis_contact = find_contact(@placement_request)
+          @placement_request.fetch_gitis_contact gitis_crm
 
           notify_school @cancellation
           notify_candidate @cancellation
@@ -104,10 +104,6 @@ module Candidates
           candidate_name: cancellation.candidate_name,
           requested_availability: cancellation.dates_requested
         ).despatch_later!
-      end
-
-      def find_contact(req)
-        gitis_crm.find(req.contact_uuid)
       end
     end
   end
