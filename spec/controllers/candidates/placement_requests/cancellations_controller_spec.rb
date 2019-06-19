@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe Candidates::PlacementRequests::CancellationsController, type: :request do
-  include_context 'stubbed out Gitis'
-
   let :notify_school_request_cancellation do
     double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
   end
@@ -154,11 +152,15 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
             FactoryBot.build :cancellation, placement_request: placement_request
           end
 
+          let :gitis_contact do
+            Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+          end
+
           it 'notifies the school' do
             expect(NotifyEmail::SchoolRequestCancellation).to have_received(:new).with \
               to: cancellation.school_email,
               school_name: cancellation.school_name,
-              candidate_name: cancellation.candidate_name,
+              candidate_name: gitis_contact.full_name,
               cancellation_reasons: cancellation.reason,
               requested_availability: cancellation.dates_requested,
               placement_request_url: schools_placement_request_url(cancellation.placement_request)
@@ -169,9 +171,9 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
 
           it 'notifies the candidate' do
             expect(NotifyEmail::CandidateRequestCancellation).to have_received(:new).with \
-              to: cancellation.candidate_email,
+              to: gitis_contact.email,
               school_name: cancellation.school_name,
-              candidate_name: cancellation.candidate_name,
+              candidate_name: gitis_contact.full_name,
               requested_availability: cancellation.dates_requested
 
             expect(notify_candidate_request_cancellation).to \
@@ -228,11 +230,15 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
             FactoryBot.build :cancellation, placement_request: placement_request
           end
 
+          let :gitis_contact do
+            Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+          end
+
           it 'notifies the school' do
             expect(NotifyEmail::SchoolBookingCancellation).to have_received(:new).with \
               to: cancellation.school_email,
               school_name: cancellation.school_name,
-              candidate_name: cancellation.candidate_name,
+              candidate_name: gitis_contact.full_name,
               placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
 
             expect(notify_school_booking_cancellation).to \
@@ -241,9 +247,9 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
 
           it 'notifies the candidate' do
             expect(NotifyEmail::CandidateBookingCancellation).to have_received(:new).with \
-              to: cancellation.candidate_email,
+              to: gitis_contact.email,
               school_name: cancellation.school_name,
-              candidate_name: cancellation.candidate_name,
+              candidate_name: gitis_contact.full_name,
               placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
 
             expect(notify_candidate_booking_cancellation).to \

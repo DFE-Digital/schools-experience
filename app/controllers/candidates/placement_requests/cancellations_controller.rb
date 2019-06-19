@@ -1,6 +1,7 @@
 module Candidates
   module PlacementRequests
     class CancellationsController < ApplicationController
+      include GitisAccess
       before_action :ensure_placement_request_is_open, except: :show
 
       def show
@@ -16,6 +17,8 @@ module Candidates
           placement_request_params
 
         if @cancellation.save
+          @placement_request.gitis_contact = find_contact(@placement_request)
+
           notify_school @cancellation
           notify_candidate @cancellation
           @cancellation.sent!
@@ -101,6 +104,10 @@ module Candidates
           candidate_name: cancellation.candidate_name,
           requested_availability: cancellation.dates_requested
         ).despatch_later!
+      end
+
+      def find_contact(req)
+        gitis_crm.find(req.contact_uuid)
       end
     end
   end
