@@ -1,19 +1,19 @@
-<div class="govuk-se-warning">
-
-  <div class="govuk-warning-text">
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      You have school experience requests waiting
-    </strong>
+<div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+  <h2 class="govuk-error-summary__title" id="error-summary-title">
+    <%= not_onboarded_warning %>
+  </h2>
+  <div class="govuk-error-summary__body">
+    <p>
+      Before you can view and deal with these requests you need to answer some
+      questions to update your school profile.
+    </p>
+    <ul class="govuk-list govuk-error-summary__list">
+      <li>
+        <%= link_to 'Update your school profile',
+          schools_on_boarding_profile_path,
+          class: 'govuk-se-warning__link govuk-!-font-weight-bold'
+        %>
+      </li>
+    </ul>
   </div>
-
-  <p>
-    Before you can view and deal with these requests you need to answer some
-    questions to update your school profile.
-  </p>
-
-  <%= link_to 'Update your school profile',
-    schools_on_boarding_profile_path,
-    class: 'govuk-se-warning__link govuk-!-font-weight-bold'
-  %>
 </div>
