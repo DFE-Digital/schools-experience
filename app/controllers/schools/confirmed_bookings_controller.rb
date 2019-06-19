@@ -6,7 +6,7 @@ module Schools
         .eager_load(:bookings_subject, :bookings_placement_request)
         .all
 
-      assign_gitis_contacts(@bookings)
+      assign_gitis_contacts @bookings
     end
 
     def show
