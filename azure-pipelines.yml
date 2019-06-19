@@ -40,7 +40,7 @@ steps:
     displayName: Run the Cucumber features
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
-  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed $(DOCKER_HUB_REPO):$(imageName):$(imageTag) rake db:create db:schema:load
+  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed $(DOCKER_HUB_REPO):$(imageTag) rake db:create db:schema:load
     displayName: Create Smoketest database and import schema
   - script: docker run -d --name=smoketest --health-interval=4s --link postgres:postgres --link redis:redis -e RAILS_ENV=servertest -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed -e SKIP_FORCE_SSL=true $(DOCKER_HUB_REPO):$(imageTag)
     displayName: Spin up app
