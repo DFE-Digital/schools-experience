@@ -22,15 +22,13 @@ module Schools
     end
 
     def assign_gitis_contacts(reqs)
-      return [] if reqs.empty?
+      return reqs if reqs.empty?
 
       contacts = gitis_crm.find(reqs.map(&:contact_uuid)).index_by(&:id)
 
       reqs.each do |req|
         req.gitis_contact = contacts[req.contact_uuid]
       end
-
-      reqs
     end
   end
 end

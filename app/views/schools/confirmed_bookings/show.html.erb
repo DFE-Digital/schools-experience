@@ -6,7 +6,7 @@
   }
 %>
 
-<h1>Booking by <%= @booking.candidate.full_name %></h1>
+<h1>Booking by <%= @booking.candidate_name %></h1>
 
 <div class="booking">
   <section id="booking-details">
@@ -113,7 +113,7 @@
           Address
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @booking.candidate.address %>
+          <%= @booking.gitis_contact.address %>
         </dd>
       </div>
 
@@ -122,7 +122,7 @@
           UK telephone number
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @booking.candidate.phone %>
+          <%= @booking.gitis_contact.phone %>
         </dd>
       </div>
 
@@ -131,7 +131,7 @@
           Email address
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @booking.candidate.email %>
+          <%= @booking.candidate_email %>
         </dd>
       </div>
     </dl>
