@@ -6,7 +6,7 @@ module Schools
         .eager_load(:bookings_subject)
         .order(date: :asc)
         .page(params[:page])
-        .per(10)
+        .per(50)
     end
 
     def show

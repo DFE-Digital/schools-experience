@@ -12,12 +12,25 @@
     <h1 class="govuk-heading-l">Manage bookings</h1>
 
     <p>
-      The following <strong>only lists bookings</strong> made on or after <strong>20 June 2019</strong>.
-      <br>
+      The following <strong>only lists bookings</strong> made on or after <strong>TODO - insert release date</strong>.
+    </p>
+
+    <p>
       You'll need to refer to <strong>your own records</strong> for any bookings made before this date.
     </p>
 
+    <div class="pagination-info higher">
+      <div class="pagination-slice">
+        <%= page_entries_info @bookings %>
+      </div>
+      <%= paginate @bookings %>
+    </div>
+
     <%= render partial: 'schools/confirmed_bookings/booking_table', locals: { bookings: @bookings } %>
+
+    <div class="pagination-info lower">
+      <%= paginate @bookings %>
+    </div>
 
     <div>
       <%= link_to "Return to requests and bookings", schools_dashboard_path, class: 'govuk-button govuk-button--secondary' %>

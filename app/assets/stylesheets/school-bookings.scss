@@ -53,10 +53,6 @@ table#bookings {
     td.name, td.date {
       font-weight: bold;
     }
-
-    td:first-of-type {
-      width: 14rem;
-    }
   }
 
   .govuk-table__header, .govuk-table__cell {
@@ -65,7 +61,12 @@ table#bookings {
 }
 
 #bookings-index {
-  p {
-    line-height: 2;
+  .pagination-info.higher {
+    @include govuk-responsive-margin(4, "bottom");
+  }
+
+  .pagination-info.lower {
+    @include govuk-responsive-margin(4, "top");
+    @include govuk-responsive-margin(4, "bottom");
   }
 }
