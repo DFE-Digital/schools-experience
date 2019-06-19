@@ -72,6 +72,15 @@ article#dashboard {
     &.requests-and-bookings {
     }
   }
+
+  .govuk-se-warning {
+    border: 5px solid $govuk-error-colour;
+    padding: 1rem;
+
+    a.govuk-se-warning__link {
+      color: $govuk-error-colour;
+    }
+  }
 }
 
 .govuk-hint.govuk-hint__indented {

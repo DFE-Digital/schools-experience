@@ -5,35 +5,11 @@
     <article id="dashboard">
 
       <section class="managing-requests">
-
-        <section class="requests-and-bookings">
-          <div class="subsection requests">
-            <header class="dashboard-high-priority">
-              <%= link_to "Accept and reject requests", schools_upcoming_requests_path %>
-              <%= numbered_circle(@new_requests, id: 'new-requests-counter') %>
-            </header>
-            <p class="govuk-hint">Candidates have requested school experience</p>
-          </div>
-
-          <div class="subsection bookings">
-            <header class="dashboard-high-priority">
-              <%= link_to "Accept and reject bookings", "#" %>
-              <%= numbered_circle(@new_bookings, id: 'new-bookings-counter') %>
-            </header>
-            <p class="govuk-hint">A candidate has asked to change a booking</p>
-          </div>
-        </section>
-
-        <section class="candidate-attendance">
-          <header class="dashboard-medium-priority">
-            <%= link_to "Confirm candidate attendance", "#" %>
-            <%= numbered_circle(@candidate_attendances, id: 'candidate-attendances-counter') %>
-          </header>
-          <p class="govuk-hint">
-            Confirm the attendance of candidates who've been on school experience
-          </p>
-        </section>
-
+        <% if @current_school.private_beta? %>
+          <%= render partial: 'new_requests_and_bookings' %>
+        <% else %>
+          <%= render partial: 'update_your_school_profile' %>
+        <% end %>
       </section>
 
       <section class="upcoming-bookings">

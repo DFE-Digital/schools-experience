@@ -1,0 +1,19 @@
+<div class="govuk-se-warning">
+
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      You have school experience requests waiting
+    </strong>
+  </div>
+
+  <p>
+    Before you can view and deal with these requests - you need to answer some
+    questions to update your school profile.
+  </p>
+
+  <%= link_to 'Update your school profile',
+    schools_on_boarding_profile_path,
+    class: 'govuk-se-warning__link govuk-!-font-weight-bold'
+  %>
+</div>
