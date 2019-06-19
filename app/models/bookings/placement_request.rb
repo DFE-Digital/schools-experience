@@ -63,8 +63,12 @@ module Bookings
     end
 
     # FIXME SE-1095 update this model to belong_to a candidate
-    def candidate
-      @candidate ||= Bookings::Gitis::CRM.new('abc123').find(1)
+#    def candidate
+#      @candidate ||= Bookings::Gitis::CRM.new('abc123').find(1)
+#    end
+
+    def contact_uuid
+      1
     end
 
     def dates_requested
@@ -108,14 +112,6 @@ module Bookings
 
     def school_admin_name
       school.admin_contact_name
-    end
-
-    def candidate_email
-      candidate.email
-    end
-
-    def candidate_name
-      candidate.full_name
     end
 
     def cancellation
