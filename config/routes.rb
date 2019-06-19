@@ -45,6 +45,10 @@ Rails.application.routes.draw do
           end
         end
         resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
+          resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
+            resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
+          end
+
           collection do
             resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
           end

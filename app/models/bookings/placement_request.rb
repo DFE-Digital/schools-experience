@@ -39,12 +39,13 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
-    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
-      self.create! \
+    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil, context: nil)
+      self.new(
         Candidates::Registrations::RegistrationAsPlacementRequest
           .new(registration_session)
           .attributes
           .merge(analytics_tracking_uuid: analytics_tracking_uuid)
+      ).tap { |r| r.save!(context: context) }
     end
 
     def sent_at

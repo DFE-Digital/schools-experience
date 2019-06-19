@@ -1,0 +1,43 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Send rejection email to candidate
+    </h1>
+
+    <p>
+      The following contains the wording of the rejection email which will be
+      sent to <%= @cancellation.candidate_name %>.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Preview rejection email
+    </h2>
+
+    <%= render partial: "letter", locals: {
+      cancellation: @cancellation,
+      reason: @cancellation.reason,
+      extra_details: @cancellation.extra_details
+    } %>
+
+    <section>
+      <p>
+        By sending this email you’re confirming, to the best of your knowledge, the booking details you’re providing are correct.
+      </p>
+
+      <p>
+        <%= button_to 'Send rejection email',
+          schools_booking_cancellation_notification_delivery_path(@booking),
+          class: 'govuk-button'
+        %>
+      </p>
+
+      <p>
+        <%= link_to 'Amend the rejection email', edit_schools_booking_cancellation_path(@booking) %>
+      </p>
+
+      <p>
+        <%= link_to 'Back to booking', schools_booking_path(@booking) %>
+      </p>
+    </section>
+  </div>
+</div>
