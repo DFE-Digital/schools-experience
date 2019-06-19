@@ -5,6 +5,7 @@ Feature: Viewing a booking
 
     Background:
         Given I am logged in as a DfE user
+        And my school is fully-onboarded
         And the scheduled booking date is '02 October 2019'
 
     Scenario: Breadcrumbs

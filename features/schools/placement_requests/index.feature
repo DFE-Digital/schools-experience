@@ -5,6 +5,7 @@ Feature: Viewing all placement requests
 
     Background:
         Given I am logged in as a DfE user
+        And my school is fully-onboarded
         And the school has subjects
 
     Scenario: Page title
