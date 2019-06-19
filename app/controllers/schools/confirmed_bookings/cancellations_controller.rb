@@ -10,10 +10,12 @@ module Schools
 
       def new
         @cancellation = @placement_request.build_school_cancellation
+        @placement_request.fetch_gitis_contact gitis_crm
       end
 
       def edit
         @cancellation = @placement_request.school_cancellation
+        @placement_request.fetch_gitis_contact gitis_crm
       end
 
       def create
@@ -24,6 +26,7 @@ module Schools
           redirect_to schools_booking_cancellation_path \
             @booking
         else
+          @placement_request.fetch_gitis_contact gitis_crm
           render :new
         end
       end
@@ -35,6 +38,7 @@ module Schools
           redirect_to schools_booking_cancellation_path \
             @booking
         else
+          @placement_request.fetch_gitis_contact gitis_crm
           render :edit
         end
       end
