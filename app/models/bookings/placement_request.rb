@@ -64,11 +64,6 @@ module Bookings
       !closed?
     end
 
-    # FIXME SE-1095 update this model to belong_to a candidate
-#    def candidate
-#      @candidate ||= Bookings::Gitis::CRM.new('abc123').find(1)
-#    end
-
     def contact_uuid
       1
     end

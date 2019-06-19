@@ -454,4 +454,16 @@ describe Bookings::PlacementRequest, type: :model do
       end
     end
   end
+
+  describe '#fetch_gitis_contact' do
+    let(:gitis) { Bookings::Gitis::CRM.new('a.fake.token') }
+    subject { FactoryBot.create :placement_request }
+
+    it "will assign contact" do
+      expect(subject.fetch_gitis_contact(gitis)).to \
+        be_kind_of(Bookings::Gitis::Contact)
+
+      expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
+    end
+  end
 end
