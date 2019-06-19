@@ -10,11 +10,14 @@ module Schools
 
       def new
         @cancellation = @placement_request.build_school_cancellation
+        attach_contact @placement_request
       end
 
       def create
         @cancellation = @placement_request.build_school_cancellation \
           cancellation_params
+
+        attach_contact(@placement_request)
 
         if @cancellation.save
           redirect_to schools_placement_request_cancellation_path \
@@ -26,6 +29,7 @@ module Schools
 
       def edit
         @cancellation = @placement_request.school_cancellation
+        attach_contact @placement_request
       end
 
       def update
@@ -35,6 +39,7 @@ module Schools
           redirect_to schools_placement_request_cancellation_path \
             @placement_request
         else
+          attach_contact @placement_request
           render :edit
         end
       end
@@ -55,6 +60,14 @@ module Schools
       def cancellation_params
         params.require(:bookings_placement_request_cancellation).permit \
           :reason, :extra_details
+      end
+
+      def find_contact(req)
+        gitis_crm.find(req.contact_uuid)
+      end
+
+      def attach_contact(req)
+        req.gitis_contact = find_contact(req)
       end
     end
   end
