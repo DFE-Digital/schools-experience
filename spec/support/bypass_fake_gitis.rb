@@ -1,4 +1,3 @@
 shared_context "bypass fake Gitis" do
-  before { Rails.application.config.x.fake_crm = false }
-  after { Rails.application.config.x.fake_crm = true }
+  before { allow(Rails.application.config.x).to receive(:fake_crm).and_return(false) }
 end
