@@ -44,11 +44,7 @@ Rails.application.routes.draw do
             resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
           end
         end
-        resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
-          collection do
-            resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
-          end
-        end
+        resources :confirmed_bookings, path: 'bookings', as: 'bookings'
       end
 
       resource :availability_preference, only: %i(edit update)
