@@ -10,6 +10,17 @@ Feature: The School Dashboard
         Given I am on the 'schools dashboard' page
         Then the main site header should be 'Manage school experience'
 
+    Scenario: Hiding the managing requests section when schools haven't onboarded
+        Given my school has not yet fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see a warning informing me that I need to complete my profile before continuing
+        And I should see a 'Update your school profile' link to the 'profile' page
+
+    Scenario: Displaying the managing requests section when schools have onboarded
+        Given my school has fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see the managing requests section
+
     @wip
     Scenario: High priority headings
         Given I am on the 'schools dashboard' page
