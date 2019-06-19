@@ -55,10 +55,6 @@ module Bookings
       [date.to_formatted_s(:govuk), duration_days].join(' ')
     end
 
-    def received_on
-      bookings_placement_request.created_at.to_date
-    end
-
     def duration_days
       duration.to_s + ' day'.pluralize(duration)
     end
