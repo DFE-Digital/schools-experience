@@ -1,6 +1,6 @@
-<div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+<div class="govuk-error-summary" role="alert" tabindex="-1" data-module="error-summary">
   <h2 class="govuk-error-summary__title" id="error-summary-title">
-    <%= not_onboarded_warning %>
+    <%= not_onboarded_warning(@current_school) %>
   </h2>
   <div class="govuk-error-summary__body">
     <p>

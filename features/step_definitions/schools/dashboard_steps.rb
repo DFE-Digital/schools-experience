@@ -38,7 +38,7 @@ Given("my school has not yet fully-onboarded") do
 end
 
 Then("I should see a warning informing me that I need to complete my profile before continuing") do
-  within('.govuk-se-warning') do
+  within('.govuk-error-summary') do
     expect(page).to have_content('you need to answer some questions to update your school profile')
   end
 end
