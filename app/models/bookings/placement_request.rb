@@ -74,7 +74,7 @@ module Bookings
     end
 
     def received_on
-      created_at.to_date.to_formatted_s(:govuk)
+      created_at.to_date
     end
 
     # FIXME SE-1130
@@ -116,10 +116,14 @@ module Bookings
       candidate.full_name
     end
 
+    def cancellation
+      candidate_cancellation || school_cancellation
+    end
+
   private
 
     def cancelled?
-      candidate_cancellation&.sent? || school_cancellation&.sent?
+      cancellation&.sent?
     end
 
     def completed?

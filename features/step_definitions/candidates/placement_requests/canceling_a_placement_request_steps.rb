@@ -14,7 +14,7 @@ Then "I should see a form to enter my cancellation reason" do
   end
 end
 
-Then "I should see the confirmation page" do
+Then "I should see the confirmation page for my cancelled {string}" do |string|
   expect(page).to have_css 'h1.govuk-panel__title',
-    text: 'Your school experience request has been cancelled'
+    text: "Your school experience #{string} has been cancelled"
 end

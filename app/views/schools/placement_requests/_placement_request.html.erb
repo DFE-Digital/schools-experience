@@ -16,7 +16,7 @@
         Request received
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= placement_request.received_on %>
+        <%= placement_request.received_on.to_formatted_s(:govuk) %>
       </dd>
     </div>
 
