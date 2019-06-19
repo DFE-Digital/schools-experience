@@ -56,11 +56,15 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
         create(:bookings_booking, bookings_placement_request: placement_request, bookings_school: school)
       end
 
+      let(:gitis_contact) do
+        Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+      end
+
       it 'notifies the candidate' do
         expect(NotifyEmail::CandidateBookingSchoolCancelsBooking).to have_received(:new).with \
-          to: cancellation.candidate_email,
+          to: gitis_contact.email,
           school_name: cancellation.school_name,
-          candidate_name: cancellation.candidate_name,
+          candidate_name: gitis_contact.full_name,
           rejection_reasons: cancellation.reason,
           extra_details: cancellation.extra_details,
           dates_requested: cancellation.dates_requested,

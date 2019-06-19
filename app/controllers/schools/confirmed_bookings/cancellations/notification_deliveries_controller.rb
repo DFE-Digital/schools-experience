@@ -6,10 +6,12 @@ module Schools
 
         def show
           @cancellation = @placement_request.school_cancellation
+          @placement_request.fetch_gitis_contact gitis_crm
         end
 
         def create
           @cancellation = @placement_request.school_cancellation
+          @placement_request.fetch_gitis_contact gitis_crm
           notify_candidate @cancellation
           @cancellation.sent!
           redirect_to \
