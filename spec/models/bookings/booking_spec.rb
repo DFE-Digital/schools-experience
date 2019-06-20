@@ -46,12 +46,13 @@ describe Bookings::Booking do
     it { is_expected.to belong_to(:bookings_placement_request) }
     it { is_expected.to belong_to(:bookings_subject) }
     it { is_expected.to belong_to(:bookings_school) }
+    it { is_expected.to have_one(:candidate_cancellation).through(:bookings_placement_request) }
   end
 
   describe 'Delegation' do
     %i(
       availability degree_stage degree_stage_explaination degree_subject
-      has_dbs_check objectives teaching_stage
+      has_dbs_check objectives teaching_stage token closed?
     ).each do |delegated_method|
       it { is_expected.to delegate_method(delegated_method).to(:bookings_placement_request) }
     end
@@ -185,6 +186,19 @@ describe Bookings::Booking do
           expect(subject).not_to be_accepted
         end
       end
+    end
+  end
+
+  describe '#placement_start_date_with_duration' do
+    let! :date do
+      Date.today
+    end
+
+    subject { described_class.new date: date, duration: 2 }
+
+    specify 'should return a descriptive string' do
+      expect(subject.placement_start_date_with_duration).to eq \
+        "#{date.to_formatted_s(:govuk)} 2 days"
     end
   end
 end

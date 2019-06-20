@@ -15,4 +15,4 @@ Feature: Cancelling a placement requests
     And I have entered the following details into the form:
       | Cancellation reasons | Won the lottery, going on holiday |
     When I click the 'Cancel' button
-    Then I should see the confirmation page
+    Then I should see the confirmation page for my cancelled 'request'

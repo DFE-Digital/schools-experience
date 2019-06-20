@@ -45,12 +45,9 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
     end
 
     context 'uuid found' do
-      before do
-        get "/candidates/confirm/#{uuid}"
-      end
-
       context 'registration job already enqueued' do
         before do
+          get "/candidates/confirm/#{uuid}"
           @placement_request_count = Bookings::PlacementRequest.count
           get "/candidates/confirm/#{uuid}"
         end
@@ -75,34 +72,52 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       end
 
       context 'registration job not already enqueued' do
-        let :stored_registration_session do
-          Candidates::Registrations::RegistrationStore.instance.retrieve! uuid
+        shared_examples 'a successful create' do
+          before do
+            get "/candidates/confirm/#{uuid}"
+          end
+
+          let :stored_registration_session do
+            Candidates::Registrations::RegistrationStore.instance.retrieve! uuid
+          end
+
+          it 'marks the registration as completed and re-stores it in redis' do
+            expect(stored_registration_session).to be_completed
+          end
+
+          it 'creates a bookings placement request' do
+            expect(Bookings::PlacementRequest.count).to \
+              eq @placement_request_count + 1
+            expect(Bookings::PlacementRequest.last.school).to \
+              eq stored_registration_session.school
+          end
+
+          it 'enqueues the placement request job' do
+            expect(Candidates::Registrations::PlacementRequestJob).to \
+              have_received(:perform_later).with \
+                uuid,
+                candidates_cancel_url(Bookings::PlacementRequest.last.token)
+          end
+
+          it 'redirects to placement request show' do
+            expect(response).to redirect_to \
+              candidates_school_registrations_placement_request_path(
+                school,
+                uuid: uuid
+              )
+          end
         end
 
-        it 'marks the registration as completed and re-stores it in redis' do
-          expect(stored_registration_session).to be_completed
+        context 'school has changed availability type' do
+          before do
+            school.update! availability_preference_fixed: true
+          end
+
+          it_behaves_like 'a successful create'
         end
 
-        it 'creates a bookings placement request' do
-          expect(Bookings::PlacementRequest.count).to \
-            eq @placement_request_count + 1
-          expect(Bookings::PlacementRequest.last.school).to \
-            eq stored_registration_session.school
-        end
-
-        it 'enqueues the placement request job' do
-          expect(Candidates::Registrations::PlacementRequestJob).to \
-            have_received(:perform_later).with \
-              uuid,
-              new_candidates_placement_request_cancellation_url(Bookings::PlacementRequest.last.token)
-        end
-
-        it 'redirects to placement request show' do
-          expect(response).to redirect_to \
-            candidates_school_registrations_placement_request_path(
-              school,
-              uuid: uuid
-            )
+        context 'school has not changed availability type' do
+          it_behaves_like 'a successful create'
         end
       end
     end
