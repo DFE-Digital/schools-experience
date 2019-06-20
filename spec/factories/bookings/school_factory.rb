@@ -10,6 +10,7 @@ FactoryBot.define do
     sequence(:contact_email) { |n| "admin#{n}@school.org" }
     availability_info { 'We can offer placements throughout June and July for the remainder of this academic year (up to the 21st July).' }
     availability_preference_fixed { false }
+    enabled { true }
 
     trait :onboarded do
       association :profile, factory: :bookings_profile

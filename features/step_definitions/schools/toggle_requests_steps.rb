@@ -1,9 +1,9 @@
 Given("my school is enabled") do
+  @school.update(enabled: true)
   expect(@school).to be_enabled
 end
 
 Given("my school is disabled") do
-  @school.update(enabled: false)
   expect(@school).to be_disabled
 end
 
