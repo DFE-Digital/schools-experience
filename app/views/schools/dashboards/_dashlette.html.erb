@@ -36,33 +36,22 @@
   </ul>
 
   <section class="availability-preferences">
-    <h3 class="govuk-heading-s">Availability and dates</h3>
+    <h3 class="govuk-heading-s">Manage dates</h3>
 
     <ul class="govuk-list">
-      <li>
-        <%= link_to "Change how availability and dates are displayed", edit_schools_availability_preference_path %>
-        <span class="govuk-hint">
-          Your school currently displays
-          <strong><%= availability_status_display_status(@current_school.availability_preference_fixed?) %></strong>
-          to candidates
-        </span>
-      </li>
-
       <%- if @current_school.availability_preference_fixed? -%>
         <li>
-          <%= link_to "Manage fixed dates", schools_placement_dates_path %>
-          <span class="govuk-hint">
-            Add, remove, close and open <strong>fixed dates</strong> for school experience
-          </span>
+          <%= link_to "Add, remove and change dates", schools_placement_dates_path %>
         </li>
       <%- else -%>
         <li>
-          <%= link_to "Manage flexible dates", edit_schools_availability_info_path %>
-          <span class="govuk-hint">
-            Update your availability and <strong>flexible dates</strong> for school experience
-          </span>
+          <%= link_to "Describe when you’ll host school experience candidates", edit_schools_availability_info_path %>
         </li>
       <%- end -%>
+
+      <li>
+        <%= link_to "Change how dates are displayed", edit_schools_availability_preference_path %>
+      </li>
     </ul>
   </section>
 </article>

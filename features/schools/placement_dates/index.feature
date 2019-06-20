@@ -8,14 +8,14 @@ Feature: Listing placement dates
 
     Scenario: Page title
         Given I am on the 'placement dates' page
-        Then the page title should be 'Manage fixed dates'
+        Then the page title should be 'Manage dates'
 
   Scenario: Breadcrumbs
     Given I am on the 'placement dates' page
     Then I should see the following breadcrumbs:
-        | Text               | Link               |
-        | Some school        | /schools/dashboard |
-        | Manage fixed dates | None               |
+        | Text         | Link               |
+        | Some school  | /schools/dashboard |
+        | Manage dates | None               |
 
     Scenario: List contents
         Given my school has 5 placement dates
