@@ -14,9 +14,8 @@ Rails.application.routes.draw do
       get '/auth/insecure_callback', to: 'schools/insecure_sessions#create', as: :insecure_auth_callback
     end
 
+    resource :schools, only: :show
     namespace :schools do
-      root to: 'dashboards#show'
-
       resource :session, only: %i(show destroy)
       resource :switch, only: %i(new), controller: 'switch'
       resource :dashboard, only: :show
@@ -46,6 +45,10 @@ Rails.application.routes.draw do
           end
         end
         resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
+          resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
+            resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
+          end
+
           collection do
             resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
           end
@@ -104,9 +107,18 @@ Rails.application.routes.draw do
     end
 
     if Rails.application.config.x.phase >= 3
+      get 'cancel/:placement_request_token', to: 'placement_requests/cancellations#new', as: :cancel
       resources :placement_requests, only: [], param: :token do
         resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
       end
+    end
+
+    if Rails.application.config.x.phase >= 4
+      get 'signin', to: 'sessions#new'
+      post 'signin', to: 'sessions#create'
+      get 'signin/:authtoken', to: 'sessions#update', as: 'signin_confirmation'
+
+      resource :dashboard, only: :show
     end
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }

@@ -3,7 +3,7 @@ module Schools
     def index
       @bookings = current_school
         .bookings
-        .eager_load(:bookings_subject)
+        .eager_load(:bookings_subject, :bookings_placement_request)
         .all
     end
 

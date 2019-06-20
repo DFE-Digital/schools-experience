@@ -388,6 +388,36 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
+  context '#cancellation' do
+    subject { described_class.new }
+
+    context 'when cancelled by candidate' do
+      let! :candidate_cancellation do
+        subject.build_candidate_cancellation
+      end
+
+      it 'returns the candidate_cancellation' do
+        expect(subject.cancellation).to eq candidate_cancellation
+      end
+    end
+
+    context 'when cancelled by school' do
+      let! :school_cancellation do
+        subject.build_school_cancellation
+      end
+
+      it 'returns the school_cancellation' do
+        expect(subject.cancellation).to eq school_cancellation
+      end
+    end
+
+    context 'when not cancelled' do
+      it 'returns nil' do
+        expect(subject.cancellation).not_to be_present
+      end
+    end
+  end
+
   context '#status' do
     context 'default' do
       subject { FactoryBot.create :placement_request }

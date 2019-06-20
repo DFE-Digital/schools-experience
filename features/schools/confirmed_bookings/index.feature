@@ -13,9 +13,9 @@ Feature: Viewing all bookings
     Scenario: Breadcrumbs
         Given I am on the 'bookings' page
         Then I should see the following breadcrumbs:
-            | Text         | Link     |
-            | Some school  | /schools |
-            | All bookings | None     |
+            | Text         | Link               |
+            | Some school  | /schools/dashboard |
+            | All bookings | None               |
 
     Scenario: List presence
         Given there are some bookings

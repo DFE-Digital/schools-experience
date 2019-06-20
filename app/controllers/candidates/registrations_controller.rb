@@ -2,7 +2,7 @@ module Candidates
   class RegistrationsController < ApplicationController
     rescue_from Registrations::RegistrationSession::StepNotFound do |error|
       Rails.logger.warn "Step not found: #{error.inspect}"
-      redirect_to public_send error.step_path
+      redirect_to next_step_path(current_registration)
     end
 
   private
@@ -21,6 +21,11 @@ module Candidates
 
     def current_urn
       params[:school_id]
+    end
+
+    def next_step_path(registration_session)
+      step = registration_session.incomplete_steps.first
+      send "new_candidates_school_registrations_#{step}_path"
     end
   end
 end

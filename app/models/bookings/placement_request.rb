@@ -39,12 +39,13 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
-    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
-      self.create! \
+    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil, context: nil)
+      self.new(
         Candidates::Registrations::RegistrationAsPlacementRequest
           .new(registration_session)
           .attributes
           .merge(analytics_tracking_uuid: analytics_tracking_uuid)
+      ).tap { |r| r.save!(context: context) }
     end
 
     def sent_at
@@ -73,7 +74,7 @@ module Bookings
     end
 
     def received_on
-      created_at.to_date.to_formatted_s(:govuk)
+      created_at.to_date
     end
 
     # FIXME SE-1130
@@ -115,10 +116,14 @@ module Bookings
       candidate.full_name
     end
 
+    def cancellation
+      candidate_cancellation || school_cancellation
+    end
+
   private
 
     def cancelled?
-      candidate_cancellation&.sent? || school_cancellation&.sent?
+      cancellation&.sent?
     end
 
     def completed?

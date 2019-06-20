@@ -3,7 +3,8 @@ module Bookings
     class Contact
       include Entity
 
-      attr_reader :id
+      entity_id_attribute :contactid
+
       entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
       entity_attributes :address1_line1, :address1_line2, :address1_line3
       entity_attributes :address1_city, :address1_stateorprovince
@@ -18,7 +19,7 @@ module Bookings
 
       def initialize(crm_contact_data = {})
         @crm_data                     = crm_contact_data.stringify_keys
-        self.id                       = @crm_data['contactid']
+        self.contactid                = @crm_data['contactid']
         self.firstname                = @crm_data['firstname']
         self.lastname                 = @crm_data['lastname']
         self.emailaddress1            = @crm_data['emailaddress1']
@@ -52,19 +53,9 @@ module Bookings
         [address1_line2, address1_line3].map(&:presence).compact.join(', ')
       end
 
-      def id=(assigned_id)
-        if @id.blank?
-          @id = assigned_id
-        elsif @id.to_s != assigned_id.to_s
-          fail ContactIdChangedUnexpectedly
-        end
-      end
-
       def full_name
         "#{firstname} #{lastname}"
       end
-
-      class ContactIdChangedUnexpectedly < RuntimeError; end
 
     private
 

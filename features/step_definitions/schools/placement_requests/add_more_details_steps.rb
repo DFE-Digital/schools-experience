@@ -30,3 +30,26 @@ Then("the relevant fields in the booking should have been saved") do
     expect(b.location).to eql('Please come to the reception in the East Building')
   end
 end
+
+Given("my school has previous accepted bookings") do
+  @latest_accepted_booking = FactoryBot.create(
+    :bookings_booking,
+    :accepted,
+    :with_more_details_added,
+    bookings_school: @school
+  )
+end
+
+Then("the contact details should have been filled with those from the latest accepted booking") do
+  {
+    "Contact name"   => @latest_accepted_booking.contact_name,
+    "Contact number" => @latest_accepted_booking.contact_number,
+    "Contact email"  => @latest_accepted_booking.contact_email,
+  }.each do |label, value|
+    expect(get_input(page, label)['value']).to eql(value)
+  end
+
+  within(get_form_group(page, 'Location')) do
+    expect(page.find('textarea')['value']).to eql(@latest_accepted_booking.location)
+  end
+end
