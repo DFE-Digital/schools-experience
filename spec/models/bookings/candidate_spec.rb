@@ -27,6 +27,8 @@ RSpec.describe Bookings::Candidate, type: :model do
 
   describe 'associations' do
     it { is_expected.to have_many :session_tokens }
+    it { is_expected.to have_many :placement_requests }
+    it { is_expected.to have_many :bookings }
   end
 
   describe 'scopes' do
