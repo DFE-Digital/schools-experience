@@ -1,5 +1,6 @@
 module Schools
   class ToggleEnabledController < Schools::BaseController
+    include Schools::RestrictAccessUnlessOnboarded
     before_action :set_school
 
     def edit; end
