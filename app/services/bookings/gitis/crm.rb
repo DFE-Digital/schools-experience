@@ -9,21 +9,23 @@ module Bookings
         @endpoint = endpoint
       end
 
-      def find(*uuids, entity_type: Contact)
-        uuids = normalise_ids(*uuids)
+      def find(uuids, entity_type: Contact)
+        multiple_ids = uuids.is_a?(Array)
+
+        uuids = normalise_ids(uuids)
         validate_ids(uuids)
 
         # ensure we can't accidentally pull too much data
         params = { '$top' => uuids.length }
 
-        if uuids.length == 1
-          entity_type.new api.get("#{entity_type.entity_path}(#{uuids[0]})", params)
-        else
+        if multiple_ids
           params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
 
           api.get(entity_type.entity_path, params)['value'].map do |entity_data|
             entity_type.new entity_data
           end
+        else
+          entity_type.new api.get("#{entity_type.entity_path}(#{uuids[0]})", params)
         end
       end
 
@@ -71,14 +73,22 @@ module Bookings
         @api ||= API.new(@token, service_url: @service_url, endpoint: @endpoint)
       end
 
-      def normalise_ids(*ids)
+      def normalise_ids(ids)
         Array.wrap(ids).flatten
       end
 
       def validate_ids(ids)
         if ids.empty?
           fail ArgumentError, "No Contact Ids supplied"
+        else
+          ids.each { |id| validate_id id }
         end
+      end
+
+      def validate_id(id)
+        return true if id =~ Entity::ID_FORMAT
+
+        fail ArgumentError, "Invalid Entity Id"
       end
 
       def filter_pairs(filter_data, join_with = 'or')

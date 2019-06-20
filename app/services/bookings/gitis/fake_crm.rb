@@ -1,17 +1,18 @@
 module Bookings::Gitis
   module FakeCrm
-    def find(*ids)
+    def find(ids)
       return super unless stubbed?
 
-      ids = normalise_ids(*ids)
+      multiple_ids = ids.is_a? Array
+      ids = normalise_ids(ids)
       validate_ids(ids)
 
-      if ids.length == 1
-        Contact.new(fake_contact_data.merge('contactid' => ids[0]))
-      else
+      if multiple_ids
         ids.map do |id|
           Contact.new(fake_contact_data.merge('contactid' => id))
         end
+      else
+        Contact.new(fake_contact_data.merge('contactid' => ids[0]))
       end
     end
 

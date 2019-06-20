@@ -16,7 +16,7 @@ class Bookings::Candidate < ApplicationRecord
 
   has_many :bookings, through: :placement_requests
 
-  validates :gitis_uuid, presence: true, format: { with: UUID_V4_FORMAT }
+  validates :gitis_uuid, presence: true, format: { with: Bookings::Gitis::Entity::ID_FORMAT }
   validates :gitis_uuid, uniqueness: { case_sensitive: false }
 
   scope :confirmed, -> { where.not(confirmed_at: nil) }
