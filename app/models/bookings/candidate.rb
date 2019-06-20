@@ -22,6 +22,29 @@ class Bookings::Candidate < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :unconfirmed, -> { where(confirmed_at: nil) }
 
+  class << self
+    def create_or_update_from_registration_session!(crm, registration, contact)
+      if contact
+        find_or_create_by!(gitis_uuid: contact.id).
+          update_from_registration_session!(crm, registration)
+      else
+        create_from_registration_session!(crm, registration)
+      end
+    end
+
+    def create_from_registration_session!(crm, registration)
+      mapper = Bookings::RegistrationContactMapper.new \
+        registration, Bookings::Gitis::Contact.new
+
+      contact = mapper.registration_to_contact
+      crm.write contact
+
+      create!(gitis_uuid: contact.id, confirmed_at: Time.zone.now).tap do |candidate|
+        candidate.gitis_contact = contact
+      end
+    end
+  end
+
   def generate_session_token!
     session_tokens.create!
   end
@@ -36,6 +59,16 @@ class Bookings::Candidate < ApplicationRecord
 
   def last_signed_in_at
     confirmed_at || session_tokens.confirmed.maximum(:confirmed_at)
+  end
+
+  def update_from_registration_session!(crm, registration)
+    mapper = Bookings::RegistrationContactMapper.new \
+      registration, gitis_contact
+
+    mapper.registration_to_contact
+    crm.write gitis_contact
+
+    self
   end
 
   def fetch_gitis_contact(crm)

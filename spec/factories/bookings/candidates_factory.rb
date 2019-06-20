@@ -5,5 +5,10 @@ FactoryBot.define do
     trait :confirmed do
       confirmed_at { 5.minutes.ago }
     end
+
+    trait :with_gitis_contact do
+      gitis_contact { build(:gitis_contact, :persisted) }
+      gitis_uuid { gitis_contact.id }
+    end
   end
 end

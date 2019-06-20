@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::Candidate, type: :model do
+  include_context "fake gitis"
+
   describe 'database structure' do
     it { is_expected.to have_db_column(:gitis_uuid).of_type(:string).with_options(limit: 36) }
     it { is_expected.to have_db_index(:gitis_uuid).unique }
@@ -54,7 +56,49 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
   end
 
-  describe '.generate_session_token!' do
+  describe '.create_from_registration_session!' do
+    let(:registration) { build(:registration_session) }
+
+    subject do
+      described_class.create_from_registration_session! fake_gitis, registration
+    end
+
+    it { is_expected.to be_kind_of Bookings::Candidate }
+    it { is_expected.to be_persisted }
+    it { is_expected.to have_attributes(gitis_uuid: subject.gitis_contact.id) }
+    it { is_expected.to have_attributes(gitis_contact: instance_of(Bookings::Gitis::Contact)) }
+
+    it "will assign contact attributes" do
+      expect(subject.gitis_contact).to have_attributes \
+        firstname: registration.personal_information.first_name,
+        lastname: registration.personal_information.last_name
+    end
+  end
+
+  describe '.create_or_update_from_registration_session!' do
+    it "will be tested"
+  end
+
+  describe '#update_from_registration_session!' do
+    let(:registration) { build(:registration_session) }
+    let(:candidate) { build(:candidate, :with_gitis_contact) }
+
+    subject do
+      candidate.update_from_registration_session! fake_gitis, registration
+    end
+
+    it { is_expected.to be_kind_of Bookings::Candidate }
+    it { is_expected.to have_attributes(gitis_uuid: subject.gitis_contact.id) }
+    it { is_expected.to have_attributes(gitis_contact: instance_of(Bookings::Gitis::Contact)) }
+
+    it "will assign contact attributes" do
+      expect(subject.gitis_contact).to have_attributes \
+        firstname: registration.personal_information.first_name,
+        lastname: registration.personal_information.last_name
+    end
+  end
+
+  describe '#generate_session_token!' do
     let(:candidate) { create(:candidate) }
 
     it "should create a new token" do
@@ -63,7 +107,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
   end
 
-  describe '.expire_session_tokens!' do
+  describe '#expire_session_tokens!' do
     let!(:first) { create(:candidate_session_token) }
     let!(:second) { create(:candidate_session_token, candidate: first.candidate) }
     let!(:third) { create(:candidate_session_token, :expired, candidate: first.candidate) }
@@ -84,7 +128,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
   end
 
-  describe '.last_signed_in_at' do
+  describe '#last_signed_in_at' do
     let!(:first) { create(:candidate_session_token, :confirmed) }
 
     let!(:second) do
