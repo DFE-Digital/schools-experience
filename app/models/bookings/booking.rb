@@ -11,7 +11,14 @@ module Bookings
 
     has_one :candidate_cancellation, through: :bookings_placement_request
 
-    validates :date, presence: true
+    validates :date,
+      presence: true,
+      on: :create,
+      timeliness: {
+        on_or_after: :today,
+        before: -> { 2.years.from_now },
+        type: :date
+      }
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true
@@ -30,7 +37,10 @@ module Bookings
       :build_candidate_cancellation,
       :closed?,
       :received_on,
-      :candidate,
+      :gitis_contact,
+      :contact_uuid,
+      :candidate_email,
+      :candidate_name,
       to: :bookings_placement_request
 
     scope :upcoming, -> { where(arel_table[:date].between(Time.now..2.weeks.from_now)) }

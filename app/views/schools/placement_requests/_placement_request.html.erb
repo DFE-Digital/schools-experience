@@ -1,5 +1,5 @@
 <div class="placement-request" data-placement-request="<%= placement_request.id %>" data-urn="<%= placement_request.urn %>">
-  <h2 class="govuk-heading-m">Request from <%= placement_request.candidate.full_name %></h2>
+  <h2 class="govuk-heading-m">Request from <%= placement_request.gitis_contact.full_name %></h2>
 
   <dl class="placement-details govuk-summary-list">
     <div class="date-requested govuk-summary-list__row">
@@ -41,9 +41,9 @@
                   Address
                 </dt>
                 <dd class="govuk-summary-list__value">
-                  <%= placement_request.candidate.building %>,
-                  <%= placement_request.candidate.town_or_city %>,
-                  <%= placement_request.candidate.postcode %>
+                  <%= placement_request.gitis_contact.building %>,
+                  <%= placement_request.gitis_contact.town_or_city %>,
+                  <%= placement_request.gitis_contact.postcode %>
                 </dd>
               </div>
 
@@ -52,7 +52,7 @@
                   UK telephone number
                 </dt>
                 <dd class="govuk-summary-list__value">
-                  <%= placement_request.candidate.phone %>
+                  <%= placement_request.gitis_contact.phone %>
                 </dd>
               </div>
 
@@ -61,7 +61,7 @@
                   Email address
                 </dt>
                 <dd class="govuk-summary-list__value">
-                  <%= placement_request.candidate.email %>
+                  <%= placement_request.gitis_contact.email %>
                 </dd>
               </div>
 

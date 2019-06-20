@@ -36,6 +36,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
     let!(:school) { create(:bookings_school, urn: 11048) }
     let!(:profile) { create(:bookings_profile, school: school) }
     let(:to) { "morris.szyslak@moes.net" }
+    let(:candidate_name) { "morris.szyslak" }
 
     let!(:pr) { create(:bookings_placement_request, school: school) }
     let!(:booking) do
@@ -48,13 +49,13 @@ describe NotifyEmail::CandidateBookingConfirmation do
 
     let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
 
-    subject { described_class.from_booking(to, booking, cancellation_url) }
+    subject { described_class.from_booking(to, candidate_name, booking, cancellation_url) }
 
     it { is_expected.to be_a(described_class) }
 
     context 'correctly assigning attributes' do
       specify 'candidate_name is correctly-assigned' do
-        expect(subject.candidate_name).to eql([pr.candidate.firstname, pr.candidate.lastname].join(' '))
+        expect(subject.candidate_name).to eql(candidate_name)
       end
 
       specify 'placement_start_date is correctly-assigned' do

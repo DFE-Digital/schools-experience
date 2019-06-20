@@ -62,16 +62,14 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     super(to: to)
   end
 
-  def self.from_booking(to, booking, cancellation_url)
+  def self.from_booking(to, candidate_name, booking, cancellation_url)
     school = booking.bookings_school
-    placement_request = booking.bookings_placement_request
-    candidate = placement_request.candidate
     profile = school.profile
 
     new(
       to: to,
       school_name: school.name,
-      candidate_name: [candidate.firstname, candidate.lastname].join(' '),
+      candidate_name: candidate_name,
       placement_start_date: booking.date,
       placement_finish_date: 'FIXME',
       school_address: [
