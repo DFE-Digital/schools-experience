@@ -25,9 +25,16 @@ module Bookings::Gitis
 
   private
 
-    def write_data(crm_contact_data)
-      crm_contact_data['contactid'].presence ||
-        "75c5a32d-d603-4483-956f-236fee7c5784"
+    def create_entity(entity_id, _data)
+      return super unless stubbed?
+
+      "#{entity_id}(#{SecureRandom.uuid})"
+    end
+
+    def update_entity(entity_id, _data)
+      return super unless stubbed?
+
+      entity_id
     end
 
     def fake_account_data

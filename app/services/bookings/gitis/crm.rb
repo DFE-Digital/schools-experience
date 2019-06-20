@@ -55,9 +55,9 @@ module Bookings
         data = entity.changed_attributes.sort.to_h
 
         if entity.id
-          api.patch(entity.entity_id, data)
+          update_entity(entity.entity_id, data)
         else
-          entity.entity_id = api.post(entity.entity_id, data)
+          entity.entity_id = create_entity(entity.entity_id, data)
         end
 
         entity.id
@@ -89,6 +89,14 @@ module Bookings
         end
 
         parts.join(" #{join_with} ")
+      end
+
+      def create_entity(entity_id, data)
+        api.post(entity_id, data)
+      end
+
+      def update_entity(entity_id, data)
+        api.patch(entity_id, data)
       end
     end
   end
