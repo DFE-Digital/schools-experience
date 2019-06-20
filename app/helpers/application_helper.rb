@@ -41,4 +41,8 @@ module ApplicationHelper
       end
     end
   end
+
+  def phase_three_release_date
+    PHASE_THREE_RELEASE_DATE.to_formatted_s :govuk
+  end
 end
