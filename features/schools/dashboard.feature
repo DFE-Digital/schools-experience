@@ -21,6 +21,16 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the managing requests section
 
+    Scenario: Hide the enable/disable link if schools not onboarded
+        Given my school has not yet fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then there should be no 'Turn requests on / off' link
+
+    Scenario: Show the enable/disable link when schools are onboarded
+        Given my school has fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see a 'Turn requests on / off' link to the 'toggle requests' page
+
     @wip
     Scenario: High priority headings
         Given I am on the 'schools dashboard' page

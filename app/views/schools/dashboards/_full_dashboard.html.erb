@@ -12,17 +12,20 @@
         <%= render partial: 'update_your_school_profile' %>
       <% end %>
 
-      <section class="upcoming-bookings">
-        <header class="dashboard-medium-priority">
-          <%= link_to "View upcoming bookings", "#" %>
-        </header>
-      </section>
-
       <section class="other-tasks">
         <ul class="govuk-list dashboard-low-priority">
           <li>
             <%= link_to "Read about service updates and changes", "#" %>
           </li>
+          <%- if @current_school.private_beta? -%>
+            <li>
+              <%= link_to "Turn requests on / off", edit_schools_enabled_path %>
+              <span class="govuk-hint">
+                Choose to stop / start receiving requests from candidates.
+                Requests are currently <strong><%= school_enabled_description(@current_school) %></strong>.
+              </span>
+            </li>
+          <%- end -%>
           <li>
             <%= link_to "Edit school profile", "#" %>
           </li>
