@@ -13,6 +13,11 @@ module Bookings
       class_name: 'Bookings::School',
       foreign_key: :bookings_school_id
 
+    belongs_to :candidate,
+      class_name: 'Bookings::Candidate',
+      foreign_key: :candidate_id,
+      optional: true
+
     has_one :booking,
       class_name: 'Bookings::Booking',
       foreign_key: 'bookings_placement_request_id',
