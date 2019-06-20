@@ -27,7 +27,7 @@ RSpec.describe Bookings::Candidate, type: :model do
 
   describe 'associations' do
     it { is_expected.to have_many :session_tokens }
-    it { is_expected.to have_many :placement_requests }
+    it { is_expected.to have_many(:placement_requests).inverse_of :candidate }
     it { is_expected.to have_many :bookings }
   end
 
@@ -103,6 +103,19 @@ RSpec.describe Bookings::Candidate, type: :model do
       it "will return last confirmed token timestamp" do
         expect(first.candidate.last_signed_in_at.to_i).to eql(second.confirmed_at.to_i)
       end
+    end
+  end
+
+  describe '#fetch_gitis_contact' do
+    let(:gitis) { Bookings::Gitis::CRM.new('a.fake.token') }
+    subject { FactoryBot.create :candidate }
+
+    it "will assign contact" do
+      expect(subject.fetch_gitis_contact(gitis)).to \
+        be_kind_of(Bookings::Gitis::Contact)
+
+      expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
+      expect(subject.contact).to be_kind_of(Bookings::Gitis::Contact)
     end
   end
 end
