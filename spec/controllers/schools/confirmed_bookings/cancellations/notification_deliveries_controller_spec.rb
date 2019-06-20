@@ -43,6 +43,8 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
     end
 
     context 'when request not already closed' do
+      include_context 'fake gitis'
+
       let :placement_request do
         FactoryBot.create \
           :placement_request, :with_school_cancellation, school: school
@@ -57,7 +59,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       end
 
       let(:gitis_contact) do
-        Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+        fake_gitis.find placement_request.contact_uuid
       end
 
       it 'notifies the candidate' do

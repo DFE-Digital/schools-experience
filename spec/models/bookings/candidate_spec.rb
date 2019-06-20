@@ -107,11 +107,11 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '#fetch_gitis_contact' do
-    let(:gitis) { Bookings::Gitis::CRM.new('a.fake.token') }
+    include_context 'fake gitis'
     subject { FactoryBot.create :candidate }
 
     it "will assign contact" do
-      expect(subject.fetch_gitis_contact(gitis)).to \
+      expect(subject.fetch_gitis_contact(fake_gitis)).to \
         be_kind_of(Bookings::Gitis::Contact)
 
       expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
