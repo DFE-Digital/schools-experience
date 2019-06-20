@@ -34,12 +34,49 @@ describe Bookings::Booking do
   end
 
   describe 'Validation' do
-    it { is_expected.to validate_presence_of(:date) }
     it { is_expected.to validate_presence_of(:bookings_placement_request) }
     it { is_expected.to validate_presence_of(:bookings_subject) }
     it { is_expected.to validate_presence_of(:bookings_school) }
     it { is_expected.to validate_presence_of(:duration) }
     it { is_expected.to validate_numericality_of(:duration).is_greater_than 0 }
+
+    context '#date' do
+      it { is_expected.to validate_presence_of(:date) }
+
+      context 'new placement dates must be in the future' do
+        specify 'should allow future dates' do
+          [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
+            expect(subject).to allow_value(d).for(:date)
+          end
+        end
+
+        specify 'new placement dates should not allow historic dates' do
+          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago].each do |d|
+            expect(subject).not_to allow_value(d).for(:date)
+          end
+        end
+
+        context 'error messages' do
+          let(:message) { 'Validation failed: Date must be in the future' }
+          let(:invalid_pd) { create(:bookings_placement_date, date: 3.weeks.ago) }
+
+          specify 'should show a suitable error message' do
+            expect { invalid_pd }.to(
+              raise_error(ActiveRecord::RecordInvalid, message)
+            )
+          end
+        end
+      end
+
+      context 'new placement dates must be in the future' do
+        context 'not too far in the future' do
+          specify 'should not allow dates more than 2 years in the future' do
+            expect(subject).not_to allow_value((2.years + 1.day).from_now).for(:date)
+            expect(subject).to allow_value((2.years - 1.day).from_now).for(:date)
+          end
+        end
+      end
+    end
   end
 
   describe 'Relationships' do
@@ -62,7 +99,7 @@ describe Bookings::Booking do
     describe '.upcoming' do
       # upcoming is currently set to any date within the next 2 weeks
       let!(:included) { [0, 1, 13, 14].map { |offset| create(:bookings_booking, date: offset.days.from_now) } }
-      let!(:excluded) { [-4, -1, 15, 50].map { |offset| create(:bookings_booking, date: offset.days.from_now) } }
+      let!(:excluded) { [-4, -1, 15, 50].map { |offset| build(:bookings_booking, date: offset.days.from_now).save(validate: false) } }
 
       specify 'should include bookings that fall within the range' do
         expect(described_class.upcoming).to match_array(included)
