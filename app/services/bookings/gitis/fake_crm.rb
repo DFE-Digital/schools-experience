@@ -7,10 +7,10 @@ module Bookings::Gitis
       validate_ids(ids)
 
       if ids.length == 1
-        Contact.new(fake_account_data.merge('contactid' => ids[0]))
+        Contact.new(fake_contact_data.merge('contactid' => ids[0]))
       else
         ids.map do |id|
-          Contact.new(fake_account_data.merge('contactid' => id))
+          Contact.new(fake_contact_data.merge('contactid' => id))
         end
       end
     end
@@ -18,7 +18,7 @@ module Bookings::Gitis
     def find_by_email(address)
       return super unless stubbed?
 
-      Contact.new(fake_account_data).tap do |contact|
+      Contact.new(fake_contact_data).tap do |contact|
         contact.email = address
       end
     end
@@ -28,7 +28,7 @@ module Bookings::Gitis
     def create_entity(entity_id, _data)
       return super unless stubbed?
 
-      "#{entity_id}(#{SecureRandom.uuid})"
+      "#{entity_id}(#{fake_contact_id})"
     end
 
     def update_entity(entity_id, _data)
@@ -37,9 +37,13 @@ module Bookings::Gitis
       entity_id
     end
 
-    def fake_account_data
+    def fake_contact_id
+      SecureRandom.uuid
+    end
+
+    def fake_contact_data
       {
-        'contactid' => "d778d663-a022-4c4b-9962-e469ee179f4a",
+        'contactid' => fake_contact_id,
         'firstname' => 'Matthew',
         'lastname' => 'Richards',
         'mobilephone' => '07123 456789',
