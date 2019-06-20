@@ -10,8 +10,21 @@
 
 <h1>Create a placement date</h1>
 
+<p>
+  Enter the start date and tell us how long it will last.
+</p>
+
+<p>
+  These details will be shown to candidates to help them choose school experience
+  at your school.
+</p>
+
 <%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |form| %>
-  <%= form.date_field :date %>
-  <%= form.number_field :duration, width: 3, required: true %>
+  <%= form.date_field :date, heading: true %>
+  <%= form.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true } %>
   <%= form.submit 'Continue' %>
 <%- end -%>
+
+<p class="govuk-inset-text">
+  You'll be able to add subject-specific dates soon.
+</p>
