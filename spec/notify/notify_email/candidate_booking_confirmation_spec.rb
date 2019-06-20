@@ -6,8 +6,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
   it_should_behave_like "email template", "29ed44bd-dc79-4fb3-bf8e-6e0ff18365b3",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",
-    placement_start_date: "2022-01-01",
-    placement_finish_date: "2022-02-01",
+    placement_schedule: "2022-03-04 for 3 days",
     school_address: "123 Main Street, Springfield, M2 3JF",
     school_start_time: "08:40",
     school_finish_time: "15:30",
@@ -58,13 +57,9 @@ describe NotifyEmail::CandidateBookingConfirmation do
         expect(subject.candidate_name).to eql(candidate_name)
       end
 
-      specify 'placement_start_date is correctly-assigned' do
-        expect(subject.placement_start_date).to eql(booking.date)
+      specify 'placement_schedule is correctly-assigned' do
+        expect(subject.placement_schedule).to eql(booking.placement_start_date_with_duration)
       end
-
-      specify 'placement_finish_date is correctly-assigned'
-      #  expect(subject.placement_finish_date).to eql('FIXME')
-      #end
 
       specify 'school_address is correctly-assigned' do
         expect(subject.school_address).to eql(

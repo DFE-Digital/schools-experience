@@ -1,8 +1,7 @@
 class NotifyEmail::CandidateBookingConfirmation < Notify
   attr_accessor :school_name,
     :candidate_name,
-    :placement_start_date,
-    :placement_finish_date,
+    :placement_schedule,
     :school_address,
     :school_start_time,
     :school_finish_time,
@@ -22,8 +21,7 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     to:,
     school_name:,
     candidate_name:,
-    placement_start_date:,
-    placement_finish_date:,
+    placement_schedule:,
     school_address:,
     school_start_time:,
     school_finish_time:,
@@ -42,8 +40,7 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
 
     self.school_name = school_name
     self.candidate_name = candidate_name
-    self.placement_start_date = placement_start_date
-    self.placement_finish_date = placement_finish_date
+    self.placement_schedule = placement_schedule
     self.school_address = school_address
     self.school_start_time = school_start_time
     self.school_finish_time = school_finish_time
@@ -70,8 +67,7 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
       to: to,
       school_name: school.name,
       candidate_name: candidate_name,
-      placement_start_date: booking.date,
-      placement_finish_date: 'FIXME',
+      placement_schedule: booking.placement_start_date_with_duration,
       school_address: [
         school.address_1,
         school.address_2,
@@ -112,8 +108,7 @@ private
     {
       school_name: school_name,
       candidate_name: candidate_name,
-      placement_start_date: placement_start_date,
-      placement_finish_date: placement_finish_date,
+      placement_schedule: placement_schedule,
       school_address: school_address,
       school_start_time: school_start_time,
       school_finish_time: school_finish_time,
