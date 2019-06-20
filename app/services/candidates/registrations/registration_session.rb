@@ -5,6 +5,7 @@ module Candidates
   module Registrations
     class RegistrationSession
       class NotCompletedError < StandardError; end
+      class StepNotFound < StandardError; end
 
       PENDING_EMAIL_CONFIRMATION_STATUS = 'pending_email_confirmation'.freeze
       COMPLETED_STATUS = 'completed'.freeze
@@ -33,8 +34,6 @@ module Candidates
       end
 
       def flag_as_completed!
-        raise NotCompletedError unless all_steps_completed?
-
         @registration_session['status'] = COMPLETED_STATUS
       end
 
@@ -115,17 +114,30 @@ module Candidates
         other.to_json == self.to_json
       end
 
+      def incomplete_steps
+        STEPS.reject do |step|
+          step_completed? step
+        end
+      end
+
     private
 
-      def all_steps_completed?
-        [
-          background_check,
-          contact_information,
-          placement_preference,
-          subject_preference
-        ].all?(&:valid?)
+      STEPS = %i(
+        placement_preference
+        contact_information
+        subject_preference
+        background_check
+      ).freeze
+
+      def step_completed?(step)
+        model = send step
+        model.valid?
       rescue StepNotFound
         false
+      end
+
+      def all_steps_completed?
+        STEPS.all? { |step| step_completed? step }
       end
     end
   end

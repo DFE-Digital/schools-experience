@@ -1,6 +1,6 @@
 <tr class="govuk-table__row placement-request" data-placement-request="<%= placement_request.id %>" data-urn="<%= placement_request.urn %>">
   <td class="govuk-table__cell govuk-!-font-weight-bold">
-    <%= placement_request.candidate.full_name %>
+    <%= placement_request.gitis_contact.full_name %>
   </td>
   <td class="govuk-table__cell">
     <% if !placement_request.viewed? %>

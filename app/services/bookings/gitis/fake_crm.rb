@@ -1,6 +1,8 @@
 module Bookings::Gitis
   module FakeCrm
     def find(*ids)
+      return super unless stubbed?
+
       ids = normalise_ids(*ids)
       validate_ids(ids)
 
@@ -14,6 +16,8 @@ module Bookings::Gitis
     end
 
     def find_by_email(address)
+      return super unless stubbed?
+
       Contact.new(fake_account_data).tap do |contact|
         contact.email = address
       end
@@ -43,6 +47,10 @@ module Bookings::Gitis
         'address1_stateorprovince' => 'Manchester',
         'address1_postalcode' => 'MA1 1AM'
       }
+    end
+
+    def stubbed?
+      Rails.application.config.x.fake_crm
     end
   end
 end

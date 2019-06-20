@@ -23,6 +23,8 @@ UK telephone number: ((school_teacher_telephone))
 
 You can also contact them if you have any questions about your actual placement.
 
+To cancel your placement use the the following link ((cancellation_url)).
+
 # Placement details
 
 ((placement_details))
