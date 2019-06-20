@@ -1,6 +1,7 @@
 module Candidates
   module PlacementRequests
     class CancellationsController < ApplicationController
+      include GitisAccess
       before_action :ensure_placement_request_is_open, except: :show
 
       def show
@@ -16,6 +17,8 @@ module Candidates
           placement_request_params
 
         if @cancellation.save
+          @placement_request.fetch_gitis_contact gitis_crm
+
           notify_school @cancellation
           notify_candidate @cancellation
           @cancellation.sent!

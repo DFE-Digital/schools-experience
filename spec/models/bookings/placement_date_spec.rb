@@ -8,7 +8,7 @@ describe Bookings::PlacementDate, type: :model do
     it { is_expected.to have_db_column(:active).of_type(:boolean) }
   end
 
-  describe 'Valiation' do
+  describe 'Validation' do
     subject { described_class.new }
 
     context '#date' do
@@ -66,8 +66,8 @@ describe Bookings::PlacementDate, type: :model do
   end
 
   describe 'Relationships' do
-    subject { described_class.new }
-    it { expect(subject).to belong_to(:bookings_school) }
+    it { is_expected.to belong_to(:bookings_school) }
+    it { is_expected.to have_many(:placement_requests) }
   end
 
   describe 'Scopes' do

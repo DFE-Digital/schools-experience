@@ -4,6 +4,11 @@ module Bookings
       class_name: 'Bookings::School',
       foreign_key: 'bookings_school_id'
 
+    has_many :placement_requests,
+      class_name: 'Bookings::PlacementRequest',
+      inverse_of: :placement_date,
+      foreign_key: :bookings_placement_date_id
+
     validates :bookings_school, presence: true
     validates :duration,
       presence: true,

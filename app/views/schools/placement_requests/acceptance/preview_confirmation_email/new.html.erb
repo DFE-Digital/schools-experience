@@ -4,12 +4,12 @@
 
     <p>
       The following contains the wording of the confirmation email which will be
-      sent to <%= @placement_request.candidate.firstname %> <%= @placement_request.candidate.lastname %>
+      sent to <%= @placement_request.candidate_name %>
       to confirm their booking.
     </p>
 
     <div class="email-preview">
-      <p>Dear <%= @placement_request.candidate.firstname %> <%= @placement_request.candidate.lastname %>,</p>
+      <p>Dear <%= @placement_request.candidate_name %>,</p>
 
       <p>Here are the details about your school experience at <%= @placement_request.school.name %>.</p>
 

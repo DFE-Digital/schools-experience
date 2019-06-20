@@ -30,7 +30,10 @@ module Bookings
       :build_candidate_cancellation,
       :closed?,
       :received_on,
-      :candidate,
+      :gitis_contact,
+      :contact_uuid,
+      :candidate_email,
+      :candidate_name,
       to: :bookings_placement_request
 
     scope :upcoming, -> { where(arel_table[:date].between(Time.now..2.weeks.from_now)) }

@@ -11,7 +11,7 @@
     <%- @bookings.each do |booking| -%>
     <tr class="booking govuk-table__row" data-booking="<%= booking.id %>">
       <td class="name govuk-table__cell">
-        <%= booking.candidate.full_name %>
+        <%= booking.candidate_name %>
       </td>
       <td class="subject govuk-table__cell">
         <%= booking.bookings_subject.name %>
