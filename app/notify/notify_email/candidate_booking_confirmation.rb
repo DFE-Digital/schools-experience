@@ -14,7 +14,6 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     :school_teacher_email,
     :school_teacher_telephone,
     :placement_details,
-    :placement_fee,
     :cancellation_url
 
   def initialize(
@@ -34,7 +33,6 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     school_teacher_email:,
     school_teacher_telephone:,
     placement_details:,
-    placement_fee:,
     cancellation_url:
   )
 
@@ -53,7 +51,6 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     self.school_teacher_email = school_teacher_email
     self.school_teacher_telephone = school_teacher_telephone
     self.placement_details = placement_details
-    self.placement_fee = placement_fee
     self.cancellation_url = cancellation_url
 
     super(to: to)
@@ -93,7 +90,6 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
       school_teacher_email: booking.contact_email,
       school_teacher_telephone: booking.contact_number,
       placement_details: booking.placement_details,
-      placement_fee: 'REMOVE', # FIXME
       cancellation_url: cancellation_url
     )
   end
@@ -121,7 +117,6 @@ private
       school_teacher_email: school_teacher_email,
       school_teacher_telephone: school_teacher_telephone,
       placement_details: placement_details,
-      placement_fee: placement_fee,
       cancellation_url: cancellation_url
     }
   end

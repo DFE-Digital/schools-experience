@@ -27,12 +27,6 @@ You can also contact them if you have any questions about your experience.
 
 To cancel your school experience use the following link ((cancellation_url)).
 
-To cancel your placement use the the following link ((cancellation_url)).
-
 # School experience details
 
 ((placement_details))
-
-# Remember to bring
-* your DBS certificate
-* your £((placement_fee)) placement fee
