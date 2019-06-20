@@ -5,7 +5,7 @@ module Schools
         @bookings = current_school
           .bookings
           .upcoming
-          .eager_load(:bookings_subject, :bookings_placement_request)
+          .eager_load(:bookings_subject, bookings_placement_request: :candidate)
           .all
 
         assign_gitis_contacts @bookings

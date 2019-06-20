@@ -2,7 +2,6 @@
 # registration
 module Bookings
   class PlacementRequest < ApplicationRecord
-    attr_accessor :gitis_contact
     include Candidates::Registrations::Behaviours::PlacementPreference
     include Candidates::Registrations::Behaviours::SubjectPreference
     include Candidates::Registrations::Behaviours::BackgroundCheck
@@ -50,6 +49,8 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
+    delegate :gitis_contact, :fetch_gitis_contact, to: :candidate
+
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil, context: nil)
       self.new(
         Candidates::Registrations::RegistrationAsPlacementRequest
@@ -72,7 +73,7 @@ module Bookings
     end
 
     def contact_uuid
-      1
+      candidate.gitis_uuid
     end
 
     def dates_requested
@@ -119,19 +120,15 @@ module Bookings
     end
 
     def candidate_email
-      gitis_contact.email
+      candidate.email
     end
 
     def candidate_name
-      gitis_contact.full_name
+      candidate.full_name
     end
 
     def cancellation
       candidate_cancellation || school_cancellation
-    end
-
-    def fetch_gitis_contact(crm)
-      self.gitis_contact = crm.find(contact_uuid)
     end
 
   private

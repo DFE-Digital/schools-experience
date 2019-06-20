@@ -295,4 +295,13 @@ RSpec.describe Bookings::Candidate, type: :model do
       expect(subject.contact).to be_kind_of(Bookings::Gitis::Contact)
     end
   end
+
+  describe "contact accessor attributes" do
+    subject { build :candidate, :with_gitis_contact }
+    it "will be delegated to gitis contact" do
+      is_expected.to have_attributes \
+        full_name: subject.gitis_contact.full_name,
+        email: subject.gitis_contact.email
+    end
+  end
 end
