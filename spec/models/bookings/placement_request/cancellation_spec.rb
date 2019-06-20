@@ -40,4 +40,23 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
       expect(subject.reload.placement_request).to be_closed
     end
   end
+
+  describe '#dates_requested' do
+    let(:placement_request) { create(:placement_request, :cancelled_by_school) }
+    subject { placement_request.school_cancellation }
+
+    context 'when the placement has been accepted' do
+      let!(:booking) { create(:bookings_booking, bookings_placement_request: placement_request) }
+
+      specify "should be the booking's date" do
+        expect(subject.dates_requested).to eql(booking.date.to_formatted_s(:govuk))
+      end
+    end
+
+    context "when the placement not has been accepted" do
+      specify 'should be the placement request availability' do
+        expect(subject.dates_requested).to eql(placement_request.dates_requested)
+      end
+    end
+  end
 end

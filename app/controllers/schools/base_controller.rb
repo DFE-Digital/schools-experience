@@ -3,6 +3,7 @@ module Schools
   class MissingURN < StandardError; end
 
   class BaseController < ApplicationController
+    include GitisAccess
     include DFEAuthentication
     before_action :require_auth
     before_action :set_current_school
