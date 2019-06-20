@@ -56,6 +56,37 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
   end
 
+  describe '.find_or_create_from_gitis_contact!' do
+    let(:gitis_contact) { build(:gitis_contact, :persisted) }
+
+    subject do
+      Bookings::Candidate.find_or_create_from_gitis_contact! gitis_contact
+    end
+
+    context 'with existing' do
+      let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.id) }
+
+      it "return existing candidate" do
+        is_expected.to eql candidate
+      end
+
+      it "will assign gitis_contact" do
+        is_expected.to have_attributes(gitis_contact: gitis_contact)
+      end
+    end
+
+    context 'without existing' do
+      it "will create candidate" do
+        is_expected.to be_kind_of Bookings::Candidate
+        is_expected.to be_persisted
+      end
+
+      it "will assign gitis_contact" do
+        is_expected.to have_attributes(gitis_contact: gitis_contact)
+      end
+    end
+  end
+
   describe '.create_from_registration_session!' do
     let(:registration) { build(:registration_session) }
 
@@ -76,7 +107,81 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '.create_or_update_from_registration_session!' do
-    it "will be tested"
+    let(:registration_session) { build(:registration_session) }
+
+    context 'with an existing contact and existing candidate' do
+      let(:candidate) { create(:candidate, :with_gitis_contact) }
+      let(:contact) { candidate.gitis_contact }
+
+      before do
+        expect(fake_gitis).to receive(:update_entity).and_return(contact.entity_id)
+      end
+
+      subject do
+        Bookings::Candidate.create_or_update_from_registration_session! \
+          fake_gitis, registration_session, contact
+      end
+
+      it "will return the existing candidate" do
+        is_expected.to eql candidate
+      end
+
+      it "will update the contacts details" do
+        expect(subject.gitis_contact).to have_attributes \
+          firstname: registration_session.personal_information.first_name,
+          lastname: registration_session.personal_information.last_name
+      end
+    end
+
+    context 'with an existing contact but not candidate' do
+      let(:contact) { build(:gitis_contact, :persisted) }
+
+      before do
+        expect(fake_gitis).to receive(:update_entity).and_return(contact.entity_id)
+      end
+
+      subject do
+        Bookings::Candidate.create_or_update_from_registration_session! \
+          fake_gitis, registration_session, contact
+      end
+
+      it "will create a Candidate" do
+        is_expected.to be_kind_of Bookings::Candidate
+        is_expected.to be_persisted
+      end
+
+      it "will update the contacts details" do
+        expect(subject.gitis_contact).to have_attributes \
+          firstname: registration_session.personal_information.first_name,
+          lastname: registration_session.personal_information.last_name
+      end
+    end
+
+    context 'with no contact or candidate' do
+      let(:contact_id) { SecureRandom.uuid }
+
+      before do
+        expect(fake_gitis).to receive(:create_entity) do |entity_id, _data|
+          "#{entity_id}(#{contact_id})"
+        end
+      end
+
+      subject do
+        Bookings::Candidate.create_or_update_from_registration_session! \
+          fake_gitis, registration_session, nil
+      end
+
+      it "will create a Candidate" do
+        is_expected.to be_kind_of Bookings::Candidate
+        is_expected.to be_persisted
+      end
+
+      it "will create the Contacts with registration details" do
+        expect(subject.gitis_contact).to have_attributes \
+          firstname: registration_session.personal_information.first_name,
+          lastname: registration_session.personal_information.last_name
+      end
+    end
   end
 
   describe '#update_from_registration_session!' do

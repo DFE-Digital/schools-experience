@@ -23,10 +23,16 @@ class Bookings::Candidate < ApplicationRecord
   scope :unconfirmed, -> { where(confirmed_at: nil) }
 
   class << self
+    def find_or_create_from_gitis_contact!(contact)
+      find_or_create_by!(gitis_uuid: contact.id).tap do |c|
+        c.gitis_contact = contact
+      end
+    end
+
     def create_or_update_from_registration_session!(crm, registration, contact)
       if contact
-        find_or_create_by!(gitis_uuid: contact.id).
-          update_from_registration_session!(crm, registration)
+        find_or_create_from_gitis_contact!(contact) \
+          .update_from_registration_session!(crm, registration)
       else
         create_from_registration_session!(crm, registration)
       end
