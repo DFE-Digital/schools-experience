@@ -72,7 +72,15 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       end
 
       context 'registration job not already enqueued' do
+        include_context 'fake gitis with known uuid'
+
         shared_examples 'a successful create' do
+          before do
+            expect(fake_gitis).to receive(:create_entity) do |entity_id, _data|
+              "#{entity_id}(#{fake_gitis_uuid})"
+            end
+          end
+
           before do
             get "/candidates/confirm/#{uuid}"
           end
@@ -83,6 +91,17 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
           it 'marks the registration as completed and re-stores it in redis' do
             expect(stored_registration_session).to be_completed
+          end
+
+          it "creates a candidate" do
+            created = Bookings::Candidate.find_by(gitis_uuid: fake_gitis_uuid)
+            expect(created).not_to be_nil
+          end
+
+          it "assigns contact attrs" do
+            expect(session['gitis_contact']).to include \
+              'firstname' => stored_registration_session.personal_information.first_name,
+              'lastname' => stored_registration_session.personal_information.last_name
           end
 
           it 'creates a bookings placement request' do

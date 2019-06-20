@@ -29,6 +29,12 @@ class Bookings::Candidate < ApplicationRecord
       end
     end
 
+    def find_by_gitis_contact!(contact)
+      find_by!(gitis_uuid: contact.id).tap do |c|
+        c.gitis_contact = contact
+      end
+    end
+
     def create_or_update_from_registration_session!(crm, registration, contact)
       if contact
         find_or_create_from_gitis_contact!(contact) \

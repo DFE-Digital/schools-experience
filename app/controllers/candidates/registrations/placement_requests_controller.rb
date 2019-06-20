@@ -9,6 +9,11 @@ module Candidates
         registration_session = RegistrationStore.instance.retrieve! params[:uuid]
 
         unless registration_session.completed?
+          self.current_candidate = Bookings::Candidate.create_or_update_from_registration_session! \
+            gitis_crm,
+            registration_session,
+            current_contact
+
           placement_request = Bookings::PlacementRequest.create_from_registration_session! \
             registration_session,
             cookies[:analytics_tracking_uuid],

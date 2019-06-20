@@ -56,6 +56,34 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
   end
 
+  describe '.find_by_gitis_contact!' do
+    let(:gitis_contact) { build(:gitis_contact, :persisted) }
+
+    context 'with existing Candidate' do
+      let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.id) }
+
+      subject do
+        Bookings::Candidate.find_or_create_from_gitis_contact! gitis_contact
+      end
+
+      it "return existing candidate" do
+        is_expected.to eql candidate
+      end
+
+      it "will assign gitis_contact" do
+        is_expected.to have_attributes(gitis_contact: gitis_contact)
+      end
+    end
+
+    context 'without existing Candidate' do
+      it "raise record not found" do
+        expect {
+          Bookings::Candidate.find_by_gitis_contact! gitis_contact
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
   describe '.find_or_create_from_gitis_contact!' do
     let(:gitis_contact) { build(:gitis_contact, :persisted) }
 

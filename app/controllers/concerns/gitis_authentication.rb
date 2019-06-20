@@ -29,11 +29,13 @@ protected
     return nil unless current_contact
 
     @current_candidate ||=
-      Bookings::Candidate.find_by!(gitis_uuid: current_contact.id)
+      Bookings::Candidate.find_by_gitis_contact!(current_contact)
   end
 
   def current_candidate=(candidate)
-    self.current_contact = gitis_crm.find(candidate.gitis_uuid)
+    self.current_contact = candidate.gitis_contact ||
+      candidate.fetch_gitis_contact(gitis_crm)
+
     @current_candidate = candidate
   end
 
