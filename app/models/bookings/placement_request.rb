@@ -9,6 +9,8 @@ module Bookings
 
     has_secure_token
 
+    validates_presence_of :candidate, unless: :pre_phase3_record?
+
     belongs_to :school,
       class_name: 'Bookings::School',
       foreign_key: :bookings_school_id
@@ -141,6 +143,12 @@ module Bookings
     def completed?
       # FIXME SE-1096 determine from booking
       false
+    end
+
+    def pre_phase3_record?
+      return true if Rails.application.config.x.phase < 3
+
+      persisted? && candidate_id_was.nil?
     end
   end
 end

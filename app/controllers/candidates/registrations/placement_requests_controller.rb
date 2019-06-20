@@ -14,7 +14,7 @@ module Candidates
             registration_session,
             current_contact
 
-          placement_request = Bookings::PlacementRequest.create_from_registration_session! \
+          placement_request = current_candidate.placement_requests.create_from_registration_session! \
             registration_session,
             cookies[:analytics_tracking_uuid],
             context: :returning_from_confirmation_email
