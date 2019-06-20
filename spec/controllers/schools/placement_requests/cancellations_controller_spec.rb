@@ -3,7 +3,6 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementRequests::CancellationsController, type: :request do
   include_context "logged in DfE user"
-  include_context "stubbed out Gitis"
   include_context "restricted unless school onboarded"
 
   let :school do

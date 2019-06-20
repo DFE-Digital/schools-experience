@@ -119,6 +119,7 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   context 'attributes' do
+    it { is_expected.to respond_to :gitis_contact }
     it { is_expected.to respond_to :urn }
     it { is_expected.to respond_to :degree_stage }
     it { is_expected.to respond_to :degree_stage_explaination }
@@ -388,6 +389,36 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
+  context '#cancellation' do
+    subject { described_class.new }
+
+    context 'when cancelled by candidate' do
+      let! :candidate_cancellation do
+        subject.build_candidate_cancellation
+      end
+
+      it 'returns the candidate_cancellation' do
+        expect(subject.cancellation).to eq candidate_cancellation
+      end
+    end
+
+    context 'when cancelled by school' do
+      let! :school_cancellation do
+        subject.build_school_cancellation
+      end
+
+      it 'returns the school_cancellation' do
+        expect(subject.cancellation).to eq school_cancellation
+      end
+    end
+
+    context 'when not cancelled' do
+      it 'returns nil' do
+        expect(subject.cancellation).not_to be_present
+      end
+    end
+  end
+
   context '#status' do
     context 'default' do
       subject { FactoryBot.create :placement_request }
@@ -421,6 +452,18 @@ describe Bookings::PlacementRequest, type: :model do
       it "returns 'No'" do
         expect(subject.dbs).to eq 'No'
       end
+    end
+  end
+
+  describe '#fetch_gitis_contact' do
+    let(:gitis) { Bookings::Gitis::CRM.new('a.fake.token') }
+    subject { FactoryBot.create :placement_request }
+
+    it "will assign contact" do
+      expect(subject.fetch_gitis_contact(gitis)).to \
+        be_kind_of(Bookings::Gitis::Contact)
+
+      expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
     end
   end
 end

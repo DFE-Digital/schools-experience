@@ -1,6 +1,5 @@
 class NotifyEmail::SchoolRequestCancellation < Notify
-  attr_accessor :school_admin_name,
-    :school_name,
+  attr_accessor :school_name,
     :candidate_name,
     :cancellation_reasons,
     :requested_availability,
@@ -9,14 +8,12 @@ class NotifyEmail::SchoolRequestCancellation < Notify
   def initialize(
     to:,
     school_name:,
-    school_admin_name:,
     candidate_name:,
     cancellation_reasons:,
     requested_availability:,
     placement_request_url:
   )
 
-    self.school_admin_name      = school_admin_name
     self.school_name            = school_name
     self.candidate_name         = candidate_name
     self.cancellation_reasons   = cancellation_reasons
@@ -33,7 +30,6 @@ private
 
   def personalisation
     {
-      school_admin_name: school_admin_name,
       school_name: school_name,
       candidate_name: candidate_name,
       cancellation_reasons: cancellation_reasons,

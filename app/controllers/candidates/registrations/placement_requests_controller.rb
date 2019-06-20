@@ -34,7 +34,7 @@ module Candidates
 
       def cancellation_url(placement_request)
         if Rails.application.config.x.phase > 2
-          new_candidates_placement_request_cancellation_url(placement_request.token)
+          candidates_cancel_url(placement_request.token)
         else
           ''
         end

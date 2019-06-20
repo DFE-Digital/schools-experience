@@ -13,9 +13,10 @@ RSpec.describe Candidates::SessionsController, type: :request do
   end
 
   describe "POST #create" do
-    before { NotifyFakeClient.reset_deliveries! }
-    before { queue_adapter.perform_enqueued_jobs = true }
-    after { queue_adapter.perform_enqueued_jobs = nil }
+    before do
+      NotifyFakeClient.reset_deliveries!
+      allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)
+    end
 
     let(:valid_creds) do
       {
