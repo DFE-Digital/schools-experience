@@ -10,6 +10,8 @@ module Bookings
       entity_attributes :address1_city, :address1_stateorprovince
       entity_attributes :address1_postalcode, :phone
 
+      alias_attribute :first_name, :firstname
+      alias_attribute :last_name, :lastname
       alias_attribute :building, :address1_line1
       alias_attribute :town_or_city, :address1_city
       alias_attribute :county, :address1_stateorprovince
@@ -47,6 +49,11 @@ module Bookings
         elsif emailaddress1 != emailaddress
           self.emailaddress2 = emailaddress
         end
+      end
+
+      def street=(line_2and3)
+        self.address1_line2 = line_2and3
+        self.address1_line3 = ""
       end
 
       def street
