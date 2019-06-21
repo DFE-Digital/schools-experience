@@ -32,6 +32,10 @@ protected
       Bookings::Candidate.find_by_gitis_contact!(current_contact)
   end
 
+  def candidate_signed_in?
+    !current_candidate.nil?
+  end
+
   def current_candidate=(candidate)
     self.current_contact = candidate.gitis_contact ||
       candidate.fetch_gitis_contact(gitis_crm)

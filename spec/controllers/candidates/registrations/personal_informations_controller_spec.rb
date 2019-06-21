@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::PersonalInformationsController, type: :request do
   include_context 'Stubbed current_registration'
+  include_context 'fake gitis'
 
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new({})
@@ -92,6 +93,38 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         it 'does not send sign in email'
 
         it 'redirects to the contact information step' do
+          expect(response).to redirect_to \
+            '/candidates/schools/11048/registrations/contact_information/new'
+        end
+      end
+
+      context 'already signed in' do
+        let :personal_information do
+          FactoryBot.build :personal_information
+        end
+
+        let(:token) { create(:candidate_session_token) }
+        let(:contact_attributes) do
+          token.candidate.fetch_gitis_contact(fake_gitis).attributes
+        end
+
+        before do
+          allow_any_instance_of(ActionDispatch::Request::Session).to \
+            receive(:[]).with(:gitis_contact).and_return(contact_attributes)
+
+          post \
+            '/candidates/schools/11048/registrations/personal_information',
+            params: personal_information_params
+        end
+
+        it 'updates the session with the new details' do
+          expect(registration_session.personal_information).to \
+            eq_model personal_information
+        end
+
+        it "does not send a sign in email"
+
+        it 'redirects to the next step' do
           expect(response).to redirect_to \
             '/candidates/schools/11048/registrations/contact_information/new'
         end

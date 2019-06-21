@@ -10,7 +10,9 @@ module Candidates
         if @personal_information.valid?
           persist @personal_information
 
-          if @personal_information.create_signin_token(gitis_crm)
+          if candidate_signed_in?
+            redirect_to new_candidates_school_registrations_contact_information_path
+          elsif @personal_information.create_signin_token(gitis_crm)
             # FIXME should send the email to the user
             redirect_to candidates_school_registrations_sign_ins_path
           else
