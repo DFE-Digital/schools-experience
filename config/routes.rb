@@ -39,6 +39,9 @@ Rails.application.routes.draw do
             resource :preview_confirmation_email,
               only: [:new, :create],
               controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
+            resource :email_sent,
+              only: [:show],
+              controller: '/schools/placement_requests/acceptance/email_sent'
           end
           collection do
             resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'

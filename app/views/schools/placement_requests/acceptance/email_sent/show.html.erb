@@ -1,0 +1,23 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Your email has been sent
+      </h1>
+    </div>
+    <div>
+      <h3>What happens next</h3>
+
+      <p>
+        We’ve sent your confirmation to
+        <%= @placement_request.gitis_contact.full_name %>
+      </p>
+      <p>
+        They’ve been told to arrive at your school on the date and time you
+        specified.
+      </p>
+
+      <%= link_to 'Return to requets and bookings', schools_dashboard_path, class: 'govuk-button govuk-button--secondary' %>
+    </div>
+  </div>
+</div>

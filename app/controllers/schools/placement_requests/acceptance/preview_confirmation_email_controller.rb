@@ -12,7 +12,7 @@ module Schools
           booking = @placement_request.booking
 
           if booking.update(accepted_at: Time.now) && candidate_booking_notification(booking).despatch_later!
-            redirect_to schools_placement_requests_path
+            redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
           else
             render :new
           end
