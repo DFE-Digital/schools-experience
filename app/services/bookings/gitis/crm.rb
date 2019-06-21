@@ -19,13 +19,9 @@ module Bookings
         params = { '$top' => uuids.length }
 
         if multiple_ids
-          params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
-
-          api.get(entity_type.entity_path, params)['value'].map do |entity_data|
-            entity_type.new entity_data
-          end
+          find_many(entity_type, uuids, params)
         else
-          entity_type.new api.get("#{entity_type.entity_path}(#{uuids[0]})", params)
+          find_one(entity_type, uuids[0], params)
         end
       end
 
@@ -107,6 +103,18 @@ module Bookings
 
       def update_entity(entity_id, data)
         api.patch(entity_id, data)
+      end
+
+      def find_one(entity_type, uuid, params)
+        entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
+      end
+
+      def find_many(entity_type, uuids, params)
+        params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
+
+        api.get(entity_type.entity_path, params)['value'].map do |entity_data|
+          entity_type.new entity_data
+        end
       end
     end
   end
