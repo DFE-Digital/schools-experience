@@ -174,7 +174,8 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
               to: gitis_contact.email,
               school_name: cancellation.school_name,
               candidate_name: gitis_contact.full_name,
-              requested_availability: cancellation.dates_requested
+              requested_availability: cancellation.dates_requested,
+              school_search_url: new_candidates_school_search_url
 
             expect(notify_candidate_request_cancellation).to \
               have_received :despatch_later!
@@ -250,7 +251,8 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
               to: gitis_contact.email,
               school_name: cancellation.school_name,
               candidate_name: gitis_contact.full_name,
-              placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
+              placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration,
+              school_search_url: new_candidates_school_search_url
 
             expect(notify_candidate_booking_cancellation).to \
               have_received :despatch_later!
