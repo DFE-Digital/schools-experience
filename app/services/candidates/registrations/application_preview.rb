@@ -85,6 +85,10 @@ module Candidates
         placement_preference.objectives
       end
 
+      def placement_request_url
+        schools_placement_request_url(123)
+      end
+
       def teaching_subject_first_choice
         subject_first_choice
       end

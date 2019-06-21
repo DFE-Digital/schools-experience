@@ -5,13 +5,14 @@ module Candidates
 
       retry_on Notify::RetryableError, wait: A_DECENT_AMOUNT_LONGER, attempts: 5
 
-      def perform(uuid, cancellation_url)
+      def perform(uuid, cancellation_url, placement_request_url)
         registration_session = RegistrationStore.instance.retrieve! uuid
         application_preview  = ApplicationPreview.new registration_session
 
         NotifyEmail::SchoolRequestConfirmation.from_application_preview(
           registration_session.school.notifications_email,
-          application_preview
+          application_preview,
+          placement_request_url
         ).despatch!
 
         if Rails.application.config.x.phase > 2
