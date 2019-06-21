@@ -46,7 +46,7 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   feature 'Candidate Registration' do
-    context 'for unknown Candidate' do
+    context 'for unknown Contact' do
       let(:email_address) { 'unknown@example.com' }
 
       scenario "completing the Journey" do
@@ -61,7 +61,23 @@ feature 'Candidate Registrations', type: :feature do
       end
     end
 
-    context 'for known Candidate' do
+    context 'for unknown Candidate but Contact is in Gitis' do
+      let(:token) { create(:candidate_session_token) }
+      let(:email_address) { 'test@example.com' }
+
+      scenario "completing the Journey" do
+        complete_personal_information_step
+        complete_sign_in_step(token.token)
+        complete_contact_information_step
+        complete_subject_preference_step
+        complete_placement_preference_step
+        complete_background_step
+        complete_application_preview_step
+        view_request_acknowledgement_step
+      end
+    end
+
+    context 'for known Candidate not signed in' do
       let(:token) { create(:candidate_session_token) }
       let(:email_address) { 'test@example.com' }
 
@@ -78,7 +94,31 @@ feature 'Candidate Registrations', type: :feature do
         complete_placement_preference_step
         complete_background_step
         complete_application_preview_step
-        complete_email_confirmation_step
+        view_request_acknowledgement_step
+      end
+    end
+
+    context 'for known Candidate already signed in' do
+      include_context 'fake gitis with known uuid'
+
+      let(:email_address) { 'test@example.com' }
+      let!(:candidate) { create(:candidate, :confirmed, gitis_uuid: fake_gitis_uuid) }
+      let(:token) { create(:candidate_session_token, candidate: candidate) }
+
+      before do
+        allow_any_instance_of(Candidates::Session).to \
+          receive(:create_signin_token).and_return(token.token)
+      end
+
+      scenario "completing the Journey" do
+        sign_in_via_dashboard(token.token)
+
+        complete_personal_information_step
+        complete_contact_information_step
+        complete_subject_preference_step
+        complete_placement_preference_step
+        complete_background_step
+        complete_application_preview_step
         view_request_acknowledgement_step
       end
     end
@@ -221,5 +261,20 @@ feature 'Candidate Registrations', type: :feature do
   def view_request_acknowledgement_step
     expect(page).to have_text \
       "Your request for school experience will be forwarded to Test School."
+  end
+
+  def sign_in_via_dashboard(token)
+    visit "/candidates/signin"
+
+    fill_in 'Email address', with: email_address
+    fill_in 'First name', with: 'testy'
+    fill_in 'Last name', with: 'mctest'
+    fill_in 'Day', with: '01'
+    fill_in 'Month', with: '01'
+    fill_in 'Year', with: '1980'
+    click_button 'Sign in'
+
+    visit "/candidates/signin/#{token}"
+    expect(page.current_path).to eq "/candidates/dashboard"
   end
 end
