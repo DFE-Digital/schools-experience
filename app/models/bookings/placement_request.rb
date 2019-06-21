@@ -49,6 +49,8 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
+    default_scope { where.not(candidate_id: nil) }
+
     delegate :gitis_contact, :fetch_gitis_contact, to: :candidate
 
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil, context: nil)
