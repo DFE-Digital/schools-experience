@@ -87,8 +87,8 @@ Then("every booking should contain a link to view more details") do
   within('#bookings') do
     page.all('.booking').each do |sr|
       within(sr) do
-        booking_id = sr['data-booking'].to_i
-        expect(page).to have_link('Open', href: schools_booking_path(booking_id))
+        booking_id = sr['data-booking']
+        expect(page).to have_link('View', href: schools_booking_path(booking_id))
       end
     end
   end
