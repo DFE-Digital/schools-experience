@@ -1,8 +1,6 @@
 module Candidates
   module Registrations
     class PersonalInformation < RegistrationStep
-      attr_reader :contact
-
       attribute :first_name
       attribute :last_name
       attribute :email
