@@ -2,7 +2,7 @@ class NotifyEmail::SchoolRequestCancellation < Notify
   attr_accessor :school_name,
     :candidate_name,
     :cancellation_reasons,
-    :requested_availability,
+    :requested_on,
     :placement_request_url
 
   def initialize(
@@ -10,15 +10,15 @@ class NotifyEmail::SchoolRequestCancellation < Notify
     school_name:,
     candidate_name:,
     cancellation_reasons:,
-    requested_availability:,
+    requested_on:,
     placement_request_url:
   )
 
-    self.school_name            = school_name
-    self.candidate_name         = candidate_name
-    self.cancellation_reasons   = cancellation_reasons
-    self.requested_availability = requested_availability
-    self.placement_request_url  = placement_request_url
+    self.school_name           = school_name
+    self.candidate_name        = candidate_name
+    self.cancellation_reasons  = cancellation_reasons
+    self.requested_on          = requested_on
+    self.placement_request_url = placement_request_url
     super(to: to)
   end
 
@@ -33,7 +33,7 @@ private
       school_name: school_name,
       candidate_name: candidate_name,
       cancellation_reasons: cancellation_reasons,
-      requested_availability: requested_availability,
+      requested_on: requested_on,
       placement_request_url: placement_request_url
     }
   end

@@ -162,7 +162,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
               school_name: cancellation.school_name,
               candidate_name: gitis_contact.full_name,
               cancellation_reasons: cancellation.reason,
-              requested_availability: cancellation.dates_requested,
+              requested_on: cancellation.placement_request.created_at.to_formatted_s(:govuk),
               placement_request_url: schools_placement_request_url(cancellation.placement_request)
 
             expect(notify_school_request_cancellation).to \
