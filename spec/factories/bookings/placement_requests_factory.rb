@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :bookings_placement_request, class: 'Bookings::PlacementRequest' do
+    association :candidate
+
     objectives { "I want to be a teacher" }
     degree_stage { "Final year" }
     degree_subject { "Bioscience" }

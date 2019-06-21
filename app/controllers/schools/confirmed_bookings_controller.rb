@@ -3,7 +3,7 @@ module Schools
     def index
       @bookings = current_school
         .bookings
-        .eager_load(:bookings_subject, :bookings_placement_request)
+        .eager_load(:bookings_subject, bookings_placement_request: :candidate)
         .all
 
       assign_gitis_contacts @bookings
@@ -26,7 +26,7 @@ module Schools
       contacts = gitis_crm.find(bookings.map(&:contact_uuid)).index_by(&:id)
 
       bookings.each do |booking|
-        booking.bookings_placement_request.gitis_contact = \
+        booking.bookings_placement_request.candidate.gitis_contact = \
           contacts[booking.contact_uuid]
       end
     end

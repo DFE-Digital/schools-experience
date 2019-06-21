@@ -3,6 +3,7 @@ module Bookings::Gitis
 
   module Entity
     extend ActiveSupport::Concern
+    ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
 
     included do
       include ActiveModel::Model

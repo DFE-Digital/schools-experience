@@ -53,19 +53,6 @@ describe Bookings::Gitis::CRM, type: :model do
       end
     end
 
-    context 'with multiple account_ids' do
-      before { gitis_stub.stub_multiple_contact_request(uuids) }
-      subject { gitis.find(*uuids) }
-
-      it "will return an account per id" do
-        is_expected.to have_attributes(length: 3)
-        is_expected.to all be_instance_of(Bookings::Gitis::Contact)
-        subject.each_with_index do |contact, index|
-          expect(contact.id).to eq(uuids[index])
-        end
-      end
-    end
-
     context 'with array of account_ids' do
       before { gitis_stub.stub_multiple_contact_request(uuids) }
       subject { gitis.find(uuids) }

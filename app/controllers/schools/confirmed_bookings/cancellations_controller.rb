@@ -49,7 +49,7 @@ module Schools
       def set_booking_and_placement_request
         @booking = current_school
           .bookings
-          .eager_load(:bookings_placement_request)
+          .eager_load(bookings_placement_request: :candidate)
           .find(params[:booking_id])
         @placement_request = @booking.bookings_placement_request
       end

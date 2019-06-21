@@ -1,5 +1,7 @@
 module Candidates
   class RegistrationsController < ApplicationController
+    include GitisAuthentication
+
     rescue_from Registrations::RegistrationSession::StepNotFound do |error|
       Rails.logger.warn "Step not found: #{error.inspect}"
       redirect_to next_step_path(current_registration)

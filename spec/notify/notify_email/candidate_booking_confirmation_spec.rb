@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateBookingConfirmation do
-  include_context "stubbed out Gitis"
-
   it_should_behave_like "email template", "29ed44bd-dc79-4fb3-bf8e-6e0ff18365b3",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",

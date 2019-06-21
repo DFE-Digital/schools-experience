@@ -1,38 +1,34 @@
 module Bookings::Gitis
   module FakeCrm
-    def find(*ids)
-      return super unless stubbed?
-
-      ids = normalise_ids(*ids)
-      validate_ids(ids)
-
-      if ids.length == 1
-        Contact.new(fake_account_data.merge('contactid' => ids[0]))
-      else
-        ids.map do |id|
-          Contact.new(fake_account_data.merge('contactid' => id))
-        end
-      end
-    end
-
     def find_by_email(address)
       return super unless stubbed?
 
-      Contact.new(fake_account_data).tap do |contact|
+      Contact.new(fake_contact_data).tap do |contact|
         contact.email = address
       end
     end
 
   private
 
-    def write_data(crm_contact_data)
-      crm_contact_data['contactid'].presence ||
-        "75c5a32d-d603-4483-956f-236fee7c5784"
+    def create_entity(entity_id, _data)
+      return super unless stubbed?
+
+      "#{entity_id}(#{fake_contact_id})"
     end
 
-    def fake_account_data
+    def update_entity(entity_id, _data)
+      return super unless stubbed?
+
+      entity_id
+    end
+
+    def fake_contact_id
+      SecureRandom.uuid
+    end
+
+    def fake_contact_data
       {
-        'contactid' => "d778d663-a022-4c4b-9962-e469ee179f4a",
+        'contactid' => fake_contact_id,
         'firstname' => 'Matthew',
         'lastname' => 'Richards',
         'mobilephone' => '07123 456789',
@@ -51,6 +47,22 @@ module Bookings::Gitis
 
     def stubbed?
       Rails.application.config.x.fake_crm
+    end
+
+    # only Contacts are mocked for now
+    def find_one(_entity_type, uuid, params)
+      return super unless stubbed?
+
+      Contact.new(fake_contact_data.merge('contactid' => uuid))
+    end
+
+    # only Contacts are mocked for now
+    def find_many(entity_type, uuids, params)
+      return super unless stubbed?
+
+      uuids.map do |uuid|
+        find_one(entity_type, uuid, params)
+      end
     end
   end
 end

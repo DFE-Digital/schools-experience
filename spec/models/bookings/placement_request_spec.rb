@@ -16,8 +16,25 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: true }
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
   it { is_expected.to have_db_column(:analytics_tracking_uuid).of_type(:uuid).with_options null: true }
+  it { is_expected.to have_db_column(:candidate_id).of_type(:integer).with_options null: true }
 
   it { is_expected.to have_secure_token }
+
+  describe 'candidate requirement' do
+    it { is_expected.to validate_presence_of :candidate }
+
+    context 'with legacy record' do
+      subject { create(:placement_request) }
+      before { subject.update_columns(candidate_id: nil) }
+      before { subject.reload }
+      it { is_expected.to be_valid }
+    end
+
+    context 'before phase3' do
+      before { allow(Rails.application.config.x).to receive(:phase).and_return(2) }
+      it { is_expected.not_to validate_presence_of :candidate }
+    end
+  end
 
   context 'relationships' do
     it do
@@ -37,6 +54,11 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to belong_to(:school).class_name('Bookings::School').with_foreign_key(:bookings_school_id) }
     it { is_expected.to have_one(:booking).class_name('Bookings::Booking').with_foreign_key(:bookings_placement_request_id) }
     it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
+
+    it do
+      is_expected.to belong_to(:candidate).class_name('Bookings::Candidate').\
+        with_foreign_key(:candidate_id).without_validating_presence
+    end
   end
 
   it { is_expected.to respond_to :sent_at }
@@ -68,6 +90,8 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   context '.create_from_registration_session' do
+    let(:candidate) { create(:candidate) }
+
     context 'invalid session' do
       let :invalid_session do
         Candidates::Registrations::RegistrationSession.new \
@@ -80,7 +104,8 @@ describe Bookings::PlacementRequest, type: :model do
 
       it 'raises a validation error' do
         expect {
-          described_class.create_from_registration_session! invalid_session
+          candidate.placement_requests.create_from_registration_session! \
+            invalid_session
         }.to raise_error ActiveRecord::RecordInvalid
       end
     end
@@ -94,7 +119,8 @@ describe Bookings::PlacementRequest, type: :model do
 
       it 'creates the placement request' do
         expect {
-          described_class.create_from_registration_session! registration_session
+          candidate.placement_requests.create_from_registration_session! \
+            registration_session
         }.to change { described_class.count }.by 1
       end
     end
@@ -109,7 +135,8 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       subject do
-        described_class.create_from_registration_session! registration_session, analytics_tracking_uuid
+        candidate.placement_requests.create_from_registration_session! \
+          registration_session, analytics_tracking_uuid
       end
 
       specify 'it stores the analytics_tracking_uuid correctly if supplied' do
@@ -456,11 +483,11 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   describe '#fetch_gitis_contact' do
-    let(:gitis) { Bookings::Gitis::CRM.new('a.fake.token') }
+    include_context 'fake gitis'
     subject { FactoryBot.create :placement_request }
 
     it "will assign contact" do
-      expect(subject.fetch_gitis_contact(gitis)).to \
+      expect(subject.fetch_gitis_contact(fake_gitis)).to \
         be_kind_of(Bookings::Gitis::Contact)
 
       expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
