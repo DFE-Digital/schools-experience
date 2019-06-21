@@ -13,6 +13,10 @@ article#dashlette {
 }
 
 article#dashboard {
+  #change-school {
+    padding-top: 0;
+  }
+
   section {
     padding: 2rem 0rem;
     margin: 0rem 0rem;
@@ -26,7 +30,7 @@ article#dashboard {
       padding: 0rem;
 
       &.dashboard-high-priority {
-        @include govuk-font($size: 27, $weight: bold);
+        @include govuk-font($size: 24, $weight: bold);
       }
 
       &.dashboard-medium-priority {
@@ -70,6 +74,16 @@ article#dashboard {
     }
 
     &.requests-and-bookings {
+    }
+
+    #requests {
+      padding-top: 0;
+    }
+  }
+
+  section.medium-priority {
+    .subsection {
+      padding: 0;
     }
   }
 }

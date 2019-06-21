@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::Gitis::Auth do
+  include_context 'bypass fake Gitis'
+
   let(:tenant_id) { SecureRandom.uuid }
   let(:client_id) { 'client_id' }
   let(:client_secret) { 'secret' }

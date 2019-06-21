@@ -1,0 +1,20 @@
+en:
+  errors:
+    messages:
+      invalid_date: "is not a valid date"
+      invalid_time: "is not a valid time"
+      invalid_datetime: "is not a valid date"
+      is_at: "must be at %{restriction}"
+      before: "must be before %{restriction}"
+      on_or_before: "must be on or before %{restriction}"
+      after: "must be after %{restriction}"
+
+      # note, this tranlsation only works when comparing
+      # the value to today
+      on_or_after: "Date must be in the future"
+
+  validates_timeliness:
+    error_value_formats:
+      date: "%d %B %Y"
+      time: '%H:%M:%S'
+      datetime: '%d %B %Y %H:%M:%S'

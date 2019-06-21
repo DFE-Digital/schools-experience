@@ -39,10 +39,10 @@ end
 Then("I should only see bookings belonging to my school") do
   within('table#bookings tbody') do
     @bookings.map(&:id).each do |booking_id|
-      expect(page).to have_css(".booking-#{booking_id}")
+      expect(page).to have_css(".booking[data-booking='#{booking_id}']")
     end
     @other_school_bookings.map(&:id).each do |booking_id|
-      expect(page).not_to have_css(".booking-#{booking_id}")
+      expect(page).not_to have_css(".booking[data-booking='#{booking_id}']")
     end
   end
 end
@@ -87,7 +87,7 @@ Then("every booking should contain a link to view more details") do
   within('#bookings') do
     page.all('.booking').each do |sr|
       within(sr) do
-        booking_id = sr['data-booking-id']
+        booking_id = sr['data-booking']
         expect(page).to have_link('View', href: schools_booking_path(booking_id))
       end
     end
@@ -122,7 +122,7 @@ end
 Then("the upcoming bookings should be listed") do
   within('table#bookings tbody') do
     @bookings.map(&:id).each do |booking_id|
-      expect(page).to have_css(".booking-#{booking_id}")
+      expect(page).to have_css(".booking[data-booking='#{booking_id}']")
     end
   end
 end
@@ -130,7 +130,7 @@ end
 Then("the non-upcoming bookings shouldn't") do
   within('table#bookings tbody') do
     @non_upcoming_bookings.map(&:id).each do |booking_id|
-      expect(page).not_to have_css(".booking-#{booking_id}")
+      expect(page).not_to have_css(".booking[data-booking='#{booking_id}']")
     end
   end
 end

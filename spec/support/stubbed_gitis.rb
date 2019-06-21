@@ -1,6 +1,8 @@
 require 'apimock/gitis_crm'
 
 shared_context "stubbed out Gitis" do
+  include_context 'bypass fake Gitis'
+
   let(:tenant_id) { SecureRandom.uuid }
   let(:client_id) { 'client_id' }
   let(:client_secret) { 'secret' }

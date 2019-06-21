@@ -9,20 +9,20 @@
   </thead>
   <tbody class="govuk-table__body">
     <%- @bookings.each do |booking| -%>
-      <tr class="booking govuk-table__row <%= "booking-#{booking.id}" %>" data-booking-id="<%= booking.id %>">
-      <td class="name govuk-table__cell">
-        <%= booking.candidate.full_name %>
-      </td>
-      <td class="subject govuk-table__cell">
-        <%= booking.bookings_subject.name %>
-      </td>
-      <td class="date govuk-table__cell">
-        <%= booking.date.to_formatted_s(:govuk) %>
-      </td>
-      <td class="govuk-table__cell">
-        <%= link_to "View", schools_booking_path(booking) %>
-      </td>
-    </tr>
+      <tr class="booking govuk-table__row" data-booking="<%= booking.id %>">
+        <td class="name govuk-table__cell">
+          <%= booking.candidate_name %>
+        </td>
+        <td class="subject govuk-table__cell">
+          <%= booking.bookings_subject.name %>
+        </td>
+        <td class="date govuk-table__cell">
+          <%= booking.date.to_formatted_s(:govuk) %>
+        </td>
+        <td class="govuk-table__cell">
+          <%= link_to "View", schools_booking_path(booking) %>
+        </td>
+      </tr>
     <%- end -%>
   </tbody>
 </table>
