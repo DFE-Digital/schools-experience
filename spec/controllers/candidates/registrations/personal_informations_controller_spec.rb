@@ -1,11 +1,12 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PersonalInformationsController, type: :request do
+  include ActiveJob::TestHelper
   include_context 'Stubbed current_registration'
   include_context 'fake gitis'
 
   let :registration_session do
-    Candidates::Registrations::RegistrationSession.new({})
+    Candidates::Registrations::RegistrationSession.new('urn' => '10020')
   end
 
   context 'without existing personal information in the session' do
@@ -25,6 +26,11 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
           candidates_registrations_personal_information: \
             personal_information.attributes
         }
+      end
+
+      before do
+        NotifyFakeClient.reset_deliveries!
+        allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)
       end
 
       context 'invalid' do
@@ -66,7 +72,16 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             eq_model personal_information
         end
 
-        it "sends a sign in email"
+        it "sends a sign in email" do
+          expect(NotifyFakeClient.deliveries.length).to eql(1)
+
+          delivery = NotifyFakeClient.deliveries.first
+          expect(delivery[:email_address]).to \
+            eql(registration_session.personal_information.email)
+
+          expect(delivery[:personalisation][:verification_link]).to \
+            match(%r{/registrations/sign_ins/[^/]{24}\z})
+        end
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
@@ -90,7 +105,9 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             eq_model personal_information
         end
 
-        it 'does not send sign in email'
+        it "does not send a sign in email" do
+          expect(NotifyFakeClient.deliveries.length).to eql(0)
+        end
 
         it 'redirects to the contact information step' do
           expect(response).to redirect_to \
@@ -122,7 +139,9 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             eq_model personal_information
         end
 
-        it "does not send a sign in email"
+        it "does not send a sign in email" do
+          expect(NotifyFakeClient.deliveries.length).to eql(0)
+        end
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \

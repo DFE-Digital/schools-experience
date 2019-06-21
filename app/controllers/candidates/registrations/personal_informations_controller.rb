@@ -12,11 +12,15 @@ module Candidates
 
           if candidate_signed_in?
             redirect_to new_candidates_school_registrations_contact_information_path
-          elsif @personal_information.create_signin_token(gitis_crm)
-            # FIXME should send the email to the user
-            redirect_to candidates_school_registrations_sign_ins_path
           else
-            redirect_to new_candidates_school_registrations_contact_information_path
+            token = @personal_information.create_signin_token(gitis_crm)
+
+            if token
+              verification_email(token).despatch_later!
+              redirect_to candidates_school_registrations_sign_ins_path
+            else
+              redirect_to new_candidates_school_registrations_contact_information_path
+            end
           end
         else
           render :new
@@ -51,6 +55,20 @@ module Candidates
 
       def attributes_from_session
         current_registration.personal_information_attributes.except 'created_at'
+      end
+
+      def verification_email(token)
+        NotifyEmail::CandidateVerifyEmailLink.new(
+          to: current_registration.personal_information.email,
+          verification_link: verification_link(token)
+        )
+      end
+
+      def verification_link(token)
+        candidates_school_registrations_sign_in_url \
+          current_registration.urn,
+          token,
+          host: request.host
       end
     end
   end
