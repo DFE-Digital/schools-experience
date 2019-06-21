@@ -134,3 +134,15 @@ Then("the non-upcoming bookings shouldn't") do
     end
   end
 end
+
+Given("there are no bookings") do
+  # do nothing
+end
+
+Then("I should see the text {string}") do |string|
+  expect(page).to have_text string
+end
+
+Then("I should not see the bookings table") do
+  expect(page).not_to have_css('table#bookings')
+end

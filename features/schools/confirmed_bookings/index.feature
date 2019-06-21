@@ -41,3 +41,9 @@ Feature: Viewing all bookings
         Given there are some bookings
         When I am on the 'bookings' page
         Then every booking should contain a link to view more details
+
+    Scenario:
+        Given there are no bookings
+        When I am on the 'bookings' page
+        Then I should see the text 'There are no bookings'
+        And I should not see the bookings table
