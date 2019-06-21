@@ -1,16 +1,16 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      Send rejection email to candidate
+      Review and send cancellation email to candidate
     </h1>
 
     <p>
-      The following contains the wording of the rejection email which will be
+      The following contains the wording of the cancellation email which will be
       sent to <%= @cancellation.candidate_name %>.
     </p>
 
     <h2 class="govuk-heading-m">
-      Preview rejection email
+      Preview cancellation email
     </h2>
 
     <%= render partial: "letter", locals: {
@@ -25,14 +25,14 @@
       </p>
 
       <p>
-        <%= button_to 'Send rejection email',
+        <%= button_to 'Send cancellation email',
           schools_booking_cancellation_notification_delivery_path(@booking),
           class: 'govuk-button'
         %>
       </p>
 
       <p>
-        <%= link_to 'Amend the rejection email', edit_schools_booking_cancellation_path(@booking) %>
+        <%= link_to 'Edit cancellation email', edit_schools_booking_cancellation_path(@booking) %>
       </p>
 
       <p>
