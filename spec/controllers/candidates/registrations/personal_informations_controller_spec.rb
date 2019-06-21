@@ -72,7 +72,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             eq_model personal_information
         end
 
-        it "sends a sign in email" do
+        it "sends a verification email" do
           expect(NotifyFakeClient.deliveries.length).to eql(1)
 
           delivery = NotifyFakeClient.deliveries.first
@@ -105,7 +105,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             eq_model personal_information
         end
 
-        it "does not send a sign in email" do
+        it "does not send a verification email" do
           expect(NotifyFakeClient.deliveries.length).to eql(0)
         end
 
@@ -139,7 +139,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             eq_model personal_information
         end
 
-        it "does not send a sign in email" do
+        it "does not send a verification email" do
           expect(NotifyFakeClient.deliveries.length).to eql(0)
         end
 

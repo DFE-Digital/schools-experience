@@ -7,7 +7,12 @@ module Candidates
       end
 
       def create
-        # FIXME SHOULD CREATE A RESEND TOKEN
+        @personal_information = current_registration.personal_information
+
+        token = @personal_information.create_signin_token(gitis_crm)
+        verification_email(token).despatch_later!
+
+        redirect_to candidates_school_registrations_sign_ins_path
       end
 
       def update
@@ -19,6 +24,20 @@ module Candidates
         else
           @resend_link = candidates_school_registrations_sign_ins_path
         end
+      end
+
+      def verification_email(token)
+        NotifyEmail::CandidateVerifyEmailLink.new(
+          to: current_registration.personal_information.email,
+          verification_link: verification_link(token)
+        )
+      end
+
+      def verification_link(token)
+        candidates_school_registrations_sign_in_url \
+          current_registration.urn,
+          token,
+          host: request.host
       end
     end
   end
