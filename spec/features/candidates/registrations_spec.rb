@@ -20,17 +20,18 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   let :uuid do
-    'some-uuid'
+    SecureRandom.urlsafe_base64
   end
 
   let :registration_session do
-    FactoryBot.build :registration_session, current_time: today
+    FactoryBot.build :registration_session, current_time: today, uuid: uuid
   end
 
   before do
     allow(Candidates::School).to receive(:find) { school }
 
-    allow(SecureRandom).to receive(:urlsafe_base64) { uuid }
+    allow_any_instance_of(Candidates::Registrations::RegistrationSession).to \
+      receive(:uuid).and_return(uuid)
 
     allow(NotifyEmail::CandidateMagicLink).to receive :new do
       double NotifyEmail::CandidateMagicLink, despatch!: true
@@ -255,7 +256,7 @@ feature 'Candidate Registrations', type: :feature do
       "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\n#{email_address}"
 
     # Click email confirmation link
-    visit "/candidates/confirm/#{uuid}"
+    visit "/candidates/confirm/#{registration_session.uuid}"
   end
 
   def view_request_acknowledgement_step

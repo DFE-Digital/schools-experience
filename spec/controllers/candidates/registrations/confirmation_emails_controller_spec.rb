@@ -116,7 +116,12 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
             params: privacy_policy_params
         end
 
-        it 'marks the session as completed' do
+        it 'stores the session' do
+          expect(registration_store.retrieve!(registration_session.uuid)).to \
+            eq registration_session
+        end
+
+        it 'does not mark the session as pending email confirmation' do
           expect(registration_session).not_to be_pending_email_confirmation
         end
 

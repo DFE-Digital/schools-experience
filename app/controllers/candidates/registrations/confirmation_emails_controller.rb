@@ -14,6 +14,7 @@ module Candidates
           @application_preview = ApplicationPreview.new current_registration
           render 'candidates/registrations/application_previews/show'
         elsif candidate_signed_in?
+          RegistrationStore.instance.store! current_registration
           redirect_to candidates_confirm_path uuid: current_registration.uuid
         else
           current_registration.flag_as_pending_email_confirmation!
