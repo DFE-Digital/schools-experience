@@ -1,5 +1,7 @@
 module Bookings::Gitis
   module FakeCrm
+    KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
+
     def find_by_email(address)
       return super unless stubbed?
       return nil if address =~ /unknown/
@@ -24,7 +26,15 @@ module Bookings::Gitis
     end
 
     def fake_contact_id
-      SecureRandom.uuid
+      if Rails.env.test? || Rails.env.servertest?
+        SecureRandom.uuid # Mock it if predictable behaviour required
+      elsif %w{true yes 1}.include? ENV['FAKE_CRM_UUID'].to_s
+        KNOWN_UUID
+      elsif ENV['FAKE_CRM_UUID'].present?
+        ENV['FAKE_CRM_UUID']
+      else
+        SecureRandom.uuid
+      end
     end
 
     def fake_contact_data
