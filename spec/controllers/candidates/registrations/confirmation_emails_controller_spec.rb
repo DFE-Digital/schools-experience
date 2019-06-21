@@ -99,6 +99,38 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
             candidates_school_registrations_confirmation_email_path school
         end
       end
+
+      context 'no skipped steps and already signed in' do
+        include_context 'fake gitis'
+
+        let(:candidate) { create(:candidate, :confirmed) }
+        let(:contact_attributes) do
+          candidate.fetch_gitis_contact(fake_gitis).attributes
+        end
+
+        before do
+          allow_any_instance_of(ActionDispatch::Request::Session).to \
+            receive(:[]).with(:gitis_contact).and_return(contact_attributes)
+
+          post candidates_school_registrations_confirmation_email_path(school),
+            params: privacy_policy_params
+        end
+
+        it 'marks the session as completed' do
+          expect(registration_session).not_to be_pending_email_confirmation
+        end
+
+        it 'wont enqueue a confirmation email job' do
+          expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
+            have_received(:perform_later).with \
+              registration_session.uuid, 'www.example.com'
+        end
+
+        it 'redirects to the placement_request page' do
+          expect(response).to redirect_to \
+            candidates_confirm_path registration_session.uuid
+        end
+      end
     end
   end
 

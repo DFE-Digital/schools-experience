@@ -10,9 +10,13 @@ module Candidates
       def create
         @privacy_policy = PrivacyPolicy.new privacy_policy_params
 
-        if @privacy_policy.accepted?
+        if @privacy_policy.not_accepted?
+          @application_preview = ApplicationPreview.new current_registration
+          render 'candidates/registrations/application_previews/show'
+        elsif candidate_signed_in?
+          redirect_to candidates_confirm_path uuid: current_registration.uuid
+        else
           current_registration.flag_as_pending_email_confirmation!
-
           RegistrationStore.instance.store! current_registration
 
           SendEmailConfirmationJob.perform_later \
@@ -20,9 +24,6 @@ module Candidates
             request.host
 
           redirect_to candidates_school_registrations_confirmation_email_path
-        else
-          @application_preview = ApplicationPreview.new current_registration
-          render 'candidates/registrations/application_previews/show'
         end
       rescue RegistrationSession::NotCompletedError
         # We can get here if the school changes their date format while the
