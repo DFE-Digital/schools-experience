@@ -26,6 +26,8 @@ module Candidates
         end
       end
 
+    private
+
       def verification_email(token)
         NotifyEmail::CandidateVerifyEmailLink.new(
           to: current_registration.personal_information.email,
