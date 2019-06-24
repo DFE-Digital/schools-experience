@@ -132,7 +132,7 @@ feature 'Candidate Registrations', type: :feature do
 
     # Submit personal information form with errors
     fill_in 'First name', with: 'testy'
-    fill_in 'Last name', with: 'mctest'
+    fill_in 'Last name', with: ''
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 

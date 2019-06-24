@@ -151,6 +151,30 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
     end
   end
 
+  context 'with existing personal information in gitis' do
+    let(:gitis_contact) { build(:gitis_contact, :persisted) }
+    before do
+      allow_any_instance_of(ActionDispatch::Request::Session).to \
+        receive(:[]).with(:gitis_contact).and_return(gitis_contact.attributes)
+    end
+
+    context '#new' do
+      before do
+        get '/candidates/schools/11048/registrations/personal_information/new'
+      end
+
+      it 'populates the form with the values from gitis' do
+        expect(assigns(:personal_information)).to have_attributes \
+          first_name: gitis_contact.first_name,
+          email: gitis_contact.email
+      end
+
+      it 'renders the new template' do
+        expect(response).to render_template :new
+      end
+    end
+  end
+
   context 'with existing personal information in session' do
     let :existing_personal_information do
       FactoryBot.build :personal_information

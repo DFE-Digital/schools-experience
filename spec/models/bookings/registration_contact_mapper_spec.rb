@@ -29,7 +29,28 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it "should copy more attributes over"
   end
 
-  describe "#contact_to_registration" do
-    it "will be written"
+  describe "#contact_to_personal_information" do
+    let(:contact) { build(:gitis_contact, :persisted) }
+    let(:registration) { build(:registration_session) }
+    let(:mapper) { described_class.new(registration, contact) }
+    subject { mapper.contact_to_personal_information }
+
+    it { is_expected.to include('first_name' => contact.first_name) }
+    it { is_expected.to include('last_name' => contact.last_name) }
+    it { is_expected.to include('email' => contact.email) }
+  end
+
+  describe "#contact_to_contact_information" do
+    let(:contact) { build(:gitis_contact, :persisted) }
+    let(:registration) { build(:registration_session) }
+    let(:mapper) { described_class.new(registration, contact) }
+    subject { mapper.contact_to_contact_information }
+
+    it { is_expected.to include('phone' => contact.phone) }
+    it { is_expected.to include('building' => contact.building) }
+    it { is_expected.to include('street' => contact.street) }
+    it { is_expected.to include('town_or_city' => contact.town_or_city) }
+    it { is_expected.to include('county' => contact.county) }
+    it { is_expected.to include('postcode' => contact.postcode) }
   end
 end
