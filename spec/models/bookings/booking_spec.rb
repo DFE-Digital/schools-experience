@@ -238,4 +238,12 @@ describe Bookings::Booking do
         "#{date.to_formatted_s(:govuk)} 2 days"
     end
   end
+
+  describe '#reference' do
+    subject { create(:bookings_booking) }
+
+    specify 'should be the first 5 characters of the placement reference token' do
+      expect(subject.reference).to eql(subject.bookings_placement_request.token.first(5))
+    end
+  end
 end
