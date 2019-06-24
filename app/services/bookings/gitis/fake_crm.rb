@@ -1,6 +1,13 @@
 module Bookings::Gitis
   module FakeCrm
     KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
+    REQUIRED = %w{
+      firstname lastname emailaddress1 telephone1 address1_line1 address1_city
+      address1_stateorprovince address1_postalcode statecode dfe_channelcreation
+    }.freeze
+    ALLOWED = (
+      REQUIRED + %w{mobilephone address1_line2 address1_line3 emailaddress2}
+    ).freeze
 
     def find_by_email(address)
       return super unless stubbed?
@@ -13,14 +20,32 @@ module Bookings::Gitis
 
   private
 
-    def create_entity(entity_id, _data)
+    def create_entity(entity_id, data)
       return super unless stubbed?
+
+      REQUIRED.each do |key|
+        unless data.has_key?(key)
+          raise "Bad Response - attribute '#{key}' is missing"
+        end
+      end
+
+      data.keys.each do |key|
+        unless ALLOWED.include?(key)
+          raise "Bad Response - attribute '#{key}' is not recognised"
+        end
+      end
 
       "#{entity_id}(#{fake_contact_id})"
     end
 
-    def update_entity(entity_id, _data)
+    def update_entity(entity_id, data)
       return super unless stubbed?
+
+      data.keys.each do |key|
+        unless ALLOWED.include?(key)
+          raise "Bad Response - attribute '#{key}' is not recognised"
+        end
+      end
 
       entity_id
     end
@@ -52,7 +77,9 @@ module Bookings::Gitis
         'address1_line3' => 'Third Line',
         'address1_city' => 'Manchester',
         'address1_stateorprovince' => 'Manchester',
-        'address1_postalcode' => 'MA1 1AM'
+        'address1_postalcode' => 'MA1 1AM',
+        'statecode' => 0,
+        'dfe_channelcreation' => 10
       }
     end
 
