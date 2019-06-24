@@ -11,6 +11,10 @@ Feature: Accepting placement requests
         And I have completed the 'add more details' page
         And I have completed the 'review and send email' page
 
+    Scenario: Page title
+        Given I have progressed to the 'preview confirmation email' page for my chosen placement request
+        Then the page title should be 'Send details to candidate'
+
     Scenario: Page contents
         Given I have progressed to the 'preview confirmation email' page for my chosen placement request
         Then I should see an email preview with the following subheadings:
