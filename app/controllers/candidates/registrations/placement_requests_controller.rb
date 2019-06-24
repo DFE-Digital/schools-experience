@@ -11,7 +11,8 @@ module Candidates
         unless registration_session.completed?
           placement_request = Bookings::PlacementRequest.create_from_registration_session! \
             registration_session,
-            cookies[:analytics_tracking_uuid]
+            cookies[:analytics_tracking_uuid],
+            context: :returning_from_confirmation_email
 
           registration_session.flag_as_completed!
 
@@ -33,7 +34,7 @@ module Candidates
 
       def cancellation_url(placement_request)
         if Rails.application.config.x.phase > 2
-          new_candidates_placement_request_cancellation_url(placement_request.token)
+          candidates_cancel_url(placement_request.token)
         else
           ''
         end

@@ -51,4 +51,12 @@ module ApplicationHelper
 
     safe_join([greeting, logout_link].compact, ". ")
   end
+
+  def phase_three_release_date
+    PHASE_THREE_RELEASE_DATE.to_formatted_s :govuk
+  end
+
+  def chat_service
+    link_to "online chat service", "https://ta-chat.education.gov.uk/chat/chatstart.aspx?domain=www.education.gov.uk&department=GetIntoTeaching%27,%27new_win%27,%27width=0,height=0%27);return&SID=0"
+  end
 end

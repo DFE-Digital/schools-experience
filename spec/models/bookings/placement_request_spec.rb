@@ -16,6 +16,7 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: true }
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
   it { is_expected.to have_db_column(:analytics_tracking_uuid).of_type(:uuid).with_options null: true }
+  it { is_expected.to have_db_column(:candidate_id).of_type(:integer).with_options null: true }
 
   it { is_expected.to have_secure_token }
 
@@ -37,6 +38,8 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to belong_to(:school).class_name('Bookings::School').with_foreign_key(:bookings_school_id) }
     it { is_expected.to have_one(:booking).class_name('Bookings::Booking').with_foreign_key(:bookings_placement_request_id) }
     it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
+
+    it { is_expected.to belong_to(:candidate).class_name('Bookings::Candidate').with_foreign_key(:candidate_id).optional }
   end
 
   it { is_expected.to respond_to :sent_at }
@@ -119,6 +122,7 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   context 'attributes' do
+    it { is_expected.to respond_to :gitis_contact }
     it { is_expected.to respond_to :urn }
     it { is_expected.to respond_to :degree_stage }
     it { is_expected.to respond_to :degree_stage_explaination }
@@ -388,6 +392,36 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
+  context '#cancellation' do
+    subject { described_class.new }
+
+    context 'when cancelled by candidate' do
+      let! :candidate_cancellation do
+        subject.build_candidate_cancellation
+      end
+
+      it 'returns the candidate_cancellation' do
+        expect(subject.cancellation).to eq candidate_cancellation
+      end
+    end
+
+    context 'when cancelled by school' do
+      let! :school_cancellation do
+        subject.build_school_cancellation
+      end
+
+      it 'returns the school_cancellation' do
+        expect(subject.cancellation).to eq school_cancellation
+      end
+    end
+
+    context 'when not cancelled' do
+      it 'returns nil' do
+        expect(subject.cancellation).not_to be_present
+      end
+    end
+  end
+
   context '#status' do
     context 'default' do
       subject { FactoryBot.create :placement_request }
@@ -421,6 +455,18 @@ describe Bookings::PlacementRequest, type: :model do
       it "returns 'No'" do
         expect(subject.dbs).to eq 'No'
       end
+    end
+  end
+
+  describe '#fetch_gitis_contact' do
+    let(:gitis) { Bookings::Gitis::CRM.new('a.fake.token') }
+    subject { FactoryBot.create :placement_request }
+
+    it "will assign contact" do
+      expect(subject.fetch_gitis_contact(gitis)).to \
+        be_kind_of(Bookings::Gitis::Contact)
+
+      expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
     end
   end
 end

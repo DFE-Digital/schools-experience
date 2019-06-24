@@ -15,7 +15,8 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     :school_teacher_email,
     :school_teacher_telephone,
     :placement_details,
-    :placement_fee
+    :placement_fee,
+    :cancellation_url
 
   def initialize(
     to:,
@@ -35,7 +36,8 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     school_teacher_email:,
     school_teacher_telephone:,
     placement_details:,
-    placement_fee:
+    placement_fee:,
+    cancellation_url:
   )
 
     self.school_name = school_name
@@ -55,20 +57,19 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     self.school_teacher_telephone = school_teacher_telephone
     self.placement_details = placement_details
     self.placement_fee = placement_fee
+    self.cancellation_url = cancellation_url
 
     super(to: to)
   end
 
-  def self.from_booking(to, booking)
+  def self.from_booking(to, candidate_name, booking, cancellation_url)
     school = booking.bookings_school
-    placement_request = booking.bookings_placement_request
-    candidate = placement_request.candidate
     profile = school.profile
 
     new(
       to: to,
       school_name: school.name,
-      candidate_name: [candidate.firstname, candidate.lastname].join(' '),
+      candidate_name: candidate_name,
       placement_start_date: booking.date,
       placement_finish_date: 'FIXME',
       school_address: [
@@ -96,7 +97,8 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
       school_teacher_email: booking.contact_email,
       school_teacher_telephone: booking.contact_number,
       placement_details: booking.placement_details,
-      placement_fee: 'REMOVE' # FIXME
+      placement_fee: 'REMOVE', # FIXME
+      cancellation_url: cancellation_url
     )
   end
 
@@ -124,7 +126,8 @@ private
       school_teacher_email: school_teacher_email,
       school_teacher_telephone: school_teacher_telephone,
       placement_details: placement_details,
-      placement_fee: placement_fee
+      placement_fee: placement_fee,
+      cancellation_url: cancellation_url
     }
   end
 end
