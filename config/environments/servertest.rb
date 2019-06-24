@@ -6,7 +6,7 @@ Rails.application.configure do
   # Override production environment settings here
 
   # Don't actually attempt to delivery emails in Staging environment
-  Notify.notification_class = NotifyFakeClient
+  config.x.notify_client = NotifyFakeClient
 
   # default to true but allow overriding in CI
   config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?

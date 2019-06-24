@@ -58,7 +58,7 @@ Rails.application.configure do
   end
 
   # Don't actually attempt to delivery emails during tests
-  Notify.notification_class = NotifyFakeClient
+  config.x.notify_client = NotifyFakeClient
 
   config.x.phase = 10000
 
