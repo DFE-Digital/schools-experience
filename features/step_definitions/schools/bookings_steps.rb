@@ -146,3 +146,8 @@ end
 Then("I should not see the bookings table") do
   expect(page).not_to have_css('table#bookings')
 end
+
+Then("the page title should start with {string} and include the candidate's name") do |string|
+  expect(page.title).to start_with(string)
+  expect(page.title).to include('Matthew Richards')
+end

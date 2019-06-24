@@ -7,6 +7,11 @@ Feature: Viewing a booking
         Given I am logged in as a DfE user
         And the scheduled booking date is '02 October 2019'
 
+    Scenario: Page title
+        Given there is at least one booking
+        When I am viewing my chosen booking
+        Then the page title should start with 'Booking details for' and include the candidate's name
+
     Scenario: Breadcrumbs
         Given there is at least one booking
         When I am viewing my chosen booking
