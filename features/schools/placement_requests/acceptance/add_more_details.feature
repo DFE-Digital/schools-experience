@@ -8,6 +8,10 @@ Feature: Accepting placement requests
         And the subjects 'Biology' and 'Chemistry' exist
         And there is a new placement request
 
+    Scenario: Page title
+        Given I have completed the 'confirm booking' page
+        Then the page title should be 'Add more booking details'
+
     Scenario: Page heading
         Given I have completed the 'confirm booking' page
         And I have progressed to the 'add more details' page for my chosen placement request
