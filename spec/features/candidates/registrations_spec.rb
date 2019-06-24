@@ -145,11 +145,11 @@ feature 'Candidate Registrations', type: :feature do
 
   def complete_sign_in_step(token)
     expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/sign_ins"
+      "/candidates/schools/#{school_urn}/registrations/sign_in"
     expect(page).to have_text 'Verify your email address'
 
     # Follow the link from email
-    visit "/candidates/schools/#{school_urn}/registrations/sign_ins/#{token}"
+    visit "/candidates/verify/#{school_urn}/#{token}"
   end
 
   def complete_contact_information_step

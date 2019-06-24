@@ -18,8 +18,8 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     )
   end
 
-  describe 'GET #index' do
-    before { get candidates_school_registrations_sign_ins_path(school_id) }
+  describe 'GET #show' do
+    before { get candidates_school_registrations_sign_in_path(school_id) }
 
     it "should return HTTP success" do
       expect(response).to have_http_status(:success)
@@ -31,7 +31,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
     context 'with valid token' do
       before do
-        get candidates_school_registrations_sign_in_path(school_id, token)
+        get candidates_registration_verify_path(school_id, token)
       end
 
       it "will redirect_to ContactInformation step" do
@@ -47,7 +47,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     context 'with invalid token' do
       before do
         expect(Candidates::Session).to receive(:signin!).and_return(nil)
-        get candidates_school_registrations_sign_in_path(school_id, token)
+        get candidates_registration_verify_path(school_id, token)
       end
 
       it "will show error screen" do
@@ -66,12 +66,12 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     let(:token) { create(:candidate_session_token, candidate: candidate) }
 
     before do
-      post candidates_school_registrations_sign_ins_path(school_id)
+      post candidates_school_registrations_sign_in_path(school_id)
     end
 
-    it "will redirect to the index page" do
+    it "will redirect to the show page" do
       expect(response).to \
-        redirect_to candidates_school_registrations_sign_ins_path(school_id)
+        redirect_to candidates_school_registrations_sign_in_path(school_id)
     end
 
     it "will have created new token" do
@@ -86,7 +86,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         eql(registration_session.personal_information.email)
 
       expect(delivery[:personalisation][:verification_link]).to \
-        match(%r{/registrations/sign_ins/[^/]{24}\z})
+        match(%r{/candidates/verify/[0-9]+/[^/]{24}\z})
     end
   end
 end

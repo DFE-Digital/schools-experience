@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/registrations/sign_ins/index.html.erb", type: :view do
+RSpec.describe "candidates/registrations/sign_ins/show.html.erb", type: :view do
   before do
     assign(:email_address, 'test@testymctest.com')
     assign(:resend_link, '/my/resend/link')

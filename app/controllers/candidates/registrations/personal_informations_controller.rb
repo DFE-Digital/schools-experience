@@ -18,7 +18,7 @@ module Candidates
 
           if token
             verification_email(token).despatch_later!
-            redirect_to candidates_school_registrations_sign_ins_path
+            redirect_to candidates_school_registrations_sign_in_path
           else
             redirect_to new_candidates_school_registrations_contact_information_path
           end
@@ -63,7 +63,7 @@ module Candidates
       end
 
       def verification_link(token)
-        candidates_school_registrations_sign_in_url \
+        candidates_registration_verify_url \
           current_registration.urn,
           token,
           host: request.host

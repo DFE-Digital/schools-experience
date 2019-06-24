@@ -1,9 +1,9 @@
 module Candidates
   module Registrations
     class SignInsController < RegistrationsController
-      def index
+      def show
         @email_address = current_registration.personal_information.email
-        @resend_link = candidates_school_registrations_sign_ins_path
+        @resend_link = candidates_school_registrations_sign_in_path
       end
 
       def create
@@ -12,17 +12,17 @@ module Candidates
         token = @personal_information.create_signin_token(gitis_crm)
         verification_email(token).despatch_later!
 
-        redirect_to candidates_school_registrations_sign_ins_path
+        redirect_to candidates_school_registrations_sign_in_path
       end
 
       def update
-        candidate = Candidates::Session.signin!(params[:id])
+        candidate = Candidates::Session.signin!(params[:token])
 
         if candidate
           self.current_candidate = candidate
           redirect_to new_candidates_school_registrations_contact_information_path
         else
-          @resend_link = candidates_school_registrations_sign_ins_path
+          @resend_link = candidates_school_registrations_sign_in_path
         end
       end
 
@@ -36,7 +36,7 @@ module Candidates
       end
 
       def verification_link(token)
-        candidates_school_registrations_sign_in_url \
+        candidates_registration_verify_url \
           current_registration.urn,
           token,
           host: request.host
