@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_152627) do
     t.integer "bookings_school_id"
     t.string "token"
     t.uuid "analytics_tracking_uuid"
+    t.datetime "viewed_at"
     t.bigint "candidate_id"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
     t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"

@@ -69,6 +69,16 @@ module Bookings
       !closed?
     end
 
+    def viewed!
+      if viewed_at.nil?
+        update(viewed_at: Time.now)
+      end
+    end
+
+    def viewed?
+      viewed_at.present?
+    end
+
     def contact_uuid
       1
     end
