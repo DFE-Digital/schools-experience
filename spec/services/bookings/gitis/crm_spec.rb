@@ -2,13 +2,14 @@ require 'rails_helper'
 require 'apimock/gitis_crm'
 
 describe Bookings::Gitis::CRM, type: :model do
+  include_context 'bypass fake Gitis'
+
   let(:client_id) { 'clientid' }
   let(:client_secret) { 'clientsecret' }
   let(:tenant_id) { SecureRandom.uuid }
   let(:gitis_url) { 'https://gitis-crm.net' }
   let(:token) { 'my.secret.token' }
 
-#  let(:api) { Bookings::Gitis::API.new('my.secret.token', service_url: gitis_url) }
   let(:gitis) { described_class.new(token, service_url: gitis_url) }
   let(:gitis_stub) do
     Apimock::GitisCrm.new(client_id, client_secret, tenant_id, gitis_url)

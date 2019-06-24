@@ -29,9 +29,9 @@ Feature: School Profile
   Scenario: Breadcrumbs
     Given I am on the 'Profile' page
     Then I should see the following breadcrumbs:
-        | Text                                                                | Link     |
-        | Some school                                                         | /schools |
-        | Check your answers before setting up your school experience profile | None     |
+        | Text                                                                | Link               |
+        | Some school                                                         | /schools/dashboard |
+        | Check your answers before setting up your school experience profile | None               |
 
 
   Scenario: Viewing the profile
@@ -39,6 +39,7 @@ Feature: School Profile
     Then the page should have the following summary list information:
       | Full name                   | school 1                                                    |
       | Address                     | \d{1,} something street, M\d{1,} 2JJ                        |
+      | UK telephone number         | 01234567890                                                 |
       | Email address               | school1@example.com                                         |
       | Fees                        | Yes - £300.00 daily other fee                               |
       | DBS check required          | Yes - Sometimes. policy details                             |

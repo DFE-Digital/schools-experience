@@ -122,7 +122,7 @@ describe Schools::SessionsController, type: :request do
     end
 
     specify "should redirect to the homepage" do
-      expect(subject).to redirect_to(root_path)
+      expect(subject).to redirect_to(schools_path)
     end
   end
 end

@@ -58,7 +58,7 @@ Rails.application.configure do
   end
 
   # Don't actually attempt to delivery emails during tests
-  Notify.notification_class = NotifyFakeClient
+  config.x.notify_client = NotifyFakeClient
 
   config.x.phase = 10000
 
@@ -67,5 +67,7 @@ Rails.application.configure do
   config.x.oidc_client_secret = 'abc123'
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
 
-  config.x.fake_crm = false
+  config.x.fake_crm = true
+
+  Rails.application.routes.default_url_options = { protocol: 'https' }
 end

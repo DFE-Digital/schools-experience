@@ -64,10 +64,11 @@ gem 'rack-timeout'
 gem 'openid_connect'
 gem 'uk_postcode'
 gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: 'a7429200'
-gem 'faraday'
 
 gem 'addressable'
 gem 'faraday'
+
+gem 'validates_timeliness', '~> 5.0.0.alpha4'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

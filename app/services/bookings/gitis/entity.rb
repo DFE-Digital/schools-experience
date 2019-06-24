@@ -1,4 +1,6 @@
 module Bookings::Gitis
+  class IdChangedUnexpectedly < RuntimeError; end
+
   module Entity
     extend ActiveSupport::Concern
 
@@ -54,6 +56,28 @@ module Bookings::Gitis
 
     module ClassMethods
     protected
+
+      def entity_id_attribute(attr_name)
+        define_method :"#{attr_name}" do
+          attributes[attr_name.to_s]
+        end
+
+        define_method :id do
+          attributes[attr_name.to_s]
+        end
+
+        define_method :"#{attr_name}=" do |assigned_id|
+          if attributes[attr_name.to_s].blank?
+            attributes[attr_name.to_s] = assigned_id
+          elsif attributes[attr_name.to_s].to_s != assigned_id.to_s
+            fail IdChangedUnexpectedly
+          end
+        end
+
+        define_method :id= do |value|
+          self.send(:"#{attr_name}=", value)
+        end
+      end
 
       def entity_attribute(attr_name)
         define_method :"#{attr_name}" do

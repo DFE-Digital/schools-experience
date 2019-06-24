@@ -16,7 +16,7 @@ describe Candidates::Registrations::ApplicationPreviewsController, type: :reques
 
       it 'redirects to the first missing step' do
         expect(response).to redirect_to \
-          '/candidates/schools/urn/registrations/contact_information/new'
+          '/candidates/schools/urn/registrations/placement_preference/new'
       end
     end
 

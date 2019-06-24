@@ -19,9 +19,9 @@ Feature: Other Fee
   Scenario: Breadcrumbs
     Given I am already on the 'other costs' page
     Then I should see the following breadcrumbs:
-        | Text        | Link     |
-        | Some school | /schools |
-        | Other costs | None     |
+        | Text        | Link               |
+        | Some school | /schools/dashboard |
+        | Other costs | None               |
 
   Scenario: Completing the Other costs step with error
     Given I have entered the following details into the form:

@@ -25,7 +25,10 @@ module Candidates
           render 'candidates/registrations/application_previews/show'
         end
       rescue RegistrationSession::NotCompletedError
-        redirect_to candidates_school_registrations_application_preview_path
+        # We can get here if the school changes their date format while the
+        # candidate is applying, or we push a code change mid way through a
+        # registration.
+        redirect_to next_step_path(current_registration)
       end
 
     private
