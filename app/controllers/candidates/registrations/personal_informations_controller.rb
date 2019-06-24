@@ -7,23 +7,21 @@ module Candidates
 
       def create
         @personal_information = PersonalInformation.new personal_information_params
-        if @personal_information.valid?
-          persist @personal_information
+        render(:new) && return unless @personal_information.valid?
 
-          if candidate_signed_in?
-            redirect_to new_candidates_school_registrations_contact_information_path
-          else
-            token = @personal_information.create_signin_token(gitis_crm)
+        persist @personal_information
 
-            if token
-              verification_email(token).despatch_later!
-              redirect_to candidates_school_registrations_sign_ins_path
-            else
-              redirect_to new_candidates_school_registrations_contact_information_path
-            end
-          end
+        if candidate_signed_in?
+          redirect_to new_candidates_school_registrations_contact_information_path
         else
-          render :new
+          token = @personal_information.create_signin_token(gitis_crm)
+
+          if token
+            verification_email(token).despatch_later!
+            redirect_to candidates_school_registrations_sign_ins_path
+          else
+            redirect_to new_candidates_school_registrations_contact_information_path
+          end
         end
       end
 

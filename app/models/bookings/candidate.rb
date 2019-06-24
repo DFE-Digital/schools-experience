@@ -31,6 +31,15 @@ class Bookings::Candidate < ApplicationRecord
       end
     end
 
+    def find_by_gitis_contact(contact)
+      candidate = find_by(gitis_uuid: contact.id)
+      return nil unless candidate
+
+      candidate.tap do |c|
+        c.gitis_contact = contact
+      end
+    end
+
     def find_by_gitis_contact!(contact)
       find_by!(gitis_uuid: contact.id).tap do |c|
         c.gitis_contact = contact

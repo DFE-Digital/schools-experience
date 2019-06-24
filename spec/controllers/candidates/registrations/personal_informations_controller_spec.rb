@@ -120,9 +120,9 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
           FactoryBot.build :personal_information
         end
 
-        let(:token) { create(:candidate_session_token) }
+        let(:candidate) { create(:candidate, :confirmed) }
         let(:contact_attributes) do
-          token.candidate.fetch_gitis_contact(fake_gitis).attributes
+          candidate.fetch_gitis_contact(fake_gitis).attributes
         end
 
         before do
