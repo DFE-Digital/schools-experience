@@ -8,6 +8,10 @@ Feature: Accepting placement requests
         And the subjects 'Biology' and 'Chemistry' exist
         And there is a new placement request
 
+    Scenario: Page title
+        Given I am on the 'confirm booking' page for my chosen placement request
+        Then the page title should be 'Confirm booking'
+
     Scenario: Page heading
         Given I am on the 'confirm booking' page for my chosen placement request
         Then the page's main header should be 'Confirm booking'
