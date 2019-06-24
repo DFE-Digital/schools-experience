@@ -19,18 +19,25 @@
       You'll need to refer to <strong>your own records</strong> for any bookings made before this date.
     </p>
 
-    <div class="pagination-info higher">
-      <div class="pagination-slice">
-        <%= page_entries_info @bookings %>
+    <% if @bookings.any? %>
+      <div class="pagination-info higher">
+        <div class="pagination-slice">
+          <%= page_entries_info @bookings %>
+        </div>
+        <%= paginate @bookings %>
       </div>
-      <%= paginate @bookings %>
-    </div>
 
-    <%= render partial: 'schools/confirmed_bookings/booking_table', locals: { bookings: @bookings } %>
+      <%= render partial: 'schools/confirmed_bookings/booking_table', locals: { bookings: @bookings } %>
 
-    <div class="pagination-info lower">
-      <%= paginate @bookings %>
-    </div>
+      <div class="pagination-info lower">
+        <%= paginate @bookings %>
+      </div>
+
+    <% else %>
+      <p>
+        There are no bookings.
+      </p>
+    <% end %>
 
     <div>
       <%= link_to "Return to requests and bookings", schools_dashboard_path, class: 'govuk-button govuk-button--secondary' %>
