@@ -1,60 +1,112 @@
+<% self.page_title = "Manage requests and bookings at #{@current_school.name}" %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">Manage school experience at <%= @current_school.name %></h1>
+    <h1 class="govuk-heading-l">Manage requests and bookings at <%= @current_school.name %></h1>
 
     <article id="dashboard">
-      <section class="requests-and-bookings">
-        <div class="subsection requests">
+      <section id="change-school">
+        <%= link_to "Change school", new_schools_switch_path %>
+      </section>
+
+      <section id="requests-and-bookings">
+        <h2 class="govuk-heading-m">
+          To do list
+        </h2>
+
+        <div id="requests" class="subsection">
           <header class="dashboard-high-priority">
-            <%= link_to "Accept and reject requests", schools_placement_requests_path %>
+            <%= link_to "Manage requests", schools_placement_requests_path %>
             <%= numbered_circle(@new_requests, id: 'new-requests-counter') %>
           </header>
           <p class="govuk-hint">Candidates have requested school experience</p>
         </div>
 
-        <div class="subsection bookings">
+        <div id="bookings" class="subsection">
           <header class="dashboard-high-priority">
-            <%= link_to "Accept and reject bookings", "#" %>
+            <%= link_to "Manage bookings", "TODO SE-1193" %>
             <%= numbered_circle(@new_bookings, id: 'new-bookings-counter') %>
           </header>
           <p class="govuk-hint">A candidate has asked to change a booking</p>
         </div>
       </section>
 
-      <section class="candidate-attendance">
-        <header class="dashboard-medium-priority">
-          <%= link_to "Confirm candidate attendance", "#" %>
-          <%= numbered_circle(@candidate_attendances, id: 'candidate-attendances-counter') %>
-        </header>
-        <p class="govuk-hint">
-          Confirm the attendance of candidates who've been on school experience
-        </p>
+      <section id="account-admin" class="medium-priority">
+        <h2 class="govuk-heading-m">
+          Account admin
+        </h2>
+
+        <div id="manage-availability-preference" class="subsection">
+          <header class="dashboard-medium-priority">
+            <%= link_to "Change how availability and dates are displayed", edit_schools_availability_preference_path %>
+          </header>
+          <span class="govuk-hint">
+            Your school currently displays
+            <strong><%= availability_status_display_status(@current_school.availability_preference_fixed?) %></strong>
+            to candidates
+          </span>
+        </div>
+
+        <div id="manage-dates" class="subsection">
+          <%- if @current_school.availability_preference_fixed? -%>
+            <header class="dashboard-medium-priority">
+              <%= link_to "Manage fixed dates", schools_placement_dates_path %>
+            </header>
+            <span class="govuk-hint">
+              Add, remove, close and open <strong>fixed dates</strong> for school experience
+            </span>
+          <%- else -%>
+            <header class="dashboard-medium-priority">
+              <%= link_to "Manage flexible dates", edit_schools_availability_info_path %>
+            </header>
+            <span class="govuk-hint">
+              Update your availability and <strong>flexible dates</strong> for school experience
+            </span>
+          <%- end -%>
+        </div>
+
+        <div id="update-school-profile" class="subsection">
+          <header class="dashboard-medium-priority">
+            <%= link_to "Update school profile", schools_on_boarding_profile_path %>
+          </header>
+          <span class="govuk-hint">
+            Add, edit and remove school profile details
+          </span>
+        </div>
+
+        <div id="manage-requests" class="subection">
+          <header class="dashboard-medium-priority">
+            <%= link_to "Turn requests on / off", edit_schools_enabled_path %>
+          </header>
+          <span class="govuk-hint">
+            Choose to stop / start receiving requests from candidates.
+            Requests are currently <strong><%= school_enabled_description(@current_school) %></strong>.
+          </span>
+        </div>
       </section>
 
-      <section class="upcoming-bookings">
-        <header class="dashboard-medium-priority">
-          <%= link_to "View upcoming bookings", "#" %>
-        </header>
-      </section>
+      <section id="help-and-support" class="medium-priority">
+        <h2 class="govuk-heading-m">
+          Help and support
+        </h2>
 
-      <section class="other-tasks">
-        <ul class="govuk-list dashboard-low-priority">
-          <li>
-            <%= link_to "Read about service updates and changes", "#" %>
-          </li>
-          <li>
-            <%= link_to "Edit school profile", "#" %>
-          </li>
-          <li>
-            <%= link_to "View old bookings Read service guidance", "#" %>
-          </li>
-          <li>
-            <%= link_to "View rejected requests", "#" %>
-          </li>
-          <li>
-            <%= link_to "Give feedback on this service", "#" %>
-          </li>
-        </ul>
+        <div id="service-updates-and-guidance" class="subsection">
+          <header class="dashboard-medium-priority">
+            <%= link_to 'Service updates and guidance', 'TODO SE-1214' %>
+          </header>
+          <span class="govuk-hint">
+            Find out about the latest changes to the service and how it works
+          </span>
+        </div>
+
+        <div id="contact-us" class="subsection">
+          <header class="dashboard-medium-priority">
+            <%= mail_to 'organise.school-experience@education.gov.uk', 'Contact us' %>
+          </header>
+          <span class="govuk-hint">
+            Get in touch if you need help using the service
+          </span>
+        </div>
       </section>
     </article>
   </div>

@@ -4,7 +4,9 @@ module Schools
       @bookings = current_school
         .bookings
         .eager_load(:bookings_subject, :bookings_placement_request)
-        .all
+        .order(date: :asc)
+        .page(params[:page])
+        .per(50)
 
       assign_gitis_contacts @bookings
     end

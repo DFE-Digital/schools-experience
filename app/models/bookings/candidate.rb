@@ -3,6 +3,8 @@ class Bookings::Candidate < ApplicationRecord
 
   # delete_all used since there may be a lot of tokens, and the tokens don't have any real logic
   has_many :session_tokens, class_name: 'Candidates::SessionToken', dependent: :delete_all
+  has_many :placement_requests, class_name: 'Bookings::PlacementRequest', dependent: :destroy
+  has_many :bookings, through: :placement_requests
 
   validates :gitis_uuid, presence: true, format: { with: UUID_V4_FORMAT }
   validates :gitis_uuid, uniqueness: { case_sensitive: false }

@@ -16,6 +16,7 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: true }
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
   it { is_expected.to have_db_column(:analytics_tracking_uuid).of_type(:uuid).with_options null: true }
+  it { is_expected.to have_db_column(:candidate_id).of_type(:integer).with_options null: true }
 
   it { is_expected.to have_secure_token }
 
@@ -37,6 +38,8 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to belong_to(:school).class_name('Bookings::School').with_foreign_key(:bookings_school_id) }
     it { is_expected.to have_one(:booking).class_name('Bookings::Booking').with_foreign_key(:bookings_placement_request_id) }
     it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
+
+    it { is_expected.to belong_to(:candidate).class_name('Bookings::Candidate').with_foreign_key(:candidate_id).optional }
   end
 
   it { is_expected.to respond_to :sent_at }
