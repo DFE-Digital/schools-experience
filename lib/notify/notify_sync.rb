@@ -34,7 +34,7 @@ class NotifySync
       File.write(
         File.join(
           TEMPLATE_PATH,
-          [rt.name.gsub(/[\ \-]/, "").underscore, template_id, 'md'].join('.'),
+          [rt.name.gsub(/[\ ]/, "").underscore, template_id, 'md'].join('.'),
         ),
         reencode(rt.body)
       )

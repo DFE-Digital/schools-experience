@@ -14,9 +14,9 @@ Feature: Editing placement dates
     Scenario: Breadcrumbs
         Given I am on the 'availability preferences' page
         Then I should see the following breadcrumbs:
-            | Text                                            | Link     |
-            | Some school                                     | /schools |
-            | Change how availability and dates are displayed | None     |
+            | Text                                            | Link               |
+            | Some school                                     | /schools/dashboard |
+            | Change how availability and dates are displayed | None               |
 
     Scenario: Page contents
         Given I am on the 'availability preferences' page

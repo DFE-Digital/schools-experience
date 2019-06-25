@@ -101,6 +101,18 @@ en:
             acceptance:
               accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
+        candidates/session:
+          attributes:
+            email:
+              blank: Enter your email address
+              invalid: Enter a valid email address
+            firstname:
+              blank: Enter your first name
+            lastname:
+              blank: Enter your last name
+            date_of_birth:
+              blank: Enter your date of birth
+
         schools/on_boarding/candidate_requirement:
           attributes:
             dbs_requirement:
@@ -364,6 +376,7 @@ en:
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_labels
         payment_method: 'Explain how the fee is paid.'
+        description: 'Add extra details'
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:

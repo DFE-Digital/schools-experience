@@ -16,12 +16,13 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil, p
     "cancel placement request" => [:new_candidates_placement_request_cancellation_path, placement_request&.token],
 
     #school paths
-    "schools" => [:schools_root_path],
+    "schools" => [:schools_path],
     "schools dashboard" => [:schools_dashboard_path],
     "bookings" => [:schools_bookings_path],
     "upcoming bookings" => [:schools_upcoming_bookings_path],
     "booking" => [:schools_booking_path, booking_id],
     "placement requests" => [:schools_placement_requests_path],
+    "cancel booking" => [:new_schools_booking_cancellation_path, booking_id],
     "upcoming requests" => [:schools_upcoming_requests_path],
     "placement request" => [:schools_placement_request_path, placement_request],
     "confirm booking" => [:new_schools_placement_request_acceptance_confirm_booking_path, placement_request],

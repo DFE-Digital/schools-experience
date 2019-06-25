@@ -20,8 +20,7 @@ Then("I should see the dashboard") do
 end
 
 Given("there are {int} new requests") do |qty|
-  qty
-  #  do nothing, currently hard-coded in controller
+  FactoryBot.create_list :placement_request, qty, school: @school
 end
 
 Given("there are {int} new bookings") do |qty|

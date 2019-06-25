@@ -45,11 +45,11 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       end
 
       context 'skipped step' do
-        before do
-          allow(registration_session).to receive(:flag_as_pending_email_confirmation!) {
-            raise Candidates::Registrations::RegistrationSession::NotCompletedError
-          }
+        let :registration_session do
+          Candidates::Registrations::RegistrationSession.new({})
+        end
 
+        before do
           post candidates_school_registrations_confirmation_email_path(school),
             params: privacy_policy_params
         end
@@ -67,9 +67,9 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
               registration_session.uuid, 'www.example.com'
         end
 
-        it "redirects to the application preview path" do
+        it "redirects to the first missing step" do
           expect(response).to redirect_to \
-            candidates_school_registrations_application_preview_path school
+            new_candidates_school_registrations_placement_preference_path school
         end
       end
 

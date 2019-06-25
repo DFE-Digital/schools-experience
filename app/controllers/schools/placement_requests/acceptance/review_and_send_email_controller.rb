@@ -3,6 +3,7 @@ module Schools
     module Acceptance
       class ReviewAndSendEmailController < Schools::BaseController
         before_action :set_placement_request
+        before_action :fetch_gitis_contact_for_placement_request
         before_action :ensure_previous_step_complete
 
         def new
@@ -37,6 +38,10 @@ module Schools
           @placement_request = @current_school
             .bookings_placement_requests
             .find(params[:placement_request_id])
+        end
+
+        def fetch_gitis_contact_for_placement_request
+          @placement_request.fetch_gitis_contact gitis_crm
         end
       end
     end

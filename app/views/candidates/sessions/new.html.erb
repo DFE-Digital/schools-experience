@@ -1,0 +1,25 @@
+<% self.page_title = 'Sign in to school experience' %>
+
+<h1>Get school experience sign in</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <p>
+      Please supply details below and we will send you a link which
+      you can sign in with.
+    </p>
+
+    <%= form_for @candidates_session, url: candidates_signin_path, html: {novalidate: true} do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary @session, 'There is a problem', '' %>
+
+      <%= f.email_field :email, autocomplete: 'on', class: 'govuk-input govuk-input--width-30' %>
+      <%= f.text_field :firstname, autocomplete: 'given-name', class: 'govuk-input govuk-input--width-20' %>
+      <%= f.text_field :lastname, autocomplete: 'family-name', class: 'govuk-input govuk-input--width-20' %>
+      <%= f.date_field :date_of_birth %>
+
+      <%= f.submit 'Sign in' %>
+    <% end %>
+
+  </div>
+</div>

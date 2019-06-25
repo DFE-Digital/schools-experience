@@ -15,3 +15,8 @@ Then("my newly-created placement date should be listed") do
     expect(page).to have_css('td', text: "#{@duration} days")
   end
 end
+
+Given("I fill in the {string} date field with an invalid date of 31st September next year") do |label|
+  year = Date.today.year + 1
+  step "I fill in the date field '#{label}' with 31-09-#{year}"
+end

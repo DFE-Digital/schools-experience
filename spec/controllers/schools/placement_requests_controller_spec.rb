@@ -3,7 +3,6 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementRequestsController, type: :request do
   include_context "logged in DfE user"
-  include_context "stubbed out Gitis"
 
   let :school do
     Bookings::School.find_by! urn: urn
@@ -21,6 +20,8 @@ describe Schools::PlacementRequestsController, type: :request do
 
     it 'assigns the placement_requests belonging to the school' do
       expect(assigns(:placement_requests)).to eq school.placement_requests
+      expect(assigns(:placement_requests).map(&:gitis_contact)).to all \
+        be_kind_of Bookings::Gitis::Contact
     end
 
     it 'renders the index template' do

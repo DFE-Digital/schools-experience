@@ -8,14 +8,14 @@ Feature: Viewing all bookings
 
     Scenario: Page title
         Given I am on the 'bookings' page
-        Then the page title should be 'All bookings'
+        Then the page title should be 'Manage bookings'
 
     Scenario: Breadcrumbs
         Given I am on the 'bookings' page
         Then I should see the following breadcrumbs:
-            | Text         | Link     |
-            | Some school  | /schools |
-            | All bookings | None     |
+            | Text            | Link               |
+            | Some school     | /schools/dashboard |
+            | Manage bookings | None               |
 
     Scenario: List presence
         Given there are some bookings
@@ -41,3 +41,9 @@ Feature: Viewing all bookings
         Given there are some bookings
         When I am on the 'bookings' page
         Then every booking should contain a link to view more details
+
+    Scenario:
+        Given there are no bookings
+        When I am on the 'bookings' page
+        Then I should see the text 'There are no bookings'
+        And I should not see the bookings table

@@ -46,5 +46,17 @@ FactoryBot.define do
             placement_request: placement_request, cancelled_by: 'school'
       end
     end
+
+    trait :booked do
+      after :create do |placement_request|
+        FactoryBot.create \
+          :bookings_booking,
+          :with_existing_subject,
+          bookings_school: placement_request.school,
+          bookings_subject: placement_request.school.subjects.first,
+          bookings_placement_request: placement_request,
+          bookings_placement_request_id: placement_request.id
+      end
+    end
   end
 end

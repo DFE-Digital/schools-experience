@@ -41,6 +41,10 @@ Then("I should see an error message stating {string}") do |string|
   expect(page).to have_css('span.govuk-error-message', text: string)
 end
 
+Then("I should see an error") do
+  expect(page).to have_css('span.govuk-error-message')
+end
+
 Then("I should see a {string} link to the {string}") do |link_text, path|
   expect(page).to have_link(link_text, href: path_for(path))
 end
