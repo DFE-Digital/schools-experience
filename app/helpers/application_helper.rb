@@ -42,6 +42,10 @@ module ApplicationHelper
     end
   end
 
+  def service_update_last_updated_at
+    # TODO - update this on deploy
+  end
+
   def user_info_and_logout_link
     logout_link = link_to("Logout", schools_session_path)
 
