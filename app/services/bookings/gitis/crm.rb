@@ -121,8 +121,8 @@ module Bookings
         api.get(
           'contacts',
           '$top' => max,
-          '$filter' => filter#,
-#          '$order' => #FIXME
+          '$filter' => filter,
+          '$orderby' => 'createdon desc'
         )['value']
       end
     end
