@@ -7,7 +7,7 @@ class Notify
 
   class << self
     def notification_class
-      Rails.application.config.x.notify_client || Notifications::Client
+      Rails.application.config.x.notify_client.presence || Notifications::Client
     end
   end
 
