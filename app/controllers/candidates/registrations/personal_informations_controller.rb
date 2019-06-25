@@ -37,7 +37,8 @@ module Candidates
         params.require(:candidates_registrations_personal_information).permit \
           :first_name,
           :last_name,
-          :email
+          :email,
+          :date_of_birth
       end
 
       def attributes_from_session
