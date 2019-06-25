@@ -6,8 +6,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
   it_should_behave_like "email template", "29ed44bd-dc79-4fb3-bf8e-6e0ff18365b3",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",
-    placement_start_date: "2022-01-01",
-    placement_finish_date: "2022-02-01",
+    placement_schedule: "2022-03-04 for 3 days",
     school_address: "123 Main Street, Springfield, M2 3JF",
     school_start_time: "08:40",
     school_finish_time: "15:30",
@@ -20,7 +19,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
     school_teacher_email: "ednak@springfield.co.uk",
     school_teacher_telephone: "01234 234 1245",
     placement_details: "You will shadow a teacher and assist with lesson planning",
-    placement_fee: 30
+    cancellation_url: 'https://example.com/candiates/cancel/abc-123'
 
   describe ".from_booking" do
     before do
@@ -35,6 +34,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
     let!(:school) { create(:bookings_school, urn: 11048) }
     let!(:profile) { create(:bookings_profile, school: school) }
     let(:to) { "morris.szyslak@moes.net" }
+    let(:candidate_name) { "morris.szyslak" }
 
     let!(:pr) { create(:bookings_placement_request, school: school) }
     let!(:booking) do
@@ -45,22 +45,20 @@ describe NotifyEmail::CandidateBookingConfirmation do
       )
     end
 
-    subject { described_class.from_booking(to, booking) }
+    let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
+
+    subject { described_class.from_booking(to, candidate_name, booking, cancellation_url) }
 
     it { is_expected.to be_a(described_class) }
 
     context 'correctly assigning attributes' do
       specify 'candidate_name is correctly-assigned' do
-        expect(subject.candidate_name).to eql([pr.candidate.firstname, pr.candidate.lastname].join(' '))
+        expect(subject.candidate_name).to eql(candidate_name)
       end
 
-      specify 'placement_start_date is correctly-assigned' do
-        expect(subject.placement_start_date).to eql(booking.date)
+      specify 'placement_schedule is correctly-assigned' do
+        expect(subject.placement_schedule).to eql(booking.placement_start_date_with_duration)
       end
-
-      specify 'placement_finish_date is correctly-assigned'
-      #  expect(subject.placement_finish_date).to eql('FIXME')
-      #end
 
       specify 'school_address is correctly-assigned' do
         expect(subject.school_address).to eql(
@@ -117,9 +115,9 @@ describe NotifyEmail::CandidateBookingConfirmation do
         expect(subject.placement_details).to eql(booking.placement_details)
       end
 
-      specify 'placement_fee is correctly-assigned'
-      #  expect(subject.placement_fee).to eql('REMOVE')
-      #end
+      specify 'cancellation_url is correctly-assigned' do
+        expect(subject.cancellation_url).to eql(cancellation_url)
+      end
     end
   end
 end

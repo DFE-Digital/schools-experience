@@ -47,3 +47,26 @@
     }
   }
 }
+
+table#bookings {
+  tr {
+    td.name, td.date {
+      font-weight: bold;
+    }
+  }
+
+  .govuk-table__header, .govuk-table__cell {
+    border: none;
+  }
+}
+
+#bookings-index {
+  .pagination-info.higher {
+    @include govuk-responsive-margin(4, "bottom");
+  }
+
+  .pagination-info.lower {
+    @include govuk-responsive-margin(4, "top");
+    @include govuk-responsive-margin(4, "bottom");
+  }
+}

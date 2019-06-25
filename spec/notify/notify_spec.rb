@@ -24,10 +24,8 @@ describe Notify do
 
   describe 'Initialization' do
     before do
-      @orig_notification_class = Notify.notification_class
-      Notify.notification_class = nil
+      allow(Rails.application.config.x).to receive(:notify_client).and_return nil
     end
-    after { Notify.notification_class = @orig_notification_class }
 
     specify 'should assign email address' do
       expect(subject.to).to eql(to)
@@ -81,11 +79,10 @@ describe Notify do
     end
 
     before do
-      Notify.notification_class = NotifyFakeClient
+      allow(Rails.application.config.x).to receive(:notify_client).and_return NotifyFakeClient
+
       NotifyFakeClient.reset_deliveries!
     end
-
-    after { Notify.notification_class = nil }
 
     describe '#despatch!' do
       subject { StubNotification.new(to: 'test@user.com', name: 'Test User') }
