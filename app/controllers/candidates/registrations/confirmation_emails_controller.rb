@@ -4,7 +4,7 @@ module Candidates
       def show
         @email = current_registration.email
         @school_name = current_registration.school.name
-        @resend_path = candidates_school_registrations_resend_confirmation_email_path
+        @resend_link = candidates_school_registrations_resend_confirmation_email_path
       end
 
       def create

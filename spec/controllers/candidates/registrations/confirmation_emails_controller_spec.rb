@@ -153,7 +153,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
     end
 
     it 'assigns retry path for the view' do
-      expect(assigns(:resend_path)).to eq \
+      expect(assigns(:resend_link)).to eq \
         '/candidates/schools/11048/registrations/resend_confirmation_email'
     end
   end
