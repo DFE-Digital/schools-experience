@@ -11,10 +11,10 @@ Given("I am on the candidate signin page") do
   expect(page.current_path).to eql(candidates_signin_path)
 end
 
-When("I should enter my name and email address") do
-  fill_in 'Email', with: "testy@mctest.com"
-  fill_in 'Firstname', with: "Testy"
-  fill_in 'Lastname', with: "McTest"
+When("I enter my name and email address") do
+  fill_in 'Email address', with: "testy@mctest.com"
+  fill_in 'First name', with: "Testy"
+  fill_in 'Last name', with: "McTest"
   fill_in 'Day', with: '01'
   fill_in 'Month', with: '01'
   fill_in 'Year', with: '1980'

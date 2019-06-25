@@ -61,10 +61,29 @@ RSpec.describe Bookings::Candidate, type: :model do
 
     context 'with existing Candidate' do
       let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.id) }
+      subject { Bookings::Candidate.find_by_gitis_contact gitis_contact }
 
-      subject do
-        Bookings::Candidate.find_or_create_from_gitis_contact! gitis_contact
+      it "return existing candidate" do
+        is_expected.to eql candidate
       end
+
+      it "will assign gitis_contact" do
+        is_expected.to have_attributes(gitis_contact: gitis_contact)
+      end
+    end
+
+    context 'without existing Candidate' do
+      subject { Bookings::Candidate.find_by_gitis_contact gitis_contact }
+      it { is_expected.to be_nil }
+    end
+  end
+
+  describe '.find_by_gitis_contact!' do
+    let(:gitis_contact) { build(:gitis_contact, :persisted) }
+
+    context 'with existing Candidate' do
+      let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.id) }
+      subject { Bookings::Candidate.find_by_gitis_contact! gitis_contact }
 
       it "return existing candidate" do
         is_expected.to eql candidate

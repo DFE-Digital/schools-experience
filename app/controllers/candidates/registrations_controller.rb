@@ -29,5 +29,11 @@ module Candidates
       step = registration_session.incomplete_steps.first
       send "new_candidates_school_registrations_#{step}_path"
     end
+
+    def gitis_mapper(registration_session = current_registration,
+        gitis_contact = self.current_contact)
+
+      Bookings::RegistrationContactMapper.new(registration_session, gitis_contact)
+    end
   end
 end

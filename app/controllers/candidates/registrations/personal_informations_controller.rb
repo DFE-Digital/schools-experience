@@ -2,16 +2,26 @@ module Candidates
   module Registrations
     class PersonalInformationsController < RegistrationsController
       def new
-        @personal_information = PersonalInformation.new attributes_from_session
+        @personal_information = PersonalInformation.new attributes_from_session_or_gitis
       end
 
       def create
         @personal_information = PersonalInformation.new personal_information_params
-        if @personal_information.valid?
-          persist @personal_information
+        render(:new) && return unless @personal_information.valid?
+
+        persist @personal_information
+
+        if candidate_signed_in?
           redirect_to new_candidates_school_registrations_contact_information_path
         else
-          render :new
+          token = @personal_information.create_signin_token(gitis_crm)
+
+          if token
+            verification_email(token).despatch_later!
+            redirect_to candidates_school_registrations_sign_in_path
+          else
+            redirect_to new_candidates_school_registrations_contact_information_path
+          end
         end
       end
 
@@ -25,6 +35,7 @@ module Candidates
 
         if @personal_information.valid?
           persist @personal_information
+          # FIXME need to consider scenario where the user swaps out email address after confirming
           redirect_to candidates_school_registrations_application_preview_path
         else
           render :edit
@@ -42,6 +53,27 @@ module Candidates
 
       def attributes_from_session
         current_registration.personal_information_attributes.except 'created_at'
+      end
+
+      def attributes_from_session_or_gitis
+        attrs = attributes_from_session
+        return attrs if attrs.any?
+
+        current_contact ? gitis_mapper.contact_to_personal_information : {}
+      end
+
+      def verification_email(token)
+        NotifyEmail::CandidateVerifyEmailLink.new(
+          to: current_registration.personal_information.email,
+          verification_link: verification_link(token)
+        )
+      end
+
+      def verification_link(token)
+        candidates_registration_verify_url \
+          current_registration.urn,
+          token,
+          host: request.host
       end
     end
   end

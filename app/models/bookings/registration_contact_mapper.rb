@@ -25,5 +25,24 @@ module Bookings
 
       gitis_contact
     end
+
+    def contact_to_contact_information
+      {
+        'phone'         => gitis_contact.phone,
+        'building'      => gitis_contact.building,
+        'street'        => gitis_contact.street,
+        'town_or_city'  => gitis_contact.town_or_city,
+        'county'        => gitis_contact.county,
+        'postcode'      => gitis_contact.postcode
+      }
+    end
+
+    def contact_to_personal_information
+      {
+        'first_name'  => gitis_contact.first_name,
+        'last_name'   => gitis_contact.last_name,
+        'email'       => gitis_contact.email
+      }
+    end
   end
 end
