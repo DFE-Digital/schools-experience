@@ -59,14 +59,19 @@ describe Bookings::PlacementRequest, type: :model do
       FactoryBot.create :placement_request, :cancelled_by_school, school: school
     end
 
+    let! :placement_request_with_booking do
+      FactoryBot.create(:bookings_booking).bookings_placement_request
+    end
+
     let! :placement_request_open do
       FactoryBot.create :placement_request, school: school
     end
 
     it 'only returns the open placement requests' do
-      expect(described_class.open).to include placement_request_open
+      expect(described_class.open).to match_array [placement_request_open]
       expect(described_class.open).not_to include placement_request_closed_by_candidate
       expect(described_class.open).not_to include placement_request_closed_by_school
+      expect(described_class.open).not_to include placement_request_with_booking
     end
   end
 

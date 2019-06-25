@@ -43,9 +43,10 @@ module Bookings
       dependent: :destroy
 
     scope :open, -> do
-      left_joins(:candidate_cancellation, :school_cancellation)
+      left_joins(:candidate_cancellation, :school_cancellation, :booking)
         .where(bookings_placement_request_cancellations: { sent_at: nil })
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
+        .where(bookings_bookings: { bookings_placement_request_id: nil })
     end
 
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil, context: nil)

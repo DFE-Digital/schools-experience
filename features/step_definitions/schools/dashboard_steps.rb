@@ -19,7 +19,11 @@ Then("I should see the dashboard") do
   expect(page).to have_css('h1', text: "Manage school experience at #{@school.name}")
 end
 
-Given("there are {int} new requests/bookings") do |qty|
+Given("there are {int} new requests") do |qty|
+  FactoryBot.create_list :placement_request, qty, school: @school
+end
+
+Given("there are {int} new bookings") do |qty|
   qty
   #  do nothing, currently hard-coded in controller
 end
