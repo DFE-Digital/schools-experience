@@ -354,6 +354,10 @@ en:
         objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
         acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/privacy_policy" class="govuk-link">privacy policy</a>'
+      candidates_session:
+        firstname: First name
+        lastname: Last name
+        email: Email address
       order: Sorted by
       query: Find what?
       location: Where?

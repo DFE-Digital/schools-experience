@@ -2,7 +2,7 @@ module Candidates
   module Registrations
     class ContactInformation < RegistrationStep
       # These are here purely for compatibility with legacy data in Redis
-      if Rails.application.config.x.phase == 3
+      if Rails.application.config.x.phase <= 3
         attribute :first_name
         attribute :last_name
         attribute :full_name

@@ -9,6 +9,10 @@ module Candidates
       validates :acceptance, acceptance: true
 
       alias_method :accepted?, :valid?
+
+      def not_accepted?
+        !accepted?
+      end
     end
   end
 end

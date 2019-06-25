@@ -124,4 +124,32 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       end
     end
   end
+
+  describe '.create_signin_token' do
+    include_context 'stubbed out Gitis'
+    let(:pinfo) { build(:personal_information) }
+
+    context 'for known candidate' do
+      let(:contactid) { SecureRandom.uuid }
+
+      before do
+        gitis_stubs.stub_contact_request_by_email(pinfo.email,
+          contactid: contactid)
+      end
+
+      it 'returns a token' do
+        expect(pinfo.create_signin_token(gitis)).to be_present
+      end
+    end
+
+    context 'for unknown candidate' do
+      before do
+        gitis_stubs.stub_contact_request_by_email(pinfo.email, data: [])
+      end
+
+      it 'returns false' do
+        expect(pinfo.create_signin_token(gitis)).to be false
+      end
+    end
+  end
 end

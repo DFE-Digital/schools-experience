@@ -3,12 +3,14 @@ FactoryBot.define do
     firstname { "Test" }
     sequence(:lastname) { |n| "User#{n}" }
     sequence(:emailaddress1) { |n| "testuser#{n}@testdomain.com" }
-    phone { "01234 567890" }
+    telephone1 { "01234 567890" }
     address1_line1 { "My Building" }
     address1_line2 { "Test Street" }
     address1_city { "Test Town" }
     address1_stateorprovince { "Test County" }
     address1_postalcode { "MA1 1AM" }
+    statecode { 0 }
+    dfe_channelcreation { 10 }
 
     trait :persisted do
       id { SecureRandom.uuid }
