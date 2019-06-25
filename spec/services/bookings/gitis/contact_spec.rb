@@ -83,4 +83,36 @@ describe Bookings::Gitis::Contact, type: :model do
       it { expect(subject.email).to eql('second@test.com') }
     end
   end
+
+  describe "#signin_attributes_match?" do
+    let(:contact) { build(:gitis_contact) }
+    let(:date_of_birth) { Date.parse(contact.date_of_birth) }
+    subject { contact.signin_attributes_match?(*signin_attrs) }
+
+    context 'with matching name' do
+      let(:signin_attrs) do
+        [contact.firstname, contact.lastname, Date.parse('2000-01-01')]
+      end
+
+      it { is_expected.to be true }
+    end
+
+    context 'with all matching' do
+      let(:signin_attrs) do
+        [contact.firstname, contact.lastname, date_of_birth]
+      end
+
+      it { is_expected.to be true }
+    end
+
+    context 'with matching dob' do
+      let(:signin_attrs) { ['', '', date_of_birth] }
+      it { is_expected.to be false }
+    end
+
+    context 'with partial name match and matching dob' do
+      let(:signin_attrs) { ['', contact.lastname, date_of_birth] }
+      it { is_expected.to be true }
+    end
+  end
 end

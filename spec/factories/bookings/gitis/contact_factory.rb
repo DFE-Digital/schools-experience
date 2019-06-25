@@ -9,6 +9,7 @@ FactoryBot.define do
     address1_city { "Test Town" }
     address1_stateorprovince { "Test County" }
     address1_postalcode { "MA1 1AM" }
+    date_of_birth { '1980-01-01' }
     statecode { 0 }
     dfe_channelcreation { 10 }
 
