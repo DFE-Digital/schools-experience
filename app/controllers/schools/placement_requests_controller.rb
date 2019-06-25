@@ -7,13 +7,15 @@ module Schools
 
     def show
       @placement_request = placement_request
+      @placement_request.viewed!
       @gitis_contact = gitis_crm.find(placement_request.contact_uuid)
     end
 
   private
 
     def placement_requests
-      current_school.placement_requests
+      current_school
+        .placement_requests
         .eager_load(:candidate_cancellation, :school_cancellation, :placement_date)
     end
 

@@ -463,6 +463,35 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
+  describe '#viewed_at' do
+    subject { FactoryBot.create :placement_request }
+
+    specify 'should be nil' do
+      expect(subject.viewed_at).to be_nil
+    end
+  end
+
+  describe '#viewed!' do
+    subject { FactoryBot.create :placement_request }
+
+    context 'when #viewed_at has not already been set' do
+      before { subject.viewed! }
+      specify 'should set #viewed_at to now' do
+        expect(subject.viewed_at).to be_within(0.1).of(Time.now)
+      end
+    end
+
+    context 'when #viewed_at has already been set' do
+      let(:ts) { 3.weeks.ago }
+      subject { FactoryBot.create(:placement_request, viewed_at: ts) }
+
+      before { subject.viewed! }
+      specify 'should not overwrite #viewed_at' do
+        expect(subject.viewed_at).to eql(ts)
+      end
+    end
+  end
+
   describe '#fetch_gitis_contact' do
     let(:gitis) { Bookings::Gitis::CRM.new('a.fake.token') }
     subject { FactoryBot.create :placement_request }
