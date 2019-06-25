@@ -36,6 +36,9 @@ Feature: Personal Information
             | First name          | Philip                 |
             | Last name           | Gilbert                |
             | Email address       | phil.gilbert@gmail.com |
+            | Day                 | 01                     |
+            | Month               | 01                     |
+            | Year                | 2000                   |
 
         When I submit the form
         Then I should be on the 'verify your email' page for my school of choice

@@ -133,8 +133,10 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       let(:contactid) { SecureRandom.uuid }
 
       before do
-        gitis_stubs.stub_contact_request_by_email(pinfo.email,
-          contactid: contactid)
+        gitis_stubs.stub_contact_signin_request(pinfo.email, contactid => {
+          firstname: pinfo.first_name,
+          lastname: pinfo.last_name
+        })
       end
 
       it 'returns a token' do
@@ -144,7 +146,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
 
     context 'for unknown candidate' do
       before do
-        gitis_stubs.stub_contact_request_by_email(pinfo.email, data: [])
+        gitis_stubs.stub_contact_signin_request(pinfo.email, [])
       end
 
       it 'returns false' do

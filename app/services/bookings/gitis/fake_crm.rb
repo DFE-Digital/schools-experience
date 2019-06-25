@@ -3,7 +3,8 @@ module Bookings::Gitis
     KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
     REQUIRED = %w{
       firstname lastname emailaddress1 telephone1 address1_line1 address1_city
-      address1_stateorprovince address1_postalcode statecode dfe_channelcreation
+      address1_stateorprovince address1_postalcode date_of_birth
+      statecode dfe_channelcreation
     }.freeze
     ALLOWED = (
       REQUIRED + %w{mobilephone address1_line2 address1_line3 emailaddress2}
@@ -15,6 +16,15 @@ module Bookings::Gitis
 
       Contact.new(fake_contact_data).tap do |contact|
         contact.email = address
+      end
+    end
+
+    def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
+      return super unless stubbed?
+      return nil if email =~ /unknown/
+
+      Contact.new(fake_contact_data).tap do |contact|
+        contact.email = email
       end
     end
 
@@ -78,6 +88,7 @@ module Bookings::Gitis
         'address1_city' => 'Manchester',
         'address1_stateorprovince' => 'Manchester',
         'address1_postalcode' => 'MA1 1AM',
+        'date_of_birth' => '1980-01-01',
         'statecode' => 0,
         'dfe_channelcreation' => 10
       }

@@ -38,7 +38,7 @@ module Candidates
           firstname: first_name,
           lastname: last_name,
           email: email,
-          date_of_birth: Date.new(1970, 1, 1) # FIXME waiting to integrate DOB branch
+          date_of_birth: date_of_birth
         )
       end
     end
