@@ -6,18 +6,18 @@
   }
 %>
 
-<% self.page_title = "Booking for #{@booking.candidate.full_name}" %>
+<% self.page_title = "Booking for #{@booking.candidate_name}" %>
 
-<h1>Booking for <%= @booking.candidate.full_name %></h1>
+<h1>Booking by <%= @booking.candidate_name %></h1>
 
 <div id="school-booking-show" class="booking">
   <section id="personal-details">
     <h2>Personal details</h2>
 
     <dl class="placement-details govuk-summary-list">
-      <%= summary_row 'Address', @booking.candidate.address %>
-      <%= summary_row 'UK telephone number', @booking.candidate.phone %>
-      <%= summary_row 'Email address', @booking.candidate.email %>
+      <%= summary_row 'Address', @booking.gitis_contact.address %>
+      <%= summary_row 'UK telephone number', @booking.gitis_contact.phone %>
+      <%= summary_row 'Email address', @booking.gitis_contact.email %>
     </dl>
   </section>
 
@@ -46,7 +46,7 @@
   </section>
 
   <div>
-    <%= link_to 'Cancel booking', 'TODO - SE-1215', class: 'govuk-button govuk-button--secondary' %>
+    <%= link_to 'Cancel booking', new_schools_booking_cancellation_path(@booking), class: 'govuk-button govuk-button--secondary' %>
   </div>
 
   <div>

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/cookies_policy', to: 'pages#cookies_policy'
+  get '/service_update', to: 'pages#service_update'
 
   if Rails.application.config.x.phase >= 2
     get '/auth/callback', to: 'schools/sessions#create'
@@ -40,13 +41,10 @@ Rails.application.routes.draw do
               only: [:new, :create],
               controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
           end
-          collection do
-            resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
-          end
         end
-        resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
-          collection do
-            resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
+        resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i(index show) do
+          resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
+            resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
           end
         end
       end
@@ -103,6 +101,7 @@ Rails.application.routes.draw do
     end
 
     if Rails.application.config.x.phase >= 3
+      get 'cancel/:placement_request_token', to: 'placement_requests/cancellations#new', as: :cancel
       resources :placement_requests, only: [], param: :token do
         resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
       end

@@ -6,6 +6,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
   describe 'database structure' do
     it { is_expected.to have_db_column(:token).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_index(:token).unique }
+    it { is_expected.to have_secure_token }
   end
 
   describe 'associations' do

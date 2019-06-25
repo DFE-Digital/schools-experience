@@ -1,0 +1,17 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Your cancellation email has been sent
+      </h1>
+    </div>
+    <h2 class="govuk-heading-m">
+      What happens next
+    </h2>
+    <p>
+      We’ve sent your response to <%= @cancellation.candidate_name %>
+    </p>
+
+    <%= link_to 'Return to requests and bookings', schools_dashboard_path, class: 'govuk-button govuk-button--secondary' %>
+  </div>
+</div>

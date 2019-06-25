@@ -1,0 +1,39 @@
+<% self.page_title = 'Cancelled booking' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Your school experience booking has been cancelled
+      </h1>
+    </div>
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+    <p>
+    Your school experience booking on <%= cancellation.booking_date %> at <%= cancellation.school_name %> has been cancelled.
+    </p>
+
+    <h2 class="govuk-heading-s">The school will be notified about this cancellation.</h2>
+    <p>
+      We'll also send you an email to confirm you've cancelled your booking.
+    </p>
+
+    <h2 class="govuk-heading-m">Get advice about teaching</h2>
+    <p>
+      If you’d like to find out more about teaching or teacher training call our Get Into Teaching service on Freephone 0800 389 2500.
+    </p>
+    <p>
+      You can also chat to a Get Into Teaching Line adviser using our
+      <%= chat_service %>
+    </p>
+
+
+    <% if Rails.application.config.x.phase >= 4 %>
+      <h2 class="govuk-heading-m">View and request more school experience</h2>
+      <p>
+        <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
+      </p>
+    <% end %>
+  </div>
+</div>
+
