@@ -3,7 +3,7 @@ module Bookings::Gitis
     KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
     REQUIRED = %w{
       firstname lastname emailaddress1 telephone1 address1_line1 address1_city
-      address1_stateorprovince address1_postalcode date_of_birth
+      address1_stateorprovince address1_postalcode birthdate
       statecode dfe_channelcreation
     }.freeze
     ALLOWED = (
@@ -88,7 +88,7 @@ module Bookings::Gitis
         'address1_city' => 'Manchester',
         'address1_stateorprovince' => 'Manchester',
         'address1_postalcode' => 'MA1 1AM',
-        'date_of_birth' => '1980-01-01',
+        'birthdate' => '1980-01-01',
         'statecode' => 0,
         'dfe_channelcreation' => 10
       }

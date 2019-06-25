@@ -86,7 +86,7 @@ describe Bookings::Gitis::Contact, type: :model do
 
   describe "#signin_attributes_match?" do
     let(:contact) { build(:gitis_contact) }
-    let(:date_of_birth) { Date.parse(contact.date_of_birth) }
+    let(:date_of_birth) { Date.parse(contact.birthdate) }
     subject { contact.signin_attributes_match?(*signin_attrs) }
 
     context 'with matching name' do

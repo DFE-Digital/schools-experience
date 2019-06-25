@@ -15,7 +15,7 @@ module Bookings
       entity_attributes :address1_line1, :address1_line2, :address1_line3
       entity_attributes :address1_city, :address1_stateorprovince
       entity_attributes :address1_postalcode, :telephone1, :mobilephone
-      entity_attributes :date_of_birth, :statecode, :dfe_channelcreation
+      entity_attributes :birthdate, :statecode, :dfe_channelcreation
 
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
@@ -41,7 +41,7 @@ module Bookings
         self.address1_city            = @crm_data['address1_city']
         self.address1_stateorprovince = @crm_data['address1_stateorprovince']
         self.address1_postalcode      = @crm_data['address1_postalcode']
-        self.date_of_birth            = @crm_data['date_of_birth']
+        self.birthdate                = @crm_data['birthdate']
         self.statecode                = @crm_data['statecode'] || STATE_CODE
         self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || CHANNEL_CREATION
       end
@@ -90,14 +90,22 @@ module Bookings
         end
       end
 
+      def date_of_birth
+        birthdate.present? ? Date.parse(birthdate) : nil
+      end
+
+      def date_of_birth=(dob)
+        self.birthdate = dob.present? ? dob.to_formatted_s(:db) : nil
+      end
+
       def signin_attributes_match?(fname, lname, dob)
         gitis_format_dob = dob.to_formatted_s(:db)
         fname = fname.downcase
         lname = lname.downcase
 
         firstname.downcase == fname && lastname.downcase == lname ||
-          firstname.downcase == fname && date_of_birth == gitis_format_dob ||
-          lastname.downcase == lname && date_of_birth == gitis_format_dob
+          firstname.downcase == fname && birthdate == gitis_format_dob ||
+          lastname.downcase == lname && birthdate == gitis_format_dob
       end
     end
   end
