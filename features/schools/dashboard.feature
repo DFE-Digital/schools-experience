@@ -43,7 +43,6 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then the 'new requests counter' should be 5
 
-    @wip
     Scenario: Candidate bookings counter
         Given there are 3 new bookings
         When I am on the 'schools dashboard' page

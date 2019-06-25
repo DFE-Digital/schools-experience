@@ -24,9 +24,9 @@ Given("there are {int} new requests") do |qty|
 end
 
 Given("there are {int} new bookings") do |qty|
-  qty
-  #  do nothing, currently hard-coded in controller
+  FactoryBot.create_list :bookings_booking, qty, :upcoming, bookings_school: @school
 end
+
 
 Given("there are {int} new candidate attendances") do |qty|
   qty

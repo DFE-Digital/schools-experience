@@ -18,7 +18,9 @@ end
 
 And("there is/are {int} booking/bookings") do |count|
   @scheduled_booking_date ||= 1.week.from_now.strftime("%d %B %Y")
-  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
+  unless @school.subjects.where(name: 'Biology').any?
+    @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
+  end
   @bookings = FactoryBot.create_list(
     :bookings_booking,
     count,
