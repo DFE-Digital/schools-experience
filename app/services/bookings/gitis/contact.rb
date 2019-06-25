@@ -3,8 +3,8 @@ module Bookings
     class Contact
       include Entity
 
-      # Call pot in Gitis to instert the record into
-      CHANNEL_CREATION = ENV.fetch('CRM_CHANNEL_CREATION', nil)
+      # Call pot in Gitis to insert the record into
+      CHANNEL_CREATION = ENV['CRM_CHANNEL_CREATION'].presence || 0
 
       # Status of record within Gitis
       STATE_CODE = 0
