@@ -51,7 +51,7 @@ module ApplicationHelper
   end
 
   def service_update_last_updated_at
-    # TODO - update this on deploy
+    SERVICE_UPDATE_LAST_UPDATED_AT.to_formatted_s :govuk
   end
 
   def user_info_and_logout_link
