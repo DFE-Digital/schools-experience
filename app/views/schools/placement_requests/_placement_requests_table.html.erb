@@ -1,0 +1,16 @@
+<table id="placement-requests" class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header">Name</th>
+      <th class="govuk-table__header">Status</th>
+      <th class="govuk-table__header">Subjects</th>
+      <th class="govuk-table__header">Date requested</th>
+      <th class="govuk-table__header"/>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <%= render partial: 'schools/placement_requests/placement_request',
+      collection: placement_requests
+    %>
+  </tbody>
+</table>

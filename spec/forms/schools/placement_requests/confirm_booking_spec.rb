@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Schools::PlacementRequests::ConfirmBooking, type: :model do
-  attributes = %i(date placement_details bookings_subject_id).freeze
+  attributes = %i(placement_details bookings_subject_id).freeze
 
   describe 'Attributes' do
     attributes.each do |attribute_name|
@@ -23,10 +23,17 @@ describe Schools::PlacementRequests::ConfirmBooking, type: :model do
     context '#date' do
       let(:past_dates) { [1.week.ago, 1.day.ago, Date.today] }
       let(:future_dates) { [1.day.from_now, 1.week.from_now, 1.year.from_now] }
+      let!(:bookings_subject) { create(:bookings_subject) }
 
       specify 'should not allow past dates' do
         past_dates.each do |pd|
-          expect(subject).not_to allow_value(pd).for(:date)
+          expect(
+            described_class.new(
+              bookings_subject_id: bookings_subject.id,
+              placement_details: 'yes',
+              date: pd
+            )
+          ).not_to be_valid
         end
       end
 

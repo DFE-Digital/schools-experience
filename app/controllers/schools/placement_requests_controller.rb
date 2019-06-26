@@ -8,12 +8,15 @@ module Schools
     def show
       @placement_request = placement_request
       @gitis_contact = placement_request.fetch_gitis_contact(gitis_crm)
+
+      @placement_request.viewed!
     end
 
   private
 
     def placement_requests
-      current_school.placement_requests
+      current_school
+        .placement_requests
         .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date)
     end
 

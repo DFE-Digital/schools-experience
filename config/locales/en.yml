@@ -386,6 +386,7 @@ en:
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_labels
         payment_method: 'Explain how the fee is paid.'
+        description: 'Add extra details'
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:
