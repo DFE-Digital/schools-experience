@@ -54,9 +54,9 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
   context '#perform' do
     context 'no errors' do
-      context 'phase 2' do
+      context 'phase 3' do
         before do
-          allow(Rails.application.config.x).to receive(:phase) { 2 }
+          allow(Rails.application.config.x).to receive(:phase) { 3 }
           described_class.perform_later registration_session.uuid, cancellation_url
         end
 
@@ -86,9 +86,9 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         end
       end
 
-      context 'phase > 2' do
+      context 'phase >= 4' do
         before do
-          allow(Rails.application.config.x).to receive(:phase) { 3 }
+          allow(Rails.application.config.x).to receive(:phase) { 4 }
           described_class.perform_later registration_session.uuid, cancellation_url
         end
 
