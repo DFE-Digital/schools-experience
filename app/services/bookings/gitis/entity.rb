@@ -53,6 +53,14 @@ module Bookings::Gitis
       id ? "#{entity_path}(#{id})" : entity_path
     end
 
+    def attributes_for_update
+      changed_attributes
+    end
+
+    def attributes_for_create
+      changed_attributes
+    end
+
     class InvalidEntityIdError < RuntimeError; end
 
     module ClassMethods
