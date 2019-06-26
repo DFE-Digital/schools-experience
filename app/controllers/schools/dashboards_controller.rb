@@ -3,8 +3,8 @@ module Schools
     def show
       @school = current_school
 
-      @new_requests = 5
-      @new_bookings = 3
+      @new_requests = current_school.placement_requests.open.count
+      @new_bookings = current_school.bookings.upcoming.count
       @candidate_attendances = 4
     end
   end

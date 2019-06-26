@@ -21,7 +21,8 @@
             rows: 5,
             maxwords: { count: 150 },
             placeholder: t('.availability_placeholder'),
-            label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
+            'aria-describedby': 'candidates_registrations_placement_preference_availability_label',
+            label_options: { overwrite_defaults!: true, class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_availability_label' } do %>
 
             <p>
               We need a few details so we can forward your experience requirements to the school.
@@ -67,7 +68,8 @@
           :objectives,
           rows: 5,
           maxwords: { count: 150 },
-          label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
+          'aria-describedby': 'candidates_registrations_placement_preference_objectives_label',
+          label_options: { overwrite_defaults!: true, class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_objectives_label' } do %>
           <p>
             Provide a short explanation. For example:
           </p>

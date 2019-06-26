@@ -16,7 +16,7 @@
 
         <div id="requests" class="subsection">
           <header class="dashboard-high-priority">
-            <%= link_to "Manage requests", 'TODO SE-1192' %>
+            <%= link_to "Manage requests", schools_placement_requests_path %>
             <%= numbered_circle(@new_requests, id: 'new-requests-counter') %>
           </header>
           <p class="govuk-hint">Candidates have requested school experience</p>
@@ -24,7 +24,7 @@
 
         <div id="bookings" class="subsection">
           <header class="dashboard-high-priority">
-            <%= link_to "Manage bookings", "TODO SE-1193" %>
+            <%= link_to "Manage bookings", schools_bookings_path  %>
             <%= numbered_circle(@new_bookings, id: 'new-bookings-counter') %>
           </header>
           <p class="govuk-hint">A candidate has asked to change a booking</p>
@@ -92,7 +92,7 @@
 
         <div id="service-updates-and-guidance" class="subsection">
           <header class="dashboard-medium-priority">
-            <%= link_to 'Service updates and guidance', 'TODO SE-1214' %>
+            <%= link_to "Service updates and guidance - #{service_update_last_updated_at}", service_update_path %>
           </header>
           <span class="govuk-hint">
             Find out about the latest changes to the service and how it works
