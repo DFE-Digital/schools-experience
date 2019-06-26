@@ -16,7 +16,7 @@
       <%= f.email_field :email, autocomplete: 'on', class: 'govuk-input govuk-input--width-30' %>
       <%= f.text_field :firstname, autocomplete: 'given-name', class: 'govuk-input govuk-input--width-20' %>
       <%= f.text_field :lastname, autocomplete: 'family-name', class: 'govuk-input govuk-input--width-20' %>
-      <%= f.date_field :date_of_birth %>
+      <%= f.date_field :date_of_birth, autocomplete: 'bday', heading: true %>
 
       <%= f.submit 'Sign in' %>
     <% end %>
