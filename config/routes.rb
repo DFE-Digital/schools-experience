@@ -115,7 +115,7 @@ Rails.application.routes.draw do
       end
     end
 
-    if Rails.application.config.x.phase >= 4
+    if Rails.application.config.x.phase >= 5
       get 'signin', to: 'sessions#new'
       post 'signin', to: 'sessions#create'
       get 'signin/:authtoken', to: 'sessions#update', as: 'signin_confirmation'
