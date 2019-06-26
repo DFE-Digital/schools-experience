@@ -287,6 +287,7 @@ en:
           Requests that are already in-progress will continue as normal.
       bookings_placement_date:
         date: For example, 01 09 2019
+        duration: Enter number of days
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
@@ -325,7 +326,7 @@ en:
         availability_info: Describe your school experience availability
 
       bookings_placement_date:
-        duration: How many days will it last?
+        duration: How long will it last?
         active: Make this date available to candidates?
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
