@@ -1,9 +1,9 @@
 module Schools::DashboardsHelper
   def not_onboarded_warning(school)
     if school.placement_requests.any?
-      "Your profile isn't complete"
-    else
       "You have school experience requests waiting"
+    else
+      "Your profile isn't complete"
     end
   end
 

@@ -169,13 +169,13 @@ describe Schools::DashboardsHelper, type: 'helper' do
       let!(:pr) { create(:bookings_placement_request, school: school) }
 
       specify 'should return message "You profile isn\'t complete"' do
-        expect(not_onboarded_warning(school)).to eql("Your profile isn't complete")
+        expect(not_onboarded_warning(school)).to eql("You have school experience requests waiting")
       end
     end
 
     context 'when the school has no placement requests' do
       specify 'should return message "You have school experience requests waiting"' do
-        expect(not_onboarded_warning(school)).to eql("You have school experience requests waiting")
+        expect(not_onboarded_warning(school)).to eql("Your profile isn't complete")
       end
     end
   end
