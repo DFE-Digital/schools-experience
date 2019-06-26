@@ -114,6 +114,10 @@ When("I enter {string} into the {string} text area") do |value, label|
   fill_in label, with: value
 end
 
+When("I click the {string} submit button") do |string|
+  page.find("input[value='#{string}']").click
+end
+
 LABEL_SELECTORS = %w(.govuk-label legend label).freeze
 def get_form_group(page, label_text)
   selector = LABEL_SELECTORS.detect do |s|

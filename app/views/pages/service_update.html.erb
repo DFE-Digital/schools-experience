@@ -1,0 +1,71 @@
+<div id="service-update" class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Service updates and guidance - <%= service_update_last_updated_at %>
+    </h1>
+    <p>
+      Find out about the latest changes and planned future updates for the service.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Latest service updates
+    </h2>
+    <p>
+      We’ve added a new management tool which means you can now:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        add and update your school experience dates
+      </li>
+      <li>
+        change and update your school profile
+      </li>
+    </ul>
+
+    <h2 class="govuk-heading-m">
+      Next service updates
+    </h2>
+    <p>
+      We’ll be updating the management tool so you’ll be able to:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        manage school experience requests - including accepting and rejecting requests with automatic email confirmations sent to candidates
+      </li>
+      <li>
+        manage school experience bookings - including cancelling bookings with automatic email confirmations sent to candidates
+      </li>
+      <li>
+        confirm candidate attendance - so you can help us reduce the number of no-shows
+      </li>
+    </ul>
+
+    <h2 class="govuk-heading-m">
+      Help and support
+    </h2>
+
+    <p>
+      If you’ve got any feedback, questions or would like to take part in user
+      testing email us with your URN at <%= mail_to "organise.school-experience@education.gov.uk" %>.
+    </p>
+
+    <p>
+      <%= link_to "Back to requests and bookings", schools_dashboard_path %>
+    </p>
+  </div>
+
+  <div id="service-guidance" class="govuk-grid-column-one-third app-related-items">
+    <h2 class="govuk-heading-m">Service guidance</h2>
+    <p>
+      Find out more about the service and how it works.
+    </p>
+    <p>
+      <%= link_to "Manage school experience: information for schools", "https://www.gov.uk/government/publications/school-experience-programme-information-for-schools" %>
+    </p>
+    <p>
+    <%= link_to "DfE Sign-in help", "https://help.signin.education.gov.uk/contact" %>
+    </p>
+  </div>
+</div>
