@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       resource :dashboard, only: :show
       resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
-      if Rails.application.config.x.phase >= 3
+      if Rails.application.config.x.phase >= 4
         resources :placement_requests do
           resource :cancellation, only: %i(show new create edit update), controller: 'placement_requests/cancellations' do
             resource :notification_delivery, only: %i(show create), controller: 'placement_requests/cancellations/notification_deliveries'
@@ -100,7 +100,7 @@ Rails.application.routes.draw do
       end
     end
 
-    if Rails.application.config.x.phase >= 3
+    if Rails.application.config.x.phase >= 4
       get 'cancel/:placement_request_token', to: 'placement_requests/cancellations#new', as: :cancel
       resources :placement_requests, only: [], param: :token do
         resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
