@@ -7,6 +7,7 @@ module Candidates
 
       def create
         @contact_information = ContactInformation.new contact_information_params
+
         if @contact_information.valid?
           persist @contact_information
           redirect_to new_candidates_school_registrations_subject_preference_path
