@@ -41,4 +41,34 @@ module ApplicationHelper
       end
     end
   end
+
+  def summary_row(key, value, change_path = nil, id: nil)
+    action = change_path ? link_to('Change', change_path) : nil
+
+    render \
+      partial: "shared/list_row",
+      locals: { key: key, value: value, action: action, id: id }
+  end
+
+  def service_update_last_updated_at
+    # TODO - update this on deploy
+  end
+
+  def user_info_and_logout_link
+    logout_link = link_to("Logout", schools_session_path)
+
+    greeting = if @current_user.is_a?(OpenIDConnect::ResponseObject::UserInfo)
+                 "Welcome #{@current_user.given_name} #{@current_user.family_name}"
+               end
+
+    safe_join([greeting, logout_link].compact, ". ")
+  end
+
+  def phase_three_release_date
+    PHASE_THREE_RELEASE_DATE.to_formatted_s :govuk
+  end
+
+  def chat_service
+    link_to "online chat service", "https://ta-chat.education.gov.uk/chat/chatstart.aspx?domain=www.education.gov.uk&department=GetIntoTeaching%27,%27new_win%27,%27width=0,height=0%27);return&SID=0"
+  end
 end

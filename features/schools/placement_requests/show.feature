@@ -11,7 +11,7 @@ Feature: Viewing a placement request
     Scenario: Back link
         Given there is at least one placement request
         When I am on the placement request page
-        Then I should see a 'Back' link to the 'upcoming requests' page
+        Then I should see a 'Back' link to the 'placement requests' page
 
     Scenario: Personal details
         Given there is at least one placement request

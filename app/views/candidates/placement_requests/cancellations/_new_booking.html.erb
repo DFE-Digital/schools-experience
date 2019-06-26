@@ -1,0 +1,38 @@
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Cancel booking</h1>
+      <%= form_for cancellation, url: candidates_placement_request_cancellation_path(cancellation.placement_request.token) do |f| %>
+        <p>
+          You've chosen to cancel your school experience booking for <%= cancellation.school_name %>.
+        </p>
+        <p>
+          Date booked: <%= cancellation.placement_request.booking.date.to_formatted_s :govuk %>
+        </p>
+
+        <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon">!</span>
+          <span class="govuk-warning-text__assistive">Warning</span>
+          <strong class="govuk-warning-text__text">
+            To change any school experience details you’ll need to contact the
+            school. For example, to change the date of your booking.
+          </strong>
+        </div>
+
+        <%= f.text_area :reason,
+            rows: 5,
+            label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
+
+            <p>
+              Tell us a why you want to cancel your request so we can let the school know you no longer want school experience.
+            </p>
+        <% end %>
+
+        <%= f.submit 'Cancel booking' %>
+
+        <% # TODO add link to 'Contact school' booking show path %>
+        <% # TODO add link to 'Your requests and bookings' booking index path %>
+      <% end %>
+    </div>
+  </div>
+</div>

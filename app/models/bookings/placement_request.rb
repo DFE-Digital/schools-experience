@@ -2,6 +2,7 @@
 # registration
 module Bookings
   class PlacementRequest < ApplicationRecord
+    attr_accessor :gitis_contact
     include Candidates::Registrations::Behaviours::PlacementPreference
     include Candidates::Registrations::Behaviours::SubjectPreference
     include Candidates::Registrations::Behaviours::BackgroundCheck
@@ -12,9 +13,15 @@ module Bookings
       class_name: 'Bookings::School',
       foreign_key: :bookings_school_id
 
+    belongs_to :candidate,
+      class_name: 'Bookings::Candidate',
+      foreign_key: :candidate_id,
+      optional: true
+
     has_one :booking,
       class_name: 'Bookings::Booking',
-      foreign_key: 'bookings_placement_request_id'
+      foreign_key: 'bookings_placement_request_id',
+      inverse_of: :bookings_placement_request
 
     belongs_to :placement_date,
       class_name: 'Bookings::PlacementDate',
@@ -25,15 +32,34 @@ module Bookings
       -> { where cancelled_by: 'candidate' },
       class_name: 'Bookings::PlacementRequest::Cancellation',
       foreign_key: 'bookings_placement_request_id',
+      inverse_of: :placement_request,
       dependent: :destroy
 
     has_one :school_cancellation,
       -> { where cancelled_by: 'school' },
       class_name: 'Bookings::PlacementRequest::Cancellation',
       foreign_key: 'bookings_placement_request_id',
+      inverse_of: :placement_request,
       dependent: :destroy
 
     scope :open, -> do
+      not_cancelled.merge unbooked
+    end
+
+    scope :unbooked, -> do
+      left_joins(:booking)
+        .where(bookings_bookings: { bookings_placement_request_id: nil })
+    end
+
+    scope :cancelled, -> do
+      left_joins(:candidate_cancellation, :school_cancellation)
+        .where <<~SQL
+          bookings_placement_request_cancellations.sent_at IS NOT NULL
+          OR school_cancellations_bookings_placement_requests.sent_at IS NOT NULL
+        SQL
+    end
+
+    scope :not_cancelled, -> do
       left_joins(:candidate_cancellation, :school_cancellation)
         .where(bookings_placement_request_cancellations: { sent_at: nil })
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
@@ -60,9 +86,18 @@ module Bookings
       !closed?
     end
 
-    # FIXME SE-1095 update this model to belong_to a candidate
-    def candidate
-      @candidate ||= Bookings::Gitis::CRM.new('abc123').find(1)
+    def viewed!
+      if viewed_at.nil?
+        update(viewed_at: Time.now)
+      end
+    end
+
+    def viewed?
+      viewed_at.present?
+    end
+
+    def contact_uuid
+      1
     end
 
     def dates_requested
@@ -74,7 +109,7 @@ module Bookings
     end
 
     def received_on
-      created_at.to_date.to_formatted_s(:govuk)
+      created_at.to_date
     end
 
     # FIXME SE-1130
@@ -109,17 +144,25 @@ module Bookings
     end
 
     def candidate_email
-      candidate.email
+      gitis_contact.email
     end
 
     def candidate_name
-      candidate.full_name
+      gitis_contact.full_name
+    end
+
+    def cancellation
+      candidate_cancellation || school_cancellation
+    end
+
+    def fetch_gitis_contact(crm)
+      self.gitis_contact = crm.find(contact_uuid)
     end
 
   private
 
     def cancelled?
-      candidate_cancellation&.sent? || school_cancellation&.sent?
+      cancellation&.sent?
     end
 
     def completed?

@@ -65,4 +65,16 @@
       <%- end -%>
     </ul>
   </section>
+
+  <section class="help-and-support">
+    <h3 class="govuk-heading-s">Help and support</h3>
+    <ul class="govuk-list">
+      <li>
+        <%= link_to "Service updates and guidance - #{service_update_last_updated_at}", service_update_path %>
+        <span class="govuk-hint">
+          Find out about the latest changes to the service and how it works
+        </span>
+      </li>
+    </ul>
+  </section>
 </article>

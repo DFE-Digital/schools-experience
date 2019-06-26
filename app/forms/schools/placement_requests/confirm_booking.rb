@@ -9,19 +9,15 @@ module Schools
       attribute :placement_details
       attribute :bookings_subject_id, :integer
 
-      validates :date, presence: true
+      validates :date,
+        timeliness: {
+          after: :today,
+          before: -> { 2.years.from_now },
+          type: :date
+        },
+        presence: true
       validates :placement_details, presence: true
       validates :bookings_subject_id, presence: true
-
-      validate :ensure_date_in_future, if: -> { date.present? }
-
-    private
-
-      def ensure_date_in_future
-        if self.date <= Date.today
-          errors.add(:date, "must be in the future")
-        end
-      end
     end
   end
 end

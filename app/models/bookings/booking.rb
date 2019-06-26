@@ -9,7 +9,16 @@ module Bookings
     belongs_to :bookings_school,
       class_name: 'Bookings::School'
 
-    validates :date, presence: true
+    has_one :candidate_cancellation, through: :bookings_placement_request
+
+    validates :date,
+      presence: true,
+      on: :create,
+      timeliness: {
+        on_or_after: :today,
+        before: -> { 2.years.from_now },
+        type: :date
+      }
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true
@@ -24,9 +33,20 @@ module Bookings
       :has_dbs_check,
       :objectives,
       :teaching_stage,
+      :token,
+      :build_candidate_cancellation,
+      :closed?,
+      :received_on,
+      :gitis_contact,
+      :contact_uuid,
+      :candidate_email,
+      :candidate_name,
       to: :bookings_placement_request
 
-    scope :upcoming, -> { where(arel_table[:date].between(Time.now..2.weeks.from_now)) }
+    UPCOMING_TIMEFRAME = 2.weeks
+
+    scope :open, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
+    scope :upcoming, -> { open.where(arel_table[:date].between(Time.now..UPCOMING_TIMEFRAME.from_now)) }
     scope :accepted, -> { where.not(accepted_at: nil) }
 
     def self.from_confirm_booking(confirm_booking)
@@ -37,18 +57,16 @@ module Bookings
       )
     end
 
-    # FIXME this will eventually be handled 'higher up', probably by
-    # a helper or directly in the view
-    def candidate
-      Bookings::Gitis::CRM.new('abc123').find(1)
-    end
-
-    def received_on
-      bookings_placement_request.created_at.to_date
-    end
-
     def status
       "New"
+    end
+
+    def placement_start_date_with_duration
+      [date.to_formatted_s(:govuk), duration_days].join(' ')
+    end
+
+    def duration_days
+      duration.to_s + ' day'.pluralize(duration)
     end
 
     # stage one of the placement request acceptance mini-wizard

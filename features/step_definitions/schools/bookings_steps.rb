@@ -18,7 +18,9 @@ end
 
 And("there is/are {int} booking/bookings") do |count|
   @scheduled_booking_date ||= 1.week.from_now.strftime("%d %B %Y")
-  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
+  unless @school.subjects.where(name: 'Biology').any?
+    @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
+  end
   @bookings = FactoryBot.create_list(
     :bookings_booking,
     count,
@@ -87,8 +89,8 @@ Then("every booking should contain a link to view more details") do
   within('#bookings') do
     page.all('.booking').each do |sr|
       within(sr) do
-        booking_id = sr['data-booking'].to_i
-        expect(page).to have_link('Open', href: schools_booking_path(booking_id))
+        booking_id = sr['data-booking']
+        expect(page).to have_link('View', href: schools_booking_path(booking_id))
       end
     end
   end
@@ -133,4 +135,16 @@ Then("the non-upcoming bookings shouldn't") do
       expect(page).not_to have_css(".booking[data-booking='#{booking_id}']")
     end
   end
+end
+
+Given("there are no bookings") do
+  # do nothing
+end
+
+Then("I should see the text {string}") do |string|
+  expect(page).to have_text string
+end
+
+Then("I should not see the bookings table") do
+  expect(page).not_to have_css('table#bookings')
 end

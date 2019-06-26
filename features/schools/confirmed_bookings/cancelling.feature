@@ -11,7 +11,7 @@ Feature: Cancelling bookings
     Scenario: Page heading
         Given there is at least one booking
         When I am on the cancel booking page
-        Then the page's main heading should be 'Review and send rejection email to candidate'
+        Then the page's main heading should be 'Review and send cancellation email to candidate'
 
     Scenario: Reject information
         Given there is at least one booking
@@ -22,7 +22,7 @@ Feature: Cancelling bookings
         """
         And the following text should be present:
         """
-        has turned down your school experience request for the following dates:
+        has cancelled your school experience booking for the following dates:
         """
 
     Scenario: Reject information
@@ -38,12 +38,17 @@ Feature: Cancelling bookings
         When I am on the cancel booking page
         Then there should be a 'Cancellation reasons' text area
         And there should be a 'Extra details' text area
-        And the submit button should contain text 'Preview rejection email'
+        And the submit button should contain text 'Preview cancellation email'
 
     Scenario: Rejecting the requests
         Given there is at least one booking
         And I am on the cancel booking page
         And I have entered a reason in the cancellation reasons text area
         And I have entered a extra details in the extra details text area
-        When I click the 'Preview rejection email' button
+        When I click the 'Preview cancellation email' button
         Then I should see a preview of what I have entered
+
+    Scenario: Sending the email
+        Given I have progressed to the cancellation email preview page
+        When I click the 'Send cancellation email' submit button
+        Then I should see a 'Your cancellation email has been sent' confirmation

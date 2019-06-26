@@ -12,18 +12,23 @@ module Schools
             date: @placement_request.placement_date&.date,
             placement_details: @current_school&.profile&.experience_details
           )
+          @placement_request.fetch_gitis_contact gitis_crm
         end
 
         def create
           @confirm_booking = Schools::PlacementRequests::ConfirmBooking.new(confirm_booking_params)
 
-          return render :new if @confirm_booking.invalid?
+          if @confirm_booking.invalid?
+            @placement_request.fetch_gitis_contact gitis_crm
+            return render :new
+          end
 
           booking = find_or_create_booking(@placement_request)
 
           if booking.save
             redirect_to new_schools_placement_request_acceptance_add_more_details_path(@placement_request.id)
           else
+            @placement_request.fetch_gitis_contact gitis_crm
             Rails.logger.warn("ConfirmBooking was valid but Booking wasn't: #{params}")
             render :new
           end

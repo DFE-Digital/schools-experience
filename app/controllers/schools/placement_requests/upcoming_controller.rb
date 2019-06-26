@@ -5,6 +5,7 @@ module Schools
 
       def index
         @placement_requests = placement_requests.open
+        assign_gitis_contacts @placement_requests
       end
     end
   end

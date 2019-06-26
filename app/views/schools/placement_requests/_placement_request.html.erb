@@ -1,113 +1,21 @@
-<div class="placement-request" data-placement-request="<%= placement_request.id %>" data-urn="<%= placement_request.urn %>">
-  <h2 class="govuk-heading-m">Request from <%= placement_request.candidate.full_name %></h2>
-
-  <dl class="placement-details govuk-summary-list">
-    <div class="date-requested govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Dates requested
-      </dt>
-      <dd class="govuk-summary-list__value">
-        <%= placement_request.dates_requested %>
-      </dd>
-    </div>
-
-    <div class="date-received-on govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Request received
-      </dt>
-      <dd class="govuk-summary-list__value">
-        <%= placement_request.received_on %>
-      </dd>
-    </div>
-
-    <div class="contact-details govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Contact details
-      </dt>
-      <dd class="govuk-summary-list__value">
-
-        <details class="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-              View contact details
-            </span>
-          </summary>
-
-          <div class="govuk-details__text">
-            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-body govuk-!-font-size-16">
-
-              <div class="address govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  Address
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <%= placement_request.candidate.building %>,
-                  <%= placement_request.candidate.town_or_city %>,
-                  <%= placement_request.candidate.postcode %>
-                </dd>
-              </div>
-
-              <div class="phone-number govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  UK telephone number
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <%= placement_request.candidate.phone %>
-                </dd>
-              </div>
-
-              <div class="email-address govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  Email address
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <%= placement_request.candidate.email %>
-                </dd>
-              </div>
-
-            </dl>
-          </div>
-        </details>
-
-      </dd>
-    </div>
-
-    <div class="teaching-stage govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Teaching stage
-      </dt>
-      <dd class="govuk-summary-list__value">
-        <%= placement_request.teaching_stage %>
-      </dd>
-    </div>
-
-    <div class="teaching-subject govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Teaching subject first choice
-      </dt>
-      <dd class="govuk-summary-list__value">
-        <%= placement_request.subject_first_choice %>
-      </dd>
-    </div>
-
-    <div class="teaching-subject govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Teaching subject second choice
-      </dt>
-      <dd class="govuk-summary-list__value">
-        <%= placement_request.subject_second_choice %>
-      </dd>
-    </div>
-
-    <div class="status govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Status
-      </dt>
-      <dd class="govuk-summary-list__value">
-        <span class="govuk-tag"><%= placement_request.status %></span>
-      </dd>
-    </div>
-  </dl>
-
-  <%= link_to "Open request", schools_placement_request_path(placement_request), class: 'govuk-button' %>
-</div>
+<tr class="govuk-table__row placement-request" data-placement-request="<%= placement_request.id %>" data-urn="<%= placement_request.urn %>">
+  <td class="govuk-table__cell govuk-!-font-weight-bold">
+    <%= placement_request.gitis_contact.full_name %>
+  </td>
+  <td class="govuk-table__cell">
+    <% if !placement_request.viewed? %>
+      <span class="govuk-tag">
+        <%= placement_request.status %>
+      </span>
+    <% end %>
+  </td>
+  <td class="govuk-table__cell">
+    <%= placement_request.subject_first_choice %>
+  </td>
+  <td class="govuk-table__cell govuk-!-font-weight-bold">
+    <%= placement_request.dates_requested %>
+  </td>
+  <td class="govuk-table__cell">
+    <%= link_to "View", schools_placement_request_path(placement_request) %>
+  </td>
+</tr>

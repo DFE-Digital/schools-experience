@@ -46,6 +46,10 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Use Redis for Session and cache
+  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
+  config.session_store :cache_store, key: 'schoolex-test-session'
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
@@ -58,7 +62,7 @@ Rails.application.configure do
   end
 
   # Don't actually attempt to delivery emails during tests
-  Notify.notification_class = NotifyFakeClient
+  config.x.notify_client = NotifyFakeClient
 
   config.x.phase = 10000
 

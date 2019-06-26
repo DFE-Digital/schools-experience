@@ -26,15 +26,15 @@ Feature: Viewing a booking
             | UK telephone number | 07123 456789                                                         |
             | Email address       | second@thisaddress.com                                               |
 
-    Scenario: Request details
+    Scenario: Booking details
         Given there is at least one booking
         When I am viewing my chosen booking
         Then I should see a 'Booking details' section with the following values:
-            | Heading          | Value            |
-            | Date             | 02 October 2019  |
-            | Request received | 08 February 2019 |
-            | DBS certificate  | Yes              |
-            | Status           | New              |
+            | Heading          | Value                                                                  |
+            | Date             | 02 October 2019                                                        |
+            | Subject          | Biology                                                                |
+            | DBS certificate  | Yes - Candidate says they have DBS certificate \(not verified by DfE\) |
+            | Request received | 08 February 2019                                                       |
 
     Scenario: Candidate details
         Given there is at least one booking
@@ -44,5 +44,6 @@ Feature: Viewing a booking
             | What they want out of school experience | It’s just an idea                 |
             | Degree stage                            | Final year                        |
             | Degree subject                          | Bioscience                        |
-            | Teaching stage                          | I want to be a teacher |
-            | Preferred subjects                      | Biology                           |
+            | Teaching stage                          | I want to be a teacher            |
+            | Teaching subject                        | First choice: Biology             |
+            | Teaching subject                        | Second choice: Biology            |

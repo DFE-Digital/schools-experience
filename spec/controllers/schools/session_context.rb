@@ -9,7 +9,7 @@ shared_context "logged in DfE user" do
     allow_any_instance_of(ActionDispatch::Request)
       .to(
         receive(:session).and_return(
-          current_user: { name: "joey" },
+          current_user: OpenStruct.new(given_name: 'Martin', family_name: 'Prince'),
           urn: urn
         )
       )

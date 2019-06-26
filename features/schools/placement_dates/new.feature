@@ -10,13 +10,13 @@ Feature: Creating new placement dates
         Given I am on the 'new placement date' page
         Then the page title should be 'Create a placement date'
 
-  Scenario: Breadcrumbs
-    Given I am on the 'new placement date' page
-    Then I should see the following breadcrumbs:
-        | Text                    | Link                     |
-        | Some school             | /schools/dashboard       |
-        | Placement dates         | /schools/placement_dates |
-        | Create a placement date | None                     |
+    Scenario: Breadcrumbs
+        Given I am on the 'new placement date' page
+        Then I should see the following breadcrumbs:
+            | Text                    | Link                     |
+            | Some school             | /schools/dashboard       |
+            | Placement dates         | /schools/placement_dates |
+            | Create a placement date | None                     |
 
     Scenario: Placement date form
         Given I am on the 'new placement date' page
@@ -31,3 +31,9 @@ Feature: Creating new placement dates
         When I submit the form
         Then I should be on the 'placement dates' page
         And my newly-created placement date should be listed
+
+    Scenario: Preventing invalid dates from being added
+        Given I am on the 'new placement date' page
+        And I fill in the 'Enter a start date' date field with an invalid date of 31st September next year
+        When I submit the form
+        Then I should see an error message stating 'is not a valid date'

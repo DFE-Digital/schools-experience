@@ -6,138 +6,50 @@
   }
 %>
 
-<h1>Booking by <%= @booking.candidate.full_name %></h1>
+<% self.page_title = "Booking for #{@booking.candidate_name}" %>
 
-<div class="booking">
+<h1>Booking by <%= @booking.candidate_name %></h1>
+
+<div id="school-booking-show" class="booking">
+  <section id="personal-details">
+    <h2>Personal details</h2>
+
+    <dl class="placement-details govuk-summary-list">
+      <%= summary_row 'Address', @booking.gitis_contact.address %>
+      <%= summary_row 'UK telephone number', @booking.gitis_contact.phone %>
+      <%= summary_row 'Email address', @booking.gitis_contact.email %>
+    </dl>
+  </section>
+
   <section id="booking-details">
     <h2>Booking details</h2>
 
-    <dl class="placement-details govuk-summary-list">
-      <div class="date-requested govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Date
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.date.to_formatted_s(:govuk) %>
-        </dd>
-      </div>
-
-      <div class="date-received-on govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Request received
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.received_on.to_formatted_s(:govuk) %>
-        </dd>
-      </div>
-
-      <div class="dbs-certificate govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          DBS certificate
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= format_boolean(@booking.has_dbs_check) %>
-        </dd>
-      </div>
-
-      <div class="status govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Status
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <span class="govuk-tag"><%= @booking.status %></span>
-        </dd>
-      </div>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Date', @booking.date.to_formatted_s(:govuk) %>
+      <%= summary_row 'Subject', @booking.bookings_subject.name %>
+      <%= summary_row 'DBS certificate', format_has_dbs_certificate(@booking.has_dbs_check) %>
+      <%= summary_row 'Request received', @booking.received_on.to_formatted_s(:govuk) %>
     </dl>
   </section>
 
   <section id="candidate-details">
     <h2>Candidate details</h2>
 
-    <dl class="candidate-details govuk-summary-list">
-      <div class="objectives govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          What they want out of school experience
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.objectives %>
-        </dd>
-      </div>
-
-      <div class="degree-stage govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Degree stage
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.degree_stage %>
-        </dd>
-      </div>
-
-      <div class="degree-subject govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Degree subject
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.degree_subject %>
-        </dd>
-      </div>
-
-      <div class="teaching-tage govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Teaching stage
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.teaching_stage %>
-        </dd>
-      </div>
-
-      <div class="teaching-tage govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Preferred subjects
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ol class="govuk-list govuk-list--number">
-            <%= @booking.bookings_subject.name -%>
-          </ol>
-        </dd>
-      </div>
-    </dl>
-  </section>
-
-  <section id="personal-details">
-    <h2>Personal details</h2>
-
-    <dl class="placement-details govuk-summary-list">
-      <div class="address govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Address
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.candidate.address %>
-        </dd>
-      </div>
-
-      <div class="phone-number govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          UK telephone number
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.candidate.phone %>
-        </dd>
-      </div>
-
-      <div class="email-address govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Email address
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= @booking.candidate.email %>
-        </dd>
-      </div>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'What they want out of school experience', @booking.objectives %>
+      <%= summary_row 'Degree stage', @booking.degree_stage %>
+      <%= summary_row 'Degree subject', @booking.degree_subject %>
+      <%= summary_row 'Teaching stage', @booking.teaching_stage %>
+      <%= summary_row 'Teaching subject', "First choice: #{@booking.bookings_placement_request.subject_first_choice}", id: 'teaching-subject-first-choice' %>
+      <%= summary_row 'Teaching subject', "Second choice: #{@booking.bookings_placement_request.subject_second_choice}", id: 'teaching-subject-second-choice' %>
     </dl>
   </section>
 
   <div>
-    <%= link_to 'Cancel', new_schools_booking_cancellation_path(@booking), class: 'govuk-button govuk-button--secondary' %>
+    <%= link_to 'Cancel booking', new_schools_booking_cancellation_path(@booking), class: 'govuk-button govuk-button--secondary' %>
+  </div>
+
+  <div>
+    <%= link_to 'Return to requests and bookings', schools_dashboard_path, class: 'govuk-button' %>
   </div>
 </div>
