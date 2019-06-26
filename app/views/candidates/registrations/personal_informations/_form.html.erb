@@ -2,12 +2,11 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">Enter your personal details</h1>
+    <h1 class="govuk-heading-l">Check if we already have your details</h1>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <p class="govuk-body">
-          Your details will be used by schools to contact you about school
-          experience once you’ve sent them a request.
+          Provide the following information so we can check if we already have your details.
         </p>
 
         <%= form_for personal_information, url: candidates_school_registrations_personal_information_path do |f| %>
@@ -16,7 +15,7 @@
           <%= f.text_field :first_name, autocomplete: 'given-name' %>
           <%= f.text_field :last_name, autocomplete: 'family-name' %>
           <%= f.email_field :email, autocomplete: 'on' %>
-          <%= f.date_field :date_of_birth, autocomplete: 'bday', heading: true %>
+          <%= f.date_field :date_of_birth, heading: true %>
 
           <%= f.submit 'Continue' %>
         <% end %>

@@ -128,7 +128,7 @@ feature 'Candidate Registrations', type: :feature do
   def complete_personal_information_step
     # Begin wizard journey
     visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
-    expect(page).to have_text 'Enter your personal details'
+    expect(page).to have_text 'Check if we already have your details'
 
     # Submit personal information form with errors
     fill_in 'First name', with: 'testy'
