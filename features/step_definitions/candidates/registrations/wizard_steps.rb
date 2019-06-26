@@ -16,6 +16,9 @@ Given("I have completed the personal information form") do
   fill_in 'First name', with: 'testy'
   fill_in 'Last name', with: 'mctest'
   fill_in 'Email address', with: 'test@example.com'
+  fill_in 'Day', with: '01'
+  fill_in 'Month', with: '01'
+  fill_in 'Year', with: '2000'
   click_button 'Continue'
 end
 
@@ -83,7 +86,7 @@ Then("the subject preference form should populated with the details I've entered
   visit path_for 'candidate subjects', school: @school
   expect(find_field('Graduate or postgraduate')).to be_checked
   expect(find_field('If you have or are studying for a degree, tell us about your degree subject').value).to eq 'Physics'
-  expect(find_field('I’ve applied for teacher training')).to be_checked
+  expect(find_field("I’ve applied for teacher training")).to be_checked
   expect(find_field('First choice').value).to eq 'Physics'
   expect(find_field('Second choice').value).to eq 'Mathematics'
 end

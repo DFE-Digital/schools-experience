@@ -3,5 +3,6 @@ FactoryBot.define do
     first_name { 'Testy' }
     last_name { 'Mc Test' }
     email { 'test@example.com' }
+    date_of_birth { Date.parse '2000-01-01' }
   end
 end

@@ -84,7 +84,7 @@ module Candidates
           return PersonalInformation.new @registration_session.fetch(param_key)
         end
 
-        contact = @registration_session.fetch(ContactInformation.model_name.param_key)
+        contact = @registration_session.fetch(ContactInformation.model_name.param_key, {})
         migrate = contact.slice(*MIGRATE_ATTRS)
 
         raise StepNotFound, param_key if migrate.empty?
