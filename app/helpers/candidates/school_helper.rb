@@ -52,14 +52,15 @@ module Candidates::SchoolHelper
     count >= 10
   end
 
-  def school_location_map(school, zoom: 10)
+  def school_location_map(school, zoom: 10, described_by: nil)
     ajax_map(
       school.coordinates.latitude,
       school.coordinates.longitude,
       zoom: zoom,
       mapsize: "628,420",
       title: school.name,
-      description: format_school_address(school, tag(:br))
+      description: format_school_address(school, tag(:br)),
+      described_by: described_by
     )
   end
 
