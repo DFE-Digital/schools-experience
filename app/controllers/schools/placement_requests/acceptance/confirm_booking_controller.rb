@@ -2,7 +2,8 @@ module Schools
   module PlacementRequests
     module Acceptance
       class ConfirmBookingController < Schools::BaseController
-        before_action :set_placement_request, :set_available_subjects
+        include Acceptance
+        before_action :set_available_subjects
 
         def new
           subject_id = Bookings::Subject.find_by(name: @placement_request.subject_first_choice).id
@@ -46,12 +47,6 @@ module Schools
           params
             .require(:schools_placement_requests_confirm_booking)
             .permit(:bookings_subject_id, :date, :placement_details)
-        end
-
-        def set_placement_request
-          @placement_request = @current_school
-            .bookings_placement_requests
-            .find(params[:placement_request_id])
         end
 
         def set_available_subjects

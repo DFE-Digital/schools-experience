@@ -59,5 +59,5 @@ Feature: Accepting placement requests
         Given I have progressed to the 'preview confirmation email' page for my chosen placement request
         And I think the email looks good
         When I click the 'Send confirmation email' button
-        Then I should be on the 'placement requests' page
+        Then I should be on the 'email sent' page for my chosen placement request
         And the placement request should be accepted

@@ -2,7 +2,7 @@ module Schools
   module PlacementRequests
     module Acceptance
       class AddMoreDetailsController < Schools::BaseController
-        before_action :set_placement_request
+        include Acceptance
         before_action :ensure_previous_step_complete
 
         def new
@@ -31,12 +31,6 @@ module Schools
         end
 
       private
-
-        def set_placement_request
-          @placement_request = @current_school
-            .bookings_placement_requests
-            .find(params[:placement_request_id])
-        end
 
         def ensure_previous_step_complete
           unless @placement_request.booking.booking_confirmed?
