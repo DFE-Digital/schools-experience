@@ -2,11 +2,12 @@ module Candidates
   module Registrations
     class ContactInformationsController < RegistrationsController
       def new
-        @contact_information = ContactInformation.new attributes_from_session
+        @contact_information = ContactInformation.new attributes_from_session_or_gitis
       end
 
       def create
         @contact_information = ContactInformation.new contact_information_params
+
         if @contact_information.valid?
           persist @contact_information
           redirect_to new_candidates_school_registrations_subject_preference_path
@@ -38,6 +39,7 @@ module Candidates
           :first_name,
           :last_name,
           :email,
+          :date_of_birth,
           :building,
           :street,
           :town_or_city,
@@ -48,6 +50,13 @@ module Candidates
 
       def attributes_from_session
         current_registration.contact_information_attributes.except 'created_at'
+      end
+
+      def attributes_from_session_or_gitis
+        attrs = attributes_from_session
+        return attrs if attrs.any?
+
+        current_contact ? gitis_mapper.contact_to_contact_information : {}
       end
     end
   end

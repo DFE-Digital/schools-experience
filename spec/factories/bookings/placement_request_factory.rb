@@ -8,6 +8,8 @@ FactoryBot.define do
       urn: 11048,
       subject_count: 2
 
+    association :candidate
+
     after :build do |placement_request|
       placement_request.subject_first_choice = placement_request.school.subjects.first.name
       placement_request.subject_second_choice = placement_request.school.subjects.second&.name || "I don't have a second subject"

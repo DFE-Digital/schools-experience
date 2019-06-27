@@ -1,5 +1,3 @@
-require 'apimock/gitis_crm'
-
 module Bookings
   module Gitis
     class Auth

@@ -9,5 +9,9 @@ FactoryBot.define do
     trait :auto_expired do
       created_at { Time.zone.now - 1.minute - Candidates::SessionToken::AUTO_EXPIRE }
     end
+
+    trait :confirmed do
+      confirmed_at { 5.minutes.ago }
+    end
   end
 end

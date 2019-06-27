@@ -3,7 +3,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmedBookings::CancellationsController, type: :request do
   include_context "logged in DfE user"
-  include_context "stubbed out Gitis"
+  include_context "fake gitis"
 
   let :school do
     Bookings::School.find_by!(urn: urn).tap do |s|

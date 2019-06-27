@@ -73,15 +73,6 @@ en:
               blank: "Enter your building"
             county:
               blank: "Enter your county"
-            email:
-              blank: "Enter your email address"
-              invalid: "Enter a valid email address"
-            first_name:
-              blank: 'Enter your first name'
-            last_name:
-              blank: 'Enter your last name'
-            full_name:
-              blank: "Enter your full name"
             phone:
               blank: "Enter your telephone number"
               invalid: "Enter a valid telephone number"
@@ -92,6 +83,20 @@ en:
               blank: "Enter your street"
             town_or_city:
               blank: "Enter your town or city"
+
+        candidates/registrations/personal_information:
+          attributes:
+            email:
+              blank: "Enter your email address"
+              invalid: "Enter a valid email address"
+            first_name:
+              blank: 'Enter your first name'
+            last_name:
+              blank: 'Enter your last name'
+            full_name:
+              blank: "Enter your full name"
+            date_of_birth:
+              inclusion: "Enter a valid date of birth. You must be at least 18 years old"
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
@@ -291,6 +296,8 @@ en:
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
+      candidates_registrations_personal_information:
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
@@ -307,6 +314,8 @@ en:
         objectives:
           - Provide a short explanation about what you want to gain from your placement.
           - This will help the school see if it can offer you the kind of placement you’re looking for.
+      candidates_session:
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
@@ -331,9 +340,10 @@ en:
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
       candidates_registrations_contact_information:
-        email: 'Email address'
         building: "Building and street"
         phone: "UK telephone number"
+      candidates_registrations_personal_information:
+        email: 'Email address'
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"
@@ -349,6 +359,10 @@ en:
         objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
         acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/privacy_policy" class="govuk-link">privacy policy</a>'
+      candidates_session:
+        firstname: First name
+        lastname: Last name
+        email: Email address
       order: Sorted by
       query: Find what?
       location: Where?

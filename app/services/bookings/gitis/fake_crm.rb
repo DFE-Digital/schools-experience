@@ -1,38 +1,70 @@
 module Bookings::Gitis
   module FakeCrm
-    def find(*ids)
-      return super unless stubbed?
-
-      ids = normalise_ids(*ids)
-      validate_ids(ids)
-
-      if ids.length == 1
-        Contact.new(fake_account_data.merge('contactid' => ids[0]))
-      else
-        ids.map do |id|
-          Contact.new(fake_account_data.merge('contactid' => id))
-        end
-      end
-    end
+    KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
+    REQUIRED = %w{
+      firstname lastname emailaddress1 telephone1 address1_line1 address1_city
+      address1_stateorprovince address1_postalcode statecode dfe_channelcreation
+    }.freeze
+    ALLOWED = (
+      REQUIRED + %w{mobilephone address1_line2 address1_line3 emailaddress2}
+    ).freeze
 
     def find_by_email(address)
       return super unless stubbed?
+      return nil if address =~ /unknown/
 
-      Contact.new(fake_account_data).tap do |contact|
+      Contact.new(fake_contact_data).tap do |contact|
         contact.email = address
       end
     end
 
   private
 
-    def write_data(crm_contact_data)
-      crm_contact_data['contactid'].presence ||
-        "75c5a32d-d603-4483-956f-236fee7c5784"
+    def create_entity(entity_id, data)
+      return super unless stubbed?
+
+      REQUIRED.each do |key|
+        unless data.has_key?(key)
+          raise "Bad Response - attribute '#{key}' is missing"
+        end
+      end
+
+      data.keys.each do |key|
+        unless ALLOWED.include?(key)
+          raise "Bad Response - attribute '#{key}' is not recognised"
+        end
+      end
+
+      "#{entity_id}(#{fake_contact_id})"
     end
 
-    def fake_account_data
+    def update_entity(entity_id, data)
+      return super unless stubbed?
+
+      data.keys.each do |key|
+        unless ALLOWED.include?(key)
+          raise "Bad Response - attribute '#{key}' is not recognised"
+        end
+      end
+
+      entity_id
+    end
+
+    def fake_contact_id
+      if Rails.env.test? || Rails.env.servertest?
+        SecureRandom.uuid # Mock it if predictable behaviour required
+      elsif %w{true yes 1}.include? ENV['FAKE_CRM_UUID'].to_s
+        KNOWN_UUID
+      elsif ENV['FAKE_CRM_UUID'].present?
+        ENV['FAKE_CRM_UUID']
+      else
+        SecureRandom.uuid
+      end
+    end
+
+    def fake_contact_data
       {
-        'contactid' => "d778d663-a022-4c4b-9962-e469ee179f4a",
+        'contactid' => fake_contact_id,
         'firstname' => 'Matthew',
         'lastname' => 'Richards',
         'mobilephone' => '07123 456789',
@@ -45,12 +77,30 @@ module Bookings::Gitis
         'address1_line3' => 'Third Line',
         'address1_city' => 'Manchester',
         'address1_stateorprovince' => 'Manchester',
-        'address1_postalcode' => 'MA1 1AM'
+        'address1_postalcode' => 'MA1 1AM',
+        'statecode' => 0,
+        'dfe_channelcreation' => 10
       }
     end
 
     def stubbed?
       Rails.application.config.x.fake_crm
+    end
+
+    # only Contacts are mocked for now
+    def find_one(_entity_type, uuid, params)
+      return super unless stubbed?
+
+      Contact.new(fake_contact_data.merge('contactid' => uuid))
+    end
+
+    # only Contacts are mocked for now
+    def find_many(entity_type, uuids, params)
+      return super unless stubbed?
+
+      uuids.map do |uuid|
+        find_one(entity_type, uuid, params)
+      end
     end
   end
 end

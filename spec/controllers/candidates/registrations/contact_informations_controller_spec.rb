@@ -65,6 +65,30 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
     end
   end
 
+  context 'with existing contact information in gitis' do
+    let(:gitis_contact) { build(:gitis_contact, :persisted) }
+    before do
+      allow_any_instance_of(ActionDispatch::Request::Session).to \
+        receive(:[]).with(:gitis_contact).and_return(gitis_contact.attributes)
+    end
+
+    context '#new' do
+      before do
+        get '/candidates/schools/11048/registrations/contact_information/new'
+      end
+
+      it 'populates the form with the values from gitis' do
+        expect(assigns(:contact_information)).to have_attributes \
+          phone: gitis_contact.phone,
+          postcode: gitis_contact.postcode
+      end
+
+      it 'renders the new template' do
+        expect(response).to render_template :new
+      end
+    end
+  end
+
   context 'with existing contact information in session' do
     let :existing_contact_information do
       FactoryBot.build :contact_information
@@ -134,7 +158,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
       context 'valid' do
         let :contact_information do
-          FactoryBot.build :contact_information, email: 'new-email@test.com'
+          FactoryBot.build :contact_information, town_or_city: 'Manchester'
         end
 
         it 'updates the session' do

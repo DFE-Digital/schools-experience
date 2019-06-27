@@ -9,10 +9,22 @@ module Candidates
         registration_session = RegistrationStore.instance.retrieve! params[:uuid]
 
         unless registration_session.completed?
-          placement_request = Bookings::PlacementRequest.create_from_registration_session! \
-            registration_session,
-            cookies[:analytics_tracking_uuid],
-            context: :returning_from_confirmation_email
+          if gitis_integration?
+            self.current_candidate = Bookings::Candidate.create_or_update_from_registration_session! \
+              gitis_crm,
+              registration_session,
+              current_contact
+
+            placement_request = current_candidate.placement_requests.create_from_registration_session! \
+              registration_session,
+              cookies[:analytics_tracking_uuid],
+              context: :returning_from_confirmation_email
+          else
+            placement_request = Bookings::PlacementRequest.create_from_registration_session! \
+              registration_session,
+              cookies[:analytics_tracking_uuid],
+              context: :returning_from_confirmation_email
+          end
 
           registration_session.flag_as_completed!
 

@@ -95,3 +95,7 @@ Shoulda::Matchers.configure do |config|
     with.library :action_controller
   end
 end
+
+# Ensure load time injection of FakeCRM happens early enough
+require_dependency 'bookings/gitis/auth'
+require_dependency 'bookings/gitis/crm'

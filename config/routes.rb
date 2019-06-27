@@ -88,11 +88,19 @@ Rails.application.routes.draw do
 
     resources :school_searches, only: %i{new}
 
+    if Rails.application.config.x.phase >= 3
+    get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
+    end
+
     resources :schools, only: %i{index show} do
       namespace :registrations do
-        resource :placement_preference, only: %i(new create edit update)
+        resource :personal_information, only: %i(new create edit update)
+        if Rails.application.config.x.phase >= 3
+          resource :sign_in, only: %i(show create)
+        end
         resource :contact_information, only: %i(new create edit update)
         resource :subject_preference, only: %i(new create edit update)
+        resource :placement_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
         resource :confirmation_email, only: %i(show create)
@@ -108,7 +116,7 @@ Rails.application.routes.draw do
       end
     end
 
-    if Rails.application.config.x.phase >= 4
+    if Rails.application.config.x.phase >= 5
       get 'signin', to: 'sessions#new'
       post 'signin', to: 'sessions#create'
       get 'signin/:authtoken', to: 'sessions#update', as: 'signin_confirmation'

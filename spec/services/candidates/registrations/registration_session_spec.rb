@@ -197,9 +197,10 @@ describe Candidates::Registrations::RegistrationSession do
 
     it 'returns the correct models' do
       expect(registration_session.incomplete_steps).to eq %i(
-        placement_preference
+        personal_information
         contact_information
         subject_preference
+        placement_preference
         background_check
       )
     end

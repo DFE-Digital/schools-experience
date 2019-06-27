@@ -2,12 +2,13 @@
 # registration
 module Bookings
   class PlacementRequest < ApplicationRecord
-    attr_accessor :gitis_contact
     include Candidates::Registrations::Behaviours::PlacementPreference
     include Candidates::Registrations::Behaviours::SubjectPreference
     include Candidates::Registrations::Behaviours::BackgroundCheck
 
     has_secure_token
+
+    validates_presence_of :candidate, unless: :pre_phase3_record?
 
     belongs_to :school,
       class_name: 'Bookings::School',
@@ -65,6 +66,10 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
+    default_scope { where.not(candidate_id: nil) }
+
+    delegate :gitis_contact, :fetch_gitis_contact, to: :candidate
+
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil, context: nil)
       self.new(
         Candidates::Registrations::RegistrationAsPlacementRequest
@@ -97,7 +102,7 @@ module Bookings
     end
 
     def contact_uuid
-      1
+      candidate.gitis_uuid
     end
 
     def dates_requested
@@ -144,19 +149,15 @@ module Bookings
     end
 
     def candidate_email
-      gitis_contact.email
+      candidate.email
     end
 
     def candidate_name
-      gitis_contact.full_name
+      candidate.full_name
     end
 
     def cancellation
       candidate_cancellation || school_cancellation
-    end
-
-    def fetch_gitis_contact(crm)
-      self.gitis_contact = crm.find(contact_uuid)
     end
 
   private
@@ -168,6 +169,12 @@ module Bookings
     def completed?
       # FIXME SE-1096 determine from booking
       false
+    end
+
+    def pre_phase3_record?
+      return true if Rails.application.config.x.phase < 3
+
+      persisted? && candidate_id_was.nil?
     end
   end
 end
