@@ -4,7 +4,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">
-        Review and send rejection email to candidate
+        Review and send cancellation email to candidate
       </h1>
 
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
@@ -33,11 +33,11 @@
 
           <section>
             <p>
-              <%= f.submit 'Preview rejection email' %>
+              <%= f.submit 'Preview cancellation email' %>
             </p>
 
             <p>
-              <%= link_to 'Back to request', schools_placement_request_path(cancellation.placement_request) %>
+              <%= link_to 'Back to booking', schools_booking_path(@booking) %>
             </p>
           </section>
         </div>

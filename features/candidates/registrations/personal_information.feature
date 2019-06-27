@@ -5,8 +5,8 @@ Feature: Personal Information
 
     Scenario: Page contents
         Given I am on the 'Enter your personal details' page for my school of choice
-        Then the page's main header should be 'Enter your personal details'
-        And I should see a paragraph informing me that my details will be used by schools to contact me
+        Then the page's main header should be 'Check if we already have your details'
+        And I should see a paragraph informing me that my details will be used to identify me
 
     Scenario: Form contents
         Given I am on the 'Enter your personal details' page for my school of choice

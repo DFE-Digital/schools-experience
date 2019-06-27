@@ -35,5 +35,13 @@ module Candidates
 
       Bookings::RegistrationContactMapper.new(registration_session, gitis_contact)
     end
+
+    def gitis_integration?
+      Rails.application.config.x.phase >= 3
+    end
+
+    def skip_gitis_integration?
+      !gitis_integration?
+    end
   end
 end

@@ -47,14 +47,15 @@ module Bookings
         raise ArgumentError unless entity.class < Entity
         return false unless entity.valid?
 
-        # Sorting to allow stubbing http requests
+        # Sorting attributes allows stubbed http requests
         # webmock compares the request body as a serialized string
-        data = entity.changed_attributes.sort.to_h
 
         if entity.id
-          update_entity(entity.entity_id, data)
+          update_entity entity.entity_id,
+            entity.attributes_for_update.sort.to_h
         else
-          entity.entity_id = create_entity(entity.entity_id, data)
+          entity.entity_id = create_entity entity.entity_id, \
+            entity.attributes_for_create.sort.to_h
         end
 
         entity.id

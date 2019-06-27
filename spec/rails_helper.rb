@@ -73,6 +73,10 @@ RSpec.configure do |config|
     ])
   end
 
+  config.before :each do
+    Rails.cache.clear
+  end
+
   config.before :suite do
     Webpacker.compile
   end
@@ -91,3 +95,7 @@ Shoulda::Matchers.configure do |config|
     with.library :action_controller
   end
 end
+
+# Ensure load time injection of FakeCRM happens early enough
+require_dependency 'bookings/gitis/auth'
+require_dependency 'bookings/gitis/crm'

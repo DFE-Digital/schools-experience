@@ -11,7 +11,14 @@ module Bookings
 
     has_one :candidate_cancellation, through: :bookings_placement_request
 
-    validates :date, presence: true
+    validates :date,
+      presence: true,
+      on: :create,
+      timeliness: {
+        on_or_after: :today,
+        before: -> { 2.years.from_now },
+        type: :date
+      }
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true
@@ -36,7 +43,10 @@ module Bookings
       :candidate_name,
       to: :bookings_placement_request
 
-    scope :upcoming, -> { where(arel_table[:date].between(Time.now..2.weeks.from_now)) }
+    UPCOMING_TIMEFRAME = 2.weeks
+
+    scope :open, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
+    scope :upcoming, -> { open.where(arel_table[:date].between(Time.now..UPCOMING_TIMEFRAME.from_now)) }
     scope :accepted, -> { where.not(accepted_at: nil) }
 
     def self.from_confirm_booking(confirm_booking)

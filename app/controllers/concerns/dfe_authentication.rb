@@ -26,7 +26,7 @@ module DFEAuthentication
       redirect_to client.authorization_uri(
         state: session[:state],
         nonce: session[:nonce],
-        scope: %i(organisation)
+        scope: %i(profile organisation)
       )
     end
   end

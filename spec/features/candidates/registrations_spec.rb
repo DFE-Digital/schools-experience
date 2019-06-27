@@ -47,6 +47,26 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   feature 'Candidate Registration' do
+    context "running under Phase 2" do
+      include_context 'bypass fake Gitis'
+      let(:email_address) { 'person@example.com' }
+
+      before do
+        allow(Rails.application.config.x).to receive(:phase).and_return(2)
+      end
+
+      scenario "completing the Journey" do
+        complete_personal_information_step
+        complete_contact_information_step
+        complete_subject_preference_step
+        complete_placement_preference_step
+        complete_background_step
+        complete_application_preview_step
+        complete_email_confirmation_step
+        view_request_acknowledgement_step
+      end
+    end
+
     context 'for unknown Contact' do
       let(:email_address) { 'unknown@example.com' }
 
@@ -113,7 +133,6 @@ feature 'Candidate Registrations', type: :feature do
 
       scenario "completing the Journey" do
         sign_in_via_dashboard(token.token)
-
         complete_personal_information_step
         complete_contact_information_step
         complete_subject_preference_step
@@ -128,7 +147,7 @@ feature 'Candidate Registrations', type: :feature do
   def complete_personal_information_step
     # Begin wizard journey
     visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
-    expect(page).to have_text 'Enter your personal details'
+    expect(page).to have_text 'Check if we already have your details'
 
     # Submit personal information form with errors
     fill_in 'First name', with: 'testy'

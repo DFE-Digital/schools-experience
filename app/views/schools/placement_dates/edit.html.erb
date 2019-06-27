@@ -10,22 +10,32 @@
 
 <h1>Modify placement date</h1>
 
+<p>
+  These details will be shown to candidates to help them choose school experience
+  at your school.
+</p>
+
+
 <%= form_for @placement_date, url: schools_placement_date_path(@placement_date), method: :put do |form| %>
 
   <div>
-    <h3>Start date</h3>
+    <h2 class="govuk-heading-m">Start date</h2>
     <p class="placement-start-date">
       <%= @placement_date.date.to_formatted_s(:govuk) %>
     </p>
   </div>
 
-  <%= form.number_field :duration, width: 3, required: true %>
+  <%= form.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true }  %>
 
   <div class="govuk-form-group">
-    <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+    <fieldset class="govuk-fieldset">
       <%= form.check_box_input :active %>
     </fieldset>
   </div>
 
   <%= form.submit 'Continue' %>
 <%- end -%>
+
+<p class="govuk-inset-text">
+  You'll be able to add subject-specific dates soon.
+</p>

@@ -237,7 +237,7 @@ en:
         date: Confirm experience date
       bookings_school:
         enabled: Turn requests on or off
-        availability_preference_fixed: Change how availability and dates are displayed
+        availability_preference_fixed: Change how dates are displayed
       bookings_placement_date:
         date: Enter a start date
       phases: Education phases
@@ -292,9 +292,12 @@ en:
           Requests that are already in-progress will continue as normal.
       bookings_placement_date:
         date: For example, 01 09 2019
+        duration: Enter number of days
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
+      candidates_registrations_personal_information:
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
@@ -311,6 +314,8 @@ en:
         objectives:
           - Provide a short explanation about what you want to gain from your placement.
           - This will help the school see if it can offer you the kind of placement you’re looking for.
+      candidates_session:
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
@@ -325,12 +330,12 @@ en:
           true: Allow requests
           false: Do not allow requests
         availability_preference_fixed:
-          true_html: <strong>Fixed dates</strong> - display set dates
-          false_html: <strong>Flexible dates</strong> - display a description of your availability
+          true_html: Display specific dates
+          false_html: Display a description of when you'll host school experience candidates
         availability_info: Describe your school experience availability
 
       bookings_placement_date:
-        duration: How many days will it last?
+        duration: How long will it last?
         active: Make this date available to candidates?
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
@@ -386,6 +391,7 @@ en:
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_labels
         payment_method: 'Explain how the fee is paid.'
+        description: 'Add extra details'
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:
@@ -433,7 +439,7 @@ en:
       schools_on_boarding_availability_description:
         description: 'Outline when you offer school experience at your school.'
       schools_on_boarding_confirmation:
-        acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/privacy_policy" class="govuk-link">privacy policy</a>'
+        acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a>'
       schools_on_boarding_key_stage_list:
         early_years: 'Early years foundation stage (EYFS)'
 
