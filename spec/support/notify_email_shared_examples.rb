@@ -126,7 +126,7 @@ shared_examples_for "email template" do |template_id, personalisation|
 end
 
 
-shared_examples_for "email template from application preview" do
+shared_examples_for "email template from application preview" do |args|
   describe ".from_application_preview" do
     before do
       stub_const(
@@ -142,7 +142,13 @@ shared_examples_for "email template from application preview" do
     let(:to) { "morris.szyslak@moes.net" }
     let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
 
-    subject { described_class.from_application_preview(to, ap) }
+    subject do
+      if args
+        described_class.from_application_preview(to, ap, *args)
+      else
+        described_class.from_application_preview(to, ap)
+      end
+    end
 
     it { is_expected.to be_a(described_class) }
 

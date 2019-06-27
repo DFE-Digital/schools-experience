@@ -7,6 +7,7 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
   let :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
       s.subjects << FactoryBot.create_list(:bookings_subject, 5)
+      FactoryBot.create(:bookings_profile, school: s)
     end
   end
 

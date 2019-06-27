@@ -8,6 +8,10 @@ describe Schools::PlacementRequestsController, type: :request do
     Bookings::School.find_by! urn: urn
   end
 
+  let! :profile do
+    create(:bookings_profile, school: school)
+  end
+
   before do
     school.subjects << FactoryBot.create_list(:bookings_subject, 5)
   end

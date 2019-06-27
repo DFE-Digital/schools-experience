@@ -41,6 +41,9 @@ Rails.application.routes.draw do
             resource :preview_confirmation_email,
               only: [:new, :create],
               controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
+            resource :email_sent,
+              only: [:show],
+              controller: '/schools/placement_requests/acceptance/email_sent'
           end
         end
         resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i(index show) do

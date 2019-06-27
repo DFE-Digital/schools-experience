@@ -8,6 +8,7 @@ module Schools
     before_action :require_auth
     before_action :set_current_school
     before_action :set_site_header_text
+    before_action :ensure_onboarded
 
     rescue_from MissingURN, with: -> { redirect_to schools_errors_no_school_path }
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
@@ -33,6 +34,17 @@ module Schools
       end
 
       school
+    end
+
+    def ensure_onboarded
+      unless @current_school.private_beta?
+        Rails.logger.warn("%<school_name>s tried to access %<page>s before completing profile" % {
+          school_name: @current_school.name,
+          page: request.path
+        })
+
+        redirect_to schools_dashboard_path
+      end
     end
   end
 end

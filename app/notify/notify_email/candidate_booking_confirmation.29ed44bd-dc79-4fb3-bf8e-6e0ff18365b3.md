@@ -1,8 +1,7 @@
 Dear ((candidate_name)),
 
-Here are the main details about your school experience at ((school_name)).
+Here are the main details about your school experience at ((school_name)):
 
-* School or college: ((school_name))
 * Address: ((school_address))
 * Experience dates: ((placement_schedule))
 * Experience start and finish times: ((school_start_time)) to ((school_finish_time))

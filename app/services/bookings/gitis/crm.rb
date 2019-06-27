@@ -27,9 +27,8 @@ module Bookings
 
       def find_by_email(address)
         contacts = api.get("contacts", '$top' => 1, '$filter' => filter_pairs(
-          emailaddress1: address,
           emailaddress2: address,
-          emailaddress3: address
+          emailaddress1: address
         ))['value']
 
         Contact.new(contacts[0]) if contacts.any?
@@ -37,11 +36,11 @@ module Bookings
 
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
-        # if condition is to keep the linter happy about unused variables
-        # temporary since this is a shim for now
-        if firstname && lastname && date_of_birth
-          find_by_email(email)
-        end
+        find_possible_signin_contacts(email, 20) \
+          .map(&Contact.method(:new))
+          .find do |contact|
+            contact.signin_attributes_match?(firstname, lastname, date_of_birth)
+          end
       end
 
       def write(entity)
@@ -116,6 +115,16 @@ module Bookings
         api.get(entity_type.entity_path, params)['value'].map do |entity_data|
           entity_type.new entity_data
         end
+      end
+
+      def find_possible_signin_contacts(email, max)
+        filter = filter_pairs(emailaddress2: email, emailaddress1: email)
+        api.get(
+          'contacts',
+          '$top' => max,
+          '$filter' => filter,
+          '$orderby' => 'createdon desc'
+        )['value']
       end
     end
   end

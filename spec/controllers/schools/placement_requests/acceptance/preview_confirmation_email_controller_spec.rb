@@ -52,7 +52,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
     end
 
     specify 'should be redirected to the placement requests index' do
-      expect(response).to redirect_to schools_placement_requests_path
+      expect(response).to redirect_to schools_placement_request_acceptance_email_sent_path(pr.id)
     end
   end
 end

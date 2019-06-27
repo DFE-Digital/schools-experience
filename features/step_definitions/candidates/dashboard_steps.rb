@@ -24,6 +24,10 @@ When("I click the '{string}' button") do |button_label|
   click_button button_label
 end
 
+When("I am on the Verify Link Sent page") do
+  expect(page.body).to match(/Confirm your email/)
+end
+
 When("I follow the sign in link from the email") do
   token = Candidates::SessionToken.reorder(:id).last
   visit candidates_signin_confirmation_path(token)

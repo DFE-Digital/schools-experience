@@ -115,7 +115,8 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
             expect(Candidates::Registrations::PlacementRequestJob).to \
               have_received(:perform_later).with \
                 uuid,
-                candidates_cancel_url(Bookings::PlacementRequest.last.token)
+                candidates_cancel_url(Bookings::PlacementRequest.last.token),
+                schools_placement_request_url(Bookings::PlacementRequest.last)
           end
 
           it 'redirects to placement request show' do

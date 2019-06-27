@@ -36,3 +36,21 @@ end
 Then("the {string} should be {int}") do |string, int|
   expect(page).to have_css("svg#%<id>s" % { id: string.tr(' ', '-') }, text: int.to_s)
 end
+
+Given("my school has not yet fully-onboarded") do
+  # do nothing
+end
+
+Then("I should see a warning informing me that I need to complete my profile before continuing") do
+  within('.govuk-error-summary') do
+    expect(page).to have_content('you need to answer some questions to update your school profile')
+  end
+end
+
+Given("my school has fully-onboarded") do
+  FactoryBot.create(:bookings_profile, school: @school)
+end
+
+Then("I should see the managing requests section") do
+  expect(page).to have_css('.managing-requests')
+end

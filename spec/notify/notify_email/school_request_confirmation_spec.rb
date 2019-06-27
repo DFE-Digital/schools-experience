@@ -14,7 +14,8 @@ describe NotifyEmail::SchoolRequestConfirmation do
     candidate_teaching_subject_second_choice: "Philosophy",
     placement_outcome: "I enjoy teaching",
     placement_availability: "Late Smarch",
+    placement_request_url: "https://schoolexperience.edu/placement/abc123",
     school_name: "Springfield Elementary School"
 
-  it_should_behave_like "email template from application preview", true
+  it_should_behave_like "email template from application preview", true, "https://schoolexperience.edu/placement/abc123"
 end

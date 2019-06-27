@@ -79,20 +79,65 @@ describe Bookings::Gitis::CRM, type: :model do
   end
 
   describe '#find_contact_for_signin' do
-    let(:email) { 'me@something.com' }
-    before { gitis_stub.stub_contact_request_by_email(email) }
+    let(:email) { 'testy@mctest.com' }
+    let(:firstuuid) { SecureRandom.uuid }
+    let(:seconduuid) { SecureRandom.uuid }
+
+    let(:signin_attrs) do
+      {
+        'emailaddress1' => email,
+        'firstname' => 'testy',
+        'lastname' => 'mctest',
+        'date_of_birth' => '1980-01-01'
+      }
+    end
 
     subject do
       gitis.find_contact_for_signin(
-        email: email,
-        firstname: 'ignore',
-        lastname: 'ignore',
-        date_of_birth: 'invalid'
+        email: 'testy@mctest.com',
+        firstname: 'testy',
+        lastname: 'mctest',
+        date_of_birth: Date.parse('1980-01-01')
       )
     end
 
-    it "will return a contact record" do
-      is_expected.to have_attributes(email: email)
+    context 'with no match' do
+      before { gitis_stub.stub_contact_signin_request(email, {}) }
+      it { is_expected.to be_nil }
+    end
+
+    context 'with a single email match' do
+      context 'and matching other fields' do
+        before do
+          gitis_stub.stub_contact_signin_request(email,
+            firstuuid => signin_attrs)
+        end
+
+        it "will return contact with correct gitis uuid" do
+          is_expected.to have_attributes id: firstuuid
+        end
+      end
+
+      context 'and not matching other fields' do
+        before do
+          gitis_stub.stub_contact_signin_request(email,
+            firstuuid => signin_attrs)
+        end
+
+        it "needs to be discussed"
+      end
+    end
+
+    context 'with multiple matches' do
+      before do
+        gitis_stub.stub_contact_signin_request(email,
+          firstuuid => signin_attrs.merge('emailaddress1' => 'foo@bar.com', 'emailaddress2' => email),
+          seconduuid => signin_attrs.merge('firstname' => 'Joe', 'lastname' => 'Bloggs'))
+      end
+
+      it "will return the first contact record" do
+        is_expected.to have_attributes(id: firstuuid)
+      end
     end
   end
 

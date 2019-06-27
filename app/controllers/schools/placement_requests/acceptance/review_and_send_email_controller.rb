@@ -2,8 +2,7 @@ module Schools
   module PlacementRequests
     module Acceptance
       class ReviewAndSendEmailController < Schools::BaseController
-        before_action :set_placement_request
-        before_action :fetch_gitis_contact_for_placement_request
+        include Acceptance
         before_action :ensure_previous_step_complete
 
         def new
@@ -32,16 +31,6 @@ module Schools
           unless @placement_request.booking.more_details_added?
             redirect_to new_schools_placement_request_acceptance_add_more_details_path(@placement_request.id)
           end
-        end
-
-        def set_placement_request
-          @placement_request = @current_school
-            .bookings_placement_requests
-            .find(params[:placement_request_id])
-        end
-
-        def fetch_gitis_contact_for_placement_request
-          @placement_request.fetch_gitis_contact gitis_crm
         end
       end
     end

@@ -5,6 +5,7 @@ Feature: Viewing all placement requests
 
     Background:
         Given I am logged in as a DfE user
+        And my school is fully-onboarded
         And the school has subjects
 
     Scenario: Page title
@@ -34,3 +35,18 @@ Feature: Viewing all placement requests
         Given there are some placement requests
         When I am on the 'placement requests' page
         Then every request should contain a link to view more details
+
+    Scenario: Cancelled placement requests
+        Given there are some cancelled placement requests
+        When I am on the 'placement requests' page
+        Then the cancelled requests should have a status of 'Cancelled'
+
+    Scenario: Unviewed placement requests
+        Given there are some unviewed placement requests
+        When I am on the 'placement requests' page
+        Then the unviewed requests should have a status of 'New'
+
+    Scenario: Viewed placement requests
+        Given there are some viewed placement requests
+        When I am on the 'placement requests' page
+        Then the viewed requests should have no status
