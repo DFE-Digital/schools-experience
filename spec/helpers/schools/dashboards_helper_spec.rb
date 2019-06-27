@@ -65,6 +65,23 @@ describe Schools::DashboardsHelper, type: 'helper' do
           end
         end
       end
+
+      context 'with 0 as number' do
+        let(:circle) { numbered_circle(0) }
+        subject { circle }
+
+        it "will return nil" do
+          is_expected.to be_nil
+        end
+
+        context 'and show_if_zero set' do
+          let(:circle) { numbered_circle(0, show_if_zero: true) }
+
+          it "will return with zero" do
+            is_expected.not_to be_nil
+          end
+        end
+      end
     end
 
     context 'text' do
