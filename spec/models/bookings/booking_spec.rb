@@ -109,6 +109,24 @@ describe Bookings::Booking do
         excluded.each { |e| expect(described_class.upcoming).not_to include(e) }
       end
     end
+
+    describe '.open' do
+      let! :open_booking do
+        FactoryBot.create :bookings_booking
+      end
+
+      let! :booking_cancelled_by_school do
+        FactoryBot.create :bookings_booking, :cancelled_by_school
+      end
+
+      let! :booking_cancelled_by_candidate do
+        FactoryBot.create :bookings_booking, :cancelled_by_candidate
+      end
+
+      subject { described_class.open }
+
+      it { is_expected.to match_array [open_booking] }
+    end
   end
 
   describe 'Acceptance' do

@@ -8,8 +8,13 @@ module Candidates
       attr_reader :registration_session
 
       delegate \
+        :first_name,
+        :last_name,
         :full_name,
         :email,
+        to: :@personal_information
+
+      delegate \
         :phone,
         :building,
         :street,
@@ -32,6 +37,7 @@ module Candidates
 
       def initialize(registration_session)
         @registration_session = registration_session
+        @personal_information = registration_session.personal_information
         @contact_information = registration_session.contact_information
         @placement_preference = registration_session.placement_preference
         @subject_preference = registration_session.subject_preference
@@ -55,6 +61,10 @@ module Candidates
           county.presence,
           postcode.presence
         ].compact.join(', ')
+      end
+
+      def date_of_birth
+        @personal_information.date_of_birth.strftime '%d/%m/%Y'
       end
 
       def has_bookings_date?
@@ -83,6 +93,10 @@ module Candidates
 
       def placement_outcome
         placement_preference.objectives
+      end
+
+      def placement_request_url
+        schools_placement_request_url(123)
       end
 
       def teaching_subject_first_choice

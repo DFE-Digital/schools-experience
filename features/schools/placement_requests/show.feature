@@ -5,12 +5,13 @@ Feature: Viewing a placement request
 
     Background:
         Given I am logged in as a DfE user
+        And my school is fully-onboarded
         And the school has subjects
 
     Scenario: Back link
         Given there is at least one placement request
         When I am on the placement request page
-        Then I should see a 'Back' link to the 'upcoming requests' page
+        Then I should see a 'Back' link to the 'placement requests' page
 
     Scenario: Personal details
         Given there is at least one placement request

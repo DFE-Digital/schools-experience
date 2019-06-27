@@ -20,6 +20,22 @@ describe Bookings::PlacementRequest, type: :model do
 
   it { is_expected.to have_secure_token }
 
+  describe 'candidate requirement' do
+    it { is_expected.to validate_presence_of :candidate }
+
+    context 'with legacy record' do
+      subject { create(:placement_request) }
+      before { subject.update_columns(candidate_id: nil) }
+      before { subject.reload }
+      it { is_expected.to be_valid }
+    end
+
+    context 'before phase3' do
+      before { allow(Rails.application.config.x).to receive(:phase).and_return(2) }
+      it { is_expected.not_to validate_presence_of :candidate }
+    end
+  end
+
   context 'relationships' do
     it do
       is_expected.to \
@@ -39,14 +55,17 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to have_one(:booking).class_name('Bookings::Booking').with_foreign_key(:bookings_placement_request_id) }
     it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
 
-    it { is_expected.to belong_to(:candidate).class_name('Bookings::Candidate').with_foreign_key(:candidate_id).optional }
+    it do
+      is_expected.to belong_to(:candidate).class_name('Bookings::Candidate').\
+        with_foreign_key(:candidate_id).without_validating_presence
+    end
   end
 
   it { is_expected.to respond_to :sent_at }
 
   it_behaves_like 'a background check'
 
-  context '.open' do
+  context 'scopes' do
     let :school do
       FactoryBot.create :bookings_school, :with_subjects
     end
@@ -59,18 +78,65 @@ describe Bookings::PlacementRequest, type: :model do
       FactoryBot.create :placement_request, :cancelled_by_school, school: school
     end
 
+    let! :placement_request_cancelled_by_school_but_not_sent do
+      FactoryBot.create :placement_request, school: school
+    end
+
+    let! :booked_placement_request do
+      FactoryBot.create(:bookings_booking, bookings_school: school).bookings_placement_request
+    end
+
     let! :placement_request_open do
       FactoryBot.create :placement_request, school: school
     end
 
-    it 'only returns the open placement requests' do
-      expect(described_class.open).to include placement_request_open
-      expect(described_class.open).not_to include placement_request_closed_by_candidate
-      expect(described_class.open).not_to include placement_request_closed_by_school
+    context '.open' do
+      subject { described_class.open }
+      it do
+        is_expected.to match_array [
+          placement_request_open,
+          placement_request_cancelled_by_school_but_not_sent
+        ]
+      end
+    end
+
+    context '.unbooked' do
+      subject { described_class.unbooked }
+      it do
+        is_expected.to match_array [
+          placement_request_open,
+          placement_request_cancelled_by_school_but_not_sent,
+          placement_request_closed_by_candidate,
+          placement_request_closed_by_school
+        ]
+      end
+    end
+
+    context '.cancelled' do
+      subject { described_class.cancelled }
+      it do
+        is_expected.to match_array [
+          placement_request_closed_by_candidate,
+          placement_request_closed_by_school
+        ]
+      end
+    end
+
+    context '.not_cancelled' do
+      subject { described_class.not_cancelled }
+      it do
+        is_expected.to match_array [
+          placement_request_open,
+          placement_request_cancelled_by_school_but_not_sent,
+          booked_placement_request
+        ]
+      end
     end
   end
 
   context '.create_from_registration_session' do
+    let(:candidate) { create(:candidate) }
+
     context 'invalid session' do
       let :invalid_session do
         Candidates::Registrations::RegistrationSession.new \
@@ -83,7 +149,8 @@ describe Bookings::PlacementRequest, type: :model do
 
       it 'raises a validation error' do
         expect {
-          described_class.create_from_registration_session! invalid_session
+          candidate.placement_requests.create_from_registration_session! \
+            invalid_session
         }.to raise_error ActiveRecord::RecordInvalid
       end
     end
@@ -97,7 +164,8 @@ describe Bookings::PlacementRequest, type: :model do
 
       it 'creates the placement request' do
         expect {
-          described_class.create_from_registration_session! registration_session
+          candidate.placement_requests.create_from_registration_session! \
+            registration_session
         }.to change { described_class.count }.by 1
       end
     end
@@ -112,7 +180,8 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       subject do
-        described_class.create_from_registration_session! registration_session, analytics_tracking_uuid
+        candidate.placement_requests.create_from_registration_session! \
+          registration_session, analytics_tracking_uuid
       end
 
       specify 'it stores the analytics_tracking_uuid correctly if supplied' do
@@ -458,12 +527,41 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
+  describe '#viewed_at' do
+    subject { FactoryBot.create :placement_request }
+
+    specify 'should be nil' do
+      expect(subject.viewed_at).to be_nil
+    end
+  end
+
+  describe '#viewed!' do
+    subject { FactoryBot.create :placement_request }
+
+    context 'when #viewed_at has not already been set' do
+      before { subject.viewed! }
+      specify 'should set #viewed_at to now' do
+        expect(subject.viewed_at).to be_within(0.1).of(Time.now)
+      end
+    end
+
+    context 'when #viewed_at has already been set' do
+      let(:ts) { 3.weeks.ago }
+      subject { FactoryBot.create(:placement_request, viewed_at: ts) }
+
+      before { subject.viewed! }
+      specify 'should not overwrite #viewed_at' do
+        expect(subject.viewed_at).to eql(ts)
+      end
+    end
+  end
+
   describe '#fetch_gitis_contact' do
-    let(:gitis) { Bookings::Gitis::CRM.new('a.fake.token') }
+    include_context 'fake gitis'
     subject { FactoryBot.create :placement_request }
 
     it "will assign contact" do
-      expect(subject.fetch_gitis_contact(gitis)).to \
+      expect(subject.fetch_gitis_contact(fake_gitis)).to \
         be_kind_of(Bookings::Gitis::Contact)
 
       expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)

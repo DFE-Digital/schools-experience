@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::Session, type: :model do
-  let(:gitis) { Bookings::Gitis::CRM.new('a-token') }
+  include_context 'fake gitis'
   let(:candidate) { create(:candidate) }
   let(:attrs) do
     {
@@ -23,7 +23,7 @@ RSpec.describe Candidates::Session, type: :model do
 
   describe '.new' do
     context 'with crm instance' do
-      subject { described_class.new(gitis) }
+      subject { described_class.new(fake_gitis) }
       it "will return instance" do
         is_expected.to be_kind_of Candidates::Session
       end
@@ -37,7 +37,7 @@ RSpec.describe Candidates::Session, type: :model do
   end
 
   describe 'validates' do
-    subject { described_class.new(gitis) }
+    subject { described_class.new(fake_gitis) }
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:firstname) }
     it { is_expected.to validate_presence_of(:lastname) }
@@ -73,14 +73,14 @@ RSpec.describe Candidates::Session, type: :model do
   end
 
   describe '#create_signin_token' do
-    subject { described_class.new(gitis, login_attrs) }
+    subject { described_class.new(fake_gitis, login_attrs) }
 
     context 'with known candidate' do
       let(:existing_attrs) { attrs.merge('contactid' => candidate.gitis_uuid) }
       let(:existing_contact) { Bookings::Gitis::Contact.new(existing_attrs) }
 
       before do
-        expect(gitis).to receive(:find_contact_for_signin).and_return(existing_contact)
+        expect(fake_gitis).to receive(:find_contact_for_signin).and_return(existing_contact)
         @token = subject.create_signin_token
       end
 
@@ -99,7 +99,7 @@ RSpec.describe Candidates::Session, type: :model do
 
       context 'who exists in Gitis' do
         before do
-          expect(gitis).to receive(:find_contact_for_signin).and_return(new_contact)
+          expect(fake_gitis).to receive(:find_contact_for_signin).and_return(new_contact)
           @token = subject.create_signin_token
         end
 
@@ -115,7 +115,7 @@ RSpec.describe Candidates::Session, type: :model do
 
       context 'who does not exist in Gitis' do
         before do
-          expect(gitis).to receive(:find_contact_for_signin).and_return(false)
+          expect(fake_gitis).to receive(:find_contact_for_signin).and_return(false)
           @token = subject.create_signin_token
         end
 

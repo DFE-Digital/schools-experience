@@ -1,6 +1,8 @@
 module Schools
   module OnBoarding
     class OnBoardingsController < BaseController
+      skip_before_action :ensure_onboarded
+
     private
 
       def current_school_profile

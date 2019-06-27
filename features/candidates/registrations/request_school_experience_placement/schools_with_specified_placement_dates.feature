@@ -23,4 +23,4 @@ Feature: Request a school experience placement
         When I choose a placement date
         And I enter 'I just love teaching!' into the 'What do you want to get out of your school experience?' text area
         And I submit the form
-        Then I should be on the 'Enter your contact details' page for my school of choice
+        Then I should be on the 'Background checks' page for my school of choice

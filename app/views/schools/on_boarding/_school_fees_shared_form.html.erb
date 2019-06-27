@@ -9,9 +9,9 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <div class="govuk-heading-l">
+    <h1 class="govuk-heading-l">
       <%= title %>
-    </div>
+    </h1>
 
     <%= form_for model, url: submission_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary model, 'There is a problem', '' %>

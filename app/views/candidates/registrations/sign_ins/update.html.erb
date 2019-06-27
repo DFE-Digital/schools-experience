@@ -1,0 +1,21 @@
+<% self.page_title = 'Link has expired' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1>
+      Verify link has expired
+    </h1>
+
+    <p>
+      Your Email verification link has expired
+    </p>
+
+    <p>
+      Click below to be emailed a new link
+    </p>
+
+    <p>
+      <%= button_to 'Send a new link', @resend_link, class: 'govuk-button' %>
+    </p>
+  </div>
+</div>

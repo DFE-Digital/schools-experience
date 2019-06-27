@@ -5,10 +5,22 @@ Feature: The School Dashboard
 
     Background:
         Given I am logged in as a DfE user
+        And the school has subjects
 
     Scenario: Site header
         Given I am on the 'schools dashboard' page
         Then the main site header should be 'Manage school experience'
+
+    Scenario: Hiding the managing requests section when schools haven't onboarded
+        Given my school has not yet fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see a warning informing me that I need to complete my profile before continuing
+        And I should see a 'Update your school profile' link to the 'profile' page
+
+    Scenario: Displaying the managing requests section when schools have onboarded
+        Given my school has fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see the managing requests section
 
     @wip
     Scenario: High priority headings
@@ -37,15 +49,15 @@ Feature: The School Dashboard
             | View rejected requests                  | None | #    |
             | Give feedback on this service           | None | #    |
 
-    @wip
     Scenario: Candidate requests counter
-        Given there are 5 new requests
+        Given my school has fully-onboarded
+        And there are 5 new requests
         When I am on the 'schools dashboard' page
         Then the 'new requests counter' should be 5
 
-    @wip
     Scenario: Candidate bookings counter
-        Given there are 3 new bookings
+        Given my school has fully-onboarded
+        And there are 3 new bookings
         When I am on the 'schools dashboard' page
         Then the 'new bookings counter' should be 3
 

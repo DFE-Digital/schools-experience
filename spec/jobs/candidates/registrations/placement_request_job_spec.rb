@@ -33,6 +33,10 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
     'https://example.com/cancel-request/uuid'
   end
 
+  let :placement_request_url do
+    'https://example.com/placement-request/uuid'
+  end
+
   let :application_preview do
     Candidates::Registrations::ApplicationPreview.new registration_session
   end
@@ -54,17 +58,18 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
   context '#perform' do
     context 'no errors' do
-      context 'phase 2' do
+      context 'phase 3' do
         before do
-          allow(Rails.application.config.x).to receive(:phase) { 2 }
-          described_class.perform_later registration_session.uuid, cancellation_url
+          allow(Rails.application.config.x).to receive(:phase) { 3 }
+          described_class.perform_later registration_session.uuid, cancellation_url, placement_request_url
         end
 
         it 'notifies the school' do
           expect(NotifyEmail::SchoolRequestConfirmation).to \
             have_received(:from_application_preview).with \
               school.notifications_email,
-              application_preview
+              application_preview,
+              placement_request_url
 
           expect(school_request_confirmation_notification).to \
             have_received :despatch!
@@ -86,17 +91,18 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         end
       end
 
-      context 'phase > 2' do
+      context 'phase >= 4' do
         before do
-          allow(Rails.application.config.x).to receive(:phase) { 3 }
-          described_class.perform_later registration_session.uuid, cancellation_url
+          allow(Rails.application.config.x).to receive(:phase) { 4 }
+          described_class.perform_later registration_session.uuid, cancellation_url, placement_request_url
         end
 
         it 'notifies the school' do
           expect(NotifyEmail::SchoolRequestConfirmation).to \
             have_received(:from_application_preview).with \
               school.notifications_email,
-              application_preview
+              application_preview,
+              placement_request_url
 
           expect(school_request_confirmation_notification).to \
             have_received :despatch!
@@ -139,7 +145,8 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
           expect {
             described_class.perform_later \
               registration_session.uuid,
-              cancellation_url
+              cancellation_url,
+              placement_request_url
           }.to raise_error RuntimeError, 'Oh no!'
         end
       end
@@ -166,7 +173,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
           freeze_time # so we can easily compare a decent_amount_longer from now
 
           described_class.perform_later \
-            registration_session.uuid, cancellation_url
+            registration_session.uuid, cancellation_url, placement_request_url
         end
 
         it 'reenqueues the job' do

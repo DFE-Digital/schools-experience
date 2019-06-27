@@ -5,10 +5,16 @@ describe Candidates::Registrations::ApplicationPreview do
     true
   end
 
+  let :personal_information do
+    build :personal_information,
+      first_name: 'Testy',
+      last_name: 'McTest',
+      email: 'test@example.com',
+      date_of_birth: Date.parse('2000-01-01')
+  end
+
   let :contact_information do
     build :contact_information,
-      full_name: 'Testy McTest',
-      email: 'test@example.com',
       building: "Test building",
       street: "Test street",
       town_or_city: "Test town",
@@ -42,6 +48,7 @@ describe Candidates::Registrations::ApplicationPreview do
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new \
       'urn' => school.urn,
+      'candidates_registrations_personal_information' => personal_information.attributes,
       'candidates_registrations_contact_information' => contact_information.attributes,
       'candidates_registrations_placement_preference' => placement_preference.attributes,
       'candidates_registrations_subject_preference' => subject_preference.attributes,
@@ -74,6 +81,12 @@ describe Candidates::Registrations::ApplicationPreview do
   context '#email_address' do
     it 'returns the correct value' do
       expect(subject.email_address).to eq "test@example.com"
+    end
+  end
+
+  context '#date_of_birth' do
+    it 'returns the correct value' do
+      expect(subject.date_of_birth).to eq '01/01/2000'
     end
   end
 

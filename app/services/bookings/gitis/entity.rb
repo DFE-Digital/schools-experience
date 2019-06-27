@@ -3,6 +3,7 @@ module Bookings::Gitis
 
   module Entity
     extend ActiveSupport::Concern
+    ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
 
     included do
       include ActiveModel::Model
@@ -50,6 +51,14 @@ module Bookings::Gitis
 
     def entity_id
       id ? "#{entity_path}(#{id})" : entity_path
+    end
+
+    def attributes_for_update
+      changed_attributes
+    end
+
+    def attributes_for_create
+      changed_attributes
     end
 
     class InvalidEntityIdError < RuntimeError; end

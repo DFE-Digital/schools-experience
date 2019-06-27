@@ -5,6 +5,7 @@ Feature: Editing placement dates
 
     Background:
         Given I am logged in as a DfE user
+        And my school is fully-onboarded
 
     Scenario: Page title
         Given I am on the edit page for my placement
@@ -21,8 +22,8 @@ Feature: Editing placement dates
     Scenario: Placement date form
         Given I am on the edit page for my placement
         Then I should see a form with the following fields:
-            | Label                       | Type   |
-            | How many days will it last? | number |
+            | Label                  | Type   |
+            | How long will it last? | number |
         And there should be a 'Make this date available to candidates?' checkbox
         And the current start date should be present
 

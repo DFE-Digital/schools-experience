@@ -2,10 +2,14 @@
 
 <%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
 
-<h1>All placement requests</h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full-width">
+    <%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
 
-<div id="placement-requests">
-  <%= render partial: 'schools/placement_requests/placement_request',
-    collection: @placement_requests
-  %>
+    <h1>All placement requests</h1>
+
+    <%= render partial: 'schools/placement_requests/placement_requests_table',
+      locals: { placement_requests: @placement_requests } %>
+
+  </div>
 </div>

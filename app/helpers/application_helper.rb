@@ -42,6 +42,28 @@ module ApplicationHelper
     end
   end
 
+  def summary_row(key, value, change_path = nil, id: nil)
+    action = change_path ? link_to('Change', change_path) : nil
+
+    render \
+      partial: "shared/list_row",
+      locals: { key: key, value: value, action: action, id: id }
+  end
+
+  def service_update_last_updated_at
+    SERVICE_UPDATE_LAST_UPDATED_AT.to_formatted_s :govuk
+  end
+
+  def user_info_and_logout_link
+    logout_link = link_to("Logout", schools_session_path)
+
+    greeting = if @current_user.is_a?(OpenIDConnect::ResponseObject::UserInfo)
+                 "Welcome #{@current_user.given_name} #{@current_user.family_name}"
+               end
+
+    safe_join([greeting, logout_link].compact, ". ")
+  end
+
   def phase_three_release_date
     PHASE_THREE_RELEASE_DATE.to_formatted_s :govuk
   end

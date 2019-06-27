@@ -7,14 +7,17 @@ module Schools
 
     def show
       @placement_request = placement_request
-      @gitis_contact = gitis_crm.find(placement_request.contact_uuid)
+      @gitis_contact = placement_request.fetch_gitis_contact(gitis_crm)
+
+      @placement_request.viewed!
     end
 
   private
 
     def placement_requests
-      current_school.placement_requests
-        .eager_load(:candidate_cancellation, :school_cancellation, :placement_date)
+      current_school
+        .placement_requests
+        .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date)
     end
 
     def placement_request
@@ -27,7 +30,7 @@ module Schools
       contacts = gitis_crm.find(reqs.map(&:contact_uuid)).index_by(&:id)
 
       reqs.each do |req|
-        req.gitis_contact = contacts[req.contact_uuid]
+        req.candidate.gitis_contact = contacts[req.contact_uuid]
       end
     end
   end

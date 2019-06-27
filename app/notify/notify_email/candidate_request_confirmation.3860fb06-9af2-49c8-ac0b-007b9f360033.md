@@ -4,9 +4,9 @@ You've requested school experience at ((school_name)).
 
 ^ The school will be in touch with you. For example, during term time this could typically mean within 2 weeks.
 
-# Your placement request details
+# Your request details
 
-Here is a copy of your request details which have been forwarded to the school.
+Here's a copy of your request details which have been forwarded to the school.
 
 Personal details
 
@@ -31,4 +31,4 @@ Request details
 
 # Help and support
 
-If you haven’t heard from the school after 2 weeks or would like to withdraw your school experience request contact schoolexperience@ta-recruit.education.gov.uk
+If you haven’t heard from the school after 2 weeks or would like to withdraw your school experience request contact schoolexperience@ta-recruit.education.gov.uk.

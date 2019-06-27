@@ -18,7 +18,7 @@ describe ApplicationController, type: :request do
         candidates_schools_path,
         candidates_school_path(school),
         new_candidates_school_registrations_subject_preference_path(school),
-        new_candidates_school_registrations_contact_information_path(school)
+        new_candidates_school_registrations_personal_information_path(school)
 
       ].each do |cp|
         head cp

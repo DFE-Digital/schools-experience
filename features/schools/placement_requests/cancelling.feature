@@ -5,12 +5,14 @@ Feature: Rejecting placement requests
 
     Background:
         Given I am logged in as a DfE user
+        And my school is fully-onboarded
         And the school has subjects
 
     Scenario: Back link
-        Given there are some upcoming requests
-        When I am on the 'upcoming requests' page
-        Then I should see a 'Back' link to the 'schools dashboard'
+        Given there is at least one placement request
+        And there are some upcoming requests
+        When I am on the reject placement request page
+        Then I should see a 'Back' link to the 'placement requests' page
 
     Scenario: Page heading
         Given there is at least one placement request

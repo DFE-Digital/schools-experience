@@ -84,7 +84,7 @@
     <%- if @school.has_availability? -%>
     <div class="school-start-request-button__tablet_plus">
       <%= link_to "Start request",
-                  new_candidates_school_registrations_placement_preference_path(@school),
+                  new_candidates_school_registrations_personal_information_path(@school),
                   class:"govuk-button" %>
     </div>
     <%- end -%>
@@ -132,7 +132,7 @@
     <%- if @school.has_availability? -%>
     <div class="school-start-request-button__mobile">
       <%= link_to "Start request",
-                  new_candidates_school_registrations_placement_preference_path(@school),
+                  new_candidates_school_registrations_personal_information_path(@school),
                   class:"govuk-button" %>
     </div>
   <%- end -%>

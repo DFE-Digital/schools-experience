@@ -83,7 +83,7 @@ module Candidates
           school_name: cancellation.school_name,
           candidate_name: cancellation.candidate_name,
           cancellation_reasons: cancellation.reason,
-          requested_availability: cancellation.dates_requested,
+          requested_on: cancellation.created_at.to_formatted_s(:govuk),
           placement_request_url: schools_placement_request_url(cancellation.placement_request)
         ).despatch_later!
       end
@@ -93,7 +93,8 @@ module Candidates
           to: cancellation.candidate_email,
           school_name: cancellation.school_name,
           candidate_name: cancellation.candidate_name,
-          placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
+          placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration,
+          school_search_url: new_candidates_school_search_url
         ).despatch_later!
       end
 
@@ -102,7 +103,8 @@ module Candidates
           to: cancellation.candidate_email,
           school_name: cancellation.school_name,
           candidate_name: cancellation.candidate_name,
-          requested_availability: cancellation.dates_requested
+          requested_availability: cancellation.dates_requested,
+          school_search_url: new_candidates_school_search_url
         ).despatch_later!
       end
     end

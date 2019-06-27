@@ -1,6 +1,7 @@
 Given("the school has subjects") do
   @school.subjects << FactoryBot.create(:bookings_subject, name: 'Maths')
   @school.subjects << FactoryBot.create(:bookings_subject, name: 'Physics')
+  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
 end
 
 Given("there are some upcoming requests") do
@@ -70,8 +71,8 @@ end
 Then("every request should contain a link to view more details") do
   within('#placement-requests') do
     @placement_requests.each do |placement_request|
-      within("div.placement-request[data-placement-request='#{placement_request.id}']") do
-        expect(page).to have_link('Open request', href: schools_placement_request_path(placement_request.id))
+      within(".placement-request[data-placement-request='#{placement_request.id}']") do
+        expect(page).to have_link('View', href: schools_placement_request_path(placement_request.id))
       end
     end
   end
@@ -141,4 +142,54 @@ Then("I should be on the confirm booking page") do
   path = path_for('confirm booking', placement_request: @placement_request)
   visit(path)
   expect(page.current_path).to eql(path)
+end
+
+Then("I should see a table with the following headings:") do |table|
+  table.transpose.raw.flatten.each do |heading|
+    expect(page).to have_css('thead th', text: heading)
+  end
+end
+
+Given("there are some cancelled placement requests") do
+  @cancelled_placement_requests_count = 3
+  @cancelled_placement_requests = FactoryBot.create_list \
+    :placement_request,
+    @cancelled_placement_requests_count,
+    :cancelled,
+    school: @school
+end
+
+Then("the cancelled requests should have a status of {string}") do |status|
+  within('table#placement-requests') do
+    expect(page).to have_css('.govuk-tag', text: status, count: @cancelled_placement_requests_count)
+  end
+end
+
+Given("there are some unviewed placement requests") do
+  @unviewed_placement_requests_count = 3
+  @unviewed_placement_requests = FactoryBot.create_list \
+    :placement_request,
+    @unviewed_placement_requests_count,
+    school: @school
+end
+
+Then("the unviewed requests should have a status of {string}") do |status|
+  within('table#placement-requests') do
+    expect(page).to have_css('.govuk-tag', text: status, count: @unviewed_placement_requests_count)
+  end
+end
+
+Given("there are some viewed placement requests") do
+  @viewed_placement_requests_count = 3
+  @viewed_placement_requests = FactoryBot.create_list \
+    :placement_request,
+    @viewed_placement_requests_count,
+    school: @school,
+    viewed_at: 3.minutes.ago
+end
+
+Then("the viewed requests should have no status") do
+  within('table#placement-requests') do
+    expect(page).not_to have_css('.govuk-tag')
+  end
 end

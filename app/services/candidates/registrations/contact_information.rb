@@ -1,10 +1,14 @@
 module Candidates
   module Registrations
     class ContactInformation < RegistrationStep
-      attribute :first_name
-      attribute :last_name
-      attribute :full_name
-      attribute :email
+      # These are here purely for compatibility with legacy data in Redis
+      if Rails.application.config.x.phase <= 3
+        attribute :first_name
+        attribute :last_name
+        attribute :full_name
+        attribute :email
+      end
+
       attribute :building
       attribute :street
       attribute :town_or_city
@@ -12,29 +16,11 @@ module Candidates
       attribute :postcode
       attribute :phone
 
-      validates :first_name, presence: true
-      validates :last_name, presence: true
       validates :phone, presence: true
       validates :phone, phone: true, if: -> { phone.present? }
-      validates :email, presence: true
-      validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: -> { email.present? }
       validates :building, presence: true
       validates :postcode, presence: true
       validate :postcode_is_valid, if: -> { postcode.present? }
-
-      def full_name
-        full_name_attribute = super
-
-        if full_name_attribute.present?
-          return full_name_attribute
-        end
-
-        if first_name && last_name
-          return [first_name, last_name].map(&:to_s).join(' ')
-        end
-
-        nil
-      end
 
     private
 

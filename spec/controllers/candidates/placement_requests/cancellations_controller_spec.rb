@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::PlacementRequests::CancellationsController, type: :request do
+  include_context 'fake gitis'
+
   let :notify_school_request_cancellation do
     double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
   end
@@ -153,7 +155,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
 
           let :gitis_contact do
-            Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+            fake_gitis.find placement_request.contact_uuid
           end
 
           it 'notifies the school' do
@@ -162,7 +164,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
               school_name: cancellation.school_name,
               candidate_name: gitis_contact.full_name,
               cancellation_reasons: cancellation.reason,
-              requested_availability: cancellation.dates_requested,
+              requested_on: cancellation.placement_request.created_at.to_formatted_s(:govuk),
               placement_request_url: schools_placement_request_url(cancellation.placement_request)
 
             expect(notify_school_request_cancellation).to \
@@ -174,7 +176,8 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
               to: gitis_contact.email,
               school_name: cancellation.school_name,
               candidate_name: gitis_contact.full_name,
-              requested_availability: cancellation.dates_requested
+              requested_availability: cancellation.dates_requested,
+              school_search_url: new_candidates_school_search_url
 
             expect(notify_candidate_request_cancellation).to \
               have_received :despatch_later!
@@ -231,7 +234,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
 
           let :gitis_contact do
-            Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+            fake_gitis.find placement_request.contact_uuid
           end
 
           it 'notifies the school' do
@@ -250,7 +253,8 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
               to: gitis_contact.email,
               school_name: cancellation.school_name,
               candidate_name: gitis_contact.full_name,
-              placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
+              placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration,
+              school_search_url: new_candidates_school_search_url
 
             expect(notify_candidate_booking_cancellation).to \
               have_received :despatch_later!
