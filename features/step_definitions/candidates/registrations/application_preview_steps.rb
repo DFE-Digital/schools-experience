@@ -83,7 +83,7 @@ Given("my school has fixed dates") do
 end
 
 Given("my school of choice exists") do
-  @school = FactoryBot.create(:bookings_school, urn: 123456)
+  @school = FactoryBot.create(:bookings_school, name: 'Test School', urn: 123456)
 end
 
 Given("my school of choice offers {string}") do |string|
