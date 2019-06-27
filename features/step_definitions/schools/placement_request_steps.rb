@@ -161,7 +161,7 @@ end
 
 Then("the cancelled requests should have a status of {string}") do |status|
   within('table#placement-requests') do
-    expect(page).to have_css('.govuk-tag', text: status, count: @cancelled_placement_requests_count)
+    expect(page).to have_css('.govuk-tag', text: /#{status}/i, count: @cancelled_placement_requests_count)
   end
 end
 
@@ -175,7 +175,7 @@ end
 
 Then("the unviewed requests should have a status of {string}") do |status|
   within('table#placement-requests') do
-    expect(page).to have_css('.govuk-tag', text: status, count: @unviewed_placement_requests_count)
+    expect(page).to have_css('.govuk-tag', text: /#{status}/i, count: @unviewed_placement_requests_count)
   end
 end
 
