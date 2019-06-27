@@ -3,13 +3,22 @@ module Bookings
     class Contact
       include Entity
 
+      # Call pot in Gitis to insert the record into
+      CHANNEL_CREATION = ENV['CRM_CHANNEL_CREATION'].presence || 0
+
+      # Status of record within Gitis
+      STATE_CODE = 0
+
       entity_id_attribute :contactid
 
       entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
       entity_attributes :address1_line1, :address1_line2, :address1_line3
       entity_attributes :address1_city, :address1_stateorprovince
-      entity_attributes :address1_postalcode, :phone
+      entity_attributes :address1_postalcode, :telephone1, :mobilephone
+      entity_attributes :birthdate, :statecode, :dfe_channelcreation
 
+      alias_attribute :first_name, :firstname
+      alias_attribute :last_name, :lastname
       alias_attribute :building, :address1_line1
       alias_attribute :town_or_city, :address1_city
       alias_attribute :county, :address1_stateorprovince
@@ -24,13 +33,17 @@ module Bookings
         self.lastname                 = @crm_data['lastname']
         self.emailaddress1            = @crm_data['emailaddress1']
         self.emailaddress2            = @crm_data['emailaddress2']
-        self.phone                    = parse_phone_from_crm(@crm_data)
+        self.telephone1               = @crm_data['telephone1']
+        self.mobilephone              = @crm_data['mobilephone']
         self.address1_line1           = @crm_data['address1_line1']
         self.address1_line2           = @crm_data['address1_line2']
         self.address1_line3           = @crm_data['address1_line3']
         self.address1_city            = @crm_data['address1_city']
         self.address1_stateorprovince = @crm_data['address1_stateorprovince']
         self.address1_postalcode      = @crm_data['address1_postalcode']
+        self.birthdate                = @crm_data['birthdate']
+        self.statecode                = @crm_data['statecode'] || STATE_CODE
+        self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || CHANNEL_CREATION
       end
 
       def address
@@ -49,6 +62,11 @@ module Bookings
         end
       end
 
+      def street=(line_2and3)
+        self.address1_line2 = line_2and3
+        self.address1_line3 = ""
+      end
+
       def street
         [address1_line2, address1_line3].map(&:presence).compact.join(', ')
       end
@@ -57,10 +75,37 @@ module Bookings
         "#{firstname} #{lastname}"
       end
 
-    private
+      def phone
+        mobilephone.presence || telephone1
+      end
 
-      def parse_phone_from_crm(data)
-        data['mobilephone'].presence || data['telephone1']
+      def phone=(phonenumber)
+        return unless phonenumber
+
+        number = phonenumber.strip
+        if number.start_with?('07', '+447', '0077')
+          self.mobilephone = number
+        else
+          self.telephone1 = number
+        end
+      end
+
+      def date_of_birth
+        birthdate.present? ? Date.parse(birthdate) : nil
+      end
+
+      def date_of_birth=(dob)
+        self.birthdate = dob.present? ? dob.to_formatted_s(:db) : nil
+      end
+
+      def signin_attributes_match?(fname, lname, dob)
+        gitis_format_dob = dob.to_formatted_s(:db)
+        fname = fname.downcase
+        lname = lname.downcase
+
+        firstname.downcase == fname && lastname.downcase == lname ||
+          firstname.downcase == fname && birthdate == gitis_format_dob ||
+          lastname.downcase == lname && birthdate == gitis_format_dob
       end
     end
   end

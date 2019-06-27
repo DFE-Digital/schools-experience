@@ -15,7 +15,7 @@ module Candidates
           placement_request_url
         ).despatch!
 
-        if Rails.application.config.x.phase > 2
+        if Rails.application.config.x.phase >= 4
           NotifyEmail::CandidateRequestConfirmationWithConfirmationLink.from_application_preview(
             registration_session.email,
             application_preview,

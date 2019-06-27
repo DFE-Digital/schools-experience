@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/cookies_policy', to: 'pages#cookies_policy'
+  get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
+  get '/service_update', to: 'pages#service_update'
 
   if Rails.application.config.x.phase >= 2
     get '/auth/callback', to: 'schools/sessions#create'
@@ -21,7 +23,7 @@ Rails.application.routes.draw do
       resource :dashboard, only: :show
       resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
-      if Rails.application.config.x.phase >= 3
+      if Rails.application.config.x.phase >= 4
         resources :placement_requests do
           resource :cancellation, only: %i(show new create edit update), controller: 'placement_requests/cancellations' do
             resource :notification_delivery, only: %i(show create), controller: 'placement_requests/cancellations/notification_deliveries'
@@ -39,18 +41,14 @@ Rails.application.routes.draw do
             resource :preview_confirmation_email,
               only: [:new, :create],
               controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
-          end
-          collection do
-            resources :upcoming, only: :index, controller: 'placement_requests/upcoming', as: 'upcoming_requests'
+            resource :email_sent,
+              only: [:show],
+              controller: '/schools/placement_requests/acceptance/email_sent'
           end
         end
-        resources :confirmed_bookings, path: 'bookings', as: 'bookings' do
+        resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i(index show) do
           resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
             resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
-          end
-
-          collection do
-            resources :upcoming, only: :index, controller: 'confirmed_bookings/upcoming', as: 'upcoming_bookings'
           end
         end
       end
@@ -93,11 +91,19 @@ Rails.application.routes.draw do
 
     resources :school_searches, only: %i{new}
 
+    if Rails.application.config.x.phase >= 3
+    get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
+    end
+
     resources :schools, only: %i{index show} do
       namespace :registrations do
-        resource :placement_preference, only: %i(new create edit update)
+        resource :personal_information, only: %i(new create edit update)
+        if Rails.application.config.x.phase >= 3
+          resource :sign_in, only: %i(show create)
+        end
         resource :contact_information, only: %i(new create edit update)
         resource :subject_preference, only: %i(new create edit update)
+        resource :placement_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
         resource :confirmation_email, only: %i(show create)
@@ -106,14 +112,14 @@ Rails.application.routes.draw do
       end
     end
 
-    if Rails.application.config.x.phase >= 3
+    if Rails.application.config.x.phase >= 4
       get 'cancel/:placement_request_token', to: 'placement_requests/cancellations#new', as: :cancel
       resources :placement_requests, only: [], param: :token do
         resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
       end
     end
 
-    if Rails.application.config.x.phase >= 4
+    if Rails.application.config.x.phase >= 5
       get 'signin', to: 'sessions#new'
       post 'signin', to: 'sessions#create'
       get 'signin/:authtoken', to: 'sessions#update', as: 'signin_confirmation'

@@ -3,6 +3,7 @@
 <div id="subject-preference">
   <h1 class="govuk-heading-l">We need some more details</h1>
   <p>The following will be used to help schools offer you school experience.</p>
+  <p>You'll be given a chance to check and change the details you enter before sending off your request.</p>
 
   <%= form_for subject_preference, url: candidates_school_registrations_subject_preference_path, data: { controller: 'subject-preference-form' } do |f| %>
     <%= GovukElementsErrorsHelper.error_summary subject_preference, 'There is a problem', '' %>

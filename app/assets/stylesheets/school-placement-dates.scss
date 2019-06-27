@@ -10,3 +10,14 @@ table#placement-dates {
     }
   }
 }
+
+#bookings_placement_date_date_container {
+  fieldset {
+    legend {
+      margin-bottom: 20px;
+      span.govuk-hint {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

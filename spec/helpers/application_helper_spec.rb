@@ -50,4 +50,29 @@ describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  context '#user_info_and_logout_link' do
+    subject { helper.user_info_and_logout_link }
+    let(:given_name) { 'Martin' }
+    let(:family_name) { 'Prince' }
+    context 'when a user is logged in' do
+      before do
+        assign(
+          :current_user,
+          OpenIDConnect::ResponseObject::UserInfo.new(
+            given_name: given_name,
+            family_name: family_name
+          )
+        )
+      end
+
+      specify "should contain the person's name and a logout link" do
+        expect(subject).to include("#{given_name} #{family_name}")
+      end
+
+      specify "should contain a logout link" do
+        expect(subject).to have_link('Logout', href: '/schools/session')
+      end
+    end
+  end
 end

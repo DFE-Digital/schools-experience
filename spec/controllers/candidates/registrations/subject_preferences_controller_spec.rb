@@ -59,7 +59,7 @@ describe Candidates::Registrations::SubjectPreferencesController, type: :request
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/background_check/new'
+            '/candidates/schools/11048/registrations/placement_preference/new'
         end
       end
     end

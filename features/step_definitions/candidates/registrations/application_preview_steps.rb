@@ -1,30 +1,27 @@
 Given("I have completed the wizard") do
-  visit path_for('request school experience placement', school: @school)
-  step "I have filled in my placement preferences successfully"
+  visit path_for('enter your personal details', school: @school)
+  step "I have filled in my personal information successfully"
   step "I have filled in my contact information successfully"
   step "I have filled in my subject preferences successfully"
+  step "I have filled in my placement preferences successfully"
   step "I have filled in my background checks successfully"
 end
 
-Given("I have filled in my placement preferences successfully") do
-  # Submit registrations/placement_preference form successfully
-  if @fixed_dates
-    choose @wanted_bookings_placement_date
-  else
-    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
-  end
-  fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+Given("I have filled in my personal information successfully") do
+  # Submit contact information form successfully
+  fill_in 'First name', with: 'testy'
+  fill_in 'Last name', with: 'mctest'
+  fill_in 'Email address', with: 'unknown@example.com'
+  fill_in 'Day', with: '01'
+  fill_in 'Month', with: '01'
+  fill_in 'Year', with: '2000'
   click_button 'Continue'
-
   expect(page.current_path).to eq \
     "/candidates/schools/#{@school.urn}/registrations/contact_information/new"
 end
 
 Given("I have filled in my contact information successfully") do
   # Submit contact information form successfully
-  fill_in 'First name', with: 'testy'
-  fill_in 'Last name', with: 'mctest'
-  fill_in 'Email address', with: 'test@example.com'
   fill_in 'Building', with: 'Test house'
   fill_in 'Street', with: 'Test street'
   fill_in 'Town or city', with: 'Test Town'
@@ -42,7 +39,22 @@ Given("I have filled in my subject preferences successfully") do
   select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
   choose "I’m very sure and think I’ll apply"
   select 'Physics', from: 'First choice'
+  select 'Mathematics', from: 'Second choice'
   click_button 'Continue'
+  expect(page.current_path).to eq \
+    "/candidates/schools/#{@school.urn}/registrations/placement_preference/new"
+end
+
+Given("I have filled in my placement preferences successfully") do
+  # Submit registrations/placement_preference form successfully
+  if @fixed_dates
+    choose @wanted_bookings_placement_date
+  else
+    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
+  end
+  fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+  click_button 'Continue'
+
   expect(page.current_path).to eq \
     "/candidates/schools/#{@school.urn}/registrations/background_check/new"
 end
@@ -92,7 +104,9 @@ Then("I should see the following summary rows:") do |table|
   table.hashes.each do |row|
     within(".#{row['Heading'].tr(' ', '-').downcase}") do
       expect(page).to have_css('dd', text: row['Value'])
-      expect(page).to have_link('Change', href: /#{row['Change link path']}/)
+      if row['Change link path'].present?
+        expect(page).to have_link('Change', href: /#{row['Change link path']}/)
+      end
     end
   end
 end

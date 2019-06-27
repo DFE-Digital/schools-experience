@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::PlacementRequests::CancellationsController, type: :request do
+  include_context 'fake gitis'
+
   let :notify_school_request_cancellation do
     double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
   end
@@ -153,7 +155,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
 
           let :gitis_contact do
-            Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+            fake_gitis.find placement_request.contact_uuid
           end
 
           it 'notifies the school' do
@@ -232,7 +234,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
 
           let :gitis_contact do
-            Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+            fake_gitis.find placement_request.contact_uuid
           end
 
           it 'notifies the school' do
