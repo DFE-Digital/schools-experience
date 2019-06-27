@@ -21,6 +21,9 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "background checks" => [:new_candidates_school_registrations_background_check_path, school],
     "check your answers" => [:candidates_school_registrations_application_preview_path, school],
     "cancel placement request" => [:new_candidates_placement_request_cancellation_path, placement_request&.token],
+    "candidates_dashboard" => [:candidates_dashboard_path],
+    "candidates signin" => [:candidates_signin_path],
+    "candidates signin confirm" => [:candidates_signin_confirmation_path, session_token],
 
     #school paths
     "schools" => [:schools_path],
