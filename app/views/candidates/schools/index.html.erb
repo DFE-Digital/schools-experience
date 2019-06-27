@@ -8,7 +8,7 @@
 </div>
 
 <div class="govuk-grid-row">
-  <aside class="govuk-grid-column-one-third filter-list">
+  <aside class="govuk-grid-column-one-third filter-list" aria-label="Filter search results">
     <div data-controller="collapsible" id="search-filter">
       <button data-action="collapsible#toggle">
         Filter the results
@@ -37,7 +37,7 @@
     </div>
   </aside>
 
-  <section class="govuk-grid-column-two-thirds" id="search-results">
+  <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
     <%- if @search.subjects.any? || @search.phases.any? -%>
     <div class="school-search-filter-info">
       <div>
@@ -95,7 +95,7 @@
       <% @search.results.each_with_index do |school, index| %>
       <li data-school-urn="<%= school.urn %>">
         <article class="school-result">
-          <h3 class="govuk-heading-l">
+          <h2 class="govuk-heading-l">
             <%= school.name %>
             <%- if school.respond_to? :distance -%>
             <span class="govuk-caption-m distance">
@@ -103,7 +103,7 @@
               away
             </span>
             <%- end -%>
-          </h3>
+          </h2>
 
           <dl class="govuk-summary-list">
             <%= summary_row 'Address', format_school_address(school) %>
