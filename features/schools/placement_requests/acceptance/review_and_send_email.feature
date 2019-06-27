@@ -10,6 +10,10 @@ Feature: Accepting placement requests
         And I have completed the 'confirm booking' page
         And I have completed the 'add more details' page
 
+    Scenario: Page title
+        Given I have progressed to the 'review and send email' page for my chosen placement request
+        Then the page title should be 'Review and send confirmation email to candidate'
+
     Scenario: Page heading
         Given I have progressed to the 'review and send email' page for my chosen placement request
         Then the page's main header should be 'Review and send confirmation email to candidate'

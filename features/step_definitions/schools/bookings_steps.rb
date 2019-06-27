@@ -28,7 +28,8 @@ And("there is/are {int} booking/bookings") do |count|
     bookings_school: @school,
     date: @scheduled_booking_date
   )
-  @booking_id = @bookings.first.id
+  @booking = @bookings.first
+  @booking_id = @booking.id
 end
 
 Given("there are some bookings belonging to other schools") do
@@ -147,4 +148,9 @@ end
 
 Then("I should not see the bookings table") do
   expect(page).not_to have_css('table#bookings')
+end
+
+Then("the page title should start with {string} and include the booking reference") do |string|
+  expect(page.title).to start_with(string)
+  expect(page.title).to include(@booking.reference)
 end

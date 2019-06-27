@@ -98,5 +98,9 @@ module Bookings
     def accepted?
       accepted_at.present?
     end
+
+    def reference
+      bookings_placement_request.token.first(5)
+    end
   end
 end

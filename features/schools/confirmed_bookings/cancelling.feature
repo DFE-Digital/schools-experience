@@ -39,6 +39,7 @@ Feature: Cancelling bookings
         Then there should be a 'Cancellation reasons' text area
         And there should be a 'Extra details' text area
         And the submit button should contain text 'Preview cancellation email'
+        And the page title should be 'Review and send cancellation email to candidate'
 
     Scenario: Rejecting the requests
         Given there is at least one booking
@@ -52,3 +53,4 @@ Feature: Cancelling bookings
         Given I have progressed to the cancellation email preview page
         When I click the 'Send cancellation email' submit button
         Then I should see a 'Your cancellation email has been sent' confirmation
+        And the page title should be 'Your cancellation email has been sent'

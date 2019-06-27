@@ -7,6 +7,10 @@ Feature: The school not registered error page
         Given I am on the 'not registered error' page
         Then I should see a email link to 'organise.school-experience@education.gov.uk'
 
+    Scenario: Page title
+        Given I am on the 'not registered error' page
+        Then the page title should be 'Error - your school is not signed up to the manage school experience service'
+
     Scenario: Change school link
         Given I am on the 'not registered error' page
         Then I should see a 'Change school' link to the 'change school' page
