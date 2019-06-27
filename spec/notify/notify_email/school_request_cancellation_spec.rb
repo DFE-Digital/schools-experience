@@ -5,6 +5,6 @@ describe NotifyEmail::SchoolRequestCancellation do
     school_name: "Springfield Elementary School",
     candidate_name: "Otto Mann",
     cancellation_reasons: 'Spinal Tap playing same day',
-    requested_availability: 'whenever',
+    requested_on: 3.days.ago.to_formatted_s(:govuk),
     placement_request_url: 'http://example.com/schools/placement_requests/1'
 end

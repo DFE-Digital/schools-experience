@@ -1,8 +1,8 @@
 Hello,
 
-((candidate_name)) has cancelled their request for school experience at ((school_name)) with requested availability ((requested_availability))
+((candidate_name)) has withdrawn their request for school experience at ((school_name)) which they submitted on  ((requested_on)).
 
-They have provided the following reasons for the cancellation:
+They've provided the following reasons for withdrawing the request:
 ((cancellation_reasons))
 
-The cancelled request can be viewed here ((placement_request_url))
+View the cancelled request - ((placement_request_url))

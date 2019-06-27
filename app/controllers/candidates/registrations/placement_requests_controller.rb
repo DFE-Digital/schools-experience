@@ -32,7 +32,8 @@ module Candidates
 
           PlacementRequestJob.perform_later \
             registration_session.uuid,
-            cancellation_url(placement_request)
+            cancellation_url(placement_request),
+            placement_url(placement_request)
         end
 
         redirect_to candidates_school_registrations_placement_request_path \
@@ -47,6 +48,14 @@ module Candidates
       def cancellation_url(placement_request)
         if Rails.application.config.x.phase >= 4
           candidates_cancel_url(placement_request.token)
+        else
+          ''
+        end
+      end
+
+      def placement_url(placement_request)
+        if Rails.application.config.x.phase >= 4
+          schools_placement_request_url(placement_request)
         else
           ''
         end
