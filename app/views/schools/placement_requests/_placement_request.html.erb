@@ -3,11 +3,7 @@
     <%= placement_request.gitis_contact.full_name %>
   </td>
   <td class="govuk-table__cell">
-    <% if !placement_request.viewed? %>
-      <span class="govuk-tag">
-        <%= placement_request.status %>
-      </span>
-    <% end %>
+    <%= placement_request_status(placement_request) %>
   </td>
   <td class="govuk-table__cell">
     <%= placement_request.subject_first_choice %>

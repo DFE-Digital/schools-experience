@@ -160,11 +160,11 @@ module Bookings
       candidate_cancellation || school_cancellation
     end
 
-  private
-
     def cancelled?
       cancellation&.sent?
     end
+
+  private
 
     def completed?
       # FIXME SE-1096 determine from booking
