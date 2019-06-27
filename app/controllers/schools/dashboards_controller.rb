@@ -1,5 +1,7 @@
 module Schools
   class DashboardsController < BaseController
+    skip_before_action :ensure_onboarded
+
     def show
       @school = current_school
 

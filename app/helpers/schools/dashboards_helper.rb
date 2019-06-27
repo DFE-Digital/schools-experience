@@ -1,4 +1,12 @@
 module Schools::DashboardsHelper
+  def not_onboarded_warning(school)
+    if school.placement_requests.any?
+      "You have school experience requests waiting"
+    else
+      "Your profile isn't complete"
+    end
+  end
+
   def numbered_circle(number, id: nil, colour: 'red', width: 26, height: 30, font_size: "16px", circle_size: 13)
     content_tag(:svg, id: id, width: width, height: height) do
       safe_join([

@@ -5,6 +5,7 @@ describe Schools::PlacementRequests::Acceptance::ConfirmBookingController, type:
   include_context "logged in DfE user"
 
   let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
+  before { create(:bookings_profile, school: @current_user_school) }
 
   context '#new' do
     before do

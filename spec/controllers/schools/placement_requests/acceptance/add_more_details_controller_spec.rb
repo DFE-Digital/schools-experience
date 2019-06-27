@@ -15,6 +15,10 @@ describe Schools::PlacementRequests::Acceptance::AddMoreDetailsController, type:
     )
   end
 
+  let!(:profile) do
+    create(:bookings_profile, school: @current_user_school)
+  end
+
   context '#new' do
     before do
       get new_schools_placement_request_acceptance_add_more_details_path(pr.id)
