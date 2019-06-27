@@ -8,8 +8,9 @@ Feature: View Dashboard page
     
     Scenario: Signing in and Viewing the Dashboard
         Given I am on the candidate signin page
-        When I should enter my name and email address
+        When I enter my name and email address
         And I click the 'Sign in' button
+        And I am on the Verify Link Sent page
         And I follow the sign in link from the email
         Then I will see the Dashboard page
     

@@ -20,7 +20,7 @@ class Candidates::Session
     token = Candidates::SessionToken.valid.find_by(token: token_string)
     return unless token
 
-    token.candidate.tap(&:expire_session_tokens!)
+    token.confirm!.candidate
   end
 
   def initialize(gitis, *args)
@@ -53,7 +53,7 @@ private
   end
 
   def find_or_create_candidate
-    @candidate = Bookings::Candidate.find_or_create_by!(gitis_uuid: contact.id)
+    @candidate = Bookings::Candidate.find_or_create_from_gitis_contact!(contact)
   end
 
   def generate_session_token

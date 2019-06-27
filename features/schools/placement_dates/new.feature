@@ -22,9 +22,9 @@ Feature: Creating new placement dates
     Scenario: Placement date form
         Given I am on the 'new placement date' page
         Then I should see a form with the following fields:
-            | Label                       | Type   |
-            | Enter a start date          | date   |
-            | How many days will it last? | number |
+            | Label                  | Type   |
+            | Enter a start date     | date   |
+            | How long will it last? | number |
 
     Scenario: Filling in and submitting the form
         Given I am on the 'new placement date' page

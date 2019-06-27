@@ -2,8 +2,7 @@ module Schools
   module PlacementRequests
     module Acceptance
       class PreviewConfirmationEmailController < Schools::BaseController
-        before_action :set_placement_request
-        before_action :fetch_gitis_contact_for_placement_request
+        include Acceptance
         before_action :ensure_previous_step_complete
 
         def new; end
@@ -12,7 +11,7 @@ module Schools
           booking = @placement_request.booking
 
           if booking.update(accepted_at: Time.now) && candidate_booking_notification(booking).despatch_later!
-            redirect_to schools_placement_requests_path
+            redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
           else
             render :new
           end
@@ -29,16 +28,6 @@ module Schools
         def candidate_booking_notification(booking)
           NotifyEmail::CandidateBookingConfirmation
             .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token))
-        end
-
-        def set_placement_request
-          @placement_request = @current_school
-            .bookings_placement_requests
-            .find(params[:placement_request_id])
-        end
-
-        def fetch_gitis_contact_for_placement_request
-          @placement_request.fetch_gitis_contact gitis_crm
         end
       end
     end

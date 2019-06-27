@@ -45,7 +45,13 @@ module Apimock
     end
 
     def stub_contact_request_by_email(email, return_params = {})
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1&$filter=emailaddress1 eq '#{email}' or emailaddress2 eq '#{email}' or emailaddress3 eq '#{email}'").
+      data = return_params.delete(:data)
+      stringified_params = return_params.stringify_keys
+      data ||= [
+        contact_data.merge('emailaddress1' => email).merge(stringified_params)
+      ]
+
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'").
         with(headers: get_headers).
         to_return(
           status: 200,
@@ -54,10 +60,28 @@ module Apimock
           },
           body: {
             '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
-            'value' => [
-              contact_data.merge('emailaddress1' => email). \
-                merge(return_params.stringify_keys)
-            ]
+            'value' => data
+          }.to_json
+        )
+    end
+
+    def stub_contact_signin_request(email, data = {})
+      data = data.map do |uuid, contactdata|
+        contact_data \
+          .merge('contactid' => uuid) \
+          .merge(contactdata.stringify_keys)
+      end
+
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=20&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'&$orderby=createdon desc").
+        with(headers: get_headers).
+        to_return(
+          status: 200,
+          headers: {
+            'Content-Type' => 'application/json; odata.metadata=minimal',
+          },
+          body: {
+            '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
+            'value' => data
           }.to_json
         )
     end

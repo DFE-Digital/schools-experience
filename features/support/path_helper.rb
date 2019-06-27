@@ -1,19 +1,29 @@
-def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil, placement_request: nil)
+def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
+  placement_request: nil, session_token: nil)
+
   if school && school.respond_to?(:to_param)
     school = school.to_param
   end
+
+  session_token = session_token&.to_param
 
   mappings = {
     # candidate paths
     "landing" => [:root_path],
     "splash" => [:candidates_splash_path],
     "find a school" => [:new_candidates_school_search_path],
-    "request school experience placement" => [:new_candidates_school_registrations_placement_preference_path, school],
+    "enter your personal details" => [:new_candidates_school_registrations_personal_information_path, school],
+    "verify your email" => [:candidates_school_registrations_sign_in_path, school],
+    "verify your email with token" => [:candidates_registration_verify_path, school, session_token],
     "enter your contact details" => [:new_candidates_school_registrations_contact_information_path, school],
     "candidate subjects" => [:new_candidates_school_registrations_subject_preference_path, school],
+    "request school experience placement" => [:new_candidates_school_registrations_placement_preference_path, school],
     "background checks" => [:new_candidates_school_registrations_background_check_path, school],
     "check your answers" => [:candidates_school_registrations_application_preview_path, school],
     "cancel placement request" => [:new_candidates_placement_request_cancellation_path, placement_request&.token],
+    "candidates_dashboard" => [:candidates_dashboard_path],
+    "candidates signin" => [:candidates_signin_path],
+    "candidates signin confirm" => [:candidates_signin_confirmation_path, session_token],
 
     #school paths
     "schools" => [:schools_path],
@@ -29,6 +39,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil, p
     "add more details" => [:new_schools_placement_request_acceptance_add_more_details_path, placement_request],
     "review and send email" => [:new_schools_placement_request_acceptance_review_and_send_email_path, placement_request],
     "preview confirmation email" => [:new_schools_placement_request_acceptance_preview_confirmation_email_path, placement_request],
+    "email sent" => [:schools_placement_request_acceptance_email_sent_path, placement_request],
     "reject placement request" => [:new_schools_placement_request_cancellation_path, placement_request&.id],
     "candidate requirements" => [:new_schools_on_boarding_candidate_requirement_path],
     "fees charged" => [:new_schools_on_boarding_fees_path],

@@ -9,9 +9,9 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <div class="govuk-heading-l">
+    <h1 class="govuk-heading-l">
       DBS check costs
-    </div>
+    </h1>
 
     <%= form_for @dbs_fee, url: schools_on_boarding_dbs_fee_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>

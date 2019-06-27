@@ -26,10 +26,10 @@ Feature: Viewing all placement requests
         Given there are some placement requests
         When I am on the 'placement requests' page
         Then I should see a table with the following headings:
-            | Name           |
-            | Status         |
-            | Subjects       |
-            | Date requested |
+            | Name                   |
+            | Status                 |
+            | Subjects               |
+            | School experience date |
 
     Scenario: Open request buttons
         Given there are some placement requests

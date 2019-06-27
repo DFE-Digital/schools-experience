@@ -2,12 +2,12 @@ Given("I fill in the form with a future date and duration of {int}") do |int|
   @date = 1.week.from_now
   @duration = int
   step "I fill in the date field 'Enter a start date' with #{@date.strftime('%d-%m-%Y')}"
-  fill_in "How many days will it last?", with: @duration
+  fill_in "How long will it last?", with: @duration
 end
 
 Given("I fill in the form with a duration of {int}") do |int|
   @duration = int
-  fill_in "How many days will it last?", with: @duration
+  fill_in "How long will it last?", with: @duration
 end
 
 Then("my newly-created placement date should be listed") do

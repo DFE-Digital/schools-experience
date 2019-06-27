@@ -3,7 +3,6 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesController, type: :request do
   include_context "logged in DfE user"
-  include_context "stubbed out Gitis"
 
   let :school do
     Bookings::School.find_by!(urn: urn).tap do |s|
@@ -41,6 +40,8 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
     end
 
     context 'when request not already closed' do
+      include_context 'fake gitis'
+
       let :placement_request do
         FactoryBot.create \
           :placement_request, :with_school_cancellation, school: school
@@ -51,7 +52,7 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
       end
 
       let :gitis_contact do
-        Bookings::Gitis::CRM.new('a.fake.token').find placement_request.contact_uuid
+        fake_gitis.find placement_request.contact_uuid
       end
 
       it 'notifies the candidate' do

@@ -9,6 +9,7 @@ module Candidates
 
       PENDING_EMAIL_CONFIRMATION_STATUS = 'pending_email_confirmation'.freeze
       COMPLETED_STATUS = 'completed'.freeze
+      MIGRATE_ATTRS = %w{first_name last_name email}.freeze
 
       def initialize(session)
         @registration_session = session
@@ -43,7 +44,7 @@ module Candidates
 
       # TODO add spec
       def email
-        contact_information.email
+        personal_information.email
       end
 
       def urn
@@ -73,6 +74,35 @@ module Candidates
 
       def contact_information_attributes
         fetch_attributes ContactInformation
+      end
+
+      def personal_information
+        # Allow populating from pre Phase 3 data in the session
+        param_key = PersonalInformation.model_name.param_key
+
+        if !@registration_session[param_key].nil?
+          return PersonalInformation.new @registration_session.fetch(param_key)
+        end
+
+        contact = @registration_session.fetch(ContactInformation.model_name.param_key, {})
+        migrate = contact.slice(*MIGRATE_ATTRS)
+
+        raise StepNotFound, param_key if migrate.empty?
+
+        PersonalInformation.new(migrate).tap do |migrated|
+          save migrated
+        end
+      rescue KeyError
+        raise StepNotFound, param_key
+      end
+
+      def personal_information_attributes
+        attrs = @registration_session.fetch(PersonalInformation.model_name.param_key, {})
+        return attrs if attrs.any?
+
+        # Allow populating with pre Phase 3 data in the session
+        migrate = @registration_session.fetch(ContactInformation.model_name.param_key, {})
+        migrate.slice(*MIGRATE_ATTRS)
       end
 
       def placement_preference
@@ -123,9 +153,10 @@ module Candidates
     private
 
       STEPS = %i(
-        placement_preference
+        personal_information
         contact_information
         subject_preference
+        placement_preference
         background_check
       ).freeze
 

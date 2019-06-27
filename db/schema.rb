@@ -23,13 +23,13 @@ ActiveRecord::Schema.define(version: 2019_06_18_152627) do
     t.integer "bookings_school_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "duration", default: 1, null: false
     t.text "placement_details"
     t.string "contact_name"
     t.string "contact_number"
     t.string "contact_email"
     t.text "location"
     t.string "candidate_instructions"
-    t.integer "duration", default: 1, null: false
     t.datetime "accepted_at"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_152627) do
     t.string "gitis_uuid", limit: 36, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "confirmed_at"
     t.index ["gitis_uuid"], name: "index_bookings_candidates_on_gitis_uuid", unique: true
   end
 
@@ -89,8 +90,8 @@ ActiveRecord::Schema.define(version: 2019_06_18_152627) do
     t.text "availability"
     t.integer "bookings_placement_date_id"
     t.integer "bookings_school_id"
-    t.string "token"
     t.uuid "analytics_tracking_uuid"
+    t.string "token"
     t.datetime "viewed_at"
     t.bigint "candidate_id"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
@@ -226,6 +227,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_152627) do
     t.datetime "expired_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "confirmed_at"
     t.index ["candidate_id"], name: "index_candidates_session_tokens_on_candidate_id"
     t.index ["token"], name: "index_candidates_session_tokens_on_token", unique: true
   end
