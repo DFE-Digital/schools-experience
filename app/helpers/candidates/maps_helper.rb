@@ -56,7 +56,9 @@ module Candidates::MapsHelper
       'aria-label': "Map showing #{title}"
     }
 
-    aria_attributes.merge!('aria-describedby': described_by) if described_by
+    if described_by.present?
+      aria_attributes[:'aria-describedby'] = described_by
+    end
 
     content_tag :div, class: "embedded-map", data: map_data, **aria_attributes do
       content_tag :div, class: 'embedded-map__inner-container',
