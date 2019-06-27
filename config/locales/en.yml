@@ -237,7 +237,7 @@ en:
         date: Confirm experience date
       bookings_school:
         enabled: Turn requests on or off
-        availability_preference_fixed: Change how availability and dates are displayed
+        availability_preference_fixed: Change how dates are displayed
       bookings_placement_date:
         date: Enter a start date
       phases: Education phases
@@ -330,8 +330,8 @@ en:
           true: Allow requests
           false: Do not allow requests
         availability_preference_fixed:
-          true_html: <strong>Fixed dates</strong> - display set dates
-          false_html: <strong>Flexible dates</strong> - display a description of your availability
+          true_html: Display specific dates
+          false_html: Display a description of when you'll host school experience candidates
         availability_info: Describe your school experience availability
 
       bookings_placement_date:

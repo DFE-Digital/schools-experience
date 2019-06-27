@@ -63,7 +63,7 @@ describe Schools::DashboardsController, type: :request do
         before { get '/schools/dashboard' }
 
         specify 'should have the link' do
-          expect(response.body).to match(/Add, remove, close and open.*fixed dates.*for school experience/)
+          expect(response.body).to match(/Add, remove and change dates/)
         end
       end
 
@@ -72,7 +72,7 @@ describe Schools::DashboardsController, type: :request do
         before { get '/schools/dashboard' }
 
         specify 'should have the link' do
-          expect(response.body).to match(/Update your availability and.*flexible dates.*for school experience/)
+          expect(response.body).to match(/Describe when you’ll host school experience candidates/)
         end
       end
     end
