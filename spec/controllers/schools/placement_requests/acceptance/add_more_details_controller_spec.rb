@@ -3,7 +3,6 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::PlacementRequests::Acceptance::AddMoreDetailsController, type: :request do
   include_context "logged in DfE user"
-  include_context "restricted unless school onboarded"
 
   let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
   let!(:booking) do

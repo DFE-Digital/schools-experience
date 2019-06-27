@@ -6,6 +6,7 @@ Feature: Editing availability info
     Background:
         Given I am logged in as a DfE user
         And my school is set to use 'flexible' dates
+        And my school is fully-onboarded
 
     Scenario: Page title
         Given I am on the 'availability information' page

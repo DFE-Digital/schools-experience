@@ -2,7 +2,6 @@ module Schools
   module ConfirmedBookings
     module Cancellations
       class NotificationDeliveriesController < Schools::BaseController
-        include Schools::RestrictAccessUnlessOnboarded
         before_action :set_booking_and_placement_request
 
         def show

@@ -2,7 +2,6 @@ module Schools
   module PlacementRequests
     module Acceptance
       class ConfirmBookingController < Schools::BaseController
-        include Schools::RestrictAccessUnlessOnboarded
         before_action :set_placement_request, :set_available_subjects
 
         def new

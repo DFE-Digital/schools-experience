@@ -2,7 +2,6 @@ module Schools
   module PlacementRequests
     module Acceptance
       class ReviewAndSendEmailController < Schools::BaseController
-        include Schools::RestrictAccessUnlessOnboarded
         before_action :set_placement_request
         before_action :fetch_gitis_contact_for_placement_request
         before_action :ensure_previous_step_complete

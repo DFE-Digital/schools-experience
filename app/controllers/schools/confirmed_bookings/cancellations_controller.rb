@@ -1,8 +1,6 @@
 module Schools
   module ConfirmedBookings
     class CancellationsController < Schools::BaseController
-      include Schools::RestrictAccessUnlessOnboarded
-
       before_action :set_booking_and_placement_request
       before_action :ensure_booking_is_open
 

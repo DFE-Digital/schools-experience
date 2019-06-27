@@ -1,7 +1,5 @@
 module Schools
   class ConfirmedBookingsController < Schools::BaseController
-    include Schools::RestrictAccessUnlessOnboarded
-
     def index
       @bookings = current_school
         .bookings

@@ -4,7 +4,6 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailController, type: :request do
   include_context "logged in DfE user"
   include_context "stubbed out Gitis"
-  include_context "restricted unless school onboarded"
 
   let!(:booking_profile) { create(:bookings_profile, school: @current_user_school) }
   let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
