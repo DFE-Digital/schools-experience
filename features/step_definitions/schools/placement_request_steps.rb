@@ -149,3 +149,47 @@ Then("I should see a table with the following headings:") do |table|
     expect(page).to have_css('thead th', text: heading)
   end
 end
+
+Given("there are some cancelled placement requests") do
+  @cancelled_placement_requests_count = 3
+  @cancelled_placement_requests = FactoryBot.create_list \
+    :placement_request,
+    @cancelled_placement_requests_count,
+    :cancelled,
+    school: @school
+end
+
+Then("the cancelled requests should have a status of {string}") do |status|
+  within('table#placement-requests') do
+    expect(page).to have_css('.govuk-tag', text: status, count: @cancelled_placement_requests_count)
+  end
+end
+
+Given("there are some unviewed placement requests") do
+  @unviewed_placement_requests_count = 3
+  @unviewed_placement_requests = FactoryBot.create_list \
+    :placement_request,
+    @unviewed_placement_requests_count,
+    school: @school
+end
+
+Then("the unviewed requests should have a status of {string}") do |status|
+  within('table#placement-requests') do
+    expect(page).to have_css('.govuk-tag', text: status, count: @unviewed_placement_requests_count)
+  end
+end
+
+Given("there are some viewed placement requests") do
+  @viewed_placement_requests_count = 3
+  @viewed_placement_requests = FactoryBot.create_list \
+    :placement_request,
+    @viewed_placement_requests_count,
+    school: @school,
+    viewed_at: 3.minutes.ago
+end
+
+Then("the viewed requests should have no status") do
+  within('table#placement-requests') do
+    expect(page).not_to have_css('.govuk-tag')
+  end
+end
