@@ -1,5 +1,5 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
-  <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
+  <article class="govuk-grid-column-two-thirds" id="candidate-school-profile">
 
     <%- if @school.placement_info.present? -%>
     <section id="school-placement-info">
@@ -31,11 +31,11 @@
     </dl>
 
     <div>
-      <h1 class="govuk-heading-m">
+      <h2 class="govuk-heading-m">
         Location
-      </h1>
+      </h2>
 
-      <%= school_location_map @school %>
+      <%= school_location_map @school, described_by: 'school-address' %>
 
       <p class="directions-link">
         <%= link_to 'Get directions', external_map_url(
@@ -89,9 +89,9 @@
     </div>
     <%- end -%>
 
-  </div>
+  </article>
 
-  <div class="govuk-grid-column-one-third column-top-border">
+  <aside class="govuk-grid-column-one-third column-top-border">
 
     <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
       <div id="school-address" class="govuk-summary-list__row">
@@ -137,5 +137,5 @@
     </div>
   <%- end -%>
 
-  </div>
+  </aside>
 </div>

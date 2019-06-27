@@ -31,7 +31,7 @@ module Candidates::MapsHelper
     tmpl.expand(params: params, zoom_level: zoom, center_point: location).to_s
   end
 
-  def ajax_map(latitude, longitude, mapsize:, title: nil, description: nil, zoom: 10)
+  def ajax_map(latitude, longitude, mapsize:, title: nil, description: nil, zoom: 10, described_by: nil)
     return unless ENV['BING_MAPS_KEY'].present?
 
     map_data = {
@@ -40,7 +40,7 @@ module Candidates::MapsHelper
       map_longitude: longitude,
       map_title: title,
       map_description: description,
-      map_api_key: ENV['BING_MAPS_KEY'].to_s,
+      map_api_key: ENV['BING_MAPS_KEY'].to_s
     }
 
     static_url = static_map_url(
@@ -52,11 +52,19 @@ module Candidates::MapsHelper
 
     include_maps_in_head
 
-    content_tag :div, class: "embedded-map", data: map_data do
+    aria_attributes = {
+      'aria-label': "Map showing #{title}"
+    }
+
+    if described_by.present?
+      aria_attributes[:'aria-describedby'] = described_by
+    end
+
+    content_tag :div, class: "embedded-map", data: map_data, **aria_attributes do
       content_tag :div, class: 'embedded-map__inner-container',
         data: { target: 'map.container' } do
 
-        image_tag static_url, class: "embedded-map__nojs-img"
+        image_tag static_url, class: "embedded-map__nojs-img", alt: "Map showing #{title}", **aria_attributes
       end
     end
   end
