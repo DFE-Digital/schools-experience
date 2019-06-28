@@ -62,7 +62,7 @@ class Bookings::Candidate < ApplicationRecord
       contact = mapper.registration_to_contact
       crm.write contact
 
-      create!(gitis_uuid: contact.id, confirmed_at: Time.zone.now).tap do |candidate|
+      create!(gitis_uuid: contact.id, confirmed_at: Time.zone.now, created_in_gitis: true).tap do |candidate|
         candidate.gitis_contact = contact
       end
     end
