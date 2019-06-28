@@ -1,4 +1,4 @@
-Feature: Entering candidate contact details
+Feature: Entering candidate subject preference details
     So I can inform the school about my education and expertise
     As a potential candidate
     I want to enter some details about my degree and preferred subjects

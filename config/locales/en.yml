@@ -84,6 +84,17 @@ en:
             town_or_city:
               blank: "Enter your town or city"
 
+        candidates/registrations/education:
+          attributes:
+            degree_stage:
+              blank: "Select a degree stage"
+            degree_stage_explaination:
+              blank: "Enter an explaination"
+            degree_subject:
+              blank: "Select a subject"
+              inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
+              exclusion: "Select a subject if you have a degree or are studying for one"
+
         candidates/registrations/personal_information:
           attributes:
             email:
@@ -345,6 +356,8 @@ en:
         phone: "UK telephone number"
       candidates_registrations_personal_information:
         email: 'Email address'
+      candidates_registrations_education:
+        degree_subject: If you have or are studying for a degree, tell us about your degree subject
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"

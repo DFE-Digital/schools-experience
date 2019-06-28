@@ -101,6 +101,12 @@ Then("the {string} input should require at least {string} characters") do |field
   expect(input['minlength']).to eql(length)
 end
 
+Then("I should see the validation error {string}") do |string|
+  within ".govuk-error-summary" do
+    expect(page).to have_text string
+  end
+end
+
 Given("there should be a {string} text area") do |string|
   expect(page).to have_field(string, type: 'textarea')
 end

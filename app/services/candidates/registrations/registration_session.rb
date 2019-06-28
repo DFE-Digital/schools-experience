@@ -121,6 +121,24 @@ module Candidates
         fetch_attributes SubjectPreference
       end
 
+      def education_attributes_converter
+        # Temporary converter to convert between subject_preference and education
+        # while there are potential inflight registrations
+        EducationAttributes.new(@registration_session)
+      end
+
+      def education_attributes
+        education_attributes_converter.attributes || {}
+      end
+
+      def education
+        if education_attributes_converter.attributes.present?
+          Education.new education_attributes_converter.attributes
+        else
+          raise StepNotFound, :candidates_registrations_education
+        end
+      end
+
       def fetch(klass)
         klass.new @registration_session.fetch(klass.model_name.param_key)
       rescue KeyError => e

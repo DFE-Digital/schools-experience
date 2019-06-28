@@ -102,6 +102,7 @@ Rails.application.routes.draw do
           resource :sign_in, only: %i(show create)
         end
         resource :contact_information, only: %i(new create edit update)
+        resource :education, only: %i(new create edit update)
         resource :subject_preference, only: %i(new create edit update)
         resource :placement_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
