@@ -17,7 +17,9 @@ module Schools
     def placement_requests
       current_school
         .placement_requests
+        .unbooked
         .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date)
+        .order(created_at: 'desc')
     end
 
     def placement_request
