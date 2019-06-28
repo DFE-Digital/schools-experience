@@ -107,3 +107,7 @@ section.govuk-se-letter {
   background-color: $govuk-se-light-blue;
   margin-bottom: 1rem;
 }
+
+ul.govuk-se-spaced-list li {
+  @include govuk-responsive-margin(2, "bottom");
+}

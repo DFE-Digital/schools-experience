@@ -24,7 +24,7 @@ Feature: Candidate landing page
         Given I am on the 'landing' page
         Then I should see a column on the right with the following useful links:
             | Get Into Teaching | https://getintoteaching.education.gov.uk/ |
-        And the right column should have the subheading 'Teaching resources'
+        And the right column should have the subheading 'Helpful information'
 
     Scenario: The 'Before you start' guide
         Given I am on the 'landing' page
