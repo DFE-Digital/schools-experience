@@ -6,7 +6,15 @@
   <div class="govuk-grid-column-full-width">
     <%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
 
-    <h1>All placement requests</h1>
+    <h1>Manage requests</h1>
+
+    <p>
+      The following <strong>only lists requests</strong> made on or after <strong><%= phase_three_release_date %></strong>.
+    </p>
+
+    <p>
+      You'll need to refer to <strong>your own records</strong> for any requests received before this date.
+    </p>
 
     <%= render partial: 'schools/placement_requests/placement_requests_table',
       locals: { placement_requests: @placement_requests } %>
