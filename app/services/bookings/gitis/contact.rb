@@ -18,8 +18,9 @@ module Bookings
       entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
       entity_attributes :address1_line1, :address1_line2, :address1_line3
       entity_attributes :address1_city, :address1_stateorprovince
-      entity_attributes :address1_postalcode, :telephone1, :telephone2
-      entity_attributes :birthdate, :statecode, :dfe_channelcreation
+      entity_attributes :address1_postalcode, :birthdate
+      entity_attributes :telephone1, :telephone2, :mobilephone
+      entity_attributes :statecode, :dfe_channelcreation
 
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
@@ -36,7 +37,7 @@ module Bookings
         self.firstname                = @crm_data['firstname']
         self.lastname                 = @crm_data['lastname']
         self.emailaddress1            = @crm_data['emailaddress1']
-        self.emailaddress2            = @crm_data['emailaddress2'].presence || @crm_data['emailaddress1'].presence
+        self.emailaddress2            = @crm_data['emailaddress2']
         self.telephone2               = @crm_data['telephone2']
         self.address1_line1           = @crm_data['address1_line1']
         self.address1_line2           = @crm_data['address1_line2']
@@ -47,6 +48,12 @@ module Bookings
         self.birthdate                = @crm_data['birthdate']
         self.statecode                = @crm_data['statecode'] || STATE_CODE
         self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || CHANNEL_CREATION
+
+        super # handles resetting dirty attributes
+
+        if @crm_data['emailaddress2'].blank? && @crm_data['emailaddress1'].present?
+          self.emailaddress2 = @crm_data['emailaddress1']
+        end
       end
 
       def address

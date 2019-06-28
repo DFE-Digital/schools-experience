@@ -18,8 +18,7 @@ describe Bookings::Gitis::Contact, type: :model do
           'contactid' => "d778d663-a022-4c4b-9962-e469ee179f4a",
           'firstname' => 'Testing',
           'lastname' => '123',
-          'mobilephone' => '07123 456789',
-          'telephone1' => '01234 567890',
+          'telephone2' => '01234 567890',
           'emailaddress1' => 'first@thisaddress.com',
           'address1_line1' => 'First Address Line',
           'address1_line2' => 'Second Address Line',
@@ -146,13 +145,18 @@ describe Bookings::Gitis::Contact, type: :model do
     end
 
     describe "#attributes_for_update" do
-      let(:contact) { build(:gitis_contact, :persisted, dfe_channelcreation: nil) }
+      let(:attrs) do
+        attributes_for :gitis_contact, :persisted, dfe_channelcreation: nil
+      end
+
+      let(:contact) { Bookings::Gitis::Contact.new attrs }
       subject { contact.attributes_for_update }
 
       context 'when unmodified' do
         it { is_expected.not_to include('contactid') }
         it { is_expected.not_to include('statecode') }
         it { is_expected.not_to include('dfe_channelcreation') }
+        it { is_expected.to include('emailaddress2') }
       end
 
       context 'when modified' do

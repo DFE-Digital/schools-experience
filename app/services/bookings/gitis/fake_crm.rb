@@ -2,12 +2,12 @@ module Bookings::Gitis
   module FakeCrm
     KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
     REQUIRED = %w{
-      firstname lastname emailaddress1 telephone1 address1_line1 address1_city
-      address1_stateorprovince address1_postalcode birthdate
+      firstname lastname emailaddress2 telephone2 birthdate
+      address1_line1 address1_city address1_stateorprovince address1_postalcode
       statecode dfe_channelcreation
     }.freeze
     ALLOWED = (
-      REQUIRED + %w{mobilephone address1_line2 address1_line3 emailaddress2}
+      REQUIRED + %w{telephone1 address1_line2 address1_line3 emailaddress1}
     ).freeze
 
     def find_by_email(address)
