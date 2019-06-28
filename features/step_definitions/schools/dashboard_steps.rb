@@ -54,3 +54,7 @@ end
 Then("I should see the managing requests section") do
   expect(page).to have_css('.managing-requests')
 end
+
+Then("there should be no {string} link") do |link_text|
+  expect(page).not_to have_link(link_text)
+end

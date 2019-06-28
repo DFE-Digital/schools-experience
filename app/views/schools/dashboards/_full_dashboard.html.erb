@@ -61,6 +61,7 @@
           </span>
         </div>
 
+        <%- if @current_school.private_beta? -%>
         <div id="manage-requests" class="subection">
           <header class="dashboard-medium-priority">
             <%= link_to "Turn requests on / off", edit_schools_enabled_path %>
@@ -70,6 +71,7 @@
             Requests are currently <strong><%= school_enabled_description(@current_school) %></strong>.
           </span>
         </div>
+        <%- end -%>
       </section>
 
       <section id="help-and-support" class="medium-priority">
