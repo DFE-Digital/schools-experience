@@ -17,8 +17,11 @@ describe Schools::PlacementRequestsController, type: :request do
   end
 
   context '#index' do
-    before do
+    let(:placement_requests) do
       FactoryBot.create_list :placement_request, 5, school: school
+    end
+
+    before do
       get '/schools/placement_requests'
     end
 
@@ -30,6 +33,19 @@ describe Schools::PlacementRequestsController, type: :request do
 
     it 'renders the index template' do
       expect(response).to render_template :index
+    end
+
+    context 'after placement requests have been accepted' do
+      let(:booked) { placement_requests.last }
+      before do
+        create(:bookings_booking, bookings_placement_request: booked, bookings_school: school)
+      end
+
+      before { get '/schools/placement_requests' }
+
+      specify 'they should be omitted' do
+        expect(assigns(:placement_requests)).to eq(school.placement_requests - Array.wrap(booked))
+      end
     end
   end
 
