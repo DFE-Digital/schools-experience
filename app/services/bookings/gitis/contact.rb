@@ -9,12 +9,16 @@ module Bookings
       # Status of record within Gitis
       STATE_CODE = 0
 
+      UPDATE_BLACKLIST = %w{
+        dfe_channelcreation statecode emailaddress1 telephone1
+      }.freeze
+
       entity_id_attribute :contactid
 
       entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
       entity_attributes :address1_line1, :address1_line2, :address1_line3
       entity_attributes :address1_city, :address1_stateorprovince
-      entity_attributes :address1_postalcode, :telephone1, :mobilephone
+      entity_attributes :address1_postalcode, :telephone1, :telephone2
       entity_attributes :birthdate, :statecode, :dfe_channelcreation
 
       alias_attribute :first_name, :firstname
@@ -32,9 +36,8 @@ module Bookings
         self.firstname                = @crm_data['firstname']
         self.lastname                 = @crm_data['lastname']
         self.emailaddress1            = @crm_data['emailaddress1']
-        self.emailaddress2            = @crm_data['emailaddress2']
-        self.telephone1               = @crm_data['telephone1']
-        self.mobilephone              = @crm_data['mobilephone']
+        self.emailaddress2            = @crm_data['emailaddress2'].presence || @crm_data['emailaddress1'].presence
+        self.telephone2               = @crm_data['telephone2']
         self.address1_line1           = @crm_data['address1_line1']
         self.address1_line2           = @crm_data['address1_line2']
         self.address1_line3           = @crm_data['address1_line3']
@@ -57,9 +60,9 @@ module Bookings
       def email=(emailaddress)
         if emailaddress1.blank?
           self.emailaddress1 = emailaddress
-        elsif emailaddress1 != emailaddress
-          self.emailaddress2 = emailaddress
         end
+
+        self.emailaddress2 = emailaddress
       end
 
       def street=(line_2and3)
@@ -76,18 +79,11 @@ module Bookings
       end
 
       def phone
-        mobilephone.presence || telephone1
+        telephone2
       end
 
       def phone=(phonenumber)
-        return unless phonenumber
-
-        number = phonenumber.strip
-        if number.start_with?('07', '+447', '0077')
-          self.mobilephone = number
-        else
-          self.telephone1 = number
-        end
+        self.telephone2 = phonenumber&.strip
       end
 
       def date_of_birth
@@ -106,6 +102,10 @@ module Bookings
         firstname.downcase == fname && lastname.downcase == lname ||
           firstname.downcase == fname && birthdate == gitis_format_dob ||
           lastname.downcase == lname && birthdate == gitis_format_dob
+      end
+
+      def attributes_for_update
+        super.except(*UPDATE_BLACKLIST)
       end
     end
   end

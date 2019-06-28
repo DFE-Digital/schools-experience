@@ -115,4 +115,62 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to be true }
     end
   end
+
+  describe 'writing' do
+    describe "#attributes_for_create" do
+      let(:contact) do
+        described_class.new.tap do |c|
+          c.contactid     = SecureRandom.uuid
+          c.first_name    = "Test"
+          c.last_name     = "User"
+          c.email         = 'testing@testaddress.education.gov.uk'
+          c.date_of_birth = Date.parse('1980-01-01')
+          c.phone         = '01234 567890'
+          c.building      = 'My Building'
+          c.street        = 'Test Street'
+          c.town_or_city  = 'Test Town'
+          c.county        = 'Test County'
+          c.postcode      = 'MA1 1AM'
+        end
+      end
+
+      subject { contact.attributes_for_create }
+      it { is_expected.not_to include('contactid') }
+      it { is_expected.to include('firstname') }
+      it { is_expected.to include('lastname') }
+      it { is_expected.to include('emailaddress1') }
+      it { is_expected.to include('emailaddress2') }
+      it { is_expected.to include('telephone2') }
+      it { is_expected.to include('statecode') }
+      it { is_expected.to include('dfe_channelcreation') }
+    end
+
+    describe "#attributes_for_update" do
+      let(:contact) { build(:gitis_contact, :persisted, dfe_channelcreation: nil) }
+      subject { contact.attributes_for_update }
+
+      context 'when unmodified' do
+        it { is_expected.not_to include('contactid') }
+        it { is_expected.not_to include('statecode') }
+        it { is_expected.not_to include('dfe_channelcreation') }
+      end
+
+      context 'when modified' do
+        before do
+          contact.firstname = 'Different'
+          contact.lastname = 'Different'
+          contact.email = 'new@fictional-address.com'
+          contact.phone = '0712345679'
+        end
+
+        it { is_expected.not_to include('contactid') }
+        it { is_expected.not_to include('statecode') }
+        it { is_expected.not_to include('dfe_channelcreation') }
+        it { is_expected.to include('firstname') }
+        it { is_expected.to include('lastname') }
+        it { is_expected.to include('emailaddress2') }
+        it { is_expected.to include('telephone2') }
+      end
+    end
+  end
 end
