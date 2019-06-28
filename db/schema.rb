@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_18_152627) do
+ActiveRecord::Schema.define(version: 2019_06_28_082805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_152627) do
     t.text "primary_key_stage_info"
     t.text "availability_info"
     t.string "teacher_training_website"
-    t.boolean "enabled", default: true, null: false
+    t.boolean "enabled", default: false, null: false
     t.boolean "availability_preference_fixed", default: false, null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
