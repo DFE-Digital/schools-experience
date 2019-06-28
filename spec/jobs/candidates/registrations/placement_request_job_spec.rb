@@ -24,6 +24,10 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
     double NotifyEmail::CandidateRequestConfirmation, despatch!: true
   end
 
+  let :school_request_confirmation_notification_with_placement_request_url do
+    double NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl, despatch!: true
+  end
+
   let :candidate_request_confirmation_notification_with_confirmation_link do
     double NotifyEmail::CandidateRequestConfirmationWithConfirmationLink,
       despatch!: true
@@ -48,6 +52,9 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
     allow(NotifyEmail::CandidateRequestConfirmation).to \
       receive(:from_application_preview) { candidate_request_confirmation_notification }
 
+    allow(NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl).to \
+      receive(:from_application_preview) { school_request_confirmation_notification_with_placement_request_url }
+
     allow(NotifyEmail::CandidateRequestConfirmationWithConfirmationLink).to \
       receive(:from_application_preview) { candidate_request_confirmation_notification_with_confirmation_link }
 
@@ -68,8 +75,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
           expect(NotifyEmail::SchoolRequestConfirmation).to \
             have_received(:from_application_preview).with \
               school.notifications_email,
-              application_preview,
-              placement_request_url
+              application_preview
 
           expect(school_request_confirmation_notification).to \
             have_received :despatch!
@@ -98,13 +104,13 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         end
 
         it 'notifies the school' do
-          expect(NotifyEmail::SchoolRequestConfirmation).to \
+          expect(NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl).to \
             have_received(:from_application_preview).with \
               school.notifications_email,
               application_preview,
               placement_request_url
 
-          expect(school_request_confirmation_notification).to \
+          expect(school_request_confirmation_notification_with_placement_request_url).to \
             have_received :despatch!
         end
 
@@ -134,7 +140,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         end
 
         before do
-          allow(school_request_confirmation_notification).to \
+          allow(school_request_confirmation_notification_with_placement_request_url).to \
             receive(:despatch!) { raise 'Oh no!' }
 
           allow_any_instance_of(described_class).to \

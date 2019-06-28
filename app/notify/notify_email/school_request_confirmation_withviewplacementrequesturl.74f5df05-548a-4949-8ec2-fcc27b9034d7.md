@@ -28,6 +28,12 @@ Request details:
 ^ Note that DBS certificates have not been checked and verified by DfE
 
 ---
+Accept or reject their request
+
+View the request – ((placement_request_url))
+
+The candidate is aware you may be in touch to discuss their request
+---
 
 # Help and support
 
