@@ -1,4 +1,4 @@
-class NotifyEmail::SchoolRequestConfirmation < Notify
+class NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl < Notify
   attr_accessor :candidate_address,
     :candidate_dbs_check_document,
     :candidate_degree_stage,
@@ -11,6 +11,7 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     :candidate_teaching_subject_second_choice,
     :placement_outcome,
     :placement_availability,
+    :placement_request_url,
     :school_name
 
   def initialize(
@@ -27,6 +28,7 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     candidate_teaching_subject_second_choice:,
     placement_outcome:,
     placement_availability:,
+    placement_request_url:,
     school_name:
   )
 
@@ -42,13 +44,14 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
     self.candidate_teaching_subject_second_choice =        candidate_teaching_subject_second_choice
     self.placement_outcome                        =        placement_outcome
     self.placement_availability                   =        placement_availability
+    self.placement_request_url                    =        placement_request_url
     self.school_name                              =        school_name
 
     super(to: to)
   end
 
-  def self.from_application_preview(to, application_preview)
-    NotifyEmail::SchoolRequestConfirmation.new(
+  def self.from_application_preview(to, application_preview, placement_request_url)
+    new(
       to: to,
       candidate_address: application_preview.full_address,
       candidate_dbs_check_document: application_preview.dbs_check_document,
@@ -62,6 +65,7 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
       candidate_teaching_subject_second_choice: application_preview.teaching_subject_second_choice,
       placement_outcome: application_preview.placement_outcome,
       placement_availability: application_preview.placement_availability_description,
+      placement_request_url: placement_request_url,
       school_name: application_preview.school.name
     )
   end
@@ -69,7 +73,7 @@ class NotifyEmail::SchoolRequestConfirmation < Notify
 private
 
   def template_id
-    '3da1cb35-efd2-4aa6-8416-27efc5611d06'
+    '74f5df05-548a-4949-8ec2-fcc27b9034d7'
   end
 
   def personalisation
@@ -86,6 +90,7 @@ private
       candidate_teaching_subject_second_choice: candidate_teaching_subject_second_choice,
       placement_outcome: placement_outcome,
       placement_availability: placement_availability,
+      placement_request_url: placement_request_url,
       school_name: school_name
     }
   end
