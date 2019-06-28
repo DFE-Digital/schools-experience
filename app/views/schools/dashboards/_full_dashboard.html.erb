@@ -5,18 +5,15 @@
     <h1 class="govuk-heading-l">Manage requests and bookings at <%= @current_school.name %></h1>
 
     <article id="dashboard">
-
-      <% if @current_school.private_beta? %>
-        <section class="managing-requests">
-          <%= render partial: 'new_requests_and_bookings' %>
-        </section>
-      <% else %>
-        <%= render partial: 'update_your_school_profile' %>
-      <% end %>
-
       <section id="change-school">
         <%= link_to "Change school", new_schools_switch_path %>
       </section>
+
+      <% if @current_school.private_beta? %>
+        <%= render partial: 'new_requests_and_bookings' %>
+      <% else %>
+        <%= render partial: 'update_your_school_profile' %>
+      <% end %>
 
       <section id="account-admin" class="medium-priority">
         <h2 class="govuk-heading-m">
