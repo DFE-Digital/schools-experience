@@ -19,7 +19,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(firstname: registration.personal_information.first_name) }
     it { is_expected.to have_attributes(lastname: registration.personal_information.last_name) }
     it { is_expected.to have_attributes(email: registration.personal_information.email) }
-    it "needs to compare date of birth when that is merged in"
+    it { is_expected.to have_attributes(date_of_birth: registration.personal_information.date_of_birth) }
     it { is_expected.to have_attributes(phone: registration.contact_information.phone) }
     it { is_expected.to have_attributes(building: registration.contact_information.building) }
     it { is_expected.to have_attributes(street: registration.contact_information.street) }
@@ -38,6 +38,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to include('first_name' => contact.first_name) }
     it { is_expected.to include('last_name' => contact.last_name) }
     it { is_expected.to include('email' => contact.email) }
+    it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
   end
 
   describe "#contact_to_contact_information" do

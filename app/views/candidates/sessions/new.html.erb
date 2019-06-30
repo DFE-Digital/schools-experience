@@ -11,7 +11,7 @@
     </p>
 
     <%= form_for @candidates_session, url: candidates_signin_path, html: {novalidate: true} do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary @session, 'There is a problem', '' %>
+      <%= GovukElementsErrorsHelper.error_summary @candidates_session, 'There is a problem', '' %>
 
       <%= f.email_field :email, autocomplete: 'on', class: 'govuk-input govuk-input--width-30' %>
       <%= f.text_field :firstname, autocomplete: 'given-name', class: 'govuk-input govuk-input--width-20' %>
