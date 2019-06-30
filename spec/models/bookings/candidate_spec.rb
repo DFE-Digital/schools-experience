@@ -178,6 +178,10 @@ RSpec.describe Bookings::Candidate, type: :model do
           firstname: registration_session.personal_information.first_name,
           lastname: registration_session.personal_information.last_name
       end
+
+      it "will mark as already existing in gitis" do
+        is_expected.to have_attributes(created_in_gitis: false)
+      end
     end
 
     context 'with an existing contact but not candidate' do
@@ -201,6 +205,10 @@ RSpec.describe Bookings::Candidate, type: :model do
         expect(subject.gitis_contact).to have_attributes \
           firstname: registration_session.personal_information.first_name,
           lastname: registration_session.personal_information.last_name
+      end
+
+      it "will mark as already existing in gitis" do
+        is_expected.to have_attributes(created_in_gitis: false)
       end
     end
 
@@ -227,6 +235,10 @@ RSpec.describe Bookings::Candidate, type: :model do
         expect(subject.gitis_contact).to have_attributes \
           firstname: registration_session.personal_information.first_name,
           lastname: registration_session.personal_information.last_name
+      end
+
+      it "will mark as newly created in gitis" do
+        is_expected.to have_attributes(created_in_gitis: true)
       end
     end
   end
