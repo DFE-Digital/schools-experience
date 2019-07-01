@@ -3,10 +3,15 @@ module Bookings::Gitis
 
   module Entity
     extend ActiveSupport::Concern
+    include ActiveModel::AttributeAssignment
+    include ActiveModel::Validations
+    include ActiveModel::Conversion
+
     ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
 
     included do
-      include ActiveModel::Model
+      extend ActiveModel::Naming
+      extend ActiveModel::Translation
 
       class_attribute :entity_path
       self.entity_path = derive_entity_path
@@ -15,12 +20,12 @@ module Bookings::Gitis
       self.primary_key = derive_primary_key
     end
 
-    def initialize
-      raise "Abstract Class - implement initialize in entity model"
+    def initialize(*_args)
+      reset_dirty_attributes if persisted?
     end
 
-    def attributes
-      @attributes ||= {}
+    def persisted?
+      id.present?
     end
 
     def reset
@@ -58,7 +63,14 @@ module Bookings::Gitis
     end
 
     def attributes_for_create
-      changed_attributes
+      keys = attributes.keys - ['id', primary_key]
+      keys.reject! { |k| attributes[k].nil? }
+
+      attributes.slice(*keys)
+    end
+
+    def attributes
+      @attributes ||= {}
     end
 
     class InvalidEntityIdError < RuntimeError; end

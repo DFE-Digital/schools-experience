@@ -79,7 +79,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
       it 'populates the form with the values from gitis' do
         expect(assigns(:contact_information)).to have_attributes \
-          phone: gitis_contact.phone,
+          phone: gitis_contact.telephone1,
           postcode: gitis_contact.postcode
       end
 

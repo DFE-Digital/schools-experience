@@ -18,8 +18,7 @@ describe Bookings::Gitis::Contact, type: :model do
           'contactid' => "d778d663-a022-4c4b-9962-e469ee179f4a",
           'firstname' => 'Testing',
           'lastname' => '123',
-          'mobilephone' => '07123 456789',
-          'telephone1' => '01234 567890',
+          'telephone2' => '01234 567890',
           'emailaddress1' => 'first@thisaddress.com',
           'address1_line1' => 'First Address Line',
           'address1_line2' => 'Second Address Line',
@@ -113,6 +112,72 @@ describe Bookings::Gitis::Contact, type: :model do
     context 'with partial name match and matching dob' do
       let(:signin_attrs) { ['', contact.lastname, date_of_birth] }
       it { is_expected.to be true }
+    end
+  end
+
+  describe 'writing' do
+    describe "#attributes_for_create" do
+      let(:contact) do
+        described_class.new.tap do |c|
+          c.contactid     = SecureRandom.uuid
+          c.first_name    = "Test"
+          c.last_name     = "User"
+          c.email         = 'testing@testaddress.education.gov.uk'
+          c.date_of_birth = Date.parse('1980-01-01')
+          c.phone         = '01234 567890'
+          c.building      = 'My Building'
+          c.street        = 'Test Street'
+          c.town_or_city  = 'Test Town'
+          c.county        = 'Test County'
+          c.postcode      = 'MA1 1AM'
+        end
+      end
+
+      subject { contact.attributes_for_create }
+      it { is_expected.not_to include('contactid') }
+      it { is_expected.to include('firstname') }
+      it { is_expected.to include('lastname') }
+      it { is_expected.to include('emailaddress1') }
+      it { is_expected.to include('emailaddress2') }
+      it { is_expected.to include('telephone2') }
+      it { is_expected.to include('statecode') }
+      it { is_expected.to include('dfe_channelcreation') }
+    end
+
+    describe "#attributes_for_update" do
+      let(:attrs) do
+        attributes_for :gitis_contact, :persisted, dfe_channelcreation: nil
+      end
+
+      let(:contact) { Bookings::Gitis::Contact.new attrs }
+      subject { contact.attributes_for_update }
+
+      context 'when unmodified' do
+        it { is_expected.not_to include('contactid') }
+        it { is_expected.not_to include('statecode') }
+        it { is_expected.not_to include('dfe_channelcreation') }
+        it { is_expected.not_to include('firstname') }
+        it { is_expected.not_to include('lastname') }
+        it { is_expected.to include('telephone2') }
+        it { is_expected.to include('emailaddress2') }
+      end
+
+      context 'when modified' do
+        before do
+          contact.firstname = 'Different'
+          contact.lastname = 'Different'
+          contact.email = 'new@fictional-address.com'
+          contact.phone = '0712345679'
+        end
+
+        it { is_expected.not_to include('contactid') }
+        it { is_expected.not_to include('statecode') }
+        it { is_expected.not_to include('dfe_channelcreation') }
+        it { is_expected.to include('firstname') }
+        it { is_expected.to include('lastname') }
+        it { is_expected.to include('emailaddress2') }
+        it { is_expected.to include('telephone2') }
+      end
     end
   end
 end

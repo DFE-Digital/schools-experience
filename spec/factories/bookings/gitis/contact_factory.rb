@@ -14,7 +14,7 @@ FactoryBot.define do
     dfe_channelcreation { 10 }
 
     trait :persisted do
-      id { SecureRandom.uuid }
+      contactid { SecureRandom.uuid }
     end
   end
 end
