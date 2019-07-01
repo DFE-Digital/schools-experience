@@ -54,6 +54,13 @@ module Bookings
         if @crm_data['emailaddress2'].blank? && @crm_data['emailaddress1'].present?
           self.emailaddress2 = @crm_data['emailaddress1']
         end
+
+        if @crm_data['telephone2'].blank?
+          self.telephone2 = @crm_data['mobilephone'].presence || \
+            @crm_data['address1_telephone1'].presence || \
+            @crm_data['telephone1'].presence || \
+            self.telephone2
+        end
       end
 
       def address
