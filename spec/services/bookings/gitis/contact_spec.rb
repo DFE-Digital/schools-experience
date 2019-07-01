@@ -156,6 +156,9 @@ describe Bookings::Gitis::Contact, type: :model do
         it { is_expected.not_to include('contactid') }
         it { is_expected.not_to include('statecode') }
         it { is_expected.not_to include('dfe_channelcreation') }
+        it { is_expected.not_to include('firstname') }
+        it { is_expected.not_to include('lastname') }
+        it { is_expected.to include('telephone2') }
         it { is_expected.to include('emailaddress2') }
       end
 
