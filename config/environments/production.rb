@@ -131,4 +131,6 @@ Rails.application.configure do
   end
 
   config.x.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)
+
+  config.x.features = []
 end
