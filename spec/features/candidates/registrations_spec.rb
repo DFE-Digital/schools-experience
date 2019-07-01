@@ -142,6 +142,28 @@ feature 'Candidate Registrations', type: :feature do
         view_request_acknowledgement_step
       end
     end
+
+    context 'for known Candidate already signed in switching account part way through' do
+      include_context 'fake gitis with known uuid'
+
+      let(:email_address) { 'test@example.com' }
+      let!(:candidate) { create(:candidate, :confirmed, gitis_uuid: fake_gitis_uuid) }
+      let(:token) { create(:candidate_session_token, candidate: candidate) }
+      let(:newtoken) { create(:candidate_session_token) }
+
+      before do
+        allow_any_instance_of(Candidates::Session).to \
+          receive(:create_signin_token).and_return(token.token)
+      end
+
+      scenario "completing the Journey" do
+        sign_in_via_dashboard(token.token)
+        complete_personal_information_step
+        complete_contact_information_step
+        sign_in_via_dashboard(newtoken.token)
+        get_bounced_to_personal_information_step
+      end
+    end
   end
 
   def complete_personal_information_step
@@ -300,5 +322,11 @@ feature 'Candidate Registrations', type: :feature do
 
     visit "/candidates/signin/#{token}"
     expect(page.current_path).to eq "/candidates/dashboard"
+  end
+
+  def get_bounced_to_personal_information_step
+    visit "/candidates/schools/#{school_urn}/registrations/subject_preference/new"
+    expect(page.current_path).to eq \
+      "/candidates/schools/#{school_urn}/registrations/personal_information/new"
   end
 end
