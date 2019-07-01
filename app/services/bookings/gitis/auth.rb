@@ -26,7 +26,7 @@ module Bookings
       end
 
       class UnableToRetrieveToken < RuntimeError
-        def initialize(body, code)
+        def initialize(code, body)
           msg = "Response Code: #{code}\n#{body}"
           super(msg)
         end
