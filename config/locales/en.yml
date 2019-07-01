@@ -257,6 +257,8 @@ en:
       subjects: Placement subjects
       candidates_registrations_background_check:
         has_dbs_check: Do you have a DBS certificate?
+      candidates_registrations_education:
+        degree_stage: What stage are you at with your degree?
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
