@@ -217,9 +217,8 @@ RSpec.describe "The GITIS CRM Api" do
     {
       'firstname' => "Test User",
       'lastname' => "TestUser",
-      'emailaddress1' => "school-experience-testuser@education.gov.uk",
-      'mobilephone' => "07123456789",
-      'telephone1' => "01234567890",
+      'emailaddress2' => "school-experience-testuser@education.gov.uk",
+      'telephone2' => "01234567890",
       'address1_line1' => "First Address Line",
       'address1_line2' => "Second Address Line",
       'address1_line3' => "Third Address Line",
@@ -227,7 +226,7 @@ RSpec.describe "The GITIS CRM Api" do
       'address1_stateorprovince' => "",
       'address1_postalcode' => "MA1 1AM",
       'statecode' => 0,
-      'dfe_channelcreation' => 222750021
+      'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION')
     }
   end
 
