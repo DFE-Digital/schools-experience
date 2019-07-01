@@ -25,7 +25,12 @@ module Bookings
         end
       end
 
-      class UnableToRetrieveToken < RuntimeError; end
+      class UnableToRetrieveToken < RuntimeError
+        def initialize(code, body)
+          msg = "Response Code: #{code}\n#{body}"
+          super(msg)
+        end
+      end
 
     private
 
@@ -60,7 +65,7 @@ module Bookings
       def store_failed_response(response)
         @response_status = response.status
         @response_body = response.body
-        raise UnableToRetrieveToken
+        raise UnableToRetrieveToken.new(@response_status, @response_body)
       end
 
       def parse_successful_response(response)
