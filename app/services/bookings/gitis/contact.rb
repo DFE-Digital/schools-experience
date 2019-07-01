@@ -10,7 +10,8 @@ module Bookings
       STATE_CODE = 0
 
       UPDATE_BLACKLIST = %w{
-        dfe_channelcreation statecode emailaddress1 telephone1
+        dfe_channelcreation statecode emailaddress1 telephone1 mobilephone
+        address1_telephone1
       }.freeze
 
       entity_id_attribute :contactid
