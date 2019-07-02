@@ -13,7 +13,8 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         {
           'first_name' => 'Testy',
           'last_name' => 'McTest',
-          'email' => 'testy@mctest.com'
+          'email' => 'testy@mctest.com',
+          'date_of_birth' => Date.parse('1980-01-01')
         }
     )
   end
@@ -28,6 +29,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
   describe 'GET #update' do
     let(:token) { create(:candidate_session_token) }
+    let(:personal_info) { registration_session.personal_information }
 
     context 'with valid token' do
       before do
@@ -42,6 +44,10 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       it "will have confirmed candidate" do
         expect(token.candidate.reload).to be_confirmed
       end
+
+      it "will have marked the email address read only" do
+        expect(personal_info).to have_attributes read_only_email: true
+      end
     end
 
     context 'with invalid token' do
@@ -52,6 +58,10 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
       it "will show error screen" do
         expect(response).to have_http_status(:success)
+      end
+
+      it "will not have marked the email address read only" do
+        expect(personal_info).to have_attributes read_only_email: false
       end
     end
   end

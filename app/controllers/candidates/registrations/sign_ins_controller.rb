@@ -16,9 +16,13 @@ module Candidates
       end
 
       def update
+        personal_information = current_registration.personal_information
         candidate = Candidates::Session.signin!(params[:token])
 
         if candidate
+          personal_information.read_only_email = true
+          persist personal_information
+
           self.current_candidate = candidate
           redirect_to new_candidates_school_registrations_contact_information_path
         else
