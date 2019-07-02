@@ -2,8 +2,20 @@
 
 <h1>Logout</h1>
 
-<%= button_to "Yes, log me out",
+<%= button_to "Log me out of school experience",
   schools_session_path,
   method: 'delete',
   class: 'govuk-button'
+%>
+
+<% @query = {
+    id_token_hint: session[:id_token],
+    state: session[:state],
+    post_logout_redirect_uri: 'https://pp-support.signin.education.gov.uk/signout/complete'
+  }.to_query
+%>
+
+<%= link_to "Log me out of DfE signin completely",
+  "https://pp-oidc.signin.education.gov.uk/session/end?#{@query}",
+  class: "govuk-button govuk-button--secondary"
 %>
