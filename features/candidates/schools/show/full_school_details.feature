@@ -23,7 +23,7 @@ Feature: School show page (enhanced data)
 
     Scenario: Education phase (singular)
         Given the phases 'Primary' and 'Secondary' exist
-        And the school has is a 'Primary' school
+        And the school is a 'Primary' school
         When I am on the profile page for the chosen school
         Then the age range should be 'Primary'
 

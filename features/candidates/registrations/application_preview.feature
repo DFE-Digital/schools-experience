@@ -5,8 +5,7 @@ Feature: Previewing my application
 
     Background:
         Given my school of choice exists
-        And my school of choice offers 'Physics'
-        And my school of choice offers 'Mathematics'
+        And the school offers 'Physics, Mathematics'
 
     Scenario: Page contents (when the school has flexible availability)
         Given my school has flexible dates
