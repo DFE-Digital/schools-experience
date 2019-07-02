@@ -117,7 +117,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
       context 'already signed in' do
         let :personal_information do
-          FactoryBot.build :personal_information
+          FactoryBot.build :personal_information, read_only_email: true
         end
 
         let(:candidate) { create(:candidate, :confirmed) }
