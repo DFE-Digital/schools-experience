@@ -104,6 +104,7 @@ Rails.application.routes.draw do
         resource :contact_information, only: %i(new create edit update)
         if Rails.application.config.x.features.include? :split_subject_preference
           resource :education, only: %i(new create edit update)
+          resource :teaching_preference, only: %i(new create edit update)
         end
         resource :subject_preference, only: %i(new create edit update)
         resource :placement_preference, only: %i(new create edit update)

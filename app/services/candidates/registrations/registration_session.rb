@@ -139,6 +139,22 @@ module Candidates
         end
       end
 
+      def teaching_preference_attributes_converter
+        TeachingPreferenceAttributes.new(@registration_session)
+      end
+
+      def teaching_preference_attributes
+        teaching_preference_attributes_converter.attributes || {}
+      end
+
+      def teaching_preference
+        if teaching_preference_attributes_converter.attributes.present?
+          TeachingPreference.new teaching_preference_attributes.merge(school: self.school)
+        else
+          raise StepNotFound, :candidates_registrations_teaching_preference
+        end
+      end
+
       def fetch(klass)
         klass.new @registration_session.fetch(klass.model_name.param_key)
       rescue KeyError => e

@@ -68,6 +68,13 @@ FactoryBot.define do
           'updated_at' => current_time
         )
       end
+
+      candidates_registrations_teaching_preference do
+        FactoryBot.attributes_for(:teaching_preference).stringify_keys.merge(
+          'created_at' => current_time,
+          'updated_at' => current_time
+        )
+      end
     end
 
     initialize_with do
@@ -108,6 +115,26 @@ FactoryBot.define do
           "candidates_registrations_background_check"     => candidates_registrations_background_check,
           "candidates_registrations_education"            => candidates_registrations_education,
           "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
+      end
+    end
+
+    # TODO refactor this to avoid duplication building up the session
+    trait :with_teaching_preference do
+      initialize_with do
+        new \
+          "uuid"                                          => uuid,
+          "urn"                                           => urn,
+          "candidates_registrations_personal_information" => candidates_registrations_personal_information,
+          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
+          "candidates_registrations_background_check"     => candidates_registrations_background_check,
+          "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
+          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
+      end
+    end
+
+    trait :with_school do
+      after :build do |reg|
+        Bookings::School.find_by(urn: reg.urn) || FactoryBot.create(:bookings_school, urn: reg.urn)
       end
     end
   end
