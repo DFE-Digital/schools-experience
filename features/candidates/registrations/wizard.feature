@@ -5,8 +5,7 @@ Feature: Persisting registration information on navigating away
 
   Background:
     Given my school of choice exists
-    And my school of choice offers 'Physics'
-    And my school of choice offers 'Mathematics'
+    And the school offers 'Physics, Mathematics'
 
   Scenario: Returning to the wizard
     Given I have completed the personal information form

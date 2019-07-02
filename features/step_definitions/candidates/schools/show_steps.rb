@@ -1,8 +1,3 @@
-Given("there is a school called {string}") do |name|
-  @school = FactoryBot.create(:bookings_school, :full_address, name: name)
-  expect(@school).to be_persisted
-end
-
 Given("the school has created their profile") do
   @profile = FactoryBot.create(:bookings_profile, school: @school)
   expect(@profile).to be_persisted
@@ -28,29 +23,14 @@ Then("I should see the correctly-formatted school placement information") do
   end
 end
 
-Given("the school has is a {string} school") do |phase_name|
-  @school.phases << Bookings::Phase.find_by(name: phase_name)
-end
-
 Then("the age range should be {string}") do |string|
   within("#school-phases") do
     expect(page).to have_content(string)
   end
 end
 
-Given("the school is a {string} and {string} school") do |p1, p2|
-  [p1, p2].each do |phase_name|
-    @school.phases << Bookings::Phase.find_by(name: phase_name)
-  end
-end
-
 Given("some subjects exist") do
   @subjects = FactoryBot.create_list(:bookings_subject, 5)
-end
-
-Given("the school offers {int} subjects") do |int|
-  @school.subjects << @subjects.first(int)
-  expect(@school.subjects.size).to eql(int)
 end
 
 Then("all of the subjects should be listed") do
@@ -70,11 +50,6 @@ Then("I should see a hyperlink to the school's website") do
   within('#school-website') do
     expect(page).to have_link("#{@school.name} website", href: @school.website)
   end
-end
-
-Given("my chosen school has the URN {int}") do |int|
-  @school.update_attributes(urn: int)
-  expect(@school.urn).to eql(int)
 end
 
 Then("I should see the following websites listed:") do |table|

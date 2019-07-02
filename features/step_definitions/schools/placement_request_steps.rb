@@ -1,9 +1,3 @@
-Given("the school has subjects") do
-  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Maths')
-  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Physics')
-  @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
-end
-
 Given("there are some upcoming requests") do
   step 'there are some placement requests'
 end

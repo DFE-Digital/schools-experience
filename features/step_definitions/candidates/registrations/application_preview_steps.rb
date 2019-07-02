@@ -82,20 +82,6 @@ Given("my school has fixed dates") do
   # do nothing, it's the default
 end
 
-Given("my school of choice exists") do
-  @school = FactoryBot.create(:bookings_school, name: 'Test School', urn: 123456)
-end
-
-Given("my school of choice offers {string}") do |string|
-  string.split(", ").each do |subject_name|
-    @school.subjects << FactoryBot.create(:bookings_subject, name: subject_name)
-  end
-end
-
-Given("My school offers physics") do
-  @school.subjects << FactoryBot.create(:bookings_subject, name: "Physics")
-end
-
 When("I am on the {string} page for my choice of school") do |string|
   expect(page.current_path).to eql(path_for(string, school: @school.urn))
 end
