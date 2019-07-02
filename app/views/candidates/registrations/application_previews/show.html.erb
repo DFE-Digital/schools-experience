@@ -38,12 +38,16 @@
           anchor: 'candidates_registrations_contact_information_phone_container'
         ) %>
 
-      <%= summary_row \
-        'Email address',
-        @application_preview.email_address,
-        edit_candidates_school_registrations_personal_information_path(
-          anchor: 'candidates_registrations_personal_information_email_container'
-        ) %>
+      <%- if @application_preview.read_only_email -%>
+        <%= summary_row 'Email address', @application_preview.email_address %>
+      <%- else -%>
+        <%= summary_row \
+          'Email address',
+          @application_preview.email_address,
+          edit_candidates_school_registrations_personal_information_path(
+            anchor: 'candidates_registrations_personal_information_email_container'
+          ) %>
+      <%- end -%>
 
       <h2 class="govuk-heading-m">Request details</h2>
 
