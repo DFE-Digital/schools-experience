@@ -72,13 +72,13 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
         school.town,
         school.county,
         school.postcode
-      ].join(', '),
+      ].reject(&:blank?).join(', '),
       school_start_time: profile.start_time,
       school_finish_time: profile.end_time,
       school_dress_code: [
         profile.dress_code,
         profile.dress_code_other_details,
-      ].join(', '),
+      ].reject(&:blank?).join(', '),
       school_parking: [
         profile.parking_provided ? 'Yes' : 'No',
         profile.parking_details
