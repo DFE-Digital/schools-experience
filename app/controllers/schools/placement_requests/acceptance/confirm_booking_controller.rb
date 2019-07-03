@@ -37,9 +37,12 @@ module Schools
       private
 
         def find_or_create_booking(placement_request)
+          duration = placement_request&.placement_date&.duration
+
           placement_request.booking || Bookings::Booking.from_confirm_booking(@confirm_booking).tap do |booking|
             booking.bookings_placement_request = placement_request
             booking.bookings_school = @current_school
+            (booking.duration = duration) if duration
           end
         end
 
