@@ -122,7 +122,8 @@ feature 'Candidate Registrations', type: :feature do
     context 'for known Candidate already signed in' do
       include_context 'fake gitis with known uuid'
 
-      let(:email_address) { 'test@example.com' }
+      # Contact gets default email address after reload via token lookup
+      let(:email_address) { fake_gitis.send(:fake_contact_data)['emailaddress2'] }
       let!(:candidate) { create(:candidate, :confirmed, gitis_uuid: fake_gitis_uuid) }
       let(:token) { create(:candidate_session_token, candidate: candidate) }
 

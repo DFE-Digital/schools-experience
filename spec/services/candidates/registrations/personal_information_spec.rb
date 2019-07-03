@@ -8,6 +8,8 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     it { is_expected.to respond_to :first_name }
     it { is_expected.to respond_to :last_name }
     it { is_expected.to respond_to :email }
+    it { is_expected.to respond_to :read_only_email }
+    it { is_expected.to have_attributes read_only_email: false }
   end
 
   context 'validations' do
@@ -152,6 +154,28 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       it 'returns false' do
         expect(pinfo.create_signin_token(gitis)).to be false
       end
+    end
+  end
+
+  describe '.email=' do
+    before { subject.email = 'second@test.com' }
+
+    context 'with unvalidate emails' do
+      subject do
+        build(:personal_information, email: 'first@test.com',
+          read_only_email: false)
+      end
+
+      it { is_expected.to have_attributes email: 'second@test.com' }
+    end
+
+    context 'with validated emails' do
+      subject do
+        build(:personal_information, email: 'first@test.com',
+          read_only_email: true)
+      end
+
+      it { is_expected.to have_attributes email: 'first@test.com' }
     end
   end
 end

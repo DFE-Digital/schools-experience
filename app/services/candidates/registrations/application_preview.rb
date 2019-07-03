@@ -12,6 +12,7 @@ module Candidates
         :last_name,
         :full_name,
         :email,
+        :read_only_email,
         to: :@personal_information
 
       delegate \
