@@ -24,6 +24,8 @@ class Notify
         personalisation: personalisation
       )
     rescue Notifications::Client::ServerError => e
+      ExceptionNotifier.notify_exception(e)
+      Raven.capture_exception(e)
       raise RetryableError, e.message
     end
   end
