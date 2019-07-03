@@ -43,7 +43,7 @@ module Bookings
       inverse_of: :placement_request,
       dependent: :destroy
 
-    scope :open, -> do
+    scope :unprocessed, -> do
       not_cancelled.merge unbooked
     end
 

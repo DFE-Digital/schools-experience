@@ -110,7 +110,7 @@ describe Bookings::Booking do
       end
     end
 
-    describe '.open' do
+    describe '.unprocessed' do
       let! :open_booking do
         FactoryBot.create :bookings_booking
       end
@@ -123,7 +123,7 @@ describe Bookings::Booking do
         FactoryBot.create :bookings_booking, :cancelled_by_candidate
       end
 
-      subject { described_class.open }
+      subject { described_class.unprocessed }
 
       it { is_expected.to match_array [open_booking] }
     end

@@ -90,8 +90,8 @@ describe Bookings::PlacementRequest, type: :model do
       FactoryBot.create :placement_request, school: school
     end
 
-    context '.open' do
-      subject { described_class.open }
+    context '.unprocessed' do
+      subject { described_class.unprocessed }
       it do
         is_expected.to match_array [
           placement_request_open,
