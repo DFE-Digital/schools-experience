@@ -62,7 +62,7 @@ module Bookings
     end
 
     def placement_start_date_with_duration
-      [date.to_formatted_s(:govuk), duration_days].join(' ')
+      [date.to_formatted_s(:govuk), 'for', duration_days].join(' ')
     end
 
     def duration_days

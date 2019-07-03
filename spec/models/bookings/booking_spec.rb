@@ -253,7 +253,7 @@ describe Bookings::Booking do
 
     specify 'should return a descriptive string' do
       expect(subject.placement_start_date_with_duration).to eq \
-        "#{date.to_formatted_s(:govuk)} 2 days"
+        "#{date.to_formatted_s(:govuk)} for 2 days"
     end
   end
 
