@@ -61,7 +61,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
       specify 'school_address is correctly-assigned' do
         expect(subject.school_address).to eql(
           [school.address_1, school.address_2, school.address_3,
-           school.town, school.county, school.postcode].join(", ")
+           school.town, school.county, school.postcode].reject(&:blank?).join(", ")
         )
       end
 
@@ -75,7 +75,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
 
       specify 'school_dress_code is correctly-assigned' do
         expect(subject.school_dress_code).to eql(
-          [profile.dress_code, profile.dress_code_other_details].join(", ")
+          [profile.dress_code, profile.dress_code_other_details].reject(&:blank?).join(", ")
         )
       end
 
