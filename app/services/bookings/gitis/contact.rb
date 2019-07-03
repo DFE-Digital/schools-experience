@@ -10,9 +10,12 @@ module Bookings
       STATE_CODE = 0
 
       UPDATE_BLACKLIST = %w{
-        dfe_channelcreation statecode emailaddress1 telephone1 mobilephone
-        address1_telephone1
+        dfe_channelcreation statecode mobilephone address1_telephone1
       }.freeze
+
+      UPDATE_BLACKLIST_OTHER_RECORDS = (
+        UPDATE_BLACKLIST + %w{telephone1 emailaddress1}
+      ).freeze
 
       entity_id_attribute :contactid
 
@@ -64,6 +67,10 @@ module Bookings
         end
       end
 
+      def created_by_us?
+        dfe_channelcreation.to_s == CHANNEL_CREATION.to_s
+      end
+
       def address
         [building, street, town_or_city, county, postcode].compact.join(", ")
       end
@@ -73,7 +80,7 @@ module Bookings
       end
 
       def email=(emailaddress)
-        if emailaddress1.blank?
+        if emailaddress1.blank? || created_by_us?
           self.emailaddress1 = emailaddress
         end
 
@@ -99,6 +106,7 @@ module Bookings
 
       def phone=(phonenumber)
         self.telephone2 = phonenumber&.strip
+        self.telephone1 = self.telephone2 if created_by_us?
       end
 
       def date_of_birth
