@@ -33,10 +33,15 @@ Given("I have completed the contact information form") do
   click_button 'Continue'
 end
 
-Given("I have completed the subject preference form") do
-  visit path_for 'candidate subjects', school: @school
+Given("I have completed the education form") do
+  visit path_for 'education', school: @school
   choose 'Graduate or postgraduate'
   select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
+  click_button 'Continue'
+end
+
+Given("I have completed the teaching preference form") do
+  visit path_for 'teaching preference', school: @school
   choose 'I’ve applied for teacher training'
   select 'Physics', from: 'First choice'
   select 'Mathematics', from: 'Second choice'
@@ -82,10 +87,14 @@ Then("the contact information form should populated with the details I've entere
   expect(find_field('UK telephone number').value).to eq '01234567890'
 end
 
-Then("the subject preference form should populated with the details I've entered so far") do
-  visit path_for 'candidate subjects', school: @school
+Then("the education form should populated with the details I've entered so far") do
+  visit path_for 'education', school: @school
   expect(find_field('Graduate or postgraduate')).to be_checked
   expect(find_field('If you have or are studying for a degree, tell us about your degree subject').value).to eq 'Physics'
+end
+
+Then("the teaching preference form should populated with the details I've entered so far") do
+  visit path_for 'teaching preference', school: @school
   expect(find_field("I’ve applied for teacher training")).to be_checked
   expect(find_field('First choice').value).to eq 'Physics'
   expect(find_field('Second choice').value).to eq 'Mathematics'

@@ -82,9 +82,8 @@ describe Candidates::Registrations::EducationsController, type: :request do
       end
 
       it 'redirects to the next step' do
-        # TODO update to point at teaching preference
         expect(response).to redirect_to \
-          '/candidates/schools/11048/registrations/subject_preference/new'
+          '/candidates/schools/11048/registrations/teaching_preference/new'
       end
     end
   end

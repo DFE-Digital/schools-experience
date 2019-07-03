@@ -58,7 +58,8 @@ feature 'Candidate Registrations', type: :feature do
       scenario "completing the Journey" do
         complete_personal_information_step
         complete_contact_information_step
-        complete_subject_preference_step
+        complete_education_step
+        complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
         complete_application_preview_step
@@ -73,7 +74,8 @@ feature 'Candidate Registrations', type: :feature do
       scenario "completing the Journey" do
         complete_personal_information_step
         complete_contact_information_step
-        complete_subject_preference_step
+        complete_education_step
+        complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
         complete_application_preview_step
@@ -90,7 +92,8 @@ feature 'Candidate Registrations', type: :feature do
         complete_personal_information_step
         complete_sign_in_step(token.token)
         complete_contact_information_step
-        complete_subject_preference_step
+        complete_education_step
+        complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
         complete_application_preview_step
@@ -111,7 +114,8 @@ feature 'Candidate Registrations', type: :feature do
         complete_personal_information_step
         complete_sign_in_step(token.token)
         complete_contact_information_step
-        complete_subject_preference_step
+        complete_education_step
+        complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
         complete_application_preview_step
@@ -136,7 +140,8 @@ feature 'Candidate Registrations', type: :feature do
         sign_in_via_dashboard(token.token)
         complete_personal_information_step
         complete_contact_information_step
-        complete_subject_preference_step
+        complete_education_step
+        complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
         complete_application_preview_step
@@ -194,23 +199,33 @@ feature 'Candidate Registrations', type: :feature do
     click_button 'Continue'
   end
 
-  def complete_subject_preference_step
+  def complete_education_step
     expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/subject_preference/new"
+      "/candidates/schools/#{school_urn}/registrations/education/new"
 
-    # Submit registrations/subject_preference form with errors
+    # Submit registrations/education form with errors
     choose 'Graduate or postgraduate'
-    select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
-    choose "I’m very sure and think I’ll apply"
-    select 'Maths', from: 'Second choice'
     click_button 'Continue'
     expect(page).to have_text "There is a problem"
 
-    # Submit registrations/subject_preference form successfully
+    # Submit registrations/education form successfully
     choose 'Graduate or postgraduate'
     select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
+    click_button 'Continue'
+  end
+
+  def complete_teaching_preference_step
+    expect(page.current_path).to eq \
+      "/candidates/schools/#{school_urn}/registrations/teaching_preference/new"
+
+    # Submit registrations/teaching_preference form with errors
+    choose "I’m very sure and think I’ll apply"
+    click_button 'Continue'
+
+    # Submit registrations/education form successfully
     choose "I’m very sure and think I’ll apply"
     select 'Physics', from: 'First choice'
+    select 'Maths', from: 'Second choice'
     click_button 'Continue'
   end
 

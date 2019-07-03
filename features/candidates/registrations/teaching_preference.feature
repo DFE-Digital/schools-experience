@@ -16,7 +16,7 @@ Feature: Entering teaching preference details
     Scenario: Filling in and subject the form
         Given I make my teaching preference selection
         When I submit the form
-        Then I should be on the 'candidate subjects' page for my school of choice
+        Then I should be on the 'request school experience placement' page for my school of choice
 
     Scenario: Editing choices
         Given I have completed the wizard

@@ -92,7 +92,7 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          '/candidates/schools/11048/registrations/subject_preference/new'
+          '/candidates/schools/11048/registrations/placement_preference/new'
       end
     end
   end
