@@ -26,6 +26,7 @@ Feature: Accepting placement requests
             | School experience details     |
             | Extra details from the school |
             | Help and support              |
+        And I should see the booking date and duration displayed
 
     Scenario: Email preview - school details
         Given I have progressed to the 'review and send email' page for my chosen placement request
