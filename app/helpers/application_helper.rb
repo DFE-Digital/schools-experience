@@ -42,6 +42,10 @@ module ApplicationHelper
     end
   end
 
+  def in_schools_namespace?
+    request.path.start_with?('/schools')
+  end
+
   def summary_row(key, value, change_path = nil, id: nil)
     action = change_path ? link_to('Change', change_path) : nil
 

@@ -12,7 +12,7 @@
       <%= user_info_and_logout_link %>
     </div>
 
-    <%- else -%>
+    <%- elsif in_schools_namespace? -%>
       <%= link_to 'Choose another service', Rails.configuration.x.oidc_services_list_url %>
     <%- end -%>
   </div>

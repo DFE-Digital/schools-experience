@@ -30,3 +30,7 @@ Feature: Candidate landing page
         Given I am on the 'landing' page
         Then there should be a section titled 'Before you start'
         And it should contain some useful information about the process
+
+    Scenario: No account links in the phase banner
+        Given I am on the 'landing' page
+        Then there should be no 'Choose another service' link in the phase banner
