@@ -2,10 +2,8 @@ module Schools
   class StateMissmatchError < StandardError; end
   class AuthFailedError < StandardError; end
 
-  class SessionsController < Schools::BaseController
+  class SessionsController < ApplicationController
     include DFEAuthentication
-
-    skip_before_action :ensure_onboarded
 
     rescue_from AuthFailedError,     with: :authentication_failure
     rescue_from StateMissmatchError, with: :authentication_failure
@@ -21,7 +19,7 @@ module Schools
     #
     # NOTE that the post_logout_redirect_uri must be configured by the DfE
     # Sign-in team and what we supply must match what's configured
-    def destroy
+    def logout
       id_token = session[:id_token]
 
       if id_token.nil?

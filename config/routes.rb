@@ -18,7 +18,9 @@ Rails.application.routes.draw do
 
     resource :schools, only: :show
     namespace :schools do
-      resource :session, only: %i(show destroy)
+      resource :session, only: %i(show) do
+        get :logout
+      end
       resource :dfe_session, only: %i(destroy)
       resource :switch, only: %i(new), controller: 'switch'
       resource :dashboard, only: :show

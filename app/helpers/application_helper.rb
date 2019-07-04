@@ -55,7 +55,7 @@ module ApplicationHelper
   end
 
   def user_info_and_logout_link
-    logout_link = link_to("Logout", schools_session_path)
+    logout_link = link_to("Logout", logout_schools_session_path)
 
     greeting = if @current_user.is_a?(OpenIDConnect::ResponseObject::UserInfo)
                  "Welcome #{@current_user.given_name} #{@current_user.family_name}"
