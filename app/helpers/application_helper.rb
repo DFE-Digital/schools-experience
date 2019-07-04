@@ -58,10 +58,12 @@ module ApplicationHelper
     logout_link = link_to("Logout", logout_schools_session_path)
 
     greeting = if @current_user.is_a?(OpenIDConnect::ResponseObject::UserInfo)
-                 "Welcome #{@current_user.given_name} #{@current_user.family_name}"
+                 "Welcome #{@current_user.given_name} #{@current_user.family_name}."
                end
 
-    safe_join([greeting, logout_link].compact, ". ")
+    switch_service = link_to("switch service", Rails.configuration.x.oidc_services_list_url)
+
+    safe_join([greeting, logout_link, "or", switch_service].compact, " ")
   end
 
   def phase_three_release_date

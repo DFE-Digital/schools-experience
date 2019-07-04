@@ -85,6 +85,7 @@ Rails.application.configure do
   config.x.oidc_client_id = 'schoolexperience'
   config.x.oidc_client_secret = Rails.application.credentials.dig(:dfe_pp_signin_secret)
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
+  config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
 
   config.x.fake_crm = ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true }))
 end
