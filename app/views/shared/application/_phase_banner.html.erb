@@ -11,6 +11,9 @@
     <div class="govuk-phase-banner__text auth">
       <%= user_info_and_logout_link %>
     </div>
+
+    <%- else -%>
+      <%= link_to 'Choose another service', Rails.configuration.x.oidc_services_list_url %>
     <%- end -%>
   </div>
 </div>
