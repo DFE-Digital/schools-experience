@@ -2,9 +2,8 @@ module Bookings
   class RegistrationContactMapper
     attr_reader :registration_session, :gitis_contact
 
-    delegate :personal_information, :contact_information, :subject_preference,
+    delegate :personal_information, :contact_information, :education, :teaching_preference,
       :placement_preference, :background_check, to: :registration_session
-
 
     def initialize(registration_session, gitis_contact)
       @registration_session = registration_session

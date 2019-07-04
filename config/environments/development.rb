@@ -87,6 +87,4 @@ Rails.application.configure do
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
 
   config.x.fake_crm = ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true }))
-
-  config.x.features = %i(split_subject_preference)
 end

@@ -20,6 +20,4 @@ Rails.application.configure do
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
 
   config.x.fake_crm = true
-
-  config.x.features = %i(split_subject_preference)
 end

@@ -73,7 +73,5 @@ Rails.application.configure do
 
   config.x.fake_crm = true
 
-  config.x.features = %i(split_subject_preference)
-
   Rails.application.routes.default_url_options = { protocol: 'https' }
 end
