@@ -19,20 +19,20 @@ module Schools
       end
 
       session.clear
-      redirect_to [end_session_endpoint, build_query(id_token)].join('?')
+
+      redirect_to(
+        URI::HTTPS.build(
+          host: get_oidc_client.host,
+          path: '/session/end',
+          query: build_query(id_token)
+        ).to_s
+      )
     end
 
   private
 
-    def end_session_endpoint
-      "https://#{get_oidc_client.host}/session/end"
-    end
-
     def build_query(id_token)
-      {
-        id_token_hint: id_token,
-        post_logout_redirect_uri: schools_url
-      }.to_query
+      { id_token_hint: id_token, post_logout_redirect_uri: schools_url }.to_query
     end
   end
 end
