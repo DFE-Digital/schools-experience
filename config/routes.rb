@@ -21,7 +21,6 @@ Rails.application.routes.draw do
       resource :session, only: %i(show) do
         get :logout
       end
-      resource :dfe_session, only: %i(destroy)
       resource :switch, only: %i(new), controller: 'switch'
       resource :dashboard, only: :show
       resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'

@@ -1,6 +1,7 @@
 module Schools
   class StateMissmatchError < StandardError; end
   class AuthFailedError < StandardError; end
+  class NoIDTokenError < StandardError; end
 
   class SessionsController < ApplicationController
     include DFEAuthentication
