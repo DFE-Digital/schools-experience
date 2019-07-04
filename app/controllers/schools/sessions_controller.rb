@@ -19,7 +19,10 @@ module Schools
     end
 
     def create
-      check_state(session[:state], params[:state])
+      # using fetch rather than :[] so it'll blow up
+      # here if it's retrieiving the state from the session that's
+      # the problem rather than the comparison
+      check_state(session.fetch(:state), params[:state])
 
       client                    = get_oidc_client
       client.authorization_code = params[:code]
