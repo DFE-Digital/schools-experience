@@ -6,8 +6,8 @@ describe "candidates/home/index.html.erb", type: :request do
 
   let(:ga_identifiers) do
     [
-      '<script async src="https://www.googletagmanager.com/gtag/js?id=AAAAABBBBBCCCCCDDDDDEEEEE"></script>',
-      'gtag("config", "AAAAABBBBBCCCCCDDDDDEEEEE");'
+      "<script async src='https://www.google-analytics.com/analytics.js'></script>",
+      "ga('create', '#{tracking_id}', 'auto');"
     ]
   end
 
