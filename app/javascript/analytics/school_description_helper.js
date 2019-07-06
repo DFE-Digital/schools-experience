@@ -5,6 +5,6 @@ const descriptionToggleEvent = (e) => {
     sendGAEvent('school-onboarding', 'toggle-school-description', value);
 };
 
-const descriptionSummary = document.querySelector('details');
+const descriptionSummary = document.querySelector('details#description-example');
 
 export { descriptionSummary, descriptionToggleEvent };
