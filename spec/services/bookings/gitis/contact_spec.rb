@@ -65,6 +65,26 @@ describe Bookings::Gitis::Contact, type: :model do
     end
   end
 
+  describe '#created_by_us?' do
+    context 'with our record' do
+      subject do
+        build :gitis_contact, \
+          dfe_channelcreation: described_class::CHANNEL_CREATION
+      end
+
+      it { is_expected.to be_created_by_us }
+    end
+
+    context 'with existing gitis record' do
+      subject do
+        build :gitis_contact, \
+          dfe_channelcreation: described_class::CHANNEL_CREATION + 1
+      end
+
+      it { is_expected.not_to be_created_by_us }
+    end
+  end
+
   describe "#email" do
     context "with primary address set" do
       subject { described_class.new(emailaddress1: 'first@test.com') }
@@ -146,37 +166,78 @@ describe Bookings::Gitis::Contact, type: :model do
 
     describe "#attributes_for_update" do
       let(:attrs) do
-        attributes_for :gitis_contact, :persisted, dfe_channelcreation: nil
+        attributes_for :gitis_contact, :persisted, dfe_channelcreation: channel
       end
 
       let(:contact) { Bookings::Gitis::Contact.new attrs }
       subject { contact.attributes_for_update }
 
-      context 'when unmodified' do
-        it { is_expected.not_to include('contactid') }
-        it { is_expected.not_to include('statecode') }
-        it { is_expected.not_to include('dfe_channelcreation') }
-        it { is_expected.not_to include('firstname') }
-        it { is_expected.not_to include('lastname') }
-        it { is_expected.to include('telephone2') }
-        it { is_expected.to include('emailaddress2') }
-      end
+      context 'with records we created' do
+        let(:channel) { described_class::CHANNEL_CREATION }
 
-      context 'when modified' do
-        before do
-          contact.firstname = 'Different'
-          contact.lastname = 'Different'
-          contact.email = 'new@fictional-address.com'
-          contact.phone = '0712345679'
+        context 'when unmodified' do
+          it { is_expected.not_to include('contactid') }
+          it { is_expected.not_to include('statecode') }
+          it { is_expected.not_to include('dfe_channelcreation') }
+          it { is_expected.not_to include('firstname') }
+          it { is_expected.not_to include('lastname') }
+          it { is_expected.to include('telephone2') }
+          it { is_expected.to include('emailaddress2') }
         end
 
-        it { is_expected.not_to include('contactid') }
-        it { is_expected.not_to include('statecode') }
-        it { is_expected.not_to include('dfe_channelcreation') }
-        it { is_expected.to include('firstname') }
-        it { is_expected.to include('lastname') }
-        it { is_expected.to include('emailaddress2') }
-        it { is_expected.to include('telephone2') }
+        context 'when modified' do
+          before do
+            contact.firstname = 'Different'
+            contact.lastname = 'Different'
+            contact.email = 'new@fictional-address.com'
+            contact.phone = '0712345679'
+          end
+
+          it { is_expected.not_to include('contactid') }
+          it { is_expected.not_to include('statecode') }
+          it { is_expected.not_to include('dfe_channelcreation') }
+          it { is_expected.to include('firstname') }
+          it { is_expected.to include('lastname') }
+          it { is_expected.to include('emailaddress1') }
+          it { is_expected.to include('emailaddress2') }
+          it { is_expected.to include('telephone1') }
+          it { is_expected.to include('telephone2') }
+        end
+      end
+
+      context "with other gitis records" do
+        let(:channel) { described_class::CHANNEL_CREATION + 1 }
+
+        context 'when unmodified' do
+          it { is_expected.not_to include('contactid') }
+          it { is_expected.not_to include('statecode') }
+          it { is_expected.not_to include('dfe_channelcreation') }
+          it { is_expected.not_to include('firstname') }
+          it { is_expected.not_to include('lastname') }
+          it { is_expected.not_to include('emailaddress1') }
+          it { is_expected.to include('emailaddress2') }
+          it { is_expected.not_to include('telephone1') }
+          it { is_expected.to include('telephone2') }
+        end
+
+        context 'when modified' do
+          before do
+            contact.firstname = 'Different'
+            contact.lastname = 'Different'
+            contact.email = 'new@fictional-address.com'
+            contact.phone = '0712345679'
+          end
+
+          it { is_expected.not_to include('contactid') }
+          it { is_expected.not_to include('statecode') }
+          it { is_expected.not_to include('dfe_channelcreation') }
+          it { is_expected.to include('firstname') }
+          it { is_expected.to include('lastname') }
+          it { is_expected.not_to include('emailaddress1') }
+          it { is_expected.to include('emailaddress2') }
+          it { is_expected.not_to include('telephone1') }
+          it { is_expected.to include('telephone2') }
+        end
       end
     end
   end

@@ -2,6 +2,7 @@ module Bookings
   module Gitis
     class CRM
       prepend FakeCrm if Rails.application.config.x.fake_crm
+      delegate :logger, to: Rails
 
       def initialize(token, service_url: nil, endpoint: nil)
         @token = token
@@ -18,6 +19,7 @@ module Bookings
         # ensure we can't accidentally pull too much data
         params = { '$top' => uuids.length }
 
+        crmlog "READING Contacts #{uuids.inspect}"
         if multiple_ids
           find_many(entity_type, uuids, params)
         else
@@ -31,16 +33,19 @@ module Bookings
           emailaddress1: address
         ))['value']
 
-        Contact.new(contacts[0]) if contacts.any?
+        if contacts.any?
+          Contact.new(contacts[0]).tap do |c|
+            crmlog "Read contact #{c.contactid}"
+          end
+        end
       end
 
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
-        find_possible_signin_contacts(email, 20) \
+        find_possible_signin_contacts(email, 20)
           .map(&Contact.method(:new))
-          .find do |contact|
-            contact.signin_attributes_match?(firstname, lastname, date_of_birth)
-          end
+          .find { |c| c.signin_attributes_match? firstname, lastname, date_of_birth }
+          .tap { |c| crmlog "Read contact #{c.contactid}" if c }
       end
 
       def write(entity)
@@ -51,11 +56,13 @@ module Bookings
         # webmock compares the request body as a serialized string
 
         if entity.id
-          update_entity entity.entity_id,
-            entity.attributes_for_update.sort.to_h
+          attrs = entity.attributes_for_update.sort.to_h
+          crmlog "UPDATING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
+          update_entity entity.entity_id, attrs
         else
-          entity.entity_id = create_entity entity.entity_id, \
-            entity.attributes_for_create.sort.to_h
+          attrs = entity.attributes_for_create.sort.to_h
+          crmlog "INSERTING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
+          entity.entity_id = create_entity entity.entity_id, attrs
         end
 
         entity.id
@@ -125,6 +132,10 @@ module Bookings
           '$filter' => filter,
           '$orderby' => 'createdon desc'
         )['value']
+      end
+
+      def crmlog(msg)
+        logger.warn "[CRM] #{msg}"
       end
     end
   end
