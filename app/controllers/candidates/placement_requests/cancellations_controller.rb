@@ -83,7 +83,7 @@ module Candidates
           school_name: cancellation.school_name,
           candidate_name: cancellation.candidate_name,
           cancellation_reasons: cancellation.reason,
-          requested_on: cancellation.created_at.to_formatted_s(:govuk),
+          requested_on: cancellation.placement_request.requested_on.to_formatted_s(:govuk),
           placement_request_url: schools_placement_request_url(cancellation.placement_request)
         ).despatch_later!
       end
