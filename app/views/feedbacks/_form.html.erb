@@ -1,0 +1,44 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Give feedback on this service</h1>
+    <%= form_for feedback do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <p>
+        Help us improve the manage school experience service.
+      </p>
+
+      <%= f.radio_button_fieldset :reason_for_using_service do |fieldset| %>
+        <% f.object.reasons_for_using_service.each do |option| %>
+          <% if f.object.requires_explanation? option %>
+            <%= fieldset.radio_input option do %>
+              <%= fieldset.text_area :reason_for_using_service_explanation %>
+            <% end %>
+          <% else %>
+            <%= fieldset.radio_input option %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= f.radio_button_fieldset :rating do |fieldset| %>
+        <% f.object.ratings.each do |option| %>
+          <%= fieldset.radio_input option %>
+        <% end %>
+      <% end %>
+
+      <%= f.text_area :improvements, rows: 5, label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
+        <p>
+          <%= content_for :pii_warning %>
+        </p>
+      <% end %>
+
+      <%= f.submit 'Submit feedback' %>
+    <% end %>
+
+    <h2 class="govuk-heading-m">Help and support</h2>
+
+    <p>
+      <%= content_for :help_and_support %>
+    </p>
+  </div>
+</div>
+

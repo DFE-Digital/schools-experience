@@ -56,6 +56,29 @@ en:
     description: 'Explain what the fee covers.'
     payment_method: 'Explain how the fee is paid. For example, by bank transfer, in cash or via PayPal.'
 
+  feedback_errors: &feedback_errors
+    attributes:
+      reason_for_using_service:
+        blank: 'Select an option for what did you come to do on the service'
+      reason_for_using_service_explanation:
+        blank: 'Provide an explanation'
+      rating:
+        blank: 'Select an option for how did you feel about the service'
+
+  feedback_fieldset: &feedback_fieldset
+    reason_for_using_service: What did you come to do on the service?
+    rating: Overall, how did you feel about the service you received?
+
+  feedback_label: &feedback_label
+    improvements: How could we improve the service? (optional)
+    reason_for_using_service_explanation: 'Tell us what you came here to do. Do not include any information that could identify you personally - such as your name'
+    rating:
+      very_satisfied: 'Very satisfied'
+      satisfied: 'Satisfied'
+      neither_satisfied_or_dissatisfied: 'Neither satisfied or dissatisfied'
+      dissatisfied: 'Dissatisfied'
+      very_dissatisfied: 'Very dissatisfied'
+
   activemodel:
     errors:
       models:
@@ -225,6 +248,11 @@ en:
           attributes:
             location:
               too_short: Must be at least 3 characters
+        candidates/feedback:
+          <<: *feedback_errors
+        schools/feedback:
+          <<: *feedback_errors
+
     attributes:
       bookings/profile:
         dress_code_business: Business dress
@@ -283,6 +311,11 @@ en:
         times_flexible: 'Are your start and finish times flexible? '
       schools_on_boarding_experience_outline:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
+
+      candidates_feedback:
+        <<: *feedback_fieldset
+      schools_feedback:
+        <<: *feedback_fieldset
 
     hint:
       schools_placement_requests_confirm_booking:
@@ -443,6 +476,20 @@ en:
         acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a>'
       schools_on_boarding_key_stage_list:
         early_years: 'Early years foundation stage (EYFS)'
+
+      candidates_feedback:
+        <<: *feedback_label
+        reason_for_using_service:
+          make_a_school_experience_request: 'Make a school experience request'
+          withdraw_request_or_cancel_booking: 'Withdraw a request or cancel a booking'
+          something_else: 'Something else'
+
+      schools_feedback:
+        <<: *feedback_label
+        reason_for_using_service:
+          set_up_new_school: 'Set up a new school or schools on the service'
+          manage_school_experience_requests_and_bookings: 'Manage your school experience requests and bookings'
+          something_else: 'Something else'
 
     page_entries_info:
       one_page:
