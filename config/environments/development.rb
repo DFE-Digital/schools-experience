@@ -87,4 +87,8 @@ Rails.application.configure do
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
 
   config.x.fake_crm = ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true }))
+
+  if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
+    Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
+  end
 end
