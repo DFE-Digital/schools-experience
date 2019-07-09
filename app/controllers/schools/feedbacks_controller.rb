@@ -11,7 +11,8 @@ module Schools
     end
 
     def create
-      @feedback = Schools::Feedback.new feedback_params
+      @feedback = Schools::Feedback.new \
+        feedback_params.merge(urn: current_school&.urn)
 
       if @feedback.save
         redirect_to @feedback

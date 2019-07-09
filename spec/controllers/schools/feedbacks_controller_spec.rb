@@ -46,6 +46,10 @@ describe Schools::FeedbacksController, type: :request do
         FactoryBot.build :schools_feedback
       end
 
+      it 'stores the urn' do
+        expect(Schools::Feedback.last.urn).to eq urn
+      end
+
       it 'redirects to the show action' do
         expect(response).to redirect_to \
           schools_feedback_path Schools::Feedback.last
