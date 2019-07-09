@@ -56,7 +56,7 @@ feature 'Candidate Registrations', type: :feature do
       end
 
       scenario "completing the Journey" do
-        complete_personal_information_step
+        complete_personal_information_step 'Enter your details'
         complete_contact_information_step
         complete_subject_preference_step
         complete_placement_preference_step
@@ -145,10 +145,10 @@ feature 'Candidate Registrations', type: :feature do
     end
   end
 
-  def complete_personal_information_step
+  def complete_personal_information_step(expected_heading = nil)
     # Begin wizard journey
     visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
-    expect(page).to have_text 'Check if we already have your details'
+    expect(page).to have_text expected_heading || 'Check if we already have your details'
 
     # Submit personal information form with errors
     fill_in 'First name', with: 'testy'
