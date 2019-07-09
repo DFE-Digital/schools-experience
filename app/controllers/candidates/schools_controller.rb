@@ -2,7 +2,7 @@ class Candidates::SchoolsController < ApplicationController
   include AnalyticsTracking
   EXPANDED_SEARCH_RADIUS = 50
 
-  content_security_policy do |policy|
+  content_security_policy(only: :show) do |policy| # Allow bing maps
     policy.connect_src :self, 'https://www.bing.com'
     policy.script_src :self, :data, "'unsafe-inline'", "'unsafe-eval'", 'https://www.bing.com', 'https://*.virtualearth.net'
     policy.font_src :self, :data
