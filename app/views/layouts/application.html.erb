@@ -56,7 +56,7 @@
           </strong>
           <div class="govuk-phase-banner__text phase">
             This is a new service – your
-            <a class="govuk-link" href="mailto:organise.school-experience@education.gov.uk">feedback</a>
+            <%= link_to 'feedback', feedback_path %>
             will help us to improve it.
           </div>
           <%- if @current_user.present? -%>
