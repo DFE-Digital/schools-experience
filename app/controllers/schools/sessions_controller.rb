@@ -19,6 +19,8 @@ module Schools
     end
 
     def create
+      return redirect_to schools_dashboard_path if user_signed_in?
+
       # using fetch rather than :[] so it'll blow up
       # here if it's retrieiving the state from the session that's
       # the problem rather than the comparison
