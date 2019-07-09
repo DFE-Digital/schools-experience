@@ -115,6 +115,18 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         end
       end
 
+      context 'out of range' do
+        let :date_of_birth do
+          { 3 => -1, 2 => -1, 1 => -2 }
+        end
+
+        it 'is invalid' do
+          expect(subject.errors[:date_of_birth]).to eq [
+            'Enter your date of birth'
+          ]
+        end
+      end
+
       context 'valid' do
         let :date_of_birth do
           25.years.ago

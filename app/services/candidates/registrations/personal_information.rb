@@ -35,6 +35,16 @@ module Candidates
         read_only_email ? email : super
       end
 
+      # Rescue argument error thrown by
+      # validates_timeliness/extensions/multiparameter_handler.rb
+      # when the user enters a DOB like `-1, -1, -2`.
+      # date of birth will be unset and get caught by the presence validation
+      def date_of_birth=(*args)
+        super
+      rescue ArgumentError
+        nil
+      end
+
     private
 
       def build_candidate_session(gitis_crm)
