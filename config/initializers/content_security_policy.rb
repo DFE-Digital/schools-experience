@@ -26,8 +26,11 @@
 
  Rails.application.config.content_security_policy do |policy|
    policy.default_src :self
-   if ENV['GA_TRACKING_ID'].present?
-     policy.img_src :self, "https://www.google-analytics.com"
-     policy.script_src :self, "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.google-analytics.com"
-   end
+
+   policy.connect_src :self, "https://*.visualstudio.com"
+   policy.img_src :self, "https://www.google-analytics.com"
+   policy.script_src :self, "'unsafe-inline'",
+     "https://www.googletagmanager.com",
+     "https://www.google-analytics.com",
+     "https://*.vo.msecnd.net"
  end
