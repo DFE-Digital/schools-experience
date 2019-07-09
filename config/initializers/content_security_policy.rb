@@ -30,10 +30,4 @@
      policy.img_src :self, "https://www.google-analytics.com"
      policy.script_src :self, "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.google-analytics.com"
    end
-
-   # Specify URI for violation reports
-#   policy.report_uri "/csp-violation-report-endpoint"
  end
-
-Rails.application.config.content_security_policy_report_only = \
-  %w{1 true yes}.include?(ENV['CSP_REPORT_ONLY'].to_s)
