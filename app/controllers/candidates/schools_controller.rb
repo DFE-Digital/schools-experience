@@ -2,6 +2,14 @@ class Candidates::SchoolsController < ApplicationController
   include AnalyticsTracking
   EXPANDED_SEARCH_RADIUS = 50
 
+  content_security_policy do |policy|
+    policy.connect_src :self, 'https://www.bing.com'
+    policy.script_src :self, :data, "'unsafe-inline'", "'unsafe-eval'", 'https://www.bing.com', 'https://*.virtualearth.net'
+    policy.font_src :self, :data
+    policy.img_src :self, :data, 'https://www.bing.com', 'https://*.virtualearth.net'
+    policy.style_src :self, "'unsafe-inline'", 'https://www.bing.com'
+  end
+
   def index
     return redirect_to new_candidates_school_search_path unless location_present?
 
