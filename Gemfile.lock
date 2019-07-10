@@ -183,7 +183,7 @@ GEM
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
-    jwt (2.1.0)
+    jwt (2.2.1)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.1.1)
@@ -224,7 +224,7 @@ GEM
     nio4r (2.4.0)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
-    notifications-ruby-client (3.1.0)
+    notifications-ruby-client (4.0.0)
       jwt (>= 1.5, < 3)
     openid_connect (1.1.8)
       activemodel
