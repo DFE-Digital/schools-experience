@@ -128,6 +128,9 @@ Rails.application.configure do
       ''
     end
     config.x.oidc_host = ENV.fetch('DFE_SIGNIN_HOST') { 'pp-oidc.signin.education.gov.uk' }
+    config.x.oidc_services_list_url = ENV.fetch('DFE_SERVICES_LIST_URL') do
+      'https://services.signin.education.gov.uk/my-services'
+    end
   end
 
   config.x.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)
