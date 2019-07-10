@@ -28,6 +28,17 @@
           <%- end -%>
         </dd>
       </div>
+
+      <%- if @placement_request.placement_date.present? -%>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Duration
+        </dt>
+        <dd class="govuk-summary-list__value availability-requested-date">
+          <%= pluralize(@placement_request.placement_date.duration, 'day') %>
+        </dd>
+      </div>
+      <%- end -%>
     </dl>
 
     <%= form_for @confirm_booking, url: schools_placement_request_acceptance_confirm_booking_path do |form| %>
