@@ -164,6 +164,10 @@ module Bookings
       cancellation&.sent?
     end
 
+    def requested_on
+      created_at&.to_date
+    end
+
   private
 
     def completed?
