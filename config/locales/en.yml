@@ -134,11 +134,11 @@ en:
         schools/on_boarding/fees:
           attributes:
             administration_fees:
-              inclusion: 'Select an opiton'
+              inclusion: 'Select Yes or No for Administration costs'
             dbs_fees:
-              inclusion: 'Select an opiton'
+              inclusion: 'Select Yes or No for DBS check costs'
             other_fees:
-              inclusion: 'Select an opiton'
+              inclusion: 'Select Yes or No for Other costs'
         schools/on_boarding/administration_fee:
           <<: *schools_on_boarding_school_fee_errors
         schools/on_boarding/dbs_fee:
