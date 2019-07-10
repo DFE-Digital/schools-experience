@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateBookingConfirmation do
-  it_should_behave_like "email template", "29ed44bd-dc79-4fb3-bf8e-6e0ff18365b3",
+  it_should_behave_like "email template", "b9882e65-b644-4c52-871e-0e5922f27d7e",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",
     placement_schedule: "2022-03-04 for 3 days",
@@ -10,7 +10,6 @@ describe NotifyEmail::CandidateBookingConfirmation do
     school_finish_time: "15:30",
     school_dress_code: "Smart casual, elbow patches",
     school_parking: "There is a car park on the school grounds",
-    school_admin_name: "Seymour Skinner",
     school_admin_email: "sskinner@springfield.co.uk",
     school_admin_telephone: "01234 123 1234",
     school_teacher_name: "Edna Krabappel",
@@ -83,10 +82,6 @@ describe NotifyEmail::CandidateBookingConfirmation do
         expect(subject.school_parking).to eql(
           ['No', profile.parking_details].join(', ')
         )
-      end
-
-      specify 'school_admin_name is correctly-assigned' do
-        expect(subject.school_admin_name).to eql(profile.admin_contact_full_name)
       end
 
       specify 'school_admin_email is correctly-assigned' do

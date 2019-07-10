@@ -144,10 +144,6 @@ module Bookings
       school.name
     end
 
-    def school_admin_name
-      school.admin_contact_name
-    end
-
     def candidate_email
       candidate.email
     end

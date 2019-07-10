@@ -388,16 +388,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#admin_contact_full_name' do
-    let :profile do
-      FactoryBot.build :school_profile, :with_admin_contact
-    end
-
-    it "returns the admin contact's name" do
-      expect(subject.admin_contact_full_name).to eq 'Gary Chalmers'
-    end
-  end
-
   context '#admin_contact_email' do
     let :profile do
       FactoryBot.build :school_profile, :with_admin_contact

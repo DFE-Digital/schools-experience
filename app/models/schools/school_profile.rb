@@ -167,7 +167,6 @@ module Schools
       :admin_contact,
       class_name: 'Schools::OnBoarding::AdminContact',
       mapping: [
-        %w(admin_contact_full_name full_name),
         %w(admin_contact_email email),
         %w(admin_contact_phone phone)
       ],
