@@ -31,8 +31,7 @@ module Schools
       session[:id_token]        = access_token.id_token # store this for logout flows.
       session[:current_user]    = userinfo
       session[:urn]             = userinfo.raw_attributes.dig("organisation", "urn").to_i
-
-      Rails.logger.info("Logged in #{session[:current_user]}, urn: #{session[:urn]}")
+      session[:school_name]     = userinfo.raw_attributes.dig("organisation", "name")
 
       redirect_to(session.delete(:return_url) || schools_dashboard_path)
 
