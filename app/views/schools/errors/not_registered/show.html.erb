@@ -12,10 +12,14 @@
 
     <p>
       To find out more about or sign up for manage school experience email your
-      request and URN to
+      request and URN (<%= session[:urn] %>) to
       <a href="mailto:organise.school-experience@education.gov.uk">
         organise.school-experience@education.gov.uk
       </a>
+    </p>
+
+    <p>
+      You are currently logged in as <strong><%= current_user_full_name %></strong>.
     </p>
 
     <section>
