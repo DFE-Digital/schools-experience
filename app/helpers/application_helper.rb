@@ -42,6 +42,10 @@ module ApplicationHelper
     end
   end
 
+  def in_schools_namespace?
+    request.path.start_with?('/schools')
+  end
+
   def summary_row(key, value, change_path = nil, id: nil)
     action = change_path ? link_to('Change', change_path) : ""
 
@@ -55,13 +59,15 @@ module ApplicationHelper
   end
 
   def user_info_and_logout_link
-    logout_link = link_to("Logout", schools_session_path)
+    logout_link = link_to("Logout", logout_schools_session_path)
 
     greeting = if @current_user.is_a?(OpenIDConnect::ResponseObject::UserInfo)
-                 "Welcome #{@current_user.given_name} #{@current_user.family_name}"
+                 "Welcome #{@current_user.given_name} #{@current_user.family_name}."
                end
 
-    safe_join([greeting, logout_link].compact, ". ")
+    switch_service = link_to("switch service", Rails.configuration.x.oidc_services_list_url)
+
+    safe_join([greeting, logout_link, "or", switch_service].compact, " ")
   end
 
   def phase_three_release_date

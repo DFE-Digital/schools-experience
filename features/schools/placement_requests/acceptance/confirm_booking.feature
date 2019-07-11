@@ -40,6 +40,11 @@ Feature: Accepting placement requests
         Then the date should be pre-populated
         And the original date should be listed on the page
 
+    Scenario: Displaying the duration when the school has fixed dates
+        Given my school is set to use 'fixed' dates
+        When I am on the 'confirm booking' page for my fixed placement request
+        Then I should see the placement request's duration
+
     Scenario: Entering an invalid date
         Given my school is set to use 'fixed' dates
         When I am on the 'confirm booking' page for my fixed placement request

@@ -23,6 +23,9 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.headers = {
+    'X-Content-Type-Options' => 'nosniff'
+  }
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -128,6 +131,9 @@ Rails.application.configure do
       ''
     end
     config.x.oidc_host = ENV.fetch('DFE_SIGNIN_HOST') { 'pp-oidc.signin.education.gov.uk' }
+    config.x.oidc_services_list_url = ENV.fetch('DFE_SERVICES_LIST_URL') do
+      'https://services.signin.education.gov.uk/my-services'
+    end
   end
 
   config.x.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)

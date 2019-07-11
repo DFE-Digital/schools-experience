@@ -45,8 +45,8 @@ module Bookings
 
     UPCOMING_TIMEFRAME = 2.weeks
 
-    scope :open, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
-    scope :upcoming, -> { open.where(arel_table[:date].between(Time.now..UPCOMING_TIMEFRAME.from_now)) }
+    scope :unprocessed, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
+    scope :upcoming, -> { unprocessed.where(arel_table[:date].between(Time.now..UPCOMING_TIMEFRAME.from_now)) }
     scope :accepted, -> { where.not(accepted_at: nil) }
 
     def self.from_confirm_booking(confirm_booking)

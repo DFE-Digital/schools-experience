@@ -71,3 +71,9 @@ Then("it should contain some useful information about the process") do
     end
   end
 end
+
+Then("there should be no {string} link in the phase banner") do |link|
+  within('.govuk-phase-banner') do
+    expect(page).not_to have_link(link)
+  end
+end
