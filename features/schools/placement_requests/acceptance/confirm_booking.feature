@@ -45,15 +45,6 @@ Feature: Accepting placement requests
         When I am on the 'confirm booking' page for my fixed placement request
         Then I should see the placement request's duration
 
-    Scenario: Entering an invalid date
-        Given my school is set to use 'fixed' dates
-        When I am on the 'confirm booking' page for my fixed placement request
-        And I select 'Chemistry' from the 'Confirm subject' select box
-        And I enter "It's a really exciting day" into the "Confirm experience details" text area
-        And I fill in the 'Confirm experience date' date field with an invalid date of 31st September next year
-        And I submit the form
-        Then I should see an error message stating 'not a valid date'
-
     Scenario: The date should be blank when the school has flexible dates
         Given my school is set to use 'flexible' dates
         When I am on the 'confirm booking' page for my flexible placement request
