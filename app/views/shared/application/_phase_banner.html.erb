@@ -4,8 +4,7 @@
       beta
     </strong>
     <div class="govuk-phase-banner__text phase">
-      This is a new service.
-      <a class="govuk-link" href="mailto:organise.school-experience@education.gov.uk">Give feedback</a>
+      This is a new service. <%= link_to 'Give feedback', feedback_path %>
     </div>
     <%- if @current_user.present? -%>
     <div class="govuk-phase-banner__text auth">

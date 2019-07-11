@@ -97,6 +97,8 @@ Rails.application.routes.draw do
       resource :profile, only: :show
       resource :confirmation, only: %i(create show)
     end
+
+    resources :feedbacks, only: %i(new create show)
   end
 
   namespace :candidates do
@@ -143,6 +145,8 @@ Rails.application.routes.draw do
 
       resource :dashboard, only: :show
     end
+
+    resources :feedbacks, only: %i(new create show)
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
 end
