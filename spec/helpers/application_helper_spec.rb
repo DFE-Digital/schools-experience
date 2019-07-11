@@ -71,7 +71,7 @@ describe ApplicationHelper, type: :helper do
       end
 
       specify "should contain a logout link" do
-        expect(subject).to have_link('Logout', href: '/schools/session')
+        expect(subject).to have_link('Logout', href: '/schools/session/logout')
       end
     end
   end

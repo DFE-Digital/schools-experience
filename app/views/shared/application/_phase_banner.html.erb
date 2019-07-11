@@ -1,0 +1,19 @@
+<div class="govuk-phase-banner">
+  <div class="govuk-phase-banner__content">
+    <strong class="govuk-tag govuk-phase-banner__content__tag ">
+      beta
+    </strong>
+    <div class="govuk-phase-banner__text phase">
+      This is a new service.
+      <a class="govuk-link" href="mailto:organise.school-experience@education.gov.uk">Give feedback</a>
+    </div>
+    <%- if @current_user.present? -%>
+    <div class="govuk-phase-banner__text auth">
+      <%= current_user_info_and_logout_link %>
+    </div>
+
+    <%- elsif in_schools_namespace? -%>
+      <%= link_to 'Choose another service', Rails.configuration.x.oidc_services_list_url %>
+    <%- end -%>
+  </div>
+</div>

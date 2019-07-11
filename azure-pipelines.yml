@@ -4,7 +4,7 @@ pool:
 variables:
   imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
-  # define four more variables imageName, dockerId, dockerPassword and dockerRegistry in the build pipeline in UI
+  # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
   POSTGRESS_PASSWORD: secret
   DATABASE_URL: postgis://postgres:secret@postgres/school_experience_test
   WEB_URL: postgis://postgres:secret@postgres/school_experience
@@ -15,64 +15,55 @@ variables:
 
 steps:
 
-  - script: docker login $(dockerRegistry) -u $(dockerId) -p $pswd
-    env:
-      pswd: $(dockerPassword)
-    displayName: 'Docker login'
-
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
   - script: docker run --name=redis -d $(REDIS_IMAGE)
     displayName: Launch Redis # done early to give it time to boot
 
-  - script: docker pull $(dockerRegistry)/$(imageName):latest || true
+  - script: docker pull $(DOCKER_HUB_REPO):latest || true
     displayName: Retrieve latest Docker build to use as cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker build -f Dockerfile --cache-from=$(dockerRegistry)/$(imageName):latest -t $(dockerRegistry)/$(imageName):$(imageTag) .
+  - script: docker build -f Dockerfile --cache-from=$(DOCKER_HUB_REPO):latest -t $(DOCKER_HUB_REPO):$(imageTag) .
     displayName: Build Docker Image using Cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker build -f Dockerfile -t $(dockerRegistry)/$(imageName):$(imageTag) .
+  - script: docker build -f Dockerfile -t $(DOCKER_HUB_REPO):$(imageTag) .
     displayName: Build Docker Image without Cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:test:prepare
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(DOCKER_HUB_REPO):$(imageTag) rake db:create db:test:prepare
     displayName: Create Testing databases, import schema and fixtures
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) rspec
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(DOCKER_HUB_REPO):$(imageTag) rspec
     displayName: Run the Specs
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 $(dockerRegistry)/$(imageName):$(imageTag) cucumber --profile=$(CUCUMBER_PROFILE)
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 $(DOCKER_HUB_REPO):$(imageTag) cucumber --profile=$(CUCUMBER_PROFILE)
     displayName: Run the Cucumber features
-  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) brakeman --no-pager
+  - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
-  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed $(dockerRegistry)/$(imageName):$(imageTag) rake db:create db:schema:load
+  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed $(DOCKER_HUB_REPO):$(imageTag) rake db:create db:schema:load
     displayName: Create Smoketest database and import schema
-  - script: docker run -d --name=smoketest --health-interval=4s --link postgres:postgres --link redis:redis -e RAILS_ENV=servertest -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed -e SKIP_FORCE_SSL=true $(dockerRegistry)/$(imageName):$(imageTag)
+  - script: docker run -d --name=smoketest --health-interval=4s --link postgres:postgres --link redis:redis -e RAILS_ENV=servertest -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e SECRET_KEY_BASE=stubbed -e SKIP_FORCE_SSL=true $(DOCKER_HUB_REPO):$(imageTag)
     displayName: Spin up app
   - script: sleep 15 # ugly but gives the web app time to boot
     displayName: Pause to allow app to boot
   - script: docker ps | grep smoketest | grep '(healthy)' || false
     displayName: Check app reports as Healthy
-  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL -e REDIS_URL -e RAILS_ENV=test $(dockerRegistry)/$(imageName):$(imageTag) govuk-lint-ruby app lib spec
+  - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL -e REDIS_URL -e RAILS_ENV=test $(DOCKER_HUB_REPO):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
 
   - script: |
       docker run --name=selenium-chrome -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-chrome
-      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(DOCKER_HUB_REPO):$(imageTag) cucumber
     displayName: Run Cucumber via Selenium Chrome
 
   - script: |
       docker run --name=selenium-firefox -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-firefox
-      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(dockerRegistry)/$(imageName):$(imageTag) cucumber
+      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(DOCKER_HUB_REPO):$(imageTag) cucumber
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/debug')))
     displayName: Run Cucumber via Selenium Firefox
 
   - script: |
-      docker push $(dockerRegistry)/$(imageName):$(imageTag)
-      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(dockerRegistry)/$(imageName):latest
-      docker push $(dockerRegistry)/$(imageName):latest
-      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)
-      docker tag $(dockerRegistry)/$(imageName):$(imageTag) $(DOCKER_HUB_REPO):latest
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Push Docker image (built from master)'
 

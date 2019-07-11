@@ -70,12 +70,12 @@ describe Schools::PlacementRequests::Acceptance::ConfirmBookingController, type:
       end
     end
 
-    context 'with invalid params' do
+    context 'with an invalid date' do
       let(:params) do
         {
           schools_placement_requests_confirm_booking: {
             bookings_subject_id: create(:bookings_subject).id,
-            # date: '2019-07-03',
+            date: '2019-09-31',
             placement_details: "you'll get to try out teaching"
           }
         }
@@ -89,6 +89,10 @@ describe Schools::PlacementRequests::Acceptance::ConfirmBookingController, type:
 
       specify 'should rerender the new template' do
         expect(response).to render_template(:new)
+      end
+
+      specify "should include an 'invalid date' error" do
+        expect(response.body).to match(/not a valid date/)
       end
     end
   end
