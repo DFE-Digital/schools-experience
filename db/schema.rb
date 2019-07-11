@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_28_133753) do
+ActiveRecord::Schema.define(version: 2019_07_11_150310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2019_06_28_133753) do
     t.text "location"
     t.string "candidate_instructions"
     t.datetime "accepted_at"
+    t.boolean "attended"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
     t.index ["bookings_subject_id"], name: "index_bookings_bookings_on_bookings_subject_id"
