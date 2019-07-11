@@ -21,6 +21,12 @@ protected
   def current_contact=(contact)
     raise InvalidContact unless contact.is_a?(Bookings::Gitis::Contact)
 
+    if current_contact && current_contact.contactid != contact.contactid
+      Rails.logger.warn \
+        "Signed in Candidate overwritten - #{current_contact.contactid} to #{contact.contactid}"
+      delete_registration_sessions!
+    end
+
     contact.tap do |c|
       session[:gitis_contact] = c.attributes
     end
@@ -48,5 +54,9 @@ protected
 
   def authenticate_user!
     current_candidate || fail(UnauthorizedCandidate)
+  end
+
+  def delete_registration_sessions!
+    Candidates::Registrations::SchoolSession.delete_all_registrations session
   end
 end

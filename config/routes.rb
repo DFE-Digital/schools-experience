@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/cookies_policy', to: 'pages#cookies_policy'
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
-  get '/service_update', to: 'pages#service_update'
+  get '/service_update', to: 'pages#service_update' if Rails.application.config.x.phase >= 4
 
   get '/auth/callback', to: 'schools/sessions#create'
 
@@ -17,7 +17,9 @@ Rails.application.routes.draw do
 
   resource :schools, only: :show
   namespace :schools do
-    resource :session, only: %i(show destroy)
+    resource :session, only: %i(show) do
+      get :logout
+    end
     resource :switch, only: %i(new), controller: 'switch'
     resource :dashboard, only: :show
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
@@ -26,6 +28,23 @@ Rails.application.routes.draw do
       resources :placement_requests do
         resource :cancellation, only: %i(show new create edit update), controller: 'placement_requests/cancellations' do
           resource :notification_delivery, only: %i(show create), controller: 'placement_requests/cancellations/notification_deliveries'
+        end
+        namespace :acceptance do
+          resource :confirm_booking,
+            only: [:new, :create],
+            controller: '/schools/placement_requests/acceptance/confirm_booking'
+          resource :add_more_details,
+            only: [:new, :create],
+            controller: '/schools/placement_requests/acceptance/add_more_details'
+          resource :review_and_send_email,
+            only: [:new, :create],
+            controller: '/schools/placement_requests/acceptance/review_and_send_email'
+          resource :preview_confirmation_email,
+            only: [:new, :create],
+            controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
+          resource :email_sent,
+            only: [:show],
+            controller: '/schools/placement_requests/acceptance/email_sent'
         end
         namespace :acceptance do
           resource :confirm_booking,
@@ -90,7 +109,7 @@ Rails.application.routes.draw do
     resources :school_searches, only: %i{new}
 
     if Rails.application.config.x.phase >= 3
-    get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
+      get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
     end
 
     resources :schools, only: %i{index show} do

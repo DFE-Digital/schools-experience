@@ -21,6 +21,42 @@ describe Candidates::Registrations::SchoolSession do
     {}
   end
 
+  context '.destroy_all_registrations' do
+    let :session do
+      {
+        'schools/100/registrations' => {
+          'personal_information' => {
+            'first_name'    => 'One',
+            'last_name'     => 'Test',
+            'email'         => 'one@test.one',
+            'date_of_birth' => Date.parse('1980-01-01')
+          }
+        },
+        'schools/200/registrations' => {
+          'personal_information' => {
+            'first_name'    => 'Two',
+            'last_name'     => 'Test',
+            'email'         => 'two@test.two',
+            'date_of_birth' => Date.parse('1980-01-01')
+          },
+        },
+        'some-other-key' => 'test'
+      }
+    end
+
+    before { described_class.delete_all_registrations session }
+    subject { session }
+
+    it "will remove the registrations keys" do
+      is_expected.not_to include('schools/100/registrations')
+      is_expected.not_to include('schools/200/registrations')
+    end
+
+    it "will leave the other keys" do
+      is_expected.to include('some-other-key' => 'test')
+    end
+  end
+
   context '#current_registration' do
     context '1 school' do
       subject do

@@ -55,6 +55,7 @@
     </ul>
   </section>
 
+  <%- if Rails.application.config.x.phase >= 4 -%>
   <section class="help-and-support">
     <h3 class="govuk-heading-s">Help and support</h3>
     <ul class="govuk-list">
@@ -66,4 +67,5 @@
       </li>
     </ul>
   </section>
+  <%- end -%>
 </article>

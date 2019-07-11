@@ -11,3 +11,8 @@ Feature: The School Landing Page
     Scenario: Start now button
         Given I am on the 'schools' page
         Then there should be a 'Start now' link to the 'schools dashboard'
+
+    Scenario: Choose another service link
+        Given I am not logged in
+        When I am on the 'schools' page
+        Then there should be a 'Choose another service' link to the DfE services list page
