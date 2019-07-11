@@ -7,7 +7,7 @@ services:
        - "3000:3000"
      restart: always
      healthcheck:
-       disable: true
+       disable: false
      environment:
        - RAILS_ENV=servertest
        - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
@@ -16,14 +16,14 @@ services:
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      depends_on:
-       - create-db
+       - db-tasks
 
    delayed-jobs:
      image: school-experience:latest
      command: rake jobs:work
      restart: always
      healthcheck:
-       disable: true
+       disable: false
      environment:
        - RAILS_ENV=servertest
        - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
@@ -32,9 +32,9 @@ services:
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      depends_on:
-       - create-db
+       - db-tasks
   
-   create-db:
+   db-tasks:
      image: school-experience:latest
      command: rake db:create db:schema:load
      restart: on-failure
