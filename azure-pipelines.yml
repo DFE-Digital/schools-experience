@@ -105,10 +105,10 @@ jobs:
   - script: |
       docker pull $(DOCKER_HUB_REPO):latest || true
       docker build -f Dockerfile --cache-from=$(DOCKER_HUB_REPO):latest -t school-experience:latest .
-      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml up -d 
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d 
       sleep 15
       echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
-      docker-compose -f docker-compose.yml -f docker-compose-selenium.yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) school-experience cucumber $(features)
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) school-experience cucumber $(features)
     displayName: Run Cucumber Tests
     condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['browser'],'chrome')))
 
