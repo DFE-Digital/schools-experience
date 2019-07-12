@@ -13,6 +13,20 @@ module Schools
     end
 
     def update
+      Bookings::Booking.transaction do
+        params
+          .select { |k,_| k.match(/\A\d+\z/) }
+          .each do |booking_id, attended|
+            current_school
+              .bookings
+              .find(booking_id).tap do |booking|
+                booking.attended = ActiveModel::Type::Boolean.new.cast(attended)
+                booking.save
+              end
+          end
+
+        redirect_to schools_confirm_attendance_path
+      end
     end
 
   private
