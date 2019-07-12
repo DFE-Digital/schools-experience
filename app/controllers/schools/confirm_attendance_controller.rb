@@ -13,10 +13,17 @@ module Schools
 
     def update
       bookings_params = params
-        .select { |key,_| key.match(/\A\d+\z/) }
-        .transform_keys { |key| key.to_i }
+        .select { |key, _| key.match(/\A\d+\z/) }
+        .transform_keys(&:to_i)
 
-      bookings = unlogged_bookings.where(id: bookings_params.keys).index_by(&:id)
+      bookings = unlogged_bookings
+        .eager_load(
+          :bookings_placement_request,
+          :bookings_subject,
+          :bookings_school
+        )
+        .where(id: bookings_params.keys)
+        .index_by(&:id)
 
       Bookings::Booking.transaction do
         bookings_params.each do |booking_id, attended|
