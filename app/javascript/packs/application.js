@@ -18,8 +18,3 @@ global.mapsLoadedCallback = function() {
     instance.initMap() ;
   }
 }
-
-// custom Google Analytics events
-import { descriptionSummary, descriptionToggleEvent } from 'analytics/school_description_helper.js';
-
-descriptionSummary.addEventListener('toggle', descriptionToggleEvent);
