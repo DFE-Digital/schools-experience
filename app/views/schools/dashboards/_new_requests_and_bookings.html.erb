@@ -18,4 +18,12 @@
     </header>
     <p class="govuk-hint">A candidate has asked to change a booking</p>
   </div>
+
+  <div id="confirm-attendance" class="subsection">
+    <header class="dashboard-high-priority">
+      <%= link_to "Confirm attendance", schools_confirm_attendance_path  %>
+      <%= numbered_circle(@new_bookings, id: 'new-bookings-counter') %>
+    </header>
+    <p class="govuk-hint">Confirm if candidates have attended their school experience</p>
+  </div>
 </section>
