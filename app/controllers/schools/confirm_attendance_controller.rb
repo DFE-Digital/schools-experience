@@ -26,7 +26,7 @@ module Schools
           end
         end
 
-        redirect_to schools_confirm_attendance_path
+        redirect_to schools_dashboard_path
       end
     end
 
