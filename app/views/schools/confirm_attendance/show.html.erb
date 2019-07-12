@@ -19,7 +19,7 @@
       </thead>
       <tbody class="govuk-table__body">
         <% @bookings.each do |booking| %>
-          <tr class="govuk-table__row">
+          <tr class="govuk-table__row" data-booking-id="<%= booking.id %>">
             <th class="govuk-table__header" scope="row">
               <%= booking.candidate_name %>
             </th>
@@ -50,7 +50,7 @@
 
 <% else %>
   <p>
-    There are no bookings that need their attandance to be confirmed.
+    There are no bookings that need their attendance to be confirmed.
   </p>
 
   <p>

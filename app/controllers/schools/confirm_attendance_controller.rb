@@ -44,6 +44,7 @@ module Schools
         .bookings
         .previous
         .attendance_unlogged
+        .order(date: 'desc')
     end
 
     def assign_gitis_contacts(bookings)
