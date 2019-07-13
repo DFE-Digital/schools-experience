@@ -61,4 +61,11 @@
   </div>
 </div>
 
-<%= javascript_pack_tag 'analytics' %>
+<script>
+  window.onload = function() {
+    descriptionTracker.element.addEventListener(
+      'toggle',
+      this.descriptionTracker.event
+    );
+  };
+</script>
