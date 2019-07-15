@@ -6,7 +6,7 @@ describe Notify do
   let(:to) { 'somename@somecompany.org' }
 
   before do
-    allow(NotifyJob).to receive(:perform_later)
+    allow(NotifyService.instance).to receive(:send_email)
   end
 
   subject { Notify.new(to: to) }
@@ -72,14 +72,15 @@ describe Notify do
     end
 
     describe '#despatch_later!' do
+      before { ActiveJob::Base.queue_adapter = :inline }
       before { notification.despatch_later! }
 
       it "should enqueue a notify job with the correct parameters" do
         recipients.each do |recipient|
-          expect(NotifyJob).to have_received(:perform_later).with \
-            to: recipient,
+          expect(NotifyService.instance).to have_received(:send_email).with \
+            email_address: recipient,
             template_id: notification.send(:template_id),
-            personalisation_json: notification.send(:personalisation).to_json
+            personalisation: notification.send(:personalisation)
         end
       end
     end
