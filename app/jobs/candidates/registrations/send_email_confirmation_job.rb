@@ -11,7 +11,7 @@ module Candidates
           school_name: registration_session.school.name,
           confirmation_link: confirmation_link(uuid, host)
 
-        notification.despatch!
+        notification.despatch_later!
       end
 
     private

@@ -12,23 +12,23 @@ module Candidates
             registration_session.school.notifications_email,
             application_preview,
             placement_request_url
-          ).despatch!
+          ).despatch_later!
 
           NotifyEmail::CandidateRequestConfirmationWithConfirmationLink.from_application_preview(
             registration_session.email,
             application_preview,
             cancellation_url
-          ).despatch!
+          ).despatch_later!
         else
           NotifyEmail::SchoolRequestConfirmation.from_application_preview(
             registration_session.school.notifications_email,
             application_preview,
-          ).despatch!
+          ).despatch_later!
 
           NotifyEmail::CandidateRequestConfirmation.from_application_preview(
             registration_session.email,
             application_preview
-          ).despatch!
+          ).despatch_later!
         end
 
         RegistrationStore.instance.delete! registration_session.uuid

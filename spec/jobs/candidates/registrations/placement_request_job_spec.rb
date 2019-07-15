@@ -17,20 +17,20 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
   end
 
   let :school_request_confirmation_notification do
-    double NotifyEmail::SchoolRequestConfirmation, despatch!: true
+    double NotifyEmail::SchoolRequestConfirmation, despatch_later!: true
   end
 
   let :candidate_request_confirmation_notification do
-    double NotifyEmail::CandidateRequestConfirmation, despatch!: true
+    double NotifyEmail::CandidateRequestConfirmation, despatch_later!: true
   end
 
   let :school_request_confirmation_notification_with_placement_request_url do
-    double NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl, despatch!: true
+    double NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl, despatch_later!: true
   end
 
   let :candidate_request_confirmation_notification_with_confirmation_link do
     double NotifyEmail::CandidateRequestConfirmationWithConfirmationLink,
-      despatch!: true
+      despatch_later!: true
   end
 
   let :cancellation_url do
@@ -78,7 +78,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
               application_preview
 
           expect(school_request_confirmation_notification).to \
-            have_received :despatch!
+            have_received :despatch_later!
         end
 
         it 'notifies the candidate' do
@@ -88,7 +88,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
               application_preview
 
           expect(candidate_request_confirmation_notification).to \
-            have_received :despatch!
+            have_received :despatch_later!
         end
 
         it 'deletes the registration session from redis' do
@@ -111,7 +111,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
               placement_request_url
 
           expect(school_request_confirmation_notification_with_placement_request_url).to \
-            have_received :despatch!
+            have_received :despatch_later!
         end
 
         it 'notifies the candidate' do
@@ -123,7 +123,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
           expect(
             candidate_request_confirmation_notification_with_confirmation_link
-          ).to have_received :despatch!
+          ).to have_received :despatch_later!
         end
 
         it 'deletes the registration session from redis' do

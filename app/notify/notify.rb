@@ -6,6 +6,10 @@ class Notify
   end
 
   def despatch!
+    raise caller.reject { |l| l.include? 'gem' }.first
+  end
+
+  def despatch_later!
     to.each do |address|
       NotifyJob.perform_later \
         to: address,
@@ -13,8 +17,6 @@ class Notify
         personalisation_json: personalisation.to_json
     end
   end
-
-  alias_method :despatch_later!, :despatch!
 
 private
 

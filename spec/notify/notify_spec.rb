@@ -22,9 +22,9 @@ describe Notify do
   end
 
   describe 'Methods' do
-    describe '#despatch!' do
+    describe '#despatch_later!' do
       it "should fail with 'Not implemented'" do
-        expect { subject.despatch! }.to raise_error('Not implemented')
+        expect { subject.despatch_later! }.to raise_error('Not implemented')
       end
     end
 
@@ -71,8 +71,8 @@ describe Notify do
       %w(test1@user.com test2@user.com)
     end
 
-    describe '#despatch!' do
-      before { notification.despatch! }
+    describe '#despatch_later!' do
+      before { notification.despatch_later! }
 
       it "should enqueue a notify job with the correct parameters" do
         recipients.each do |recipient|

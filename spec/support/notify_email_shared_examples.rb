@@ -48,12 +48,12 @@ shared_examples_for "email template" do |template_id, personalisation|
   end
 
   describe 'Methods' do
-    describe '#despatch!' do
+    describe '#despatch_later!' do
       before do
         allow(NotifyJob).to receive(:perform_later).and_return(true)
       end
 
-      before { subject.despatch! }
+      before { subject.despatch_later! }
 
       specify 'it enqueues the email delivery job' do
         subject.to.each do |address|
