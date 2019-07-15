@@ -1,38 +1,20 @@
 class Notify
-  attr_accessor :notify_client, :to
-
-  API_KEY = ENV['NOTIFY_API_KEY'].presence || Rails.application.credentials[:notify_api_key].freeze
-
-  class RetryableError < ArgumentError; end
-
-  class << self
-    def notification_class
-      Rails.application.config.x.notify_client.presence || Notifications::Client
-    end
-  end
+  attr_accessor :to
 
   def initialize(to:)
-    self.to = to
-    self.notify_client = self.class.notification_class.new(API_KEY)
+    self.to = Array.wrap to
   end
 
   def despatch!
-    begin
-      notify_client.send_email(
+    to.each do |address|
+      NotifyJob.perform_later \
+        to: address,
         template_id: template_id,
-        email_address: to,
-        personalisation: personalisation
-      )
-    rescue Notifications::Client::ServerError => e
-      ExceptionNotifier.notify_exception(e)
-      Raven.capture_exception(e)
-      raise RetryableError, e.message
+        personalisation_json: personalisation.to_json
     end
   end
 
-  def despatch_later!
-    NotifyJob.perform_later(self)
-  end
+  alias_method :despatch_later!, :despatch!
 
 private
 
