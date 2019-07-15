@@ -28,10 +28,13 @@ module Bookings
       end
 
       def find_by_email(address)
-        contacts = api.get("contacts", '$top' => 1, '$filter' => filter_pairs(
-          emailaddress2: address,
-          emailaddress1: address
-        ))['value']
+        params = {
+          '$filter' => filter_pairs(emailaddress2: address, emailaddress1: address),
+          '$select' => Contact.entity_attribute_names.to_a.join(','),
+          '$top' => 1
+        }
+
+        contacts = api.get("contacts", params)['value']
 
         if contacts.any?
           Contact.new(contacts[0]).tap do |c|
@@ -113,11 +116,14 @@ module Bookings
       end
 
       def find_one(entity_type, uuid, params)
+        params['$select'] ||= entity_type.entity_attribute_names.to_a.join(',')
+
         entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
       end
 
       def find_many(entity_type, uuids, params)
         params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
+        params['$select'] ||= entity_type.entity_attribute_names.to_a.join(',')
 
         api.get(entity_type.entity_path, params)['value'].map do |entity_data|
           entity_type.new entity_data
@@ -129,6 +135,7 @@ module Bookings
         api.get(
           'contacts',
           '$top' => max,
+          '$select' => Contact.entity_attribute_names.to_a.join(','),
           '$filter' => filter,
           '$orderby' => 'createdon desc'
         )['value']
