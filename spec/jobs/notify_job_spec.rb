@@ -10,8 +10,12 @@ describe NotifyJob do
   end
 
   context '#perform_later' do
+    let(:email_address) do
+      'test@test.org'
+    end
+
     let(:email) do
-      NotifyEmail::CandidateMagicLink.new({ to: 'test@test.org' }.merge(personalisation))
+      NotifyEmail::CandidateMagicLink.new({ to: email_address }.merge(personalisation))
     end
 
     before { NotifyJob.perform_later(email) }
@@ -22,6 +26,16 @@ describe NotifyJob do
         "test@test.org",
         personalisation.to_json
       )
+    end
+
+    specify "doesn't log pii arguments" do
+      allow(ActiveJob::Base.logger).to receive :info do |&block|
+        personalisation.values.each { |v| expect(block.call).not_to include v }
+        expect(block.call).not_to include email_address
+        expect(block.call).to include 'NotifyEmail::CandidateMagicLink'
+      end
+
+      NotifyJob.perform_later(email)
     end
   end
 
