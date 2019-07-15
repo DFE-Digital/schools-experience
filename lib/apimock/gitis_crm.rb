@@ -10,7 +10,7 @@ module Apimock
     end
 
     def stub_contact_request(uuid, return_params = {})
-      stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})?$top=1").
+      stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})?$top=1&$select=#{contact_attributes}").
         with(headers: get_headers).
         to_return(
           status: 200,
@@ -27,7 +27,7 @@ module Apimock
     def stub_multiple_contact_request(uuids, return_params = {})
       uuidfilter = uuids.map { |id| "contactid eq '#{id}'" }.join(' or ')
 
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=#{uuids.length}&$filter=#{uuidfilter}").
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=#{uuids.length}&$filter=#{uuidfilter}&$select=#{contact_attributes}").
         with(headers: get_headers).
         to_return(
           status: 200,
@@ -51,7 +51,7 @@ module Apimock
         contact_data.merge('emailaddress1' => email).merge(stringified_params)
       ]
 
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'").
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'&$select=#{contact_attributes}").
         with(headers: get_headers).
         to_return(
           status: 200,
@@ -72,7 +72,7 @@ module Apimock
           .merge(contactdata.stringify_keys)
       end
 
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=20&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'&$orderby=createdon desc").
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=20&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'&$select=#{contact_attributes}&$orderby=createdon desc").
         with(headers: get_headers).
         to_return(
           status: 200,
@@ -297,6 +297,10 @@ module Apimock
         'statecode' => 0,
         'dfe_channelcreation' => 222750021
       }
+    end
+
+    def contact_attributes
+      Bookings::Gitis::Contact.entity_attribute_names.to_a.join(',')
     end
   end
 end
