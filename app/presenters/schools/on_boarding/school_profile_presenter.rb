@@ -216,6 +216,10 @@ module Schools
         @school_profile.admin_contact.email
       end
 
+      def admin_contact_email2
+        @school_profile.admin_contact.email2
+      end
+
       def flexible_dates?
         @school_profile.flexible_dates?
       end

@@ -33,7 +33,6 @@ Feature: School Profile
         | Some school                                                         | /schools/dashboard |
         | Check your answers before setting up your school experience profile | None               |
 
-
   Scenario: Viewing the profile
     Given I am on the 'Profile' page
     Then the page should have the following summary list information:
@@ -58,3 +57,4 @@ Feature: School Profile
       | Flexible on times           | No                                                          |
       | UK telephone number         | 01234567890                                                 |
       | Email address               | g.chalmers@springfield.edu                                  |
+      | Email address 2             | s.skinner@springfield.edu                                   |

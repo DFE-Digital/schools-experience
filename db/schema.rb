@@ -336,6 +336,7 @@ ActiveRecord::Schema.define(version: 2019_07_24_092556) do
     t.boolean "phases_list_secondary_and_college", default: false, null: false
     t.boolean "confirmation_acceptance", default: false
     t.text "candidate_experience_detail_times_flexible_details"
+    t.string "admin_contact_email2"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

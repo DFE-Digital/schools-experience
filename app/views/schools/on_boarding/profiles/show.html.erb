@@ -53,6 +53,9 @@
       <dl class="govuk-summary-list">
         <%= summary_row 'UK telephone number', @profile.admin_contact_phone, edit_schools_on_boarding_admin_contact_path %>
         <%= summary_row 'Email address', @profile.admin_contact_email, edit_schools_on_boarding_admin_contact_path %>
+        <% if @profile.admin_contact_email2.present? %>
+          <%= summary_row 'Email address 2', @profile.admin_contact_email2, edit_schools_on_boarding_admin_contact_path %>
+        <% end %>
       </dl>
 
       <h2 class="govuk-heading-m">Set up your school experience profile</h2>
