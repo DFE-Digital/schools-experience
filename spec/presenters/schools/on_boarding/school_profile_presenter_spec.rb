@@ -398,13 +398,13 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#admin_contact_email2' do
+  context '#admin_contact_email_secondary' do
     let :profile do
       FactoryBot.build :school_profile, :with_admin_contact
     end
 
     it "returns the admin contact's emails" do
-      expect(subject.admin_contact_email2).to eq 's.skinner@springfield.edu'
+      expect(subject.admin_contact_email_secondary).to eq 's.skinner@springfield.edu'
     end
   end
 

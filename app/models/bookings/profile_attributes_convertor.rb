@@ -77,11 +77,11 @@ module Bookings
       output[:admin_contact_email] = input[:admin_contact_email].presence
 
       if output[:admin_contact_email].present?
-        output[:admin_contact_email2] = input[:admin_contact_email2].presence
+        output[:admin_contact_email_secondary] = input[:admin_contact_email_secondary].presence
         output[:admin_contact_phone] = input[:admin_contact_phone].presence
       else
         output[:admin_contact_email] = \
-          output[:admin_contact_email2] = output[:admin_contact_phone] = nil
+          output[:admin_contact_email_secondary] = output[:admin_contact_phone] = nil
       end
     end
 

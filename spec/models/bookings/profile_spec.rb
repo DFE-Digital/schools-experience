@@ -256,14 +256,14 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.not_to allow_value('').for :admin_contact_email }
     end
 
-    describe "admin_contact_email2" do
-      it { is_expected.to allow_value('me@you.com').for :admin_contact_email2 }
-      it { is_expected.to allow_value('me.test@you.co.uk').for :admin_contact_email2 }
-      it { is_expected.not_to allow_value('you.com').for :admin_contact_email2 }
-      it { is_expected.not_to allow_value('https://you.com').for :admin_contact_email2 }
-      it { is_expected.not_to allow_value('me@you').for :admin_contact_email2 }
-      it { is_expected.not_to allow_value('').for :admin_contact_email2 }
-      it { is_expected.to allow_value(nil).for :admin_contact_email2 }
+    describe "admin_contact_email_secondary" do
+      it { is_expected.to allow_value('me@you.com').for :admin_contact_email_secondary }
+      it { is_expected.to allow_value('me.test@you.co.uk').for :admin_contact_email_secondary }
+      it { is_expected.not_to allow_value('you.com').for :admin_contact_email_secondary }
+      it { is_expected.not_to allow_value('https://you.com').for :admin_contact_email_secondary }
+      it { is_expected.not_to allow_value('me@you').for :admin_contact_email_secondary }
+      it { is_expected.not_to allow_value('').for :admin_contact_email_secondary }
+      it { is_expected.to allow_value(nil).for :admin_contact_email_secondary }
     end
 
     describe "admin_contact_phone" do

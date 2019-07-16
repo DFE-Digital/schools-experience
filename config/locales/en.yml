@@ -248,7 +248,7 @@ en:
             email:
               blank: "Enter admin contact's email address"
               invalid: 'Enter a valid email address'
-            email2:
+            email_secondary:
               invalid: 'Enter a valid email address'
         schools/on_boarding/availability_preference:
           attributes:
@@ -505,7 +505,7 @@ en:
         full_name: 'Full name'
         phone: 'UK telephone number'
         email: 'Email address'
-        email2: 'Email address 2'
+        email_secondary: 'Secondary email address'
       schools_on_boarding_availability_preference:
         fixed:
           true_html: 'If you only offer <strong>fixed</strong> dates, state when you provide school experience.<span id="more-detail-hint" class="govuk-hint">For example, on 10 May 2020.</span>'

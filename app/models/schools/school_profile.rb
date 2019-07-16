@@ -168,7 +168,7 @@ module Schools
       class_name: 'Schools::OnBoarding::AdminContact',
       mapping: [
         %w(admin_contact_email email),
-        %w(admin_contact_email2 email2),
+        %w(admin_contact_email_secondary email_secondary),
         %w(admin_contact_phone phone)
       ],
       constructor: :compose

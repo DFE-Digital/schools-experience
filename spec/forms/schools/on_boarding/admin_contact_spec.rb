@@ -4,7 +4,7 @@ describe Schools::OnBoarding::AdminContact, type: :model do
   context 'attributes' do
     it { is_expected.to respond_to :phone }
     it { is_expected.to respond_to :email }
-    it { is_expected.to respond_to :email2 }
+    it { is_expected.to respond_to :email_secondary }
   end
 
   context 'validations' do
@@ -47,7 +47,7 @@ describe Schools::OnBoarding::AdminContact, type: :model do
     end
 
     context 'email address format' do
-      subject { described_class.new(email: email, email2: email).tap(&:validate) }
+      subject { described_class.new(email: email, email_secondary: email).tap(&:validate) }
 
       context 'incorrect format' do
         let :email do
@@ -58,8 +58,8 @@ describe Schools::OnBoarding::AdminContact, type: :model do
           expect(subject.errors[:email]).to eq ['Enter a valid email address']
         end
 
-        it 'is invalid for email2' do
-          expect(subject.errors[:email2]).to eq ['Enter a valid email address']
+        it 'is invalid for email_secondary' do
+          expect(subject.errors[:email_secondary]).to eq ['Enter a valid email address']
         end
       end
 
@@ -72,8 +72,8 @@ describe Schools::OnBoarding::AdminContact, type: :model do
           expect(subject.errors[:email]).to be_empty
         end
 
-        it 'is valid for email2' do
-          expect(subject.errors[:email2]).to be_empty
+        it 'is valid for email_secondary' do
+          expect(subject.errors[:email_secondary]).to be_empty
         end
       end
     end

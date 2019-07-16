@@ -35,7 +35,7 @@ module Schools
 
       def admin_contact_params
         params.require(:schools_on_boarding_admin_contact).permit \
-          :phone, :email, :email2
+          :phone, :email, :email_secondary
       end
     end
   end

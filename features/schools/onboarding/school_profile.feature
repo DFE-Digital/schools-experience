@@ -57,4 +57,4 @@ Feature: School Profile
       | Flexible on times           | No                                                          |
       | UK telephone number         | 01234567890                                                 |
       | Email address               | g.chalmers@springfield.edu                                  |
-      | Email address 2             | s.skinner@springfield.edu                                   |
+      | Secondary email address     | s.skinner@springfield.edu                                   |

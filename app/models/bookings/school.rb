@@ -149,7 +149,7 @@ class Bookings::School < ApplicationRecord
 
   def notification_emails
     if profile && profile.admin_contact_email.present?
-      [profile.admin_contact_email, profile.admin_contact_email2].compact
+      [profile.admin_contact_email, profile.admin_contact_email_secondary].compact
     else
       [contact_email]
     end

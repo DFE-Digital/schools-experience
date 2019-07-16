@@ -34,6 +34,6 @@ Feature: Admin contact
     Given I am on the 'Admin contact' page
     And I enter '01234567890' into the 'UK telephone number' text area
     And I enter 'g.chalmers@springfield.edu' into the 'Email address' text area
-    And I enter 's.skinner@springfield.edu' into the 'Email address 2' text area
+    And I enter 's.skinner@springfield.edu' into the 'Secondary email address' text area
     When I submit the form
     Then I should be on the 'Profile' page
