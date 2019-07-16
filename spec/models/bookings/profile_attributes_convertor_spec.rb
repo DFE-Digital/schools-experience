@@ -24,6 +24,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(dress_code_smart_casual: true) }
       it { is_expected.to include(dress_code_other_details: 'Must have nice hat') }
       it { is_expected.to include(admin_contact_email: 'g.chalmers@springfield.edu') }
+      it { is_expected.to include(admin_contact_email2: 's.skinner@springfield.edu') }
       it { is_expected.to include(admin_contact_phone: '+441234567890') }
       it { is_expected.to include(primary_phase: true) }
       it { is_expected.to include(secondary_phase: true) }
@@ -88,6 +89,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(disabled_facilities: nil) }
       it { is_expected.to include(dress_code_other_details: nil) }
       it { is_expected.to include(admin_contact_email: nil) }
+      it { is_expected.to include(admin_contact_email2: nil) }
       it { is_expected.to include(admin_contact_phone: nil) }
       it { is_expected.to include(primary_phase: false) }
       it { is_expected.to include(secondary_phase: true) }

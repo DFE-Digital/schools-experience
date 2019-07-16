@@ -256,6 +256,16 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.not_to allow_value('').for :admin_contact_email }
     end
 
+    describe "admin_contact_email2" do
+      it { is_expected.to allow_value('me@you.com').for :admin_contact_email2 }
+      it { is_expected.to allow_value('me.test@you.co.uk').for :admin_contact_email2 }
+      it { is_expected.not_to allow_value('you.com').for :admin_contact_email2 }
+      it { is_expected.not_to allow_value('https://you.com').for :admin_contact_email2 }
+      it { is_expected.not_to allow_value('me@you').for :admin_contact_email2 }
+      it { is_expected.not_to allow_value('').for :admin_contact_email2 }
+      it { is_expected.to allow_value(nil).for :admin_contact_email2 }
+    end
+
     describe "admin_contact_phone" do
       it { is_expected.to allow_value('07123456789').for :admin_contact_phone }
       it { is_expected.to allow_value('02019123456').for :admin_contact_phone }
