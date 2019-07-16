@@ -17,6 +17,7 @@ class Schools::InsecureSessionsController < ApplicationController
     session[:id_token]     = 'abc123'
     session[:current_user] = OpenIDConnect::ResponseObject::UserInfo.new(given_name: 'Martin', family_name: 'Prince')
     session[:urn]          = 123456
+    session[:school_name]  = 'Some school'
     redirect_to '/schools/dashboard'
   end
 end

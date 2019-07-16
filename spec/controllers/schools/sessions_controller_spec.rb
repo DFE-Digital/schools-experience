@@ -12,6 +12,7 @@ describe Schools::SessionsController, type: :request do
       let(:access_token) { 'abc123' }
 
       let(:urn) { 123456 }
+      let(:school_name) { "Springfield Elementary" }
 
       before do
         allow_any_instance_of(ActionDispatch::Request)
@@ -60,7 +61,8 @@ describe Schools::SessionsController, type: :request do
             headers: {},
             body: {
               organisation: {
-                urn: urn
+                urn: urn,
+                name: school_name
               }
             }.to_json
           )
@@ -70,12 +72,16 @@ describe Schools::SessionsController, type: :request do
 
       subject! { get callback }
 
-      specify 'should do the thing' do
+      specify 'should redirect to the return url' do
         expect(response.body).to redirect_to(return_url)
       end
 
       specify 'should save the URN in the session' do
         expect(session[:urn]).to eql(urn)
+      end
+
+      specify 'should save the school name in the session' do
+        expect(session[:school_name]).to eql(school_name)
       end
 
       specify 'should save the current user in the session' do
