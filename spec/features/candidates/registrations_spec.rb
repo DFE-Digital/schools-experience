@@ -56,7 +56,7 @@ feature 'Candidate Registrations', type: :feature do
       end
 
       scenario "completing the Journey" do
-        complete_personal_information_step 'Enter your details'
+        complete_personal_information_step expected_heading: 'Enter your details'
         complete_contact_information_step
         complete_subject_preference_step
         complete_placement_preference_step
@@ -134,7 +134,7 @@ feature 'Candidate Registrations', type: :feature do
 
       scenario "completing the Journey" do
         sign_in_via_dashboard(token.token)
-        complete_personal_information_step
+        complete_personal_information_step fill_in_email: false
         complete_contact_information_step
         complete_subject_preference_step
         complete_placement_preference_step
@@ -159,7 +159,7 @@ feature 'Candidate Registrations', type: :feature do
 
       scenario "completing the Journey" do
         sign_in_via_dashboard(token.token)
-        complete_personal_information_step
+        complete_personal_information_step(fill_in_email: false)
         complete_contact_information_step
         sign_in_via_dashboard(newtoken.token)
         swap_back_to_subject_preference_step
@@ -171,7 +171,7 @@ feature 'Candidate Registrations', type: :feature do
     end
   end
 
-  def complete_personal_information_step(expected_heading = nil)
+  def complete_personal_information_step(expected_heading: nil, fill_in_email: true)
     # Begin wizard journey
     visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
     expect(page).to have_text expected_heading || 'Check if we already have your details'
@@ -185,7 +185,7 @@ feature 'Candidate Registrations', type: :feature do
     # Submit personal information form successfully
     fill_in 'First name', with: 'testy'
     fill_in 'Last name', with: 'mctest'
-    fill_in 'Email address', with: email_address
+    fill_in 'Email address', with: email_address if fill_in_email
     fill_in 'Day', with: '01'
     fill_in 'Month', with: '01'
     fill_in 'Year', with: '2000'

@@ -7,7 +7,11 @@ module Candidates
 
       def create
         @personal_information = PersonalInformation.new personal_information_params
-        @personal_information.read_only_email = candidate_signed_in?
+        if candidate_signed_in?
+          @personal_information.email = current_contact.email
+          @personal_information.read_only_email = candidate_signed_in?
+        end
+
         render(:new) && return unless @personal_information.valid?
 
         persist @personal_information
