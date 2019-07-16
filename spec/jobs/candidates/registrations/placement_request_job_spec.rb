@@ -74,7 +74,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         it 'notifies the school' do
           expect(NotifyEmail::SchoolRequestConfirmation).to \
             have_received(:from_application_preview).with \
-              school.notifications_email,
+              school.notification_emails,
               application_preview
 
           expect(school_request_confirmation_notification).to \
@@ -106,7 +106,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         it 'notifies the school' do
           expect(NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl).to \
             have_received(:from_application_preview).with \
-              school.notifications_email,
+              school.notification_emails,
               application_preview,
               placement_request_url
 

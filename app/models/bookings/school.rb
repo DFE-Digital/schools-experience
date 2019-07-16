@@ -147,11 +147,11 @@ class Bookings::School < ApplicationRecord
     !availability_preference_fixed? || has_available_dates?
   end
 
-  def notifications_email
+  def notification_emails
     if profile && profile.admin_contact_email.present?
-      profile.admin_contact_email
+      [profile.admin_contact_email, profile.admin_contact_email2].compact
     else
-      contact_email
+      [contact_email]
     end
   end
 
