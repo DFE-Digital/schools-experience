@@ -33,12 +33,13 @@ class Candidates::SchoolsController < ApplicationController
 
   def show
     @school = Candidates::School.find(params[:id])
+    @school.increment!(:views)
+
     if @school.private_beta?
       @presenter = Candidates::SchoolPresenter.new(@school, @school.profile)
+    else
+      @available_dates = @school.bookings_placement_dates.available
     end
-    @available_dates = @school.bookings_placement_dates.available
-
-    @school.increment!(:views)
   end
 
 private

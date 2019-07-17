@@ -105,7 +105,7 @@
 
       <div id="school-availability-info" class="govuk-summary-list__row">
         <%- if @school.availability_preference_fixed? -%>
-          <%= render partial: 'placement_dates', locals: { available_dates: @available_dates } %>
+          <%= render partial: 'placement_dates', locals: { available_dates: @presenter.available_dates } %>
         <%- else -%>
           <dt class="govuk-summary-list__key">
             Placement availability
