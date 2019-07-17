@@ -8,6 +8,10 @@ describe Event, type: :model do
         .with_foreign_key(:bookings_school_id)
         .optional
     end
+
+    specify do
+      expect(subject).to belong_to(:recordable).optional
+    end
   end
 
   describe 'Validation' do
