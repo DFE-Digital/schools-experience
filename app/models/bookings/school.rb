@@ -176,6 +176,7 @@ class Bookings::School < ApplicationRecord
 
     Bookings::School.transaction do
       update!(enabled: true)
+
       Event.create!(event_type: 'school_enabled', bookings_school: self)
     end
   end
