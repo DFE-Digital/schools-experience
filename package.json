@@ -2,12 +2,12 @@
   "name": "school_experience",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "3.5",
+    "@rails/webpacker": "^4.0.7",
     "@stimulus/polyfills": "^1.1.1",
     "govuk-frontend": "^2.5",
     "stimulus": "^1.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "3.7.2"
+    "webpack-dev-server": "^3.7"
   }
 }
