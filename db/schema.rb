@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_16_094514) do
+ActiveRecord::Schema.define(version: 2019_07_17_135225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -250,14 +250,14 @@ ActiveRecord::Schema.define(version: 2019_07_16_094514) do
 
   create_table "events", force: :cascade do |t|
     t.integer "bookings_school_id"
-    t.uuid "gitis_uuid"
     t.string "event_type", null: false
     t.integer "recordable_id"
     t.string "recordable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "bookings_candidate_id"
+    t.index ["bookings_candidate_id"], name: "index_events_on_bookings_candidate_id"
     t.index ["bookings_school_id"], name: "index_events_on_bookings_school_id"
-    t.index ["gitis_uuid"], name: "index_events_on_gitis_uuid"
   end
 
   create_table "feedbacks", force: :cascade do |t|
@@ -352,6 +352,7 @@ ActiveRecord::Schema.define(version: 2019_07_16_094514) do
   add_foreign_key "bookings_schools_subjects", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_subjects"
   add_foreign_key "candidates_session_tokens", "bookings_candidates", column: "candidate_id"
+  add_foreign_key "events", "bookings_candidates"
   add_foreign_key "events", "bookings_schools"
   add_foreign_key "schools_school_profiles", "bookings_schools"
 end

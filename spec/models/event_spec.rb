@@ -19,24 +19,24 @@ describe Event, type: :model do
       expect(subject).to validate_inclusion_of(:event_type).in_array(Event::EVENT_TYPES)
     end
 
-    context 'presence of school or gitis uuid' do
+    context 'presence of school or candidate' do
       context 'when both are missing' do
-        subject { build(:event, :without_gitis_uuid, :without_bookings_school) }
+        subject { build(:event, :without_bookings_candidate, :without_bookings_school) }
         specify { expect(subject).not_to be_valid }
       end
 
       context 'when the school is missing' do
-        subject { build(:event, :without_bookings_school) }
+        subject { create(:event, :without_bookings_school) }
         specify { expect(subject).to be_valid }
       end
 
-      context 'when the gitis uuid is missing' do
-        subject { build(:event, :without_gitis_uuid) }
+      context 'when the candidate is missing' do
+        subject { create(:event, :without_bookings_candidate) }
         specify { expect(subject).to be_valid }
       end
 
       context 'when both are present' do
-        subject { build(:event) }
+        subject { create(:event) }
         specify { expect(subject).to be_valid }
       end
     end
