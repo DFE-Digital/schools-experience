@@ -165,7 +165,7 @@ class Bookings::School < ApplicationRecord
     return true if disabled?
 
     Bookings::School.transaction do
-      update(enabled: false)
+      update!(enabled: false)
 
       Event.create!(event_type: 'school_disabled', bookings_school: self)
     end
@@ -175,7 +175,7 @@ class Bookings::School < ApplicationRecord
     return true if enabled?
 
     Bookings::School.transaction do
-      update(enabled: true)
+      update!(enabled: true)
       Event.create!(event_type: 'school_enabled', bookings_school: self)
     end
   end
