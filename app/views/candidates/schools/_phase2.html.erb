@@ -85,16 +85,18 @@
       </ul>
     </div>
 
-    <div class="school-start-request-button__tablet_plus">
-      <%= link_to "Start request",
-                  new_candidates_school_registrations_personal_information_path(@presenter.school),
-                  class:"govuk-button" %>
-    </div>
+    <% if include_candidate_request_links %>
+      <div class="school-start-request-button__tablet_plus">
+        <%= link_to "Start request",
+                    new_candidates_school_registrations_personal_information_path(@presenter.school),
+                    class:"govuk-button" %>
+      </div>
 
-    <p>
-      <%= link_to 'Back to Search Results', :back,
-                  data: {controller: 'back-link'} %>
-    </p>
+      <p>
+        <%= link_to 'Back to Search Results', :back,
+                    data: {controller: 'back-link'} %>
+      </p>
+    <% end %>
   </div>
 
   <div class="candidate-profile-sidebar govuk-grid-column-one-third column-top-border">
@@ -105,7 +107,7 @@
 
       <div id="school-availability-info" class="govuk-summary-list__row">
         <%- if @school.availability_preference_fixed? -%>
-          <%= render partial: 'placement_dates', locals: { available_dates: @presenter.available_dates } %>
+          <%= render partial: 'candidates/schools/placement_dates', locals: { available_dates: @presenter.available_dates } %>
         <%- else -%>
           <dt class="govuk-summary-list__key">
             Placement availability
@@ -199,10 +201,12 @@
       <% end if @presenter.teacher_training_info.present? %>
     </dl>
 
-    <div class="school-start-request-button__mobile">
-      <%= link_to "Start request",
-                  new_candidates_school_registrations_personal_information_path(@presenter.school),
-                  class:"govuk-button" %>
-    </div>
+    <% if include_candidate_request_links %>
+      <div class="school-start-request-button__mobile">
+        <%= link_to "Start request",
+                    new_candidates_school_registrations_personal_information_path(@presenter.school),
+                    class:"govuk-button" %>
+      </div>
+    <% end %>
   </div>
 </div>
