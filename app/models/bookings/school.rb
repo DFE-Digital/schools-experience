@@ -167,7 +167,7 @@ class Bookings::School < ApplicationRecord
     Bookings::School.transaction do
       update(enabled: false)
 
-      Event.create(event_type: :school_disabled, bookings_school: self)
+      Event.create!(event_type: 'school_disabled', bookings_school: self)
     end
   end
 
@@ -176,7 +176,7 @@ class Bookings::School < ApplicationRecord
 
     Bookings::School.transaction do
       update(enabled: true)
-      Event.create!(event_type: :school_enabled, bookings_school: self)
+      Event.create!(event_type: 'school_enabled', bookings_school: self)
     end
   end
 

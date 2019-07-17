@@ -439,5 +439,71 @@ describe Bookings::School, type: :model do
         it { is_expected.to be_private_beta }
       end
     end
+
+    describe '#enable!' do
+      before do
+        allow(Event).to receive(:create!).and_return(true)
+      end
+
+      context 'when the school is enabled' do
+        subject { create(:bookings_school) }
+        before { subject.enable! }
+
+        specify 'the school should remain enabled' do
+          expect(subject).to be_enabled
+        end
+
+        specify 'should not create a school_disabled event' do
+          expect(Event).not_to have_received(:create!)
+        end
+      end
+
+      context 'when the school is disabled' do
+        subject { create(:bookings_school, :disabled) }
+        before { subject.enable! }
+
+        specify 'should enable the school' do
+          expect(subject).to be_enabled
+        end
+
+        specify 'should create a school_enabled event' do
+          expect(Event).to have_received(:create!)
+            .with(event_type: 'school_enabled', bookings_school: subject)
+        end
+      end
+    end
+
+    describe '#disable!' do
+      before do
+        allow(Event).to receive(:create!).and_return(true)
+      end
+
+      context 'when the school is disabled' do
+        subject { create(:bookings_school, :disabled) }
+        before { subject.disable! }
+
+        specify 'the school should remain disabled' do
+          expect(subject).to be_disabled
+        end
+
+        specify 'should not create a school_enabled event' do
+          expect(Event).not_to have_received(:create!)
+        end
+      end
+
+      context 'when the school is enabled' do
+        subject { create(:bookings_school) }
+        before { subject.disable! }
+
+        specify 'should disable the school' do
+          expect(subject).to be_disabled
+        end
+
+        specify 'should create a school_disabled event' do
+          expect(Event).to have_received(:create!)
+            .with(event_type: 'school_disabled', bookings_school: subject)
+        end
+      end
+    end
   end
 end
