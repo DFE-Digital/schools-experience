@@ -11,6 +11,7 @@ module Schools
     # back to the dashboard with a session associated to their new school
     def new
       session[:current_user] = nil
+      session[:school_name] = nil
 
       redirect_to(schools_dashboard_path)
     end

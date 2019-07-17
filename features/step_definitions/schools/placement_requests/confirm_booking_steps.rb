@@ -90,3 +90,7 @@ Given("I enter three weeks from now as the date") do
   date = 3.weeks.from_now.strftime('%d-%m-%Y')
   step "I fill in the date field 'Confirm experience date' with #{date}"
 end
+
+Then("I should see the placement request's duration") do
+  expect(page).to have_css('dd', text: "1 day")
+end

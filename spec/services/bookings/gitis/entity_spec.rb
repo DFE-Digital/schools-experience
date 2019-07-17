@@ -28,6 +28,11 @@ RSpec.describe Bookings::Gitis::Entity do
     it { is_expected.to eq('stubid') }
   end
 
+  describe ".entity_attribute_names" do
+    subject { Stub.entity_attribute_names }
+    it { is_expected.to eq Set.new %w{firstname lastname} }
+  end
+
   describe "#attributes" do
     it do
       expect(subject.send(:attributes)).to \
