@@ -172,6 +172,13 @@ describe Bookings::School, type: :model do
           .class_name('Bookings::PlacementRequest')
           .dependent(:destroy)
     end
+
+    specify do
+      is_expected.to \
+        have_many(:events)
+          .with_foreign_key(:bookings_school_id)
+          .dependent(:destroy)
+    end
   end
 
   describe 'Paramterisation' do
