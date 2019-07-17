@@ -1,5 +1,4 @@
 class Bookings::Candidate < ApplicationRecord
-  UUID_V4_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
   attr_accessor :gitis_contact
   alias_method :contact, :gitis_contact
 

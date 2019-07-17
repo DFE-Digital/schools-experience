@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_09_133215) do
+ActiveRecord::Schema.define(version: 2019_07_17_142510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2019_07_09_133215) do
   end
 
   create_table "bookings_candidates", force: :cascade do |t|
-    t.string "gitis_uuid", limit: 36, null: false
+    t.uuid "gitis_uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "confirmed_at"
