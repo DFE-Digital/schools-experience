@@ -80,6 +80,49 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
+  context '#education_attributes' do
+    context 'when education is not in session' do
+      subject { described_class.new({}) }
+
+      it 'returns an empty hash' do
+        expect(subject.education_attributes).to eq({})
+      end
+    end
+
+    context 'when education is in session' do
+      subject { FactoryBot.build :registration_session, :with_education }
+
+      it 'returns the correct attributes' do
+        expect(subject.education_attributes.except('created_at', 'updated_at')).to eq \
+          FactoryBot.attributes_for(:education).stringify_keys
+      end
+    end
+  end
+
+  context '#education' do
+    context 'when not education in session' do
+      subject { described_class.new({}) }
+
+      it 'raise StepNotFound' do
+        expect { subject.education }.to raise_error described_class::StepNotFound
+      end
+    end
+
+    context 'when education in session' do
+      let :session do
+        FactoryBot.build :registration_session, :with_education
+      end
+
+      subject { session.education }
+
+      it { is_expected.to be_a Candidates::Registrations::Education }
+      it do
+        expect(subject.attributes.except('created_at', 'updated_at')).to \
+          eq FactoryBot.build(:education).attributes.except('created_at', 'updated_at')
+      end
+    end
+  end
+
   context '#pending_email_confirmation?' do
     context 'when not pending email confirmation' do
       it 'returns false' do
