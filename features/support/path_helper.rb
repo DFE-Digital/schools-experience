@@ -26,6 +26,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "candidates_dashboard" => [:candidates_dashboard_path],
     "candidates signin" => [:candidates_signin_path],
     "candidates signin confirm" => [:candidates_signin_confirmation_path, session_token],
+    "new candidates feedback" => [:new_candidates_feedback_path],
 
     #school paths
     "schools" => [:schools_path],
@@ -64,7 +65,8 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "profile" => [:schools_on_boarding_profile_path],
     "toggle requests" => [:edit_schools_enabled_path],
     "not registered error" => [:schools_errors_not_registered_path],
-    "change school" => [:new_schools_switch_path]
+    "change school" => [:new_schools_switch_path],
+    "new schools feedback" => [:new_schools_feedback_path]
   }
 
   (path = mappings[descriptor.downcase]) ? send(*path) : fail("No mapping for #{descriptor}")

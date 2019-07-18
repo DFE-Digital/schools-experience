@@ -90,8 +90,8 @@ describe Bookings::PlacementRequest, type: :model do
       FactoryBot.create :placement_request, school: school
     end
 
-    context '.open' do
-      subject { described_class.open }
+    context '.unprocessed' do
+      subject { described_class.unprocessed }
       it do
         is_expected.to match_array [
           placement_request_open,
@@ -199,6 +199,9 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to respond_to :teaching_stage }
     it { is_expected.to respond_to :subject_first_choice }
     it { is_expected.to respond_to :subject_second_choice }
+    it { is_expected.to respond_to :availability }
+    it { is_expected.to respond_to :objectives }
+    it { is_expected.to respond_to :bookings_placement_date_id }
   end
 
   context 'validations' do
@@ -336,14 +339,7 @@ describe Bookings::PlacementRequest, type: :model do
     Date.today
   end
 
-  context 'attributes' do
-    it { is_expected.to respond_to :urn }
-    it { is_expected.to respond_to :availability }
-    it { is_expected.to respond_to :objectives }
-    it { is_expected.to respond_to :bookings_placement_date_id }
-  end
-
-  context 'validations' do
+  context 'validations for placement preferences' do
     before :each do
       placement_preference.validate
     end
@@ -566,5 +562,10 @@ describe Bookings::PlacementRequest, type: :model do
 
       expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
     end
+  end
+
+  describe '#requested_on' do
+    subject { create :placement_request }
+    it { is_expected.to have_attributes(requested_on: subject.created_at.to_date) }
   end
 end

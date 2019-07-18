@@ -15,14 +15,18 @@ class SchoolManager
 
 private
 
-  def set_enabled(enabled)
+  def set_enabled(new_status)
     Bookings::School.transaction do
       urns.each do |row|
         Bookings::School.find_by(urn: row['urn']).tap do |bs|
           fail "no school found with urn #{row['urn']}" unless bs.present?
 
-          puts "Updating #{bs.name}, enabled: #{enabled}"
-          bs.update_attributes(enabled: enabled)
+          puts "Updating #{bs.name}, enabled: #{new_status}"
+          if new_status
+            bs.enable!
+          else
+            bs.disable!
+          end
         end
       end
     end

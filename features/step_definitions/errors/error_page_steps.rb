@@ -31,3 +31,11 @@ end
 Then("there should be some text explaining technical difficulties") do
   expect(page).to have_content("We are currently experiencing technical difficulties")
 end
+
+Then("I should see my current school's name") do
+  expect(page).to have_css('h1', text: /#{@school.name}/)
+end
+
+Then("I should see my name in the body of the page") do
+  expect(page).to have_css('p', text: /You are currently logged in as Martin Prince/)
+end

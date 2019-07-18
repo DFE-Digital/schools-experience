@@ -2,6 +2,7 @@
   <h3>School experience details</h3>
 
   <ul class="govuk-list govuk-list--bullet">
+    <li class="govuk-list__item">Dates: <%= @placement_request.booking.placement_start_date_with_duration %></li>
     <li class="govuk-list__item">Subject: <%= @placement_request.booking.bookings_subject.name %></li>
     <li class="govuk-list__item">Experience details: <%= @placement_request.booking.placement_details %></li>
   </ul>

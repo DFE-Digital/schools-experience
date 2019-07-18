@@ -1,5 +1,6 @@
 require 'rails_helper'
 require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
+require File.join(Rails.root, 'spec', 'support', 'notify_erroring_client')
 
 describe Notify do
   let(:to) { 'somename@somecompany.org' }
@@ -11,8 +12,12 @@ describe Notify do
     )
   end
 
+  let :notify_client do
+    NotifyFakeClient.new
+  end
+
   before do
-    allow(subject).to receive(:notify_client).and_return(NotifyFakeClient.new)
+    allow(subject).to receive(:notify_client).and_return(notify_client)
   end
 
   subject { Notify.new(to: to) }
@@ -85,12 +90,39 @@ describe Notify do
     end
 
     describe '#despatch!' do
-      subject { StubNotification.new(to: 'test@user.com', name: 'Test User') }
+      context 'with error' do
+        let :notify_client do
+          NotifyErroringClient.new
+        end
 
-      it "should return hash of stubbed despatch" do
-        expect(subject.despatch!.keys).to eq(
-          %i(delivered_at template_id email_address personalisation)
-        )
+        before do
+          allow(ExceptionNotifier).to receive :notify_exception
+          allow(Raven).to receive :capture_exception
+        end
+
+        subject { StubNotification.new(to: 'test@user.com', name: 'Test User') }
+
+        before do
+          expect { subject.despatch! }.to raise_error Notify::RetryableError
+        end
+
+        it 'notifies slack' do
+          expect(ExceptionNotifier).to have_received(:notify_exception)
+        end
+
+        it 'notifies sentry' do
+          expect(Raven).to have_received(:capture_exception)
+        end
+      end
+
+      context 'without error' do
+        subject { StubNotification.new(to: 'test@user.com', name: 'Test User') }
+
+        it "should return hash of stubbed despatch" do
+          expect(subject.despatch!.keys).to eq(
+            %i(delivered_at template_id email_address personalisation)
+          )
+        end
       end
     end
 
