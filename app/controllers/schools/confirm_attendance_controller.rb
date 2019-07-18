@@ -12,38 +12,31 @@ module Schools
     end
 
     def update
-      bookings_params = params
-        .select { |key, _| key.match(/\A\d+\z/) }
-        .transform_keys(&:to_i)
+      bookings = unlogged_bookings.where(id: bookings_params.keys)
 
-      bookings = unlogged_bookings
-        .eager_load(
-          :bookings_placement_request,
-          :bookings_subject,
-          :bookings_school
-        )
-        .where(id: bookings_params.keys)
-        .index_by(&:id)
-
-      Bookings::Booking.transaction do
-        bookings_params.each do |booking_id, attended|
-          bookings[booking_id].tap do |booking|
-            booking.attended = ActiveModel::Type::Boolean.new.cast(attended)
-            booking.save
-          end
-        end
-
+      if Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params).save
         redirect_to schools_dashboard_path
       end
     end
 
   private
 
+    def bookings_params
+      params
+        .select { |key, _| key.match(/\A\d+\z/) }
+        .transform_keys(&:to_i)
+    end
+
     def unlogged_bookings
       current_school
         .bookings
         .previous
         .attendance_unlogged
+        .eager_load(
+          :bookings_placement_request,
+          :bookings_subject,
+          :bookings_school
+        )
         .order(date: 'desc')
     end
 
