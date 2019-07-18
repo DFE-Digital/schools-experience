@@ -69,7 +69,6 @@ jobs:
 
   - task: Docker@2
     displayName: 'push to docker hub'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
@@ -103,8 +102,7 @@ jobs:
   steps:
 
   - script: |
-      docker pull $(DOCKER_HUB_REPO):latest || true
-      docker build -f Dockerfile --cache-from=$(DOCKER_HUB_REPO):latest -t school-experience:latest .
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) school-experience:latest
       docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d 
       sleep 15
       echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
