@@ -291,7 +291,8 @@ describe Candidates::Registrations::RegistrationSession do
       expect(registration_session.incomplete_steps).to eq %i(
         personal_information
         contact_information
-        subject_preference
+        education
+        teaching_preference
         placement_preference
         background_check
       )

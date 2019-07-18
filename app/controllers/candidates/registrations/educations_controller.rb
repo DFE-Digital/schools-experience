@@ -10,7 +10,7 @@ module Candidates
 
         if @education.valid?
           persist @education
-          redirect_to new_candidates_school_registrations_subject_preference_path
+          redirect_to new_candidates_school_registrations_teaching_preference_path
         else
           render :new
         end

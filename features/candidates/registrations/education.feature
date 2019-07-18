@@ -17,8 +17,7 @@ Feature: Entering candidate education details
         Given I am on the 'education' page for my school of choice
         And I make my degree selection
         When I submit the form
-        # TODO update this to point at teaching preferences
-        Then I should be on the 'candidate subjects' page for my school of choice
+        Then I should be on the 'teaching preference' page for my school of choice
 
     @javascript
     Scenario: Hiding degree subject choice when candidate has no degree
