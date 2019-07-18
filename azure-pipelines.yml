@@ -102,6 +102,7 @@ jobs:
   steps:
 
   - script: |
+      docker pull $(DOCKER_HUB_REPO):$(imageTag)
       docker tag $(DOCKER_HUB_REPO):$(imageTag) school-experience:latest
       docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d 
       sleep 15
