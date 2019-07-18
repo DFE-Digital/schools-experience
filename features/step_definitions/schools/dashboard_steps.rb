@@ -8,10 +8,18 @@ Then("I should see the following {string} links:") do |string, table|
         expect(page).to have_css(".dashboard-#{string}")
 
         if (hint = row['Hint']) && hint != 'None'
-          expect(page).to have_css('p.govuk-hint', text: hint)
+          expect(page).to have_css('.govuk-hint', text: Regexp.new(hint))
         end
       end
     end
+  end
+end
+
+When 'it has {string} availability' do |availability_option|
+  case availability_option
+  when 'fixed' then @school.update(availability_preference_fixed: true)
+  when 'flexible' then @school.update(availability_preference_fixed: false)
+  else fail ArgumentError, 'must be true or false'
   end
 end
 

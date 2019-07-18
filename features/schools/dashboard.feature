@@ -22,32 +22,46 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the managing requests section
 
-    @wip
-    Scenario: High priority headings
-        Given I am on the 'schools dashboard' page
+    Scenario: To-do list
+        Given my school has fully-onboarded
+        When I am on the 'schools dashboard' page
         Then I should see the following 'high-priority' links:
-            | Text                       | Hint                                        | Path                                 |
-            | Accept and reject requests | Candidates have requested school experience | /schools/placement_requests/upcoming |
-            | Accept and reject bookings | A candidate has asked to change a booking   | #                                    |
+            | Text            | Hint                                        | Path                        |
+            | Manage requests | Candidates have requested school experience | /schools/placement_requests |
+            | Manage bookings | A candidate has asked to change a booking   | /schools/bookings           |
 
-    @wip
-    Scenario: Medium priority headings
-        Given I am on the 'schools dashboard' page
+    Scenario: Manage dates (fixed dates)
+        Given my school has fully-onboarded
+        And it has 'fixed' availability
+        When I am on the 'schools dashboard' page
         Then I should see the following 'medium-priority' links:
-            | Text                         | Hint                                                                  | Path |
-            | Confirm candidate attendance | Confirm the attendance of candidates who've been on school experience | #    |
-            | View upcoming bookings       | None                                                                  | #    |
+            | Text                           | Hint | Path                                  |
+            | Add, remove and change dates   | None | /schools/placement_dates              |
+            | Change how dates are displayed | None | /schools/availability_preference/edit |
 
-    @wip
+    Scenario: Manage dates (flexible dates)
+        Given my school has fully-onboarded
+        And it has 'flexible' availability
+        When I am on the 'schools dashboard' page
+        Then I should see the following 'medium-priority' links:
+            | Text                                                   | Hint | Path                                  |
+            | Describe when you’ll host school experience candidates | None | /schools/availability_info/edit       |
+            | Change how dates are displayed                         | None | /schools/availability_preference/edit |
+
+    Scenario: Account admin
+        Given my school has fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see the following 'medium-priority' links:
+            | Text                   | Hint                                                      | Path                         |
+            | Update school profile  | Add, edit and remove school profile details               | /schools/on_boarding/profile |
+            | Turn requests on / off | Choose to stop / start receiving requests from candidates | /schools/toggle_enabled/edit |
+
     Scenario: Low priority headings
-        Given I am on the 'schools dashboard' page
+        Given my school has fully-onboarded
+        When I am on the 'schools dashboard' page
         Then I should see the following 'low-priority' links:
-            | Text                                    | Hint | Path |
-            | Read about service updates and changes  | None | #    |
-            | Edit school profile                     | None | #    |
-            | View old bookings Read service guidance | None | #    |
-            | View rejected requests                  | None | #    |
-            | Give feedback on this service           | None | #    |
+            | Text       | Hint                                            | Path                                               |
+            | Contact us | Get in touch if you need help using the service | mailto:organise.school-experience@education.gov.uk |
 
     Scenario: Candidate requests counter
         Given my school has fully-onboarded
