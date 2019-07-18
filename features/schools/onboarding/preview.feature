@@ -22,7 +22,7 @@ Feature: Preview profile
             | Candidate experience details |                           |
             | Experience Outline           |                           |
             | Admin contact                |                           |
-        When I click the 'Preview' button
+        When I click the 'Preview profile' button
 
     Scenario: Page contents
         Then I should see the correctly-formatted school placement information I entered in the wizard

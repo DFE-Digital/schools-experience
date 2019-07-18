@@ -7,7 +7,7 @@
   }
 %>
 
-<div class="govuk-grid-row">
+<div class="govuk-grid-row" id="school-onboarding-profile">
   <div class="govuk-grid-column-full">
     <%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
       <h1 class="govuk-heading-l">
@@ -56,12 +56,15 @@
         <%= summary_row 'Email address', @profile.admin_contact_email, edit_schools_on_boarding_admin_contact_path %>
       </dl>
 
+
       <h2 class="govuk-heading-m">Set up your school experience profile</h2>
       <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
         <%= f.check_box_input :acceptance %>
       </div>
-      <%= f.submit 'Accept and set up profile' %>
-      <%= link_to 'Preview', schools_on_boarding_preview_path, class: 'govuk-button govuk-button--secondary' %>
+      <div class="button-group-container">
+        <%= link_to 'Preview profile', schools_on_boarding_preview_path, class: 'govuk-button govuk-button--secondary' %>
+        <%= f.submit 'Accept and set up profile' %>
+      </div>
     <% end %>
   </div>
 </div>
