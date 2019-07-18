@@ -167,8 +167,9 @@ feature 'Candidate Registrations', type: :feature do
         complete_personal_information_step(fill_in_email: false)
         complete_contact_information_step
         sign_in_via_dashboard(newtoken.token)
-        swap_back_to_subject_preference_step
-        complete_subject_preference_step
+        swap_back_to_education_step
+        complete_education_step
+        complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
         get_bounced_to_personal_information_step
@@ -344,8 +345,8 @@ feature 'Candidate Registrations', type: :feature do
     expect(page.current_path).to eq "/candidates/dashboard"
   end
 
-  def swap_back_to_subject_preference_step
-    visit "/candidates/schools/#{school_urn}/registrations/subject_preference/new"
+  def swap_back_to_education_step
+    visit "/candidates/schools/#{school_urn}/registrations/education/new"
   end
 
   def get_bounced_to_personal_information_step
