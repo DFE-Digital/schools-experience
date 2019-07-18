@@ -53,5 +53,33 @@ describe Schools::DashboardsController, type: :request do
         expect(subject).to redirect_to(schools_errors_no_school_path)
       end
     end
+
+    describe 'Phase feature flags' do
+      include_context "logged in DfE user"
+
+      context 'pre phase 4' do
+        before do
+          allow(Rails.application.config.x).to receive(:phase).and_return(3)
+        end
+
+        before { get('/schools/dashboard') }
+
+        specify 'should not show the to do list' do
+          expect(response.body).not_to match(/To do list/)
+        end
+      end
+
+      context 'phase 4 and beyond' do
+        before do
+          allow(Rails.application.config.x).to receive(:phase).and_return(4)
+        end
+
+        before { get('/schools/dashboard') }
+
+        specify 'should show the to do list' do
+          expect(response.body).not_to match(/To do list/)
+        end
+      end
+    end
   end
 end
