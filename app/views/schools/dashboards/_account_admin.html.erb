@@ -1,0 +1,24 @@
+<section id="account-admin" class="medium-priority">
+  <h2 class="govuk-heading-m">
+    Account admin
+  </h2>
+
+  <div id="update-school-profile" class="subsection">
+    <header class="dashboard-medium-priority">
+      <%= link_to "Update school profile", schools_on_boarding_profile_path %>
+    </header>
+    <span class="govuk-hint">
+      Add, edit and remove school profile details
+    </span>
+  </div>
+
+  <div id="manage-requests" class="subection">
+    <header class="dashboard-medium-priority">
+      <%= link_to "Turn requests on / off", edit_schools_enabled_path %>
+    </header>
+    <span class="govuk-hint">
+      Choose to stop / start receiving requests from candidates.
+      Requests are currently <strong><%= school_enabled_description(@current_school) %></strong>.
+    </span>
+  </div>
+</section>

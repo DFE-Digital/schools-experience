@@ -1,0 +1,23 @@
+<section class="manage-dates">
+  <h2 class="govuk-heading-m">Manage dates</h3>
+
+  <%- if @current_school.availability_preference_fixed? -%>
+    <div id="update-school-profile" class="subsection">
+      <header class="dashboard-medium-priority">
+        <%= link_to "Add, remove and change dates", schools_placement_dates_path %>
+      </header>
+    </div>
+  <%- else -%>
+    <div id="update-school-profile" class="subsection">
+      <header class="dashboard-medium-priority">
+        <%= link_to "Describe when you’ll host school experience candidates", edit_schools_availability_info_path %>
+      </header>
+    </div>
+  <%- end -%>
+
+  <div id="update-school-profile" class="subsection">
+    <header class="dashboard-medium-priority">
+      <%= link_to "Change how dates are displayed", edit_schools_availability_preference_path %>
+    </header>
+  </div>
+</section>
