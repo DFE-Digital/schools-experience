@@ -118,6 +118,13 @@ en:
               inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
               exclusion: "Select a subject if you have a degree or are studying for one"
 
+        candidates/registrations/teaching_preference:
+          attributes:
+            subject_first_choice:
+              blank: "Select a subject"
+            teaching_stage:
+              blank: "Select a teaching stage"
+
         candidates/registrations/personal_information:
           attributes:
             email:
@@ -295,6 +302,8 @@ en:
         has_dbs_check: Do you have a DBS certificate?
       candidates_registrations_education:
         degree_stage: What stage are you at with your degree?
+      candidates_registrations_teaching_preference:
+        teaching_stage: Which of the following teaching stages are you at?
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
@@ -396,6 +405,10 @@ en:
         phone: "UK telephone number"
       candidates_registrations_personal_information:
         email: 'Email address'
+      candidates_registrations_teaching_preference:
+        teaching_stage: Which of the following teaching stages are you at?
+        subject_first_choice: "First choice"
+        subject_second_choice: "Second choice"
       candidates_registrations_education:
         degree_subject: If you have or are studying for a degree, tell us about your degree subject
       candidates_registrations_subject_preference:
