@@ -281,21 +281,4 @@ describe Candidates::Registrations::RegistrationSession do
       expect(registration_session).to be_completed
     end
   end
-
-  context '#incomplete_steps' do
-    let :registration_session do
-      described_class.new({})
-    end
-
-    it 'returns the correct models' do
-      expect(registration_session.incomplete_steps).to eq %i(
-        personal_information
-        contact_information
-        education
-        teaching_preference
-        placement_preference
-        background_check
-      )
-    end
-  end
 end

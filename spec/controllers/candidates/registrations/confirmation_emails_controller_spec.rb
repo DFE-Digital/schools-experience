@@ -4,8 +4,16 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
   include_context 'Stubbed candidates school'
   include_context 'Stubbed current_registration'
 
-  let! :registration_session do
-    FactoryBot.build :registration_session
+  let :registration_session do
+    FactoryBot.build :registration_session, urn: school.urn,
+      with: %i(
+        personal_information
+        contact_information
+        education
+        teaching_preference
+        placement_preference
+        background_check
+      )
   end
 
   let :registration_store do
@@ -46,7 +54,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
 
       context 'skipped step' do
         let :registration_session do
-          Candidates::Registrations::RegistrationSession.new({})
+          FactoryBot.build :registration_session, with: []
         end
 
         before do

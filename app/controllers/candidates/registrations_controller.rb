@@ -1,10 +1,12 @@
 module Candidates
   class RegistrationsController < ApplicationController
     include GitisAuthentication
+    include Registrations::Wizard
 
+    # TODO can remove this
     rescue_from Registrations::RegistrationSession::StepNotFound do |error|
       Rails.logger.warn "Step not found: #{error.inspect}"
-      redirect_to next_step_path(current_registration)
+      redirect_to next_step_path
     end
 
   private
@@ -23,11 +25,6 @@ module Candidates
 
     def current_urn
       params[:school_id]
-    end
-
-    def next_step_path(registration_session)
-      step = registration_session.incomplete_steps.first
-      send "new_candidates_school_registrations_#{step}_path"
     end
 
     def gitis_mapper(registration_session = current_registration,

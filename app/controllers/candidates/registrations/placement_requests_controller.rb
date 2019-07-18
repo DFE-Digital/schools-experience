@@ -1,6 +1,8 @@
 module Candidates
   module Registrations
     class PlacementRequestsController < RegistrationsController
+      skip_before_action :ensure_step_permitted!
+
       def show
         @school_name = Bookings::School.find_by!(urn: params[:school_id]).name
       end

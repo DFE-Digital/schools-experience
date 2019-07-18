@@ -11,12 +11,12 @@ describe Candidates::Registrations::ApplicationPreviewsController, type: :reques
 
     context 'candidate skipped ahead' do
       let :registration_session do
-        Candidates::Registrations::RegistrationSession.new({})
+        FactoryBot.build :registration_session, urn: school.urn, with: []
       end
 
       it 'redirects to the first missing step' do
         expect(response).to redirect_to \
-          '/candidates/schools/urn/registrations/personal_information/new'
+          "/candidates/schools/#{school.urn}/registrations/personal_information/new"
       end
     end
 

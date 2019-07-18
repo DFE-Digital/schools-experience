@@ -31,7 +31,8 @@ end
 
 Given("my school has availability information set") do
   @availability_info = "Tuesday afternoons only"
-  @school = FactoryBot.create(:bookings_school, availability_info: @availability_info)
+  @school ||= FactoryBot.create(:bookings_school)
+  @school.update! availability_info: @availability_info
 end
 
 Then("I should see a warning containing the availability information") do
@@ -42,7 +43,8 @@ Then("I should see a warning containing the availability information") do
 end
 
 Given("my school has availability no information set") do
-  @school = FactoryBot.create(:bookings_school, availability_info: nil)
+  @school ||= FactoryBot.create(:bookings_school)
+  @school.update! availability_info: nil
 end
 
 Then("I should see no warning containing the availability information") do
@@ -54,7 +56,8 @@ Given("the school I'm applying to is flexible on dates") do
 end
 
 Given("the school I'm applying to is not flexible on dates") do
-  @school = FactoryBot.create(:bookings_school, :with_fixed_availability_preference)
+  @school ||= FactoryBot.create(:bookings_school)
+  @school.update! availability_preference_fixed: true
 end
 
 Given("the school has {int} placements available in the upcoming weeks") do |int|

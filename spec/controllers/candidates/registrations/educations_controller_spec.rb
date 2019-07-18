@@ -4,8 +4,12 @@ describe Candidates::Registrations::EducationsController, type: :request do
   include_context 'Stubbed current_registration'
 
   let :registration_session do
-    Candidates::Registrations::RegistrationSession.new({})
+    FactoryBot.build :registration_session, with: %i(
+      personal_information
+      contact_information
+    )
   end
+
 
   context '#new' do
     context 'without existing education in session' do

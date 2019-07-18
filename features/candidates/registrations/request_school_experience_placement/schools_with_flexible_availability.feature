@@ -4,7 +4,13 @@ Feature: Request a school experience placement
     I want to submit a description of my availability to the school
 
     Background:
-        Given the school I'm applying to is flexible on dates
+        Given my school of choice exists
+        And the school offers 'Physics, Mathematics'
+        And I have completed the personal information form
+        And I have completed the contact information form
+        And I have completed the education form
+        And I have completed the teaching preference form
+        And the school I'm applying to is flexible on dates
 
     Scenario: Form contents
         Given I am on the 'Request school experience placement' page for my school of choice
