@@ -79,6 +79,10 @@ class Bookings::School < ApplicationRecord
     foreign_key: :bookings_school_id,
     dependent: :destroy
 
+  has_many :events,
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
+
   scope :enabled, -> { where(enabled: true) }
 
   scope :that_provide, ->(subject_ids) do
@@ -155,6 +159,26 @@ class Bookings::School < ApplicationRecord
 
   def admin_contact_phone
     profile&.admin_contact_phone
+  end
+
+  def disable!
+    return true if disabled?
+
+    Bookings::School.transaction do
+      update!(enabled: false)
+
+      Event.create!(event_type: 'school_disabled', bookings_school: self)
+    end
+  end
+
+  def enable!
+    return true if enabled?
+
+    Bookings::School.transaction do
+      update!(enabled: true)
+
+      Event.create!(event_type: 'school_enabled', bookings_school: self)
+    end
   end
 
 private

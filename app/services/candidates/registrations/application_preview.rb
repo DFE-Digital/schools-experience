@@ -27,10 +27,13 @@ module Candidates
       delegate \
         :degree_stage,
         :degree_subject,
+        to: :@education
+
+      delegate \
         :teaching_stage,
         :subject_first_choice,
         :subject_second_choice,
-        to: :@subject_preference
+        to: :@teaching_preference
 
       delegate :has_dbs_check, to: :@background_check
 
@@ -41,8 +44,9 @@ module Candidates
         @personal_information = registration_session.personal_information
         @contact_information = registration_session.contact_information
         @placement_preference = registration_session.placement_preference
-        @subject_preference = registration_session.subject_preference
         @background_check = registration_session.background_check
+        @education = registration_session.education
+        @teaching_preference = registration_session.teaching_preference
       end
 
       def ==(other)

@@ -113,12 +113,38 @@ module Candidates
         fetch_attributes PlacementPreference
       end
 
-      def subject_preference
-        fetch SubjectPreference
+      def education_attributes_converter
+        # Temporary converter to convert between subject_preference and education
+        # while there are potential inflight registrations
+        EducationAttributes.new(@registration_session)
       end
 
-      def subject_preference_attributes
-        fetch_attributes SubjectPreference
+      def education_attributes
+        education_attributes_converter.attributes || {}
+      end
+
+      def education
+        if !education_attributes_converter.attributes.nil?
+          Education.new education_attributes_converter.attributes
+        else
+          raise StepNotFound, :candidates_registrations_education
+        end
+      end
+
+      def teaching_preference_attributes_converter
+        TeachingPreferenceAttributes.new(@registration_session)
+      end
+
+      def teaching_preference_attributes
+        teaching_preference_attributes_converter.attributes || {}
+      end
+
+      def teaching_preference
+        if !teaching_preference_attributes_converter.attributes.nil?
+          TeachingPreference.new teaching_preference_attributes.merge(school: self.school)
+        else
+          raise StepNotFound, :candidates_registrations_teaching_preference
+        end
       end
 
       def fetch(klass)
@@ -155,7 +181,8 @@ module Candidates
       STEPS = %i(
         personal_information
         contact_information
-        subject_preference
+        education
+        teaching_preference
         placement_preference
         background_check
       ).freeze

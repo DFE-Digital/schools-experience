@@ -89,6 +89,8 @@ Rails.application.configure do
 
   config.x.fake_crm = ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true }))
 
+  config.x.features = %i(split_subject_preference)
+
   if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
   end
