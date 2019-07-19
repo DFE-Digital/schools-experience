@@ -1,13 +1,13 @@
 module Schools
-  class StateMissmatchError < StandardError; end
+  class StateMismatchError < StandardError; end
   class AuthFailedError < StandardError; end
   class NoIDTokenError < StandardError; end
 
   class SessionsController < ApplicationController
     include DFEAuthentication
 
-    rescue_from AuthFailedError,     with: :authentication_failure
-    rescue_from StateMissmatchError, with: :authentication_failure
+    rescue_from AuthFailedError,    with: :authentication_failure
+    rescue_from StateMismatchError, with: :authentication_failure
 
     def show
       # nothing yet, the view just contains a 'logout' button
@@ -75,7 +75,7 @@ module Schools
 
         Rails.logger.error(message)
 
-        raise StateMissmatchError, message
+        raise StateMismatchError, message
       end
     end
 
