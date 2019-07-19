@@ -6,21 +6,27 @@ Feature: Entering teaching preference details
     Background:
         Given my school of choice exists
         And the school offers 'Mathematics, Physics'
-        And I am on the 'teaching preference' page for my school of choice
 
     Scenario: Filling in and submitting the form with errors
+        Given I have completed the personal information form
+        And I have completed the contact information form
+        And I have completed the education form
+        And I am on the 'teaching preference' page for my school of choice
         When I submit the form
         Then I should see the validation error 'Select a teaching stage'
         And I should see the validation error 'Select a subject'
 
     Scenario: Filling in and subject the form
-        Given I make my teaching preference selection
+        Given I have completed the personal information form
+        And I have completed the contact information form
+        And I have completed the education form
+        And I am on the 'teaching preference' page for my school of choice
+        And I make my teaching preference selection
         When I submit the form
         Then I should be on the 'request school experience placement' page for my school of choice
 
     Scenario: Editing choices
         Given I have completed the wizard
-        And I have completed the Teaching preference step
         And I am on the 'edit teaching preference' page for my school of choice
         And I change my teaching subject
         When I submit the form

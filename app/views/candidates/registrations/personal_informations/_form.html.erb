@@ -2,7 +2,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">Check if we already have your details</h1>
+    <h1 class="govuk-heading-l">
+      <%- if Rails.application.config.x.phase >= 3 -%>
+      Check if we already have your details
+      <%- else -%>
+      Enter your details
+      <%- end -%>
+    </h1>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <p class="govuk-body">
@@ -27,7 +33,9 @@
 
           <%= f.text_field :first_name, autocomplete: 'given-name' %>
           <%= f.text_field :last_name, autocomplete: 'family-name' %>
-          <%= f.email_field :email, autocomplete: 'on', readonly: personal_information.read_only_email %>
+          <%= f.email_field :email, autocomplete: 'on',
+                readonly: personal_information.read_only_email,
+                disabled: personal_information.read_only_email %>
           <%= f.date_field :date_of_birth, heading: true %>
 
           <%= f.submit 'Continue' %>

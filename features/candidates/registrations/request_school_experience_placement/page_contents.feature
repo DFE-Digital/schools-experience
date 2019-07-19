@@ -3,6 +3,14 @@ Feature: Request a school experience placement
     As a potential candidate
     I want to submit my details to the school
 
+    Background:
+       Given my school of choice exists
+       And the school offers 'Physics, Mathematics'
+       And I have completed the personal information form
+       And I have completed the contact information form
+       And I have completed the education form
+       And I have completed the teaching preference form
+
     Scenario: Page title and description
         Given I am on the 'Request school experience placement' page for my school of choice
         Then the page's main header should be 'Request school experience'

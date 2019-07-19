@@ -3,6 +3,9 @@ Feature: The school not registered error page
     As an administrator from an unregistered school
     I want to see some informative instructions
 
+    Background:
+        Given I am logged in as a DfE user
+
     Scenario: Email address
         Given I am on the 'not registered error' page
         Then I should see a email link to 'organise.school-experience@education.gov.uk'
@@ -14,3 +17,8 @@ Feature: The school not registered error page
     Scenario: Change school link
         Given I am on the 'not registered error' page
         Then I should see a 'Change school' link to the 'change school' page
+
+    Scenario: Context
+        Given I am on the 'not registered error' page
+        Then I should see my current school's name
+        And I should see my name in the body of the page

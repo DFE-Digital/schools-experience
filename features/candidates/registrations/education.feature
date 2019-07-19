@@ -3,6 +3,12 @@ Feature: Entering candidate education details
     As a potential candidate
     I want to enter some details about my degree and preferred subjects
 
+    Background:
+       Given my school of choice exists
+       And the school offers 'Physics, Mathematics'
+       And I have completed the personal information form
+       And I have completed the contact information form
+
     Scenario: Filling in and submitting the form with errors
         Given I am on the 'education' page for my school of choice
         When I submit the form
@@ -32,9 +38,7 @@ Feature: Entering candidate education details
         Then I should see some subject choices
 
     Scenario: Editing choices
-        Given my school of choice exists
-        And the school offers 'Physics, Mathematics'
-        And I have completed the wizard
+        Given I have completed the wizard
         And I have completed the Education step
         And I am on the 'edit education' page for my school of choice
         And I change my degree selection

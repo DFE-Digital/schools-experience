@@ -64,6 +64,22 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         expect(personal_info).to have_attributes read_only_email: false
       end
     end
+
+    context 'when already signed in' do
+      include_context 'candidate signin'
+
+      before do
+        expect_any_instance_of(described_class).to \
+          receive(:delete_registration_sessions!)
+
+        get candidates_registration_verify_path(school_id, token)
+      end
+
+      it "will redirect_to ContactInformation step" do
+        expect(response).to \
+          redirect_to new_candidates_school_registrations_contact_information_path(school_id)
+      end
+    end
   end
 
   describe 'POST #create' do

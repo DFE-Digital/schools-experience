@@ -11,7 +11,7 @@ module Candidates
 
         if @teaching_preference.valid?
           persist @teaching_preference
-          redirect_to new_candidates_school_registrations_placement_preference_path
+          redirect_to next_step_path
         else
           render :new
         end

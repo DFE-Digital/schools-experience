@@ -2,6 +2,7 @@ module Bookings
   module Gitis
     class CRM
       prepend FakeCrm if Rails.application.config.x.fake_crm
+      delegate :logger, to: Rails
 
       def initialize(token, service_url: nil, endpoint: nil)
         @token = token
@@ -18,6 +19,7 @@ module Bookings
         # ensure we can't accidentally pull too much data
         params = { '$top' => uuids.length }
 
+        crmlog "READING Contacts #{uuids.inspect}"
         if multiple_ids
           find_many(entity_type, uuids, params)
         else
@@ -26,21 +28,27 @@ module Bookings
       end
 
       def find_by_email(address)
-        contacts = api.get("contacts", '$top' => 1, '$filter' => filter_pairs(
-          emailaddress2: address,
-          emailaddress1: address
-        ))['value']
+        params = {
+          '$filter' => filter_pairs(emailaddress2: address, emailaddress1: address),
+          '$select' => Contact.entity_attribute_names.to_a.join(','),
+          '$top' => 1
+        }
 
-        Contact.new(contacts[0]) if contacts.any?
+        contacts = api.get("contacts", params)['value']
+
+        if contacts.any?
+          Contact.new(contacts[0]).tap do |c|
+            crmlog "Read contact #{c.contactid}"
+          end
+        end
       end
 
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
-        find_possible_signin_contacts(email, 20) \
+        find_possible_signin_contacts(email, 20)
           .map(&Contact.method(:new))
-          .find do |contact|
-            contact.signin_attributes_match?(firstname, lastname, date_of_birth)
-          end
+          .find { |c| c.signin_attributes_match? firstname, lastname, date_of_birth }
+          .tap { |c| crmlog "Read contact #{c.contactid}" if c }
       end
 
       def write(entity)
@@ -51,11 +59,13 @@ module Bookings
         # webmock compares the request body as a serialized string
 
         if entity.id
-          update_entity entity.entity_id,
-            entity.attributes_for_update.sort.to_h
+          attrs = entity.attributes_for_update.sort.to_h
+          crmlog "UPDATING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
+          update_entity entity.entity_id, attrs
         else
-          entity.entity_id = create_entity entity.entity_id, \
-            entity.attributes_for_create.sort.to_h
+          attrs = entity.attributes_for_create.sort.to_h
+          crmlog "INSERTING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
+          entity.entity_id = create_entity entity.entity_id, attrs
         end
 
         entity.id
@@ -106,11 +116,14 @@ module Bookings
       end
 
       def find_one(entity_type, uuid, params)
+        params['$select'] ||= entity_type.entity_attribute_names.to_a.join(',')
+
         entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
       end
 
       def find_many(entity_type, uuids, params)
         params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
+        params['$select'] ||= entity_type.entity_attribute_names.to_a.join(',')
 
         api.get(entity_type.entity_path, params)['value'].map do |entity_data|
           entity_type.new entity_data
@@ -122,9 +135,14 @@ module Bookings
         api.get(
           'contacts',
           '$top' => max,
+          '$select' => Contact.entity_attribute_names.to_a.join(','),
           '$filter' => filter,
           '$orderby' => 'createdon desc'
         )['value']
+      end
+
+      def crmlog(msg)
+        logger.warn "[CRM] #{msg}"
       end
     end
   end

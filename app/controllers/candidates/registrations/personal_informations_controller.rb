@@ -6,8 +6,10 @@ module Candidates
       end
 
       def create
-        @personal_information = PersonalInformation.new personal_information_params
+        @personal_information = PersonalInformation.new attributes_from_session_or_gitis
         @personal_information.read_only_email = candidate_signed_in?
+        @personal_information.attributes = personal_information_params
+
         render(:new) && return unless @personal_information.valid?
 
         persist @personal_information

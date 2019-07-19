@@ -9,7 +9,7 @@ module Candidates
         @background_check = BackgroundCheck.new background_check_params
         if @background_check.valid?
           persist @background_check
-          redirect_to candidates_school_registrations_application_preview_path
+          redirect_to next_step_path
         else
           render :new
         end

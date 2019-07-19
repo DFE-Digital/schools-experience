@@ -78,3 +78,9 @@ end
 Then("the candidate instructions should have been saved") do
   expect(@placement_request.booking.candidate_instructions).to eql(@candidate_instructions)
 end
+
+Then("I should see the booking date and duration displayed") do
+  within('#school-experience-details') do
+    expect(page).to have_content(@placement_request.booking.placement_start_date_with_duration)
+  end
+end

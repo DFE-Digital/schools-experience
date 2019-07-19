@@ -56,7 +56,7 @@ feature 'Candidate Registrations', type: :feature do
       end
 
       scenario "completing the Journey" do
-        complete_personal_information_step
+        complete_personal_information_step expected_heading: 'Enter your details'
         complete_contact_information_step
         complete_education_step
         complete_teaching_preference_step
@@ -138,7 +138,7 @@ feature 'Candidate Registrations', type: :feature do
 
       scenario "completing the Journey" do
         sign_in_via_dashboard(token.token)
-        complete_personal_information_step
+        complete_personal_information_step fill_in_email: false
         complete_contact_information_step
         complete_education_step
         complete_teaching_preference_step
@@ -148,12 +148,35 @@ feature 'Candidate Registrations', type: :feature do
         view_request_acknowledgement_step
       end
     end
+
+    context 'for known Candidate already signed in switching account part way through' do
+      include_context 'fake gitis with known uuid'
+
+      let(:email_address) { 'test@example.com' }
+      let!(:candidate) { create(:candidate, :confirmed, gitis_uuid: fake_gitis_uuid) }
+      let(:token) { create(:candidate_session_token, candidate: candidate) }
+      let(:newtoken) { create(:candidate_session_token) }
+
+      before do
+        allow_any_instance_of(Candidates::Session).to \
+          receive(:create_signin_token).and_return(token.token)
+      end
+
+      scenario "completing the Journey" do
+        sign_in_via_dashboard(token.token)
+        complete_personal_information_step(fill_in_email: false)
+        complete_contact_information_step
+        sign_in_via_dashboard(newtoken.token)
+        swap_back_to_education_step
+        get_bounced_to_personal_information_step
+      end
+    end
   end
 
-  def complete_personal_information_step
+  def complete_personal_information_step(expected_heading: nil, fill_in_email: true)
     # Begin wizard journey
     visit "/candidates/schools/#{school_urn}/registrations/personal_information/new"
-    expect(page).to have_text 'Check if we already have your details'
+    expect(page).to have_text expected_heading || 'Check if we already have your details'
 
     # Submit personal information form with errors
     fill_in 'First name', with: 'testy'
@@ -164,7 +187,7 @@ feature 'Candidate Registrations', type: :feature do
     # Submit personal information form successfully
     fill_in 'First name', with: 'testy'
     fill_in 'Last name', with: 'mctest'
-    fill_in 'Email address', with: email_address
+    fill_in 'Email address', with: email_address if fill_in_email
     fill_in 'Day', with: '01'
     fill_in 'Month', with: '01'
     fill_in 'Year', with: '2000'
@@ -316,5 +339,15 @@ feature 'Candidate Registrations', type: :feature do
 
     visit "/candidates/signin/#{token}"
     expect(page.current_path).to eq "/candidates/dashboard"
+  end
+
+  def swap_back_to_education_step
+    visit "/candidates/schools/#{school_urn}/registrations/education/new"
+  end
+
+  def get_bounced_to_personal_information_step
+    visit "/candidates/schools/#{school_urn}/registrations/application_preview"
+    expect(page.current_path).to eq \
+      "/candidates/schools/#{school_urn}/registrations/personal_information/new"
   end
 end

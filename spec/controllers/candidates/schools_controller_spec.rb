@@ -89,6 +89,10 @@ RSpec.describe Candidates::SchoolsController, type: :request do
           expect(parts).to all(match(/[0-9a-f]/))
         end
       end
+
+      specify 'should be HTTP-only' do
+        expect(cookies.get_cookie("analytics_tracking_uuid")).to be_http_only
+      end
     end
   end
 

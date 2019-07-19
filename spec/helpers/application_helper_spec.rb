@@ -51,8 +51,8 @@ describe ApplicationHelper, type: :helper do
     end
   end
 
-  context '#user_info_and_logout_link' do
-    subject { helper.user_info_and_logout_link }
+  context '#current_user_info_and_logout_link' do
+    subject { helper.current_user_info_and_logout_link }
     let(:given_name) { 'Martin' }
     let(:family_name) { 'Prince' }
     context 'when a user is logged in' do
@@ -71,7 +71,7 @@ describe ApplicationHelper, type: :helper do
       end
 
       specify "should contain a logout link" do
-        expect(subject).to have_link('Logout', href: '/schools/session')
+        expect(subject).to have_link('Logout', href: '/schools/session/logout')
       end
     end
   end

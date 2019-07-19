@@ -44,7 +44,8 @@ describe Schools::PlacementRequestsController, type: :request do
       before { get '/schools/placement_requests' }
 
       specify 'they should be omitted' do
-        expect(assigns(:placement_requests)).to eq(school.placement_requests - Array.wrap(booked))
+        expect(assigns(:placement_requests).sort_by(&:id)).to \
+          eq((school.placement_requests - Array.wrap(booked)).sort_by(&:id))
       end
     end
   end

@@ -4,8 +4,9 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
   include_context 'Stubbed current_registration'
 
   let :registration_session do
-    Candidates::Registrations::RegistrationSession.new({})
+    FactoryBot.build :registration_session, with: %i(personal_information)
   end
+
 
   context 'without existing contact information in the session' do
     context '#new' do

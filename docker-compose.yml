@@ -16,7 +16,7 @@ services:
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      depends_on:
-       - create-db
+       - db-tasks
 
    delayed-jobs:
      image: school-experience:latest
@@ -32,9 +32,9 @@ services:
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      depends_on:
-       - create-db
+       - db-tasks
   
-   create-db:
+   db-tasks:
      image: school-experience:latest
      command: rake db:create db:schema:load
      restart: on-failure

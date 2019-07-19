@@ -1,6 +1,8 @@
 module Candidates
   module Registrations
     class PlacementRequestsController < RegistrationsController
+      skip_before_action :ensure_step_permitted!
+
       def show
         @school_name = Bookings::School.find_by!(urn: params[:school_id]).name
       end
@@ -41,6 +43,9 @@ module Candidates
           uuid: registration_session.uuid
       rescue RegistrationStore::SessionNotFound
         render :session_expired
+      rescue RegistrationSession::StepNotFound
+        @current_registration = registration_session
+        redirect_to next_step_path
       end
 
     private

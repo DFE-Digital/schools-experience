@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_28_133753) do
+ActiveRecord::Schema.define(version: 2019_07_17_142510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2019_06_28_133753) do
   end
 
   create_table "bookings_candidates", force: :cascade do |t|
-    t.string "gitis_uuid", limit: 36, null: false
+    t.uuid "gitis_uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "confirmed_at"
@@ -248,6 +248,29 @@ ActiveRecord::Schema.define(version: 2019_06_28_133753) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "events", force: :cascade do |t|
+    t.integer "bookings_school_id"
+    t.string "event_type", null: false
+    t.integer "recordable_id"
+    t.string "recordable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "bookings_candidate_id"
+    t.index ["bookings_candidate_id"], name: "index_events_on_bookings_candidate_id"
+    t.index ["bookings_school_id"], name: "index_events_on_bookings_school_id"
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.string "type", null: false
+    t.integer "reason_for_using_service", null: false
+    t.text "reason_for_using_service_explanation"
+    t.integer "rating", null: false
+    t.text "improvements"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "urn"
+  end
+
   create_table "schools_on_boarding_profile_subjects", force: :cascade do |t|
     t.bigint "schools_school_profile_id"
     t.bigint "bookings_subject_id"
@@ -329,5 +352,7 @@ ActiveRecord::Schema.define(version: 2019_06_28_133753) do
   add_foreign_key "bookings_schools_subjects", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_subjects"
   add_foreign_key "candidates_session_tokens", "bookings_candidates", column: "candidate_id"
+  add_foreign_key "events", "bookings_candidates"
+  add_foreign_key "events", "bookings_schools"
   add_foreign_key "schools_school_profiles", "bookings_schools"
 end
