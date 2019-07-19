@@ -35,11 +35,15 @@ describe Candidates::Registrations::ApplicationPreview do
 
   let(:school) { create(:bookings_school, name: 'Test school') }
 
-  let :subject_preference do
-    build :subject_preference,
+  let :education do
+    build :education,
       degree_stage: "I don't have a degree and am not studying for one",
       degree_stage_explaination: "",
-      degree_subject: "Not applicable",
+      degree_subject: "Not applicable"
+  end
+
+  let :teaching_preference do
+    build :teaching_preference,
       teaching_stage: "I'm thinking about teaching and want to find out more",
       subject_first_choice: "Architecture",
       subject_second_choice: "Maths"
@@ -51,7 +55,8 @@ describe Candidates::Registrations::ApplicationPreview do
       'candidates_registrations_personal_information' => personal_information.attributes,
       'candidates_registrations_contact_information' => contact_information.attributes,
       'candidates_registrations_placement_preference' => placement_preference.attributes,
-      'candidates_registrations_subject_preference' => subject_preference.attributes,
+      'candidates_registrations_education' => education.attributes,
+      'candidates_registrations_teaching_preference' => teaching_preference.attributes,
       'candidates_registrations_background_check' => background_check.attributes
   end
 

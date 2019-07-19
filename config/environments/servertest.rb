@@ -21,6 +21,4 @@ Rails.application.configure do
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
 
   config.x.fake_crm = true
-
-  config.x.features = %i(split_subject_preference)
 end

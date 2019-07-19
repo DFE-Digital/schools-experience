@@ -245,7 +245,7 @@ feature 'Candidate Registrations', type: :feature do
     choose "I’m very sure and think I’ll apply"
     click_button 'Continue'
 
-    # Submit registrations/education form successfully
+    # Submit registrations/teaching_preference form successfully
     choose "I’m very sure and think I’ll apply"
     select 'Physics', from: 'First choice'
     select 'Maths', from: 'Second choice'
