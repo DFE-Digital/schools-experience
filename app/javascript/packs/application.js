@@ -4,6 +4,7 @@ initAll();
 import "@stimulus/polyfills"
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
+import { descriptionSummary, descriptionToggleEvent } from 'analytics/school_description_helper.js';
 
 const application = Application.start()
 const context = require.context("controllers", true, /.js$/)
@@ -18,3 +19,8 @@ global.mapsLoadedCallback = function() {
     instance.initMap() ;
   }
 }
+
+window.descriptionTracker = {
+  element: descriptionSummary,
+  event: descriptionToggleEvent
+};
