@@ -30,4 +30,4 @@ Feature: Contact Information
             | UK telephone number | 07765 432 100  |
 
         When I submit the form
-        Then I should be on the 'candidate subjects' page for my school of choice
+        Then I should be on the 'education' page for my school of choice

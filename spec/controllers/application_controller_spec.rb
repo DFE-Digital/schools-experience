@@ -17,7 +17,7 @@ describe ApplicationController, type: :request do
         "/healthcheck.txt",
         candidates_schools_path,
         candidates_school_path(school),
-        new_candidates_school_registrations_subject_preference_path(school),
+        new_candidates_school_registrations_background_check_path(school),
         new_candidates_school_registrations_personal_information_path(school)
 
       ].each do |cp|

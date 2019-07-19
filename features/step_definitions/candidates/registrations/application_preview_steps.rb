@@ -2,7 +2,8 @@ Given("I have completed the wizard") do
   visit path_for('enter your personal details', school: @school)
   step "I have filled in my personal information successfully"
   step "I have filled in my contact information successfully"
-  step "I have filled in my subject preferences successfully"
+  step "I have filled in my education details successfully"
+  step "I have filled in my teaching preferences successfully"
   step "I have filled in my placement preferences successfully"
   step "I have filled in my background checks successfully"
 end
@@ -30,13 +31,18 @@ Given("I have filled in my contact information successfully") do
   fill_in 'UK telephone number', with: '01234567890'
   click_button 'Continue'
   expect(page.current_path).to eq \
-    "/candidates/schools/#{@school.urn}/registrations/subject_preference/new"
+    "/candidates/schools/#{@school.urn}/registrations/education/new"
 end
 
-Given("I have filled in my subject preferences successfully") do
-  # Submit registrations/subject_preference form successfully
+Given("I have filled in my education details successfully") do
   choose 'Graduate or postgraduate'
   select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
+  click_button 'Continue'
+  expect(page.current_path).to eq \
+    "/candidates/schools/#{@school.urn}/registrations/teaching_preference/new"
+end
+
+Given("I have filled in my teaching preferences successfully") do
   choose "I’m very sure and think I’ll apply"
   select 'Physics', from: 'First choice'
   select 'Mathematics', from: 'Second choice'

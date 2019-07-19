@@ -80,6 +80,98 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
+  context '#education_attributes' do
+    context 'when education is not in session' do
+      subject { described_class.new({}) }
+
+      it 'returns an empty hash' do
+        expect(subject.education_attributes).to eq({})
+      end
+    end
+
+    context 'when education is in session' do
+      subject { FactoryBot.build :registration_session, :with_education }
+
+      it 'returns the correct attributes' do
+        expect(subject.education_attributes.except('created_at', 'updated_at')).to eq \
+          FactoryBot.attributes_for(:education).stringify_keys
+      end
+    end
+  end
+
+  context '#education' do
+    context 'when not education in session' do
+      subject { described_class.new({}) }
+
+      it 'raise StepNotFound' do
+        expect { subject.education }.to raise_error described_class::StepNotFound
+      end
+    end
+
+    context 'when education in session' do
+      let :session do
+        FactoryBot.build :registration_session, :with_education
+      end
+
+      subject { session.education }
+
+      it { is_expected.to be_a Candidates::Registrations::Education }
+      it do
+        expect(subject.attributes.except('created_at', 'updated_at')).to \
+          eq FactoryBot.build(:education).attributes.except('created_at', 'updated_at')
+      end
+    end
+  end
+
+  context '#teaching_preference_attributes' do
+    context 'when teaching_preference is not in session' do
+      subject { described_class.new({}) }
+
+      it 'returns an empty hash' do
+        expect(subject.teaching_preference_attributes).to eq({})
+      end
+    end
+
+    context 'when teaching_preference is in session' do
+      subject { FactoryBot.build :registration_session, :with_teaching_preference }
+
+      it 'returns the correct attributes' do
+        expect(subject.teaching_preference_attributes.except('created_at', 'updated_at')).to eq \
+          FactoryBot.attributes_for(:teaching_preference).stringify_keys
+      end
+    end
+  end
+
+  context '#teaching_preference' do
+    context 'when teaching_preference is not in the session' do
+      subject { described_class.new({}) }
+
+      it 'raises StepNotFound' do
+        expect { subject.teaching_preference }.to raise_error described_class::StepNotFound
+      end
+    end
+
+    context 'when teaching_preference is in the session' do
+      let :session do
+        FactoryBot.build \
+          :registration_session, :with_teaching_preference, :with_school
+      end
+
+      subject { session.teaching_preference }
+
+      it { is_expected.to be_a Candidates::Registrations::TeachingPreference }
+
+      it do
+        expect(subject.attributes.except('created_at', 'updated_at')).to \
+          eq FactoryBot.build(:teaching_preference).attributes.except('created_at', 'updated_at')
+      end
+
+      it 'sets the school correctly' do
+        expect(subject.school).to eq session.school
+      end
+    end
+  end
+
   context '#pending_email_confirmation?' do
     context 'when not pending email confirmation' do
       it 'returns false' do
@@ -199,7 +291,8 @@ describe Candidates::Registrations::RegistrationSession do
       expect(registration_session.incomplete_steps).to eq %i(
         personal_information
         contact_information
-        subject_preference
+        education
+        teaching_preference
         placement_preference
         background_check
       )

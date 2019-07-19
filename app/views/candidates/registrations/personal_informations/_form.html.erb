@@ -33,7 +33,9 @@
 
           <%= f.text_field :first_name, autocomplete: 'given-name' %>
           <%= f.text_field :last_name, autocomplete: 'family-name' %>
-          <%= f.email_field :email, autocomplete: 'on', readonly: personal_information.read_only_email %>
+          <%= f.email_field :email, autocomplete: 'on',
+                readonly: personal_information.read_only_email,
+                disabled: personal_information.read_only_email %>
           <%= f.date_field :date_of_birth, heading: true %>
 
           <%= f.submit 'Continue' %>

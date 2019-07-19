@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_15_100432) do
+ActiveRecord::Schema.define(version: 2019_07_17_142510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,13 +23,13 @@ ActiveRecord::Schema.define(version: 2019_07_15_100432) do
     t.integer "bookings_school_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "duration", default: 1, null: false
     t.text "placement_details"
     t.string "contact_name"
     t.string "contact_number"
     t.string "contact_email"
     t.text "location"
     t.string "candidate_instructions"
+    t.integer "duration", default: 1, null: false
     t.datetime "accepted_at"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2019_07_15_100432) do
   end
 
   create_table "bookings_candidates", force: :cascade do |t|
-    t.string "gitis_uuid", limit: 36, null: false
+    t.uuid "gitis_uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "confirmed_at"
@@ -91,8 +91,8 @@ ActiveRecord::Schema.define(version: 2019_07_15_100432) do
     t.text "availability"
     t.integer "bookings_placement_date_id"
     t.integer "bookings_school_id"
-    t.uuid "analytics_tracking_uuid"
     t.string "token"
+    t.uuid "analytics_tracking_uuid"
     t.datetime "viewed_at"
     t.bigint "candidate_id"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
@@ -249,6 +249,18 @@ ActiveRecord::Schema.define(version: 2019_07_15_100432) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "events", force: :cascade do |t|
+    t.integer "bookings_school_id"
+    t.string "event_type", null: false
+    t.integer "recordable_id"
+    t.string "recordable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "bookings_candidate_id"
+    t.index ["bookings_candidate_id"], name: "index_events_on_bookings_candidate_id"
+    t.index ["bookings_school_id"], name: "index_events_on_bookings_school_id"
+  end
+
   create_table "feedbacks", force: :cascade do |t|
     t.string "type", null: false
     t.integer "reason_for_using_service", null: false
@@ -341,5 +353,7 @@ ActiveRecord::Schema.define(version: 2019_07_15_100432) do
   add_foreign_key "bookings_schools_subjects", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_subjects"
   add_foreign_key "candidates_session_tokens", "bookings_candidates", column: "candidate_id"
+  add_foreign_key "events", "bookings_candidates"
+  add_foreign_key "events", "bookings_schools"
   add_foreign_key "schools_school_profiles", "bookings_schools"
 end

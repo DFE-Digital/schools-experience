@@ -59,7 +59,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/subject_preference/new'
+            '/candidates/schools/11048/registrations/education/new'
         end
       end
     end
