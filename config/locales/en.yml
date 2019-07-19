@@ -56,6 +56,29 @@ en:
     description: 'Explain what the fee covers.'
     payment_method: 'Explain how the fee is paid. For example, by bank transfer, in cash or via PayPal.'
 
+  feedback_errors: &feedback_errors
+    attributes:
+      reason_for_using_service:
+        blank: 'Select an option for what did you come to do on the service'
+      reason_for_using_service_explanation:
+        blank: 'Provide an explanation'
+      rating:
+        blank: 'Select an option for how did you feel about the service'
+
+  feedback_fieldset: &feedback_fieldset
+    reason_for_using_service: What did you come to do on the service?
+    rating: Overall, how did you feel about the service you received?
+
+  feedback_label: &feedback_label
+    improvements: How could we improve the service? (optional)
+    reason_for_using_service_explanation: 'Tell us what you came here to do. Do not include any information that could identify you personally - such as your name'
+    rating:
+      very_satisfied: 'Very satisfied'
+      satisfied: 'Satisfied'
+      neither_satisfied_or_dissatisfied: 'Neither satisfied or dissatisfied'
+      dissatisfied: 'Dissatisfied'
+      very_dissatisfied: 'Very dissatisfied'
+
   activemodel:
     errors:
       models:
@@ -83,6 +106,24 @@ en:
               blank: "Enter your street"
             town_or_city:
               blank: "Enter your town or city"
+
+        candidates/registrations/education:
+          attributes:
+            degree_stage:
+              blank: "Select a degree stage"
+            degree_stage_explaination:
+              blank: "Enter an explaination"
+            degree_subject:
+              blank: "Select a subject"
+              inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
+              exclusion: "Select a subject if you have a degree or are studying for one"
+
+        candidates/registrations/teaching_preference:
+          attributes:
+            subject_first_choice:
+              blank: "Select a subject"
+            teaching_stage:
+              blank: "Select a teaching stage"
 
         candidates/registrations/personal_information:
           attributes:
@@ -233,6 +274,11 @@ en:
           attributes:
             location:
               too_short: Must be at least 3 characters
+        candidates/feedback:
+          <<: *feedback_errors
+        schools/feedback:
+          <<: *feedback_errors
+
     attributes:
       bookings/profile:
         dress_code_business: Business dress
@@ -254,6 +300,10 @@ en:
       subjects: Placement subjects
       candidates_registrations_background_check:
         has_dbs_check: Do you have a DBS certificate?
+      candidates_registrations_education:
+        degree_stage: What stage are you at with your degree?
+      candidates_registrations_teaching_preference:
+        teaching_stage: Which of the following teaching stages are you at?
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
@@ -292,6 +342,11 @@ en:
       schools_on_boarding_experience_outline:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
 
+      candidates_feedback:
+        <<: *feedback_fieldset
+      schools_feedback:
+        <<: *feedback_fieldset
+
     hint:
       schools_placement_requests_confirm_booking:
         placement_details: You can add extra experience details
@@ -320,9 +375,6 @@ en:
             it has available.
           - Depending on availability and time of year, schools may not always
             be able to offer you the exact dates you’re looking for.
-        objectives:
-          - Provide a short explanation about what you want to gain from your placement.
-          - This will help the school see if it can offer you the kind of placement you’re looking for.
       candidates_session:
         date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
       schools_on_boarding_candidate_experience_detail:
@@ -353,6 +405,12 @@ en:
         phone: "UK telephone number"
       candidates_registrations_personal_information:
         email: 'Email address'
+      candidates_registrations_teaching_preference:
+        teaching_stage: Which of the following teaching stages are you at?
+        subject_first_choice: "First choice"
+        subject_second_choice: "Second choice"
+      candidates_registrations_education:
+        degree_subject: If you have or are studying for a degree, tell us about your degree subject
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"
@@ -451,6 +509,20 @@ en:
         acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a>'
       schools_on_boarding_key_stage_list:
         early_years: 'Early years foundation stage (EYFS)'
+
+      candidates_feedback:
+        <<: *feedback_label
+        reason_for_using_service:
+          make_a_school_experience_request: 'Make a school experience request'
+          withdraw_request_or_cancel_booking: 'Withdraw a request or cancel a booking'
+          something_else: 'Something else'
+
+      schools_feedback:
+        <<: *feedback_label
+        reason_for_using_service:
+          set_up_new_school: 'Set up a new school or schools on the service'
+          manage_school_experience_requests_and_bookings: 'Manage your school experience requests and bookings'
+          something_else: 'Something else'
 
     page_entries_info:
       one_page:

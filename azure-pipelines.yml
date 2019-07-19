@@ -1,6 +1,3 @@
-pool:
-  vmImage: 'ubuntu-16.04'
-
 variables:
   imageTag: v$(Build.BuildId)
   POSTGRES_IMAGE: mdillon/postgis:11-alpine
@@ -12,9 +9,16 @@ variables:
   REDIS_IMAGE: redis:5-alpine
   REDIS_URL: redis://redis:6379/1
   CUCUMBER_PROFILE: continuous_integration
+  APP_URL: http://school-experience:3000
 
-steps:
+jobs:
+- job: BuildAndNonBrowserTesting
+  pool:
+    vmImage: 'ubuntu-16.04'
 
+  steps:
+
+  - script: echo $(Build.Reason)
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
   - script: docker run --name=redis -d $(REDIS_IMAGE)
@@ -51,22 +55,6 @@ steps:
   - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL -e REDIS_URL -e RAILS_ENV=test $(DOCKER_HUB_REPO):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
 
-  - script: |
-      docker run --name=selenium-chrome -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-chrome
-      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-chrome:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(DOCKER_HUB_REPO):$(imageTag) cucumber
-    displayName: Run Cucumber via Selenium Chrome
-
-  - script: |
-      docker run --name=selenium-firefox -d --link smoketest:school-experience -v /dev/shm:/dev/shm selenium/standalone-firefox
-      docker run --rm --link postgres:postgres --link=redis:redis --link selenium-firefox:selenium --link smoketest:school-experience -e DATABASE_URL="$WEB_URL" -e REDIS_URL -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium -e CUC_DRIVER=firefox -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e CUC_PAGE_DELAY=0 -e APP_URL='http://school-experience:3000' $(DOCKER_HUB_REPO):$(imageTag) cucumber
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),eq(variables['Build.SourceBranch'], 'refs/heads/debug')))
-    displayName: Run Cucumber via Selenium Firefox
-
-  - script: |
-      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Push Docker image (built from master)'
-
   - task: Docker@2
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: login
@@ -74,9 +62,13 @@ steps:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       command: login
 
+  - script: |
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Push Docker image (built from master)'
+
   - task: Docker@2
     displayName: 'push to docker hub'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
@@ -91,6 +83,42 @@ steps:
       repository: $(DOCKER_HUB_REPO)
       command: push
       tags: latest
+
+  - task: Bash@3
+    name: mtrx
+    displayName: 'set up functional test matrix variable'
+    inputs:
+      targetType: filePath
+      filePath: ./script/generate_matrix.sh
+
+- job: FunctionalTesting
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn: BuildAndNonBrowserTesting
+  strategy:
+    maxParallel: 5
+    matrix: $[ dependencies.BuildAndNonBrowserTesting.outputs['mtrx.legs'] ]
+
+  steps:
+
+  - script: |
+      docker pull $(DOCKER_HUB_REPO):$(imageTag)
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) school-experience:latest
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d 
+      WAIT_COUNT=0
+      until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+      echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) school-experience cucumber $(features)
+    displayName: Run Cucumber Tests
+    condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['browser'],'chrome')))
+
+- job: PublishArtifacts
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn:
+  - FunctionalTesting
+
+  steps:
 
   - task: CopyFiles@2
     inputs:

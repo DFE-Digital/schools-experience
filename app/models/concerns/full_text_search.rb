@@ -2,7 +2,7 @@ require 'active_support/concern'
 
 module FullTextSearch
   extend ActiveSupport::Concern
-  include PgSearch
+  include PgSearch::Model
 
   included do
     pg_search_scope :search_by_name,

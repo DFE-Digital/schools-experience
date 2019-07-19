@@ -7,7 +7,8 @@ module Candidates
       NON_PII_MODELS = %i(
         background_check
         placement_preference
-        subject_preference
+        education
+        teaching_preference
       ).freeze
 
       OTHER_IGNORED_ATTRS = %w(created_at updated_at).freeze

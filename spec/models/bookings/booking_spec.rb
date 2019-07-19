@@ -290,15 +290,33 @@ describe Bookings::Booking do
   end
 
   describe '#placement_start_date_with_duration' do
-    let! :date do
-      Date.today
+    context 'when the placement request has a flexible date' do
+      let! :date do
+        Date.today
+      end
+
+      subject { described_class.new date: date }
+
+      specify 'should return the date formatted to GOV.UK style' do
+        expect(subject.placement_start_date_with_duration).to eq \
+          date.to_formatted_s(:govuk)
+      end
     end
 
-    subject { described_class.new date: date, duration: 2 }
+    context 'when the placement request has a fixed date' do
+      let! :date do
+        Date.today
+      end
 
-    specify 'should return a descriptive string' do
-      expect(subject.placement_start_date_with_duration).to eq \
-        "#{date.to_formatted_s(:govuk)} for 2 days"
+      let(:placement_date) { create(:bookings_placement_date) }
+      let(:placement_request) { create(:placement_request, placement_date: placement_date) }
+
+      subject { described_class.new(date: date, duration: 2, bookings_placement_request: placement_request) }
+
+      specify 'should return a the date formatted to GOV.UK style with duration' do
+        expect(subject.placement_start_date_with_duration).to eq \
+          "#{date.to_formatted_s(:govuk)} for 2 days"
+      end
     end
   end
 

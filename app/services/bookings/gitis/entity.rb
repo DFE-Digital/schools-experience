@@ -18,6 +18,9 @@ module Bookings::Gitis
 
       class_attribute :primary_key
       self.primary_key = derive_primary_key
+
+      class_attribute :entity_attribute_names
+      self.entity_attribute_names = Set.new
     end
 
     def initialize(*_args)
@@ -112,6 +115,8 @@ module Bookings::Gitis
 
           attributes[attr_name.to_s] = value
         end
+
+        self.entity_attribute_names << attr_name.to_s
       end
 
       def entity_attributes(*attr_names)

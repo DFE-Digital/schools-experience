@@ -58,16 +58,20 @@ module ApplicationHelper
     SERVICE_UPDATE_LAST_UPDATED_AT.to_formatted_s :govuk
   end
 
-  def user_info_and_logout_link
+  def current_user_info_and_logout_link
     logout_link = link_to("Logout", logout_schools_session_path)
 
     greeting = if @current_user.is_a?(OpenIDConnect::ResponseObject::UserInfo)
-                 "Welcome #{@current_user.given_name} #{@current_user.family_name}."
+                 "Welcome #{current_user_full_name}"
                end
 
     switch_service = link_to("switch service", Rails.configuration.x.oidc_services_list_url)
 
     safe_join([greeting, logout_link, "or", switch_service].compact, " ")
+  end
+
+  def current_user_full_name
+    [@current_user.given_name, @current_user.family_name].join(' ')
   end
 
   def phase_three_release_date
@@ -76,5 +80,13 @@ module ApplicationHelper
 
   def chat_service
     link_to "online chat service", "https://ta-chat.education.gov.uk/chat/chatstart.aspx?domain=www.education.gov.uk&department=GetIntoTeaching%27,%27new_win%27,%27width=0,height=0%27);return&SID=0"
+  end
+
+  def feedback_path
+    if in_schools_namespace?
+      new_schools_feedback_path
+    else
+      new_candidates_feedback_path
+    end
   end
 end

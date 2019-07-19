@@ -10,7 +10,7 @@ module Candidates
 
         if @contact_information.valid?
           persist @contact_information
-          redirect_to new_candidates_school_registrations_subject_preference_path
+          redirect_to next_step_path
         else
           render :new
         end

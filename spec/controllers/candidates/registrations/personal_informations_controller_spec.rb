@@ -135,8 +135,19 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
 
         it 'updates the session with the new details' do
-          expect(registration_session.personal_information).to \
-            eq_model personal_information
+          expect(registration_session.personal_information.first_name).to \
+            eq personal_information.first_name
+
+          expect(registration_session.personal_information.last_name).to \
+            eq personal_information.last_name
+
+          expect(registration_session.personal_information.date_of_birth).to \
+            eq personal_information.date_of_birth
+        end
+
+        it "leaves the email address matching the GiTiS contact" do
+          expect(registration_session.personal_information.email).to \
+            eq contact_attributes['emailaddress2']
         end
 
         it "does not send a verification email" do

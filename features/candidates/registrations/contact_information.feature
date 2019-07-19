@@ -3,6 +3,10 @@ Feature: Contact Information
   As a potential candidate
   I want to be able to provide my contact details
 
+    Background:
+        Given my school of choice exists
+        Given I have completed the personal information form
+
     Scenario: Page contents
         Given I am on the 'Enter your contact details' page for my school of choice
         Then the page's main header should be 'Enter your contact details'
@@ -30,4 +34,4 @@ Feature: Contact Information
             | UK telephone number | 07765 432 100  |
 
         When I submit the form
-        Then I should be on the 'candidate subjects' page for my school of choice
+        Then I should be on the 'education' page for my school of choice

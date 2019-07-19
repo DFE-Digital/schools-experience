@@ -6,6 +6,16 @@ FactoryBot.define do
       placement_date { create(:bookings_placement_date) }
       uuid { 'some-uuid' }
 
+      with do
+        %i(
+          personal_information
+          contact_information
+          background_check
+          placement_preference
+          subject_preference
+        )
+      end
+
       candidates_registrations_personal_information do
         {
           "first_name"   => 'Testy',
@@ -61,17 +71,27 @@ FactoryBot.define do
           "updated_at"                => current_time
         }
       end
+
+      candidates_registrations_education do
+        FactoryBot.attributes_for(:education).stringify_keys.merge(
+          'created_at' => current_time,
+          'updated_at' => current_time
+        )
+      end
+
+      candidates_registrations_teaching_preference do
+        FactoryBot.attributes_for(:teaching_preference).stringify_keys.merge(
+          'created_at' => current_time,
+          'updated_at' => current_time
+        )
+      end
     end
 
     initialize_with do
       new \
-        "uuid"                                          => uuid,
-        "urn"                                           => urn,
-        "candidates_registrations_personal_information" => candidates_registrations_personal_information,
-        "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
-        "candidates_registrations_background_check"     => candidates_registrations_background_check,
-        "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
-        "candidates_registrations_subject_preference"   => candidates_registrations_subject_preference
+        with
+          .map { |step| "candidates_registrations_#{step}" }
+          .reduce("uuid" => uuid, "urn" => urn) { |options, step| options.merge step => send(step) }
     end
 
     trait :with_placement_date do
@@ -88,6 +108,39 @@ FactoryBot.define do
               "availability" => nil,
               "bookings_placement_date_id" => placement_date.id
             )
+      end
+    end
+
+    trait :with_education do
+      initialize_with do
+        new \
+          "uuid"                                          => uuid,
+          "urn"                                           => urn,
+          "candidates_registrations_personal_information" => candidates_registrations_personal_information,
+          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
+          "candidates_registrations_background_check"     => candidates_registrations_background_check,
+          "candidates_registrations_education"            => candidates_registrations_education,
+          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
+      end
+    end
+
+    # TODO refactor this to avoid duplication building up the session
+    trait :with_teaching_preference do
+      initialize_with do
+        new \
+          "uuid"                                          => uuid,
+          "urn"                                           => urn,
+          "candidates_registrations_personal_information" => candidates_registrations_personal_information,
+          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
+          "candidates_registrations_background_check"     => candidates_registrations_background_check,
+          "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
+          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
+      end
+    end
+
+    trait :with_school do
+      after :build do |reg|
+        Bookings::School.find_by(urn: reg.urn) || FactoryBot.create(:bookings_school, urn: reg.urn)
       end
     end
   end

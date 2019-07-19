@@ -1,0 +1,12 @@
+<% self.page_title = 'Candidate Feedback' %>
+
+<% content_for :pii_warning do %>
+  Do not include any information that could identify you personally - such as your name.
+<% end %>
+
+<% content_for :help_and_support do %>
+  If there’s anything else you’d like to add email our School Experience
+  Service team at <%= mail_to 'organise.school-experience@education.gov.uk' %>.
+<% end %>
+
+<%= render partial: 'feedbacks/form', locals: { feedback: @feedback } %>

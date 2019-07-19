@@ -1,0 +1,52 @@
+<h1 class="govuk-heading-l">
+  We need some more details
+</h1>
+<p>
+  The following will be used to help schools offer you school experience.
+</p>
+<p>
+  You'll be given a chance to check and change the details you enter before sending off your request.
+</p>
+
+<%= form_for education, url: candidates_school_registrations_education_path, data: { controller: 'education-form' } do |f| %>
+  <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+
+  <section id="education-degree-stage-container" data-target="education-form.degreeStagesContainer">
+    <%= f.radio_button_fieldset :degree_stage do |fieldset| %>
+      <% f.object.available_degree_stages.each do |degree_stage| %>
+        <% if f.object.requires_explanation_for_degree_stage? degree_stage %>
+          <%= fieldset.radio_input degree_stage, data: {
+            action: 'click->education-form#degreeStageSelected',
+            requires_subject: f.object.requires_subject_for_degree_stage?(degree_stage)
+          } do %>
+            <%= fieldset.text_area :degree_stage_explaination %>
+          <% end %>
+        <% else %>
+          <%= fieldset.radio_input degree_stage, data: {
+            action: 'click->education-form#degreeStageSelected',
+            requires_subject: f.object.requires_subject_for_degree_stage?(degree_stage)
+          } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section id="education-degree-subject-container" data-target="education-form.degreeSubjectContainer">
+    <%= f.collection_select \
+      :degree_subject,
+      f.object.available_degree_subjects,
+      :to_s,
+      :to_s,
+      { include_blank: 'Select' },
+      {
+        class: 'govuk-select govuk-!-width-one-half',
+        data: {
+          target: 'education-form.degreeSubject',
+          value_for_no_degree: f.object.no_degree_subject
+        },
+        label_options: { class: 'govuk-heading-m' }
+      } %>
+  </section>
+
+  <%= f.submit 'Continue' %>
+<% end %>

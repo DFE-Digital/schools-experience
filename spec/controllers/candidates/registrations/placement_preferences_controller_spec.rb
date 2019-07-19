@@ -5,7 +5,12 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
   include_context 'Stubbed current_registration'
 
   let :registration_session do
-    Candidates::Registrations::RegistrationSession.new({})
+    FactoryBot.build :registration_session, with: %i(
+      personal_information
+      contact_information
+      education
+      teaching_preference
+    )
   end
 
   context 'without existing placement_preference in session' do

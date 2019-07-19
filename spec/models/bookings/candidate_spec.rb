@@ -4,7 +4,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   include_context "fake gitis"
 
   describe 'database structure' do
-    it { is_expected.to have_db_column(:gitis_uuid).of_type(:string).with_options(limit: 36) }
+    it { is_expected.to have_db_column(:gitis_uuid).of_type(:uuid) }
     it { is_expected.to have_db_index(:gitis_uuid).unique }
   end
 

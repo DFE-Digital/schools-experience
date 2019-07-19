@@ -1,0 +1,21 @@
+<% self.page_title = 'Candidate feedback sent' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Thank you for your feedback.
+      </h1>
+    </div>
+    <h2 class="govuk-heading-m">
+      View and request more school experience
+    </h2>
+    <p>
+      <% if Rails.application.config.x.phase >= 5  %>
+        <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
+      <% else %>
+        <%= link_to 'Find more school experience', candidates_root_path %>
+      <% end %>
+    </p>
+  </div>
+</div>

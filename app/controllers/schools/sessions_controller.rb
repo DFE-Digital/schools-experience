@@ -39,6 +39,8 @@ module Schools
     end
 
     def create
+      return redirect_to schools_dashboard_path if user_signed_in?
+
       # using fetch rather than :[] so it'll blow up
       # here if it's retrieiving the state from the session that's
       # the problem rather than the comparison
@@ -51,8 +53,7 @@ module Schools
       session[:id_token]        = access_token.id_token # store this for logout flows.
       session[:current_user]    = userinfo
       session[:urn]             = userinfo.raw_attributes.dig("organisation", "urn").to_i
-
-      Rails.logger.info("Logged in #{session[:current_user]}, urn: #{session[:urn]}")
+      session[:school_name]     = userinfo.raw_attributes.dig("organisation", "name")
 
       redirect_to(session.delete(:return_url) || schools_dashboard_path)
 

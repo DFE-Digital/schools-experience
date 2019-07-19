@@ -98,6 +98,8 @@ Rails.application.routes.draw do
       resource :profile, only: :show
       resource :confirmation, only: %i(create show)
     end
+
+    resources :feedbacks, only: %i(new create show)
   end
 
   namespace :candidates do
@@ -120,7 +122,8 @@ Rails.application.routes.draw do
           resource :sign_in, only: %i(show create)
         end
         resource :contact_information, only: %i(new create edit update)
-        resource :subject_preference, only: %i(new create edit update)
+        resource :education, only: %i(new create edit update)
+        resource :teaching_preference, only: %i(new create edit update)
         resource :placement_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
@@ -144,6 +147,8 @@ Rails.application.routes.draw do
 
       resource :dashboard, only: :show
     end
+
+    resources :feedbacks, only: %i(new create show)
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
 end
