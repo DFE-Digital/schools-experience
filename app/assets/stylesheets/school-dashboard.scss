@@ -1,17 +1,3 @@
-article#dashlette {
-  // FIXME remove post phase 3
-  ul > li {
-    @include govuk-font($size: 19, $weight: normal);
-    margin: 1rem 0rem;
-
-    a {
-      display: inline-block;
-      margin-bottom: 0.5rem;
-    }
-
-  }
-}
-
 article#dashboard {
   #change-school {
     padding-top: 0;

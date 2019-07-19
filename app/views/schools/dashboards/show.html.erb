@@ -1,5 +1,52 @@
-<%- if Rails.application.config.x.phase <= 3 -%>
-  <%= render partial: 'dashlette' %>
-<%- else -%>
-  <%= render partial: 'full_dashboard' %>
-<%- end -%>
+<% self.page_title = "Manage requests and bookings at #{@current_school.name}" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">Manage requests and bookings at <%= @current_school.name %></h1>
+
+    <article id="dashboard">
+      <section id="change-school">
+        <%= link_to "Change school", new_schools_switch_path %>
+      </section>
+
+      <% if @current_school.private_beta? %>
+
+        <% if Rails.application.config.x.phase >= 4 %>
+          <%= render partial: 'new_requests_and_bookings' %>
+        <% end %>
+
+        <%= render partial: 'manage_dates' %>
+        <%= render partial: 'account_admin' %>
+
+      <% else %>
+        <%= render partial: 'update_your_school_profile' %>
+      <% end %>
+
+      <section id="help-and-support" class="medium-priority">
+        <h2 class="govuk-heading-m">
+          Help and support
+        </h2>
+
+        <%- if Rails.application.config.x.phase >= 4 -%>
+        <div id="service-updates-and-guidance" class="subsection">
+          <header class="dashboard-low-priority">
+            <%= link_to "Service updates and guidance - #{service_update_last_updated_at}", service_update_path %>
+          </header>
+          <span class="govuk-hint">
+            Find out about the latest changes to the service and how it works
+          </span>
+        </div>
+        <%- end -%>
+
+        <div id="contact-us" class="subsection">
+          <header class="dashboard-low-priority">
+            <%= mail_to 'organise.school-experience@education.gov.uk', 'Contact us' %>
+          </header>
+          <span class="govuk-hint">
+            Get in touch if you need help using the service
+          </span>
+        </div>
+      </section>
+    </article>
+  </div>
+</div>

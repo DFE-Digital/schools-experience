@@ -54,25 +54,30 @@ describe Schools::DashboardsController, type: :request do
       end
     end
 
-    context 'dashlette' do
+    describe 'Phase feature flags' do
       include_context "logged in DfE user"
-      before { allow(Rails.application.config.x).to receive(:phase).and_return(2) }
 
-      context 'when the school has fixed dates' do
-        before { @current_user_school.update(availability_preference_fixed: true) }
-        before { get '/schools/dashboard' }
+      context 'pre phase 4' do
+        before do
+          allow(Rails.application.config.x).to receive(:phase).and_return(3)
+        end
 
-        specify 'should have the link' do
-          expect(response.body).to match(/Add, remove and change dates/)
+        before { get('/schools/dashboard') }
+
+        specify 'should not show the to do list' do
+          expect(response.body).not_to match(/To do list/)
         end
       end
 
-      context 'when the school has flexible dates' do
-        before { @current_user_school.update(availability_preference_fixed: false) }
-        before { get '/schools/dashboard' }
+      context 'phase 4 and beyond' do
+        before do
+          allow(Rails.application.config.x).to receive(:phase).and_return(4)
+        end
 
-        specify 'should have the link' do
-          expect(response.body).to match(/Describe when you’ll host school experience candidates/)
+        before { get('/schools/dashboard') }
+
+        specify 'should show the to do list' do
+          expect(response.body).not_to match(/To do list/)
         end
       end
     end
