@@ -14,7 +14,7 @@ module Candidates
 
         if @placement_preference.valid?
           persist @placement_preference
-          redirect_to new_candidates_school_registrations_background_check_path
+          redirect_to next_step_path
         else
           render :new
         end

@@ -3,6 +3,15 @@ Feature: Background checks
     As a potential candidate
     I want to inform the school of my DBS check status
 
+    Background:
+       Given my school of choice exists
+       And the school offers 'Physics, Mathematics'
+       And I have completed the personal information form
+       And I have completed the contact information form
+       And I have completed the education form
+       And I have completed the teaching preference form
+       And I have completed the placement preference form
+
     Scenario: Page contents
         Given I am on the 'background checks' page for my school of choice
         Then I should see a paragraph informing me that some schools require a DBS check
@@ -17,6 +26,5 @@ Feature: Background checks
     Scenario: Filling in and submitting the form
         Given I am on the 'background checks' page for my school of choice
         And I choose 'Yes' from the 'Do you have a DBS certificate?' radio buttons
-        # We need to have filled in the whole wizard to progress, revisit
-        #When I submit the form
-        #Then I should be on the 'Check your answers' page
+        When I submit the form
+        Then I should be on the 'Check your answers' page for my school of choice

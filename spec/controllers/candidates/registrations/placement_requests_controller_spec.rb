@@ -139,6 +139,25 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
         context 'school has not changed availability type' do
           it_behaves_like 'a successful create'
         end
+
+        context 'with an invalid session' do
+          let :incomplete_registration_session do
+            FactoryBot.build :registration_session,
+              urn: '333333', uuid: 'aaa', with: [:personal_information]
+          end
+
+          before do
+            Candidates::Registrations::RegistrationStore.instance.store! \
+              incomplete_registration_session
+
+            get "/candidates/confirm/#{incomplete_registration_session.uuid}"
+          end
+
+          it 'redirects to the first missing step' do
+            expect(response).to redirect_to \
+              "/candidates/schools/#{incomplete_registration_session.urn}/registrations/contact_information/new"
+          end
+        end
       end
     end
   end

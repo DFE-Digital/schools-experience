@@ -5,11 +5,9 @@ Given("I make my teaching preference selection") do
 end
 
 Given("I have completed the Teaching preference step") do
-  steps %(
-    I have completed the Teaching preference step
-    I make my teaching preference selection
-    I submit the form
-  )
+  step "I am on the 'teaching preference' page for my school of choice"
+  step 'I make my teaching preference selection'
+  step 'I submit the form'
 end
 
 Given("I change my teaching subject") do

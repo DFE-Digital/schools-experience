@@ -3,8 +3,18 @@ require 'rails_helper'
 describe Candidates::Registrations::BackgroundChecksController, type: :request do
   include_context 'Stubbed current_registration'
 
+  before do
+    FactoryBot.create :bookings_school, urn: 11048
+  end
+
   let :registration_session do
-    Candidates::Registrations::RegistrationSession.new({})
+    FactoryBot.build :registration_session, with: %i(
+      personal_information
+      contact_information
+      education
+      teaching_preference
+      placement_preference
+    )
   end
 
   context 'without existing background_check in session' do

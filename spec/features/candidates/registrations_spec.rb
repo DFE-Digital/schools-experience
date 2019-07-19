@@ -168,10 +168,6 @@ feature 'Candidate Registrations', type: :feature do
         complete_contact_information_step
         sign_in_via_dashboard(newtoken.token)
         swap_back_to_education_step
-        complete_education_step
-        complete_teaching_preference_step
-        complete_placement_preference_step
-        complete_background_step
         get_bounced_to_personal_information_step
       end
     end

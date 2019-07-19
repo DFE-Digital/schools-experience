@@ -170,32 +170,10 @@ module Candidates
         other.to_json == self.to_json
       end
 
-      def incomplete_steps
-        STEPS.reject do |step|
-          step_completed? step
-        end
-      end
-
     private
 
-      STEPS = %i(
-        personal_information
-        contact_information
-        education
-        teaching_preference
-        placement_preference
-        background_check
-      ).freeze
-
-      def step_completed?(step)
-        model = send step
-        model.valid?
-      rescue StepNotFound
-        false
-      end
-
       def all_steps_completed?
-        STEPS.all? { |step| step_completed? step }
+        RegistrationState.new(self).completed?
       end
     end
   end
