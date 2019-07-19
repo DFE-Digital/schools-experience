@@ -37,6 +37,8 @@ class Candidates::SchoolsController < ApplicationController
       @presenter = Candidates::SchoolPresenter.new(@school, @school.profile)
     end
     @available_dates = @school.bookings_placement_dates.available
+
+    @school.increment!(:views)
   end
 
 private

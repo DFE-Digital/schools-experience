@@ -97,15 +97,29 @@ RSpec.describe Candidates::SchoolsController, type: :request do
   end
 
   context "GET #show" do
-    before do
-      @school = create(:bookings_school)
-      get candidates_school_path(@school)
-    end
+    let(:school) { create(:bookings_school) }
+    let(:req) { get candidates_school_path(school) }
+    subject! { req }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
-      expect(response).to render_template('show')
+    end
+
+    it "renders the correct template" do
+      expect(subject).to render_template('show')
+    end
+
+    it "assigns the the school" do
       expect(assigns(:school)).to_not be_nil
+    end
+
+    context 'counting' do
+      let!(:count) { school.views }
+      before { req }
+
+      specify 'count should have increased when viewed' do
+        expect(school.reload.views).to eql(count + 1)
+      end
     end
   end
 end
