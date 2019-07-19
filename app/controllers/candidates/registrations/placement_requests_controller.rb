@@ -43,6 +43,9 @@ module Candidates
           uuid: registration_session.uuid
       rescue RegistrationStore::SessionNotFound
         render :session_expired
+      rescue RegistrationSession::StepNotFound
+        @current_registration = registration_session
+        redirect_to next_step_path
       end
 
     private
