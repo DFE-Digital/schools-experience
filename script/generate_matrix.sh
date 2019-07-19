@@ -7,7 +7,7 @@ ls -l
 echo "Branch is ${BUILD_SOURCEBRANCHNAME}"
 
 browsers='chrome'
-if [ $BUILD_SOURCEBRANCHNAME -eq 'master' ] ; then
+if [ ${BUILD_SOURCEBRANCHNAME} == 'master' ] ; then
   browsers='chrome firefox'
 fi
 
