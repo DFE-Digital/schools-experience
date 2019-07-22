@@ -255,7 +255,8 @@ GEM
       pry (>= 0.10.4)
     psych (3.1.0)
     public_suffix (3.1.1)
-    puma (3.12.1)
+    puma (4.0.1)
+      nio4r (~> 2.0)
     rack (2.0.7)
     rack-oauth2 (1.10.0)
       activesupport
@@ -462,7 +463,7 @@ DEPENDENCIES
   phonelib
   pry-byebug
   pry-rails
-  puma (~> 3.12)
+  puma (~> 4.0)
   rack-rewrite
   rack-timeout
   rails (~> 5.2.3)
