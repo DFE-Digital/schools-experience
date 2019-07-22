@@ -150,4 +150,7 @@ Rails.application.routes.draw do
     resources :feedbacks, only: %i(new create show)
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
+
+
+  match "/admin/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
 end
