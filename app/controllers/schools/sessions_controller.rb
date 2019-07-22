@@ -1,13 +1,13 @@
 module Schools
-  class StateMissmatchError < StandardError; end
+  class StateMismatchError < StandardError; end
   class AuthFailedError < StandardError; end
   class NoIDTokenError < StandardError; end
 
   class SessionsController < ApplicationController
     include DFEAuthentication
 
-    rescue_from AuthFailedError,     with: :authentication_failure
-    rescue_from StateMissmatchError, with: :authentication_failure
+    rescue_from AuthFailedError,    with: :authentication_failure
+    rescue_from StateMismatchError, with: :authentication_failure
 
     def show
       # nothing yet, the view just contains a 'logout' button
@@ -68,14 +68,14 @@ module Schools
 
     def check_state(session_state, params_state)
       if params_state != session_state
-        Rails.logger.error(
-          "params state (%<params_state>s) doesn't match session state %<session_state>s" % {
-            params_state: params_state,
-            session_state: session_state
-          }
-        )
+        message = "params state (%<params_state>s) doesn't match session state %<session_state>s" % {
+          params_state: params_state,
+          session_state: session_state
+        }
 
-        raise StateMissmatchError
+        Rails.logger.error(message)
+
+        raise StateMismatchError, message
       end
     end
 
