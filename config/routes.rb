@@ -152,5 +152,7 @@ Rails.application.routes.draw do
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
 
 
-  match "/admin/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
+  if Rails.application.config.x.delayed_job_admin_enabled
+    match "/admin/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
+  end
 end
