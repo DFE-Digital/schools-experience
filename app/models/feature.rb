@@ -3,6 +3,7 @@ class Feature
 
   delegate :only_phase, :from_phase, :until_phase, to: :instance
   delegate :only, :from, :until, to: :instance
+  delegate :active?, to: :instance
 
   def only_phase(phase_to_test)
     return false unless Integer(phase_to_test) == current_phase
@@ -34,4 +35,8 @@ class Feature
     @current_phase = phase.nil? ? nil : Integer(phase)
   end
   alias_method :current=, :current_phase=
+
+  def active?(feature_key)
+    Array.wrap(Rails.application.config.x.features).include? feature_key
+  end
 end
