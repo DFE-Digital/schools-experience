@@ -12,11 +12,11 @@
       </h2>
 
       <dl class="govuk-summary-list govuk-summary-list--no-border inline">
-        <%= dlist_item 'Individual requirements:' do %>
+        <%= dlist_item 'Individual requirements:', id: 'individual-requirements' do %>
           <%= content_or_msg @presenter.individual_requirements, "No requirements specified" %>
         <% end %>
 
-        <%= dlist_item 'Experience details:' do %>
+        <%= dlist_item 'Experience details:', id: 'experience-details' do %>
           <%= content_or_msg @presenter.experience_details, "No information supplied" %>
         <% end %>
 
@@ -158,7 +158,7 @@
         <%= content_or_msg @presenter.formatted_dress_code, "No dress code supplied" %>
       <% end %>
 
-      <%= dlist_item 'Experience start and finish times' do %>
+      <%= dlist_item 'Experience start and finish times', id: 'start-and-finish-times' do %>
         <p>
           <%= @presenter.start_time %> to <%= @presenter.end_time %>
 
@@ -172,7 +172,7 @@
         <%- end -%>
       <% end %>
 
-      <%= dlist_item 'Parking' do %>
+      <%= dlist_item 'Parking', id: 'parking' do %>
         <%- if @presenter.parking_provided -%>
           <p>Yes - on site parking provided</p>
         <%- else -%>
@@ -182,7 +182,7 @@
         <%= simple_format @presenter.parking_details %>
       <% end %>
 
-      <%= dlist_item 'Accessibility details' do %>
+      <%= dlist_item 'Accessibility details', id: 'accessibility-details' do %>
         <%- if @presenter.disabled_facilities.present? -%>
           <%= simple_format @presenter.disabled_facilities %>
         <%- else -%>
