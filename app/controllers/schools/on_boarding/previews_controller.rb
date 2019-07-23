@@ -13,6 +13,7 @@ module Schools
 
         profile = Bookings::Profile.new converter.attributes
         @presenter = Candidates::SchoolPresenter.new @school, profile
+        @confirmation = Confirmation.new
       end
 
     private

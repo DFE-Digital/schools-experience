@@ -9,62 +9,50 @@
 
 <div class="govuk-grid-row" id="school-onboarding-profile">
   <div class="govuk-grid-column-full">
-    <%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
-      <h1 class="govuk-heading-l">
-        Check your answers before setting up your school experience profile
-      </h1>
+    <h1 class="govuk-heading-l">
+      Check your answers before setting up your school experience profile
+    </h1>
 
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+    <h2 class="govuk-heading-m">School details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Full name', @profile.school_name %>
+      <%= summary_row 'Address', @profile.school_address %>
+      <%= summary_row 'UK telephone number', @profile.admin_contact_phone %>
+      <%= summary_row 'Email address', @profile.school_email %>
+    </dl>
 
-      <h2 class="govuk-heading-m">School details</h2>
-      <dl class="govuk-summary-list">
-        <%= summary_row 'Full name', @profile.school_name %>
-        <%= summary_row 'Address', @profile.school_address %>
-        <%= summary_row 'UK telephone number', @profile.admin_contact_phone %>
-        <%= summary_row 'Email address', @profile.school_email %>
-      </dl>
+    <h2 class="govuk-heading-m">School experience details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Fees', @profile.fees, edit_schools_on_boarding_fees_path %>
+      <%= summary_row 'DBS check required', @profile.dbs_check_required, edit_schools_on_boarding_candidate_requirement_path %>
+      <%= summary_row 'Individual requirements', @profile.individual_requirements, edit_schools_on_boarding_candidate_requirement_path %>
+      <%= summary_row 'School experience phases', @profile.school_experience_phases, edit_schools_on_boarding_phases_list_path %>
+      <%= summary_row 'Primary key stages', @profile.primary_key_stages, \
+        @profile.primary_key_stages_offered? ? edit_schools_on_boarding_key_stage_list_path : edit_schools_on_boarding_phases_list_path %>
+      <%= summary_row 'Subjects', @profile.subjects, \
+        @profile.subjects_offered? ? edit_schools_on_boarding_subjects_path : edit_schools_on_boarding_phases_list_path %>
+      <%= summary_row 'Description', @profile.descriptions, edit_schools_on_boarding_description_path %>
+      <%= summary_row 'School experience details', @profile.school_experience_details, edit_schools_on_boarding_experience_outline_path %>
+      <%= summary_row 'Teacher training links', @profile.teacher_training_links, edit_schools_on_boarding_experience_outline_path %>
+    </dl>
 
-      <h2 class="govuk-heading-m">School experience details</h2>
-      <dl class="govuk-summary-list">
-        <%= summary_row 'Fees', @profile.fees, edit_schools_on_boarding_fees_path %>
-        <%= summary_row 'DBS check required', @profile.dbs_check_required, edit_schools_on_boarding_candidate_requirement_path %>
-        <%= summary_row 'Individual requirements', @profile.individual_requirements, edit_schools_on_boarding_candidate_requirement_path %>
-        <%= summary_row 'School experience phases', @profile.school_experience_phases, edit_schools_on_boarding_phases_list_path %>
-        <%= summary_row 'Primary key stages', @profile.primary_key_stages, \
-          @profile.primary_key_stages_offered? ? edit_schools_on_boarding_key_stage_list_path : edit_schools_on_boarding_phases_list_path %>
-        <%= summary_row 'Subjects', @profile.subjects, \
-          @profile.subjects_offered? ? edit_schools_on_boarding_subjects_path : edit_schools_on_boarding_phases_list_path %>
-        <%= summary_row 'Description', @profile.descriptions, edit_schools_on_boarding_description_path %>
-        <%= summary_row 'School experience details', @profile.school_experience_details, edit_schools_on_boarding_experience_outline_path %>
-        <%= summary_row 'Teacher training links', @profile.teacher_training_links, edit_schools_on_boarding_experience_outline_path %>
-      </dl>
+    <h2 class="govuk-heading-m">Candidate information</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Dress code', @profile.dress_code, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Parking', @profile.parking, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Start time', @profile.start_time, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Finish time', @profile.end_time, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <%= summary_row 'Flexible on times', @profile.flexible_on_times, edit_schools_on_boarding_candidate_experience_detail_path %>
+    </dl>
 
-      <h2 class="govuk-heading-m">Candidate information</h2>
-      <dl class="govuk-summary-list">
-        <%= summary_row 'Dress code', @profile.dress_code, edit_schools_on_boarding_candidate_experience_detail_path %>
-        <%= summary_row 'Parking', @profile.parking, edit_schools_on_boarding_candidate_experience_detail_path %>
-        <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs, edit_schools_on_boarding_candidate_experience_detail_path %>
-        <%= summary_row 'Start time', @profile.start_time, edit_schools_on_boarding_candidate_experience_detail_path %>
-        <%= summary_row 'Finish time', @profile.end_time, edit_schools_on_boarding_candidate_experience_detail_path %>
-        <%= summary_row 'Flexible on times', @profile.flexible_on_times, edit_schools_on_boarding_candidate_experience_detail_path %>
-      </dl>
+    <h2 class="ogvuk-heading-m">Admin contact details</h2>
+    <dl class="govuk-summary-list">
+      <%= summary_row 'Full name', @profile.admin_contact_full_name, edit_schools_on_boarding_admin_contact_path %>
+      <%= summary_row 'UK telephone number', @profile.admin_contact_phone, edit_schools_on_boarding_admin_contact_path %>
+      <%= summary_row 'Email address', @profile.admin_contact_email, edit_schools_on_boarding_admin_contact_path %>
+    </dl>
 
-      <h2 class="ogvuk-heading-m">Admin contact details</h2>
-      <dl class="govuk-summary-list">
-        <%= summary_row 'Full name', @profile.admin_contact_full_name, edit_schools_on_boarding_admin_contact_path %>
-        <%= summary_row 'UK telephone number', @profile.admin_contact_phone, edit_schools_on_boarding_admin_contact_path %>
-        <%= summary_row 'Email address', @profile.admin_contact_email, edit_schools_on_boarding_admin_contact_path %>
-      </dl>
-
-
-      <h2 class="govuk-heading-m">Set up your school experience profile</h2>
-      <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
-        <%= f.check_box_input :acceptance %>
-      </div>
-      <div class="button-group-container">
-        <%= link_to 'Preview profile', schools_on_boarding_preview_path, class: 'govuk-button govuk-button--secondary' %>
-        <%= f.submit 'Accept and set up profile' %>
-      </div>
-    <% end %>
+    <%= link_to 'Continue', schools_on_boarding_preview_path, class: 'govuk-button' %>
   </div>
 </div>
