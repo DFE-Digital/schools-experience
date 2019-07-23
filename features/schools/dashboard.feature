@@ -85,6 +85,20 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see a 'Turn requests on / off' link to the 'toggle requests' page
 
+    Scenario: Displaying a warning when fixed with no dates
+        Given my school has fully-onboarded
+        And it has 'fixed' availability
+        And my school has no placement dates
+        When I am on the 'schools dashboard' page
+        Then there should be a 'You have no placement dates' warning
+
+    Scenario: Displaying a warning when flexible with no description
+        Given my school has fully-onboarded
+        And it has 'flexible' availability
+        And my school has availability no information set
+        When I am on the 'schools dashboard' page
+        Then there should be a 'You have no availability information' warning
+
     @wip
     Scenario: Candidate attendances counter
         Given there are 4 new candidate attendances
