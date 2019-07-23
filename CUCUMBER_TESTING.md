@@ -31,6 +31,38 @@ The html dumps will be available on the local machine in /tmp/screenshots
 
 ## Profiling Cucumber Tests using ruby-prof
 
+Add a file `features/support/ruby_prof_cucumber.rb`
+
+with contents
+
+```
+if ENV['RUBY_PROF'].present?
+  require 'ruby-prof'
+  RubyProf.start
+
+  at_exit do
+    results = RubyProf.stop
+    File.open "/app/tmp/profile-graph.html", 'w' do |file|
+      RubyProf::GraphHtmlPrinter.new(results).print(file)
+    end 
+
+    File.open "/app/tmp/profile-flat.txt", 'w' do |file|
+      RubyProf::FlatPrinter.new(results).print(file)
+    end
+
+    File.open "/app/tmp/profile-stack.html", 'w' do |file|
+      RubyProf::CallStackPrinter.new(results).print(file)
+    end 
+  end 
+end
+```
+
+and add a line into the Gemfile
+
+`gem 'ruby-prof'`
+
+and then rebuild the docker image. Then run the tests with the following command
+
 `docker-compose run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-chrome -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL='http://school-experience:3000' -e DEBUG_DATABASE_CLEANER=true -v /tmp/screenshots:/app/tmp/capybara/ -v /tmp/ruby-prof:/app/tmp/ -e RUBY_PROF=true school-experience cucumber features/candidates/bookings/cancelling_a_booking.feature`
 
 Note that the command above has restricted the profiling to a single feature. This is because the profiling processing takes a long time ( > 5 mins) . Then to view the profile results in stack form for each thread
