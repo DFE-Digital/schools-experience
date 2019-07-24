@@ -1,7 +1,9 @@
 module Schools
   module OnBoarding
     class ConfirmationsController < OnBoardingsController
-      def show; end
+      def show
+        redirect_to schools_on_boarding_profile_path if reloaded_create_action?
+      end
 
       def create
         @confirmation = Confirmation.new confirmation_params
@@ -12,8 +14,6 @@ module Schools
           redirect_to schools_on_boarding_confirmation_path
         else
           # TODO remove duplication
-          # NOTE bug, -> submit with error, hit here, refresh -> see confirmation
-          # without having confirmed.
           @school = current_school_profile.bookings_school
           set_up_school_for_preview! @school
 
@@ -41,6 +41,21 @@ module Schools
       def publish_profile!
         school = current_school_profile.bookings_school
         Bookings::ProfilePublisher.new(school, current_school_profile).update!
+      end
+
+      def bookings_profile
+        @bookings_profile ||= current_school.profile
+      end
+
+      # If the user clicks submit on the previous step without accepting the
+      # ts and cs then reloads the page they will see the confirmation page
+      # (same url different methods), we want to prevent that behaviour.
+      def reloaded_create_action?
+        bookings_profile.nil? || latest_changes_havent_been_published?
+      end
+
+      def latest_changes_havent_been_published?
+        bookings_profile.updated_at < current_school_profile.updated_at
       end
     end
   end

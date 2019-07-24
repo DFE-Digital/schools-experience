@@ -55,4 +55,35 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
       end
     end
   end
+
+  context '#show' do
+    context 'when the profile is incomplete' do
+      before do
+        get '/schools/on_boarding/confirmation'
+      end
+
+      it 'redirects to the previous step' do
+        expect(response).to redirect_to schools_on_boarding_profile_path
+      end
+    end
+
+    context 'when the profile is complete' do
+      let :confirmation do
+        FactoryBot.build :confirmation
+      end
+
+      let :params do
+        { schools_on_boarding_confirmation: confirmation.attributes }
+      end
+
+      before do
+        post '/schools/on_boarding/confirmation', params: params
+        get '/schools/on_boarding/confirmation'
+      end
+
+      it 'renders the show template' do
+        expect(response).to render_template :show
+      end
+    end
+  end
 end
