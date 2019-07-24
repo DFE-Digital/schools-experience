@@ -13,26 +13,13 @@ module Schools
           publish_profile!
           redirect_to schools_on_boarding_confirmation_path
         else
-          # TODO remove duplication
           @school = current_school_profile.bookings_school
-          set_up_school_for_preview! @school
-
-          profile = Bookings::Profile.new converter.attributes
-          @presenter = Candidates::SchoolPresenter.new @school, profile
+          @presenter = PreviewPresenter.new current_school_profile
           render 'schools/on_boarding/previews/show'
         end
       end
 
     private
-
-      def set_up_school_for_preview!(school)
-        school.phase_ids = converter.phase_ids
-        school.subject_ids = current_school_profile.subject_ids
-      end
-
-      def converter
-        @converter ||= Bookings::ProfileAttributesConvertor.new current_school_profile.attributes
-      end
 
       def confirmation_params
         params.require(:schools_on_boarding_confirmation).permit :acceptance

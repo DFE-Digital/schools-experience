@@ -21,7 +21,7 @@
         <% end %>
 
         <%= dlist_item 'Experience subjects:', id: "school-subjects" do %>
-          <%= format_school_subjects @school %>
+          <%= format_school_subjects @presenter.school %>
         <% end %>
       </dl>
     </div>
@@ -33,9 +33,9 @@
 
       <p class="directions-link">
         <%= link_to 'Get directions', external_map_url(
-              latitude: @school.coordinates.latitude,
-              longitude: @school.coordinates.longitude,
-              name: @school.name) %>
+              latitude: @presenter.school.coordinates.latitude,
+              longitude: @presenter.school.coordinates.longitude,
+              name: @presenter.school.name) %>
       </p>
     </div>
 
@@ -57,22 +57,22 @@
       <ul id="school-websites">
         <%- if @presenter.website.present? -%>
         <li id="school-website">
-          <%= link_to "#{@school.name} website", @presenter.website %>
+          <%= link_to "#{@presenter.school.name} website", @presenter.website %>
         </li>
         <%- end -%>
 
         <li>
-          <%= link_to "#{@school.name} Get Information About Schools",
+          <%= link_to "#{@presenter.school.name} Get Information About Schools",
                       gias_school_url(@presenter.urn) %>
         </li>
 
         <li>
-          <%= link_to "Ofsted report: #{@school.name}",
+          <%= link_to "Ofsted report: #{@presenter.school.name}",
                       ofsted_report_url(@presenter.urn) %>
         </li>
 
         <li>
-          <%= link_to "Performance information: #{@school.name}",
+          <%= link_to "Performance information: #{@presenter.school.name}",
                       performance_report_url(@presenter.urn) %>
         </li>
 
@@ -106,7 +106,7 @@
       <% end %>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-        <%- if @school.availability_preference_fixed? -%>
+        <%- if @presenter.school.availability_preference_fixed? -%>
           <%= render partial: 'candidates/schools/placement_dates', locals: { available_dates: @presenter.available_dates } %>
         <%- else -%>
           <dt class="govuk-summary-list__key">

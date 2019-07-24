@@ -61,7 +61,7 @@ describe Schools::OnBoarding::PreviewsController, type: :request do
       end
 
       it 'sets up @presenter' do
-        expect(assigns(:presenter)).to be_a Candidates::SchoolPresenter
+        expect(assigns(:presenter)).to be_a Schools::OnBoarding::PreviewPresenter
       end
 
       it 'renders the show template' do
