@@ -1,4 +1,5 @@
 require File.join(Rails.root, "lib", "data", "school_importer")
+require File.join(Rails.root, "lib", "data", "school_mass_importer")
 require File.join(Rails.root, "lib", "data", "school_enhancer")
 require File.join(Rails.root, "lib", "data", "school_manager")
 
@@ -30,6 +31,18 @@ namespace :data do
       )
 
       SchoolImporter.new(tpuk_data, edubase_data, args[:email_override]).import
+    end
+
+    desc "Import all GiaS (EduBase) data"
+    task :mass_import, %i{edubase email_override} => :environment do |_t, args|
+      args.with_defaults(email_override: nil)
+
+      edubase_data = CSV.parse(
+        File.read(args[:edubase]).scrub,
+        headers: true
+      )
+
+      SchoolMassImporter.new(edubase_data, args[:email_override]).import
     end
 
     desc "Enhance school data using information captured in the questionnaire"
