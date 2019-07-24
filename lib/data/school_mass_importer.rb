@@ -93,16 +93,28 @@ private
     url_with_prefix = if url.starts_with?("http:", "https:")
                         url
 
-                      # one school has a typo...
+                      # typos
                       elsif url.starts_with?("http;")
                         url.tr('http;', 'http:')
+
+                      elsif url.starts_with?("Hhtp:")
+                        url.tr('Hhtp:', 'http:')
 
                       # add a prefix if none present, most common error
                       else
                         "http://#{url}"
                       end
 
-    fail "invalid website for #{urn}, #{url}" unless url_with_prefix =~ URI::regexp(%w(http https))
+    # skip ip addresses
+    return nil if url_with_prefix =~ /\d+\.\d+\.\d+\.\d+/
+
+    # skip email addresses
+    return nil if url_with_prefix =~ /@/
+
+    unless url_with_prefix.match?(/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,10}(:[0-9]{1,5})?(\/.*)?$/ix)
+      puts "invalid website for #{urn}, #{url}"
+      return nil
+    end
 
     url_with_prefix.downcase
   end
