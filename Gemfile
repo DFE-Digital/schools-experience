@@ -69,6 +69,7 @@ gem 'addressable'
 gem 'faraday'
 
 gem 'validates_timeliness', '~> 5.0.0.alpha4'
+gem 'activerecord-import', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
