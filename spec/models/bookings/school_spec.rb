@@ -56,7 +56,7 @@ describe Bookings::School, type: :model do
     include_examples "websites", :teacher_training_website
 
     context 'contact_email' do
-      valid_addresses = %w{hello@bbc.co.uk hi.there@bbc.com}
+      valid_addresses = ['hello@bbc.co.uk', 'hi.there@bbc.com', nil]
       invalid_addresses = [
         "www.bbc.co.uk",
         "0161 123 4567",
