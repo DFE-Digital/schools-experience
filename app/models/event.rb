@@ -2,6 +2,7 @@ class Event < ApplicationRecord
   EVENT_TYPES = %w(
     school_disabled
     school_enabled
+    school_edubase_data_refreshed
   ).freeze
 
   belongs_to :recordable,

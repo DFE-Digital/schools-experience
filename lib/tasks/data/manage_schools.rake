@@ -1,6 +1,7 @@
 require File.join(Rails.root, "lib", "data", "school_mass_importer")
 require File.join(Rails.root, "lib", "data", "school_enhancer")
 require File.join(Rails.root, "lib", "data", "school_manager")
+require File.join(Rails.root, "lib", "data", "school_updater")
 
 namespace :data do
   namespace :schools do
@@ -14,6 +15,16 @@ namespace :data do
       )
 
       SchoolMassImporter.new(edubase_data, args[:email_override]).import
+    end
+
+    desc "Update schools"
+    task :update, %i{edubase} => :environment do |_t, args|
+      edubase_data = CSV.parse(
+        File.read(args[:edubase]).scrub,
+        headers: true
+      )
+
+      SchoolUpdater.new(edubase_data).update
     end
 
     desc "Enhance school data using information captured in the questionnaire"
