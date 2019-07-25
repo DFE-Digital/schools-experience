@@ -32,7 +32,11 @@ class SchoolMassImporter
           print '.'
         end
 
-        assign_phases(urn, row['PhaseOfEducation (code)'])
+        school = Bookings::School.find_by(urn: urn)
+
+        next unless school.present?
+
+        assign_phases(school, row['PhaseOfEducation (code)'])
       end
 
       puts "done..."
@@ -41,13 +45,12 @@ class SchoolMassImporter
 
 private
 
-  def assign_phases(urn, edubase_id)
+  def assign_phases(school, edubase_id)
     phases = map_phase(edubase_id.to_i)
     return if phases.nil?
+    return if school.phases.any?
 
-    Bookings::School.find_by(urn: urn).tap do |school|
-      school.phases << phases if school
-    end
+    school.phases << phases if school
   end
 
   def map_phase(edubase_id)
