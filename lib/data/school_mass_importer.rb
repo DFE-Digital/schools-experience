@@ -1,8 +1,9 @@
-require 'breasal'
-require 'activerecord-import'
+require_relative 'school_data_helpers'
 
 class SchoolMassImporter
   attr_accessor :existing_urns, :edubase_data, :email_override
+
+  include SchoolDataHelpers
 
   def initialize(edubase_data, email_override = nil)
     self.edubase_data = edubase_data
@@ -114,6 +115,7 @@ private
     # skip email addresses
     return nil if url_with_prefix =~ /@/
 
+    # skip urls that don't look sensible
     unless url_with_prefix.match?(/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,10}(:[0-9]{1,5})?(\/.*)?$/ix)
       puts "invalid website for #{urn}, #{url}"
       return nil
@@ -134,7 +136,7 @@ private
       town:                    nilify(edubase_row['Town']),
       county:                  nilify(edubase_row['County (name)']),
       postcode:                nilify(edubase_row['Postcode']),
-      coordinates:             convert_to_point(edubase_row['Easting'], edubase_row['Northing']),
+      coordinates:             convert_to_point(edubase_row),
       bookings_school_type_id: school_types[edubase_row['TypeOfEstablishment (code)'].to_i].id
     }
 
@@ -154,21 +156,5 @@ private
     end
 
     attributes
-  end
-
-  def school_types
-    @school_types ||= Bookings::SchoolType.all.index_by(&:edubase_id)
-  end
-
-  def convert_to_point(easting, northing)
-    return nil if easting.blank? || northing.blank?
-
-    coords = Breasal::EastingNorthing.new(
-      easting: easting.to_i,
-      northing: northing.to_i,
-      type: 'gb'
-    ).to_wgs84
-
-    Bookings::School::GEOFACTORY.point(coords[:longitude], coords[:latitude])
   end
 end
