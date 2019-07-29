@@ -1,0 +1,28 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1>Change the booking date for <%= @booking.gitis_contact.full_name %></h1>
+
+    <p>
+      Before you change the date contact the candidate and make sure the they can
+      attend
+    </p>
+
+    <%= form_for @booking, url: schools_booking_date_path(@booking), method: 'patch' do |f| %>
+      <%= f.date_field :date, heading: true %>
+
+        <div id="school-booking-show" class="booking">
+          <section id="booking-details">
+            <dl class="govuk-summary-list">
+              <%= summary_row 'Subject', @booking.bookings_subject.name %>
+              <%= summary_row 'UK telephone number', @booking.gitis_contact.phone %>
+              <%= summary_row 'Email address', @booking.gitis_contact.email %>
+              <%= summary_row 'Request received', @booking.received_on.to_formatted_s(:govuk) %>
+            </dl>
+          </section>
+        </div>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+
+  </div>
+</div>
