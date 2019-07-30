@@ -74,6 +74,29 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
     end
   end
 
+  context 'with existing background check in gitis' do
+    let(:gitis_contact) { build(:gitis_contact, :persisted) }
+    before do
+      allow_any_instance_of(ActionDispatch::Request::Session).to \
+        receive(:[]).with(:gitis_contact).and_return(gitis_contact.attributes)
+    end
+
+    context '#new' do
+      before do
+        get '/candidates/schools/11048/registrations/background_check/new'
+      end
+
+      it 'populates the form with the values from gitis' do
+        expect(assigns(:background_check)).to have_attributes \
+          has_dbs_check: gitis_contact.dfe_hasdbscertificate
+      end
+
+      it 'renders the new template' do
+        expect(response).to render_template :new
+      end
+    end
+  end
+
   context 'with existing background check in session' do
     let :registration_session do
       FactoryBot.build :gitis_registration_session, with: %i(

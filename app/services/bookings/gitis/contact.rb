@@ -13,6 +13,8 @@ module Bookings
       entity_attributes :address1_postalcode
       entity_attributes :telephone1, :telephone2
 
+      entity_attributes :dfe_hasdbscertificate
+
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
       alias_attribute :first_name, :firstname
@@ -44,6 +46,7 @@ module Bookings
         self.address1_postalcode      = @crm_data['address1_postalcode']
         self.birthdate                = @crm_data['birthdate']
         self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
+        self.dfe_hasdbscertificate    = @crm_data['dfe_hasdbscertificate']
 
         super # handles resetting dirty attributes
 
