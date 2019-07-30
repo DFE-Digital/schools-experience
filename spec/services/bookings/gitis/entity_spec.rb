@@ -7,6 +7,8 @@ RSpec.describe Bookings::Gitis::Entity do
     entity_id_attribute :stubid
     entity_attributes :firstname, :lastname
     entity_attributes :hidden, internal: true
+    entity_attributes :notcreate, except: :create
+    entity_attributes :notupdate, except: :update
 
     def initialize(data = {})
       self.stubid = data['stubid']
@@ -31,7 +33,7 @@ RSpec.describe Bookings::Gitis::Entity do
 
   describe ".entity_attribute_names" do
     subject { Stub.entity_attribute_names }
-    it { is_expected.to eq Set.new %w{firstname lastname hidden} }
+    it { is_expected.to eq Set.new %w{firstname lastname hidden notcreate notupdate} }
   end
 
   describe "#attributes" do
@@ -168,5 +170,17 @@ RSpec.describe Bookings::Gitis::Entity do
     it { expect(Stub.entity_attribute_names).to include('hidden') }
     it { expect(Stub.respond_to?('hidden')).to be false }
     it { expect(Stub.respond_to?('hidden=')).to be false }
+  end
+
+  describe "exclude: :create attributes" do
+    subject { Stub.new.tap { |s| s.notcreate = 'test' } }
+    it { expect(subject.attributes_for_create).not_to include('notcreate' => 'test') }
+    it { expect(subject.attributes_for_update).to include('notcreate' => 'test') }
+  end
+
+  describe "exclude: :update attributes" do
+    subject { Stub.new.tap { |s| s.notupdate = 'test' } }
+    it { expect(subject.attributes_for_create).to include('notupdate' => 'test') }
+    it { expect(subject.attributes_for_update).not_to include('notupdate' => 'test') }
   end
 end
