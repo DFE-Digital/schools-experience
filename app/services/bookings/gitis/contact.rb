@@ -3,11 +3,8 @@ module Bookings
     class Contact
       include Entity
 
-      # Status of record within Gitis
-      STATE_CODE = 0
-
       UPDATE_BLACKLIST = %w{
-        dfe_channelcreation statecode mobilephone address1_telephone1
+        dfe_channelcreation mobilephone address1_telephone1
         firstname lastname birthdate
       }.freeze
 
@@ -22,7 +19,7 @@ module Bookings
       entity_attributes :address1_city, :address1_stateorprovince
       entity_attributes :address1_postalcode, :birthdate
       entity_attributes :telephone1, :telephone2, :mobilephone
-      entity_attributes :statecode, :dfe_channelcreation
+      entity_attributes :dfe_channelcreation
 
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
@@ -52,7 +49,6 @@ module Bookings
         self.address1_stateorprovince = @crm_data['address1_stateorprovince']
         self.address1_postalcode      = @crm_data['address1_postalcode']
         self.birthdate                = @crm_data['birthdate']
-        self.statecode                = @crm_data['statecode'] || STATE_CODE
         self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
 
         super # handles resetting dirty attributes

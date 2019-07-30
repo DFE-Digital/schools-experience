@@ -160,7 +160,7 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to include('emailaddress1') }
       it { is_expected.to include('emailaddress2') }
       it { is_expected.to include('telephone2') }
-      it { is_expected.to include('statecode') }
+      it { is_expected.not_to include('statecode') }
       it { is_expected.to include('dfe_channelcreation') }
     end
 
