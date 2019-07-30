@@ -13,12 +13,15 @@ module Bookings
 
     validates :date,
       presence: true,
-      on: :create,
+      on: :create
+    validates :date,
+      if: -> { date_changed? },
       timeliness: {
         on_or_after: :today,
         before: -> { 2.years.from_now },
         type: :date
       }
+
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true
