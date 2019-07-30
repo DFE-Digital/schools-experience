@@ -3,23 +3,17 @@ module Bookings
     class Contact
       include Entity
 
-      UPDATE_BLACKLIST = %w{
-        dfe_channelcreation mobilephone address1_telephone1
-        firstname lastname birthdate
-      }.freeze
-
-      UPDATE_BLACKLIST_OTHER_RECORDS = (
-        UPDATE_BLACKLIST + %w{telephone1 emailaddress1}
-      ).freeze
-
       entity_id_attribute :contactid
 
-      entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
+      entity_attributes :firstname, :lastname, :birthdate, except: :update
+
+      entity_attributes :emailaddress1, :emailaddress2
       entity_attributes :address1_line1, :address1_line2, :address1_line3
       entity_attributes :address1_city, :address1_stateorprovince
-      entity_attributes :address1_postalcode, :birthdate
-      entity_attributes :telephone1, :telephone2, :mobilephone
-      entity_attributes :dfe_channelcreation
+      entity_attributes :address1_postalcode
+      entity_attributes :telephone1, :telephone2
+
+      entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
@@ -123,10 +117,6 @@ module Bookings
         firstname.downcase == fname && lastname.downcase == lname ||
           firstname.downcase == fname && birthdate == gitis_format_dob ||
           lastname.downcase == lname && birthdate == gitis_format_dob
-      end
-
-      def attributes_for_update
-        super.except(*UPDATE_BLACKLIST)
       end
     end
   end
