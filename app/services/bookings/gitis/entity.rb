@@ -103,10 +103,11 @@ module Bookings::Gitis
         end
       end
 
-      def entity_attribute(attr_name)
+      def entity_attribute(attr_name, internal: false)
         define_method :"#{attr_name}" do
           attributes[attr_name.to_s]
         end
+        private :"#{attr_name}" if internal
 
         define_method :"#{attr_name}=" do |value|
           unless value == send(attr_name.to_sym)
@@ -115,13 +116,14 @@ module Bookings::Gitis
 
           attributes[attr_name.to_s] = value
         end
+        private :"#{attr_name}=" if internal
 
         self.entity_attribute_names << attr_name.to_s
       end
 
-      def entity_attributes(*attr_names)
+      def entity_attributes(*attr_names, internal: false)
         Array.wrap(attr_names).flatten.each do |attr_name|
-          entity_attribute(attr_name)
+          entity_attribute(attr_name, internal: internal)
         end
       end
 
