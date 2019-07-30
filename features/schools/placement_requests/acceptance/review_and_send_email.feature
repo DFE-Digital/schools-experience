@@ -55,7 +55,6 @@ Feature: Accepting placement requests
     Scenario: Email preview - help and support
         Given I have progressed to the 'review and send email' page for my chosen placement request
         Then in the 'Help and support' section I should see the following items:
-            | Name                |
             | Email address       |
             | UK telephone number |
         And the help and support section should contain the relevant information

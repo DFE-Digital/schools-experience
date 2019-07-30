@@ -23,7 +23,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(dress_code_remove_piercings: true) }
       it { is_expected.to include(dress_code_smart_casual: true) }
       it { is_expected.to include(dress_code_other_details: 'Must have nice hat') }
-      it { is_expected.to include(admin_contact_full_name: 'Gary Chalmers') }
       it { is_expected.to include(admin_contact_email: 'g.chalmers@springfield.edu') }
       it { is_expected.to include(admin_contact_phone: '+441234567890') }
       it { is_expected.to include(primary_phase: true) }
@@ -63,7 +62,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.description_details = ' '
         model.candidate_experience_detail_disabled_facilities = false
         model.candidate_experience_detail_other_dress_requirements = false
-        model.admin_contact_full_name = ' '
+        model.admin_contact_email = ' '
         model.phases_list_primary = false
         model.phases_list_secondary = false
         model.phases_list_college = true
@@ -88,7 +87,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(description_details: nil) }
       it { is_expected.to include(disabled_facilities: nil) }
       it { is_expected.to include(dress_code_other_details: nil) }
-      it { is_expected.to include(admin_contact_full_name: nil) }
       it { is_expected.to include(admin_contact_email: nil) }
       it { is_expected.to include(admin_contact_phone: nil) }
       it { is_expected.to include(primary_phase: false) }

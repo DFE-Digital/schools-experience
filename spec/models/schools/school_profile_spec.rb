@@ -464,7 +464,7 @@ describe Schools::SchoolProfile, type: :model do
         model.admin_contact = form_model
       end
 
-      %i(full_name phone email).each do |attribute|
+      %i(phone email).each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("admin_contact_#{attribute}")).to \
             eq form_model.send attribute

@@ -153,10 +153,6 @@ class Bookings::School < ApplicationRecord
     end
   end
 
-  def admin_contact_name
-    profile ? profile.admin_contact_full_name : contact_email
-  end
-
   def admin_contact_phone
     profile&.admin_contact_phone
   end
