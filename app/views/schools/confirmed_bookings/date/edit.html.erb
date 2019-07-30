@@ -1,5 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+     <%= link_to 'Back', schools_booking_path(@booking), class: 'govuk-back-link' %>
+
     <h1>Change the booking date for <%= @booking.gitis_contact.full_name %></h1>
 
     <p>
