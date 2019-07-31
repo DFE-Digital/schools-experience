@@ -10,7 +10,6 @@ describe NotifyEmail::CandidateBookingDateChanged do
     school_finish_time: "15:30",
     school_dress_code: "Smart casual, elbow patches",
     school_parking: "There is a car park on the school grounds",
-    school_admin_name: "Seymour Skinner",
     school_admin_email: "sskinner@springfield.co.uk",
     school_admin_telephone: "01234 123 1234",
     school_teacher_name: "Edna Krabappel",
@@ -86,10 +85,6 @@ describe NotifyEmail::CandidateBookingDateChanged do
         expect(subject.school_parking).to eql(
           ['No', profile.parking_details].join(', ')
         )
-      end
-
-      specify 'school_admin_name is correctly-assigned' do
-        expect(subject.school_admin_name).to eql(profile.admin_contact_full_name)
       end
 
       specify 'school_admin_email is correctly-assigned' do

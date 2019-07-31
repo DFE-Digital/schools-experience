@@ -1,6 +1,6 @@
 Dear ((candidate_name)),
 
-^ Your experience date has been changed by the school from the ((old_date)) to the ((new_date)).
+^ Your experience date has been changed by the school from ((old_date)) to ((new_date))
 
 Here are the main details about your school experience at ((school_name)):
 
@@ -14,7 +14,6 @@ School experience contacts
 
 If you have any questions about your booking:
 
-Name: ((school_admin_name))
 Email address: ((school_admin_email))
 UK telephone number: ((school_admin_telephone))
 

@@ -7,7 +7,6 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
     :school_finish_time,
     :school_dress_code,
     :school_parking,
-    :school_admin_name,
     :school_admin_email,
     :school_admin_telephone,
     :school_teacher_name,
@@ -28,7 +27,6 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
     school_finish_time:,
     school_dress_code:,
     school_parking:,
-    school_admin_name:,
     school_admin_email:,
     school_admin_telephone:,
     school_teacher_name:,
@@ -48,7 +46,6 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
     self.school_finish_time = school_finish_time
     self.school_dress_code = school_dress_code
     self.school_parking = school_parking
-    self.school_admin_name = school_admin_name
     self.school_admin_email = school_admin_email
     self.school_admin_telephone = school_admin_telephone
     self.school_teacher_name = school_teacher_name
@@ -89,7 +86,6 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
         profile.parking_provided ? 'Yes' : 'No',
         profile.parking_details
       ].join(', '),
-      school_admin_name: profile.admin_contact_full_name,
       school_admin_email: profile.admin_contact_email,
       school_admin_telephone: profile.admin_contact_phone,
       school_teacher_name: booking.contact_name,
@@ -118,7 +114,6 @@ private
       school_finish_time: school_finish_time,
       school_dress_code: school_dress_code,
       school_parking: school_parking,
-      school_admin_name: school_admin_name,
       school_admin_email: school_admin_email,
       school_admin_telephone: school_admin_telephone,
       school_teacher_name: school_teacher_name,
