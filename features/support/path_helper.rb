@@ -67,6 +67,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "toggle requests" => [:edit_schools_enabled_path],
     "not registered error" => [:schools_errors_not_registered_path],
     "change school" => [:new_schools_switch_path],
+    "confirm attendance" => [:schools_confirm_attendance_path],
     "new schools feedback" => [:new_schools_feedback_path]
   }
 
