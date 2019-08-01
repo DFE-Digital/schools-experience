@@ -1,3 +1,5 @@
+<%- self.page_title = "Change booking date" %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
      <%= link_to 'Back', schools_booking_path(@booking), class: 'govuk-back-link' %>
@@ -6,7 +8,12 @@
 
     <p>
       Before you change the date contact the candidate and make sure they can
-      attend
+      attend.
+    </p>
+
+    <p>
+      When the date is changed the candidate will receive an email with the new
+      details.
     </p>
 
     <%= form_for @booking, url: schools_booking_date_path(@booking), method: 'patch' do |f| %>

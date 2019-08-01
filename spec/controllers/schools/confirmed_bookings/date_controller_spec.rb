@@ -30,7 +30,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
     subject { patch schools_booking_date_path(booking.id, params: params) }
 
     specify 'should redirect to the booking page' do
-      expect(subject).to redirect_to(schools_booking_path(booking))
+      expect(subject).to redirect_to(schools_booking_date_path(booking))
     end
 
     context 'updating the booking' do
@@ -84,6 +84,22 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
           candidates_cancel_url(booking.token),
           old_date.strftime("%d %B %Y")
         )
+      end
+    end
+  end
+
+  describe '#show' do
+    subject { get schools_booking_date_path(booking.id) }
+
+    specify do
+      expect(subject).to render_template(:show)
+    end
+
+    context 'dynamic contents' do
+      before { subject }
+
+      specify 'should contain the new date' do
+        expect(response.body).to match(booking.date.to_formatted_s(:govuk))
       end
     end
   end

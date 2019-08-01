@@ -9,11 +9,13 @@ module Schools
         old_date = @booking.date
 
         if change_booking_date(old_date)
-          redirect_to schools_booking_path(@booking)
+          redirect_to schools_booking_date_path(@booking)
         else
           render :edit
         end
       end
+
+      def show; end
 
     private
 
