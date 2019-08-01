@@ -289,7 +289,8 @@ RSpec.describe "The GITIS CRM Api" do
       'address1_stateorprovince' => "",
       'address1_postalcode' => "MA1 1AM",
       'statecode' => 0,
-      'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION')
+      'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION'),
+      'dfe_notesforclassroomexperience' => "Written by School Experience"
     }
   end
 
