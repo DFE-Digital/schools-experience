@@ -124,6 +124,32 @@ RSpec.describe "The GITIS CRM Api" do
     expect(contact_se_data).to include('dfe_notes' => "First Line\r\n\r\nSecond Line")
   end
 
+  it "can update existing Contacts in the CRM", :update do
+    resp = crm_get("/contacts", "$top" => "1", "$filter" => " dfe_channelcreation ne null and dfe_channelcreation ne #{ENV.fetch('CRM_CHANNEL_CREATION')}")
+    expect(resp.status).to eql(200)
+    expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
+
+    data = JSON.parse(resp.body)
+    expect(data['value'].length).to eql(1)
+    contact = data['value'][0]
+
+    contact_id = contact['contactid']
+    currenttime = Time.zone.now.strftime("%H:%I %d/%m/%Y")
+
+    resp = crm_patch("/contacts(#{contact_id})", {
+      'lastname' => "Updated by School Experience at #{currenttime}"
+    })
+    expect(resp.status).to eql(204)
+
+    # Read Contact Back
+    resp = crm_get("/contacts(#{contact_id})")
+    expect(resp.status).to eql(200)
+
+    data = JSON.parse(resp.body)
+    expect(data).to include('contactid' => contact_id)
+    expect(data).to include('lastname' => "Updated by School Experience at #{currenttime}")
+  end
+
   private
 
   def retrieve_access_token
