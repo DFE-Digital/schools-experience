@@ -22,6 +22,7 @@ FactoryBot.define do
       administration_fee_description { 'General administration' }
       administration_fee_interval { 'Daily' }
       administration_fee_payment_method { 'Travelers Cheques' }
+      administration_fee_step_completed { true }
     end
 
     trait :with_dbs_fee do
@@ -29,6 +30,7 @@ FactoryBot.define do
       dbs_fee_description { 'DBS check' }
       dbs_fee_interval { 'One-off' }
       dbs_fee_payment_method { 'Ethereum' }
+      dbs_fee_step_completed { true }
     end
 
     trait :with_other_fee do
@@ -36,6 +38,7 @@ FactoryBot.define do
       other_fee_description { 'Owl repellent / other protective gear' }
       other_fee_interval { 'One-off' }
       other_fee_payment_method { 'Stamps' }
+      other_fee_step_completed { true }
     end
 
     trait :with_phases do
