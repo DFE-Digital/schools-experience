@@ -11,7 +11,7 @@ RSpec.describe "The GITIS CRM Api" do
 
   let(:access_token) { retrieve_access_token }
 
-  it "can read the from the CRM", :read do
+  it "can read Contacts from the CRM", :read do
     # Read the first contact
     resp = crm_get("/contacts", "$top" => "3")
 
@@ -38,6 +38,43 @@ RSpec.describe "The GITIS CRM Api" do
 
     expect(contacts['value'].length).to eql(3)
     expect(contacts['value'].pluck('contactid')).to eql(data['value'].pluck('contactid'))
+
+    # Read Country
+
+
+    # Read Subject List
+
+    # Read Qualificaions
+  end
+
+  it "can read Countries from the CRM", :read do
+    resp = crm_get('/dfe_countries', '$top' => 50)
+
+    expect(resp.status).to eql(200)
+    expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
+
+    data = JSON.parse(resp.body)
+    expect(data['value'].length).to eql(50)
+  end
+
+  it "can read Teaching Subjects from the CRM", :read do
+    resp = crm_get('/dfe_teachingsubjectlist', '$top' => 10)
+
+    expect(resp.status).to eql(200)
+    expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
+
+    data = JSON.parse(resp.body)
+    expect(data['value'].length).to eql(10)
+  end
+
+  it "can read Qualifications from the CRM", :read do
+    resp = crm_get('/dfe_candidatequalifications', '$top' => 10)
+
+    expect(resp.status).to eql(200)
+    expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
+
+    data = JSON.parse(resp.body)
+    expect(data['value'].length).to be > 1
   end
 
   it "can write to the CRM", :write do
