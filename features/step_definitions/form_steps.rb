@@ -182,6 +182,6 @@ def ensure_input_exists(form_group, label_text, field_type, autocomplete: nil)
   expect(form_group).to have_field(label_text, type: field_type)
 
   if autocomplete
-    expect(form_group.find('input')[:autocomplete]).to eql(autocomplete)
+    expect(form_group).to have_css("input[autocomplete='#{autocomplete}']")
   end
 end
