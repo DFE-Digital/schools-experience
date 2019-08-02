@@ -17,7 +17,7 @@
     </p>
 
     <%= form_for @booking, url: schools_booking_date_path(@booking), method: 'patch' do |f| %>
-      <%= f.date_field :date, heading: true %>
+      <%= f.date_field :date, { heading: true }, {} %>
         <div id="school-booking-show" class="booking">
           <section id="booking-details">
             <dl class="govuk-summary-list">
