@@ -38,13 +38,6 @@ RSpec.describe "The GITIS CRM Api" do
 
     expect(contacts['value'].length).to eql(3)
     expect(contacts['value'].pluck('contactid')).to eql(data['value'].pluck('contactid'))
-
-    # Read Country
-
-
-    # Read Subject List
-
-    # Read Qualificaions
   end
 
   it "can read Countries from the CRM", :read do
@@ -58,7 +51,7 @@ RSpec.describe "The GITIS CRM Api" do
   end
 
   it "can read Teaching Subjects from the CRM", :read do
-    resp = crm_get('/dfe_teachingsubjectlist', '$top' => 10)
+    resp = crm_get('/dfe_teachingsubjectlists', '$top' => 10)
 
     expect(resp.status).to eql(200)
     expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
@@ -77,9 +70,20 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data['value'].length).to be > 1
   end
 
+  it "can read PrivacyPolices from the CRM", :read do
+    resp = crm_get('/dfe_privacypolicies', '$top' => 10)
+
+    expect(resp.status).to eql(200)
+    expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
+
+    data = JSON.parse(resp.body)
+    expect(data['value'].length).to be > 1
+  end
+
   it "can write to the CRM", :write do
     # Create a new contact
     resp = crm_post('/contacts', new_contact_data)
+
     expect(resp.status).to eql(204)
     expect(resp.headers['odata-entityid']).not_to be_nil
 
@@ -290,7 +294,10 @@ RSpec.describe "The GITIS CRM Api" do
       'address1_postalcode' => "MA1 1AM",
       'statecode' => 0,
       'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION'),
-      'dfe_notesforclassroomexperience' => "Written by School Experience"
+      'dfe_notesforclassroomexperience' => "Written by School Experience",
+      'dfe_hasdbscertificate' => true,
+      'dfe_dateofissueofdbscertificate' => nil
+#      'ownerid' => ENV.fetch('CRM_OWNER_ID')
     }
   end
 
