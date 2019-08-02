@@ -266,4 +266,54 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to have_attributes(dfe_dateofissueofdbscertificate: nil) }
     end
   end
+
+  describe 'phone=' do
+    subject { described_class.new attrs }
+    before { allow(subject).to receive(:created_by_us?).and_return(ours) }
+    before { subject.phone = '01234567890' }
+
+    context 'on existing GiTiS record' do
+      let(:ours) { false }
+
+      context 'with blank telephone1' do
+        let(:attrs) do
+          { 'telephone1' => '', 'telephone2' => '' }
+        end
+
+        it { is_expected.to have_attributes(telephone1: '01234567890') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+
+      context 'with matching telephone1' do
+        let(:attrs) do
+          { 'telephone1' => '01234567890', 'telephone2' => '07123456789' }
+        end
+
+        it { is_expected.to have_attributes(telephone1: '01234567890') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+
+      context 'for unmatching telephone1' do
+        let(:attrs) do
+          { 'telephone1' => '07123456789', 'telephone2' => '07123456789' }
+        end
+
+        it { is_expected.to have_attributes(telephone1: '07123456789') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+    end
+
+    context 'on record we created' do
+      let(:ours) { true }
+
+      context 'for unmatching telephone1' do
+        let(:attrs) do
+          { 'telephone1' => '07123456789', 'telephone2' => '07123456789' }
+        end
+
+        it { is_expected.to have_attributes(telephone1: '01234567890') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+    end
+  end
 end

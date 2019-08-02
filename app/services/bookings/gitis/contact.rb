@@ -35,6 +35,7 @@ module Bookings
         self.lastname                 = @crm_data['lastname']
         self.emailaddress1            = @crm_data['emailaddress1']
         self.emailaddress2            = @crm_data['emailaddress2']
+        self.telephone1               = @crm_data['telephone1']
         self.telephone2               = @crm_data['telephone2']
         self.address1_line1           = @crm_data['address1_line1']
         self.address1_line2           = @crm_data['address1_line2']
@@ -95,12 +96,15 @@ module Bookings
       end
 
       def phone
-        telephone2
+        telephone2.presence || telephone1.presence || mobilephone
       end
 
       def phone=(phonenumber)
+        if created_by_us? || telephone1.blank?
+          self.telephone1 = phonenumber&.strip
+        end
+
         self.telephone2 = phonenumber&.strip
-        self.telephone1 = self.telephone2 if created_by_us?
       end
 
       def date_of_birth
