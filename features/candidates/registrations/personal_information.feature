@@ -42,3 +42,7 @@ Feature: Personal Information
 
         When I submit the form
         Then I should be on the 'verify your email' page for my school of choice
+
+    Scenario: Autocomplete attributes
+      Given I am on the 'Enter your personal details' page for my school of choice
+      Then the 'Date of birth' date field should have day, month and year birth date auto-completion enabled
