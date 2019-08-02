@@ -36,7 +36,7 @@
           <%= f.email_field :email, autocomplete: 'on',
                 readonly: personal_information.read_only_email,
                 disabled: personal_information.read_only_email %>
-          <%= f.date_field :date_of_birth, heading: true, date_of_birth: true %>
+          <%= f.date_field :date_of_birth, { heading: true }, date_of_birth: true %>
 
           <%= f.submit 'Continue' %>
         <% end %>
