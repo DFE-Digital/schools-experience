@@ -267,7 +267,7 @@ describe Bookings::Gitis::Contact, type: :model do
     end
   end
 
-  describe 'phone=' do
+  describe '#phone=' do
     subject { described_class.new attrs }
     before { allow(subject).to receive(:created_by_us?).and_return(ours) }
     before { subject.phone = '01234567890' }
@@ -313,6 +313,56 @@ describe Bookings::Gitis::Contact, type: :model do
 
         it { is_expected.to have_attributes(telephone1: '01234567890') }
         it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+    end
+  end
+
+  describe '#email=' do
+    subject { described_class.new attrs }
+    before { allow(subject).to receive(:created_by_us?).and_return(ours) }
+    before { subject.email = 'foobar@education.gov.uk' }
+
+    context 'on existing GiTiS record' do
+      let(:ours) { false }
+
+      context 'with blank emailaddress1' do
+        let(:attrs) do
+          { 'emailaddress1' => '', 'emailaddress2' => '' }
+        end
+
+        it { is_expected.to have_attributes(emailaddress1: 'foobar@education.gov.uk') }
+        it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
+      end
+
+      context 'with matching emailaddress1' do
+        let(:attrs) do
+          { 'emailaddress1' => 'foobar@education.gov.uk', 'emailaddress2' => 'barfoo@education.gov.uk' }
+        end
+
+        it { is_expected.to have_attributes(emailaddress1: 'foobar@education.gov.uk') }
+        it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
+      end
+
+      context 'for unmatching emailaddress1' do
+        let(:attrs) do
+          { 'emailaddress1' => 'barfoo@education.gov.uk', 'emailaddress2' => 'barfoo@education.gov.uk' }
+        end
+
+        it { is_expected.to have_attributes(emailaddress1: 'barfoo@education.gov.uk') }
+        it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
+      end
+    end
+
+    context 'on record we created' do
+      let(:ours) { true }
+
+      context 'for unmatching emailaddress1' do
+        let(:attrs) do
+          { 'emailaddress1' => 'barfoo@education.gov.uk', 'emailaddress2' => 'barfoo@education.gov.uk' }
+        end
+
+        it { is_expected.to have_attributes(emailaddress1: 'foobar@education.gov.uk') }
+        it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
       end
     end
   end
