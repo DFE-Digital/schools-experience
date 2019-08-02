@@ -102,9 +102,7 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data).to include('lastname' => new_contact_data['lastname'])
 
     # Update the newly created contact
-    resp = crm_patch("/contacts(#{contact_id})", {
-      'lastname' => 'New Last Name'
-    })
+    resp = crm_patch("/contacts(#{contact_id})", update_contact_data(data))
     expect(resp.status).to eql(204)
 
     # Read Contact Back
@@ -296,8 +294,19 @@ RSpec.describe "The GITIS CRM Api" do
       'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION'),
       'dfe_notesforclassroomexperience' => "Written by School Experience",
       'dfe_hasdbscertificate' => true,
-      'dfe_dateofissueofdbscertificate' => nil
+      'dfe_dateofissueofdbscertificate' => Date.today.to_s(:db)
 #      'ownerid' => ENV.fetch('CRM_OWNER_ID')
+    }
+  end
+
+  def update_contact_data(existing_data)
+    {
+      'lastname' => 'New Last Name',
+      'dfe_hasdbscertificate' => false,
+      'dfe_dateofissueofdbscertificate' => nil,
+      'dfe_notesforclassroomexperience' =>
+        existing_data['dfe_notesforclassroomexperience'] +
+        "#{existing_data['dfe_notesforclassroomexperience']}\nUpdated at #{Time.zone.now}"
     }
   end
 
