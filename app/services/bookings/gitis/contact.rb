@@ -12,9 +12,7 @@ module Bookings
       entity_attributes :address1_city, :address1_stateorprovince
       entity_attributes :address1_postalcode
       entity_attributes :telephone1, :telephone2
-
-      entity_attributes :dfe_hasdbscertificate
-
+      entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
       alias_attribute :first_name, :firstname
@@ -47,6 +45,7 @@ module Bookings
         self.birthdate                = @crm_data['birthdate']
         self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
         self.dfe_hasdbscertificate    = @crm_data['dfe_hasdbscertificate']
+        self.dfe_dateofissueofdbscertificate = @crm_data['dfe_dateofissueofdbscertificate']
 
         super # handles resetting dirty attributes
 
@@ -110,6 +109,18 @@ module Bookings
 
       def date_of_birth=(dob)
         self.birthdate = dob.present? ? dob.to_formatted_s(:db) : nil
+      end
+
+      def has_dbs_check
+        dfe_hasdbscertificate
+      end
+
+      def has_dbs_check=(value)
+        if value != dfe_hasdbscertificate
+          self.dfe_dateofissueofdbscertificate = nil
+        end
+
+        self.dfe_hasdbscertificate = value
       end
 
       def signin_attributes_match?(fname, lname, dob)

@@ -245,4 +245,25 @@ describe Bookings::Gitis::Contact, type: :model do
       end
     end
   end
+
+  describe '#has_dbs_check' do
+    subject do
+      described_class.new(
+        dfe_hasdbscertificate: true,
+        dfe_dateofissueofdbscertificate: '2019-01-01'
+      )
+    end
+
+    context 'with matching value' do
+      before { subject.has_dbs_check = true }
+      it { is_expected.to have_attributes(dfe_hasdbscertificate: true) }
+      it { is_expected.to have_attributes(dfe_dateofissueofdbscertificate: '2019-01-01') }
+    end
+
+    context 'with non matching value' do
+      before { subject.has_dbs_check = false }
+      it { is_expected.to have_attributes(dfe_hasdbscertificate: false) }
+      it { is_expected.to have_attributes(dfe_dateofissueofdbscertificate: nil) }
+    end
+  end
 end

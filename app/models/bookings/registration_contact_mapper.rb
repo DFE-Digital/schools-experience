@@ -23,7 +23,7 @@ module Bookings
       gitis_contact.county = contact_information.county
       gitis_contact.postcode = contact_information.postcode
 
-      gitis_contact.dfe_hasdbscertificate = background_check.has_dbs_check
+      gitis_contact.has_dbs_check = background_check.has_dbs_check
 
       gitis_contact
     end
@@ -50,7 +50,7 @@ module Bookings
 
     def contact_to_background_check
       {
-        'has_dbs_check' => gitis_contact.dfe_hasdbscertificate
+        'has_dbs_check' => gitis_contact.has_dbs_check
       }
     end
   end
