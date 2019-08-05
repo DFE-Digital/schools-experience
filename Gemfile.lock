@@ -49,6 +49,8 @@ GEM
       activemodel (= 5.2.3)
       activesupport (= 5.2.3)
       arel (>= 9.0)
+    activerecord-import (1.0.2)
+      activerecord (>= 3.2)
     activerecord-postgis-adapter (5.2.2)
       activerecord (~> 5.1)
       rgeo-activerecord (~> 6.0)
@@ -428,6 +430,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-import
   activerecord-postgis-adapter
   acts_as_list
   addressable
