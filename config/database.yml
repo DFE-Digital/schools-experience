@@ -81,6 +81,21 @@ test: &test
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+# Keepalives info (https://www.postgresql.org/docs/10/libpq-connect.html#LIBPQ-KEEPALIVES)
+#
+#   keepalives:          Controls whether client-side TCP keepalives are used
+#
+#   keepalives_idle:     Controls the number of seconds of inactivity after which
+#                        TCP should send a keepalive message to the server.
+#
+#   keepalives_interval: Controls the number of seconds after which a TCP keepalive
+#                        message that is not acknowledged by the server should be
+#                        retransmitted.
+#
+#   keepalives_count:    Controls the number of TCP keepalives that can be lost before
+#                        the client's connection to the server is considered dead
+#
+#
 production: &production
   <<: *default
   host: <%= ENV['DB_HOST'] %>
@@ -88,7 +103,9 @@ production: &production
   username: <%= ENV['DB_USERNAME'] %>
   password: <%= ENV['DB_PASSWORD'] %>
   keepalives: 1
-  keepalives_interval: 60
+  keepalives_idle: 60
+  keepalives_interval: 20
+  keepalives_count: 3
 
 servertest:
   <<: *production
