@@ -80,6 +80,21 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
           new_schools_on_boarding_candidate_experience_detail_path
       end
     end
+
+    context 'skipped' do
+      let :params do
+        { commit: 'Skip' }
+      end
+
+      it 'creates a new description without details' do
+        expect(school_profile.reload.description.details).to be_empty
+      end
+
+      it 'redirects to the next step' do
+        expect(response).to redirect_to \
+          new_schools_on_boarding_candidate_experience_detail_path
+      end
+    end
   end
 
   context '#edit' do
@@ -139,6 +154,27 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       end
 
       it 'redirects to the school_profile' do
+        expect(response).to redirect_to schools_on_boarding_profile_path
+      end
+    end
+
+    context 'skipped' do
+      let :description do
+        FactoryBot.build :description, details: 'Updated'
+      end
+
+      let :params do
+        {
+          schools_on_boarding_description: description.attributes,
+          commit: 'Skip'
+        }
+      end
+
+      it "doesn't update the description" do
+        expect(school_profile.reload.description.details).not_to eq 'Updated'
+      end
+
+      it 'redirects the the school_profile' do
         expect(response).to redirect_to schools_on_boarding_profile_path
       end
     end
