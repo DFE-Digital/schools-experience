@@ -16,15 +16,15 @@
           <%= f.telephone_field :phone, autocomplete: 'on' %>
 
           <h2 class="govuk-heading-m">Address</h2>
-          <%= f.text_field :building, autocomplete: 'on' %>
+          <%= f.text_field :building, autocomplete: 'home address-line1' %>
           <% if f.object.errors[:street].any? %>
-            <%= f.text_field :street, autocomplete: 'on' %>
+            <%= f.text_field :street, autocomplete: 'home address-line2' %>
           <% else %>
-            <%= f.text_field :street, autocomplete: 'on', label_options: { class: 'govuk-visually-hidden' } %>
+            <%= f.text_field :street, autocomplete: 'home address-line2', label_options: { class: 'govuk-visually-hidden' } %>
           <% end %>
-          <%= f.text_field :town_or_city, autocomplete: 'on', class: 'govuk-!-width-two-thirds' %>
-          <%= f.text_field :county, autocomplete: 'on', class: 'govuk-!-width-two-thirds' %>
-          <%= f.text_field :postcode, autocomplete: 'on', class: 'govuk-input govuk-input--width-10' %>
+          <%= f.text_field :town_or_city, autocomplete: 'home address-level2', class: 'govuk-!-width-two-thirds' %>
+          <%= f.text_field :county, autocomplete: 'home address-level1', class: 'govuk-!-width-two-thirds' %>
+          <%= f.text_field :postcode, autocomplete: 'home postal-code', class: 'govuk-input govuk-input--width-10' %>
 
           <%= f.submit 'Continue' %>
         <% end %>

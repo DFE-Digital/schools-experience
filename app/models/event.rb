@@ -2,6 +2,7 @@ class Event < ApplicationRecord
   EVENT_TYPES = %w(
     school_disabled
     school_enabled
+    booking_date_changed
   ).freeze
 
   belongs_to :recordable,

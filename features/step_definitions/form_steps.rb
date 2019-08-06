@@ -2,6 +2,7 @@ Then("I should see a form with the following fields:") do |table|
   table.hashes.each do |row|
     label_text = row['Label']
     options = row['Options']&.split(',')&.map(&:strip)
+    autocompletion = row['Autocompletion']
 
     within(get_form_group(page, label_text)) do
       case row['Type']
@@ -10,8 +11,8 @@ Then("I should see a form with the following fields:") do |table|
       when /select/ then ensure_select_options_exist(page, options)
       when /checkbox/ then ensure_check_boxes_exist(page, options)
       when /textarea/ then ensure_textarea_exists(page)
-      else # regular inputs
-        expect(page).to have_field(label_text, type: row['Type'])
+      else
+        ensure_input_exists(page, label_text, row['Type'], autocomplete: autocompletion)
       end
     end
   end
@@ -175,4 +176,12 @@ end
 
 def ensure_select_options_exist(form_group, options)
   options.each { |option| expect(form_group).to have_css('select option', text: option) }
+end
+
+def ensure_input_exists(form_group, label_text, field_type, autocomplete: nil)
+  expect(form_group).to have_field(label_text, type: field_type)
+
+  if autocomplete
+    expect(form_group).to have_css("input[autocomplete='#{autocomplete}']")
+  end
 end

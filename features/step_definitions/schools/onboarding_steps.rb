@@ -58,7 +58,7 @@ end
 Given "I have completed the Phases step" do
   steps %(
     Given I am on the 'phases' page
-    And I check 'Secondary'
+    And I check 'Secondary (11 to 16)'
     And I check '16 to 18 years'
     When I submit the form
   )
@@ -135,7 +135,6 @@ end
 Given "I have completed the Admin contact step" do
   steps %(
     Given I am on the 'Admin contact' page
-    And I enter 'Gary Chalmers' into the 'Full name' text area
     And I enter '01234567890' into the 'UK telephone number' text area
     And I enter 'g.chalmers@springfield.edu' into the 'Email address' text area
     When I submit the form
