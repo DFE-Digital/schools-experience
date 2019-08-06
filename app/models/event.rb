@@ -3,6 +3,7 @@ class Event < ApplicationRecord
     school_disabled
     school_enabled
     school_edubase_data_refreshed
+    booking_date_changed
   ).freeze
 
   belongs_to :recordable,

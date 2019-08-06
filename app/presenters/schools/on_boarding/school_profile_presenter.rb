@@ -208,10 +208,6 @@ module Schools
         end
       end
 
-      def admin_contact_full_name
-        @school_profile.admin_contact.full_name
-      end
-
       def admin_contact_phone
         @school_profile.admin_contact.phone
       end

@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2019_07_24_092556) do
     t.string "candidate_instructions"
     t.integer "duration", default: 1, null: false
     t.datetime "accepted_at"
+    t.boolean "attended"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
     t.index ["bookings_subject_id"], name: "index_bookings_bookings_on_bookings_subject_id"

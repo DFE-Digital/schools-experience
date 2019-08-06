@@ -14,6 +14,19 @@ describe Schools::OnBoarding::ExperienceOutline, type: :model do
     context 'when provides_teacher_training' do
       subject { described_class.new provides_teacher_training: true }
       it { is_expected.to validate_presence_of :teacher_training_details }
+
+      context 'when teacher_training_url is present' do
+        INVALID_URLS = ['javascript:alert("oh no!")//http://example.com'].freeze
+        VALID_URLS = ['https://www.example.com', 'http://example.com'].freeze
+
+        INVALID_URLS.each do |url|
+          it { is_expected.not_to allow_value(url).for :teacher_training_url }
+        end
+
+        VALID_URLS.each do |url|
+          it { is_expected.to allow_value(url).for :teacher_training_url }
+        end
+      end
     end
 
     context 'when not provides_teacher_training' do

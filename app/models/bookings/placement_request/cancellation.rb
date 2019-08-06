@@ -11,7 +11,6 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   delegate \
     :school_email,
     :school_name,
-    :school_admin_name,
     :candidate_email,
     :candidate_name,
     :dates_requested,

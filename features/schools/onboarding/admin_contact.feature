@@ -26,14 +26,12 @@ Feature: Admin contact
 
   Scenario: Completing the step with error
     Given I am on the 'Admin contact' page
-    And I enter 'Gary Chalmers' into the 'Full name' text area
     And I enter '01234567890' into the 'UK telephone number' text area
     When I submit the form
     Then I should see a validation error message
 
   Scenario: Completing the step with error
     Given I am on the 'Admin contact' page
-    And I enter 'Gary Chalmers' into the 'Full name' text area
     And I enter '01234567890' into the 'UK telephone number' text area
     And I enter 'g.chalmers@springfield.edu' into the 'Email address' text area
     When I submit the form
