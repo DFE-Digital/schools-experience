@@ -1,4 +1,4 @@
-class Schools::Sync
+class Bookings::SchoolSync
   FILE_LOCATION = Rails.root.join('tmp', 'edubase.csv').freeze
 
   attr_accessor :email_override

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Schools::Sync do
+describe Bookings::SchoolSync do
   let(:email_override) { 'test@test.org' }
   subject { described_class.new(email_override: email_override) }
 
