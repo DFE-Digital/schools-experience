@@ -66,7 +66,6 @@ end
 Then("the help and support section should contain the relevant information") do
   within('section#help-and-support') do
     [
-      @profile.admin_contact_full_name,
       @profile.admin_contact_email,
       @profile.admin_contact_phone
     ].each do |item|

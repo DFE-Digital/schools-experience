@@ -89,12 +89,12 @@ describe Schools::SessionsController, type: :request do
       end
 
       context 'errors' do
-        context 'StateMissmatchError' do
+        context 'StateMismatchError' do
           let(:bad_state) { 'aaaaaaaa-bbbb-1111-2222-333333333333' }
           let(:callback) { "/auth/callback?code=#{code}&state=#{bad_state}&session_state=#{session_state}" }
           after { get callback }
 
-          specify 'should raise StateMissmatchError' do
+          specify 'should raise StateMismatchError' do
             expect(Rails.logger).to receive(:error).with(/doesn't match session state/)
           end
 

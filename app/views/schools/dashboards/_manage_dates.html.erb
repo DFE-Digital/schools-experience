@@ -1,6 +1,14 @@
 <section class="manage-dates">
   <h2 class="govuk-heading-m">Manage dates</h3>
 
+  <%- if show_no_placement_dates_warning?(@current_school) -%>
+    <%= render partial: 'schools/dashboards/no_placement_dates_warning' %>
+  <%- end -%>
+
+  <%- if show_no_availability_info_warning?(@current_school) -%>
+    <%= render partial: 'schools/dashboards/no_availability_info_warning' %>
+  <%- end -%>
+
   <%- if @current_school.availability_preference_fixed? -%>
     <div id="update-school-profile" class="subsection">
       <header class="dashboard-medium-priority">

@@ -18,7 +18,7 @@ gem 'breasal', require: false
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 3.12'
+gem 'puma', '~> 4.0'
 
 # Use SCSS for stylesheets
 gem 'sassc-rails'
@@ -69,6 +69,7 @@ gem 'addressable'
 gem 'faraday'
 
 gem 'validates_timeliness', '~> 5.0.0.alpha4'
+gem 'activerecord-import', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

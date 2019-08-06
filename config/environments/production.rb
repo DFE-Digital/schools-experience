@@ -29,7 +29,7 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
-  # config.assets.css_compressor = :sass
+  config.assets.css_compressor = nil
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
@@ -136,4 +136,6 @@ Rails.application.configure do
   config.x.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)
 
   config.x.features = []
+
+  config.sass[:style] = :compressed if config.sass
 end

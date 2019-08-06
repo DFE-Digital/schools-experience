@@ -91,3 +91,7 @@ Then("the main site header should be {string}") do |title_text|
     text: title_text
   )
 end
+
+Then("I should see a notification that {string}") do |string|
+  expect(page).to have_content(string)
+end

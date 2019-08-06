@@ -16,10 +16,12 @@ class Bookings::School < ApplicationRecord
 
   validates :teacher_training_website, allow_nil: true, website: true
 
-  validates :contact_email, format: {
-    with: URI::MailTo::EMAIL_REGEXP,
-    message: "isn't a valid email address"
-  }
+  validates :contact_email,
+    allow_nil: true,
+    format: {
+      with: URI::MailTo::EMAIL_REGEXP,
+      message: "isn't a valid email address"
+    }
 
   validates :availability_info,
     allow_nil: true,
@@ -151,10 +153,6 @@ class Bookings::School < ApplicationRecord
     else
       contact_email
     end
-  end
-
-  def admin_contact_name
-    profile ? profile.admin_contact_full_name : contact_email
   end
 
   def admin_contact_phone

@@ -7,7 +7,6 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     :school_finish_time,
     :school_dress_code,
     :school_parking,
-    :school_admin_name,
     :school_admin_email,
     :school_admin_telephone,
     :school_teacher_name,
@@ -26,7 +25,6 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     school_finish_time:,
     school_dress_code:,
     school_parking:,
-    school_admin_name:,
     school_admin_email:,
     school_admin_telephone:,
     school_teacher_name:,
@@ -44,7 +42,6 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     self.school_finish_time = school_finish_time
     self.school_dress_code = school_dress_code
     self.school_parking = school_parking
-    self.school_admin_name = school_admin_name
     self.school_admin_email = school_admin_email
     self.school_admin_telephone = school_admin_telephone
     self.school_teacher_name = school_teacher_name
@@ -83,7 +80,6 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
         profile.parking_provided ? 'Yes' : 'No',
         profile.parking_details
       ].join(', '),
-      school_admin_name: profile.admin_contact_full_name,
       school_admin_email: profile.admin_contact_email,
       school_admin_telephone: profile.admin_contact_phone,
       school_teacher_name: booking.contact_name,
@@ -97,7 +93,7 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
 private
 
   def template_id
-    '29ed44bd-dc79-4fb3-bf8e-6e0ff18365b3'
+    'b9882e65-b644-4c52-871e-0e5922f27d7e'
   end
 
   def personalisation
@@ -110,7 +106,6 @@ private
       school_finish_time: school_finish_time,
       school_dress_code: school_dress_code,
       school_parking: school_parking,
-      school_admin_name: school_admin_name,
       school_admin_email: school_admin_email,
       school_admin_telephone: school_admin_telephone,
       school_teacher_name: school_teacher_name,

@@ -2,13 +2,11 @@ require 'rails_helper'
 
 describe Schools::OnBoarding::AdminContact, type: :model do
   context 'attributes' do
-    it { is_expected.to respond_to :full_name }
     it { is_expected.to respond_to :phone }
     it { is_expected.to respond_to :email }
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of :full_name }
     it { is_expected.to validate_presence_of :phone }
     it { is_expected.to validate_presence_of :email }
 

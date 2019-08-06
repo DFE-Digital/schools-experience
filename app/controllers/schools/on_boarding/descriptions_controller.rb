@@ -6,7 +6,7 @@ module Schools
       end
 
       def create
-        @description = Description.new description_params
+        @description = Description.new new_description_params
 
         if @description.valid?
           current_school_profile.update! description: @description
@@ -21,6 +21,8 @@ module Schools
       end
 
       def update
+        return redirect_to next_step_path(current_school_profile) if skipped?
+
         @description = Description.new description_params
 
         if @description.valid?
@@ -33,8 +35,18 @@ module Schools
 
     private
 
+      def skipped?
+        params[:commit] == 'Skip'
+      end
+
       def description_params
         params.require(:schools_on_boarding_description).permit :details
+      end
+
+      def new_description_params
+        return { details: '' } if skipped?
+
+        description_params
       end
     end
   end

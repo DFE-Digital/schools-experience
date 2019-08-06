@@ -6,8 +6,14 @@ class Bookings::Profile < ApplicationRecord
   FIELDS_TO_NILIFY = %i{dbs_policy teacher_training_info teacher_training_url}.freeze
 
   FIELDS_TO_STRIP = %i{
-    start_time end_time admin_contact_full_name admin_contact_email admin_contact_phone
+    start_time end_time admin_contact_email admin_contact_phone
   }.freeze
+
+  # Temporary while we're in the process of removing the admin_full_name
+  # attribute as the column has a not null constraint
+  before_save do
+    self.admin_contact_full_name = 'NOT-SET'
+  end
 
   belongs_to :school, class_name: 'Bookings::School'
   validates :school_id, uniqueness: true
@@ -46,7 +52,6 @@ class Bookings::Profile < ApplicationRecord
 
   validates :teacher_training_url, format: URI::regexp(%w{http https}), if: :teacher_training_url
 
-  validates :admin_contact_full_name, presence: true
   validates :admin_contact_email, presence: true
   validates :admin_contact_email, format: EMAIL_FORMAT, allow_blank: true
   validates :admin_contact_phone, presence: true
