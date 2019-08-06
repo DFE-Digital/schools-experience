@@ -33,7 +33,7 @@ class SchoolUpdater
         next if row.nil?
         next if matches?(school, row)
 
-        school.update(build_attributes(row))
+        school.update!(build_attributes(row))
         Event.create(bookings_school: school, event_type: 'school_edubase_data_refreshed')
       end
     end
