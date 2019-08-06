@@ -93,13 +93,14 @@ RSpec.describe "The GITIS CRM Api" do
     contact_id = contact_url.gsub(%r{#{service_url}#{endpoint}/contacts\(([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})\)}, '\1')
 
     # Read Contact Back
-    resp = crm_get("/contacts(#{contact_id})")
+    resp = crm_get("/contacts(#{contact_id})?$expand=dfe_Country")
     expect(resp.status).to eql(200)
 
     data = JSON.parse(resp.body)
     expect(data).to include('contactid' => contact_id)
     expect(data).to include('firstname' => new_contact_data['firstname'])
     expect(data).to include('lastname' => new_contact_data['lastname'])
+    expect(data['dfe_Country']).to include('dfe_name' => 'United Kingdom')
 
     # Update the newly created contact
     resp = crm_patch("/contacts(#{contact_id})", update_contact_data(data))
@@ -240,6 +241,20 @@ RSpec.describe "The GITIS CRM Api" do
     end
   end
 
+  def crm_put(url, params)
+    conn = Faraday.new(service_url)
+    resp = conn.put do |req|
+      req.headers['Accept'] = 'application/json'
+      req.headers['Authorization'] = "Bearer #{access_token}"
+      req.headers["OData-MaxVersion"] = "4.0"
+      req.headers["OData-Version"] = "4.0"
+      req.headers["Content-Type"] = "application/json"
+
+      req.url "#{endpoint}#{url}"
+      req.body = params.to_json
+    end
+  end
+
   def crm_patch(url, params)
     conn = Faraday.new(service_url)
     resp = conn.patch do |req|
@@ -279,6 +294,8 @@ RSpec.describe "The GITIS CRM Api" do
   end
 
   def new_contact_data
+    countryid = ENV.fetch('CRM_COUNTRY_ID')
+
     {
       'firstname' => "Test User",
       'lastname' => "TestUser",
@@ -294,7 +311,8 @@ RSpec.describe "The GITIS CRM Api" do
       'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION'),
       'dfe_notesforclassroomexperience' => "Written by School Experience",
       'dfe_hasdbscertificate' => true,
-      'dfe_dateofissueofdbscertificate' => Date.today.to_s(:db)
+      'dfe_dateofissueofdbscertificate' => Date.today.to_s(:db),
+      'dfe_Country@odata.bind' => "dfe_countries(#{countryid})" # UK
 #      'ownerid' => ENV.fetch('CRM_OWNER_ID')
     }
   end
