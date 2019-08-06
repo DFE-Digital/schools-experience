@@ -18,17 +18,14 @@ class SchoolMassImporter
   end
 
   def import
-    data = edubase_data
-        .reject { |urn, _| urn.in?(existing_urns) }
-        .map { |_, row| build_school(row) }
-        .compact
+    new_schools = edubase_data.reject { |urn, _| urn.in?(existing_urns) }
 
     Bookings::School.transaction do
       puts "importing schools..."
-      Bookings::School.import(data)
+      Bookings::School.import(new_schools.map { |_, row| build_school(row) }.compact)
 
       puts "setting up phases..."
-      edubase_data.each.with_index do |(urn, row), i|
+      new_schools.each.with_index do |(urn, row), i|
         if (i % 1000).zero?
           print '.'
         end
