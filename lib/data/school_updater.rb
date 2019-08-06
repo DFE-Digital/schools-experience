@@ -62,9 +62,28 @@ private
   end
 
   def build_attributes(row)
-    ATTRIBUTE_MAPPING.each_with_object({}) { |(k, v), h| h[k] = row[v] }.tap do |attrs|
-      attrs.merge(coordinates: convert_to_point(row))
-      attrs.merge(school_type_id: school_types[row[retrieve_school_type(row)]])
+    # create an attributes hash using ATTRIBUTE_MAPPING
+    # the key being the attribute in Bookings::Schools and
+    # the value being extracted from the row using the edubase identifier
+    #
+    # So, with an ATTRIBUTE_MAPPING of { name: 'EstablishmentName' } a
+    # CSV in the following format:
+    #
+    # EstablishmentName,...
+    # "Some School",...
+    #
+    # Will be converted to:
+    # { name: 'Some School' }
+    #
+    attributes = ATTRIBUTE_MAPPING.each_with_object({}) do |(k, v), h|
+      h[k] = row[v]
+    end
+
+    # In addition to the directly-mappable attributes we also need
+    # to assign a school type and convert its coordinates
+    attributes.tap do |att|
+      att.merge(coordinates: convert_to_point(row))
+      att.merge(school_type_id: school_types[row[retrieve_school_type(row)]])
     end
   end
 end
