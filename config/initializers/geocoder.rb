@@ -37,3 +37,15 @@ if ENV['BING_MAPS_KEY'].present?
 else
   Geocoder.configure(defaults)
 end
+
+module BingOverrideURLParams
+  def query_url_params(query)
+    { c: 'en-gb' }.merge(super)
+  end
+end
+
+module Geocoder::Lookup
+  class Bing < Geocoder::Lookup::Base
+    prepend BingOverrideURLParams
+  end
+end
