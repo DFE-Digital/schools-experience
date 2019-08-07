@@ -103,7 +103,7 @@ RSpec.describe "The GITIS CRM Api" do
     contact_id = contact_url.gsub(%r{#{service_url}#{endpoint}/contacts\(([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})\)}, '\1')
 
     # Read Contact Back
-    resp = crm_get("/contacts(#{contact_id})?$expand=dfe_Country")
+    resp = crm_get("/contacts(#{contact_id})?$expand=dfe_Country,dfe_PreferredTeachingSubject01,dfe_PreferredTeachingSubject02")
     expect(resp.status).to eql(200)
 
     data = JSON.parse(resp.body)
@@ -111,6 +111,8 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data).to include('firstname' => new_contact_data['firstname'])
     expect(data).to include('lastname' => new_contact_data['lastname'])
     expect(data['dfe_Country']).to include('dfe_name' => 'United Kingdom')
+    expect(data['dfe_PreferredTeachingSubject01']).to include('dfe_marketingteachingsubjectname' => teaching_subject_name)
+    expect(data['dfe_PreferredTeachingSubject02']).to include('dfe_marketingteachingsubjectname' => teaching_subject_name)
 
     # Update the newly created contact
     resp = crm_patch("/contacts(#{contact_id})", update_contact_data(data))
@@ -303,16 +305,23 @@ RSpec.describe "The GITIS CRM Api" do
     "/api/data/v9.1"
   end
 
-  def teaching_subject_guid
-    @teaching_subject_guid ||= begin
+  def teaching_subject
+    @teaching_subject ||= begin
       resp = crm_get('/dfe_teachingsubjectlists', '$top' => 3)
       raise "Bad Request" unless resp.status == 200
 
       data = JSON.parse(resp.body)
-      data['value'].last['dfe_teachingsubjectlistid']
+      data['value'].last
     end
   end
 
+  def teaching_subject_name
+    teaching_subject['dfe_marketingteachingsubjectname']
+  end
+
+  def teaching_subject_guid
+    teaching_subject['dfe_teachingsubjectlistid']
+  end
 
   def new_contact_data
     ownerid = ENV.fetch('CRM_OWNER_ID')
