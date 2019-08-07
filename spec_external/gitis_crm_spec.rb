@@ -293,7 +293,19 @@ RSpec.describe "The GITIS CRM Api" do
     "/api/data/v9.1"
   end
 
+  def teaching_subject_guid
+    @teaching_subject_guid ||= begin
+      resp = crm_get('/dfe_teachingsubjectlists', '$top' => 3)
+      raise "Bad Request" unless resp.status == 200
+
+      data = JSON.parse(resp.body)
+      data['value'].last['dfe_teachingsubjectlistid']
+    end
+  end
+
+
   def new_contact_data
+    ownerid = ENV.fetch('CRM_OWNER_ID')
     countryid = ENV.fetch('CRM_COUNTRY_ID')
 
     {
@@ -312,8 +324,10 @@ RSpec.describe "The GITIS CRM Api" do
       'dfe_notesforclassroomexperience' => "Written by School Experience",
       'dfe_hasdbscertificate' => true,
       'dfe_dateofissueofdbscertificate' => Date.today.to_s(:db),
-      'dfe_Country@odata.bind' => "dfe_countries(#{countryid})" # UK
-#      'ownerid' => ENV.fetch('CRM_OWNER_ID')
+      'dfe_Country@odata.bind' => "dfe_countries(#{countryid})", # UK
+      'dfe_PreferredTeachingSubject01@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})",
+      'dfe_PreferredTeachingSubject02@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})"
+#      'ownerid@odata.bind' => "dfe_owners(#{ownerid})"
     }
   end
 
