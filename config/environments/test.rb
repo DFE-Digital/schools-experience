@@ -40,6 +40,9 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
 #  config.action_mailer.delivery_method = :test
 
+  # avoid second pass through SASS since thats incompatible with GovUK Frontend
+  config.assets.css_compressor = nil
+
   # set the cache to use RAM
   config.cache_store = :null_store
 
