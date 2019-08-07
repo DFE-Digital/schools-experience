@@ -68,7 +68,9 @@ Rails.application.routes.draw do
         resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
           resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
         end
+        resource :date, only: %i(edit update show), controller: 'confirmed_bookings/date'
       end
+      resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
     end
 
     resource :availability_preference, only: %i(edit update)

@@ -37,7 +37,7 @@ Feature: School Profile
   Scenario: Viewing the profile
     Given I am on the 'Profile' page
     Then the page should have the following summary list information:
-      | Full name                   | school 1                                                    |
+      | Full name                   | Some school                                                 |
       | Address                     | \d{1,} something street, M\d{1,} 2JJ                        |
       | UK telephone number         | 01234567890                                                 |
       | Email address               | school1@example.com                                         |
@@ -56,6 +56,5 @@ Feature: School Profile
       | Start time                  | 8:15 am                                                     |
       | Finish time                 | 4:30 pm                                                     |
       | Flexible on times           | No                                                          |
-      | Full name                   | Gary Chalmers                                               |
       | UK telephone number         | 01234567890                                                 |
       | Email address               | g.chalmers@springfield.edu                                  |

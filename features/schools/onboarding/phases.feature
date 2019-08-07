@@ -32,7 +32,7 @@ Feature: Phases
 
   Scenario: Completing step choosing Secondary phase only
     Given I am on the 'phases' page
-    And I check 'Secondary'
+    And I check 'Secondary (11 to 16)'
     When I submit the form
     Then I should be on the 'Subjects' page
 
@@ -44,7 +44,7 @@ Feature: Phases
 
   Scenario: Completing step choosing multiple phases
     Given I am on the 'phases' page
-    And I check 'Secondary'
+    And I check 'Secondary (11 to 16)'
     And I check '16 to 18 years'
     And I check 'Secondary with 16 to 18 years'
     When I submit the form

@@ -44,6 +44,7 @@ gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
 gem 'delayed_job_active_record'
+gem 'delayed_job_web'
 
 gem "redis", "~> 4.1"
 
@@ -69,7 +70,7 @@ gem 'addressable'
 gem 'faraday'
 
 gem 'validates_timeliness', '~> 5.0.0.alpha4'
-gem 'delayed_job_web'
+gem 'activerecord-import', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

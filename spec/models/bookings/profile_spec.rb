@@ -247,10 +247,6 @@ RSpec.describe Bookings::Profile, type: :model do
       end
     end
 
-    describe "admin_contact_full_name" do
-      it { is_expected.to validate_presence_of :admin_contact_full_name }
-    end
-
     describe "admin_contact_email" do
       it { is_expected.to allow_value('me@you.com').for :admin_contact_email }
       it { is_expected.to allow_value('me.test@you.co.uk').for :admin_contact_email }

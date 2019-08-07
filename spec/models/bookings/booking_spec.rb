@@ -127,6 +127,51 @@ describe Bookings::Booking do
 
       it { is_expected.to match_array [unprocessed_bookings] }
     end
+
+    describe '.previous' do
+      let!(:previous_bookings) do
+        [
+          FactoryBot.build(:bookings_booking, date: 1.week.ago),
+          FactoryBot.build(:bookings_booking, date: Date.yesterday),
+          FactoryBot.build(:bookings_booking, date: Date.today)
+        ].each do |booking|
+          booking.save(validate: false)
+        end
+      end
+
+      let!(:non_previous_bookings) do
+        [
+          FactoryBot.create(:bookings_booking, date: Date.tomorrow),
+          FactoryBot.create(:bookings_booking, date: 1.week.from_now)
+        ]
+      end
+
+      subject { described_class.previous.to_a }
+
+      specify 'should include dates today or before' do
+        expect(subject).to match_array(previous_bookings)
+      end
+
+      specify 'should not include dates after today' do
+        expect(subject).not_to include(*non_previous_bookings)
+      end
+    end
+
+    describe '.attendance_unlogged' do
+      let!(:attended) { FactoryBot.create(:bookings_booking, attended: true) }
+      let!(:skipped) { FactoryBot.create(:bookings_booking, attended: false) }
+      let!(:unlogged) { FactoryBot.create(:bookings_booking) }
+
+      subject { described_class.attendance_unlogged }
+
+      specify 'when attended is nil' do
+        expect(subject).to include(unlogged)
+      end
+
+      specify 'when attended is not nil' do
+        expect(subject).not_to include(attended, skipped)
+      end
+    end
   end
 
   describe 'Acceptance' do

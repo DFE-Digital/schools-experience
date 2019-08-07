@@ -1,0 +1,59 @@
+<%- self.page_title = "Confirm attendance" -%>
+
+<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+
+<h1>Confirm attendance</h1>
+
+<%- if @bookings.any? %>
+
+  <%= form_with url: schools_confirm_attendance_path, method: 'put' do |f| %>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Name</th>
+          <th class="govuk-table__header" scope="col">Subject</th>
+          <th class="govuk-table__header" scope="col">Date</th>
+          <th class="govuk-table__header" scope="col">Attended</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <% @bookings.each do |booking| %>
+          <tr class="govuk-table__row" data-booking-id="<%= booking.id %>">
+            <th class="govuk-table__header" scope="row">
+              <%= booking.candidate_name %>
+            </th>
+            <td class="govuk-table__cell">
+              <%= booking.bookings_subject.name %>
+            </td>
+            <th class="govuk-table__header" scope="row">
+              <%= booking.date.to_formatted_s(:govuk) %>
+            </th>
+            <td class="govuk-table__cell">
+
+              <div class="govuk-radios govuk-radios--inline">
+                <%= confirm_attendance_radio(f, booking.id, true, 'Yes') %>
+                <%= confirm_attendance_radio(f, booking.id, false, 'No') %>
+              </div>
+
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div>
+      <%= f.submit 'Save and return to requests and bookings' %>
+    </div>
+
+  <% end %>
+
+<% else %>
+  <p>
+    There are no bookings that need their attendance to be confirmed.
+  </p>
+
+  <p>
+    <%= link_to "Return to requests and bookings", schools_dashboard_path, class: 'govuk-button'%>
+  </p>
+<% end %>

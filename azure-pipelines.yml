@@ -19,22 +19,44 @@ jobs:
   steps:
 
   - script: echo $(Build.Reason)
+    displayName: Build trigger
+
   - script: docker run --name=postgres -e POSTGRES_PASSWORD -d $(POSTGRES_IMAGE)
     displayName: Launch Postgres # done early to give it time to boot
+
   - script: docker run --name=redis -d $(REDIS_IMAGE)
     displayName: Launch Redis # done early to give it time to boot
 
-  - script: docker pull $(DOCKER_HUB_REPO):latest || true
-    displayName: Retrieve latest Docker build to use as cache
-    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      DEPENDENCY_TAG=`cat Dockerfile .dockerignore Gemfile Gemfile.lock package.json yarn.lock | shasum | cut -d ' ' -f 1`
+      echo "##vso[task.setvariable variable=buildCacheTag]${DEPENDENCY_TAG}"
+    displayName: Calculate build cache tag
 
-  - script: docker build -f Dockerfile --cache-from=$(DOCKER_HUB_REPO):latest -t $(DOCKER_HUB_REPO):$(imageTag) .
+  - script: echo "dependencies tag is $(buildCacheTag)"
+    displayName: Show build cache tag
+
+  - script: |
+      docker pull $(DOCKER_HUB_REPO):$(buildCacheTag) || true
+      docker build -f Dockerfile --cache-from=$(DOCKER_HUB_REPO):$(buildCacheTag) -t $(DOCKER_HUB_REPO):$(imageTag) .
     displayName: Build Docker Image using Cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script: docker build -f Dockerfile -t $(DOCKER_HUB_REPO):$(imageTag) .
     displayName: Build Docker Image without Cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+  - script: docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(buildCacheTag)
+    displayName: Tag build cache image
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+  - task: Docker@2
+    displayName: 'Upload build cache image to DockerHub'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      repository: $(DOCKER_HUB_REPO)
+      command: push
+      tags: $(buildCacheTag)
 
   - script: docker run --rm --link postgres:postgres -e DATABASE_URL --link redis:redis -e REDIS_URL -e RAILS_ENV=test $(DOCKER_HUB_REPO):$(imageTag) rake db:create db:test:prepare
     displayName: Create Testing databases, import schema and fixtures
@@ -54,13 +76,6 @@ jobs:
     displayName: Check app reports as Healthy
   - script: docker run --rm --link postgres:postgres --link redis:redis -e DATABASE_URL -e REDIS_URL -e RAILS_ENV=test $(DOCKER_HUB_REPO):$(imageTag) govuk-lint-ruby app lib spec
     displayName: Run the GovUK Lint check
-
-  - task: Docker@2
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: login
-    inputs:
-      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
-      command: login
 
   - script: |
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
@@ -104,7 +119,7 @@ jobs:
   - script: |
       docker pull $(DOCKER_HUB_REPO):$(imageTag)
       docker tag $(DOCKER_HUB_REPO):$(imageTag) school-experience:latest
-      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d 
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d
       WAIT_COUNT=0
       until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
       echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)

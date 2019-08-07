@@ -19,16 +19,6 @@
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
       <%= f.text_area :details, rows: 10 do %>
 
-        <p>
-          We recommend your summary includes and outlines the following kind of details:
-        </p>
-
-        <ul class="govuk-list govuk-list--bullet">
-          <li>your area, catchment and the kind and numbers of pupils you teach</li>
-          <li>any unique opportunities you offer via links to outside agencies and organisations</li>
-          <li>any activities, educational phases or subjects and subject areas you specialise in</li>
-        </ul>
-
         <details id="description-example" class="govuk-details" role="group">
           <summary class="govuk-details__summary" role="button">
             <span class="govuk-details__summary-text">View description example</span>
@@ -57,6 +47,7 @@
       <% end %>
 
       <%= f.submit 'Continue' %>
+      <%= f.submit 'Skip', class: 'govuk-button govuk-button--secondary' %>
     <% end %>
   </div>
 </div>
