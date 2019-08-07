@@ -80,6 +80,16 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data['value'].length).to be > 1
   end
 
+  it "can read Teams from the CRM", :read do
+    resp = crm_get('/teams', '$top' => 10)
+
+    expect(resp.status).to eql(200)
+    expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
+
+    data = JSON.parse(resp.body)
+    expect(data['value'].length).to be > 1
+  end
+
   it "can write to the CRM", :write do
     # Create a new contact
     resp = crm_post('/contacts', new_contact_data)
@@ -326,8 +336,8 @@ RSpec.describe "The GITIS CRM Api" do
       'dfe_dateofissueofdbscertificate' => Date.today.to_s(:db),
       'dfe_Country@odata.bind' => "dfe_countries(#{countryid})", # UK
       'dfe_PreferredTeachingSubject01@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})",
-      'dfe_PreferredTeachingSubject02@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})"
-#      'ownerid@odata.bind' => "dfe_owners(#{ownerid})"
+      'dfe_PreferredTeachingSubject02@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})",
+      'ownerid@odata.bind' => "teams(#{ownerid})"
     }
   end
 
