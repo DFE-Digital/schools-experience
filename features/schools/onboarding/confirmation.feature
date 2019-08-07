@@ -60,7 +60,7 @@ Feature: Publishing Profile
             | Experience details                | A really good one                                |
             | School subjects                   | Maths                                            |
             | School phases                     | Secondary (11 to 16) and 16 to 18                |
-            | School Address                    | 22 something streetM1 2JJ                        |
+            | School Address                    | 22 something                                     |
             | School availability info          | No information supplied                          |
             | DBS check info                    | Yes - Sometimes\npolicy details                  |
             | Other fee info                    | £300.00 Daily, Gold sovereigns\nFalconry lessons |
