@@ -40,7 +40,7 @@ end
 
 module BingOverrideURLParams
   def query_url_params(query)
-    { c: 'en-gb' }.merge(super)
+    super.merge(c: 'en-gb')
   end
 end
 
