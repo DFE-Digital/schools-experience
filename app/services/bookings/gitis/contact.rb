@@ -26,6 +26,9 @@ module Bookings
 
       def self.channel_creation
         Rails.application.config.x.gitis.channel_creation
+
+      def self.default_owner_id
+        ENV.fetch['CRM_OWNER_ID']
       end
 
       def initialize(crm_contact_data = {})
@@ -135,6 +138,12 @@ module Bookings
         firstname.downcase == fname && lastname.downcase == lname ||
           firstname.downcase == fname && birthdate == gitis_format_dob ||
           lastname.downcase == lname && birthdate == gitis_format_dob
+      end
+
+      def attributes_for_create
+        super.merge(
+          'ownerid@odata.bind' => "teams(#{self.class.default_owner_id})"
+        )
       end
     end
   end

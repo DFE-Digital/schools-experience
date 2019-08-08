@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::Contact, type: :model do
+  before do
+    allow(described_class).to \
+      receive(:default_owner_id).and_return(SecureRandom.uuid)
+  end
+
   describe '.entity_path' do
     subject { described_class.entity_path }
     it { is_expected.to eq('contacts') }
@@ -162,6 +167,7 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to include('telephone2') }
       it { is_expected.not_to include('statecode') }
       it { is_expected.to include('dfe_channelcreation') }
+      it { is_expected.to include('ownerid@odata.bind') }
     end
 
     describe "#attributes_for_update" do
@@ -184,6 +190,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('birthdate') }
           it { is_expected.to include('telephone2') }
           it { is_expected.to include('emailaddress2') }
+          it { is_expected.not_to include('ownerid@odata.bind') }
         end
 
         context 'when modified' do
@@ -204,6 +211,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('emailaddress2') }
           it { is_expected.to include('telephone1') }
           it { is_expected.to include('telephone2') }
+          it { is_expected.not_to include('ownerid@odata.bind') }
         end
       end
 
@@ -221,6 +229,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
           it { is_expected.to include('telephone2') }
+          it { is_expected.not_to include('ownerid@odata.bind') }
         end
 
         context 'when modified' do
@@ -241,6 +250,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
           it { is_expected.to include('telephone2') }
+          it { is_expected.not_to include('ownerid@odata.bind') }
         end
       end
     end
