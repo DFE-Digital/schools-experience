@@ -434,7 +434,8 @@ en:
         email: Email address
       order: Sorted by
       query: Find what?
-      location: Where?
+      location: Enter location or postcode
+      distance: Select search area
       schools_on_boarding_candidate_requirement:
         dbs_requirement:
           always: 'Yes - Always'

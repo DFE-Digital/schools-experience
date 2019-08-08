@@ -2,38 +2,33 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      Search for school experience
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
     <div id="search-form">
-      <h1 class="govuk-heading-l">
-        Find school experience
-      </h1>
 
-      <%= form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
-        <p class="govuk-hint">
-          Search by location or postcode
-        </p>
+      <%= form_for(@search,
+        as: '',
+        url: candidates_schools_path,
+        method: :get,
+        html: { class: 'school-search-form' }) do |f| %>
 
-        <div class="govuk-grid-row school-search-form">
-          <div class="school-search-form__location-field"
-                data-controller="grab-location">
+          <%= f.search_field :location, required: true, minlength: "3" %>
 
-            <%= f.search_field :location,
-                  placeholder: 'Such as Manchester, M1 3BD',
-                  required: true,
-                  minlength: "3"
-            %>
-          </div>
-
-          <div class="school-search-form__distance-field">
-            <%= f.collection_select :distance,
-                  Candidates::SchoolSearch.distances, :first, :last %>
-          </div>
+          <%= f.collection_select :distance,
+                Candidates::SchoolSearch.distances, :first, :last %>
 
           <div class="school-search-form__submit">
             <div class="govuk-form-group">
-              <%= f.submit 'Find', name: nil, aria: { label: 'Find schools' } %>
+              <%= f.submit 'Search', name: nil, aria: { label: 'Find schools' } %>
             </div>
           </div>
-        </div>
+
       <% end %>
     </div>
   </div>
