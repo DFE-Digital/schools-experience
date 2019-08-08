@@ -14,7 +14,7 @@ gem 'pg_search'
 
 # PostGIS adapter for Active Record
 gem 'activerecord-postgis-adapter'
-gem 'breasal', require: false
+gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
@@ -69,7 +69,7 @@ gem 'addressable'
 gem 'faraday'
 
 gem 'validates_timeliness', '~> 5.0.0.alpha5'
-gem 'activerecord-import', require: false
+gem 'activerecord-import'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
