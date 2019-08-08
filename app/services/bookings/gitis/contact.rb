@@ -24,6 +24,16 @@ module Bookings
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
+      delegate :default_owner, :default_country, to: :class
+
+      def self.default_owner
+        "teams(#{ENV.fetch['CRM_OWNER_ID']})"
+      end
+
+      def self.default_country
+        "dfe_countries(#{ENV.fetch['CRM_COUNTRY_ID']})"
+      end
+
       def self.channel_creation
         Rails.application.config.x.gitis.channel_creation
 
@@ -142,7 +152,8 @@ module Bookings
 
       def attributes_for_create
         super.merge(
-          'ownerid@odata.bind' => "teams(#{self.class.default_owner_id})"
+          'ownerid@odata.bind' => default_owner,
+          'dfe_Country@odata.bind' => default_country
         )
       end
     end
