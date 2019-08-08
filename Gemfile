@@ -68,7 +68,7 @@ gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: '
 gem 'addressable'
 gem 'faraday'
 
-gem 'validates_timeliness', '~> 5.0.0.alpha4'
+gem 'validates_timeliness', '~> 5.0.0.alpha5'
 gem 'activerecord-import'
 
 group :development, :test do

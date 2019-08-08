@@ -28,6 +28,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "candidates signin" => [:candidates_signin_path],
     "candidates signin confirm" => [:candidates_signin_confirmation_path, session_token],
     "new candidates feedback" => [:new_candidates_feedback_path],
+    "candidate school" => [:candidates_school_path, school],
 
     #school paths
     "schools" => [:schools_path],

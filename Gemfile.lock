@@ -124,10 +124,10 @@ GEM
       cucumber-tag_expressions (~> 1.1.0)
       gherkin (~> 5.0)
     cucumber-expressions (6.0.1)
-    cucumber-rails (1.7.0)
-      capybara (>= 2.3.0, < 4)
+    cucumber-rails (1.8.0)
+      capybara (>= 2.12, < 4)
       cucumber (>= 3.0.2, < 4)
-      mime-types (>= 1.17, < 4)
+      mime-types (>= 2.0, < 4)
       nokogiri (~> 1.8)
       railties (>= 4.2, < 7)
     cucumber-tag_expressions (1.1.1)
@@ -292,7 +292,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.0.4)
+    rails-html-sanitizer (1.1.0)
       loofah (~> 2.2, >= 2.2.2)
     railties (5.2.3)
       actionpack (= 5.2.3)
@@ -402,7 +402,7 @@ GEM
     validate_url (1.0.8)
       activemodel (>= 3.0.0)
       public_suffix
-    validates_timeliness (5.0.0.alpha4)
+    validates_timeliness (5.0.0.alpha5)
       timeliness (>= 0.3.10, < 1)
     web-console (3.7.0)
       actionview (>= 5.0)
@@ -485,7 +485,7 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 1.3.0)
   uk_postcode
-  validates_timeliness (~> 5.0.0.alpha4)
+  validates_timeliness (~> 5.0.0.alpha5)
   web-console (>= 3.3.0)
   webmock
   webpacker
