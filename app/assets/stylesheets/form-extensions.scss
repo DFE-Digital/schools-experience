@@ -21,6 +21,19 @@
     margin-bottom: 0;
     width: auto;
   }
+
+  .govuk-radios {
+    display: flex;
+    align-items: center;
+    legend {
+      margin-right: 1rem;
+      margin-bottom: 0;
+      font-weight: bold;
+      span {
+        @extend .govuk-label;
+      }
+    }
+  }
 }
 
 .govuk-currency-input {

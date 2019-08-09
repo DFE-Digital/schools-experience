@@ -74,7 +74,14 @@
           <%= f.hidden_field :subjects, multiple: true, value: subject_id, id: nil %>
         <% end %>
         <%= f.hidden_field :max_fee %>
-        <%= f.collection_select :order, f.object.class.available_orders, :first, :last %>
+        <%= f.radio_button_fieldset :order,
+          choices: f.object.class.available_orders,
+          value_method: :first,
+          text_method: :last,
+          fieldset_heading: false,
+          small: true,
+          inline: true
+        %>
         <%= f.submit "Change sort order", name: nil %>
       <% end %>
     </div>

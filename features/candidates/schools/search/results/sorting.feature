@@ -12,7 +12,7 @@ Feature: Schools search page sorting
             | Burnley School    | Burnley    |
         And I have provided 'Bury' as my location
         And I have changed the sort order to 'Name'
-        When I select 'Distance' in the 'Sorted by' select box
+        When I select 'Distance' from the 'Sorted by' radio buttons
         Then the results should be sorted by distance, nearest to furthest
 
     @javascript
@@ -24,7 +24,7 @@ Feature: Schools search page sorting
             | Burnley School    | Burnley    |
         And I have provided a point in 'Bury' as my location
         And I have changed the sort order to 'Name'
-        When I select 'Distance' in the 'Sorted by' select box
+        When I select 'Distance' from the 'Sorted by' radio buttons
         Then the results should be sorted by distance, nearest to furthest
 
     @javascript
@@ -36,7 +36,7 @@ Feature: Schools search page sorting
             | Burnley School    | Burnley    |
         And I have provided a point in 'Bury' as my location
         And I have changed the sort order to 'Name'
-        When I select 'Distance' in the 'Sorted by' select box
+        When I select 'Distance' from the 'Sorted by' radio buttons
         Then the distance should be ordered from low to high
 
     @javascript
@@ -48,5 +48,5 @@ Feature: Schools search page sorting
             | Manningtree Primary School | Burnley    |
         And I have searched for 'Man' and am on the results page
         And the sort order has defaulted to 'Distance'
-        When I select 'Name' in the 'Sorted by' select box
+        When I select 'Name' from the 'Sorted by' radio buttons
         Then the results should be sorted by name, lowest to highest
