@@ -37,7 +37,7 @@ end
 
 Then("I should see a warning containing the availability information") do
   within('section.govuk-se-warning') do
-    expect(page).to have_content("The school has provided the following information")
+    expect(page).to have_content(" The school has provided the following details about when school experience is available:")
     expect(page).to have_content(@availability_info)
   end
 end
