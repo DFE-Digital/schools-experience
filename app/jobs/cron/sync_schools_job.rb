@@ -1,4 +1,4 @@
-class SyncSchoolsJob < CronJob
+class Cron::SyncSchoolsJob < CronJob
   self.cron_expression = '30 4 * * *'
 
   def perform
