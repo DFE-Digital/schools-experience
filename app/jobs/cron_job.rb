@@ -2,7 +2,6 @@ class CronJob < ActiveJob::Base
   class_attribute :cron_expression
 
   class << self
-
     def schedule
       set(cron: cron_expression).perform_later unless scheduled?
     end
