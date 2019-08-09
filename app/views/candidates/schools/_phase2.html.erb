@@ -35,7 +35,9 @@
         <%= link_to 'Get directions', external_map_url(
               latitude: @school.coordinates.latitude,
               longitude: @school.coordinates.longitude,
-              name: @school.name) %>
+              name: @school.name),
+              'aria-label': "Get directions for #{@school.name}"
+            %>
       </p>
     </div>
 
@@ -88,7 +90,8 @@
     <div class="school-start-request-button__tablet_plus">
       <%= link_to "Start request",
                   new_candidates_school_registrations_personal_information_path(@presenter.school),
-                  class:"govuk-button" %>
+                  class:"govuk-button",
+                  'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
     </div>
 
     <p>
@@ -202,7 +205,8 @@
     <div class="school-start-request-button__mobile">
       <%= link_to "Start request",
                   new_candidates_school_registrations_personal_information_path(@presenter.school),
-                  class:"govuk-button" %>
+                  class:"govuk-button",
+                  'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
     </div>
   </div>
 </div>
