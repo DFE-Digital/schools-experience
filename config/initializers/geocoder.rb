@@ -21,6 +21,7 @@
 #)
 
 require Rails.root.join('lib', 'geocoder_autoexpire_cache')
+require File.join('geocoder', 'lookups', 'bing')
 
 defaults = {
   units: :miles,
@@ -44,8 +45,4 @@ module BingOverrideURLParams
   end
 end
 
-module Geocoder::Lookup
-  class Bing < Geocoder::Lookup::Base
-    prepend BingOverrideURLParams
-  end
-end
+Geocoder::Lookup::Bing.prepend(BingOverrideURLParams)
