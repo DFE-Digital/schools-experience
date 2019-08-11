@@ -224,7 +224,7 @@ GEM
     multi_test (0.1.2)
     multipart-post (2.1.1)
     nio4r (2.4.0)
-    nokogiri (1.10.3)
+    nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     notifications-ruby-client (4.0.0)
       jwt (>= 1.5, < 3)
