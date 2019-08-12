@@ -3,7 +3,8 @@ require 'rails_helper'
 describe Schools::DashboardsHelper, type: 'helper' do
   describe '#numbered_circle' do
     let(:text) { '15' }
-    let(:circle) { numbered_circle(text) }
+    let(:aria_label) { 'upcoming bookings' }
+    let(:circle) { numbered_circle(text, aria_label: aria_label) }
     subject { Nokogiri.parse(circle) }
 
     context 'id' do
@@ -15,17 +16,21 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
       context 'when set' do
         let(:id) { 'what-a-nice-circle' }
-        let(:circle) { numbered_circle(text, id: id) }
+        let(:circle) { numbered_circle(text, id: id, aria_label: aria_label) }
         specify 'should be set to the overridden value' do
           expect(subject.at_css('div.numbered-circle')['id']).to eql(id)
         end
       end
     end
 
-    context 'text' do
-      specify 'should contain the supplied text' do
-        expect(subject).to have_css("div.numbered-circle", text: text)
-      end
+    specify 'should contain the supplied text' do
+      expect(subject).to have_css("div.numbered-circle", text: text)
+    end
+
+    specify 'should have the correct aria label' do
+      expect(subject.at_css('div.numbered-circle')['aria-label']).to eql(
+        "#{text} #{aria_label}"
+      )
     end
   end
 

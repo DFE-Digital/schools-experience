@@ -7,11 +7,11 @@ module Schools::DashboardsHelper
     end
   end
 
-  def numbered_circle(number, id: nil, show_if_zero: false)
+  def numbered_circle(number, aria_label:, id: nil, show_if_zero: false)
     # Does string comparison in case its not a number
     return if number.to_s == '0' && !show_if_zero
 
-    content_tag('div', id: id, class: 'numbered-circle') do
+    content_tag('div', id: id, class: 'numbered-circle', aria: { label: "#{number} #{aria_label}" }) do
       tag.span(number, class: 'number')
     end
   end
