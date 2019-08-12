@@ -61,14 +61,10 @@ module Bookings::Gitis
     end
 
     def fake_contact_id
-      if Rails.env.test? || Rails.env.servertest?
-        SecureRandom.uuid # Mock it if predictable behaviour required
-      elsif %w{true yes 1}.include? ENV['FAKE_CRM_UUID'].to_s
+      if %w{true yes 1}.include? config.fake_crm_uuid.to_s
         KNOWN_UUID
-      elsif ENV['FAKE_CRM_UUID'].present?
-        ENV['FAKE_CRM_UUID']
       else
-        SecureRandom.uuid
+        config.fake_crm_uuid.presence || SecureRandom.uuid
       end
     end
 

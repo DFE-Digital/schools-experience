@@ -92,6 +92,7 @@ Rails.application.configure do
   end
 
   config.x.gitis.fake_crm = ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true }))
+  config.x.gitis.fake_crm_uuid = ENV.fetch('FAKE_CRM_UUID', nil)
   config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID', 'notset')
   config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET', 'notset')
   config.x.gitis.auth_tenant_id = ENV.fetch('CRM_AUTH_TENANT_ID', 'notset')

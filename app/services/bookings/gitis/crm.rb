@@ -3,6 +3,7 @@ module Bookings
     class CRM
       prepend FakeCrm if Rails.application.config.x.gitis.fake_crm
       delegate :logger, to: Rails
+      delegate :config, to: Rails.application.config.x.gitis
 
       def initialize(token, service_url: nil, endpoint: nil)
         @token = token
