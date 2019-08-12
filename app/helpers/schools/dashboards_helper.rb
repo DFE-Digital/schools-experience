@@ -7,17 +7,12 @@ module Schools::DashboardsHelper
     end
   end
 
-  def numbered_circle(number, id: nil, colour: 'red', width: 26, height: 30, font_size: "16px", circle_size: 13, show_if_zero: false)
+  def numbered_circle(number, id: nil, show_if_zero: false)
     # Does string comparison in case its not a number
     return if number.to_s == '0' && !show_if_zero
 
-    content_tag(:svg, id: id, width: width, height: height) do
-      safe_join([
-        tag(:circle, class: colour, cx: circle_size, cy: circle_size, r: circle_size),
-        content_tag(:text, x: "50%", y: "50%", dy: "0.2em", "font-size" => font_size) do
-          number.to_s
-        end
-      ])
+    content_tag('div', id: id, class: 'numbered-circle') do
+      tag.span(number, class: 'number')
     end
   end
 
