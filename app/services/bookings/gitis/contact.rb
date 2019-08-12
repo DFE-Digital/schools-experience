@@ -26,19 +26,18 @@ module Bookings
 
       delegate :default_owner, :default_country, to: :class
 
-      def self.default_owner
-        "teams(#{ENV.fetch['CRM_OWNER_ID']})"
-      end
+      class << self
+        def default_owner
+          "teams(#{Rails.application.config.x.gitis.owner_id})"
+        end
 
-      def self.default_country
-        "dfe_countries(#{ENV.fetch['CRM_COUNTRY_ID']})"
-      end
+        def default_country
+          "dfe_countries(#{Rails.application.config.x.gitis.country_id})"
+        end
 
-      def self.channel_creation
-        Rails.application.config.x.gitis.channel_creation
-
-      def self.default_owner_id
-        ENV.fetch['CRM_OWNER_ID']
+        def channel_creation
+          Rails.application.config.x.gitis.channel_creation
+        end
       end
 
       def initialize(crm_contact_data = {})

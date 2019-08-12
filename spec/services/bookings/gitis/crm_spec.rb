@@ -149,7 +149,7 @@ describe Bookings::Gitis::CRM, type: :model do
       let(:contact) { build(:gitis_contact, contact_attributes) }
 
       before do
-        sorted_attrs = contact_attributes.sort.to_h
+        sorted_attrs = contact.attributes_for_create.sort.to_h
         gitis_stub.stub_create_contact_request(sorted_attrs, contactid)
       end
 
