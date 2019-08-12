@@ -8,13 +8,16 @@ module Bookings
       attr_reader :service_url, :expires_at, :expires_in
 
       delegate :cache, to: Rails
-      delegate :config, to: Rails.application.config.x.gitis
 
       def initialize(client_id: nil, client_secret: nil, tenant_id: nil, service_url: nil)
         @client_id = client_id || config.auth_client_id
         @client_secret = client_secret || config.auth_secret
         @tenant_id = tenant_id || config.auth_tenant_id
         @service_url = service_url || config.service_url
+      end
+
+      def config
+        Rails.application.config.x.gitis
       end
 
       def token(force_reload = false)

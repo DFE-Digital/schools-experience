@@ -3,9 +3,6 @@ module Bookings
     class Contact
       include Entity
 
-      # Call pot in Gitis to insert the record into
-      CHANNEL_CREATION = ENV['CRM_CHANNEL_CREATION'].presence || 0
-
       # Status of record within Gitis
       STATE_CODE = 0
 
@@ -51,7 +48,7 @@ module Bookings
         self.address1_postalcode      = @crm_data['address1_postalcode']
         self.birthdate                = @crm_data['birthdate']
         self.statecode                = @crm_data['statecode'] || STATE_CODE
-        self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || CHANNEL_CREATION
+        self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || Rails.application.config.channel_creation
 
         super # handles resetting dirty attributes
 
