@@ -61,7 +61,7 @@ module Bookings::Gitis
     end
 
     def fake_contact_id
-      fake_uuid = Rails.config.x.gitis.fake_crm_uuid
+      fake_uuid = Rails.application.config.x.gitis.fake_crm_uuid
 
       if %w{true yes 1}.include? fake_uuid
         KNOWN_UUID

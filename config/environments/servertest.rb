@@ -21,4 +21,5 @@ Rails.application.configure do
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
 
   config.x.gitis.fake_crm = true
+  config.x.gitis.channel_creation = '0'
 end
