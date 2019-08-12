@@ -77,32 +77,11 @@ module Candidates
       end
 
       def personal_information
-        # Allow populating from pre Phase 3 data in the session
-        param_key = PersonalInformation.model_name.param_key
-
-        if !@registration_session[param_key].nil?
-          return PersonalInformation.new @registration_session.fetch(param_key)
-        end
-
-        contact = @registration_session.fetch(ContactInformation.model_name.param_key, {})
-        migrate = contact.slice(*MIGRATE_ATTRS)
-
-        raise StepNotFound, param_key if migrate.empty?
-
-        PersonalInformation.new(migrate).tap do |migrated|
-          save migrated
-        end
-      rescue KeyError
-        raise StepNotFound, param_key
+        fetch PersonalInformation
       end
 
       def personal_information_attributes
-        attrs = @registration_session.fetch(PersonalInformation.model_name.param_key, {})
-        return attrs if attrs.any?
-
-        # Allow populating with pre Phase 3 data in the session
-        migrate = @registration_session.fetch(ContactInformation.model_name.param_key, {})
-        migrate.slice(*MIGRATE_ATTRS)
+        fetch_attributes PersonalInformation
       end
 
       def placement_preference
