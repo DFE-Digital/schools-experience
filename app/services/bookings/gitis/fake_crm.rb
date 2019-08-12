@@ -95,7 +95,7 @@ module Bookings::Gitis
     end
 
     def stubbed?
-      Rails.application.config.x.fake_crm
+      Rails.application.config.x.gitis.fake_crm
     end
 
     # only Contacts are mocked for now

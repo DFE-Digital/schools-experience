@@ -1,7 +1,7 @@
 module Bookings
   module Gitis
     class Auth
-      prepend FakeAuth if Rails.application.config.x.fake_crm
+      prepend FakeAuth if Rails.application.config.x.gitis.fake_crm
 
       CACHE_KEY = 'gitis-auth-token'.freeze
       AUTH_URL = "https://login.microsoftonline.com/{tenant_id}/oauth2/token".freeze
