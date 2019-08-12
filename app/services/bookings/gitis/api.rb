@@ -3,10 +3,11 @@ module Bookings::Gitis
     ENDPOINT = '/api/data/v9.1'.freeze
 
     attr_reader :endpoint_url, :access_token
+    delegate :config, to: Rails.application.config.x.gitis
 
     def initialize(token, service_url: nil, endpoint: nil)
       @access_token = token
-      @service_url = service_url || ENV.fetch("CRM_SERVICE_URL")
+      @service_url = service_url || config.service_url
       @endpoint = endpoint || ENDPOINT
       @endpoint_url = "#{@service_url}#{@endpoint}"
     end

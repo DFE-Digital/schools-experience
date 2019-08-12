@@ -94,7 +94,7 @@ Rails.application.configure do
   config.x.gitis = {
     fake_crm: ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true })),
     auth_client_id: ENV.fetch('CRM_CLIENT_ID', 'notset'),
-    auth_client_secret: ENV.fetch('CRM_CLIENT_SECRET', 'notset'),
+    auth_secret: ENV.fetch('CRM_CLIENT_SECRET', 'notset'),
     auth_tenant_id: ENV.fetch('CRM_AUTH_TENANT_ID', 'notset'),
     service_url: ENV.fetch('CRM_SERVICE_URL', 'notset'),
     channel_creation: ENV.fetch('CRM_CHANNEL_CREATION', '0')
