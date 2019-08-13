@@ -51,7 +51,9 @@ Rails.application.configure do
 
   # Use Redis for Session and cache
   config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
-  config.session_store :cache_store, key: 'schoolex-test-session'
+  config.session_store :cache_store,
+    key: 'schoolex-test-session',
+    expire_after: 1.hour # Sets explicit TTL for Session Redis keys
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

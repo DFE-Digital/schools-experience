@@ -67,7 +67,10 @@ Rails.application.configure do
   config.cache_store = :redis_cache_store, {
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
   }
-  config.session_store :cache_store, key: 'schoolex-session'
+
+  config.session_store :cache_store,
+    key: 'schoolex-session',
+    expire_after: 1.hour # Sets explicit TTL for Session Redis keys
 
   config.after_initialize do
     Bullet.enable = true
