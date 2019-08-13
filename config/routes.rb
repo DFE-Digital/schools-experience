@@ -152,4 +152,9 @@ Rails.application.routes.draw do
     resources :feedbacks, only: %i(new create show)
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
+
+
+  if Rails.application.config.x.delayed_job_admin_enabled
+    match "/admin/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
+  end
 end
