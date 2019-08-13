@@ -163,10 +163,10 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
   end
 
   context 'with existing personal information in gitis' do
-    let(:gitis_contact) { build(:gitis_contact, :persisted) }
-    before do
-      allow_any_instance_of(ActionDispatch::Request::Session).to \
-        receive(:[]).with(:gitis_contact).and_return(gitis_contact.attributes)
+    include_context 'candidate signin'
+
+    let :registration_session do
+      Candidates::Registrations::GitisRegistrationSession.new({ 'urn' => '10020' }, gitis_contact)
     end
 
     context '#new' do

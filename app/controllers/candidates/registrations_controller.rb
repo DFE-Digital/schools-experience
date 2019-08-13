@@ -15,7 +15,11 @@ module Candidates
     end
 
     def current_registration
-      @current_registration ||= school_session.current_registration
+      @current_registration ||= if candidate_signed_in?
+                                  school_session.gitis_registration(current_contact)
+                                else
+                                  school_session.current_registration
+                                end
     end
 
     def school_session

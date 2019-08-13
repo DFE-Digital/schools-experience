@@ -19,6 +19,10 @@ module Candidates
       def current_registration
         @current_registration ||= RegistrationSession.new @school_session
       end
+
+      def gitis_registration(current_contact)
+        @gitis_registration ||= GitisRegistrationSession.new @school_session, current_contact
+      end
     end
   end
 end
