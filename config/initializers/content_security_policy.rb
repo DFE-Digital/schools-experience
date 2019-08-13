@@ -32,5 +32,5 @@
    policy.script_src :self, "'unsafe-inline'",
      "https://www.googletagmanager.com",
      "https://www.google-analytics.com",
-     "https://*.vo.msecnd.net"
+     "https://az416426.vo.msecnd.net" # needed for App Insights
  end
