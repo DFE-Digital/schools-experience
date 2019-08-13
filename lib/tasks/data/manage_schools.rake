@@ -1,5 +1,4 @@
 require File.join(Rails.root, "lib", "data", "school_mass_importer")
-require File.join(Rails.root, "lib", "data", "school_enhancer")
 require File.join(Rails.root, "lib", "data", "school_manager")
 require File.join(Rails.root, "lib", "data", "school_updater")
 
