@@ -3,9 +3,6 @@ module Bookings
     class Contact
       include Entity
 
-      # Call pot in Gitis to insert the record into
-      CHANNEL_CREATION = ENV['CRM_CHANNEL_CREATION'].presence || 0
-
       # Status of record within Gitis
       STATE_CODE = 0
 
@@ -35,6 +32,10 @@ module Bookings
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
+      def self.channel_creation
+        Rails.application.config.x.gitis.channel_creation
+      end
+
       def initialize(crm_contact_data = {})
         @crm_data                     = crm_contact_data.stringify_keys
         self.contactid                = @crm_data['contactid']
@@ -51,7 +52,7 @@ module Bookings
         self.address1_postalcode      = @crm_data['address1_postalcode']
         self.birthdate                = @crm_data['birthdate']
         self.statecode                = @crm_data['statecode'] || STATE_CODE
-        self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || CHANNEL_CREATION
+        self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
 
         super # handles resetting dirty attributes
 
@@ -68,7 +69,7 @@ module Bookings
       end
 
       def created_by_us?
-        dfe_channelcreation.to_s == CHANNEL_CREATION.to_s
+        dfe_channelcreation.to_s == Rails.application.config.x.gitis.channel_creation.to_s
       end
 
       def address

@@ -1,7 +1,7 @@
 module Bookings
   module Gitis
     class Auth
-      prepend FakeAuth if Rails.application.config.x.fake_crm
+      prepend FakeAuth if Rails.application.config.x.gitis.fake_crm
 
       CACHE_KEY = 'gitis-auth-token'.freeze
       AUTH_URL = "https://login.microsoftonline.com/{tenant_id}/oauth2/token".freeze
@@ -10,10 +10,14 @@ module Bookings
       delegate :cache, to: Rails
 
       def initialize(client_id: nil, client_secret: nil, tenant_id: nil, service_url: nil)
-        @client_id = client_id || ENV.fetch('CRM_CLIENT_ID')
-        @client_secret = client_secret || ENV.fetch('CRM_CLIENT_SECRET')
-        @tenant_id = tenant_id || ENV.fetch('CRM_AUTH_TENANT_ID')
-        @service_url = service_url || ENV.fetch('CRM_SERVICE_URL')
+        @client_id = client_id || config.auth_client_id
+        @client_secret = client_secret || config.auth_secret
+        @tenant_id = tenant_id || config.auth_tenant_id
+        @service_url = service_url || config.service_url
+      end
+
+      def config
+        Rails.application.config.x.gitis
       end
 
       def token(force_reload = false)

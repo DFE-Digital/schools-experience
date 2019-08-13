@@ -90,9 +90,15 @@ Rails.application.configure do
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
   config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
 
-  config.x.fake_crm = ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true }))
-
   if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
   end
+
+  config.x.gitis.fake_crm = ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true }))
+  config.x.gitis.fake_crm_uuid = ENV.fetch('FAKE_CRM_UUID', nil)
+  config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID', 'notset')
+  config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET', 'notset')
+  config.x.gitis.auth_tenant_id = ENV.fetch('CRM_AUTH_TENANT_ID', 'notset')
+  config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL', 'notset')
+  config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION', '0')
 end

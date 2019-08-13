@@ -61,14 +61,12 @@ module Bookings::Gitis
     end
 
     def fake_contact_id
-      if Rails.env.test? || Rails.env.servertest?
-        SecureRandom.uuid # Mock it if predictable behaviour required
-      elsif %w{true yes 1}.include? ENV['FAKE_CRM_UUID'].to_s
+      fake_uuid = Rails.application.config.x.gitis.fake_crm_uuid
+
+      if %w{true yes 1}.include? fake_uuid
         KNOWN_UUID
-      elsif ENV['FAKE_CRM_UUID'].present?
-        ENV['FAKE_CRM_UUID']
       else
-        SecureRandom.uuid
+        fake_uuid.presence || SecureRandom.uuid
       end
     end
 
@@ -95,7 +93,7 @@ module Bookings::Gitis
     end
 
     def stubbed?
-      Rails.application.config.x.fake_crm
+      Rails.application.config.x.gitis.fake_crm
     end
 
     # only Contacts are mocked for now
