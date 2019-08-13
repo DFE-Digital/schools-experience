@@ -3,7 +3,6 @@ module Bookings::Gitis
 
   module Entity
     extend ActiveSupport::Concern
-    include ActiveModel::AttributeAssignment
     include ActiveModel::Validations
     include ActiveModel::Conversion
 
