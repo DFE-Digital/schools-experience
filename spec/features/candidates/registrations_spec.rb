@@ -173,7 +173,7 @@ feature 'Candidate Registrations', type: :feature do
         complete_contact_information_step
         sign_in_via_dashboard(newtoken.token)
         swap_back_to_education_step
-        get_bounced_to_personal_information_step
+        get_bounced_to_contact_information_step
       end
     end
   end
@@ -350,9 +350,9 @@ feature 'Candidate Registrations', type: :feature do
     visit "/candidates/schools/#{school_urn}/registrations/education/new"
   end
 
-  def get_bounced_to_personal_information_step
+  def get_bounced_to_contact_information_step
     visit "/candidates/schools/#{school_urn}/registrations/application_preview"
     expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/personal_information/new"
+      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
   end
 end
