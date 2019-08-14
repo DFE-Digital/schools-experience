@@ -15,7 +15,7 @@ module Candidates
     end
 
     def current_registration
-      @current_registration ||= school_session.current_registration
+      @current_registration ||= school_session.current_registration(current_contact)
     end
 
     def school_session

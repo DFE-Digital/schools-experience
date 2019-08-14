@@ -113,8 +113,8 @@ module Candidates
         raise StepNotFound, e.key
       end
 
-      def fetch_attributes(klass)
-        @registration_session.fetch(klass.model_name.param_key, {})
+      def fetch_attributes(klass, defaults = {})
+        @registration_session.fetch(klass.model_name.param_key, defaults)
       end
 
       def to_h
