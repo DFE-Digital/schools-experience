@@ -181,6 +181,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
+          it { is_expected.not_to include('birthdate') }
           it { is_expected.to include('telephone2') }
           it { is_expected.to include('emailaddress2') }
         end
@@ -196,8 +197,9 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('contactid') }
           it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
-          it { is_expected.to include('firstname') }
-          it { is_expected.to include('lastname') }
+          it { is_expected.not_to include('firstname') }
+          it { is_expected.not_to include('lastname') }
+          it { is_expected.not_to include('birthdate') }
           it { is_expected.to include('emailaddress1') }
           it { is_expected.to include('emailaddress2') }
           it { is_expected.to include('telephone1') }
@@ -214,6 +216,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
+          it { is_expected.not_to include('birthdate') }
           it { is_expected.not_to include('emailaddress1') }
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
@@ -231,8 +234,9 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('contactid') }
           it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
-          it { is_expected.to include('firstname') }
-          it { is_expected.to include('lastname') }
+          it { is_expected.not_to include('firstname') }
+          it { is_expected.not_to include('lastname') }
+          it { is_expected.not_to include('birthdate') }
           it { is_expected.not_to include('emailaddress1') }
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }

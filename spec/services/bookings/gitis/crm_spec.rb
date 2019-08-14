@@ -164,10 +164,10 @@ describe Bookings::Gitis::CRM, type: :model do
       before do
         @contact = build(:gitis_contact, contact_attributes.merge(id: contactid))
         @contact.reset_dirty_attributes
-        @contact.firstname = 'Changed'
-        @contact.lastname = 'Name'
+        @contact.address1_line1 = 'Changed'
+        @contact.address1_line2 = 'Address'
         gitis_stub.stub_update_contact_request(
-          { 'firstname' => 'Changed', 'lastname' => 'Name' },
+          { 'address1_line1' => 'Changed', 'address1_line2' => 'Address' },
           contactid
         )
       end
