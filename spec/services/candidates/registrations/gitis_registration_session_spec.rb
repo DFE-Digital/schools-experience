@@ -71,10 +71,10 @@ describe Candidates::Registrations::GitisRegistrationSession do
           personal_information_attributes
       end
 
-      it { is_expected.to include('first_name' => data['first_name']) }
-      it { is_expected.to include('last_name' => data['last_name']) }
+      it { is_expected.to include('first_name' => contact.firstname) }
+      it { is_expected.to include('last_name' => contact.lastname) }
       it { is_expected.to include('email' => contact.email) }
-      it { is_expected.to include('date_of_birth' => data['date_of_birth']) }
+      it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
     end
 
     context 'with only gitis data' do
@@ -101,10 +101,10 @@ describe Candidates::Registrations::GitisRegistrationSession do
         described_class.new({ key => data }, contact).personal_information
       end
 
-      it { is_expected.to have_attributes(first_name: data['first_name']) }
-      it { is_expected.to have_attributes(last_name: data['last_name']) }
+      it { is_expected.to have_attributes(first_name: contact.firstname) }
+      it { is_expected.to have_attributes(last_name: contact.lastname) }
       it { is_expected.to have_attributes(email: contact.email) }
-      it { is_expected.to have_attributes(date_of_birth: data['date_of_birth']) }
+      it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
     end
 
     context 'with only gitis data' do
