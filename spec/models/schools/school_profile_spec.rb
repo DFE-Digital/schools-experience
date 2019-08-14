@@ -162,10 +162,6 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:admin_contact_full_name).of_type :string
-    end
-
-    it do
       is_expected.to have_db_column(:admin_contact_email).of_type :string
     end
 

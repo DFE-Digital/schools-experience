@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_24_092556) do
+ActiveRecord::Schema.define(version: 2019_08_14_151928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -329,7 +329,6 @@ ActiveRecord::Schema.define(version: 2019_07_24_092556) do
     t.boolean "experience_outline_provides_teacher_training"
     t.text "experience_outline_teacher_training_details"
     t.string "experience_outline_teacher_training_url"
-    t.string "admin_contact_full_name"
     t.string "admin_contact_email"
     t.string "admin_contact_phone"
     t.integer "bookings_school_id", null: false
