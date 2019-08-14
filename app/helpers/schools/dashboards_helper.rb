@@ -11,8 +11,12 @@ module Schools::DashboardsHelper
     # Does string comparison in case its not a number
     return if number.to_s == '0' && !show_if_zero
 
-    content_tag('div', id: id, class: 'numbered-circle', aria: { label: "#{number} #{aria_label}" }) do
-      tag.span(number, class: 'number')
+    content_tag('div', class: 'alert-counter') do
+      content_tag('div', class: 'numbered-circle-container') do
+        content_tag('div', id: id, class: 'numbered-circle', aria: { label: "#{number} #{aria_label}" }) do
+          tag.div(number, class: 'number')
+        end
+      end
     end
   end
 

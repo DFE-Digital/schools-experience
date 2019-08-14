@@ -43,19 +43,35 @@ article#dashboard {
       padding: 1rem 0rem;
     }
 
-    div.numbered-circle {
-      background-color: #A32526;
-      border-radius: 50%;
-      color: white;
+    div.alert-counter {
       display: inline-block;
-      height: 1.8rem;
       margin-left: 0.5rem;
-      min-width: 1.8rem;
-      padding: 0.3rem;
-      text-align: center;
-    }
 
-    &.requests-and-bookings {
+      div.numbered-circle-container {
+        display: flex;
+        justify-content: center;
+
+        div.numbered-circle {
+          background-color: #A32526;
+          border-radius: 50%;
+          width: 1.2rem;
+          height: 1.2rem;
+          padding: 0.2rem;
+          display: flex;
+          justify-content: center;
+
+          div.number {
+            display: flex;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 0rem;
+            margin: 0rem;
+            font-size: 1rem;
+            line-height: 1.3;
+          }
+        }
+      }
     }
 
     #requests {
