@@ -2,12 +2,11 @@ module Candidates
   module Registrations
     class PersonalInformationsController < RegistrationsController
       def new
-        @personal_information = PersonalInformation.new attributes_from_session_or_gitis
+        @personal_information = PersonalInformation.new attributes_from_session
       end
 
       def create
-        @personal_information = PersonalInformation.new attributes_from_session_or_gitis
-        @personal_information.read_only_email = candidate_signed_in?
+        @personal_information = PersonalInformation.new attributes_from_session
         @personal_information.attributes = personal_information_params
 
         render(:new) && return unless @personal_information.valid?
@@ -39,7 +38,7 @@ module Candidates
 
         if @personal_information.valid?
           persist @personal_information
-          # FIXME need to consider scenario where the user swaps out email address after confirming
+
           redirect_to candidates_school_registrations_application_preview_path
         else
           render :edit
@@ -49,22 +48,22 @@ module Candidates
     private
 
       def personal_information_params
-        params.require(:candidates_registrations_personal_information).permit \
-          :first_name,
-          :last_name,
-          :email,
-          :date_of_birth
+        if candidate_signed_in?
+          params.require(:candidates_registrations_personal_information).permit \
+            :first_name,
+            :last_name,
+            :date_of_birth
+        else
+          params.require(:candidates_registrations_personal_information).permit \
+            :first_name,
+            :last_name,
+            :email,
+            :date_of_birth
+        end
       end
 
       def attributes_from_session
         current_registration.personal_information_attributes.except 'created_at'
-      end
-
-      def attributes_from_session_or_gitis
-        attrs = attributes_from_session
-        return attrs if attrs.any?
-
-        current_contact ? gitis_mapper.contact_to_personal_information : {}
       end
 
       def verification_email(token)
