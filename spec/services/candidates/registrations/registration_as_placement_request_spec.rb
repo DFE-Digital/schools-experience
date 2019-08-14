@@ -26,12 +26,12 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
       "availability" => "Every third Tuesday",
       "bookings_placement_date_id" => nil,
       "objectives" => "test the software",
-      "degree_stage" => "I don't have a degree and am not studying for one",
-      "degree_stage_explaination" => "",
-      "degree_subject" => "Not applicable",
+      "degree_stage" => "Other",
+      "degree_stage_explaination" => "Khan academy, level 3",
+      "degree_subject" => "Bioscience",
       "teaching_stage" => "I’m very sure and think I’ll apply",
-      "subject_first_choice" => "Maths",
-      "subject_second_choice" => "Physics",
+      "subject_first_choice" => "Astronomy",
+      "subject_second_choice" => "History",
       "urn" => urn,
       "bookings_school_id" => school.id
     }
