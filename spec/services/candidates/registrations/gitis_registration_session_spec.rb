@@ -52,7 +52,14 @@ describe Candidates::Registrations::GitisRegistrationSession do
   end
 
   describe "#personal_information_attributes" do
-    let(:data) { { 'first_name' => 'Person', 'email' => 'person@personl.com' } }
+    let(:data) do
+      {
+        'first_name' => 'Person',
+        'last_name' => 'A',
+        'email' => 'person@personl.com',
+        'date_of_birth' => Date.parse('1970-01-01')
+      }
+    end
 
     let(:key) do
       Candidates::Registrations::PersonalInformation.model_name.param_key
@@ -65,7 +72,9 @@ describe Candidates::Registrations::GitisRegistrationSession do
       end
 
       it { is_expected.to include('first_name' => data['first_name']) }
+      it { is_expected.to include('last_name' => data['last_name']) }
       it { is_expected.to include('email' => contact.email) }
+      it { is_expected.to include('date_of_birth' => data['date_of_birth']) }
     end
 
     context 'with only gitis data' do
@@ -74,12 +83,14 @@ describe Candidates::Registrations::GitisRegistrationSession do
       end
 
       it { is_expected.to include('first_name' => contact.firstname) }
+      it { is_expected.to include('last_name' => contact.lastname) }
       it { is_expected.to include('email' => contact.email) }
+      it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
     end
   end
 
   describe '#personal_information' do
-    let(:data) { { 'first_name' => 'Person', 'email' => 'person@personl.com' } }
+    let(:data) { { 'first_name' => 'Person', 'email' => 'person@person.com' } }
 
     let(:key) do
       Candidates::Registrations::PersonalInformation.model_name.param_key
@@ -91,7 +102,9 @@ describe Candidates::Registrations::GitisRegistrationSession do
       end
 
       it { is_expected.to have_attributes(first_name: data['first_name']) }
+      it { is_expected.to have_attributes(last_name: data['last_name']) }
       it { is_expected.to have_attributes(email: contact.email) }
+      it { is_expected.to have_attributes(date_of_birth: data['date_of_birth']) }
     end
 
     context 'with only gitis data' do
@@ -100,7 +113,9 @@ describe Candidates::Registrations::GitisRegistrationSession do
       end
 
       it { is_expected.to have_attributes(first_name: contact.firstname) }
+      it { is_expected.to have_attributes(last_name: contact.lastname) }
       it { is_expected.to have_attributes(email: contact.email) }
+      it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
     end
   end
 end
