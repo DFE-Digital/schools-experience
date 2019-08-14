@@ -1,4 +1,6 @@
-module SchoolDataHelpers
+module BookingsDataHelpers
+  extend ActiveSupport::Concern
+
   def convert_to_point(row)
     easting  = retrive_easting(row)
     northing = retrieve_northing(row)

@@ -1,3 +1,5 @@
+require 'csv'
+
 class Bookings::SchoolSync
   FILE_LOCATION = Rails.root.join('tmp', 'edubase.csv').freeze
 
@@ -19,12 +21,12 @@ private
 
   # import any school records that aren't currently in our db
   def import_all
-    SchoolMassImporter.new(data, email_override).import
+    Bookings::Data::SchoolMassImporter.new(data, email_override).import
   end
 
   # update any school records that differ from edubase source
   def update_all
-    SchoolUpdater.new(data).update
+    Bookings::Data::SchoolUpdater.new(data).update
   end
 
   def data
