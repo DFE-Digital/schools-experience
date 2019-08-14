@@ -91,38 +91,20 @@ module Candidates
         fetch_attributes PlacementPreference
       end
 
-      def education_attributes_converter
-        # Temporary converter to convert between subject_preference and education
-        # while there are potential inflight registrations
-        EducationAttributes.new(@registration_session)
-      end
-
       def education_attributes
-        education_attributes_converter.attributes || {}
+        fetch_attributes Education
       end
 
       def education
-        if !education_attributes_converter.attributes.nil?
-          Education.new education_attributes_converter.attributes
-        else
-          raise StepNotFound, :candidates_registrations_education
-        end
-      end
-
-      def teaching_preference_attributes_converter
-        TeachingPreferenceAttributes.new(@registration_session)
+        fetch Education
       end
 
       def teaching_preference_attributes
-        teaching_preference_attributes_converter.attributes || {}
+        fetch_attributes TeachingPreference
       end
 
       def teaching_preference
-        if !teaching_preference_attributes_converter.attributes.nil?
-          TeachingPreference.new teaching_preference_attributes.merge(school: self.school)
-        else
-          raise StepNotFound, :candidates_registrations_teaching_preference
-        end
+        fetch(TeachingPreference).tap { |tp| tp.school = school }
       end
 
       def fetch(klass)
