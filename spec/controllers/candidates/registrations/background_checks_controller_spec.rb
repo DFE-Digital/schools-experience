@@ -75,10 +75,18 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
   end
 
   context 'with existing background check in gitis' do
-    let(:gitis_contact) { build(:gitis_contact, :persisted) }
-    before do
-      allow_any_instance_of(ActionDispatch::Request::Session).to \
-        receive(:[]).with(:gitis_contact).and_return(gitis_contact.attributes)
+    include_context 'candidate signin'
+
+    let :registration_session do
+      FactoryBot.build :gitis_registration_session,
+        gitis_contact: gitis_contact,
+        with: %i(
+          personal_information
+          contact_information
+          education
+          teaching_preference
+          placement_preference
+        )
     end
 
     context '#new' do

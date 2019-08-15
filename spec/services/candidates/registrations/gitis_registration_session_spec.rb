@@ -118,4 +118,52 @@ describe Candidates::Registrations::GitisRegistrationSession do
       it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
     end
   end
+
+  describe '#background_check_attributes' do
+    let(:data) { { 'has_dbs_check' => false } }
+
+    let(:key) do
+      Candidates::Registrations::BackgroundCheck.model_name.param_key
+    end
+
+    context 'with overridden background data' do
+      subject do
+        described_class.new({ key => data }, contact).
+          background_check_attributes
+      end
+
+      it { is_expected.to include(data) }
+    end
+
+    context 'with only gitis data' do
+      subject do
+        described_class.new({}, contact).background_check_attributes
+      end
+
+      it { is_expected.to include('has_dbs_check' => contact.has_dbs_check) }
+    end
+  end
+
+  describe '#background_check' do
+    let(:data) { { 'has_dbs_check' => false } }
+
+    let(:key) do
+      Candidates::Registrations::BackgroundCheck.model_name.param_key
+    end
+
+    context 'with overridden background data' do
+      subject do
+        described_class.new({ key => data }, contact).background_check
+      end
+
+      it { is_expected.to have_attributes(has_dbs_check: false) }
+    end
+
+    context 'with only gitis data' do
+      it "will raise a missing step error" do
+        expect { described_class.new({}, contact).background_check }.to \
+          raise_exception Candidates::Registrations::RegistrationSession::StepNotFound
+      end
+    end
+  end
 end

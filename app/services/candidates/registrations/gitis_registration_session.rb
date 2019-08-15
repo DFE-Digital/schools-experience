@@ -26,6 +26,10 @@ module Candidates
         fetch_attributes ContactInformation, mapper.contact_to_contact_information
       end
 
+      def background_check_attributes
+        fetch_attributes BackgroundCheck, mapper.contact_to_background_check
+      end
+
       def mapper
         @mapper ||= Bookings::RegistrationContactMapper.new(self, gitis_contact)
       end

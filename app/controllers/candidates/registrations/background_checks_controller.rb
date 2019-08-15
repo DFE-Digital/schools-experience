@@ -2,7 +2,7 @@ module Candidates
   module Registrations
     class BackgroundChecksController < RegistrationsController
       def new
-        @background_check = BackgroundCheck.new attributes_from_session_or_gitis
+        @background_check = BackgroundCheck.new attributes_from_session
       end
 
       def create
@@ -40,13 +40,6 @@ module Candidates
 
       def attributes_from_session
         current_registration.background_check_attributes.except 'created_at'
-      end
-
-      def attributes_from_session_or_gitis
-        attrs = attributes_from_session
-        return attrs if attrs.any?
-
-        current_contact ? gitis_mapper.contact_to_background_check : {}
       end
     end
   end
