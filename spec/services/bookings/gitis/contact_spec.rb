@@ -168,7 +168,6 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to include('emailaddress1') }
       it { is_expected.to include('emailaddress2') }
       it { is_expected.to include('telephone2') }
-      it { is_expected.not_to include('statecode') }
       it { is_expected.to include('dfe_channelcreation') }
       it { is_expected.to include('ownerid@odata.bind') }
       it { is_expected.to include('dfe_Country@odata.bind') }
@@ -187,7 +186,6 @@ describe Bookings::Gitis::Contact, type: :model do
 
         context 'when unmodified' do
           it { is_expected.not_to include('contactid') }
-          it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
@@ -207,7 +205,6 @@ describe Bookings::Gitis::Contact, type: :model do
           end
 
           it { is_expected.not_to include('contactid') }
-          it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
@@ -226,7 +223,6 @@ describe Bookings::Gitis::Contact, type: :model do
 
         context 'when unmodified' do
           it { is_expected.not_to include('contactid') }
-          it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
@@ -248,7 +244,6 @@ describe Bookings::Gitis::Contact, type: :model do
           end
 
           it { is_expected.not_to include('contactid') }
-          it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }

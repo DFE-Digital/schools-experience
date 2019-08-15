@@ -91,7 +91,6 @@ module Bookings::Gitis
         'address1_stateorprovince' => 'Manchester',
         'address1_postalcode' => 'MA1 1AM',
         'birthdate' => '1980-01-01',
-        'statecode' => 0,
         'dfe_channelcreation' => 10
       }
     end
