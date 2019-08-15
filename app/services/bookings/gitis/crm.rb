@@ -4,10 +4,15 @@ module Bookings
       prepend FakeCrm if Rails.application.config.x.gitis.fake_crm
       delegate :logger, to: Rails
 
+      attr_reader :backend
+      delegate :create_entity, :update_entity, :find_one, :find_many, to: :backend
+
       def initialize(token, service_url: nil, endpoint: nil)
         @token = token
         @service_url = service_url
         @endpoint = endpoint
+
+        @backend = Backends.load(api)
       end
 
       def find(uuids, entity_type: Contact, includes: nil)
@@ -142,28 +147,6 @@ module Bookings
         end
 
         parts.join(" #{join_with} ")
-      end
-
-      def create_entity(entity_id, data)
-        api.post(entity_id, data)
-      end
-
-      def update_entity(entity_id, data)
-        api.patch(entity_id, data)
-      end
-
-      def find_one(entity_type, uuid, params)
-        params['$select'] ||= entity_type.attributes_to_select
-        entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
-      end
-
-      def find_many(entity_type, uuids, params)
-        params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
-        params['$select'] ||= entity_type.attributes_to_select
-
-        api.get(entity_type.entity_path, params)['value'].map do |entity_data|
-          entity_type.new entity_data
-        end
       end
 
       def crmlog(msg)
