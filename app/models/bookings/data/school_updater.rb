@@ -13,7 +13,7 @@ module Bookings
         postcode: 'Postcode'
       }.freeze
 
-      include BookingsDataHelpers
+      include EdubaseDataHelpers
 
       attr_accessor :edubase_data
 

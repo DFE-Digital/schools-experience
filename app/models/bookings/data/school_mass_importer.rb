@@ -3,7 +3,7 @@ module Bookings
     class SchoolMassImporter
       attr_accessor :existing_urns, :edubase_data, :email_override
 
-      include BookingsDataHelpers
+      include EdubaseDataHelpers
 
       def initialize(edubase_data, email_override = nil)
         self.edubase_data = edubase_data

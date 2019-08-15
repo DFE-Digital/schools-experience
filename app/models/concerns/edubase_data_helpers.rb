@@ -1,9 +1,9 @@
-module BookingsDataHelpers
+module EdubaseDataHelpers
   extend ActiveSupport::Concern
 
-  def convert_to_point(row)
-    easting  = retrive_easting(row)
-    northing = retrieve_northing(row)
+  def convert_to_point(edubase_row)
+    easting  = retrive_easting(edubase_row)
+    northing = retrieve_northing(edubase_row)
 
     return nil if easting.blank? || northing.blank?
 
@@ -20,15 +20,15 @@ module BookingsDataHelpers
     @school_types ||= Bookings::SchoolType.all.index_by(&:edubase_id)
   end
 
-  def retrieve_northing(row)
-    row['Northing'].to_i
+  def retrieve_northing(edubase_row)
+    edubase_row['Northing'].to_i
   end
 
-  def retrive_easting(row)
-    row['Easting'].to_i
+  def retrive_easting(edubase_row)
+    edubase_row['Easting'].to_i
   end
 
-  def retrieve_school_type(row)
-    row['TypeOfEstablishment (code)'].to_i
+  def retrieve_school_type(edubase_row)
+    edubase_row['TypeOfEstablishment (code)'].to_i
   end
 end
