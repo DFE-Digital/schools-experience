@@ -160,6 +160,15 @@ en:
             date_of_birth:
               blank: Enter your date of birth
 
+        schools/on_boarding/dbs_requirement:
+          attributes:
+            requires_check:
+              inclusion: 'Select whether you require candidates to have a DBS check'
+            dbs_policy_details:
+              blank: 'Provide details'
+            no_dbs_policy_details:
+              blank: 'Provide details'
+
         schools/on_boarding/candidate_requirement:
           attributes:
             dbs_requirement:
@@ -321,6 +330,8 @@ en:
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
+      schools_on_boarding_dbs_requirement:
+        requires_check: 'Do you require candidates to have or get a DBS check?'
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
@@ -404,6 +415,8 @@ en:
             be able to offer you the exact dates you’re looking for.
       candidates_session:
         date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
+      schools_on_boarding_dbs_requirement:
+        requires_check: 'Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
@@ -460,6 +473,12 @@ en:
       query: Find what?
       location: Enter location or postcode
       distance: Select search area
+      schools_on_boarding_dbs_requirement:
+        dbs_policy_details: 'Provide details in 50 words or less.'
+        no_dbs_policy_details: 'Provide any extra details in 50 words or less.'
+        requires_check:
+          true: 'Yes - Outline your DBS requirements'
+          false: 'No - Candidates will be accompanied at all times'
       schools_on_boarding_candidate_requirement:
         dbs_requirement:
           always: 'Yes - Always'
