@@ -4,14 +4,14 @@ module Bookings
       prepend FakeCrm if Rails.application.config.x.gitis.fake_crm
       delegate :logger, to: Rails
 
-      attr_reader :backend
+      attr_reader :store
 
       def initialize(token, service_url: nil, endpoint: nil)
         @token = token
         @service_url = service_url
         @endpoint = endpoint
 
-        @backend = Backends.load(api)
+        @store = Store.load(api)
       end
 
       def find(uuids, entity_type: Contact, includes: nil)
@@ -33,9 +33,9 @@ module Bookings
         end
 
         if multiple_ids
-          backend.find_many(entity_type, uuids, params)
+          store.find_many(entity_type, uuids, params)
         else
-          backend.find_one(entity_type, uuids[0], params)
+          store.find_one(entity_type, uuids[0], params)
         end
       end
 
@@ -94,11 +94,11 @@ module Bookings
         if entity.id
           attrs = entity.attributes_for_update.sort.to_h
           crmlog "UPDATING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          backend.update_entity entity.entity_id, attrs
+          store.update_entity entity.entity_id, attrs
         else
           attrs = entity.attributes_for_create.sort.to_h
           crmlog "INSERTING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          entity.entity_id = backend.create_entity entity.entity_id, attrs
+          entity.entity_id = store.create_entity entity.entity_id, attrs
         end
 
         entity.id

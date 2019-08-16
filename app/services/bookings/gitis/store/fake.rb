@@ -1,6 +1,6 @@
 module Bookings
   module Gitis
-    module Backends
+    module Store
       class Fake
         KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
         REQUIRED = %w{

@@ -1,6 +1,6 @@
 module Bookings
   module Gitis
-    module Backends
+    module Store
       class Dynamics
         attr_reader :api
 

@@ -1,6 +1,6 @@
 module Bookings
   module Gitis
-    module Backends
+    module Store
       def self.load(*args)
         Dynamics.new(*args)
       end

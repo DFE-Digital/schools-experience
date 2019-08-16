@@ -2,23 +2,23 @@ module Bookings::Gitis
   module FakeCrm
     def initialize(*args)
       super
-      @fake_backend = Backends::Fake.new
+      @fake_store = Store::Fake.new
     end
 
-    def fake_backend
-      @fake_backend
+    def fake_store
+      @fake_store
     end
 
     def fake_contact_id
-      fake_backend.send(:fake_contact_id)
+      fake_store.send(:fake_contact_id)
     end
 
     def fake_contact_data
-      fake_backend.send(:fake_contact_data)
+      fake_store.send(:fake_contact_data)
     end
 
-    def backend
-      stubbed? ? @fake_backend : @backend
+    def store
+      stubbed? ? @fake_store : @store
     end
 
     def find_by_email(address)
