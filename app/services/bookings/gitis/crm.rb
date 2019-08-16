@@ -5,7 +5,6 @@ module Bookings
       delegate :logger, to: Rails
 
       attr_reader :backend
-      delegate :create_entity, :update_entity, :find_one, :find_many, to: :backend
 
       def initialize(token, service_url: nil, endpoint: nil)
         @token = token
@@ -34,9 +33,9 @@ module Bookings
         end
 
         if multiple_ids
-          find_many(entity_type, uuids, params)
+          backend.find_many(entity_type, uuids, params)
         else
-          find_one(entity_type, uuids[0], params)
+          backend.find_one(entity_type, uuids[0], params)
         end
       end
 
@@ -95,11 +94,11 @@ module Bookings
         if entity.id
           attrs = entity.attributes_for_update.sort.to_h
           crmlog "UPDATING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          update_entity entity.entity_id, attrs
+          backend.update_entity entity.entity_id, attrs
         else
           attrs = entity.attributes_for_create.sort.to_h
           crmlog "INSERTING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          entity.entity_id = create_entity entity.entity_id, attrs
+          entity.entity_id = backend.create_entity entity.entity_id, attrs
         end
 
         entity.id

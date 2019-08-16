@@ -72,8 +72,6 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       end
 
       context 'registration job not already enqueued' do
-        include_context 'fake gitis with known uuid'
-
         shared_examples 'a successful create' do
           before do
             allow(Bookings::LogToGitisJob).to \
@@ -81,11 +79,9 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
             allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
               receive(:perform_later).and_return(true)
-
-            expect(fake_gitis).to receive(:create_entity) do |entity_id, _data|
-              "#{entity_id}(#{fake_gitis_uuid})"
-            end
           end
+
+          include_context 'fake gitis with known uuid'
 
           before do
             get "/candidates/confirm/#{uuid}"

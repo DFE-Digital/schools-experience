@@ -308,13 +308,13 @@ describe Bookings::Gitis::CRM, type: :model do
 
     before do
       allow(gitis).to receive(:find).with(contact.id).and_return(contact)
-      allow(gitis).to receive(:update_entity).and_return(true)
+      allow(gitis.backend).to receive(:update_entity).and_return(true)
 
       gitis.log_school_experience(contact.id, logline)
     end
 
     it "will create a new entry with a single row" do
-      expect(gitis).to have_received(:update_entity).with(
+      expect(gitis.backend).to have_received(:update_entity).with(
         contact.entity_id,
         'dfe_notesforclassroomexperience' => "#{headerline}\r\n\r\n#{logline}\r\n"
       )
