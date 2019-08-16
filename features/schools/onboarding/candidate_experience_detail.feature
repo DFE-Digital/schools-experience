@@ -10,6 +10,7 @@ Feature: Candidate experience details
     And there are some subjects available
     And I have completed the following steps:
         | Step name                    | Extra                     |
+        | DBS Requirements             |                           |
         | Candidate Requirements       |                           |
         | Fees                         | choosing only Other costs |
         | Other costs                  |                           |

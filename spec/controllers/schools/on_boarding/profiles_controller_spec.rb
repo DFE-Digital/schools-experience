@@ -17,7 +17,7 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
 
       it 'redirects to the first incompleted step' do
         expect(response).to \
-          redirect_to '/schools/on_boarding/candidate_requirement/new'
+          redirect_to '/schools/on_boarding/dbs_requirement/new'
       end
     end
 

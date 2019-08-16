@@ -5,7 +5,8 @@ describe Schools::OnBoarding::AdministrationFeesController, type: :request do
   include_context "logged in DfE user"
 
   let! :school_profile do
-    FactoryBot.create :school_profile, :with_candidate_requirement, :with_fees
+    FactoryBot.create :school_profile,
+      :with_dbs_requirement, :with_candidate_requirement, :with_fees
   end
 
   context '#new' do
