@@ -8,7 +8,7 @@ module CookiesHelper
     cookies[cookie_name] = {
       value: seen_value,
       httponly: true,
-      expires: 1.month.from_now
+      expires: 2.weeks.from_now
     }
   end
 end
