@@ -12,6 +12,7 @@
     <%= placement_request.dates_requested %>
   </td>
   <td class="govuk-table__cell">
-    <%= link_to "View", schools_placement_request_path(placement_request) %>
+    <%= link_to "View", schools_placement_request_path(placement_request),
+      'aria-label': "View placement request for #{placement_request.gitis_contact.full_name} #{placement_request.dates_requested}" %>
   </td>
 </tr>

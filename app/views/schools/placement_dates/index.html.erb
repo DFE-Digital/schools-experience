@@ -41,7 +41,7 @@
             <td class="govuk-table__cell">
               <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
                 Change
-                <span class="govuk-visually-hidden"> placement date</span>
+                <span class="govuk-visually-hidden"> placement date <%= placement_date.date.to_formatted_s(:govuk) %></span>
               <%- end -%>
             </td>
           </tr>
