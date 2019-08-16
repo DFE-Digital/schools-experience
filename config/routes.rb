@@ -89,7 +89,7 @@ Rails.application.routes.draw do
     end
 
     namespace :on_boarding do
-      resource :dbs_requirement, only: %i(new create), constraints: -> request {
+      resource :dbs_requirement, only: %i(new create edit update), constraints: -> request {
         Feature.instance.active? :dbs_requirement
       }
       resource :candidate_requirement, only: %i(new create edit update)
