@@ -5,21 +5,34 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 describe Schools::OnBoarding::ProfilesController, type: :request do
   include_context "logged in DfE user"
 
-  before { enable_feature :dbs_requirement }
-
   context '#show' do
     context 'with an incomplete profile' do
       let! :school_profile do
         FactoryBot.create :school_profile
       end
 
-      before do
-        get '/schools/on_boarding/profile'
+      context 'when dbs_requirement feature is not enabled' do
+        before do
+          get '/schools/on_boarding/profile'
+        end
+
+        it 'redirects to the first incompleted step' do
+          expect(response).to \
+            redirect_to '/schools/on_boarding/candidate_requirement/new'
+        end
       end
 
-      it 'redirects to the first incompleted step' do
-        expect(response).to \
-          redirect_to '/schools/on_boarding/dbs_requirement/new'
+      context 'when dbs_requirement feature is enabled' do
+        before do
+          enable_feature :dbs_requirement
+
+          get '/schools/on_boarding/profile'
+        end
+
+        it 'redirects to the first incompleted step' do
+          expect(response).to \
+            redirect_to '/schools/on_boarding/dbs_requirement/new'
+        end
       end
     end
 

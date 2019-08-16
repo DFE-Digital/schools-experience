@@ -18,6 +18,11 @@ class Bookings::Profile < ApplicationRecord
   belongs_to :school, class_name: 'Bookings::School'
   validates :school_id, uniqueness: true
 
+  with_options if: -> { Rails.application.config.x.features.include? :dbs_requirement } do
+    validates :dbs_requires_check, inclusion: [true, false]
+    validates :dbs_policy_details, presence: true
+  end
+
   validates :dbs_required, presence: true
   validates :dbs_required, inclusion: DBS_REQUIREMENTS, unless: -> { dbs_required.nil? }
   validates :dbs_policy, presence: true, if: -> { dbs_required == 'sometimes' }

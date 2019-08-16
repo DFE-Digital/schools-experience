@@ -13,6 +13,12 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         described_class.new(completed_attrs).attributes
       end
 
+      context 'with dbs_requirement feature enabled' do
+        before { enable_feature :dbs_requirement }
+
+        it { is_expected.to include(dbs_requires_check: true) }
+        it { is_expected.to include(dbs_policy_details: 'Must have recent dbs check') }
+      end
       it { is_expected.to include(dbs_required: 'sometimes') }
       it { is_expected.to include(dbs_policy: 'Super secure') }
       it { is_expected.to include(individual_requirements: 'Gotta go fast') }

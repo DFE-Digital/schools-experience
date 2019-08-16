@@ -60,6 +60,18 @@ RSpec.describe Bookings::Profile, type: :model do
       end
     end
 
+    describe "dbs_requires_check" do
+      before { enable_feature :dbs_requirement }
+
+      it { is_expected.not_to allow_value(nil).for :dbs_requires_check }
+    end
+
+    describe "dbs_policy_details" do
+      before { enable_feature :dbs_requirement }
+
+      it { is_expected.to validate_presence_of :dbs_policy_details }
+    end
+
     describe "individual_requirements" do
       it { is_expected.to allow_value(nil).for :individual_requirements }
       it { is_expected.to allow_value("something").for :individual_requirements }

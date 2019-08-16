@@ -22,7 +22,6 @@ Feature: Publishing Profile
             | Experience Outline           |                           |
             | Admin contact                |                           |
 
-
     @dbs_requirement_feature
     Scenario: Page contents
         Then the page title should be 'Check your answers before setting up your school experience profile'
