@@ -1,8 +1,10 @@
-<div id="cookie-banner">
-  <div id="cookie-banner-message" class="govuk-width-container">
-    <p class="govuk-body-s">
-    School experience uses cookies to make the site simpler.
-      <%= link_to("Find out more about cookies", cookies_policy_path) %>
-    </p>
+<% if show_cookie_message? %>
+  <div id="cookie-banner">
+    <div id="cookie-banner-message" class="govuk-width-container">
+      <p class="govuk-body-s">
+      School experience uses cookies to make the site simpler.
+        <%= link_to("Find out more about cookies", cookies_policy_path) %>
+      </p>
+    </div>
   </div>
-</div>
+<% end %>
