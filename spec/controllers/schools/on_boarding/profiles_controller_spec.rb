@@ -5,6 +5,8 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 describe Schools::OnBoarding::ProfilesController, type: :request do
   include_context "logged in DfE user"
 
+  before { enable_feature :dbs_requirement }
+
   context '#show' do
     context 'with an incomplete profile' do
       let! :school_profile do
@@ -17,7 +19,7 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
 
       it 'redirects to the first incompleted step' do
         expect(response).to \
-          redirect_to '/schools/on_boarding/candidate_requirement/new'
+          redirect_to '/schools/on_boarding/dbs_requirement/new'
       end
     end
 

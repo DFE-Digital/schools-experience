@@ -11,6 +11,7 @@ Feature: School Profile
     And there are some subjects available
     And I have completed the following steps:
         | Step name                    | Extra                     |
+        | DBS Requirements             |                           |
         | Candidate Requirements       |                           |
         | Fees                         | choosing only Other costs |
         | Other costs                  |                           |
@@ -34,6 +35,7 @@ Feature: School Profile
         | Check your answers before setting up your school experience profile | None               |
 
 
+  @dbs_requirement_feature
   Scenario: Viewing the profile
     Given I am on the 'Profile' page
     Then the page should have the following summary list information:
@@ -42,7 +44,7 @@ Feature: School Profile
       | UK telephone number         | 01234567890                                                 |
       | Email address               | school1@example.com                                         |
       | Fees                        | Yes - £300.00 daily other fee                               |
-      | DBS check required          | Yes - Sometimes. policy details                             |
+      | DBS check required          | Yes - Always require DBS check                              |
       | Individual requirements     | Yes - Candidates need to be good                            |
       | School experience phases    | Secondary and 16 - 18 years                                 |
       | Primary key stages          | None                                                        |

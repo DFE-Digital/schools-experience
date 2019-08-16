@@ -17,6 +17,22 @@ module Schools
         end
       end
 
+      def edit
+        @dbs_requirement = current_school_profile.dbs_requirement
+      end
+
+      def update
+        @dbs_requirement = DbsRequirement.new dbs_requirement_params
+
+        if @dbs_requirement.valid?
+          current_school_profile.update! dbs_requirement: @dbs_requirement
+
+          redirect_to next_step_path(current_school_profile)
+        else
+          render :edit
+        end
+      end
+
     private
 
       def dbs_requirement_params

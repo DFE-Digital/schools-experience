@@ -70,6 +70,24 @@ module Schools
         end
       end
 
+      def dbs_check
+        unless [true, false].include? @school_profile.dbs_requirement.requires_check
+          fail "DBS requirement not set #{@school_profile.inspect}"
+        end
+
+        if @school_profile.dbs_requirement.requires_check
+          [
+            'Yes',
+            @school_profile.dbs_requirement.dbs_policy_details
+          ].compact.join(' - ')
+        else
+          [
+            'No - Candidates will be accompanied at all times',
+            @school_profile.dbs_requirement.no_dbs_policy_details
+          ].compact.join(' - ')
+        end
+      end
+
       def individual_requirements
         if @school_profile.candidate_requirement.requirements
           'Yes - ' + @school_profile.candidate_requirement.requirements_details

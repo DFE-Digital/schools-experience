@@ -11,6 +11,7 @@ Feature: Publishing Profile
         And there are some subjects available
         And I have completed the following steps:
             | Step name                    | Extra                     |
+            | DBS Requirements             |                           |
             | Candidate Requirements       |                           |
             | Fees                         | choosing only Other costs |
             | Other costs                  |                           |
@@ -21,12 +22,14 @@ Feature: Publishing Profile
             | Experience Outline           |                           |
             | Admin contact                |                           |
 
+
+    @dbs_requirement_feature
     Scenario: Page contents
         Then the page title should be 'Check your answers before setting up your school experience profile'
         And I should see the following summary rows:
             | Heading                     | Value                                                       |
             | Fees                        | Yes - £300.00 daily other fee                               |
-            | DBS check required          | Yes - Sometimes. policy details                             |
+            | DBS check required          | Yes - Always require DBS check                              |
             | Individual requirements     | Yes - Candidates need to be good                            |
             | School experience phases    | Secondary and 16 - 18 years                                 |
             | Primary key stages          | None                                                        |

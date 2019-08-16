@@ -2,6 +2,17 @@ Given "I check {string}" do |string|
   check string
 end
 
+Given "I have completed the DBS Requirements step" do
+  enable_feature :dbs_requirement do
+    steps %(
+      Given I am on the 'DBS requirements' page
+      And I choose 'Yes - Outline your DBS requirements' from the 'Do you require candidates to have or get a DBS check?' radio buttons
+      And I enter 'Always require DBS check' into the 'Provide details in 50 words or less.' text area
+      When I submit the form
+    )
+  end
+end
+
 Given "I have completed the Candidate Requirements step" do
   steps %(
     Given I am on the 'candidate requirements' page

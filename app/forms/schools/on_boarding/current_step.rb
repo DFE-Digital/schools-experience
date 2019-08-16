@@ -11,7 +11,9 @@ module Schools
       end
 
       def call
-        if candidate_requirement_required?
+        if dbs_requirement_required?
+          :dbs_requirement
+        elsif candidate_requirement_required?
           :candidate_requirement
         elsif fees_required?
           :fees
@@ -41,6 +43,12 @@ module Schools
       end
 
     private
+
+      def dbs_requirement_required?
+        return false unless Rails.application.config.x.features.include? :dbs_requirement
+
+        !@school_profile.dbs_requirement.dup.valid?
+      end
 
       def candidate_requirement_required?
         !@school_profile.candidate_requirement.dup.valid?
