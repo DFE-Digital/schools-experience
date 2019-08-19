@@ -181,4 +181,124 @@ RSpec.describe Bookings::Gitis::Entity do
     it { expect(subject.attributes_for_create).to include('notupdate' => 'test') }
     it { expect(subject.attributes_for_update).not_to include('notupdate' => 'test') }
   end
+
+  describe '.entity_association' do
+    let(:testentity) do
+      TestEntity.new('testentityid' => SecureRandom.uuid, 'firstname' => 'test')
+    end
+
+    class Associated
+      include Bookings::Gitis::Entity
+
+      entity_id_attribute :associatedid
+      entity_attribute :description
+      entity_association :testassoc, TestEntity
+
+      def initialize(crmdata = {})
+        self.associatedid = crmdata['associatedid']
+        self.description = crmdata['description']
+        self._testassoc_value = crmdata['_testassoc_value']
+
+        super
+      end
+    end
+
+    context 'with new instance' do
+      subject { Associated.new('description' => 'test') }
+
+      it { is_expected.to have_attributes _testassoc_value: nil }
+
+      it "is excluded from attributes_for_create" do
+        expect(subject.attributes_for_create).not_to \
+          include('testassoc@odata.bind')
+      end
+
+      context "and assigned via value variant" do
+        before { subject._testassoc_value = testentity.id }
+
+        it { is_expected.to have_attributes _testassoc_value: testentity.id }
+
+        it "is included in create attributes" do
+          expect(subject.attributes_for_create).to \
+            include('testassoc@odata.bind' => testentity.entity_id)
+        end
+      end
+
+      context "and assigned via attribute itself" do
+        before { subject.testassoc = testentity.id }
+
+        it { is_expected.to have_attributes _testassoc_value: testentity.id }
+
+        it "is included in create attributes" do
+          expect(subject.attributes_for_create).to \
+            include('testassoc@odata.bind' => testentity.entity_id)
+        end
+      end
+
+      context "and assigned via associating a class" do
+        before { subject.testassoc = testentity }
+
+        it { is_expected.to have_attributes _testassoc_value: testentity.id }
+
+        it "is included in create attributes" do
+          expect(subject.attributes_for_create).to \
+            include('testassoc@odata.bind' => testentity.entity_id)
+        end
+      end
+    end
+
+    context 'with existing instance' do
+      let(:e2) do
+        TestEntity.new('testentityid' => SecureRandom.uuid, 'firstname' => 'second')
+      end
+
+      subject do
+        Associated.new(
+          'associatedid' => SecureRandom.uuid,
+          'description' => 'test',
+          '_testassoc_value' => testentity.id
+        )
+      end
+
+      it { is_expected.to have_attributes _testassoc_value: testentity.id }
+
+      it "is excluded from attributes_for_update" do
+        expect(subject.attributes_for_update).not_to \
+          include('testassoc@odata.bind')
+      end
+
+      context "and assigned via value variant" do
+        before { subject._testassoc_value = e2.id }
+
+        it { is_expected.to have_attributes _testassoc_value: e2.id }
+
+        it "is included in update attributes" do
+          expect(subject.attributes_for_update).to \
+            include('testassoc@odata.bind' => e2.entity_id)
+        end
+      end
+
+      context "and assigned via attribute itself" do
+        before { subject.testassoc = e2.id }
+
+        it { is_expected.to have_attributes _testassoc_value: e2.id }
+
+        it "is included in update attributes" do
+          expect(subject.attributes_for_update).to \
+            include('testassoc@odata.bind' => e2.entity_id)
+        end
+      end
+
+      context "and assigned via associating a class" do
+        before { subject.testassoc = e2.id }
+
+        it { is_expected.to have_attributes _testassoc_value: e2.id }
+
+        it "is included in update attributes" do
+          expect(subject.attributes_for_update).to \
+            include('testassoc@odata.bind' => e2.entity_id)
+        end
+      end
+    end
+  end
 end

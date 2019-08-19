@@ -151,6 +151,32 @@ module Bookings::Gitis
       def derive_primary_key
         model_name.to_s.downcase.split('::').last + 'id'
       end
+
+      def entity_association(attr_name, entity_type)
+        entity_attribute :"#{attr_name}@odata.bind"
+
+        define_method :"_#{attr_name}_value" do
+          send(:"#{attr_name}@odata.bind")&.gsub(/\A[^(]+\(([^)]+)\).*\z/, '\1')
+        end
+
+        define_method :"_#{attr_name}_value=" do |id_value|
+          if id_value.nil?
+            send :"#{attr_name}@odata.bind=", nil
+          elsif ID_FORMAT.match?(id_value)
+            send :"#{attr_name}@odata.bind=", "#{entity_type.entity_path}(#{id_value})"
+          else
+            raise InvalidEntityIdError
+          end
+        end
+
+        define_method :"#{attr_name}=" do |entity_or_value|
+          if entity_or_value.is_a? Bookings::Gitis::Entity
+            send :"#{attr_name}@odata.bind=", entity_or_value.entity_id
+          else
+            send :"_#{attr_name}_value=", entity_or_value
+          end
+        end
+      end
     end
   end
 end
