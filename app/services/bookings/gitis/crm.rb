@@ -43,13 +43,14 @@ module Bookings
         end
       end
 
-      def fetch(entity_type, filter: nil, limit: 10)
+      def fetch(entity_type, filter: nil, limit: 10, order: nil)
         params = {
           '$select' => entity_type.entity_attribute_names.to_a.join(','),
           '$top' => limit
         }
 
         params['$filter'] = filter if filter.present?
+        params['$orderby'] = order if order.present?
 
         records = api.get(entity_type.entity_path, params)['value']
 
@@ -64,8 +65,9 @@ module Bookings
 
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
-        find_possible_signin_contacts(email, 20)
-          .map(&Contact.method(:new))
+        filter = filter_pairs(emailaddress2: email, emailaddress1: email)
+
+        fetch(Contact, filter: filter, limit: 20, order: 'createdon desc')
           .find { |c| c.signin_attributes_match? firstname, lastname, date_of_birth }
           .tap { |c| crmlog "Read contact #{c.contactid}" if c }
       end
@@ -147,17 +149,6 @@ module Bookings
         api.get(entity_type.entity_path, params)['value'].map do |entity_data|
           entity_type.new entity_data
         end
-      end
-
-      def find_possible_signin_contacts(email, max)
-        filter = filter_pairs(emailaddress2: email, emailaddress1: email)
-        api.get(
-          'contacts',
-          '$top' => max,
-          '$select' => Contact.entity_attribute_names.to_a.join(','),
-          '$filter' => filter,
-          '$orderby' => 'createdon desc'
-        )['value']
       end
 
       def crmlog(msg)

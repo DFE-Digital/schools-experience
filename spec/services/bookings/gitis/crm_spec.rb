@@ -246,5 +246,20 @@ describe Bookings::Gitis::CRM, type: :model do
       subject { gitis.fetch(TestEntity, limit: 5) }
       it { is_expected.to eq(response) }
     end
+
+    context 'with entity and order' do
+      before do
+        expect(gitis.send(:api)).to receive(:get).
+          with(
+            'testentities',
+            '$top' => 5,
+            '$select' => selectattrs,
+            '$orderby' => 'createdon desc'
+          ).and_return('value' => [t1, t2, t3])
+      end
+
+      subject { gitis.fetch(TestEntity, limit: 5, order: 'createdon desc') }
+      it { is_expected.to eq(response) }
+    end
   end
 end
