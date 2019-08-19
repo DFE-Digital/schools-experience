@@ -11,9 +11,20 @@ RSpec.describe Bookings::RegistrationContactMapper do
   end
 
   describe "#registration_to_contact" do
-    let(:registration) { build(:registration_session) }
+    let(:registration) { build(:registration_session, :with_school) }
     let(:contact) { Bookings::Gitis::Contact.new }
+    let(:teachingsubjectid) do
+      Bookings::Subject.find_by!(
+        name: registration.teaching_preference.subject_first_choice
+      ).gitis_uuid
+    end
+    let(:teachingsubjectid2) do
+      Bookings::Subject.find_by!(
+        name: registration.teaching_preference.subject_second_choice
+      ).gitis_uuid
+    end
     let(:mapper) { described_class.new(registration, contact) }
+
     subject { mapper.registration_to_contact }
 
     it { is_expected.to have_attributes(firstname: registration.personal_information.first_name) }
@@ -27,7 +38,8 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(county: registration.contact_information.county) }
     it { is_expected.to have_attributes(postcode: registration.contact_information.postcode) }
     it { is_expected.to have_attributes(dfe_hasdbscertificate: registration.background_check.has_dbs_check) }
-    it "should copy more attributes over"
+    it { is_expected.to have_attributes(_dfe_teachingsubject01_value: teachingsubjectid) }
+    it { is_expected.to have_attributes(_dfe_teachingsubject02_value: teachingsubjectid2) }
   end
 
   describe "#contact_to_personal_information" do

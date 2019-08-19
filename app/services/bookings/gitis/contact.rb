@@ -15,6 +15,9 @@ module Bookings
       entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
+      entity_association :dfe_teachingsubject01, TeachingSubject
+      entity_association :dfe_teachingsubject02, TeachingSubject
+
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
       alias_attribute :building, :address1_line1
@@ -59,6 +62,9 @@ module Bookings
         self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
         self.dfe_hasdbscertificate    = @crm_data['dfe_hasdbscertificate']
         self.dfe_dateofissueofdbscertificate = @crm_data['dfe_dateofissueofdbscertificate']
+
+        self.dfe_teachingsubject01    = @crm_data['_dfe_teachingsubject01_value']
+        self.dfe_teachingsubject02    = @crm_data['_dfe_teachingsubject02_value']
 
         super # handles resetting dirty attributes
 

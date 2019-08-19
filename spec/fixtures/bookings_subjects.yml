@@ -1,32 +1,40 @@
 astronomy:
   name: Astronomy
+  gitis_uuid: <%= SecureRandom.uuid %>
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
 architecture:
   name: Architecture
+  gitis_uuid: <%= SecureRandom.uuid %>
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
 biology:
   name: Biology
+  gitis_uuid: <%= SecureRandom.uuid %>
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
 chemistry:
   name: Chemistry
+  gitis_uuid: <%= SecureRandom.uuid %>
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
 english:
   name: English
+  gitis_uuid: <%= SecureRandom.uuid %>
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
 maths:
   name: Maths
+  gitis_uuid: <%= SecureRandom.uuid %>
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
 physics:
   name: Physics
+  gitis_uuid: <%= SecureRandom.uuid %>
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
 history:
   name: History
+  gitis_uuid: <%= SecureRandom.uuid %>
   created_at: <%= Time.now.to_s(:db) %>
   updated_at: <%= Time.now.to_s(:db) %>
