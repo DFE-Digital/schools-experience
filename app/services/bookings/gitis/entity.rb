@@ -81,17 +81,23 @@ module Bookings::Gitis
       @attributes ||= {}
     end
 
+    def id
+      attributes[primary_key]
+    end
+
+    def id=(value)
+      attributes[primary_key] = value
+    end
+
     class InvalidEntityIdError < RuntimeError; end
 
     module ClassMethods
     protected
 
       def entity_id_attribute(attr_name)
-        define_method :"#{attr_name}" do
-          attributes[attr_name.to_s]
-        end
+        self.primary_key = attr_name.to_s
 
-        define_method :id do
+        define_method :"#{attr_name}" do
           attributes[attr_name.to_s]
         end
 
@@ -101,10 +107,6 @@ module Bookings::Gitis
           elsif attributes[attr_name.to_s].to_s != assigned_id.to_s
             fail IdChangedUnexpectedly
           end
-        end
-
-        define_method :id= do |value|
-          self.send(:"#{attr_name}=", value)
         end
       end
 
