@@ -3,12 +3,13 @@ require 'rails_helper'
 describe Candidates::Registrations::ContactInformationsController, type: :request do
   include_context 'Stubbed current_registration'
 
-  let :registration_session do
-    FactoryBot.build :registration_session, with: %i(personal_information)
-  end
-
+  let(:gitis_contact) { build(:gitis_contact, :persisted) }
 
   context 'without existing contact information in the session' do
+    let :registration_session do
+      FactoryBot.build :registration_session, with: %i(personal_information)
+    end
+
     context '#new' do
       before do
         get '/candidates/schools/11048/registrations/contact_information/new'
@@ -67,10 +68,10 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
   end
 
   context 'with existing contact information in gitis' do
-    let(:gitis_contact) { build(:gitis_contact, :persisted) }
-    before do
-      allow_any_instance_of(ActionDispatch::Request::Session).to \
-        receive(:[]).with(:gitis_contact).and_return(gitis_contact.attributes)
+    let :registration_session do
+      FactoryBot.build :gitis_registration_session,
+        gitis_contact: gitis_contact,
+        with: %i(personal_information)
     end
 
     context '#new' do
@@ -80,7 +81,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
       it 'populates the form with the values from gitis' do
         expect(assigns(:contact_information)).to have_attributes \
-          phone: gitis_contact.telephone1,
+          phone: gitis_contact.phone,
           postcode: gitis_contact.postcode
       end
 
@@ -91,6 +92,12 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
   end
 
   context 'with existing contact information in session' do
+    let :registration_session do
+      FactoryBot.build :gitis_registration_session,
+        gitis_contact: gitis_contact,
+        with: %i(personal_information)
+    end
+
     let :existing_contact_information do
       FactoryBot.build :contact_information
     end

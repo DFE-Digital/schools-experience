@@ -51,7 +51,9 @@ Rails.application.configure do
 
   # Use Redis for Session and cache
   config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
-  config.session_store :cache_store, key: 'schoolex-test-session'
+  config.session_store :cache_store,
+    key: 'schoolex-test-session',
+    expire_after: 1.hour # Sets explicit TTL for Session Redis keys
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
@@ -75,7 +77,8 @@ Rails.application.configure do
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
 
-  config.x.fake_crm = true
+  config.x.gitis.fake_crm = true
+  config.x.gitis.channel_creation = '0'
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 end

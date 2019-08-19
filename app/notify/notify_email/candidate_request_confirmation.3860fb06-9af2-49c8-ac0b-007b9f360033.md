@@ -2,7 +2,7 @@ Dear ((candidate_name))
 
 You've requested school experience at ((school_name)).
 
-^ The school will be in touch with you. For example, during term time this could typically mean within 2 weeks.
+^ The school will be in touch with you. Be aware, due to the summer holidays, they may not get in touch until at least late August or early September.
 
 # Your request details
 

@@ -60,15 +60,17 @@ describe Candidates::Registrations::SchoolSession do
   context '#current_registration' do
     context '1 school' do
       subject do
-        described_class.new school_urn_1, session
+        described_class.new(school_urn_1, session).current_registration
       end
 
       before do
-        subject.current_registration.save personal_information_1
+        subject.save personal_information_1
       end
 
+      it { is_expected.to be_kind_of Candidates::Registrations::RegistrationSession }
+
       it 'returns the current_registration' do
-        expect(subject.current_registration.personal_information).to eq \
+        expect(subject.personal_information).to eq \
           personal_information_1
       end
 
@@ -102,7 +104,7 @@ describe Candidates::Registrations::SchoolSession do
           personal_information_2
       end
 
-      it 'stores the registratiosn for each school seperatley' do
+      it 'stores the registrations for each school seperatley' do
         expect(session).to eq \
           "schools/#{school_urn_1}/registrations" => {
             'urn' => school_urn_1,
@@ -112,6 +114,32 @@ describe Candidates::Registrations::SchoolSession do
             'urn' => school_urn_2,
             personal_information_2.model_name.param_key => personal_information_2.attributes
           }
+      end
+    end
+
+    context 'with a gitis_contact' do
+      let(:gitis_contact) { build(:gitis_contact, :persisted) }
+
+      subject do
+        described_class.new(school_urn_1, session).current_registration(gitis_contact)
+      end
+
+      before do
+        subject.save personal_information_1
+      end
+
+      it { is_expected.to be_kind_of Candidates::Registrations::GitisRegistrationSession }
+
+      it 'returns the current_registration' do
+        expect(subject.personal_information.email).to eq gitis_contact.email
+      end
+
+      it 'stores the registration in the session' do
+        expect(session["schools/#{school_urn_1}/registrations"]).to \
+          include('urn' => school_urn_1)
+
+        expect(session["schools/#{school_urn_1}/registrations"]).to \
+          include(personal_information_1.model_name.param_key)
       end
     end
   end

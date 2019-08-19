@@ -17,6 +17,12 @@ if Object.const_defined?('RSpec')
         t.pattern = "./spec_external/*_spec.rb"
         t.rspec_opts = "--tag=write"
       end
+
+      desc "Run API Specs against external APIs, only update Contacts which we did not create"
+      RSpec::Core::RakeTask.new(update: "spec:prepare") do |t|
+        t.pattern = "./spec_external/*_spec.rb"
+        t.rspec_opts = "--tag=update"
+      end
     end
   end
 end

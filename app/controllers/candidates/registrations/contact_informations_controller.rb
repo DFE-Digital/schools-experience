@@ -2,7 +2,7 @@ module Candidates
   module Registrations
     class ContactInformationsController < RegistrationsController
       def new
-        @contact_information = ContactInformation.new attributes_from_session_or_gitis
+        @contact_information = ContactInformation.new attributes_from_session
       end
 
       def create
@@ -50,13 +50,6 @@ module Candidates
 
       def attributes_from_session
         current_registration.contact_information_attributes.except 'created_at'
-      end
-
-      def attributes_from_session_or_gitis
-        attrs = attributes_from_session
-        return attrs if attrs.any?
-
-        current_contact ? gitis_mapper.contact_to_contact_information : {}
       end
     end
   end
