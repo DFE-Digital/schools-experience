@@ -92,6 +92,10 @@ class Bookings::Profile < ApplicationRecord
       .capitalize
   end
 
+  def has_legacy_dbs_requirement?
+    dbs_requires_check.nil?
+  end
+
 private
 
   def at_least_one_phase
