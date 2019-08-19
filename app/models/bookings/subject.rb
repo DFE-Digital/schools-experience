@@ -13,4 +13,10 @@ class Bookings::Subject < ApplicationRecord
     class_name: "Bookings::School",
     through: :bookings_schools_subjects,
     source: :bookings_school
+
+  has_many :placement_date_subjects,
+    class_name: 'Bookings::PlacementDateSubject',
+    inverse_of: :bookings_subject,
+    foreign_key: :bookings_subject_id,
+    dependent: :destroy
 end

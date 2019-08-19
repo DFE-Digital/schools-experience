@@ -261,6 +261,17 @@ en:
             acceptance:
               accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
+        schools/placement_dates/configuration_form:
+          attributes:
+            available_for_all_subjects:
+              inclusion: 'Select if this date is available for all the subjects you offer'
+            has_limited_availability:
+              inclusion: 'Select if there is a maximum number of bookings you’ll accept for this date'
+            max_bookings_count:
+              not_a_number: "Enter a valid number for maximum number of bookings you'll accept for this date"
+            subjects:
+              blank: 'Select which subjects are available for this date'
+
   activerecord:
     errors:
       models:
@@ -343,6 +354,13 @@ en:
         times_flexible: 'Are your start and finish times flexible? '
       schools_on_boarding_experience_outline:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
+
+      schools_placement_dates_configuration_form:
+        has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
+        available_for_all_subjects: Is this date available for all the subjects you offer?
+
+      schools_placement_dates_subject_selection:
+        subject_ids: Select all that apply
 
       candidates_feedback:
         <<: *feedback_fieldset
@@ -513,6 +531,17 @@ en:
         acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a>'
       schools_on_boarding_key_stage_list:
         early_years: 'Early years foundation stage (EYFS)'
+
+      schools_placement_dates_configuration_form:
+        available_for_all_subjects:
+          true: 'Yes'
+          false: 'No'
+        has_limited_availability:
+          true: 'Yes'
+          false: 'No'
+        max_bookings_count: 'Enter maximum number of bookings.'
+      schools_placement_dates_subject_selection:
+        available_for_all_subjects: 'All subjects'
 
       candidates_feedback:
         <<: *feedback_label
