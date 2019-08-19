@@ -34,15 +34,15 @@ feature 'Candidate Registrations', type: :feature do
       receive(:uuid).and_return(uuid)
 
     allow(NotifyEmail::CandidateMagicLink).to receive :new do
-      double NotifyEmail::CandidateMagicLink, despatch!: true
+      double NotifyEmail::CandidateMagicLink, despatch_later!: true
     end
 
     allow(NotifyEmail::SchoolRequestConfirmation).to receive :new do
-      double NotifyEmail::SchoolRequestConfirmation, despatch!: true
+      double NotifyEmail::SchoolRequestConfirmation, despatch_later!: true
     end
 
     allow(NotifyEmail::CandidateRequestConfirmation).to receive :new do
-      double NotifyEmail::CandidateRequestConfirmation, despatch!: true
+      double NotifyEmail::CandidateRequestConfirmation, despatch_later!: true
     end
   end
 
@@ -85,8 +85,10 @@ feature 'Candidate Registrations', type: :feature do
     end
 
     context 'for unknown Candidate but Contact is in Gitis' do
+      include_context 'fake gitis with known uuid'
+
       let(:token) { create(:candidate_session_token) }
-      let(:email_address) { 'test@example.com' }
+      let(:email_address) { fake_gitis.send(:fake_contact_data)['emailaddress2'] }
 
       scenario "completing the Journey" do
         complete_personal_information_step
@@ -102,8 +104,11 @@ feature 'Candidate Registrations', type: :feature do
     end
 
     context 'for known Candidate not signed in' do
-      let(:token) { create(:candidate_session_token) }
-      let(:email_address) { 'test@example.com' }
+      include_context 'fake gitis with known uuid'
+
+      let(:email_address) { fake_gitis.send(:fake_contact_data)['emailaddress2'] }
+      let!(:candidate) { create(:candidate, :confirmed, gitis_uuid: fake_gitis_uuid) }
+      let(:token) { create(:candidate_session_token, candidate: candidate) }
 
       before do
         allow_any_instance_of(Candidates::Registrations::PersonalInformation).to \
@@ -168,7 +173,7 @@ feature 'Candidate Registrations', type: :feature do
         complete_contact_information_step
         sign_in_via_dashboard(newtoken.token)
         swap_back_to_education_step
-        get_bounced_to_personal_information_step
+        get_bounced_to_contact_information_step
       end
     end
   end
@@ -345,9 +350,9 @@ feature 'Candidate Registrations', type: :feature do
     visit "/candidates/schools/#{school_urn}/registrations/education/new"
   end
 
-  def get_bounced_to_personal_information_step
+  def get_bounced_to_contact_information_step
     visit "/candidates/schools/#{school_urn}/registrations/application_preview"
     expect(page.current_path).to eq \
-      "/candidates/schools/#{school_urn}/registrations/personal_information/new"
+      "/candidates/schools/#{school_urn}/registrations/contact_information/new"
   end
 end

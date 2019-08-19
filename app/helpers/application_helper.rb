@@ -47,7 +47,7 @@ module ApplicationHelper
   end
 
   def summary_row(key, value, change_path = nil, id: nil)
-    action = change_path ? link_to('Change', change_path) : ""
+    action = change_path ? link_to('Change', change_path, 'aria-label': "Change #{key}") : ""
 
     render \
       partial: "shared/list_row",

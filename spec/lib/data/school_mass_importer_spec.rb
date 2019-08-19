@@ -1,16 +1,14 @@
 require 'rails_helper'
 require 'csv'
-require File.join(Rails.root, "lib", "data", "school_importer")
+require File.join(Rails.root, "lib", "data", "school_mass_importer")
 
-describe SchoolImporter do
+describe SchoolMassImporter do
+  before do
+    allow(STDOUT).to receive(:puts).and_return(true)
+    allow_any_instance_of(Kernel).to receive(:print).and_return(nil)
+  end
+
   context 'Initialization' do
-    let(:tpuk_data) do
-      CSV.parse(
-        File.read(File.join(Rails.root, 'spec', 'sample_data', 'tpuk.csv')).scrub,
-        headers: true
-      )
-    end
-
     let(:edubase_data) do
       CSV.parse(
         File.read(File.join(Rails.root, 'spec', 'sample_data', 'edubase.csv')).scrub,
@@ -18,16 +16,8 @@ describe SchoolImporter do
       )
     end
 
-    context 'URNS' do
-      subject { SchoolImporter.new(tpuk_data, []) }
-
-      specify 'should remove markers from URN list' do
-        expect(subject.tpuk_data.keys).to eql([100492, 100494, 100171])
-      end
-    end
-
     context 'EduBase Data' do
-      subject { SchoolImporter.new([], edubase_data).edubase_data }
+      subject { SchoolMassImporter.new([], edubase_data).edubase_data }
 
       specify 'should convert to a hash' do
         expect(subject).to be_a(Hash)
@@ -49,23 +39,23 @@ describe SchoolImporter do
       before do
         # note these values are present in spec/sample_data/edubase.csv
         {
-         1 => 'Early years',
-         2 => 'Primary (4 to 11)',
-         4 => 'Secondary (11 to 16)',
-         6 => '16 to 18',
-         7 => 'All through'
+          1 => 'Early years',
+          2 => 'Primary (4 to 11)',
+          4 => 'Secondary (11 to 16)',
+          6 => '16 to 18',
+          7 => 'All through'
         }.each do |i, name|
           create(:bookings_phase, name: name, edubase_id: i)
         end
         create(:bookings_school_type, edubase_id: school_type_id)
       end
 
-      subject { SchoolImporter.new(tpuk_data, edubase_data) }
+      subject { SchoolMassImporter.new(edubase_data) }
 
       before { subject.import }
 
       specify 'it should import the correct number of rows' do
-        expect(Bookings::School.count).to eql(count_before + subject.tpuk_data.keys.size)
+        expect(Bookings::School.count).to eql(count_before + edubase_data.size)
       end
 
       specify 'the new records should have the correct attributes' do
@@ -79,7 +69,7 @@ describe SchoolImporter do
             town: "London",
             county: nil,
             postcode: "W10 5EF",
-            contact_email: "email.100492@school.org"
+            contact_email: nil
           },
           100494 => {
             name: "Saint Francis of Assisi Catholic Primary School",
@@ -90,7 +80,7 @@ describe SchoolImporter do
             town: "London",
             county: nil,
             postcode: "W11 4BJ",
-            contact_email: "email.100494@school.org"
+            contact_email: nil
           }
         }.each do |urn, attributes|
           Bookings::School.find_by(urn: urn).tap do |school|
@@ -106,12 +96,6 @@ describe SchoolImporter do
         specify 'invalid websites should raise errors' do
           expect { subject.send(:cleanup_website, 101010, "invalidcom") }.to raise_error(
             RuntimeError, "invalid hostname for 101010, invalidcom"
-          )
-        end
-
-        specify 'invalid protocols should raise errors' do
-          expect { subject.send(:cleanup_website, 101010, "httpppp://invalid.com") }.to raise_error(
-            RuntimeError, "invalid website for 101010, httpppp://invalid.com"
           )
         end
       end
@@ -137,7 +121,7 @@ describe SchoolImporter do
 
       context 'Overriding email addresses' do
         let(:email_override) { "someone@someschool.org" }
-        subject { SchoolImporter.new(tpuk_data, edubase_data, email_override) }
+        subject { SchoolMassImporter.new(edubase_data, email_override) }
 
         specify "all emails should be set to the override email address" do
           Bookings::School.all.each do |school|

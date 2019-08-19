@@ -29,8 +29,9 @@
 
    policy.connect_src :self, "https://*.visualstudio.com"
    policy.img_src :self, "https://www.google-analytics.com"
+   policy.object_src :none
    policy.script_src :self, "'unsafe-inline'",
      "https://www.googletagmanager.com",
      "https://www.google-analytics.com",
-     "https://*.vo.msecnd.net"
+     "https://az416426.vo.msecnd.net" # needed for App Insights
  end

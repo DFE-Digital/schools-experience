@@ -94,7 +94,15 @@ end
 
 Then("I should see the following summary rows:") do |table|
   table.hashes.each do |row|
-    within(".#{row['Heading'].tr(' ', '-').downcase}") do
+    heading_selector = row['Heading'].tr(' ', '-').downcase
+
+    if page.has_selector? ".#{heading_selector}"
+      row_selector = ".#{heading_selector}"
+    else
+      row_selector = "##{heading_selector}"
+    end
+
+    within row_selector do
       expect(page).to have_css('dd', text: row['Value'])
       if row['Change link path'].present?
         expect(page).to have_link('Change', href: /#{row['Change link path']}/)

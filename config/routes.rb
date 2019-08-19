@@ -68,7 +68,9 @@ Rails.application.routes.draw do
         resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
           resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
         end
+        resource :date, only: %i(edit update show), controller: 'confirmed_bookings/date'
       end
+      resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
     end
 
     resource :availability_preference, only: %i(edit update)
@@ -155,4 +157,9 @@ Rails.application.routes.draw do
     resources :feedbacks, only: %i(new create show)
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
+
+
+  if Rails.application.config.x.delayed_job_admin_enabled
+    match "/admin/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
+  end
 end

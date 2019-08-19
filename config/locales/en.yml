@@ -301,6 +301,8 @@ en:
     fieldset:
       schools_placement_requests_confirm_booking:
         date: Confirm experience date
+      bookings_booking:
+        date: Booking date
       bookings_school:
         enabled: Turn requests on or off
         availability_preference_fixed: Change how dates are displayed

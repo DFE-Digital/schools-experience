@@ -3,8 +3,6 @@ module Candidates
     class SendEmailConfirmationJob < ApplicationJob
       queue_as :default
 
-      retry_on Notify::RetryableError, wait: A_DECENT_AMOUNT_LONGER, attempts: 5
-
       def perform(uuid, host)
         registration_session = RegistrationStore.instance.retrieve! uuid
 
@@ -13,7 +11,7 @@ module Candidates
           school_name: registration_session.school.name,
           confirmation_link: confirmation_link(uuid, host)
 
-        notification.despatch!
+        notification.despatch_later!
       end
 
     private

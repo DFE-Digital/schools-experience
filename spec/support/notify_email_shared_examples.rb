@@ -16,7 +16,7 @@ shared_examples_for "email template" do |template_id, personalisation|
   end
 
   before do
-    allow(subject).to receive(:notify_client).and_return(NotifyFakeClient.new)
+    allow(NotifyService.instance).to receive(:notification_class) { NotifyFakeClient }
   end
 
   specify 'should inherit from Notify' do
@@ -48,47 +48,21 @@ shared_examples_for "email template" do |template_id, personalisation|
   end
 
   describe 'Methods' do
-    describe '#despatch!' do
-      context 'successfully sending emails' do
-        after { subject.despatch! }
-
-        specify 'should call @notify_client.send_email with correct args' do
-          expect(subject.notify_client).to receive(:send_email).with(
-            template_id: subject.send(:template_id),
-            email_address: to,
-            personalisation: personalisation
-          )
-        end
-      end
-
-      # https://docs.notifications.service.gov.uk/ruby.html#error-codes
-      context 'when Notify is unable to process a request' do
-        let(:nc) { subject.notify_client }
-        let(:error_message) { "500, something went wrong" }
-        before do
-          allow(nc).to receive(:send_email).and_raise(
-            Notifications::Client::ServerError,
-            OpenStruct.new(body: error_message)
-          )
-        end
-
-        specify 'should raise a RetryableError' do
-          expect { subject.despatch! }.to raise_error(Notify::RetryableError, error_message)
-        end
-      end
-    end
-
     describe '#despatch_later!' do
-      specify { expect(subject).to respond_to(:despatch_later!) }
-
       before do
         allow(NotifyJob).to receive(:perform_later).and_return(true)
       end
 
       before { subject.despatch_later! }
 
-      specify 'should call @notify_client.send_email with correct args' do
-        expect(NotifyJob).to have_received(:perform_later).with(subject)
+      specify 'it enqueues the email delivery job' do
+        subject.to.each do |address|
+          expect(NotifyJob).to have_received(:perform_later).with(
+            to: address,
+            template_id: subject.send(:template_id),
+            personalisation_json: subject.send(:personalisation).to_json
+          )
+        end
       end
     end
   end

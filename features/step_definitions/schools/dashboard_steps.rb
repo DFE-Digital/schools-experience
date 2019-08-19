@@ -42,7 +42,7 @@ Given("there are {int} new candidate attendances") do |qty|
 end
 
 Then("the {string} should be {int}") do |string, int|
-  expect(page).to have_css("svg#%<id>s" % { id: string.tr(' ', '-') }, text: int.to_s)
+  expect(page).to have_css("div#%<id>s" % { id: string.tr(' ', '-') }, text: int.to_s)
 end
 
 Given("my school has not yet fully-onboarded") do

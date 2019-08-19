@@ -15,12 +15,12 @@ Feature: Contact Information
     Scenario: Form contents
         Given I am on the 'Enter your contact details' page for my school of choice
         Then I should see a form with the following fields:
-            | Label               | Type  |
-            | UK telephone number | tel   |
-            | Building and street | text  |
-            | Town or city        | text  |
-            | County              | text  |
-            | Postcode            | text  |
+            | Label               | Type | Autocompletion      |
+            | UK telephone number | tel  | on                  |
+            | Building and street | text | home address-line1  |
+            | Town or city        | text | home address-level2 |
+            | County              | text | home address-level1 |
+            | Postcode            | text | home postal-code    |
 
     Scenario: Submitting my data
       Given I am on the 'Enter your contact details' page for my school of choice

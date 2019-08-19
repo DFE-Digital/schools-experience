@@ -28,6 +28,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "candidates signin" => [:candidates_signin_path],
     "candidates signin confirm" => [:candidates_signin_confirmation_path, session_token],
     "new candidates feedback" => [:new_candidates_feedback_path],
+    "candidate school" => [:candidates_school_path, school],
 
     #school paths
     "schools" => [:schools_path],
@@ -35,6 +36,8 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "bookings" => [:schools_bookings_path],
     "upcoming bookings" => [:schools_upcoming_bookings_path],
     "booking" => [:schools_booking_path, booking_id],
+    "change booking date" => [:edit_schools_booking_date_path, booking_id],
+    "booking date changed" => [:schools_booking_date_path, booking_id],
     "placement requests" => [:schools_placement_requests_path],
     "cancel booking" => [:new_schools_booking_cancellation_path, booking_id],
     "upcoming requests" => [:schools_upcoming_requests_path],
@@ -69,6 +72,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "toggle requests" => [:edit_schools_enabled_path],
     "not registered error" => [:schools_errors_not_registered_path],
     "change school" => [:new_schools_switch_path],
+    "confirm attendance" => [:schools_confirm_attendance_path],
     "new schools feedback" => [:new_schools_feedback_path]
   }
 

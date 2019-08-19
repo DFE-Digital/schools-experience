@@ -21,6 +21,7 @@
 #)
 
 require Rails.root.join('lib', 'geocoder_autoexpire_cache')
+require File.join('geocoder', 'lookups', 'bing')
 
 defaults = {
   units: :miles,
@@ -37,3 +38,11 @@ if ENV['BING_MAPS_KEY'].present?
 else
   Geocoder.configure(defaults)
 end
+
+module BingOverrideURLParams
+  def query_url_params(query)
+    super.merge(c: 'en-gb')
+  end
+end
+
+Geocoder::Lookup::Bing.prepend(BingOverrideURLParams)

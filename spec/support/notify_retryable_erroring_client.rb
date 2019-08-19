@@ -1,4 +1,4 @@
-class NotifyErroringClient
+class NotifyRetryableErroringClient
   def initialize(api_key = nil); end
 
   def send_email(*_args)

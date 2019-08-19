@@ -8,7 +8,7 @@ require 'cucumber/rails'
 require 'selenium/webdriver'
 require 'capybara-screenshot/cucumber'
 
-Rails.application.config.x.fake_crm = true
+Rails.application.config.x.gitis.fake_crm = true
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -85,14 +85,13 @@ Capybara.register_driver :chrome do |app|
 end
 
 Capybara.register_driver :chrome_headless do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: %w(headless disable-gpu) }
-  )
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.headless!
 
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
-    desired_capabilities: capabilities
+    options: options
   )
 end
 
