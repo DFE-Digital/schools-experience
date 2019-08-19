@@ -89,6 +89,12 @@ module Bookings::Gitis
       attributes[primary_key] = value
     end
 
+    def ==(other)
+      return false unless other.is_a? self.class
+
+      other.id == self.id
+    end
+
     class InvalidEntityIdError < RuntimeError; end
 
     module ClassMethods

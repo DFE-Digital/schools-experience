@@ -150,6 +150,20 @@ RSpec.describe Bookings::Gitis::Entity do
     end
   end
 
+  describe '#==' do
+    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+
+    context 'with matching id' do
+      let(:e2) { TestEntity.new('testentityid' => 10, 'firstname' => 'x', 'lastname' => 'y') }
+      it { expect(entity == e2).to be true }
+    end
+
+    context 'with matching attributes but different id' do
+      let(:e2) { TestEntity.new('testentityid' => 1, 'firstname' => 'test', 'lastname' => 'user') }
+      it { expect(entity == e2).to be false }
+    end
+  end
+
   describe "private attributes" do
     it { expect(TestEntity.entity_attribute_names).to include('hidden') }
     it { expect(TestEntity.respond_to?('hidden')).to be false }
