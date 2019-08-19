@@ -72,9 +72,10 @@ Feature: School show page (enhanced data)
         When I am on the profile page for the chosen school
         Then the availability information in the sidebar should read 'No information supplied'
     
+    @dbs_requirement_feature
     Scenario: DBS Check info (sidebar)
         Given I am on the profile page for the chosen school
-        Then the DBS Check information in the sidebar should read 'No - Candidates will be accompanied at all times'
+        Then the DBS Check information in the sidebar should show the correct details
     
     Scenario: Admin Fees information (sidebar)
         Given the school charges a 'administration' fee of '10.00' for 'general overheads'
