@@ -139,11 +139,11 @@ module Bookings::Gitis
       end
 
       def derive_entity_path
-        model_name.to_s.underscore.split('/').last.pluralize
+        model_name.to_s.downcase.split('::').last.pluralize
       end
 
       def derive_primary_key
-        model_name.to_s.underscore.split('/').last + 'id'
+        model_name.to_s.downcase.split('::').last + 'id'
       end
     end
   end

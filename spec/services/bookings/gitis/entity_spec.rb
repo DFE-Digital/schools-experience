@@ -1,45 +1,29 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::Gitis::Entity do
-  class Stub
-    include Bookings::Gitis::Entity
+  include_context 'test entity'
 
-    entity_id_attribute :stubid
-    entity_attributes :firstname, :lastname
-    entity_attributes :hidden, internal: true
-    entity_attributes :notcreate, except: :create
-    entity_attributes :notupdate, except: :update
-
-    def initialize(data = {})
-      self.stubid = data['stubid']
-      self.firstname = data['firstname']
-      self.lastname = data['lastname']
-
-      super
-    end
-  end
-
-  subject { Stub.new('firstname' => 'test', 'lastname' => 'user') }
+  subject { TestEntity.new('firstname' => 'test', 'lastname' => 'user') }
 
   describe ".entity_path" do
-    subject { Stub.entity_path }
-    it { is_expected.to eq('stubs') }
+    subject { TestEntity.entity_path }
+    it { is_expected.to eq('testentities') }
   end
 
   describe ".primary_key" do
-    subject { Stub.primary_key }
-    it { is_expected.to eq('stubid') }
+    subject { TestEntity.primary_key }
+    it { is_expected.to eq('testentityid') }
   end
 
   describe ".entity_attribute_names" do
-    subject { Stub.entity_attribute_names }
+    subject { TestEntity.entity_attribute_names }
     it { is_expected.to eq Set.new %w{firstname lastname hidden notcreate notupdate} }
   end
 
   describe "#attributes" do
     it do
       expect(subject.send(:attributes)).to \
-        eq('firstname' => 'test', 'lastname' => 'user', 'stubid' => nil)
+        eq('firstname' => 'test', 'lastname' => 'user', 'testentityid' => nil)
     end
   end
 
@@ -50,12 +34,12 @@ RSpec.describe Bookings::Gitis::Entity do
 
   describe '#persisted?' do
     context 'with persisted?' do
-      subject { Stub.new('stubid' => SecureRandom.uuid) }
+      subject { TestEntity.new('testentityid' => SecureRandom.uuid) }
       it { is_expected.to be_persisted }
     end
 
     context 'with unpersisted?' do
-      subject { Stub.new('firstname' => 'test') }
+      subject { TestEntity.new('firstname' => 'test') }
       it { is_expected.not_to be_persisted }
     end
   end
@@ -76,8 +60,8 @@ RSpec.describe Bookings::Gitis::Entity do
 
     context 'for persisted object' do
       subject do
-        Stub.new(
-          'stubid' => SecureRandom.uuid,
+        TestEntity.new(
+          'testentityid' => SecureRandom.uuid,
           'firstname' => 'Test',
           'lastname' => 'User'
         )
@@ -102,7 +86,7 @@ RSpec.describe Bookings::Gitis::Entity do
     before { subject.id = uuid }
 
     it "will include uuid and entity_path" do
-      expect(subject).to have_attributes('entity_id' => "stubs(#{uuid})")
+      expect(subject).to have_attributes('entity_id' => "testentities(#{uuid})")
     end
   end
 
@@ -110,7 +94,7 @@ RSpec.describe Bookings::Gitis::Entity do
     let(:uuid) { SecureRandom.uuid }
 
     context "with expected format" do
-      before { subject.entity_id = "stubs(#{uuid})" }
+      before { subject.entity_id = "testentities(#{uuid})" }
 
       it "will set the id" do
         expect(subject.id).to eq(uuid)
@@ -133,33 +117,33 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe "#attributes_for_create" do
-    let(:stub) { Stub.new('stubid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
-    subject { stub.attributes_for_create }
+    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+    subject { entity.attributes_for_create }
 
-    it { is_expected.not_to include('stubid') }
+    it { is_expected.not_to include('testentityid') }
     it { is_expected.not_to include('id') }
     it { is_expected.to include('firstname' => 'test') }
     it { is_expected.to include('lastname' => 'user') }
   end
 
   describe "#attributes_for_update" do
-    let(:stub) { Stub.new('stubid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
-    subject { stub.attributes_for_update }
+    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+    subject { entity.attributes_for_update }
 
-    it { is_expected.not_to include('stubid') }
+    it { is_expected.not_to include('testentityid') }
     it { is_expected.not_to include('id') }
     it { is_expected.not_to include('firstname' => 'test') }
     it { is_expected.not_to include('lastname' => 'user') }
 
     context 'with changes' do
-      let(:stub) do
-        Stub.new('stubid' => 10, 'firstname' => 'test', 'lastname' => 'user').tap do |stub|
-          stub.firstname = 'changed'
-          stub.lastname = 'changed'
+      let(:entity) do
+        TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user').tap do |entity|
+          entity.firstname = 'changed'
+          entity.lastname = 'changed'
         end
       end
 
-      it { is_expected.not_to include('stubid') }
+      it { is_expected.not_to include('testentityid') }
       it { is_expected.not_to include('id') }
       it { is_expected.to include('firstname' => 'changed') }
       it { is_expected.to include('lastname' => 'changed') }
@@ -167,19 +151,19 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe "private attributes" do
-    it { expect(Stub.entity_attribute_names).to include('hidden') }
-    it { expect(Stub.respond_to?('hidden')).to be false }
-    it { expect(Stub.respond_to?('hidden=')).to be false }
+    it { expect(TestEntity.entity_attribute_names).to include('hidden') }
+    it { expect(TestEntity.respond_to?('hidden')).to be false }
+    it { expect(TestEntity.respond_to?('hidden=')).to be false }
   end
 
   describe "exclude: :create attributes" do
-    subject { Stub.new.tap { |s| s.notcreate = 'test' } }
+    subject { TestEntity.new.tap { |s| s.notcreate = 'test' } }
     it { expect(subject.attributes_for_create).not_to include('notcreate' => 'test') }
     it { expect(subject.attributes_for_update).to include('notcreate' => 'test') }
   end
 
   describe "exclude: :update attributes" do
-    subject { Stub.new.tap { |s| s.notupdate = 'test' } }
+    subject { TestEntity.new.tap { |s| s.notupdate = 'test' } }
     it { expect(subject.attributes_for_create).to include('notupdate' => 'test') }
     it { expect(subject.attributes_for_update).not_to include('notupdate' => 'test') }
   end
