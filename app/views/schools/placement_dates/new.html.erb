@@ -20,6 +20,7 @@
 </p>
 
 <%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |form| %>
+  <%= GovukElementsErrorsHelper.error_summary form.object, 'There is a problem', '' %>
   <%= form.date_field :date, heading: true %>
   <%= form.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true } %>
   <%= form.submit 'Continue' %>

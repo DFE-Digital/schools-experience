@@ -1,11 +1,18 @@
 require 'rails_helper'
 
 describe Bookings::PlacementDate, type: :model do
+  let! :school do
+    create :bookings_school, :with_subjects, subject_count: 3
+  end
+
   describe 'Columns' do
     it { is_expected.to have_db_column(:bookings_school_id).of_type(:integer) }
     it { is_expected.to have_db_column(:date).of_type(:date) }
     it { is_expected.to have_db_column(:duration).of_type(:integer) }
     it { is_expected.to have_db_column(:active).of_type(:boolean) }
+    it { is_expected.to have_db_column(:max_bookings_count).of_type(:integer) }
+    it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:subject_specific).of_type(:boolean).with_options(default: false, null: false) }
   end
 
   describe 'Validation' do
@@ -70,6 +77,48 @@ describe Bookings::PlacementDate, type: :model do
           )
       end
       it { expect(subject).to validate_presence_of(:duration) }
+    end
+
+    context '#max_bookings_count' do
+      before { subject.published_at = Date.today }
+      it do
+        is_expected.to \
+          validate_numericality_of(:max_bookings_count).is_greater_than(0).allow_nil
+      end
+    end
+
+    context '#subjects' do
+      context 'published' do
+        before { subject.published_at = Date.today }
+
+        context 'when not subject_specific?' do
+          before { subject.subject_specific = false }
+
+          it { is_expected.to validate_absence_of(:subjects) }
+        end
+
+        context 'when subject_specific?' do
+          before { subject.subject_specific = true }
+
+          it { is_expected.to validate_presence_of(:subjects) }
+        end
+      end
+
+      context 'unpublished' do
+        before { subject.published_at = nil }
+
+        context 'when not subject_specific?' do
+          before { subject.subject_specific = false }
+
+          it { is_expected.not_to validate_absence_of(:subjects) }
+        end
+
+        context 'when subject_specific?' do
+          before { subject.subject_specific = true }
+
+          it { is_expected.not_to validate_presence_of(:subjects) }
+        end
+      end
     end
   end
 
@@ -142,8 +191,53 @@ describe Bookings::PlacementDate, type: :model do
 
     context '.available' do
       after { described_class.available }
-      specify 'should combine the future, active and in_date_order scopes' do
-        expect(described_class).to receive_message_chain(:active, :future, :in_date_order)
+      specify 'should combine the future, active, published, and in_date_order scopes' do
+        expect(described_class).to receive_message_chain(:published, :active, :future, :in_date_order)
+      end
+    end
+
+    context '.published' do
+      let!(:published) { create :bookings_placement_date }
+      let!(:un_publised) { create :bookings_placement_date, published_at: nil }
+
+      specify 'should return only the published placement_dates' do
+        expect(described_class.published).to match_array [published]
+      end
+    end
+  end
+
+  context '#has_limited_availability?' do
+    context 'when max_bookings_count' do
+      before { subject.max_bookings_count = 7 }
+
+      it 'returns true' do
+        expect(subject.has_limited_availability?).to be true
+      end
+    end
+
+    context 'when no max_bookings_count' do
+      before { subject.max_bookings_count = nil }
+
+      it 'returns false' do
+        expect(subject.has_limited_availability?).to be false
+      end
+    end
+  end
+
+  context '#published?' do
+    context 'when published_at is set' do
+      before { subject.published_at = DateTime.now }
+
+      it 'returns true' do
+        expect(subject.published?).to be true
+      end
+    end
+
+    context 'when published_at is not set' do
+      before { subject.published_at = nil }
+
+      it 'returns false' do
+        expect(subject.published?).to be false
       end
     end
   end

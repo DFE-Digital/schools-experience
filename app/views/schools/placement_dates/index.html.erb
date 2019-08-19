@@ -19,6 +19,7 @@
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Date</th>
             <th class="govuk-table__header" scope="col">Duration</th>
+            <th class="govuk-table__header" scope="col">Subjects</th>
             <th class="govuk-table__header" scope="col">Status</th>
             <th class="govuk-table__header" scope="col"></th>
           </tr>
@@ -32,6 +33,13 @@
             </th>
             <td class="govuk-table__cell">
               <%= pluralize(placement_date.duration, 'day') %>
+            </td>
+            <td class="govuk-table__cell">
+              <% if placement_date.subject_specific? %>
+                <%= placement_date.subjects.pluck(:name).join(',') %>
+              <% else %>
+                All subjects
+              <% end %>
             </td>
             <td class="govuk-table__cell status">
               <strong class="govuk-tag <%= placement_date_display_class(placement_date.active) %>">
