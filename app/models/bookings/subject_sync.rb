@@ -2,8 +2,8 @@ module Bookings
   class SubjectSync
     LIMIT = 400
 
-    def self.synchronize(crm)
-      new(crm).synchronize
+    def self.synchronise(crm)
+      new(crm).synchronise
     end
 
     def initialize(crm)
