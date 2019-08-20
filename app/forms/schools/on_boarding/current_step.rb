@@ -45,8 +45,6 @@ module Schools
     private
 
       def dbs_requirement_required?
-        return false unless Rails.application.config.x.features.include? :dbs_requirement
-
         !@school_profile.dbs_requirement.dup.valid?
       end
 

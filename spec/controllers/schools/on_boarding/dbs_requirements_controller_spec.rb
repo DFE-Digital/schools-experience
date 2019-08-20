@@ -4,8 +4,6 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 describe Schools::OnBoarding::DbsRequirementsController, type: :request do
   include_context "logged in DfE user"
 
-  before { enable_feature :dbs_requirement }
-
   context '#new' do
     let! :school_profile do
       create :school_profile

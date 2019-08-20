@@ -60,7 +60,7 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.candidate_requirement).to eq \
+        expect(school_profile.reload.candidate_requirement).to eq_model \
           candidate_requirement
       end
 
@@ -129,7 +129,7 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
 
       it 'updates the school_profile' do
         expect(school_profile.reload.candidate_requirement).to \
-          eq candidate_requirement
+          eq_model candidate_requirement
       end
 
       it 'redirects to the school_profile' do

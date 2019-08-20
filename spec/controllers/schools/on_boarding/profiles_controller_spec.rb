@@ -11,23 +11,8 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
         FactoryBot.create :school_profile
       end
 
-      context 'when dbs_requirement feature is not enabled' do
-        before do
-          get '/schools/on_boarding/profile'
-        end
-
-        it 'redirects to the first incompleted step' do
-          expect(response).to \
-            redirect_to '/schools/on_boarding/candidate_requirement/new'
-        end
-      end
-
       context 'when dbs_requirement feature is enabled' do
-        before do
-          enable_feature :dbs_requirement
-
-          get '/schools/on_boarding/profile'
-        end
+        before { get '/schools/on_boarding/profile' }
 
         it 'redirects to the first incompleted step' do
           expect(response).to \
