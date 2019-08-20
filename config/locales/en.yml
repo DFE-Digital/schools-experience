@@ -333,6 +333,12 @@ en:
         administration_fees: Administration costs
         dbs_fees: DBS check costs
         other_fees: Other costs
+      schools_on_boarding_phases_list:
+        title: Select school experience phases
+      schools_on_boarding_key_stage_list:
+        title: Confirm number of primary key stages
+      schools_on_boarding_subject_list:
+        title: Select school experience subjects
       schools_on_boarding_specialism:
         has_specialism_html: >
           <p>
