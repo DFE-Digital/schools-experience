@@ -28,7 +28,7 @@ private
 
   def sync_disabled?
     disabled = ENV.fetch('GIAS_SYNC_DISABLED') { false }
-    disabled.in?(%w(1 true yes))
+    disabled.to_s.in?(%w(1 true yes))
   end
 
   # import any school records that aren't currently in our db
