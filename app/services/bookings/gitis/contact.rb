@@ -15,6 +15,8 @@ module Bookings
       entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
+      entity_association :ownerid, Team
+      entity_association :dfe_Country, Country
       entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
       entity_association :dfe_PreferredTeachingSubject02, TeachingSubject
 
@@ -31,11 +33,11 @@ module Bookings
 
       class << self
         def default_owner
-          "teams(#{Rails.application.config.x.gitis.owner_id})"
+          Rails.application.config.x.gitis.owner_id
         end
 
         def default_country
-          "dfe_countries(#{Rails.application.config.x.gitis.country_id})"
+          Rails.application.config.x.gitis.country_id
         end
 
         def channel_creation
@@ -62,7 +64,8 @@ module Bookings
         self.dfe_channelcreation              = @crm_data['dfe_channelcreation'] || self.class.channel_creation
         self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
         self.dfe_dateofissueofdbscertificate  = @crm_data['dfe_dateofissueofdbscertificate']
-
+        self.ownerid                          = @crm_data['_ownerid_value'] || default_owner
+        self.dfe_Country                      = @crm_data['_dfe_countryid_value'] || default_country
         self.dfe_PreferredTeachingSubject01   = @crm_data['_dfe_preferredteachingsubject01_value']
         self.dfe_PreferredTeachingSubject02   = @crm_data['_dfe_preferredteachingsubject02_value']
 
@@ -153,13 +156,6 @@ module Bookings
         firstname.downcase == fname && lastname.downcase == lname ||
           firstname.downcase == fname && birthdate == gitis_format_dob ||
           lastname.downcase == lname && birthdate == gitis_format_dob
-      end
-
-      def attributes_for_create
-        super.merge(
-          'ownerid@odata.bind' => default_owner,
-          'dfe_Country@odata.bind' => default_country
-        )
       end
     end
   end
