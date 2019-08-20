@@ -41,8 +41,6 @@ module Schools
 
       def candidate_requirement_params
         params.require(:schools_on_boarding_candidate_requirement).permit \
-          :dbs_requirement,
-          :dbs_policy,
           :requirements,
           :requirements_details
       end

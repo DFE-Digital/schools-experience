@@ -270,16 +270,6 @@ describe Schools::SchoolProfile, type: :model do
         model.candidate_requirement = form_model
       end
 
-      it 'sets candidate_requirement_dbs_requirement' do
-        expect(model.candidate_requirement_dbs_requirement).to eq \
-          form_model.dbs_requirement
-      end
-
-      it 'sets candidate_requirement_dbs_policy' do
-        expect(model.candidate_requirement_dbs_policy).to eq \
-          form_model.dbs_policy
-      end
-
       it 'sets candidate_requirement_requirements' do
         expect(model.candidate_requirement_requirements).to eq \
           form_model.requirements
