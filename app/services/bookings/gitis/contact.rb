@@ -15,8 +15,8 @@ module Bookings
       entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
-      entity_association :dfe_teachingsubject01, TeachingSubject
-      entity_association :dfe_teachingsubject02, TeachingSubject
+      entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
+      entity_association :dfe_PreferredTeachingSubject02, TeachingSubject
 
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
@@ -44,27 +44,27 @@ module Bookings
       end
 
       def initialize(crm_contact_data = {})
-        @crm_data                     = crm_contact_data.stringify_keys
-        self.contactid                = @crm_data['contactid']
-        self.firstname                = @crm_data['firstname']
-        self.lastname                 = @crm_data['lastname']
-        self.emailaddress1            = @crm_data['emailaddress1']
-        self.emailaddress2            = @crm_data['emailaddress2']
-        self.telephone1               = @crm_data['telephone1']
-        self.telephone2               = @crm_data['telephone2']
-        self.address1_line1           = @crm_data['address1_line1']
-        self.address1_line2           = @crm_data['address1_line2']
-        self.address1_line3           = @crm_data['address1_line3']
-        self.address1_city            = @crm_data['address1_city']
-        self.address1_stateorprovince = @crm_data['address1_stateorprovince']
-        self.address1_postalcode      = @crm_data['address1_postalcode']
-        self.birthdate                = @crm_data['birthdate']
-        self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
-        self.dfe_hasdbscertificate    = @crm_data['dfe_hasdbscertificate']
-        self.dfe_dateofissueofdbscertificate = @crm_data['dfe_dateofissueofdbscertificate']
+        @crm_data                             = crm_contact_data.stringify_keys
+        self.contactid                        = @crm_data['contactid']
+        self.firstname                        = @crm_data['firstname']
+        self.lastname                         = @crm_data['lastname']
+        self.emailaddress1                    = @crm_data['emailaddress1']
+        self.emailaddress2                    = @crm_data['emailaddress2']
+        self.telephone1                       = @crm_data['telephone1']
+        self.telephone2                       = @crm_data['telephone2']
+        self.address1_line1                   = @crm_data['address1_line1']
+        self.address1_line2                   = @crm_data['address1_line2']
+        self.address1_line3                   = @crm_data['address1_line3']
+        self.address1_city                    = @crm_data['address1_city']
+        self.address1_stateorprovince         = @crm_data['address1_stateorprovince']
+        self.address1_postalcode              = @crm_data['address1_postalcode']
+        self.birthdate                        = @crm_data['birthdate']
+        self.dfe_channelcreation              = @crm_data['dfe_channelcreation'] || self.class.channel_creation
+        self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
+        self.dfe_dateofissueofdbscertificate  = @crm_data['dfe_dateofissueofdbscertificate']
 
-        self.dfe_teachingsubject01    = @crm_data['_dfe_teachingsubject01_value']
-        self.dfe_teachingsubject02    = @crm_data['_dfe_teachingsubject02_value']
+        self.dfe_PreferredTeachingSubject01   = @crm_data['_dfe_preferredteachingsubject01_value']
+        self.dfe_PreferredTeachingSubject02   = @crm_data['_dfe_preferredteachingsubject02_value']
 
         super # handles resetting dirty attributes
 

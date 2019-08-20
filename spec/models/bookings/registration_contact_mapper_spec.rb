@@ -38,8 +38,8 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(county: registration.contact_information.county) }
     it { is_expected.to have_attributes(postcode: registration.contact_information.postcode) }
     it { is_expected.to have_attributes(dfe_hasdbscertificate: registration.background_check.has_dbs_check) }
-    it { is_expected.to have_attributes(_dfe_teachingsubject01_value: teachingsubjectid) }
-    it { is_expected.to have_attributes(_dfe_teachingsubject02_value: teachingsubjectid2) }
+    it { is_expected.to have_attributes(_dfe_preferredteachingsubject01_value: teachingsubjectid) }
+    it { is_expected.to have_attributes(_dfe_preferredteachingsubject02_value: teachingsubjectid2) }
   end
 
   describe "#contact_to_personal_information" do

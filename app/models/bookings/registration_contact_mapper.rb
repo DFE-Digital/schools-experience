@@ -25,8 +25,8 @@ module Bookings
 
       gitis_contact.has_dbs_check = background_check.has_dbs_check
 
-      gitis_contact.dfe_teachingsubject01 = find_teaching_subjects['dfe_teachingsubject01']
-      gitis_contact.dfe_teachingsubject02 = find_teaching_subjects['dfe_teachingsubject02']
+      gitis_contact.dfe_PreferredTeachingSubject01 = find_teaching_subjects['dfe_teachingsubject01']
+      gitis_contact.dfe_PreferredTeachingSubject02 = find_teaching_subjects['dfe_teachingsubject02']
 
       gitis_contact
     end
@@ -60,17 +60,19 @@ module Bookings
   private
 
     def find_teaching_subjects
-      @subjects ||= Bookings::Subject.where(name: [
-        teaching_preference.subject_first_choice,
-        teaching_preference.subject_second_choice
-      ]).index_by(&:name)
+      @find_teaching_subjects ||= begin
+        subjects = Bookings::Subject.where(name: [
+          teaching_preference.subject_first_choice,
+          teaching_preference.subject_second_choice
+        ]).index_by(&:name)
 
-      {
-        'dfe_teachingsubject01' =>
-          @subjects[teaching_preference.subject_first_choice]&.gitis_uuid,
-        'dfe_teachingsubject02' =>
-          @subjects[teaching_preference.subject_second_choice]&.gitis_uuid
-      }
+        {
+          'dfe_teachingsubject01' =>
+            subjects[teaching_preference.subject_first_choice]&.gitis_uuid,
+          'dfe_teachingsubject02' =>
+            subjects[teaching_preference.subject_second_choice]&.gitis_uuid
+        }
+      end
     end
   end
 end

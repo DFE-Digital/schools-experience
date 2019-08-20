@@ -6,12 +6,13 @@ module Bookings::Gitis
       address1_line1 address1_city address1_stateorprovince address1_postalcode
       dfe_channelcreation dfe_hasdbscertificate
       dfe_Country@odata.bind ownerid@odata.bind
-      dfe_teachingsubject01@odata.bind dfe_teachingsubject02@odata.bind
     }.freeze
     ALLOWED = (
       REQUIRED + %w{
         telephone1 address1_line2 address1_line3 emailaddress1
         dfe_dateofissueofdbscertificate
+        dfe_PreferredTeachingSubject01@odata.bind
+        dfe_PreferredTeachingSubject02@odata.bind
       }
     ).freeze
 
