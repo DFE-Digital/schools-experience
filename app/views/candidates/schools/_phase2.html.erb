@@ -33,9 +33,11 @@
 
       <p class="directions-link">
         <%= link_to 'Get directions', external_map_url(
-              latitude: @presenter.school.coordinates.latitude,
-              longitude: @presenter.school.coordinates.longitude,
-              name: @presenter.school.name) %>
+          latitude: @presenter.school.coordinates.latitude,
+          longitude: @presenter.school.coordinates.longitude,
+          name: @presenter.school.name),
+          'aria-label': "Get directions for #{@school.name}"
+        %>
       </p>
     </div>
 
@@ -85,12 +87,21 @@
       </ul>
     </div>
 
+<<<<<<< HEAD
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__tablet_plus">
         <%= link_to "Start request",
                     new_candidates_school_registrations_personal_information_path(@presenter.school),
                     class:"govuk-button" %>
       </div>
+=======
+    <div class="school-start-request-button__tablet_plus">
+      <%= link_to "Start request",
+                  new_candidates_school_registrations_personal_information_path(@presenter.school),
+                  class:"govuk-button",
+                  'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
+    </div>
+>>>>>>> master
 
       <p>
         <%= link_to 'Back to Search Results', :back,
@@ -201,6 +212,7 @@
       <% end if @presenter.teacher_training_info.present? %>
     </dl>
 
+<<<<<<< HEAD
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__mobile">
         <%= link_to "Start request",
@@ -208,5 +220,13 @@
                     class:"govuk-button" %>
       </div>
     <% end %>
+=======
+    <div class="school-start-request-button__mobile">
+      <%= link_to "Start request",
+                  new_candidates_school_registrations_personal_information_path(@presenter.school),
+                  class:"govuk-button",
+                  'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
+    </div>
+>>>>>>> master
   </div>
 </div>
