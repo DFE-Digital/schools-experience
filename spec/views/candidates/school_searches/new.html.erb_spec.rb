@@ -7,16 +7,16 @@ RSpec.describe "candidates/school_searches/new.html.erb", type: :view do
   end
 
   it "shows search form" do
-    expect(rendered).to match(/Find.*experience/i)
+    expect(rendered).to have_css('h1', text: 'Search for school experience')
   end
 
   specify 'the form has the correct inputs' do
-    expect(rendered).to have_css('label', text: 'Where?')
-    expect(rendered).to have_css('label', text: 'Distance')
+    expect(rendered).to have_css('label', text: 'Enter location or postcode')
+    expect(rendered).to have_css('label', text: 'Select search area')
 
     expect(rendered).to have_css("input#location[required='required']")
     expect(rendered).to have_css('select#distance')
 
-    expect(rendered).to have_button('Find')
+    expect(rendered).to have_button('Search')
   end
 end
