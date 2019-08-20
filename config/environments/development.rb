@@ -102,4 +102,6 @@ Rails.application.configure do
   config.x.gitis.auth_tenant_id = ENV.fetch('CRM_AUTH_TENANT_ID', 'notset')
   config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL', 'notset')
   config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION', '0')
+  config.x.gitis.owner_id = ENV.fetch('CRM_OWNER_ID', SecureRandom.uuid)
+  config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID', SecureRandom.uuid)
 end

@@ -4,10 +4,14 @@ module Bookings::Gitis
     REQUIRED = %w{
       firstname lastname emailaddress2 telephone2 birthdate
       address1_line1 address1_city address1_stateorprovince address1_postalcode
-      statecode dfe_channelcreation
+      dfe_channelcreation dfe_hasdbscertificate
+      dfe_Country@odata.bind ownerid@odata.bind
     }.freeze
     ALLOWED = (
-      REQUIRED + %w{telephone1 address1_line2 address1_line3 emailaddress1}
+      REQUIRED + %w{
+        telephone1 address1_line2 address1_line3 emailaddress1
+        dfe_dateofissueofdbscertificate
+      }
     ).freeze
 
     def find_by_email(address)
@@ -87,7 +91,6 @@ module Bookings::Gitis
         'address1_stateorprovince' => 'Manchester',
         'address1_postalcode' => 'MA1 1AM',
         'birthdate' => '1980-01-01',
-        'statecode' => 0,
         'dfe_channelcreation' => 10
       }
     end

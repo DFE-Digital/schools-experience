@@ -10,8 +10,8 @@ FactoryBot.define do
     address1_stateorprovince { "Test County" }
     address1_postalcode { "MA1 1AM" }
     birthdate { '1980-01-01' }
-    statecode { 0 }
     dfe_channelcreation { 10 }
+    dfe_hasdbscertificate { true }
 
     trait :persisted do
       contactid { SecureRandom.uuid }

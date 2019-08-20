@@ -23,6 +23,8 @@ module Bookings
       gitis_contact.county = contact_information.county
       gitis_contact.postcode = contact_information.postcode
 
+      gitis_contact.has_dbs_check = background_check.has_dbs_check
+
       gitis_contact
     end
 
@@ -43,6 +45,12 @@ module Bookings
         'last_name'     => gitis_contact.last_name,
         'email'         => gitis_contact.email,
         'date_of_birth' => gitis_contact.date_of_birth
+      }
+    end
+
+    def contact_to_background_check
+      {
+        'has_dbs_check' => gitis_contact.has_dbs_check
       }
     end
   end
