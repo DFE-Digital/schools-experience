@@ -123,7 +123,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
 
         let :personal_information do
-          FactoryBot.build :personal_information, read_only_email: true
+          FactoryBot.build :personal_information, read_only: true
         end
 
         before do
@@ -132,15 +132,15 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             params: personal_information_params
         end
 
-        it 'updates the personal information with supplied details' do
+        it 'leaves the personal information with GiTiS details' do
           expect(registration_session.personal_information.first_name).to \
-            eq personal_information.first_name
+            eq gitis_contact.firstname
 
           expect(registration_session.personal_information.last_name).to \
-            eq personal_information.last_name
+            eq gitis_contact.lastname
 
           expect(registration_session.personal_information.date_of_birth).to \
-            eq personal_information.date_of_birth
+            eq gitis_contact.date_of_birth
         end
 
         it "leaves the email address matching the GiTiS contact" do

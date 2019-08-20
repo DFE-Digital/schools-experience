@@ -12,7 +12,7 @@ module Candidates
       attribute :last_name
       attribute :email
       attribute :date_of_birth, :date
-      attribute :read_only_email, :boolean, default: false
+      attribute :read_only, :boolean, default: false
 
       validates :first_name, presence: true
       validates :last_name, presence: true
@@ -31,8 +31,8 @@ module Candidates
         build_candidate_session(gitis_crm).create_signin_token
       end
 
-      def email=(email_address)
-        read_only_email ? email : super
+      def email=(*args)
+        read_only ? email : super
       end
 
       # Rescue argument error thrown by

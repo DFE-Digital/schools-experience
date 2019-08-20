@@ -8,6 +8,7 @@ module Bookings
 
       UPDATE_BLACKLIST = %w{
         dfe_channelcreation statecode mobilephone address1_telephone1
+        firstname lastname birthdate
       }.freeze
 
       UPDATE_BLACKLIST_OTHER_RECORDS = (
