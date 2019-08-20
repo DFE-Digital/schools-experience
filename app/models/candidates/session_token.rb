@@ -1,5 +1,5 @@
 class Candidates::SessionToken < ApplicationRecord
-  AUTO_EXPIRE = 1.day.freeze
+  AUTO_EXPIRE = 1.hour.freeze
 
   belongs_to :candidate, class_name: 'Bookings::Candidate'
   has_secure_token

@@ -12,6 +12,7 @@ class Schools::InsecureSessionsController < ApplicationController
       school.address_1 = "22 something street"
       school.postcode = "M1 2JJ"
       school.school_type = Bookings::SchoolType.find_or_create_by(name: "type one")
+      school.coordinates = Bookings::School::GEOFACTORY.point(-2.241, 53.481)
     end
 
     session[:id_token]     = 'abc123'

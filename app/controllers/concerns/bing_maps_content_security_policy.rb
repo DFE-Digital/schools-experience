@@ -13,7 +13,7 @@ module BingMapsContentSecurityPolicy
         'https://*.virtualearth.net',
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
-        "https://*.vo.msecnd.net"
+        "https://az416426.vo.msecnd.net" # needed for AppInsights
     end
   end
 end

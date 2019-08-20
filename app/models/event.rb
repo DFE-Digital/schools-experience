@@ -2,6 +2,7 @@ class Event < ApplicationRecord
   EVENT_TYPES = %w(
     school_disabled
     school_enabled
+    school_edubase_data_refreshed
     booking_date_changed
   ).freeze
 

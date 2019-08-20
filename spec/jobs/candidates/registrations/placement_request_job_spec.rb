@@ -17,20 +17,20 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
   end
 
   let :school_request_confirmation_notification do
-    double NotifyEmail::SchoolRequestConfirmation, despatch!: true
+    double NotifyEmail::SchoolRequestConfirmation, despatch_later!: true
   end
 
   let :candidate_request_confirmation_notification do
-    double NotifyEmail::CandidateRequestConfirmation, despatch!: true
+    double NotifyEmail::CandidateRequestConfirmation, despatch_later!: true
   end
 
   let :school_request_confirmation_notification_with_placement_request_url do
-    double NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl, despatch!: true
+    double NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl, despatch_later!: true
   end
 
   let :candidate_request_confirmation_notification_with_confirmation_link do
     double NotifyEmail::CandidateRequestConfirmationWithConfirmationLink,
-      despatch!: true
+      despatch_later!: true
   end
 
   let :cancellation_url do
@@ -78,7 +78,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
               application_preview
 
           expect(school_request_confirmation_notification).to \
-            have_received :despatch!
+            have_received :despatch_later!
         end
 
         it 'notifies the candidate' do
@@ -88,7 +88,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
               application_preview
 
           expect(candidate_request_confirmation_notification).to \
-            have_received :despatch!
+            have_received :despatch_later!
         end
 
         it 'deletes the registration session from redis' do
@@ -111,7 +111,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
               placement_request_url
 
           expect(school_request_confirmation_notification_with_placement_request_url).to \
-            have_received :despatch!
+            have_received :despatch_later!
         end
 
         it 'notifies the candidate' do
@@ -123,69 +123,12 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
           expect(
             candidate_request_confirmation_notification_with_confirmation_link
-          ).to have_received :despatch!
+          ).to have_received :despatch_later!
         end
 
         it 'deletes the registration session from redis' do
           expect { registration_store.retrieve! registration_session.uuid }.to \
             raise_error Candidates::Registrations::RegistrationStore::SessionNotFound
-        end
-      end
-    end
-
-    context 'with errors' do
-      context 'non retryable' do
-        let :application_job_retry_limit do
-          3
-        end
-
-        before do
-          allow(school_request_confirmation_notification_with_placement_request_url).to \
-            receive(:despatch!) { raise 'Oh no!' }
-
-          allow_any_instance_of(described_class).to \
-            receive(:executions) { application_job_retry_limit }
-        end
-
-        it 'lets the error propogate' do
-          expect {
-            described_class.perform_later \
-              registration_session.uuid,
-              cancellation_url,
-              placement_request_url
-          }.to raise_error RuntimeError, 'Oh no!'
-        end
-      end
-
-      context 'retryable error' do
-        let :number_of_executions do
-          2
-        end
-
-        let :a_decent_amount_longer do
-          10.minutes.from_now.to_i
-        end
-
-        before do
-          allow_any_instance_of(described_class).to \
-            receive(:executions) { number_of_executions }
-
-          allow(
-            candidate_request_confirmation_notification_with_confirmation_link
-          ).to receive(:despatch!) { raise Notify::RetryableError }
-
-          allow(described_class.queue_adapter).to receive :enqueue_at
-
-          freeze_time # so we can easily compare a decent_amount_longer from now
-
-          described_class.perform_later \
-            registration_session.uuid, cancellation_url, placement_request_url
-        end
-
-        it 'reenqueues the job' do
-          expect(described_class.queue_adapter).to \
-            have_received(:enqueue_at).with \
-              an_instance_of(described_class), a_decent_amount_longer
         end
       end
     end

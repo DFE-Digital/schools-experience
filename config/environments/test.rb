@@ -40,6 +40,9 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
 #  config.action_mailer.delivery_method = :test
 
+  # avoid second pass through SASS since thats incompatible with GovUK Frontend
+  config.assets.css_compressor = nil
+
   # set the cache to use RAM
   config.cache_store = :null_store
 
@@ -48,7 +51,9 @@ Rails.application.configure do
 
   # Use Redis for Session and cache
   config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
-  config.session_store :cache_store, key: 'schoolex-test-session'
+  config.session_store :cache_store,
+    key: 'schoolex-test-session',
+    expire_after: 1.hour # Sets explicit TTL for Session Redis keys
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
@@ -65,6 +70,7 @@ Rails.application.configure do
   config.x.notify_client = NotifyFakeClient
 
   config.x.phase = 10000
+  config.x.features = %i(subject_specific_dates)
 
   config.x.base_url = 'https://some-host'
   config.x.oidc_client_id = 'se-test'
@@ -72,7 +78,8 @@ Rails.application.configure do
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
 
-  config.x.fake_crm = true
+  config.x.gitis.fake_crm = true
+  config.x.gitis.channel_creation = '0'
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 end

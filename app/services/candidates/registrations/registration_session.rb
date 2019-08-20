@@ -9,7 +9,6 @@ module Candidates
 
       PENDING_EMAIL_CONFIRMATION_STATUS = 'pending_email_confirmation'.freeze
       COMPLETED_STATUS = 'completed'.freeze
-      MIGRATE_ATTRS = %w{first_name last_name email}.freeze
 
       def initialize(session)
         @registration_session = session
@@ -77,32 +76,11 @@ module Candidates
       end
 
       def personal_information
-        # Allow populating from pre Phase 3 data in the session
-        param_key = PersonalInformation.model_name.param_key
-
-        if !@registration_session[param_key].nil?
-          return PersonalInformation.new @registration_session.fetch(param_key)
-        end
-
-        contact = @registration_session.fetch(ContactInformation.model_name.param_key, {})
-        migrate = contact.slice(*MIGRATE_ATTRS)
-
-        raise StepNotFound, param_key if migrate.empty?
-
-        PersonalInformation.new(migrate).tap do |migrated|
-          save migrated
-        end
-      rescue KeyError
-        raise StepNotFound, param_key
+        fetch PersonalInformation
       end
 
       def personal_information_attributes
-        attrs = @registration_session.fetch(PersonalInformation.model_name.param_key, {})
-        return attrs if attrs.any?
-
-        # Allow populating with pre Phase 3 data in the session
-        migrate = @registration_session.fetch(ContactInformation.model_name.param_key, {})
-        migrate.slice(*MIGRATE_ATTRS)
+        fetch_attributes PersonalInformation
       end
 
       def placement_preference
@@ -113,38 +91,20 @@ module Candidates
         fetch_attributes PlacementPreference
       end
 
-      def education_attributes_converter
-        # Temporary converter to convert between subject_preference and education
-        # while there are potential inflight registrations
-        EducationAttributes.new(@registration_session)
-      end
-
       def education_attributes
-        education_attributes_converter.attributes || {}
+        fetch_attributes Education
       end
 
       def education
-        if !education_attributes_converter.attributes.nil?
-          Education.new education_attributes_converter.attributes
-        else
-          raise StepNotFound, :candidates_registrations_education
-        end
-      end
-
-      def teaching_preference_attributes_converter
-        TeachingPreferenceAttributes.new(@registration_session)
+        fetch Education
       end
 
       def teaching_preference_attributes
-        teaching_preference_attributes_converter.attributes || {}
+        fetch_attributes TeachingPreference
       end
 
       def teaching_preference
-        if !teaching_preference_attributes_converter.attributes.nil?
-          TeachingPreference.new teaching_preference_attributes.merge(school: self.school)
-        else
-          raise StepNotFound, :candidates_registrations_teaching_preference
-        end
+        fetch(TeachingPreference).tap { |tp| tp.school = school }
       end
 
       def fetch(klass)
@@ -153,8 +113,8 @@ module Candidates
         raise StepNotFound, e.key
       end
 
-      def fetch_attributes(klass)
-        @registration_session.fetch(klass.model_name.param_key, {})
+      def fetch_attributes(klass, defaults = {})
+        @registration_session.fetch(klass.model_name.param_key, defaults)
       end
 
       def to_h

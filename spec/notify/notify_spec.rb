@@ -1,50 +1,30 @@
 require 'rails_helper'
 require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
-require File.join(Rails.root, 'spec', 'support', 'notify_erroring_client')
+require File.join(Rails.root, 'spec', 'support', 'notify_retryable_erroring_client')
 
 describe Notify do
   let(:to) { 'somename@somecompany.org' }
 
   before do
-    stub_const(
-      'Notify::API_KEY',
-      ["somekey", SecureRandom.uuid, SecureRandom.uuid].join("-")
-    )
-  end
-
-  let :notify_client do
-    NotifyFakeClient.new
-  end
-
-  before do
-    allow(subject).to receive(:notify_client).and_return(notify_client)
+    allow(NotifyService.instance).to receive(:send_email)
   end
 
   subject { Notify.new(to: to) }
 
   describe 'Attributes' do
     it { is_expected.to respond_to(:to) }
-    it { is_expected.to respond_to(:notify_client) }
   end
 
   describe 'Initialization' do
-    before do
-      allow(Rails.application.config.x).to receive(:notify_client).and_return nil
-    end
-
-    specify 'should assign email address' do
-      expect(subject.to).to eql(to)
-    end
-
-    specify 'should set up a notify client with the correct API key' do
-      expect(described_class.new(to: to).notify_client).to be_a(Notifications::Client)
+    specify 'should assign an array of email address' do
+      expect(subject.to).to match_array(to)
     end
   end
 
   describe 'Methods' do
-    describe '#despatch!' do
+    describe '#despatch_later!' do
       it "should fail with 'Not implemented'" do
-        expect { subject.despatch! }.to raise_error('Not implemented')
+        expect { subject.despatch_later! }.to raise_error('Not implemented')
       end
     end
 
@@ -83,59 +63,25 @@ describe Notify do
       end
     end
 
-    before do
-      allow(Rails.application.config.x).to receive(:notify_client).and_return NotifyFakeClient
-
-      NotifyFakeClient.reset_deliveries!
+    let :notification do
+      StubNotification.new to: recipients, name: 'Test User'
     end
 
-    describe '#despatch!' do
-      context 'with error' do
-        let :notify_client do
-          NotifyErroringClient.new
-        end
-
-        before do
-          allow(ExceptionNotifier).to receive :notify_exception
-          allow(Raven).to receive :capture_exception
-        end
-
-        subject { StubNotification.new(to: 'test@user.com', name: 'Test User') }
-
-        before do
-          expect { subject.despatch! }.to raise_error Notify::RetryableError
-        end
-
-        it 'notifies slack' do
-          expect(ExceptionNotifier).to have_received(:notify_exception)
-        end
-
-        it 'notifies sentry' do
-          expect(Raven).to have_received(:capture_exception)
-        end
-      end
-
-      context 'without error' do
-        subject { StubNotification.new(to: 'test@user.com', name: 'Test User') }
-
-        it "should return hash of stubbed despatch" do
-          expect(subject.despatch!.keys).to eq(
-            %i(delivered_at template_id email_address personalisation)
-          )
-        end
-      end
+    let :recipients do
+      %w(test1@user.com test2@user.com)
     end
 
-    describe '.test_deliveries' do
-      before do
-        StubNotification.new(to: 'test@user.com', name: 'Test User').despatch!
-      end
+    describe '#despatch_later!' do
+      before { ActiveJob::Base.queue_adapter = :inline }
+      before { notification.despatch_later! }
 
-      it "should be included in test_deliveries list" do
-        expect(NotifyFakeClient.deliveries.length).to eql(1)
-        expect(NotifyFakeClient.deliveries.first.keys).to eq(
-          %i(delivered_at template_id email_address personalisation)
-        )
+      it "should enqueue a notify job with the correct parameters" do
+        recipients.each do |recipient|
+          expect(NotifyService.instance).to have_received(:send_email).with \
+            email_address: recipient,
+            template_id: notification.send(:template_id),
+            personalisation: notification.send(:personalisation)
+        end
       end
     end
   end
