@@ -299,6 +299,7 @@ en:
 
   helpers:
     fieldset:
+      order: Sorted by
       schools_placement_requests_confirm_booking:
         date: Confirm experience date
       bookings_booking:
@@ -456,7 +457,6 @@ en:
         firstname: First name
         lastname: Last name
         email: Email address
-      order: Sorted by
       query: Find what?
       location: Enter location or postcode
       distance: Select search area
