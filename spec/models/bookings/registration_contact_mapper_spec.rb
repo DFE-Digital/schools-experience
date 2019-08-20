@@ -67,4 +67,20 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to include('county' => contact.county) }
     it { is_expected.to include('postcode' => contact.postcode) }
   end
+
+  describe "#contact_to_teaching_preference" do
+    let(:maths) { Bookings::Subject.find_by!(name: 'Maths') }
+    let(:english) { Bookings::Subject.find_by!(name: 'English') }
+    let(:contact) do
+      build :gitis_contact, :persisted,
+        dfe_PreferredTeachingSubject01: maths.gitis_uuid,
+        dfe_PreferredTeachingSubject02: english.gitis_uuid
+    end
+    let(:registration) { build(:registration_session) }
+    let(:mapper) { described_class.new(registration, contact) }
+    subject { mapper.contact_to_teaching_preference }
+
+    it { is_expected.to include('subject_first_choice' => maths.name) }
+    it { is_expected.to include('subject_second_choice' => english.name) }
+  end
 end

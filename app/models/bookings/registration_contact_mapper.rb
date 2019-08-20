@@ -57,6 +57,15 @@ module Bookings
       }
     end
 
+    def contact_to_teaching_preference
+      {
+        'subject_first_choice' =>
+          subject_from_gitis_uuid(gitis_contact._dfe_preferredteachingsubject01_value),
+        'subject_second_choice' =>
+          subject_from_gitis_uuid(gitis_contact._dfe_preferredteachingsubject02_value)
+      }
+    end
+
   private
 
     def find_teaching_subjects
@@ -73,6 +82,21 @@ module Bookings
             subjects[teaching_preference.subject_second_choice]&.gitis_uuid
         }
       end
+    end
+
+    def subject_from_gitis_uuid(uuid)
+      return nil unless uuid.present?
+
+      @subjects_from_gitis_uuids ||= begin
+        uuids = [
+          gitis_contact._dfe_preferredteachingsubject01_value,
+          gitis_contact._dfe_preferredteachingsubject02_value
+        ].map(&:presence).compact
+
+        Bookings::Subject.where(gitis_uuid: uuids).index_by(&:gitis_uuid)
+      end
+
+      @subjects_from_gitis_uuids[uuid]&.name
     end
   end
 end
