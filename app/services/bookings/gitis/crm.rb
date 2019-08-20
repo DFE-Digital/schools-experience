@@ -30,7 +30,7 @@ module Bookings
       def find_by_email(address)
         params = {
           '$filter' => filter_pairs(emailaddress2: address, emailaddress1: address),
-          '$select' => Contact.entity_attribute_names.to_a.join(','),
+          '$select' => Contact.attributes_to_select,
           '$top' => 1
         }
 
@@ -45,7 +45,7 @@ module Bookings
 
       def fetch(entity_type, filter: nil, limit: 10, order: nil)
         params = {
-          '$select' => entity_type.entity_attribute_names.to_a.join(','),
+          '$select' => entity_type.attributes_to_select,
           '$top' => limit
         }
 
@@ -137,14 +137,14 @@ module Bookings
       end
 
       def find_one(entity_type, uuid, params)
-        params['$select'] ||= entity_type.entity_attribute_names.to_a.join(',')
+        params['$select'] ||= entity_type.attributes_to_select
 
         entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
       end
 
       def find_many(entity_type, uuids, params)
         params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
-        params['$select'] ||= entity_type.entity_attribute_names.to_a.join(',')
+        params['$select'] ||= entity_type.attributes_to_select
 
         api.get(entity_type.entity_path, params)['value'].map do |entity_data|
           entity_type.new entity_data

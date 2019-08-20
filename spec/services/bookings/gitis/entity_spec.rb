@@ -5,20 +5,12 @@ RSpec.describe Bookings::Gitis::Entity do
 
   subject { TestEntity.new('firstname' => 'test', 'lastname' => 'user') }
 
-  describe ".entity_path" do
-    subject { TestEntity.entity_path }
-    it { is_expected.to eq('testentities') }
-  end
+  let(:expected_attrs) { %w{firstname lastname hidden notcreate notupdate} }
 
-  describe ".primary_key" do
-    subject { TestEntity.primary_key }
-    it { is_expected.to eq('testentityid') }
-  end
-
-  describe ".entity_attribute_names" do
-    subject { TestEntity.entity_attribute_names }
-    it { is_expected.to eq Set.new %w{firstname lastname hidden notcreate notupdate} }
-  end
+  it { is_expected.to have_attributes entity_path: 'testentities' }
+  it { is_expected.to have_attributes primary_key: 'testentityid' }
+  it { is_expected.to have_attributes select_attribute_names: Set.new(expected_attrs) }
+  it { is_expected.to have_attributes attributes_to_select: expected_attrs.join(',') }
 
   describe "#attributes" do
     it do
@@ -165,7 +157,7 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe "private attributes" do
-    it { expect(TestEntity.entity_attribute_names).to include('hidden') }
+    it { expect(TestEntity.select_attribute_names).to include('hidden') }
     it { expect(TestEntity.respond_to?('hidden')).to be false }
     it { expect(TestEntity.respond_to?('hidden=')).to be false }
   end
