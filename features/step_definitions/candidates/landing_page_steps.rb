@@ -1,5 +1,5 @@
 Then("the leading paragraph should provide me with a summary of the service") do
-  within('div > p:first-of-type') do
+  within('.govuk-main-wrapper div > p:first-of-type') do
     [
       'interested in becoming a teacher',
       'find and request school experience',
