@@ -6,6 +6,11 @@ describe Schools::DFESignInAPI::Organisations do
 
   subject { Schools::DFESignInAPI::Organisations.new(user_guid) }
 
+  before do
+    allow(described_class).to receive(:enabled?).and_return(true)
+    allow(ENV).to receive(:fetch).and_return('123')
+  end
+
   describe '#schools' do
     specify 'schools should match the API request content' do
       expect(subject.schools).to eql(

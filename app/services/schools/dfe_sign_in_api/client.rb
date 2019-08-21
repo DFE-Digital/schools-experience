@@ -4,14 +4,16 @@ module Schools
       def self.enabled?
         [
           ENV['DFE_SIGNIN_API_CLIENT'],
-          ENV['DFE_SIGNIN_API_SECRET'],
-          ENV['DFE_SIGNIN_API_ENDPOINT']
+          ENV['DFE_SIGNIN_API_SECRET']
         ].map(&:presence).all?
       end
+      delegate :enabled?, to: :class
 
     private
 
       def response
+        return [] unless enabled?
+
         resp = Faraday.new.get(endpoint) do |req|
           req.headers['Authorization'] = "bearer #{token}"
           req.headers['Content-Type']  = 'application/json'

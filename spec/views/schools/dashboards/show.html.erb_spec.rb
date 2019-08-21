@@ -4,6 +4,10 @@ describe 'schools/dashboards/show.html.erb', type: :view do
   let(:school) { create(:bookings_school) }
   before { assign :current_school, school }
 
+  before do
+    allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+  end
+
   context 'when the user has other schools' do
     before { assign :other_urns, [111111] }
     before { render }
