@@ -1,6 +1,12 @@
 shared_context "logged in DfE user" do
   let(:urn) { 123456 }
   let(:user_guid) { '33333333-4444-5555-6666-777777777777' }
+  let(:dfe_signin_school_data) do
+    [
+      { urn: 123489, name: 'School A' },
+      { urn: 123490, name: 'School B' }
+    ]
+  end
 
   before do
     if Bookings::School.find_by(urn: urn).nil?
@@ -18,7 +24,7 @@ shared_context "logged in DfE user" do
     stub_request(:get, "https://some-signin-host.signin.education.gov.uk/users/#{user_guid}/organisations")
       .to_return(
         status: 200,
-        body: '[{"urn": 123489}, {"urn": 123490}]',
+        body: dfe_signin_school_data.to_json,
         headers: {}
       )
   end
