@@ -16,7 +16,15 @@ class Schools::InsecureSessionsController < ApplicationController
     end
 
     session[:id_token]     = 'abc123'
-    session[:current_user] = OpenIDConnect::ResponseObject::UserInfo.new(given_name: 'Martin', family_name: 'Prince')
+
+    # NOTE the sub (subscription) param is the user's unique identifier
+    # on DfE Sign-in and is hard-coded here. It must match the corresponding
+    # value hard-coded in Schools::SessionsController
+    session[:current_user] = OpenIDConnect::ResponseObject::UserInfo.new(
+      given_name: 'Martin',
+      family_name: 'Prince',
+      sub: '33333333-4444-5555-6666-777777777777'
+    )
     session[:urn]          = 123456
     session[:school_name]  = 'Some school'
     redirect_to '/schools/dashboard'

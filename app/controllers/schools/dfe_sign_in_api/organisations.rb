@@ -1,14 +1,14 @@
 module Schools
   module DFESignInAPI
     class Organisations
-      attr_accessor :user_uuid, :urns
+      attr_accessor :user_uuid
 
       def initialize(user_uuid)
         self.user_uuid = user_uuid
       end
 
       def schools
-        retrieve
+        organisations
           .each
           .with_object({}) do |school, h|
             h[school.fetch('urn').to_i] = school.fetch('name')
@@ -16,22 +16,17 @@ module Schools
       end
 
       def urns
-        retrieve.map { |record| record.fetch('urn').to_i }
-      end
-
-      def reload
-        retrieve!
+        organisations.map { |record| record.fetch('urn').to_i }
       end
 
     private
 
-      def retrieve
-        @cached_response ||= response
+      def organisations
+        @organisations ||= response
       end
 
-      def retrieve!
-        @cached_response = response
-        true
+      def organisations!
+        @organisations = response
       end
 
       def response
