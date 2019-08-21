@@ -194,4 +194,29 @@ describe Bookings::Gitis::CRM, type: :model do
       end
     end
   end
+
+  describe "#log_school_experience" do
+    let(:school) { build(:bookings_school) }
+    let(:contact) { build(:gitis_contact, :persisted) }
+    let(:headerline) { Bookings::Gitis::Contact::NOTES_HEADER }
+    let(:logline) { "01/10/2019 TEST       01/11/2019 #{school.urn} #{school.name}" }
+
+    before do
+      allow(gitis).to receive(:find).with(contact.id).and_return(contact)
+      allow(gitis).to receive(:update_entity).and_return(true)
+
+      gitis.log_school_experience(
+        contact.id,
+        Date.parse('2019-10-01'), 'test',
+        Date.parse('2019-11-01'), school
+      )
+    end
+
+    it "will create a new entry with a single row" do
+      expect(gitis).to have_received(:update_entity).with(
+        contact.entity_id,
+        'dfe_notesforclassroomexperience' => "#{headerline}\n\n#{logline}\n"
+      )
+    end
+  end
 end
