@@ -7,6 +7,13 @@
 require 'cucumber/rails'
 require 'selenium/webdriver'
 require 'capybara-screenshot/cucumber'
+require 'webmock/cucumber'
+
+# WebMock intercepts Selenium's callbacks to localhost:XXXXX/__identify__ causing
+# the tests to break, so disable net connections except for local ones
+WebMock.disable_net_connect!(allow_localhost: true)
+
+require Rails.root.join('lib', 'servertest', 'dfe_sign_in_api')
 
 Rails.application.config.x.gitis.fake_crm = true
 

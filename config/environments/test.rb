@@ -77,6 +77,7 @@ Rails.application.configure do
   config.x.oidc_client_secret = 'abc123'
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
+  config.x.dfe_sign_in_api_host = 'some-signin-host.signin.education.gov.uk'
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
