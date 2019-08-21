@@ -46,12 +46,12 @@ module Schools
       end
 
       def token
-        JWT.encode(payload, ENV.fetch('DFE_SIGN_IN_API_SECRET'))
+        JWT.encode(payload, ENV.fetch('DFE_SIGNIN_API_SECRET'))
       end
 
       def payload
         {
-          iss: ENV.fetch('DFE_SIGN_IN_API_CLIENT'),
+          iss: ENV.fetch('DFE_SIGNIN_API_CLIENT'),
           aud: 'signin.education.gov.uk'
         }
       end

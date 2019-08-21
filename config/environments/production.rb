@@ -133,7 +133,7 @@ Rails.application.configure do
     'https://services.signin.education.gov.uk/my-services'
   end
 
-  config.x.dfe_sign_in_api_host = ENV.fetch('DFE_SIGN_IN_API_ENDPOINT') do
+  config.x.dfe_sign_in_api_host = ENV.fetch('DFE_SIGNIN_API_ENDPOINT') do
     'api.signin.education.gov.uk'
   end
 
