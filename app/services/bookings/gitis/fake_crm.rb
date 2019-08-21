@@ -5,6 +5,7 @@ module Bookings::Gitis
       firstname lastname emailaddress2 telephone2 birthdate
       address1_line1 address1_city address1_stateorprovince address1_postalcode
       dfe_channelcreation dfe_hasdbscertificate
+      dfe_Country@odata.bind ownerid@odata.bind
     }.freeze
     ALLOWED = (
       REQUIRED + %w{
