@@ -87,21 +87,12 @@
       </ul>
     </div>
 
-<<<<<<< HEAD
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__tablet_plus">
         <%= link_to "Start request",
                     new_candidates_school_registrations_personal_information_path(@presenter.school),
-                    class:"govuk-button" %>
+                    'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
       </div>
-=======
-    <div class="school-start-request-button__tablet_plus">
-      <%= link_to "Start request",
-                  new_candidates_school_registrations_personal_information_path(@presenter.school),
-                  class:"govuk-button",
-                  'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
-    </div>
->>>>>>> master
 
       <p>
         <%= link_to 'Back to Search Results', :back,
@@ -212,21 +203,13 @@
       <% end if @presenter.teacher_training_info.present? %>
     </dl>
 
-<<<<<<< HEAD
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__mobile">
         <%= link_to "Start request",
                     new_candidates_school_registrations_personal_information_path(@presenter.school),
-                    class:"govuk-button" %>
+                    class:"govuk-button",
+                    'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
       </div>
     <% end %>
-=======
-    <div class="school-start-request-button__mobile">
-      <%= link_to "Start request",
-                  new_candidates_school_registrations_personal_information_path(@presenter.school),
-                  class:"govuk-button",
-                  'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
-    </div>
->>>>>>> master
   </div>
 </div>
