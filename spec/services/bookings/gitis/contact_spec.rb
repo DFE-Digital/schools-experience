@@ -241,4 +241,65 @@ describe Bookings::Gitis::Contact, type: :model do
       end
     end
   end
+
+  describe '#generate_school_experience' do
+    let(:school) { build(:bookings_school) }
+    let(:logline) { "01/10/2019 TEST       01/11/2019 #{school.urn} #{school.name}" }
+    let(:contact) { build(:gitis_contact, :persisted) }
+
+    subject do
+      contact.send :generate_log_line,
+        Date.parse('2019-10-01'),
+        'test',
+        Date.parse('2019-11-01'),
+        school
+    end
+
+    it("will generate the expected log line") { is_expected.to eql(logline) }
+  end
+
+  describe '#add_school_experience' do
+    let(:school) { build(:bookings_school) }
+    let(:contact) { build(:gitis_contact, :persisted) }
+    let(:headerline) { described_class::NOTES_HEADER }
+
+    let(:logline) do
+      "01/10/2019 TEST       01/11/2019 #{school.urn} #{school.name}"
+    end
+
+    context 'with no prior experience' do
+      before do
+        contact.add_school_experience Date.parse("2019-10-01"), 'test',
+          Date.parse('2019-11-01'), school
+      end
+
+      subject { contact }
+
+      it "will create a classroomexperience entry" do
+        is_expected.to have_attributes \
+          dfe_notesforclassroomexperience: "#{headerline}\n\n#{logline}\n"
+      end
+    end
+
+    context 'with prior experience' do
+      let(:secondline) do
+        "01/10/2019 BOOKED     01/11/2019 #{school.urn} #{school.name}"
+      end
+
+      before do
+        contact.dfe_notesforclassroomexperience = "#{headerline}\n\n#{logline}\n"
+
+        contact.add_school_experience Date.parse("2019-10-01"), 'booked',
+          Date.parse('2019-11-01'), school
+      end
+
+      subject { contact }
+
+      it "will create a classroomexperience entry" do
+        is_expected.to have_attributes \
+          dfe_notesforclassroomexperience:
+            "#{headerline}\n\n#{logline}\n#{secondline}\n"
+      end
+    end
+  end
 end

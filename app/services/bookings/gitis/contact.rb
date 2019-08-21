@@ -14,6 +14,8 @@ module Bookings
         UPDATE_BLACKLIST + %w{telephone1 emailaddress1}
       ).freeze
 
+      NOTES_HEADER = "RECORDED   ACTION     EXPERIENCE  URN     NAME".freeze
+
       entity_id_attribute :contactid
 
       entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
@@ -22,6 +24,7 @@ module Bookings
       entity_attributes :address1_postalcode, :birthdate
       entity_attributes :telephone1, :telephone2, :mobilephone
       entity_attributes :statecode, :dfe_channelcreation
+      entity_attributes :dfe_notesforclassroomexperience
 
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
@@ -130,6 +133,26 @@ module Bookings
 
       def attributes_for_update
         super.except(*UPDATE_BLACKLIST)
+      end
+
+      def add_school_experience(*args)
+        unless dfe_notesforclassroomexperience.present?
+          self.dfe_notesforclassroomexperience = NOTES_HEADER + "\n\n"
+        end
+
+        self.dfe_notesforclassroomexperience << generate_log_line(*args) + "\n"
+      end
+
+    private
+
+      def generate_log_line(recorded, action, experience_date, school)
+        [
+          recorded.to_date.strftime('%d/%m/%Y'),
+          "%-10s" % action.to_s.upcase,
+          experience_date.to_date.strftime('%d/%m/%Y'),
+          school.urn.to_s,
+          school.name
+        ].join(' ')
       end
     end
   end
