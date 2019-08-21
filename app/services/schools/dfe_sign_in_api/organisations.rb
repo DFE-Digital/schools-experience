@@ -25,10 +25,6 @@ module Schools
         @organisations ||= response
       end
 
-      def organisations!
-        @organisations = response
-      end
-
       def response
         resp = Faraday.new.get(endpoint) do |req|
           req.headers['Authorization'] = "bearer #{token}"
