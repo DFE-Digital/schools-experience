@@ -338,6 +338,7 @@ RSpec.describe "The GITIS CRM Api" do
       'address1_city' => "Manchester",
       'address1_stateorprovince' => "",
       'address1_postalcode' => "MA1 1AM",
+      'statecode' => 0,
       'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION'),
       'dfe_notesforclassroomexperience' => "Written by School Experience",
       'dfe_hasdbscertificate' => true,
@@ -357,7 +358,6 @@ RSpec.describe "The GITIS CRM Api" do
       'dfe_notesforclassroomexperience' =>
         existing_data['dfe_notesforclassroomexperience'] +
         "#{existing_data['dfe_notesforclassroomexperience']}\nUpdated at #{Time.zone.now}"
-      'dfe_hasdbscertificate' => true
     }
   end
 

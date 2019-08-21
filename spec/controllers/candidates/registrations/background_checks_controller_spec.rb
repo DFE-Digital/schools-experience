@@ -74,37 +74,6 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
     end
   end
 
-  context 'with existing background check in gitis' do
-    include_context 'candidate signin'
-
-    let :registration_session do
-      FactoryBot.build :gitis_registration_session,
-        gitis_contact: gitis_contact,
-        with: %i(
-          personal_information
-          contact_information
-          education
-          teaching_preference
-          placement_preference
-        )
-    end
-
-    context '#new' do
-      before do
-        get '/candidates/schools/11048/registrations/background_check/new'
-      end
-
-      it 'populates the form with the values from gitis' do
-        expect(assigns(:background_check)).to have_attributes \
-          has_dbs_check: gitis_contact.dfe_hasdbscertificate
-      end
-
-      it 'renders the new template' do
-        expect(response).to render_template :new
-      end
-    end
-  end
-
   context 'with existing background check in session' do
     let :registration_session do
       FactoryBot.build :gitis_registration_session, with: %i(

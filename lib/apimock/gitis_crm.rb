@@ -294,6 +294,7 @@ module Apimock
         'address1_city' => "Manchester",
         'address1_stateorprovince' => "",
         'address1_postalcode' => "MA1 1AM",
+        'statecode' => 0,
         'dfe_channelcreation' => 222750021
       }
     end

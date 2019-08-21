@@ -3,6 +3,7 @@ module Bookings::Gitis
 
   module Entity
     extend ActiveSupport::Concern
+    include ActiveModel::AttributeAssignment
     include ActiveModel::Validations
     include ActiveModel::Conversion
 
@@ -20,12 +21,6 @@ module Bookings::Gitis
 
       class_attribute :entity_attribute_names
       self.entity_attribute_names = Set.new
-
-      class_attribute :create_blacklist
-      self.create_blacklist = []
-
-      class_attribute :update_blacklist
-      self.update_blacklist = []
     end
 
     def initialize(*_args)
@@ -67,11 +62,11 @@ module Bookings::Gitis
     end
 
     def attributes_for_update
-      attributes.slice(*(changed_attributes.keys - update_blacklist))
+      changed_attributes
     end
 
     def attributes_for_create
-      keys = attributes.keys - ['id', primary_key] - create_blacklist
+      keys = attributes.keys - ['id', primary_key]
       keys.reject! { |k| attributes[k].nil? }
 
       attributes.slice(*keys)
@@ -108,14 +103,10 @@ module Bookings::Gitis
         end
       end
 
-      def entity_attribute(attr_name, internal: false, except: nil)
-        except = Array.wrap(except).map(&:to_sym)
-
+      def entity_attribute(attr_name)
         define_method :"#{attr_name}" do
           attributes[attr_name.to_s]
         end
-        private :"#{attr_name}" if internal
-        self.create_blacklist << attr_name.to_s if except.include?(:create)
 
         define_method :"#{attr_name}=" do |value|
           unless value == send(attr_name.to_sym)
@@ -124,15 +115,13 @@ module Bookings::Gitis
 
           attributes[attr_name.to_s] = value
         end
-        private :"#{attr_name}=" if internal
-        self.update_blacklist << attr_name.to_s if except.include?(:update)
 
         self.entity_attribute_names << attr_name.to_s
       end
 
-      def entity_attributes(*attr_names, internal: false, except: nil)
+      def entity_attributes(*attr_names)
         Array.wrap(attr_names).flatten.each do |attr_name|
-          entity_attribute(attr_name, internal: internal, except: except)
+          entity_attribute(attr_name)
         end
       end
 

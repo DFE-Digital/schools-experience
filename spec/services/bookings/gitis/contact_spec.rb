@@ -1,14 +1,6 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::Contact, type: :model do
-  before do
-    allow(described_class).to \
-      receive(:default_owner).and_return(SecureRandom.uuid)
-
-    allow(described_class).to \
-      receive(:default_country).and_return(SecureRandom.uuid)
-  end
-
   describe '.entity_path' do
     subject { described_class.entity_path }
     it { is_expected.to eq('contacts') }
@@ -168,9 +160,8 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to include('emailaddress1') }
       it { is_expected.to include('emailaddress2') }
       it { is_expected.to include('telephone2') }
+      it { is_expected.to include('statecode') }
       it { is_expected.to include('dfe_channelcreation') }
-      it { is_expected.to include('ownerid@odata.bind') }
-      it { is_expected.to include('dfe_Country@odata.bind') }
     end
 
     describe "#attributes_for_update" do
@@ -186,14 +177,13 @@ describe Bookings::Gitis::Contact, type: :model do
 
         context 'when unmodified' do
           it { is_expected.not_to include('contactid') }
+          it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
           it { is_expected.not_to include('birthdate') }
           it { is_expected.to include('telephone2') }
           it { is_expected.to include('emailaddress2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
-          it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
 
         context 'when modified' do
@@ -205,6 +195,7 @@ describe Bookings::Gitis::Contact, type: :model do
           end
 
           it { is_expected.not_to include('contactid') }
+          it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
@@ -213,8 +204,6 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('emailaddress2') }
           it { is_expected.to include('telephone1') }
           it { is_expected.to include('telephone2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
-          it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
       end
 
@@ -223,6 +212,7 @@ describe Bookings::Gitis::Contact, type: :model do
 
         context 'when unmodified' do
           it { is_expected.not_to include('contactid') }
+          it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
@@ -231,8 +221,6 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
           it { is_expected.to include('telephone2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
-          it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
 
         context 'when modified' do
@@ -244,6 +232,7 @@ describe Bookings::Gitis::Contact, type: :model do
           end
 
           it { is_expected.not_to include('contactid') }
+          it { is_expected.not_to include('statecode') }
           it { is_expected.not_to include('dfe_channelcreation') }
           it { is_expected.not_to include('firstname') }
           it { is_expected.not_to include('lastname') }
@@ -252,130 +241,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
           it { is_expected.to include('telephone2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
-          it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
-      end
-    end
-  end
-
-  describe '#has_dbs_check' do
-    subject do
-      described_class.new(
-        dfe_hasdbscertificate: true,
-        dfe_dateofissueofdbscertificate: '2019-01-01'
-      )
-    end
-
-    context 'with matching value' do
-      before { subject.has_dbs_check = true }
-      it { is_expected.to have_attributes(dfe_hasdbscertificate: true) }
-      it { is_expected.to have_attributes(dfe_dateofissueofdbscertificate: '2019-01-01') }
-    end
-
-    context 'with non matching value' do
-      before { subject.has_dbs_check = false }
-      it { is_expected.to have_attributes(dfe_hasdbscertificate: false) }
-      it { is_expected.to have_attributes(dfe_dateofissueofdbscertificate: nil) }
-    end
-  end
-
-  describe '#phone=' do
-    subject { described_class.new attrs }
-    before { allow(subject).to receive(:created_by_us?).and_return(ours) }
-    before { subject.phone = '01234567890' }
-
-    context 'on existing GiTiS record' do
-      let(:ours) { false }
-
-      context 'with blank telephone1' do
-        let(:attrs) do
-          { 'telephone1' => '', 'telephone2' => '' }
-        end
-
-        it { is_expected.to have_attributes(telephone1: '01234567890') }
-        it { is_expected.to have_attributes(telephone2: '01234567890') }
-      end
-
-      context 'with matching telephone1' do
-        let(:attrs) do
-          { 'telephone1' => '01234567890', 'telephone2' => '07123456789' }
-        end
-
-        it { is_expected.to have_attributes(telephone1: '01234567890') }
-        it { is_expected.to have_attributes(telephone2: '01234567890') }
-      end
-
-      context 'for unmatching telephone1' do
-        let(:attrs) do
-          { 'telephone1' => '07123456789', 'telephone2' => '07123456789' }
-        end
-
-        it { is_expected.to have_attributes(telephone1: '07123456789') }
-        it { is_expected.to have_attributes(telephone2: '01234567890') }
-      end
-    end
-
-    context 'on record we created' do
-      let(:ours) { true }
-
-      context 'for unmatching telephone1' do
-        let(:attrs) do
-          { 'telephone1' => '07123456789', 'telephone2' => '07123456789' }
-        end
-
-        it { is_expected.to have_attributes(telephone1: '01234567890') }
-        it { is_expected.to have_attributes(telephone2: '01234567890') }
-      end
-    end
-  end
-
-  describe '#email=' do
-    subject { described_class.new attrs }
-    before { allow(subject).to receive(:created_by_us?).and_return(ours) }
-    before { subject.email = 'foobar@education.gov.uk' }
-
-    context 'on existing GiTiS record' do
-      let(:ours) { false }
-
-      context 'with blank emailaddress1' do
-        let(:attrs) do
-          { 'emailaddress1' => '', 'emailaddress2' => '' }
-        end
-
-        it { is_expected.to have_attributes(emailaddress1: 'foobar@education.gov.uk') }
-        it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
-      end
-
-      context 'with matching emailaddress1' do
-        let(:attrs) do
-          { 'emailaddress1' => 'foobar@education.gov.uk', 'emailaddress2' => 'barfoo@education.gov.uk' }
-        end
-
-        it { is_expected.to have_attributes(emailaddress1: 'foobar@education.gov.uk') }
-        it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
-      end
-
-      context 'for unmatching emailaddress1' do
-        let(:attrs) do
-          { 'emailaddress1' => 'barfoo@education.gov.uk', 'emailaddress2' => 'barfoo@education.gov.uk' }
-        end
-
-        it { is_expected.to have_attributes(emailaddress1: 'barfoo@education.gov.uk') }
-        it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
-      end
-    end
-
-    context 'on record we created' do
-      let(:ours) { true }
-
-      context 'for unmatching emailaddress1' do
-        let(:attrs) do
-          { 'emailaddress1' => 'barfoo@education.gov.uk', 'emailaddress2' => 'barfoo@education.gov.uk' }
-        end
-
-        it { is_expected.to have_attributes(emailaddress1: 'foobar@education.gov.uk') }
-        it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
       end
     end
   end

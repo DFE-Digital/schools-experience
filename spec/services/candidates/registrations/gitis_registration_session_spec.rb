@@ -3,70 +3,55 @@ require 'rails_helper'
 describe Candidates::Registrations::GitisRegistrationSession do
   let(:contact) { build(:gitis_contact, :persisted) }
 
-  let(:key) { model.model_name.param_key }
-  let(:model_name) { model.model_name.element }
+  describe '#contact_information_attributes' do
+    let(:data) { { 'phone' => '01111 222333' } }
 
-  shared_examples 'attributes with and without gitis data' do
-    subject { registration.public_send(:"#{model_name}_attributes") }
+    let(:key) do
+      Candidates::Registrations::ContactInformation.model_name.param_key
+    end
 
-    context 'with overridden data' do
-      let(:registration) { described_class.new({ key => data }, contact) }
+    context 'with overridden contact data' do
+      subject do
+        described_class.new({ key => data }, contact).
+          contact_information_attributes
+      end
+
       it { is_expected.to include(data) }
     end
 
     context 'with only gitis data' do
-      let(:registration) { described_class.new({}, contact) }
-      it { is_expected.to include(gitis_data) }
+      subject do
+        described_class.new({}, contact).contact_information_attributes
+      end
+
+      it { is_expected.to include('phone' => contact.phone) }
     end
   end
 
-  shared_examples "model with and without gitis data" do
-    subject { registration.public_send(model_name.to_sym) }
+  describe '#contact_information' do
+    let(:data) { { 'phone' => '01111 222333' } }
 
-    context 'with overridden data' do
-      let(:registration) { described_class.new({ key => data }, contact) }
-      it { is_expected.to have_attributes(data) }
+    let(:key) do
+      Candidates::Registrations::ContactInformation.model_name.param_key
+    end
+
+    context 'with overridden contact data' do
+      subject do
+        described_class.new({ key => data }, contact).contact_information
+      end
+
+      it { is_expected.to have_attributes(phone: data['phone']) }
     end
 
     context 'with only gitis data' do
-      let(:registration) { described_class.new({}, contact) }
-
       it "will raise a missing step error" do
-        expect { registration.public_send(model_name.to_sym) }.to \
+        expect { described_class.new({}, contact).contact_information }.to \
           raise_exception Candidates::Registrations::RegistrationSession::StepNotFound
       end
     end
   end
 
-  describe 'Contact Information' do
-    let(:model) { Candidates::Registrations::ContactInformation }
-    let(:data) { { 'phone' => '01111 222333' } }
-    let(:gitis_data) { { 'phone' => contact.phone } }
-
-    describe '#contact_information_attributes' do
-      include_examples "attributes with and without gitis data"
-    end
-
-    describe '#contact_information' do
-      include_examples "model with and without gitis data"
-    end
-  end
-
-  context 'Background Check' do
-    let(:model) { Candidates::Registrations::BackgroundCheck }
-    let(:data) { { 'has_dbs_check' => false } }
-    let(:gitis_data) { { 'has_dbs_check' => true } }
-
-    describe '#background_check_attributes' do
-      include_examples "attributes with and without gitis data"
-    end
-
-    describe '#background_check' do
-      include_examples "model with and without gitis data"
-    end
-  end
-
-  describe 'Personal Information' do
+  describe "#personal_information_attributes" do
     let(:data) do
       {
         'first_name' => 'Person',
@@ -76,55 +61,61 @@ describe Candidates::Registrations::GitisRegistrationSession do
       }
     end
 
-    let(:model) { Candidates::Registrations::PersonalInformation }
-
-    describe "#personal_information_attributes" do
-      context 'with overridden personal data' do
-        subject do
-          described_class.new({ key => data }, contact).
-            personal_information_attributes
-        end
-
-        it { is_expected.to include('first_name' => contact.firstname) }
-        it { is_expected.to include('last_name' => contact.lastname) }
-        it { is_expected.to include('email' => contact.email) }
-        it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
-      end
-
-      context 'with only gitis data' do
-        subject do
-          described_class.new({}, contact).personal_information_attributes
-        end
-
-        it { is_expected.to include('first_name' => contact.firstname) }
-        it { is_expected.to include('last_name' => contact.lastname) }
-        it { is_expected.to include('email' => contact.email) }
-        it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
-      end
+    let(:key) do
+      Candidates::Registrations::PersonalInformation.model_name.param_key
     end
 
-    describe '#personal_information' do
-      context 'with overridden personal data' do
-        subject do
-          described_class.new({ key => data }, contact).personal_information
-        end
-
-        it { is_expected.to have_attributes(first_name: contact.firstname) }
-        it { is_expected.to have_attributes(last_name: contact.lastname) }
-        it { is_expected.to have_attributes(email: contact.email) }
-        it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
+    context 'with overridden personal data' do
+      subject do
+        described_class.new({ key => data }, contact).
+          personal_information_attributes
       end
 
-      context 'with only gitis data' do
-        subject do
-          described_class.new({}, contact).personal_information
-        end
+      it { is_expected.to include('first_name' => contact.firstname) }
+      it { is_expected.to include('last_name' => contact.lastname) }
+      it { is_expected.to include('email' => contact.email) }
+      it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
+    end
 
-        it { is_expected.to have_attributes(first_name: contact.firstname) }
-        it { is_expected.to have_attributes(last_name: contact.lastname) }
-        it { is_expected.to have_attributes(email: contact.email) }
-        it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
+    context 'with only gitis data' do
+      subject do
+        described_class.new({}, contact).personal_information_attributes
       end
+
+      it { is_expected.to include('first_name' => contact.firstname) }
+      it { is_expected.to include('last_name' => contact.lastname) }
+      it { is_expected.to include('email' => contact.email) }
+      it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
+    end
+  end
+
+  describe '#personal_information' do
+    let(:data) { { 'first_name' => 'Person', 'email' => 'person@person.com' } }
+
+    let(:key) do
+      Candidates::Registrations::PersonalInformation.model_name.param_key
+    end
+
+    context 'with overridden personal data' do
+      subject do
+        described_class.new({ key => data }, contact).personal_information
+      end
+
+      it { is_expected.to have_attributes(first_name: contact.firstname) }
+      it { is_expected.to have_attributes(last_name: contact.lastname) }
+      it { is_expected.to have_attributes(email: contact.email) }
+      it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
+    end
+
+    context 'with only gitis data' do
+      subject do
+        described_class.new({}, contact).personal_information
+      end
+
+      it { is_expected.to have_attributes(first_name: contact.firstname) }
+      it { is_expected.to have_attributes(last_name: contact.lastname) }
+      it { is_expected.to have_attributes(email: contact.email) }
+      it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
     end
   end
 end

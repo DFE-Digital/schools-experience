@@ -26,7 +26,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(town_or_city: registration.contact_information.town_or_city) }
     it { is_expected.to have_attributes(county: registration.contact_information.county) }
     it { is_expected.to have_attributes(postcode: registration.contact_information.postcode) }
-    it { is_expected.to have_attributes(dfe_hasdbscertificate: registration.background_check.has_dbs_check) }
     it "should copy more attributes over"
   end
 
