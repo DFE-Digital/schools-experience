@@ -70,6 +70,10 @@ module ApplicationHelper
     safe_join([greeting, logout_link, "or", switch_service].compact, " ")
   end
 
+  def has_other_schools?
+    @other_urns.any?
+  end
+
   def current_user_full_name
     [@current_user.given_name, @current_user.family_name].join(' ')
   end

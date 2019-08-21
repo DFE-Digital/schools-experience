@@ -5,9 +5,12 @@
     <h1 class="govuk-heading-l">Manage requests and bookings at <%= @current_school.name %></h1>
 
     <article id="dashboard">
-      <section id="change-school">
-        <%= link_to "Change school", new_schools_switch_path %>
-      </section>
+
+      <% if has_other_schools? %>
+        <section id="change-school">
+          <%= link_to "Change school", new_schools_switch_path %>
+        </section>
+      <% end %>
 
       <% if @current_school.private_beta? %>
 
