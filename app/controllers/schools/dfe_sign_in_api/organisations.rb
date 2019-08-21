@@ -1,6 +1,6 @@
 module Schools
   module DFESignInAPI
-    class Organisations
+    class Organisations < Client
       attr_accessor :user_uuid
 
       def initialize(user_uuid)

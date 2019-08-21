@@ -70,7 +70,11 @@ module ApplicationHelper
     safe_join([greeting, logout_link, "or", switch_service].compact, " ")
   end
 
+  # if the DfE Sign-in api client isn't configured assume users
+  # may have other schools
   def has_other_schools?
+    return true unless Schools::DFESignInAPI::Client.enabled?
+
     @other_urns.any?
   end
 
