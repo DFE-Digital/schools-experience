@@ -145,14 +145,16 @@ module Bookings
 
     private
 
-      def generate_log_line(recorded, action, experience_date, school)
-        [
-          recorded.to_date.strftime('%d/%m/%Y'),
-          "%-10s" % action.to_s.upcase,
-          experience_date.to_date.strftime('%d/%m/%Y'),
-          school.urn.to_s,
-          school.name
-        ].join(' ')
+      def generate_log_line(recorded, action, experience_date, urn, schoolname)
+        recorded = Date.parse(recorded) if recorded.is_a?(String)
+        recorded = recorded.to_date.strftime('%d/%m/%Y')
+
+        experience_date = Date.parse(experience_date) if experience_date.is_a?(String)
+        experience_date = experience_date.to_date.strftime('%d/%m/%Y')
+
+        action = "%-10s" % action.to_s.upcase
+
+        [recorded, action, experience_date, urn.to_s, schoolname].join(' ')
       end
     end
   end

@@ -71,11 +71,11 @@ module Bookings
         entity.id
       end
 
-      def log_school_experience(contact_id, recorded, action, se_date, school)
+      def log_school_experience(contact_id, recorded, action, se_date, urn, schoolname)
         contact = find(contact_id)
         return false unless contact
 
-        contact.add_school_experience(recorded, action, se_date, school)
+        contact.add_school_experience(recorded, action, se_date, urn, schoolname)
         write contact
       end
 
