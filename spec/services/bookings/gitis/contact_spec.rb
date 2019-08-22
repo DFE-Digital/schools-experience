@@ -244,7 +244,7 @@ describe Bookings::Gitis::Contact, type: :model do
 
   describe '#generate_log_line' do
     let(:school) { build(:bookings_school) }
-    let(:logline) { "01/10/2019 TEST       01/11/2019 #{school.urn} #{school.name}" }
+    let(:logline) { "01/10/2019 TEST                   01/11/2019 #{school.urn} #{school.name}" }
     let(:contact) { build(:gitis_contact, :persisted) }
 
     context 'with date objects' do
@@ -276,7 +276,7 @@ describe Bookings::Gitis::Contact, type: :model do
     let(:headerline) { described_class::NOTES_HEADER }
 
     let(:logline) do
-      "01/10/2019 TEST       01/11/2019 #{school.urn} #{school.name}"
+      "01/10/2019 TEST                   01/11/2019 #{school.urn} #{school.name}"
     end
 
     context 'with no prior experience' do
@@ -295,7 +295,7 @@ describe Bookings::Gitis::Contact, type: :model do
 
     context 'with prior experience' do
       let(:secondline) do
-        "01/10/2019 BOOKED     01/11/2019 #{school.urn} #{school.name}"
+        "01/10/2019 BOOKED                 01/11/2019 #{school.urn} #{school.name}"
       end
 
       before do

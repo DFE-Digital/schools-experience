@@ -157,7 +157,7 @@ module Bookings
                             experience_date.to_date.strftime('%d/%m/%Y')
                           end
 
-        "%8<recorded>s %-10<action>s %8<date>s %<urn>s %<name>s" % {
+        "%8<recorded>s %-22<action>s %8<date>s %<urn>s %<name>s" % {
           recorded: recorded,
           action: action.to_s.upcase,
           date: experience_date,

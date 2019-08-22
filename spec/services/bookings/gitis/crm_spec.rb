@@ -199,7 +199,7 @@ describe Bookings::Gitis::CRM, type: :model do
     let(:school) { build(:bookings_school) }
     let(:contact) { build(:gitis_contact, :persisted) }
     let(:headerline) { Bookings::Gitis::Contact::NOTES_HEADER }
-    let(:logline) { "01/10/2019 TEST       01/11/2019 #{school.urn} #{school.name}" }
+    let(:logline) { "01/10/2019 TEST                   01/11/2019 #{school.urn} #{school.name}" }
 
     before do
       allow(gitis).to receive(:find).with(contact.id).and_return(contact)
