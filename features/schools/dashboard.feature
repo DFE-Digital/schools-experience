@@ -30,23 +30,13 @@ Feature: The School Dashboard
             | Manage requests | Candidates have requested school experience | /schools/placement_requests |
             | Manage bookings | A candidate has asked to change a booking   | /schools/bookings           |
 
-    Scenario: Manage dates (fixed dates)
+    Scenario: Manage dates
         Given my school has fully-onboarded
         And it has 'fixed' availability
         When I am on the 'schools dashboard' page
         Then I should see the following 'medium-priority' links:
             | Text                           | Hint | Path                                  |
-            | Add, remove and change dates   | None | /schools/placement_dates              |
             | Change how dates are displayed | None | /schools/availability_preference/edit |
-
-    Scenario: Manage dates (flexible dates)
-        Given my school has fully-onboarded
-        And it has 'flexible' availability
-        When I am on the 'schools dashboard' page
-        Then I should see the following 'medium-priority' links:
-            | Text                                                   | Hint | Path                                  |
-            | Describe when you’ll host school experience candidates | None | /schools/availability_info/edit       |
-            | Change how dates are displayed                         | None | /schools/availability_preference/edit |
 
     Scenario: Account admin
         Given my school has fully-onboarded
