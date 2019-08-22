@@ -149,12 +149,21 @@ module Bookings
         recorded = Date.parse(recorded) if recorded.is_a?(String)
         recorded = recorded.to_date.strftime('%d/%m/%Y')
 
-        experience_date = Date.parse(experience_date) if experience_date.is_a?(String)
-        experience_date = experience_date.to_date.strftime('%d/%m/%Y')
+        experience_date = if experience_date.nil?
+                            '        '
+                          elsif experience_date.is_a?(String)
+                            Date.parse(experience_date).strftime('%d/%m/%Y')
+                          else
+                            experience_date.to_date.strftime('%d/%m/%Y')
+                          end
 
-        action = "%-10s" % action.to_s.upcase
-
-        [recorded, action, experience_date, urn.to_s, schoolname].join(' ')
+        "%8<recorded>s %-10<action>s %8<date>s %<urn>s %<name>s" % {
+          recorded: recorded,
+          action: action.to_s.upcase,
+          date: experience_date,
+          urn: urn,
+          name: schoolname
+        }
       end
     end
   end

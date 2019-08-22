@@ -21,6 +21,8 @@ module Candidates
               registration_session,
               cookies[:analytics_tracking_uuid],
               context: :returning_from_confirmation_email
+
+            log_to_gitis placement_request
           else
             placement_request = Bookings::PlacementRequest.create_from_registration_session! \
               registration_session,
@@ -64,6 +66,16 @@ module Candidates
         else
           ''
         end
+      end
+
+      def log_to_gitis(placement_request)
+        Bookings::LogToGitisJob.perform_later \
+          placement_request.candidate.gitis_uuid,
+          placement_request.requested_on.strftime('%d/%m/%Y'),
+          'REQUEST',
+          placement_request.placement_date&.date&.strftime('%d/%m/%Y'), # return nil for flexible dates
+          placement_request.school.urn,
+          placement_request.school.name
       end
     end
   end
