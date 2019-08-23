@@ -147,14 +147,14 @@ module Bookings
 
       def generate_log_line(recorded, action, experience_date, urn, schoolname)
         recorded = Date.parse(recorded) if recorded.is_a?(String)
-        recorded = recorded.to_date.strftime('%d/%m/%Y')
+        recorded = recorded.to_date.to_formatted_s(:gitis)
 
         experience_date = if experience_date.nil?
                             '        '
                           elsif experience_date.is_a?(String)
-                            Date.parse(experience_date).strftime('%d/%m/%Y')
+                            Date.parse(experience_date).to_formatted_s(:gitis)
                           else
-                            experience_date.to_date.strftime('%d/%m/%Y')
+                            experience_date.to_date.to_formatted_s(:gitis)
                           end
 
         "%8<recorded>s %-22<action>s %8<date>s %<urn>s %<name>s" % {

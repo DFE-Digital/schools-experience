@@ -113,9 +113,9 @@ module Candidates
       def log_to_gitis(cancellation)
         Bookings::LogToGitisJob.perform_later \
           cancellation.contact_uuid,
-          cancellation.sent_at.strftime('%d/%m/%Y'),
+          cancellation.sent_at.to_date.to_formatted_s(:gitis),
           'CANCELLED BY CANDIDATE',
-          (cancellation.booking || cancellation.placement_date)&.date&.strftime('%d/%m/%Y'),
+          (cancellation.booking || cancellation.placement_date)&.date&.to_formatted_s(:gitis),
           cancellation.school_urn,
           cancellation.school_name
       end

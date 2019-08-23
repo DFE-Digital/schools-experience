@@ -125,7 +125,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
             expect(Bookings::LogToGitisJob).to \
               have_received(:perform_later).with \
                 fake_gitis_uuid,
-                Date.today.strftime('%d/%m/%Y'),
+                Date.today.to_formatted_s(:gitis),
                 'REQUEST',
                 nil,
                 school.urn,

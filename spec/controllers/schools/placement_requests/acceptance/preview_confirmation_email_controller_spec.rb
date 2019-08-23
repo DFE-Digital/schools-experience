@@ -57,9 +57,9 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
       expect(Bookings::LogToGitisJob).to \
         have_received(:perform_later).with \
           pr.contact_uuid,
-          Date.today.strftime('%d/%m/%Y'),
+          Date.today.to_formatted_s(:gitis),
           'CONFIRMED',
-          booking.date.strftime('%d/%m/%Y'),
+          booking.date.to_formatted_s(:gitis),
           @current_user_school.urn,
           @current_user_school.name
     end

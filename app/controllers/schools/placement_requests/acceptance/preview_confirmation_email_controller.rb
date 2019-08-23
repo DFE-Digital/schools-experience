@@ -34,9 +34,9 @@ module Schools
         def log_to_gitis(booking)
           Bookings::LogToGitisJob.perform_later \
             booking.contact_uuid,
-            booking.accepted_at.to_date.strftime('%d/%m/%Y'),
+            booking.accepted_at.to_date.to_formatted_s(:gitis),
             'CONFIRMED',
-            booking.date.strftime('%d/%m/%Y'), # return nil for flexible dates
+            booking.date.to_formatted_s(:gitis), # return nil for flexible dates
             booking.bookings_school.urn,
             booking.bookings_school.name
         end

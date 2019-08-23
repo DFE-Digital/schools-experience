@@ -208,7 +208,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
             expect(Bookings::LogToGitisJob).to \
               have_received(:perform_later).with \
                 placement_request.contact_uuid,
-                Date.today.strftime('%d/%m/%Y'),
+                Date.today.to_formatted_s(:gitis),
                 'CANCELLED BY CANDIDATE',
                 nil,
                 placement_request.school.urn,
