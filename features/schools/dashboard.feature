@@ -35,8 +35,8 @@ Feature: The School Dashboard
         And it has 'fixed' availability
         When I am on the 'schools dashboard' page
         Then I should see the following 'medium-priority' links:
-            | Text                           | Hint | Path                                  |
-            | Change how dates are displayed | None | /schools/availability_preference/edit |
+            | Text                                   | Hint | Path                                  |
+            | Change dates and how they're displayed | None | /schools/availability_preference/edit |
 
     Scenario: Account admin
         Given my school has fully-onboarded
@@ -80,7 +80,7 @@ Feature: The School Dashboard
         And it has 'fixed' availability
         And my school has no placement dates
         When I am on the 'schools dashboard' page
-        Then there should be a 'You have no placement dates' warning
+        Then there should be a 'You haven't entered any dates' warning
 
     Scenario: Displaying a warning when flexible with no description
         Given my school has fully-onboarded
