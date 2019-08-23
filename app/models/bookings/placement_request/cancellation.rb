@@ -9,9 +9,6 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   validate :placement_request_not_closed, on: :create, if: :placement_request
 
   delegate \
-    :school_email,
-    :school_name,
-    :school_urn,
     :candidate_email,
     :candidate_name,
     :contact_uuid,
@@ -20,6 +17,16 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     :booking,
     :placement_date,
     to: :placement_request
+
+  delegate :name, :urn, to: :school, prefix: true
+
+  def school
+    booking ? booking.bookings_school : placement_request.school
+  end
+
+  def school_email
+    school.notifications_email
+  end
 
   def sent!
     update! sent_at: DateTime.now

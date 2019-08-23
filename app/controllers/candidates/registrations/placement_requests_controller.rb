@@ -71,11 +71,7 @@ module Candidates
       def log_to_gitis(placement_request)
         Bookings::LogToGitisJob.perform_later \
           placement_request.candidate.gitis_uuid,
-          placement_request.requested_on.to_formatted_s(:gitis),
-          'REQUEST',
-          placement_request.placement_date&.date&.to_formatted_s(:gitis), # return nil for flexible dates
-          placement_request.school.urn,
-          placement_request.school.name
+          Bookings::Gitis::LogGenerator.entry(:request, placement_request)
       end
     end
   end

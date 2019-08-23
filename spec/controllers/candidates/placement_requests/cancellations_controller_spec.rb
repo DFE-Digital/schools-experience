@@ -207,12 +207,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           it 'enqueues a log to gitis job' do
             expect(Bookings::LogToGitisJob).to \
               have_received(:perform_later).with \
-                placement_request.contact_uuid,
-                Date.today.to_formatted_s(:gitis),
-                'CANCELLED BY CANDIDATE',
-                nil,
-                placement_request.school.urn,
-                placement_request.school.name
+                placement_request.contact_uuid, /CANCELLED BY CANDIDATE/
           end
 
           it 'redirects to the show action' do

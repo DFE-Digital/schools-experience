@@ -55,13 +55,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
     specify 'should enqueue a log to gitis job' do
       expect(Bookings::LogToGitisJob).to \
-        have_received(:perform_later).with \
-          pr.contact_uuid,
-          Date.today.to_formatted_s(:gitis),
-          'CONFIRMED',
-          booking.date.to_formatted_s(:gitis),
-          @current_user_school.urn,
-          @current_user_school.name
+        have_received(:perform_later).with pr.contact_uuid, /ACCEPTED/
     end
 
     specify 'should be redirected to the placement requests index' do

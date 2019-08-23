@@ -14,8 +14,6 @@ module Bookings
         UPDATE_BLACKLIST + %w{telephone1 emailaddress1}
       ).freeze
 
-      NOTES_HEADER = "RECORDED   ACTION     EXPERIENCE  URN     NAME".freeze
-
       entity_id_attribute :contactid
 
       entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
@@ -135,35 +133,12 @@ module Bookings
         super.except(*UPDATE_BLACKLIST)
       end
 
-      def add_school_experience(*args)
+      def add_school_experience(log_line)
         unless dfe_notesforclassroomexperience.present?
-          self.dfe_notesforclassroomexperience = NOTES_HEADER + "\n\n"
+          self.dfe_notesforclassroomexperience = LogGenerator::NOTES_HEADER + "\n\n"
         end
 
-        self.dfe_notesforclassroomexperience << generate_log_line(*args) + "\n"
-      end
-
-    private
-
-      def generate_log_line(recorded, action, experience_date, urn, schoolname)
-        recorded = Date.parse(recorded) if recorded.is_a?(String)
-        recorded = recorded.to_date.to_formatted_s(:gitis)
-
-        experience_date = if experience_date.nil?
-                            '        '
-                          elsif experience_date.is_a?(String)
-                            Date.parse(experience_date).to_formatted_s(:gitis)
-                          else
-                            experience_date.to_date.to_formatted_s(:gitis)
-                          end
-
-        "%8<recorded>s %-22<action>s %8<date>s %<urn>s %<name>s" % {
-          recorded: recorded,
-          action: action.to_s.upcase,
-          date: experience_date,
-          urn: urn,
-          name: schoolname
-        }
+        self.dfe_notesforclassroomexperience << log_line + "\n"
       end
     end
   end

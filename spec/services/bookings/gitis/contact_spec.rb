@@ -242,49 +242,17 @@ describe Bookings::Gitis::Contact, type: :model do
     end
   end
 
-  describe '#generate_log_line' do
-    let(:school) { build(:bookings_school) }
-    let(:logline) { "01/10/2019 TEST                   01/11/2019 #{school.urn} #{school.name}" }
-    let(:contact) { build(:gitis_contact, :persisted) }
-
-    context 'with date objects' do
-      subject do
-        contact.send :generate_log_line,
-          Date.parse('2019-10-01'),
-          'test',
-          Date.parse('2019-11-01'),
-          school.urn,
-          school.name
-      end
-
-      it("will generate the expected log line") { is_expected.to eql(logline) }
-    end
-
-    context 'with string dates' do
-      subject do
-        contact.send :generate_log_line, \
-          '2019-10-01', 'test', '2019-11-01', school.urn, school.name
-      end
-
-      it("will generate the expected log line") { is_expected.to eql(logline) }
-    end
-  end
-
   describe '#add_school_experience' do
     let(:school) { build(:bookings_school) }
     let(:contact) { build(:gitis_contact, :persisted) }
-    let(:headerline) { described_class::NOTES_HEADER }
+    let(:headerline) { Bookings::Gitis::LogGenerator::NOTES_HEADER }
 
     let(:logline) do
       "01/10/2019 TEST                   01/11/2019 #{school.urn} #{school.name}"
     end
 
     context 'with no prior experience' do
-      before do
-        contact.add_school_experience Date.parse("2019-10-01"), 'test',
-          Date.parse('2019-11-01'), school.urn, school.name
-      end
-
+      before { contact.add_school_experience logline }
       subject { contact }
 
       it "will create a classroomexperience entry" do
@@ -300,9 +268,7 @@ describe Bookings::Gitis::Contact, type: :model do
 
       before do
         contact.dfe_notesforclassroomexperience = "#{headerline}\n\n#{logline}\n"
-
-        contact.add_school_experience Date.parse("2019-10-01"), 'booked',
-          Date.parse('2019-11-01'), school.urn, school.name
+        contact.add_school_experience secondline
       end
 
       subject { contact }

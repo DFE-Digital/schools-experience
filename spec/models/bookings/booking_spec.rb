@@ -84,6 +84,7 @@ describe Bookings::Booking do
     it { is_expected.to belong_to(:bookings_subject) }
     it { is_expected.to belong_to(:bookings_school) }
     it { is_expected.to have_one(:candidate_cancellation).through(:bookings_placement_request) }
+    it { is_expected.to have_one(:school_cancellation).through(:bookings_placement_request) }
   end
 
   describe 'Delegation' do
