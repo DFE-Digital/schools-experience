@@ -14,6 +14,7 @@ module Schools
           @cancellation = @placement_request.school_cancellation
           notify_candidate @cancellation
           @cancellation.sent!
+          log_to_gitis @cancellation
           redirect_to \
             schools_placement_request_cancellation_notification_delivery_path @placement_request
         end
@@ -45,6 +46,12 @@ module Schools
             dates_requested: cancellation.dates_requested,
             school_search_url: new_candidates_school_search_url
           ).despatch_later!
+        end
+
+        def log_to_gitis(cancellation)
+          Bookings::LogToGitisJob.perform_later \
+            cancellation.contact_uuid,
+            Bookings::Gitis::LogGenerator.entry(:cancellation, cancellation)
         end
       end
     end

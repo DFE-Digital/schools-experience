@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe Schools::Attendance do
-  let(:booking_1) { create(:bookings_booking) }
-  let(:booking_2) { create(:bookings_booking) }
-  let(:booking_3) { create(:bookings_booking) }
+  let(:booking_1) { create(:bookings_booking, :accepted) }
+  let(:booking_2) { create(:bookings_booking, :accepted) }
+  let(:booking_3) { create(:bookings_booking, :accepted) }
   let(:bookings) { [booking_1, booking_2, booking_3] }
   let(:bookings_params) do
     {
@@ -40,6 +40,24 @@ describe Schools::Attendance do
     specify 'should correctly update bookings with param values' do
       bookings_params.each do |id, status|
         expect(Bookings::Booking.find(id).attended).to be(status)
+      end
+    end
+  end
+
+  describe '#update_gitis' do
+    before do
+      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return('cattlee')
+      subject.save
+      subject.update_gitis
+    end
+
+    specify 'should correctly update bookings with param values' do
+      bookings_params.each do |id, _status|
+        booking = Bookings::Booking.find(id)
+        expect(Bookings::LogToGitisJob).to \
+          have_received(:perform_later).with \
+            booking.contact_uuid,
+            booking.attended ? /ATTENDED/ : /DID NOT ATTEND/
       end
     end
   end

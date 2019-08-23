@@ -11,12 +11,32 @@ module Schools
 
     def save
       Bookings::Booking.transaction do
-        self.bookings_params.each do |booking_id, attended|
-          self.bookings.index_by(&:id).fetch(booking_id).tap do |booking|
+        bookings_params.each do |booking_id, attended|
+          fetch(booking_id).tap do |booking|
             booking.update(attended: ActiveModel::Type::Boolean.new.cast(attended))
           end
         end
       end
+    end
+
+    def update_gitis
+      bookings_params.each do |booking_id, _attended|
+        fetch(booking_id).tap do |booking|
+          Bookings::LogToGitisJob.perform_later \
+            booking.contact_uuid,
+            Bookings::Gitis::LogGenerator.entry(:attendance, booking)
+        end
+      end
+    end
+
+  private
+
+    def indexed_bookings
+      @indexed_bookings ||= self.bookings.index_by(&:id)
+    end
+
+    def fetch(id)
+      indexed_bookings.fetch(id)
     end
   end
 end
