@@ -279,7 +279,7 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text 'There is a problem'
 
     # Submit registrations/placement_preference form successfully
-    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
+    fill_in 'Tell us about your availability', with: 'Only free from Epiphany to Whitsunday'
     fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
     click_button 'Continue'
   end

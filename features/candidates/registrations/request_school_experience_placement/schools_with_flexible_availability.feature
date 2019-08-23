@@ -15,9 +15,9 @@ Feature: Request a school experience placement
     Scenario: Form contents
         Given I am on the 'Request school experience placement' page for my school of choice
         Then I should see a form with the following fields:
-            | Label                                                                                 | Type     |
-            | Is there anything schools need to know about your availability for school experience? | textarea |
-            | What do you want to get out of your school experience?                                | textarea |
+            | Label                                                  | Type     |
+            | Tell us about your availability                        | textarea |
+            | What do you want to get out of your school experience? | textarea |
 
     Scenario: Submitting my data
         Given I am on the 'Request school experience placement' page for my school of choice
