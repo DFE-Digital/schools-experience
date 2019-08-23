@@ -17,6 +17,13 @@ FactoryBot.define do
       candidate_requirement_requirements_details { 'Gotta go fast' }
     end
 
+    trait :with_candidate_requirements_selection do
+      after :build do |profile|
+        profile.candidate_requirements_selection = \
+          FactoryBot.build :candidate_requirements_selection
+      end
+    end
+
     trait :with_fees do
       fees_administration_fees { true }
       fees_dbs_fees { true }

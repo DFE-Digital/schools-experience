@@ -79,7 +79,7 @@ Rails.application.configure do
   end
 
   config.x.phase = Integer(ENV.fetch('PHASE') { 10000 })
-  config.x.features = %i(subject_specific_dates)
+  config.x.features = %i(subject_specific_dates candidate_requirement_ab_test)
 
   # dfe signin redirects back to https, so force it
   config.force_ssl = true

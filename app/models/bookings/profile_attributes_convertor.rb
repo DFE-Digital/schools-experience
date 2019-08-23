@@ -10,6 +10,7 @@ module Bookings
       reset_output
 
       convert_dbs_required
+      convert_individual_requirements
       convert_nillable
       convert_dress_code
       convert_teacher_training
@@ -55,11 +56,20 @@ module Bookings
       end
     end
 
-    def convert_nillable
-      output[:individual_requirements] = \
-        conditional_assign(:candidate_requirement_requirements,
-          :candidate_requirement_requirements_details)
+    def convert_individual_requirements
+      # rubocop:disable ConditionalAssignment
+      if input.fetch :show_candidate_requirements_selection
+        output[:individual_requirements] = \
+          Schools::OnBoarding::CandidateRequirementsSelectionPresenter.new(input).to_s
+      else
+        output[:individual_requirements] = \
+          conditional_assign(:candidate_requirement_requirements,
+            :candidate_requirement_requirements_details)
+      end
+      # rubocop:enable ConditionalAssignment
+    end
 
+    def convert_nillable
       output[:disabled_facilities] = \
         conditional_assign(:candidate_experience_detail_disabled_facilities,
           :candidate_experience_detail_disabled_facilities_details)

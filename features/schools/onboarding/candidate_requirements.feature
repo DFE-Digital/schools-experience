@@ -5,6 +5,7 @@ Feature: Candidate requirements
 
   Background:
     Given I am logged in as a DfE user
+    Given I see the candidate requirements screen
     And I have completed the following steps:
         | Step name                    | Extra |
         | DBS Requirements             |       |

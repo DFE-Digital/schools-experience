@@ -8,10 +8,10 @@ Feature: Other Fee
     And the secondary school phase is availble
     And the college phase is availble
     And I have completed the following steps:
-        | Step name                    | Extra                     |
-        | DBS Requirements             |                           |
-        | Candidate Requirements       |                           |
-        | Fees                         | choosing only Other costs |
+        | Step name                        | Extra                     |
+        | DBS Requirements                 |                           |
+        | Candidate Requirements selection |                           |
+        | Fees                             | choosing only Other costs |
 
   Scenario: Page title
     Given I am on the 'other costs' page
