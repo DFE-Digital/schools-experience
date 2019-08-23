@@ -11,11 +11,14 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   delegate \
     :school_email,
     :school_name,
+    :school_urn,
     :candidate_email,
     :candidate_name,
+    :contact_uuid,
     :dates_requested,
     :token,
     :booking,
+    :placement_date,
     to: :placement_request
 
   def sent!

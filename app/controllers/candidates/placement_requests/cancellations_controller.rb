@@ -22,6 +22,8 @@ module Candidates
           notify_school @cancellation
           notify_candidate @cancellation
           @cancellation.sent!
+          log_to_gitis @cancellation
+
           redirect_to candidates_placement_request_cancellation_path \
             placement_request.token
         else
@@ -106,6 +108,16 @@ module Candidates
           requested_availability: cancellation.dates_requested,
           school_search_url: new_candidates_school_search_url
         ).despatch_later!
+      end
+
+      def log_to_gitis(cancellation)
+        Bookings::LogToGitisJob.perform_later \
+          cancellation.contact_uuid,
+          cancellation.sent_at.strftime('%d/%m/%Y'),
+          'CANCELLED BY CANDIDATE',
+          (cancellation.booking || cancellation.placement_date)&.date&.strftime('%d/%m/%Y'),
+          cancellation.school_urn,
+          cancellation.school_name
       end
     end
   end

@@ -82,6 +82,8 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
     end
 
     before do
+      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
+
       post \
         "/candidates/placement_requests/#{placement_request.token}/cancellation/",
         params: cancellation_params
@@ -113,6 +115,11 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           have_received :despatch_later!
       end
 
+      it 'does not enqueues a log to gitis job' do
+        expect(Bookings::LogToGitisJob).not_to \
+          have_received(:perform_later)
+      end
+
       it 'redirects to the show action' do
         expect(response).to redirect_to \
           candidates_placement_request_cancellation_path(placement_request.token)
@@ -142,6 +149,11 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
 
           it 'does not cancel the placement request' do
             expect(placement_request).not_to be_closed
+          end
+
+          it 'does not enqueues a log to gitis job' do
+            expect(Bookings::LogToGitisJob).not_to \
+              have_received(:perform_later)
           end
 
           it 'rerenders the new template' do
@@ -190,6 +202,17 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
 
           it 'cancels the placement request' do
             expect(placement_request).to be_closed
+          end
+
+          it 'enqueues a log to gitis job' do
+            expect(Bookings::LogToGitisJob).to \
+              have_received(:perform_later).with \
+                placement_request.contact_uuid,
+                Date.today.strftime('%d/%m/%Y'),
+                'CANCELLED BY CANDIDATE',
+                nil,
+                placement_request.school.urn,
+                placement_request.school.name
           end
 
           it 'redirects to the show action' do
