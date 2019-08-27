@@ -6,8 +6,15 @@ module Bookings
       NOTES_HEADER = "RECORDED   ACTION     EXPERIENCE  URN     NAME".freeze
       LOG_LINE = "%8<recorded>s %-22<action>s %8<date>s %<urn>s %<name>s".freeze
 
-      def self.entry(type, subject)
-        new(type, subject).entry
+      class << self
+        def entry(type, subject)
+          new(type, subject).entry
+        end
+
+        def write_later(contactid, type, subject)
+          Bookings::LogToGitisJob.perform_later \
+            contactid, new(type, subject).entry
+        end
       end
 
       def initialize(type, subject)

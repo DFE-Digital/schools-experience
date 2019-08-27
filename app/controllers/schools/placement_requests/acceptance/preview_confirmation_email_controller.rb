@@ -11,7 +11,9 @@ module Schools
           booking = @placement_request.booking
 
           if booking.update(accepted_at: Time.zone.now) && candidate_booking_notification(booking).despatch_later!
-            log_to_gitis booking
+            Bookings::Gitis::EventLogger.write_later \
+              booking.contact_uuid, :booking, booking
+
             redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
           else
             render :new
@@ -29,12 +31,6 @@ module Schools
         def candidate_booking_notification(booking)
           NotifyEmail::CandidateBookingConfirmation
             .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token))
-        end
-
-        def log_to_gitis(booking)
-          Bookings::LogToGitisJob.perform_later \
-            booking.contact_uuid,
-            Bookings::Gitis::EventLogger.entry(:booking, booking)
         end
       end
     end

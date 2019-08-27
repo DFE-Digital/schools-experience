@@ -22,9 +22,8 @@ module Schools
     def update_gitis
       bookings_params.each do |booking_id, _attended|
         fetch(booking_id).tap do |booking|
-          Bookings::LogToGitisJob.perform_later \
-            booking.contact_uuid,
-            Bookings::Gitis::EventLogger.entry(:attendance, booking)
+          Bookings::Gitis::EventLogger.write_later \
+            booking.contact_uuid, :attendance, booking
         end
       end
     end

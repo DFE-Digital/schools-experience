@@ -22,7 +22,9 @@ module Candidates
           notify_school @cancellation
           notify_candidate @cancellation
           @cancellation.sent!
-          log_to_gitis @cancellation
+
+          Bookings::Gitis::EventLogger.write_later \
+            @cancellation.contact_uuid, :cancellation, @cancellation
 
           redirect_to candidates_placement_request_cancellation_path \
             placement_request.token
@@ -108,12 +110,6 @@ module Candidates
           requested_availability: cancellation.dates_requested,
           school_search_url: new_candidates_school_search_url
         ).despatch_later!
-      end
-
-      def log_to_gitis(cancellation)
-        Bookings::LogToGitisJob.perform_later \
-          cancellation.contact_uuid,
-          Bookings::Gitis::EventLogger.entry(:cancellation, cancellation)
       end
     end
   end
