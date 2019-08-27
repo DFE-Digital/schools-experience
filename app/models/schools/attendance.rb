@@ -24,7 +24,7 @@ module Schools
         fetch(booking_id).tap do |booking|
           Bookings::LogToGitisJob.perform_later \
             booking.contact_uuid,
-            Bookings::Gitis::LogGenerator.entry(:attendance, booking)
+            Bookings::Gitis::EventLogger.entry(:attendance, booking)
         end
       end
     end

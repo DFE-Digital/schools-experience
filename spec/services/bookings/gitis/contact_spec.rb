@@ -245,7 +245,7 @@ describe Bookings::Gitis::Contact, type: :model do
   describe '#add_school_experience' do
     let(:school) { build(:bookings_school) }
     let(:contact) { build(:gitis_contact, :persisted) }
-    let(:headerline) { Bookings::Gitis::LogGenerator::NOTES_HEADER }
+    let(:headerline) { Bookings::Gitis::EventLogger::NOTES_HEADER }
 
     let(:logline) do
       "01/10/2019 TEST                   01/11/2019 #{school.urn} #{school.name}"

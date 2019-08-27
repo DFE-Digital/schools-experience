@@ -113,7 +113,7 @@ module Candidates
       def log_to_gitis(cancellation)
         Bookings::LogToGitisJob.perform_later \
           cancellation.contact_uuid,
-          Bookings::Gitis::LogGenerator.entry(:cancellation, cancellation)
+          Bookings::Gitis::EventLogger.entry(:cancellation, cancellation)
       end
     end
   end

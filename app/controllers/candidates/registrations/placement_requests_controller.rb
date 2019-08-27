@@ -71,7 +71,7 @@ module Candidates
       def log_to_gitis(placement_request)
         Bookings::LogToGitisJob.perform_later \
           placement_request.candidate.gitis_uuid,
-          Bookings::Gitis::LogGenerator.entry(:request, placement_request)
+          Bookings::Gitis::EventLogger.entry(:request, placement_request)
       end
     end
   end

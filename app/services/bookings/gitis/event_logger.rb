@@ -1,6 +1,6 @@
 module Bookings
   module Gitis
-    class LogGenerator
+    class EventLogger
       attr_reader :type, :subject
 
       NOTES_HEADER = "RECORDED   ACTION     EXPERIENCE  URN     NAME".freeze

@@ -34,7 +34,7 @@ module Schools
         def log_to_gitis(booking)
           Bookings::LogToGitisJob.perform_later \
             booking.contact_uuid,
-            Bookings::Gitis::LogGenerator.entry(:booking, booking)
+            Bookings::Gitis::EventLogger.entry(:booking, booking)
         end
       end
     end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Bookings::Gitis::LogGenerator, type: :model do
+describe Bookings::Gitis::EventLogger, type: :model do
   subject { described_class.entry log_type, log_subject }
   let(:today) { Date.today.to_formatted_s(:gitis) }
 
