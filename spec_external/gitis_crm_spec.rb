@@ -356,7 +356,7 @@ RSpec.describe "The GITIS CRM Api" do
       'dfe_dateofissueofdbscertificate' => nil,
       'dfe_notesforclassroomexperience' =>
         existing_data['dfe_notesforclassroomexperience'] +
-        "#{existing_data['dfe_notesforclassroomexperience']}\nUpdated at #{Time.zone.now}"
+        "#{existing_data['dfe_notesforclassroomexperience']}\nUpdated at #{Time.zone.now}",
       'dfe_hasdbscertificate' => true
     }
   end
