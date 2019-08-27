@@ -10,6 +10,7 @@ module Bookings
       class_name: 'Bookings::School'
 
     has_one :candidate_cancellation, through: :bookings_placement_request
+    has_one :school_cancellation, through: :bookings_placement_request
 
     validates :date,
       presence: true,

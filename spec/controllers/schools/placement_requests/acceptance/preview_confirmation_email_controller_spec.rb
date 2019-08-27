@@ -35,6 +35,8 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
   context '#create' do
     before do
+      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
+
       allow(NotifyEmail::CandidateBookingConfirmation).to(
         receive(:from_booking)
           .and_return(double(NotifyEmail::CandidateRequestConfirmation, despatch_later!: true))
@@ -49,6 +51,11 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
     specify 'should set the accepted_at time on the booking' do
       expect(booking.reload.accepted_at).not_to be_nil
+    end
+
+    specify 'should enqueue a log to gitis job' do
+      expect(Bookings::LogToGitisJob).to \
+        have_received(:perform_later).with pr.contact_uuid, /ACCEPTED/
     end
 
     specify 'should be redirected to the placement requests index' do

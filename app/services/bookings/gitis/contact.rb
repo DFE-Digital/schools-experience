@@ -13,6 +13,7 @@ module Bookings
       entity_attributes :address1_postalcode
       entity_attributes :telephone1, :telephone2
       entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
+      entity_attributes :dfe_notesforclassroomexperience
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
       entity_association :ownerid, Team
@@ -52,6 +53,7 @@ module Bookings
         self.dfe_channelcreation              = @crm_data['dfe_channelcreation'] || self.class.channel_creation
         self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
         self.dfe_dateofissueofdbscertificate  = @crm_data['dfe_dateofissueofdbscertificate']
+        self.dfe_notesforclassroomexperience  = @crm_data['dfe_notesforclassroomexperience']
         self.ownerid                          = @crm_data['_ownerid_value'] || Team.default
         self.dfe_Country                      = @crm_data['_dfe_countryid_value'] || Country.default
         self.dfe_PreferredTeachingSubject01   = @crm_data['_dfe_preferredteachingsubject01_value']
@@ -144,6 +146,14 @@ module Bookings
         firstname.downcase == fname && lastname.downcase == lname ||
           firstname.downcase == fname && birthdate == gitis_format_dob ||
           lastname.downcase == lname && birthdate == gitis_format_dob
+      end
+
+      def add_school_experience(log_line)
+        unless dfe_notesforclassroomexperience.present?
+          self.dfe_notesforclassroomexperience = EventLogger::NOTES_HEADER + "\n\n"
+        end
+
+        self.dfe_notesforclassroomexperience = "#{dfe_notesforclassroomexperience}#{log_line}\n"
       end
     end
   end

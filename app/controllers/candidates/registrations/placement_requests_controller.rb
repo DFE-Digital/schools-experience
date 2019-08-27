@@ -21,6 +21,9 @@ module Candidates
               registration_session,
               cookies[:analytics_tracking_uuid],
               context: :returning_from_confirmation_email
+
+            Bookings::Gitis::EventLogger.write_later \
+              current_candidate.gitis_uuid, :request, placement_request
           else
             placement_request = Bookings::PlacementRequest.create_from_registration_session! \
               registration_session,

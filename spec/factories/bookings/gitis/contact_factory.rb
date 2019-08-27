@@ -16,6 +16,7 @@ FactoryBot.define do
     _dfe_preferredteachingsubject02_value { '686ba354-2a91-430b-affa-68b4e1fdffc0' }
 
     trait :persisted do
+      after(:build, &:reset_dirty_attributes)
       contactid { SecureRandom.uuid }
     end
   end
