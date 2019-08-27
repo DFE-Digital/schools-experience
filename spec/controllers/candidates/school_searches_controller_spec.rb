@@ -5,7 +5,7 @@ RSpec.describe Candidates::SchoolSearchesController, type: :request do
     before { get new_candidates_school_search_path }
 
     it "includes the search form" do
-      expect(response.body).to match(/Find.*experience/i)
+      expect(response.body).to match(/Search for school experience/i)
     end
   end
 end

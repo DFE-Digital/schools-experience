@@ -60,5 +60,9 @@ module Candidates
       when 'never' then 'No - Candidates will be accompanied at all times'
       end
     end
+
+    def available_dates
+      school.bookings_placement_dates.available
+    end
   end
 end

@@ -75,7 +75,12 @@ Rails.application.routes.draw do
 
     resource :availability_preference, only: %i(edit update)
     resource :availability_info, only: %i(edit update), controller: 'availability_info'
-    resources :placement_dates
+    resources :placement_dates do
+      if Feature.instance.active? :subject_specific_dates
+        resource :configuration, only: %i(new create), controller: 'placement_dates/configurations'
+        resource :subject_selection, only: %i(new create), controller: 'placement_dates/subject_selections'
+      end
+    end
 
     namespace :errors do
       resource :not_registered, controller: :not_registered, only: :show
@@ -97,6 +102,7 @@ Rails.application.routes.draw do
       resource :experience_outline, only: %i(new create edit update)
       resource :admin_contact, only: %i(new create edit update)
       resource :profile, only: :show
+      resource :preview, only: :show
       resource :confirmation, only: %i(create show)
     end
 
