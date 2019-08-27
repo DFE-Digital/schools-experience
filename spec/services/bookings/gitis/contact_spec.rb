@@ -259,6 +259,11 @@ describe Bookings::Gitis::Contact, type: :model do
         is_expected.to have_attributes \
           dfe_notesforclassroomexperience: "#{headerline}\n\n#{logline}\n"
       end
+
+      it "will write the changes to the crm" do
+        expect(contact.attributes_for_create).to include \
+          'dfe_notesforclassroomexperience' => "#{headerline}\n\n#{logline}\n"
+      end
     end
 
     context 'with prior experience' do
@@ -268,14 +273,21 @@ describe Bookings::Gitis::Contact, type: :model do
 
       before do
         contact.dfe_notesforclassroomexperience = "#{headerline}\n\n#{logline}\n"
+        contact.reset_dirty_attributes
         contact.add_school_experience secondline
       end
 
       subject { contact }
 
-      it "will create a classroomexperience entry" do
+      it "will append to the classroomexperience entry" do
         is_expected.to have_attributes \
           dfe_notesforclassroomexperience:
+            "#{headerline}\n\n#{logline}\n#{secondline}\n"
+      end
+
+      it "will write the changes to the crm" do
+        expect(subject.attributes_for_update).to include \
+          'dfe_notesforclassroomexperience' =>
             "#{headerline}\n\n#{logline}\n#{secondline}\n"
       end
     end

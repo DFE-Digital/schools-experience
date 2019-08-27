@@ -54,6 +54,7 @@ module Bookings
         self.birthdate                = @crm_data['birthdate']
         self.statecode                = @crm_data['statecode'] || STATE_CODE
         self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
+        self.dfe_notesforclassroomexperience = @crm_data['dfe_notesforclassroomexperience']
 
         super # handles resetting dirty attributes
 
@@ -138,7 +139,7 @@ module Bookings
           self.dfe_notesforclassroomexperience = EventLogger::NOTES_HEADER + "\n\n"
         end
 
-        self.dfe_notesforclassroomexperience << log_line + "\n"
+        self.dfe_notesforclassroomexperience = "#{dfe_notesforclassroomexperience}#{log_line}\n"
       end
     end
   end
