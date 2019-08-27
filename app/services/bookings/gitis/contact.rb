@@ -15,6 +15,11 @@ module Bookings
       entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
+      entity_association :ownerid, Team
+      entity_association :dfe_Country, Country
+      entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
+      entity_association :dfe_PreferredTeachingSubject02, TeachingSubject
+
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
       alias_attribute :building, :address1_line1
@@ -24,41 +29,33 @@ module Bookings
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
-      delegate :default_owner, :default_country, to: :class
-
-      class << self
-        def default_owner
-          "teams(#{Rails.application.config.x.gitis.owner_id})"
-        end
-
-        def default_country
-          "dfe_countries(#{Rails.application.config.x.gitis.country_id})"
-        end
-
-        def channel_creation
-          Rails.application.config.x.gitis.channel_creation
-        end
+      def self.channel_creation
+        Rails.application.config.x.gitis.channel_creation
       end
 
       def initialize(crm_contact_data = {})
-        @crm_data                     = crm_contact_data.stringify_keys
-        self.contactid                = @crm_data['contactid']
-        self.firstname                = @crm_data['firstname']
-        self.lastname                 = @crm_data['lastname']
-        self.emailaddress1            = @crm_data['emailaddress1']
-        self.emailaddress2            = @crm_data['emailaddress2']
-        self.telephone1               = @crm_data['telephone1']
-        self.telephone2               = @crm_data['telephone2']
-        self.address1_line1           = @crm_data['address1_line1']
-        self.address1_line2           = @crm_data['address1_line2']
-        self.address1_line3           = @crm_data['address1_line3']
-        self.address1_city            = @crm_data['address1_city']
-        self.address1_stateorprovince = @crm_data['address1_stateorprovince']
-        self.address1_postalcode      = @crm_data['address1_postalcode']
-        self.birthdate                = @crm_data['birthdate']
-        self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
-        self.dfe_hasdbscertificate    = @crm_data['dfe_hasdbscertificate']
-        self.dfe_dateofissueofdbscertificate = @crm_data['dfe_dateofissueofdbscertificate']
+        @crm_data                             = crm_contact_data.stringify_keys
+        self.contactid                        = @crm_data['contactid']
+        self.firstname                        = @crm_data['firstname']
+        self.lastname                         = @crm_data['lastname']
+        self.emailaddress1                    = @crm_data['emailaddress1']
+        self.emailaddress2                    = @crm_data['emailaddress2']
+        self.telephone1                       = @crm_data['telephone1']
+        self.telephone2                       = @crm_data['telephone2']
+        self.address1_line1                   = @crm_data['address1_line1']
+        self.address1_line2                   = @crm_data['address1_line2']
+        self.address1_line3                   = @crm_data['address1_line3']
+        self.address1_city                    = @crm_data['address1_city']
+        self.address1_stateorprovince         = @crm_data['address1_stateorprovince']
+        self.address1_postalcode              = @crm_data['address1_postalcode']
+        self.birthdate                        = @crm_data['birthdate']
+        self.dfe_channelcreation              = @crm_data['dfe_channelcreation'] || self.class.channel_creation
+        self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
+        self.dfe_dateofissueofdbscertificate  = @crm_data['dfe_dateofissueofdbscertificate']
+        self.ownerid                          = @crm_data['_ownerid_value'] || Team.default
+        self.dfe_Country                      = @crm_data['_dfe_countryid_value'] || Country.default
+        self.dfe_PreferredTeachingSubject01   = @crm_data['_dfe_preferredteachingsubject01_value']
+        self.dfe_PreferredTeachingSubject02   = @crm_data['_dfe_preferredteachingsubject02_value']
 
         super # handles resetting dirty attributes
 
@@ -147,13 +144,6 @@ module Bookings
         firstname.downcase == fname && lastname.downcase == lname ||
           firstname.downcase == fname && birthdate == gitis_format_dob ||
           lastname.downcase == lname && birthdate == gitis_format_dob
-      end
-
-      def attributes_for_create
-        super.merge(
-          'ownerid@odata.bind' => default_owner,
-          'dfe_Country@odata.bind' => default_country
-        )
       end
     end
   end

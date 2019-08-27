@@ -66,6 +66,23 @@ describe Candidates::Registrations::GitisRegistrationSession do
     end
   end
 
+  context 'Teaching Preference' do
+    let(:model) { Candidates::Registrations::TeachingPreference }
+    let(:data) { { 'subject_first_choice' => 'Biology', 'subject_second_choice' => 'Physics' } }
+    let(:gitis_data) { { 'subject_first_choice' => 'Maths', 'subject_second_choice' => 'English' } }
+    let(:school) { Bookings::School.find_by(urn: '999') || FactoryBot.create(:bookings_school, urn: '999') }
+
+    before { allow(registration).to receive(:school).and_return(school) }
+
+    describe '#teaching_preference_attributes' do
+      include_examples "attributes with and without gitis data"
+    end
+
+    describe '#teaching_preference' do
+      include_examples "model with and without gitis data"
+    end
+  end
+
   describe 'Personal Information' do
     let(:data) do
       {
