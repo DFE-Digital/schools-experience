@@ -148,6 +148,13 @@ module Bookings
           firstname.downcase == fname && birthdate == gitis_format_dob ||
           lastname.downcase == lname && birthdate == gitis_format_dob
       end
+
+      def attributes_for_create
+        super.merge(
+          'ownerid@odata.bind' => default_owner,
+          'dfe_Country@odata.bind' => default_country
+        )
+      end
     end
   end
 end
