@@ -3,26 +3,23 @@ module Bookings
     class Contact
       include Entity
 
-      # Status of record within Gitis
-      STATE_CODE = 0
-
-      UPDATE_BLACKLIST = %w{
-        dfe_channelcreation statecode mobilephone address1_telephone1
-      }.freeze
-
-      UPDATE_BLACKLIST_OTHER_RECORDS = (
-        UPDATE_BLACKLIST + %w{telephone1 emailaddress1}
-      ).freeze
-
       entity_id_attribute :contactid
 
-      entity_attributes :firstname, :lastname, :emailaddress1, :emailaddress2
+      entity_attributes :firstname, :lastname, :birthdate, except: :update
+
+      entity_attributes :emailaddress1, :emailaddress2
       entity_attributes :address1_line1, :address1_line2, :address1_line3
       entity_attributes :address1_city, :address1_stateorprovince
-      entity_attributes :address1_postalcode, :birthdate
-      entity_attributes :telephone1, :telephone2, :mobilephone
-      entity_attributes :statecode, :dfe_channelcreation
+      entity_attributes :address1_postalcode
+      entity_attributes :telephone1, :telephone2
+      entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
       entity_attributes :dfe_notesforclassroomexperience
+      entity_attributes :mobilephone, :dfe_channelcreation, except: :update
+
+      entity_association :ownerid, Team
+      entity_association :dfe_Country, Country
+      entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
+      entity_association :dfe_PreferredTeachingSubject02, TeachingSubject
 
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
@@ -38,23 +35,29 @@ module Bookings
       end
 
       def initialize(crm_contact_data = {})
-        @crm_data                     = crm_contact_data.stringify_keys
-        self.contactid                = @crm_data['contactid']
-        self.firstname                = @crm_data['firstname']
-        self.lastname                 = @crm_data['lastname']
-        self.emailaddress1            = @crm_data['emailaddress1']
-        self.emailaddress2            = @crm_data['emailaddress2']
-        self.telephone2               = @crm_data['telephone2']
-        self.address1_line1           = @crm_data['address1_line1']
-        self.address1_line2           = @crm_data['address1_line2']
-        self.address1_line3           = @crm_data['address1_line3']
-        self.address1_city            = @crm_data['address1_city']
-        self.address1_stateorprovince = @crm_data['address1_stateorprovince']
-        self.address1_postalcode      = @crm_data['address1_postalcode']
-        self.birthdate                = @crm_data['birthdate']
-        self.statecode                = @crm_data['statecode'] || STATE_CODE
-        self.dfe_channelcreation      = @crm_data['dfe_channelcreation'] || self.class.channel_creation
-        self.dfe_notesforclassroomexperience = @crm_data['dfe_notesforclassroomexperience']
+        @crm_data                             = crm_contact_data.stringify_keys
+        self.contactid                        = @crm_data['contactid']
+        self.firstname                        = @crm_data['firstname']
+        self.lastname                         = @crm_data['lastname']
+        self.emailaddress1                    = @crm_data['emailaddress1']
+        self.emailaddress2                    = @crm_data['emailaddress2']
+        self.telephone1                       = @crm_data['telephone1']
+        self.telephone2                       = @crm_data['telephone2']
+        self.address1_line1                   = @crm_data['address1_line1']
+        self.address1_line2                   = @crm_data['address1_line2']
+        self.address1_line3                   = @crm_data['address1_line3']
+        self.address1_city                    = @crm_data['address1_city']
+        self.address1_stateorprovince         = @crm_data['address1_stateorprovince']
+        self.address1_postalcode              = @crm_data['address1_postalcode']
+        self.birthdate                        = @crm_data['birthdate']
+        self.dfe_channelcreation              = @crm_data['dfe_channelcreation'] || self.class.channel_creation
+        self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
+        self.dfe_dateofissueofdbscertificate  = @crm_data['dfe_dateofissueofdbscertificate']
+        self.dfe_notesforclassroomexperience  = @crm_data['dfe_notesforclassroomexperience']
+        self.ownerid                          = @crm_data['_ownerid_value'] || Team.default
+        self.dfe_Country                      = @crm_data['_dfe_countryid_value'] || Country.default
+        self.dfe_PreferredTeachingSubject01   = @crm_data['_dfe_preferredteachingsubject01_value']
+        self.dfe_PreferredTeachingSubject02   = @crm_data['_dfe_preferredteachingsubject02_value']
 
         super # handles resetting dirty attributes
 
@@ -104,12 +107,15 @@ module Bookings
       end
 
       def phone
-        telephone2
+        telephone2.presence || telephone1.presence || mobilephone
       end
 
       def phone=(phonenumber)
+        if created_by_us? || telephone1.blank?
+          self.telephone1 = phonenumber&.strip
+        end
+
         self.telephone2 = phonenumber&.strip
-        self.telephone1 = self.telephone2 if created_by_us?
       end
 
       def date_of_birth
@@ -120,6 +126,18 @@ module Bookings
         self.birthdate = dob.present? ? dob.to_formatted_s(:db) : nil
       end
 
+      def has_dbs_check
+        dfe_hasdbscertificate
+      end
+
+      def has_dbs_check=(value)
+        if value != dfe_hasdbscertificate
+          self.dfe_dateofissueofdbscertificate = nil
+        end
+
+        self.dfe_hasdbscertificate = value
+      end
+
       def signin_attributes_match?(fname, lname, dob)
         gitis_format_dob = dob.to_formatted_s(:db)
         fname = fname.downcase
@@ -128,10 +146,6 @@ module Bookings
         firstname.downcase == fname && lastname.downcase == lname ||
           firstname.downcase == fname && birthdate == gitis_format_dob ||
           lastname.downcase == lname && birthdate == gitis_format_dob
-      end
-
-      def attributes_for_update
-        super.except(*UPDATE_BLACKLIST)
       end
 
       def add_school_experience(log_line)

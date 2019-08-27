@@ -20,7 +20,7 @@ module Candidates
         candidate = Candidates::Session.signin!(params[:token])
 
         if candidate
-          personal_information.read_only_email = true
+          personal_information.read_only = true
           persist personal_information
 
           self.current_candidate = candidate

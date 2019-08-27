@@ -31,19 +31,22 @@ Feature: Editing placement dates
         Given I am on the edit page for my placement
         And I fill in the form with a duration of 6
         When I submit the form
-        Then I should be on the 'placement dates' page
-        And my newly-created placement date should be listed
+        Then I should be on the new configuration page for this date
+        Given I am on the 'placement dates' page
+        Then my newly-created placement date should be listed
 
     Scenario: Activating a placement date
         Given I am on the edit page for my 'inactive' placement
         When I check the 'Make this date available to candidates?' checkbox
         And I submit the form
-        Then I should be on the 'placement dates' page
-        And my placement should have been 'activated'
+        Then I should be on the new configuration page for this date
+        Given I am on the 'placement dates' page
+        Then my placement should have been 'activated'
 
     Scenario: Deactivating a placement date
         Given I am on the edit page for my 'active' placement
         When I uncheck the 'Make this date available to candidates?' checkbox
         And I submit the form
-        Then I should be on the 'placement dates' page
-        And my placement should have been 'deactivated'
+        Then I should be on the new configuration page for this date
+        Given I am on the 'placement dates' page
+        Then my placement should have been 'deactivated'
