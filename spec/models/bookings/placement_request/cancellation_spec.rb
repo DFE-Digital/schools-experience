@@ -39,6 +39,15 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
     it 'closes the placement request' do
       expect(subject.reload.placement_request).to be_closed
     end
+
+    context 'when already sent' do
+      subject { FactoryBot.create(:cancellation, sent_at: 5.minutes.ago) }
+
+      it "does not update" do
+        expect(subject).to be_sent
+        expect(subject.sent_at).to be < 1.minute.ago
+      end
+    end
   end
 
   describe '#dates_requested' do

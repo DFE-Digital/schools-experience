@@ -29,7 +29,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   end
 
   def sent!
-    update! sent_at: DateTime.now
+    update! sent_at: DateTime.now unless sent?
   end
 
   def sent?
