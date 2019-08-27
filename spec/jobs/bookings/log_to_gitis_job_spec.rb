@@ -21,7 +21,7 @@ describe Bookings::LogToGitisJob, type: :job do
         freeze_time
 
         described_class.perform_later \
-          contact.id, '01/10/2019', 'test', '01/11/2019', '9999', 'Test School'
+          contact.id, '01/10/2019 test 01/11/2019 9999 Test School'
       end
 
       it 'retrys the job' do
@@ -37,12 +37,12 @@ describe Bookings::LogToGitisJob, type: :job do
         allow(crm).to receive(:log_school_experience).and_return(contact.id)
 
         described_class.perform_later \
-          contact.id, '01/10/2019', 'test', '01/11/2019', '9999', 'Test School'
+          contact.id, '01/10/2019 test 01/11/2019 9999 Test School'
       end
 
       it "logs adds an entry to Gitis" do
         expect(crm).to have_received(:log_school_experience).with \
-          contact.id, '01/10/2019', 'test', '01/11/2019', '9999', 'Test School'
+          contact.id, '01/10/2019 test 01/11/2019 9999 Test School'
       end
     end
   end

@@ -2,9 +2,9 @@ module Bookings
   class LogToGitisJob < ApplicationJob
     retry_on StandardError, wait: A_DECENT_AMOUNT_LONGER, attempts: 8
 
-    def perform(contact_id, recorded, action, se_date, urn, schoolname)
+    def perform(contact_id, logline)
       gitis.log_school_experience \
-        contact_id, recorded, action, se_date, urn, schoolname
+        contact_id, logline
     end
 
   private
