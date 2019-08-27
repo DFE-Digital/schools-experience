@@ -1,14 +1,6 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::Contact, type: :model do
-  before do
-    allow(described_class).to \
-      receive(:default_owner).and_return(SecureRandom.uuid)
-
-    allow(described_class).to \
-      receive(:default_country).and_return(SecureRandom.uuid)
-  end
-
   describe '.entity_path' do
     subject { described_class.entity_path }
     it { is_expected.to eq('contacts') }

@@ -30,4 +30,14 @@ RSpec.describe Bookings::Gitis::Team, type: :model do
     it { is_expected.to have_attributes(name: 'Test Team') }
     it { is_expected.to have_attributes(changed_attributes: {}) }
   end
+
+  describe '.default' do
+    before do
+      allow(Rails.application.config.x.gitis).to \
+        receive(:owner_id).and_return(uuid)
+    end
+
+    subject { described_class.default }
+    it { is_expected.to eql(uuid) }
+  end
 end

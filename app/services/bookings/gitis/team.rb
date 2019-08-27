@@ -7,6 +7,10 @@ module Bookings::Gitis
     entity_id_attribute :ownerid
     entity_attribute :name
 
+    def self.default
+      Rails.application.config.x.gitis.owner_id
+    end
+
     def initialize(crm_data = {})
       crm_data = crm_data.stringify_keys
 

@@ -29,20 +29,8 @@ module Bookings
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
-      delegate :default_owner, :default_country, to: :class
-
-      class << self
-        def default_owner
-          Rails.application.config.x.gitis.owner_id
-        end
-
-        def default_country
-          Rails.application.config.x.gitis.country_id
-        end
-
-        def channel_creation
-          Rails.application.config.x.gitis.channel_creation
-        end
+      def self.channel_creation
+        Rails.application.config.x.gitis.channel_creation
       end
 
       def initialize(crm_contact_data = {})
@@ -64,8 +52,8 @@ module Bookings
         self.dfe_channelcreation              = @crm_data['dfe_channelcreation'] || self.class.channel_creation
         self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
         self.dfe_dateofissueofdbscertificate  = @crm_data['dfe_dateofissueofdbscertificate']
-        self.ownerid                          = @crm_data['_ownerid_value'] || default_owner
-        self.dfe_Country                      = @crm_data['_dfe_countryid_value'] || default_country
+        self.ownerid                          = @crm_data['_ownerid_value'] || Team.default
+        self.dfe_Country                      = @crm_data['_dfe_countryid_value'] || Country.default
         self.dfe_PreferredTeachingSubject01   = @crm_data['_dfe_preferredteachingsubject01_value']
         self.dfe_PreferredTeachingSubject02   = @crm_data['_dfe_preferredteachingsubject02_value']
 
