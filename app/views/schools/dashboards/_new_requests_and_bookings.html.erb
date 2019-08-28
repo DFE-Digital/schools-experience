@@ -22,7 +22,7 @@
   <div id="confirm-attendance" class="subsection">
     <header class="dashboard-high-priority">
       <%= link_to "Confirm attendance", schools_confirm_attendance_path  %>
-      <%= numbered_circle(@new_bookings, id: 'new-bookings-counter', aria_label: 'attendances to confirm') %>
+      <%= numbered_circle(@candidate_attendances, id: 'confirm-attendance-counter', aria_label: 'attendances to confirm') %>
     </header>
     <p class="govuk-hint">Confirm if candidates have attended their school experience</p>
   </div>

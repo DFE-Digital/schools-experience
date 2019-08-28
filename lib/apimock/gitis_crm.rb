@@ -299,7 +299,7 @@ module Apimock
     end
 
     def contact_attributes
-      Bookings::Gitis::Contact.entity_attribute_names.to_a.join(',')
+      Bookings::Gitis::Contact.attributes_to_select
     end
   end
 end

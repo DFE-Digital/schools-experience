@@ -12,8 +12,11 @@ FactoryBot.define do
     birthdate { '1980-01-01' }
     dfe_channelcreation { 10 }
     dfe_hasdbscertificate { true }
+    _dfe_preferredteachingsubject01_value { '04fc5f49-887b-4ac6-82ea-4278e9f3a9c1' }
+    _dfe_preferredteachingsubject02_value { '686ba354-2a91-430b-affa-68b4e1fdffc0' }
 
     trait :persisted do
+      after(:build, &:reset_dirty_attributes)
       contactid { SecureRandom.uuid }
     end
   end

@@ -1,0 +1,32 @@
+<% self.page_title = @school.name %>
+
+<%= link_to 'Back', schools_on_boarding_profile_path,
+            class: 'govuk-back-link',
+            data: {controller: 'back-link'} %>
+
+<h1 class="govuk-heading-l govuk-!-margin-top-4">
+  Preview your school experience profile
+</h1>
+
+<%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
+  <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+  <p>
+    This is how your school will appear to candidates.
+  </p>
+
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+  <h2 class="govuk-heading-l govuk-!-margin-top-4"><%= @school.name %></h2>
+
+  <%= render 'candidates/schools/phase2.html.erb', school: @school, include_candidate_request_links: false %>
+
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+  <h2 class="govuk-heading-m">Set up your school experience profile</h2>
+
+  <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
+    <%= f.check_box_input :acceptance %>
+  </div>
+
+  <%= f.submit 'Accept and set up profile' %>
+<% end %>

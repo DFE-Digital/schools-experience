@@ -145,6 +145,10 @@ module Bookings
       school.name
     end
 
+    def school_urn
+      school.urn
+    end
+
     def candidate_email
       candidate.email
     end

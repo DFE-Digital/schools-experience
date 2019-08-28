@@ -465,7 +465,15 @@ en:
         availability: Is there anything schools need to know about your availability for school experience?
         objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
-        acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/privacy_policy" class="govuk-link">privacy policy</a>'
+        acceptance_html:
+          "<p>By checking this box you're confirming:</p>
+          <ul class=\"govuk-list govuk-list--bullet\">
+            <li>the details you've provided are correct</li>
+            <li>you've read our <a href=\"/privacy_policy\" class=\"govuk-link\">privacy policy</a></li>
+            <li>you undestand your personal details will be used by DfE's
+            <a href=\"https://getintoteaching.education.gov.uk/\" class=\"govuk-link\">Get Into Teaching Information Service</a>
+            to provide you with tailored advice and information about teaching
+            training and a career as a teacher</li>"
       candidates_session:
         firstname: First name
         lastname: Last name
