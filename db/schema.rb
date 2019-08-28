@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 2019_08_20_073225) do
 
   create_table "bookings_profiles", force: :cascade do |t|
     t.bigint "school_id"
-    t.text "dbs_required"
+    t.string "dbs_required"
     t.text "dbs_policy"
     t.text "individual_requirements"
     t.boolean "primary_phase", null: false
