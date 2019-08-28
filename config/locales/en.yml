@@ -505,7 +505,7 @@ en:
         full_name: 'Full name'
         phone: 'UK telephone number'
         email: 'Email address'
-        email_secondary: 'Secondary email address'
+        email_secondary: 'Secondary email address - optional'
       schools_on_boarding_availability_preference:
         fixed:
           true_html: 'If you only offer <strong>fixed</strong> dates, state when you provide school experience.<span id="more-detail-hint" class="govuk-hint">For example, on 10 May 2020.</span>'
