@@ -11,7 +11,7 @@ module Bookings
       entity_attributes :address1_line1, :address1_line2, :address1_line3
       entity_attributes :address1_city, :address1_stateorprovince
       entity_attributes :address1_postalcode
-      entity_attributes :telephone1, :telephone2
+      entity_attributes :telephone1, :address1_telephone1, :telephone2
       entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
       entity_attributes :dfe_notesforclassroomexperience
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
@@ -49,6 +49,7 @@ module Bookings
         self.address1_city                    = @crm_data['address1_city']
         self.address1_stateorprovince         = @crm_data['address1_stateorprovince']
         self.address1_postalcode              = @crm_data['address1_postalcode']
+        self.address1_telephone1              = @crm_data['address1_telephone1']
         self.birthdate                        = @crm_data['birthdate']
         self.dfe_channelcreation              = @crm_data['dfe_channelcreation'] || self.class.channel_creation
         self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
@@ -113,6 +114,10 @@ module Bookings
       def phone=(phonenumber)
         if created_by_us? || telephone1.blank?
           self.telephone1 = phonenumber&.strip
+        end
+
+        if created_by_us? || address1_telephone1.blank?
+          self.address1_telephone1 = phonenumber&.strip
         end
 
         self.telephone2 = phonenumber&.strip

@@ -205,6 +205,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('emailaddress2') }
           it { is_expected.to include('telephone1') }
           it { is_expected.to include('telephone2') }
+          it { is_expected.to include('address1_telephone1') }
           it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
@@ -222,6 +223,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('emailaddress1') }
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
+          it { is_expected.not_to include('address1_telephone1') }
           it { is_expected.to include('telephone2') }
           it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
@@ -243,6 +245,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('emailaddress1') }
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
+          it { is_expected.not_to include('address1_telephone1') }
           it { is_expected.to include('telephone2') }
           it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
@@ -277,10 +280,10 @@ describe Bookings::Gitis::Contact, type: :model do
     before { allow(subject).to receive(:created_by_us?).and_return(ours) }
     before { subject.phone = '01234567890' }
 
-    context 'on existing GiTiS record' do
+    context 'on existing GiTiS record for telephone1' do
       let(:ours) { false }
 
-      context 'with blank telephone1' do
+      context 'with blank' do
         let(:attrs) do
           { 'telephone1' => '', 'telephone2' => '' }
         end
@@ -289,7 +292,7 @@ describe Bookings::Gitis::Contact, type: :model do
         it { is_expected.to have_attributes(telephone2: '01234567890') }
       end
 
-      context 'with matching telephone1' do
+      context 'with matching' do
         let(:attrs) do
           { 'telephone1' => '01234567890', 'telephone2' => '07123456789' }
         end
@@ -298,7 +301,7 @@ describe Bookings::Gitis::Contact, type: :model do
         it { is_expected.to have_attributes(telephone2: '01234567890') }
       end
 
-      context 'for unmatching telephone1' do
+      context 'for unmatching' do
         let(:attrs) do
           { 'telephone1' => '07123456789', 'telephone2' => '07123456789' }
         end
@@ -308,15 +311,51 @@ describe Bookings::Gitis::Contact, type: :model do
       end
     end
 
+    context 'on existing GiTiS record for address1_telephone1' do
+      let(:ours) { false }
+
+      context 'with blank' do
+        let(:attrs) do
+          { 'address1_telephone1' => '', 'telephone2' => '' }
+        end
+
+        it { is_expected.to have_attributes(address1_telephone1: '01234567890') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+
+      context 'with matching' do
+        let(:attrs) do
+          { 'address1_telephone1' => '01234567890', 'telephone2' => '07123456789' }
+        end
+
+        it { is_expected.to have_attributes(address1_telephone1: '01234567890') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+
+      context 'for unmatching' do
+        let(:attrs) do
+          { 'address1_telephone1' => '07123456789', 'telephone2' => '07123456789' }
+        end
+
+        it { is_expected.to have_attributes(address1_telephone1: '07123456789') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+    end
+
     context 'on record we created' do
       let(:ours) { true }
 
       context 'for unmatching telephone1' do
         let(:attrs) do
-          { 'telephone1' => '07123456789', 'telephone2' => '07123456789' }
+          {
+            'telephone1' => '07123456789',
+            'address1_telephone1' => '07123456789',
+            'telephone2' => '07123456789'
+          }
         end
 
         it { is_expected.to have_attributes(telephone1: '01234567890') }
+        it { is_expected.to have_attributes(address1_telephone1: '01234567890') }
         it { is_expected.to have_attributes(telephone2: '01234567890') }
       end
     end
