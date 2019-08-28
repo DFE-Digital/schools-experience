@@ -263,6 +263,17 @@ en:
             acceptance:
               accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
+        schools/placement_dates/configuration_form:
+          attributes:
+            available_for_all_subjects:
+              inclusion: 'Select if this date is available for all the subjects you offer'
+            has_limited_availability:
+              inclusion: 'Select if there is a maximum number of bookings you’ll accept for this date'
+            max_bookings_count:
+              not_a_number: "Enter a valid number for maximum number of bookings you'll accept for this date"
+            subjects:
+              blank: 'Select which subjects are available for this date'
+
   activerecord:
     errors:
       models:
@@ -290,6 +301,7 @@ en:
 
   helpers:
     fieldset:
+      order: Sorted by
       schools_placement_requests_confirm_booking:
         date: Confirm experience date
       bookings_booking:
@@ -324,6 +336,12 @@ en:
         administration_fees: Administration costs
         dbs_fees: DBS check costs
         other_fees: Other costs
+      schools_on_boarding_phases_list:
+        title: Select school experience phases
+      schools_on_boarding_key_stage_list:
+        title: Confirm number of primary key stages
+      schools_on_boarding_subject_list:
+        title: Select school experience subjects
       schools_on_boarding_specialism:
         has_specialism_html: >
           <p>
@@ -345,6 +363,13 @@ en:
         times_flexible: 'Are your start and finish times flexible? '
       schools_on_boarding_experience_outline:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
+
+      schools_placement_dates_configuration_form:
+        has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
+        available_for_all_subjects: Is this date available for all the subjects you offer?
+
+      schools_placement_dates_subject_selection:
+        subject_ids: Select all that apply
 
       candidates_feedback:
         <<: *feedback_fieldset
@@ -429,14 +454,22 @@ en:
         availability: Is there anything schools need to know about your availability for school experience?
         objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
-        acceptance_html: 'By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/privacy_policy" class="govuk-link">privacy policy</a>'
+        acceptance_html:
+          "<p>By checking this box you're confirming:</p>
+          <ul class=\"govuk-list govuk-list--bullet\">
+            <li>the details you've provided are correct</li>
+            <li>you've read our <a href=\"/privacy_policy\" class=\"govuk-link\">privacy policy</a></li>
+            <li>you undestand your personal details will be used by DfE's
+            <a href=\"https://getintoteaching.education.gov.uk/\" class=\"govuk-link\">Get Into Teaching Information Service</a>
+            to provide you with tailored advice and information about teaching
+            training and a career as a teacher</li>"
       candidates_session:
         firstname: First name
         lastname: Last name
         email: Email address
-      order: Sorted by
       query: Find what?
-      location: Where?
+      location: Enter location or postcode
+      distance: Select search area
       schools_on_boarding_candidate_requirement:
         dbs_requirement:
           always: 'Yes - Always'
@@ -516,6 +549,17 @@ en:
         acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a>'
       schools_on_boarding_key_stage_list:
         early_years: 'Early years foundation stage (EYFS)'
+
+      schools_placement_dates_configuration_form:
+        available_for_all_subjects:
+          true: 'Yes'
+          false: 'No'
+        has_limited_availability:
+          true: 'Yes'
+          false: 'No'
+        max_bookings_count: 'Enter maximum number of bookings.'
+      schools_placement_dates_subject_selection:
+        available_for_all_subjects: 'All subjects'
 
       candidates_feedback:
         <<: *feedback_label

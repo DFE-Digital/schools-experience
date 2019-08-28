@@ -6,7 +6,7 @@
   <div id="requests" class="subsection">
     <header class="dashboard-high-priority">
       <%= link_to "Manage requests", schools_placement_requests_path %>
-      <%= numbered_circle(@new_requests, id: 'new-requests-counter') %>
+      <%= numbered_circle(@new_requests, id: 'new-requests-counter', aria_label: 'new placement requests') %>
     </header>
     <p class="govuk-hint">Candidates have requested school experience</p>
   </div>
@@ -14,7 +14,7 @@
   <div id="bookings" class="subsection">
     <header class="dashboard-high-priority">
       <%= link_to "Manage bookings", schools_bookings_path  %>
-      <%= numbered_circle(@new_bookings, id: 'new-bookings-counter') %>
+      <%= numbered_circle(@new_bookings, id: 'new-bookings-counter', aria_label: 'new upcoming bookings') %>
     </header>
     <p class="govuk-hint">A candidate has asked to change a booking</p>
   </div>
@@ -22,7 +22,7 @@
   <div id="confirm-attendance" class="subsection">
     <header class="dashboard-high-priority">
       <%= link_to "Confirm attendance", schools_confirm_attendance_path  %>
-      <%= numbered_circle(@new_bookings, id: 'new-bookings-counter') %>
+      <%= numbered_circle(@candidate_attendances, id: 'confirm-attendance-counter', aria_label: 'attendances to confirm') %>
     </header>
     <p class="govuk-hint">Confirm if candidates have attended their school experience</p>
   </div>

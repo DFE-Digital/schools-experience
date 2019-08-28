@@ -31,12 +31,21 @@
         <%= form_for personal_information, url: candidates_school_registrations_personal_information_path do |f| %>
           <%= GovukElementsErrorsHelper.error_summary personal_information, 'There is a problem', '' %>
 
-          <%= f.text_field :first_name, autocomplete: 'given-name' %>
-          <%= f.text_field :last_name, autocomplete: 'family-name' %>
+          <%= f.text_field :first_name, autocomplete: 'given-name',
+                readonly: personal_information.read_only,
+                disabled: personal_information.read_only %>
+
+          <%= f.text_field :last_name, autocomplete: 'family-name',
+                readonly: personal_information.read_only,
+                disabled: personal_information.read_only %>
+
           <%= f.email_field :email, autocomplete: 'on',
-                readonly: personal_information.read_only_email,
-                disabled: personal_information.read_only_email %>
-          <%= f.date_field :date_of_birth, { heading: true }, date_of_birth: true %>
+                readonly: personal_information.read_only,
+                disabled: personal_information.read_only %>
+
+          <%= f.date_field :date_of_birth, heading: true, date_of_birth: true,
+                readonly: personal_information.read_only,
+                disabled: personal_information.read_only %>
 
           <%= f.submit 'Continue' %>
         <% end %>

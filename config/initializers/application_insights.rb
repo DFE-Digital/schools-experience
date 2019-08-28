@@ -7,8 +7,9 @@ unless Rails.env.test?
       if 'true' ==  ENV["APPINSIGHTS_JAVASCRIPT_ENABLED"]
           config.middleware.use(ApplicationInsights::Rack::InjectJavaScriptTracking, app_insights_key)
       end
-    end
 
+      ApplicationInsights::UnhandledException.collect(app_insights_key)
+    end
     # # This isn't needed _until_ we want to track events and metrics in addition
     # # to the Rails app middleware (ApplicationInsights::Rack::TrackRequest). More
     # # info here:

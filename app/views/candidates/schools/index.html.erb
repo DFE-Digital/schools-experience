@@ -74,7 +74,14 @@
           <%= f.hidden_field :subjects, multiple: true, value: subject_id, id: nil %>
         <% end %>
         <%= f.hidden_field :max_fee %>
-        <%= f.collection_select :order, f.object.class.available_orders, :first, :last %>
+        <%= f.radio_button_fieldset :order,
+          choices: f.object.class.available_orders,
+          value_method: :first,
+          text_method: :last,
+          fieldset_heading: false,
+          small: true,
+          inline: true
+        %>
         <%= f.submit "Change sort order", name: nil %>
       <% end %>
     </div>
@@ -111,7 +118,7 @@
             <%= summary_row 'Experience subjects', format_school_subjects(school) %>
           </dl>
 
-          <%= link_to 'View school details', candidates_school_path(school), class: 'govuk-button' %>
+          <%= link_to 'View school details', candidates_school_path(school), class: 'govuk-button', 'aria-label': "View school details for #{school.name}" %>
         </article>
       </li>
       <% end %>

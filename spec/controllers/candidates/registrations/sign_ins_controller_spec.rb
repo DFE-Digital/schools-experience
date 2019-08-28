@@ -46,7 +46,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       end
 
       it "will have marked the email address read only" do
-        expect(personal_info).to have_attributes read_only_email: true
+        expect(personal_info).to have_attributes read_only: true
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       end
 
       it "will not have marked the email address read only" do
-        expect(personal_info).to have_attributes read_only_email: false
+        expect(personal_info).to have_attributes read_only: false
       end
     end
 

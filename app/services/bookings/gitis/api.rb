@@ -6,7 +6,7 @@ module Bookings::Gitis
 
     def initialize(token, service_url: nil, endpoint: nil)
       @access_token = token
-      @service_url = service_url || ENV.fetch("CRM_SERVICE_URL")
+      @service_url = service_url || Rails.application.config.x.gitis.service_url
       @endpoint = endpoint || ENDPOINT
       @endpoint_url = "#{@service_url}#{@endpoint}"
     end

@@ -1,20 +1,7 @@
 class Candidates::SchoolsController < ApplicationController
   include AnalyticsTracking
+  include BingMapsContentSecurityPolicy
   EXPANDED_SEARCH_RADIUS = 50
-
-  content_security_policy(only: :show) do |policy| # Allow bing maps
-    policy.connect_src :self, 'https://www.bing.com', "https://*.visualstudio.com"
-    policy.font_src :self, :data
-    policy.img_src :self, :data, 'https://www.bing.com', 'https://*.virtualearth.net', "https://www.google-analytics.com"
-    policy.style_src :self, "'unsafe-inline'", 'https://www.bing.com'
-    policy.script_src :self, :data, "'unsafe-inline'",
-      "'unsafe-eval'",
-      'https://www.bing.com',
-      'https://*.virtualearth.net',
-      "https://www.googletagmanager.com",
-      "https://www.google-analytics.com",
-      "https://*.vo.msecnd.net"
-  end
 
   def index
     return redirect_to new_candidates_school_search_path unless location_present?
@@ -33,12 +20,13 @@ class Candidates::SchoolsController < ApplicationController
 
   def show
     @school = Candidates::School.find(params[:id])
+    @school.increment!(:views)
+
     if @school.private_beta?
       @presenter = Candidates::SchoolPresenter.new(@school, @school.profile)
+    else
+      @available_dates = @school.bookings_placement_dates.available
     end
-    @available_dates = @school.bookings_placement_dates.available
-
-    @school.increment!(:views)
   end
 
 private

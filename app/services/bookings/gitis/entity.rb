@@ -3,7 +3,6 @@ module Bookings::Gitis
 
   module Entity
     extend ActiveSupport::Concern
-    include ActiveModel::AttributeAssignment
     include ActiveModel::Validations
     include ActiveModel::Conversion
 
@@ -13,14 +12,22 @@ module Bookings::Gitis
       extend ActiveModel::Naming
       extend ActiveModel::Translation
 
+      delegate :attributes_to_select, to: :class
+
       class_attribute :entity_path
       self.entity_path = derive_entity_path
 
       class_attribute :primary_key
       self.primary_key = derive_primary_key
 
-      class_attribute :entity_attribute_names
-      self.entity_attribute_names = Set.new
+      class_attribute :select_attribute_names
+      self.select_attribute_names = Set.new
+
+      class_attribute :create_blacklist
+      self.create_blacklist = []
+
+      class_attribute :update_blacklist
+      self.update_blacklist = []
     end
 
     def initialize(*_args)
@@ -62,11 +69,11 @@ module Bookings::Gitis
     end
 
     def attributes_for_update
-      changed_attributes
+      attributes.slice(*(changed_attributes.keys - update_blacklist))
     end
 
     def attributes_for_create
-      keys = attributes.keys - ['id', primary_key]
+      keys = attributes.keys - ['id', primary_key] - create_blacklist
       keys.reject! { |k| attributes[k].nil? }
 
       attributes.slice(*keys)
@@ -76,17 +83,33 @@ module Bookings::Gitis
       @attributes ||= {}
     end
 
+    def id
+      attributes[primary_key]
+    end
+
+    def id=(value)
+      attributes[primary_key] = value
+    end
+
+    def ==(other)
+      return false unless other.is_a? self.class
+
+      other.id == self.id
+    end
+
     class InvalidEntityIdError < RuntimeError; end
 
     module ClassMethods
+      def attributes_to_select
+        self.select_attribute_names.to_a.join(',')
+      end
+
     protected
 
       def entity_id_attribute(attr_name)
-        define_method :"#{attr_name}" do
-          attributes[attr_name.to_s]
-        end
+        self.primary_key = attr_name.to_s
 
-        define_method :id do
+        define_method :"#{attr_name}" do
           attributes[attr_name.to_s]
         end
 
@@ -97,16 +120,16 @@ module Bookings::Gitis
             fail IdChangedUnexpectedly
           end
         end
-
-        define_method :id= do |value|
-          self.send(:"#{attr_name}=", value)
-        end
       end
 
-      def entity_attribute(attr_name)
+      def entity_attribute(attr_name, internal: false, except: nil)
+        except = Array.wrap(except).map(&:to_sym)
+
         define_method :"#{attr_name}" do
           attributes[attr_name.to_s]
         end
+        private :"#{attr_name}" if internal
+        self.create_blacklist << attr_name.to_s if except.include?(:create)
 
         define_method :"#{attr_name}=" do |value|
           unless value == send(attr_name.to_sym)
@@ -115,22 +138,55 @@ module Bookings::Gitis
 
           attributes[attr_name.to_s] = value
         end
+        private :"#{attr_name}=" if internal
+        self.update_blacklist << attr_name.to_s if except.include?(:update)
 
-        self.entity_attribute_names << attr_name.to_s
+        unless except.include?(:select) || except.include?(:read)
+          self.select_attribute_names << attr_name.to_s
+        end
       end
 
-      def entity_attributes(*attr_names)
+      def entity_attributes(*attr_names, internal: false, except: nil)
         Array.wrap(attr_names).flatten.each do |attr_name|
-          entity_attribute(attr_name)
+          entity_attribute(attr_name, internal: internal, except: except)
         end
       end
 
       def derive_entity_path
-        model_name.to_s.underscore.split('/').last.pluralize
+        model_name.to_s.downcase.split('::').last.pluralize
       end
 
       def derive_primary_key
-        model_name.to_s.underscore.split('/').last + 'id'
+        model_name.to_s.downcase.split('::').last + 'id'
+      end
+
+      def entity_association(attr_name, entity_type)
+        entity_attribute :"#{attr_name}@odata.bind", except: :select
+
+        value_name = "_#{attr_name.downcase}_value"
+        self.select_attribute_names << value_name
+
+        define_method value_name.to_sym do
+          send(:"#{attr_name}@odata.bind")&.gsub(/\A[^(]+\(([^)]+)\).*\z/, '\1')
+        end
+
+        define_method :"#{value_name}=" do |id_value|
+          if id_value.nil?
+            send :"#{attr_name}@odata.bind=", nil
+          elsif ID_FORMAT.match?(id_value)
+            send :"#{attr_name}@odata.bind=", "#{entity_type.entity_path}(#{id_value})"
+          else
+            raise InvalidEntityIdError
+          end
+        end
+
+        define_method :"#{attr_name}=" do |entity_or_value|
+          if entity_or_value.is_a? Bookings::Gitis::Entity
+            send :"#{attr_name}@odata.bind=", entity_or_value.entity_id
+          else
+            send :"#{value_name}=", entity_or_value
+          end
+        end
       end
     end
   end

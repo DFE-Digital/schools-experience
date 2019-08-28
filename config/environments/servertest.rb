@@ -12,6 +12,7 @@ Rails.application.configure do
   config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
 
   config.x.phase = 10000
+  config.x.features = %i(subject_specific_dates)
 
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = "https://localhost:#{ENV.fetch("PORT") { 3000 }}"
@@ -20,5 +21,8 @@ Rails.application.configure do
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
 
-  config.x.fake_crm = true
+  config.x.gitis.fake_crm = true
+  config.x.gitis.channel_creation = '0'
+  config.x.gitis.owner_id = SecureRandom.uuid
+  config.x.gitis.country_id = SecureRandom.uuid
 end
