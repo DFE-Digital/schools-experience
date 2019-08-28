@@ -80,6 +80,16 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data['value'].length).to be > 1
   end
 
+  it "can read CandidatePrivacyPolices from the CRM", :read do
+    resp = crm_get('/dfe_candidateprivacypolicies', '$top' => 10)
+
+    expect(resp.status).to eql(200)
+    expect(resp.headers).to include('content-type' => 'application/json; odata.metadata=minimal')
+
+    data = JSON.parse(resp.body)
+    expect(data['value'].length).to be > 1
+  end
+
   it "can read Teams from the CRM", :read do
     resp = crm_get('/teams', '$top' => 10)
 
@@ -174,6 +184,27 @@ RSpec.describe "The GITIS CRM Api" do
     contact_se_data = data['dfe_contact_dfe_candidateschoolexperience_ContactId'][0]
     expect(contact_se_data).to include('dfe_candidateschoolexperienceid' => experience_id)
     expect(contact_se_data).to include('dfe_notes' => "First Line\r\n\r\nSecond Line")
+
+    resp = crm_post("/dfe_candidateprivacypolicies", {
+      'dfe_consentreceivedby' => 222750001,
+      'dfe_meanofconsent' => 222750001,
+      'dfe_name' => "Online consent as part of school experience registration",
+      'dfe_timeofconsent' => Time.now.utc.iso8601,
+      'dfe_Candidate@odata.bind' => "contacts(#{contact_id})",
+      'dfe_PrivacyPolicyNumber@odata.bind' => "dfe_privacypolicies(#{privacypolicyid})"
+    })
+    expect(resp.status).to eql(204)
+
+    resp = crm_get("/contacts(#{contact_id})?$expand=dfe_contact_dfe_candidateprivacypolicy_Candidate")
+    expect(resp.status).to eql(200)
+
+    data = JSON.parse(resp.body)
+    expect(data).to include('contactid' => contact_id)
+    expect(data).to include('firstname' => new_contact_data['firstname'])
+
+    contact_pp_data = data['dfe_contact_dfe_candidateprivacypolicy_Candidate'][0]
+    expect(contact_pp_data).to include('_dfe_privacypolicynumber_value' => privacypolicyid)
+    expect(contact_pp_data).to include('_dfe_candidate_value' => contact_id)
   end
 
   it "can update existing Contacts in the CRM", :update do
@@ -301,6 +332,10 @@ RSpec.describe "The GITIS CRM Api" do
     ENV.fetch('CRM_AUTH_TENANT_ID')
   end
 
+  def privacypolicyid
+    ENV.fetch('CRM_PRIVACYPOLICY_ID')
+  end
+
   def endpoint
     "/api/data/v9.1"
   end
@@ -324,13 +359,13 @@ RSpec.describe "The GITIS CRM Api" do
   end
 
   def new_contact_data
-    ownerid = ENV.fetch('CRM_OWNER_ID')
     countryid = ENV.fetch('CRM_COUNTRY_ID')
 
     {
       'firstname' => "Test User",
       'lastname' => "TestUser",
       'emailaddress2' => "school-experience-testuser@education.gov.uk",
+      'telephone1' => "01234567890",
       'telephone2' => "01234567890",
       'address1_line1' => "First Address Line",
       'address1_line2' => "Second Address Line",
@@ -338,14 +373,14 @@ RSpec.describe "The GITIS CRM Api" do
       'address1_city' => "Manchester",
       'address1_stateorprovince' => "",
       'address1_postalcode' => "MA1 1AM",
+      'address1_telephone1' => "01234567890",
       'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION'),
       'dfe_notesforclassroomexperience' => "Written by School Experience",
       'dfe_hasdbscertificate' => true,
       'dfe_dateofissueofdbscertificate' => Date.today.to_s(:db),
       'dfe_Country@odata.bind' => "dfe_countries(#{countryid})", # UK
       'dfe_PreferredTeachingSubject01@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})",
-      'dfe_PreferredTeachingSubject02@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})",
-      'ownerid@odata.bind' => "teams(#{ownerid})"
+      'dfe_PreferredTeachingSubject02@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})"
     }
   end
 

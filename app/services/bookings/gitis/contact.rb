@@ -16,7 +16,6 @@ module Bookings
       entity_attributes :dfe_notesforclassroomexperience
       entity_attributes :mobilephone, :dfe_channelcreation, except: :update
 
-      entity_association :ownerid, Team
       entity_association :dfe_Country, Country
       entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
       entity_association :dfe_PreferredTeachingSubject02, TeachingSubject
@@ -55,7 +54,6 @@ module Bookings
         self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
         self.dfe_dateofissueofdbscertificate  = @crm_data['dfe_dateofissueofdbscertificate']
         self.dfe_notesforclassroomexperience  = @crm_data['dfe_notesforclassroomexperience']
-        self.ownerid                          = @crm_data['_ownerid_value'] || Team.default
         self.dfe_Country                      = @crm_data['_dfe_countryid_value'] || Country.default
         self.dfe_PreferredTeachingSubject01   = @crm_data['_dfe_preferredteachingsubject01_value']
         self.dfe_PreferredTeachingSubject02   = @crm_data['_dfe_preferredteachingsubject02_value']

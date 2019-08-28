@@ -161,7 +161,6 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to include('emailaddress2') }
       it { is_expected.to include('telephone2') }
       it { is_expected.to include('dfe_channelcreation') }
-      it { is_expected.to include('ownerid@odata.bind') }
       it { is_expected.to include('dfe_Country@odata.bind') }
     end
 
@@ -184,7 +183,6 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('birthdate') }
           it { is_expected.to include('telephone2') }
           it { is_expected.to include('emailaddress2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
 
@@ -206,7 +204,6 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('telephone1') }
           it { is_expected.to include('telephone2') }
           it { is_expected.to include('address1_telephone1') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
       end
@@ -225,7 +222,6 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('telephone1') }
           it { is_expected.not_to include('address1_telephone1') }
           it { is_expected.to include('telephone2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
 
@@ -247,7 +243,6 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('telephone1') }
           it { is_expected.not_to include('address1_telephone1') }
           it { is_expected.to include('telephone2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
       end
