@@ -103,6 +103,7 @@ Rails.application.configure do
   config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL', 'notset')
   config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION', '0')
   config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID', SecureRandom.uuid)
+  config.x.gitis.caching = ['1', 'true', 'yes'].include?(ENV['CRM_CACHING'].to_s)
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 end

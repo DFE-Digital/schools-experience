@@ -141,6 +141,7 @@ Rails.application.configure do
     config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL')
     config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION')
     config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID')
+    config.x.gitis.caching = ['1', 'true', 'yes'].include?(ENV['CRM_CACHING'].to_s)
   end
 
   config.x.features = []

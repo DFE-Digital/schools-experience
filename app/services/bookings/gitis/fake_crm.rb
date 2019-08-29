@@ -103,14 +103,14 @@ module Bookings::Gitis
     end
 
     # only Contacts are mocked for now
-    def find_one(_entity_type, uuid, params)
+    def find_one(_entity_type, uuid, params = {})
       return super unless stubbed?
 
       Contact.new(fake_contact_data.merge('contactid' => uuid))
     end
 
     # only Contacts are mocked for now
-    def find_many(entity_type, uuids, params)
+    def find_many(entity_type, uuids, params = {})
       return super unless stubbed?
 
       uuids.map do |uuid|

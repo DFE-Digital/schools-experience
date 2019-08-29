@@ -2,6 +2,7 @@ module Bookings
   module Gitis
     class CRM
       prepend FakeCrm if Rails.application.config.x.gitis.fake_crm
+      prepend CachingCrm
       delegate :logger, to: Rails
 
       def initialize(token, service_url: nil, endpoint: nil)
@@ -10,7 +11,7 @@ module Bookings
         @endpoint = endpoint
       end
 
-      def find(uuids, entity_type: Contact)
+      def find(uuids, entity_type: Contact, **_options)
         multiple_ids = uuids.is_a?(Array)
 
         uuids = normalise_ids(uuids)
@@ -19,7 +20,7 @@ module Bookings
         # ensure we can't accidentally pull too much data
         params = { '$top' => uuids.length }
 
-        crmlog "READING Contacts #{uuids.inspect}"
+        crmlog "READING #{entity_type.name.split('::').last.pluralize} #{uuids.inspect}"
         if multiple_ids
           find_many(entity_type, uuids, params)
         else
@@ -144,13 +145,13 @@ module Bookings
         api.patch(entity_id, data)
       end
 
-      def find_one(entity_type, uuid, params)
+      def find_one(entity_type, uuid, params = {})
         params['$select'] ||= entity_type.attributes_to_select
 
         entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
       end
 
-      def find_many(entity_type, uuids, params)
+      def find_many(entity_type, uuids, params = {})
         params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
         params['$select'] ||= entity_type.attributes_to_select
 

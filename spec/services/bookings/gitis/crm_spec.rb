@@ -283,4 +283,147 @@ describe Bookings::Gitis::CRM, type: :model do
       )
     end
   end
+
+  context 'with caching enabled' do
+    let(:uuid) { "03ec3075-a9f9-400f-bc43-a7a5cdf68579" }
+
+    before do
+      allow(Rails.application.config.x.gitis).to \
+        receive(:caching).and_return(true)
+    end
+
+    context '.find' do
+      let(:contact) do
+        build(:gitis_contact, :persisted, contactid: uuid, firstname: 'cached')
+      end
+
+      let(:cache_key) { "bookings/gitis/contacts/#{uuid}/v1" }
+
+      before do
+        Rails.cache.clear
+        Rails.cache.write(cache_key, contact, expires_in: 5.minutes)
+      end
+
+      context "with single entity" do
+        before { allow(Rails.cache).to receive(:write).and_call_original }
+
+        context 'without refresh: true' do
+          subject { gitis.find(uuid) }
+
+          context 'and already in cache' do
+            it { is_expected.to have_attributes(firstname: 'cached') }
+            it { expect(Rails.cache).not_to have_received(:write) }
+          end
+
+          context 'after write of entity' do
+            before do
+              gitis_stub.stub_update_contact_request({ address1_line1: 'modified' }, uuid)
+              gitis_stub.stub_contact_request(uuid, address1_line1: 'modified')
+              contact.address1_line1 = 'modified'
+              gitis.write contact
+            end
+
+            it "Will requery and update cache" do
+              is_expected.to have_attributes(address1_line1: 'modified')
+
+              expect(Rails.cache).to have_received(:write).with \
+                "bookings/gitis/contacts/#{uuid}/v1",
+                contact,
+                hash_including(expires_in: 1.hour)
+            end
+          end
+        end
+
+        context 'with refresh: true' do
+          before do
+            gitis_stub.stub_contact_request(uuid, firstname: 'nocache')
+          end
+
+          subject { gitis.find(uuid, refresh: true) }
+
+          it "will requery and update cache" do
+            is_expected.to have_attributes(firstname: 'nocache')
+
+            expect(Rails.cache).to have_received(:write).with \
+              "bookings/gitis/contacts/#{uuid}/v1",
+              subject,
+              hash_including(expires_in: 1.hour)
+          end
+        end
+      end
+
+      context 'with multiple entities' do
+        let(:second_uuid) { SecureRandom.uuid }
+        let(:second_key) { "bookings/gitis/contacts/#{second_uuid}/v1" }
+
+        let(:second) do
+          build(:gitis_contact, :persisted,
+            contactid: second_uuid,
+            firstname: 'cached',
+            lastname: 'second')
+        end
+
+        before do
+          Rails.cache.write(second_key, second, expires_in: 5.minutes)
+          allow(Rails.cache).to receive(:write).and_call_original
+        end
+
+        context 'without refresh: true' do
+          context 'and already in cache' do
+            subject { gitis.find([uuid, second_uuid]) }
+            it { expect(subject[0]).to have_attributes(firstname: 'cached') }
+            it { expect(subject[1]).to have_attributes(firstname: 'cached') }
+            it { expect(subject[1]).to have_attributes(lastname: 'second') }
+            it { expect(Rails.cache).not_to have_received(:write) }
+          end
+
+          context 'and some uuids in cache' do
+            let(:third_uuid) { SecureRandom.uuid }
+            let(:third_key) { "bookings/gitis/contacts/#{third_uuid}/v1" }
+
+            let(:third) do
+              build(:gitis_contact, :persisted, contactid: third_uuid, firstname: 'third')
+            end
+
+            before { gitis_stub.stub_multiple_contact_request([third_uuid], firstname: 'third') }
+
+            subject { gitis.find([uuid, second_uuid, third_uuid]) }
+
+            it "will uncached contact missing to cache" do
+              expect(subject[0]).to have_attributes(firstname: 'cached')
+              expect(subject[1]).to have_attributes(firstname: 'cached')
+              expect(subject[2]).to have_attributes(firstname: 'third')
+
+              expect(Rails.cache).to have_received(:write).with \
+                third_key, third, hash_including(expires_in: 1.hour)
+            end
+          end
+        end
+
+        context 'with refresh: true' do
+          before do
+            gitis_stub.stub_multiple_contact_request([uuid, second_uuid],
+              firstname: 'fresh')
+          end
+
+          subject { gitis.find([uuid, second_uuid], refresh: true) }
+
+          it "will requery and update cache" do
+            expect(subject[0]).to have_attributes(firstname: 'fresh')
+            expect(subject[1]).to have_attributes(firstname: 'fresh')
+
+            expect(Rails.cache).to have_received(:write).with \
+              "bookings/gitis/contacts/#{uuid}/v1",
+              contact,
+              hash_including(expires_in: 1.hour)
+
+            expect(Rails.cache).to have_received(:write).with \
+              "bookings/gitis/contacts/#{second_uuid}/v1",
+              second,
+              hash_including(expires_in: 1.hour)
+          end
+        end
+      end
+    end
+  end
 end
