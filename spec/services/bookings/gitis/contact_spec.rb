@@ -1,14 +1,6 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::Contact, type: :model do
-  before do
-    allow(described_class).to \
-      receive(:default_owner).and_return(SecureRandom.uuid)
-
-    allow(described_class).to \
-      receive(:default_country).and_return(SecureRandom.uuid)
-  end
-
   describe '.entity_path' do
     subject { described_class.entity_path }
     it { is_expected.to eq('contacts') }
@@ -169,8 +161,7 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to include('emailaddress2') }
       it { is_expected.to include('telephone2') }
       it { is_expected.to include('dfe_channelcreation') }
-      it { is_expected.not_to include('ownerid@odata.bind') }
-      it { is_expected.not_to include('dfe_Country@odata.bind') }
+      it { is_expected.to include('dfe_Country@odata.bind') }
     end
 
     describe "#attributes_for_update" do
@@ -192,7 +183,6 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('birthdate') }
           it { is_expected.to include('telephone2') }
           it { is_expected.to include('emailaddress2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
 
@@ -213,7 +203,7 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.to include('emailaddress2') }
           it { is_expected.to include('telephone1') }
           it { is_expected.to include('telephone2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
+          it { is_expected.to include('address1_telephone1') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
       end
@@ -230,8 +220,8 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('emailaddress1') }
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
+          it { is_expected.not_to include('address1_telephone1') }
           it { is_expected.to include('telephone2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
 
@@ -251,8 +241,8 @@ describe Bookings::Gitis::Contact, type: :model do
           it { is_expected.not_to include('emailaddress1') }
           it { is_expected.to include('emailaddress2') }
           it { is_expected.not_to include('telephone1') }
+          it { is_expected.not_to include('address1_telephone1') }
           it { is_expected.to include('telephone2') }
-          it { is_expected.not_to include('ownerid@odata.bind') }
           it { is_expected.not_to include('dfe_Country@odata.bind') }
         end
       end
@@ -285,10 +275,10 @@ describe Bookings::Gitis::Contact, type: :model do
     before { allow(subject).to receive(:created_by_us?).and_return(ours) }
     before { subject.phone = '01234567890' }
 
-    context 'on existing GiTiS record' do
+    context 'on existing GiTiS record for telephone1' do
       let(:ours) { false }
 
-      context 'with blank telephone1' do
+      context 'with blank' do
         let(:attrs) do
           { 'telephone1' => '', 'telephone2' => '' }
         end
@@ -297,7 +287,7 @@ describe Bookings::Gitis::Contact, type: :model do
         it { is_expected.to have_attributes(telephone2: '01234567890') }
       end
 
-      context 'with matching telephone1' do
+      context 'with matching' do
         let(:attrs) do
           { 'telephone1' => '01234567890', 'telephone2' => '07123456789' }
         end
@@ -306,7 +296,7 @@ describe Bookings::Gitis::Contact, type: :model do
         it { is_expected.to have_attributes(telephone2: '01234567890') }
       end
 
-      context 'for unmatching telephone1' do
+      context 'for unmatching' do
         let(:attrs) do
           { 'telephone1' => '07123456789', 'telephone2' => '07123456789' }
         end
@@ -316,15 +306,51 @@ describe Bookings::Gitis::Contact, type: :model do
       end
     end
 
+    context 'on existing GiTiS record for address1_telephone1' do
+      let(:ours) { false }
+
+      context 'with blank' do
+        let(:attrs) do
+          { 'address1_telephone1' => '', 'telephone2' => '' }
+        end
+
+        it { is_expected.to have_attributes(address1_telephone1: '01234567890') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+
+      context 'with matching' do
+        let(:attrs) do
+          { 'address1_telephone1' => '01234567890', 'telephone2' => '07123456789' }
+        end
+
+        it { is_expected.to have_attributes(address1_telephone1: '01234567890') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+
+      context 'for unmatching' do
+        let(:attrs) do
+          { 'address1_telephone1' => '07123456789', 'telephone2' => '07123456789' }
+        end
+
+        it { is_expected.to have_attributes(address1_telephone1: '07123456789') }
+        it { is_expected.to have_attributes(telephone2: '01234567890') }
+      end
+    end
+
     context 'on record we created' do
       let(:ours) { true }
 
       context 'for unmatching telephone1' do
         let(:attrs) do
-          { 'telephone1' => '07123456789', 'telephone2' => '07123456789' }
+          {
+            'telephone1' => '07123456789',
+            'address1_telephone1' => '07123456789',
+            'telephone2' => '07123456789'
+          }
         end
 
         it { is_expected.to have_attributes(telephone1: '01234567890') }
+        it { is_expected.to have_attributes(address1_telephone1: '01234567890') }
         it { is_expected.to have_attributes(telephone2: '01234567890') }
       end
     end
@@ -376,6 +402,57 @@ describe Bookings::Gitis::Contact, type: :model do
 
         it { is_expected.to have_attributes(emailaddress1: 'foobar@education.gov.uk') }
         it { is_expected.to have_attributes(emailaddress2: 'foobar@education.gov.uk') }
+      end
+    end
+  end
+
+  describe '#add_school_experience' do
+    let(:school) { build(:bookings_school) }
+    let(:contact) { build(:gitis_contact, :persisted) }
+    let(:headerline) { Bookings::Gitis::EventLogger::NOTES_HEADER }
+
+    let(:logline) do
+      "01/10/2019 TEST                   01/11/2019 #{school.urn} #{school.name}"
+    end
+
+    context 'with no prior experience' do
+      before { contact.add_school_experience logline }
+      subject { contact }
+
+      it "will create a classroomexperience entry" do
+        is_expected.to have_attributes \
+          dfe_notesforclassroomexperience: "#{headerline}\n\n#{logline}\n"
+      end
+
+      it "will write the changes to the crm" do
+        expect(contact.attributes_for_create).to include \
+          'dfe_notesforclassroomexperience' => "#{headerline}\n\n#{logline}\n"
+      end
+    end
+
+    context 'with prior experience' do
+      let(:secondline) do
+        "01/10/2019 BOOKED                 01/11/2019 #{school.urn} #{school.name}"
+      end
+
+      before do
+        contact.dfe_notesforclassroomexperience = "#{headerline}\n\n#{logline}\n"
+        contact.reset_dirty_attributes
+        contact.add_school_experience secondline
+      end
+
+      subject { contact }
+
+      it "will append to the classroomexperience entry" do
+        is_expected.to have_attributes \
+          dfe_notesforclassroomexperience:
+            "#{headerline}\n\n#{logline}\n#{secondline}\n"
+      end
+
+      it "will write the changes to the crm" do
+        expect(subject.attributes_for_update).to include \
+          'dfe_notesforclassroomexperience' =>
+            "#{headerline}\n\n#{logline}\n#{secondline}\n"
       end
     end
   end

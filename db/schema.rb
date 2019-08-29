@@ -236,6 +236,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_213044) do
     t.string "name", limit: 64, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "gitis_uuid"
+    t.index ["gitis_uuid"], name: "index_bookings_subjects_on_gitis_uuid", unique: true
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
   end
 
