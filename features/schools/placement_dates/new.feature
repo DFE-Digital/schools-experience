@@ -26,15 +26,14 @@ Feature: Creating new placement dates
             | Enter a start date     | date   |
             | How long will it last? | number |
 
-    Scenario: Filling in and submitting the form
-        Given I am on the 'new placement date' page
-        And I fill in the form with a future date and duration of 3
-        When I submit the form
-        Then I should be on the 'placement dates' page
-        And my newly-created placement date should be listed
-
     Scenario: Preventing invalid dates from being added
         Given I am on the 'new placement date' page
         And I fill in the 'Enter a start date' date field with an invalid date of 31st September next year
         When I submit the form
         Then I should see an error message stating 'is not a valid date'
+
+    Scenario: Filling in and submitting the form
+        Given I am on the 'new placement date' page
+        And I fill in the form with a future date and duration of 3
+        When I submit the form
+        Then I should be on the new configuration page for this date

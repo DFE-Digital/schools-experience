@@ -12,7 +12,8 @@ FactoryBot.define do
           contact_information
           background_check
           placement_preference
-          subject_preference
+          education
+          teaching_preference
         )
       end
 
@@ -58,20 +59,6 @@ FactoryBot.define do
         }
       end
 
-      candidates_registrations_subject_preference do
-        {
-          "degree_stage"              => "I don't have a degree and am not studying for one",
-          "degree_stage_explaination" => "",
-          "degree_subject"            => "Not applicable",
-          "teaching_stage"            => "I’m very sure and think I’ll apply",
-          "subject_first_choice"      => "Maths",
-          "subject_second_choice"     => "Physics",
-          "urn"                       => urn,
-          "created_at"                => current_time,
-          "updated_at"                => current_time
-        }
-      end
-
       candidates_registrations_education do
         FactoryBot.attributes_for(:education).stringify_keys.merge(
           'created_at' => current_time,
@@ -102,7 +89,8 @@ FactoryBot.define do
           "candidates_registrations_personal_information" => candidates_registrations_personal_information,
           "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
           "candidates_registrations_background_check"     => candidates_registrations_background_check,
-          "candidates_registrations_subject_preference"   => candidates_registrations_subject_preference,
+          "candidates_registrations_education"            => candidates_registrations_education,
+          "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
           "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
             .merge(
               "availability" => nil,

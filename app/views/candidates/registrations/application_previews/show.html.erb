@@ -10,19 +10,27 @@
 
       <h2 class="govuk-heading-m">Personal details</h2>
 
-      <%= summary_row \
-        'Full name',
-        @application_preview.full_name,
-        edit_candidates_school_registrations_personal_information_path(
-          anchor: 'candidates_registrations_personal_information_first_name_container'
-        ) %>
+      <%- if @application_preview.read_only -%>
 
-      <%= summary_row \
-        'Date of birth',
-        @application_preview.date_of_birth,
-        edit_candidates_school_registrations_personal_information_path(
-          anchor: 'candidates_registrations_personal_information_date_of_birth_container'
-        ) %>
+        <%= summary_row 'Full name', @application_preview.full_name %>
+        <%= summary_row 'Date of birth', @application_preview.date_of_birth %>
+
+      <%- else -%>
+
+        <%= summary_row \
+          'Full name',
+          @application_preview.full_name,
+          edit_candidates_school_registrations_personal_information_path(
+            anchor: 'candidates_registrations_personal_information_first_name_container'
+          ) %>
+
+        <%= summary_row \
+          'Date of birth',
+          @application_preview.date_of_birth,
+          edit_candidates_school_registrations_personal_information_path(
+            anchor: 'candidates_registrations_personal_information_date_of_birth_container'
+          ) %>
+      <% end %>
 
       <%= summary_row \
         'Address',
@@ -38,7 +46,7 @@
           anchor: 'candidates_registrations_contact_information_phone_container'
         ) %>
 
-      <%- if @application_preview.read_only_email -%>
+      <%- if @application_preview.read_only -%>
         <%= summary_row 'Email address', @application_preview.email_address %>
       <%- else -%>
         <%= summary_row \

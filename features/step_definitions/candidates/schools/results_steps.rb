@@ -91,10 +91,17 @@ When("I select {string} in/from the {string} select box") do |option, label_text
   delay_page_load
 end
 
+When("I select {string} in/from the {string} radio buttons") do |option, label_text|
+  within find('fieldset', text: label_text) do
+    choose option
+  end
+  delay_page_load
+end
+
 Given("I search for schools near {string}") do |string|
   visit(new_candidates_school_search_path)
-  fill_in 'Where?', with: string
-  click_button 'Find'
+  fill_in 'Enter location or postcode', with: string
+  click_button 'Search'
   expect(page.current_path).to eql(candidates_schools_path)
 end
 

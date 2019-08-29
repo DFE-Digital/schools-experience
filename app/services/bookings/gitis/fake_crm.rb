@@ -4,10 +4,16 @@ module Bookings::Gitis
     REQUIRED = %w{
       firstname lastname emailaddress2 telephone2 birthdate
       address1_line1 address1_city address1_stateorprovince address1_postalcode
-      statecode dfe_channelcreation
+      dfe_channelcreation dfe_hasdbscertificate
+      dfe_Country@odata.bind
     }.freeze
     ALLOWED = (
-      REQUIRED + %w{telephone1 address1_line2 address1_line3 emailaddress1}
+      REQUIRED + %w{
+        telephone1 address1_telephone1 address1_line2 address1_line3
+        emailaddress1 dfe_dateofissueofdbscertificate
+        dfe_PreferredTeachingSubject01@odata.bind
+        dfe_PreferredTeachingSubject02@odata.bind
+      }
     ).freeze
 
     def find_by_email(address)
@@ -61,14 +67,12 @@ module Bookings::Gitis
     end
 
     def fake_contact_id
-      if Rails.env.test? || Rails.env.servertest?
-        SecureRandom.uuid # Mock it if predictable behaviour required
-      elsif %w{true yes 1}.include? ENV['FAKE_CRM_UUID'].to_s
+      fake_uuid = Rails.application.config.x.gitis.fake_crm_uuid
+
+      if %w{true yes 1}.include? fake_uuid
         KNOWN_UUID
-      elsif ENV['FAKE_CRM_UUID'].present?
-        ENV['FAKE_CRM_UUID']
       else
-        SecureRandom.uuid
+        fake_uuid.presence || SecureRandom.uuid
       end
     end
 
@@ -88,14 +92,14 @@ module Bookings::Gitis
         'address1_city' => 'Manchester',
         'address1_stateorprovince' => 'Manchester',
         'address1_postalcode' => 'MA1 1AM',
+        'address1_telephone1' => '01234 567890',
         'birthdate' => '1980-01-01',
-        'statecode' => 0,
         'dfe_channelcreation' => 10
       }
     end
 
     def stubbed?
-      Rails.application.config.x.fake_crm
+      Rails.application.config.x.gitis.fake_crm
     end
 
     # only Contacts are mocked for now

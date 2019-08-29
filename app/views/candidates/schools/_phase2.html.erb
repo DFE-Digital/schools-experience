@@ -12,16 +12,16 @@
       </h2>
 
       <dl class="govuk-summary-list govuk-summary-list--no-border inline">
-        <%= dlist_item 'Individual requirements:' do %>
+        <%= dlist_item 'Individual requirements:', id: 'individual-requirements' do %>
           <%= content_or_msg @presenter.individual_requirements, "No requirements specified" %>
         <% end %>
 
-        <%= dlist_item 'Experience details:' do %>
+        <%= dlist_item 'Experience details:', id: 'experience-details' do %>
           <%= content_or_msg @presenter.experience_details, "No information supplied" %>
         <% end %>
 
         <%= dlist_item 'Experience subjects:', id: "school-subjects" do %>
-          <%= format_school_subjects @school %>
+          <%= format_school_subjects @presenter.school %>
         <% end %>
       </dl>
     </div>
@@ -33,9 +33,11 @@
 
       <p class="directions-link">
         <%= link_to 'Get directions', external_map_url(
-              latitude: @school.coordinates.latitude,
-              longitude: @school.coordinates.longitude,
-              name: @school.name) %>
+          latitude: @presenter.school.coordinates.latitude,
+          longitude: @presenter.school.coordinates.longitude,
+          name: @presenter.school.name),
+          'aria-label': "Get directions for #{@school.name}"
+        %>
       </p>
     </div>
 
@@ -57,22 +59,22 @@
       <ul id="school-websites">
         <%- if @presenter.website.present? -%>
         <li id="school-website">
-          <%= link_to "#{@school.name} website", @presenter.website %>
+          <%= link_to "#{@presenter.school.name} website", @presenter.website %>
         </li>
         <%- end -%>
 
         <li>
-          <%= link_to "#{@school.name} Get Information About Schools",
+          <%= link_to "#{@presenter.school.name} Get Information About Schools",
                       gias_school_url(@presenter.urn) %>
         </li>
 
         <li>
-          <%= link_to "Ofsted report: #{@school.name}",
+          <%= link_to "Ofsted report: #{@presenter.school.name}",
                       ofsted_report_url(@presenter.urn) %>
         </li>
 
         <li>
-          <%= link_to "Performance information: #{@school.name}",
+          <%= link_to "Performance information: #{@presenter.school.name}",
                       performance_report_url(@presenter.urn) %>
         </li>
 
@@ -85,16 +87,19 @@
       </ul>
     </div>
 
-    <div class="school-start-request-button__tablet_plus">
-      <%= link_to "Start request",
-                  new_candidates_school_registrations_personal_information_path(@presenter.school),
-                  class:"govuk-button" %>
-    </div>
+    <% if include_candidate_request_links %>
+      <div class="school-start-request-button__tablet_plus">
+        <%= link_to "Start request",
+                    new_candidates_school_registrations_personal_information_path(@presenter.school),
+                    class:"govuk-button",
+                    'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
+      </div>
 
-    <p>
-      <%= link_to 'Back to Search Results', :back,
-                  data: {controller: 'back-link'} %>
-    </p>
+      <p>
+        <%= link_to 'Back to Search Results', :back,
+                    data: {controller: 'back-link'} %>
+      </p>
+    <% end %>
   </div>
 
   <div class="candidate-profile-sidebar govuk-grid-column-one-third column-top-border">
@@ -104,8 +109,8 @@
       <% end %>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-        <%- if @school.availability_preference_fixed? -%>
-          <%= render partial: 'placement_dates', locals: { available_dates: @available_dates } %>
+        <%- if @presenter.school.availability_preference_fixed? -%>
+          <%= render partial: 'candidates/schools/placement_dates', locals: { available_dates: @presenter.available_dates } %>
         <%- else -%>
           <dt class="govuk-summary-list__key">
             Placement availability
@@ -158,7 +163,7 @@
         <%= content_or_msg @presenter.formatted_dress_code, "No dress code supplied" %>
       <% end %>
 
-      <%= dlist_item 'Experience start and finish times' do %>
+      <%= dlist_item 'Experience start and finish times', id: 'start-and-finish-times' do %>
         <p>
           <%= @presenter.start_time %> to <%= @presenter.end_time %>
 
@@ -172,7 +177,7 @@
         <%- end -%>
       <% end %>
 
-      <%= dlist_item 'Parking' do %>
+      <%= dlist_item 'Parking', id: 'parking' do %>
         <%- if @presenter.parking_provided -%>
           <p>Yes - on site parking provided</p>
         <%- else -%>
@@ -182,7 +187,7 @@
         <%= simple_format @presenter.parking_details %>
       <% end %>
 
-      <%= dlist_item 'Accessibility details' do %>
+      <%= dlist_item 'Accessibility details', id: 'accessibility-details' do %>
         <%- if @presenter.disabled_facilities.present? -%>
           <%= simple_format @presenter.disabled_facilities %>
         <%- else -%>
@@ -199,10 +204,13 @@
       <% end if @presenter.teacher_training_info.present? %>
     </dl>
 
-    <div class="school-start-request-button__mobile">
-      <%= link_to "Start request",
-                  new_candidates_school_registrations_personal_information_path(@presenter.school),
-                  class:"govuk-button" %>
-    </div>
+    <% if include_candidate_request_links %>
+      <div class="school-start-request-button__mobile">
+        <%= link_to "Start request",
+                    new_candidates_school_registrations_personal_information_path(@presenter.school),
+                    class:"govuk-button",
+                    'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
+      </div>
+    <% end %>
   </div>
 </div>

@@ -1,7 +1,7 @@
 module Bookings
   module Gitis
     class CRM
-      prepend FakeCrm if Rails.application.config.x.fake_crm
+      prepend FakeCrm if Rails.application.config.x.gitis.fake_crm
       delegate :logger, to: Rails
 
       def initialize(token, service_url: nil, endpoint: nil)
@@ -30,7 +30,7 @@ module Bookings
       def find_by_email(address)
         params = {
           '$filter' => filter_pairs(emailaddress2: address, emailaddress1: address),
-          '$select' => Contact.entity_attribute_names.to_a.join(','),
+          '$select' => Contact.attributes_to_select,
           '$top' => 1
         }
 
@@ -43,10 +43,31 @@ module Bookings
         end
       end
 
+      def fetch(entity_type, filter: nil, limit: 10, order: nil)
+        params = {
+          '$select' => entity_type.attributes_to_select,
+          '$top' => limit
+        }
+
+        params['$filter'] = filter if filter.present?
+        params['$orderby'] = order if order.present?
+
+        records = api.get(entity_type.entity_path, params)['value']
+
+        logline = "Read #{records.length} #{entity_type.to_s.pluralize} from Gitis"
+        logline << " - filter: #{filter}" if filter.present?
+        crmlog logline
+
+        records.map do |record_data|
+          entity_type.new(record_data)
+        end
+      end
+
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
-        find_possible_signin_contacts(email, 20)
-          .map(&Contact.method(:new))
+        filter = filter_pairs(emailaddress2: email, emailaddress1: email)
+
+        fetch(Contact, filter: filter, limit: 20, order: 'createdon desc')
           .find { |c| c.signin_attributes_match? firstname, lastname, date_of_birth }
           .tap { |c| crmlog "Read contact #{c.contactid}" if c }
       end
@@ -69,6 +90,14 @@ module Bookings
         end
 
         entity.id
+      end
+
+      def log_school_experience(contact_id, logline)
+        contact = find(contact_id)
+        return false unless contact
+
+        contact.add_school_experience(logline)
+        write contact
       end
 
       class InvalidApiError < RuntimeError; end
@@ -116,29 +145,18 @@ module Bookings
       end
 
       def find_one(entity_type, uuid, params)
-        params['$select'] ||= entity_type.entity_attribute_names.to_a.join(',')
+        params['$select'] ||= entity_type.attributes_to_select
 
         entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
       end
 
       def find_many(entity_type, uuids, params)
         params['$filter'] = filter_pairs(entity_type.primary_key => uuids)
-        params['$select'] ||= entity_type.entity_attribute_names.to_a.join(',')
+        params['$select'] ||= entity_type.attributes_to_select
 
         api.get(entity_type.entity_path, params)['value'].map do |entity_data|
           entity_type.new entity_data
         end
-      end
-
-      def find_possible_signin_contacts(email, max)
-        filter = filter_pairs(emailaddress2: email, emailaddress1: email)
-        api.get(
-          'contacts',
-          '$top' => max,
-          '$select' => Contact.entity_attribute_names.to_a.join(','),
-          '$filter' => filter,
-          '$orderby' => 'createdon desc'
-        )['value']
       end
 
       def crmlog(msg)

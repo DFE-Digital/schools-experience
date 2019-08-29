@@ -16,8 +16,12 @@ module Candidates
         @school_session.merge! 'urn' => urn
       end
 
-      def current_registration
-        @current_registration ||= RegistrationSession.new @school_session
+      def current_registration(current_contact = nil)
+        @current_registration ||= if current_contact
+                                    GitisRegistrationSession.new @school_session, current_contact
+                                  else
+                                    RegistrationSession.new @school_session
+                                  end
       end
     end
   end

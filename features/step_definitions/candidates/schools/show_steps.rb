@@ -9,6 +9,10 @@ Given("I am on the profile page for the chosen school") do
   expect(page.current_path).to eql(path)
 end
 
+Given("I am on the profile page for the school") do
+  step "I am on the profile page for the chosen school"
+end
+
 Given("the school profile has description details text:") do |pi|
   @raw_placement_info = pi
   @profile.update_attributes(description_details: pi)
@@ -68,7 +72,7 @@ Then("I should see the entire school address in the sidebar") do
     @school.town,
     @school.county,
     @school.postcode
-  ].each do |address_part|
+  ].compact.each do |address_part|
     within(".govuk-grid-column-one-third") do
       within("#school-address") do
         expect(page).to have_content(address_part)

@@ -10,15 +10,19 @@ module Bookings
       class_name: 'Bookings::School'
 
     has_one :candidate_cancellation, through: :bookings_placement_request
+    has_one :school_cancellation, through: :bookings_placement_request
 
     validates :date,
       presence: true,
-      on: :create,
+      on: :create
+    validates :date,
+      if: -> { date_changed? },
       timeliness: {
         on_or_after: :today,
         before: -> { 2.years.from_now },
         type: :date
       }
+
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true
@@ -48,6 +52,8 @@ module Bookings
     scope :unprocessed, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
     scope :upcoming, -> { unprocessed.where(arel_table[:date].between(Time.now..UPCOMING_TIMEFRAME.from_now)) }
     scope :accepted, -> { where.not(accepted_at: nil) }
+    scope :previous, -> { where(arel_table[:date].lteq(Date.today)) }
+    scope :attendance_unlogged, -> { where(attended: nil) }
 
     def self.from_confirm_booking(confirm_booking)
       new(

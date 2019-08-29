@@ -29,7 +29,7 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
-  # config.assets.css_compressor = :sass
+  config.assets.css_compressor = nil
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
@@ -111,7 +111,7 @@ Rails.application.configure do
 
   config.session_store :cache_store,
     key: 'schoolex-session',
-    expire_after: 24.hours # Sets explicit TTL for Session Redis keys
+    expire_after: 1.hour # Sets explicit TTL for Session Redis keys
 
   config.active_job.queue_adapter = :delayed_job
 
@@ -133,7 +133,17 @@ Rails.application.configure do
     'https://services.signin.education.gov.uk/my-services'
   end
 
-  config.x.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)
+  config.x.gitis.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)
+  if ENV['CRM_CLIENT_ID'].present?
+    config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID')
+    config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET')
+    config.x.gitis.auth_tenant_id = ENV.fetch('CRM_AUTH_TENANT_ID')
+    config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL')
+    config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION')
+    config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID')
+  end
 
   config.x.features = []
+
+  config.sass[:style] = :compressed if config.sass
 end

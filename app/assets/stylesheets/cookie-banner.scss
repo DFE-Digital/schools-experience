@@ -1,0 +1,25 @@
+#cookie-banner {
+  background-color: lighten(govuk-colour("blue"), 65%);
+  padding: 0.6rem 0rem 0.4rem;
+
+  #cookie-banner-message {
+    > p {
+      padding: 0rem;
+      margin: 0rem;
+      line-height: 1;
+      color: $govuk-text-colour;
+
+      // forego the underline, it interferes with the header bar immediately
+      // below
+      > a {
+        text-decoration: none;
+
+        // darken when hovering because the light blue background doesn't
+        // provide enough contrast
+        &:hover {
+          color: darken($govuk-link-colour, 15%);
+        }
+      }
+    }
+  }
+}

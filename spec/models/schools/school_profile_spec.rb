@@ -8,6 +8,21 @@ describe Schools::SchoolProfile, type: :model do
 
     it do
       is_expected.to \
+        have_db_column(:dbs_requirement_requires_check).of_type :boolean
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:dbs_requirement_dbs_policy_details).of_type :text
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:dbs_requirement_no_dbs_policy_details).of_type :text
+    end
+
+    it do
+      is_expected.to \
         have_db_column(:candidate_requirement_dbs_requirement).of_type :string
     end
 
@@ -220,6 +235,30 @@ describe Schools::SchoolProfile, type: :model do
     let(:bookings_school) { create(:bookings_school) }
     let :model do
       described_class.new bookings_school: bookings_school
+    end
+
+    context '#dbs_requirement' do
+      let :form_model do
+        FactoryBot.build :dbs_requirement
+      end
+
+      before do
+        model.dbs_requirement = form_model
+      end
+
+      {
+        dbs_requirement_requires_check: :requires_check,
+        dbs_requirement_dbs_policy_details: :dbs_policy_details,
+        dbs_requirement_no_dbs_policy_details: :no_dbs_policy_details
+      }.each_pair do |column, model_attribute|
+        it "is expected to map #{column} to #{model_attribute}" do
+          expect(model.send(column)).to eq form_model.send(model_attribute)
+        end
+      end
+
+      it 'returns the form_model' do
+        expect(model.dbs_requirement).to eq_model form_model
+      end
     end
 
     context '#candidate_requirement' do

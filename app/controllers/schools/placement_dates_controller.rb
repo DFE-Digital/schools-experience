@@ -4,8 +4,10 @@ class Schools::PlacementDatesController < Schools::BaseController
   def index
     @placement_dates = current_school
       .bookings_placement_dates
+      .published
       .future
       .in_date_order
+      .eager_load(:bookings_school, :placement_date_subjects, :subjects)
   end
 
   def new
@@ -20,7 +22,7 @@ class Schools::PlacementDatesController < Schools::BaseController
       .new(new_placement_date_params)
 
     if @placement_date.save
-      redirect_to schools_placement_dates_path
+      next_step @placement_date
     else
       render :new
     end
@@ -30,13 +32,22 @@ class Schools::PlacementDatesController < Schools::BaseController
 
   def update
     if @placement_date.update(edit_placement_date_params)
-      redirect_to schools_placement_dates_path
+      next_step @placement_date
     else
       render :edit
     end
   end
 
 private
+
+  def next_step(placement_date)
+    if Feature.instance.active? :subject_specific_dates
+      redirect_to new_schools_placement_date_configuration_path(placement_date)
+    else
+      placement_date.update! published_at: DateTime.now
+      redirect_to schools_placement_dates_path
+    end
+  end
 
   def set_placement_date
     @placement_date = current_school

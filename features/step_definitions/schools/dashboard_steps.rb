@@ -35,14 +35,17 @@ Given("there are {int} new bookings") do |qty|
   FactoryBot.create_list :bookings_booking, qty, :upcoming, bookings_school: @school
 end
 
-
-Given("there are {int} new candidate attendances") do |qty|
-  qty
-  #  do nothing, currently hard-coded in controller
+Given("there are {int} bookings in the past with no attendance logged") do |qty|
+  @bookings = FactoryBot.create_list :bookings_booking, qty, bookings_school: @school
+  @bookings.each do |b|
+    b.date = 1.week.ago
+    b.attended = nil
+    b.save(validate: false)
+  end
 end
 
 Then("the {string} should be {int}") do |string, int|
-  expect(page).to have_css("svg#%<id>s" % { id: string.tr(' ', '-') }, text: int.to_s)
+  expect(page).to have_css("div#%<id>s" % { id: string.tr(' ', '-') }, text: int.to_s)
 end
 
 Given("my school has not yet fully-onboarded") do

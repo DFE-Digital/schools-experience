@@ -8,10 +8,10 @@ class ApplicationJob < ActiveJob::Base
     1.minute,
     10.minutes,
     1.hour,
-    8.hours
+    2.hours
   ].freeze
 
-  MAX_RETRY = 8.hours
+  MAX_RETRY = 4.hours
 
   A_DECENT_AMOUNT_LONGER = ->(executions) do
     RETRYS[executions - 1] || MAX_RETRY

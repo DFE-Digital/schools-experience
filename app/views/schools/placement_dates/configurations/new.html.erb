@@ -1,0 +1,28 @@
+<% self.page_title = 'Manage attendees' %>
+
+<h1><%= @placement_date.date.to_formatted_s :govuk %> (<%= pluralize @placement_date.duration, 'day' %>)</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @configuration, method: :post, url: schools_placement_date_configuration_path(@placement_date) do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+
+      <%= f.radio_button_fieldset :has_limited_availability do |fieldset| %>
+        <p>
+          Once you’ve accepted the maximum number of bookings this date will not be shown to candidates.
+        </p>
+        <%= f.radio_input true do %>
+          <%= f.number_field :max_bookings_count, class: 'govuk-!-width-one-half' %>
+        <% end %>
+        <%= f.radio_input false %>
+      <% end %>
+
+      <%= f.radio_button_fieldset :available_for_all_subjects do |fieldset| %>
+        <%= f.radio_input true %>
+        <%= f.radio_input false %>
+      <% end %>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

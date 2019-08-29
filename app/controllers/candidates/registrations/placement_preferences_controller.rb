@@ -47,6 +47,7 @@ module Candidates
         if @school.availability_preference_fixed?
           @placement_dates = @school
             .bookings_placement_dates
+            .published
             .available
         end
       end

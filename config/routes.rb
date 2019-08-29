@@ -68,12 +68,19 @@ Rails.application.routes.draw do
         resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
           resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
         end
+        resource :date, only: %i(edit update show), controller: 'confirmed_bookings/date'
       end
+      resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
     end
 
     resource :availability_preference, only: %i(edit update)
     resource :availability_info, only: %i(edit update), controller: 'availability_info'
-    resources :placement_dates
+    resources :placement_dates do
+      if Feature.instance.active? :subject_specific_dates
+        resource :configuration, only: %i(new create), controller: 'placement_dates/configurations'
+        resource :subject_selection, only: %i(new create), controller: 'placement_dates/subject_selections'
+      end
+    end
 
     namespace :errors do
       resource :not_registered, controller: :not_registered, only: :show
@@ -82,6 +89,9 @@ Rails.application.routes.draw do
     end
 
     namespace :on_boarding do
+      resource :dbs_requirement, only: %i(new create), constraints: -> request {
+        Feature.instance.active? :dbs_requirement
+      }
       resource :candidate_requirement, only: %i(new create edit update)
       resource :fees, only: %i(new create edit update)
       resource :administration_fee, only: %i(new create)
@@ -95,6 +105,7 @@ Rails.application.routes.draw do
       resource :experience_outline, only: %i(new create edit update)
       resource :admin_contact, only: %i(new create edit update)
       resource :profile, only: :show
+      resource :preview, only: :show
       resource :confirmation, only: %i(create show)
     end
 
@@ -150,4 +161,9 @@ Rails.application.routes.draw do
     resources :feedbacks, only: %i(new create show)
   end
   resolve('Candidates::SchoolSearch') { %i{candidates schools} }
+
+
+  if Rails.application.config.x.delayed_job_admin_enabled
+    match "/admin/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
+  end
 end

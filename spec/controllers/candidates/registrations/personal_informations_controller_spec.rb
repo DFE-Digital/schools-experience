@@ -116,38 +116,36 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       end
 
       context 'already signed in' do
-        let :personal_information do
-          FactoryBot.build :personal_information, read_only_email: true
+        include_context 'candidate signin'
+
+        let :registration_session do
+          Candidates::Registrations::GitisRegistrationSession.new({ 'urn' => '10020' }, gitis_contact)
         end
 
-        let(:candidate) { create(:candidate, :confirmed) }
-        let(:contact_attributes) do
-          candidate.fetch_gitis_contact(fake_gitis).attributes
+        let :personal_information do
+          FactoryBot.build :personal_information, read_only: true
         end
 
         before do
-          allow_any_instance_of(ActionDispatch::Request::Session).to \
-            receive(:[]).with(:gitis_contact).and_return(contact_attributes)
-
           post \
             '/candidates/schools/11048/registrations/personal_information',
             params: personal_information_params
         end
 
-        it 'updates the session with the new details' do
+        it 'leaves the personal information with GiTiS details' do
           expect(registration_session.personal_information.first_name).to \
-            eq personal_information.first_name
+            eq gitis_contact.firstname
 
           expect(registration_session.personal_information.last_name).to \
-            eq personal_information.last_name
+            eq gitis_contact.lastname
 
           expect(registration_session.personal_information.date_of_birth).to \
-            eq personal_information.date_of_birth
+            eq gitis_contact.date_of_birth
         end
 
         it "leaves the email address matching the GiTiS contact" do
           expect(registration_session.personal_information.email).to \
-            eq contact_attributes['emailaddress2']
+            eq gitis_contact.email
         end
 
         it "does not send a verification email" do
@@ -163,10 +161,10 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
   end
 
   context 'with existing personal information in gitis' do
-    let(:gitis_contact) { build(:gitis_contact, :persisted) }
-    before do
-      allow_any_instance_of(ActionDispatch::Request::Session).to \
-        receive(:[]).with(:gitis_contact).and_return(gitis_contact.attributes)
+    include_context 'candidate signin'
+
+    let :registration_session do
+      Candidates::Registrations::GitisRegistrationSession.new({ 'urn' => '10020' }, gitis_contact)
     end
 
     context '#new' do
@@ -189,6 +187,10 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
   context 'with existing personal information in session' do
     let :existing_personal_information do
       FactoryBot.build :personal_information
+    end
+
+    let :registration_session do
+      Candidates::Registrations::RegistrationSession.new('urn' => '10020')
     end
 
     before do

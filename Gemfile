@@ -14,11 +14,11 @@ gem 'pg_search'
 
 # PostGIS adapter for Active Record
 gem 'activerecord-postgis-adapter'
-gem 'breasal', require: false
+gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 4.0'
+gem 'puma', '~> 4.1'
 
 # Use SCSS for stylesheets
 gem 'sassc-rails'
@@ -44,6 +44,8 @@ gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
 gem 'delayed_job_active_record'
+gem 'delayed_cron_job'
+gem 'delayed_job_web'
 
 gem "redis", "~> 4.1"
 
@@ -52,7 +54,6 @@ gem 'slack-notifier'
 
 gem 'dotenv-rails'
 
-gem "font-awesome-rails"
 gem 'kaminari'
 
 gem 'phonelib'
@@ -68,7 +69,8 @@ gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: '
 gem 'addressable'
 gem 'faraday'
 
-gem 'validates_timeliness', '~> 5.0.0.alpha4'
+gem 'validates_timeliness', '~> 5.0.0.alpha5'
+gem 'activerecord-import'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
