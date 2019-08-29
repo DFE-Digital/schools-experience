@@ -123,8 +123,9 @@ describe Schools::OnBoarding::FeesController, type: :request do
         expect(school_profile.reload.fees).to eq fees
       end
 
-      it 'redirects to the school_profile' do
-        expect(response).to redirect_to schools_on_boarding_profile_path
+      it 'redirects to the first selected fee' do
+        expect(response).to \
+          redirect_to new_schools_on_boarding_administration_fee_path
       end
     end
   end

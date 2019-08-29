@@ -69,6 +69,10 @@ module Candidates
       end
     end
 
+    def available_dates
+      school.bookings_placement_dates.available
+    end
+
   private
 
     def dbs_requirement

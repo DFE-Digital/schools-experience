@@ -12,8 +12,14 @@ module Schools
         def create
           @cancellation = @placement_request.school_cancellation
           @placement_request.fetch_gitis_contact gitis_crm
-          notify_candidate @cancellation
-          @cancellation.sent!
+
+          if @cancellation.sent!
+            notify_candidate @cancellation
+
+            Bookings::Gitis::EventLogger.write_later \
+              @cancellation.contact_uuid, :cancellation, @cancellation
+          end
+
           redirect_to \
             schools_booking_cancellation_notification_delivery_path(@booking)
         end

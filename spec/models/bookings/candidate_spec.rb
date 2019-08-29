@@ -135,7 +135,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '.create_from_registration_session!' do
-    let(:registration) { build(:registration_session) }
+    let(:registration) { build(:registration_session, :with_school) }
 
     subject do
       described_class.create_from_registration_session! fake_gitis, registration
@@ -154,7 +154,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '.create_or_update_from_registration_session!' do
-    let(:registration_session) { build(:registration_session) }
+    let(:registration_session) { build(:registration_session, :with_school) }
 
     context 'with an existing contact and existing candidate' do
       let(:candidate) { create(:candidate, :with_gitis_contact) }
@@ -244,7 +244,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '#update_from_registration_session!' do
-    let(:registration) { build(:registration_session) }
+    let(:registration) { build(:registration_session, :with_school) }
     let(:candidate) { build(:candidate, :with_gitis_contact) }
 
     subject do

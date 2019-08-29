@@ -75,6 +75,12 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then the 'new bookings counter' should be 3
 
+    Scenario: Confirm attendance counter
+        Given my school has fully-onboarded
+        And there are 2 bookings in the past with no attendance logged
+        When I am on the 'schools dashboard' page
+        Then the 'confirm attendance counter' should be 2
+
     Scenario: Hide the enable/disable link if schools not onboarded
         Given my school has not yet fully-onboarded
         When I am on the 'schools dashboard' page
@@ -98,9 +104,3 @@ Feature: The School Dashboard
         And my school has availability no information set
         When I am on the 'schools dashboard' page
         Then there should be a 'You have no availability information' warning
-
-    @wip
-    Scenario: Candidate attendances counter
-        Given there are 4 new candidate attendances
-        When I am on the 'schools dashboard' page
-        Then the 'candidate attendances counter' should be 4

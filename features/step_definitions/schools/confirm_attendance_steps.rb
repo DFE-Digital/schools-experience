@@ -2,7 +2,7 @@ Given("there are some bookings that were scheduled last week") do
   @number_of_bookings = 3
   step "there are #{@number_of_bookings} bookings"
   @bookings.each do |booking|
-    booking.date = 4.days.ago
+    booking.date = booking.accepted_at = 4.days.ago
     booking.save(validate: false)
   end
   @first_booking = @bookings.first

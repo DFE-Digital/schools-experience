@@ -45,6 +45,10 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
         expect(school_profile.reload.dbs_fee).to eq dbs_fee
       end
 
+      it "doesn't mark the step as complete" do
+        expect(school_profile.reload.dbs_fee_step_completed).to_not be true
+      end
+
       it 'rerenders the new form' do
         expect(response).to render_template :new
       end
@@ -57,6 +61,10 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
 
       it 'updates the school_profile' do
         expect(school_profile.reload.dbs_fee).to eq dbs_fee
+      end
+
+      it 'marks the step as complete' do
+        expect(school_profile.reload.dbs_fee_step_completed).to be true
       end
 
       it 'redirects to the next step' do

@@ -15,6 +15,7 @@ module Bookings
         school.subject_ids = @school_profile.subject_ids
         school.phase_ids = converted_phase_ids
         school.save!
+        profile.updated_at = DateTime.now
         profile.tap(&:save!)
       end
     end

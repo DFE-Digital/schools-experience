@@ -327,8 +327,7 @@ feature 'Candidate Registrations', type: :feature do
       "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
 
     # Submit email confirmation form successfully
-    check \
-      "By checking this box and sending this request you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our privacy policy"
+    check "candidates_registrations_privacy_policy_acceptance"
     click_button 'Accept and send'
   end
 

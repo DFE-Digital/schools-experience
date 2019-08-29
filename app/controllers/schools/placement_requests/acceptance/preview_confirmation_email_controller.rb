@@ -10,7 +10,10 @@ module Schools
         def create
           booking = @placement_request.booking
 
-          if booking.update(accepted_at: Time.now) && candidate_booking_notification(booking).despatch_later!
+          if booking.update(accepted_at: Time.zone.now) && candidate_booking_notification(booking).despatch_later!
+            Bookings::Gitis::EventLogger.write_later \
+              booking.contact_uuid, :booking, booking
+
             redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
           else
             render :new
