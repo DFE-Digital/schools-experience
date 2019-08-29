@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_16_153248) do
+ActiveRecord::Schema.define(version: 2019_08_16_213044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,6 +159,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_153248) do
     t.datetime "updated_at", null: false
     t.text "flexible_on_times_details"
     t.string "admin_contact_email_secondary"
+    t.boolean "dbs_requires_check"
+    t.text "dbs_policy_details"
     t.index ["school_id"], name: "index_bookings_profiles_on_school_id", unique: true
   end
 

@@ -9,6 +9,10 @@ module Bookings
     def attributes
       reset_output
 
+      if Rails.application.config.x.features.include? :dbs_requirement
+        convert_dbs_required
+      end
+
       convert_dbs
       convert_nillable
       convert_dress_code
@@ -44,6 +48,16 @@ module Bookings
     end
 
   private
+
+    def convert_dbs_required
+      if input[:dbs_requirement_requires_check]
+        output[:dbs_requires_check] = true
+        output[:dbs_policy_details] = input[:dbs_requirement_dbs_policy_details]
+      else
+        output[:dbs_requires_check] = false
+        output[:dbs_policy_details] = input[:dbs_requirement_no_dbs_policy_details]
+      end
+    end
 
     def convert_dbs
       output[:dbs_required] = input[:candidate_requirement_dbs_requirement]
