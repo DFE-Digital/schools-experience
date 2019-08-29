@@ -1,6 +1,6 @@
 # FIXME needs to inherit from CronJob once its merged
-class Cron::SyncSubjectsWithGitisJob < ApplicationJob
-#  self.cron_expression = '30 3 * * *' # FIXME reenabled for scheduling
+class Cron::SyncSubjectsWithGitisJob < CronJob
+  self.cron_expression = '30 3 * * *'
 
   def perform
     Bookings::SubjectSync.synchronise(crm)
