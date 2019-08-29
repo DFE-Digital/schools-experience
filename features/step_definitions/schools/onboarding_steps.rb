@@ -269,7 +269,7 @@ end
 
 Then "the DBS Check information in the sidebar should match the information entered in the wizard" do
   within "#dbs-check-info" do
-    expect(page).to have_content "Yes - Sometimes\npolicy details"
+    expect(page).to have_content "Yes\nAlways require DBS check"
   end
 end
 

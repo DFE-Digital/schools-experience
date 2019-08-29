@@ -67,7 +67,7 @@ Feature: Publishing Profile
             | School phases                     | Secondary (11 to 16) and 16 to 18                |
             | School Address                    | 22 something                                     |
             | School availability info          | No information supplied                          |
-            | DBS check info                    | Yes - Sometimes\npolicy details                  |
+            | DBS check info                    | Yes\nAlways require DBS check                    |
             | Other fee info                    | £300.00 Daily, Gold sovereigns\nFalconry lessons |
             | Dress code                        | Business dress\nMust have nice hat               |
             | Start and finish times            | 8:15 am to 4:30 pm                               |
