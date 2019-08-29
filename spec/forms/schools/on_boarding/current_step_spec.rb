@@ -58,49 +58,106 @@ describe Schools::OnBoarding::CurrentStep do
 
       context 'fees not required' do
         context 'administration_fee required' do
-          let :school_profile do
-            FactoryBot.build :school_profile,
-              :with_dbs_requirement,
-              :with_candidate_requirement,
-              fees_administration_fees: true,
-              fees_dbs_fees: false,
-              fees_other_fees: false
+          context 'administration_fee invalid' do
+            let :school_profile do
+              FactoryBot.build :school_profile,
+                :with_dbs_requirement,
+                :with_candidate_requirement,
+                fees_administration_fees: true,
+                fees_dbs_fees: false,
+                fees_other_fees: false
+            end
+
+            it 'returns :administration_fee' do
+              expect(returned_step).to eq :administration_fee
+            end
           end
 
-          it 'returns :administration_fee' do
-            expect(returned_step).to eq :administration_fee
+          context 'administration_fee valid step flagged incomplete' do
+            let :school_profile do
+              FactoryBot.build :school_profile,
+                :with_dbs_requirement,
+                :with_candidate_requirement,
+                :with_administration_fee,
+                fees_administration_fees: true,
+                fees_dbs_fees: true,
+                fees_other_fees: false,
+                administration_fee_step_completed: false
+            end
+
+            it 'returns :administration_fee' do
+              expect(returned_step).to eq :administration_fee
+            end
           end
         end
 
         context 'administration_fee not required' do
           context 'dbs_fee required' do
-            let :school_profile do
-              FactoryBot.build :school_profile,
-                :with_dbs_requirement,
-                :with_candidate_requirement,
-                fees_administration_fees: false,
-                fees_dbs_fees: true,
-                fees_other_fees: false
-            end
-
-            it 'returns :dbs_fee' do
-              expect(returned_step).to eq :dbs_fee
-            end
-          end
-
-          context 'dbs_fee not required' do
-            context 'other_fees required' do
+            context 'dbs_fee invalid' do
               let :school_profile do
                 FactoryBot.build :school_profile,
                   :with_dbs_requirement,
                   :with_candidate_requirement,
                   fees_administration_fees: false,
-                  fees_dbs_fees: false,
-                  fees_other_fees: true
+                  fees_dbs_fees: true,
+                  fees_other_fees: false
               end
 
-              it 'returns :other_fees' do
-                expect(returned_step).to eq :other_fee
+              it 'returns :dbs_fee' do
+                expect(returned_step).to eq :dbs_fee
+              end
+            end
+
+            context 'dbs_fee step flagged incomplete' do
+              let :school_profile do
+                FactoryBot.build :school_profile,
+                  :with_dbs_requirement,
+                  :with_candidate_requirement,
+                  :with_dbs_fee,
+                  fees_administration_fees: false,
+                  fees_dbs_fees: true,
+                  fees_other_fees: false,
+                  dbs_fee_step_completed: false
+              end
+
+              it 'returns :dbs_fee' do
+                expect(returned_step).to eq :dbs_fee
+              end
+            end
+          end
+
+          context 'dbs_fee not required' do
+            context 'other_fees required' do
+              context 'other_fees invalid' do
+                let :school_profile do
+                  FactoryBot.build :school_profile,
+                    :with_dbs_requirement,
+                    :with_candidate_requirement,
+                    fees_administration_fees: false,
+                    fees_dbs_fees: false,
+                    fees_other_fees: true
+                end
+
+                it 'returns :other_fees' do
+                  expect(returned_step).to eq :other_fee
+                end
+              end
+
+              context 'other_fees step flagged incomplete' do
+                let :school_profile do
+                  FactoryBot.build :school_profile,
+                    :with_dbs_requirement,
+                    :with_candidate_requirement,
+                    :with_other_fee,
+                    fees_administration_fees: false,
+                    fees_dbs_fees: false,
+                    fees_other_fees: true,
+                    other_fee_step_completed: false
+                end
+
+                it 'returns :other_fees' do
+                  expect(returned_step).to eq :other_fee
+                end
               end
             end
 

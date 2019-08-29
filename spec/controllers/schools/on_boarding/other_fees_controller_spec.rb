@@ -47,6 +47,10 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
         expect(school_profile.reload.other_fee).to eq other_fee
       end
 
+      it "doesn't mark the step as complete" do
+        expect(school_profile.reload.other_fee_step_completed).to_not be true
+      end
+
       it 'rerenders the new form' do
         expect(response).to render_template :new
       end
@@ -57,8 +61,12 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
         FactoryBot.build :other_fee
       end
 
-      it "doesn't update the school_profile" do
+      it "updates the school_profile" do
         expect(school_profile.reload.other_fee).to eq other_fee
+      end
+
+      it 'marks the step as complete' do
+        expect(school_profile.reload.other_fee_step_completed).to be true
       end
 
       it 'redirects to the next step' do
