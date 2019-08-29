@@ -2,14 +2,17 @@ module Schools
   module OnBoarding
     class DbsFeesController < OnBoardingsController
       def new
-        @dbs_fee = DBSFee.new
+        @dbs_fee = current_school_profile.dbs_fee
       end
 
       def create
         @dbs_fee = DBSFee.new dbs_fee_params
 
         if @dbs_fee.valid?
-          current_school_profile.update! dbs_fee: @dbs_fee
+          current_school_profile.update! \
+            dbs_fee: @dbs_fee,
+            dbs_fee_step_completed: true
+
           redirect_to next_step_path(current_school_profile)
         else
           render :new

@@ -236,6 +236,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_213044) do
     t.string "name", limit: 64, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "gitis_uuid"
+    t.index ["gitis_uuid"], name: "index_bookings_subjects_on_gitis_uuid", unique: true
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
   end
 
@@ -357,6 +359,9 @@ ActiveRecord::Schema.define(version: 2019_08_16_213044) do
     t.boolean "phases_list_secondary_and_college", default: false, null: false
     t.boolean "confirmation_acceptance", default: false
     t.text "candidate_experience_detail_times_flexible_details"
+    t.boolean "administration_fee_step_completed", default: false
+    t.boolean "dbs_fee_step_completed", default: false
+    t.boolean "other_fee_step_completed", default: false
     t.string "admin_contact_email_secondary"
     t.boolean "dbs_requirement_requires_check"
     t.text "dbs_requirement_dbs_policy_details"

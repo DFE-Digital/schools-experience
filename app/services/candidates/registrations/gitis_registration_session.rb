@@ -30,6 +30,10 @@ module Candidates
         fetch_attributes BackgroundCheck, mapper.contact_to_background_check
       end
 
+      def teaching_preference_attributes
+        fetch_attributes TeachingPreference, mapper.contact_to_teaching_preference
+      end
+
       def mapper
         @mapper ||= Bookings::RegistrationContactMapper.new(self, gitis_contact)
       end

@@ -152,4 +152,19 @@ RSpec.describe Candidates::SchoolPresenter do
       it { is_expected.to eql 'Must have recent dbs check' }
     end
   end
+
+  describe '#available_dates' do
+    let(:unavailable_date) { FactoryBot.create :bookings_placement_date, :inactive }
+    let(:available_date) { FactoryBot.create :bookings_placement_date }
+
+    before do
+      school.save!
+      school.bookings_placement_dates << unavailable_date
+      school.bookings_placement_dates << available_date
+    end
+
+    subject { described_class.new(school, profile).available_dates }
+
+    it { is_expected.to eq school.bookings_placement_dates.available }
+  end
 end

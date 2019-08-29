@@ -35,8 +35,6 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
       it 'assigns the instance variable' do
         expect(assigns(:profile)).to \
           eq Schools::OnBoarding::SchoolProfilePresenter.new(school_profile)
-        expect(assigns(:confirmation)).to \
-          eq Schools::OnBoarding::Confirmation.new
       end
 
       it 'renders the show template' do

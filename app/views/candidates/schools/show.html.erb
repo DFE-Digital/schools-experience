@@ -6,4 +6,4 @@
 
 <h1 class="govuk-heading-l govuk-!-margin-top-4"><%= @school.name %></h1>
 
-<%= render (@presenter ? 'phase2' : 'phase1'), school: @school %>
+<%= render (@presenter ? 'phase2' : 'phase1'), school: @school, include_candidate_request_links: true %>
