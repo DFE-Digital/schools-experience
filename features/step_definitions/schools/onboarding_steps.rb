@@ -163,6 +163,10 @@ Then "the page should have the following summary list information:" do |table|
   end
 end
 
+Given "the primary phase is available" do
+  FactoryBot.create :bookings_phase, :primary
+end
+
 Given "the secondary school phase is availble" do
   FactoryBot.create :bookings_phase, :secondary
 end
@@ -176,8 +180,7 @@ Given "there are some subjects available" do
 end
 
 Given "A school is returned from DFE sign in" do
-  # FIXME change this once we merge in phase2
-  FactoryBot.create :bookings_school, urn: 1234567890
+  @school = Bookings::School.find_by(urn: 123456) || FactoryBot.create(:bookings_school, urn: 123456)
 end
 
 Given "I have completed the following steps:" do |table|
@@ -218,4 +221,66 @@ And "I complete the candidate experience form with valid data" do
     And I enter '4:30 pm' into the 'Finish time' text area
     And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
   )
+end
+
+Then "I should see the correctly-formatted school placement information I entered in the wizard" do
+  within "#school-placement-info" do
+    @school.school_profile.description_details.lines.reject(&:blank?).each do |line|
+      expect(page).to have_css('p', text: line.strip)
+    end
+  end
+end
+
+Then "the age range should match what I entered in the wizard" do
+  within "#school-phases" do
+    {
+      primary: 'Primary',
+      secondary: 'Secondary (11 to 16)',
+      college: '16 to 18'
+    }.each do |k, v|
+      expect(page).to have_content(v) if @school.school_profile.phases_list.public_send("#{k}?")
+    end
+  end
+end
+
+Then "all of the subjects I entered should be listed" do
+  within "#school-subjects" do
+    @school.school_profile.subject_ids.each do |subject_id|
+      expect(page).to have_content(Bookings::Subject.find(subject_id).name)
+    end
+  end
+end
+
+Then "I should see the teacher trainning info I entered in the wizard" do
+  within '#school-teacher-training-info' do
+    expect(page).to have_content \
+      @school.school_profile.experience_outline.teacher_training_details
+
+    expect(page).to have_link "More information",
+      href: @school.school_profile.experience_outline.teacher_training_url
+  end
+end
+
+Then "I should see the schools availability information in the sidebar" do
+  within "#school-availability-info" do
+    expect(page).to have_css('p', text: @school.availability_info)
+  end
+end
+
+Then "the DBS Check information in the sidebar should match the information entered in the wizard" do
+  within "#dbs-check-info" do
+    expect(page).to have_content "Yes - Sometimes\npolicy details"
+  end
+end
+
+Then "I should see the fee information I entered in the wizard" do
+  within "#other-fee-info" do
+    expect(page).to have_content "£300.00 Daily, Gold sovereigns\nFalconry lessons"
+  end
+end
+
+Then "I should see the dress code policy information I entered in the wizard" do
+  within "#dress-code" do
+    expect(page).to have_content "Business dress\nMust have nice hat"
+  end
 end

@@ -51,7 +51,7 @@ describe NotifyJob, type: :job do
       context 'retryable error' do
         let(:notify_class) { NotifyRetryableErroringClient }
         let(:executions) { 4 }
-        let(:retry_in) { 8.hours.from_now.to_i }
+        let(:retry_in) { 2.hours.from_now.to_i }
 
         # https://docs.notifications.service.gov.uk/ruby.html#error-codes
         it 'retrys the job' do

@@ -80,7 +80,6 @@ Rails.application.configure do
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
-  config.x.gitis.owner_id = SecureRandom.uuid
   config.x.gitis.country_id = SecureRandom.uuid
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
