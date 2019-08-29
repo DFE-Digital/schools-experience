@@ -38,7 +38,7 @@ describe Schools::PlacementRequestsController, type: :request do
     context 'after placement requests have been accepted' do
       let(:booked) { placement_requests.last }
       before do
-        create(:bookings_booking, bookings_placement_request: booked, bookings_school: school)
+        create(:bookings_booking, :accepted, bookings_placement_request: booked, bookings_school: school)
       end
 
       before { get '/schools/placement_requests' }

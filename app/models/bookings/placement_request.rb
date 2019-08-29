@@ -50,7 +50,10 @@ module Bookings
 
     scope :unbooked, -> do
       left_joins(:booking)
-        .where(bookings_bookings: { bookings_placement_request_id: nil })
+        .where <<~SQL
+          bookings_bookings.bookings_placement_request_id IS NULL
+          OR bookings_bookings.accepted_at IS NULL
+        SQL
     end
 
     scope :cancelled, -> do
