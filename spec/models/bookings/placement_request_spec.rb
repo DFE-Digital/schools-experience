@@ -83,6 +83,10 @@ describe Bookings::PlacementRequest, type: :model do
     end
 
     let! :booked_placement_request do
+      FactoryBot.create(:bookings_booking, :accepted, bookings_school: school).bookings_placement_request
+    end
+
+    let! :booked_but_not_accepted_placement_request do
       FactoryBot.create(:bookings_booking, bookings_school: school).bookings_placement_request
     end
 
@@ -95,7 +99,8 @@ describe Bookings::PlacementRequest, type: :model do
       it do
         is_expected.to match_array [
           placement_request_open,
-          placement_request_cancelled_by_school_but_not_sent
+          placement_request_cancelled_by_school_but_not_sent,
+          booked_but_not_accepted_placement_request
         ]
       end
     end
@@ -107,7 +112,8 @@ describe Bookings::PlacementRequest, type: :model do
           placement_request_open,
           placement_request_cancelled_by_school_but_not_sent,
           placement_request_closed_by_candidate,
-          placement_request_closed_by_school
+          placement_request_closed_by_school,
+          booked_but_not_accepted_placement_request
         ]
       end
     end
@@ -128,7 +134,8 @@ describe Bookings::PlacementRequest, type: :model do
         is_expected.to match_array [
           placement_request_open,
           placement_request_cancelled_by_school_but_not_sent,
-          booked_placement_request
+          booked_placement_request,
+          booked_but_not_accepted_placement_request
         ]
       end
     end

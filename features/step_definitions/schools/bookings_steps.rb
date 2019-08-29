@@ -25,6 +25,7 @@ And("there is/are {int} booking/bookings") do |count|
     :bookings_booking,
     count,
     :with_existing_subject,
+    :accepted,
     bookings_school: @school,
     date: @scheduled_booking_date
   )
