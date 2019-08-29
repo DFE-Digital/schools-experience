@@ -69,6 +69,10 @@ module Candidates
       end
     end
 
+    def available_dates
+      school.bookings_placement_dates.available
+    end
+
   private
 
     def dbs_requirement
@@ -85,10 +89,6 @@ module Candidates
       when 'sometimes' then 'Yes - Sometimes'
       when 'never' then 'No - Candidates will be accompanied at all times'
       end
-    end
-
-    def available_dates
-      school.bookings_placement_dates.available
     end
   end
 end
