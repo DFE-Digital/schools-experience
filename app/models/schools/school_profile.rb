@@ -48,6 +48,16 @@ module Schools
     end
 
     composed_of \
+      :dbs_requirement,
+      class_name: 'Schools::OnBoarding::DbsRequirement',
+      mapping: [
+        %w(dbs_requirement_requires_check requires_check),
+        %w(dbs_requirement_dbs_policy_details dbs_policy_details),
+        %w(dbs_requirement_no_dbs_policy_details no_dbs_policy_details)
+      ],
+      constructor: :compose
+
+    composed_of \
       :candidate_requirement,
       class_name: 'Schools::OnBoarding::CandidateRequirement',
       mapping: [

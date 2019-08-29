@@ -358,6 +358,9 @@ ActiveRecord::Schema.define(version: 2019_08_16_153248) do
     t.boolean "confirmation_acceptance", default: false
     t.text "candidate_experience_detail_times_flexible_details"
     t.string "admin_contact_email_secondary"
+    t.boolean "dbs_requirement_requires_check"
+    t.text "dbs_requirement_dbs_policy_details"
+    t.text "dbs_requirement_no_dbs_policy_details"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 
