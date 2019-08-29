@@ -416,7 +416,7 @@ en:
       candidates_session:
         date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
       schools_on_boarding_dbs_requirement:
-        requires_check: 'Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
+        requires_check_html: '<br>Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
