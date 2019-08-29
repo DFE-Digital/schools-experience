@@ -9,6 +9,7 @@ Feature: Phases
     And the college phase is availble
     And I have completed the following steps:
         | Step name                    | Extra                     |
+        | DBS Requirements             |                           |
         | Candidate Requirements       |                           |
         | Fees                         | choosing only Other costs |
         | Other costs                  |                           |

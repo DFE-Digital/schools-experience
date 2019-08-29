@@ -4,6 +4,12 @@ FactoryBot.define do
       sp.bookings_school = Bookings::School.find_by(urn: 123456) || create(:bookings_school, urn: 123456)
     end
 
+    trait :with_dbs_requirement do
+      after :build do |profile|
+        profile.dbs_requirement = FactoryBot.build :dbs_requirement
+      end
+    end
+
     trait :with_candidate_requirement do
       candidate_requirement_dbs_requirement { 'sometimes' }
       candidate_requirement_dbs_policy { 'Super secure' }
@@ -110,6 +116,7 @@ FactoryBot.define do
     end
 
     trait :completed do
+      with_dbs_requirement
       with_candidate_requirement
       with_fees
       with_administration_fee

@@ -4,13 +4,9 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
   include_context "logged in DfE user"
 
-  let! :school_profile do
-    create :school_profile
-  end
-
   context '#new' do
     let! :school_profile do
-      FactoryBot.create :school_profile
+      FactoryBot.create :school_profile, :with_dbs_requirement
     end
 
     before do
@@ -29,7 +25,7 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
 
   context '#create' do
     let! :school_profile do
-      FactoryBot.create :school_profile
+      FactoryBot.create :school_profile, :with_dbs_requirement
     end
 
     let :params do
