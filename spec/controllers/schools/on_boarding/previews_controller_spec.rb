@@ -36,7 +36,7 @@ describe Schools::OnBoarding::PreviewsController, type: :request do
 
       it 'redirects to the first outstanding step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_candidate_requirement_path
+          new_schools_on_boarding_dbs_requirement_path
       end
     end
 

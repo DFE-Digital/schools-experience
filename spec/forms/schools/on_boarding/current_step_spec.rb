@@ -14,9 +14,29 @@ describe Schools::OnBoarding::CurrentStep do
       described_class.for school_profile
     end
 
+    context 'dbs_requirement required' do
+      let :school_profile do
+        FactoryBot.build :school_profile
+      end
+
+      it 'returns :candidate_requirement' do
+        expect(returned_step).to eq :dbs_requirement
+      end
+    end
+
+    context 'dbs_requirement not required' do
+      let :school_profile do
+        FactoryBot.build :school_profile, :with_dbs_requirement
+      end
+
+      it 'returns :candidate_requirement' do
+        expect(returned_step).to eq :candidate_requirement
+      end
+    end
+
     context 'candidate_requirement required' do
       let :school_profile do
-        FactoryBot.build_stubbed :school_profile
+        FactoryBot.build :school_profile, :with_dbs_requirement
       end
 
       it 'returns :candidate_requirement' do
@@ -27,7 +47,8 @@ describe Schools::OnBoarding::CurrentStep do
     context 'candidate_requirement not required' do
       context 'fees required' do
         let :school_profile do
-          FactoryBot.build_stubbed :school_profile, :with_candidate_requirement
+          FactoryBot.build :school_profile,
+            :with_dbs_requirement, :with_candidate_requirement
         end
 
         it 'returns :fees' do
@@ -38,7 +59,8 @@ describe Schools::OnBoarding::CurrentStep do
       context 'fees not required' do
         context 'administration_fee required' do
           let :school_profile do
-            FactoryBot.build_stubbed :school_profile,
+            FactoryBot.build :school_profile,
+              :with_dbs_requirement,
               :with_candidate_requirement,
               fees_administration_fees: true,
               fees_dbs_fees: false,
@@ -53,7 +75,8 @@ describe Schools::OnBoarding::CurrentStep do
         context 'administration_fee not required' do
           context 'dbs_fee required' do
             let :school_profile do
-              FactoryBot.build_stubbed :school_profile,
+              FactoryBot.build :school_profile,
+                :with_dbs_requirement,
                 :with_candidate_requirement,
                 fees_administration_fees: false,
                 fees_dbs_fees: true,
@@ -68,7 +91,8 @@ describe Schools::OnBoarding::CurrentStep do
           context 'dbs_fee not required' do
             context 'other_fees required' do
               let :school_profile do
-                FactoryBot.build_stubbed :school_profile,
+                FactoryBot.build :school_profile,
+                  :with_dbs_requirement,
                   :with_candidate_requirement,
                   fees_administration_fees: false,
                   fees_dbs_fees: false,
@@ -83,7 +107,8 @@ describe Schools::OnBoarding::CurrentStep do
             context 'other_fees not required' do
               context 'phases_list required' do
                 let :school_profile do
-                  FactoryBot.build_stubbed :school_profile,
+                  FactoryBot.build :school_profile,
+                    :with_dbs_requirement,
                     :with_candidate_requirement,
                     fees_administration_fees: false,
                     fees_dbs_fees: false,
@@ -98,7 +123,8 @@ describe Schools::OnBoarding::CurrentStep do
               context 'phases_list not required' do
                 context 'key_stage_list required' do
                   let :school_profile do
-                    FactoryBot.build_stubbed :school_profile,
+                    FactoryBot.build :school_profile,
+                      :with_dbs_requirement,
                       :with_candidate_requirement,
                       :with_fees,
                       :with_administration_fee,
@@ -115,7 +141,8 @@ describe Schools::OnBoarding::CurrentStep do
                 context 'key_stage_list not required' do
                   context 'subjects required' do
                     let :school_profile do
-                      FactoryBot.build_stubbed :school_profile,
+                      FactoryBot.build :school_profile,
+                        :with_dbs_requirement,
                         :with_candidate_requirement,
                         :with_fees,
                         :with_administration_fee,
@@ -134,6 +161,7 @@ describe Schools::OnBoarding::CurrentStep do
                     context 'description required' do
                       let :school_profile do
                         FactoryBot.create :school_profile,
+                          :with_dbs_requirement,
                           :with_candidate_requirement,
                           :with_fees,
                           :with_administration_fee,
@@ -153,6 +181,7 @@ describe Schools::OnBoarding::CurrentStep do
                       context 'candidate_experience_detail required' do
                         let :school_profile do
                           FactoryBot.create :school_profile,
+                            :with_dbs_requirement,
                             :with_candidate_requirement,
                             :with_fees,
                             :with_administration_fee,
@@ -174,6 +203,7 @@ describe Schools::OnBoarding::CurrentStep do
                         context 'experience_outline requred' do
                           let :school_profile do
                             FactoryBot.create :school_profile,
+                              :with_dbs_requirement,
                               :with_candidate_requirement,
                               :with_fees,
                               :with_administration_fee,
@@ -196,6 +226,7 @@ describe Schools::OnBoarding::CurrentStep do
                           context 'admin_contact required' do
                             let :school_profile do
                               FactoryBot.create :school_profile,
+                                :with_dbs_requirement,
                                 :with_candidate_requirement,
                                 :with_fees,
                                 :with_administration_fee,
@@ -217,6 +248,7 @@ describe Schools::OnBoarding::CurrentStep do
                           context 'admin_contact not required' do
                             let :school_profile do
                               FactoryBot.create :school_profile,
+                                :with_dbs_requirement,
                                 :with_candidate_requirement,
                                 :with_fees,
                                 :with_administration_fee,
