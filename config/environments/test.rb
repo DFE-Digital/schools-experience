@@ -83,4 +83,5 @@ Rails.application.configure do
   config.x.gitis.country_id = SecureRandom.uuid
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
+  config.ab_threshold = ENV.fetch('AB_TEST_THRESHOLD', 100)
 end

@@ -21,7 +21,7 @@ module Schools
       def show_candidate_requirements_selection?
         return false unless Feature.instance.active? :candidate_requirement_ab_test
 
-        true # TODO do this x % of the time
+        Random.rand(100) <= Rails.application.config.ab_threshold
       end
 
       def next_step_path(school_profile)

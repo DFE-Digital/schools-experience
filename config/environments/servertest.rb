@@ -24,4 +24,5 @@ Rails.application.configure do
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
+  config.ab_threshold = ENV.fetch('AB_TEST_THRESHOLD', 100)
 end
