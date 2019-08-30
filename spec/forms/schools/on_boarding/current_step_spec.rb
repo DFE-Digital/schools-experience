@@ -19,7 +19,7 @@ describe Schools::OnBoarding::CurrentStep do
         FactoryBot.build :school_profile
       end
 
-      it 'returns :candidate_requirement' do
+      it 'returns :dbs_requirement' do
         expect(returned_step).to eq :dbs_requirement
       end
     end

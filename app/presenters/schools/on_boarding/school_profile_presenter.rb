@@ -57,19 +57,6 @@ module Schools
         end
       end
 
-      def dbs_check_required
-        case @school_profile.candidate_requirement.dbs_requirement
-        when 'always'
-          'Yes - Always'
-        when 'sometimes'
-          'Yes - Sometimes. ' + @school_profile.candidate_requirement.dbs_policy
-        when 'never'
-          'No - Candidates will be accompanied at all times'
-        else
-          fail "Unknown dbs_requirement profile: #{@school_profile.inspect}"
-        end
-      end
-
       def dbs_check
         unless [true, false].include? @school_profile.dbs_requirement.requires_check
           fail "DBS requirement not set #{@school_profile.inspect}"
