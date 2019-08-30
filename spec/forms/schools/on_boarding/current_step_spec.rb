@@ -19,7 +19,7 @@ describe Schools::OnBoarding::CurrentStep do
         FactoryBot.build :school_profile
       end
 
-      it 'returns :candidate_requirement' do
+      it 'returns :dbs_requirement' do
         expect(returned_step).to eq :dbs_requirement
       end
     end
@@ -35,12 +35,40 @@ describe Schools::OnBoarding::CurrentStep do
     end
 
     context 'candidate_requirement required' do
-      let :school_profile do
-        FactoryBot.build :school_profile, :with_dbs_requirement
+      context 'school is not shown candidate_requirement' do
+        let :school_profile do
+          FactoryBot.build :school_profile, :with_dbs_requirement
+        end
+
+        it 'returns :candidate_requirement' do
+          expect(returned_step).to eq :candidate_requirement
+        end
       end
 
-      it 'returns :candidate_requirement' do
-        expect(returned_step).to eq :candidate_requirement
+      context 'school is shown select_candidate_requirement' do
+        context 'step not completed' do
+          let :school_profile do
+            FactoryBot.build :school_profile, :with_dbs_requirement,
+              show_candidate_requirements_selection: true
+          end
+
+          it 'returns :select_candidate_requirement' do
+            expect(returned_step).to eq :candidate_requirements_selection
+          end
+        end
+
+        context 'step completed' do
+          let :school_profile do
+            FactoryBot.build :school_profile,
+              :with_dbs_requirement,
+              :with_candidate_requirements_selection,
+              show_candidate_requirements_selection: true
+          end
+
+          it 'returns :fees' do
+            expect(returned_step).to eq :fees
+          end
+        end
       end
     end
 

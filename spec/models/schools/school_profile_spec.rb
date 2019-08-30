@@ -192,6 +192,11 @@ describe Schools::SchoolProfile, type: :model do
       is_expected.to \
         have_db_column(:confirmation_acceptance).of_type(:boolean)
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:show_candidate_requirements_selection).of_type(:boolean)
+    end
   end
 
   context 'relationships' do
@@ -268,16 +273,6 @@ describe Schools::SchoolProfile, type: :model do
 
       before do
         model.candidate_requirement = form_model
-      end
-
-      it 'sets candidate_requirement_dbs_requirement' do
-        expect(model.candidate_requirement_dbs_requirement).to eq \
-          form_model.dbs_requirement
-      end
-
-      it 'sets candidate_requirement_dbs_policy' do
-        expect(model.candidate_requirement_dbs_policy).to eq \
-          form_model.dbs_policy
       end
 
       it 'sets candidate_requirement_requirements' do

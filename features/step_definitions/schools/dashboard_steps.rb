@@ -32,7 +32,7 @@ Given("there are {int} new requests") do |qty|
 end
 
 Given("there are {int} new bookings") do |qty|
-  FactoryBot.create_list :bookings_booking, qty, :upcoming, bookings_school: @school
+  FactoryBot.create_list :bookings_booking, qty, :upcoming, :accepted, bookings_school: @school
 end
 
 Given("there are {int} bookings in the past with no attendance logged") do |qty|

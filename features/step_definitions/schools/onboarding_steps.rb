@@ -11,11 +11,21 @@ Given "I have completed the DBS Requirements step" do
   )
 end
 
+Given "I have completed the Candidate Requirements selection step" do
+  steps %(
+    Given I am on the 'candidate requirements selection' page
+    And I check "They must apply or have been accepted onto your or a partner school's teacher training course"
+    And I check "They must live locally"
+    And I enter '7' into the 'Tell us within how many miles of your school. For example, 20 miles.' text area
+    And I check 'Other'
+    And I enter 'Some details' into the 'Provide details.' text area
+    When I submit the form
+  )
+end
+
 Given "I have completed the Candidate Requirements step" do
   steps %(
     Given I am on the 'candidate requirements' page
-    And I choose 'Yes - Sometimes' from the 'Do you require candidates to be DBS-checked?' radio buttons
-    And I outline our dbs policy
     And I choose 'Yes' from the 'Do you have any requirements for school experience candidates?' radio buttons
     And I provide details
     When I submit the form

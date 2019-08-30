@@ -61,10 +61,22 @@ module Schools
       :candidate_requirement,
       class_name: 'Schools::OnBoarding::CandidateRequirement',
       mapping: [
-        %w(candidate_requirement_dbs_requirement dbs_requirement),
-        %w(candidate_requirement_dbs_policy dbs_policy),
         %w(candidate_requirement_requirements requirements),
         %w(candidate_requirement_requirements_details requirements_details)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :candidate_requirements_selection,
+      class_name: 'Schools::OnBoarding::CandidateRequirementsSelection',
+      mapping: [
+          %w(candidate_requirements_selection_on_teacher_training_course on_teacher_training_course),
+          %w(candidate_requirements_selection_has_degree has_degree),
+          %w(candidate_requirements_selection_working_towards_degree working_towards_degree),
+          %w(candidate_requirements_selection_live_locally live_locally),
+          %w(candidate_requirements_selection_maximum_distance_from_school maximum_distance_from_school),
+          %w(candidate_requirements_selection_other other),
+          %w(candidate_requirements_selection_other_details other_details)
       ],
       constructor: :compose
 
@@ -219,6 +231,10 @@ module Schools
 
     def requires_subjects?
       phases_list.secondary? || phases_list.college?
+    end
+
+    def show_candidate_requirement?
+      !show_candidate_requirements_selection?
     end
   end
 end

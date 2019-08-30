@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 2019_08_30_092648) do
 
   create_table "bookings_profiles", force: :cascade do |t|
     t.bigint "school_id"
-    t.string "dbs_required", null: false
+    t.string "dbs_required"
     t.text "dbs_policy"
     t.text "individual_requirements"
     t.boolean "primary_phase", null: false
@@ -368,6 +368,14 @@ ActiveRecord::Schema.define(version: 2019_08_30_092648) do
     t.boolean "dbs_requirement_requires_check"
     t.text "dbs_requirement_dbs_policy_details"
     t.text "dbs_requirement_no_dbs_policy_details"
+    t.boolean "show_candidate_requirements_selection", default: false
+    t.boolean "candidate_requirements_selection_on_teacher_training_course"
+    t.boolean "candidate_requirements_selection_has_degree"
+    t.boolean "candidate_requirements_selection_working_towards_degree"
+    t.boolean "candidate_requirements_selection_live_locally"
+    t.integer "candidate_requirements_selection_maximum_distance_from_school"
+    t.boolean "candidate_requirements_selection_other"
+    t.text "candidate_requirements_selection_other_details"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

@@ -15,6 +15,8 @@ module Schools
           :dbs_requirement
         elsif candidate_requirement_required?
           :candidate_requirement
+        elsif candidate_requirements_selection_required?
+          :candidate_requirements_selection
         elsif fees_required?
           :fees
         elsif administration_fee_required?
@@ -45,13 +47,19 @@ module Schools
     private
 
       def dbs_requirement_required?
-        return false unless Rails.application.config.x.features.include? :dbs_requirement
-
         !@school_profile.dbs_requirement.dup.valid?
       end
 
       def candidate_requirement_required?
+        return false unless @school_profile.show_candidate_requirement?
+
         @school_profile.candidate_requirement.dup.invalid?
+      end
+
+      def candidate_requirements_selection_required?
+        return false unless @school_profile.show_candidate_requirements_selection?
+
+        @school_profile.candidate_requirements_selection.dup.invalid?
       end
 
       def fees_required?
