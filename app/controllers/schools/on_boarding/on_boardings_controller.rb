@@ -10,7 +10,18 @@ module Schools
       end
 
       def get_current_school_profile
-        current_school.school_profile || current_school.create_school_profile!
+        current_school.school_profile || create_school_profile!
+      end
+
+      def create_school_profile!
+        current_school.create_school_profile! \
+          show_candidate_requirements_selection: show_candidate_requirements_selection?
+      end
+
+      def show_candidate_requirements_selection?
+        return false unless Feature.instance.active? :candidate_requirement_ab_test
+
+        Random.rand(100) <= Rails.application.config.ab_threshold
       end
 
       def next_step_path(school_profile)

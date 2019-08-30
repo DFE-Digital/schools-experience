@@ -75,11 +75,15 @@ module Schools
         end
       end
 
+      def show_candidate_requirements_selection?
+        @school_profile.show_candidate_requirements_selection?
+      end
+
       def individual_requirements
-        if @school_profile.candidate_requirement.requirements
-          'Yes - ' + @school_profile.candidate_requirement.requirements_details
+        if @school_profile.show_candidate_requirements_selection?
+          candidate_requirements_selection
         else
-          'No'
+          candidate_requirements
         end
       end
 
@@ -226,6 +230,18 @@ module Schools
       end
 
     private
+
+      def candidate_requirements
+        if @school_profile.candidate_requirement.requirements
+          'Yes - ' + @school_profile.candidate_requirement.requirements_details
+        else
+          'No'
+        end
+      end
+
+      def candidate_requirements_selection
+        CandidateRequirementsSelectionPresenter.new(@school_profile.attributes).to_s
+      end
 
       def description_for_fee(fee)
         amount = number_to_currency fee.amount_pounds, unit: '£', raise: true
