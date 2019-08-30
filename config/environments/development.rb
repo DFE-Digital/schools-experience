@@ -104,5 +104,5 @@ Rails.application.configure do
   config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION', '0')
   config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID', SecureRandom.uuid)
 
-  config.ab_threshold = ENV.fetch('AB_TEST_THRESHOLD', 100)
+  config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 end

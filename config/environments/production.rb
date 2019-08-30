@@ -147,5 +147,5 @@ Rails.application.configure do
 
   config.sass[:style] = :compressed if config.sass
 
-  config.ab_threshold = ENV.fetch('AB_TEST_THRESHOLD', 70)
+  config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
 end
