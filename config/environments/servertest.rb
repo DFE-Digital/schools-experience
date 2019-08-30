@@ -12,7 +12,7 @@ Rails.application.configure do
   config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
 
   config.x.phase = 10000
-  config.x.features = %i(subject_specific_dates dbs_requirement)
+  config.x.features = %i(subject_specific_dates dbs_requirement candidate_requirement_ab_test)
 
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = "https://localhost:#{ENV.fetch("PORT") { 3000 }}"
