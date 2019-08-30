@@ -23,13 +23,22 @@ module Candidates
         if candidate
           self.current_candidate = candidate
 
+          # Ensure PersonalInformation is updated in session
+          # necessary for if switching device as part of email verification
+          personal_information = PersonalInformation.new attributes_from_session
+          persist personal_information
+
           redirect_to new_candidates_school_registrations_contact_information_path
-        else
+        elsif attributes_from_session.any?
           @resend_link = candidates_school_registrations_sign_in_path
         end
       end
 
     private
+
+      def attributes_from_session
+        current_registration.personal_information_attributes
+      end
 
       def verification_email(token)
         NotifyEmail::CandidateVerifyEmailLink.new(
