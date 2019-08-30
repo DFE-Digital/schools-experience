@@ -59,7 +59,7 @@ class SchoolEnhancer
 private
 
   def secondary_subjects
-    @secondary_subjects ||= Bookings::Subject.all.index_by(&:name)
+    @secondary_subjects ||= Bookings::Subject.available.index_by(&:name)
   end
 
   def extract_urn(raw)
