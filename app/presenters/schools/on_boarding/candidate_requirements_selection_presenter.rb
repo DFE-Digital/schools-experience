@@ -33,7 +33,12 @@ module Schools
           output << other_details
         end
 
-        output.join('. ')
+
+        if output.empty?
+          'None'
+        else
+          output.join('. ')
+        end
       end
 
     private
