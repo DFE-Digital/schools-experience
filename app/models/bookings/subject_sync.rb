@@ -1,6 +1,7 @@
 module Bookings
   class SubjectSync
     LIMIT = 400
+    BLACKLIST = YAML.load_file(Rails.root.join('db', 'data', 'gitis_subject_blacklist.yml')).freeze
 
     def self.synchronise(crm)
       new(crm).synchronise
@@ -53,7 +54,8 @@ module Bookings
     def create_from_gitis!(gitis)
       Bookings::Subject.create! \
         name: gitis.dfe_name,
-        gitis_uuid: gitis.id
+        gitis_uuid: gitis.id,
+        hidden: BLACKLIST.include?(gitis.dfe_name)
     end
 
     def update_from_gitis!(internal, gitis)

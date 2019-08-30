@@ -24,13 +24,17 @@ RSpec.describe Bookings::SubjectSync do
     let(:gitis_subject_2) { build(:gitis_subject) }
     let(:gitis_subject_3) { build(:gitis_subject, dfe_name: 'match') }
     let(:gitis_subject_4) { build(:gitis_subject) }
+    let(:gitis_subject_5) { build(:gitis_subject, dfe_name: described_class::BLACKLIST.first) }
 
     let!(:matched1) { create(:bookings_subject, gitis_uuid: gitis_subject_1.id) }
     let!(:matched2) { create(:bookings_subject, gitis_uuid: gitis_subject_2.id) }
     let!(:unmatched) { create(:bookings_subject, name: 'Match') }
     let!(:nomatch) { create(:bookings_subject, name: 'nomatch') }
     let(:response) do
-      [gitis_subject_1, gitis_subject_2, gitis_subject_3, gitis_subject_4].map(&:attributes)
+      [
+        gitis_subject_1, gitis_subject_2, gitis_subject_3,
+        gitis_subject_4, gitis_subject_5
+      ].map(&:attributes)
     end
 
     before do
@@ -60,12 +64,19 @@ RSpec.describe Bookings::SubjectSync do
       context "with new subjects" do
         subject { Bookings::Subject.where(gitis_uuid: gitis_subject_4.id).first }
         it { is_expected.to have_attributes(name: gitis_subject_4.dfe_name) }
+        it { is_expected.to have_attributes(hidden: false) }
       end
 
       context "with subjects it cannot match" do
         subject { nomatch.reload }
         it { is_expected.to have_attributes(name: 'nomatch') }
         it { is_expected.to have_attributes(gitis_uuid: nil) }
+      end
+
+      context "with blacklisted new subject" do
+        subject { Bookings::Subject.where(gitis_uuid: gitis_subject_5.id).first }
+        it { is_expected.to have_attributes(name: gitis_subject_5.dfe_name) }
+        it { is_expected.to have_attributes(hidden: true) }
       end
     end
 
