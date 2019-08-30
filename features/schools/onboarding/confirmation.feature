@@ -19,6 +19,7 @@ Feature: Publishing Profile
             | Phases                           |                           |
             | Subjects                         |                           |
             | Description                      |                           |
+            | Access needs support             |                           |
             | Candidate experience details     |                           |
             | Experience Outline               |                           |
             | Admin contact                    |                           |

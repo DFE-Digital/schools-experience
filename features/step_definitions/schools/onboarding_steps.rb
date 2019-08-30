@@ -134,6 +134,14 @@ Given "I have completed the Description step" do
   )
 end
 
+Given "I have completed the Access needs support step" do
+  steps %(
+    Given I am on the 'Access needs support' page
+    And I choose 'Yes' from the 'Do you want to add details about how you can support candidates with disabilites and access needs?' radio buttons
+    When I submit the form
+  )
+end
+
 Given "I have completed the Candidate experience details step" do
   steps %(
     Given I am on the 'Candidate experience details' page

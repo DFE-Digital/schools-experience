@@ -17,7 +17,8 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_description,
-        :with_candidate_experience_detail
+        :with_candidate_experience_detail,
+        :with_access_needs_support
     end
 
     before do
@@ -47,7 +48,8 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_description,
-        :with_candidate_experience_detail
+        :with_candidate_experience_detail,
+        :with_access_needs_support
     end
 
     let :params do

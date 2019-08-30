@@ -87,7 +87,7 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_experience_outline_path
+          new_schools_on_boarding_access_needs_support_path
       end
     end
   end

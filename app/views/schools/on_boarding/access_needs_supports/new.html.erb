@@ -1,0 +1,29 @@
+<%- self.page_title = 'Access needs support' -%>
+
+<%-
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Disability and access needs support' => nil
+  }
+-%>
+
+<%= link_to 'Back', :back, class: 'govuk-back-link', data: {controller: 'back-link'} %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @access_needs_support, url: schools_on_boarding_access_needs_support_path do |f| %>
+      <%= f.hidden_field :supports_access_needs, value: nil %>
+
+      <%= f.radio_button_fieldset :supports_access_needs, page_heading: true, inline: true do |fieldset| %>
+        <p>These details will be added to your school profile.</p>
+        <%= fieldset.radio_input true %>
+        <%= fieldset.radio_input false %>
+      <% end %>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+
+    <p class="govuk-inset-text">
+      Find out how you can <a href="/schools/access-need-guidance2">help and support candidates with disability and access needs</a>.
+    </p>
+  </div>
+</div>

@@ -18,6 +18,7 @@ Feature: Experience Outline
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
+        | Access needs support             |                           |
         | Candidate experience details     |                           |
 
   Scenario: Breadcrumbs
