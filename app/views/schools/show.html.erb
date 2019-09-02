@@ -6,45 +6,51 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Manage school experience</h1>
-        <p>
-          Use this service if you're a primary or secondary school in England and
-          want to offer and organise school experience.
-        </p>
 
-        <p>
-          You’ll be asked to sign in using DfE Sign-in.
-        </p>
+        <section>
+          <p>
+            Use this service if you're a primary or secondary school in England
+            and want to offer school experience to potential teachers.
+          </p>
+
+          <p>
+            You'll see details about candidates who've requested to visit your
+            school so you can decide whether to offer them experience.
+          </p>
+
+          <p>
+            The service is currently only open to specific schools. To sign up
+            for the service email us with your URN at
+            <%= mail_to('organise.school-experience@education.gov.uk') %>
+          </p>
+
+          <p>
+            You’ll be asked to sign in using DfE Sign-in.
+          </p>
+        </section>
+
+        <%= link_to 'Start now', schools_dashboard_path,
+          role:'button',
+          class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' %>
+
+        <section>
+          <h2 class="govuk-heading-m">Before you start</h2>
+
+          <p>
+            The service will ask you to outline the kind of experience you
+            offer including details about DBS-checks and any fees you charge candidates.
+          </p>
+
+          <p>
+            It's your responsibility to decide if candidates comply with your
+            school DBS and safeguarding policies.
+          </p>
+        </section>
+
+
+
 
         <div class="govuk-accordion" data-module="accordion" id="accordion-default">
-          <div class="govuk-accordion__section ">
-            <div class="govuk-accordion__section-header">
-              <h2 class="govuk-accordion__section-heading">
-                <span class="govuk-accordion__section-button" id="i-have-a-dfe-signin-account-heading">
-                  I have a DfE Sign-in account
-                </span>
-              </h2>
-            </div>
-
-            <div id="i-have-a-dfe-signin-account-content" class="govuk-accordion__section-content" aria-labelledby="i-have-a-dfe-signin-account-heading">
-              <p class='govuk-body'>
-                You’ll need your DfE Sign-in username and password but be aware
-                these are not the same as your old SEP login details and does
-                not include your URN.
-              </p>
-
-              <p>
-                You’ll also need to ask your organisation’s ‘DfE Sign-in
-                approver’ (often your head or deputy head) to provide you with
-                access to ‘School Experience’ within your DfE Sign-in account.
-              </p>
-
-              <p>
-                Your organisation’s approver details can be found in the 'My
-                Organisations' section of your DfE Sign-in account.
-              </p>
-            </div>
-          </div>
-
           <div class="govuk-accordion__section ">
             <div class="govuk-accordion__section-header">
               <h2 class="govuk-accordion__section-heading">
@@ -100,87 +106,11 @@
             </div>
           </div>
         </div>
-        <p>
-          The service is currently only open to specific schools. To sign up
-          for the service email us with your URN at
-          <%= mail_to 'organise.school-experience@education.gov.uk' %>.
-        </p>
-
-        <%= link_to 'Start now', schools_dashboard_path,
-          role:'button',
-          class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' %>
-
-        <section>
-          <h2 class="govuk-heading-m">Before you start</h2>
-
-          <p>
-            You’ll need to set up a school experience profile so you can start
-            receiving requests from candidates.
-          </p>
-
-          <p>
-            To set up your profile, you’ll need to provide various details including:
-          </p>
-
-          <ul class="govuk-list govuk-list--bullet">
-            <li>your DBS-check and other candidate-related requirements</li>
-            <li>whether you charge candidates any fees for school experience</li>
-            <li>an outline of the kind of school experience you offer candidates</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 class="govuk-heading-m">Request details</h2>
-
-          <p>
-            Each individual request from a candidate will include their:
-          </p>
-
-          <ul class="govuk-list govuk-list--bullet">
-            <li>
-              full name and contact details - including address, email and UK
-              telephone number
-            </li>
-            <li>
-              candidate requirements - including their expectations and
-              preferred experience dates and subjects
-            </li>
-            <li>
-              degree status and subject - including whether they have or are
-              studying towards a degree and the subject
-            </li>
-            <li>
-              teaching experience - including how far they've got towards
-              becoming a teacher
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 class="govuk-heading-m">DBS details and fees</h2>
-
-          <p>
-            You'll also be told if candidates have got a Disclosure and Barring
-            Service (DBS) certificate. These details will not be verified by DfE.
-          </p>
-
-          <p class="govuk-!-font-weight-bold">
-            It's your responsibility to decide if candidates comply with your
-            individual DBS and safeguarding policies and book them on experience
-            at your school.
-          </p>
-
-          <p>
-            You can charge fees to cover administration, DBS check and any other
-            school experience-related costs. You’ll need to sort out payment
-            between yourselves and individual candidates.
-          </p>
-        </section>
       </div>
 
       <div class="govuk-grid-column-one-third column-top-border">
         <nav>
-          <h2 class="govuk-heading-m">Related guidance</h2>
+          <h2 class="govuk-heading-m">Help and guidance</h2>
           <ul class="govuk-list">
             <li>
               <%= link_to 'Manage school experience: information for schools', 'https://www.gov.uk/government/publications/school-experience-programme-information-for-schools' %>
