@@ -324,7 +324,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    xcontext 'access_needs_detail not required' do
+    context 'access_needs_detail required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -341,12 +341,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_access_needs_support
       end
 
-      it 'returns :experience_outline' do
-        expect(returned_step).to eq :experience_outline
+      it 'returns :access_needs_detail' do
+        expect(returned_step).to eq :access_needs_detail
       end
-    end
-
-    context 'access_needs_detail required' do
     end
 
     context 'disability_confident required' do
@@ -369,7 +366,8 @@ describe Schools::OnBoarding::CurrentStep do
           :with_subjects,
           :with_description,
           :with_candidate_experience_detail,
-          :with_access_needs_support
+          :with_access_needs_support,
+          :with_access_needs_detail
       end
 
       it 'returns :experience_outline' do
@@ -392,6 +390,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_experience_detail,
           :with_access_needs_support,
+          :with_access_needs_detail,
           :with_experience_outline
       end
 
@@ -415,6 +414,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_experience_detail,
           :with_access_needs_support,
+          :with_access_needs_detail,
           :with_experience_outline,
           :with_admin_contact
       end

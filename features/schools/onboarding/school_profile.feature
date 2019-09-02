@@ -21,6 +21,7 @@ Feature: School Profile
         | Description                      |                           |
         | Candidate experience details     |                           |
         | Access needs support             |                           |
+        | Access needs detail              |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
 

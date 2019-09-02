@@ -19,6 +19,7 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_description,
         :with_candidate_experience_detail,
         :with_access_needs_support,
+        :with_access_needs_detail,
         :with_experience_outline
     end
 
@@ -51,6 +52,7 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_description,
         :with_candidate_experience_detail,
         :with_access_needs_support,
+        :with_access_needs_detail,
         :with_experience_outline
     end
 
