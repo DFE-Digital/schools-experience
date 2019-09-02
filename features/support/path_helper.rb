@@ -32,6 +32,7 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
 
     #school paths
     "schools" => [:schools_path],
+    "contact us" => [:schools_contact_us_path],
     "schools dashboard" => [:schools_dashboard_path],
     "bookings" => [:schools_bookings_path],
     "upcoming bookings" => [:schools_upcoming_bookings_path],
