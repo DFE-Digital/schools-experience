@@ -410,15 +410,6 @@ en:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
         bookings_placement_date_id: School experience is only available on the following days
-        availability:
-          - Tell us about your availability. For example, when you'll be
-            available for placements or any particular days or periods when you
-            won't.
-          - The school will contact you to arrange the exact date of your
-            placement and will use this information to offer you the best dates
-            it has available.
-          - Depending on availability and time of year, schools may not always
-            be able to offer you the exact dates you’re looking for.
       candidates_session:
         date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
       schools_on_boarding_dbs_requirement:
@@ -468,7 +459,7 @@ en:
           true: "Yes"
           false: "No"
       candidates_registrations_placement_preference:
-        availability: Is there anything schools need to know about your availability for school experience?
+        availability: Tell us about your availability
         objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
         acceptance_html:
@@ -623,9 +614,3 @@ en:
     pagination:
       next: Next
       previous: Previous
-
-  candidates:
-    registrations:
-      placement_preferences:
-        form:
-          availability_placeholder: Such as, from 4 to 8 May, from the start of next term, any time during May, June or July or I can only do Thursdays and Fridays
