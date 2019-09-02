@@ -60,8 +60,8 @@ Feature: The School Dashboard
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
         Then I should see the following 'low-priority' links:
-            | Text       | Hint                                            | Path                                               |
-            | Contact us | Get in touch if you need help using the service | mailto:organise.school-experience@education.gov.uk |
+            | Text       | Hint                                            | Path                |
+            | Contact us | Get in touch if you need help using the service | /schools/contact_us |
 
     Scenario: Candidate requests counter
         Given my school has fully-onboarded
