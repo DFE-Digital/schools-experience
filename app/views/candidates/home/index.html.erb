@@ -6,8 +6,8 @@
     <h1 class="govuk-heading-xl">Get school experience</h1>
 
     <p>
-      Use this service if you're interested in becoming a teacher and want to
-      find and request school experience in schools across England.
+      Use this service if you want to request school experience in a primary
+      and secondary school in England.
     </p>
 
     <p>
@@ -15,9 +15,10 @@
       schools.
     </p>
 
-    <p class="govuk-!-font-weight-bold">
-      This service is only available for school experience at primary and
-      secondary schools in England.
+    <p>
+      You’ll need to provide personal details which schools will use to decide
+      whether they can offer you school experience. They may contact you for
+      further information.
     </p>
 
     <%= link_to 'Start now', new_candidates_school_search_path,
@@ -29,33 +30,36 @@
 
       <p>
         To request school experience, you’ll need to provide:
-      </p>
 
-      <ul class="govuk-list govuk-list--bullet">
-        <li>personal details - including your address</li>
-        <li>contact details - including your email and telephone number</li>
-      </ul>
-
-      <p>
-        As part of making a school experience request, your details will be
-        registered with the Department for Education’s
-        <a href="https://getintoteaching.education.gov.uk/">
-          Get Into Teaching service
-        </a>.
+        By using this service, you'll be registered with the Department for
+        Education's <%= link_to 'Get Into Teaching Information Service', 'https://getintoteaching.education.gov.uk/' %>
+        to receive tailored advice about becoming a teacher.
       </p>
 
       <p>
-        This means you can get extra help and tailored advice and information
-        about becoming a teacher.
+        During school holidays, schools may take longer to respond to requests.
       </p>
 
       <p>
-        If you're registered with our service or Get Into Teaching - we'll
-        automatically add your personal and contact details to your school
-        experience request.
+        Some schools charge fees to cover their costs. These will be clearly
+        listed and need to be paid directly to the individual school.
       </p>
-
     </section>
+
+    <%- Feature.instance.from_phase(5) do %>
+      <section class="used-the-service-before">
+        <h2 class="govuk-heading-m">Used the service before?</h2>
+
+        <p>
+          If you've used the service before and want to make a new school
+          experience request:
+        </p>
+
+        <p>
+          <%= link_to 'Sign in', candidates_dashboard_path %>
+        </p>
+      </section>
+    <% end %>
   </div>
 
   <div class="govuk-grid-column-one-third column-top-border">
@@ -85,6 +89,11 @@
             <a href="https://www.gov.uk/types-of-school" class="govuk-!-font-weight-bold">
               Types of school<span class="govuk-visually-hidden">in Subsection</span>
             </a>
+          </li>
+          <li>
+            <%= link_to schools_path, class: "govuk-!-font-weight-bold" do %>
+              Manage school experience <span class="govuk-visually-hidden">in Subsection</span>
+            <% end %>
           </li>
         </ul>
       </nav>
