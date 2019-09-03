@@ -22,6 +22,8 @@ module Schools
     end
     alias_method :set_current_school, :current_school
 
+  private
+
     def set_site_header_text
       @site_header_text = "Manage school experience"
     end
@@ -29,8 +31,6 @@ module Schools
     def set_other_urns
       @other_urns = (session[:other_urns] || retrieve_other_urns)
     end
-
-  private
 
     def retrieve_school(urn)
       unless (school = Bookings::School.find_by(urn: urn))
