@@ -308,6 +308,10 @@ en:
           attributes:
             location:
               too_short: Must be at least 3 characters
+        bookings/school:
+          attributes:
+            availability_preference_fixed:
+              inclusion: Select an availability preference
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:

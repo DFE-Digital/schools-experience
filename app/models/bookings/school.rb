@@ -27,6 +27,10 @@ class Bookings::School < ApplicationRecord
     allow_nil: true,
     length: { minimum: 3 }
 
+  validates :availability_preference_fixed,
+    inclusion: { in: [true, false] },
+    on: :selecting_availability_preference
+
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
     inverse_of: :bookings_school,

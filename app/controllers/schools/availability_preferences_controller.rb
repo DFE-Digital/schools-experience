@@ -4,7 +4,9 @@ class Schools::AvailabilityPreferencesController < Schools::BaseController
   end
 
   def update
-    if @current_school.update(placement_date_params)
+    @current_school.assign_attributes(placement_date_params)
+
+    if @current_school.save(context: :selecting_availability_preference)
       if @current_school.availability_preference_fixed?
         redirect_to schools_placement_dates_path
       else
