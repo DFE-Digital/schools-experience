@@ -197,6 +197,11 @@ describe Schools::SchoolProfile, type: :model do
       is_expected.to \
         have_db_column(:show_candidate_requirements_selection).of_type(:boolean)
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:candidate_requirements_choice_has_requirements).of_type(:boolean)
+    end
   end
 
   context 'relationships' do

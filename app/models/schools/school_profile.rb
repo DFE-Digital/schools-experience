@@ -67,6 +67,14 @@ module Schools
       constructor: :compose
 
     composed_of \
+      :candidate_requirements_choice,
+      class_name: 'Schools::OnBoarding::CandidateRequirementsChoice',
+      mapping: [
+        %w(candidate_requirements_choice_has_requirements has_requirements)
+      ],
+      constructor: :compose
+
+    composed_of \
       :candidate_requirements_selection,
       class_name: 'Schools::OnBoarding::CandidateRequirementsSelection',
       mapping: [
