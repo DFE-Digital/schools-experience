@@ -6,7 +6,7 @@
 ###################################################
 
 
-cat <<EOF >> compose-school-experience.yml
+cat <<EOF > compose-school-experience.yml
 version: '3.3'
 
 services:
