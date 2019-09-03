@@ -279,7 +279,7 @@ describe Bookings::Gitis::CRM, type: :model do
     it "will create a new entry with a single row" do
       expect(gitis).to have_received(:update_entity).with(
         contact.entity_id,
-        'dfe_notesforclassroomexperience' => "#{headerline}\n\n#{logline}\n"
+        'dfe_notesforclassroomexperience' => "#{headerline}\r\n\r\n#{logline}\r\n"
       )
     end
   end
