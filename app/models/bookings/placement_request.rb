@@ -51,6 +51,7 @@ module Bookings
     scope :unbooked, -> do
       left_joins(:booking)
         .where(bookings_bookings: { bookings_placement_request_id: nil })
+        .or(left_joins(:booking).where(bookings_bookings: { accepted_at: nil }))
     end
 
     scope :cancelled, -> do

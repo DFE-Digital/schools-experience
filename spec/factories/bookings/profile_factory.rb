@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :bookings_profile, class: 'Bookings::Profile' do
     association :school, factory: :bookings_school
+    dbs_requires_check { true }
+    dbs_policy_details { 'Must have recent dbs check' }
     dbs_required { 'never' }
     primary_phase { true }
     secondary_phase { false }

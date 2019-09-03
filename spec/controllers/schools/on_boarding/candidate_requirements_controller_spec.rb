@@ -4,13 +4,9 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
   include_context "logged in DfE user"
 
-  let! :school_profile do
-    create :school_profile
-  end
-
   context '#new' do
     let! :school_profile do
-      FactoryBot.create :school_profile
+      FactoryBot.create :school_profile, :with_dbs_requirement
     end
 
     before do
@@ -29,7 +25,7 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
 
   context '#create' do
     let! :school_profile do
-      FactoryBot.create :school_profile
+      FactoryBot.create :school_profile, :with_dbs_requirement
     end
 
     let :params do
@@ -64,7 +60,7 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.candidate_requirement).to eq \
+        expect(school_profile.reload.candidate_requirement).to eq_model \
           candidate_requirement
       end
 
@@ -133,7 +129,7 @@ describe Schools::OnBoarding::CandidateRequirementsController, type: :request do
 
       it 'updates the school_profile' do
         expect(school_profile.reload.candidate_requirement).to \
-          eq candidate_requirement
+          eq_model candidate_requirement
       end
 
       it 'redirects to the school_profile' do

@@ -25,7 +25,7 @@ Then("a text area labelled {string} should have appeared") do |string|
 end
 
 Given("I have filled in the form with accurate data") do
-  fill_in "Is there anything schools need to know about your availability for school experience?", with: "Anytime!"
+  fill_in "Tell us about your availability", with: "Anytime!"
   fill_in "What do you want to get out of your school experience?", with: "I love teaching"
 end
 

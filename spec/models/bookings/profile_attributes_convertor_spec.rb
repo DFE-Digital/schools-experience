@@ -13,8 +13,8 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         described_class.new(completed_attrs).attributes
       end
 
-      it { is_expected.to include(dbs_required: 'sometimes') }
-      it { is_expected.to include(dbs_policy: 'Super secure') }
+      it { is_expected.to include(dbs_requires_check: true) }
+      it { is_expected.to include(dbs_policy_details: 'Must have recent dbs check') }
       it { is_expected.to include(individual_requirements: 'Gotta go fast') }
       it { is_expected.to include(description_details: 'Horse archery') }
       it { is_expected.to include(disabled_facilities: 'Full wheelchair access and hearing loops') }
@@ -58,6 +58,9 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
     context 'with completed profile with blank fields' do
       let(:model_attrs) do
         model = build(:school_profile, :completed, disabled_facilities: true)
+        model.dbs_requirement_requires_check = false
+        model.dbs_requirement_dbs_policy_details = ''
+        model.dbs_requirement_no_dbs_policy_details = ''
         model.candidate_requirement_dbs_requirement = 'never'
         model.candidate_requirement_requirements = false
         model.description_details = ' '
@@ -82,8 +85,8 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         described_class.new(model_attrs).attributes
       end
 
-      it { is_expected.to include(dbs_required: 'never') }
-      it { is_expected.to include(dbs_policy: nil) }
+      it { is_expected.to include(dbs_requires_check: false) }
+      it { is_expected.to include(dbs_policy_details: nil) }
       it { is_expected.to include(individual_requirements: nil) }
       it { is_expected.to include(description_details: nil) }
       it { is_expected.to include(disabled_facilities: nil) }

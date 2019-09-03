@@ -8,6 +8,9 @@ module Candidates
       redirect_to next_step_path
     end
 
+    helper_method :gitis_integration?
+    helper_method :candidate_signed_in?
+
   private
 
     def persist(model)

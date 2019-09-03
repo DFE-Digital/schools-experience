@@ -10,15 +10,16 @@ Feature: Admin contact
     And the college phase is availble
     And there are some subjects available
     And I have completed the following steps:
-        | Step name                    | Extra                     |
-        | Candidate Requirements       |                           |
-        | Fees                         | choosing only Other costs |
-        | Other costs                  |                           |
-        | Phases                       |                           |
-        | Subjects                     |                           |
-        | Description                  |                           |
-        | Candidate experience details |                           |
-        | Experience Outline           |                           |
+        | Step name                        | Extra                     |
+        | DBS Requirements                 |                           |
+        | Candidate Requirements selection |                           |
+        | Fees                             | choosing only Other costs |
+        | Other costs                      |                           |
+        | Phases                           |                           |
+        | Subjects                         |                           |
+        | Description                      |                           |
+        | Candidate experience details     |                           |
+        | Experience Outline               |                           |
 
   Scenario: Page title
     Given I am on the 'Admin contact' page

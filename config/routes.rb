@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     end
     resource :switch, only: %i(new), controller: 'switch'
     resource :dashboard, only: :show
+    resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
     if Rails.application.config.x.phase >= 4
@@ -89,7 +90,9 @@ Rails.application.routes.draw do
     end
 
     namespace :on_boarding do
+      resource :dbs_requirement, only: %i(new create edit update)
       resource :candidate_requirement, only: %i(new create edit update)
+      resource :candidate_requirements_selection, only: %i(new create edit update)
       resource :fees, only: %i(new create edit update)
       resource :administration_fee, only: %i(new create)
       resource :dbs_fee, only: %i(new create)

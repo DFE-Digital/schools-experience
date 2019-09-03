@@ -8,9 +8,10 @@ Feature: Administration Fee
     And the secondary school phase is availble
     And the college phase is availble
     And I have completed the following steps:
-        | Step name              | Extra                              |
-        | Candidate Requirements |                                    |
-        | Fees                   | choosing only Administration costs |
+        | Step name                        | Extra                              |
+        | DBS Requirements                 |                                    |
+        | Candidate Requirements selection |                                    |
+        | Fees                             | choosing only Administration costs |
 
   Scenario: Page title
     Given I am already on the 'administration costs' page

@@ -92,21 +92,64 @@ RSpec.describe Candidates::SchoolPresenter do
   end
 
   describe '#dbs_required' do
-    subject { described_class.new(school, profile).dbs_required }
+    context 'when legacy profile' do
+      let :legacy_profile do
+        build :bookings_profile, dbs_requires_check: nil, dbs_policy_details: nil
+      end
 
-    context 'when yes' do
-      before { profile.dbs_required = 'always' }
-      it { is_expected.to eql "Yes - Always" }
+      subject { described_class.new(school, legacy_profile).dbs_required }
+
+      context 'when yes' do
+        before { legacy_profile.dbs_required = 'always' }
+        it { is_expected.to eql "Yes - Always" }
+      end
+
+      context 'when no' do
+        before { legacy_profile.dbs_required = 'never' }
+        it { is_expected.to eql "No - Candidates will be accompanied at all times" }
+      end
+
+      context 'when yes' do
+        before { legacy_profile.dbs_required = 'sometimes' }
+        it { is_expected.to eql "Yes - Sometimes" }
+      end
     end
 
-    context 'when no' do
-      before { profile.dbs_required = 'never' }
-      it { is_expected.to eql "No - Candidates will be accompanied at all times" }
+    context 'when new profile' do
+      subject { described_class.new(school, profile).dbs_required }
+
+      context 'when true' do
+        before { profile.dbs_requires_check = true }
+
+        it { is_expected.to eql 'Yes' }
+      end
+
+      context 'when false' do
+        before { profile.dbs_requires_check = false }
+
+        it { is_expected.to eql 'No - Candidates will be accompanied at all times' }
+      end
+    end
+  end
+
+  describe '#dbs_policy' do
+    context 'when legacy profile' do
+      let :legacy_profile do
+        build :bookings_profile,
+          dbs_requires_check: nil,
+          dbs_policy_details: nil,
+          dbs_policy: 'Our DBS policy'
+      end
+
+      subject { described_class.new(school, legacy_profile).dbs_policy }
+
+      it { is_expected.to eql 'Our DBS policy' }
     end
 
-    context 'when yes' do
-      before { profile.dbs_required = 'sometimes' }
-      it { is_expected.to eql "Yes - Sometimes" }
+    context 'when new profile' do
+      subject { described_class.new(school, profile).dbs_policy }
+
+      it { is_expected.to eql 'Must have recent dbs check' }
     end
   end
 

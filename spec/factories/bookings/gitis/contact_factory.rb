@@ -4,6 +4,7 @@ FactoryBot.define do
     sequence(:lastname) { |n| "User#{n}" }
     sequence(:emailaddress1) { |n| "testuser#{n}@testdomain.com" }
     telephone1 { "01234 567890" }
+    address1_telephone1 { "01234 567890" }
     address1_line1 { "My Building" }
     address1_line2 { "Test Street" }
     address1_city { "Test Town" }

@@ -11,8 +11,12 @@ module Schools
       end
 
       def call
-        if candidate_requirement_required?
+        if dbs_requirement_required?
+          :dbs_requirement
+        elsif candidate_requirement_required?
           :candidate_requirement
+        elsif candidate_requirements_selection_required?
+          :candidate_requirements_selection
         elsif fees_required?
           :fees
         elsif administration_fee_required?
@@ -42,34 +46,57 @@ module Schools
 
     private
 
+      def dbs_requirement_required?
+        !@school_profile.dbs_requirement.dup.valid?
+      end
+
       def candidate_requirement_required?
-        !@school_profile.candidate_requirement.dup.valid?
+        return false unless @school_profile.show_candidate_requirement?
+
+        @school_profile.candidate_requirement.dup.invalid?
+      end
+
+      def candidate_requirements_selection_required?
+        return false unless @school_profile.show_candidate_requirements_selection?
+
+        @school_profile.candidate_requirements_selection.dup.invalid?
       end
 
       def fees_required?
-        !@school_profile.fees.dup.valid?
+        @school_profile.fees.dup.invalid?
       end
 
       def administration_fee_required?
-        @school_profile.fees.administration_fees &&
-          !@school_profile.administration_fee.dup.valid?
+        return false unless @school_profile.fees.administration_fees
+
+        return true if @school_profile.administration_fee.dup.invalid?
+
+        !@school_profile.administration_fee_step_completed?
       end
 
       def dbs_fee_required?
-        @school_profile.fees.dbs_fees && !@school_profile.dbs_fee.dup.valid?
+        return false unless @school_profile.fees.dbs_fees
+
+        return true if @school_profile.dbs_fee.dup.invalid?
+
+        !@school_profile.dbs_fee_step_completed?
       end
 
       def other_fees_required?
-        @school_profile.fees.other_fees && !@school_profile.other_fee.dup.valid?
+        return false unless @school_profile.fees.other_fees
+
+        return true if @school_profile.other_fee.dup.invalid?
+
+        !@school_profile.other_fee_step_completed?
       end
 
       def phases_list_required?
-        !@school_profile.phases_list.dup.valid?
+        @school_profile.phases_list.dup.invalid?
       end
 
       def key_stage_list_required?
         @school_profile.phases_list.primary? &&
-          !@school_profile.key_stage_list.dup.valid?
+          @school_profile.key_stage_list.dup.invalid?
       end
 
       def subjects_required?
@@ -83,19 +110,19 @@ module Schools
       end
 
       def description_required?
-        !@school_profile.description.dup.valid?
+        @school_profile.description.dup.invalid?
       end
 
       def candidate_experience_detail_required?
-        !@school_profile.candidate_experience_detail.dup.valid?
+        @school_profile.candidate_experience_detail.dup.invalid?
       end
 
       def experience_outline_required?
-        !@school_profile.experience_outline.dup.valid?
+        @school_profile.experience_outline.dup.invalid?
       end
 
       def admin_contact_required?
-        !@school_profile.admin_contact.dup.valid?
+        @school_profile.admin_contact.dup.invalid?
       end
     end
   end

@@ -160,6 +160,21 @@ en:
             date_of_birth:
               blank: Enter your date of birth
 
+        schools/on_boarding/dbs_requirement:
+          attributes:
+            requires_check:
+              inclusion: 'Select whether you require candidates to have a DBS check'
+            dbs_policy_details:
+              blank: 'Provide details'
+            no_dbs_policy_details:
+              blank: 'Provide details'
+        schools/on_boarding/candidate_requirements_selection:
+          attributes:
+            maximum_distance_from_school:
+              blank: "Enter how close to your school a candidate must live"
+              not_a_number: 'Enter a valid number for how close to your school a candidate must live'
+            other_details:
+              blank: 'Provide details'
         schools/on_boarding/candidate_requirement:
           attributes:
             dbs_requirement:
@@ -323,6 +338,8 @@ en:
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
+      schools_on_boarding_dbs_requirement:
+        requires_check: 'Do you require candidates to have or get a DBS check?'
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
@@ -395,17 +412,10 @@ en:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
         bookings_placement_date_id: School experience is only available on the following days
-        availability:
-          - Tell us about your availability. For example, when you'll be
-            available for placements or any particular days or periods when you
-            won't.
-          - The school will contact you to arrange the exact date of your
-            placement and will use this information to offer you the best dates
-            it has available.
-          - Depending on availability and time of year, schools may not always
-            be able to offer you the exact dates you’re looking for.
       candidates_session:
         date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
+      schools_on_boarding_dbs_requirement:
+        requires_check_html: '<br>Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
@@ -451,7 +461,7 @@ en:
           true: "Yes"
           false: "No"
       candidates_registrations_placement_preference:
-        availability: Is there anything schools need to know about your availability for school experience?
+        availability: Tell us about your availability
         objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
         acceptance_html:
@@ -470,6 +480,20 @@ en:
       query: Find what?
       location: Enter location or postcode
       distance: Select search area
+      schools_on_boarding_dbs_requirement:
+        dbs_policy_details: 'Provide details in 50 words or less.'
+        no_dbs_policy_details: 'Provide any extra details in 50 words or less.'
+        requires_check:
+          true: 'Yes - Outline your DBS requirements'
+          false: 'No - Candidates will be accompanied at all times'
+      schools_on_boarding_candidate_requirements_selection:
+        on_teacher_training_course: "They must apply or have been accepted onto your or a partner school's teacher training course"
+        has_degree: "They must have a degree"
+        working_towards_degree: "They must be working towards a degree"
+        live_locally: "They must live locally"
+        maximum_distance_from_school: "Tell us within how many miles of your school. For example, 20 miles."
+        other: "Other"
+        other_details: "Provide details."
       schools_on_boarding_candidate_requirement:
         dbs_requirement:
           always: 'Yes - Always'
@@ -593,9 +617,3 @@ en:
     pagination:
       next: Next
       previous: Previous
-
-  candidates:
-    registrations:
-      placement_preferences:
-        form:
-          availability_placeholder: Such as, from 4 to 8 May, from the start of next term, any time during May, June or July or I can only do Thursdays and Fridays

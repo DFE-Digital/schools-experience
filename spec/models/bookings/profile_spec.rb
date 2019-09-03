@@ -45,19 +45,12 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.to validate_uniqueness_of :school_id }
     end
 
-    describe "dbs" do
-      it { is_expected.to validate_presence_of :dbs_required }
-      described_class::DBS_REQUIREMENTS.each do |req|
-        it { is_expected.to allow_value(req).for :dbs_required }
-      end
-      it { is_expected.not_to allow_value(10).for :dbs_required }
+    describe "dbs_requires_check" do
+      it { is_expected.not_to allow_value(nil).for :dbs_requires_check }
+    end
 
-      context "when dbs_policy required" do
-        subject { described_class.new(dbs_required: 'sometimes') }
-        it { is_expected.to allow_value("something").for :dbs_policy }
-        it { is_expected.not_to allow_value("").for :dbs_policy }
-        it { is_expected.not_to allow_value(nil).for :dbs_policy }
-      end
+    describe "dbs_policy_details" do
+      it { is_expected.to validate_presence_of :dbs_policy_details }
     end
 
     describe "individual_requirements" do

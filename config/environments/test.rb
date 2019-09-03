@@ -70,7 +70,7 @@ Rails.application.configure do
   config.x.notify_client = NotifyFakeClient
 
   config.x.phase = 10000
-  config.x.features = %i(subject_specific_dates)
+  config.x.features = %i(subject_specific_dates dbs_requirement candidate_requirement_ab_test)
 
   config.x.base_url = 'https://some-host'
   config.x.oidc_client_id = 'se-test'
@@ -80,8 +80,8 @@ Rails.application.configure do
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
-  config.x.gitis.owner_id = SecureRandom.uuid
   config.x.gitis.country_id = SecureRandom.uuid
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
+  config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 end

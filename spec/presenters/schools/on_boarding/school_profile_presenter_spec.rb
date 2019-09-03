@@ -88,38 +88,45 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#dbs_check_required' do
-    context 'when never' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile,
-          candidate_requirement_dbs_requirement: 'never'
+  context '#dbs_check' do
+    let :profile do
+      build :school_profile
+    end
+
+    before { profile.dbs_requirement = dbs_requirement }
+
+    context 'when required' do
+      let :dbs_requirement do
+        build :dbs_requirement
       end
 
-      it 'returns No - Never' do
-        expect(subject.dbs_check_required).to eq 'No - Candidates will be accompanied at all times'
+      it 'returns the correct details' do
+        expect(subject.dbs_check).to eq 'Yes - Must have recent dbs check'
       end
     end
 
-    context 'when always' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile,
-          candidate_requirement_dbs_requirement: 'always'
+    context 'when not required' do
+      context 'when additional details provide' do
+        let :dbs_requirement do
+          build :dbs_requirement,
+            requires_check: false, no_dbs_policy_details: 'Some details'
+        end
+
+        it 'returns the correct details' do
+          expect(subject.dbs_check).to eq \
+            'No - Candidates will be accompanied at all times - Some details'
+        end
       end
 
-      it 'returns Yes - Always' do
-        expect(subject.dbs_check_required).to eq 'Yes - Always'
-      end
-    end
+      context 'when additional details not provide' do
+        let :dbs_requirement do
+          build :dbs_requirement, requires_check: false
+        end
 
-    context 'when sometimes' do
-      let :profile do
-        FactoryBot.build :school_profile, :with_candidate_requirement
-      end
-
-      it 'returns sometimes and the policy' do
-        expect(subject.dbs_check_required).to eq 'Yes - Sometimes. Super secure'
+        it 'returns the correct details' do
+          expect(subject.dbs_check).to eq \
+            'No - Candidates will be accompanied at all times'
+        end
       end
     end
   end

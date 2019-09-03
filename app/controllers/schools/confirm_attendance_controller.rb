@@ -35,6 +35,7 @@ module Schools
         .bookings
         .previous
         .attendance_unlogged
+        .accepted
         .eager_load(
           :bookings_placement_request,
           :bookings_subject,

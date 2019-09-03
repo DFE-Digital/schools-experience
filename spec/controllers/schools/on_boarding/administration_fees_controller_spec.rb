@@ -5,7 +5,8 @@ describe Schools::OnBoarding::AdministrationFeesController, type: :request do
   include_context "logged in DfE user"
 
   let! :school_profile do
-    FactoryBot.create :school_profile, :with_candidate_requirement, :with_fees
+    FactoryBot.create :school_profile,
+      :with_dbs_requirement, :with_candidate_requirement, :with_fees
   end
 
   context '#new' do
@@ -42,6 +43,10 @@ describe Schools::OnBoarding::AdministrationFeesController, type: :request do
           administration_fee
       end
 
+      it "doesn't marks the step as complete" do
+        expect(school_profile.reload.administration_fee_step_completed).to_not be true
+      end
+
       it 'rerenders the new form' do
         expect(response).to render_template :new
       end
@@ -55,6 +60,10 @@ describe Schools::OnBoarding::AdministrationFeesController, type: :request do
       it 'updates the school_profile' do
         expect(school_profile.reload.administration_fee).to eq \
           administration_fee
+      end
+
+      it 'marks the step as complete' do
+        expect(school_profile.reload.administration_fee_step_completed).to be true
       end
 
       it 'redirects to the next step' do

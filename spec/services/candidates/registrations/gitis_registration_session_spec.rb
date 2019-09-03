@@ -106,6 +106,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to include('last_name' => contact.lastname) }
         it { is_expected.to include('email' => contact.email) }
         it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
+        it { is_expected.to include('read_only' => true) }
       end
 
       context 'with only gitis data' do
@@ -117,6 +118,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to include('last_name' => contact.lastname) }
         it { is_expected.to include('email' => contact.email) }
         it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
+        it { is_expected.to include('read_only' => true) }
       end
     end
 

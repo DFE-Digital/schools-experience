@@ -140,11 +140,12 @@ Rails.application.configure do
     config.x.gitis.auth_tenant_id = ENV.fetch('CRM_AUTH_TENANT_ID')
     config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL')
     config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION')
-    config.x.gitis.owner_id = ENV.fetch('CRM_OWNER_ID')
     config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID')
   end
 
   config.x.features = []
 
   config.sass[:style] = :compressed if config.sass
+
+  config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
 end

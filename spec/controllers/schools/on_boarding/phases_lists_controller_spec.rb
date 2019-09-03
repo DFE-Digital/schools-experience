@@ -9,6 +9,7 @@ describe Schools::OnBoarding::PhasesListsController, type: :request do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
+        :with_dbs_requirement,
         :with_candidate_requirement,
         :with_fees,
         :with_administration_fee,
@@ -33,6 +34,7 @@ describe Schools::OnBoarding::PhasesListsController, type: :request do
     let! :school_profile do
       FactoryBot.create \
         :school_profile,
+        :with_dbs_requirement,
         :with_candidate_requirement,
         :with_fees,
         :with_administration_fee,
