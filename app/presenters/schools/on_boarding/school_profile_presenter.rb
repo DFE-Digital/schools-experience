@@ -32,7 +32,7 @@ module Schools
       end
 
       def school_email
-        @school.notifications_email
+        @school.notification_emails.join ', '
       end
 
       def fees
@@ -223,6 +223,10 @@ module Schools
 
       def admin_contact_email
         @school_profile.admin_contact.email
+      end
+
+      def admin_contact_email_secondary
+        @school_profile.admin_contact.email_secondary
       end
 
       def flexible_dates?

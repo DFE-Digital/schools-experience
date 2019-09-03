@@ -185,7 +185,7 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:admin_contact_email).of_type :string
+      is_expected.to have_db_column(:admin_contact_email_secondary).of_type :string
     end
 
     it do
@@ -498,7 +498,7 @@ describe Schools::SchoolProfile, type: :model do
         model.admin_contact = form_model
       end
 
-      %i(phone email).each do |attribute|
+      %i(phone email email_secondary).each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("admin_contact_#{attribute}")).to \
             eq form_model.send attribute
