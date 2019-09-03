@@ -14,12 +14,19 @@ module Schools
       def response
         return [] unless enabled?
 
-        resp = Faraday.new.get(endpoint) do |req|
+        resp = faraday.get(endpoint) do |req|
           req.headers['Authorization'] = "bearer #{token}"
           req.headers['Content-Type']  = 'application/json'
         end
 
         JSON.parse(resp.body)
+      end
+
+      def faraday
+        Faraday.new do |f|
+          f.use(Faraday::Response::RaiseError)
+          f.adapter(Faraday.default_adapter)
+        end
       end
 
       def token
