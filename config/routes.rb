@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     end
     resource :switch, only: %i(new), controller: 'switch'
     resource :dashboard, only: :show
+    resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
     if Rails.application.config.x.phase >= 4
