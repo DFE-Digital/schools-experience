@@ -12,19 +12,19 @@ class Feature
   end
   alias_method :only, :only_phase
 
-  def from_phase(phase_to_test)
+  def until_phase(phase_to_test)
     return false unless Integer(phase_to_test) >= current_phase
 
     block_given? ? yield : true
   end
-  alias_method :from, :from_phase
+  alias_method :until, :until_phase
 
-  def until_phase(phase_to_test)
+  def from_phase(phase_to_test)
     return false unless Integer(phase_to_test) <= current_phase
 
     block_given? ? yield : true
   end
-  alias_method :until, :until_phase
+  alias_method :from, :from_phase
 
   def current_phase
     @current_phase ||= Integer(Rails.application.config.x.phase)

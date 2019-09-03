@@ -18,7 +18,7 @@ Feature: Candidate landing page
     Scenario: The start now button
         Given I am on the 'landing' page
         When I click the 'Start now' button
-        Then I should be on the 'splash' page
+        Then I should be on the 'find a school' page
 
     Scenario: The 'teaching resources' column
         Given I am on the 'landing' page
