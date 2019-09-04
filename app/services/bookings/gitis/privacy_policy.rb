@@ -9,6 +9,16 @@ module Bookings::Gitis
     entity_attribute :dfe_name
     entity_attribute :dfe_active
 
+    class << self
+      def default
+        Rails.application.config.x.gitis.privacy_policy_id
+      end
+
+      def consent
+        Rails.application.config.x.gitis.privacy_consent_id
+      end
+    end
+
     def initialize(crm_data = {})
       crm_data = crm_data.stringify_keys
 

@@ -141,6 +141,10 @@ Rails.application.configure do
     config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL')
     config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION')
     config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID')
+    config.x.gitis.privacy_policy_id = ENV['CRM_PRIVACYPOLICY_ID'].presence
+    if config.x.gitis.privacy_policy_id
+      config.x.gitis.privacy_consent_id = ENV.fetch('CRM_PRIVACY_CONSENT_ID')
+    end
   end
 
   config.x.features = []

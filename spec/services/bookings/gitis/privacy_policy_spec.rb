@@ -36,4 +36,26 @@ RSpec.describe Bookings::Gitis::PrivacyPolicy, type: :model do
     it { is_expected.to have_attributes(dfe_active: true) }
     it { is_expected.to have_attributes(changed_attributes: {}) }
   end
+
+  describe '.default' do
+    let(:pp_uuid) { SecureRandom.uuid }
+
+    before do
+      allow(Rails.application.config.x.gitis).to \
+        receive(:privacy_policy_id).and_return(pp_uuid)
+    end
+
+    it { expect(described_class.default).to eql(pp_uuid) }
+  end
+
+  describe '.consent' do
+    let(:consent) { '10' }
+
+    before do
+      allow(Rails.application.config.x.gitis).to \
+        receive(:privacy_consent_id).and_return(consent)
+    end
+
+    it { expect(described_class.consent).to eql(consent) }
+  end
 end

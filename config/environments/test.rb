@@ -81,6 +81,8 @@ Rails.application.configure do
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
+  config.x.gitis.privacy_policy_id = SecureRandom.uuid
+  config.x.gitis.privacy_consent_id = '10'
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
