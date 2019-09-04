@@ -13,6 +13,16 @@ module Bookings::Gitis
     entity_association :dfe_Candidate, Contact
     entity_association :dfe_PrivacyPolicyNumber, PrivacyPolicy
 
+    def self.build_for_contact(contact)
+      new \
+        'dfe_name' => "Online consent as part of school experience registration",
+        'dfe_consentreceivedby' => PrivacyPolicy.consent,
+        'dfe_meanofconsent' => PrivacyPolicy.consent,
+        'dfe_timeofconsent' => Time.now.utc.iso8601,
+        '_dfe_candidate_value' => contact.id,
+        '_dfe_privacypolicynumber_value' => PrivacyPolicy.default
+    end
+
     def initialize(crm_data = {})
       crm_data = crm_data.stringify_keys
 

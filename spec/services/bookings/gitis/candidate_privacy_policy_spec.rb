@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::Gitis::CandidatePrivacyPolicy, type: :model do
+  include ActiveSupport::Testing::TimeHelpers
+
   let(:uuid) { SecureRandom.uuid }
 
   describe '.entity_path' do
@@ -49,5 +51,23 @@ RSpec.describe Bookings::Gitis::CandidatePrivacyPolicy, type: :model do
     it { is_expected.to have_attributes(_dfe_candidate_value: candidate_uuid) }
     it { is_expected.to have_attributes(_dfe_privacypolicynumber_value: privacypolicy_uuid) }
     it { is_expected.to have_attributes(changed_attributes: {}) }
+  end
+
+  describe '.build_for_contact' do
+    let(:contact) { build(:gitis_contact) }
+    before { freeze_time }
+    subject { described_class.build_for_contact(contact) }
+
+    it { is_expected.to have_attributes(dfe_candidateprivacypolicyid: nil) }
+    it { is_expected.to have_attributes(dfe_name: /school experience/) }
+    it { is_expected.to have_attributes(dfe_consentreceivedby: Bookings::Gitis::PrivacyPolicy.consent) }
+    it { is_expected.to have_attributes(dfe_meanofconsent: Bookings::Gitis::PrivacyPolicy.consent) }
+    it { is_expected.to have_attributes(dfe_timeofconsent: Time.now.utc.iso8601) }
+    it { is_expected.to have_attributes(_dfe_candidate_value: contact.id) }
+    it do
+      is_expected.to have_attributes(
+        _dfe_privacypolicynumber_value: Bookings::Gitis::PrivacyPolicy.default
+      )
+    end
   end
 end
