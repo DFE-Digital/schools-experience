@@ -136,7 +136,7 @@ end
 seleniumHubPort=4444
 if ENV['SELENIUM_HUB_PORT'].present?
   seleniumHubPort = Integer ENV['SELENIUM_HUB_PORT']
-END
+end
 
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
   capabilities = ENV.fetch('CUC_DRIVER') { 'chrome' }
