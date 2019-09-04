@@ -9,7 +9,7 @@ module Candidates
 
         if Rails.application.config.x.phase >= 4
           NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl.from_application_preview(
-            registration_session.school.notifications_email,
+            registration_session.school.notification_emails,
             application_preview,
             placement_request_url
           ).despatch_later!
@@ -21,7 +21,7 @@ module Candidates
           ).despatch_later!
         else
           NotifyEmail::SchoolRequestConfirmation.from_application_preview(
-            registration_session.school.notifications_email,
+            registration_session.school.notification_emails,
             application_preview,
           ).despatch_later!
 

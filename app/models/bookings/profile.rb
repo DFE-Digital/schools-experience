@@ -52,6 +52,7 @@ class Bookings::Profile < ApplicationRecord
 
   validates :admin_contact_email, presence: true
   validates :admin_contact_email, format: EMAIL_FORMAT, allow_blank: true
+  validates :admin_contact_email_secondary, format: EMAIL_FORMAT, if: :admin_contact_email_secondary
   validates :admin_contact_phone, presence: true
   validates :admin_contact_phone, phone: true, allow_blank: true
 

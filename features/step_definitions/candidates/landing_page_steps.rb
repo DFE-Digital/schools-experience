@@ -1,8 +1,8 @@
 Then("the leading paragraph should provide me with a summary of the service") do
   within('.govuk-main-wrapper div > p:first-of-type') do
     [
-      'interested in becoming a teacher',
-      'find and request school experience',
+      'Use this service',
+      'request school experience in a primary and secondary school',
       'England'
     ].each do |snippet|
       expect(page).to have_text(snippet)
@@ -61,11 +61,9 @@ end
 Then("it should contain some useful information about the process") do
   within('.before-you-start') do
     [
-      "you’ll need to provide",
-      "personal details",
-      "address",
-      "telephone number",
-      "email"
+      "During school holidays",
+      "Some schools charge fees",
+      "receive tailored advice about becoming a teacher",
     ].each do |snippet|
       expect(page).to have_content(snippet)
     end

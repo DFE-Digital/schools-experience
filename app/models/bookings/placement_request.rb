@@ -139,7 +139,7 @@ module Bookings
     end
 
     def school_email
-      school.notifications_email
+      school.notification_emails
     end
 
     def school_name

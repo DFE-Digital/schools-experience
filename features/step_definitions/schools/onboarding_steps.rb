@@ -11,6 +11,15 @@ Given "I have completed the DBS Requirements step" do
   )
 end
 
+Given "I have completed the DBS Requirements step, choosing No" do
+  steps %(
+    Given I am on the 'DBS requirements' page
+    And I choose 'No - Candidates will be accompanied at all times' from the 'Do you require candidates to have or get a DBS check?' radio buttons
+    And I enter 'No more details' into the 'Provide any extra details in 50 words or less.' text area
+    When I submit the form
+  )
+end
+
 Given "I have completed the Candidate Requirements selection step" do
   steps %(
     Given I am on the 'candidate requirements selection' page
@@ -58,7 +67,7 @@ Given "I have completed the Fees step, choosing only Other costs" do
     Given I am on the 'fees charged' page
     And I choose 'Yes' from the 'Other costs' radio buttons
     And I choose 'No' from the 'Administration costs' radio buttons
-    And I choose 'No' from the 'DBS check costs' radio buttons
+    And I choose 'No' from the 'DBS check costs' radio buttons if available
     When I submit the form
   )
 end
@@ -156,6 +165,7 @@ Given "I have completed the Admin contact step" do
     Given I am on the 'Admin contact' page
     And I enter '01234567890' into the 'UK telephone number' text area
     And I enter 'g.chalmers@springfield.edu' into the 'Email address' text area
+    And I enter 's.skinner@springfield.edu' into the 'Secondary email address' text area
     When I submit the form
     Then I should be on the 'Profile' page
   )

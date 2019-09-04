@@ -62,7 +62,7 @@ feature 'Candidate Registrations', type: :feature do
         complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
-        complete_application_preview_step
+        complete_application_preview_step button_text: 'Continue'
         complete_email_confirmation_step
         view_request_acknowledgement_step
       end
@@ -78,7 +78,7 @@ feature 'Candidate Registrations', type: :feature do
         complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
-        complete_application_preview_step
+        complete_application_preview_step button_text: 'Continue'
         complete_email_confirmation_step
         view_request_acknowledgement_step
       end
@@ -298,7 +298,7 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   def complete_application_preview_step(name: 'testy mctest', email: nil,
-    date_of_birth: Date.parse('2000-01-01'))
+    date_of_birth: Date.parse('2000-01-01'), button_text: 'Accept and send')
 
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/application_preview"
@@ -321,14 +321,14 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "DBS certificate Yes"
 
     # Submit email confirmation form with errors
-    click_button 'Accept and send'
+    click_button button_text
     expect(page).to have_text 'You need to confirm your details are correct and accept our privacy policy to continue'
     expect(page).not_to have_text \
       "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
 
     # Submit email confirmation form successfully
     check "candidates_registrations_privacy_policy_acceptance"
-    click_button 'Accept and send'
+    click_button button_text
   end
 
   def complete_email_confirmation_step

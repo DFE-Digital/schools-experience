@@ -88,7 +88,14 @@ module Bookings
 
     def convert_admin_details
       output[:admin_contact_email] = input[:admin_contact_email].presence
-      output[:admin_contact_phone] = output[:admin_contact_email].presence && input[:admin_contact_phone].presence
+
+      if output[:admin_contact_email].present?
+        output[:admin_contact_email_secondary] = input[:admin_contact_email_secondary].presence
+        output[:admin_contact_phone] = input[:admin_contact_phone].presence
+      else
+        output[:admin_contact_email] = \
+          output[:admin_contact_email_secondary] = output[:admin_contact_phone] = nil
+      end
     end
 
     def copy_phases

@@ -54,6 +54,9 @@
     <dl class="govuk-summary-list">
       <%= summary_row 'UK telephone number', @profile.admin_contact_phone, edit_schools_on_boarding_admin_contact_path %>
       <%= summary_row 'Email address', @profile.admin_contact_email, edit_schools_on_boarding_admin_contact_path %>
+      <% if @profile.admin_contact_email_secondary.present? %>
+        <%= summary_row 'Secondary email address', @profile.admin_contact_email_secondary, edit_schools_on_boarding_admin_contact_path %>
+      <% end %>
     </dl>
 
     <%= link_to 'Continue', schools_on_boarding_preview_path, class: 'govuk-button' %>

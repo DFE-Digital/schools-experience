@@ -119,7 +119,7 @@ Rails.application.configure do
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
-  config.x.default_phase = 2
+  config.x.default_phase = 4
   config.x.phase = Integer(ENV['PHASE'].presence || config.x.default_phase)
   config.x.base_url = ENV.fetch('DFE_SIGNIN_BASE_URL') { 'https://schoolexperience.education.gov.uk' }
   config.x.oidc_client_id = ENV.fetch('DFE_SIGNIN_CLIENT_ID') { 'schoolexperience' }
@@ -143,7 +143,7 @@ Rails.application.configure do
     config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID')
   end
 
-  config.x.features = []
+  config.x.features = %i(candidate_requirement_ab_test)
 
   config.sass[:style] = :compressed if config.sass
 

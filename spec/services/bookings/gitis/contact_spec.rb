@@ -421,12 +421,12 @@ describe Bookings::Gitis::Contact, type: :model do
 
       it "will create a classroomexperience entry" do
         is_expected.to have_attributes \
-          dfe_notesforclassroomexperience: "#{headerline}\n\n#{logline}\n"
+          dfe_notesforclassroomexperience: "#{headerline}\r\n\r\n#{logline}\r\n"
       end
 
       it "will write the changes to the crm" do
         expect(contact.attributes_for_create).to include \
-          'dfe_notesforclassroomexperience' => "#{headerline}\n\n#{logline}\n"
+          'dfe_notesforclassroomexperience' => "#{headerline}\r\n\r\n#{logline}\r\n"
       end
     end
 
@@ -436,7 +436,7 @@ describe Bookings::Gitis::Contact, type: :model do
       end
 
       before do
-        contact.dfe_notesforclassroomexperience = "#{headerline}\n\n#{logline}\n"
+        contact.dfe_notesforclassroomexperience = "#{headerline}\r\n\r\n#{logline}\r\n"
         contact.reset_dirty_attributes
         contact.add_school_experience secondline
       end
@@ -446,13 +446,13 @@ describe Bookings::Gitis::Contact, type: :model do
       it "will append to the classroomexperience entry" do
         is_expected.to have_attributes \
           dfe_notesforclassroomexperience:
-            "#{headerline}\n\n#{logline}\n#{secondline}\n"
+            "#{headerline}\r\n\r\n#{logline}\r\n#{secondline}\r\n"
       end
 
       it "will write the changes to the crm" do
         expect(subject.attributes_for_update).to include \
           'dfe_notesforclassroomexperience' =>
-            "#{headerline}\n\n#{logline}\n#{secondline}\n"
+            "#{headerline}\r\n\r\n#{logline}\r\n#{secondline}\r\n"
       end
     end
   end

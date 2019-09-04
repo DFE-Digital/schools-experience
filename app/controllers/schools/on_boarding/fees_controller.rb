@@ -1,8 +1,12 @@
 module Schools
   module OnBoarding
     class FeesController < OnBoardingsController
+      before_action do
+        @requires_dbs_check = current_school_profile.dbs_requirement.requires_check
+      end
+
       def new
-        @fees = Fees.new
+        @fees = current_school_profile.fees
       end
 
       def create

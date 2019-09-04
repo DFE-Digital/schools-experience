@@ -25,7 +25,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   end
 
   def school_email
-    school.notifications_email
+    school.notification_emails
   end
 
   def sent!
