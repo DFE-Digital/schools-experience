@@ -14,16 +14,16 @@
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
       <div class="govuk-form-group <%= "govuk-form-group--error" if f.object.errors.any? %>">
-		<fieldset class="govuk-fieldset" aria-describedby="choose-how-dates-are-displayed-hint">
-		  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-			<h1 class="govuk-fieldset__heading">
+        <fieldset class="govuk-fieldset" aria-describedby="choose-how-dates-are-displayed-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h1 class="govuk-fieldset__heading">
               Choose how dates are displayed
-			</h1>
+            </h1>
 
             <span id="choose-how-dates-are-displayed-hint" class="govuk-hint">
               Select how you'd like to present school experience dates to candidates.
             </span>
-		  </legend>
+          </legend>
 
           <%- if f.object.errors[:availability_preference_fixed].present? %>
             <span class="govuk-error-message" id="bookings-school-availability-preference-fixed-error">
@@ -68,9 +68,9 @@
               </div>
             </div>
           </div>
-		</fieldset>
-	  </div>
-	  <div class="govuk-form-group">
+        </fieldset>
+      </div>
+      <div class="govuk-form-group">
         <%= f.submit 'Continue', class: 'govuk-button' %>
       </div>
     <% end %>
