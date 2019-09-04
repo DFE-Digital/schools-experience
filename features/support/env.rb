@@ -133,6 +133,11 @@ else
   Capybara.javascript_driver = :chrome_headless
 end
 
+seleniumHubPort=4444
+if ENV['SELENIUM_HUB_PORT'].present?
+  seleniumHubPort = Integer ENV['SELENIUM_HUB_PORT']
+END
+
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
   capabilities = ENV.fetch('CUC_DRIVER') { 'chrome' }
 
@@ -140,7 +145,7 @@ if ENV['SELENIUM_HUB_HOSTNAME'].present?
   Capybara.register_driver :selenium_remote do |app|
     Capybara::Selenium::Driver.new(app,
         :browser => :remote,
-        :url => "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:4444/wd/hub",
+        :url => "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:#{seleniumHubPort}/wd/hub",
         :desired_capabilities => capabilities.to_sym)
   end
   Capybara.javascript_driver = :selenium_remote
