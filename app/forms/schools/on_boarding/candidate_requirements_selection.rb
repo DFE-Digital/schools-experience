@@ -15,6 +15,7 @@ module Schools
       validates :live_locally, inclusion: [true, false]
       validates :other, inclusion: [true, false]
       validates :maximum_distance_from_school, presence: true, if: :live_locally
+      validates :maximum_distance_from_school, numericality: { greater_than: 0 }, if: :maximum_distance_from_school
       validates :maximum_distance_from_school, absence: true, unless: :live_locally
       validates :other_details, presence: true, if: :other
       validates :other_details, absence: true, unless: :other

@@ -30,7 +30,8 @@ module Schools
 
         if @candidate_requirements_choice.valid?
           current_school_profile.update! \
-            candidate_requirements_choice: @candidate_requirements_choice
+            candidate_requirements_choice: @candidate_requirements_choice,
+            candidate_requirements_selection_step_completed: false
 
           redirect_to next_step_path(current_school_profile)
         else

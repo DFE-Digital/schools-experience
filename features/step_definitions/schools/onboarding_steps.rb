@@ -29,6 +29,15 @@ Given "I have completed the Candidate Requirements choice step" do
   )
 end
 
+Given "I have completed the Candidate Requirements choice step, choosing No" do
+  steps %(
+    Given I am on the 'candidate requirements choice' page
+    And I choose 'No' from the 'Do you have any candidate requirements?' radio buttons
+    When I submit the form
+    Then I should be on the 'fees charged' page
+  )
+end
+
 Given "I have completed the Candidate Requirements selection step" do
   steps %(
     Given I am on the 'candidate requirements selection' page

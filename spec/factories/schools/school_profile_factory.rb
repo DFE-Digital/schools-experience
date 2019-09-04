@@ -33,6 +33,7 @@ FactoryBot.define do
     end
 
     trait :with_candidate_requirements_selection do
+      candidate_requirements_selection_step_completed { true }
       after :build do |profile|
         profile.candidate_requirements_selection = \
           FactoryBot.build :candidate_requirements_selection

@@ -67,11 +67,11 @@ module Schools
       def candidate_requirements_selection_required?
         return false unless @school_profile.show_candidate_requirements_selection?
 
-        if @school_profile.candidate_requirements_choice.has_requirements
-          @school_profile.candidate_requirements_selection.dup.invalid?
-        else
-          false
-        end
+        return false unless @school_profile.candidate_requirements_choice.has_requirements
+
+        return true if @school_profile.candidate_requirements_selection.dup.invalid?
+
+        !@school_profile.candidate_requirements_selection_step_completed?
       end
 
       def fees_required?

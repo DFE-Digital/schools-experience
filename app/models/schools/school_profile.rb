@@ -24,6 +24,9 @@ module Schools
       unless requires_subjects?
         self.subjects.destroy_all
       end
+      unless candidate_requirements_choice.has_requirements
+        self.candidate_requirements_selection = OnBoarding::CandidateRequirementsSelection.new
+      end
     end
 
     validate :administration_fee_not_set, unless: -> { fees.administration_fees? }

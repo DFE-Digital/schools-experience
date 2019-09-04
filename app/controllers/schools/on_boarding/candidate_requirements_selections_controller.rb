@@ -2,7 +2,8 @@ module Schools
   module OnBoarding
     class CandidateRequirementsSelectionsController < OnBoardingsController
       def new
-        @candidate_requirements_selection = CandidateRequirementsSelection.new
+        @candidate_requirements_selection = \
+          current_school_profile.candidate_requirements_selection
       end
 
       def create
@@ -11,7 +12,8 @@ module Schools
 
         if @candidate_requirements_selection.valid?
           current_school_profile.update! \
-            candidate_requirements_selection: @candidate_requirements_selection
+            candidate_requirements_selection: @candidate_requirements_selection,
+            candidate_requirements_selection_step_completed: true
 
           redirect_to next_step_path(current_school_profile)
         else
