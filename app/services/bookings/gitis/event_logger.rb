@@ -3,8 +3,8 @@ module Bookings
     class EventLogger
       attr_reader :type, :subject
 
-      NOTES_HEADER = "RECORDED   ACTION     EXPERIENCE  URN     NAME".freeze
-      LOG_LINE = "%8<recorded>s %-22<action>s %8<date>s %<urn>s %<name>s".freeze
+      NOTES_HEADER = "RECORDED   ACTION                 EXP DATE   URN    NAME".freeze
+      LOG_LINE = "%10<recorded>s %-22<action>s %8<date>s %-6<urn>s %<name>s".freeze
 
       class << self
         def entry(type, subject)
