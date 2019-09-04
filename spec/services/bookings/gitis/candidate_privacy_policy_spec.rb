@@ -55,8 +55,9 @@ RSpec.describe Bookings::Gitis::CandidatePrivacyPolicy, type: :model do
 
   describe '.build_for_contact' do
     let(:contact) { build(:gitis_contact) }
+    let(:privacypolicy_uuid) { SecureRandom.uuid }
     before { freeze_time }
-    subject { described_class.build_for_contact(contact) }
+    subject { described_class.build_for_contact(contact.id, privacypolicy_uuid) }
 
     it { is_expected.to have_attributes(dfe_candidateprivacypolicyid: nil) }
     it { is_expected.to have_attributes(dfe_name: /school experience/) }
@@ -66,7 +67,7 @@ RSpec.describe Bookings::Gitis::CandidatePrivacyPolicy, type: :model do
     it { is_expected.to have_attributes(_dfe_candidate_value: contact.id) }
     it do
       is_expected.to have_attributes(
-        _dfe_privacypolicynumber_value: Bookings::Gitis::PrivacyPolicy.default
+        _dfe_privacypolicynumber_value: privacypolicy_uuid
       )
     end
   end
