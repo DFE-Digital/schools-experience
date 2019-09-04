@@ -94,7 +94,7 @@ module Bookings
       end
 
       def log_school_experience(contact_id, logline)
-        contact = find(contact_id)
+        contact = find(contact_id, refresh: true)
         return false unless contact
 
         contact.add_school_experience(logline)

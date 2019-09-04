@@ -270,7 +270,7 @@ describe Bookings::Gitis::CRM, type: :model do
     let(:logline) { "01/10/2019 TEST                   01/11/2019 #{school.urn} #{school.name}" }
 
     before do
-      allow(gitis).to receive(:find).with(contact.id).and_return(contact)
+      allow(gitis).to receive(:find).with(contact.id, refresh: true).and_return(contact)
       allow(gitis).to receive(:update_entity).and_return(true)
 
       gitis.log_school_experience(contact.id, logline)
