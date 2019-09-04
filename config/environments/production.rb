@@ -143,7 +143,7 @@ Rails.application.configure do
     config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID')
   end
 
-  config.x.features = []
+  config.x.features = %i(candidate_requirement_ab_test)
 
   config.sass[:style] = :compressed if config.sass
 
