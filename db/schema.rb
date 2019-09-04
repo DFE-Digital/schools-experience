@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_04_085720) do
+ActiveRecord::Schema.define(version: 2019_09_04_120202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -370,14 +370,14 @@ ActiveRecord::Schema.define(version: 2019_09_04_085720) do
     t.text "dbs_requirement_no_dbs_policy_details"
     t.boolean "show_candidate_requirements_selection", default: false
     t.boolean "candidate_requirements_selection_on_teacher_training_course"
-    t.boolean "candidate_requirements_selection_has_degree"
-    t.boolean "candidate_requirements_selection_working_towards_degree"
     t.boolean "candidate_requirements_selection_live_locally"
     t.integer "candidate_requirements_selection_maximum_distance_from_school"
     t.boolean "candidate_requirements_selection_other"
     t.text "candidate_requirements_selection_other_details"
     t.boolean "candidate_requirements_choice_has_requirements"
     t.boolean "candidate_requirements_selection_step_completed", default: false
+    t.boolean "candidate_requirements_selection_not_on_another_training_course"
+    t.boolean "candidate_requirements_selection_has_or_working_towards_degree"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

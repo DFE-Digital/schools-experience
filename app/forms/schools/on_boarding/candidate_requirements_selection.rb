@@ -2,16 +2,16 @@ module Schools
   module OnBoarding
     class CandidateRequirementsSelection < Step
       attribute :on_teacher_training_course, :boolean
-      attribute :has_degree, :boolean
-      attribute :working_towards_degree, :boolean
+      attribute :not_on_another_training_course, :boolean
+      attribute :has_or_working_towards_degree, :boolean
       attribute :live_locally, :boolean
       attribute :maximum_distance_from_school, :integer
       attribute :other, :boolean
       attribute :other_details, :string
 
       validates :on_teacher_training_course, inclusion: [true, false]
-      validates :has_degree, inclusion: [true, false]
-      validates :working_towards_degree, inclusion: [true, false]
+      validates :not_on_another_training_course, inclusion: [true, false]
+      validates :has_or_working_towards_degree, inclusion: [true, false]
       validates :live_locally, inclusion: [true, false]
       validates :other, inclusion: [true, false]
       validates :maximum_distance_from_school, presence: true, if: :live_locally
@@ -22,8 +22,8 @@ module Schools
 
       def self.compose(
         on_teacher_training_course,
-        has_degree,
-        working_towards_degree,
+        not_on_another_training_course,
+        has_or_working_towards_degree,
         live_locally,
         maximum_distance_from_school,
         other,
@@ -31,8 +31,8 @@ module Schools
       )
         new \
           on_teacher_training_course: on_teacher_training_course,
-          has_degree: has_degree,
-          working_towards_degree: working_towards_degree,
+          not_on_another_training_course: not_on_another_training_course,
+          has_or_working_towards_degree: has_or_working_towards_degree,
           live_locally: live_locally,
           maximum_distance_from_school: maximum_distance_from_school,
           other: other,
