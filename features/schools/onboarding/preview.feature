@@ -14,6 +14,7 @@ Feature: Preview profile
         And I have completed the following steps:
             | Step name                        | Extra                     |
             | DBS Requirements                 |                           |
+            | Candidate Requirements choice    |                           |
             | Candidate Requirements selection |                           |
             | Fees                             | choosing only Other costs |
             | Other costs                      |                           |

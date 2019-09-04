@@ -15,14 +15,14 @@ Feature: DBS requirements
     And I choose 'Yes - Outline your DBS requirements' from the 'Do you require candidates to have or get a DBS check?' radio buttons
     And I enter 'Always require DBS check' into the 'Provide details in 50 words or less.' text area
     When I submit the form
-    Then I should be on the 'candidate requirements selection' page
+    Then I should be on the 'candidate requirements choice' page
 
   Scenario: Completing step chosing no
     Given I am on the 'DBS requirements' page
     And I choose 'No - Candidates will be accompanied at all times' from the 'Do you require candidates to have or get a DBS check?' radio buttons
     And I enter 'Candidates are always accompanied' into the 'Provide any extra details in 50 words or less.' text area
     When I submit the form
-    Then I should be on the 'candidate requirements selection' page
+    Then I should be on the 'candidate requirements choice' page
 
   Scenario: Completing step chosing no seeing candidate requirment
     Given I see the candidate requirements screen

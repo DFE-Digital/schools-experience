@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_30_092648) do
+ActiveRecord::Schema.define(version: 2019_09_04_085720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -376,6 +376,8 @@ ActiveRecord::Schema.define(version: 2019_08_30_092648) do
     t.integer "candidate_requirements_selection_maximum_distance_from_school"
     t.boolean "candidate_requirements_selection_other"
     t.text "candidate_requirements_selection_other_details"
+    t.boolean "candidate_requirements_choice_has_requirements"
+    t.boolean "candidate_requirements_selection_step_completed", default: false
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

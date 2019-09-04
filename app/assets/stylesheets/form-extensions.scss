@@ -43,6 +43,12 @@
   }
 }
 
+.govuk-fieldset.inline {
+  .govuk-radios__item {
+    display: inline-block;
+  }
+}
+
 .govuk-currency-input {
   display: flex;
   .govuk-currency-input__symbol {

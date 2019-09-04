@@ -15,6 +15,8 @@ module Schools
           :dbs_requirement
         elsif candidate_requirement_required?
           :candidate_requirement
+        elsif candidate_requirements_choice_required?
+          :candidate_requirements_choice
         elsif candidate_requirements_selection_required?
           :candidate_requirements_selection
         elsif fees_required?
@@ -56,10 +58,20 @@ module Schools
         @school_profile.candidate_requirement.dup.invalid?
       end
 
+      def candidate_requirements_choice_required?
+        return false unless @school_profile.show_candidate_requirements_selection?
+
+        @school_profile.candidate_requirements_choice.dup.invalid?
+      end
+
       def candidate_requirements_selection_required?
         return false unless @school_profile.show_candidate_requirements_selection?
 
-        @school_profile.candidate_requirements_selection.dup.invalid?
+        return false unless @school_profile.candidate_requirements_choice.has_requirements
+
+        return true if @school_profile.candidate_requirements_selection.dup.invalid?
+
+        !@school_profile.candidate_requirements_selection_step_completed?
       end
 
       def fees_required?

@@ -24,6 +24,9 @@ module Schools
       unless requires_subjects?
         self.subjects.destroy_all
       end
+      unless candidate_requirements_choice.has_requirements
+        self.candidate_requirements_selection = OnBoarding::CandidateRequirementsSelection.new
+      end
     end
 
     validate :administration_fee_not_set, unless: -> { fees.administration_fees? }
@@ -63,6 +66,14 @@ module Schools
       mapping: [
         %w(candidate_requirement_requirements requirements),
         %w(candidate_requirement_requirements_details requirements_details)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :candidate_requirements_choice,
+      class_name: 'Schools::OnBoarding::CandidateRequirementsChoice',
+      mapping: [
+        %w(candidate_requirements_choice_has_requirements has_requirements)
       ],
       constructor: :compose
 

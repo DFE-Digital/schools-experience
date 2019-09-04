@@ -197,6 +197,17 @@ describe Schools::SchoolProfile, type: :model do
       is_expected.to \
         have_db_column(:show_candidate_requirements_selection).of_type(:boolean)
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:candidate_requirements_choice_has_requirements).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:candidate_requirements_selection_step_completed)
+          .of_type(:boolean).with_options(default: false)
+    end
   end
 
   context 'relationships' do
@@ -602,6 +613,28 @@ describe Schools::SchoolProfile, type: :model do
 
         it 'removes subjects' do
           expect(school_profile.reload.subjects).to be_empty
+        end
+      end
+
+      context 'when school no longer has candidate requirements' do
+        let :school_profile do
+          FactoryBot.create :school_profile, :with_candidate_requirements_choice,
+            :with_candidate_requirements_selection
+        end
+
+        let :candidate_requirements_choice do
+          FactoryBot.build :candidate_requirements_choice,
+            has_requirements: false
+        end
+
+        before do
+          school_profile.update! \
+            candidate_requirements_choice: candidate_requirements_choice
+        end
+
+        it 'removes subjects' do
+          expect(school_profile.reload.candidate_requirements_selection).to \
+            eq Schools::OnBoarding::CandidateRequirementsSelection.new
         end
       end
     end
