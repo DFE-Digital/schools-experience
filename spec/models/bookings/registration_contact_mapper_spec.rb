@@ -52,6 +52,18 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to include('last_name' => contact.last_name) }
     it { is_expected.to include('email' => contact.email) }
     it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
+
+    context 'with whitespace in email address' do
+      let(:contact) do
+        build(:gitis_contact, :persisted,
+          emailaddress1: ' someone@education.gov.uk ',
+          emailaddress2: nil)
+      end
+
+      it "will strip the whitespace" do
+        is_expected.to include('email' => 'someone@education.gov.uk')
+      end
+    end
   end
 
   describe "#contact_to_contact_information" do
