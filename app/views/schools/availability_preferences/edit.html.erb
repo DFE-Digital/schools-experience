@@ -34,6 +34,8 @@
             </span>
           <% end %>
 
+          <%= f.hidden_field :availability_preference_fixed %>
+
           <div class="govuk-radios">
             <div class="govuk-radios__item">
               <%= f.radio_button :availability_preference_fixed, true, class: "govuk-radios__input", aria: { describedby: 'bookings-school-availability-preference-fixed-true-hint' } %>
