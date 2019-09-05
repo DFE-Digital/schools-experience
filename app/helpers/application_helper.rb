@@ -61,7 +61,7 @@ module ApplicationHelper
   def current_user_info_and_logout_link
     logout_link = link_to("Logout", logout_schools_session_path)
 
-    greeting = if @current_user.is_a?(OpenIDConnect::ResponseObject::UserInfo)
+    greeting = if valid_user?(@current_user)
                  "Welcome #{current_user_full_name}"
                end
 
@@ -71,6 +71,8 @@ module ApplicationHelper
   end
 
   def current_user_full_name
+    return 'Unknown' unless valid_user?(@current_user)
+
     [@current_user.given_name, @current_user.family_name].join(' ')
   end
 
@@ -88,5 +90,11 @@ module ApplicationHelper
     else
       new_candidates_feedback_path
     end
+  end
+
+private
+
+  def valid_user?(user)
+    user.is_a?(OpenIDConnect::ResponseObject::UserInfo)
   end
 end
