@@ -150,8 +150,6 @@ if ENV['SELENIUM_HUB_HOSTNAME'].present? || ENV['SELENIUM_HUB_ENDPOINT'].present
   if 'ie' == ENV['CUC_DRIVER'] 
     capabilities["browserName"] = "internet explorer"
     capabilities["version"] = "11"
-    capabilities["platform"] = "WIN10"
-    capabilities["platformName"] = "windows" 
   else
     capabilities["browserName"] = ENV.fetch('CUC_DRIVER') { 'chrome' }
   end
