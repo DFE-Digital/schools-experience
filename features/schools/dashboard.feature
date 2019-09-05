@@ -38,6 +38,23 @@ Feature: The School Dashboard
             | Text                                   | Hint | Path                                  |
             | Change dates and how they're displayed | None | /schools/availability_preference/edit |
 
+    Scenario: Adding, removing and changing dates visible when fixed and dates present
+        Given my school has fully-onboarded
+        And my school has 3 placement dates
+        And it has 'fixed' availability
+        When I am on the 'schools dashboard' page
+        Then I should see the following 'medium-priority' links:
+            | Text                                   | Hint | Path                                  |
+            | Change dates and how they're displayed | None | /schools/availability_preference/edit |
+            | Add, remove and change dates           | None | /schools/placement_dates              |
+
+    Scenario: Adding, removing and changing dates not visible when not fixed and dates not present
+        Given my school has fully-onboarded
+        And it has 'fixed' availability
+        When I am on the 'schools dashboard' page
+        Then there should be no 'Add, remove and change dates' link
+
+
     Scenario: Account admin
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
@@ -80,7 +97,7 @@ Feature: The School Dashboard
         And it has 'fixed' availability
         And my school has no placement dates
         When I am on the 'schools dashboard' page
-        Then there should be a 'You haven't entered any dates' warning
+        Then there should be a "You haven't entered any dates" warning
 
     Scenario: Displaying a warning when flexible with no description
         Given my school has fully-onboarded

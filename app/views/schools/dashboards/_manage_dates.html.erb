@@ -9,7 +9,15 @@
     <%= render partial: 'schools/dashboards/no_availability_info_warning' %>
   <%- end -%>
 
-  <div id="update-school-profile" class="subsection">
+  <%- if is_fixed_and_has_active_dates?(@current_school) -%>
+    <div id="add-remove-and-change-dates" class="subsection">
+      <header class="dashboard-medium-priority">
+        <%= link_to "Add, remove and change dates", schools_placement_dates_path %>
+      </header>
+    </div>
+  <%- end -%>
+
+  <div id="change-how-dates-are-displayed" class="subsection">
     <header class="dashboard-medium-priority">
       <%= link_to "Change dates and how they're displayed", edit_schools_availability_preference_path %>
     </header>
