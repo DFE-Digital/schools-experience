@@ -161,7 +161,7 @@ if ENV['SELENIUM_HUB_HOSTNAME'].present? || ENV['SELENIUM_HUB_ENDPOINT'].present
     Capybara::Selenium::Driver.new(app,
         :browser => :remote,
         :url => seleniumHubEndpoint,
-        :desired_capabilities => capabilitie)
+        :desired_capabilities => capabilities)
   end
   Capybara.javascript_driver = :selenium_remote
   Capybara.default_driver = :selenium_remote
