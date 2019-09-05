@@ -4,4 +4,4 @@ Click the link below to sign in to your school experience dashboard
 
 ((confirmation_link))
 
-This link will expire within 1 hour.
+This link will expire within 24 hours.
