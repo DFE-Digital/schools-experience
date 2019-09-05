@@ -12,15 +12,15 @@ module Schools
         output = []
 
         if on_teacher_training_course?
-          output << "Must be applying to or have been accepted onto our, or a partner school's, teacher training course"
+          output << "Must be applying to or have applied to our, or a partner school's, teacher training course"
         end
 
-        if has_degree?
+        if not_on_another_training_course?
+          output << "Must not have been accepted onto another teacher training course"
+        end
+
+        if has_or_working_towards_degree?
           output << "Must have a degree"
-        end
-
-        if working_towards_degree?
-          output << "Must be working towards a degree"
         end
 
         if live_locally?
@@ -32,7 +32,6 @@ module Schools
         if other?
           output << other_details
         end
-
 
         if output.empty?
           'None'
@@ -48,14 +47,14 @@ module Schools
           :candidate_requirements_selection_on_teacher_training_course
       end
 
-      def has_degree?
+      def not_on_another_training_course?
         @attributes.fetch \
-          :candidate_requirements_selection_has_degree
+          :candidate_requirements_selection_not_on_another_training_course
       end
 
-      def working_towards_degree?
+      def has_or_working_towards_degree?
         @attributes.fetch \
-          :candidate_requirements_selection_working_towards_degree
+          :candidate_requirements_selection_has_or_working_towards_degree
       end
 
       def live_locally?

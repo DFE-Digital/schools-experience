@@ -45,8 +45,8 @@ module Schools
       def candidate_requirements_selection_params
         params.require(:schools_on_boarding_candidate_requirements_selection).permit \
           :on_teacher_training_course,
-          :has_degree,
-          :working_towards_degree,
+          :not_on_another_training_course,
+          :has_or_working_towards_degree,
           :live_locally,
           :maximum_distance_from_school,
           :other,
