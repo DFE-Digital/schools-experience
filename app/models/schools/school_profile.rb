@@ -202,6 +202,14 @@ module Schools
       constructor: :compose
 
     composed_of \
+      :disability_confident,
+      class_name: 'Schools::OnBoarding::DisabilityConfident',
+      mapping: [
+        %w(disability_confident_is_disability_confident is_disability_confident)
+      ],
+      constructor: :compose
+
+    composed_of \
       :experience_outline,
       class_name: 'Schools::OnBoarding::ExperienceOutline',
       mapping: [

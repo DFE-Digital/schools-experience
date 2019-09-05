@@ -24,6 +24,7 @@ Feature: Preview profile
             | Candidate experience details     |                           |
             | Access needs support             |                           |
             | Access needs detail              |                           |
+            | Disability confident             |                           |
             | Experience Outline               |                           |
             | Admin contact                    |                           |
         When I click the 'Continue' button
