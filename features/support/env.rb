@@ -144,7 +144,15 @@ if ENV['SELENIUM_HUB_ENDPOINT'].present?
 end
 
 if ENV['SELENIUM_HUB_HOSTNAME'].present? || ENV['SELENIUM_HUB_ENDPOINT'].present?
+
   capabilities = ENV.fetch('CUC_DRIVER') { 'chrome' }
+
+  if 'ie' == ENV['CUC_DRIVER'] 
+    capabilities["browserName"] = "internet explorer"
+    capabilities["version"] = "11"
+    capabilities["platform"] = "WIN10"
+    capabilities["platformName"] = "windows" 
+  end
 
   Capybara.run_server = false
   Capybara.register_driver :selenium_remote do |app|
