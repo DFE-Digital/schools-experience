@@ -39,7 +39,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Canonical meta tag
 gem 'canonical-rails'
 
-gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
+gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder', branch: 'govuk-frontend-v3.1'
 gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
