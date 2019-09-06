@@ -2,6 +2,28 @@
 module Schools
   module OnBoarding
     class CurrentStep
+      STEPS = %i(
+        dbs_requirement
+        candidate_requirement
+        candidate_requirements_choice
+        candidate_requirements_selection
+        fees
+        administration_fee
+        dbs_fee
+        other_fee
+        phases_list
+        key_stage_list
+        subjects
+        description
+        candidate_experience_detail
+        access_needs_support
+        access_needs_detail
+        disability_confident
+        access_needs_policy
+        experience_outline
+        admin_contact
+      ).freeze
+
       def self.for(school_profile)
         new(school_profile).call
       end
@@ -11,50 +33,14 @@ module Schools
       end
 
       def call
-        if dbs_requirement_required?
-          :dbs_requirement
-        elsif candidate_requirement_required?
-          :candidate_requirement
-        elsif candidate_requirements_choice_required?
-          :candidate_requirements_choice
-        elsif candidate_requirements_selection_required?
-          :candidate_requirements_selection
-        elsif fees_required?
-          :fees
-        elsif administration_fee_required?
-          :administration_fee
-        elsif dbs_fee_required?
-          :dbs_fee
-        elsif other_fees_required?
-          :other_fee
-        elsif phases_list_required?
-          :phases_list
-        elsif key_stage_list_required?
-          :key_stage_list
-        elsif subjects_required?
-          :subjects
-        elsif description_required?
-          :description
-        elsif candidate_experience_detail_required?
-          :candidate_experience_detail
-        elsif access_needs_support_required?
-          :access_needs_support
-        elsif access_needs_detail_required?
-          :access_needs_detail
-        elsif disability_confident_required?
-          :disability_confident
-        elsif access_needs_policy_required?
-          :access_needs_policy
-        elsif experience_outline_required?
-          :experience_outline
-        elsif admin_contact_required?
-          :admin_contact
-        else
-          :COMPLETED
-        end
+        STEPS.detect(&method(:required?)) || :COMPLETED
       end
 
     private
+
+      def required?(step)
+        send "#{step}_required?"
+      end
 
       def dbs_requirement_required?
         !@school_profile.dbs_requirement.dup.valid?
@@ -102,7 +88,7 @@ module Schools
         !@school_profile.dbs_fee_step_completed?
       end
 
-      def other_fees_required?
+      def other_fee_required?
         return false unless @school_profile.fees.other_fees
 
         return true if @school_profile.other_fee.dup.invalid?
