@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
   context 'attributes' do
     it { is_expected.to respond_to :on_teacher_training_course }
-    it { is_expected.to respond_to :has_degree }
-    it { is_expected.to respond_to :working_towards_degree }
+    it { is_expected.to respond_to :not_on_another_training_course }
+    it { is_expected.to respond_to :has_or_working_towards_degree }
     it { is_expected.to respond_to :live_locally }
     it { is_expected.to respond_to :maximum_distance_from_school }
     it { is_expected.to respond_to :other }

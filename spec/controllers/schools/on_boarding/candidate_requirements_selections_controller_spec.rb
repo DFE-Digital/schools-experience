@@ -127,7 +127,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
     context 'vaild' do
       let :candidate_requirements_selection do
         school_profile.candidate_requirements_selection.tap do |m|
-          m.working_towards_degree = !m.working_towards_degree
+          m.has_or_working_towards_degree = !m.has_or_working_towards_degree
         end
       end
 

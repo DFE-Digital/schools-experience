@@ -82,8 +82,8 @@ module Schools
       class_name: 'Schools::OnBoarding::CandidateRequirementsSelection',
       mapping: [
           %w(candidate_requirements_selection_on_teacher_training_course on_teacher_training_course),
-          %w(candidate_requirements_selection_has_degree has_degree),
-          %w(candidate_requirements_selection_working_towards_degree working_towards_degree),
+          %w(candidate_requirements_selection_not_on_another_training_course not_on_another_training_course),
+          %w(candidate_requirements_selection_has_or_working_towards_degree has_or_working_towards_degree),
           %w(candidate_requirements_selection_live_locally live_locally),
           %w(candidate_requirements_selection_maximum_distance_from_school maximum_distance_from_school),
           %w(candidate_requirements_selection_other other),

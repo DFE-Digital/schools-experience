@@ -38,26 +38,25 @@ Feature: School Profile
   Scenario: Viewing the profile
     Given I am on the 'Profile' page
     Then the page should have the following summary list information:
-      | Full name                   | Some school                                                                                                                                                     |
-      | Address                     | \d{1,} something street, M\d{1,} 2JJ                                                                                                                            |
-      | UK telephone number         | 01234567890                                                                                                                                                     |
-      | Email address               | school1@example.com                                                                                                                                             |
-      | Fees                        | Yes - £300.00 daily other fee                                                                                                                                   |
-      | DBS check required          | Yes - Always require DBS check                                                                                                                                  |
-      | Individual requirements     | Must be applying to or have been accepted onto our, or a partner school's, teacher training course. They must live within 7 miles from the school. Some details |
-      | School experience phases    | Secondary and 16 - 18 years                                                                                                                                     |
-      | Primary key stages          | None                                                                                                                                                            |
-      | Subjects                    | Maths                                                                                                                                                           |
-      | Description                 | We have a race track                                                                                                                                            |
-      | School experience details   | A really good one                                                                                                                                               |
-      | Teacher training links      | Yes - We run our own training. Teacher training information                                                                                                     |
-      | Dress code                  | Business dress and must have nice hat                                                                                                                           |
-      | Parking                     | Carpark next door                                                                                                                                               |
-      | Disability and access needs | No                                                                                                                                                              |
-      | Start time                  | 8:15 am                                                                                                                                                         |
-      | Finish time                 | 4:30 pm                                                                                                                                                         |
-      | Flexible on times           | No                                                                                                                                                              |
-      | UK telephone number         | 01234567890                                                                                                                                                     |
-      | Email address               | g.chalmers@springfield.edu                                                                                                                                      |
-      | Secondary email address     | s.skinner@springfield.edu                                                                                                                                       |
-
+      | Full name                   | Some school                                                                                                                                            |
+      | Address                     | \d{1,} something street, M\d{1,} 2JJ                                                                                                                   |
+      | UK telephone number         | 01234567890                                                                                                                                            |
+      | Email address               | school1@example.com                                                                                                                                    |
+      | Fees                        | Yes - £300.00 daily other fee                                                                                                                          |
+      | DBS check required          | Yes - Always require DBS check                                                                                                                         |
+      | Individual requirements     | Must be applying to or have applied to our, or a partner school's, teacher training course. They must live within 7 miles from the school. Some detail |
+      | School experience phases    | Secondary and 16 - 18 years                                                                                                                            |
+      | Primary key stages          | None                                                                                                                                                   |
+      | Subjects                    | Maths                                                                                                                                                  |
+      | Description                 | We have a race track                                                                                                                                   |
+      | School experience details   | A really good one                                                                                                                                      |
+      | Teacher training links      | Yes - We run our own training. Teacher training information                                                                                            |
+      | Dress code                  | Business dress and must have nice hat                                                                                                                  |
+      | Parking                     | Carpark next door                                                                                                                                      |
+      | Disability and access needs | No                                                                                                                                                     |
+      | Start time                  | 8:15 am                                                                                                                                                |
+      | Finish time                 | 4:30 pm                                                                                                                                                |
+      | Flexible on times           | No                                                                                                                                                     |
+      | UK telephone number         | 01234567890                                                                                                                                            |
+      | Email address               | g.chalmers@springfield.edu                                                                                                                             |
+      | Secondary email address     | s.skinner@springfield.edu                                                                                                                              |
