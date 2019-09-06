@@ -23,7 +23,7 @@
   }
 
   .status .govuk-tag {
-    background-color: govuk-colour('grey-1');
+    background-color: govuk-colour('dark-grey');
   }
 
   .request-options {
@@ -36,11 +36,11 @@
 
       .govuk-se-button-container {
         .govuk-button--secondary {
-          background-color: govuk-colour('grey-4');
+          background-color: govuk-colour('light-grey');
           color: govuk-colour('black');
 
           &:hover {
-            background-color: govuk-colour('grey-3');
+            background-color: darken(govuk-colour('light-grey'), 10%);
           }
         }
       }
