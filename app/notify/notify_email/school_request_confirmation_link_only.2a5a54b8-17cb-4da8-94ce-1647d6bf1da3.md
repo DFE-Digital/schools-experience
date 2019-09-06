@@ -10,6 +10,6 @@ To view and manage the request use the following link:
 
 View the request – ((placement_request_url))
 
-Help and support
+# Help and support
  
 If you’ve got any feedback, questions or would like to take part in user testing contact us at organise.schoolexperience@education.gov.uk.
