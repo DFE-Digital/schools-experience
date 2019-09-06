@@ -43,6 +43,8 @@ module Schools
           :access_needs_detail
         elsif disability_confident_required?
           :disability_confident
+        elsif access_needs_policy_required?
+          :access_needs_policy
         elsif experience_outline_required?
           :experience_outline
         elsif admin_contact_required?
@@ -151,6 +153,12 @@ module Schools
         return false unless Feature.instance.active? :access_needs_journey
 
         @school_profile.disability_confident.dup.invalid?
+      end
+
+      def access_needs_policy_required?
+        return false unless Feature.instance.active? :access_needs_journey
+
+        @school_profile.access_needs_policy.dup.invalid?
       end
 
       def experience_outline_required?

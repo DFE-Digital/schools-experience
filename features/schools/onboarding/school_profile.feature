@@ -23,6 +23,7 @@ Feature: School Profile
         | Access needs support             |                           |
         | Access needs detail              |                           |
         | Disability confident             |                           |
+        | Access needs policy              |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
 

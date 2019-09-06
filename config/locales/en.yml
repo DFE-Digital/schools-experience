@@ -260,6 +260,12 @@ en:
           attributes:
             is_disability_confident:
               inclusion: 'Select whether you are signed up to the Disability Confident employer scheme'
+        schools/on_boarding/access_needs_policy:
+          attributes:
+            has_access_needs_policy:
+              inclusion: 'Select whether you have any online information which covers your disability and access needs policy'
+            url:
+              blank: 'Enter a url for your disability and access needs policy'
         schools/on_boarding/experience_outline:
           attributes:
             candidate_experience:
@@ -397,6 +403,8 @@ en:
         supports_access_needs: 'Do you want to add details about how you can support candidates with disabilites and access needs?'
       schools_on_boarding_disability_confident:
         is_disability_confident: 'Are you signed up to the Disability Confident employer scheme?'
+      schools_on_boarding_access_needs_policy:
+        has_access_needs_policy: 'Do you have any online information which covers your disability and access needs policy?'
       schools_on_boarding_candidate_experience_detail:
         dress_code: 'Do you have a dress code for candidates?'
         parking_provided: 'Do you provide parking for candidates?'
@@ -591,6 +599,11 @@ en:
         is_disability_confident:
           true: 'Yes'
           false: 'No'
+      schools_on_boarding_access_needs_policy:
+        has_access_needs_policy:
+          true: 'Yes'
+          false: 'No'
+        url: 'Enter web address.'
       schools_on_boarding_experience_outline:
         candidate_experience: 'What kind of school experience do you offer candidates?'
         provides_teacher_training:

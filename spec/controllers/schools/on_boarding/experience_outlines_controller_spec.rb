@@ -20,7 +20,8 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_candidate_experience_detail,
         :with_access_needs_support,
         :with_access_needs_detail,
-        :with_disability_confident
+        :with_disability_confident,
+        :with_access_needs_policy
     end
 
     before do
@@ -53,7 +54,8 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_candidate_experience_detail,
         :with_access_needs_support,
         :with_access_needs_detail,
-        :with_disability_confident
+        :with_disability_confident,
+        :with_access_needs_policy
     end
 
     let :params do
