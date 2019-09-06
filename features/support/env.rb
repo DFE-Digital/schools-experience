@@ -111,8 +111,11 @@ end
 
 Capybara.register_driver :ie do |app|
   options = Selenium::WebDriver::IE::Options.new
-  options.require_window_focus = true
-  options.ignore_protected_mode_settings = true
+  options.require_window_focus = ENV.fetch('REQUIRE_WINDOW_FOCUS') { true }
+  options.ignore_protected_mode_settings = ENV.fetch('IGNORE_PROTECTED_MODE_SETTINGS') { true }
+  options.ensure_clean_session = ENV.fetch('ENSURE_CLEAN_SESSION') { false }
+  options.native_events = ENV.fetch('NATIVE_EVENTS') { true }
+  options.persistent_hover = ENV.fetch('PERSISTENT_HOVER') { true }
   Capybara::Selenium::Driver.new(app, browser: :internet_explorer, options: options)
 end
 
