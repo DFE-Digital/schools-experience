@@ -25,6 +25,12 @@ module Candidates
     delegate :other_fee_amount_pounds, :other_fee_interval, \
       :other_fee_description, :other_fee_payment_method, to: :profile
 
+    delegate :supports_access_needs?,
+      :access_needs_description,
+      :disability_confident?,
+      :has_access_needs_policy?,
+      :access_needs_policy_url, to: :profile
+
     def initialize(school, profile)
       @school = school
       @profile = profile

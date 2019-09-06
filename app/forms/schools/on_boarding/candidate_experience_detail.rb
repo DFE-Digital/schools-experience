@@ -31,8 +31,12 @@ module Schools
       validates :parking_provided, inclusion: [true, false]
       validates :parking_details, presence: true, if: :parking_provided
       validates :nearby_parking_details, presence: true, if: -> { !parking_provided && !parking_provided.nil? }
-      validates :disabled_facilities, inclusion: [true, false]
-      validates :disabled_facilities_details, presence: true, if: :disabled_facilities
+
+      with_options unless: -> { Feature.instance.active? :access_needs_journey } do
+        validates :disabled_facilities, inclusion: [true, false]
+        validates :disabled_facilities_details, presence: true, if: :disabled_facilities
+      end
+
       validates :start_time, presence: true
       validates :start_time, format: { with: SCHOOL_TIME_FORMAT }, if: -> { start_time.present? }
       validates :end_time, presence: true
