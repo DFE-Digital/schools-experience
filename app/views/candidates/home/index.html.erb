@@ -21,10 +21,12 @@
       further information.
     </p>
 
-    <%= link_to 'Start now', new_candidates_school_search_path,
+    <%= link_to new_candidates_school_search_path,
         role:'button',
         class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8',
-        data: { module: 'govuk-button' } %>
+        data: { module: 'govuk-button' } do %>
+        Start now <%= render 'shared/start_button_chevron' %>
+    <% end %>
 
     <section class="before-you-start">
       <h2 class="govuk-heading-m">Before you start</h2>

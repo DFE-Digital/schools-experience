@@ -29,11 +29,12 @@
           </p>
         </section>
 
-        <%= link_to 'Start now', schools_dashboard_path,
+        <%= link_to schools_dashboard_path,
           role:'button',
           class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8',
-          data: { module: 'govuk-button' }
-        %>
+          data: { module: 'govuk-button' } do %>
+          Start now <%= render 'shared/start_button_chevron' %>
+        <% end %>
 
         <section>
           <h2 class="govuk-heading-m">Before you start</h2>
