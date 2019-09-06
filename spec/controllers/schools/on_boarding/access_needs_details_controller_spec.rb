@@ -77,4 +77,70 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
       end
     end
   end
+
+  context '#edit' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    before do
+      get '/schools/on_boarding/access_needs_detail/edit'
+    end
+
+    it 'assigns the form model' do
+      expect(assigns(:access_needs_detail)).to \
+        eq school_profile.access_needs_detail
+    end
+
+    it 'renders the edit template' do
+      expect(response).to render_template :edit
+    end
+  end
+
+  context '#update' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    let :params do
+      {
+        schools_on_boarding_access_needs_detail: \
+          access_needs_detail.attributes
+      }
+    end
+
+    before do
+      patch '/schools/on_boarding/access_needs_detail', params: params
+    end
+
+    context 'invalid' do
+      let :access_needs_detail do
+        Schools::OnBoarding::AccessNeedsDetail.new
+      end
+
+      it 'doesnt update the form model' do
+        expect(school_profile.reload.access_needs_detail).not_to \
+          eq access_needs_detail
+      end
+
+      it 'rerenders the edit template' do
+        expect(response).to render_template :edit
+      end
+    end
+
+    context 'valid' do
+      let :access_needs_detail do
+        FactoryBot.build :access_needs_detail, description: 'updated'
+      end
+
+      it 'updates the form model' do
+        expect(school_profile.reload.access_needs_detail).to \
+          eq access_needs_detail
+      end
+
+      it 'redirects to the next step' do
+        expect(response).to redirect_to schools_on_boarding_profile_path
+      end
+    end
+  end
 end

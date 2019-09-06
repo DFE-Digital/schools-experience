@@ -105,7 +105,7 @@ Rails.application.routes.draw do
       resource :candidate_experience_detail, only: %i(new create edit update)
       if Feature.instance.active? :access_needs_journey
         resource :access_needs_support, only: %i(new create edit update)
-        resource :access_needs_detail, only: %i(new create)
+        resource :access_needs_detail, only: %i(new create edit update)
         resource :disability_confident, only: %i(new create)
         resource :access_needs_policy, only: %i(new create)
       end
