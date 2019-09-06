@@ -92,7 +92,8 @@
         <%= link_to "Start request",
                     new_candidates_school_registrations_personal_information_path(@presenter.school),
                     class:"govuk-button",
-                    'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
+                    aria: { label: "Start request for school experience at #{@presenter.school.name}" },
+                    data: { module: 'govuk-button' }%>
       </div>
 
       <p>
@@ -209,7 +210,8 @@
         <%= link_to "Start request",
                     new_candidates_school_registrations_personal_information_path(@presenter.school),
                     class:"govuk-button",
-                    'aria-label': "Start request for school experience at #{@presenter.school.name}" %>
+                    aria: { label: "Start request for school experience at #{@presenter.school.name}" },
+                    data: { module: 'govuk-button' }%>
       </div>
     <% end %>
   </div>

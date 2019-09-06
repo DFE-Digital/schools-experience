@@ -27,7 +27,8 @@
       <p>
         <%= button_to 'Send cancellation email',
           schools_booking_cancellation_notification_delivery_path(@booking),
-          class: 'govuk-button'
+          class: 'govuk-button',
+          data: { module: 'govuk-button' }
         %>
       </p>
 

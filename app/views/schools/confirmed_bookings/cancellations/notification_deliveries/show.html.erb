@@ -14,6 +14,9 @@
       We’ve sent your response to <%= @cancellation.candidate_name %>
     </p>
 
-    <%= link_to 'Return to requests and bookings', schools_dashboard_path, class: 'govuk-button govuk-button--secondary' %>
+    <%= link_to 'Return to requests and bookings',
+      schools_dashboard_path,
+      class: 'govuk-button govuk-button--secondary',
+      data: { module: 'govuk-button' } %>
   </div>
 </div>

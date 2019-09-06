@@ -48,10 +48,16 @@
   </section>
 
   <div>
-    <%= link_to 'Cancel booking', new_schools_booking_cancellation_path(@booking), class: 'govuk-button govuk-button--secondary' %>
+    <%= link_to 'Cancel booking',
+      new_schools_booking_cancellation_path(@booking),
+      class: 'govuk-button govuk-button--secondary',
+      data: { module: 'govuk-button' } %>
   </div>
 
   <div>
-    <%= link_to 'Return to requests and bookings', schools_dashboard_path, class: 'govuk-button' %>
+    <%= link_to 'Return to requests and bookings',
+      schools_dashboard_path,
+      class: 'govuk-button',
+      data: { module: 'govuk-button' } %>
   </div>
 </div>
