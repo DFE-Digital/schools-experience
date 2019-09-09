@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Bookings::Gitis::EventLogger, type: :model do
   subject { described_class.entry log_type, log_subject }
   let(:today) { Date.today.to_formatted_s(:gitis) }
+  let(:padded_urn) { sprintf('%-6s', school.urn) }
 
   context 'with a PlacementRequest' do
     let(:log_type) { 'request' }
@@ -12,7 +13,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
     context 'with flexible dates' do
       it "will generate an entry" do
         is_expected.to eql \
-          "#{today} REQUEST                         #{school.urn} #{school.name}"
+          "#{today} REQUEST                         #{padded_urn} #{school.name}"
       end
     end
 
@@ -23,7 +24,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will generate an entry" do
         is_expected.to eql \
-          "#{today} REQUEST                #{formatted_date} #{school.urn} #{school.name}"
+          "#{today} REQUEST                #{formatted_date} #{padded_urn} #{school.name}"
       end
     end
   end
@@ -36,7 +37,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
     it "will record confirmation of a booking" do
       is_expected.to eql \
-        "#{today} ACCEPTED               #{formatted_date} #{school.urn} #{school.name}"
+        "#{today} ACCEPTED               #{formatted_date} #{padded_urn} #{school.name}"
     end
   end
 
@@ -51,7 +52,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by Candidate" do
         is_expected.to eql \
-          "#{today} CANCELLED BY CANDIDATE          #{school.urn} #{school.name}"
+          "#{today} CANCELLED BY CANDIDATE          #{padded_urn} #{school.name}"
       end
     end
 
@@ -62,7 +63,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by School" do
         is_expected.to eql \
-          "#{today} CANCELLED BY SCHOOL             #{school.urn} #{school.name}"
+          "#{today} CANCELLED BY SCHOOL             #{padded_urn} #{school.name}"
       end
     end
 
@@ -74,7 +75,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by Candidate" do
         is_expected.to eql \
-          "#{today} CANCELLED BY CANDIDATE #{date} #{school.urn} #{school.name}"
+          "#{today} CANCELLED BY CANDIDATE #{date} #{padded_urn} #{school.name}"
       end
     end
 
@@ -86,7 +87,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by School" do
         is_expected.to eql \
-          "#{today} CANCELLED BY SCHOOL    #{date} #{school.urn} #{school.name}"
+          "#{today} CANCELLED BY SCHOOL    #{date} #{padded_urn} #{school.name}"
       end
     end
   end
@@ -103,7 +104,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record they attended" do
         is_expected.to eql \
-          "#{today} ATTENDED               #{date} #{school.urn} #{school.name}"
+          "#{today} ATTENDED               #{date} #{padded_urn} #{school.name}"
       end
     end
 
@@ -113,7 +114,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "record they did not attend" do
         is_expected.to eql \
-          "#{today} DID NOT ATTEND         #{date} #{school.urn} #{school.name}"
+          "#{today} DID NOT ATTEND         #{date} #{padded_urn} #{school.name}"
       end
     end
   end

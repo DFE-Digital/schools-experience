@@ -19,4 +19,6 @@ class Bookings::Subject < ApplicationRecord
     inverse_of: :bookings_subject,
     foreign_key: :bookings_subject_id,
     dependent: :destroy
+
+  scope :available, -> { where.not(hidden: true) }
 end

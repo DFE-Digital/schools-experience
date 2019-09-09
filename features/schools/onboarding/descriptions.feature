@@ -9,13 +9,14 @@ Feature: Description
     Given the college phase is availble
     And there are some subjects available
     And I have completed the following steps:
-        | Step name                    | Extra                     |
-        | DBS Requirements             |                           |
-        | Candidate Requirements       |                           |
-        | Fees                         | choosing only Other costs |
-        | Other costs                  |                           |
-        | Phases                       |                           |
-        | Subjects                     |                           |
+        | Step name                        | Extra                     |
+        | DBS Requirements                 |                           |
+        | Candidate Requirements choice    |                           |
+        | Candidate Requirements selection |                           |
+        | Fees                             | choosing only Other costs |
+        | Other costs                      |                           |
+        | Phases                           |                           |
+        | Subjects                         |                           |
 
   Scenario: Page title
     Given I am on the 'description' page

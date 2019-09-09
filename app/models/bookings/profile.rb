@@ -1,9 +1,8 @@
 class Bookings::Profile < ApplicationRecord
-  DBS_REQUIREMENTS = %w(always sometimes never).freeze
   AVAILABLE_INTERVALS = %w(Daily One-off).freeze
   EMAIL_FORMAT = /\A.*@.*\..*\z/.freeze
 
-  FIELDS_TO_NILIFY = %i{dbs_policy teacher_training_info teacher_training_url}.freeze
+  FIELDS_TO_NILIFY = %i{teacher_training_info teacher_training_url}.freeze
 
   FIELDS_TO_STRIP = %i{
     start_time end_time admin_contact_email admin_contact_phone
@@ -18,14 +17,8 @@ class Bookings::Profile < ApplicationRecord
   belongs_to :school, class_name: 'Bookings::School'
   validates :school_id, uniqueness: true
 
-  with_options if: -> { Rails.application.config.x.features.include? :dbs_requirement } do
-    validates :dbs_requires_check, inclusion: [true, false]
-    validates :dbs_policy_details, presence: true
-  end
-
-  validates :dbs_required, presence: true
-  validates :dbs_required, inclusion: DBS_REQUIREMENTS, unless: -> { dbs_required.nil? }
-  validates :dbs_policy, presence: true, if: -> { dbs_required == 'sometimes' }
+  validates :dbs_requires_check, inclusion: [true, false]
+  validates :dbs_policy_details, presence: true
 
   validates :individual_requirements, length: { minimum: 1 }, if: :individual_requirements
 
@@ -59,6 +52,7 @@ class Bookings::Profile < ApplicationRecord
 
   validates :admin_contact_email, presence: true
   validates :admin_contact_email, format: EMAIL_FORMAT, allow_blank: true
+  validates :admin_contact_email_secondary, format: EMAIL_FORMAT, if: :admin_contact_email_secondary
   validates :admin_contact_phone, presence: true
   validates :admin_contact_phone, phone: true, allow_blank: true
 

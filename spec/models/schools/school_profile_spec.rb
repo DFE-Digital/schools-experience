@@ -185,12 +185,28 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:admin_contact_email).of_type :string
+      is_expected.to have_db_column(:admin_contact_email_secondary).of_type :string
     end
 
     it do
       is_expected.to \
         have_db_column(:confirmation_acceptance).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:show_candidate_requirements_selection).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:candidate_requirements_choice_has_requirements).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:candidate_requirements_selection_step_completed)
+          .of_type(:boolean).with_options(default: false)
     end
   end
 
@@ -268,16 +284,6 @@ describe Schools::SchoolProfile, type: :model do
 
       before do
         model.candidate_requirement = form_model
-      end
-
-      it 'sets candidate_requirement_dbs_requirement' do
-        expect(model.candidate_requirement_dbs_requirement).to eq \
-          form_model.dbs_requirement
-      end
-
-      it 'sets candidate_requirement_dbs_policy' do
-        expect(model.candidate_requirement_dbs_policy).to eq \
-          form_model.dbs_policy
       end
 
       it 'sets candidate_requirement_requirements' do
@@ -503,7 +509,7 @@ describe Schools::SchoolProfile, type: :model do
         model.admin_contact = form_model
       end
 
-      %i(phone email).each do |attribute|
+      %i(phone email email_secondary).each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("admin_contact_#{attribute}")).to \
             eq form_model.send attribute
@@ -607,6 +613,28 @@ describe Schools::SchoolProfile, type: :model do
 
         it 'removes subjects' do
           expect(school_profile.reload.subjects).to be_empty
+        end
+      end
+
+      context 'when school no longer has candidate requirements' do
+        let :school_profile do
+          FactoryBot.create :school_profile, :with_candidate_requirements_choice,
+            :with_candidate_requirements_selection
+        end
+
+        let :candidate_requirements_choice do
+          FactoryBot.build :candidate_requirements_choice,
+            has_requirements: false
+        end
+
+        before do
+          school_profile.update! \
+            candidate_requirements_choice: candidate_requirements_choice
+        end
+
+        it 'removes subjects' do
+          expect(school_profile.reload.candidate_requirements_selection).to \
+            eq Schools::OnBoarding::CandidateRequirementsSelection.new
         end
       end
     end

@@ -24,6 +24,9 @@ module Schools
       unless requires_subjects?
         self.subjects.destroy_all
       end
+      unless candidate_requirements_choice.has_requirements
+        self.candidate_requirements_selection = OnBoarding::CandidateRequirementsSelection.new
+      end
     end
 
     validate :administration_fee_not_set, unless: -> { fees.administration_fees? }
@@ -61,10 +64,30 @@ module Schools
       :candidate_requirement,
       class_name: 'Schools::OnBoarding::CandidateRequirement',
       mapping: [
-        %w(candidate_requirement_dbs_requirement dbs_requirement),
-        %w(candidate_requirement_dbs_policy dbs_policy),
         %w(candidate_requirement_requirements requirements),
         %w(candidate_requirement_requirements_details requirements_details)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :candidate_requirements_choice,
+      class_name: 'Schools::OnBoarding::CandidateRequirementsChoice',
+      mapping: [
+        %w(candidate_requirements_choice_has_requirements has_requirements)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :candidate_requirements_selection,
+      class_name: 'Schools::OnBoarding::CandidateRequirementsSelection',
+      mapping: [
+          %w(candidate_requirements_selection_on_teacher_training_course on_teacher_training_course),
+          %w(candidate_requirements_selection_not_on_another_training_course not_on_another_training_course),
+          %w(candidate_requirements_selection_has_or_working_towards_degree has_or_working_towards_degree),
+          %w(candidate_requirements_selection_live_locally live_locally),
+          %w(candidate_requirements_selection_maximum_distance_from_school maximum_distance_from_school),
+          %w(candidate_requirements_selection_other other),
+          %w(candidate_requirements_selection_other_details other_details)
       ],
       constructor: :compose
 
@@ -178,6 +201,7 @@ module Schools
       class_name: 'Schools::OnBoarding::AdminContact',
       mapping: [
         %w(admin_contact_email email),
+        %w(admin_contact_email_secondary email_secondary),
         %w(admin_contact_phone phone)
       ],
       constructor: :compose
@@ -206,7 +230,7 @@ module Schools
       foreign_key: 'bookings_school_id'
 
     def available_subjects
-      Bookings::Subject.all
+      Bookings::Subject.available
     end
 
     def current_step
@@ -219,6 +243,10 @@ module Schools
 
     def requires_subjects?
       phases_list.secondary? || phases_list.college?
+    end
+
+    def show_candidate_requirement?
+      !show_candidate_requirements_selection?
     end
   end
 end

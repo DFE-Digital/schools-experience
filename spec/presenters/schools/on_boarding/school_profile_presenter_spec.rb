@@ -88,42 +88,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#dbs_check_required' do
-    context 'when never' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile,
-          candidate_requirement_dbs_requirement: 'never'
-      end
-
-      it 'returns No - Never' do
-        expect(subject.dbs_check_required).to eq 'No - Candidates will be accompanied at all times'
-      end
-    end
-
-    context 'when always' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile,
-          candidate_requirement_dbs_requirement: 'always'
-      end
-
-      it 'returns Yes - Always' do
-        expect(subject.dbs_check_required).to eq 'Yes - Always'
-      end
-    end
-
-    context 'when sometimes' do
-      let :profile do
-        FactoryBot.build :school_profile, :with_candidate_requirement
-      end
-
-      it 'returns sometimes and the policy' do
-        expect(subject.dbs_check_required).to eq 'Yes - Sometimes. Super secure'
-      end
-    end
-  end
-
   context '#dbs_check' do
     let :profile do
       build :school_profile
@@ -438,6 +402,16 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
     it "returns the admin contact's email" do
       expect(subject.admin_contact_email).to eq 'g.chalmers@springfield.edu'
+    end
+  end
+
+  context '#admin_contact_email_secondary' do
+    let :profile do
+      FactoryBot.build :school_profile, :with_admin_contact
+    end
+
+    it "returns the admin contact's emails" do
+      expect(subject.admin_contact_email_secondary).to eq 's.skinner@springfield.edu'
     end
   end
 

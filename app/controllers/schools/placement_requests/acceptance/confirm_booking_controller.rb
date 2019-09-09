@@ -54,7 +54,7 @@ module Schools
 
         def set_available_subjects
           school_subjects = @current_school.subjects
-          @available_subjects = (school_subjects&.any? && school_subjects) || Bookings::Subject.all
+          @available_subjects = (school_subjects&.any? && school_subjects) || Bookings::Subject.available
         end
       end
     end

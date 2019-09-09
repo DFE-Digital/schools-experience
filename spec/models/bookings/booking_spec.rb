@@ -99,8 +99,8 @@ describe Bookings::Booking do
   describe 'Scopes' do
     describe '.upcoming' do
       # upcoming is currently set to any date within the next 2 weeks
-      let!(:included) { [0, 1, 13, 14].map { |offset| create(:bookings_booking, date: offset.days.from_now) } }
-      let!(:excluded) { [-4, -1, 15, 50].map { |offset| build(:bookings_booking, date: offset.days.from_now).save(validate: false) } }
+      let!(:included) { [0, 1, 13, 14].map { |offset| create(:bookings_booking, :accepted, date: offset.days.from_now) } }
+      let!(:excluded) { [-4, -1, 15, 50].map { |offset| build(:bookings_booking, :accepted, date: offset.days.from_now).save(validate: false) } }
 
       specify 'should include bookings that fall within the range' do
         expect(described_class.upcoming).to match_array(included)

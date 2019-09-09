@@ -56,7 +56,7 @@ Given("I have filled in my placement preferences successfully") do
   if @fixed_dates
     choose @wanted_bookings_placement_date
   else
-    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
+    fill_in 'Tell us about your availability', with: 'Only free from Epiphany to Whitsunday'
   end
   fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
   click_button 'Continue'

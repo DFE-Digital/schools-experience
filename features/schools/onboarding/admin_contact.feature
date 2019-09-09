@@ -10,16 +10,17 @@ Feature: Admin contact
     And the college phase is availble
     And there are some subjects available
     And I have completed the following steps:
-        | Step name                    | Extra                     |
-        | DBS Requirements             |                           |
-        | Candidate Requirements       |                           |
-        | Fees                         | choosing only Other costs |
-        | Other costs                  |                           |
-        | Phases                       |                           |
-        | Subjects                     |                           |
-        | Description                  |                           |
-        | Candidate experience details |                           |
-        | Experience Outline           |                           |
+        | Step name                        | Extra                     |
+        | DBS Requirements                 |                           |
+        | Candidate Requirements choice    |                           |
+        | Candidate Requirements selection |                           |
+        | Fees                             | choosing only Other costs |
+        | Other costs                      |                           |
+        | Phases                           |                           |
+        | Subjects                         |                           |
+        | Description                      |                           |
+        | Candidate experience details     |                           |
+        | Experience Outline               |                           |
 
   Scenario: Page title
     Given I am on the 'Admin contact' page
@@ -31,9 +32,10 @@ Feature: Admin contact
     When I submit the form
     Then I should see a validation error message
 
-  Scenario: Completing the step with error
+  Scenario: Completing the step without error
     Given I am on the 'Admin contact' page
     And I enter '01234567890' into the 'UK telephone number' text area
     And I enter 'g.chalmers@springfield.edu' into the 'Email address' text area
+    And I enter 's.skinner@springfield.edu' into the 'Secondary email address' text area
     When I submit the form
     Then I should be on the 'Profile' page

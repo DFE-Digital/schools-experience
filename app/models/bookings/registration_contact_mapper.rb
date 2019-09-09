@@ -46,7 +46,7 @@ module Bookings
       {
         'first_name'    => gitis_contact.first_name,
         'last_name'     => gitis_contact.last_name,
-        'email'         => gitis_contact.email,
+        'email'         => gitis_contact.email&.strip,
         'date_of_birth' => gitis_contact.date_of_birth
       }
     end

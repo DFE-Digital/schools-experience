@@ -8,10 +8,11 @@ Feature: DBS Fee
     And the secondary school phase is availble
     And the college phase is availble
     And I have completed the following steps:
-        | Step name              | Extra                   |
-        | DBS Requirements       |                         |
-        | Candidate Requirements |                         |
-        | Fees                   | choosing only DBS costs |
+        | Step name                        | Extra                   |
+        | DBS Requirements                 |                         |
+        | Candidate Requirements choice    |                         |
+        | Candidate Requirements selection |                         |
+        | Fees                             | choosing only DBS costs |
 
   Scenario: Page title
     Given I am on the 'dbs check costs' page

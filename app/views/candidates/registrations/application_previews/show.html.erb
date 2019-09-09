@@ -1,7 +1,9 @@
 <% self.page_title = 'Check your answers' %>
 
 <div class="govuk-grid-row" id="application-preview">
-  <%= form_for @privacy_policy, url: candidates_school_registrations_confirmation_email_path do |f| %>
+  <%= form_for @privacy_policy,
+        url: candidates_school_registrations_confirmation_email_path,
+        html: { onsubmit: 'preventDoubleClick(this)' } do |f| %>
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>A copy of the following details will be emailed to you once you've sent your school experience request.</p>
@@ -139,7 +141,11 @@
       <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
         <%= f.check_box_input :acceptance %>
       </div>
-      <%= f.submit 'Accept and send', class: 'govuk-button' %>
+      <% if gitis_integration? && candidate_signed_in? %>
+        <%= f.submit 'Accept and send', class: 'govuk-button' %>
+      <% else %>
+        <%= f.submit 'Continue', class: 'govuk-button' %>
+      <% end %>
   </div>
   <% end %>
 </div>

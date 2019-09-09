@@ -1,13 +1,32 @@
-<% self.page_title = 'Confirm your email' %>
+<% self.page_title = 'We already have your details' %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1>
-      Verify your email address
+      We already have your details
     </h1>
 
     <p>
-      Click the link in the email we’ve sent to verify your email address:
+      We have your details on record as you previously provided
+      them to us when you:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>attended one of our teaching events</li>
+      <li>previously used this service</li>
+      <li>
+        registered with our partner
+        <a href="https://getintoteaching.education.gov.uk/" class="govuk-link">
+          Get Into Teaching Information Service
+        </a>
+      </li>
+    </ul>
+
+    <h2>Verify your details</h2>
+
+    <p>
+      You now need to <strong>select the link</strong> we've sent to
+      the following email address:
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
@@ -15,7 +34,11 @@
     </ul>
 
     <p>
-      If you can’t find the message in your inbox:
+      <strong>The link will expire within 1 hour.</strong>
+    </p>
+
+    <p>
+      If you cannot find the message in your inbox:
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
@@ -23,8 +46,8 @@
     </ul>
 
     <p>
-      If you can’t find or haven’t received the email use the following link to
-      resend it:
+      If you cannot find or have not received the email use the following
+      link to resend it:
     </p>
 
     <%= button_to 'Resend link', @resend_link, class: 'govuk-button govuk-button--secondary' %>

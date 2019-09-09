@@ -20,31 +20,24 @@
             :availability,
             rows: 5,
             maxwords: { count: 150 },
-            placeholder: t('.availability_placeholder'),
             'aria-describedby': 'candidates_registrations_placement_preference_availability_label',
             label_options: { overwrite_defaults!: true, class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_availability_label' } do %>
 
-            <p>
-              We need a few details so we can forward your experience requirements to the school.
-            </p>
-
-            <p>
-              Tell us about your availability. For example, if you're:
-            </p>
+            <p>For example, if you're:</p>
 
             <ul class="govuk-list govuk-list--bullet">
               <li>
                 available for any specific experience dates offered by schools
               </li>
               <li>
-                only available or unavailable for experience on particular days, dates or for certain periods of time
+                only available or unavailable on particular days, dates or for certain periods of time
               </li>
             </ul>
+
             <p>
-              The school will use this information to offer you the best dates it has available and may contact you to arrange the exact date of your experience.
-            </p>
-            <p>
-              Depending on availability and time of year, schools may not always be able to offer you the exact dates you’re looking for.
+              Depending on availability and time of year, the school may not
+              offer the exact date you’re looking for. They may contact you
+              directly to discuss the most suitable dates.
             </p>
 
             <%- if @school.availability_info.present? -%>
@@ -71,7 +64,8 @@
           'aria-describedby': 'candidates_registrations_placement_preference_objectives_label',
           label_options: { overwrite_defaults!: true, class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_objectives_label' } do %>
           <p>
-            Provide a short explanation. For example:
+            Provide a short explanation to help the school offer you the kind of
+            experience you’re looking for. For example:
           </p>
           <ul class="govuk-list govuk-list--bullet">
             <li>
@@ -87,9 +81,6 @@
               I want to see how teachers teach my subject
             </li>
           </ul>
-          <p>
-            This will help the school see if it can offer you the kind of experience you’re looking for.
-          </p>
         <% end %>
 
       <%= f.submit 'Continue' %>

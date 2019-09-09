@@ -106,6 +106,22 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to include('last_name' => contact.lastname) }
         it { is_expected.to include('email' => contact.email) }
         it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
+        it { is_expected.to include('read_only' => true) }
+
+        context 'with some blank fields in gitis data' do
+          let(:contact) do
+            build :gitis_contact, :persisted,
+              date_of_birth: nil,
+              firstname: "",
+              lastname: ""
+          end
+
+          it { is_expected.to include('first_name' => data['first_name']) }
+          it { is_expected.to include('last_name' => data['last_name']) }
+          it { is_expected.to include('email' => contact.email) }
+          it { is_expected.to include('date_of_birth' => data['date_of_birth']) }
+          it { is_expected.to include('read_only' => true) }
+        end
       end
 
       context 'with only gitis data' do
@@ -117,6 +133,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to include('last_name' => contact.lastname) }
         it { is_expected.to include('email' => contact.email) }
         it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
+        it { is_expected.to include('read_only' => true) }
       end
     end
 
@@ -130,6 +147,21 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to have_attributes(last_name: contact.lastname) }
         it { is_expected.to have_attributes(email: contact.email) }
         it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
+
+        context 'with some blank fields in gitis data' do
+          let(:contact) do
+            build :gitis_contact, :persisted,
+              date_of_birth: nil,
+              firstname: "",
+              lastname: ""
+          end
+
+          it { is_expected.to be_valid }
+          it { is_expected.to have_attributes(first_name: data['first_name']) }
+          it { is_expected.to have_attributes(last_name: data['last_name']) }
+          it { is_expected.to have_attributes(email: contact.email) }
+          it { is_expected.to have_attributes(date_of_birth: data['date_of_birth']) }
+        end
       end
 
       context 'with only gitis data' do

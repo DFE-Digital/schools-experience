@@ -10,12 +10,20 @@
       Your Email verification link has expired
     </p>
 
+    <% if @resend_link %>
     <p>
       Click below to be emailed a new link
     </p>
 
     <p>
       <%= button_to 'Send a new link', @resend_link, class: 'govuk-button govuk-button--secondary' %>
+    </p>
+    <% end %>
+
+    <p>
+      <%= link_to 'Restart your application',
+       new_candidates_school_registrations_personal_information_path,
+       class: 'govuk-link' %>
     </p>
   </div>
 </div>

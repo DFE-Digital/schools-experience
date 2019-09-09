@@ -12,17 +12,18 @@ Feature: Preview profile
         And I am logged in as a DfE user
         And the school has subjects
         And I have completed the following steps:
-            | Step name                    | Extra                     |
-            | DBS Requirements             |                           |
-            | Candidate Requirements       |                           |
-            | Fees                         | choosing only Other costs |
-            | Other costs                  |                           |
-            | Phases                       |                           |
-            | Subjects                     |                           |
-            | Description                  |                           |
-            | Candidate experience details |                           |
-            | Experience Outline           |                           |
-            | Admin contact                |                           |
+            | Step name                        | Extra                     |
+            | DBS Requirements                 |                           |
+            | Candidate Requirements choice    |                           |
+            | Candidate Requirements selection |                           |
+            | Fees                             | choosing only Other costs |
+            | Other costs                      |                           |
+            | Phases                           |                           |
+            | Subjects                         |                           |
+            | Description                      |                           |
+            | Candidate experience details     |                           |
+            | Experience Outline               |                           |
+            | Admin contact                    |                           |
         When I click the 'Continue' button
 
     Scenario: Page contents

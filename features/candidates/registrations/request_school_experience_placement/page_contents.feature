@@ -39,10 +39,10 @@ Feature: Request a school experience placement
     @javascript
     Scenario: Word counting in placement objectives in availability
         Given I am on the 'Request school experience placement' page for my school of choice
-        Then the 'Is there anything schools need to know about your availability for school experience?' word count should say 'You have 150 words remaining'
+        Then the 'Tell us about your availability' word count should say 'You have 150 words remaining'
 
     @javascript
     Scenario: Updating the word count in availability
         Given I am on the 'Request school experience placement' page for my school of choice
-        When I enter 'The quick brown fox' into the 'Is there anything schools need to know about your availability for school experience?' text area
-        Then the 'Is there anything schools need to know about your availability for school experience?' word count should say 'You have 146 words remaining'
+        When I enter 'The quick brown fox' into the 'Tell us about your availability' text area
+        Then the 'Tell us about your availability' word count should say 'You have 146 words remaining'

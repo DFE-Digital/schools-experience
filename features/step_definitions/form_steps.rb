@@ -35,6 +35,10 @@ Then("I should see radio buttons for {string} with the following options:") do |
   )
 end
 
+Then("I should not see {string}") do |string|
+  expect(page).not_to have_content string
+end
+
 Then("I should see a select box labelled {string} with the following options:") do |string, table|
   ensure_select_options_exist(
     get_form_group(page, string),
@@ -97,6 +101,12 @@ Given("I choose {string} from the {string} radio buttons") do |option, field|
   end
 end
 
+Given("I choose {string} from the {string} radio buttons if available") do |option, field|
+  if page.has_css? "h2.govuk-fieldset__heading", text: field
+    step "I choose '#{option}' from the '#{field}' radio buttons"
+  end
+end
+
 Then("the {string} input should require at least {string} characters") do |field, length|
   input = page.find("input##{field}")
   expect(input['minlength']).to eql(length)
@@ -133,21 +143,21 @@ When("I click the {string} submit button") do |string|
   page.find("input[value='#{string}']").click
 end
 
-LABEL_SELECTORS = %w(.govuk-label legend label).freeze
 def get_form_group(page, label_text)
-  selector = LABEL_SELECTORS.detect do |s|
-    page.has_css?(s, text: label_text)
-  end
+  selector = get_selector label_text
   label = page.find(selector, text: label_text)
   label.ancestor('div.govuk-form-group')
 end
 
 def get_input(page, label_text)
-  selector = LABEL_SELECTORS.detect do |s|
-    page.has_css?(s, text: label_text)
-  end
+  selector = get_selector label_text
   label = page.find(selector, text: label_text)
   page.find('input', id: label['for'])
+end
+
+LABEL_SELECTORS = %w(.govuk-label legend label).freeze
+def get_selector(label_text)
+  LABEL_SELECTORS.detect { |s| page.has_css?(s, text: label_text) }
 end
 
 def ensure_date_field_exists(form_group)
