@@ -9,72 +9,42 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for @current_school, url: schools_availability_preference_path, method: 'patch', builder: ActionView::Helpers::FormBuilder do |f| %>
-
+    <%= form_for @current_school, url: schools_availability_preference_path, method: 'patch' do |f| %>
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <%= f.radio_button_fieldset :availability_preference_fixed, choices: %w(true false) do |fieldset| %>
 
-      <div class="govuk-form-group <%= "govuk-form-group--error" if f.object.errors.any? %>">
-        <fieldset class="govuk-fieldset" aria-describedby="choose-how-dates-are-displayed-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h1 class="govuk-fieldset__heading">
-              Choose how dates are displayed
-            </h1>
+        <%= f.hidden_field :availability_preference_fixed %>
 
-            <span id="choose-how-dates-are-displayed-hint" class="govuk-hint">
-              Select how you'd like to present school experience dates to candidates.
-            </span>
-          </legend>
+        <%= fieldset.radio_input true, 'aria-describedby': 'bookings-school-availability-preference-fixed-true-hint' %>
 
-          <%- if f.object.errors[:availability_preference_fixed].present? %>
-            <span class="govuk-error-message" id="bookings-school-availability-preference-fixed-error">
-              <span class="govuk-visually-hidden">
-                Error:
-              </span>
-              <%= f.object.errors[:availability_preference_fixed].first %>
-            </span>
-          <% end %>
+        <div id="bookings-school-availability-preference-fixed-true-hint" class="govuk-hint govuk-radios__hint preference-info">
+          You must enter specific school experience dates to start receiving requests from candidates
 
-          <%= f.hidden_field :availability_preference_fixed %>
+          <div class="govuk-inset-text">
+            <h3>Upcoming experience dates</h3>
 
-          <div class="govuk-radios">
-            <div class="govuk-radios__item">
-              <%= f.radio_button :availability_preference_fixed, true, class: "govuk-radios__input", aria: { describedby: 'bookings-school-availability-preference-fixed-true-hint' } %>
-              <%= f.label :availability_preference_fixed, 'Show specific dates', value: true, class: 'govuk-label govuk-radios__label govuk-!-font-weight-bold' %>
-              <div id="bookings-school-availability-preference-fixed-true-hint" class="govuk-hint govuk-radios__hint">
-                You must enter specific school experience dates to start receiving requests from candidates
-
-                <div class="govuk-inset-text">
-                  <h3>Upcoming experience dates</h3>
-
-                  <ul class="govuk-list">
-                    <%- example_future_dates.each do |fd| %>
-                      <li><%= fd.to_formatted_s(:govuk) %> (1 day)</li>
-                    <% end %>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="govuk-radios__item">
-              <%= f.radio_button :availability_preference_fixed, false, class: "govuk-radios__input", aria: { describedby: 'bookings-school-availability-preference-fixed-false-hint' } %>
-              <%= f.label :availability_preference_fixed, 'Show a description of when you can host candidates', value: false, class: 'govuk-label govuk-radios__label govuk-!-font-weight-bold' %>
-
-              <div id="bookings-school-availability-preference-fixed-false-hint" class="govuk-hint govuk-radios__hint">
-                For example, on set days of the week or at certain times of the year such as around exams, holidays and busy term times
-
-                <div class="govuk-inset-text">
-                  <h3>Experience availability</h3>
-
-                  <p>We offer career experience placements throughout the school year.</p>
-                </div>
-              </div>
-            </div>
+            <ul class="govuk-list">
+              <%- example_future_dates.each do |fd| %>
+                <li><%= fd.to_formatted_s(:govuk) %> (1 day)</li>
+              <% end %>
+            </ul>
           </div>
-        </fieldset>
-      </div>
-      <div class="govuk-form-group">
-        <%= f.submit 'Continue', class: 'govuk-button', data: { module: 'govuk-button' } %>
-      </div>
+        </div>
+
+        <%= fieldset.radio_input false, 'aria-describedby': 'bookings-school-availability-preference-fixed-false-hint'  %>
+
+        <div id="bookings-school-availability-preference-fixed-false-hint" class="govuk-hint govuk-radios__hint preference-info">
+          For example, on set days of the week or at certain times of the year such as around exams, holidays and busy term times
+
+          <div class="govuk-inset-text">
+            <h3>Experience availability</h3>
+
+            <p>We offer career experience placements throughout the school year.</p>
+          </div>
+        </div>
+
+      <% end %>
+      <%= f.submit 'Continue' %>
     <% end %>
   </div>
 </div>
