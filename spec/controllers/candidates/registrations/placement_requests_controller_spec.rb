@@ -76,7 +76,11 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
         shared_examples 'a successful create' do
           before do
-            allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
+            allow(Bookings::LogToGitisJob).to \
+              receive(:perform_later).and_return(true)
+
+            allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
+              receive(:perform_later).and_return(true)
 
             expect(fake_gitis).to receive(:create_entity) do |entity_id, _data|
               "#{entity_id}(#{fake_gitis_uuid})"
@@ -119,6 +123,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
                 uuid,
                 candidates_cancel_url(Bookings::PlacementRequest.last.token),
                 schools_placement_request_url(Bookings::PlacementRequest.last)
+          end
+
+          it 'enqueues an accept privacy policy job' do
+            expect(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
+              have_received(:perform_later).with \
+                fake_gitis_uuid,
+                Bookings::Gitis::PrivacyPolicy.default
           end
 
           it 'enqueues a log to gitis job' do
