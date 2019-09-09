@@ -23,6 +23,9 @@ module Bookings::Gitis
       class_attribute :select_attribute_names
       self.select_attribute_names = Set.new
 
+      class_attribute :association_attribute_names
+      self.association_attribute_names = Set.new
+
       class_attribute :create_blacklist
       self.create_blacklist = []
 
@@ -107,7 +110,7 @@ module Bookings::Gitis
       attrs.stringify_keys.each do |attr_name, value|
         if self.class.primary_key == attr_name ||
             (respond_to?(:"#{attr_name}=") &&
-            self.class.select_attribute_names.include?(attr_name))
+            self.class.all_attribute_names.include?(attr_name))
 
           send(:"#{attr_name}=", value)
         end
@@ -117,6 +120,10 @@ module Bookings::Gitis
     module ClassMethods
       def attributes_to_select
         self.select_attribute_names.to_a.join(',')
+      end
+
+      def all_attribute_names
+        select_attribute_names + association_attribute_names
       end
 
     protected
@@ -176,6 +183,7 @@ module Bookings::Gitis
       end
 
       def entity_association(attr_name, entity_type)
+        self.association_attribute_names << attr_name.to_s
         entity_attribute :"#{attr_name}@odata.bind", except: :select
 
         value_name = "_#{attr_name.downcase}_value"
@@ -185,7 +193,12 @@ module Bookings::Gitis
           send(:"#{attr_name}@odata.bind")&.gsub(/\A[^(]+\(([^)]+)\).*\z/, '\1')
         end
 
+        # updating just the associated entities id
         define_method :"#{value_name}=" do |id_value|
+          return if id_value == send(:"#{attr_name}@odata.bind")
+
+          instance_variable_set("@_#{attr_name}", nil)
+
           if id_value.nil?
             send :"#{attr_name}@odata.bind=", nil
           elsif ID_FORMAT.match?(id_value)
@@ -195,12 +208,23 @@ module Bookings::Gitis
           end
         end
 
+        # assigning data or class to associated entity
         define_method :"#{attr_name}=" do |entity_or_value|
-          if entity_or_value.is_a? Bookings::Gitis::Entity
+          case entity_or_value
+          when Bookings::Gitis::Entity
+            instance_variable_set "@_#{attr_name}", entity_or_value
             send :"#{attr_name}@odata.bind=", entity_or_value.entity_id
+          when Hash
+            entity = entity_type.new(entity_or_value)
+            instance_variable_set "@_#{attr_name}", entity
+            send :"#{attr_name}@odata.bind=", entity.entity_id
           else
             send :"#{value_name}=", entity_or_value
           end
+        end
+
+        define_method :"#{attr_name}" do
+          instance_variable_get "@_#{attr_name}"
         end
       end
     end

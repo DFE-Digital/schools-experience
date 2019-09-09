@@ -270,10 +270,12 @@ RSpec.describe Bookings::Gitis::Entity do
         end
       end
 
-      context "and assigned via attribute itself" do
-        before { subject.testassoc = e2.id }
+      context "and assigned via attribute with a hash" do
+        before { subject.testassoc = e2.attributes }
 
         it { is_expected.to have_attributes _testassoc_value: e2.id }
+        it { expect(subject.testassoc).to have_attributes id: e2.id }
+        it { expect(subject.testassoc).to have_attributes firstname: e2.firstname }
 
         it "is included in update attributes" do
           expect(subject.attributes_for_update).to \
@@ -281,16 +283,33 @@ RSpec.describe Bookings::Gitis::Entity do
         end
       end
 
-      context "and assigned via associating a class" do
-        before { subject.testassoc = e2.id }
+      context "and assigned via attribute with a class" do
+        before { subject.testassoc = e2 }
 
         it { is_expected.to have_attributes _testassoc_value: e2.id }
+        it { expect(subject.testassoc).to have_attributes id: e2.id }
+        it { expect(subject.testassoc).to have_attributes firstname: e2.firstname }
 
         it "is included in update attributes" do
           expect(subject.attributes_for_update).to \
             include('testassoc@odata.bind' => e2.entity_id)
         end
       end
+    end
+
+    context 'initializing with existing data' do
+      let(:teamid) { SecureRandom.uuid }
+      let(:testid) { SecureRandom.uuid }
+
+      subject do
+        TeamEntity.new teamentityid: teamid, title: 'HR', leader:
+          { testentityid: testid, firstname: 'John' }
+      end
+
+      it { is_expected.to have_attributes _leader_value: testid }
+      it { is_expected.to have_attributes title: 'HR' }
+      it { expect(subject.leader).to have_attributes testentityid: testid }
+      it { expect(subject.leader).to have_attributes firstname: 'John' }
     end
   end
 end
