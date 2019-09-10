@@ -228,7 +228,7 @@ end
 
 Then "the page should have the following summary list information:" do |table|
   table.raw.to_h.each do |key, value|
-    expect(page).to have_text %r{#{key} #{value}}
+    expect(page).to have_text %r{#{key} #{value}}, normalize_ws: true
   end
 end
 
@@ -354,6 +354,6 @@ end
 
 Then "I should see the accessability information I have entered" do
   within '#access-needs-statement' do
-    expect(page).to have_content "Disability and access needs details\nWe offer facilities and provide an inclusive environment for students,\r staff and school experience candidates with disability and access needs.\r \r We're happy to discuss your disability or access needs before or as part\r of your school experience request.\r\nAccess needs policy"
+    expect(page).to have_text "Disability and access needs details We offer facilities and provide an inclusive environment for students, staff and school experience candidates with disability and access needs. We're happy to discuss your disability or access needs before or as part of your school experience request. Access needs policy", normalize_ws: true
   end
 end
