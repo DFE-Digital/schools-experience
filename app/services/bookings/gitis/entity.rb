@@ -30,7 +30,9 @@ module Bookings::Gitis
       self.update_blacklist = []
     end
 
-    def initialize(*_args)
+    def initialize(attrs = {})
+      populate attrs
+
       reset_dirty_attributes if persisted?
     end
 
@@ -98,6 +100,19 @@ module Bookings::Gitis
     end
 
     class InvalidEntityIdError < RuntimeError; end
+
+  private
+
+    def populate(attrs)
+      attrs.stringify_keys.each do |attr_name, value|
+        if self.class.primary_key == attr_name ||
+            (respond_to?(:"#{attr_name}=") &&
+            self.class.select_attribute_names.include?(attr_name))
+
+          send(:"#{attr_name}=", value)
+        end
+      end
+    end
 
     module ClassMethods
       def attributes_to_select

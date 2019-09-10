@@ -34,42 +34,12 @@ module Bookings
       end
 
       def initialize(crm_contact_data = {})
-        @crm_data                             = crm_contact_data.stringify_keys
-        self.contactid                        = @crm_data['contactid']
-        self.firstname                        = @crm_data['firstname']
-        self.lastname                         = @crm_data['lastname']
-        self.emailaddress1                    = @crm_data['emailaddress1']
-        self.emailaddress2                    = @crm_data['emailaddress2']
-        self.telephone1                       = @crm_data['telephone1']
-        self.telephone2                       = @crm_data['telephone2']
-        self.address1_line1                   = @crm_data['address1_line1']
-        self.address1_line2                   = @crm_data['address1_line2']
-        self.address1_line3                   = @crm_data['address1_line3']
-        self.address1_city                    = @crm_data['address1_city']
-        self.address1_stateorprovince         = @crm_data['address1_stateorprovince']
-        self.address1_postalcode              = @crm_data['address1_postalcode']
-        self.address1_telephone1              = @crm_data['address1_telephone1']
-        self.birthdate                        = @crm_data['birthdate']
-        self.dfe_channelcreation              = @crm_data['dfe_channelcreation'] || self.class.channel_creation
-        self.dfe_hasdbscertificate            = @crm_data['dfe_hasdbscertificate']
-        self.dfe_dateofissueofdbscertificate  = @crm_data['dfe_dateofissueofdbscertificate']
-        self.dfe_notesforclassroomexperience  = @crm_data['dfe_notesforclassroomexperience']
-        self.dfe_Country                      = @crm_data['_dfe_countryid_value'] || Country.default
-        self.dfe_PreferredTeachingSubject01   = @crm_data['_dfe_preferredteachingsubject01_value']
-        self.dfe_PreferredTeachingSubject02   = @crm_data['_dfe_preferredteachingsubject02_value']
+        @crm_data = crm_contact_data.stringify_keys
 
-        super # handles resetting dirty attributes
+        super # handles populating
 
-        if @crm_data['emailaddress2'].blank? && @crm_data['emailaddress1'].present?
-          self.emailaddress2 = @crm_data['emailaddress1']
-        end
-
-        if @crm_data['telephone2'].blank?
-          self.telephone2 = @crm_data['mobilephone'].presence || \
-            @crm_data['address1_telephone1'].presence || \
-            @crm_data['telephone1'].presence || \
-            self.telephone2
-        end
+        set_email_address_2_if_blank
+        set_telephone_2_if_blank @crm_data
       end
 
       def created_by_us?
@@ -157,6 +127,30 @@ module Bookings
         end
 
         self.dfe_notesforclassroomexperience = "#{dfe_notesforclassroomexperience}#{log_line}\r\n"
+      end
+
+    private
+
+      def populate(attrs)
+        super
+
+        self.dfe_channelcreation  = self.class.channel_creation unless dfe_channelcreation.present?
+        self.dfe_Country          = Country.default unless _dfe_country_value.present?
+      end
+
+      def set_email_address_2_if_blank
+        return if emailaddress2.present? || emailaddress1.blank?
+
+        self.emailaddress2 = emailaddress1
+      end
+
+      def set_telephone_2_if_blank(data = {})
+        return if telephone2.present?
+
+        self.telephone2 = data['mobilephone'].presence || \
+          data['address1_telephone1'].presence || \
+          data['telephone1'].presence || \
+          telephone2
       end
     end
   end

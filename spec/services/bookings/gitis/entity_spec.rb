@@ -15,7 +15,7 @@ RSpec.describe Bookings::Gitis::Entity do
   describe "#attributes" do
     it do
       expect(subject.send(:attributes)).to \
-        eq('firstname' => 'test', 'lastname' => 'user', 'testentityid' => nil)
+        eq('firstname' => 'test', 'lastname' => 'user')
     end
   end
 
