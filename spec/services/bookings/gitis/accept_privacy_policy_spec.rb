@@ -17,6 +17,25 @@ describe Bookings::Gitis::AcceptPrivacyPolicy do
     it { is_expected.to have_attributes(policy_id: policy_id) }
   end
 
+  describe '#contact' do
+    before do
+      allow(fake_gitis).to receive(:find).and_call_original
+    end
+
+    let(:servicemodel) { described_class.new(fake_gitis, contact.id, policy_id) }
+    subject! { servicemodel.contact }
+
+    it { is_expected.to be_kind_of Bookings::Gitis::Contact }
+    it { is_expected.to have_attributes(contactid: contact.id) }
+
+    it "will also retrieve accepted policies" do
+      expect(fake_gitis).to \
+        have_received(:find).with contact.id, hash_including(
+          includes: :dfe_contact_dfe_candidateprivacypolicy_Candidate
+        )
+    end
+  end
+
   describe '#build' do
     before { freeze_time }
 
@@ -34,25 +53,66 @@ describe Bookings::Gitis::AcceptPrivacyPolicy do
   end
 
   describe '#accept!' do
-    before do
-      allow(fake_gitis).to \
-        receive(:create_entity).
-        and_return("#{cpp_entity_path}(#{candidate_pp_id})")
+    context 'without existing acceptance' do
+      before do
+        allow(fake_gitis).to \
+          receive(:create_entity).
+          and_return("#{cpp_entity_path}(#{candidate_pp_id})")
 
-      freeze_time
+        freeze_time
+      end
+
+      subject! { described_class.new(fake_gitis, contact.id, policy_id).accept! }
+
+      it "will write to gitis" do
+        expect(fake_gitis).to have_received(:create_entity).with \
+          cpp_entity_path,
+          'dfe_name' => /school experience/,
+          'dfe_consentreceivedby' => consent_id,
+          'dfe_meanofconsent' => consent_id,
+          'dfe_timeofconsent' => Time.now.utc.iso8601,
+          'dfe_Candidate@odata.bind' => contact.entity_id,
+          'dfe_PrivacyPolicyNumber@odata.bind' => "#{pp_entity_path}(#{policy_id})"
+      end
     end
 
-    subject! { described_class.new(fake_gitis, contact.id, policy_id).accept! }
+    context 'with existing acceptance' do
+      let(:policy_data) do
+        {
+          'dfe_candidateprivacypolicyid' => candidate_pp_id,
+          'dfe_name' => 'Privacy Policy v9',
+          'dfe_consentreceivedby' => consent_id,
+          'dfe_meanofconsent' => consent_id,
+          'dfe_timeofconsent' => Time.now.utc.iso8601,
+          '_dfe_privacypolicynumber_value' => policy_id
+        }
+      end
 
-    it "will write to gitis" do
-      expect(fake_gitis).to have_received(:create_entity).with \
-        cpp_entity_path,
-        'dfe_name' => /school experience/,
-        'dfe_consentreceivedby' => consent_id,
-        'dfe_meanofconsent' => consent_id,
-        'dfe_timeofconsent' => Time.now.utc.iso8601,
-        'dfe_Candidate@odata.bind' => contact.entity_id,
-        'dfe_PrivacyPolicyNumber@odata.bind' => "#{pp_entity_path}(#{policy_id})"
+      let(:contact) do
+        build :gitis_contact, :persisted,
+          dfe_contact_dfe_candidateprivacypolicy_Candidate: [policy_data]
+      end
+
+      before do
+        allow(fake_gitis).to \
+          receive(:find).
+          with(contact.id, includes: :dfe_contact_dfe_candidateprivacypolicy_Candidate).
+          and_return(contact)
+
+        allow(fake_gitis).to receive(:create_entity).and_call_original
+
+        freeze_time
+      end
+
+      subject! { described_class.new(fake_gitis, contact.id, policy_id).accept! }
+
+      it "will return id of existing policy" do
+        is_expected.to be candidate_pp_id
+      end
+
+      it "will write to gitis" do
+        expect(fake_gitis).not_to have_received(:create_entity)
+      end
     end
   end
 end
