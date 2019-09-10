@@ -189,7 +189,7 @@ module Bookings::Gitis
         value_name = "_#{attr_name.downcase}_value"
         self.select_attribute_names << value_name
 
-        define_method value_name.to_sym do
+        define_method :"#{value_name}" do
           send(:"#{attr_name}@odata.bind")&.gsub(/\A[^(]+\(([^)]+)\).*\z/, '\1')
         end
 
@@ -225,6 +225,29 @@ module Bookings::Gitis
 
         define_method :"#{attr_name}" do
           instance_variable_get "@_#{attr_name}"
+        end
+      end
+
+      def entity_collection(attr_name, entity_type)
+        self.association_attribute_names << attr_name.to_s
+
+        define_method :"#{attr_name}" do
+          instance_variable_get("@_#{attr_name}")
+        end
+
+        define_method :"#{attr_name}=" do |entities|
+          entities = Array.wrap(entities).map do |entity|
+            case entity
+            when Bookings::Gitis::Entity
+              entity
+            when Hash
+              entity_type.new(entity)
+            else
+              raise "Invalid data type"
+            end
+          end
+
+          instance_variable_set("@_#{attr_name}", entities)
         end
       end
     end

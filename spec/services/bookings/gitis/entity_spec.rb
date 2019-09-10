@@ -312,4 +312,51 @@ RSpec.describe Bookings::Gitis::Entity do
       it { expect(subject.leader).to have_attributes firstname: 'John' }
     end
   end
+
+  describe '.entity_collection' do
+    class TeamEntity
+      include Bookings::Gitis::Entity
+
+      entity_attribute :name
+      entity_collection :players, TestEntity
+    end
+
+    context 'initializing with data' do
+      let(:player1) { SecureRandom.uuid }
+      let(:player2) { SecureRandom.uuid }
+      let(:player3) { SecureRandom.uuid }
+
+      let(:crmdata) do
+        {
+          'name' => 'Manchester Sevens',
+          'players' => [
+            { 'testentityid' => player1, 'firstname' => 'Jane' },
+            { 'testentityid' => player2, 'firstname' => 'John' },
+            { 'testentityid' => player3, 'firstname' => 'Joe' }
+          ]
+        }
+      end
+
+      subject { TeamEntity.new(crmdata) }
+
+      it { is_expected.to have_attributes name: 'Manchester Sevens' }
+      it { expect(subject.players).to have_attributes length: 3 }
+      it { expect(subject.players).to all be_kind_of TestEntity }
+
+      it do
+        expect(subject.players[0]).to have_attributes \
+          testentityid: player1, firstname: 'Jane'
+      end
+
+      it do
+        expect(subject.players[1]).to have_attributes \
+          testentityid: player2, firstname: 'John'
+      end
+
+      it do
+        expect(subject.players[2]).to have_attributes \
+          testentityid: player3, firstname: 'Joe'
+      end
+    end
+  end
 end
