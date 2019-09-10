@@ -30,5 +30,5 @@ Feature: Editing placement dates
         Given I am on the 'availability preferences' page
         When I choose "Show a description of when you can host candidates" from the "Choose how dates are displayed" radio buttons
         And I submit the form
-        Then I should be on the 'schools dashboard' page
+        Then I should be on the 'availability information' page
         And my school's availability preference should be 'fixed'
