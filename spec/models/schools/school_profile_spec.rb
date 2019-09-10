@@ -474,6 +474,27 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
+    context '#access_needs_support' do
+      let :form_model do
+        FactoryBot.build :access_needs_support
+      end
+
+      before do
+        model.access_needs_support = form_model
+      end
+
+      %i(supports_access_needs).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("access_needs_support_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.access_needs_support).to eq form_model
+      end
+    end
+
     context '#experience_outline' do
       let :form_model do
         FactoryBot.build :experience_outline

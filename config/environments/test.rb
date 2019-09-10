@@ -70,7 +70,11 @@ Rails.application.configure do
   config.x.notify_client = NotifyFakeClient
 
   config.x.phase = 10000
-  config.x.features = %i(subject_specific_dates dbs_requirement candidate_requirement_ab_test)
+  config.x.features = %i(
+    subject_specific_dates
+    candidate_requirement_ab_test
+    access_needs_journey
+  )
 
   config.x.base_url = 'https://some-host'
   config.x.oidc_client_id = 'se-test'

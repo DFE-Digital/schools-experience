@@ -20,6 +20,7 @@ Feature: School Profile
         | Subjects                         |                           |
         | Description                      |                           |
         | Candidate experience details     |                           |
+        | Access needs support             |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
 
