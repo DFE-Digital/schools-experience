@@ -197,7 +197,9 @@ module Bookings::Gitis
         define_method :"#{value_name}=" do |id_value|
           return if id_value == send(:"#{attr_name}@odata.bind")
 
-          instance_variable_set("@_#{attr_name}", nil)
+          if send(attr_name)&.id != id_value
+            instance_variable_set("@_#{attr_name}", nil)
+          end
 
           if id_value.nil?
             send :"#{attr_name}@odata.bind=", nil

@@ -302,8 +302,11 @@ RSpec.describe Bookings::Gitis::Entity do
       let(:testid) { SecureRandom.uuid }
 
       subject do
-        CompanyEntity.new teamentityid: companyid, title: 'HR', leader:
-          { testentityid: testid, firstname: 'John' }
+        CompanyEntity.new \
+          'teamentityid' => companyid,
+          'title' => 'HR',
+          'leader' => { 'testentityid' => testid, 'firstname' => 'John' },
+          '_leader_value' => testid
       end
 
       it { is_expected.to have_attributes _leader_value: testid }
