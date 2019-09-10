@@ -298,11 +298,11 @@ RSpec.describe Bookings::Gitis::Entity do
     end
 
     context 'initializing with existing data' do
-      let(:teamid) { SecureRandom.uuid }
+      let(:companyid) { SecureRandom.uuid }
       let(:testid) { SecureRandom.uuid }
 
       subject do
-        TeamEntity.new teamentityid: teamid, title: 'HR', leader:
+        CompanyEntity.new teamentityid: companyid, title: 'HR', leader:
           { testentityid: testid, firstname: 'John' }
       end
 

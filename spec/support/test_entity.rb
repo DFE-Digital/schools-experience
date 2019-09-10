@@ -9,7 +9,7 @@ shared_context 'test entity' do
     entity_attributes :notupdate, except: :update
   end
 
-  class TeamEntity
+  class CompanyEntity
     include Bookings::Gitis::Entity
 
     entity_id_attribute :teamentityid

@@ -70,12 +70,12 @@ describe Bookings::Gitis::CRM, type: :model do
     context 'with includes' do
       include_context 'test entity'
 
-      let(:teamid) { SecureRandom.uuid }
+      let(:companyid) { SecureRandom.uuid }
       let(:testentityid) { SecureRandom.uuid }
 
       let(:response) do
         {
-          'teamentityid' => teamid,
+          'teamentityid' => companyid,
           'title' => 'Human Resources',
           'leader' => {
             'testentityid' => testentityid,
@@ -86,16 +86,16 @@ describe Bookings::Gitis::CRM, type: :model do
 
       before { allow(gitis.send(:api)).to receive(:get).and_return(response) }
 
-      subject! { gitis.find(teamid, entity_type: TeamEntity, includes: :leader) }
+      subject! { gitis.find(companyid, entity_type: CompanyEntity, includes: :leader) }
 
       it "will query for the team" do
         expect(gitis.send(:api)).to have_received(:get).with \
-          "#{TeamEntity.entity_path}(#{teamid})",
+          "#{CompanyEntity.entity_path}(#{companyid})",
           hash_including('$expand' => 'leader')
       end
 
       it "will populate the team entity" do
-        is_expected.to have_attributes(id: teamid, title: 'Human Resources')
+        is_expected.to have_attributes(id: companyid, title: 'Human Resources')
       end
 
       it "will populate the associated leader entity" do
