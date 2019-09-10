@@ -20,9 +20,14 @@ module Bookings
         params = { '$top' => uuids.length }
 
         expand = Array.wrap(includes).map(&:to_s).join(',')
-        params['$expand'] = expand if expand.present?
 
-        crmlog "READING Contacts #{uuids.inspect}"
+        if expand.present?
+          params['$expand'] = expand
+          crmlog "READING #{entity_type} #{uuids.inspect} with #{expand}"
+        else
+          crmlog "READING #{entity_type} #{uuids.inspect}"
+        end
+
         if multiple_ids
           find_many(entity_type, uuids, params)
         else

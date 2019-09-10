@@ -10,7 +10,7 @@ module Bookings
       end
 
       def accept!
-        match ? match.id : @crm.write(build)
+        match ? match.id : create!
       end
 
       def contact
@@ -40,6 +40,10 @@ module Bookings
 
       def existing
         contact.dfe_contact_dfe_candidateprivacypolicy_Candidate || []
+      end
+
+      def create!
+        @crm.write build
       end
     end
   end
