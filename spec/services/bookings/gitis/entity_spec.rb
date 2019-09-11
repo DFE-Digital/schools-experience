@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe Bookings::Gitis::Entity do
   include_context 'test entity'
 
+  let(:uuid) { SecureRandom.uuid }
+  let(:expected_attrs) { %w{testentityid firstname lastname notcreate notupdate} }
   subject { TestEntity.new('firstname' => 'test', 'lastname' => 'user') }
-
-  let(:expected_attrs) { %w{firstname lastname hidden notcreate notupdate} }
 
   it { is_expected.to have_attributes entity_path: 'testentities' }
   it { is_expected.to have_attributes primary_key: 'testentityid' }
@@ -14,14 +14,29 @@ RSpec.describe Bookings::Gitis::Entity do
 
   describe "#attributes" do
     it do
-      expect(subject.send(:attributes)).to \
-        eq('firstname' => 'test', 'lastname' => 'user')
+      expect(subject.attributes).to eq(
+        'testentityid' => nil,
+        'firstname' => 'test',
+        'lastname' => 'user',
+        'notcreate' =>  nil,
+        'notupdate' => nil
+      )
     end
   end
 
   describe "#reset" do
     before { subject.reset }
-    it { expect(subject.send(:attributes)).to eq({}) }
+    it { expect(subject.changed).to be_empty }
+
+    it "will set attributes back to original values" do
+      expect(subject.attributes).to eql(
+        'testentityid' => nil,
+        'firstname' => nil,
+        'lastname' => nil,
+        'notcreate' => nil,
+        'notupdate' => nil
+      )
+    end
   end
 
   describe '#persisted?' do
@@ -36,17 +51,16 @@ RSpec.describe Bookings::Gitis::Entity do
     end
   end
 
-  describe "#changed_attributes" do
+  describe "#changed" do
     context 'for unpersisted object' do
       it "will use dirty tracking to return modified attributes since last reset" do
-        expect(subject.changed_attributes).to \
-          eq('firstname' => 'test', 'lastname' => 'user')
+        expect(subject.changed).to eq(%w{firstname lastname})
 
-        subject.reset_dirty_attributes
-        expect(subject.changed_attributes).to eq({})
+        subject.reset
+        expect(subject.changed).to be_empty
 
         subject.lastname = 'changed'
-        expect(subject.changed_attributes).to eq('lastname' => 'changed')
+        expect(subject.changed).to eq(%w{lastname})
       end
     end
 
@@ -60,21 +74,20 @@ RSpec.describe Bookings::Gitis::Entity do
       end
 
       it "will not have any changed attributes" do
-        expect(subject.changed_attributes).to eq({})
+        expect(subject.changed).to be_empty
       end
 
       context 'with changed name' do
         before { subject.firstname = 'Changed' }
 
         it "will include name" do
-          expect(subject.changed_attributes).to eq('firstname' => 'Changed')
+          expect(subject.changed).to eq(%w{firstname})
         end
       end
     end
   end
 
   describe "#entity_id" do
-    let(:uuid) { SecureRandom.uuid }
     before { subject.id = uuid }
 
     it "will include uuid and entity_path" do
@@ -83,8 +96,6 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe "#entity_id=" do
-    let(:uuid) { SecureRandom.uuid }
-
     context "with expected format" do
       before { subject.entity_id = "testentities(#{uuid})" }
 
@@ -109,7 +120,7 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe "#attributes_for_create" do
-    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+    let(:entity) { TestEntity.new('testentityid' => uuid, 'firstname' => 'test', 'lastname' => 'user') }
     subject { entity.attributes_for_create }
 
     it { is_expected.not_to include('testentityid') }
@@ -119,7 +130,7 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe "#attributes_for_update" do
-    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+    let(:entity) { TestEntity.new('testentityid' => uuid, 'firstname' => 'test', 'lastname' => 'user') }
     subject { entity.attributes_for_update }
 
     it { is_expected.not_to include('testentityid') }
@@ -129,7 +140,7 @@ RSpec.describe Bookings::Gitis::Entity do
 
     context 'with changes' do
       let(:entity) do
-        TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user').tap do |entity|
+        TestEntity.new('testentityid' => uuid, 'firstname' => 'test', 'lastname' => 'user').tap do |entity|
           entity.firstname = 'changed'
           entity.lastname = 'changed'
         end
@@ -143,23 +154,27 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe '#==' do
-    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+    let(:entity) { TestEntity.new('testentityid' => uuid, 'firstname' => 'test', 'lastname' => 'user') }
 
     context 'with matching id' do
-      let(:e2) { TestEntity.new('testentityid' => 10, 'firstname' => 'x', 'lastname' => 'y') }
+      let(:e2) { TestEntity.new('testentityid' => uuid, 'firstname' => 'x', 'lastname' => 'y') }
       it { expect(entity == e2).to be true }
     end
 
     context 'with matching attributes but different id' do
-      let(:e2) { TestEntity.new('testentityid' => 1, 'firstname' => 'test', 'lastname' => 'user') }
+      let(:e2) { TestEntity.new('testentityid' => SecureRandom.uuid, 'firstname' => 'test', 'lastname' => 'user') }
       it { expect(entity == e2).to be false }
     end
   end
 
   describe "private attributes" do
-    it { expect(TestEntity.select_attribute_names).to include('hidden') }
-    it { expect(TestEntity.respond_to?('hidden')).to be false }
-    it { expect(TestEntity.respond_to?('hidden=')).to be false }
+    class TestInternal < TestEntity
+      entity_attribute :hidden, internal: true
+    end
+
+    it { expect(TestInternal.select_attribute_names).to include('hidden') }
+    it { expect(TestInternal.respond_to?('hidden')).to be false }
+    it { expect(TestInternal.respond_to?('hidden=')).to be false }
   end
 
   describe "exclude: :create attributes" do
@@ -185,14 +200,6 @@ RSpec.describe Bookings::Gitis::Entity do
       entity_id_attribute :associatedid
       entity_attribute :description
       entity_association :testassoc, TestEntity
-
-      def initialize(crmdata = {})
-        self.associatedid = crmdata['associatedid']
-        self.description = crmdata['description']
-        self._testassoc_value = crmdata['_testassoc_value']
-
-        super
-      end
     end
 
     context 'with new instance' do
@@ -271,7 +278,7 @@ RSpec.describe Bookings::Gitis::Entity do
       end
 
       context "and assigned via attribute with a hash" do
-        before { subject.testassoc = e2.attributes }
+        before { subject.testassoc = e2.attributes.merge(e2.primary_key => e2.id) }
 
         it { is_expected.to have_attributes _testassoc_value: e2.id }
         it { expect(subject.testassoc).to have_attributes id: e2.id }
