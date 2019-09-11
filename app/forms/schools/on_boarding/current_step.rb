@@ -39,6 +39,8 @@ module Schools
           :candidate_experience_detail
         elsif access_needs_support_required?
           :access_needs_support
+        elsif access_needs_detail_required?
+          :access_needs_detail
         elsif experience_outline_required?
           :experience_outline
         elsif admin_contact_required?
@@ -135,6 +137,12 @@ module Schools
         return false unless Feature.instance.active? :access_needs_journey
 
         @school_profile.access_needs_support.dup.invalid?
+      end
+
+      def access_needs_detail_required?
+        return false unless Feature.instance.active? :access_needs_journey
+
+        @school_profile.access_needs_detail.dup.invalid?
       end
 
       def experience_outline_required?

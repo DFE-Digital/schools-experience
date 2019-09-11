@@ -23,6 +23,7 @@ Feature: Preview profile
             | Description                      |                           |
             | Candidate experience details     |                           |
             | Access needs support             |                           |
+            | Access needs detail              |                           |
             | Experience Outline               |                           |
             | Admin contact                    |                           |
         When I click the 'Continue' button

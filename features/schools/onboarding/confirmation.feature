@@ -20,6 +20,7 @@ Feature: Publishing Profile
             | Subjects                         |                           |
             | Description                      |                           |
             | Access needs support             |                           |
+            | Access needs detail              |                           |
             | Candidate experience details     |                           |
             | Experience Outline               |                           |
             | Admin contact                    |                           |

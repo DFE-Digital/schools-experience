@@ -61,7 +61,7 @@ describe Schools::OnBoarding::AccessNeedsSupportsController, type: :request do
       end
     end
 
-    context 'vaild' do
+    context 'valid' do
       let :access_needs_support do
         build :access_needs_support
       end
@@ -73,7 +73,7 @@ describe Schools::OnBoarding::AccessNeedsSupportsController, type: :request do
 
       it 'redirects to the next_step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_experience_outline_path
+          new_schools_on_boarding_access_needs_detail_path
       end
     end
   end
