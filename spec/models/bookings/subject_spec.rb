@@ -48,8 +48,28 @@ RSpec.describe Bookings::Subject, type: :model do
 
       subject { described_class.available.to_a }
 
-      it { is_expected.to include(visible) }
-      it { is_expected.not_to include(hidden) }
+      it 'should include non-hidden subjects' do
+        is_expected.to include(visible)
+      end
+
+      it 'should not include hidden subjects' do
+        is_expected.not_to include(hidden)
+      end
+    end
+
+    describe '.secondary' do
+      let!(:secondary) { create(:bookings_subject, secondary_subject: true) }
+      let!(:primary) { create(:bookings_subject, secondary_subject: false) }
+
+      subject { described_class.secondary_subjects.to_a }
+
+      it 'should include secondary subjects' do
+        is_expected.to include(secondary)
+      end
+
+      it 'should not include non-secondary subjects' do
+        is_expected.not_to include(primary)
+      end
     end
   end
 end
