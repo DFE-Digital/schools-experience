@@ -44,6 +44,7 @@ gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
 gem 'delayed_job_active_record'
+gem 'delayed_cron_job'
 gem 'delayed_job_web'
 
 gem "redis", "~> 4.1"
@@ -53,7 +54,6 @@ gem 'slack-notifier'
 
 gem 'dotenv-rails'
 
-gem "font-awesome-rails"
 gem 'kaminari'
 
 gem 'phonelib'

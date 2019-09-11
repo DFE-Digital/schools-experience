@@ -12,9 +12,12 @@ module Schools
     end
 
     def update
-      bookings = unlogged_bookings.where(id: bookings_params.keys)
+      bookings = unlogged_bookings.where(id: bookings_params.keys). \
+        includes(bookings_placement_request: :candidate)
+      attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
 
-      if Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params).save
+      if attendance.save
+        attendance.update_gitis
         redirect_to schools_dashboard_path
       end
     end
@@ -32,6 +35,7 @@ module Schools
         .bookings
         .previous
         .attendance_unlogged
+        .accepted
         .eager_load(
           :bookings_placement_request,
           :bookings_subject,

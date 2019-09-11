@@ -16,16 +16,15 @@ $govuk-grid-widths: (
   full: 100%
 );
 
-@import "font-awesome" ;
 @import "../../../node_modules/govuk-frontend/all" ;
 @import "global-styles" ;
+@import "cookie-banner" ;
 @import "form-extensions" ;
 @import "school-search" ;
 @import "pagination" ;
 @import "application-preview" ;
 @import "placement-preference" ;
 @import "subject-preference" ;
-@import "splash-screen" ;
 @import "stimulus/*" ;
 @import "testing-fixes" ;
 @import "school-placement-requests" ;

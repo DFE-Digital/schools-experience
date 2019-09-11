@@ -1,42 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::Gitis::Entity do
-  class Stub
-    include Bookings::Gitis::Entity
+  include_context 'test entity'
 
-    entity_id_attribute :stubid
-    entity_attributes :firstname, :lastname
+  subject { TestEntity.new('firstname' => 'test', 'lastname' => 'user') }
 
-    def initialize(data = {})
-      self.stubid = data['stubid']
-      self.firstname = data['firstname']
-      self.lastname = data['lastname']
+  let(:expected_attrs) { %w{firstname lastname hidden notcreate notupdate} }
 
-      super
-    end
-  end
-
-  subject { Stub.new('firstname' => 'test', 'lastname' => 'user') }
-
-  describe ".entity_path" do
-    subject { Stub.entity_path }
-    it { is_expected.to eq('stubs') }
-  end
-
-  describe ".primary_key" do
-    subject { Stub.primary_key }
-    it { is_expected.to eq('stubid') }
-  end
-
-  describe ".entity_attribute_names" do
-    subject { Stub.entity_attribute_names }
-    it { is_expected.to eq Set.new %w{firstname lastname} }
-  end
+  it { is_expected.to have_attributes entity_path: 'testentities' }
+  it { is_expected.to have_attributes primary_key: 'testentityid' }
+  it { is_expected.to have_attributes select_attribute_names: Set.new(expected_attrs) }
+  it { is_expected.to have_attributes attributes_to_select: expected_attrs.join(',') }
 
   describe "#attributes" do
     it do
       expect(subject.send(:attributes)).to \
-        eq('firstname' => 'test', 'lastname' => 'user', 'stubid' => nil)
+        eq('firstname' => 'test', 'lastname' => 'user')
     end
   end
 
@@ -47,12 +26,12 @@ RSpec.describe Bookings::Gitis::Entity do
 
   describe '#persisted?' do
     context 'with persisted?' do
-      subject { Stub.new('stubid' => SecureRandom.uuid) }
+      subject { TestEntity.new('testentityid' => SecureRandom.uuid) }
       it { is_expected.to be_persisted }
     end
 
     context 'with unpersisted?' do
-      subject { Stub.new('firstname' => 'test') }
+      subject { TestEntity.new('firstname' => 'test') }
       it { is_expected.not_to be_persisted }
     end
   end
@@ -73,8 +52,8 @@ RSpec.describe Bookings::Gitis::Entity do
 
     context 'for persisted object' do
       subject do
-        Stub.new(
-          'stubid' => SecureRandom.uuid,
+        TestEntity.new(
+          'testentityid' => SecureRandom.uuid,
           'firstname' => 'Test',
           'lastname' => 'User'
         )
@@ -99,7 +78,7 @@ RSpec.describe Bookings::Gitis::Entity do
     before { subject.id = uuid }
 
     it "will include uuid and entity_path" do
-      expect(subject).to have_attributes('entity_id' => "stubs(#{uuid})")
+      expect(subject).to have_attributes('entity_id' => "testentities(#{uuid})")
     end
   end
 
@@ -107,7 +86,7 @@ RSpec.describe Bookings::Gitis::Entity do
     let(:uuid) { SecureRandom.uuid }
 
     context "with expected format" do
-      before { subject.entity_id = "stubs(#{uuid})" }
+      before { subject.entity_id = "testentities(#{uuid})" }
 
       it "will set the id" do
         expect(subject.id).to eq(uuid)
@@ -130,36 +109,188 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe "#attributes_for_create" do
-    let(:stub) { Stub.new('stubid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
-    subject { stub.attributes_for_create }
+    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+    subject { entity.attributes_for_create }
 
-    it { is_expected.not_to include('stubid') }
+    it { is_expected.not_to include('testentityid') }
     it { is_expected.not_to include('id') }
     it { is_expected.to include('firstname' => 'test') }
     it { is_expected.to include('lastname' => 'user') }
   end
 
   describe "#attributes_for_update" do
-    let(:stub) { Stub.new('stubid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
-    subject { stub.attributes_for_update }
+    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+    subject { entity.attributes_for_update }
 
-    it { is_expected.not_to include('stubid') }
+    it { is_expected.not_to include('testentityid') }
     it { is_expected.not_to include('id') }
     it { is_expected.not_to include('firstname' => 'test') }
     it { is_expected.not_to include('lastname' => 'user') }
 
     context 'with changes' do
-      let(:stub) do
-        Stub.new('stubid' => 10, 'firstname' => 'test', 'lastname' => 'user').tap do |stub|
-          stub.firstname = 'changed'
-          stub.lastname = 'changed'
+      let(:entity) do
+        TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user').tap do |entity|
+          entity.firstname = 'changed'
+          entity.lastname = 'changed'
         end
       end
 
-      it { is_expected.not_to include('stubid') }
+      it { is_expected.not_to include('testentityid') }
       it { is_expected.not_to include('id') }
       it { is_expected.to include('firstname' => 'changed') }
       it { is_expected.to include('lastname' => 'changed') }
+    end
+  end
+
+  describe '#==' do
+    let(:entity) { TestEntity.new('testentityid' => 10, 'firstname' => 'test', 'lastname' => 'user') }
+
+    context 'with matching id' do
+      let(:e2) { TestEntity.new('testentityid' => 10, 'firstname' => 'x', 'lastname' => 'y') }
+      it { expect(entity == e2).to be true }
+    end
+
+    context 'with matching attributes but different id' do
+      let(:e2) { TestEntity.new('testentityid' => 1, 'firstname' => 'test', 'lastname' => 'user') }
+      it { expect(entity == e2).to be false }
+    end
+  end
+
+  describe "private attributes" do
+    it { expect(TestEntity.select_attribute_names).to include('hidden') }
+    it { expect(TestEntity.respond_to?('hidden')).to be false }
+    it { expect(TestEntity.respond_to?('hidden=')).to be false }
+  end
+
+  describe "exclude: :create attributes" do
+    subject { TestEntity.new.tap { |s| s.notcreate = 'test' } }
+    it { expect(subject.attributes_for_create).not_to include('notcreate' => 'test') }
+    it { expect(subject.attributes_for_update).to include('notcreate' => 'test') }
+  end
+
+  describe "exclude: :update attributes" do
+    subject { TestEntity.new.tap { |s| s.notupdate = 'test' } }
+    it { expect(subject.attributes_for_create).to include('notupdate' => 'test') }
+    it { expect(subject.attributes_for_update).not_to include('notupdate' => 'test') }
+  end
+
+  describe '.entity_association' do
+    let(:testentity) do
+      TestEntity.new('testentityid' => SecureRandom.uuid, 'firstname' => 'test')
+    end
+
+    class Associated
+      include Bookings::Gitis::Entity
+
+      entity_id_attribute :associatedid
+      entity_attribute :description
+      entity_association :testassoc, TestEntity
+
+      def initialize(crmdata = {})
+        self.associatedid = crmdata['associatedid']
+        self.description = crmdata['description']
+        self._testassoc_value = crmdata['_testassoc_value']
+
+        super
+      end
+    end
+
+    context 'with new instance' do
+      subject { Associated.new('description' => 'test') }
+
+      it { is_expected.to have_attributes _testassoc_value: nil }
+
+      it "is excluded from attributes_for_create" do
+        expect(subject.attributes_for_create).not_to \
+          include('testassoc@odata.bind')
+      end
+
+      context "and assigned via value variant" do
+        before { subject._testassoc_value = testentity.id }
+
+        it { is_expected.to have_attributes _testassoc_value: testentity.id }
+
+        it "is included in create attributes" do
+          expect(subject.attributes_for_create).to \
+            include('testassoc@odata.bind' => testentity.entity_id)
+        end
+      end
+
+      context "and assigned via attribute itself" do
+        before { subject.testassoc = testentity.id }
+
+        it { is_expected.to have_attributes _testassoc_value: testentity.id }
+
+        it "is included in create attributes" do
+          expect(subject.attributes_for_create).to \
+            include('testassoc@odata.bind' => testentity.entity_id)
+        end
+      end
+
+      context "and assigned via associating a class" do
+        before { subject.testassoc = testentity }
+
+        it { is_expected.to have_attributes _testassoc_value: testentity.id }
+
+        it "is included in create attributes" do
+          expect(subject.attributes_for_create).to \
+            include('testassoc@odata.bind' => testentity.entity_id)
+        end
+      end
+    end
+
+    context 'with existing instance' do
+      let(:e2) do
+        TestEntity.new('testentityid' => SecureRandom.uuid, 'firstname' => 'second')
+      end
+
+      subject do
+        Associated.new(
+          'associatedid' => SecureRandom.uuid,
+          'description' => 'test',
+          '_testassoc_value' => testentity.id
+        )
+      end
+
+      it { is_expected.to have_attributes _testassoc_value: testentity.id }
+
+      it "is excluded from attributes_for_update" do
+        expect(subject.attributes_for_update).not_to \
+          include('testassoc@odata.bind')
+      end
+
+      context "and assigned via value variant" do
+        before { subject._testassoc_value = e2.id }
+
+        it { is_expected.to have_attributes _testassoc_value: e2.id }
+
+        it "is included in update attributes" do
+          expect(subject.attributes_for_update).to \
+            include('testassoc@odata.bind' => e2.entity_id)
+        end
+      end
+
+      context "and assigned via attribute itself" do
+        before { subject.testassoc = e2.id }
+
+        it { is_expected.to have_attributes _testassoc_value: e2.id }
+
+        it "is included in update attributes" do
+          expect(subject.attributes_for_update).to \
+            include('testassoc@odata.bind' => e2.entity_id)
+        end
+      end
+
+      context "and assigned via associating a class" do
+        before { subject.testassoc = e2.id }
+
+        it { is_expected.to have_attributes _testassoc_value: e2.id }
+
+        it "is included in update attributes" do
+          expect(subject.attributes_for_update).to \
+            include('testassoc@odata.bind' => e2.entity_id)
+        end
+      end
     end
   end
 end

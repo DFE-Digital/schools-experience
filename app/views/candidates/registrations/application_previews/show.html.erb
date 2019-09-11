@@ -1,7 +1,9 @@
 <% self.page_title = 'Check your answers' %>
 
 <div class="govuk-grid-row" id="application-preview">
-  <%= form_for @privacy_policy, url: candidates_school_registrations_confirmation_email_path do |f| %>
+  <%= form_for @privacy_policy,
+        url: candidates_school_registrations_confirmation_email_path,
+        html: { onsubmit: 'preventDoubleClick(this)' } do |f| %>
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>A copy of the following details will be emailed to you once you've sent your school experience request.</p>
@@ -10,19 +12,27 @@
 
       <h2 class="govuk-heading-m">Personal details</h2>
 
-      <%= summary_row \
-        'Full name',
-        @application_preview.full_name,
-        edit_candidates_school_registrations_personal_information_path(
-          anchor: 'candidates_registrations_personal_information_first_name_container'
-        ) %>
+      <%- if @application_preview.read_only -%>
 
-      <%= summary_row \
-        'Date of birth',
-        @application_preview.date_of_birth,
-        edit_candidates_school_registrations_personal_information_path(
-          anchor: 'candidates_registrations_personal_information_date_of_birth_container'
-        ) %>
+        <%= summary_row 'Full name', @application_preview.full_name %>
+        <%= summary_row 'Date of birth', @application_preview.date_of_birth %>
+
+      <%- else -%>
+
+        <%= summary_row \
+          'Full name',
+          @application_preview.full_name,
+          edit_candidates_school_registrations_personal_information_path(
+            anchor: 'candidates_registrations_personal_information_first_name_container'
+          ) %>
+
+        <%= summary_row \
+          'Date of birth',
+          @application_preview.date_of_birth,
+          edit_candidates_school_registrations_personal_information_path(
+            anchor: 'candidates_registrations_personal_information_date_of_birth_container'
+          ) %>
+      <% end %>
 
       <%= summary_row \
         'Address',
@@ -38,7 +48,7 @@
           anchor: 'candidates_registrations_contact_information_phone_container'
         ) %>
 
-      <%- if @application_preview.read_only_email -%>
+      <%- if @application_preview.read_only -%>
         <%= summary_row 'Email address', @application_preview.email_address %>
       <%- else -%>
         <%= summary_row \
@@ -131,7 +141,11 @@
       <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
         <%= f.check_box_input :acceptance %>
       </div>
-      <%= f.submit 'Accept and send', class: 'govuk-button' %>
+      <% if gitis_integration? && candidate_signed_in? %>
+        <%= f.submit 'Accept and send', class: 'govuk-button' %>
+      <% else %>
+        <%= f.submit 'Continue', class: 'govuk-button' %>
+      <% end %>
   </div>
   <% end %>
 </div>

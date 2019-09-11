@@ -23,6 +23,11 @@ module Bookings
       gitis_contact.county = contact_information.county
       gitis_contact.postcode = contact_information.postcode
 
+      gitis_contact.has_dbs_check = background_check.has_dbs_check
+
+      gitis_contact.dfe_PreferredTeachingSubject01 = find_teaching_subjects['dfe_teachingsubject01']
+      gitis_contact.dfe_PreferredTeachingSubject02 = find_teaching_subjects['dfe_teachingsubject02']
+
       gitis_contact
     end
 
@@ -41,9 +46,57 @@ module Bookings
       {
         'first_name'    => gitis_contact.first_name,
         'last_name'     => gitis_contact.last_name,
-        'email'         => gitis_contact.email,
+        'email'         => gitis_contact.email&.strip,
         'date_of_birth' => gitis_contact.date_of_birth
       }
+    end
+
+    def contact_to_background_check
+      {
+        'has_dbs_check' => gitis_contact.has_dbs_check
+      }
+    end
+
+    def contact_to_teaching_preference
+      {
+        'subject_first_choice' =>
+          subject_from_gitis_uuid(gitis_contact._dfe_preferredteachingsubject01_value),
+        'subject_second_choice' =>
+          subject_from_gitis_uuid(gitis_contact._dfe_preferredteachingsubject02_value)
+      }
+    end
+
+  private
+
+    def find_teaching_subjects
+      @find_teaching_subjects ||= begin
+        subjects = Bookings::Subject.where(name: [
+          teaching_preference.subject_first_choice,
+          teaching_preference.subject_second_choice
+        ]).index_by(&:name)
+
+        {
+          'dfe_teachingsubject01' =>
+            subjects[teaching_preference.subject_first_choice]&.gitis_uuid,
+          'dfe_teachingsubject02' =>
+            subjects[teaching_preference.subject_second_choice]&.gitis_uuid
+        }
+      end
+    end
+
+    def subject_from_gitis_uuid(uuid)
+      return nil unless uuid.present?
+
+      @subjects_from_gitis_uuids ||= begin
+        uuids = [
+          gitis_contact._dfe_preferredteachingsubject01_value,
+          gitis_contact._dfe_preferredteachingsubject02_value
+        ].map(&:presence).compact
+
+        Bookings::Subject.where(gitis_uuid: uuids).index_by(&:gitis_uuid)
+      end
+
+      @subjects_from_gitis_uuids[uuid]&.name
     end
   end
 end

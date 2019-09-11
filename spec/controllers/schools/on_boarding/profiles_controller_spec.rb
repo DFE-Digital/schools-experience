@@ -17,7 +17,7 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
 
       it 'redirects to the first incompleted step' do
         expect(response).to \
-          redirect_to '/schools/on_boarding/candidate_requirement/new'
+          redirect_to '/schools/on_boarding/dbs_requirement/new'
       end
     end
 
@@ -33,8 +33,6 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
       it 'assigns the instance variable' do
         expect(assigns(:profile)).to \
           eq Schools::OnBoarding::SchoolProfilePresenter.new(school_profile)
-        expect(assigns(:confirmation)).to \
-          eq Schools::OnBoarding::Confirmation.new
       end
 
       it 'renders the show template' do

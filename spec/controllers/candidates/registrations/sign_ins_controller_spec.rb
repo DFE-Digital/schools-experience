@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   include ActiveJob::TestHelper
   let(:school_id) { 11048 }
-  include_context 'Stubbed current_registration'
   include_context 'fake gitis with known uuid'
 
   let :registration_session do
@@ -20,6 +19,8 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   end
 
   describe 'GET #show' do
+    include_context 'Stubbed current_registration'
+
     before { get candidates_school_registrations_sign_in_path(school_id) }
 
     it "should return HTTP success" do
@@ -32,6 +33,8 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     let(:personal_info) { registration_session.personal_information }
 
     context 'with valid token' do
+      include_context 'Stubbed current_registration'
+
       before do
         get candidates_registration_verify_path(school_id, token)
       end
@@ -44,13 +47,11 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       it "will have confirmed candidate" do
         expect(token.candidate.reload).to be_confirmed
       end
-
-      it "will have marked the email address read only" do
-        expect(personal_info).to have_attributes read_only_email: true
-      end
     end
 
     context 'with invalid token' do
+      include_context 'Stubbed current_registration'
+
       before do
         expect(Candidates::Session).to receive(:signin!).and_return(nil)
         get candidates_registration_verify_path(school_id, token)
@@ -59,13 +60,10 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       it "will show error screen" do
         expect(response).to have_http_status(:success)
       end
-
-      it "will not have marked the email address read only" do
-        expect(personal_info).to have_attributes read_only_email: false
-      end
     end
 
     context 'when already signed in' do
+      include_context 'Stubbed current_registration'
       include_context 'candidate signin'
 
       before do
@@ -80,9 +78,26 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
           redirect_to new_candidates_school_registrations_contact_information_path(school_id)
       end
     end
+
+    context 'when having swapped device' do
+      before do
+        get candidates_registration_verify_path(school_id, token)
+      end
+
+      it "will redirect_to ContactInformation step" do
+        expect(response).to \
+          redirect_to new_candidates_school_registrations_contact_information_path(school_id)
+      end
+
+      it "will have confirmed candidate" do
+        expect(token.candidate.reload).to be_confirmed
+      end
+    end
   end
 
   describe 'POST #create' do
+    include_context 'Stubbed current_registration'
+
     before do
       NotifyFakeClient.reset_deliveries!
       allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)

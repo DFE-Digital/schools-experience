@@ -1,48 +1,34 @@
-<% self.page_title = 'Find school experience' %>
+<% self.page_title = 'Search for school experience' %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      Search for school experience
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
     <div id="search-form">
-      <%= form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">
-              Find school experience
-            </h1>
-          </legend>
 
-          <p class="govuk-hint">
-            Search by location or postcode
-          </p>
+      <%= form_for(@search,
+        as: '',
+        url: candidates_schools_path,
+        method: :get,
+        html: { class: 'school-search-form' }) do |f| %>
 
-          <div class="govuk-grid-row school-search-form">
-            <div class="school-search-form__location-field"
-                  data-controller="grab-location">
+          <%= f.search_field :location, required: true, minlength: "3" %>
 
-              <%= f.search_field :location,
-                    placeholder: 'Such as Manchester, M1 3BD',
-                    required: true,
-                    minlength: "3",
-                    data: {
-                      action: "focus->grab-location#clearLocationInfo",
-                      target: "grab-location.location"
-                    } %>
-              <%= f.hidden_field :latitude, data: { target: 'grab-location.latitude' } %>
-              <%= f.hidden_field :longitude, data: { target: 'grab-location.longitude' } %>
-            </div>
+          <%= f.collection_select :distance,
+                Candidates::SchoolSearch.distances, :first, :last %>
 
-            <div class="school-search-form__distance-field">
-              <%= f.collection_select :distance,
-                    Candidates::SchoolSearch.distances, :first, :last %>
-            </div>
-
-            <div class="school-search-form__submit">
-              <div class="govuk-form-group">
-                <%= f.submit 'Find', name: nil %>
-              </div>
+          <div class="school-search-form__submit">
+            <div class="govuk-form-group">
+              <%= f.submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
             </div>
           </div>
-        </fieldset>
+
       <% end %>
     </div>
   </div>

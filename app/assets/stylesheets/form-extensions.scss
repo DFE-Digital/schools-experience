@@ -1,6 +1,12 @@
 .inline-fields {
   display: block;
 
+  legend.govuk-fieldset__legend {
+    span.govuk-label {
+      margin-bottom: 0;
+    }
+  }
+
   .govuk-form-group {
     display: inline-block;
     margin-right: 0.4em;
@@ -10,6 +16,7 @@
       @extend .govuk-label;
       display: inline-block;
       @include govuk-responsive-margin(3, "right");
+      margin-bottom: 0;
     }
 
     input, select {
@@ -20,6 +27,25 @@
   input[type=submit].govuk-button {
     margin-bottom: 0;
     width: auto;
+  }
+
+  .govuk-radios {
+    display: flex;
+    align-items: center;
+    legend {
+      margin-right: 1rem;
+      margin-bottom: 0;
+      font-weight: bold;
+      span {
+        @extend .govuk-label;
+      }
+    }
+  }
+}
+
+.govuk-fieldset.inline {
+  .govuk-radios__item {
+    display: inline-block;
   }
 }
 

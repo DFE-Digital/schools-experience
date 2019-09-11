@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     end
     resource :switch, only: %i(new), controller: 'switch'
     resource :dashboard, only: :show
+    resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
     if Rails.application.config.x.phase >= 4
@@ -75,7 +76,12 @@ Rails.application.routes.draw do
 
     resource :availability_preference, only: %i(edit update)
     resource :availability_info, only: %i(edit update), controller: 'availability_info'
-    resources :placement_dates
+    resources :placement_dates do
+      if Feature.instance.active? :subject_specific_dates
+        resource :configuration, only: %i(new create), controller: 'placement_dates/configurations'
+        resource :subject_selection, only: %i(new create), controller: 'placement_dates/subject_selections'
+      end
+    end
 
     namespace :errors do
       resource :not_registered, controller: :not_registered, only: :show
@@ -84,7 +90,10 @@ Rails.application.routes.draw do
     end
 
     namespace :on_boarding do
+      resource :dbs_requirement, only: %i(new create edit update)
       resource :candidate_requirement, only: %i(new create edit update)
+      resource :candidate_requirements_choice, only: %i(new create edit update)
+      resource :candidate_requirements_selection, only: %i(new create edit update)
       resource :fees, only: %i(new create edit update)
       resource :administration_fee, only: %i(new create)
       resource :dbs_fee, only: %i(new create)
@@ -94,9 +103,13 @@ Rails.application.routes.draw do
       resource :subjects, only: %i(new create edit update)
       resource :description, only: %i(new create edit update)
       resource :candidate_experience_detail, only: %i(new create edit update)
+      if Feature.instance.active? :access_needs_journey
+        resource :access_needs_support, only: %i(new create)
+      end
       resource :experience_outline, only: %i(new create edit update)
       resource :admin_contact, only: %i(new create edit update)
       resource :profile, only: :show
+      resource :preview, only: :show
       resource :confirmation, only: %i(create show)
     end
 

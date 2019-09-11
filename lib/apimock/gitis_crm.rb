@@ -294,13 +294,13 @@ module Apimock
         'address1_city' => "Manchester",
         'address1_stateorprovince' => "",
         'address1_postalcode' => "MA1 1AM",
-        'statecode' => 0,
+        'address1_telephone1' => "01234567890",
         'dfe_channelcreation' => 222750021
       }
     end
 
     def contact_attributes
-      Bookings::Gitis::Contact.entity_attribute_names.to_a.join(',')
+      Bookings::Gitis::Contact.attributes_to_select
     end
   end
 end

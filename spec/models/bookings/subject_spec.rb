@@ -35,5 +35,21 @@ RSpec.describe Bookings::Subject, type: :model do
           .source(:bookings_school)
       )
     end
+
+    specify do
+      is_expected.to have_many(:placement_date_subjects).dependent(:destroy)
+    end
+  end
+
+  describe "Scopes" do
+    describe '.available' do
+      let!(:visible) { create(:bookings_subject, hidden: false) }
+      let!(:hidden) { create(:bookings_subject, hidden: true) }
+
+      subject { described_class.available.to_a }
+
+      it { is_expected.to include(visible) }
+      it { is_expected.not_to include(hidden) }
+    end
   end
 end

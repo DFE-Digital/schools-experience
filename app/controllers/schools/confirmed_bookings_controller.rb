@@ -3,6 +3,9 @@ module Schools
     def index
       @bookings = current_school
         .bookings
+        .not_cancelled
+        .attendance_unlogged
+        .accepted
         .eager_load(:bookings_subject, bookings_placement_request: :candidate)
         .order(date: :asc)
         .page(params[:page])

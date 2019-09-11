@@ -20,3 +20,7 @@ Given("I fill in the {string} date field with an invalid date of 31st September 
   year = Date.today.year + 1
   step "I fill in the date field '#{label}' with 31-09-#{year}"
 end
+
+Then "I should be on the new configuration page for this date" do
+  expect(page.current_path).to eq path_for 'new configuration', placement_date_id: Bookings::PlacementDate.last.id
+end

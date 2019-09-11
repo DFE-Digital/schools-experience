@@ -29,7 +29,11 @@
       <%= f.hidden_field :administration_fees %>
 
       <%= f.radio_button_fieldset :administration_fees, choices: [true, false] %>
-      <%= f.radio_button_fieldset :dbs_fees, choices: [true, false] %>
+      <% if requires_dbs_check %>
+        <%= f.radio_button_fieldset :dbs_fees, choices: [true, false] %>
+      <% else %>
+        <%= f.hidden_field :dbs_fees, value: false %>
+      <% end %>
       <%= f.radio_button_fieldset :other_fees, choices: [true, false] %>
       <%= f.submit 'Continue' %>
     <% end %>

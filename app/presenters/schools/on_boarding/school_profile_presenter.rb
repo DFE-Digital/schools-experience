@@ -32,7 +32,7 @@ module Schools
       end
 
       def school_email
-        @school.notifications_email
+        @school.notification_emails.join ', '
       end
 
       def fees
@@ -57,24 +57,33 @@ module Schools
         end
       end
 
-      def dbs_check_required
-        case @school_profile.candidate_requirement.dbs_requirement
-        when 'always'
-          'Yes - Always'
-        when 'sometimes'
-          'Yes - Sometimes. ' + @school_profile.candidate_requirement.dbs_policy
-        when 'never'
-          'No - Candidates will be accompanied at all times'
+      def dbs_check
+        unless [true, false].include? @school_profile.dbs_requirement.requires_check
+          fail "DBS requirement not set #{@school_profile.inspect}"
+        end
+
+        if @school_profile.dbs_requirement.requires_check
+          [
+            'Yes',
+            @school_profile.dbs_requirement.dbs_policy_details
+          ].compact.join(' - ')
         else
-          fail "Unknown dbs_requirement profile: #{@school_profile.inspect}"
+          [
+            'No - Candidates will be accompanied at all times',
+            @school_profile.dbs_requirement.no_dbs_policy_details
+          ].compact.join(' - ')
         end
       end
 
+      def show_candidate_requirements_selection?
+        @school_profile.show_candidate_requirements_selection?
+      end
+
       def individual_requirements
-        if @school_profile.candidate_requirement.requirements
-          'Yes - ' + @school_profile.candidate_requirement.requirements_details
+        if @school_profile.show_candidate_requirements_selection?
+          candidate_requirements_selection
         else
-          'No'
+          candidate_requirements
         end
       end
 
@@ -216,11 +225,27 @@ module Schools
         @school_profile.admin_contact.email
       end
 
+      def admin_contact_email_secondary
+        @school_profile.admin_contact.email_secondary
+      end
+
       def flexible_dates?
         @school_profile.flexible_dates?
       end
 
     private
+
+      def candidate_requirements
+        if @school_profile.candidate_requirement.requirements
+          'Yes - ' + @school_profile.candidate_requirement.requirements_details
+        else
+          'No'
+        end
+      end
+
+      def candidate_requirements_selection
+        CandidateRequirementsSelectionPresenter.new(@school_profile.attributes).to_s
+      end
 
       def description_for_fee(fee)
         amount = number_to_currency fee.amount_pounds, unit: '£', raise: true

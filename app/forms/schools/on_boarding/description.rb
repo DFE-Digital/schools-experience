@@ -1,9 +1,6 @@
 module Schools
   module OnBoarding
-    class Description
-      include ActiveModel::Model
-      include ActiveModel::Attributes
-
+    class Description < Step
       attribute :details, :string
 
       # We want to allow blank values so school admins aren't forced to complete
@@ -14,10 +11,6 @@ module Schools
 
       def self.compose(details)
         new details: details
-      end
-
-      def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
       end
     end
   end

@@ -56,7 +56,7 @@ Given("I have filled in my placement preferences successfully") do
   if @fixed_dates
     choose @wanted_bookings_placement_date
   else
-    fill_in 'Is there anything schools need to know about your availability for school experience?', with: 'Only free from Epiphany to Whitsunday'
+    fill_in 'Tell us about your availability', with: 'Only free from Epiphany to Whitsunday'
   end
   fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
   click_button 'Continue'
@@ -82,7 +82,7 @@ Given("my school has fixed dates") do
   @fixed_dates = true
   @school.update_attributes(availability_preference_fixed: true)
   (1..3).each { |i| i.weeks.from_now }.each do |date|
-    @school.bookings_placement_dates.create(date: date.weeks.from_now)
+    @school.bookings_placement_dates.create(date: date.weeks.from_now, published_at: 1.week.ago)
     @wanted_bookings_placement_date = @school.bookings_placement_dates.last.to_s
   end
   # do nothing, it's the default

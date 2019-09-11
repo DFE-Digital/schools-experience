@@ -4,11 +4,40 @@ FactoryBot.define do
       sp.bookings_school = Bookings::School.find_by(urn: 123456) || create(:bookings_school, urn: 123456)
     end
 
+    trait :with_dbs_requirement do
+      after :build do |profile|
+        profile.dbs_requirement = FactoryBot.build :dbs_requirement
+      end
+    end
+
     trait :with_candidate_requirement do
       candidate_requirement_dbs_requirement { 'sometimes' }
       candidate_requirement_dbs_policy { 'Super secure' }
       candidate_requirement_requirements { true }
       candidate_requirement_requirements_details { 'Gotta go fast' }
+    end
+
+    trait :with_candidate_requirements_choice do
+      after :build do |profile|
+        profile.candidate_requirements_choice = \
+          FactoryBot.build :candidate_requirements_choice
+      end
+    end
+
+    trait :without_candidate_requirements_choice do
+      after :build do |profile|
+        profile.candidate_requirements_choice = \
+          FactoryBot.build :candidate_requirements_choice,
+            has_requirements: false
+      end
+    end
+
+    trait :with_candidate_requirements_selection do
+      candidate_requirements_selection_step_completed { true }
+      after :build do |profile|
+        profile.candidate_requirements_selection = \
+          FactoryBot.build :candidate_requirements_selection
+      end
     end
 
     trait :with_fees do
@@ -22,6 +51,7 @@ FactoryBot.define do
       administration_fee_description { 'General administration' }
       administration_fee_interval { 'Daily' }
       administration_fee_payment_method { 'Travelers Cheques' }
+      administration_fee_step_completed { true }
     end
 
     trait :with_dbs_fee do
@@ -29,6 +59,7 @@ FactoryBot.define do
       dbs_fee_description { 'DBS check' }
       dbs_fee_interval { 'One-off' }
       dbs_fee_payment_method { 'Ethereum' }
+      dbs_fee_step_completed { true }
     end
 
     trait :with_other_fee do
@@ -36,6 +67,7 @@ FactoryBot.define do
       other_fee_description { 'Owl repellent / other protective gear' }
       other_fee_interval { 'One-off' }
       other_fee_payment_method { 'Stamps' }
+      other_fee_step_completed { true }
     end
 
     trait :with_phases do
@@ -94,6 +126,19 @@ FactoryBot.define do
       end
     end
 
+    trait :with_access_needs_support do
+      after :build do |profile|
+        profile.access_needs_support = FactoryBot.build :access_needs_support
+      end
+    end
+
+    trait :without_access_needs_support do
+      after :build do |profile|
+        profile.access_needs_support = \
+          FactoryBot.build :access_needs_support, supports_access_needs: false
+      end
+    end
+
     trait :with_experience_outline do
       after :build do |profile|
         profile.experience_outline = FactoryBot.build :experience_outline
@@ -107,6 +152,8 @@ FactoryBot.define do
     end
 
     trait :completed do
+      with_dbs_requirement
+      without_candidate_requirements_choice
       with_candidate_requirement
       with_fees
       with_administration_fee
@@ -118,6 +165,7 @@ FactoryBot.define do
       with_subjects
       with_description
       with_candidate_experience_detail
+      with_access_needs_support
       with_experience_outline
       with_admin_contact
     end

@@ -7,7 +7,7 @@ Feature: Verify your email
         Given my school of choice exists
         And I have completed the Personal Information step for my school of choice
         And I am on the 'Verify your email' page for my school of choice
-        Then the page's main header should be 'Verify your email'
+        Then the page's main header should be 'We already have your details'
         And I should see an email was sent to my email address
 
     Scenario: Confirming the Eamil

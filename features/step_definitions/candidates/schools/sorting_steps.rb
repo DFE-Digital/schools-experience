@@ -74,12 +74,15 @@ Then("the results should be sorted by name, lowest to highest") do
 end
 
 Given("I have changed the sort order to {string}") do |sort_by|
-  select(sort_by, from: 'Sorted by')
+  within find('fieldset', text: 'Sorted by') do
+    choose sort_by
+  end
   delay_page_load
 end
 
 Given("the sort order has defaulted to {string}") do |string|
-  expect(page.find("select#order").value).to eql(string.downcase)
+  selected_radio = page.find :xpath, %Q(.//input[@value="#{string.downcase}"])
+  expect(selected_radio).to be_checked
 end
 
 Then("the distance should be ordered from low to high") do

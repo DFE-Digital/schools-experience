@@ -72,7 +72,7 @@ Then("I should see the entire school address in the sidebar") do
     @school.town,
     @school.county,
     @school.postcode
-  ].each do |address_part|
+  ].compact.each do |address_part|
     within(".govuk-grid-column-one-third") do
       within("#school-address") do
         expect(page).to have_content(address_part)
@@ -182,9 +182,12 @@ Given("there are some available dates in the future") do
   end
 end
 
-Then("the DBS Check information in the sidebar should read {string}") do |string|
+Then("the DBS Check information in the sidebar should show the correct details") do
   within("#dbs-check-info") do
-    expect(page).to have_css('dd', text: string)
+    within 'dd' do
+      expect(page).to have_css 'p', text: 'Yes'
+      expect(page).to have_css 'p', text: 'Must have recent dbs check'
+    end
   end
 end
 

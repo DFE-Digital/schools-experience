@@ -51,6 +51,7 @@ module Bookings
     scope :unbooked, -> do
       left_joins(:booking)
         .where(bookings_bookings: { bookings_placement_request_id: nil })
+        .or(left_joins(:booking).where(bookings_bookings: { accepted_at: nil }))
     end
 
     scope :cancelled, -> do
@@ -138,11 +139,15 @@ module Bookings
     end
 
     def school_email
-      school.notifications_email
+      school.notification_emails
     end
 
     def school_name
       school.name
+    end
+
+    def school_urn
+      school.urn
     end
 
     def candidate_email

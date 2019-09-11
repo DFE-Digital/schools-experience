@@ -8,8 +8,8 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     it { is_expected.to respond_to :first_name }
     it { is_expected.to respond_to :last_name }
     it { is_expected.to respond_to :email }
-    it { is_expected.to respond_to :read_only_email }
-    it { is_expected.to have_attributes read_only_email: false }
+    it { is_expected.to respond_to :read_only }
+    it { is_expected.to have_attributes read_only: false }
   end
 
   context 'validations' do
@@ -174,8 +174,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
 
     context 'with unvalidate emails' do
       subject do
-        build(:personal_information, email: 'first@test.com',
-          read_only_email: false)
+        build(:personal_information, email: 'first@test.com', read_only: false)
       end
 
       it { is_expected.to have_attributes email: 'second@test.com' }
@@ -183,8 +182,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
 
     context 'with validated emails' do
       subject do
-        build(:personal_information, email: 'first@test.com',
-          read_only_email: true)
+        build(:personal_information, email: 'first@test.com', read_only: true)
       end
 
       it { is_expected.to have_attributes email: 'first@test.com' }

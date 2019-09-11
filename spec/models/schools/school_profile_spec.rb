@@ -8,6 +8,21 @@ describe Schools::SchoolProfile, type: :model do
 
     it do
       is_expected.to \
+        have_db_column(:dbs_requirement_requires_check).of_type :boolean
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:dbs_requirement_dbs_policy_details).of_type :text
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:dbs_requirement_no_dbs_policy_details).of_type :text
+    end
+
+    it do
+      is_expected.to \
         have_db_column(:candidate_requirement_dbs_requirement).of_type :string
     end
 
@@ -170,12 +185,28 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:admin_contact_email).of_type :string
+      is_expected.to have_db_column(:admin_contact_email_secondary).of_type :string
     end
 
     it do
       is_expected.to \
         have_db_column(:confirmation_acceptance).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:show_candidate_requirements_selection).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:candidate_requirements_choice_has_requirements).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:candidate_requirements_selection_step_completed)
+          .of_type(:boolean).with_options(default: false)
     end
   end
 
@@ -222,6 +253,30 @@ describe Schools::SchoolProfile, type: :model do
       described_class.new bookings_school: bookings_school
     end
 
+    context '#dbs_requirement' do
+      let :form_model do
+        FactoryBot.build :dbs_requirement
+      end
+
+      before do
+        model.dbs_requirement = form_model
+      end
+
+      {
+        dbs_requirement_requires_check: :requires_check,
+        dbs_requirement_dbs_policy_details: :dbs_policy_details,
+        dbs_requirement_no_dbs_policy_details: :no_dbs_policy_details
+      }.each_pair do |column, model_attribute|
+        it "is expected to map #{column} to #{model_attribute}" do
+          expect(model.send(column)).to eq form_model.send(model_attribute)
+        end
+      end
+
+      it 'returns the form_model' do
+        expect(model.dbs_requirement).to eq_model form_model
+      end
+    end
+
     context '#candidate_requirement' do
       let :form_model do
         FactoryBot.build :candidate_requirement
@@ -229,16 +284,6 @@ describe Schools::SchoolProfile, type: :model do
 
       before do
         model.candidate_requirement = form_model
-      end
-
-      it 'sets candidate_requirement_dbs_requirement' do
-        expect(model.candidate_requirement_dbs_requirement).to eq \
-          form_model.dbs_requirement
-      end
-
-      it 'sets candidate_requirement_dbs_policy' do
-        expect(model.candidate_requirement_dbs_policy).to eq \
-          form_model.dbs_policy
       end
 
       it 'sets candidate_requirement_requirements' do
@@ -429,6 +474,27 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
+    context '#access_needs_support' do
+      let :form_model do
+        FactoryBot.build :access_needs_support
+      end
+
+      before do
+        model.access_needs_support = form_model
+      end
+
+      %i(supports_access_needs).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("access_needs_support_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.access_needs_support).to eq form_model
+      end
+    end
+
     context '#experience_outline' do
       let :form_model do
         FactoryBot.build :experience_outline
@@ -464,7 +530,7 @@ describe Schools::SchoolProfile, type: :model do
         model.admin_contact = form_model
       end
 
-      %i(phone email).each do |attribute|
+      %i(phone email email_secondary).each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("admin_contact_#{attribute}")).to \
             eq form_model.send attribute
@@ -568,6 +634,28 @@ describe Schools::SchoolProfile, type: :model do
 
         it 'removes subjects' do
           expect(school_profile.reload.subjects).to be_empty
+        end
+      end
+
+      context 'when school no longer has candidate requirements' do
+        let :school_profile do
+          FactoryBot.create :school_profile, :with_candidate_requirements_choice,
+            :with_candidate_requirements_selection
+        end
+
+        let :candidate_requirements_choice do
+          FactoryBot.build :candidate_requirements_choice,
+            has_requirements: false
+        end
+
+        before do
+          school_profile.update! \
+            candidate_requirements_choice: candidate_requirements_choice
+        end
+
+        it 'removes subjects' do
+          expect(school_profile.reload.candidate_requirements_selection).to \
+            eq Schools::OnBoarding::CandidateRequirementsSelection.new
         end
       end
     end
