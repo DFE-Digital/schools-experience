@@ -61,7 +61,7 @@ describe Schools::OnBoarding::AccessNeedsSupportsController, type: :request do
       end
     end
 
-    context 'vaild' do
+    context 'valid' do
       let :access_needs_support do
         build :access_needs_support
       end
