@@ -33,4 +33,4 @@ Request details
 
 If you haven’t heard from the school after 2 weeks email our School Experience Support Team at schoolexperience@ta-recruit.education.gov.uk.
 
-If you'd like to withdraw your school experience request use the the following link ((cancellation_url)).
+If you'd like to withdraw your school experience request use the following link ((cancellation_url)).

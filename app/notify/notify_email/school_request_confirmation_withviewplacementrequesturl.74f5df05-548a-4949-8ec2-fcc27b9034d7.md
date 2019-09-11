@@ -32,9 +32,9 @@ Accept or reject their request
 
 View the request – ((placement_request_url))
 
-The candidate is aware you may be in touch to discuss their request
+The candidate is aware you may be in touch to discuss their request.
 ---
 
 # Help and support
 
-If you’ve got any any feedback, questions or would like to take part in user testing email us with your URN at organise.school-experience@education.gov.uk.
+If you’ve got any feedback, questions or would like to take part in user testing email us with your URN at organise.school-experience@education.gov.uk.
