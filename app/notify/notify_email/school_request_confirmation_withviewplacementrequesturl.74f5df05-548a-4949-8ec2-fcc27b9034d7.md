@@ -17,9 +17,9 @@ Request details:
 
 * School or college: ((school_name))
 * Availability/preferred dates: ((placement_availability))
-* Experience outcome: ((placement_outcome))
-* Experience subject – first choice: ((candidate_teaching_subject_first_choice))
-* Experience subject – second choice: ((candidate_teaching_subject_second_choice))
+* What they want to get out of school experience: ((placement_outcome))
+* Teaching subject – first choice: ((candidate_teaching_subject_first_choice))
+* Teaching subject – second choice: ((candidate_teaching_subject_second_choice))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))
 * Teaching stage (multiple choice): ((candidate_teaching_stage))
