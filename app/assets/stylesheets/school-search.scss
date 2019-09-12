@@ -112,4 +112,8 @@
   }
 }
 
-
+#skip-to-results{
+  &:focus {
+    margin-bottom: 10px !important;
+  }
+}
