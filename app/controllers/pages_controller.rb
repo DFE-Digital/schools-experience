@@ -3,10 +3,6 @@ class PagesController < ApplicationController
     render template: sanitise_page
   end
 
-  def healthcheck
-    render plain: 'healthy'
-  end
-
   def privacy_policy; end
 
   def schools_privacy_policy; end
