@@ -19,7 +19,7 @@ Request details
 
 * School or college: ((school_name))
 * Availability/preferred dates: ((placement_availability))
-* Experience outcome: ((placement_outcome))
+* What you want to get out of school experience: ((placement_outcome))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))
 * Teaching stage: ((candidate_teaching_stage))
