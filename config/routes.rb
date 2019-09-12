@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  get "/healthcheck.txt", to: "healthchecks#show", as: :healthcheck
+  get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
+  get '/deployment.txt', to: 'healthchecks#deployment', as: :deployment
 
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'

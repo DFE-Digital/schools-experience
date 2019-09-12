@@ -27,4 +27,41 @@ describe HealthchecksController, type: :request do
       end
     end
   end
+
+  describe '#deployment' do
+    context "with auth" do
+      let(:username) { Rails.application.config.x.healthchecks.username }
+      let(:password) { Rails.application.config.x.healthchecks.password }
+      let(:encoded) do
+        ActionController::HttpAuthentication::Basic.
+          encode_credentials(username, password)
+      end
+
+      context "with DEPLOYMENT_ID set" do
+        before do
+          allow(ENV).to \
+            receive(:fetch).with('DEPLOYMENT_ID').and_return('1997-08-29')
+
+          get deployment_path, headers: { "Authorization" => encoded }
+        end
+
+        it { expect(response).to have_http_status(:success) }
+        it { expect(response).to have_attributes body: '1997-08-29' }
+      end
+
+      context 'without DEPLOYMENT_ID set' do
+        before do
+          get deployment_path, headers: { "Authorization" => encoded }
+        end
+
+        it { expect(response).to have_http_status(:success) }
+        it { expect(response).to have_attributes body: 'not set' }
+      end
+    end
+
+    context 'without auth' do
+      before { get deployment_path }
+      it { expect(response).to have_http_status(:unauthorized) }
+    end
+  end
 end
