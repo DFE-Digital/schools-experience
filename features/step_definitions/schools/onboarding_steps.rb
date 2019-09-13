@@ -212,7 +212,7 @@ end
 
 Then "the page should have the following summary list information:" do |table|
   table.raw.to_h.each do |key, value|
-    expect(page).to have_text %r{#{key} #{value}}
+    expect(page).to have_text %r{#{key} #{value}}, normalize_ws: true
   end
 end
 
