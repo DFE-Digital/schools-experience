@@ -10,7 +10,7 @@ module Bookings
         @endpoint = endpoint
       end
 
-      def find(uuids, entity_type: Contact)
+      def find(uuids, entity_type: Contact, includes: nil)
         multiple_ids = uuids.is_a?(Array)
 
         uuids = normalise_ids(uuids)
@@ -19,7 +19,15 @@ module Bookings
         # ensure we can't accidentally pull too much data
         params = { '$top' => uuids.length }
 
-        crmlog "READING Contacts #{uuids.inspect}"
+        expand = Array.wrap(includes).map(&:to_s).join(',')
+
+        if expand.present?
+          params['$expand'] = expand
+          crmlog "READING #{entity_type} #{uuids.inspect} with #{expand}"
+        else
+          crmlog "READING #{entity_type} #{uuids.inspect}"
+        end
+
         if multiple_ids
           find_many(entity_type, uuids, params)
         else
@@ -146,7 +154,6 @@ module Bookings
 
       def find_one(entity_type, uuid, params)
         params['$select'] ||= entity_type.attributes_to_select
-
         entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
       end
 

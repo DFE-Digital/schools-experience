@@ -1,8 +1,7 @@
 require 'rails_helper'
 require 'csv'
-require File.join(Rails.root, "lib", "data", "school_manager")
 
-describe SchoolManager do
+describe Bookings::Data::SchoolManager do
   let(:urns) do
     [100111, 100112, 100113]
   end

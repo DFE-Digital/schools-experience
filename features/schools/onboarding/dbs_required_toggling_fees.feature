@@ -31,6 +31,7 @@ Feature: Dbs required toggling available fees
         | Subjects                         |                           |
         | Description                      |                           |
         | Access needs support             |                           |
+        | Access needs detail              |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
@@ -52,6 +53,7 @@ Feature: Dbs required toggling available fees
         | Subjects                         |                           |
         | Description                      |                           |
         | Access needs support             |                           |
+        | Access needs detail              |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |

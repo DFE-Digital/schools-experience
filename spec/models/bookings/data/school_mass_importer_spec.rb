@@ -1,8 +1,7 @@
 require 'rails_helper'
 require 'csv'
-require File.join(Rails.root, "lib", "data", "school_mass_importer")
 
-describe SchoolMassImporter do
+describe Bookings::Data::SchoolMassImporter do
   before do
     allow(STDOUT).to receive(:puts).and_return(true)
     allow_any_instance_of(Kernel).to receive(:print).and_return(nil)
@@ -17,7 +16,7 @@ describe SchoolMassImporter do
     end
 
     context 'EduBase Data' do
-      subject { SchoolMassImporter.new([], edubase_data).edubase_data }
+      subject { Bookings::Data::SchoolMassImporter.new([], edubase_data).edubase_data }
 
       specify 'should convert to a hash' do
         expect(subject).to be_a(Hash)
@@ -50,7 +49,7 @@ describe SchoolMassImporter do
         create(:bookings_school_type, edubase_id: school_type_id)
       end
 
-      subject { SchoolMassImporter.new(edubase_data) }
+      subject { Bookings::Data::SchoolMassImporter.new(edubase_data) }
 
       before { subject.import }
 
@@ -121,7 +120,7 @@ describe SchoolMassImporter do
 
       context 'Overriding email addresses' do
         let(:email_override) { "someone@someschool.org" }
-        subject { SchoolMassImporter.new(edubase_data, email_override) }
+        subject { Bookings::Data::SchoolMassImporter.new(edubase_data, email_override) }
 
         specify "all emails should be set to the override email address" do
           Bookings::School.all.each do |school|

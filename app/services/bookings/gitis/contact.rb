@@ -20,6 +20,8 @@ module Bookings
       entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
       entity_association :dfe_PreferredTeachingSubject02, TeachingSubject
 
+      entity_collection :dfe_contact_dfe_candidateprivacypolicy_Candidate, CandidatePrivacyPolicy
+
       alias_attribute :first_name, :firstname
       alias_attribute :last_name, :lastname
       alias_attribute :building, :address1_line1

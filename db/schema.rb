@@ -380,6 +380,7 @@ ActiveRecord::Schema.define(version: 2019_09_11_085544) do
     t.boolean "candidate_requirements_selection_not_on_another_training_course"
     t.boolean "candidate_requirements_selection_has_or_working_towards_degree"
     t.boolean "access_needs_support_supports_access_needs"
+    t.string "access_needs_detail_description"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

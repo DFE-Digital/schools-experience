@@ -17,9 +17,9 @@ Request details:
 
 * School or college: ((school_name))
 * Availability/preferred dates: ((placement_availability))
-* Experience outcome: ((placement_outcome))
-* Experience subject – first choice: ((candidate_teaching_subject_first_choice))
-* Experience subject – second choice: ((candidate_teaching_subject_second_choice))
+* What they want to get out of school experience: ((placement_outcome))
+* Teaching subject – first choice: ((candidate_teaching_subject_first_choice))
+* Teaching subject – second choice: ((candidate_teaching_subject_second_choice))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))
 * Teaching stage (multiple choice): ((candidate_teaching_stage))
@@ -32,9 +32,9 @@ Accept or reject their request
 
 View the request – ((placement_request_url))
 
-The candidate is aware you may be in touch to discuss their request
+The candidate is aware you may be in touch to discuss their request.
 ---
 
 # Help and support
 
-If you’ve got any any feedback, questions or would like to take part in user testing email us with your URN at organise.school-experience@education.gov.uk.
+If you’ve got any feedback, questions or would like to take part in user testing email us with your URN at organise.school-experience@education.gov.uk.

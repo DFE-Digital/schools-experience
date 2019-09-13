@@ -12,8 +12,6 @@ module Candidates
 
         unless registration_session.completed?
           if gitis_integration?
-            already_signed_in = candidate_signed_in?
-
             self.current_candidate = Bookings::Candidate.create_or_update_from_registration_session! \
               gitis_crm,
               registration_session,
@@ -24,7 +22,7 @@ module Candidates
               cookies[:analytics_tracking_uuid],
               context: :returning_from_confirmation_email
 
-            unless already_signed_in || Bookings::Gitis::PrivacyPolicy.default.nil?
+            unless Bookings::Gitis::PrivacyPolicy.default.nil?
               AcceptPrivacyPolicyJob.perform_later \
                 current_candidate.gitis_uuid,
                 Bookings::Gitis::PrivacyPolicy.default

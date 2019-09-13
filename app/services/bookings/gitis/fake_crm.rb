@@ -38,6 +38,7 @@ module Bookings::Gitis
 
     def create_entity(entity_id, data)
       return super unless stubbed?
+      return "#{entity_id}(#{fake_contact_id})" unless entity_id == 'contacts'
 
       REQUIRED.each do |key|
         unless data.has_key?(key)
@@ -56,6 +57,7 @@ module Bookings::Gitis
 
     def update_entity(entity_id, data)
       return super unless stubbed?
+      return entity_id unless entity_id.start_with?('contacts(')
 
       data.keys.each do |key|
         unless ALLOWED.include?(key)

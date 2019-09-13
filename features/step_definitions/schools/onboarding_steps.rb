@@ -142,6 +142,13 @@ Given "I have completed the Access needs support step" do
   )
 end
 
+Given "I have completed the Access needs detail step" do
+  steps %(
+    Given I am on the 'Access needs detail' page
+    When I submit the form
+  )
+end
+
 Given "I have completed the Candidate experience details step" do
   steps %(
     Given I am on the 'Candidate experience details' page

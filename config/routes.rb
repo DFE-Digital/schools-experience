@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  get "/healthcheck.txt", to: "pages#healthcheck"
+  get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
+  get '/deployment.txt', to: 'healthchecks#deployment', as: :deployment
 
   get "/pages/:page", to: "pages#show"
   root to: 'candidates/home#index'
@@ -105,6 +106,7 @@ Rails.application.routes.draw do
       resource :candidate_experience_detail, only: %i(new create edit update)
       if Feature.instance.active? :access_needs_journey
         resource :access_needs_support, only: %i(new create)
+        resource :access_needs_detail, only: %i(new create)
       end
       resource :experience_outline, only: %i(new create edit update)
       resource :admin_contact, only: %i(new create edit update)
