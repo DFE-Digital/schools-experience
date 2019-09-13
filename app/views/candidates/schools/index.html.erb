@@ -17,7 +17,6 @@
       <div data-target="collapsible.panel">
         <%= form_for @search, as: '',
               method: :get,
-              data: {controller: 'instant-filter'},
               html: {class: "collapsible__content"} do |f| %>
 
           <%= f.hidden_field :query %>
