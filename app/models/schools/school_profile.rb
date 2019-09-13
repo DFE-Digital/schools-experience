@@ -186,6 +186,22 @@ module Schools
       constructor: :compose
 
     composed_of \
+      :access_needs_support,
+      class_name: 'Schools::OnBoarding::AccessNeedsSupport',
+      mapping: [
+        %w(access_needs_support_supports_access_needs supports_access_needs)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :access_needs_detail,
+      class_name: 'Schools::OnBoarding::AccessNeedsDetail',
+      mapping: [
+        %w(access_needs_detail_description description)
+      ],
+      constructor: :compose
+
+    composed_of \
       :experience_outline,
       class_name: 'Schools::OnBoarding::ExperienceOutline',
       mapping: [

@@ -126,6 +126,25 @@ FactoryBot.define do
       end
     end
 
+    trait :with_access_needs_support do
+      after :build do |profile|
+        profile.access_needs_support = FactoryBot.build :access_needs_support
+      end
+    end
+
+    trait :without_access_needs_support do
+      after :build do |profile|
+        profile.access_needs_support = \
+          FactoryBot.build :access_needs_support, supports_access_needs: false
+      end
+    end
+
+    trait :with_access_needs_detail do
+      after :build do |profile|
+        profile.access_needs_detail = FactoryBot.build :access_needs_detail
+      end
+    end
+
     trait :with_experience_outline do
       after :build do |profile|
         profile.experience_outline = FactoryBot.build :experience_outline
@@ -152,6 +171,8 @@ FactoryBot.define do
       with_subjects
       with_description
       with_candidate_experience_detail
+      with_access_needs_support
+      with_access_needs_detail
       with_experience_outline
       with_admin_contact
     end

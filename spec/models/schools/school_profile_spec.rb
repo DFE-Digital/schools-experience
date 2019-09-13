@@ -208,6 +208,11 @@ describe Schools::SchoolProfile, type: :model do
         have_db_column(:candidate_requirements_selection_step_completed)
           .of_type(:boolean).with_options(default: false)
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:access_needs_detail_description).of_type(:string)
+    end
   end
 
   context 'relationships' do
@@ -471,6 +476,48 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.candidate_experience_detail).to eq form_model
+      end
+    end
+
+    context '#access_needs_support' do
+      let :form_model do
+        FactoryBot.build :access_needs_support
+      end
+
+      before do
+        model.access_needs_support = form_model
+      end
+
+      %i(supports_access_needs).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("access_needs_support_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.access_needs_support).to eq form_model
+      end
+    end
+
+    context '#access_needs_detail' do
+      let :form_model do
+        FactoryBot.build :access_needs_detail
+      end
+
+      before do
+        model.access_needs_detail = form_model
+      end
+
+      %i(description).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("access_needs_detail_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.access_needs_detail).to eq form_model
       end
     end
 

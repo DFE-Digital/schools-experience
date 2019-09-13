@@ -40,4 +40,4 @@ Feature: Candidate experience details
     Given I am on the 'Candidate experience details' page
     And I complete the candidate experience form with valid data
     When I submit the form
-    Then I should be on the 'Experience outline' page
+    Then I should be on the 'access needs support' page

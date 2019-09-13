@@ -10,11 +10,20 @@ module Bookings
       end
 
       def accept!
-        @crm.write build
+        match ? match.id : create!
       end
 
       def contact
-        @contact ||= @crm.find(contact_id)
+        @contact ||= @crm.find(
+          contact_id,
+          includes: :dfe_contact_dfe_candidateprivacypolicy_Candidate
+        )
+      end
+
+      def match
+        @match ||= existing.find do |cpp|
+          cpp._dfe_privacypolicynumber_value == policy_id
+        end
       end
 
     private
@@ -27,6 +36,14 @@ module Bookings
           'dfe_timeofconsent' => Time.now.utc.iso8601,
           '_dfe_candidate_value' => contact.id,
           '_dfe_privacypolicynumber_value' => @policy_id
+      end
+
+      def existing
+        contact.dfe_contact_dfe_candidateprivacypolicy_Candidate || []
+      end
+
+      def create!
+        @crm.write build
       end
     end
   end

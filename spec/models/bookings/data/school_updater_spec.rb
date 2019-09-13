@@ -1,8 +1,7 @@
 require 'rails_helper'
 require 'csv'
-require File.join(Rails.root, "lib", "data", "school_updater")
 
-describe SchoolUpdater do
+describe Bookings::Data::SchoolUpdater do
   before do
     allow(STDOUT).to receive(:puts).and_return(true)
   end

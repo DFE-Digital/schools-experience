@@ -19,6 +19,8 @@ Feature: Admin contact
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
+        | Access needs support             |                           |
+        | Access needs detail              |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
 

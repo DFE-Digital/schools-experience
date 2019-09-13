@@ -18,16 +18,5 @@ module Bookings::Gitis
         Rails.application.config.x.gitis.privacy_consent_id
       end
     end
-
-    def initialize(crm_data = {})
-      crm_data = crm_data.stringify_keys
-
-      self.dfe_privacypolicyid  = crm_data['dfe_privacypolicyid']
-      self.dfe_policyid         = crm_data['dfe_policyid']
-      self.dfe_name             = crm_data['dfe_name']
-      self.dfe_active           = crm_data['dfe_active']
-
-      super
-    end
   end
 end
