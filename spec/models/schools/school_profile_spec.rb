@@ -740,6 +740,39 @@ describe Schools::SchoolProfile, type: :model do
             eq Schools::OnBoarding::CandidateRequirementsSelection.new
         end
       end
+
+      context 'when school no longer supports access_needs' do
+        let :school_profile do
+          FactoryBot.create :school_profile,
+            :with_access_needs_support,
+            :with_access_needs_detail,
+            :with_disability_confident,
+            :with_access_needs_policy
+        end
+
+        let :no_access_needs_support do
+          FactoryBot.build :access_needs_support, supports_access_needs: false
+        end
+
+        before do
+          school_profile.update! access_needs_support: no_access_needs_support
+        end
+
+        it 'removes access_needs_detail' do
+          expect(school_profile.access_needs_detail).to eq \
+            Schools::OnBoarding::AccessNeedsDetail.new
+        end
+
+        it 'removes disability_confident' do
+          expect(school_profile.disability_confident).to eq \
+            Schools::OnBoarding::DisabilityConfident.new
+        end
+
+        it 'removes access_needs_policy' do
+          expect(school_profile.access_needs_policy).to eq \
+            Schools::OnBoarding::AccessNeedsPolicy.new
+        end
+      end
     end
   end
 
