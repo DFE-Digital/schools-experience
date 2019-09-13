@@ -16,6 +16,15 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     it { is_expected.to validate_presence_of :first_name }
     it { is_expected.to validate_presence_of :last_name }
     it { is_expected.to validate_presence_of :email }
+    it { is_expected.to validate_presence_of :date_of_birth }
+
+    context 'when read only' do
+      subject { described_class.new read_only: true }
+      it { is_expected.not_to validate_presence_of :first_name }
+      it { is_expected.not_to validate_presence_of :last_name }
+      it { is_expected.to validate_presence_of :email }
+      it { is_expected.not_to validate_presence_of :date_of_birth }
+    end
 
     context 'email is present' do
       VALID_EMAILS = ['test@example.com', 'testymctest@gmail.com'].freeze
@@ -169,23 +178,22 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     end
   end
 
-  describe '.email=' do
-    before { subject.email = 'second@test.com' }
+  describe 'with read_only set to true' do
+    let(:pinfo) { described_class.new(read_only: true) }
 
-    context 'with unvalidate emails' do
-      subject do
-        build(:personal_information, email: 'first@test.com', read_only: false)
-      end
-
-      it { is_expected.to have_attributes email: 'second@test.com' }
+    before do
+      pinfo.assign_attributes \
+        first_name: 'test',
+        last_name: 'test',
+        email: 'test@test.com',
+        date_of_birth: Date.parse('1980-01-01')
     end
 
-    context 'with validated emails' do
-      subject do
-        build(:personal_information, email: 'first@test.com', read_only: true)
-      end
+    subject { pinfo }
 
-      it { is_expected.to have_attributes email: 'first@test.com' }
-    end
+    it { is_expected.to have_attributes first_name: nil }
+    it { is_expected.to have_attributes last_name: nil }
+    it { is_expected.to have_attributes email: nil }
+    it { is_expected.to have_attributes date_of_birth: nil }
   end
 end

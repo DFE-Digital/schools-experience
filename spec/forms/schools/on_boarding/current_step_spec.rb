@@ -347,6 +347,26 @@ describe Schools::OnBoarding::CurrentStep do
     end
 
     context 'disability_confident required' do
+      let :school_profile do
+        FactoryBot.create :school_profile,
+          :with_dbs_requirement,
+          :with_candidate_requirement,
+          :with_fees,
+          :with_administration_fee,
+          :with_dbs_fee,
+          :with_other_fee,
+          :with_phases,
+          :with_key_stage_list,
+          :with_subjects,
+          :with_description,
+          :with_candidate_experience_detail,
+          :with_access_needs_support,
+          :with_access_needs_detail
+      end
+
+      it 'returns :disability_confident' do
+        expect(returned_step).to eq :disability_confident
+      end
     end
 
     context 'access_needs_policy required' do
@@ -367,7 +387,8 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_experience_detail,
           :with_access_needs_support,
-          :with_access_needs_detail
+          :with_access_needs_detail,
+          :with_disability_confident
       end
 
       it 'returns :experience_outline' do
@@ -391,6 +412,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_candidate_experience_detail,
           :with_access_needs_support,
           :with_access_needs_detail,
+          :with_disability_confident,
           :with_experience_outline
       end
 
@@ -415,6 +437,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_candidate_experience_detail,
           :with_access_needs_support,
           :with_access_needs_detail,
+          :with_disability_confident,
           :with_experience_outline,
           :with_admin_contact
       end

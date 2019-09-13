@@ -25,4 +25,4 @@ Feature: Access needs detail
   Scenario: Submitting the form successfully
     Given I am on the 'Access needs detail' page
     When I submit the form
-    Then I should be on the 'Experience outline' page
+    Then I should be on the 'Disability Confident' page

@@ -107,6 +107,7 @@ Rails.application.routes.draw do
       if Feature.instance.active? :access_needs_journey
         resource :access_needs_support, only: %i(new create)
         resource :access_needs_detail, only: %i(new create)
+        resource :disability_confident, only: %i(new create)
       end
       resource :experience_outline, only: %i(new create edit update)
       resource :admin_contact, only: %i(new create edit update)

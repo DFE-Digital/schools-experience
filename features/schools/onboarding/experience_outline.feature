@@ -20,6 +20,7 @@ Feature: Experience Outline
         | Description                      |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |
+        | Disability confident             |                           |
         | Candidate experience details     |                           |
 
   Scenario: Breadcrumbs

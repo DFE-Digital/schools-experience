@@ -93,7 +93,7 @@ module Bookings::Gitis
         'address1_line3' => 'Third Line',
         'address1_city' => 'Manchester',
         'address1_stateorprovince' => 'Manchester',
-        'address1_postalcode' => 'MA1 1AM',
+        'address1_postalcode' => 'TE57 1NG',
         'address1_telephone1' => '01234 567890',
         'birthdate' => '1980-01-01',
         'dfe_channelcreation' => 10
