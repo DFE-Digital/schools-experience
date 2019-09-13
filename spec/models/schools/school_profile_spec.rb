@@ -218,6 +218,15 @@ describe Schools::SchoolProfile, type: :model do
       is_expected.to \
         have_db_column(:disability_confident_is_disability_confident).of_type(:boolean)
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:access_needs_policy_has_access_needs_policy).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to have_db_column(:access_needs_policy_url).of_type(:string)
+    end
   end
 
   context 'relationships' do
@@ -544,6 +553,27 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.disability_confident).to eq form_model
+      end
+    end
+
+    context '#access_needs_policy' do
+      let :form_model do
+        FactoryBot.build :access_needs_policy
+      end
+
+      before do
+        model.access_needs_policy = form_model
+      end
+
+      %i(has_access_needs_policy url).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("access_needs_policy_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.access_needs_policy).to eq form_model
       end
     end
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
-describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
+describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
   include_context "logged in DfE user"
 
   let! :school_profile do
@@ -18,17 +18,18 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
       :with_description,
       :with_candidate_experience_detail,
       :with_access_needs_support,
-      :with_access_needs_detail
+      :with_access_needs_detail,
+      :with_disability_confident
   end
 
   context '#new' do
     before do
-      get '/schools/on_boarding/disability_confident/new'
+      get '/schools/on_boarding/access_needs_policy/new'
     end
 
     it 'assigns the model' do
-      expect(assigns(:disability_confident)).to eq \
-        Schools::OnBoarding::DisabilityConfident.new
+      expect(assigns(:access_needs_policy)).to eq \
+        Schools::OnBoarding::AccessNeedsPolicy.new
     end
 
     it 'renders the new template' do
@@ -39,23 +40,22 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
   context '#create' do
     let :params do
       {
-        schools_on_boarding_disability_confident: \
-          disability_confident.attributes
+        schools_on_boarding_access_needs_policy: access_needs_policy.attributes
       }
     end
 
     before do
-      post '/schools/on_boarding/disability_confident', params: params
+      post '/schools/on_boarding/access_needs_policy', params: params
     end
 
     context 'invalid' do
-      let :disability_confident do
-        Schools::OnBoarding::DisabilityConfident.new
+      let :access_needs_policy do
+        Schools::OnBoarding::AccessNeedsPolicy.new
       end
 
-      it 'doesnt update the school profile' do
-        expect(school_profile.reload.disability_confident).to eq \
-          Schools::OnBoarding::DisabilityConfident.new
+      it 'doesnt update the school_profile' do
+        expect(school_profile.reload.access_needs_policy).to eq \
+          Schools::OnBoarding::AccessNeedsPolicy.new
       end
 
       it 'rerenders the new template' do
@@ -64,18 +64,18 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
     end
 
     context 'valid' do
-      let :disability_confident do
-        FactoryBot.build :disability_confident
+      let :access_needs_policy do
+        FactoryBot.build :access_needs_policy
       end
 
       it 'updates the school profile' do
-        expect(school_profile.reload.disability_confident).to eq \
-          disability_confident
+        expect(school_profile.reload.access_needs_policy).to eq \
+          access_needs_policy
       end
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_access_needs_policy_path
+          new_schools_on_boarding_experience_outline_path
       end
     end
   end

@@ -151,6 +151,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_access_needs_policy do
+      after :build do |profile|
+        profile.access_needs_policy = FactoryBot.build :access_needs_policy
+      end
+    end
+
     trait :with_experience_outline do
       after :build do |profile|
         profile.experience_outline = FactoryBot.build :experience_outline
@@ -180,6 +186,7 @@ FactoryBot.define do
       with_access_needs_support
       with_access_needs_detail
       with_disability_confident
+      with_access_needs_policy
       with_experience_outline
       with_admin_contact
     end

@@ -210,6 +210,15 @@ module Schools
       constructor: :compose
 
     composed_of \
+      :access_needs_policy,
+      class_name: 'Schools::OnBoarding::AccessNeedsPolicy',
+      mapping: [
+        %w(access_needs_policy_has_access_needs_policy has_access_needs_policy),
+        %w(access_needs_policy_url url)
+      ],
+      constructor: :compose
+
+    composed_of \
       :experience_outline,
       class_name: 'Schools::OnBoarding::ExperienceOutline',
       mapping: [
