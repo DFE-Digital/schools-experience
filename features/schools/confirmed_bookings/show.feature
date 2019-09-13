@@ -27,7 +27,7 @@ Feature: Viewing a booking
         When I am viewing my chosen booking
         Then I should see a 'Personal details' section with the following values:
             | Heading             | Value                                                                |
-            | Address             | First Line, Second Line, Third Line, Manchester, Manchester, MA1 1AM |
+            | Address             | First Line, Second Line, Third Line, Manchester, Manchester, TE57 1NG |
             | UK telephone number | 07123 456789                                                         |
             | Email address       | second@thisaddress.com                                               |
 
