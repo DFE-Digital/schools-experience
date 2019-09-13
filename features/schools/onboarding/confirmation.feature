@@ -21,6 +21,7 @@ Feature: Publishing Profile
             | Description                      |                           |
             | Access needs support             |                           |
             | Access needs detail              |                           |
+            | Disability confident             |                           |
             | Candidate experience details     |                           |
             | Experience Outline               |                           |
             | Admin contact                    |                           |

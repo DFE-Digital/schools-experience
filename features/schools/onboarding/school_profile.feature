@@ -22,6 +22,7 @@ Feature: School Profile
         | Candidate experience details     |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |
+        | Disability confident             |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
 

@@ -145,6 +145,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_disability_confident do
+      after :build do |profile|
+        profile.disability_confident = FactoryBot.build :disability_confident
+      end
+    end
+
     trait :with_experience_outline do
       after :build do |profile|
         profile.experience_outline = FactoryBot.build :experience_outline
@@ -173,6 +179,7 @@ FactoryBot.define do
       with_candidate_experience_detail
       with_access_needs_support
       with_access_needs_detail
+      with_disability_confident
       with_experience_outline
       with_admin_contact
     end

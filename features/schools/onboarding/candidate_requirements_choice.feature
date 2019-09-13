@@ -35,6 +35,7 @@ Feature: Candidates requirements choice
         | Candidate experience details     |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |
+        | Disability confident             |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page
@@ -56,6 +57,7 @@ Feature: Candidates requirements choice
         | Candidate experience details     |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |
+        | Disability confident             |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page
@@ -77,6 +79,7 @@ Feature: Candidates requirements choice
         | Candidate experience details     |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |
+        | Disability confident             |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page

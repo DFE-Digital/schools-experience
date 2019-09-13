@@ -213,6 +213,11 @@ describe Schools::SchoolProfile, type: :model do
       is_expected.to \
         have_db_column(:access_needs_detail_description).of_type(:string)
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:disability_confident_is_disability_confident).of_type(:boolean)
+    end
   end
 
   context 'relationships' do
@@ -518,6 +523,27 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form model' do
         expect(model.access_needs_detail).to eq form_model
+      end
+    end
+
+    context '#disability_confident' do
+      let :form_model do
+        FactoryBot.build :disability_confident
+      end
+
+      before do
+        model.disability_confident = form_model
+      end
+
+      %i(is_disability_confident).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("disability_confident_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.disability_confident).to eq form_model
       end
     end
 
