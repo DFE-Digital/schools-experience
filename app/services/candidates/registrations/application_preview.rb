@@ -69,7 +69,7 @@ module Candidates
       end
 
       def date_of_birth
-        @personal_information.date_of_birth.strftime '%d/%m/%Y'
+        @personal_information.date_of_birth&.strftime '%d/%m/%Y'
       end
 
       def has_bookings_date?
