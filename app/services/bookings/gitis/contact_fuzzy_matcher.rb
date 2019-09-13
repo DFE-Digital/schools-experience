@@ -8,7 +8,9 @@ module Bookings
       end
 
       def find(contacts)
-        contacts.find(&method(:matches?))
+        known, unknown = prioritise(contacts)
+
+        known.find(&method(:matches?)) || unknown.find(&method(:matches?))
       end
 
     private
@@ -22,6 +24,16 @@ module Bookings
       def compare(attribute, contact)
         cvalue = contact.public_send(attribute).to_s.downcase
         cvalue == instance_variable_get("@#{attribute}")
+      end
+
+      def prioritise(contacts)
+        contact_ids = contacts.map(&:contactid).compact
+
+        candidates = Bookings::Candidate.
+          where(gitis_uuid: contact_ids).
+          pluck(:gitis_uuid)
+
+        contacts.partition { |c| candidates.include? c.contactid }
       end
     end
   end
