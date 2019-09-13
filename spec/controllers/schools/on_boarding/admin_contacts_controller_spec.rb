@@ -21,6 +21,7 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_access_needs_support,
         :with_access_needs_detail,
         :with_disability_confident,
+        :with_access_needs_policy,
         :with_experience_outline
     end
 
@@ -55,6 +56,7 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_access_needs_support,
         :with_access_needs_detail,
         :with_disability_confident,
+        :with_access_needs_policy,
         :with_experience_outline
     end
 

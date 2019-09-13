@@ -157,6 +157,15 @@ Given "I have completed the Disability confident step" do
   )
 end
 
+Given "I have completed the Access needs policy step" do
+  steps %(
+    Given I am on the 'Access needs policy' page
+    And I choose 'Yes' from the 'Do you have any online information which covers your disability and access needs policy?' radio buttons
+    And I enter 'https://example.com' into the 'Enter web address.' text area
+    When I submit the form
+  )
+end
+
 Given "I have completed the Candidate experience details step" do
   steps %(
     Given I am on the 'Candidate experience details' page
