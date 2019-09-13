@@ -32,9 +32,3 @@ Feature: Access needs support
     And I choose 'Yes' from the 'Do you want to add details about how you can support candidates with disabilites and access needs?' radio buttons
     When I submit the form
     Then I should be on the 'Access needs detail' page
-
-  Scenario: Submitting the form successfully choosing no
-    Given I am on the 'Access needs support' page
-    And I choose 'No' from the 'Do you want to add details about how you can support candidates with disabilites and access needs?' radio buttons
-    When I submit the form
-    Then I should be on the 'Experience outline' page

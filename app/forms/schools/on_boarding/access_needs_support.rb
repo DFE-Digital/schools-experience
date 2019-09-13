@@ -8,10 +8,6 @@ module Schools
       def self.compose(supports_access_needs)
         new supports_access_needs: supports_access_needs
       end
-
-      def supports_access_needs?
-        supports_access_needs
-      end
     end
   end
 end

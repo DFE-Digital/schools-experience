@@ -27,11 +27,6 @@ module Schools
       unless candidate_requirements_choice.has_requirements
         self.candidate_requirements_selection = OnBoarding::CandidateRequirementsSelection.new
       end
-      unless access_needs_support.supports_access_needs?
-        self.access_needs_detail = OnBoarding::AccessNeedsDetail.new
-        self.disability_confident = OnBoarding::DisabilityConfident.new
-        self.access_needs_policy = OnBoarding::AccessNeedsPolicy.new
-      end
     end
 
     validate :administration_fee_not_set, unless: -> { fees.administration_fees? }
