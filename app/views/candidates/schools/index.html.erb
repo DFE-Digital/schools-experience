@@ -15,6 +15,7 @@
       </button>
 
       <div data-target="collapsible.panel">
+        <%= link_to 'Skip to search results', '#search-results', class: 'govuk-skip-link', id: 'skip-to-results' %>
         <%= form_for @search, as: '',
               method: :get,
               data: {controller: 'instant-filter'},
