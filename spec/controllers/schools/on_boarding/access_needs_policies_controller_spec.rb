@@ -79,4 +79,72 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
       end
     end
   end
+
+  context '#edit' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    before do
+      get '/schools/on_boarding/access_needs_policy/edit'
+    end
+
+    it 'assigns the form model' do
+      expect(assigns(:access_needs_policy)).to \
+        eq school_profile.access_needs_policy
+    end
+
+    it 'renders the edit template' do
+      expect(response).to render_template :edit
+    end
+  end
+
+  context '#update' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    let :params do
+      {
+        schools_on_boarding_access_needs_policy: \
+          access_needs_policy.attributes
+      }
+    end
+
+    before do
+      patch '/schools/on_boarding/access_needs_policy', params: params
+    end
+
+    context 'invalid' do
+      let :access_needs_policy do
+        Schools::OnBoarding::AccessNeedsPolicy.new
+      end
+
+      it 'doesnt update the form model' do
+        expect(school_profile.reload.access_needs_policy).not_to \
+          eq access_needs_policy
+      end
+
+      it 'rerenders the edit template' do
+        expect(response).to render_template :edit
+      end
+    end
+
+    context 'valid' do
+      let :access_needs_policy do
+        FactoryBot.build :access_needs_policy,
+          has_access_needs_policy: false,
+          url: nil
+      end
+
+      it 'updates the form model' do
+        expect(school_profile.reload.access_needs_policy).to \
+          eq access_needs_policy
+      end
+
+      it 'redirects to the next step' do
+        expect(response).to redirect_to schools_on_boarding_profile_path
+      end
+    end
+  end
 end

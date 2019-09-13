@@ -19,6 +19,24 @@ module Schools
         end
       end
 
+      def edit
+        @access_needs_support = current_school_profile.access_needs_support
+      end
+
+      def update
+        @access_needs_support = \
+          AccessNeedsSupport.new admin_needs_support_params
+
+        if @access_needs_support.valid?
+          current_school_profile.update! \
+            access_needs_support: @access_needs_support
+
+          redirect_to next_step_path(current_school_profile)
+        else
+          render :edit
+        end
+      end
+
     private
 
       def admin_needs_support_params

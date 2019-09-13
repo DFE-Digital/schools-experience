@@ -18,6 +18,23 @@ module Schools
         end
       end
 
+      def edit
+        @access_needs_detail = current_school_profile.access_needs_detail
+      end
+
+      def update
+        @access_needs_detail = AccessNeedsDetail.new access_needs_detail_params
+
+        if @access_needs_detail.valid?
+          current_school_profile.update! \
+            access_needs_detail: @access_needs_detail
+
+          redirect_to next_step_path(current_school_profile)
+        else
+          render :edit
+        end
+      end
+
     private
 
       def access_needs_detail_params

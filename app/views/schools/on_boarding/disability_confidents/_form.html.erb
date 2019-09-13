@@ -1,0 +1,45 @@
+<%- self.page_title = 'Disability Confident' -%>
+
+<%-
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Disability Confident' => nil
+  }
+-%>
+
+<%= link_to 'Back', :back, class: 'govuk-back-link', data: {controller: 'back-link'} %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for disability_confident, url: schools_on_boarding_disability_confident_path, method: method do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <%= f.hidden_field :is_disability_confident, value: nil %>
+      <%= f.radio_button_fieldset :is_disability_confident, page_heading: true do |fieldset| %>
+
+        <div>
+          <%= image_tag 'disability-confident-small.png', alt: 'Disability confident logo' %>
+          <span class="govuk-hint">
+            This was previously known as the 'Two Ticks scheme'
+          </span>
+        </div>
+
+        <%= fieldset.radio_input true %>
+        <%= fieldset.radio_input false %>
+      <% end %>
+
+      <p>
+        Check if you're already signed up -
+        <%= link_to 'Disability Confident: employers that have signed up.',
+          'https://www.gov.uk/government/publications/disability-confident-employers-that-have-signed-up' %>
+      </p>
+
+      <p>
+        Find out more about how to become a
+        <%= link_to 'Disability Confident committed employer.',
+          'https://disabilityconfident.campaign.gov.uk/' %>
+      </p>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

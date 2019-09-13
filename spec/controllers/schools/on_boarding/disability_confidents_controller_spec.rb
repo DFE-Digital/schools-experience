@@ -79,4 +79,70 @@ describe Schools::OnBoarding::DisabilityConfidentsController, type: :request do
       end
     end
   end
+
+  context '#edit' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    before do
+      get '/schools/on_boarding/disability_confident/edit'
+    end
+
+    it 'assigns the form model' do
+      expect(assigns(:disability_confident)).to \
+        eq school_profile.disability_confident
+    end
+
+    it 'renders the edit template' do
+      expect(response).to render_template :edit
+    end
+  end
+
+  context '#update' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    let :params do
+      {
+        schools_on_boarding_disability_confident: \
+          disability_confident.attributes
+      }
+    end
+
+    before do
+      patch '/schools/on_boarding/disability_confident', params: params
+    end
+
+    context 'invalid' do
+      let :disability_confident do
+        Schools::OnBoarding::AccessNeedsSupport.new
+      end
+
+      it 'doesnt update the form model' do
+        expect(school_profile.reload.disability_confident).not_to \
+          eq disability_confident
+      end
+
+      it 'rerenders the edit template' do
+        expect(response).to render_template :edit
+      end
+    end
+
+    context 'valid' do
+      let :disability_confident do
+        FactoryBot.build :disability_confident, is_disability_confident: false
+      end
+
+      it 'updates the form model' do
+        expect(school_profile.reload.disability_confident).to \
+          eq disability_confident
+      end
+
+      it 'redirects to the next step' do
+        expect(response).to redirect_to schools_on_boarding_profile_path
+      end
+    end
+  end
 end
