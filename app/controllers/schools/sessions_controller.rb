@@ -41,6 +41,7 @@ module Schools
     def create
       return redirect_to schools_dashboard_path if user_signed_in?
 
+      check_for_errors(params[:error])
       check_state(session[:state], params[:state])
 
       client                    = get_oidc_client
@@ -73,6 +74,14 @@ module Schools
         Rails.logger.error(message)
 
         raise StateMismatchError, message
+      end
+    end
+
+    def check_for_errors(params_error)
+      if params_error
+        Rails.logger.error("DfE Sign-in error response #{params_error}, #{params}")
+
+        raise AuthFailedError, params_error
       end
     end
 

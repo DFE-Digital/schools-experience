@@ -89,6 +89,22 @@ describe Schools::SessionsController, type: :request do
       end
 
       context 'errors' do
+        context 'Errors returned by DfE Sign-in' do
+          let(:error) { 'baderror' }
+          let(:callback) { "/auth/callback?error=#{error}" }
+
+          after { get callback }
+
+          specify 'should raise an AuthFailed error' do
+            expect(response.status).to eql 302
+            expect(response.redirect_url).to end_with('schools/errors/auth_failed')
+          end
+
+          specify 'should write a message to the log' do
+            expect(Rails.logger).to receive(:error).with(/DfE Sign-in error response/)
+          end
+        end
+
         context 'StateMismatchError' do
           {
             'aaaaaaaa-bbbb-1111-2222-333333333333' => 'not-matching',
@@ -105,6 +121,7 @@ describe Schools::SessionsController, type: :request do
 
               specify 'should redirect to an error page' do
                 expect(response.status).to eql 302
+                expect(response.redirect_url).to end_with('schools/errors/auth_failed')
               end
             end
           end
@@ -120,6 +137,7 @@ describe Schools::SessionsController, type: :request do
 
           specify 'should redirect to an error page' do
             expect(response.status).to eql 302
+            expect(response.redirect_url).to end_with('schools/errors/auth_failed')
           end
         end
       end
