@@ -115,16 +115,6 @@ module Bookings
         self.dfe_hasdbscertificate = value
       end
 
-      def signin_attributes_match?(fname, lname, dob)
-        gitis_format_dob = dob.to_formatted_s(:db)
-        fname = fname.downcase
-        lname = lname.downcase
-
-        firstname.downcase == fname && lastname.downcase == lname ||
-          firstname.downcase == fname && birthdate == gitis_format_dob ||
-          lastname.downcase == lname && birthdate == gitis_format_dob
-      end
-
       def add_school_experience(log_line)
         if dfe_notesforclassroomexperience.blank?
           self.dfe_notesforclassroomexperience = EventLogger::NOTES_HEADER + "\r\n\r\n"
