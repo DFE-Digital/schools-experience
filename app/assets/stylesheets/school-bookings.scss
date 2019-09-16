@@ -33,17 +33,6 @@
 
     .accept-or-reject {
       padding-left: 0rem;
-
-      .govuk-se-button-container {
-        .govuk-button--secondary {
-          background-color: govuk-colour('light-grey');
-          color: govuk-colour('black');
-
-          &:hover {
-            background-color: darken(govuk-colour('light-grey'), 10%);
-          }
-        }
-      }
     }
   }
 }
