@@ -4,7 +4,7 @@ class AddSecondarySubjectFlagToSubjects < ActiveRecord::Migration[5.2]
 
     Bookings::Subject.reset_column_information
 
-    Bookings::Subject.find_by(name: 'Primary').update(secondary_subject: false)
+    Bookings::Subject.where(name: 'Primary').update_all(secondary_subject: false)
   end
 
   def down
