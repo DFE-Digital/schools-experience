@@ -16,14 +16,6 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
     FactoryBot.build :placement_request, school: school
   end
 
-  let :school_request_confirmation_notification do
-    double NotifyEmail::SchoolRequestConfirmation, despatch_later!: true
-  end
-
-  let :candidate_request_confirmation_notification do
-    double NotifyEmail::CandidateRequestConfirmation, despatch_later!: true
-  end
-
   let :school_request_confirmation_notification_link_only do
     double NotifyEmail::SchoolRequestConfirmationLinkOnly, despatch_later!: true
   end
@@ -46,12 +38,6 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
   end
 
   before do
-    allow(NotifyEmail::SchoolRequestConfirmation).to \
-      receive(:from_application_preview) { school_request_confirmation_notification }
-
-    allow(NotifyEmail::CandidateRequestConfirmation).to \
-      receive(:from_application_preview) { candidate_request_confirmation_notification }
-
     allow(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
       receive(:new) { school_request_confirmation_notification_link_only }
 
@@ -65,71 +51,36 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
 
   context '#perform' do
     context 'no errors' do
-      context 'phase 3' do
-        before do
-          allow(Rails.application.config.x).to receive(:phase) { 3 }
-          described_class.perform_later registration_session.uuid, cancellation_url, placement_request_url
-        end
-
-        it 'notifies the school' do
-          expect(NotifyEmail::SchoolRequestConfirmation).to \
-            have_received(:from_application_preview).with \
-              school.notification_emails,
-              application_preview
-
-          expect(school_request_confirmation_notification).to \
-            have_received :despatch_later!
-        end
-
-        it 'notifies the candidate' do
-          expect(NotifyEmail::CandidateRequestConfirmation).to \
-            have_received(:from_application_preview).with \
-              registration_session.email,
-              application_preview
-
-          expect(candidate_request_confirmation_notification).to \
-            have_received :despatch_later!
-        end
-
-        it 'deletes the registration session from redis' do
-          expect { registration_store.retrieve! registration_session.uuid }.to \
-            raise_error Candidates::Registrations::RegistrationStore::SessionNotFound
-        end
+      before do
+        described_class.perform_later registration_session.uuid, cancellation_url, placement_request_url
       end
 
-      context 'phase >= 4' do
-        before do
-          allow(Rails.application.config.x).to receive(:phase) { 4 }
-          described_class.perform_later registration_session.uuid, cancellation_url, placement_request_url
-        end
+      it 'notifies the school' do
+        expect(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
+          have_received(:new).with \
+            to: school.notification_emails,
+            school_name: school.name,
+            placement_request_url: placement_request_url
 
-        it 'notifies the school' do
-          expect(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
-            have_received(:new).with \
-              to: school.notification_emails,
-              school_name: school.name,
-              placement_request_url: placement_request_url
+        expect(school_request_confirmation_notification_link_only).to \
+          have_received :despatch_later!
+      end
 
-          expect(school_request_confirmation_notification_link_only).to \
-            have_received :despatch_later!
-        end
+      it 'notifies the candidate' do
+        expect(NotifyEmail::CandidateRequestConfirmationWithConfirmationLink).to \
+          have_received(:from_application_preview).with \
+            registration_session.email,
+            application_preview,
+            cancellation_url
 
-        it 'notifies the candidate' do
-          expect(NotifyEmail::CandidateRequestConfirmationWithConfirmationLink).to \
-            have_received(:from_application_preview).with \
-              registration_session.email,
-              application_preview,
-              cancellation_url
+        expect(
+          candidate_request_confirmation_notification_with_confirmation_link
+        ).to have_received :despatch_later!
+      end
 
-          expect(
-            candidate_request_confirmation_notification_with_confirmation_link
-          ).to have_received :despatch_later!
-        end
-
-        it 'deletes the registration session from redis' do
-          expect { registration_store.retrieve! registration_session.uuid }.to \
-            raise_error Candidates::Registrations::RegistrationStore::SessionNotFound
-        end
+      it 'deletes the registration session from redis' do
+        expect { registration_store.retrieve! registration_session.uuid }.to \
+          raise_error Candidates::Registrations::RegistrationStore::SessionNotFound
       end
     end
   end

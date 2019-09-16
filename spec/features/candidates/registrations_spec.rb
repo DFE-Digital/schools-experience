@@ -36,14 +36,6 @@ feature 'Candidate Registrations', type: :feature do
     allow(NotifyEmail::CandidateMagicLink).to receive :new do
       double NotifyEmail::CandidateMagicLink, despatch_later!: true
     end
-
-    allow(NotifyEmail::SchoolRequestConfirmation).to receive :new do
-      double NotifyEmail::SchoolRequestConfirmation, despatch_later!: true
-    end
-
-    allow(NotifyEmail::CandidateRequestConfirmation).to receive :new do
-      double NotifyEmail::CandidateRequestConfirmation, despatch_later!: true
-    end
   end
 
   feature 'Candidate Registration' do

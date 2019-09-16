@@ -53,19 +53,11 @@ module Candidates
     private
 
       def cancellation_url(placement_request)
-        if Rails.application.config.x.phase >= 4
-          candidates_cancel_url(placement_request.token)
-        else
-          ''
-        end
+        candidates_cancel_url(placement_request.token)
       end
 
       def placement_url(placement_request)
-        if Rails.application.config.x.phase >= 4
-          schools_placement_request_url(placement_request)
-        else
-          ''
-        end
+        schools_placement_request_url(placement_request)
       end
     end
   end
