@@ -18,7 +18,6 @@
         <%= link_to 'Skip to search results', '#search-results', class: 'govuk-skip-link', id: 'skip-to-results' %>
         <%= form_for @search, as: '',
               method: :get,
-              data: {controller: 'instant-filter'},
               html: {class: "collapsible__content"} do |f| %>
 
           <%= f.hidden_field :query %>

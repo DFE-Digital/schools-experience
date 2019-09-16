@@ -30,5 +30,6 @@ Feature: Filtering school search results
             | Burnley School    | Primary   | Burnley    |
         And I have provided a point in 'Bury' as my location
         And there are both 'Primary' and 'Secondary' schools in the results
-        When I check the 'Secondary' filter box
+        And I check the 'Secondary' filter box
+        When I click the 'Update schools list' button
         Then only 'Secondary' schools should remain in the results
