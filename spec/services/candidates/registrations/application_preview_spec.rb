@@ -93,6 +93,18 @@ describe Candidates::Registrations::ApplicationPreview do
     it 'returns the correct value' do
       expect(subject.date_of_birth).to eq '01/01/2000'
     end
+
+    context 'with a nil date_of_birth' do
+      let :personal_information do
+        build :personal_information,
+          first_name: 'Testy',
+          last_name: 'McTest',
+          email: 'test@example.com',
+          date_of_birth: nil
+      end
+
+      it { expect(subject.date_of_birth).to be_nil }
+    end
   end
 
   context '#school' do

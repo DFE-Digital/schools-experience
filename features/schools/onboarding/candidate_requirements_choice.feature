@@ -33,6 +33,10 @@ Feature: Candidates requirements choice
         | Subjects                         |                           |
         | Description                      |                           |
         | Candidate experience details     |                           |
+        | Access needs support             |                           |
+        | Access needs detail              |                           |
+        | Disability confident             |                           |
+        | Access needs policy              |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page
@@ -52,6 +56,10 @@ Feature: Candidates requirements choice
         | Subjects                         |                           |
         | Description                      |                           |
         | Candidate experience details     |                           |
+        | Access needs support             |                           |
+        | Access needs detail              |                           |
+        | Disability confident             |                           |
+        | Access needs policy              |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page
@@ -71,6 +79,10 @@ Feature: Candidates requirements choice
         | Subjects                         |                           |
         | Description                      |                           |
         | Candidate experience details     |                           |
+        | Access needs support             |                           |
+        | Access needs detail              |                           |
+        | Disability confident             |                           |
+        | Access needs policy              |                           |
         | Experience Outline               |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page

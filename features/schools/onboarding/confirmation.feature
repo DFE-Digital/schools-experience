@@ -19,6 +19,10 @@ Feature: Publishing Profile
             | Phases                           |                           |
             | Subjects                         |                           |
             | Description                      |                           |
+            | Access needs support             |                           |
+            | Access needs detail              |                           |
+            | Disability confident             |                           |
+            | Access needs policy              |                           |
             | Candidate experience details     |                           |
             | Experience Outline               |                           |
             | Admin contact                    |                           |

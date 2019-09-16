@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_04_120202) do
+ActiveRecord::Schema.define(version: 2019_09_11_085544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +238,7 @@ ActiveRecord::Schema.define(version: 2019_09_04_120202) do
     t.datetime "updated_at", null: false
     t.uuid "gitis_uuid"
     t.boolean "hidden", default: false
+    t.boolean "secondary_subject", default: true, null: false
     t.index ["gitis_uuid"], name: "index_bookings_subjects_on_gitis_uuid", unique: true
     t.index ["hidden"], name: "index_bookings_subjects_on_hidden"
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
@@ -378,6 +379,11 @@ ActiveRecord::Schema.define(version: 2019_09_04_120202) do
     t.boolean "candidate_requirements_selection_step_completed", default: false
     t.boolean "candidate_requirements_selection_not_on_another_training_course"
     t.boolean "candidate_requirements_selection_has_or_working_towards_degree"
+    t.boolean "access_needs_support_supports_access_needs"
+    t.string "access_needs_detail_description"
+    t.boolean "disability_confident_is_disability_confident"
+    t.boolean "access_needs_policy_has_access_needs_policy"
+    t.string "access_needs_policy_url"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

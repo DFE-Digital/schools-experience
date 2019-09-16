@@ -387,7 +387,6 @@ RSpec.describe "The GITIS CRM Api" do
   def update_contact_data(existing_data)
     {
       'lastname' => 'New Last Name',
-      'dfe_hasdbscertificate' => false,
       'dfe_dateofissueofdbscertificate' => nil,
       'dfe_notesforclassroomexperience' =>
         existing_data['dfe_notesforclassroomexperience'] +

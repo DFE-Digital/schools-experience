@@ -18,6 +18,10 @@ Feature: Experience Outline
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
+        | Access needs support             |                           |
+        | Access needs detail              |                           |
+        | Disability confident             |                           |
+        | Access needs policy              |                           |
         | Candidate experience details     |                           |
 
   Scenario: Breadcrumbs

@@ -46,8 +46,8 @@ module ApplicationHelper
     request.path.start_with?('/schools')
   end
 
-  def summary_row(key, value, change_path = nil, id: nil)
-    action = change_path ? link_to('Change', change_path, 'aria-label': "Change #{key}") : ""
+  def summary_row(key, value, change_path = nil, id: nil, show_action: true)
+    action = show_action && (change_path ? link_to('Change', change_path, 'aria-label': "Change #{key}") : "")
 
     render \
       partial: "shared/list_row",

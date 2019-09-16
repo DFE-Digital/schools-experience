@@ -8,10 +8,10 @@ module Candidates
         application_preview  = ApplicationPreview.new registration_session
 
         if Rails.application.config.x.phase >= 4
-          NotifyEmail::SchoolRequestConfirmationWithPlacementRequestUrl.from_application_preview(
-            registration_session.school.notification_emails,
-            application_preview,
-            placement_request_url
+          NotifyEmail::SchoolRequestConfirmationLinkOnly.new(
+            to: registration_session.school.notification_emails,
+            school_name: registration_session.school_name,
+            placement_request_url: placement_request_url
           ).despatch_later!
 
           NotifyEmail::CandidateRequestConfirmationWithConfirmationLink.from_application_preview(

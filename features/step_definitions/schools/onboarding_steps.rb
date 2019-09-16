@@ -134,6 +134,38 @@ Given "I have completed the Description step" do
   )
 end
 
+Given "I have completed the Access needs support step" do
+  steps %(
+    Given I am on the 'Access needs support' page
+    And I choose 'Yes' from the 'Do you want to add details about how you can support candidates with disabilites and access needs?' radio buttons
+    When I submit the form
+  )
+end
+
+Given "I have completed the Access needs detail step" do
+  steps %(
+    Given I am on the 'Access needs detail' page
+    When I submit the form
+  )
+end
+
+Given "I have completed the Disability confident step" do
+  steps %(
+    Given I am on the 'Disability Confident' page
+    And I choose 'Yes' from the 'Are you signed up to the Disability Confident employer scheme?' radio buttons
+    When I submit the form
+  )
+end
+
+Given "I have completed the Access needs policy step" do
+  steps %(
+    Given I am on the 'Access needs policy' page
+    And I choose 'Yes' from the 'Do you have any online information which covers your disability and access needs policy?' radio buttons
+    And I enter 'https://example.com' into the 'Enter web address.' text area
+    When I submit the form
+  )
+end
+
 Given "I have completed the Candidate experience details step" do
   steps %(
     Given I am on the 'Candidate experience details' page

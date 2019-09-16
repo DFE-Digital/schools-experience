@@ -15,7 +15,7 @@ RSpec.describe Bookings::Gitis::Entity do
   describe "#attributes" do
     it do
       expect(subject.send(:attributes)).to \
-        eq('firstname' => 'test', 'lastname' => 'user', 'testentityid' => nil)
+        eq('firstname' => 'test', 'lastname' => 'user')
     end
   end
 
@@ -270,10 +270,12 @@ RSpec.describe Bookings::Gitis::Entity do
         end
       end
 
-      context "and assigned via attribute itself" do
-        before { subject.testassoc = e2.id }
+      context "and assigned via attribute with a hash" do
+        before { subject.testassoc = e2.attributes }
 
         it { is_expected.to have_attributes _testassoc_value: e2.id }
+        it { expect(subject.testassoc).to have_attributes id: e2.id }
+        it { expect(subject.testassoc).to have_attributes firstname: e2.firstname }
 
         it "is included in update attributes" do
           expect(subject.attributes_for_update).to \
@@ -281,15 +283,82 @@ RSpec.describe Bookings::Gitis::Entity do
         end
       end
 
-      context "and assigned via associating a class" do
-        before { subject.testassoc = e2.id }
+      context "and assigned via attribute with a class" do
+        before { subject.testassoc = e2 }
 
         it { is_expected.to have_attributes _testassoc_value: e2.id }
+        it { expect(subject.testassoc).to have_attributes id: e2.id }
+        it { expect(subject.testassoc).to have_attributes firstname: e2.firstname }
 
         it "is included in update attributes" do
           expect(subject.attributes_for_update).to \
             include('testassoc@odata.bind' => e2.entity_id)
         end
+      end
+    end
+
+    context 'initializing with existing data' do
+      let(:companyid) { SecureRandom.uuid }
+      let(:testid) { SecureRandom.uuid }
+
+      subject do
+        CompanyEntity.new \
+          'teamentityid' => companyid,
+          'title' => 'HR',
+          'leader' => { 'testentityid' => testid, 'firstname' => 'John' },
+          '_leader_value' => testid
+      end
+
+      it { is_expected.to have_attributes _leader_value: testid }
+      it { is_expected.to have_attributes title: 'HR' }
+      it { expect(subject.leader).to have_attributes testentityid: testid }
+      it { expect(subject.leader).to have_attributes firstname: 'John' }
+    end
+  end
+
+  describe '.entity_collection' do
+    class TeamEntity
+      include Bookings::Gitis::Entity
+
+      entity_attribute :name
+      entity_collection :players, TestEntity
+    end
+
+    context 'initializing with data' do
+      let(:player1) { SecureRandom.uuid }
+      let(:player2) { SecureRandom.uuid }
+      let(:player3) { SecureRandom.uuid }
+
+      let(:crmdata) do
+        {
+          'name' => 'Manchester Sevens',
+          'players' => [
+            { 'testentityid' => player1, 'firstname' => 'Jane' },
+            { 'testentityid' => player2, 'firstname' => 'John' },
+            { 'testentityid' => player3, 'firstname' => 'Joe' }
+          ]
+        }
+      end
+
+      subject { TeamEntity.new(crmdata) }
+
+      it { is_expected.to have_attributes name: 'Manchester Sevens' }
+      it { expect(subject.players).to have_attributes length: 3 }
+      it { expect(subject.players).to all be_kind_of TestEntity }
+
+      it do
+        expect(subject.players[0]).to have_attributes \
+          testentityid: player1, firstname: 'Jane'
+      end
+
+      it do
+        expect(subject.players[1]).to have_attributes \
+          testentityid: player2, firstname: 'John'
+      end
+
+      it do
+        expect(subject.players[2]).to have_attributes \
+          testentityid: player3, firstname: 'Joe'
       end
     end
   end

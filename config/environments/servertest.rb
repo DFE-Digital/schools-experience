@@ -12,7 +12,11 @@ Rails.application.configure do
   config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
 
   config.x.phase = 10000
-  config.x.features = %i(subject_specific_dates dbs_requirement candidate_requirement_ab_test)
+  config.x.features = %i(
+    subject_specific_dates
+    candidate_requirement_ab_test
+    access_needs_journey
+  )
 
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = "https://localhost:#{ENV.fetch("PORT") { 3000 }}"
@@ -24,5 +28,8 @@ Rails.application.configure do
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
+  config.x.gitis.privacy_policy_id = SecureRandom.uuid
+  config.x.gitis.privacy_consent_id = '10'
+
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 end

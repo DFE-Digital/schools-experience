@@ -225,7 +225,7 @@ feature 'Candidate Registrations', type: :feature do
       "/candidates/schools/#{school_urn}/registrations/contact_information/new"
 
     # Submit contact information form with errors
-    fill_in 'Building', with: 'Test house'
+    fill_in 'Building', with: ''
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 

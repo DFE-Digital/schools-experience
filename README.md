@@ -65,3 +65,18 @@ enabled and configured via environment variables.
 **SLACK_WEBHOOK** _(required)_ Webhook to use to post to Slack
 **SLACK_CHANNEL** _(optional)_ Channel to post to, should be left blank if hook defaults to a specifi channel
 **SLACK_ENV** _(optional)_ Identifier for deployment environment - eg Staging or Production
+
+## Monitoring health and deployment version
+
+There is a `/healthcheck.txt` endpoint which will verify both Postgres and 
+Redis connectivity.
+
+There is a `/deployment.txt` endpoint which will reflect the contents of 
+`DEPLOYMENT_ID` back to allow checking when the deployed version has changed.
+
+This is protected by HTTPS Basic Auth, and is configured by the following 3 
+environment variables.
+
+`DEPLOYMENT_ID` - identifier for the current deployment
+`DEPLOYMENT_USERNAME` - username to protect the endpoint
+`DEPLOYMENT_PASSWORD` - password to protect the endpoint

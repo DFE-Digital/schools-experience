@@ -36,6 +36,8 @@
   <%= form.submit 'Continue' %>
 <%- end -%>
 
+<% unless Feature.instance.active? :subject_specific_dates %>
 <p class="govuk-inset-text">
   You'll be able to add subject-specific dates soon.
 </p>
+<% end %>

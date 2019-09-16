@@ -22,6 +22,12 @@ module Candidates
               cookies[:analytics_tracking_uuid],
               context: :returning_from_confirmation_email
 
+            unless Bookings::Gitis::PrivacyPolicy.default.nil?
+              AcceptPrivacyPolicyJob.perform_later \
+                current_candidate.gitis_uuid,
+                Bookings::Gitis::PrivacyPolicy.default
+            end
+
             Bookings::Gitis::EventLogger.write_later \
               current_candidate.gitis_uuid, :request, placement_request
           else

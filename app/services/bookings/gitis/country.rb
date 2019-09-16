@@ -10,14 +10,5 @@ module Bookings::Gitis
     def self.default
       Rails.application.config.x.gitis.country_id
     end
-
-    def initialize(crm_data = {})
-      crm_data = crm_data.stringify_keys
-
-      self.dfe_countryid = crm_data['dfe_countryid']
-      self.dfe_name = crm_data['dfe_name']
-
-      super
-    end
   end
 end
