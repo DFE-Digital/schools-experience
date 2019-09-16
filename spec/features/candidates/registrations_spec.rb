@@ -47,27 +47,6 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   feature 'Candidate Registration' do
-    context "running under Phase 2" do
-      include_context 'bypass fake Gitis'
-      let(:email_address) { 'person@example.com' }
-
-      before do
-        allow(Rails.application.config.x).to receive(:phase).and_return(2)
-      end
-
-      scenario "completing the Journey" do
-        complete_personal_information_step expected_heading: 'Enter your details'
-        complete_contact_information_step
-        complete_education_step
-        complete_teaching_preference_step
-        complete_placement_preference_step
-        complete_background_step
-        complete_application_preview_step button_text: 'Continue'
-        complete_email_confirmation_step
-        view_request_acknowledgement_step
-      end
-    end
-
     context 'for unknown Contact' do
       let(:email_address) { 'unknown@example.com' }
 

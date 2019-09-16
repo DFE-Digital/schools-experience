@@ -129,16 +129,12 @@ Rails.application.routes.draw do
 
     resources :school_searches, only: %i{new}
 
-    if Rails.application.config.x.phase >= 3
-      get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
-    end
+    get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
 
     resources :schools, only: %i{index show} do
       namespace :registrations do
         resource :personal_information, only: %i(new create edit update)
-        if Rails.application.config.x.phase >= 3
-          resource :sign_in, only: %i(show create)
-        end
+        resource :sign_in, only: %i(show create)
         resource :contact_information, only: %i(new create edit update)
         resource :education, only: %i(new create edit update)
         resource :teaching_preference, only: %i(new create edit update)
