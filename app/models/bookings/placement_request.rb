@@ -178,8 +178,6 @@ module Bookings
     end
 
     def pre_phase3_record?
-      return true if Rails.application.config.x.phase < 3
-
       persisted? && candidate_id_was.nil?
     end
   end

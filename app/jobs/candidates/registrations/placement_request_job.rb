@@ -7,29 +7,17 @@ module Candidates
         registration_session = RegistrationStore.instance.retrieve! uuid
         application_preview  = ApplicationPreview.new registration_session
 
-        if Rails.application.config.x.phase >= 4
-          NotifyEmail::SchoolRequestConfirmationLinkOnly.new(
-            to: registration_session.school.notification_emails,
-            school_name: registration_session.school_name,
-            placement_request_url: placement_request_url
-          ).despatch_later!
+        NotifyEmail::SchoolRequestConfirmationLinkOnly.new(
+          to: registration_session.school.notification_emails,
+          school_name: registration_session.school_name,
+          placement_request_url: placement_request_url
+        ).despatch_later!
 
-          NotifyEmail::CandidateRequestConfirmationWithConfirmationLink.from_application_preview(
-            registration_session.email,
-            application_preview,
-            cancellation_url
-          ).despatch_later!
-        else
-          NotifyEmail::SchoolRequestConfirmation.from_application_preview(
-            registration_session.school.notification_emails,
-            application_preview,
-          ).despatch_later!
-
-          NotifyEmail::CandidateRequestConfirmation.from_application_preview(
-            registration_session.email,
-            application_preview
-          ).despatch_later!
-        end
+        NotifyEmail::CandidateRequestConfirmationWithConfirmationLink.from_application_preview(
+          registration_session.email,
+          application_preview,
+          cancellation_url
+        ).despatch_later!
 
         RegistrationStore.instance.delete! registration_session.uuid
       end

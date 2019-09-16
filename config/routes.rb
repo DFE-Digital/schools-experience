@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/cookies_policy', to: 'pages#cookies_policy'
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
-  get '/service_update', to: 'pages#service_update' if Rails.application.config.x.phase >= 4
+  get '/service_update', to: 'pages#service_update'
 
   get '/auth/callback', to: 'schools/sessions#create'
 
@@ -26,54 +26,52 @@ Rails.application.routes.draw do
     resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
 
-    if Rails.application.config.x.phase >= 4
-      resources :placement_requests do
-        resource :cancellation, only: %i(show new create edit update), controller: 'placement_requests/cancellations' do
-          resource :notification_delivery, only: %i(show create), controller: 'placement_requests/cancellations/notification_deliveries'
-        end
-        namespace :acceptance do
-          resource :confirm_booking,
-            only: [:new, :create],
-            controller: '/schools/placement_requests/acceptance/confirm_booking'
-          resource :add_more_details,
-            only: [:new, :create],
-            controller: '/schools/placement_requests/acceptance/add_more_details'
-          resource :review_and_send_email,
-            only: [:new, :create],
-            controller: '/schools/placement_requests/acceptance/review_and_send_email'
-          resource :preview_confirmation_email,
-            only: [:new, :create],
-            controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
-          resource :email_sent,
-            only: [:show],
-            controller: '/schools/placement_requests/acceptance/email_sent'
-        end
-        namespace :acceptance do
-          resource :confirm_booking,
-            only: [:new, :create],
-            controller: '/schools/placement_requests/acceptance/confirm_booking'
-          resource :add_more_details,
-            only: [:new, :create],
-            controller: '/schools/placement_requests/acceptance/add_more_details'
-          resource :review_and_send_email,
-            only: [:new, :create],
-            controller: '/schools/placement_requests/acceptance/review_and_send_email'
-          resource :preview_confirmation_email,
-            only: [:new, :create],
-            controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
-          resource :email_sent,
-            only: [:show],
-            controller: '/schools/placement_requests/acceptance/email_sent'
-        end
+    resources :placement_requests do
+      resource :cancellation, only: %i(show new create edit update), controller: 'placement_requests/cancellations' do
+        resource :notification_delivery, only: %i(show create), controller: 'placement_requests/cancellations/notification_deliveries'
       end
-      resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i(index show) do
-        resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
-          resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
-        end
-        resource :date, only: %i(edit update show), controller: 'confirmed_bookings/date'
+      namespace :acceptance do
+        resource :confirm_booking,
+          only: [:new, :create],
+          controller: '/schools/placement_requests/acceptance/confirm_booking'
+        resource :add_more_details,
+          only: [:new, :create],
+          controller: '/schools/placement_requests/acceptance/add_more_details'
+        resource :review_and_send_email,
+          only: [:new, :create],
+          controller: '/schools/placement_requests/acceptance/review_and_send_email'
+        resource :preview_confirmation_email,
+          only: [:new, :create],
+          controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
+        resource :email_sent,
+          only: [:show],
+          controller: '/schools/placement_requests/acceptance/email_sent'
       end
-      resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
+      namespace :acceptance do
+        resource :confirm_booking,
+          only: [:new, :create],
+          controller: '/schools/placement_requests/acceptance/confirm_booking'
+        resource :add_more_details,
+          only: [:new, :create],
+          controller: '/schools/placement_requests/acceptance/add_more_details'
+        resource :review_and_send_email,
+          only: [:new, :create],
+          controller: '/schools/placement_requests/acceptance/review_and_send_email'
+        resource :preview_confirmation_email,
+          only: [:new, :create],
+          controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
+        resource :email_sent,
+          only: [:show],
+          controller: '/schools/placement_requests/acceptance/email_sent'
+      end
     end
+    resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i(index show) do
+      resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
+        resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
+      end
+      resource :date, only: %i(edit update show), controller: 'confirmed_bookings/date'
+    end
+    resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
 
     resource :availability_preference, only: %i(edit update)
     resource :availability_info, only: %i(edit update), controller: 'availability_info'
@@ -129,16 +127,12 @@ Rails.application.routes.draw do
 
     resources :school_searches, only: %i{new}
 
-    if Rails.application.config.x.phase >= 3
-      get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
-    end
+    get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
 
     resources :schools, only: %i{index show} do
       namespace :registrations do
         resource :personal_information, only: %i(new create edit update)
-        if Rails.application.config.x.phase >= 3
-          resource :sign_in, only: %i(show create)
-        end
+        resource :sign_in, only: %i(show create)
         resource :contact_information, only: %i(new create edit update)
         resource :education, only: %i(new create edit update)
         resource :teaching_preference, only: %i(new create edit update)
@@ -151,11 +145,9 @@ Rails.application.routes.draw do
       end
     end
 
-    if Rails.application.config.x.phase >= 4
-      get 'cancel/:placement_request_token', to: 'placement_requests/cancellations#new', as: :cancel
-      resources :placement_requests, only: [], param: :token do
-        resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
-      end
+    get 'cancel/:placement_request_token', to: 'placement_requests/cancellations#new', as: :cancel
+    resources :placement_requests, only: [], param: :token do
+      resource :cancellation, only: %i(new create show), controller: 'placement_requests/cancellations'
     end
 
     if Rails.application.config.x.phase >= 5

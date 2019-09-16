@@ -8,7 +8,6 @@ module Candidates
       redirect_to next_step_path
     end
 
-    helper_method :gitis_integration?
     helper_method :candidate_signed_in?
 
   private
@@ -33,14 +32,6 @@ module Candidates
         gitis_contact = self.current_contact)
 
       Bookings::RegistrationContactMapper.new(registration_session, gitis_contact)
-    end
-
-    def gitis_integration?
-      Rails.application.config.x.phase >= 3
-    end
-
-    def skip_gitis_integration?
-      !gitis_integration?
     end
   end
 end
