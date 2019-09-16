@@ -66,7 +66,7 @@ jobs:
     displayName: 'Tag Docker image (built from master)'
 
   - script: |
-      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):debug
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-debug
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
     displayName: 'Tag Docker image (built from debug)'
 
@@ -94,13 +94,13 @@ jobs:
       tags: latest
 
   - task: Docker@2
-    displayName: 'Push :master to DockerHub'
+    displayName: 'Push :debug to DockerHub'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
       command: push
-      tags: debug
+      tags: $(imageTag)-debug
 
   - task: Bash@3
     name: mtrx
