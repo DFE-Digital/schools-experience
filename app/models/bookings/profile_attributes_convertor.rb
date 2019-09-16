@@ -23,6 +23,7 @@ module Bookings
       convert_fees(:administration)
       convert_fees(:dbs)
       convert_fees(:other)
+      convert_access_needs if Feature.instance.active? :access_needs_journey
 
       output
     end
@@ -70,6 +71,7 @@ module Bookings
     end
 
     def convert_nillable
+      # TODO not needed if disabled_facilities feature is on
       output[:disabled_facilities] = \
         conditional_assign(:candidate_experience_detail_disabled_facilities,
           :candidate_experience_detail_disabled_facilities_details)
@@ -155,6 +157,22 @@ module Bookings
         output[:"#{type}_fee_description"]    = nil
         output[:"#{type}_fee_interval"]       = nil
         output[:"#{type}_fee_payment_method"] = nil
+      end
+    end
+
+    def convert_access_needs
+      if input.fetch(:access_needs_support_supports_access_needs)
+        output[:supports_access_needs]    = input.fetch(:access_needs_support_supports_access_needs)
+        output[:access_needs_description] = input.fetch(:access_needs_detail_description)
+        output[:disability_confident]     = input.fetch(:disability_confident_is_disability_confident)
+        output[:has_access_needs_policy]  = input.fetch(:access_needs_policy_has_access_needs_policy)
+        output[:access_needs_policy_url]  = input.fetch(:access_needs_policy_url)
+      else
+        output[:supports_access_needs]    = false
+        output[:access_needs_description] = nil
+        output[:disability_confident]     = nil
+        output[:has_access_needs_policy]  = nil
+        output[:access_needs_policy_url]  = nil
       end
     end
 

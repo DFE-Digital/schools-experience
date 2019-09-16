@@ -174,7 +174,6 @@ Given "I have completed the Candidate experience details step" do
     And I enter 'Must have nice hat' into the 'For example no denim, jeans, shorts, short skirts, trainers' text area
     And I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
     And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
-    And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
     And I enter '8:15 am' into the 'Start time' text area
     And I enter '4:30 pm' into the 'Finish time' text area
     And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
@@ -229,7 +228,7 @@ end
 
 Then "the page should have the following summary list information:" do |table|
   table.raw.to_h.each do |key, value|
-    expect(page).to have_text %r{#{key} #{value}}
+    expect(page).to have_text %r{#{key} #{value}}, normalize_ws: true
   end
 end
 
@@ -272,7 +271,6 @@ And "I complete the candidate experience form with invalid data" do
     And I check 'Other'
     And I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
     And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
-    And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
     And I enter '8:15 am' into the 'Start time' text area
     And I enter '4:30 pm' into the 'Finish time' text area
     And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
@@ -286,7 +284,6 @@ And "I complete the candidate experience form with valid data" do
     And I enter 'Must have nice hat' into the 'For example no denim, jeans, shorts, short skirts, trainers' text area
     And I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
     And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
-    And I choose 'No' from the 'Do you provide facilities or support for candidates with disabilities or access needs?' radio buttons
     And I enter '8:15 am' into the 'Start time' text area
     And I enter '4:30 pm' into the 'Finish time' text area
     And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
@@ -352,5 +349,11 @@ end
 Then "I should see the dress code policy information I entered in the wizard" do
   within "#dress-code" do
     expect(page).to have_content "Business dress\nMust have nice hat"
+  end
+end
+
+Then "I should see the accessability information I have entered" do
+  within '#access-needs-statement' do
+    expect(page).to have_text "Disability and access needs details We offer facilities and provide an inclusive environment for students, staff and school experience candidates with disability and access needs. We're happy to discuss your disability or access needs before or as part of your school experience request. Access needs policy", normalize_ws: true
   end
 end

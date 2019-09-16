@@ -85,7 +85,6 @@ Rails.application.configure do
     access_needs_journey
   )
 
-
   # dfe signin redirects back to https, so force it
   config.force_ssl = true
 

@@ -44,7 +44,18 @@
     <dl class="govuk-summary-list">
       <%= summary_row 'Dress code', @profile.dress_code, edit_schools_on_boarding_candidate_experience_detail_path %>
       <%= summary_row 'Parking', @profile.parking, edit_schools_on_boarding_candidate_experience_detail_path %>
-      <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <% if Feature.instance.active? :access_needs_journey %>
+        <%= summary_row 'Show disabilites and access needs support', @profile.supports_access_needs_description, edit_schools_on_boarding_access_needs_support_path %>
+
+        <% if @profile.supports_access_needs? %>
+          <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs_description, edit_schools_on_boarding_access_needs_detail_path %>
+          <%= summary_row 'Disability Confident employer scheme', @profile.disability_confident_scheme, edit_schools_on_boarding_disability_confident_path %>
+          <%= summary_row 'Disability and access needs policy', @profile.disability_and_access_needs_policy, edit_schools_on_boarding_access_needs_policy_path %>
+        <% end %>
+
+      <% else %>
+        <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs, edit_schools_on_boarding_candidate_experience_detail_path %>
+      <% end %>
       <%= summary_row 'Start time', @profile.start_time, edit_schools_on_boarding_candidate_experience_detail_path %>
       <%= summary_row 'Finish time', @profile.end_time, edit_schools_on_boarding_candidate_experience_detail_path %>
       <%= summary_row 'Flexible on times', @profile.flexible_on_times, edit_schools_on_boarding_candidate_experience_detail_path %>

@@ -1,0 +1,16 @@
+<section id="access-needs-statement">
+  <h2>Disability and access needs details</h2>
+  <p>
+    <%= presenter.access_needs_description %>
+  </p>
+
+  <% if presenter.has_access_needs_policy? %>
+    <p>
+      <%= link_to 'Access needs policy', presenter.access_needs_policy_url %>
+    </p>
+  <% end %>
+
+  <% if presenter.disability_confident? %>
+    <%= image_tag 'disability-confident-small.png', alt: 'Disability confident logo' %>
+  <% end %>
+</section>
