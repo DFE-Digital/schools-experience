@@ -92,24 +92,6 @@ module ApplicationHelper
     end
   end
 
-  def govuk_link_to(*args, **options, &block)
-    classes = ['govuk-button'].tap do |c|
-      c << 'govuk-button--secondary'   if options.delete(:secondary)
-      c << 'govuk-button--warning'     if options.delete(:warning)
-
-      if custom_classes = options.delete(:class)
-        c << Array.wrap(custom_classes)
-      end
-    end
-
-    defaults = {
-      class: classes.flatten.join(' ').strip,
-      data: { module: 'govuk-button' }
-    }
-
-    link_to(*args, defaults.deep_merge(options), &block)
-  end
-
 private
 
   def valid_user?(user)
