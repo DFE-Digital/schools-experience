@@ -15,7 +15,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
     Candidates::Registrations::RegistrationStore.instance.store! \
       registration_session
 
-    allow(Candidates::Registrations::PlacementRequestJob).to \
+    allow(Candidates::Registrations::CreatePlacementRequestJob).to \
       receive(:perform_later) { true }
   end
 
@@ -34,8 +34,8 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           eq @placement_request_count
       end
 
-      it "doesn't queue a PlacementRequestJob" do
-        expect(Candidates::Registrations::PlacementRequestJob).not_to \
+      it "doesn't queue a CreatePlacementRequestJob" do
+        expect(Candidates::Registrations::CreatePlacementRequestJob).not_to \
           have_received :perform_later
       end
 
@@ -57,8 +57,8 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
             eq @placement_request_count
         end
 
-        it "doesn't requeue a PlacementRequestJob" do
-          expect(Candidates::Registrations::PlacementRequestJob).to \
+        it "doesn't requeue a CreatePlacementRequestJob" do
+          expect(Candidates::Registrations::CreatePlacementRequestJob).to \
             have_received(:perform_later).exactly(:once)
         end
 
@@ -114,11 +114,12 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           end
 
           it 'enqueues the placement request job' do
-            expect(Candidates::Registrations::PlacementRequestJob).to \
+            expect(Candidates::Registrations::CreatePlacementRequestJob).to \
               have_received(:perform_later).with \
+                Bookings::PlacementRequest.last.id,
                 uuid,
-                candidates_cancel_url(Bookings::PlacementRequest.last.token),
-                schools_placement_request_url(Bookings::PlacementRequest.last)
+                fake_gitis_uuid,
+                'www.example.com'
           end
 
           it 'enqueues an accept privacy policy job' do

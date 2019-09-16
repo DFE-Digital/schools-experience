@@ -33,10 +33,11 @@ module Candidates
 
           RegistrationStore.instance.store! registration_session
 
-          PlacementRequestJob.perform_later \
+          CreatePlacementRequestJob.perform_later \
+            placement_request.id,
             registration_session.uuid,
-            cancellation_url(placement_request),
-            placement_url(placement_request)
+            current_contact&.id,
+            request.host
         end
 
         redirect_to candidates_school_registrations_placement_request_path \
