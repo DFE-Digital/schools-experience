@@ -29,10 +29,9 @@
           </p>
         </section>
 
-        <%= link_to schools_dashboard_path,
+        <%= govuk_link_to schools_dashboard_path,
           role:'button',
-          class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8',
-          data: { module: 'govuk-button' } do %>
+          class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' do %>
           Start now <%= render 'shared/start_button_chevron' %>
         <% end %>
 
@@ -49,9 +48,6 @@
             school DBS and safeguarding policies.
           </p>
         </section>
-
-
-
 
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
           <div class="govuk-accordion__section ">

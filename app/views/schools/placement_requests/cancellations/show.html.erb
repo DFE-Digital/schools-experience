@@ -25,11 +25,8 @@
       </p>
 
       <p>
-        <%= button_to 'Send rejection email',
-          schools_placement_request_cancellation_notification_delivery_path(@cancellation.placement_request),
-          class: 'govuk-button',
-          data: { module: 'govuk-button' }
-        %>
+        <%= govuk_button_to 'Send rejection email',
+          schools_placement_request_cancellation_notification_delivery_path(@cancellation.placement_request) %>
       </p>
 
       <p>

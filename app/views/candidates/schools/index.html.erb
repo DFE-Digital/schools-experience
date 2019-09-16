@@ -118,11 +118,9 @@
             <%= summary_row 'Experience subjects', format_school_subjects(school), nil, show_action: false %>
           </dl>
 
-          <%= link_to 'View school details',
-            candidates_school_path(school),
-            class: 'govuk-button',
-            aria: { 'label': "View school details for #{school.name}" },
-            data: { module: 'govuk-button' } %>
+          <%= govuk_link_to 'View school details',
+              candidates_school_path(school),
+              aria: { 'label': "View school details for #{school.name}" } %>
         </article>
       </li>
       <% end %>

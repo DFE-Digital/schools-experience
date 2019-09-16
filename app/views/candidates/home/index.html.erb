@@ -21,11 +21,9 @@
       further information.
     </p>
 
-    <%= link_to new_candidates_school_search_path,
-        role:'button',
-        class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8',
-        data: { module: 'govuk-button' } do %>
-        Start now <%= render 'shared/start_button_chevron' %>
+    <%= govuk_link_to(new_candidates_school_search_path,
+          class: 'govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8') do %>
+      Start now <%= render 'shared/start_button_chevron' %>
     <% end %>
 
     <section class="before-you-start">
