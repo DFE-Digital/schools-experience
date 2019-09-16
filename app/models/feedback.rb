@@ -13,6 +13,8 @@ class Feedback < ApplicationRecord
   validates :rating, presence: true
   validates :reason_for_using_service_explanation,
     presence: true, if: -> { requires_explanation? reason_for_using_service }
+  validates :successful_visit, inclusion: [true, false]
+  validates :unsuccessful_visit_explanation, presence: true, if: -> { successful_visit == false }
 
   def reasons_for_using_service
     self.class.reason_for_using_services.keys.map(&:to_sym)
