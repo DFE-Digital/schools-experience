@@ -80,6 +80,21 @@ describe Bookings::School, type: :model do
         end
       end
     end
+
+    describe '#availability_preference_fixed' do
+      context 'in the selecting_availability_preference context' do
+        specify 'should not allow nil' do
+          subject.availability_preference_fixed = nil
+          expect(subject.valid?(:selecting_availability_preference)).to be false
+        end
+      end
+
+      context 'everywhere else' do
+        specify 'should allow nil' do
+          expect(subject).to allow_value(nil).for(:availability_preference_fixed)
+        end
+      end
+    end
   end
 
   describe 'Relationships' do
@@ -326,7 +341,7 @@ describe Bookings::School, type: :model do
       specify { expect(described_class).to respond_to(:with_availability) }
 
       specify { expect(described_class.new).to have_db_column(:availability_info).of_type(:text) }
-      specify { expect(described_class.new).to have_db_column(:availability_preference_fixed).of_type(:boolean).with_options(default: false, null: false) }
+      specify { expect(described_class.new).to have_db_column(:availability_preference_fixed).of_type(:boolean).with_options(default: false) }
 
       let!(:flexible_with_description) { create(:bookings_school) }
       let!(:flexible_without_description) { create(:bookings_school, availability_info: nil) }
