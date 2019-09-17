@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::CreatePlacementRequest do
   include_context 'Stubbed candidates school'
+  include_context 'fake gitis with known uuid'
 
   let(:host) { 'example.com' }
 
@@ -12,12 +13,18 @@ describe Candidates::Registrations::CreatePlacementRequest do
       urn: school_urn
   end
 
+  let(:registration_uuid) { SecureRandom.urlsafe_base64 }
+
   let :registration_store do
     Candidates::Registrations::RegistrationStore.instance
   end
 
   let :registration_session do
-    FactoryBot.build :registration_session, urn: school.urn
+    FactoryBot.build :registration_session, urn: school.urn, uuid: registration_uuid
+  end
+
+  let :personal_information do
+    registration_session.personal_information
   end
 
   let :school_request_confirmation_notification_link_only do
@@ -114,17 +121,41 @@ describe Candidates::Registrations::CreatePlacementRequest do
       allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
         receive(:perform_later).and_return(true)
 
-      registration_store.store! registration_session
+      allow(fake_gitis).to receive(:find).and_call_original
+      allow(fake_gitis).to receive(:update_entity).and_call_original
+      allow(fake_gitis).to receive(:create_entity).and_call_original
     end
 
-    subject { described_class.new(uuid, contactid, host, SecureRandom.uuid) }
+    subject do
+      described_class.new \
+        fake_gitis, registration_uuid, contactid, host, SecureRandom.uuid
+    end
 
     context 'with known registration uuid' do
-      let(:uuid) { registration_session.uuid }
+      before { registration_store.store! registration_session }
       let(:contactid) { nil }
 
-      xcontext 'but without gitis contact' do
+      context 'but without gitis contact' do
         before { subject.create! }
+
+        it "does not retrieve the contact from gitis" do
+          expect(fake_gitis).not_to have_received(:find)
+        end
+
+        it "creates a contact in gitis" do
+          expect(fake_gitis).to have_received(:create_entity).with \
+            'contacts',
+            hash_including(
+              'firstname' => personal_information.first_name,
+              'lastname' => personal_information.last_name
+            )
+        end
+
+        it "creates a new Candidate record" do
+          candidates = Bookings::Candidate.where(gitis_uuid: fake_gitis_uuid)
+          expect(candidates.count).to eql(1)
+        end
+
         include_examples 'create placement request'
         include_examples 'send emails'
         include_examples 'remove from registration session'
@@ -135,9 +166,21 @@ describe Candidates::Registrations::CreatePlacementRequest do
         let(:contact) { build(:gitis_contact, :persisted) }
         let(:contactid) { contact.id }
 
-        before do
-          create :candidate, gitis_uuid: contactid
-          subject.create!
+        before { subject.create! }
+
+        it "retrieves the contact from gitis" do
+          expect(fake_gitis).to have_received(:find).with(contactid)
+        end
+
+        it "updates the contact in gitis" do
+          expect(fake_gitis).to have_received(:update_entity).with \
+            contact.entity_id,
+            hash_including('address1_city' => 'Test town')
+        end
+
+        it "creates a Candidate record" do
+          candidates = Bookings::Candidate.where(gitis_uuid: contactid)
+          expect(candidates.count).to eql(1)
         end
 
         include_examples 'create placement request'
@@ -147,12 +190,29 @@ describe Candidates::Registrations::CreatePlacementRequest do
       end
 
       context 'but unknown gitis contact' do
-        it 'will raise an exception'
+        let(:contactid) { SecureRandom.uuid }
+
+        before do
+          allow(fake_gitis).to receive(:find).with(contactid) {
+            raise Bookings::Gitis::API::UnknownUrlError.new OpenStruct.new(
+              status: 404,
+              headers: {},
+              body: 'Unknown contact'
+            )
+          }
+        end
+
+        it 'will raise an exception' do
+          expect {
+            subject.create!
+          }.to raise_exception(Bookings::Gitis::API::UnknownUrlError)
+
+          expect(Bookings::PlacementRequest.count).to be_zero
+        end
       end
     end
 
     context 'with unknown registration uuid' do
-      let(:uuid) { SecureRandom.urlsafe_base64 }
       let(:contactid) { nil }
 
       it 'will raise an exception' do
