@@ -5,16 +5,16 @@
     <h1 class="govuk-heading-l">Manage requests and bookings at <%= @current_school.name %></h1>
 
     <article id="dashboard">
-      <section id="change-school">
-        <%= link_to "Change school", new_schools_switch_path %>
-      </section>
+
+      <% if has_other_schools? %>
+        <section id="change-school">
+          <%= link_to "Change school", new_schools_switch_path %>
+        </section>
+      <% end %>
 
       <% if @current_school.private_beta? %>
 
-        <% if Rails.application.config.x.phase >= 4 %>
-          <%= render partial: 'new_requests_and_bookings' %>
-        <% end %>
-
+        <%= render partial: 'new_requests_and_bookings' %>
         <%= render partial: 'manage_dates' %>
         <%= render partial: 'account_admin' %>
 
@@ -27,7 +27,6 @@
           Help and support
         </h2>
 
-        <%- if Rails.application.config.x.phase >= 4 -%>
         <div id="service-updates-and-guidance" class="subsection">
           <header class="dashboard-low-priority">
             <%= link_to "Service updates and guidance - #{service_update_last_updated_at}", service_update_path %>
@@ -36,7 +35,6 @@
             Find out about the latest changes to the service and how it works
           </span>
         </div>
-        <%- end -%>
 
         <div id="contact-us" class="subsection">
           <header class="dashboard-low-priority">

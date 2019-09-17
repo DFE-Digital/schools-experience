@@ -193,11 +193,44 @@ module Schools
         end
       end
 
+      # TODO remove this
       def disability_and_access_needs
         if @school_profile.candidate_experience_detail.disabled_facilities
           'Yes - ' + @school_profile.candidate_experience_detail.disabled_facilities_details
         else
           'No'
+        end
+      end
+
+      def supports_access_needs?
+        @school_profile.access_needs_support.supports_access_needs?
+      end
+
+      def supports_access_needs_description
+        if supports_access_needs?
+          'Yes'
+        else
+          'No'
+        end
+      end
+
+      def disability_and_access_needs_description
+        @school_profile.access_needs_detail.description
+      end
+
+      def disability_confident_scheme
+        if @school_profile.disability_confident.is_disability_confident
+          'Yes'
+        else
+          'No'
+        end
+      end
+
+      def disability_and_access_needs_policy
+        if @school_profile.access_needs_policy.has_access_needs_policy
+          @school_profile.access_needs_policy.url
+        else
+          'None'
         end
       end
 

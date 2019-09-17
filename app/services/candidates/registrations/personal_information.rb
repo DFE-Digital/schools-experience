@@ -14,12 +14,12 @@ module Candidates
       attribute :date_of_birth, :date
       attribute :read_only, :boolean, default: false
 
-      validates :first_name, presence: true
-      validates :last_name, presence: true
+      validates :first_name, presence: true, unless: :read_only
+      validates :last_name, presence: true, unless: :read_only
       validates :email, presence: true
       validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: -> { email.present? }
-      validates :date_of_birth, presence: true
-      validates :date_of_birth, inclusion: { in: ->(_) { MAX_AGE.years.ago..MIN_AGE.years.ago } }, if: -> { date_of_birth.present? }
+      validates :date_of_birth, presence: true, unless: :read_only
+      validates :date_of_birth, inclusion: { in: ->(_) { MAX_AGE.years.ago..MIN_AGE.years.ago } }, if: -> { date_of_birth.present? && !read_only }
 
       def full_name
         return nil unless first_name && last_name
@@ -31,6 +31,14 @@ module Candidates
         build_candidate_session(gitis_crm).create_signin_token
       end
 
+      def first_name=(*args)
+        read_only ? first_name : super
+      end
+
+      def last_name=(*args)
+        read_only ? last_name : super
+      end
+
       def email=(*args)
         read_only ? email : super
       end
@@ -40,7 +48,7 @@ module Candidates
       # when the user enters a DOB like `-1, -1, -2`.
       # date of birth will be unset and get caught by the presence validation
       def date_of_birth=(*args)
-        super
+        read_only ? date_of_birth : super
       rescue ArgumentError
         nil
       end

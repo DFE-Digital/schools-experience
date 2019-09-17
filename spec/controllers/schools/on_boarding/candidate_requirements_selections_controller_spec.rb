@@ -53,7 +53,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
       end
     end
 
-    context 'vaild' do
+    context 'valid' do
       let :candidate_requirements_selection do
         build :candidate_requirements_selection
       end
@@ -124,10 +124,10 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
       end
     end
 
-    context 'vaild' do
+    context 'valid' do
       let :candidate_requirements_selection do
         school_profile.candidate_requirements_selection.tap do |m|
-          m.working_towards_degree = !m.working_towards_degree
+          m.has_or_working_towards_degree = !m.has_or_working_towards_degree
         end
       end
 

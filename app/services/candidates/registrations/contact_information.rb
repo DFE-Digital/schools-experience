@@ -1,14 +1,6 @@
 module Candidates
   module Registrations
     class ContactInformation < RegistrationStep
-      # These are here purely for compatibility with legacy data in Redis
-      if Rails.application.config.x.phase <= 4
-        attribute :first_name
-        attribute :last_name
-        attribute :full_name
-        attribute :email
-      end
-
       attribute :building
       attribute :street
       attribute :town_or_city

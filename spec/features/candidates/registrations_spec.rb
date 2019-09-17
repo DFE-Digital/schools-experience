@@ -36,38 +36,9 @@ feature 'Candidate Registrations', type: :feature do
     allow(NotifyEmail::CandidateMagicLink).to receive :new do
       double NotifyEmail::CandidateMagicLink, despatch_later!: true
     end
-
-    allow(NotifyEmail::SchoolRequestConfirmation).to receive :new do
-      double NotifyEmail::SchoolRequestConfirmation, despatch_later!: true
-    end
-
-    allow(NotifyEmail::CandidateRequestConfirmation).to receive :new do
-      double NotifyEmail::CandidateRequestConfirmation, despatch_later!: true
-    end
   end
 
   feature 'Candidate Registration' do
-    context "running under Phase 2" do
-      include_context 'bypass fake Gitis'
-      let(:email_address) { 'person@example.com' }
-
-      before do
-        allow(Rails.application.config.x).to receive(:phase).and_return(2)
-      end
-
-      scenario "completing the Journey" do
-        complete_personal_information_step expected_heading: 'Enter your details'
-        complete_contact_information_step
-        complete_education_step
-        complete_teaching_preference_step
-        complete_placement_preference_step
-        complete_background_step
-        complete_application_preview_step button_text: 'Continue'
-        complete_email_confirmation_step
-        view_request_acknowledgement_step
-      end
-    end
-
     context 'for unknown Contact' do
       let(:email_address) { 'unknown@example.com' }
 
@@ -225,7 +196,7 @@ feature 'Candidate Registrations', type: :feature do
       "/candidates/schools/#{school_urn}/registrations/contact_information/new"
 
     # Submit contact information form with errors
-    fill_in 'Building', with: 'Test house'
+    fill_in 'Building', with: ''
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 

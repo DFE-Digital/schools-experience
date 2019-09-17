@@ -3,11 +3,9 @@ class PagesController < ApplicationController
     render template: sanitise_page
   end
 
-  def healthcheck
-    render plain: 'healthy'
+  def privacy_policy
+    @policy_id = Bookings::Gitis::PrivacyPolicy.default
   end
-
-  def privacy_policy; end
 
   def schools_privacy_policy; end
 

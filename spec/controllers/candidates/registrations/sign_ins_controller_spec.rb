@@ -93,6 +93,26 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         expect(token.candidate.reload).to be_confirmed
       end
     end
+
+    context 'with valid token but invalid Gitis data' do
+      include_context 'candidate signin'
+      let(:gitis_contact_attrs) do
+        attributes_for(:gitis_contact, :persisted, birthdate: nil)
+      end
+
+      before do
+        get candidates_registration_verify_path(school_id, token)
+      end
+
+      it "will redirect_to ContactInformation step" do
+        expect(response).to \
+          redirect_to new_candidates_school_registrations_contact_information_path(school_id)
+      end
+
+      it "will have confirmed candidate" do
+        expect(token.candidate.reload).to be_confirmed
+      end
+    end
   end
 
   describe 'POST #create' do

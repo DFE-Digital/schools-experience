@@ -15,9 +15,9 @@
       </button>
 
       <div data-target="collapsible.panel">
+        <%= link_to 'Skip to search results', '#search-results', class: 'govuk-skip-link', id: 'skip-to-results' %>
         <%= form_for @search, as: '',
               method: :get,
-              data: {controller: 'instant-filter'},
               html: {class: "collapsible__content"} do |f| %>
 
           <%= f.hidden_field :query %>
@@ -113,9 +113,9 @@
           </h2>
 
           <dl class="govuk-summary-list">
-            <%= summary_row 'Address', format_school_address(school) %>
-            <%= summary_row 'Education phases', format_school_phases(school) %>
-            <%= summary_row 'Experience subjects', format_school_subjects(school) %>
+            <%= summary_row 'Address', format_school_address(school), nil, show_action: false %>
+            <%= summary_row 'Education phases', format_school_phases(school), nil, show_action: false %>
+            <%= summary_row 'Experience subjects', format_school_subjects(school), nil, show_action: false %>
           </dl>
 
           <%= link_to 'View school details', candidates_school_path(school), class: 'govuk-button', 'aria-label': "View school details for #{school.name}" %>

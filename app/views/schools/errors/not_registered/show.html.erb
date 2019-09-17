@@ -19,9 +19,11 @@
       </a>
     </p>
 
-    <p>
-      You are currently logged in as <strong><%= current_user_full_name %></strong>.
-    </p>
+    <% if @current_user.present? %>
+      <p>
+        You are currently logged in as <strong><%= current_user_full_name %></strong>.
+      </p>
+    <% end %>
 
     <section>
       <p>

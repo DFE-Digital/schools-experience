@@ -7,13 +7,14 @@ shared_context 'test entity' do
     entity_attributes :hidden, internal: true
     entity_attributes :notcreate, except: :create
     entity_attributes :notupdate, except: :update
+  end
 
-    def initialize(data = {})
-      self.testentityid = data['testentityid']
-      self.firstname = data['firstname']
-      self.lastname = data['lastname']
+  class CompanyEntity
+    include Bookings::Gitis::Entity
 
-      super
-    end
+    entity_id_attribute :teamentityid
+
+    entity_attribute :title
+    entity_association :leader, TestEntity
   end
 end

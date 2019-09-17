@@ -3,8 +3,8 @@ Dear ((candidate_name)),
 Here are the main details about your school experience at ((school_name)):
 
 * Address: ((school_address))
-* Experience dates: ((placement_schedule))
-* Experience start and finish times: ((school_start_time)) to ((school_finish_time))
+* Start date: ((placement_schedule))
+* Start and finish times: ((school_start_time)) to ((school_finish_time))
 * Dress code: ((school_dress_code))
 * Parking: ((school_parking))
 
@@ -22,7 +22,7 @@ Name: ((school_teacher_name))
 Email address: ((school_teacher_email))
 UK telephone number: ((school_teacher_telephone))
 
-You can also contact them if you have any questions about your experience.
+You can also contact them if you have any questions.
 
 To cancel your school experience use the following link ((cancellation_url)).
 

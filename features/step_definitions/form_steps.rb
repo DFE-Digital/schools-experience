@@ -143,6 +143,10 @@ When("I click the {string} submit button") do |string|
   page.find("input[value='#{string}']").click
 end
 
+Then("there should not be a {string} checkbox") do |label_text|
+  expect(page).not_to have_css('label', text: label_text)
+end
+
 def get_form_group(page, label_text)
   selector = get_selector label_text
   label = page.find(selector, text: label_text)

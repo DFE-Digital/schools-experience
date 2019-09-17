@@ -21,4 +21,5 @@ class Bookings::Subject < ApplicationRecord
     dependent: :destroy
 
   scope :available, -> { where.not(hidden: true) }
+  scope :secondary_subjects, -> { where(secondary_subject: true) }
 end

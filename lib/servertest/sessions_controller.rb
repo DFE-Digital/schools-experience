@@ -13,8 +13,11 @@ Schools::SessionsController.class_eval do
     end
 
     session[:id_token]     = 'abc123'
-    session[:current_user] = { name: params[:name] || 'Joey' }
     session[:urn]          = 123456
+    session[:current_user] = OpenStruct.new(
+      name: params[:name] || 'Joey',
+      sub: '33333333-4444-5555-6666-777777777777'
+    )
     redirect_to '/schools/dashboard'
   end
 end

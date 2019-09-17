@@ -79,7 +79,11 @@ Rails.application.configure do
   end
 
   config.x.phase = Integer(ENV.fetch('PHASE') { 10000 })
-  config.x.features = %i(subject_specific_dates candidate_requirement_ab_test)
+  config.x.features = %i(
+    subject_specific_dates
+    candidate_requirement_ab_test
+    access_needs_journey
+  )
 
   # dfe signin redirects back to https, so force it
   config.force_ssl = true
@@ -90,6 +94,7 @@ Rails.application.configure do
   config.x.oidc_client_secret = Rails.application.credentials.dig(:dfe_pp_signin_secret)
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
   config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
+  config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
 
   if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
@@ -103,6 +108,8 @@ Rails.application.configure do
   config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL', 'notset')
   config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION', '0')
   config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID', SecureRandom.uuid)
+  config.x.gitis.privacy_policy_id = ENV['CRM_PRIVACY_POLICY_ID'].presence || 'd1adf2ad-e7c4-e911-a981-000d3a206976'
+  config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 end

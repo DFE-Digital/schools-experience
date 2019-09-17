@@ -1,4 +1,4 @@
-FROM ruby:2.5.5
+FROM ruby:2.5.6
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -12,7 +12,6 @@ WORKDIR /app
 EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
-HEALTHCHECK CMD bin/check_health.sh || exit 1
 
 # Install node, leaving as few artifacts as possible
 RUN apt-get update && apt-get install apt-transport-https && \

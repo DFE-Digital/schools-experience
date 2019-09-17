@@ -70,17 +70,24 @@ Rails.application.configure do
   config.x.notify_client = NotifyFakeClient
 
   config.x.phase = 10000
-  config.x.features = %i(subject_specific_dates dbs_requirement candidate_requirement_ab_test)
+  config.x.features = %i(
+    subject_specific_dates
+    candidate_requirement_ab_test
+    access_needs_journey
+  )
 
   config.x.base_url = 'https://some-host'
   config.x.oidc_client_id = 'se-test'
   config.x.oidc_client_secret = 'abc123'
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
+  config.x.dfe_sign_in_api_host = 'some-signin-host.signin.education.gov.uk'
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
+  config.x.gitis.privacy_policy_id = SecureRandom.uuid
+  config.x.gitis.privacy_consent_id = '10'
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)

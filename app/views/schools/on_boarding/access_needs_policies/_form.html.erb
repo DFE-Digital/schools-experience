@@ -1,0 +1,29 @@
+<%- self.page_title = 'Access needs policy' -%>
+
+<%-
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Access needs policy' => nil
+  }
+-%>
+
+<%= link_to 'Back', :back, class: 'govuk-back-link', data: {controller: 'back-link'} %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for access_needs_policy, url: schools_on_boarding_access_needs_policy_path, method: method do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <%= f.radio_button_fieldset :has_access_needs_policy, page_heading: true do |fieldset| %>
+        <p class="govuk-hint">
+          For example, a link to a relevant document or page on your school
+          website
+        </p>
+        <%= fieldset.radio_input true do %>
+          <%= f.text_field :url %>
+        <% end %>
+        <%= fieldset.radio_input false %>
+      <% end %>
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

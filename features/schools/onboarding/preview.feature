@@ -22,6 +22,10 @@ Feature: Preview profile
             | Subjects                         |                           |
             | Description                      |                           |
             | Candidate experience details     |                           |
+            | Access needs support             |                           |
+            | Access needs detail              |                           |
+            | Disability confident             |                           |
+            | Access needs policy              |                           |
             | Experience Outline               |                           |
             | Admin contact                    |                           |
         When I click the 'Continue' button

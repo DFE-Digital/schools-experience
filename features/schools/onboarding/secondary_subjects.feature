@@ -33,6 +33,10 @@ Feature: Subjects
     When I submit the form
     Then I should see a validation error message
 
+  Scenario: Primary should not be listed as a subject
+    Given I am on the 'Subjects' page
+    Then there should not be a 'Primary' checkbox
+
   Scenario: Completing the step choosing some subjects
     Given I am on the 'Subjects' page
     And I check 'Maths'

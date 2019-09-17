@@ -27,6 +27,11 @@ module Schools
       unless candidate_requirements_choice.has_requirements
         self.candidate_requirements_selection = OnBoarding::CandidateRequirementsSelection.new
       end
+      unless access_needs_support.supports_access_needs?
+        self.access_needs_detail = OnBoarding::AccessNeedsDetail.new
+        self.disability_confident = OnBoarding::DisabilityConfident.new
+        self.access_needs_policy = OnBoarding::AccessNeedsPolicy.new
+      end
     end
 
     validate :administration_fee_not_set, unless: -> { fees.administration_fees? }
@@ -82,8 +87,8 @@ module Schools
       class_name: 'Schools::OnBoarding::CandidateRequirementsSelection',
       mapping: [
           %w(candidate_requirements_selection_on_teacher_training_course on_teacher_training_course),
-          %w(candidate_requirements_selection_has_degree has_degree),
-          %w(candidate_requirements_selection_working_towards_degree working_towards_degree),
+          %w(candidate_requirements_selection_not_on_another_training_course not_on_another_training_course),
+          %w(candidate_requirements_selection_has_or_working_towards_degree has_or_working_towards_degree),
           %w(candidate_requirements_selection_live_locally live_locally),
           %w(candidate_requirements_selection_maximum_distance_from_school maximum_distance_from_school),
           %w(candidate_requirements_selection_other other),
@@ -182,6 +187,39 @@ module Schools
         %w(candidate_experience_detail_end_time end_time),
         %w(candidate_experience_detail_times_flexible times_flexible),
         %w(candidate_experience_detail_times_flexible_details times_flexible_details)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :access_needs_support,
+      class_name: 'Schools::OnBoarding::AccessNeedsSupport',
+      mapping: [
+        %w(access_needs_support_supports_access_needs supports_access_needs)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :access_needs_detail,
+      class_name: 'Schools::OnBoarding::AccessNeedsDetail',
+      mapping: [
+        %w(access_needs_detail_description description)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :disability_confident,
+      class_name: 'Schools::OnBoarding::DisabilityConfident',
+      mapping: [
+        %w(disability_confident_is_disability_confident is_disability_confident)
+      ],
+      constructor: :compose
+
+    composed_of \
+      :access_needs_policy,
+      class_name: 'Schools::OnBoarding::AccessNeedsPolicy',
+      mapping: [
+        %w(access_needs_policy_has_access_needs_policy has_access_needs_policy),
+        %w(access_needs_policy_url url)
       ],
       constructor: :compose
 

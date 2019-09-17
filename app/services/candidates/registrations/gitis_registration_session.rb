@@ -14,7 +14,7 @@ module Candidates
         # finally lock it with read only
 
         fetch_attributes(PersonalInformation, mapper.contact_to_personal_information).
-          merge(mapper.contact_to_personal_information).
+          merge(completed_contact_fields_for_personal_information).
           merge('read_only' => true)
       end
 
@@ -36,6 +36,16 @@ module Candidates
 
       def mapper
         @mapper ||= Bookings::RegistrationContactMapper.new(self, gitis_contact)
+      end
+
+    private
+
+      def completed_contact_fields_for_personal_information
+        # Ignore blank fields in Gitis and fall back to our data for validation purposes
+
+        mapper.contact_to_personal_information.reject do |_key, value|
+          value.blank?
+        end
       end
     end
   end

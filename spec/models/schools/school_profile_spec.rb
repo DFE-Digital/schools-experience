@@ -208,6 +208,25 @@ describe Schools::SchoolProfile, type: :model do
         have_db_column(:candidate_requirements_selection_step_completed)
           .of_type(:boolean).with_options(default: false)
     end
+
+    it do
+      is_expected.to \
+        have_db_column(:access_needs_detail_description).of_type(:string)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:disability_confident_is_disability_confident).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to \
+        have_db_column(:access_needs_policy_has_access_needs_policy).of_type(:boolean)
+    end
+
+    it do
+      is_expected.to have_db_column(:access_needs_policy_url).of_type(:string)
+    end
   end
 
   context 'relationships' do
@@ -474,6 +493,90 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
+    context '#access_needs_support' do
+      let :form_model do
+        FactoryBot.build :access_needs_support
+      end
+
+      before do
+        model.access_needs_support = form_model
+      end
+
+      %i(supports_access_needs).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("access_needs_support_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.access_needs_support).to eq form_model
+      end
+    end
+
+    context '#access_needs_detail' do
+      let :form_model do
+        FactoryBot.build :access_needs_detail
+      end
+
+      before do
+        model.access_needs_detail = form_model
+      end
+
+      %i(description).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("access_needs_detail_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.access_needs_detail).to eq form_model
+      end
+    end
+
+    context '#disability_confident' do
+      let :form_model do
+        FactoryBot.build :disability_confident
+      end
+
+      before do
+        model.disability_confident = form_model
+      end
+
+      %i(is_disability_confident).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("disability_confident_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.disability_confident).to eq form_model
+      end
+    end
+
+    context '#access_needs_policy' do
+      let :form_model do
+        FactoryBot.build :access_needs_policy
+      end
+
+      before do
+        model.access_needs_policy = form_model
+      end
+
+      %i(has_access_needs_policy url).each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("access_needs_policy_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.access_needs_policy).to eq form_model
+      end
+    end
+
     context '#experience_outline' do
       let :form_model do
         FactoryBot.build :experience_outline
@@ -635,6 +738,39 @@ describe Schools::SchoolProfile, type: :model do
         it 'removes subjects' do
           expect(school_profile.reload.candidate_requirements_selection).to \
             eq Schools::OnBoarding::CandidateRequirementsSelection.new
+        end
+      end
+
+      context 'when school no longer supports access_needs' do
+        let :school_profile do
+          FactoryBot.create :school_profile,
+            :with_access_needs_support,
+            :with_access_needs_detail,
+            :with_disability_confident,
+            :with_access_needs_policy
+        end
+
+        let :no_access_needs_support do
+          FactoryBot.build :access_needs_support, supports_access_needs: false
+        end
+
+        before do
+          school_profile.update! access_needs_support: no_access_needs_support
+        end
+
+        it 'removes access_needs_detail' do
+          expect(school_profile.access_needs_detail).to eq \
+            Schools::OnBoarding::AccessNeedsDetail.new
+        end
+
+        it 'removes disability_confident' do
+          expect(school_profile.disability_confident).to eq \
+            Schools::OnBoarding::DisabilityConfident.new
+        end
+
+        it 'removes access_needs_policy' do
+          expect(school_profile.access_needs_policy).to eq \
+            Schools::OnBoarding::AccessNeedsPolicy.new
         end
       end
     end

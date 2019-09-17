@@ -111,8 +111,8 @@ describe Bookings::Booking do
       end
     end
 
-    describe '.unprocessed' do
-      let! :unprocessed_bookings do
+    describe '.not_cancelled' do
+      let! :not_cancelled do
         FactoryBot.create :bookings_booking
       end
 
@@ -124,9 +124,9 @@ describe Bookings::Booking do
         FactoryBot.create :bookings_booking, :cancelled_by_candidate
       end
 
-      subject { described_class.unprocessed }
+      subject { described_class.not_cancelled }
 
-      it { is_expected.to match_array [unprocessed_bookings] }
+      it { is_expected.to match_array [not_cancelled] }
     end
 
     describe '.previous' do

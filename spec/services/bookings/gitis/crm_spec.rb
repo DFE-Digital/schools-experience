@@ -66,6 +66,43 @@ describe Bookings::Gitis::CRM, type: :model do
         end
       end
     end
+
+    context 'with includes' do
+      include_context 'test entity'
+
+      let(:companyid) { SecureRandom.uuid }
+      let(:testentityid) { SecureRandom.uuid }
+
+      let(:response) do
+        {
+          'teamentityid' => companyid,
+          'title' => 'Human Resources',
+          'leader' => {
+            'testentityid' => testentityid,
+            'firstname' => 'John'
+          }
+        }
+      end
+
+      before { allow(gitis.send(:api)).to receive(:get).and_return(response) }
+
+      subject! { gitis.find(companyid, entity_type: CompanyEntity, includes: :leader) }
+
+      it "will query for the team" do
+        expect(gitis.send(:api)).to have_received(:get).with \
+          "#{CompanyEntity.entity_path}(#{companyid})",
+          hash_including('$expand' => 'leader')
+      end
+
+      it "will populate the team entity" do
+        is_expected.to have_attributes(id: companyid, title: 'Human Resources')
+      end
+
+      it "will populate the associated leader entity" do
+        expect(subject.leader).to have_attributes id: testentityid
+        expect(subject.leader).to have_attributes firstname: 'John'
+      end
+    end
   end
 
   describe '#find_by_email' do

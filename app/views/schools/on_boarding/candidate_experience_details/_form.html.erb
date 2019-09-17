@@ -41,11 +41,13 @@
         <% end %>
       <% end %>
 
-      <%= f.radio_button_fieldset :disabled_facilities do |fieldset| %>
-        <%= f.radio_input true do %>
-          <%= f.text_area :disabled_facilities_details, rows: 7 %>
+      <% unless Feature.instance.active? :access_needs_journey %>
+        <%= f.radio_button_fieldset :disabled_facilities do |fieldset| %>
+          <%= f.radio_input true do %>
+            <%= f.text_area :disabled_facilities_details, rows: 7 %>
+          <% end %>
+          <%= f.radio_input false %>
         <% end %>
-        <%= f.radio_input false %>
       <% end %>
 
       <div class="govuk-form-group">

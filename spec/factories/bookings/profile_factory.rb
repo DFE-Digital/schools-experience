@@ -24,5 +24,18 @@ FactoryBot.define do
     admin_contact_email { 'some@one.com' }
     admin_contact_phone { '07123456789' }
     description_details { 'A rather short description of our school' }
+    supports_access_needs { true }
+    access_needs_description { 'Here are some details' }
+    disability_confident { true }
+    has_access_needs_policy { true }
+    access_needs_policy_url { 'https://example.com/access-needs-policy' }
+
+    trait :without_supports_access_needs do
+      supports_access_needs { false }
+      access_needs_description { nil }
+      disability_confident { nil }
+      has_access_needs_policy { nil }
+      access_needs_policy_url { nil }
+    end
   end
 end
