@@ -1,0 +1,143 @@
+<div class="govuk-grid-row">
+  <article class="govuk-grid-column-full">
+    <%= link_to 'Back', :back, class: 'govuk-back-link', data: { controller: 'back-link' } %>
+
+    <h1 class="govuk-heading-l">Accessibility statement for the school experience service</h1>
+    <section>
+      <p>
+        This service is run by the Department for Education (DfE).
+      </p>
+
+      <p>
+        We want as many people as possible to be able to use this service. For
+        example, that means you should be able to:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>change colours, contrast levels and fonts</li>
+        <li>zoom in up to 300% without the text spilling off the screen</li>
+        <li>navigate most of the service using just a keyboard and speech recognition software</li>
+        <li>
+          listen to most of the service using a screen reader (including the most
+          recent versions of JAWS, NVDA and VoiceOver)
+        </li>
+      </ul>
+
+      <p>
+        We've also made the service text as simple as possible to understand.
+      </p>
+
+      <p>
+        For advice on making your device easier to use if you have a disability
+        visit <%= link_to 'AbilityNet', 'https://mcmw.abilitynet.org.uk/' %>.
+      </p>
+
+      <p>
+        You can also find advice on GOV.UK at <%= link_to 'Accessibility', 'https://www.gov.uk/help/accessibility' %>.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="govuk-heading-m">Service accessibility</h2>
+
+      <p>
+        We are not aware of any parts of our service which are not accessible.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="govuk-heading-m">What to do if you cannot access parts of this service</h2>
+
+      <p>
+        Contact us if you need information on this service in accessible PDF, audio
+        recording, braille, easy read or large print format.
+      </p>
+
+      <ul class="govuk-list">
+        <li><%= mail_to 'organise.school-experience@education.gov.uk', aria: { label: 'School experience support email address' } %></li>
+      </ul>
+
+      <p>
+        We'll consider your request and get back to you within 5 working days.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="govuk-heading-m">Reporting accessibility problems with this service</h2>
+
+      <p>
+        We're always looking to improve the accessibility of this service.
+      </p>
+
+      <p>
+        If you find any problems that are not listed on this page or think we're
+        not meeting accessibility requirements email <%= mail_to 'organise.school-experience@education.gov.uk' %>.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="govuk-heading-m">Enforcement procedure</h2>
+
+      <p>
+        The <%= link_to 'Equality and Human Rights Commission (EHRC)', 'https://www.equalityhumanrights.com/en' %>
+        is responsible for
+        enforcing the 'accessibility regulations' - officially known as the
+        <%= link_to 'Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.',
+          'http://www.legislation.gov.uk/uksi/2018/852/contents/made' %>
+      </p>
+
+      <p>
+        If you're not happy with how we respond to your complaint, contact the
+        <%= link_to 'Equality Advisory and Support Service (EASS)', 'https://www.equalityadvisoryservice.com/' %>.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="govuk-heading-m">Technical information about this service's accessibility</h2>
+
+      <p>
+        DfE is committed to making its service accessible, in accordance with the
+        Public Sector Bodies (Websites and Mobile Applications) (No. 2)
+        Accessibility Regulations 2018.
+      </p>
+
+      <p>
+        This service is fully compliant with the
+        <%= link_to 'Web Content Accessibility Guidelines version 2.1', 'https://www.w3.org/TR/WCAG21/' %>
+        AA standard.
+      </p>
+
+      <h3 class="govuk-heading-s">
+        Navigation and accessing information
+      </h3>
+
+      <p>
+        We have not identified any problems relating to interactive tools and
+        transactions.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="govuk-heading-m">How we tested this service</h2>
+
+      <p>
+        This service was last tested on 3 July 2019. The test was carried out by
+        the <%= link_to 'Digital Accessibility Centre (DAC)', 'https://digitalaccessibilitycentre.org/' %>.
+      </p>
+
+      <p>
+        We tested our whole service platform.
+      </p>
+
+      <p>
+        You can read the full <%= link_to 'Digtial Accessibility Centre Report', '/reports/school-experience-accessibility-report.pdf' %>.
+      </p>
+    </section>
+
+    <aside>
+      <p class="govuk-hint">
+        This statement was prepared on 17 September 2019.
+      </p>
+    </aside>
+  </article>
+</div>

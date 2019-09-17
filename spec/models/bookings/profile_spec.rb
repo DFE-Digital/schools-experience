@@ -397,5 +397,35 @@ RSpec.describe Bookings::Profile, type: :model do
         it { is_expected.not_to validate_presence_of :other_fee_payment_method }
       end
     end
+
+    describe "access_needs" do
+      context 'with supports_access_needs' do
+        subject { create :bookings_profile }
+
+        it { is_expected.not_to allow_value(nil).for :supports_access_needs }
+        it { is_expected.to validate_presence_of :access_needs_description }
+        it { is_expected.not_to allow_value(nil).for :disability_confident }
+        it { is_expected.not_to allow_value(nil).for :has_access_needs_policy }
+
+        context 'with has_access_needs_policy' do
+          before { subject.has_access_needs_policy = true }
+          it { is_expected.to validate_presence_of :access_needs_policy_url }
+        end
+
+        context 'without has_access_needs_policy' do
+          before { subject.has_access_needs_policy = false }
+          it { is_expected.not_to validate_presence_of :access_needs_policy_url }
+        end
+      end
+
+      context 'without access_needs_support' do
+        subject { create :bookings_profile, :without_supports_access_needs }
+
+        it { is_expected.not_to allow_value(nil).for :supports_access_needs }
+        it { is_expected.not_to validate_presence_of :access_needs_description }
+        it { is_expected.to allow_value(nil).for :disability_confident }
+        it { is_expected.to allow_value(nil).for :has_access_needs_policy }
+      end
+    end
   end
 end

@@ -161,6 +161,12 @@ ActiveRecord::Schema.define(version: 2019_09_11_085544) do
     t.string "admin_contact_email_secondary"
     t.boolean "dbs_requires_check"
     t.text "dbs_policy_details"
+    t.string "admin_contact_email_secondary"
+    t.boolean "supports_access_needs"
+    t.text "access_needs_description"
+    t.boolean "disability_confident"
+    t.boolean "has_access_needs_policy"
+    t.string "access_needs_policy_url"
     t.index ["school_id"], name: "index_bookings_profiles_on_school_id", unique: true
   end
 

@@ -87,6 +87,13 @@
       </ul>
     </div>
 
+    <% if Feature.instance.active? :access_needs_journey %>
+      <% if @presenter.supports_access_needs? %>
+        <%= render partial: 'candidates/schools/access_needs_statement.html.erb',
+          locals: { presenter: @presenter } %>
+      <% end %>
+    <% end %>
+
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__tablet_plus">
         <%= govuk_link_to "Start request",
@@ -187,12 +194,14 @@
         <%= simple_format @presenter.parking_details %>
       <% end %>
 
-      <%= dlist_item 'Accessibility details', id: 'accessibility-details' do %>
-        <%- if @presenter.disabled_facilities.present? -%>
-          <%= simple_format @presenter.disabled_facilities %>
-        <%- else -%>
-          <em>No information supplied</em>
-        <%- end -%>
+      <% unless Feature.instance.active? :access_needs_journey %>
+        <%= dlist_item 'Accessibility details', id: 'accessibility-details' do %>
+          <%- if @presenter.disabled_facilities.present? -%>
+            <%= simple_format @presenter.disabled_facilities %>
+          <%- else -%>
+            <em>No information supplied</em>
+          <%- end -%>
+        <% end %>
       <% end %>
 
       <%= dlist_item 'Teacher training offered', id: 'school-teacher-training-info' do %>

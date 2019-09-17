@@ -7,6 +7,7 @@ module Schools
     include DFEAuthentication
     before_action :require_auth
     before_action :set_current_school
+    before_action :set_other_urns
     before_action :set_site_header_text
     before_action :ensure_onboarded
 
@@ -17,16 +18,19 @@ module Schools
       urn = session[:urn]
       raise MissingURN, 'urn is missing, unable to match with school' unless urn.present?
 
-      Rails.logger.debug("Looking for school #{urn}")
       @current_school ||= retrieve_school(urn)
     end
     alias_method :set_current_school, :current_school
+
+  private
 
     def set_site_header_text
       @site_header_text = "Manage school experience"
     end
 
-  private
+    def set_other_urns
+      @other_urns = (session[:other_urns] || retrieve_other_urns)
+    end
 
     def retrieve_school(urn)
       unless (school = Bookings::School.find_by(urn: urn))
@@ -34,6 +38,13 @@ module Schools
       end
 
       school
+    end
+
+    def retrieve_other_urns
+      Schools::DFESignInAPI::Organisations
+        .new(current_user.sub)
+        .urns
+        .reject { |urn| urn == @current_school.urn }
     end
 
     def ensure_onboarded

@@ -39,7 +39,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
       allow(NotifyEmail::CandidateBookingConfirmation).to(
         receive(:from_booking)
-          .and_return(double(NotifyEmail::CandidateRequestConfirmation, despatch_later!: true))
+          .and_return(double(NotifyEmail::CandidateBookingConfirmation, despatch_later!: true))
       )
     end
 

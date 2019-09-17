@@ -89,17 +89,41 @@ describe Schools::SessionsController, type: :request do
       end
 
       context 'errors' do
-        context 'StateMismatchError' do
-          let(:bad_state) { 'aaaaaaaa-bbbb-1111-2222-333333333333' }
-          let(:callback) { "/auth/callback?code=#{code}&state=#{bad_state}&session_state=#{session_state}" }
+        context 'Errors returned by DfE Sign-in' do
+          let(:error) { 'baderror' }
+          let(:callback) { "/auth/callback?error=#{error}" }
+
           after { get callback }
 
-          specify 'should raise StateMismatchError' do
-            expect(Rails.logger).to receive(:error).with(/doesn't match session state/)
+          specify 'should raise an AuthFailed error' do
+            expect(response.status).to eql 302
+            expect(response.redirect_url).to end_with('schools/errors/auth_failed')
           end
 
-          specify 'should redirect to an error page' do
-            expect(response.status).to eql 302
+          specify 'should write a message to the log' do
+            expect(Rails.logger).to receive(:error).with(/DfE Sign-in error response/)
+          end
+        end
+
+        context 'StateMismatchError' do
+          {
+            'aaaaaaaa-bbbb-1111-2222-333333333333' => 'not-matching',
+            '' => 'empty',
+            nil => 'missing'
+          }.each do |bad_state, description|
+            context description do
+              let(:callback) { "/auth/callback?code=#{code}&state=#{bad_state}&session_state=#{session_state}" }
+              after { get callback }
+
+              specify 'should raise StateMismatchError' do
+                expect(Rails.logger).to receive(:error).with(/doesn't match session state/)
+              end
+
+              specify 'should redirect to an error page' do
+                expect(response.status).to eql 302
+                expect(response.redirect_url).to end_with('schools/errors/auth_failed')
+              end
+            end
           end
         end
 
@@ -113,6 +137,7 @@ describe Schools::SessionsController, type: :request do
 
           specify 'should redirect to an error page' do
             expect(response.status).to eql 302
+            expect(response.redirect_url).to end_with('schools/errors/auth_failed')
           end
         end
       end

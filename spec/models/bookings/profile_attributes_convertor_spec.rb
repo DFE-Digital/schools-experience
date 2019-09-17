@@ -53,6 +53,11 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(other_fee_description: 'Owl repellent / other protective gear') }
       it { is_expected.to include(other_fee_interval: 'One-off') }
       it { is_expected.to include(other_fee_payment_method: 'Stamps') }
+      it { is_expected.to include(supports_access_needs: true) }
+      it { is_expected.to include(access_needs_description: 'Here are some details') }
+      it { is_expected.to include(disability_confident: true) }
+      it { is_expected.to include(has_access_needs_policy: true) }
+      it { is_expected.to include(access_needs_policy_url: 'https://example.com/access-needs-policy') }
     end
 
     context 'with completed profile with blank fields' do
@@ -77,6 +82,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.fees_administration_fees = false
         model.fees_dbs_fees = false
         model.fees_other_fees = false
+        model.access_needs_support_supports_access_needs = false
 
         model.attributes
       end
@@ -116,6 +122,11 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(other_fee_description: nil) }
       it { is_expected.to include(other_fee_interval: nil) }
       it { is_expected.to include(other_fee_payment_method: nil) }
+      it { is_expected.to include(supports_access_needs: false) } # rename this clashed with form model
+      it { is_expected.to include(access_needs_description: nil) }
+      it { is_expected.to include(disability_confident: nil) }
+      it { is_expected.to include(has_access_needs_policy: nil) }
+      it { is_expected.to include(access_needs_policy_url: nil) }
     end
   end
 

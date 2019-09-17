@@ -29,11 +29,6 @@ describe Bookings::PlacementRequest, type: :model do
       before { subject.reload }
       it { is_expected.to be_valid }
     end
-
-    context 'before phase3' do
-      before { allow(Rails.application.config.x).to receive(:phase).and_return(2) }
-      it { is_expected.not_to validate_presence_of :candidate }
-    end
   end
 
   context 'relationships' do

@@ -133,6 +133,10 @@ Rails.application.configure do
     'https://services.signin.education.gov.uk/my-services'
   end
 
+  config.x.dfe_sign_in_api_host = ENV.fetch('DFE_SIGNIN_API_ENDPOINT') do
+    'api.signin.education.gov.uk'
+  end
+
   config.x.gitis.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)
   if ENV['CRM_CLIENT_ID'].present?
     config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID')

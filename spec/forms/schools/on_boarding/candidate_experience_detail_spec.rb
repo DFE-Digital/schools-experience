@@ -27,7 +27,9 @@ describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
     it { is_expected.not_to allow_value(nil).for :smart_casual }
     it { is_expected.not_to allow_value(nil).for :other_dress_requirements }
     it { is_expected.not_to allow_value(nil).for :parking_provided }
-    it { is_expected.not_to allow_value(nil).for :disabled_facilities }
+    unless Feature.instance.active? :access_needs_journey
+      it { is_expected.not_to allow_value(nil).for :disabled_facilities }
+    end
     it { is_expected.to validate_presence_of :start_time }
     it { is_expected.to validate_presence_of :end_time }
     it { is_expected.not_to allow_value(nil).for :times_flexible }
@@ -55,8 +57,10 @@ describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
     end
 
     context 'when disabled_facilities' do
-      subject { described_class.new disabled_facilities: true }
-      it { is_expected.to validate_presence_of :disabled_facilities_details }
+      unless Feature.instance.active? :access_needs_journey
+        subject { described_class.new disabled_facilities: true }
+        it { is_expected.to validate_presence_of :disabled_facilities_details }
+      end
     end
 
     context 'start and end times' do

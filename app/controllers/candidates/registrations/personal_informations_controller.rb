@@ -13,7 +13,7 @@ module Candidates
 
         persist @personal_information
 
-        if skip_gitis_integration? || candidate_signed_in?
+        if candidate_signed_in?
           redirect_to new_candidates_school_registrations_contact_information_path
         else
           token = @personal_information.create_signin_token(gitis_crm)
