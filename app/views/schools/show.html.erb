@@ -29,9 +29,11 @@
           </p>
         </section>
 
-        <%= link_to 'Start now', schools_dashboard_path,
+        <%= govuk_link_to schools_dashboard_path,
           role:'button',
-          class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' %>
+          class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' do %>
+          Start now <%= render 'shared/start_button_chevron' %>
+        <% end %>
 
         <section>
           <h2 class="govuk-heading-m">Before you start</h2>
@@ -47,10 +49,7 @@
           </p>
         </section>
 
-
-
-
-        <div class="govuk-accordion" data-module="accordion" id="accordion-default">
+        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
           <div class="govuk-accordion__section ">
             <div class="govuk-accordion__section-header">
               <h2 class="govuk-accordion__section-heading">

@@ -347,7 +347,7 @@ en:
         date: Booking date
       bookings_school:
         enabled: Turn requests on or off
-        availability_preference_fixed: Change how dates are displayed
+        availability_preference_fixed: Choose how dates are displayed
       bookings_placement_date:
         date: Enter a start date
       phases: Education phases
@@ -432,6 +432,7 @@ en:
         enabled: |
           Turning requests off will prevent your school from appearing in candidate searches.
           Requests that are already in-progress will continue as normal.
+        availability_preference_fixed: Select how you'd like to present school experience dates to candidates.
       bookings_placement_date:
         date: For example, 01 09 2019
         duration: Enter number of days
@@ -464,8 +465,8 @@ en:
           true: Allow requests
           false: Do not allow requests
         availability_preference_fixed:
-          true_html: Display specific dates
-          false_html: Display a description of when you'll host school experience candidates
+          true_html: Show specific dates
+          false_html: Show a description of when you can host candidates
         availability_info: Describe your school experience availability
 
       bookings_placement_date:
