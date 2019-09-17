@@ -2,6 +2,12 @@ require 'rails_helper'
 
 describe Candidates::Registrations::CreatePlacementRequestJob, type: :job do
   include ActiveSupport::Testing::TimeHelpers
+  include_context 'fake gitis'
+
+  before do
+    allow_any_instance_of(described_class).to \
+      receive(:gitis).and_return(fake_gitis)
+  end
 
   let(:token) { SecureRandom.urlsafe_base64 }
   let(:analytics) { SecureRandom.uuid }
@@ -29,7 +35,7 @@ describe Candidates::Registrations::CreatePlacementRequestJob, type: :job do
       it "will call Service Object with correct params" do
         expect(Candidates::Registrations::CreatePlacementRequest).to \
           have_received(:new).with \
-            token, nil, 'test.com', analytics
+            fake_gitis, token, nil, 'test.com', analytics
       end
     end
 
