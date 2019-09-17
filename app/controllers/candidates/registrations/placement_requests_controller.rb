@@ -16,19 +16,14 @@ module Candidates
             registration_session,
             current_contact
 
-          placement_request = current_candidate.placement_requests.create_from_registration_session! \
-            registration_session,
-            cookies[:analytics_tracking_uuid]
-
           registration_session.flag_as_completed!
-
           RegistrationStore.instance.store! registration_session
 
           CreatePlacementRequestJob.perform_later \
-            placement_request.id,
             registration_session.uuid,
             current_contact&.id,
-            request.host
+            request.host,
+            cookies[:analytics_tracking_uuid]
         end
 
         redirect_to candidates_school_registrations_placement_request_path \

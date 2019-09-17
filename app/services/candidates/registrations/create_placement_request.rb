@@ -1,16 +1,20 @@
 module Candidates
   module Registrations
     class CreatePlacementRequest
-      attr_reader :placement_request_id, :registration_uuid, :gitis_contact_id
+      attr_reader :placement_request, :registration_uuid, :gitis_contact_id
+      attr_reader :registration_session
 
-      def initialize(placement_request_id, registration_uuid, gitis_contact_id, host)
-        @placement_request_id = placement_request_id
+      def initialize(registration_uuid, gitis_contact_id, host, analytics_uuid = nil)
         @registration_uuid = registration_uuid
-        @contact_id = gitis_contact_id
+        fetch_registration_session
+        @gitis_contact_id = gitis_contact_id
         @host = host
+        @analytics_uuid = analytics_uuid
       end
 
       def create!
+        create_placement_request
+
         send_school_confirmation_email
         send_candidate_confirmation_email
         remove_registration_from_store
@@ -21,16 +25,12 @@ module Candidates
 
     private
 
-      def registration_session
-        @registration_session ||= RegistrationStore.instance.retrieve! registration_uuid
+      def fetch_registration_session
+        @registration_session = RegistrationStore.instance.retrieve! registration_uuid
       end
 
       def application_preview
         @application_preview ||= ApplicationPreview.new registration_session
-      end
-
-      def placement_request
-        @placement_request ||= Bookings::PlacementRequest.find placement_request_id
       end
 
       def routes
@@ -76,6 +76,16 @@ module Candidates
       def log_request_to_gitis_contact
         Bookings::Gitis::EventLogger.write_later \
           gitis_contact_id, :request, placement_request
+      end
+
+      def candidate
+        @candidate ||= Bookings::Candidate.find_by!(gitis_uuid: gitis_contact_id)
+      end
+
+      def create_placement_request
+        @placement_request = candidate.placement_requests.create_from_registration_session! \
+          registration_session,
+          @analytics_uuid
       end
     end
   end

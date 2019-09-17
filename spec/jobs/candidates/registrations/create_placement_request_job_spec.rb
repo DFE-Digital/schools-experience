@@ -4,6 +4,7 @@ describe Candidates::Registrations::CreatePlacementRequestJob, type: :job do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:token) { SecureRandom.urlsafe_base64 }
+  let(:analytics) { SecureRandom.uuid }
 
   context '#perform' do
     let!(:create_request) do
@@ -22,12 +23,13 @@ describe Candidates::Registrations::CreatePlacementRequestJob, type: :job do
       end
 
       subject! do
-        described_class.perform_later 10, token, nil, 'test.com'
+        described_class.perform_later token, nil, 'test.com', analytics
       end
 
       it "will call Service Object with correct params" do
         expect(Candidates::Registrations::CreatePlacementRequest).to \
-          have_received(:new).with(10, token, nil, 'test.com')
+          have_received(:new).with \
+            token, nil, 'test.com', analytics
       end
     end
 
@@ -40,7 +42,7 @@ describe Candidates::Registrations::CreatePlacementRequestJob, type: :job do
       end
 
       subject! do
-        described_class.perform_later 10, token, nil, 'test.com'
+        described_class.perform_later token, nil, 'test.com', analytics
       end
 
       it 'retrys the job' do
