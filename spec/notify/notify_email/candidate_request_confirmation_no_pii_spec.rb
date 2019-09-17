@@ -6,7 +6,6 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
     candidate_dbs_check_document: "Yes",
     candidate_degree_stage: "Postgraduate",
     candidate_degree_subject: "Sociology",
-    candidate_name: "Tony Hancock",
     candidate_teaching_stage: "I want to become a teacher",
     candidate_teaching_subject_first_choice: "Sociology",
     candidate_teaching_subject_second_choice: "Philosophy",
@@ -45,10 +44,6 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
 
       specify 'candidate_degree_stage is correctly-assigned' do
         expect(subject.candidate_degree_stage).to eql(ap.degree_stage)
-      end
-
-      specify 'candidate_name is correctly-assigned' do
-        expect(subject.candidate_name).to eql(ap.full_name)
       end
 
       specify 'candidate_teaching_stage is correctly-assigned' do

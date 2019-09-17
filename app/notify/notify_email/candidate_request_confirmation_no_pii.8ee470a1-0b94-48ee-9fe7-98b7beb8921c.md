@@ -1,4 +1,4 @@
-Dear ((candidate_name))
+Hello
 
 You've requested school experience at ((school_name)).
 

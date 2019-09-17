@@ -3,7 +3,6 @@ class NotifyEmail::CandidateRequestConfirmationNoPii < Notify
     :candidate_dbs_check_document,
     :candidate_degree_stage,
     :candidate_degree_subject,
-    :candidate_name,
     :candidate_teaching_stage,
     :candidate_teaching_subject_first_choice,
     :candidate_teaching_subject_second_choice,
@@ -17,7 +16,6 @@ class NotifyEmail::CandidateRequestConfirmationNoPii < Notify
     candidate_dbs_check_document:,
     candidate_degree_stage:,
     candidate_degree_subject:,
-    candidate_name:,
     candidate_teaching_stage:,
     candidate_teaching_subject_first_choice:,
     candidate_teaching_subject_second_choice:,
@@ -30,7 +28,6 @@ class NotifyEmail::CandidateRequestConfirmationNoPii < Notify
     self.candidate_dbs_check_document             =        candidate_dbs_check_document
     self.candidate_degree_stage                   =        candidate_degree_stage
     self.candidate_degree_subject                 =        candidate_degree_subject
-    self.candidate_name                           =        candidate_name
     self.candidate_teaching_stage                 =        candidate_teaching_stage
     self.candidate_teaching_subject_first_choice  =        candidate_teaching_subject_first_choice
     self.candidate_teaching_subject_second_choice =        candidate_teaching_subject_second_choice
@@ -48,7 +45,6 @@ class NotifyEmail::CandidateRequestConfirmationNoPii < Notify
       candidate_dbs_check_document: application_preview.dbs_check_document,
       candidate_degree_stage: application_preview.degree_stage,
       candidate_degree_subject: application_preview.degree_subject,
-      candidate_name: application_preview.full_name,
       candidate_teaching_stage: application_preview.teaching_stage,
       candidate_teaching_subject_first_choice: application_preview.teaching_subject_first_choice,
       candidate_teaching_subject_second_choice: application_preview.teaching_subject_second_choice,
@@ -69,7 +65,6 @@ private
       candidate_dbs_check_document: candidate_dbs_check_document,
       candidate_degree_stage: candidate_degree_stage,
       candidate_degree_subject: candidate_degree_subject,
-      candidate_name: candidate_name,
       candidate_teaching_stage: candidate_teaching_stage,
       candidate_teaching_subject_first_choice: candidate_teaching_subject_first_choice,
       candidate_teaching_subject_second_choice: candidate_teaching_subject_second_choice,
