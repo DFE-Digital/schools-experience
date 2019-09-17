@@ -26,9 +26,9 @@ Feature: The School Dashboard
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
         Then I should see the following 'high-priority' links:
-            | Text            | Hint                                        | Path                        |
-            | Manage requests | Candidates have requested school experience | /schools/placement_requests |
-            | Manage bookings | A candidate has asked to change a booking   | /schools/bookings           |
+            | Text            | Hint                                                 | Path                        |
+            | Manage requests | Accept, reject or revisit outstanding requests       | /schools/placement_requests |
+            | Manage bookings | Accept or reject change requests and cancel bookings | /schools/bookings           |
 
     Scenario: Manage dates
         Given my school has fully-onboarded
