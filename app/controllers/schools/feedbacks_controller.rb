@@ -2,9 +2,7 @@ module Schools
   class FeedbacksController < BaseController
     skip_before_action :ensure_onboarded
 
-    def show
-      @feedback = Schools::Feedback.find params[:id]
-    end
+    def show; end
 
     def new
       @feedback = Schools::Feedback.new
@@ -28,7 +26,9 @@ module Schools
         :reason_for_using_service,
         :reason_for_using_service_explanation,
         :rating,
-        :improvements
+        :improvements,
+        :successful_visit,
+        :unsuccessful_visit_explanation
     end
   end
 end

@@ -19,6 +19,13 @@
         <% end %>
       <% end %>
 
+      <%= f.radio_button_fieldset :successful_visit do |fieldset| %>
+        <%= fieldset.radio_input true %>
+        <%= fieldset.radio_input false do %>
+          <%= fieldset.text_area :unsuccessful_visit_explanation %>
+        <% end %>
+      <% end %>
+
       <%= f.radio_button_fieldset :rating do |fieldset| %>
         <% f.object.ratings.each do |option| %>
           <%= fieldset.radio_input option %>

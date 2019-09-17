@@ -1,8 +1,6 @@
 module Candidates
   class FeedbacksController < ApplicationController
-    def show
-      @feedback = Candidates::Feedback.find params[:id]
-    end
+    def show; end
 
     def new
       @feedback = Candidates::Feedback.new
@@ -25,7 +23,9 @@ module Candidates
         :reason_for_using_service,
         :reason_for_using_service_explanation,
         :rating,
-        :improvements
+        :improvements,
+        :successful_visit,
+        :unsuccessful_visit_explanation
     end
   end
 end

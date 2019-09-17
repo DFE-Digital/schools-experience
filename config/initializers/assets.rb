@@ -4,10 +4,10 @@
 Rails.application.config.assets.version = '1.0'
 
 # Add GOVUK image asset path
-Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "assets", "images")
+Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "govuk", "assets", "images")
 
 # Add GOVUK font asset path
-Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "assets", "fonts")
+Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "govuk", "assets", "fonts")
 
 Rails.application.config.assets.precompile += %w[
   favicon.ico

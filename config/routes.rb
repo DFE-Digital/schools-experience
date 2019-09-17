@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   root to: 'candidates/home#index'
 
   get '/privacy_policy', to: 'pages#privacy_policy'
+  get '/accessibility_statement', to: 'pages#accessibility_statement'
   get '/cookies_policy', to: 'pages#cookies_policy'
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/service_update', to: 'pages#service_update'

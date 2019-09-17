@@ -34,7 +34,7 @@
     </p>
 
     <%= form_tag schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id) do %>
-      <%= submit_tag 'Send confirmation email', class: 'govuk-button' %>
+      <%= submit_tag 'Send confirmation email', class: 'govuk-button', data: { module: 'govuk-button' } %>
     <%- end -%>
 
   </div>

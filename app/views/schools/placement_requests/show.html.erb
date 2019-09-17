@@ -133,11 +133,11 @@
     <% if @placement_request.open? %>
       <div class="accept-or-reject">
         <div class="govuk-se-button-container">
-          <%= link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request), class: 'govuk-button' %>
+          <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request) %>
         </div>
         <div class="govuk-se-button-container">
           <div>
-            <%= link_to "Reject request", new_schools_placement_request_cancellation_path(@placement_request), class: 'govuk-button govuk-button--secondary' %>
+            <%= govuk_link_to "Reject request", new_schools_placement_request_cancellation_path(@placement_request), secondary: true %>
           </div>
         </div>
       </div>

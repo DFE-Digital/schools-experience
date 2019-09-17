@@ -17,6 +17,6 @@
     <%= render partial: 'schools/placement_requests/placement_requests_table',
       locals: { placement_requests: @placement_requests } %>
 
-    <%= link_to "Return to requests and bookings", schools_dashboard_path, class: 'govuk-button govuk-button--secondary' %>
+    <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
   </div>
 </div>

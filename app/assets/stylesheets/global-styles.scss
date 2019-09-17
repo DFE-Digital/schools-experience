@@ -72,7 +72,7 @@ dl.govuk-summary-list {
 }
 
 .govuk-button.govuk-button--secondary {
-  $govuk-button-secondary-colour: govuk-colour("grey-3");
+  $govuk-button-secondary-colour: govuk-colour("light-grey");
   $govuk-button-secondary-hover-colour: darken($govuk-button-secondary-colour, 5%);
   $govuk-button-secondary-shadow-colour: darken($govuk-button-secondary-colour, 15%);
   $button-shadow-size: $govuk-border-width-form-element;

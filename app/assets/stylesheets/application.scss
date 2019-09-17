@@ -16,7 +16,7 @@ $govuk-grid-widths: (
   full: 100%
 );
 
-@import "../../../node_modules/govuk-frontend/all" ;
+@import "../../../node_modules/govuk-frontend/govuk/all" ;
 @import "global-styles" ;
 @import "cookie-banner" ;
 @import "form-extensions" ;
