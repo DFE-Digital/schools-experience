@@ -4,7 +4,8 @@ module Candidates
       attr_reader :placement_request, :registration_uuid, :gitis_contact_id
       attr_reader :registration_session
 
-      def initialize(registration_uuid, gitis_contact_id, host, analytics_uuid = nil)
+      def initialize(crm, registration_uuid, gitis_contact_id, host, analytics_uuid = nil)
+        @crm = crm
         @registration_uuid = registration_uuid
         fetch_registration_session
         @gitis_contact_id = gitis_contact_id
@@ -13,10 +14,14 @@ module Candidates
       end
 
       def create!
+        fetch_gitis_contact
+        create_or_update_gitis_contact
+
         create_placement_request
 
         send_school_confirmation_email
         send_candidate_confirmation_email
+
         remove_registration_from_store
 
         accept_privacy_policy
@@ -78,14 +83,19 @@ module Candidates
           gitis_contact_id, :request, placement_request
       end
 
-      def candidate
-        @candidate ||= Bookings::Candidate.find_by!(gitis_uuid: gitis_contact_id)
-      end
-
       def create_placement_request
-        @placement_request = candidate.placement_requests.create_from_registration_session! \
+        @placement_request = @candidate.placement_requests.create_from_registration_session! \
           registration_session,
           @analytics_uuid
+      end
+
+      def fetch_gitis_contact
+        @gitis_contact = @crm.find(gitis_contact_id) if gitis_contact_id
+      end
+
+      def create_or_update_gitis_contact
+        @candidate = Bookings::Candidate.create_or_update_from_registration_session! \
+          @crm, registration_session, @gitis_contact
       end
     end
   end
