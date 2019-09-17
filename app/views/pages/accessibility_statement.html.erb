@@ -49,13 +49,12 @@
       <h2 class="govuk-heading-m">What to do if you cannot access parts of this service</h2>
 
       <p>
-        If you need information on this service in accessible PDF, audio
-        recording, braille, easy read or large print format:
+        Contact us if you need information on this service in accessible PDF, audio
+        recording, braille, easy read or large print format.
       </p>
 
-      <ul class="govuk-list govuk-list--bullet">
-        <li>email <%= mail_to 'organise.school-experience@education.gov.uk' %></li>
-        <%# TODO add a phone number here when it's been confirmed %>
+      <ul class="govuk-list">
+        <li><%= mail_to 'organise.school-experience@education.gov.uk', aria: { label: 'School experience support email address' } %></li>
       </ul>
 
       <p>
@@ -73,7 +72,6 @@
       <p>
         If you find any problems that are not listed on this page or think we're
         not meeting accessibility requirements email <%= mail_to 'organise.school-experience@education.gov.uk' %>.
-        <%# TODO ...or call [TBC]. %>
       </p>
     </section>
 
@@ -131,27 +129,15 @@
         We tested our whole service platform.
       </p>
 
-      <%# FIXME Not sure it's currently publicly-available
-        <p>
-          You can read the full accessibility test report [add link to report]
-        </p>
-      %>
+      <p>
+        You can read the full <%= link_to 'Digtial Accessibility Centre Report', '/reports/school-experience-accessibility-report.pdf' %>.
+      </p>
     </section>
 
-    <%# FIXME I don't think we have a roadmap yet
-      <section>
-        <h2 class="govuk-heading-m">What we're doing to improve accessibility</h2>
-
-        <p>
-          Our accessibility roadmap [link] shows how and when we plan to
-          improve accessibility on this service.
-        </p>
-
-        <p>
-          This statement was prepared on 06 August 2019. It was
-          last updated on 06 September 2019.
-        </p>
-      </section>
-    %>
+    <aside>
+      <p class="govuk-hint">
+        This statement was prepared on 17 September 2019.
+      </p>
+    </aside>
   </article>
 </div>
