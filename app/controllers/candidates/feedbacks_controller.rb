@@ -25,7 +25,9 @@ module Candidates
         :reason_for_using_service,
         :reason_for_using_service_explanation,
         :rating,
-        :improvements
+        :improvements,
+        :successful_visit,
+        :unsuccessful_visit_explanation
     end
   end
 end

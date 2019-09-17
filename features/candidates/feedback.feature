@@ -17,6 +17,10 @@ Feature: Feedback
           | Dissatisfied                      |
           | Very dissatisfied                 |
 
+        And I should see radio buttons for 'Did you achieve what you wanted from your visit?' with the following options:
+          | Yes |
+          | No  |
+
         And there should be a 'How could we improve the service? (optional)' text area
 
     @javascript
@@ -33,6 +37,7 @@ Feature: Feedback
       Given I am on the 'new candidates feedback' page
       And I choose 'Something else' from the 'What did you come to do on the service?' radio buttons
       And I enter 'Test the software' into the 'Tell us what you came here to do. Do not include any information that could identify you personally - such as your name' field
+      And I choose 'Yes' from the 'Did you achieve what you wanted from your visit?' radio buttons
       And I choose 'Satisfied' from the 'Overall, how did you feel about the service you received?' radio buttons
       And I enter 'Keep up the good work' into the 'How could we improve the service? (optional)' field
       When I click the 'Submit feedback' button
