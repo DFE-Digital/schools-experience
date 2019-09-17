@@ -1,21 +1,12 @@
-Dear ((candidate_name))
+Hello
 
 You've requested school experience at ((school_name)).
 
-^ The school will be in touch with you. For example, during term time this could typically mean within 2 weeks.
+^ You will be contacted about your request. Schools aim to get in touch within 10 working days during term time.
 
 # Your request details
 
 Here's a copy of your request details which have been forwarded to the school.
-
-Personal details
-
-* Full name: ((candidate_name))
-* Address: ((candidate_address))
-* UK telephone number: ((candidate_phone_number))
-* Email address: ((candidate_email_address))
-
-Request details
 
 * School or college: ((school_name))
 * Availability/preferred dates: ((placement_availability))

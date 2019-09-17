@@ -21,7 +21,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
   end
 
   let :candidate_request_confirmation_notification_with_confirmation_link do
-    double NotifyEmail::CandidateRequestConfirmationWithConfirmationLink,
+    double NotifyEmail::CandidateRequestConfirmationNoPii,
       despatch_later!: true
   end
 
@@ -41,7 +41,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
     allow(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
       receive(:new) { school_request_confirmation_notification_link_only }
 
-    allow(NotifyEmail::CandidateRequestConfirmationWithConfirmationLink).to \
+    allow(NotifyEmail::CandidateRequestConfirmationNoPii).to \
       receive(:from_application_preview) { candidate_request_confirmation_notification_with_confirmation_link }
 
     registration_store.store! registration_session
@@ -67,7 +67,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
       end
 
       it 'notifies the candidate' do
-        expect(NotifyEmail::CandidateRequestConfirmationWithConfirmationLink).to \
+        expect(NotifyEmail::CandidateRequestConfirmationNoPii).to \
           have_received(:from_application_preview).with \
             registration_session.email,
             application_preview,

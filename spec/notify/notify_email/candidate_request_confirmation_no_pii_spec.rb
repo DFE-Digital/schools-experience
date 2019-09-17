@@ -1,15 +1,11 @@
 require 'rails_helper'
 
-describe NotifyEmail::CandidateRequestConfirmationWithConfirmationLink do
-  it_should_behave_like "email template", "102bb4df-82ca-4f6b-80e9-fa19af712ad6",
+describe NotifyEmail::CandidateRequestConfirmationNoPii do
+  it_should_behave_like "email template", "8ee470a1-0b94-48ee-9fe7-98b7beb8921c",
     school_name: "Springfield Elementary School",
-    candidate_address: "23 Railway Cuttings, East Cheam, CR3 0HD",
     candidate_dbs_check_document: "Yes",
     candidate_degree_stage: "Postgraduate",
     candidate_degree_subject: "Sociology",
-    candidate_email_address: "tony.hancock@bbc.co.uk",
-    candidate_name: "Tony Hancock",
-    candidate_phone_number: "01234 456 678",
     candidate_teaching_stage: "I want to become a teacher",
     candidate_teaching_subject_first_choice: "Sociology",
     candidate_teaching_subject_second_choice: "Philosophy",
@@ -42,28 +38,12 @@ describe NotifyEmail::CandidateRequestConfirmationWithConfirmationLink do
         expect(subject.cancellation_url).to eql(cancellation_url)
       end
 
-      specify 'candidate_address is correctly-assigned' do
-        expect(subject.candidate_address).to eql(ap.full_address)
-      end
-
       specify 'candidate_dbs_check_document is correctly-assigned' do
         expect(subject.candidate_dbs_check_document).to eql(ap.dbs_check_document)
       end
 
       specify 'candidate_degree_stage is correctly-assigned' do
         expect(subject.candidate_degree_stage).to eql(ap.degree_stage)
-      end
-
-      specify 'candidate_email_address is correctly-assigned' do
-        expect(subject.candidate_email_address).to eql(ap.email_address)
-      end
-
-      specify 'candidate_name is correctly-assigned' do
-        expect(subject.candidate_name).to eql(ap.full_name)
-      end
-
-      specify 'candidate_phone_number is correctly-assigned' do
-        expect(subject.candidate_phone_number).to eql(ap.telephone_number)
       end
 
       specify 'candidate_teaching_stage is correctly-assigned' do
