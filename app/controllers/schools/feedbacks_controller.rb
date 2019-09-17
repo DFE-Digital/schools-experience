@@ -2,9 +2,7 @@ module Schools
   class FeedbacksController < BaseController
     skip_before_action :ensure_onboarded
 
-    def show
-      @feedback = Schools::Feedback.find params[:id]
-    end
+    def show; end
 
     def new
       @feedback = Schools::Feedback.new
