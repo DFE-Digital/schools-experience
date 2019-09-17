@@ -13,7 +13,7 @@ module Candidates
           placement_request_url: placement_request_url
         ).despatch_later!
 
-        NotifyEmail::CandidateRequestConfirmationWithConfirmationLink.from_application_preview(
+        NotifyEmail::CandidateRequestConfirmationNoPii.from_application_preview(
           registration_session.email,
           application_preview,
           cancellation_url
