@@ -78,12 +78,34 @@ describe Candidates::Registrations::CreatePlacementRequest do
       end
     end
 
+    shared_examples 'schedule gitis jobs' do
+      it "schedules accepting the privacy policy" do
+        expect(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
+          have_received(:perform_later).with \
+            contactid,
+            Bookings::Gitis::PrivacyPolicy.default
+      end
+
+      it 'schedules the log to gitis' do
+        expect(Bookings::LogToGitisJob).to \
+          have_received(:perform_later).with \
+            contactid,
+            %r{#{Date.today.to_formatted_s(:gitis)} REQUEST}
+      end
+    end
+
     before do
       allow(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
         receive(:new) { school_request_confirmation_notification_link_only }
 
       allow(NotifyEmail::CandidateRequestConfirmationWithConfirmationLink).to \
         receive(:from_application_preview) { candidate_request_confirmation_notification_with_confirmation_link }
+
+      allow(Bookings::LogToGitisJob).to \
+        receive(:perform_later).and_return(true)
+
+      allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
+        receive(:perform_later).and_return(true)
 
       registration_store.store! registration_session
     end
@@ -98,6 +120,7 @@ describe Candidates::Registrations::CreatePlacementRequest do
         before { subject.create! }
         include_examples 'sends emails'
         include_examples 'remove from registration session'
+        include_examples 'schedule gitis jobs'
       end
 
       context 'with known gitis contact' do
@@ -107,6 +130,7 @@ describe Candidates::Registrations::CreatePlacementRequest do
 
         include_examples 'sends emails'
         include_examples 'remove from registration session'
+        include_examples 'schedule gitis jobs'
       end
 
       context 'with unknown gitis contact' do

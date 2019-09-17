@@ -76,12 +76,6 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
         shared_examples 'a successful create' do
           before do
-            allow(Bookings::LogToGitisJob).to \
-              receive(:perform_later).and_return(true)
-
-            allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
-              receive(:perform_later).and_return(true)
-
             expect(fake_gitis).to receive(:create_entity) do |entity_id, _data|
               "#{entity_id}(#{fake_gitis_uuid})"
             end
@@ -117,27 +111,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
               eq stored_registration_session.school
           end
 
-          it 'enqueues the placement request job' do
+          it 'enqueues the create placement request job' do
             expect(Candidates::Registrations::CreatePlacementRequestJob).to \
               have_received(:perform_later).with \
                 Bookings::PlacementRequest.last.id,
                 uuid,
                 fake_gitis_uuid,
                 'www.example.com'
-          end
-
-          it 'enqueues an accept privacy policy job' do
-            expect(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
-              have_received(:perform_later).with \
-                fake_gitis_uuid,
-                Bookings::Gitis::PrivacyPolicy.default
-          end
-
-          it 'enqueues a log to gitis job' do
-            expect(Bookings::LogToGitisJob).to \
-              have_received(:perform_later).with \
-                fake_gitis_uuid,
-                %r{#{Date.today.to_formatted_s(:gitis)} REQUEST}
           end
 
           it 'redirects to placement request show' do
