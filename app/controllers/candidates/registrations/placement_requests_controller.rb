@@ -20,15 +20,6 @@ module Candidates
             registration_session,
             cookies[:analytics_tracking_uuid]
 
-          unless Bookings::Gitis::PrivacyPolicy.default.nil?
-            AcceptPrivacyPolicyJob.perform_later \
-              current_candidate.gitis_uuid,
-              Bookings::Gitis::PrivacyPolicy.default
-          end
-
-          Bookings::Gitis::EventLogger.write_later \
-            current_candidate.gitis_uuid, :request, placement_request
-
           registration_session.flag_as_completed!
 
           RegistrationStore.instance.store! registration_session
