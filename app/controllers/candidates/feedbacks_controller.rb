@@ -1,8 +1,6 @@
 module Candidates
   class FeedbacksController < ApplicationController
-    def show
-      @feedback = Candidates::Feedback.find params[:id]
-    end
+    def show; end
 
     def new
       @feedback = Candidates::Feedback.new
