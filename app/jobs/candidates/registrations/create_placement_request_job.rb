@@ -1,9 +1,9 @@
 module Candidates
   module Registrations
     class CreatePlacementRequestJob < ApplicationJob
-      def perform(placement_id, registration_uuid, contact_id, host)
+      def perform(registration_uuid, contact_id, host, analytics_uuid)
         Candidates::Registrations::CreatePlacementRequest.
-          new(placement_id, registration_uuid, contact_id, host).
+          new(registration_uuid, contact_id, host, analytics_uuid).
           create!
       end
     end

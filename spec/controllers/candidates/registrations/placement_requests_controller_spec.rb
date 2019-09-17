@@ -104,20 +104,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
               'lastname' => stored_registration_session.personal_information.last_name
           end
 
-          it 'creates a bookings placement request' do
-            expect(Bookings::PlacementRequest.count).to \
-              eq @placement_request_count + 1
-            expect(Bookings::PlacementRequest.last.school).to \
-              eq stored_registration_session.school
-          end
-
           it 'enqueues the create placement request job' do
             expect(Candidates::Registrations::CreatePlacementRequestJob).to \
               have_received(:perform_later).with \
-                Bookings::PlacementRequest.last.id,
                 uuid,
                 fake_gitis_uuid,
-                'www.example.com'
+                'www.example.com',
+                nil
           end
 
           it 'redirects to placement request show' do

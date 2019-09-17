@@ -6,7 +6,7 @@ describe Candidates::Registrations::CreatePlacementRequest do
   let(:host) { 'example.com' }
 
   let :school do
-    create :bookings_school, :with_subjects, \
+    create :bookings_school, \
       name: 'Test School',
       contact_email: 'test@test.com',
       urn: school_urn
@@ -18,10 +18,6 @@ describe Candidates::Registrations::CreatePlacementRequest do
 
   let :registration_session do
     FactoryBot.build :registration_session, urn: school.urn
-  end
-
-  let :placement_request do
-    FactoryBot.create :placement_request, school: school
   end
 
   let :school_request_confirmation_notification_link_only do
@@ -46,7 +42,16 @@ describe Candidates::Registrations::CreatePlacementRequest do
   end
 
   describe '#create!' do
-    shared_examples 'sends emails' do
+    shared_examples 'create placement request' do
+      it "creates placment request" do
+        expect(Bookings::PlacementRequest.count).to \
+          eq @placement_request_count + 1
+        expect(Bookings::PlacementRequest.last.school.urn).to \
+          eq school_urn
+      end
+    end
+
+    shared_examples 'send emails' do
       it "notifies the school" do
         expect(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
           have_received(:new).with \
@@ -95,6 +100,8 @@ describe Candidates::Registrations::CreatePlacementRequest do
     end
 
     before do
+      @placement_request_count = Bookings::PlacementRequest.count
+
       allow(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
         receive(:new) { school_request_confirmation_notification_link_only }
 
@@ -110,35 +117,41 @@ describe Candidates::Registrations::CreatePlacementRequest do
       registration_store.store! registration_session
     end
 
-    subject { described_class.new(placement_request.id, uuid, contactid, host) }
+    subject { described_class.new(uuid, contactid, host, SecureRandom.uuid) }
 
-    context 'with known uuid' do
+    context 'with known registration uuid' do
       let(:uuid) { registration_session.uuid }
       let(:contactid) { nil }
 
-      context 'without gitis contact' do
+      xcontext 'but without gitis contact' do
         before { subject.create! }
-        include_examples 'sends emails'
+        include_examples 'create placement request'
+        include_examples 'send emails'
         include_examples 'remove from registration session'
         include_examples 'schedule gitis jobs'
       end
 
-      context 'with known gitis contact' do
-        let(:contact) { build(:gitis_contact) }
+      context 'and known gitis contact' do
+        let(:contact) { build(:gitis_contact, :persisted) }
         let(:contactid) { contact.id }
-        before { subject.create! }
 
-        include_examples 'sends emails'
+        before do
+          create :candidate, gitis_uuid: contactid
+          subject.create!
+        end
+
+        include_examples 'create placement request'
+        include_examples 'send emails'
         include_examples 'remove from registration session'
         include_examples 'schedule gitis jobs'
       end
 
-      context 'with unknown gitis contact' do
+      context 'but unknown gitis contact' do
         it 'will raise an exception'
       end
     end
 
-    context 'with unknown uuid' do
+    context 'with unknown registration uuid' do
       let(:uuid) { SecureRandom.urlsafe_base64 }
       let(:contactid) { nil }
 
