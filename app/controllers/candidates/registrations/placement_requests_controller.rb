@@ -11,11 +11,6 @@ module Candidates
         registration_session = RegistrationStore.instance.retrieve! params[:uuid]
 
         unless registration_session.completed?
-          self.current_candidate = Bookings::Candidate.create_or_update_from_registration_session! \
-            gitis_crm,
-            registration_session,
-            current_contact
-
           registration_session.flag_as_completed!
           RegistrationStore.instance.store! registration_session
 
@@ -31,7 +26,7 @@ module Candidates
           uuid: registration_session.uuid
       rescue RegistrationStore::SessionNotFound
         render :session_expired
-      rescue RegistrationSession::StepNotFound
+      rescue RegistrationSession::StepNotFound, RegistrationSession::NotCompletedError
         @current_registration = registration_session
         redirect_to next_step_path
       end

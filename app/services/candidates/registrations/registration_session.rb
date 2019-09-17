@@ -34,6 +34,8 @@ module Candidates
       end
 
       def flag_as_completed!
+        raise NotCompletedError unless all_steps_completed?
+
         @data['status'] = COMPLETED_STATUS
       end
 
