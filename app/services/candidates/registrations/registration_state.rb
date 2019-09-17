@@ -10,8 +10,9 @@ module Candidates
         background_check
       ).freeze
 
-      def initialize(registration_session)
+      def initialize(registration_session, validation_context = nil)
         @registration_session = registration_session
+        @validation_context = validation_context
       end
 
       def steps
@@ -27,7 +28,9 @@ module Candidates
       end
 
       def step_completed?(step)
-        @registration_session.public_send(step).valid?
+        @registration_session.
+          public_send(step).
+          valid?(@validation_context)
       rescue RegistrationSession::StepNotFound
         false
       end

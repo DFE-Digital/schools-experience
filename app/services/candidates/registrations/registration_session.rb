@@ -34,6 +34,10 @@ module Candidates
       end
 
       def flag_as_completed!
+        unless all_steps_completed?(:returning_from_confirmation_email)
+          raise NotCompletedError
+        end
+
         @registration_session['status'] = COMPLETED_STATUS
       end
 
@@ -132,8 +136,8 @@ module Candidates
 
     private
 
-      def all_steps_completed?
-        RegistrationState.new(self).completed?
+      def all_steps_completed?(validation_context = nil)
+        RegistrationState.new(self, validation_context).completed?
       end
     end
   end
