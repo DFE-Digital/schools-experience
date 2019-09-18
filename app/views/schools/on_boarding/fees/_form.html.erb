@@ -28,13 +28,25 @@
       <% # hidden_field ensures the form is submitted if no radios selected %>
       <%= f.hidden_field :administration_fees %>
 
-      <%= f.radio_button_fieldset :administration_fees, choices: [true, false] %>
+      <%= f.radio_button_fieldset :administration_fees do |fieldset| %>
+        <%= fieldset.radio_input true, 'aria-label': 'Yes, we charge a fee to cover administration costs' %>
+        <%= fieldset.radio_input false, 'aria-label': 'No, we do not charge a fee to cover administration costs' %>
+      <% end %>
+
       <% if requires_dbs_check %>
-        <%= f.radio_button_fieldset :dbs_fees, choices: [true, false] %>
+        <%= f.radio_button_fieldset :dbs_fees do |fieldset| %>
+          <%= fieldset.radio_input true, 'aria-label': 'Yes, we charge a fee to cover DBS check costs' %>
+          <%= fieldset.radio_input false, 'aria-label': 'No, we do not charge a fee to cover DBS check costs' %>
+        <% end %>
       <% else %>
         <%= f.hidden_field :dbs_fees, value: false %>
       <% end %>
-      <%= f.radio_button_fieldset :other_fees, choices: [true, false] %>
+
+      <%= f.radio_button_fieldset :other_fees do |fieldset| %>
+        <%= fieldset.radio_input true, 'aria-label': 'Yes, we charge a fee to cover other costs' %>
+        <%= fieldset.radio_input false, 'aria-label': 'No, we do not charge a fee to cover other costs' %>
+      <% end %>
+
       <%= f.submit 'Continue' %>
     <% end %>
   </div>
