@@ -49,12 +49,39 @@ describe Candidates::Registrations::CreatePlacementRequest do
   end
 
   describe '#create!' do
+    before do
+      @placement_request_count = Bookings::PlacementRequest.count
+
+      allow(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
+        receive(:new) { school_request_confirmation_notification_link_only }
+
+      allow(NotifyEmail::CandidateRequestConfirmationNoPii).to \
+        receive(:from_application_preview) { candidate_request_confirmation_notification_with_confirmation_link }
+
+      allow(Bookings::LogToGitisJob).to \
+        receive(:perform_later).and_return(true)
+
+      allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
+        receive(:perform_later).and_return(true)
+
+      allow(fake_gitis).to receive(:find).and_call_original
+      allow(fake_gitis.store).to receive(:update_entity).and_call_original
+      allow(fake_gitis.store).to receive(:create_entity).and_call_original
+    end
+
+    subject do
+      described_class.new \
+        fake_gitis, registration_uuid, signedin_contactid, host, SecureRandom.uuid
+    end
+
     shared_examples 'create placement request' do
       it "creates placment request" do
         expect(Bookings::PlacementRequest.count).to \
           eq @placement_request_count + 1
-        expect(Bookings::PlacementRequest.last.school.urn).to \
-          eq school_urn
+
+        latest = Bookings::PlacementRequest.last
+        expect(latest.school.urn).to eq school_urn
+        expect(latest.candidate.gitis_uuid).to eq requests_contactid
       end
     end
 
@@ -94,48 +121,25 @@ describe Candidates::Registrations::CreatePlacementRequest do
       it "schedules accepting the privacy policy" do
         expect(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
           have_received(:perform_later).with \
-            contactid,
+            requests_contactid,
             Bookings::Gitis::PrivacyPolicy.default
       end
 
       it 'schedules the log to gitis' do
         expect(Bookings::LogToGitisJob).to \
           have_received(:perform_later).with \
-            contactid,
+            requests_contactid,
             %r{#{Date.today.to_formatted_s(:gitis)} REQUEST}
       end
     end
 
-    before do
-      @placement_request_count = Bookings::PlacementRequest.count
-
-      allow(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
-        receive(:new) { school_request_confirmation_notification_link_only }
-
-      allow(NotifyEmail::CandidateRequestConfirmationNoPii).to \
-        receive(:from_application_preview) { candidate_request_confirmation_notification_with_confirmation_link }
-
-      allow(Bookings::LogToGitisJob).to \
-        receive(:perform_later).and_return(true)
-
-      allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
-        receive(:perform_later).and_return(true)
-
-      allow(fake_gitis).to receive(:find).and_call_original
-      allow(fake_gitis).to receive(:update_entity).and_call_original
-      allow(fake_gitis).to receive(:create_entity).and_call_original
-    end
-
-    subject do
-      described_class.new \
-        fake_gitis, registration_uuid, contactid, host, SecureRandom.uuid
-    end
-
     context 'with known registration uuid' do
       before { registration_store.store! registration_session }
-      let(:contactid) { nil }
 
       context 'but without gitis contact' do
+        let(:requests_contactid) { fake_gitis_uuid }
+        let(:signedin_contactid) { nil }
+
         before { subject.create! }
 
         it "does not retrieve the contact from gitis" do
@@ -164,12 +168,13 @@ describe Candidates::Registrations::CreatePlacementRequest do
 
       context 'and known gitis contact' do
         let(:contact) { build(:gitis_contact, :persisted) }
-        let(:contactid) { contact.id }
+        let(:requests_contactid) { contact.id }
+        let(:signedin_contactid) { contact.id }
 
         before { subject.create! }
 
         it "retrieves the contact from gitis" do
-          expect(fake_gitis).to have_received(:find).with(contactid)
+          expect(fake_gitis).to have_received(:find).with(requests_contactid)
         end
 
         it "updates the contact in gitis" do
@@ -179,7 +184,7 @@ describe Candidates::Registrations::CreatePlacementRequest do
         end
 
         it "creates a Candidate record" do
-          candidates = Bookings::Candidate.where(gitis_uuid: contactid)
+          candidates = Bookings::Candidate.where(gitis_uuid: requests_contactid)
           expect(candidates.count).to eql(1)
         end
 
@@ -190,10 +195,10 @@ describe Candidates::Registrations::CreatePlacementRequest do
       end
 
       context 'but unknown gitis contact' do
-        let(:contactid) { SecureRandom.uuid }
+        let(:signedin_contactid) { SecureRandom.uuid }
 
         before do
-          allow(fake_gitis).to receive(:find).with(contactid) {
+          allow(fake_gitis).to receive(:find).with(signedin_contactid) {
             raise Bookings::Gitis::API::UnknownUrlError.new OpenStruct.new(
               status: 404,
               headers: {},
@@ -213,7 +218,7 @@ describe Candidates::Registrations::CreatePlacementRequest do
     end
 
     context 'with unknown registration uuid' do
-      let(:contactid) { nil }
+      let(:signedin_contactid) { nil }
 
       it 'will raise an exception' do
         expect {

@@ -97,6 +97,8 @@ module Candidates
       def create_or_update_gitis_contact
         @candidate = Bookings::Candidate.create_or_update_from_registration_session! \
           @crm, registration_session, @gitis_contact
+
+        @gitis_contact_id = @candidate.gitis_uuid
       end
     end
   end
