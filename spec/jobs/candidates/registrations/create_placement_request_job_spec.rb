@@ -55,7 +55,7 @@ describe Candidates::Registrations::CreatePlacementRequestJob, type: :job do
         expect(described_class.queue_adapter).to \
           have_received(:enqueue_at).with \
             an_instance_of(described_class),
-            3.seconds.from_now.to_i
+            described_class::RETRYS.first.from_now.to_i
       end
     end
   end
