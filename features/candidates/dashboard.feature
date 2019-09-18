@@ -6,6 +6,7 @@ Feature: View Dashboard page
         Given I visit the Dashboard page
         Then I should be redirected to the candidate signin page
     
+    @wip
     Scenario: Signing in and Viewing the Dashboard
         Given I am on the candidate signin page
         When I enter my name and email address
