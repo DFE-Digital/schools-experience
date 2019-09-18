@@ -7,13 +7,14 @@ module Candidates
       def initialize(crm, registration_uuid, gitis_contact_id, host, analytics_uuid = nil)
         @crm = crm
         @registration_uuid = registration_uuid
-        fetch_registration_session
         @gitis_contact_id = gitis_contact_id
         @host = host
         @analytics_uuid = analytics_uuid
       end
 
       def create!
+        fetch_registration_session
+
         fetch_gitis_contact
         create_or_update_gitis_contact
 
