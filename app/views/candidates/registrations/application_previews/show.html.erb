@@ -8,10 +8,9 @@
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>A copy of the following details will be emailed to you once you've sent your school experience request.</p>
     <%= GovukElementsErrorsHelper.error_summary @privacy_policy, 'There is a problem', '' %>
+
+    <h2 class="govuk-heading-m">Personal details</h2>
     <dl class="govuk-summary-list">
-
-      <h2 class="govuk-heading-m">Personal details</h2>
-
       <%- if @application_preview.read_only -%>
 
         <%= summary_row 'Full name', @application_preview.full_name %>
@@ -58,9 +57,10 @@
             anchor: 'candidates_registrations_personal_information_email_container'
           ) %>
       <%- end -%>
+    </dl>
 
-      <h2 class="govuk-heading-m">Request details</h2>
-
+    <h2 class="govuk-heading-m">Request details</h2>
+    <dl class="govuk-summary-list">
       <%= summary_row \
         'School or college',
         @application_preview.school_name %>
@@ -133,7 +133,6 @@
         edit_candidates_school_registrations_background_check_path(
           anchor: 'candidates_registrations_background_check_has_dbs_check_container'
         ) %>
-
     </dl>
   </div>
   <div class="govuk-grid-column-full">
