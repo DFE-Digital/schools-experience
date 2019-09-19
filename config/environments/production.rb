@@ -149,7 +149,7 @@ Rails.application.configure do
     config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
   end
 
-  config.x.features = %i(candidate_requirement_ab_test)
+  config.x.features = %i(candidate_requirement_ab_test access_needs_journey)
 
   config.sass[:style] = :compressed if config.sass
 
