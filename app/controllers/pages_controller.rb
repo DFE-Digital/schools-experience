@@ -15,6 +15,8 @@ class PagesController < ApplicationController
 
   def service_update; end
 
+  def help_and_support_access_needs; end
+
 private
 
   def sanitise_page
@@ -25,6 +27,7 @@ private
     when 'cookies_policy' then 'pages/cookies_policy'
     when 'migration' then 'pages/migration'
     when 'service_update' then 'pages/service_update'
+    when 'help_and_support_access_needs' then 'pages/help_and_support_access_needs'
     else
       raise ActiveRecord::RecordNotFound
     end
