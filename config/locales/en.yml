@@ -275,6 +275,7 @@ en:
               inclusion: 'Select whether you have any online information which covers your disability and access needs policy'
             url:
               blank: 'Enter a url for your disability and access needs policy'
+              invalid: 'Enter a valid url for your disability and access needs policy'
         schools/on_boarding/experience_outline:
           attributes:
             candidate_experience:
