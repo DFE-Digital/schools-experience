@@ -1,5 +1,7 @@
 module Schools
   module DFESignInAPI
+    class APIResponseError < RuntimeError; end
+
     class Client
       def self.enabled?
         [

@@ -96,6 +96,10 @@ Rails.application.configure do
   config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
 
+  # these credentials map to the 'School Experience Admin' UUIDs provided by DfE Sign-in
+  config.x.dfe_sign_in_admin_service_id = ENV['SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID']
+  config.x.dfe_sign_in_admin_role_id = ENV['SCHOOL_EXPERIENCE_ADMIN_ROLE_ID']
+
   if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
   end

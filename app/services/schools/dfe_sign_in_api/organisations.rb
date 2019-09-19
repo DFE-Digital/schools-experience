@@ -19,10 +19,20 @@ module Schools
         organisations.map { |record| record.fetch('urn').to_i }
       end
 
+      def id(urn)
+        organisations
+          .find { |org| org['urn'].to_i == urn }
+          &.fetch('id')
+      end
+
     private
 
       def organisations
-        @organisations ||= response
+        @response ||= response
+
+        fail APIResponseError, 'invalid response from organisations API' unless @response.is_a?(Array)
+
+        @response
       end
 
       def endpoint
