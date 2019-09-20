@@ -16,8 +16,8 @@ module Schools
         enabled? &&
           Rails.application.config.x.dfe_sign_in_api_role_check_enabled &&
           [
-            ENV.fetch('SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID'),
-            ENV.fetch('SCHOOL_EXPERIENCE_ADMIN_ROLE_ID')
+            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID'),
+            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID')
           ].map(&:presence).all?
       end
       delegate :role_check_enabled?, to: :class

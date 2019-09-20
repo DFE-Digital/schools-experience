@@ -27,11 +27,11 @@ shared_context "logged in DfE user" do
       .and_return('123')
 
     allow(ENV).to receive(:fetch)
-      .with('SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID')
+      .with('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID')
       .and_return(dfe_signin_admin_service_id)
 
     allow(ENV).to receive(:fetch)
-      .with('SCHOOL_EXPERIENCE_ADMIN_ROLE_ID')
+      .with('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID')
       .and_return(dfe_signin_admin_role_id)
   end
 

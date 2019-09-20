@@ -96,15 +96,16 @@ Rails.application.configure do
   config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
 
-  # FIXME control with env vars
-  config.x.dfe_sign_in_api_enabled=true
-  config.x.dfe_sign_in_api_role_check_enabled=true
+  truthy_strings = %w(true 1 yes)
+
+  config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
+  config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
 
   if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
   end
 
-  config.x.gitis.fake_crm = ['true', '1', 'yes'].include?(String(ENV.fetch('FAKE_CRM') { true }))
+  config.x.gitis.fake_crm = truthy_strings.include?(String(ENV.fetch('FAKE_CRM') { true }))
   config.x.gitis.fake_crm_uuid = ENV.fetch('FAKE_CRM_UUID', nil)
   config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID', 'notset')
   config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET', 'notset')

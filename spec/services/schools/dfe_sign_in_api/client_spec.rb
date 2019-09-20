@@ -34,4 +34,10 @@ describe Schools::DFESignInAPI::Client do
       end
     end
   end
+
+  describe '.role_check_enabled?' do
+    specify 'should be disabled when the client is disabled'
+    specify 'should require the dfe_sign_in_api_role_check_enabled to be true'
+    specify 'should require both environment variables to be present'
+  end
 end
