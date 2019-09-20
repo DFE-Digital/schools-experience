@@ -46,12 +46,8 @@ module Schools
 
       client                    = get_oidc_client
       client.authorization_code = params[:code]
-      access_token              = client.access_token!
-      userinfo                  = access_token.userinfo!
-      session[:id_token]        = access_token.id_token # store this for logout flows.
-      session[:current_user]    = userinfo
-      session[:urn]             = userinfo.raw_attributes.dig("organisation", "urn").to_i
-      session[:school_name]     = userinfo.raw_attributes.dig("organisation", "name")
+
+      populate_session(client.access_token!)
 
       redirect_to(session.delete(:return_url) || schools_dashboard_path)
 
@@ -74,6 +70,15 @@ module Schools
         Rails.logger.error(message)
 
         raise StateMismatchError, message
+      end
+    end
+
+    def populate_session(access_token)
+      access_token.userinfo!.tap do |userinfo|
+        session[:id_token]     = access_token.id_token # store this for logout flows.
+        session[:current_user] = userinfo
+        session[:urn]          = userinfo.raw_attributes.dig("organisation", "urn").to_i
+        session[:school_name]  = userinfo.raw_attributes.dig("organisation", "name")
       end
     end
 
