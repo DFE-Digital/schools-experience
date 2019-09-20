@@ -137,6 +137,10 @@ Rails.application.configure do
     'api.signin.education.gov.uk'
   end
 
+  # FIXME change these to environment variables
+  config.x.dfe_sign_in_api_enabled = false
+  config.x.dfe_sign_in_api_role_check_enabled = false
+
   config.x.gitis.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)
   if ENV['CRM_CLIENT_ID'].present?
     config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID')

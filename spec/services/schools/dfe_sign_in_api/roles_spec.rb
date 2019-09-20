@@ -6,8 +6,8 @@ describe Schools::DFESignInAPI::Roles do
   subject { described_class.new(user_guid, dfe_signin_school_urn) }
 
   before do
-    allow(ENV).to receive(:fetch).and_return('123')
     allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+    allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true)
   end
 
   specify 'should respond to #has_school_experience_role?' do

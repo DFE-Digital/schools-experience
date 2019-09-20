@@ -10,8 +10,29 @@ shared_context "logged in DfE user" do
     ]
   end
 
+  let(:dfe_signin_admin_service_id) { '66666666-5555-aaaa-bbbb-cccccccccccc' }
+  let(:dfe_signin_admin_role_id) { '66666666-5555-4444-3333-222222222222' }
+
   let(:dfe_signin_role_data) do
     { roles: [{ id: '66666666-5555-4444-3333-222222222222' }] }
+  end
+
+  before do
+    allow(ENV).to receive(:fetch)
+      .with('DFE_SIGNIN_API_CLIENT')
+      .and_return('abc')
+
+    allow(ENV).to receive(:fetch)
+      .with('DFE_SIGNIN_API_SECRET')
+      .and_return('123')
+
+    allow(ENV).to receive(:fetch)
+      .with('SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID')
+      .and_return(dfe_signin_admin_service_id)
+
+    allow(ENV).to receive(:fetch)
+      .with('SCHOOL_EXPERIENCE_ADMIN_ROLE_ID')
+      .and_return(dfe_signin_admin_role_id)
   end
 
   before do
@@ -34,7 +55,7 @@ shared_context "logged in DfE user" do
         headers: {}
       )
 
-    stub_request(:get, "https://some-signin-host.signin.education.gov.uk/services/66666666-5555-aaaa-bbbb-cccccccccccc/organisations/33333333-aaaa-5555-bbbb-777777777777/users/33333333-4444-5555-6666-777777777777")
+    stub_request(:get, "https://some-signin-host.signin.education.gov.uk/services/#{dfe_signin_admin_service_id}/organisations/33333333-aaaa-5555-bbbb-777777777777/users/33333333-4444-5555-6666-777777777777")
       .to_return(
         status: 200,
         body: dfe_signin_role_data.to_json,

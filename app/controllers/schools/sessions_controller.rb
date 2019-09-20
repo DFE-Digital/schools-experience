@@ -46,12 +46,12 @@ module Schools
       check_for_errors(params[:error])
       check_state(session[:state], params[:state])
 
-      client                    = get_oidc_client
+      client = get_oidc_client
       client.authorization_code = params[:code]
 
       populate_session(client.access_token!)
 
-      # now we have the dfe sign-in user id and urn in the session, check permissions
+      # now we have the dfe sign-in user uuid and urn in the session, check permissions
       check_role(session[:dfe_sign_in_user_uuid], session[:urn])
 
       redirect_to(session.delete(:return_url) || schools_dashboard_path)

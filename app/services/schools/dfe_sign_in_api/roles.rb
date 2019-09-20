@@ -11,11 +11,7 @@ module Schools
       end
 
       def has_school_experience_role?
-        Rails.logger.debug("ROLES: checking #{roles.size} roles for 'School Experience Administrator'")
-        exists = roles.any? { |role| role['id'] == Rails.application.config.x.dfe_sign_in_admin_role_id }
-
-        Rails.logger.debug("ROLES: found - #{exists}")
-        exists
+        roles.any? { |role| role['id'] == ENV.fetch('SCHOOL_EXPERIENCE_ADMIN_ROLE_ID') }
       end
 
     private
@@ -43,7 +39,7 @@ module Schools
         URI::HTTPS.build(
           host: Rails.configuration.x.dfe_sign_in_api_host,
           path: [
-            '/services',     Rails.application.config.x.dfe_sign_in_admin_service_id,
+            '/services',     ENV.fetch('SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID'),
             'organisations', organisation_uuid,
             'users',         user_uuid
           ].join('/')
