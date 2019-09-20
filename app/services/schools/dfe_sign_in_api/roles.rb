@@ -11,7 +11,11 @@ module Schools
       end
 
       def has_school_experience_role?
-        roles.any? { |role| role['id'] == Rails.application.config.x.dfe_sign_in_admin_role_id }
+        Rails.logger.debug("ROLES: checking #{roles.size} roles for 'School Experience Administrator'")
+        exists = roles.any? { |role| role['id'] == Rails.application.config.x.dfe_sign_in_admin_role_id }
+
+        Rails.logger.debug("ROLES: found - #{exists}")
+        exists
       end
 
     private

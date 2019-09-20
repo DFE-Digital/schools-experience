@@ -11,6 +11,14 @@ module Schools
       end
       delegate :enabled?, to: :class
 
+      def self.role_check_enabled?
+        [
+          ENV['SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID'],
+          ENV['SCHOOL_EXPERIENCE_ADMIN_ROLE_ID']
+        ].map(&:presence).all?
+      end
+      delegate :role_check_enabled?, to: :class
+
     private
 
       def response

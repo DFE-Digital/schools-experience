@@ -2,12 +2,14 @@ module Schools
   class StateMismatchError < StandardError; end
   class AuthFailedError < StandardError; end
   class NoIDTokenError < StandardError; end
+  class InsufficientPrivilegesError < StandardError; end
 
   class SessionsController < ApplicationController
     include DFEAuthentication
 
     rescue_from AuthFailedError,    with: :authentication_failure
     rescue_from StateMismatchError, with: :authentication_failure
+    rescue_from InsufficientPrivilegesError, with: :insufficient_privileges_failure
 
     def show
       # nothing yet, the view just contains a 'logout' button
@@ -49,7 +51,15 @@ module Schools
 
       populate_session(client.access_token!)
 
+      # now we have the dfe sign-in user id and urn in the session, check permissions
+      check_role(session[:dfe_sign_in_user_uuid], session[:urn])
+
       redirect_to(session.delete(:return_url) || schools_dashboard_path)
+
+    # the DfE Sign-in api returns a 404 if the resource (permission) we're looking
+    # for isn't there
+    rescue Faraday::ResourceNotFound => e
+      raise InsufficientPrivilegesError, e
 
     # if we fail with an AttrRequired::AttrMissing error here it's likely that
     # params[:code] is missing, so raise AuthFailedError and log it
@@ -59,6 +69,14 @@ module Schools
     end
 
   private
+
+    def check_role(user_uuid, urn)
+      return true unless Schools::DFESignInAPI::Client.role_check_enabled?
+
+      unless Schools::DFESignInAPI::Roles.new(user_uuid, urn).has_school_experience_role?
+        raise InsufficientPrivilegesError, 'missing school experience administrator role'
+      end
+    end
 
     def check_state(session_state, params_state)
       if params_state != session_state
@@ -75,10 +93,11 @@ module Schools
 
     def populate_session(access_token)
       access_token.userinfo!.tap do |userinfo|
-        session[:id_token]     = access_token.id_token # store this for logout flows.
-        session[:current_user] = userinfo
-        session[:urn]          = userinfo.raw_attributes.dig("organisation", "urn").to_i
-        session[:school_name]  = userinfo.raw_attributes.dig("organisation", "name")
+        session[:id_token]              = access_token.id_token # store this for logout flows.
+        session[:current_user]          = userinfo
+        session[:urn]                   = userinfo.raw_attributes.dig("organisation", "urn").to_i
+        session[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
+        session[:dfe_sign_in_user_uuid] = userinfo.sub
       end
     end
 
@@ -95,6 +114,13 @@ module Schools
       Raven.capture_exception(exception)
 
       redirect_to schools_errors_auth_failed_path
+    end
+
+    def insufficient_privileges_failure(exception)
+      ExceptionNotifier.notify_exception(exception)
+      Raven.capture_exception(exception)
+
+      redirect_to schools_errors_insufficient_privileges_path
     end
 
     def build_logout_query(id_token)
