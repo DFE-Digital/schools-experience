@@ -532,19 +532,45 @@ describe Bookings::PlacementRequest, type: :model do
 
   context '#status' do
     context 'default' do
-      subject { FactoryBot.create :placement_request }
+      subject { create(:placement_request).status }
 
-      it "returns 'pending'" do
-        expect(subject.status).to eq 'New'
-      end
+      it { is_expected.to eq 'New' }
     end
 
-    context 'when cancelled?' do
-      subject { FactoryBot.create :placement_request, :cancelled }
+    context 'when cancelled by candidate' do
+      subject { create(:placement_request, :cancelled).status }
 
-      it "returns 'cancelled'" do
-        expect(subject.status).to eq 'Cancelled'
-      end
+      it { is_expected.to eq 'Withdrawn' }
+    end
+
+    context 'when cancelled by school' do
+      subject { create(:placement_request, :cancelled_by_school).status }
+
+      it { is_expected.to eq 'Rejected' }
+    end
+
+    context 'when viewed' do
+      subject { create(:placement_request, :viewed).status }
+
+      it { is_expected.to eq 'Viewed' }
+    end
+
+    context 'when booked' do
+      subject { create(:placement_request, :booked).status }
+
+      it { is_expected.to eq 'Booked' }
+    end
+
+    context 'when booked and cancelled by candidate' do
+      subject { create(:placement_request, :booked, :cancelled).status }
+
+      it { is_expected.to eq 'Candidate cancellation' }
+    end
+
+    context 'when booked and cancelled by school' do
+      subject { create(:placement_request, :booked, :cancelled_by_school).status }
+
+      it { is_expected.to eq 'School cancellation' }
     end
   end
 

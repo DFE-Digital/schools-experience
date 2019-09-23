@@ -65,7 +65,7 @@ module Bookings
     end
 
     def status
-      "New"
+      bookings_placement_request.status
     end
 
     def placement_start_date_with_duration
