@@ -35,12 +35,13 @@
 
     <% else %>
       <p>
-        There are no bookings.
+        There are no upcoming bookings.
       </p>
     <% end %>
 
-    <div>
-      <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
-    </div>
+  </div>
+
+  <div class="govuk-grid-column-full">
+    <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
   </div>
 </div>

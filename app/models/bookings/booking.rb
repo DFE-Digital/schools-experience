@@ -63,6 +63,18 @@ module Bookings
         .where(bookings_placement_request_cancellations: { viewed_at: nil })
     end
 
+    scope :to_manage, -> do
+      not_cancelled
+      .attendance_unlogged
+      .accepted
+      .upcoming
+    end
+
+    scope :requiring_attention, -> do
+      where(id: with_unviewed_candidate_cancellation.select('id')).or \
+        where(id: to_manage.select('id'))
+    end
+
     def self.from_confirm_booking(confirm_booking)
       new(
         date: confirm_booking.date,
