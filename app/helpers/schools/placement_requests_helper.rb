@@ -1,9 +1,18 @@
 module Schools::PlacementRequestsHelper
+  HIDDEN_STATUSES = %w(Viewed Booked).freeze
+
   def placement_request_status(placement_request)
-    fail "not applicable for bookings" if placement_request.booking
+    status = placement_request.status
 
-    text = placement_request.status unless placement_request.status == 'Viewed'
+    unless status.in? HIDDEN_STATUSES
 
-    tag.span(text, class: 'govuk-tag') if text
+      css_class = if placement_request.cancelled?
+                    'govuk-tag-red'
+                  else
+                    'govuk-tag'
+                  end
+
+      tag.span status, class: css_class
+    end
   end
 end

@@ -1,7 +1,8 @@
 module Bookings
   class Booking < ApplicationRecord
     belongs_to :bookings_placement_request,
-      class_name: 'Bookings::PlacementRequest'
+      class_name: 'Bookings::PlacementRequest',
+      inverse_of: :booking
 
     belongs_to :bookings_subject,
       class_name: 'Bookings::Subject'
@@ -45,6 +46,7 @@ module Bookings
       :contact_uuid,
       :candidate_email,
       :candidate_name,
+      :cancelled?,
       to: :bookings_placement_request
 
     UPCOMING_TIMEFRAME = 2.weeks

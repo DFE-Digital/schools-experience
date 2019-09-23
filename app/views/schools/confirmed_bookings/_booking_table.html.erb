@@ -2,16 +2,20 @@
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header" scope="col">Name</th>
+      <th class="govuk-table__header" scope="col">Status</th>
       <th class="govuk-table__header" scope="col">Subject</th>
       <th class="govuk-table__header" scope="col">Date booked</th>
       <th class="govuk-table__header"/>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-    <%- @bookings.each do |booking| -%>
+    <%- bookings.each do |booking| -%>
       <tr class="booking govuk-table__row" data-booking="<%= booking.id %>">
         <td class="name govuk-table__cell">
           <%= booking.candidate_name %>
+        </td>
+        <td class="status govuk-table__cell">
+          <%= placement_request_status(booking) %>
         </td>
         <td class="subject govuk-table__cell">
           <%= booking.bookings_subject.name %>
