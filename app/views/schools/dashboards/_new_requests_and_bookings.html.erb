@@ -6,7 +6,7 @@
   <div id="requests" class="subsection">
     <header class="dashboard-high-priority">
       <%= link_to "Manage requests", schools_placement_requests_path %>
-      <%= numbered_circle(@new_requests, id: 'new-requests-counter', aria_label: 'new placement requests') %>
+      <%= numbered_circle(@requests_requiring_attention, id: 'new-requests-counter', aria_label: 'new placement requests') %>
     </header>
     <p class="govuk-hint">Accept, reject or revisit outstanding requests</p>
   </div>
@@ -14,7 +14,7 @@
   <div id="bookings" class="subsection">
     <header class="dashboard-high-priority">
       <%= link_to "Manage bookings", schools_bookings_path  %>
-      <%= numbered_circle(@new_bookings, id: 'new-bookings-counter', aria_label: 'new upcoming bookings') %>
+      <%= numbered_circle(@bookings_requiring_attention, id: 'new-bookings-counter', aria_label: 'new upcoming bookings') %>
     </header>
     <p class="govuk-hint">View, change or cancel bookings</p>
   </div>

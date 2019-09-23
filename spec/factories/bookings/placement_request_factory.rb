@@ -33,6 +33,14 @@ FactoryBot.define do
       end
     end
 
+    trait :with_viewed_candidate_cancellation do
+      before :create do |placement_request|
+        placement_request.candidate_cancellation = \
+          FactoryBot.build :cancellation,
+            :sent, :viewed, placement_request: placement_request
+      end
+    end
+
     trait :cancelled_by_school do
       before :create do |placement_request|
         placement_request.school_cancellation = \
@@ -59,6 +67,10 @@ FactoryBot.define do
           bookings_placement_request: placement_request,
           bookings_placement_request_id: placement_request.id
       end
+    end
+
+    trait :viewed do
+      after :create, &:viewed!
     end
   end
 end

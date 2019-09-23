@@ -10,6 +10,10 @@ module Schools
       @gitis_contact = placement_request.fetch_gitis_contact(gitis_crm)
 
       @placement_request.viewed!
+
+      if @placement_request.candidate_cancellation
+        @placement_request.candidate_cancellation.viewed!
+      end
     end
 
   private
@@ -18,7 +22,7 @@ module Schools
       current_school
         .placement_requests
         .unbooked
-        .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date)
+        .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date, :booking)
         .order(created_at: 'desc')
     end
 

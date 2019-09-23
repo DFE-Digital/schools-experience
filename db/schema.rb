@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_16_105024) do
+ActiveRecord::Schema.define(version: 2019_09_19_111332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 2019_09_16_105024) do
     t.string "cancelled_by", null: false
     t.datetime "sent_at"
     t.text "extra_details"
+    t.datetime "viewed_at"
     t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id"
   end
 
