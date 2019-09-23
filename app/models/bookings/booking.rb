@@ -56,6 +56,11 @@ module Bookings
     scope :previous, -> { where(arel_table[:date].lteq(Date.today)) }
     scope :attendance_unlogged, -> { where(attended: nil) }
 
+    scope :with_unviewed_candidate_cancellation, -> do
+      joins(bookings_placement_request: :candidate_cancellation)
+        .where(bookings_placement_request_cancellations: { viewed_at: nil })
+    end
+
     def self.from_confirm_booking(confirm_booking)
       new(
         date: confirm_booking.date,

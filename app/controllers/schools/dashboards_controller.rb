@@ -10,7 +10,10 @@ module Schools
         .requiring_attention
         .count
 
-      @bookings_requiring_attention = current_school.bookings.upcoming.count
+      @bookings_requiring_attention = current_school
+        .bookings
+        .with_unviewed_candidate_cancellation
+        .count
 
       @candidate_attendances = current_school
         .bookings
