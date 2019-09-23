@@ -14,6 +14,7 @@
 
       <% if @current_school.private_beta? %>
 
+        <%= render partial: 'your_school_is_disabled' if @current_school.disabled? %>
         <%= render partial: 'new_requests_and_bookings' %>
         <%= render partial: 'manage_dates' %>
         <%= render partial: 'account_admin' %>
