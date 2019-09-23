@@ -133,9 +133,13 @@ module Bookings
       created_at.to_date
     end
 
-    # FIXME SE-1130
     def status
-      return 'Cancelled' if cancelled?
+      return 'Candidate cancellation' if booking && candidate_cancellation&.sent?
+      return 'School cancellation'    if booking && school_cancellation&.sent?
+      return 'Booked'                 if booking
+      return 'Withdrawn'              if candidate_cancellation&.sent?
+      return 'Rejected'               if school_cancellation&.sent?
+      return 'Viewed'                 if viewed?
 
       'New'
     end
