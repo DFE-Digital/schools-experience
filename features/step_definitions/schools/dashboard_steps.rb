@@ -69,3 +69,11 @@ end
 Then("there should be no {string} link") do |link_text|
   expect(page).not_to have_link(link_text)
 end
+
+Then("I should see a warning that my school is disabled") do
+  expect(page).to have_css('.govuk-error-summary h2', text: 'Your school is currently disabled')
+end
+
+Then("I shouldn't see any warnings") do
+  expect(page).not_to have_css('.govuk-error-summary')
+end

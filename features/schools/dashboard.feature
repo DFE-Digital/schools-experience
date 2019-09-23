@@ -17,6 +17,18 @@ Feature: The School Dashboard
         Then I should see a warning informing me that I need to complete my profile before continuing
         And I should see a 'Update your school profile' link to the 'profile' page
 
+    Scenario: Displaying a warning when the school is disabled
+        Given my school has fully-onboarded
+        And my school is disabled
+        When I am on the 'schools dashboard' page
+        Then I should see a warning that my school is disabled
+
+    Scenario: Displaying no warning when the school is enabled
+        Given my school has fully-onboarded
+        And my school is enabled
+        When I am on the 'schools dashboard' page
+        Then I shouldn't see any warnings
+
     Scenario: Displaying the managing requests section when schools have onboarded
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
