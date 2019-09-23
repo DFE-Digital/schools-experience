@@ -136,6 +136,46 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
+  context '.requiring_attention' do
+    let :school do
+      create :bookings_school, :with_subjects
+    end
+
+    let! :request_pending_decision do
+      create :placement_request, school: school
+    end
+
+    let! :request_with_unviewed_candidate_cancellation do
+      create :placement_request, :cancelled, school: school
+    end
+
+    let! :request_with_viewed_candidate_cancellation do
+      create :placement_request,
+        :with_viewed_candidate_cancellation, school: school
+    end
+
+    let! :request_with_booking do
+      create :placement_request, :booked, school: school
+    end
+
+    let! :request_with_school_cancellation do
+      create :placement_request, :cancelled_by_school, school: school
+    end
+
+    let! :other_schools_request do
+      create :placement_request, school: create(:bookings_school, :with_subjects)
+    end
+
+    subject { school.placement_requests.requiring_attention }
+
+    it { is_expected.to     include request_pending_decision }
+    it { is_expected.to     include request_with_unviewed_candidate_cancellation }
+    it { is_expected.not_to include request_with_viewed_candidate_cancellation }
+    it { is_expected.not_to include request_with_booking }
+    it { is_expected.not_to include request_with_school_cancellation }
+    it { is_expected.not_to include other_schools_request }
+  end
+
   context '.create_from_registration_session' do
     let(:candidate) { create(:candidate) }
 

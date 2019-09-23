@@ -2,6 +2,7 @@
 # registration
 module Bookings
   class PlacementRequest < ApplicationRecord
+    include ViewTrackable
     include Candidates::Registrations::Behaviours::PlacementPreference
     include Candidates::Registrations::Behaviours::Education
     include Candidates::Registrations::Behaviours::TeachingPreference
@@ -49,9 +50,16 @@ module Bookings
     end
 
     scope :unbooked, -> do
+      without_booking.or booking_not_sent
+    end
+
+    scope :booking_not_sent, -> do
+      left_joins(:booking).where(bookings_bookings: { accepted_at: nil })
+    end
+
+    scope :without_booking, -> do
       left_joins(:booking)
         .where(bookings_bookings: { bookings_placement_request_id: nil })
-        .or(left_joins(:booking).where(bookings_bookings: { accepted_at: nil }))
     end
 
     scope :cancelled, -> do
@@ -66,6 +74,22 @@ module Bookings
       left_joins(:candidate_cancellation, :school_cancellation)
         .where(bookings_placement_request_cancellations: { sent_at: nil })
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
+    end
+
+    scope :with_unviewed_canidate_cancellation, -> do
+      left_joins(:candidate_cancellation)
+        .merge Cancellation.unviewed
+    end
+
+    scope :not_cancelled_by_school, -> do
+      left_joins(:school_cancellation)
+        .where(school_cancellations_bookings_placement_requests: { bookings_placement_request_id: nil })
+    end
+
+    scope :requiring_attention, -> do
+      without_booking
+        .with_unviewed_canidate_cancellation
+        .not_cancelled_by_school
     end
 
     default_scope { where.not(candidate_id: nil) }
@@ -91,16 +115,6 @@ module Bookings
 
     def open?
       !closed?
-    end
-
-    def viewed!
-      if viewed_at.nil?
-        update(viewed_at: Time.now)
-      end
-    end
-
-    def viewed?
-      viewed_at.present?
     end
 
     def contact_uuid
