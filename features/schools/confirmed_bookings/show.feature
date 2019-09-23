@@ -52,3 +52,16 @@ Feature: Viewing a booking
             | Teaching stage                          | I want to be a teacher            |
             | Teaching subject                        | First choice: Biology             |
             | Teaching subject                        | Second choice: Biology            |
+
+    Scenario: Without a candidate cancellation
+        Given there is at least one booking
+        When I am viewing my chosen booking
+        Then I should not see a 'Cancellation details' section
+
+    Scenario: Cancellation details
+        Given there is a cancelled booking
+        When I am viewing my chosen booking
+        Then I should see a 'Cancellation details' section with the following values:
+            | Heading              | Value             |
+            | Cancellation reason  | MyText            |
+            | Cancellation sent at | \d{2}\s\w+\s\d{4} |

@@ -22,6 +22,10 @@ module Schools
         .find(params[:id])
 
       @booking.bookings_placement_request.fetch_gitis_contact gitis_crm
+
+      if @booking.candidate_cancellation
+        @booking.candidate_cancellation.viewed!
+      end
     end
 
   private

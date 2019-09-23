@@ -27,7 +27,7 @@ Feature: Viewing all bookings
         Given there are some bookings
         When I am on the 'bookings' page
         Then the bookings table should have the following values:
-			| Heading | Value            |
+			      | Heading | Value            |
             | Name    | Matthew Richards |
             | Subject | Biology          |
         And the booking date should be correct
