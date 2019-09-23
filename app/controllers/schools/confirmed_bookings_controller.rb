@@ -6,6 +6,7 @@ module Schools
         .not_cancelled
         .attendance_unlogged
         .accepted
+        .upcoming
         .eager_load(:bookings_subject, bookings_placement_request: :candidate)
         .order(date: :asc)
         .page(params[:page])
