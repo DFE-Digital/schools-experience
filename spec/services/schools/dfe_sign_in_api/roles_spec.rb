@@ -16,10 +16,34 @@ describe Schools::DFESignInAPI::Roles do
 
   context '#has_school_experience_role?' do
     context 'when the role is present' do
+      let!(:school) { create(:bookings_school, urn: dfe_signin_school_urn) }
+
       subject { described_class.new(user_guid, dfe_signin_school_urn) }
 
       specify 'should return true when the role is present' do
         expect(subject.has_school_experience_role?).to be true
+      end
+
+      specify 'should save the DfE Sign-in organisation UUID' do
+        expect(school.dfe_signin_organisation_uuid).to be nil
+        subject.has_school_experience_role?
+        expect(school.reload.dfe_signin_organisation_uuid).to eql(dfe_signin_school_id)
+      end
+
+      context 'when the DfE Sign-in organisation UUID has been saved' do
+        let!(:school) { create(:bookings_school, urn: dfe_signin_school_urn, dfe_signin_organisation_uuid: dfe_signin_school_id) }
+
+        before { allow(subject).to receive(:retrieve_organisation_uuid).and_return(true) }
+        before { allow(subject).to receive(:find_organisation_uuid).and_return(dfe_signin_school_id) }
+        before { subject.has_school_experience_role? }
+
+        specify 'should find the school to get the organisation uuid' do
+          expect(subject).to have_received(:find_organisation_uuid)
+        end
+
+        specify 'should not need to contact the DfE Sign-in API' do
+          expect(subject).to_not have_received(:retrieve_organisation_uuid)
+        end
       end
     end
 
