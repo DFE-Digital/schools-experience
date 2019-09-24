@@ -1,7 +1,6 @@
 module Schools
   class StateMismatchError < StandardError; end
   class AuthFailedError < StandardError; end
-  class NoIDTokenError < StandardError; end
 
   class SessionsController < ApplicationController
     include DFEAuthentication
@@ -24,7 +23,7 @@ module Schools
       id_token = session[:id_token]
 
       if id_token.nil?
-        fail NoIDTokenError, 'No id_token present, cannot log out from DfE Sign-in'
+        Rails.logger.error 'No id_token present, cannot log out from DfE Sign-in'
       end
 
       session.clear

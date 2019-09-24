@@ -194,8 +194,12 @@ describe Schools::SessionsController, type: :request do
     context 'when a session exists but there is no id_token' do
       subject { get(logout_schools_session_path) }
 
-      specify 'it should raise an NoIDTokenError' do
-        expect { subject }.to raise_error(Schools::NoIDTokenError, 'No id_token present, cannot log out from DfE Sign-in')
+      before { allow(Rails.logger).to receive(:error).and_return(true) }
+
+      before { subject }
+
+      specify 'it should write a message to the error log' do
+        expect(Rails.logger).to have_received(:error).with(/No id_token present/)
       end
     end
   end
