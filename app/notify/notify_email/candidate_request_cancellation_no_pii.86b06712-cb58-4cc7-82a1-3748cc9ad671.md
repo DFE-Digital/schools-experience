@@ -1,4 +1,4 @@
-Dear ((candidate_name)),
+Hello,
 
 You’ve withdrawn your request for school experience at ((school_name)) for the following dates:
 

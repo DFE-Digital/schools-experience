@@ -106,7 +106,6 @@ module Candidates
         NotifyEmail::CandidateRequestCancellation.new(
           to: cancellation.candidate_email,
           school_name: cancellation.school_name,
-          candidate_name: cancellation.candidate_name,
           requested_availability: cancellation.dates_requested,
           school_search_url: new_candidates_school_search_url
         ).despatch_later!
