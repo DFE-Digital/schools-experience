@@ -22,11 +22,12 @@ module Schools
     def logout
       id_token = session[:id_token]
 
+      session.clear
+
       if id_token.nil?
         Rails.logger.error 'No id_token present, cannot log out from DfE Sign-in'
+        return redirect_to schools_path
       end
-
-      session.clear
 
       redirect_to(
         URI::HTTPS.build(

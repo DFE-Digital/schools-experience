@@ -196,10 +196,13 @@ describe Schools::SessionsController, type: :request do
 
       before { allow(Rails.logger).to receive(:error).and_return(true) }
 
-      before { subject }
-
       specify 'it should write a message to the error log' do
+        subject
         expect(Rails.logger).to have_received(:error).with(/No id_token present/)
+      end
+
+      specify 'it should redirect directly to the schools path' do
+        expect(subject).to redirect_to(schools_path)
       end
     end
   end
