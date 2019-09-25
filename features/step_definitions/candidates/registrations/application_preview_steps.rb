@@ -96,11 +96,11 @@ Then("I should see the following summary rows:") do |table|
   table.hashes.each do |row|
     heading_selector = row['Heading'].tr(' ', '-').downcase
 
-    if page.has_selector? ".#{heading_selector}"
-      row_selector = ".#{heading_selector}"
-    else
-      row_selector = "##{heading_selector}"
-    end
+    row_selector = if page.has_selector? ".#{heading_selector}"
+                     ".#{heading_selector}"
+                   else
+                     "##{heading_selector}"
+                   end
 
     within row_selector do
       expect(page).to have_css('dd', text: row['Value'])

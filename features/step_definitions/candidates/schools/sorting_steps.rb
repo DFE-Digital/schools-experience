@@ -81,7 +81,7 @@ Given("I have changed the sort order to {string}") do |sort_by|
 end
 
 Given("the sort order has defaulted to {string}") do |string|
-  selected_radio = page.find :xpath, %Q(.//input[@value="#{string.downcase}"])
+  selected_radio = page.find :xpath, %(.//input[@value="#{string.downcase}"])
   expect(selected_radio).to be_checked
 end
 
