@@ -65,6 +65,34 @@ describe Bookings::Gitis::Contact, type: :model do
     end
   end
 
+  describe 'validation' do
+    subject { build :gitis_contact }
+
+    {
+      emailaddress1: 100,
+      emailaddress2: 100,
+      address1_line1: 250,
+      address1_line2: 250,
+      address1_line3: 250,
+      address1_city: 80,
+      address1_stateorprovince: 50,
+      address1_postalcode: 20,
+      telephone1: 50,
+      telephone2: 50
+    }.each do |attribute, max_length|
+      context attribute.to_s do
+        before do
+          subject.send("#{attribute}=", "a" * (max_length + 1))
+          subject.valid?
+        end
+
+        specify "should validate #{attribute} allows maximum length of #{max_length} characters" do
+          expect(subject.errors.messages[attribute]).to include(/is too long \(maximum is #{max_length} characters\)/)
+        end
+      end
+    end
+  end
+
   describe '#created_by_us?' do
     context 'with our record' do
       subject do

@@ -31,6 +31,17 @@ module Bookings
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
+      validates :emailaddress1, length: { maximum: 100 }
+      validates :emailaddress2, length: { maximum: 100 }
+      validates :address1_line1, length: { maximum: 250 }
+      validates :address1_line2, length: { maximum: 250 }
+      validates :address1_line3, length: { maximum: 250 }
+      validates :address1_city, length: { maximum: 80 }
+      validates :address1_stateorprovince, length: { maximum: 50 }
+      validates :address1_postalcode, length: { maximum: 20 }
+      validates :telephone1, length: { maximum: 50 }
+      validates :telephone2, length: { maximum: 50 }
+
       def self.channel_creation
         Rails.application.config.x.gitis.channel_creation
       end
