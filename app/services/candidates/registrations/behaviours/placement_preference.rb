@@ -6,12 +6,20 @@ module Candidates
 
         included do
           with_options unless: :dont_validate_availability? do
+            # The 'unless' clauses on the following validations ensure that if
+            # placement requests are created when the school has fixed or flexible
+            # dates selected *then toggles*, the PR won't be left in an invalid state
+            #
+            # At least either the availability or bookings_placement_date_id must
+            # be present
             validates :bookings_placement_date_id,
               presence: true,
-              if: :school_offers_fixed_dates?
+              if: :school_offers_fixed_dates?,
+              unless: -> { availability.present? }
             validates :availability,
               presence: true,
-              if: :school_offers_flexible_dates?
+              if: :school_offers_flexible_dates?,
+              unless: -> { bookings_placement_date_id.present? }
           end
           validates :urn, presence: true
           validates :availability, number_of_words: { less_than: 150 }, if: -> { availability.present? }
