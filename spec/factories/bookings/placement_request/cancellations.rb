@@ -7,5 +7,11 @@ FactoryBot.define do
     trait :sent do
       after :build, &:sent!
     end
+
+    trait :viewed do
+      after :build do |cancellation|
+        cancellation.viewed_at = DateTime.now
+      end
+    end
   end
 end

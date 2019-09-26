@@ -45,9 +45,23 @@
     </dl>
   </section>
 
-  <div>
-    <%= govuk_link_to 'Cancel booking', new_schools_booking_cancellation_path(@booking), secondary: true %>
-  </div>
+  <% if @booking.candidate_cancellation %>
+    <section id="cancellation-details">
+      <h2>Cancellation details</h2>
+
+      <dl class="govuk-summary-list">
+        <%= summary_row 'Cancellation reason', @booking.candidate_cancellation.reason %>
+        <% if @booking.candidate_cancellation.extra_details.present? %>
+          <%= summary_row 'Additional details', @booking.candidate_cancellation.extra_details %>
+        <% end %>
+        <%= summary_row 'Cancellation sent at', @booking.candidate_cancellation.sent_at.to_date.to_formatted_s(:govuk) %>
+      </dl>
+    </section>
+  <% else %>
+    <div>
+      <%= govuk_link_to 'Cancel booking', new_schools_booking_cancellation_path(@booking), secondary: true %>
+    </div>
+  <% end %>
 
   <div>
     <%= govuk_link_to 'Return to requests and bookings', schools_dashboard_path %>

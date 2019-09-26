@@ -1,4 +1,9 @@
 class Bookings::PlacementRequest::Cancellation < ApplicationRecord
+  include ViewTrackable
+
+  scope :candidate_cancellation, -> { where cancelled_by: 'candidate' }
+  scope :school_cancellation,    -> { where cancelled_by: 'school' }
+
   belongs_to :placement_request,
     class_name: 'Bookings::PlacementRequest',
     foreign_key: 'bookings_placement_request_id'

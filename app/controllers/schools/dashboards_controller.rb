@@ -5,8 +5,16 @@ module Schools
     def show
       @school = current_school
 
-      @new_requests = current_school.placement_requests.unprocessed.count
-      @new_bookings = current_school.bookings.upcoming.count
+      @requests_requiring_attention = current_school
+        .placement_requests
+        .requiring_attention
+        .count
+
+      @bookings_requiring_attention = current_school
+        .bookings
+        .with_unviewed_candidate_cancellation
+        .count
+
       @candidate_attendances = current_school
         .bookings
         .previous

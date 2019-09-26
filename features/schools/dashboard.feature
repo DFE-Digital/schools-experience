@@ -90,7 +90,7 @@ Feature: The School Dashboard
 
     Scenario: Candidate bookings counter
         Given my school has fully-onboarded
-        And there are 3 new bookings
+        And there are 3 unviewed candidate cancellations
         When I am on the 'schools dashboard' page
         Then the 'new bookings counter' should be 3
 

@@ -35,6 +35,11 @@ Given("there are {int} new bookings") do |qty|
   FactoryBot.create_list :bookings_booking, qty, :upcoming, :accepted, bookings_school: @school
 end
 
+Given("there are {int} unviewed candidate cancellations") do |qty|
+  FactoryBot.create_list \
+    :bookings_booking, qty, :cancelled_by_candidate, bookings_school: @school
+end
+
 Given("there are {int} bookings in the past with no attendance logged") do |qty|
   @bookings = FactoryBot.create_list :bookings_booking, qty, bookings_school: @school
   @bookings.each do |b|
