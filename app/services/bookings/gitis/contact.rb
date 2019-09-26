@@ -44,7 +44,7 @@ module Bookings
         clear_changes_information
 
         set_email_address_2_if_blank
-        set_telephone_2_if_blank @crm_data
+        set_telephone_2_if_blank @init_data
       end
 
       def created_by_us?

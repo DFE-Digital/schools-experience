@@ -34,7 +34,7 @@ module Bookings::Gitis
     end
 
     def initialize(attrs = {})
-      @crm_data = attrs.stringify_keys
+      @init_data = attrs.stringify_keys
 
       super
 
