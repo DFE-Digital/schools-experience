@@ -36,9 +36,12 @@ module Bookings
       end
 
       def initialize(crm_contact_data = {})
-        @crm_data = crm_contact_data.stringify_keys
-
         super # handles populating
+
+        self.dfe_channelcreation  = self.class.channel_creation unless dfe_channelcreation.present?
+        self.dfe_Country          = Country.default unless _dfe_country_value.present?
+
+        clear_changes_information
 
         set_email_address_2_if_blank
         set_telephone_2_if_blank @crm_data
@@ -132,13 +135,6 @@ module Bookings
       end
 
     private
-
-      def populate(attrs)
-        super
-
-        self.dfe_channelcreation  = self.class.channel_creation unless dfe_channelcreation.present?
-        self.dfe_Country          = Country.default unless _dfe_country_value.present?
-      end
 
       def set_email_address_2_if_blank
         return if emailaddress2.present? || emailaddress1.blank?
