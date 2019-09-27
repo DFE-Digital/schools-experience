@@ -13,8 +13,14 @@ describe Bookings::School, type: :model do
     end
 
     context 'availability_info' do
-      it { is_expected.to allow_value(nil).for(:availability_info) }
-      it { is_expected.to validate_length_of(:availability_info).is_at_least(3) }
+      context 'with no context' do
+        it { is_expected.not_to validate_presence_of(:availability_info) }
+      end
+
+      context 'when configuring availability' do
+        it { is_expected.to validate_presence_of(:availability_info).on(:configuring_availability) }
+        it { is_expected.to validate_length_of(:availability_info).is_at_least(3).on(:configuring_availability) }
+      end
 
       context 'overwriting empty strings before validation' do
         subject { create(:bookings_school) }
