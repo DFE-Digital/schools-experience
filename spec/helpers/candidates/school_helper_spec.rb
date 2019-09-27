@@ -87,21 +87,6 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
   end
 
   context '.describe_current_search' do
-    context 'with coordinates search' do
-      subject do
-        double('Coords search',
-          latitude: '1',
-          longitude: '2',
-          location: '',
-          location_name: nil,
-          query: '')
-      end
-
-      it('should say near me') do
-        expect(describe_current_search(subject)).to match(/near me/)
-      end
-    end
-
     context 'with location search' do
       context 'and name supplied by search' do
         subject do
