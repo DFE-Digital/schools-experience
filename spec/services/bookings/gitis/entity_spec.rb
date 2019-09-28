@@ -107,14 +107,14 @@ RSpec.describe Bookings::Gitis::Entity do
     context "with unexpected format" do
       it "will raise" do
         expect { subject.entity_id = uuid }.to \
-          raise_exception(Bookings::Gitis::Entity::InvalidEntityIdError)
+          raise_exception(Bookings::Gitis::InvalidEntityId)
       end
     end
 
     context "with nil" do
       it "will raise" do
         expect { subject.entity_id = nil }.to \
-          raise_exception(Bookings::Gitis::Entity::InvalidEntityIdError)
+          raise_exception(Bookings::Gitis::InvalidEntityId)
       end
     end
   end

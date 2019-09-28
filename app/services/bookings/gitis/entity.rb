@@ -1,6 +1,7 @@
 module Bookings::Gitis
   class IdChangedUnexpectedly < RuntimeError; end
   class MissingPrimaryKey < RuntimeError; end
+  class InvalidEntityId < RuntimeError; end
 
   module Entity
     extend ActiveSupport::Concern
@@ -56,7 +57,7 @@ module Bookings::Gitis
       if id_match && id_match[1]
         self.id = id_match[1]
       else
-        fail InvalidEntityIdError
+        fail InvalidEntityId
       end
     end
 
@@ -84,8 +85,6 @@ module Bookings::Gitis
     end
     alias_method :id=, :id
 
-    class InvalidEntityIdError < RuntimeError; end
-
   private
 
     def sanitize_for_mass_assignment(*args)
@@ -97,7 +96,7 @@ module Bookings::Gitis
       if value.blank?
         return
       elsif !value.to_s.match?(ID_FORMAT)
-        fail InvalidEntityIdError
+        fail InvalidEntityId
       elsif id.present? && id != value
         fail IdChangedUnexpectedly
       end
@@ -182,7 +181,7 @@ module Bookings::Gitis
           elsif ID_FORMAT.match?(id_value)
             send :"#{attr_name}@odata.bind=", "#{entity_type.entity_path}(#{id_value})"
           else
-            raise InvalidEntityIdError
+            raise InvalidEntityId
           end
         end
 
