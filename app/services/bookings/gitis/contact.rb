@@ -3,6 +3,10 @@ module Bookings
     class Contact
       include Entity
 
+      def self.channel_creation
+        Rails.application.config.x.gitis.channel_creation
+      end
+
       entity_id_attribute :contactid
 
       entity_attributes :firstname, :lastname, :birthdate, except: :update
@@ -14,7 +18,8 @@ module Bookings
       entity_attributes :telephone1, :address1_telephone1, :telephone2
       entity_attributes :dfe_hasdbscertificate, :dfe_dateofissueofdbscertificate
       entity_attributes :dfe_notesforclassroomexperience
-      entity_attributes :mobilephone, :dfe_channelcreation, except: :update
+      entity_attributes :mobilephone, except: :update
+      entity_attribute  :dfe_channelcreation, except: :update, default: channel_creation
 
       entity_association :dfe_Country, Country
       entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
@@ -31,15 +36,10 @@ module Bookings
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
 
-      def self.channel_creation
-        Rails.application.config.x.gitis.channel_creation
-      end
-
       def initialize(crm_contact_data = {})
         super # handles populating
 
-        self.dfe_channelcreation  = self.class.channel_creation unless dfe_channelcreation.present?
-        self.dfe_Country          = Country.default unless _dfe_country_value.present?
+        self.dfe_Country = Country.default unless _dfe_country_value.present?
 
         clear_changes_information
 
