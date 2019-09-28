@@ -125,10 +125,12 @@ module Bookings::Gitis
         end
       end
 
-      def entity_attribute(attr_name, internal: false, except: nil)
+      def entity_attribute(attr_name, type = ActiveModel::Type::Value.new,
+        internal: false, except: nil, **options)
+
         except = Array.wrap(except).map(&:to_sym)
 
-        attribute :"#{attr_name}"
+        attribute :"#{attr_name}", type, **options
 
         private :"#{attr_name}" if internal
         private :"#{attr_name}=" if internal
@@ -146,9 +148,12 @@ module Bookings::Gitis
         end
       end
 
-      def entity_attributes(*attr_names, internal: false, except: nil)
+      def entity_attributes(*attr_names, type: ActiveModel::Type::Value.new,
+        internal: false, except: nil, **options)
+
         Array.wrap(attr_names).flatten.each do |attr_name|
-          entity_attribute(attr_name, internal: internal, except: except)
+          entity_attribute attr_name, type,
+            internal: internal, except: except, **options
         end
       end
 
