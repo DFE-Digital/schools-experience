@@ -21,7 +21,7 @@ module Bookings
       entity_attributes :mobilephone, except: :update
       entity_attribute  :dfe_channelcreation, except: :update, default: channel_creation
 
-      entity_association :dfe_Country, Country
+      entity_association :dfe_Country, Country, default: Country.default
       entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
       entity_association :dfe_PreferredTeachingSubject02, TeachingSubject
 
@@ -38,10 +38,6 @@ module Bookings
 
       def initialize(crm_contact_data = {})
         super # handles populating
-
-        self.dfe_Country = Country.default unless _dfe_country_value.present?
-
-        clear_changes_information
 
         set_email_address_2_if_blank
         set_telephone_2_if_blank @init_data

@@ -161,9 +161,9 @@ module Bookings::Gitis
         model_name.to_s.downcase.split('::').last.pluralize
       end
 
-      def entity_association(attr_name, entity_type)
+      def entity_association(attr_name, entity_type, **options)
         self.association_attribute_names = association_attribute_names + [attr_name.to_s]
-        entity_attribute :"#{attr_name}@odata.bind", except: :select
+        entity_attribute :"#{attr_name}@odata.bind", except: :select, **options
 
         value_name = "_#{attr_name.downcase}_value"
         self.select_attribute_names = select_attribute_names + [value_name]
