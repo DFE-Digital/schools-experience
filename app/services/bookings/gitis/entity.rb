@@ -15,7 +15,6 @@ module Bookings::Gitis
     included do
       delegate :attributes_to_select, to: :class
 
-
       class_attribute :entity_path
       self.entity_path = derive_entity_path
 
