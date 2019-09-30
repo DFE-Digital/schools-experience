@@ -17,6 +17,10 @@ class PagesController < ApplicationController
 
   def help_and_support_access_needs; end
 
+  def maintenance
+    render status: :service_unavailable
+  end
+
 private
 
   def sanitise_page

@@ -28,4 +28,26 @@ describe PagesController, type: :request do
       end
     end
   end
+
+  describe 'maintenance mode' do
+    before do
+      allow(Rails.application.config.x).to receive(:maintenance_mode) { true }
+      Rails.application.reload_routes!
+    end
+
+    after do
+      allow(Rails.application.config.x).to receive(:maintenance_mode).and_call_original
+      Rails.application.reload_routes!
+    end
+
+    it "will show the maintenance page" do
+      get root_path
+      expect(response).to have_http_status(:service_unavailable)
+      expect(response).to have_attributes body: /service is unavailable/i
+
+      get candidates_root_path
+      expect(response).to have_http_status(:service_unavailable)
+      expect(response).to have_attributes body: /service is unavailable/i
+    end
+  end
 end
