@@ -91,4 +91,6 @@ Rails.application.configure do
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
+
+  config.x.maintenance_mode = false
 end

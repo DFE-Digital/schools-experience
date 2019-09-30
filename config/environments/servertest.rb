@@ -34,4 +34,6 @@ Rails.application.configure do
   config.x.gitis.privacy_consent_id = '10'
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
+
+  config.x.maintenance_mode = false
 end
