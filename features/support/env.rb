@@ -56,7 +56,7 @@ ActionController::Base.allow_rescue = false
 Capybara.server = :puma, { Silent: true }
 
 if ENV['APP_URL'].present?
-  Capybara.app_host = "#{ENV['APP_URL']}"
+  Capybara.app_host = ENV['APP_URL'].to_s
   Capybara.run_server = false
 end
 
@@ -126,12 +126,8 @@ else
   Capybara.use_default_driver
 end
 
-
-if (js_driver = ENV['CUC_JAVASCRIPT_DRIVER']) && js_driver.present?
-  Capybara.javascript_driver = js_driver.to_sym
-else
-  Capybara.javascript_driver = :chrome_headless
-end
+js_driver = ENV['CUC_JAVASCRIPT_DRIVER']
+Capybara.javascript_driver = js_driver.present? ? js_driver.to_sym : :chrome_headless
 
 if ENV['SELENIUM_HUB_HOSTNAME'].present?
   capabilities = ENV.fetch('CUC_DRIVER') { 'chrome' }
@@ -139,9 +135,9 @@ if ENV['SELENIUM_HUB_HOSTNAME'].present?
   Capybara.run_server = false
   Capybara.register_driver :selenium_remote do |app|
     Capybara::Selenium::Driver.new(app,
-        :browser => :remote,
-        :url => "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:4444/wd/hub",
-        :desired_capabilities => capabilities.to_sym)
+        browser: :remote,
+        url: "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:4444/wd/hub",
+        desired_capabilities: capabilities.to_sym)
   end
   Capybara.javascript_driver = :selenium_remote
   Capybara.default_driver = :selenium_remote

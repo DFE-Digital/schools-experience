@@ -170,5 +170,5 @@ Then("the page title should start with {string} and include the booking referenc
 end
 
 Then("I should not see a {string} section") do |string|
-  expect(page).not_to have_css "section##{string.downcase.gsub(' ', '-')}"
+  expect(page).not_to have_css "section##{string.downcase.tr(' ', '-')}"
 end
