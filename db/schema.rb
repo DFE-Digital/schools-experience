@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_24_080833) do
+ActiveRecord::Schema.define(version: 2019_09_30_142055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 2019_09_24_080833) do
     t.datetime "updated_at", null: false
     t.integer "position"
     t.integer "edubase_id"
+    t.boolean "supports_subjects", default: true, null: false
     t.index ["name"], name: "index_bookings_phases_on_name", unique: true
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
   end
@@ -75,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_09_24_080833) do
     t.integer "max_bookings_count"
     t.datetime "published_at"
     t.boolean "subject_specific", default: false, null: false
+    t.boolean "supports_subjects"
     t.index ["bookings_school_id"], name: "index_bookings_placement_dates_on_bookings_school_id"
   end
 
