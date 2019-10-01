@@ -1,28 +1,40 @@
-<% self.page_title = 'Confirm your email' %>
+<% self.page_title = 'Check your email to complete your request' %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      Verify your school experience request
+      Check your email to complete your request
     </h1>
+
     <p>
-      Click the link in the email we’ve sent to the following email address to
-      verify your request for school experience at <%= @school_name %>:
+      We've sent a link to the following email address:
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
       <li><%= @email %></li>
     </ul>
+
     <p>
-      If you can’t find the message in your inbox:
+      You need to <strong>select the link to confirm your request</strong>
+      for school experience at <%= @school_name %>.
     </p>
+
+    <p>
+      <strong>The link will expire within 24 hours.</strong>
+    </p>
+
+    <p>
+      If you cannot find the message in your inbox:
+    </p>
+
     <ul class="govuk-list govuk-list--bullet">
-      <li>check your spam and any other mailbox folders</li>
+      <li>check your spam and other mailbox folders</li>
     </ul>
+
     <p>
-      If you can’t find or haven’t received the email use the following link to
-      resend it:
+      If you still cannot find or have not received the message and link:
     </p>
+
     <%= govuk_button_to 'Resend link', @resend_link, secondary: true %>
   </div>
 </div>
