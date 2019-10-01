@@ -10,4 +10,10 @@ module Schools::PlacementDatesHelper
   def placement_date_display_class(val)
     val ? "govuk-tag--available" : "govuk-tag--taken"
   end
+
+  def show_subject_support_option(school)
+    options = school.phases.map(&:supports_subjects)
+
+    [true, false].all? { |value| value.in?(options) }
+  end
 end

@@ -23,6 +23,10 @@
   <%= GovukElementsErrorsHelper.error_summary form.object, 'There is a problem', '' %>
   <%= form.date_field :date, heading: true %>
   <%= form.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true } %>
+
+  <% if show_subject_support_option(@current_school) %>
+    <%= form.radio_button_fieldset :supports_subjects, choices: [false, true] %>
+  <% end %>
   <%= form.submit 'Continue' %>
 <%- end -%>
 
