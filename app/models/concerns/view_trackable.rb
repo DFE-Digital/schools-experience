@@ -8,7 +8,7 @@ module ViewTrackable
 
   def viewed!
     if viewed_at.nil?
-      update!(viewed_at: DateTime.now)
+      update_column(:viewed_at, DateTime.now)
     end
   end
 
