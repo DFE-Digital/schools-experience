@@ -17,9 +17,11 @@
         <%= f.radio_input false %>
       <% end %>
 
-      <%= f.radio_button_fieldset :available_for_all_subjects do |fieldset| %>
-        <%= f.radio_input true %>
-        <%= f.radio_input false %>
+      <%- if @placement_date.supports_subjects? -%>
+        <%= f.radio_button_fieldset :available_for_all_subjects do |fieldset| %>
+          <%= f.radio_input true %>
+          <%= f.radio_input false %>
+        <% end %>
       <% end %>
 
       <%= f.submit 'Continue' %>

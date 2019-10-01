@@ -364,6 +364,7 @@ en:
         availability_preference_fixed: Choose how dates are displayed
       bookings_placement_date:
         date: Enter a start date
+        supports_subjects: Which age groups will candidates be placed with?
       phases: Education phases
       fees: Fees
       subjects: Placement subjects
@@ -486,6 +487,11 @@ en:
       bookings_placement_date:
         duration: How long will it last?
         active: Make this date available to candidates?
+        supports_subjects:
+          # FIXME reword
+          yes: Secondary or college
+          no: Primary or early years
+
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
       candidates_registrations_contact_information:
