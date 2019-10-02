@@ -138,9 +138,7 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data).to include('lastname' => "New Last Name")
 
     # Create School Experience
-    resp = crm_post('/dfe_candidateschoolexperiences', {
-      'dfe_notes' => 'test suite'
-    })
+    resp = crm_post('/dfe_candidateschoolexperiences', 'dfe_notes' => 'test suite')
     expect(resp.status).to eql(204)
     expect(resp.headers['odata-entityid']).not_to be_nil
 
@@ -157,9 +155,7 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data).to include('dfe_notes' => "test suite")
 
     # Update School Experience
-    resp = crm_patch("/dfe_candidateschoolexperiences(#{experience_id})", {
-      "dfe_notes" => "First Line\r\n\r\nSecond Line"
-    })
+    resp = crm_patch("/dfe_candidateschoolexperiences(#{experience_id})", "dfe_notes" => "First Line\r\n\r\nSecond Line")
     expect(resp.status).to eql(204)
 
     resp = crm_get("/dfe_candidateschoolexperiences(#{experience_id})")
@@ -169,9 +165,10 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data).to include('dfe_candidateschoolexperienceid' => experience_id)
     expect(data).to include('dfe_notes' => "First Line\r\n\r\nSecond Line")
 
-    resp = crm_post("/contacts(#{contact_id})/dfe_contact_dfe_candidateschoolexperience_ContactId/$ref", {
+    resp = crm_post(
+      "/contacts(#{contact_id})/dfe_contact_dfe_candidateschoolexperience_ContactId/$ref",
       "@odata.id" => "#{service_url}#{endpoint}/dfe_candidateschoolexperiences(#{experience_id})"
-    })
+    )
     expect(resp.status).to eql(204)
 
     resp = crm_get("/contacts(#{contact_id})?$expand=dfe_contact_dfe_candidateschoolexperience_ContactId")
@@ -185,14 +182,15 @@ RSpec.describe "The GITIS CRM Api" do
     expect(contact_se_data).to include('dfe_candidateschoolexperienceid' => experience_id)
     expect(contact_se_data).to include('dfe_notes' => "First Line\r\n\r\nSecond Line")
 
-    resp = crm_post("/dfe_candidateprivacypolicies", {
+    resp = crm_post(
+      '/dfe_candidateprivacypolicies',
       'dfe_consentreceivedby' => 222750001,
       'dfe_meanofconsent' => 222750001,
       'dfe_name' => "Online consent as part of school experience registration",
       'dfe_timeofconsent' => Time.now.utc.iso8601,
       'dfe_Candidate@odata.bind' => "contacts(#{contact_id})",
       'dfe_PrivacyPolicyNumber@odata.bind' => "dfe_privacypolicies(#{privacypolicyid})"
-    })
+    )
     expect(resp.status).to eql(204)
 
     resp = crm_get("/contacts(#{contact_id})?$expand=dfe_contact_dfe_candidateprivacypolicy_Candidate")
@@ -219,9 +217,10 @@ RSpec.describe "The GITIS CRM Api" do
     contact_id = contact['contactid']
     currenttime = Time.zone.now.strftime("%H:%I %d/%m/%Y")
 
-    resp = crm_patch("/contacts(#{contact_id})", {
+    resp = crm_patch(
+      "/contacts(#{contact_id})",
       'lastname' => "Updated by School Experience at #{currenttime}"
-    })
+    )
     expect(resp.status).to eql(204)
 
     # Read Contact Back
@@ -233,7 +232,7 @@ RSpec.describe "The GITIS CRM Api" do
     expect(data).to include('lastname' => "Updated by School Experience at #{currenttime}")
   end
 
-  private
+private
 
   def retrieve_access_token
     params = {
@@ -260,7 +259,7 @@ RSpec.describe "The GITIS CRM Api" do
     combined += "?#{params.to_query}" if params
 
     conn = Faraday.new(service_url)
-    resp = conn.get do |req|
+    conn.get do |req|
       req.headers['Accept'] = 'application/json'
       req.headers['Authorization'] = "Bearer #{access_token}"
       req.headers["OData-MaxVersion"] = "4.0"
@@ -272,7 +271,7 @@ RSpec.describe "The GITIS CRM Api" do
 
   def crm_post(url, params)
     conn = Faraday.new(service_url)
-    resp = conn.post do |req|
+    conn.post do |req|
       req.headers['Accept'] = 'application/json'
       req.headers['Authorization'] = "Bearer #{access_token}"
       req.headers["OData-MaxVersion"] = "4.0"
@@ -286,7 +285,7 @@ RSpec.describe "The GITIS CRM Api" do
 
   def crm_put(url, params)
     conn = Faraday.new(service_url)
-    resp = conn.put do |req|
+    conn.put do |req|
       req.headers['Accept'] = 'application/json'
       req.headers['Authorization'] = "Bearer #{access_token}"
       req.headers["OData-MaxVersion"] = "4.0"
@@ -300,7 +299,7 @@ RSpec.describe "The GITIS CRM Api" do
 
   def crm_patch(url, params)
     conn = Faraday.new(service_url)
-    resp = conn.patch do |req|
+    conn.patch do |req|
       req.headers['Accept'] = 'application/json'
       req.headers['Authorization'] = "Bearer #{access_token}"
       req.headers["OData-MaxVersion"] = "4.0"
@@ -390,9 +389,8 @@ RSpec.describe "The GITIS CRM Api" do
       'dfe_dateofissueofdbscertificate' => nil,
       'dfe_notesforclassroomexperience' =>
         existing_data['dfe_notesforclassroomexperience'] +
-        "#{existing_data['dfe_notesforclassroomexperience']}\nUpdated at #{Time.zone.now}",
+          "#{existing_data['dfe_notesforclassroomexperience']}\nUpdated at #{Time.zone.now}",
       'dfe_hasdbscertificate' => true
     }
   end
-
 end
