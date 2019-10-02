@@ -4,10 +4,10 @@ Feature: Configuring a placement date
     I want to be able to specify details about the dates we offer
 
   Background:
-      Given I am logged in as a DfE user
-      And my school is a 'secondary' school
-      And my school is fully-onboarded
-      And I have entered a placement date
+    Given I am logged in as a DfE user
+    And my school is a 'secondary' school
+    And my school is fully-onboarded
+    And I have entered a placement date
 
   Scenario: Page title
     Then the page's main heading should be the date I just entered

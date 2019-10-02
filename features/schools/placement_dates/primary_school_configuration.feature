@@ -4,9 +4,9 @@ Feature: Configuring a placement date
     I want to be able to specify details about the dates we offer
 
   Background:
-      Given I am logged in as a DfE user
-      And my school is a 'primary' school
-      And my school is fully-onboarded
+    Given I am logged in as a DfE user
+    And my school is a 'primary' school
+    And my school is fully-onboarded
 
   Scenario: Page title
     Given I have entered a placement date
