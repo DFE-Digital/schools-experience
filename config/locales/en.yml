@@ -515,7 +515,6 @@ en:
         duration: How long will it last?
         active: Make this date available to candidates?
         supports_subjects:
-          # FIXME reword
           yes: Secondary or college
           no: Primary or early years
 

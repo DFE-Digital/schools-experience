@@ -10,6 +10,72 @@ describe Schools::PlacementDatesController, type: :request do
     end
   end
 
+  describe '#create' do
+    let(:base_params) do
+      {
+        bookings_placement_date: {
+          date: 2.weeks.from_now.strftime('%Y-%m-%d'),
+          duration: 1,
+          active: true,
+        }
+      }
+    end
+
+    subject { post "/schools/placement_dates", params: params }
+    let(:placement_date) { Bookings::PlacementDate.last }
+
+    describe 'setting supports_subjects' do
+      let(:option) { false }
+      context 'when supports_subjects has already been set' do
+        let(:params) do
+          base_params.deep_merge(bookings_placement_date: { supports_subjects: option })
+        end
+
+        # set the phase to secondary so that the default would be true to confirm that
+        # the value is ignored and doesn't just match what it'd be set to anyway
+        before do
+          Bookings::School.find_by!(urn: urn).phases << create(:bookings_phase, :secondary)
+        end
+
+        before { subject }
+
+        specify 'the flag should not be updated' do
+          expect(placement_date.supports_subjects).to be option
+        end
+      end
+
+      context "when supports_subjects hasn't been set" do
+        let(:params) do
+          base_params.deep_merge(bookings_placement_date: { supports_subjects: nil })
+        end
+
+        context "when the school has only primary" do
+          before do
+            Bookings::School.find_by!(urn: urn).phases << create(:bookings_phase, :primary)
+          end
+
+          before { subject }
+
+          specify 'supports_subjects should be set to false' do
+            expect(placement_date.supports_subjects).to be false
+          end
+        end
+
+        context "when the school has secondary or college" do
+          before do
+            Bookings::School.find_by!(urn: urn).phases << create(:bookings_phase, :secondary)
+          end
+
+          before { subject }
+
+          specify 'supports_subjects should be set to true' do
+            expect(placement_date.supports_subjects).to be true
+          end
+        end
+      end
+    end
+  end
+
   context '#edit' do
     let :placement_date do
       create :bookings_placement_date, bookings_school: school
