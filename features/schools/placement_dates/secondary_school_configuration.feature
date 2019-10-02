@@ -1,6 +1,6 @@
 Feature: Configuring a placement date
     So I can manage placement dates
-    As a school administrator
+    As a secondary school administrator
     I want to be able to specify details about the dates we offer
 
   Background:
