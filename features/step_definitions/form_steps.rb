@@ -199,3 +199,7 @@ def ensure_input_exists(form_group, label_text, field_type, autocomplete: nil)
     expect(form_group).to have_css("input[autocomplete='#{autocomplete}']")
   end
 end
+
+Then("there should be no {string} field") do |label|
+  expect(page).not_to have_content(label)
+end
