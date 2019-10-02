@@ -68,7 +68,7 @@ jobs:
   - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
 
-  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) govuk-lint-ruby app lib features spec
+  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) govuk-lint-ruby app lib features spec spec_external
     displayName: Run the GovUK Lint check
 
   - task: Docker@2
