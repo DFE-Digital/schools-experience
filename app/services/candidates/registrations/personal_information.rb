@@ -16,7 +16,7 @@ module Candidates
 
       validates :first_name, presence: true, unless: :read_only
       validates :last_name, presence: true, unless: :read_only
-      validates :email, presence: true, length: { maximum: 100 }
+      validates :email, presence: true
       validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: -> { email.present? }
       validates :date_of_birth, presence: true, unless: :read_only
       validates :date_of_birth, inclusion: { in: ->(_) { MAX_AGE.years.ago..MIN_AGE.years.ago } }, if: -> { date_of_birth.present? && !read_only }
