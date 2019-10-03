@@ -103,24 +103,18 @@ en:
           attributes:
             building:
               blank: "Enter your building"
-              too_long: "Building must be 250 characters or fewer"
             county:
               blank: "Enter your county"
-              too_long: "County must be 50 characters or fewer"
             phone:
               blank: "Enter your telephone number"
               invalid: "Enter a valid telephone number"
-              too_long: "Phone number must be 50 digits or fewer"
             postcode:
               blank: "Enter your postcode"
               invalid: 'Enter a valid postcode'
-              too_long: "Postcode must be 20 characters or fewer"
             street:
               blank: "Enter your street"
-              too_long: "Street must be 250 characters or fewer"
             town_or_city:
               blank: "Enter your town or city"
-              too_long: "Town or city must be 80 characters or fewer"
 
         candidates/registrations/education:
           attributes:
@@ -145,7 +139,6 @@ en:
             email:
               blank: "Enter your email address"
               invalid: "Enter a valid email address"
-              too_long: "Email must be 100 characters or fewer"
             first_name:
               blank: 'Enter your first name'
             last_name:
