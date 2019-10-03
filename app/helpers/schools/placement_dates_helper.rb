@@ -16,4 +16,14 @@ module Schools::PlacementDatesHelper
 
     [true, false].all? { |value| value.in?(options) }
   end
+
+  def placement_date_subject_description(placement_date)
+    if placement_date.subject_specific?
+      placement_date.subjects.pluck(:name).join(', ')
+    elsif placement_date.supports_subjects?
+      'All subjects'
+    else
+      'Primary'
+    end
+  end
 end

@@ -35,11 +35,7 @@
               <%= pluralize(placement_date.duration, 'day') %>
             </td>
             <td class="govuk-table__cell">
-              <% if placement_date.subject_specific? %>
-                <%= placement_date.subjects.pluck(:name).join(',') %>
-              <% else %>
-                All subjects
-              <% end %>
+              <%= placement_date_subject_description(placement_date) %>
             </td>
             <td class="govuk-table__cell status">
               <strong class="govuk-tag <%= placement_date_display_class(placement_date.active) %>">
