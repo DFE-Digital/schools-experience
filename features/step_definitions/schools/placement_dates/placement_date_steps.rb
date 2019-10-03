@@ -52,3 +52,16 @@ Then "my date should be listed" do
     date.subjects.map(&:name).each { |name| expect(page).to have_text name }
   end
 end
+
+Then("I should be on the new configuration page for my placement date") do
+  pd = Bookings::PlacementDate.last
+  expect(page.current_path).to eql(path_for('new configuration', placement_date_id: pd.id))
+end
+
+Then("there should be no subject specificity option") do
+  expect(page).not_to have_text('Is this date available for all the subjects you offer?')
+end
+
+Then("there should be a subject specificity option") do
+  expect(page).not_to have_css('label', text: 'Is this date available for all the subjects you offer?')
+end
