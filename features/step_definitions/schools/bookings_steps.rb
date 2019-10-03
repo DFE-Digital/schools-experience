@@ -1,5 +1,5 @@
-Given("the scheduled booking date is {string}") do |string|
-  @scheduled_booking_date = string
+Given("the scheduled booking date is in the future") do
+  @scheduled_booking_date = 1.week.from_now.strftime("%d %B %Y")
 end
 
 Given("there are some bookings") do
