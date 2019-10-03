@@ -1,8 +1,8 @@
 if ENV['SLACK_WEBHOOK'].present?
   slack_opts = {
-    :webhook_url => ENV['SLACK_WEBHOOK'],
-    :additional_parameters => {
-      :mrkdwn => true
+    webhook_url: ENV['SLACK_WEBHOOK'],
+    additional_parameters: {
+      mrkdwn: true
     }
   }
 

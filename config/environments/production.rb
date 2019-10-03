@@ -97,7 +97,7 @@ Rails.application.configure do
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
     reconnect_attempts: 1,
     tcp_keepalive: 60,
-    error_handler: -> (method:, returning:, exception:) do
+    error_handler: ->(_method:, returning:, exception:) do
       ExceptionNotifier.notify_exception(
         exception,
         data: {
@@ -159,6 +159,6 @@ Rails.application.configure do
   config.sass[:style] = :compressed if config.sass
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
-  
+
   config.x.maintenance_mode = %w{1 yes true}.include?(ENV['MAINTENANCE_MODE'].to_s)
 end
