@@ -57,3 +57,27 @@ Then("the other bookings should not be updated") do
     expect(ob).to be_nil
   end
 end
+
+Given("there are some cancelled bookings that were scheduled last week") do
+  @bookings = [
+    FactoryBot.create(
+      :bookings_booking,
+      :cancelled_by_school,
+      bookings_school: @school
+    ),
+    FactoryBot.create(
+      :bookings_booking,
+      :cancelled_by_candidate,
+      bookings_school: @school
+    )
+  ]
+
+  @bookings.each do |booking|
+    booking.date = booking.accepted_at = 4.days.ago
+    booking.save(validate: false)
+  end
+end
+
+Then("no bookings should be listed") do
+  expect(page).to have_text('There are no bookings that need their attendance to be confirmed.')
+end
