@@ -125,21 +125,9 @@ jobs:
 
   - task: CopyFiles@2
     inputs:
-      contents: 'script/compose-school-experience.sh'
-      targetFolder: $(Build.ArtifactStagingDirectory)
-    displayName: 'Copy Docker Compose file to staging area'
-
-  - task: CopyFiles@2
-    inputs:
       contents: 'script/image_tags_and_ipaddress.sh'
       targetFolder: $(Build.ArtifactStagingDirectory)
     displayName: 'Copy image tags and ip address script to staging area'
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: $(Build.ArtifactStagingDirectory)/script/compose-school-experience.sh
-      artifactName: 'compose-file'
-    displayName: 'Publish the Docker Compose file'
 
   - task: PublishBuildArtifacts@1
     inputs:
