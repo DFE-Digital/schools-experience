@@ -28,6 +28,13 @@ describe Schools::DFESignInAPI::Organisations do
     end
   end
 
+  describe '#id' do
+    specify "should return the organisation's id given the correct URN" do
+      expect(subject.id(dfe_signin_school_urn)).to eql(dfe_signin_school_id)
+    end
+  end
+
+  # FIXME this is generic behaviour, move to client_spec.rb
   describe 'error_handling' do
     subject { Schools::DFESignInAPI::Organisations.new(user_guid) }
 
@@ -52,6 +59,16 @@ describe Schools::DFESignInAPI::Organisations do
         specify "should raise a #{error} error" do
           expect { subject.urns }.to raise_error(error)
         end
+      end
+    end
+
+    describe 'when an invalid response is returned' do
+      before do
+        allow(subject).to receive(:response).and_return({})
+      end
+
+      specify 'urns should match the API request content' do
+        expect { subject.urns }.to raise_error(Schools::DFESignInAPI::APIResponseError, 'invalid response from organisations API')
       end
     end
   end
