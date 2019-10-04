@@ -1,7 +1,8 @@
 module Bookings
   class Booking < ApplicationRecord
     belongs_to :bookings_placement_request,
-      class_name: 'Bookings::PlacementRequest'
+      class_name: 'Bookings::PlacementRequest',
+      inverse_of: :booking
 
     belongs_to :bookings_subject,
       class_name: 'Bookings::Subject'
@@ -45,6 +46,7 @@ module Bookings
       :contact_uuid,
       :candidate_email,
       :candidate_name,
+      :cancelled?,
       to: :bookings_placement_request
 
     UPCOMING_TIMEFRAME = 2.weeks
@@ -56,6 +58,23 @@ module Bookings
     scope :previous, -> { where(arel_table[:date].lteq(Date.today)) }
     scope :attendance_unlogged, -> { where(attended: nil) }
 
+    scope :with_unviewed_candidate_cancellation, -> do
+      joins(bookings_placement_request: :candidate_cancellation)
+        .where(bookings_placement_request_cancellations: { viewed_at: nil })
+    end
+
+    scope :to_manage, -> do
+      not_cancelled
+      .attendance_unlogged
+      .accepted
+      .upcoming
+    end
+
+    scope :requiring_attention, -> do
+      where(id: with_unviewed_candidate_cancellation.select('id')).or \
+        where(id: to_manage.select('id'))
+    end
+
     def self.from_confirm_booking(confirm_booking)
       new(
         date: confirm_booking.date,
@@ -65,7 +84,7 @@ module Bookings
     end
 
     def status
-      "New"
+      bookings_placement_request.status
     end
 
     def placement_start_date_with_duration

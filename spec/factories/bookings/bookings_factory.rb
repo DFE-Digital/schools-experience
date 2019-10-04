@@ -47,5 +47,12 @@ FactoryBot.define do
           cancelled_by: 'school'
       end
     end
+
+    trait :with_viewed_candidate_cancellation do
+      cancelled_by_candidate
+      after :create do |bb|
+        bb.candidate_cancellation.viewed!
+      end
+    end
   end
 end

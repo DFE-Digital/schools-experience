@@ -1,5 +1,5 @@
 Given "I have entered a placement date" do
-  steps %Q(
+  steps %(
     Given I am on the 'new placement date' page
     And I fill in the form with a future date and duration of 3
     And I submit the form
@@ -7,7 +7,7 @@ Given "I have entered a placement date" do
 end
 
 Given "the placement date is subject specific" do
-  steps %Q(
+  steps %(
     Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
     And I choose 'No' from the "Is this date available for all the subjects you offer?" radio buttons
     And I submit the form

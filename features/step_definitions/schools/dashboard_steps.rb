@@ -35,6 +35,11 @@ Given("there are {int} new bookings") do |qty|
   FactoryBot.create_list :bookings_booking, qty, :upcoming, :accepted, bookings_school: @school
 end
 
+Given("there are {int} unviewed candidate cancellations") do |qty|
+  FactoryBot.create_list \
+    :bookings_booking, qty, :cancelled_by_candidate, bookings_school: @school
+end
+
 Given("there are {int} bookings in the past with no attendance logged") do |qty|
   @bookings = FactoryBot.create_list :bookings_booking, qty, bookings_school: @school
   @bookings.each do |b|
@@ -68,4 +73,12 @@ end
 
 Then("there should be no {string} link") do |link_text|
   expect(page).not_to have_link(link_text)
+end
+
+Then("I should see a warning that my school is disabled") do
+  expect(page).to have_css('.govuk-error-summary h2', text: 'Your school is currently disabled')
+end
+
+Then("I shouldn't see any warnings") do
+  expect(page).not_to have_css('.govuk-error-summary')
 end

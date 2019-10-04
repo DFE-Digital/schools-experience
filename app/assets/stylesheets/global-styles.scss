@@ -111,3 +111,8 @@ section.govuk-se-letter {
 ul.govuk-se-spaced-list li {
   @include govuk-responsive-margin(2, "bottom");
 }
+
+.govuk-tag-red {
+  @extend .govuk-tag;
+  background-color: govuk-colour("red");
+}

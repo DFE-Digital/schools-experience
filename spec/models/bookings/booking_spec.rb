@@ -173,6 +173,17 @@ describe Bookings::Booking do
         expect(subject).not_to include(attended, skipped)
       end
     end
+
+    describe '.with_unviewed_candidate_cancellation' do
+      let!(:new_booking) { create :bookings_booking }
+      let!(:with_viewed_candidate_cancellation) { create :bookings_booking, :with_viewed_candidate_cancellation }
+      let!(:with_unviewed_candidate_cancellation) { create :bookings_booking, :cancelled_by_candidate }
+      let!(:with_unviewed_school_cancellation) { create :bookings_booking, :cancelled_by_school }
+
+      subject { described_class.with_unviewed_candidate_cancellation }
+
+      it { is_expected.to match_array [with_unviewed_candidate_cancellation] }
+    end
   end
 
   describe 'Acceptance' do

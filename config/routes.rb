@@ -2,14 +2,21 @@ Rails.application.routes.draw do
   get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
   get '/deployment.txt', to: 'healthchecks#deployment', as: :deployment
 
+  if Rails.application.config.x.maintenance_mode
+    match '*path', to: 'pages#maintenance', via: :all
+    root to: 'pages#maintenance'
+  else
+    root to: 'candidates/home#index'
+  end
+
   get "/pages/:page", to: "pages#show"
-  root to: 'candidates/home#index'
 
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/accessibility_statement', to: 'pages#accessibility_statement'
   get '/cookies_policy', to: 'pages#cookies_policy'
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/service_update', to: 'pages#service_update'
+  get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
 
   get '/auth/callback', to: 'schools/sessions#create'
 

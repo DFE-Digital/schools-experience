@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 2019_09_24_080833) do
     t.string "cancelled_by", null: false
     t.datetime "sent_at"
     t.text "extra_details"
+    t.datetime "viewed_at"
     t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id"
   end
 
@@ -161,7 +162,6 @@ ActiveRecord::Schema.define(version: 2019_09_24_080833) do
     t.string "admin_contact_email_secondary"
     t.boolean "dbs_requires_check"
     t.text "dbs_policy_details"
-    t.string "admin_contact_email_secondary"
     t.boolean "supports_access_needs"
     t.text "access_needs_description"
     t.boolean "disability_confident"

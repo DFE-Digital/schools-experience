@@ -39,7 +39,7 @@ Feature: Viewing all placement requests
     Scenario: Cancelled placement requests
         Given there are some cancelled placement requests
         When I am on the 'placement requests' page
-        Then the cancelled requests should have a status of 'Cancelled'
+        Then the cancelled requests should have a status of 'Withdrawn'
 
     Scenario: Unviewed placement requests
         Given there are some unviewed placement requests

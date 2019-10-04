@@ -51,20 +51,32 @@ describe Schools::PlacementRequestsController, type: :request do
   end
 
   context '#show' do
-    let :placement_request do
-      FactoryBot.create :placement_request, school: school
-    end
-
     before do
       get "/schools/placement_requests/#{placement_request.id}"
     end
 
-    it 'assigns the correct placement_request' do
-      expect(assigns(:placement_request)).to eq placement_request
+    context 'with a new placement request' do
+      let :placement_request do
+        FactoryBot.create :placement_request, school: school
+      end
+
+      it 'assigns the correct placement_request' do
+        expect(assigns(:placement_request)).to eq placement_request
+      end
+
+      it 'renders the show template' do
+        expect(response).to render_template :show
+      end
     end
 
-    it 'renders the show template' do
-      expect(response).to render_template :show
+    context 'with a placement request cancelled by candidate' do
+      let :placement_request do
+        create :placement_request, :cancelled, school: school
+      end
+
+      it 'marks the cancellation as viewed' do
+        expect(placement_request.reload.candidate_cancellation).to be_viewed
+      end
     end
   end
 end

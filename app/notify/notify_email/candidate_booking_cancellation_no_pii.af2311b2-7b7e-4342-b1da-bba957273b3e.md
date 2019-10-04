@@ -1,4 +1,4 @@
-Dear ((candidate_name)),
+Hello,
 
 You've cancelled your school experience booking at ((school_name)) for the following dates:
 

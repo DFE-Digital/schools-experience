@@ -117,4 +117,6 @@ Rails.application.configure do
   config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
+
+  config.x.maintenance_mode = %w{1 yes true}.include?(ENV['MAINTENANCE_MODE'].to_s)
 end
