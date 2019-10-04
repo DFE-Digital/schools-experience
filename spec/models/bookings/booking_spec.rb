@@ -97,20 +97,6 @@ describe Bookings::Booking do
   end
 
   describe 'Scopes' do
-    describe '.upcoming' do
-      # upcoming is currently set to any date within the next 2 weeks
-      let!(:included) { [0, 1, 13, 14].map { |offset| create(:bookings_booking, :accepted, date: offset.days.from_now) } }
-      let!(:excluded) { [-4, -1, 15, 50].map { |offset| build(:bookings_booking, :accepted, date: offset.days.from_now).save(validate: false) } }
-
-      specify 'should include bookings that fall within the range' do
-        expect(described_class.upcoming).to match_array(included)
-      end
-
-      specify 'should not include bookings that fall outside the range' do
-        excluded.each { |e| expect(described_class.upcoming).not_to include(e) }
-      end
-    end
-
     describe '.not_cancelled' do
       let! :not_cancelled do
         FactoryBot.create :bookings_booking
@@ -155,6 +141,35 @@ describe Bookings::Booking do
 
       specify 'should not include dates after today' do
         expect(subject).not_to include(*non_previous_bookings)
+      end
+    end
+
+    describe '.future' do
+      let!(:previous_bookings) do
+        [
+          FactoryBot.build(:bookings_booking, date: 1.week.ago),
+          FactoryBot.build(:bookings_booking, date: Date.yesterday)
+        ].each do |booking|
+          booking.save(validate: false)
+        end
+      end
+
+      let!(:future_bookings) do
+        [
+          FactoryBot.create(:bookings_booking, date: Date.today),
+          FactoryBot.create(:bookings_booking, date: Date.tomorrow),
+          FactoryBot.create(:bookings_booking, date: 3.weeks.from_now)
+        ]
+      end
+
+      subject { described_class.future }
+
+      specify 'should include dates today or before' do
+        expect(subject).not_to include(*previous_bookings)
+      end
+
+      specify 'should not include dates after today' do
+        expect(subject).to match_array(future_bookings)
       end
     end
 
