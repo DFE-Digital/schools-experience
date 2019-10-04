@@ -1,7 +1,6 @@
 module Schools
   class StateMismatchError < StandardError; end
   class AuthFailedError < StandardError; end
-  class NoIDTokenError < StandardError; end
   class InsufficientPrivilegesError < StandardError; end
 
   class SessionsController < ApplicationController
@@ -25,11 +24,12 @@ module Schools
     def logout
       id_token = session[:id_token]
 
-      if id_token.nil?
-        fail NoIDTokenError, 'No id_token present, cannot log out from DfE Sign-in'
-      end
-
       session.clear
+
+      if id_token.nil?
+        Rails.logger.error 'No id_token present, cannot log out from DfE Sign-in'
+        return redirect_to schools_path
+      end
 
       redirect_to(
         URI::HTTPS.build(

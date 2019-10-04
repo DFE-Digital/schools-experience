@@ -37,14 +37,12 @@ module Candidates::SchoolHelper
   end
 
   def describe_current_search(search)
-    if search.latitude.present? && search.longitude.present?
-      "near me"
-    elsif search.location_name.present?
+    if search.location_name.present?
       "near #{search.location_name}"
-    elsif search.location.to_s.present?
-      "near #{search.location.to_s.humanize}"
+    elsif search.location.present?
+      "near #{search.location}"
     else
-      "matching #{search.query.to_s.humanize}"
+      "matching #{search.query}"
     end
   end
 
