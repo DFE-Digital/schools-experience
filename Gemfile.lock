@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DFE-Digital/govuk_elements_form_builder.git
-  revision: c67dea0e8d23d9187ba4ec43dbde920f61927f5d
+  revision: e2443c2932a1a56f488dda68bcab43b586d79427
   specs:
     govuk_elements_form_builder (1.2.0)
       govuk_elements_rails (>= 3.0.0)
@@ -182,7 +182,7 @@ GEM
       sass (>= 3.2.0)
     hashdiff (1.0.0)
     httpclient (2.8.3)
-    i18n (1.6.0)
+    i18n (1.7.0)
       concurrent-ruby (~> 1.0)
     io-like (0.3.0)
     jaro_winkler (1.5.3)
@@ -229,7 +229,7 @@ GEM
     multi_test (0.1.2)
     multipart-post (2.1.1)
     mustermann (1.0.3)
-    nio4r (2.5.1)
+    nio4r (2.5.2)
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     notifications-ruby-client (4.0.0)
