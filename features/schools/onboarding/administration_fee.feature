@@ -28,16 +28,16 @@ Feature: Administration Fee
   Scenario: Completing the Administration costs step with error
     Given I have entered the following details into the form:
       | Explain what the fee covers. | Nondescript administration |
-      | Explain how the fee is paid. | Travelers cheques          |
+      | Explain how the fee is paid  | Travelers cheques          |
     And I choose 'Daily' from the 'Is this a daily or one-off fee?' radio buttons
     When I submit the form
     Then I should see a validation error message
 
   Scenario: Completing the Administration costs step with error
     Given I have entered the following details into the form:
-      | Enter the number of pounds.  | 100                        |
+      | Enter the number of pounds   | 100                        |
       | Explain what the fee covers. | Nondescript administration |
-      | Explain how the fee is paid. | Travelers cheques          |
+      | Explain how the fee is paid  | Travelers cheques          |
     And I choose 'Daily' from the 'Is this a daily or one-off fee?' radio buttons
     When I submit the form
     Then I should be on the 'Phases' page

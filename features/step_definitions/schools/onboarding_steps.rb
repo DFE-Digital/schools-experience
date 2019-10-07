@@ -93,9 +93,9 @@ end
 Given "I have completed the Other costs step" do
   steps %(
     Given I have entered the following details into the form:
-      | Enter the number of pounds.  | 300              |
+      | Enter the number of pounds   | 300              |
       | Explain what the fee covers. | Falconry lessons |
-      | Explain how the fee is paid. | Gold sovereigns  |
+      | Explain how the fee is paid  | Gold sovereigns  |
     And I choose 'Daily' from the 'Is this a daily or one-off fee?' radio buttons
     When I submit the form
   )
