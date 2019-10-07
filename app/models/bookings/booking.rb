@@ -49,8 +49,6 @@ module Bookings
       :cancelled?,
       to: :bookings_placement_request
 
-    UPCOMING_TIMEFRAME = 2.weeks
-
     scope :not_cancelled, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
     scope :upcoming, -> { not_cancelled.accepted.future }
 
