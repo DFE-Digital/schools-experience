@@ -54,7 +54,11 @@
       </p>
 
       <ul class="govuk-list">
-        <li><%= mail_to 'organise.school-experience@education.gov.uk', aria: { label: 'School experience support email address' } %></li>
+        <li>
+          <%= mail_to 'organise.school-experience@education.gov.uk', 
+                'organise.school-experience@education.gov.uk', 
+                aria: { label: 'School experience support email address' } %>
+        </li>
       </ul>
 
       <p>
@@ -71,7 +75,8 @@
 
       <p>
         If you find any problems that are not listed on this page or think we're
-        not meeting accessibility requirements email <%= mail_to 'organise.school-experience@education.gov.uk' %>.
+        not meeting accessibility requirements email 
+        <%= mail_to 'organise.school-experience@education.gov.uk' %>.
       </p>
     </section>
 
