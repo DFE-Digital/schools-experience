@@ -39,12 +39,12 @@ describe Schools::DFESignInAPI::Organisations do
     subject { Schools::DFESignInAPI::Organisations.new(user_guid) }
 
     {
-      400 => Faraday::ClientError,
+      400 => Faraday::BadRequestError,
       404 => Faraday::ResourceNotFound,
       405 => Faraday::ClientError,
-      500 => Faraday::ClientError,
-      502 => Faraday::ClientError,
-      503 => Faraday::ClientError
+      500 => Faraday::ServerError,
+      502 => Faraday::ServerError,
+      503 => Faraday::ServerError
     }.each do |code, error|
       context code.to_s do
         before do
