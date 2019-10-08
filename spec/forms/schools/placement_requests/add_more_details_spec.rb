@@ -14,7 +14,7 @@ describe Schools::PlacementRequests::AddMoreDetails, type: :model do
     %i(contact_name contact_number contact_email location).each do |attribute_name|
       let(:attribute_name) { attribute_name }
       specify "should have attribute #{attribute_name}" do
-        expect(subject).to validate_presence_of(attribute_name)
+        expect(subject).to validate_presence_of(attribute_name).with_message(/\AEnter a/)
       end
     end
   end

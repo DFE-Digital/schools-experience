@@ -12,6 +12,8 @@
     </p>
 
     <%= form_for @add_more_details, url: schools_placement_request_acceptance_add_more_details_path, method: 'post' do |form| %>
+      <%=  GovukElementsErrorsHelper.error_summary form.object, 'There is a problem', '' %>
+
       <%= form.text_field :contact_name, required: true %>
       <%= form.phone_field :contact_number, required: true %>
       <%= form.email_field :contact_email, required: true %>

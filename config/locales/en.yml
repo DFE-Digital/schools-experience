@@ -329,6 +329,16 @@ en:
               not_a_number: "Enter a valid number for maximum number of bookings you'll accept for this date"
             subjects:
               blank: 'Select which subjects are available for this date'
+        schools/placement_requests/add_more_details:
+          attributes:
+            contact_name:
+              blank: 'Enter a contact name'
+            contact_number:
+              blank: 'Enter a contact phone number'
+            contact_email:
+              blank: 'Enter a contact email address'
+            location:
+              blank: 'Enter a location for the candidate to report to'
 
   activerecord:
     errors:
@@ -476,6 +486,8 @@ en:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
+      schools_placement_requests_add_more_details:
+        location: Describe where the candidate should report to on the day of the experience
       schools_on_boarding_school_fee_hints: &schools_on_boarding_school_fee_hints
         payment_method: For example, by bank transfer, in cash or via PayPal.
       schools_on_boarding_administration_fee:
