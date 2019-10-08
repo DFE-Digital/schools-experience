@@ -20,14 +20,14 @@ Rails.application.configure do
   )
 
   # dfe signin config, should be in credentials or env vars
-  config.x.base_url = "https://localhost:#{ENV.fetch("PORT") { 3000 }}"
+  config.x.base_url = "https://localhost:#{ENV.fetch('PORT') { 3000 }}"
   config.x.oidc_client_id = 'schoolexperience'
   config.x.oidc_client_secret = Rails.application.credentials.dig(:dfe_pp_signin_secret)
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
-  config.x.dfe_sign_in_api_enabled=false
-  config.x.dfe_sign_in_api_role_check_enabled=false
+  config.x.dfe_sign_in_api_enabled = false
+  config.x.dfe_sign_in_api_role_check_enabled = false
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'

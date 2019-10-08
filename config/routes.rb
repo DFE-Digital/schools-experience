@@ -40,19 +40,19 @@ Rails.application.routes.draw do
       end
       namespace :acceptance do
         resource :confirm_booking,
-          only: [:new, :create],
+          only: %i(new create),
           controller: '/schools/placement_requests/acceptance/confirm_booking'
         resource :add_more_details,
-          only: [:new, :create],
+          only: %i(new create),
           controller: '/schools/placement_requests/acceptance/add_more_details'
         resource :review_and_send_email,
-          only: [:new, :create],
+          only: %i(new create),
           controller: '/schools/placement_requests/acceptance/review_and_send_email'
         resource :preview_confirmation_email,
-          only: [:new, :create],
+          only: %i(new create),
           controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
         resource :email_sent,
-          only: [:show],
+          only: %i(show),
           controller: '/schools/placement_requests/acceptance/email_sent'
       end
     end
@@ -156,6 +156,6 @@ Rails.application.routes.draw do
 
 
   if Rails.application.config.x.delayed_job_admin_enabled
-    match "/admin/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
+    match "/admin/delayed_job" => DelayedJobWeb, anchor: false, via: %i(get post)
   end
 end
