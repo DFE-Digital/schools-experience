@@ -23,8 +23,8 @@ class Schools::PlacementDatesController < Schools::BaseController
 
     # if the user hasn't seen the 'select a phase' option on #new, set
     # it here based on their available phases
-    if @placement_date.supports_subjects.nil?
-      @placement_date.supports_subjects = school_supports_subjects?
+    if !new_placement_date_params.has_key?(:supports_subjects)
+      @placement_date.supports_subjects = current_school.supports_subjects?
     end
 
     if @placement_date.save
@@ -47,7 +47,7 @@ class Schools::PlacementDatesController < Schools::BaseController
 private
 
   def school_supports_subjects?
-    @current_school.phases.any?(&:supports_subjects?)
+    @current_school.supports_subjects?
   end
 
   def next_step(placement_date)
