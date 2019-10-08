@@ -79,7 +79,22 @@ module Candidates
       school.bookings_placement_dates.available
     end
 
+    def available_dates_grouped_by_date
+      available_dates
+        .group_by(&:date)
+        .each
+        .with_object({}) do |(date, placement_dates), hash|
+          hash[date] = placement_dates_subjects(placement_dates)
+        end
+    end
+
   private
+
+    def placement_dates_subjects(placement_dates)
+      placement_dates
+        .flat_map { |pd| pd.subjects.any? ? pd.subjects.map(&:name) : 'All subjects' }
+        .uniq
+    end
 
     def dbs_requirement
       if profile.dbs_requires_check?

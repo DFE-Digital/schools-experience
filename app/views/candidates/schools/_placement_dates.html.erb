@@ -1,15 +1,29 @@
-<dt class="govuk-summary-list__key">
-  Upcoming dates
-</dt>
+<h3 class="govuk-heading-m">Upcoming dates</h3>
 
-<dd class="govuk-summary-list__value">
-  <%- if available_dates.any? -%>
+<div>
+  <%- if available_dates_grouped_by_date.any? -%>
 
-    <ul class="govuk-list">
-      <%- available_dates.each do |pd| -%>
-        <li><%= pd.to_s %></li>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <%- available_dates_grouped_by_date.each do |date, subjects| -%>
+
+        <div class="govuk-summary-list__row">
+
+          <dt class="govuk-summary-list__key">
+            <%= date.to_formatted_s(:govuk) %>
+          </dt>
+
+          <dd class="govuk-summary-list__value">
+            <ul class="govuk-list">
+              <% subjects.each do |subject| %>
+                <li><%= subject %></li>
+              <% end %>
+            </ul>
+          </dd>
+
+        </div>
+
       <%- end -%>
-    </ul>
+    </dl>
 
   <%- else -%>
 
@@ -18,4 +32,4 @@
     </div>
 
   <%- end -%>
-</dd>
+</div>
