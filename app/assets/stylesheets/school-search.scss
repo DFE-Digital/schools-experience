@@ -91,7 +91,7 @@
 }
 
 #candidate-school-profile {
-  ul {
+  ul#school-websites {
     @extend .govuk-list ;
     @extend .govuk-list--bullet ;
     @extend .govuk-body-s ;
