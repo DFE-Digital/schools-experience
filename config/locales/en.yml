@@ -52,9 +52,9 @@ en:
     interval: 'Is this a daily or one-off fee?'
 
   schools_on_boarding_school_fee_labels: &schools_on_boarding_school_fee_labels
-    amount_pounds: 'Enter the number of pounds.'
+    amount_pounds: 'Enter the number of pounds'
     description: 'Explain what the fee covers.'
-    payment_method: 'Explain how the fee is paid. For example, by bank transfer, in cash or via PayPal.'
+    payment_method: 'Explain how the fee is paid'
 
   feedback_errors: &feedback_errors
     attributes:
@@ -476,6 +476,14 @@ en:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
+      schools_on_boarding_school_fee_hints: &schools_on_boarding_school_fee_hints
+        payment_method: For example, by bank transfer, in cash or via PayPal.
+      schools_on_boarding_administration_fee:
+        <<: *schools_on_boarding_school_fee_hints
+      schools_on_boarding_dbs_fee:
+        <<: *schools_on_boarding_school_fee_hints
+      schools_on_boarding_other_fee:
+        <<: *schools_on_boarding_school_fee_hints
 
     label:
       schools_placement_requests_confirm_booking:
@@ -578,7 +586,7 @@ en:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_labels
-        payment_method: 'Explain how the fee is paid.'
+        payment_method: 'Explain how the fee is paid'
         description: 'Add extra details'
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels

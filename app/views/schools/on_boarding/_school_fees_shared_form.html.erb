@@ -17,14 +17,28 @@
 
     <%= form_for model, url: submission_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary model, 'There is a problem', '' %>
-      <%= f.pounds_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.99 %>
-      <%= f.text_area :description, rows: 7, width: 'govuk-input--width-15' %>
+
+      <%= f.pounds_field :amount_pounds,
+          label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' },
+          width: 5,
+          step: 0.01,
+          min: 0,
+          max: 9999.99 %>
+
+      <%= f.text_area :description, rows: 7 %>
+
       <%= f.radio_button_fieldset :interval do |fieldset| %>
         <% f.object.available_intervals.each do |interval| %>
           <%= fieldset.radio_input interval %>
         <% end %>
       <% end %>
-      <%= f.text_area :payment_method, rows: 7, width: 'govuk-input--width-15' %>
+
+      <%= f.text_area :payment_method, rows: 7,
+        label_options: {
+          overwrite_defaults!: true,
+          class: 'govuk-heading-m'
+        } %>
+
       <%= f.submit 'Continue' %>
     <% end %>
   </div>
