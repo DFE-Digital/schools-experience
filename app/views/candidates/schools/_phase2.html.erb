@@ -94,6 +94,10 @@
       <% end %>
     <% end %>
 
+    <% if @presenter.school.availability_preference_fixed? %>
+      <%= render partial: 'candidates/schools/placement_dates', locals: { available_dates_grouped_by_date: @presenter.available_dates_grouped_by_date } %>
+    <% end %>
+
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__tablet_plus">
         <%= govuk_link_to "Start request",
@@ -116,9 +120,7 @@
       <% end %>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-        <%- if @presenter.school.availability_preference_fixed? -%>
-          <%= render partial: 'candidates/schools/placement_dates', locals: { available_dates: @presenter.available_dates } %>
-        <%- else -%>
+        <%- if !@presenter.school.availability_preference_fixed? -%>
           <dt class="govuk-summary-list__key">
             Placement availability
           </dt>
