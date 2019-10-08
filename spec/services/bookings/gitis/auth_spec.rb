@@ -47,7 +47,8 @@ RSpec.describe Bookings::Gitis::Auth do
       it "sets the expires" do
         subject.token
         expect(subject.expires_at).to be_kind_of(Time)
-        expect(subject.expires_at).to be_within(10.seconds).of(1.hour.from_now)
+        # Note we expiry the token early to allow for multiple requests and Gitis running slowly
+        expect(subject.expires_at).to be_within(10.seconds).of(55.minutes.from_now)
       end
     end
 
