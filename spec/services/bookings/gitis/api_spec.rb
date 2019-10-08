@@ -56,8 +56,10 @@ describe Bookings::Gitis::API do
     end
 
     context 'for inaccessible url' do
+      let(:url) { "#{service_url}#{endpoint}/contacts" }
+
       before do
-        stub_request(:get, "#{service_url}#{endpoint}/contacts").
+        stub_request(:get, url).
           with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
@@ -76,13 +78,18 @@ describe Bookings::Gitis::API do
       it "will raise an AccessDeniedError" do
         expect {
           api.get('contacts')
-        }.to raise_exception(Bookings::Gitis::API::BadResponseError, /401: Access Denied/i)
+        }.to raise_exception(
+          Bookings::Gitis::API::BadResponseError,
+          /401: #{url}: Access Denied/i
+        )
       end
     end
 
     context "for invalid url" do
+      let(:url) { "#{service_url}#{endpoint}/contacts" }
+
       before do
-        stub_request(:get, "#{service_url}#{endpoint}/contacts").
+        stub_request(:get, url).
           with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
@@ -101,7 +108,10 @@ describe Bookings::Gitis::API do
       it "will raise an BadResponseError" do
         expect {
           api.get('contacts')
-        }.to raise_exception(Bookings::Gitis::API::BadResponseError, /500: Something went wrong/i)
+        }.to raise_exception(
+          Bookings::Gitis::API::BadResponseError,
+          /500: #{url}: Something went wrong/i
+        )
       end
     end
 
@@ -114,8 +124,10 @@ describe Bookings::Gitis::API do
     end
 
     context 'for unknown url' do
+      let(:url) { "#{service_url}#{endpoint}/ontacts" }
+
       before do
-        stub_request(:get, "#{service_url}#{endpoint}/ontacts").
+        stub_request(:get, url).
           with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
@@ -140,7 +152,10 @@ describe Bookings::Gitis::API do
       it "will raise an UnknownUrlError" do
         expect {
           api.get('ontacts')
-        }.to raise_exception(Bookings::Gitis::API::UnknownUrlError, /404: resource not found/i)
+        }.to raise_exception(
+          Bookings::Gitis::API::UnknownUrlError,
+          /404: #{url}: resource not found/i
+        )
       end
     end
   end
@@ -208,8 +223,9 @@ describe Bookings::Gitis::API do
     end
 
     context 'for unknown url' do
+      let(:url) { "#{service_url}#{endpoint}/ontacts" }
       before do
-        stub_request(:post, "#{service_url}#{endpoint}/ontacts").
+        stub_request(:post, url).
           with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
@@ -235,7 +251,10 @@ describe Bookings::Gitis::API do
       it "will raise an UnknownUrlError" do
         expect {
           api.post('ontacts', 'firstname' => 'test', 'lastname' => 'user')
-        }.to raise_exception(Bookings::Gitis::API::UnknownUrlError, /404: resource not found/i)
+        }.to raise_exception(
+          Bookings::Gitis::API::UnknownUrlError,
+          /404: #{url}: resource not found/i
+        )
       end
     end
   end
@@ -330,7 +349,10 @@ describe Bookings::Gitis::API do
       it "will raise an UnknownUrlError" do
         expect {
           api.patch("ontacts(#{uuid})", 'firstname' => 'test', 'lastname' => 'user')
-        }.to raise_exception(Bookings::Gitis::API::UnknownUrlError, /404: resource not found/i)
+        }.to raise_exception(
+          Bookings::Gitis::API::UnknownUrlError,
+          /404: #{service_url}#{endpoint}\/ontacts\(#{uuid}\): resource not found/i
+        )
       end
     end
   end
