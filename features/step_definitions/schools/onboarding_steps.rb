@@ -104,7 +104,7 @@ end
 Given "I have completed the Phases step" do
   steps %(
     Given I am on the 'phases' page
-    And I check 'Secondary (11 to 16)'
+    And I check 'Secondary (11 to 16 years)'
     And I check '16 to 18 years'
     When I submit the form
   )
