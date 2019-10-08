@@ -2,7 +2,10 @@
   <article class="govuk-grid-column-full">
     <%= link_to 'Back', :back, class: 'govuk-back-link', data: { controller: 'back-link' } %>
 
-    <h1 class="govuk-heading-l">Accessibility statement for the school experience service</h1>
+    <%= page_heading do %>
+      Accessibility statement for the school experience service
+    <% end %>
+
     <section>
       <p>
         This service is run by the Department for Education (DfE).

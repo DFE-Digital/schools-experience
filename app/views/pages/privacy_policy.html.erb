@@ -1,10 +1,10 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
+    <%= link_to 'Back', (request.referer || candidates_root_path), class: 'govuk-back-link' %>
 
-  <%= link_to 'Back', (request.referer || candidates_root_path), class: 'govuk-back-link' %>
-
-    <h1 class="govuk-heading-l">Privacy Notice: Get Into Teaching Information
-Service</h1>
+    <%= page_heading do %>
+      Privacy Notice: Get Into Teaching Information Service
+    <% end %>
 
     <%= render @policy_id %>
 
