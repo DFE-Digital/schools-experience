@@ -40,19 +40,19 @@ Rails.application.routes.draw do
       end
       namespace :acceptance do
         resource :confirm_booking,
-          only: [:new, :create],
+          only: %i(new create),
           controller: '/schools/placement_requests/acceptance/confirm_booking'
         resource :add_more_details,
-          only: [:new, :create],
+          only: %i(new create),
           controller: '/schools/placement_requests/acceptance/add_more_details'
         resource :review_and_send_email,
-          only: [:new, :create],
+          only: %i(new create),
           controller: '/schools/placement_requests/acceptance/review_and_send_email'
         resource :preview_confirmation_email,
-          only: [:new, :create],
+          only: %i(new create),
           controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
         resource :email_sent,
-          only: [:show],
+          only: %i(show),
           controller: '/schools/placement_requests/acceptance/email_sent'
       end
     end
@@ -77,6 +77,7 @@ Rails.application.routes.draw do
       resource :not_registered, controller: :not_registered, only: :show
       resource :no_school, controller: :no_school, only: :show
       resource :auth_failed, controller: :auth_failed, only: :show
+      resource :insufficient_privileges, controller: :insufficient_privileges, only: :show
     end
 
     namespace :on_boarding do
@@ -155,6 +156,6 @@ Rails.application.routes.draw do
 
 
   if Rails.application.config.x.delayed_job_admin_enabled
-    match "/admin/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
+    match "/admin/delayed_job" => DelayedJobWeb, anchor: false, via: %i(get post)
   end
 end

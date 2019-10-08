@@ -52,9 +52,9 @@ en:
     interval: 'Is this a daily or one-off fee?'
 
   schools_on_boarding_school_fee_labels: &schools_on_boarding_school_fee_labels
-    amount_pounds: 'Enter the number of pounds.'
+    amount_pounds: 'Enter the number of pounds'
     description: 'Explain what the fee covers.'
-    payment_method: 'Explain how the fee is paid. For example, by bank transfer, in cash or via PayPal.'
+    payment_method: 'Explain how the fee is paid'
 
   feedback_errors: &feedback_errors
     attributes:
@@ -103,18 +103,24 @@ en:
           attributes:
             building:
               blank: "Enter your building"
+              too_long: "Building must be 250 characters or fewer"
             county:
               blank: "Enter your county"
+              too_long: "County must be 50 characters or fewer"
             phone:
               blank: "Enter your telephone number"
               invalid: "Enter a valid telephone number"
+              too_long: "Phone number must be 50 digits or fewer"
             postcode:
               blank: "Enter your postcode"
               invalid: 'Enter a valid postcode'
+              too_long: "Postcode must be 20 characters or fewer"
             street:
               blank: "Enter your street"
+              too_long: "Street must be 250 characters or fewer"
             town_or_city:
               blank: "Enter your town or city"
+              too_long: "Town or city must be 80 characters or fewer"
 
         candidates/registrations/education:
           attributes:
@@ -139,6 +145,7 @@ en:
             email:
               blank: "Enter your email address"
               invalid: "Enter a valid email address"
+              too_long: "Email must be 100 characters or fewer"
             first_name:
               blank: 'Enter your first name'
             last_name:
@@ -481,6 +488,14 @@ en:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
       schools_placement_requests_add_more_details:
         location: Describe where the candidate should report to on the day of the experience
+      schools_on_boarding_school_fee_hints: &schools_on_boarding_school_fee_hints
+        payment_method: For example, by bank transfer, in cash or via PayPal.
+      schools_on_boarding_administration_fee:
+        <<: *schools_on_boarding_school_fee_hints
+      schools_on_boarding_dbs_fee:
+        <<: *schools_on_boarding_school_fee_hints
+      schools_on_boarding_other_fee:
+        <<: *schools_on_boarding_school_fee_hints
 
     label:
       schools_placement_requests_confirm_booking:
@@ -583,7 +598,7 @@ en:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_labels
-        payment_method: 'Explain how the fee is paid.'
+        payment_method: 'Explain how the fee is paid'
         description: 'Add extra details'
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels

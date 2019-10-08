@@ -19,6 +19,11 @@ Feature: Confirming candidate attendance
         When I am on the 'confirm attendance' page
         Then I should see a table containing those bookings
 
+    Scenario: Not listing cancelled bookings
+        Given there are some cancelled bookings that were scheduled last week
+        When I am on the 'confirm attendance' page
+        Then no bookings should be listed
+
     Scenario: Table contents
         Given there are some bookings that were scheduled last week
         When I am on the 'confirm attendance' page

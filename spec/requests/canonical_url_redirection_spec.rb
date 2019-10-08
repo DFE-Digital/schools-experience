@@ -1,6 +1,29 @@
 require 'rails_helper'
 
 describe "Redirecting to Canonical Domain", type: :request do
+  shared_examples "perform healthchecks" do
+    let(:username) { Rails.application.config.x.healthchecks.username }
+    let(:password) { Rails.application.config.x.healthchecks.password }
+    let(:encoded) do
+      ActionController::HttpAuthentication::Basic.
+        encode_credentials(username, password)
+    end
+
+    specify "will allow direct access to healthcheck.txt" do
+      get healthcheck_path
+
+      expect(response).to have_http_status(200)
+      expect(response.body).to match('healthy')
+    end
+
+    specify "will allow direct access to deployment.txt" do
+      get deployment_path, headers: { "Authorization" => encoded }
+
+      expect(response).to have_http_status(200)
+      expect(response.body).to match('not set')
+    end
+  end
+
   before do
     @orig_canonical_domain = ENV['CANONICAL_DOMAIN']
     @orig_sep_domain = ENV['OLD_SEP_DOMAIN']
@@ -20,6 +43,8 @@ describe "Redirecting to Canonical Domain", type: :request do
 
       expect(response).to have_http_status(200)
     end
+
+    include_examples 'perform healthchecks'
   end
 
   context "with request to alternative-domain" do
@@ -31,6 +56,8 @@ describe "Redirecting to Canonical Domain", type: :request do
       expect(response).to have_http_status(302)
       expect(response).to redirect_to("http://canonical-domain/candidates?foo=bar")
     end
+
+    include_examples 'perform healthchecks'
   end
 
   context "with request to migrate domain" do

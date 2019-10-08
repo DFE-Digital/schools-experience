@@ -12,6 +12,14 @@ module ApplicationHelper
     end
   end
 
+  def page_heading(heading_txt = nil, **options, &block)
+    options[:class] ||= 'govuk-heading-l'
+    title = heading_txt || capture(&block)
+
+    self.page_title = title
+    content_tag(:h1, title, **options)
+  end
+
   def site_header_text
     @site_header_text || "Get school experience"
   end

@@ -97,7 +97,7 @@ Rails.application.configure do
     url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
     reconnect_attempts: 1,
     tcp_keepalive: 60,
-    error_handler: -> (method:, returning:, exception:) do
+    error_handler: ->(_method:, returning:, exception:) do
       ExceptionNotifier.notify_exception(
         exception,
         data: {
@@ -137,7 +137,12 @@ Rails.application.configure do
     'api.signin.education.gov.uk'
   end
 
-  config.x.gitis.fake_crm = ['true', '1', 'yes'].include?(ENV['FAKE_CRM'].to_s)
+  truthy_strings = %w(true 1 yes)
+
+  config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
+  config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
+
+  config.x.gitis.fake_crm = truthy_strings.include?(ENV['FAKE_CRM'].to_s)
   if ENV['CRM_CLIENT_ID'].present?
     config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID')
     config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET')
@@ -154,6 +159,6 @@ Rails.application.configure do
   config.sass[:style] = :compressed if config.sass
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
-  
+
   config.x.maintenance_mode = %w{1 yes true}.include?(ENV['MAINTENANCE_MODE'].to_s)
 end

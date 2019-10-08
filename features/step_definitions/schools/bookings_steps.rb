@@ -1,5 +1,5 @@
-Given("the scheduled booking date is {string}") do |string|
-  @scheduled_booking_date = string
+Given("the scheduled booking date is in the future") do
+  @scheduled_booking_date = 1.week.from_now.strftime("%d %B %Y")
 end
 
 Given("there are some bookings") do
@@ -30,18 +30,18 @@ Given("I am viewing my chosen booking") do
 end
 
 And("there is/are {int} booking/bookings") do |count|
-  @scheduled_booking_date ||= 1.week.from_now.strftime("%d %B %Y")
   unless @school.subjects.where(name: 'Biology').any?
     @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
   end
-  @bookings = FactoryBot.create_list(
-    :bookings_booking,
-    count,
-    :with_existing_subject,
-    :accepted,
-    bookings_school: @school,
-    date: @scheduled_booking_date
-  )
+  @bookings = (1..count).map do |index|
+    FactoryBot.create(
+      :bookings_booking,
+      :with_existing_subject,
+      :accepted,
+      bookings_school: @school,
+      date: index.week.from_now.strftime("%d %B %Y")
+    )
+  end
   @booking = @bookings.first
   @booking_id = @booking.id
 end
@@ -170,5 +170,5 @@ Then("the page title should start with {string} and include the booking referenc
 end
 
 Then("I should not see a {string} section") do |string|
-  expect(page).not_to have_css "section##{string.downcase.gsub(' ', '-')}"
+  expect(page).not_to have_css "section##{string.downcase.tr(' ', '-')}"
 end

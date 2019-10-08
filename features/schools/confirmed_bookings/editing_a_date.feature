@@ -6,7 +6,7 @@ Feature: Updating a date
     Background:
         Given I am logged in as a DfE user
         And my school is fully-onboarded
-        And the scheduled booking date is '02 October 2019'
+        And the scheduled booking date is in the future
 
     Scenario: Page title
         Given there is at least one booking

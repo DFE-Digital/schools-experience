@@ -46,7 +46,7 @@ jobs:
       tags: $(buildCacheTag)
 
   - script: docker tag $(DOCKER_HUB_REPO):$(imageTag) school-experience:latest
-    displayName: Tag built image as latest 
+    displayName: Tag built image as latest
 
   - script: |
       docker-compose up -d
@@ -68,7 +68,7 @@ jobs:
   - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
 
-  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) govuk-lint-ruby app lib spec
+  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) govuk-lint-ruby app config lib features spec spec_external
     displayName: Run the GovUK Lint check
 
   - task: Docker@2
@@ -125,21 +125,9 @@ jobs:
 
   - task: CopyFiles@2
     inputs:
-      contents: 'script/compose-school-experience.sh'
-      targetFolder: $(Build.ArtifactStagingDirectory)
-    displayName: 'Copy Docker Compose file to staging area'
-
-  - task: CopyFiles@2
-    inputs:
       contents: 'script/image_tags_and_ipaddress.sh'
       targetFolder: $(Build.ArtifactStagingDirectory)
     displayName: 'Copy image tags and ip address script to staging area'
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: $(Build.ArtifactStagingDirectory)/script/compose-school-experience.sh
-      artifactName: 'compose-file'
-    displayName: 'Publish the Docker Compose file'
 
   - task: PublishBuildArtifacts@1
     inputs:

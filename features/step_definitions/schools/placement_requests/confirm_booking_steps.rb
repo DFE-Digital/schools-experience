@@ -94,3 +94,7 @@ end
 Then("I should see the placement request's duration") do
   expect(page).to have_css('dd', text: "1 day")
 end
+
+Then("the future booking date should be listed") do
+  expect(page).to have_content(@booking.date.to_formatted_s(:govuk))
+end

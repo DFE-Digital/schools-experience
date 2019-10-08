@@ -1,13 +1,26 @@
 module Schools
   module DFESignInAPI
+    class APIResponseError < RuntimeError; end
+
     class Client
       def self.enabled?
-        [
-          ENV['DFE_SIGNIN_API_CLIENT'],
-          ENV['DFE_SIGNIN_API_SECRET']
-        ].map(&:presence).all?
+        Rails.application.config.x.dfe_sign_in_api_enabled &&
+          [
+            ENV.fetch('DFE_SIGNIN_API_CLIENT'),
+            ENV.fetch('DFE_SIGNIN_API_SECRET')
+          ].map(&:presence).all?
       end
       delegate :enabled?, to: :class
+
+      def self.role_check_enabled?
+        enabled? &&
+          Rails.application.config.x.dfe_sign_in_api_role_check_enabled &&
+          [
+            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID'),
+            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID')
+          ].map(&:presence).all?
+      end
+      delegate :role_check_enabled?, to: :class
 
     private
 

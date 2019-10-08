@@ -4,8 +4,8 @@ unless Rails.env.test?
       # the optional extra params are buffer_size (= 500) and send_interval (= 60),
       # leaving for now as they appear sensible
       config.middleware.use(ApplicationInsights::Rack::TrackRequest, app_insights_key)
-      if 'true' ==  ENV["APPINSIGHTS_JAVASCRIPT_ENABLED"]
-          config.middleware.use(ApplicationInsights::Rack::InjectJavaScriptTracking, app_insights_key)
+      if ENV["APPINSIGHTS_JAVASCRIPT_ENABLED"] == 'true'
+        config.middleware.use(ApplicationInsights::Rack::InjectJavaScriptTracking, app_insights_key)
       end
 
       ApplicationInsights::UnhandledException.collect(app_insights_key)

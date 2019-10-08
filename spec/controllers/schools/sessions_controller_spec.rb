@@ -2,73 +2,77 @@ require 'rails_helper'
 require_relative 'session_context'
 
 describe Schools::SessionsController, type: :request do
+  shared_context 'oidc callback' do
+    let(:code) { 'OTA4MTU0ZTgtMjBhZC00YmNmLThmMmQtOGZiZDhmNTYxMTA2vLY8wh-MpR-WR3vsn4C2J_oBkN-KGjD9-XVcDFS8UyADwt5DrIrYe0Gjgsj2gpvAt5L2cka5n8ZZmiojr6zgWg' }
+    let(:session_state) { '652b5afc63d7c4875c42de4231f66e4940226f840b2a7ea02441544751ea0a2a.h3bd7bc2438a84dc' }
+    let(:access_token) { 'abc123' }
+
+    let(:urn) { 123456 }
+    let(:school_name) { "Springfield Elementary" }
+
+    before do
+      allow_any_instance_of(ActionDispatch::Request)
+        .to receive(:session).and_return(
+          return_url: return_url,
+          state: state
+      )
+    end
+
+    before do
+      stub_request(:post, "https://#{Rails.configuration.x.oidc_host}/token")
+        .with(
+          body: {
+            'code'         => code,
+            'grant_type'   => 'authorization_code',
+            'redirect_uri' => "#{Rails.configuration.x.base_url}/auth/callback"
+          },
+          headers: {
+            'Accept'        => '*/*',
+            'Authorization' => 'Basic c2UtdGVzdDphYmMxMjM=',
+            'Content-Type'  => 'application/x-www-form-urlencoded',
+            'Date'          => /.*/,
+            'User-Agent'    => /Rack::OAuth2/
+          }
+        )
+        .to_return(
+          status: 200,
+          headers: {},
+          body: {
+            token_type: 'Bearer',
+            access_token: access_token
+          }.to_json
+        )
+
+      stub_request(:get, "https://#{Rails.configuration.x.oidc_host}/me")
+        .with(
+          headers: {
+            'Accept'        => '*/*',
+            'Authorization' => "Bearer #{access_token}",
+            'Date'          => /.*/,
+            'User-Agent'    => /OpenIDConnect::AccessToken/
+          }
+        )
+        .to_return(
+          status: 200,
+          headers: {},
+          body: {
+            organisation: {
+              urn: urn,
+              name: school_name
+            }
+          }.to_json
+        )
+    end
+
+    let(:callback) { "/auth/callback?code=#{code}&state=#{state}&session_state=#{session_state}" }
+  end
+
   context '#create' do
     let(:return_url) { '/schools/dashboard' }
     let(:state) { 'd18ce84b-423e-4696-bee4-b74caa47163e' }
 
     context 'when the user is not yet signed in' do
-      let(:code) { 'OTA4MTU0ZTgtMjBhZC00YmNmLThmMmQtOGZiZDhmNTYxMTA2vLY8wh-MpR-WR3vsn4C2J_oBkN-KGjD9-XVcDFS8UyADwt5DrIrYe0Gjgsj2gpvAt5L2cka5n8ZZmiojr6zgWg' }
-      let(:session_state) { '652b5afc63d7c4875c42de4231f66e4940226f840b2a7ea02441544751ea0a2a.h3bd7bc2438a84dc' }
-      let(:access_token) { 'abc123' }
-
-      let(:urn) { 123456 }
-      let(:school_name) { "Springfield Elementary" }
-
-      before do
-        allow_any_instance_of(ActionDispatch::Request)
-          .to receive(:session).and_return(
-            return_url: return_url,
-            state: state
-        )
-      end
-
-      before do
-        stub_request(:post, "https://#{Rails.configuration.x.oidc_host}/token")
-          .with(
-            body: {
-              'code'         => code,
-              'grant_type'   => 'authorization_code',
-              'redirect_uri' => "#{Rails.configuration.x.base_url}/auth/callback"
-            },
-            headers: {
-              'Accept'        => '*/*',
-              'Authorization' => 'Basic c2UtdGVzdDphYmMxMjM=',
-              'Content-Type'  => 'application/x-www-form-urlencoded',
-              'Date'          => /.*/,
-              'User-Agent'    => /Rack::OAuth2/
-            }
-          )
-          .to_return(
-            status: 200,
-            headers: {},
-            body: {
-              token_type: 'Bearer',
-              access_token: access_token
-            }.to_json
-          )
-
-        stub_request(:get, "https://#{Rails.configuration.x.oidc_host}/me")
-          .with(
-            headers: {
-              'Accept'        => '*/*',
-              'Authorization' => "Bearer #{access_token}",
-              'Date'          => /.*/,
-              'User-Agent'    => /OpenIDConnect::AccessToken/
-            }
-          )
-          .to_return(
-            status: 200,
-            headers: {},
-            body: {
-              organisation: {
-                urn: urn,
-                name: school_name
-              }
-            }.to_json
-          )
-      end
-
-      let(:callback) { "/auth/callback?code=#{code}&state=#{state}&session_state=#{session_state}" }
+      include_context 'oidc callback'
 
       subject! { get callback }
 
@@ -143,7 +147,24 @@ describe Schools::SessionsController, type: :request do
       end
     end
 
+    describe 'role checking' do
+      include_context 'oidc callback'
+      before do
+        allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+        allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true)
+        allow_any_instance_of(Schools::DFESignInAPI::Roles).to receive(:has_school_experience_role?).and_return(false)
+      end
+
+      subject { get callback }
+
+      specify 'should redirect to the insufficient privileges error page' do
+        expect(subject).to redirect_to(schools_errors_insufficient_privileges_path)
+      end
+    end
+
     context 'when the user is already logged in' do
+      include_context 'oidc callback'
+
       before do
         allow_any_instance_of(ActionDispatch::Request)
           .to receive(:session).and_return(
@@ -194,8 +215,15 @@ describe Schools::SessionsController, type: :request do
     context 'when a session exists but there is no id_token' do
       subject { get(logout_schools_session_path) }
 
-      specify 'it should raise an NoIDTokenError' do
-        expect { subject }.to raise_error(Schools::NoIDTokenError, 'No id_token present, cannot log out from DfE Sign-in')
+      before { allow(Rails.logger).to receive(:error).and_return(true) }
+
+      specify 'it should write a message to the error log' do
+        subject
+        expect(Rails.logger).to have_received(:error).with(/No id_token present/)
+      end
+
+      specify 'it should redirect directly to the schools path' do
+        expect(subject).to redirect_to(schools_path)
       end
     end
   end
