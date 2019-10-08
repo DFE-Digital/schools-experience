@@ -53,12 +53,10 @@ module Bookings::Gitis
       def initialize(resp)
         if resp.headers['content-type'].to_s.match?(%r{application/json})
           @data = JSON.parse(resp.body)
-          @msg = "#{resp.status}: #{@data.dig('error', 'message') || resp.body}"
-        else
-          @msg = "#{resp.status}: #{resp.body}"
+          @error = @data.dig('error', 'message')
         end
 
-        super(@msg)
+        super "#{resp.status}: #{resp.env.url}: #{@error.presence || resp.body}"
       end
     end
 
