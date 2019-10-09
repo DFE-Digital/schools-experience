@@ -4,6 +4,7 @@ module Bookings
       prepend FakeAuth if Rails.application.config.x.gitis.fake_crm
 
       CACHE_KEY = 'gitis-auth-token'.freeze
+      EXPIRY_MARGIN = 300
       AUTH_URL = "https://login.microsoftonline.com/{tenant_id}/oauth2/token".freeze
       attr_reader :service_url, :expires_at, :expires_in
 
@@ -21,7 +22,7 @@ module Bookings
       end
 
       def token(force_reload = false)
-        if !force_reload && (cached_token = fetch_cached_token)
+        if !force_reload && (cached_token = fetch_cached_token) && cached_token.present?
           cached_token
         elsif (new_token = retrieve_token)
           cache.write(CACHE_KEY, new_token, expires_in: expires_in)
@@ -74,7 +75,7 @@ module Bookings
 
       def parse_successful_response(response)
         data = JSON.parse(response.body)
-        @expires_in = data['expires_in'].to_i
+        @expires_in = data['expires_in'].to_i - EXPIRY_MARGIN # Don't use token right up to expiry time
         @expires_at = Time.zone.now + @expires_in
         @access_token = data['access_token']
       end
