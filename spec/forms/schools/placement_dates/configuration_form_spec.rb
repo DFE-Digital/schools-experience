@@ -78,7 +78,8 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
             {
               max_bookings_count: max_bookings_count,
               has_limited_availability: true,
-              available_for_all_subjects: true
+              available_for_all_subjects: true,
+              supports_subjects: true
             }
           end
 
@@ -100,7 +101,8 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
             {
               max_bookings_count: max_bookings_count,
               has_limited_availability: false,
-              available_for_all_subjects: false
+              available_for_all_subjects: false,
+              supports_subjects: true
             }
           end
 
@@ -150,7 +152,8 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
             {
               max_bookings_count: max_bookings_count,
               has_limited_availability: true,
-              available_for_all_subjects: true
+              available_for_all_subjects: true,
+              supports_subjects: true
             }
           end
 
@@ -169,7 +172,8 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
             {
               max_bookings_count: max_bookings_count,
               has_limited_availability: true,
-              available_for_all_subjects: false
+              available_for_all_subjects: false,
+              supports_subjects: true
             }
           end
 

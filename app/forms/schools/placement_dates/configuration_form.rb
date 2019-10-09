@@ -7,11 +7,13 @@ module Schools
       attribute :max_bookings_count, :integer
       attribute :has_limited_availability, :boolean
       attribute :available_for_all_subjects, :boolean
+      attribute :supports_subjects, :boolean
 
       validates :max_bookings_count, numericality: { greater_than: 0 }, if: :has_limited_availability
       validates :max_bookings_count, absence: true, unless: :has_limited_availability
       validates :has_limited_availability, inclusion: [true, false]
-      validates :available_for_all_subjects, inclusion: [true, false]
+      validates :supports_subjects, inclusion: [true, false]
+      validates :available_for_all_subjects, inclusion: [true, false], if: :supports_subjects
 
       def self.new_from_date(placement_date)
         # Default fields to unselected
@@ -19,7 +21,8 @@ module Schools
           new \
             max_bookings_count: placement_date.max_bookings_count,
             has_limited_availability: placement_date.has_limited_availability?,
-            available_for_all_subjects: !placement_date.subject_specific?
+            available_for_all_subjects: !placement_date.subject_specific?,
+            supports_subjects: placement_date.supports_subjects?
         else
           new
         end

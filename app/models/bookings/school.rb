@@ -183,6 +183,10 @@ class Bookings::School < ApplicationRecord
     end
   end
 
+  def supports_subjects?
+    phases.any?(&:supports_subjects?)
+  end
+
 private
 
   def has_available_dates?

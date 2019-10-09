@@ -37,3 +37,28 @@ Feature: Creating new placement dates
         And I fill in the form with a future date and duration of 3
         When I submit the form
         Then I should be on the new configuration page for this date
+
+    Scenario: Primary and secondary schools: extra option
+        Given my school is a 'primary and secondary' school
+        And I am on the 'new placement date' page
+        Then I should see radio buttons for 'Which age groups will candidates be placed with?' with the following options:
+          | Primary or early years |
+          | Secondary or college   |
+
+    Scenario: Primary and secondary schools: selecting primary
+        Given my school is a 'primary and secondary' school
+        And I am on the 'new placement date' page
+        When I fill in the form with a future date and duration of 3
+        And I choose 'Primary or early years' from the 'Which age groups will candidates be placed with?' radio buttons
+        And I submit the form
+        Then I should be on the new configuration page for my placement date
+        And there should be no subject specificity option
+
+    Scenario: Primary and secondary schools: selecting primary
+        Given my school is a 'primary and secondary' school
+        And I am on the 'new placement date' page
+        When I fill in the form with a future date and duration of 3
+        And I choose 'Secondary or college' from the 'Which age groups will candidates be placed with?' radio buttons
+        And I submit the form
+        Then I should be on the new configuration page for my placement date
+        And there should be a subject specificity option

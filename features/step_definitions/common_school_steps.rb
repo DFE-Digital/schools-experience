@@ -37,3 +37,17 @@ Given "my chosen school has the URN {int}" do |int|
   @school.update_attributes(urn: int)
   expect(@school.urn).to eql(int)
 end
+
+Given("my school is a {string} school") do |phase|
+  case phase
+  when 'primary'
+    @school.phases << FactoryBot.create(:bookings_phase, :primary)
+  when 'secondary'
+    @school.phases << FactoryBot.create(:bookings_phase, :secondary)
+  when 'primary and secondary'
+    @school.phases << FactoryBot.create(:bookings_phase, :primary)
+    @school.phases << FactoryBot.create(:bookings_phase, :secondary)
+  else
+    fail "unsupported phase #{phase}"
+  end
+end

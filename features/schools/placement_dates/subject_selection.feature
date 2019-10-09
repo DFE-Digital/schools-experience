@@ -6,6 +6,7 @@ Feature: Selecting subjects for a placement date
     Background:
         Given I am logged in as a DfE user
         And my school is fully-onboarded
+        And my school is a 'secondary' school
         And the school has subjects
         And I have entered a placement date
         And the placement date is subject specific
