@@ -311,8 +311,7 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   def view_request_acknowledgement_step
-    expect(page).to have_text \
-      "Your request for school experience will be forwarded to Test School."
+    expect(page).to have_text "You've requested school experience at"
   end
 
   def sign_in_via_dashboard(token)
