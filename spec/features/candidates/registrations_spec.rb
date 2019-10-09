@@ -295,7 +295,7 @@ feature 'Candidate Registrations', type: :feature do
     click_button button_text
     expect(page).to have_text 'You need to confirm your details are correct and accept our privacy policy to continue'
     expect(page).not_to have_text \
-      "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\ntest@example.com"
+      "We've sent a link to the following email address:\ntest@example.com"
 
     # Submit email confirmation form successfully
     check "candidates_registrations_privacy_policy_acceptance"
@@ -304,7 +304,7 @@ feature 'Candidate Registrations', type: :feature do
 
   def complete_email_confirmation_step
     expect(page).to have_text \
-      "Click the link in the email we’ve sent to the following email address to verify your request for school experience at Test School:\n#{email_address}"
+      "We've sent a link to the following email address:\n#{email_address}"
 
     # Click email confirmation link
     visit "/candidates/confirm/#{registration_session.uuid}"
