@@ -85,7 +85,7 @@ group :development, :test do
   gem 'pry-byebug'
 
   # Testing framework
-  gem 'rspec-rails', '~> 3.8'
+  gem 'rspec-rails', '~> 3.9'
   gem 'factory_bot_rails'
 
   gem 'brakeman', '>= 4.4.0'
