@@ -14,8 +14,17 @@ FactoryBot.define do
       accepted_at { 5.minutes.ago }
     end
 
-    trait :upcoming do
-      date { Bookings::Booking::UPCOMING_TIMEFRAME.from_now }
+    trait :attended do
+      attended { true }
+    end
+
+    trait :unattended do
+      attended { false }
+    end
+
+    trait :previous do
+      to_create { |instance| instance.save(validate: false) }
+      date { 2.weeks.ago }
     end
 
     trait :with_existing_subject do

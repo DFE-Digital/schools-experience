@@ -74,6 +74,10 @@ module Bookings
         where(id: to_manage.select('id'))
     end
 
+    scope :historical, -> do
+      previous.accepted
+    end
+
     def self.from_confirm_booking(confirm_booking)
       new(
         date: confirm_booking.date,
@@ -126,6 +130,12 @@ module Bookings
 
     def accepted?
       accepted_at.present?
+    end
+
+    def accept!
+      return true if accepted?
+
+      update(accepted_at: Time.zone.now)
     end
 
     def reference
