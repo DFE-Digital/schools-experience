@@ -1,1 +1,36 @@
-TBD
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Previous bookings' => nil
+  }
+%>
+
+<div id="previous-bookings-index" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= page_heading 'Previous bookings' %>
+
+    <% if @bookings.any? %>
+      <div class="pagination-info higher">
+        <div class="pagination-slice">
+          <%= page_entries_info @bookings %>
+        </div>
+        <%= paginate @bookings %>
+      </div>
+
+      <%= render 'table', bookings: @bookings %>
+
+      <div class="pagination-info lower">
+        <%= paginate @bookings %>
+      </div>
+
+    <% else %>
+      <p>
+        There are no previous bookings.
+      </p>
+    <% end %>
+
+    <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
+  </div>
+</div>
+
+

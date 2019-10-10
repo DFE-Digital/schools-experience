@@ -1,0 +1,33 @@
+<table id="bookings" class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col">Name</th>
+      <th class="govuk-table__header" scope="col">Subject</th>
+      <th class="govuk-table__header" scope="col">Date</th>
+      <th class="govuk-table__header" scope="col">Attended</th>
+      <th class="govuk-table__header"></th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <%- bookings.each do |booking| -%>
+      <tr class="booking govuk-table__row" data-booking="<%= booking.id %>">
+        <td class="name govuk-table__cell">
+          <%= booking.candidate_name %>
+        </td>
+        <td class="subject govuk-table__cell">
+          <%= booking.bookings_subject.name %>
+        </td>
+        <td class="date govuk-table__cell">
+          <%= booking.date.to_formatted_s(:govuk) %>
+        </td>
+        <td class="govuk-table__cell">
+          TBD
+        </td>
+        <td class="govuk-table__cell">
+          <%= link_to "View", schools_booking_path(booking),
+            'aria-label': "View booking for #{booking.candidate_name}, #{booking.date.to_formatted_s(:govuk)}" %>
+        </td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>

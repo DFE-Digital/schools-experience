@@ -13,7 +13,11 @@ describe Schools::PreviousBookingsController, type: :request do
   end
 
   describe '#index' do
-    before { get schools_previous_bookings_path }
+    before do
+      create_list(:bookings_booking, 3, :previous, :accepted)
+      get schools_previous_bookings_path
+    end
+
     it { expect(response).to have_http_status(:success) }
     it { expect(response).to render_template('index') }
   end
