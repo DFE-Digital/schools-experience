@@ -62,6 +62,10 @@ module Bookings
       }
     end
 
+    def has_subjects?
+      placement_date_subjects.any?
+    end
+
     def has_limited_availability?
       max_bookings_count.present?
     end
