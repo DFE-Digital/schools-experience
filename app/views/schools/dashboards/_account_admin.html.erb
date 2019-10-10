@@ -3,6 +3,15 @@
     Account admin
   </h2>
 
+  <div id="previous-bookings" class="subsection">
+    <header class="dashboard-medium-priority">
+      <%= link_to "View previous bookings", schools_previous_bookings_path %>
+    </header>
+    <span class="govuk-hint">
+      View booking dates, subjects and candidate names and attendance
+    </span>
+  </div>
+
   <div id="update-school-profile" class="subsection">
     <header class="dashboard-medium-priority">
       <%= link_to "Update school profile", schools_on_boarding_profile_path %>
