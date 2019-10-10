@@ -76,23 +76,26 @@ module Candidates
     end
 
     def available_dates
-      school.bookings_placement_dates.available
+      school
+        .bookings_placement_dates
+        .eager_load(:placement_date_subjects, :subjects).available
     end
 
     def available_dates_grouped_by_date
+      # FIXME limit to secondary dates
       available_dates
         .group_by(&:date)
         .each
-        .with_object({}) do |(date, placement_dates), hash|
-          hash[date] = placement_dates_subjects(placement_dates)
+        .with_object({}) do |(date, placement_date), hash|
+          hash[date] = placement_date_subjects(placement_date)
         end
     end
 
   private
 
-    def placement_dates_subjects(placement_dates)
-      placement_dates
-        .flat_map { |pd| pd.subjects.any? ? pd.subjects.map(&:name) : 'All subjects' }
+    def placement_date_subjects(placement_date)
+      placement_date
+        .flat_map { |pd| pd.has_subjects? ? pd.subjects.map(&:name) : 'All subjects' }
         .uniq
     end
 

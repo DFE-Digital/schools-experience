@@ -167,4 +167,46 @@ RSpec.describe Candidates::SchoolPresenter do
 
     it { is_expected.to eq school.bookings_placement_dates.available }
   end
+
+  describe '#available_dates_grouped_by_date' do
+    let(:early_date) { 1.week.from_now.to_date }
+    let(:late_date) { 1.month.from_now.to_date }
+    let(:all_subjects) { Array.wrap('All subjects') }
+
+    let(:placement_date_early_with_maths) do
+      build(:bookings_placement_date, date: early_date, subject_specific: true).tap do |pd|
+        pd.subjects << Bookings::Subject.find_by(name: 'Maths')
+        pd.subject_specific = true
+        pd.save
+      end
+    end
+
+    let(:placement_date_early) do
+      create(:bookings_placement_date, date: early_date)
+    end
+
+    let(:placement_date_late) do
+      create(:bookings_placement_date, date: late_date)
+    end
+
+    let(:placement_dates) do
+      [placement_date_early, placement_date_late, placement_date_early_with_maths]
+    end
+
+    before do
+      allow(subject).to receive(:available_dates).and_return(placement_dates)
+    end
+
+    specify 'should correctly itemise by date' do
+      expect(subject.available_dates_grouped_by_date.keys).to match_array([early_date.to_date, late_date.to_date])
+    end
+
+    specify 'dates with subject specific and non-specific dates should list both' do
+      expect(subject.available_dates_grouped_by_date[early_date]).to match_array(all_subjects.concat(%w(Maths)))
+    end
+
+    specify "non-specific dates should be described as 'All subjects'" do
+      expect(subject.available_dates_grouped_by_date[late_date]).to match_array(all_subjects)
+    end
+  end
 end
