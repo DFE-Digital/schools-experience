@@ -41,12 +41,16 @@ Given("there are {int} unviewed candidate cancellations") do |qty|
 end
 
 Given("there are {int} bookings in the past with no attendance logged") do |qty|
-  @bookings = FactoryBot.create_list :bookings_booking, qty, bookings_school: @school
+  @bookings = FactoryBot.create_list :bookings_booking, qty, :accepted, bookings_school: @school
   @bookings.each do |b|
     b.date = 1.week.ago
     b.attended = nil
     b.save(validate: false)
   end
+end
+
+Given("there is a booking in the past that has been cancelled") do
+  @cancelled_booking = FactoryBot.create(:bookings_booking, :accepted, :cancelled_by_school, bookings_school: @school)
 end
 
 Then("the {string} should be {int}") do |string, int|

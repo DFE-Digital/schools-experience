@@ -18,6 +18,8 @@ module Schools
       @candidate_attendances = current_school
         .bookings
         .previous
+        .not_cancelled
+        .accepted
         .attendance_unlogged
         .count
     end
