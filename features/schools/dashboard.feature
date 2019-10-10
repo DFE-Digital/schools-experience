@@ -97,6 +97,7 @@ Feature: The School Dashboard
     Scenario: Confirm attendance counter
         Given my school has fully-onboarded
         And there are 2 bookings in the past with no attendance logged
+        And there is a booking in the past that has been cancelled
         When I am on the 'schools dashboard' page
         Then the 'confirm attendance counter' should be 2
 
