@@ -21,7 +21,7 @@
           <%= booking.date.to_formatted_s(:govuk) %>
         </td>
         <td class="govuk-table__cell">
-          TBD
+          <%= attendance_status booking %>
         </td>
         <td class="govuk-table__cell">
           <%= link_to "View", schools_booking_path(booking),

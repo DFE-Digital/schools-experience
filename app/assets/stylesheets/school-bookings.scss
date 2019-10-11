@@ -65,3 +65,18 @@ table#bookings {
     @include govuk-responsive-margin(4, "bottom");
   }
 }
+
+.govuk-tag {
+  &.govuk-tag--default {
+    background-color: govuk-colour('dark-grey');
+  }
+
+  &.govuk-tag--available {
+    background-color: govuk-colour('green');
+  }
+
+  &.govuk-tag--unavailable {
+    background-color: govuk-colour('red');
+  }
+}
+
