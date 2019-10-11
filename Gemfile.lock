@@ -14,6 +14,13 @@ GIT
   specs:
     application_insights (0.5.7)
 
+GIT
+  remote: https://github.com/petenorth/database_cleaner.git
+  revision: 5925b43c23f565c2e11b7903a760ee4276e9d189
+  ref: 5925b43c23f565c2e11b7903a760ee4276e9d189
+  specs:
+    database_cleaner (1.7.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -131,7 +138,6 @@ GEM
       railties (>= 4.2, < 7)
     cucumber-tag_expressions (1.1.1)
     cucumber-wire (0.0.1)
-    database_cleaner (1.7.0)
     delayed_cron_job (0.7.2)
       delayed_job (>= 4.1)
     delayed_job (4.1.8)
@@ -455,7 +461,7 @@ DEPENDENCIES
   capybara-screenshot
   chromedriver-helper
   cucumber-rails
-  database_cleaner
+  database_cleaner!
   delayed_cron_job
   delayed_job_active_record
   delayed_job_web

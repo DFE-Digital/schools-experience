@@ -116,7 +116,7 @@ group :test do
   gem 'chromedriver-helper', platforms: [:mri]
 
   gem 'cucumber-rails', require: false
-  gem 'database_cleaner'
+  gem 'database_cleaner', github: 'petenorth/database_cleaner', ref: '5925b43c23f565c2e11b7903a760ee4276e9d189'
 
   gem 'shoulda-matchers', '~> 4.1'
   gem 'rails-controller-testing'
