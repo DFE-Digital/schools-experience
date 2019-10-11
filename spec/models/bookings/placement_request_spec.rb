@@ -74,7 +74,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
 
     let! :placement_request_cancelled_by_school_but_not_sent do
-      FactoryBot.create :placement_request, school: school
+      FactoryBot.create :placement_request, :with_school_cancellation, school: school
     end
 
     let! :booked_placement_request do
