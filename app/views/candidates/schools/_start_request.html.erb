@@ -1,3 +1,3 @@
 <%= govuk_link_to "Start request",
-      new_candidates_school_registrations_personal_information_path(@presenter.school),
+      start_request_link(@presenter.school),
       aria: { label: "Start request for school experience at #{@presenter.school.name}" } %>

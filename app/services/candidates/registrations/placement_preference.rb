@@ -11,10 +11,6 @@ module Candidates
       def school
         @school ||= Candidates::School.find(urn)
       end
-
-      def placement_date
-        @placement_date ||= Bookings::PlacementDate.find(bookings_placement_date_id)
-      end
     end
   end
 end

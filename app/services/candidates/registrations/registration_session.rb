@@ -66,6 +66,14 @@ module Candidates
         fetch_attributes BackgroundCheck
       end
 
+      def subject_and_date_information
+        fetch(SubjectAndDateInformation).tap { |sad| sad.school = school }
+      end
+
+      def subject_and_date_information_attributes
+        fetch_attributes SubjectAndDateInformation
+      end
+
       # TODO add specs for these
       def contact_information
         fetch ContactInformation
