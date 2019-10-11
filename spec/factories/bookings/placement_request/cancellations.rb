@@ -13,7 +13,7 @@ FactoryBot.define do
     end
 
     trait :sent do
-      after :build, &:sent!
+      sent_at { DateTime.now }
     end
 
     trait :viewed do
