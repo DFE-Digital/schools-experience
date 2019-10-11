@@ -1,7 +1,7 @@
 module Candidates
   module Registrations
     class RegistrationState
-      STEPS = %i(
+      REQUIRED_STEPS = %i(
         personal_information
         contact_information
         education
@@ -10,12 +10,20 @@ module Candidates
         background_check
       ).freeze
 
+      # These steps will only be shown when the school has fixed dates
+      # and will be the first pages (currently only one) of the wizard
+      OPTIONAL_INITIAL_STEPS = %i(subject_and_date_information).freeze
+
       def initialize(registration_session)
         @registration_session = registration_session
       end
 
       def steps
-        STEPS
+        if @registration_session.school.availability_preference_fixed?
+          [OPTIONAL_INITIAL_STEPS, REQUIRED_STEPS].flatten
+        else
+          REQUIRED_STEPS
+        end
       end
 
       def next_step
@@ -26,8 +34,8 @@ module Candidates
         next_step == :COMPLETED
       end
 
-      def step_completed?(step)
-        @registration_session.public_send(step).valid?
+      def step_completed?(wizard_step)
+        @registration_session.public_send(wizard_step).valid?
       rescue RegistrationSession::StepNotFound
         false
       end

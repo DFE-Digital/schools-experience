@@ -1,0 +1,19 @@
+<% self.page_title = 'Choose a date' %>
+
+<div class="govuk-grid-row" id="placement-preference">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary subject_and_date_information, 'There is a problem', '' %>
+
+      <%= f.radio_button_fieldset :bookings_placement_date_id,
+        choices: @placement_dates,
+        value_method: :id,
+        text_method: :to_s
+      -%>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+
+
+  </div>
+</div>
