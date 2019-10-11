@@ -100,9 +100,7 @@
 
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__tablet_plus">
-        <%= govuk_link_to "Start request",
-                    new_candidates_school_registrations_personal_information_path(@presenter.school),
-                    aria: { label: "Start request for school experience at #{@presenter.school.name}" } %>
+        <%= render partial: 'start_request' %>
 
       </div>
 
@@ -217,9 +215,7 @@
 
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__mobile">
-        <%= govuk_link_to "Start request",
-                    new_candidates_school_registrations_personal_information_path(@presenter.school),
-                    aria: { label: "Start request for school experience at #{@presenter.school.name}" } %>
+        <%= render partial: 'start_request' %>
       </div>
     <% end %>
   </div>
