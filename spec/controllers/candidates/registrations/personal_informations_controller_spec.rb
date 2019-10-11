@@ -4,6 +4,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
   include ActiveJob::TestHelper
   include_context 'Stubbed current_registration'
   include_context 'fake gitis'
+  let!(:school) { create(:bookings_school, urn: 10020) }
 
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new('urn' => '10020')

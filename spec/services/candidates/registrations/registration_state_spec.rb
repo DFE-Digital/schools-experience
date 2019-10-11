@@ -9,7 +9,7 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'without personal information' do
     let :registration_session do
-      Candidates::Registrations::RegistrationSession.new({})
+      Candidates::Registrations::RegistrationSession.new('urn' => '11048')
     end
 
     it { expect(subject.next_step).to eq :personal_information }

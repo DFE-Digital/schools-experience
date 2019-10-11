@@ -28,6 +28,7 @@ Feature: Previewing my application
             | Teaching subject second choice | Mathematics                                             | /candidates/schools/123456/registrations/teaching_preference/edit#candidates_registrations_teaching_preference_subject_second_choice_container |
             | DBS certificate                | Yes                                                     | /candidates/schools/123456/registrations/background_check/edit#candidates_registrations_background_check_has_dbs_check_container               |
 
+    @wip
     Scenario: Page contents (when the school has fixed availability)
         Given my school has fixed dates
         And I have completed the wizard
