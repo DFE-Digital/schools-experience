@@ -7,6 +7,7 @@ module Bookings
     include Candidates::Registrations::Behaviours::Education
     include Candidates::Registrations::Behaviours::TeachingPreference
     include Candidates::Registrations::Behaviours::BackgroundCheck
+    include Candidates::Registrations::Behaviours::SubjectAndDateInformation
 
     has_secure_token
 

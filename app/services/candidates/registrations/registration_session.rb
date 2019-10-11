@@ -51,7 +51,7 @@ module Candidates
       end
 
       def school
-        @school ||= Candidates::School.find urn
+        @school ||= Candidates::School.find urn if urn.present?
       end
 
       def school_name

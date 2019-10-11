@@ -194,36 +194,5 @@ describe Candidates::Registrations::ApplicationPreview do
         end
       end
     end
-
-    context 'when school has fixed dates' do
-      let :placement_date do
-        3.days.from_now.strftime "%d %B %Y"
-      end
-
-      let :bookings_placement_date do
-        create :bookings_placement_date,
-          date: placement_date, bookings_school: school
-      end
-
-      let :placement_preference do
-        build :placement_preference,
-          objectives: "test the software",
-          bookings_placement_date_id: bookings_placement_date.id,
-          availability: nil
-      end
-
-      context '#placement_availability' do
-        it 'returns the correct value' do
-          expect(subject.placement_date).to eq placement_date + ' (1 day)'
-        end
-      end
-
-      context '#placement_availability_description' do
-        it 'returns the placement date when #placement_availability is absent' do
-          expect(subject.placement_availability_description).to \
-            eq placement_date + ' (1 day)'
-        end
-      end
-    end
   end
 end

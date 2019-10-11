@@ -6,8 +6,9 @@ module Candidates
 
         included do
           validates :bookings_placement_date_id,
-            presence: true
-          validates :subject_id, presence: true
+            presence: true,
+            unless: -> { availability.present? }
+          #validates :subject_id, presence: true
         end
 
       private
