@@ -181,7 +181,9 @@ module Bookings
     end
 
     def cancelled?
-      cancellation&.sent?
+      [candidate_cancellation, school_cancellation].compact.any? do |cancellation|
+        cancellation.persisted? && cancellation.sent?
+      end
     end
 
     def requested_on
