@@ -7,8 +7,7 @@ module Candidates
         included do
           validates :bookings_placement_date_id,
             presence: true,
-            unless: -> { availability.present? }
-          #validates :subject_id, presence: true
+            if: :school_offers_fixed_dates?
         end
 
       private
