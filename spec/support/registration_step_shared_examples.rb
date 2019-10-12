@@ -8,7 +8,11 @@ shared_examples 'a registration step' do
   end
 
   subject do
-    described_class.new
+    if defined?(school)
+      described_class.new(school: school)
+    else
+      described_class.new
+    end
   end
 
   context 'methods' do
