@@ -7,10 +7,14 @@ module Candidates
 
       attribute :availability
       attribute :bookings_placement_date_id, :integer
-      attribute :subject_id, :integer # note this isn't the same as subject_first_choice
+      attribute :bookings_placement_dates_subject_id, :integer
 
       def placement_date
         @placement_date ||= Bookings::PlacementDate.find(bookings_placement_date_id)
+      end
+
+      def placement_date_subject
+        @placement_date_subject ||= Bookings::PlacementDateSubject.find(bookings_placement_dates_subject_id)
       end
     end
   end

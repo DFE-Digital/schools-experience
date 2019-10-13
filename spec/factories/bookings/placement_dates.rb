@@ -17,5 +17,9 @@ FactoryBot.define do
     trait :inactive do
       active { false }
     end
+
+    trait :subject_specific do
+      subject_specific { true }
+    end
   end
 end
