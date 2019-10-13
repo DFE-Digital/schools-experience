@@ -1,0 +1,10 @@
+/*
+  FIXME check the usability consequences of doing this
+
+  Not really achieveable using the form builder
+ */
+.date-selector {
+  fieldset legend {
+    display: none;
+  }
+}
