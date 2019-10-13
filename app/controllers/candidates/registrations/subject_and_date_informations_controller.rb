@@ -1,5 +1,11 @@
 module Candidates
   module Registrations
+    PlacementDateOption = Struct.new(:placement_date_id, :placement_date_subject_id, :name) do
+      def id
+        [placement_date_id, placement_date_subject_id].compact.join('_')
+      end
+    end
+
     class SubjectAndDateInformationsController < RegistrationsController
       before_action :set_school, :set_placement_dates
 
@@ -44,11 +50,28 @@ module Candidates
       end
 
       def set_placement_dates
-        if @school.availability_preference_fixed?
-          @placement_dates = @school
-            .bookings_placement_dates
-            .published
-            .available
+        @placement_dates_grouped_by_date = @school
+          .bookings_placement_dates
+          .eager_load(placement_date_subjects: :bookings_subject)
+          .published
+          .available
+          .each
+          .with_object({}) do |pd, h|
+            if h.has_key?(pd.date)
+              h[pd.date].concat(placement_date_options(pd))
+            else
+              h[pd.date] = Array.wrap(placement_date_options(pd))
+            end
+          end
+      end
+
+      def placement_date_options(placement_date)
+        if placement_date.placement_date_subjects.any?
+          placement_date.placement_date_subjects.map do |placement_date_subject|
+            PlacementDateOption.new(placement_date.id, placement_date_subject.id, placement_date_subject.bookings_subject.name)
+          end
+        else
+          Array.wrap(PlacementDateOption.new(placement_date.id, nil, 'All subjects'))
         end
       end
 

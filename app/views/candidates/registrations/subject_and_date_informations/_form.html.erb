@@ -2,18 +2,24 @@
 
 <div class="govuk-grid-row" id="placement-preference">
   <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l">Select a date and subject</h2>
     <%= form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary subject_and_date_information, 'There is a problem', '' %>
 
-      <%= f.radio_button_fieldset :bookings_placement_date_id,
-        choices: @placement_dates,
-        value_method: :id,
-        text_method: :to_s
-      -%>
+      <section class="date-selector">
+        <% @placement_dates_grouped_by_date.each do |date, placement_dates| %>
+          <h3 class="govuk-heading-m"><%= date.to_formatted_s(:govuk) %></h3>
+
+          <%= f.radio_button_fieldset :bookings_placement_date_id,
+            choices: placement_dates,
+            value_method: :id,
+            text_method: :name
+          -%>
+        <% end %>
+      </section>
 
       <%= f.submit 'Continue' %>
     <% end %>
-
 
   </div>
 </div>
