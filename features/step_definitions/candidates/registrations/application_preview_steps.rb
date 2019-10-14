@@ -112,13 +112,13 @@ Then("I should see the following summary rows:") do |table|
 end
 
 Then("I should see a summary row containing my selected date") do
-  within(".placement-date") do
+  within(".start-date-availability") do
     expect(page).to have_content(@wanted_bookings_placement_date)
   end
 end
 
 Then("the row should have a {string} link to {string}") do |link_text, path|
-  within(".placement-date") do
+  within(".start-date-availability") do
     expect(page).to have_link(link_text, href: /#{path}/)
   end
 end

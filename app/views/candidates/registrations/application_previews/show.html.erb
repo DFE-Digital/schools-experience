@@ -68,7 +68,7 @@
       <%- if @application_preview.has_bookings_date? -%>
 
         <%= summary_row \
-          'Placement date',
+          'Start date availability',
           @application_preview.placement_date,
           edit_candidates_school_registrations_placement_preference_path(
             anchor: 'candidates_registrations_placement_preference_availability_container'
@@ -86,7 +86,7 @@
       <%- end -%>
 
       <%= summary_row \
-        'Experience outcome',
+        'What you want to get out of school experience',
         @application_preview.placement_outcome,
         edit_candidates_school_registrations_placement_preference_path(
           anchor: 'candidates_registrations_placement_preference_objectives_container'

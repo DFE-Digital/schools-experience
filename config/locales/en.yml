@@ -383,7 +383,7 @@ en:
         date: Enter a start date
       phases: Education phases
       fees: Fees
-      subjects: Placement subjects
+      subjects: Subjects
       candidates_registrations_background_check:
         has_dbs_check: Do you have a DBS certificate?
       candidates_registrations_education:

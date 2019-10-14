@@ -8,7 +8,7 @@
 
     <div>
       <h2>
-        Experience information
+        About our school experience
       </h2>
 
       <dl class="govuk-summary-list govuk-summary-list--no-border inline">
@@ -16,11 +16,11 @@
           <%= content_or_msg @presenter.individual_requirements, "No requirements specified" %>
         <% end %>
 
-        <%= dlist_item 'Experience details:', id: 'experience-details' do %>
+        <%= dlist_item 'Details:', id: 'experience-details' do %>
           <%= content_or_msg @presenter.experience_details, "No information supplied" %>
         <% end %>
 
-        <%= dlist_item 'Experience subjects:', id: "school-subjects" do %>
+        <%= dlist_item 'Subjects:', id: "school-subjects" do %>
           <%= format_school_subjects @presenter.school %>
         <% end %>
       </dl>
@@ -52,7 +52,7 @@
 
       <p>
         <strong>
-          For more information about our school use the following links:
+          For more information about our school:
         </strong>
       </p>
 
@@ -103,7 +103,7 @@
       </div>
 
       <p>
-        <%= link_to 'Back to Search Results', :back,
+        <%= link_to 'Back to search results', :back,
                     data: {controller: 'back-link'} %>
       </p>
     <% end %>
@@ -170,7 +170,7 @@
         <%= content_or_msg @presenter.formatted_dress_code, "No dress code supplied" %>
       <% end %>
 
-      <%= dlist_item 'Experience start and finish times', id: 'start-and-finish-times' do %>
+      <%= dlist_item 'Start and finish times', id: 'start-and-finish-times' do %>
         <p>
           <%= @presenter.start_time %> to <%= @presenter.end_time %>
 

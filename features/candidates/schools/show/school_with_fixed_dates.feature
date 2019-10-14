@@ -9,4 +9,4 @@ Feature: School show page (fixed dates)
 
     Scenario: Placement date display
         Given I am on the profile page for the chosen school
-        Then I should see the list of 'Upcoming placement dates' in the sidebar
+        Then I should see the list of 'Upcoming dates' in the sidebar

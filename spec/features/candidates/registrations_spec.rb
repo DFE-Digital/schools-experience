@@ -283,7 +283,7 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "Date of birth #{date_of_birth.strftime '%d/%m/%Y'}"
     expect(page).to have_text "School or college #{school.name}"
     expect(page).to have_text 'Experience availability Only free from Epiphany to Whitsunday'
-    expect(page).to have_text "Experience outcome I enjoy teaching"
+    expect(page).to have_text "What you want to get out of school experience I enjoy teaching"
     expect(page).to have_text "Degree stage Graduate or postgraduate"
     expect(page).to have_text "Degree subject Physics"
     expect(page).to have_text "I’m very sure and think I’ll apply"
