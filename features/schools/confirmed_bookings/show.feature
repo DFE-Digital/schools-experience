@@ -58,8 +58,16 @@ Feature: Viewing a booking
         When I am viewing my chosen booking
         Then I should not see a 'Cancellation details' section
 
-    Scenario: Cancellation details
-        Given there is a cancelled booking
+    Scenario: Candidate cancellation details
+        Given there is a booking cancelled by the candidate
+        When I am viewing my chosen booking
+        Then I should see a 'Cancellation details' section with the following values:
+            | Heading              | Value             |
+            | Cancellation reason  | MyText            |
+            | Cancellation sent at | \d{2}\s\w+\s\d{4} |
+    
+    Scenario: School Cancellation details
+        Given there is a booking cancelled by the school
         When I am viewing my chosen booking
         Then I should see a 'Cancellation details' section with the following values:
             | Heading              | Value             |

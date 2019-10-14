@@ -48,6 +48,7 @@ module Bookings
       :candidate_email,
       :candidate_name,
       :cancelled?,
+      :cancellation,
       to: :bookings_placement_request
 
     scope :not_cancelled, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }

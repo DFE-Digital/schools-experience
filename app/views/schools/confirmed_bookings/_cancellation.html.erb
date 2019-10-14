@@ -2,6 +2,7 @@
   <h2>Cancellation details</h2>
 
   <dl class="govuk-summary-list">
+    <%= summary_row 'Cancelled by', cancellation.cancelled_by.humanize %>
     <%= summary_row 'Cancellation reason', cancellation.reason %>
     <% if cancellation.extra_details.present? %>
       <%= summary_row 'Additional details', cancellation.extra_details %>
