@@ -34,7 +34,7 @@
   </section>
 
   <% if booking.candidate_cancellation %>
-    <%= render 'cancellation', cancellation: booking.candidate_cancellation %>
+    <%= render 'schools/confirmed_bookings/cancellation', cancellation: booking.candidate_cancellation %>
   <% elsif booking.cancellable? %>
     <div>
       <%= govuk_link_to 'Cancel booking', new_schools_booking_cancellation_path(booking), secondary: true %>

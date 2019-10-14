@@ -64,7 +64,7 @@ Rails.application.routes.draw do
 
     end
     resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
-    resources :previous_bookings, only: %i(index)
+    resources :previous_bookings, only: %i(index show)
 
     resource :availability_preference, only: %i(edit update)
     resource :availability_info, only: %i(edit update), controller: 'availability_info'

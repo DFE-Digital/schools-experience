@@ -21,4 +21,12 @@ describe Schools::PreviousBookingsController, type: :request do
     it { expect(response).to have_http_status(:success) }
     it { expect(response).to render_template('index') }
   end
+
+  describe '#show' do
+    let(:booking) { create :bookings_booking, :previous, :accepted, bookings_school: school }
+    before { get schools_previous_booking_path(booking) }
+
+    it { expect(response).to have_http_status(:success) }
+    it { expect(response).to render_template('show') }
+  end
 end

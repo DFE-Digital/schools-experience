@@ -43,6 +43,7 @@ module Bookings
       :closed?,
       :received_on,
       :gitis_contact,
+      :fetch_gitis_contact,
       :contact_uuid,
       :candidate_email,
       :candidate_name,

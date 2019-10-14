@@ -2,6 +2,10 @@ Given("there are some previous bookings") do
   step "there are 3 previous bookings"
 end
 
+Given("there is at least one previous booking") do
+  step "there is 1 previous booking"
+end
+
 Then("I should see the previous bookings listed") do
   within("#bookings") do
     expect(page).to have_css('.booking', count: 3)
@@ -39,4 +43,32 @@ Given("there are some previous bookings belonging to other schools") do
       expect(b.bookings_school).not_to eql(@school)
     end
   end
+end
+
+When("I am viewing my chosen previous booking") do
+  path = path_for('previous booking', booking_id: @booking_id)
+  visit(path)
+  expect(page.current_path).to eql(path)
+end
+
+Given("the scheduled booking date is in the past") do
+  @scheduled_booking_date = 1.week.ago.strftime("%d %B %Y")
+end
+
+Given("there is a cancelled previous booking") do
+  unless @school.subjects.where(name: 'Biology').any?
+    @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
+  end
+
+  last_week = 1.week.ago.to_date
+
+  travel_to 1.month.ago do
+    @booking = FactoryBot.create :bookings_booking,
+      :cancelled_by_candidate, :accepted,
+      bookings_school: @school,
+      bookings_subject: @school.subjects.last,
+      date: last_week
+  end
+
+  @booking_id = @booking.id
 end

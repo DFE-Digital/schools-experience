@@ -1,0 +1,17 @@
+<%- self.page_title = "Booking details ref #{@booking.reference}" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    "Previous bookings" => schools_previous_bookings_path,
+    "Booking #{@booking.id}" => nil
+  }
+%>
+
+<h1>Booking by <%= @booking.candidate_name %></h1>
+
+<%= render 'schools/confirmed_bookings/booking', booking: @booking %>
+
+<div>
+  <%= govuk_link_to 'Return to previous bookings', schools_previous_bookings_path %>
+</div>
