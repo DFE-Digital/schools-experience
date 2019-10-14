@@ -61,7 +61,6 @@ Rails.application.routes.draw do
         resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
       end
       resource :date, only: %i(edit update show), controller: 'confirmed_bookings/date'
-
     end
     resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
     resources :previous_bookings, only: %i(index show)
