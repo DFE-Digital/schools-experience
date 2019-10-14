@@ -5,7 +5,7 @@ module Candidates
       before_action :ensure_placement_request_is_open, except: :show
 
       def show
-        @cancellation = placement_request.cancellation
+        @cancellation = placement_request.candidate_cancellation
       end
 
       def new
