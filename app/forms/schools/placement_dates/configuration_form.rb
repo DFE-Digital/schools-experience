@@ -47,7 +47,7 @@ module Schools
       def assign_attributes_to_placement_date(placement_date)
         placement_date.max_bookings_count = max_bookings_count
 
-        if available_for_all_subjects
+        if available_for_all_subjects || !supports_subjects
           placement_date.subject_specific = false
           placement_date.subject_ids = []
           placement_date.published_at = DateTime.now
