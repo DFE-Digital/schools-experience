@@ -392,7 +392,7 @@ describe Bookings::Booking do
         let(:booking) { create(:bookings_booking, accepted_at: ten_minutes_ago) }
         subject! { booking.accept! }
         it { is_expected.to be true }
-        it { expect(booking.reload.accepted_at).to eql(ten_minutes_ago) }
+        it { expect(booking.reload.accepted_at).to be_within(1.second).of(ten_minutes_ago) }
       end
     end
   end
