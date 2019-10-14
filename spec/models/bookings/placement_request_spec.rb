@@ -528,6 +528,10 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
+  context 'cancellable?' do
+    it "needs to be implemented"
+  end
+
   context '#status' do
     context 'default' do
       subject { create(:placement_request).status }
