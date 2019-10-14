@@ -38,7 +38,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   end
 
   def sent?
-    sent_at.present?
+    sent_at.present? && !sent_at_changed? # check its actually been sent
   end
 
   def booking_date
