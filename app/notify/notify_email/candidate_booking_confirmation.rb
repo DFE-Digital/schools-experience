@@ -93,7 +93,7 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
 private
 
   def template_id
-    'b9882e65-b644-4c52-871e-0e5922f27d7e'
+    'feb44a3a-c2f9-47a3-9be2-b8b665912570'
   end
 
   def personalisation
