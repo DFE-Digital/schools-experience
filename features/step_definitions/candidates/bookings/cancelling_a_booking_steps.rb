@@ -9,6 +9,6 @@ end
 
 Given("I have a cancelled booking") do
   FactoryBot.create :cancellation, \
-    :sent, :cancelled_by_school,
+    :sent, :cancelled_by_candidate,
     placement_request: @booking.bookings_placement_request
 end
