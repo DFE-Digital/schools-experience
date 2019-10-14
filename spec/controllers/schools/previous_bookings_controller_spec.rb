@@ -14,7 +14,7 @@ describe Schools::PreviousBookingsController, type: :request do
 
   describe '#index' do
     before do
-      create_list(:bookings_booking, 3, :previous, :accepted)
+      create_list(:bookings_booking, 3, :previous, :accepted, bookings_school: school)
       get schools_previous_bookings_path
     end
 
