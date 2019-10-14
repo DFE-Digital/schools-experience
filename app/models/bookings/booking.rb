@@ -48,7 +48,6 @@ module Bookings
       :candidate_email,
       :candidate_name,
       :cancelled?,
-      :cancellable?,
       to: :bookings_placement_request
 
     scope :not_cancelled, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
@@ -142,6 +141,14 @@ module Bookings
 
     def reference
       bookings_placement_request.token.first(5)
+    end
+
+    def in_future?
+      date > Date.today
+    end
+
+    def cancellable?
+      in_future? && !cancelled?
     end
   end
 end

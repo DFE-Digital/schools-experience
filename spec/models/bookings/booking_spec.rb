@@ -435,4 +435,33 @@ describe Bookings::Booking do
       expect(subject.reference).to eql(subject.bookings_placement_request.token.first(5))
     end
   end
+
+  describe '#in_future?' do
+    context 'for upcoming booking' do
+      subject { build :bookings_booking }
+      it { is_expected.to be_in_future }
+    end
+
+    context 'for previous booking' do
+      subject { build :bookings_booking, :previous }
+      it { is_expected.not_to be_in_future }
+    end
+  end
+
+  context '#cancellable?' do
+    context 'for uncancelled future booking' do
+      subject { create(:bookings_booking, :accepted) }
+      it { is_expected.to be_cancellable }
+    end
+
+    context 'for cancelled booking' do
+      subject { create(:bookings_booking, :cancelled_by_school) }
+      it { is_expected.not_to be_cancellable }
+    end
+
+    context 'for past booking' do
+      subject { create(:bookings_booking, :previous) }
+      it { is_expected.not_to be_cancellable }
+    end
+  end
 end

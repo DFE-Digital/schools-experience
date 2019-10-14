@@ -184,10 +184,6 @@ module Bookings
       !!cancellation
     end
 
-    def cancellable?
-      true
-    end
-
     def requested_on
       created_at&.to_date
     end
