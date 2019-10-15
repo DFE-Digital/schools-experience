@@ -4,6 +4,7 @@ module Candidates
       # FIXME delegate other methods to placement_preference once remove dates
       # pr is merged
       attr_reader :placement_preference
+      attr_reader :subject_and_date_information
 
       attr_reader :registration_session
 
@@ -27,6 +28,7 @@ module Candidates
       delegate \
         :degree_stage,
         :degree_subject,
+        :description,
         to: :@education
 
       delegate \
@@ -34,6 +36,11 @@ module Candidates
         :subject_first_choice,
         :subject_second_choice,
         to: :@teaching_preference
+
+      delegate \
+        :placement_date,
+        :placement_date_subject,
+        to: :@subject_and_date_information
 
       delegate :has_dbs_check, to: :@background_check
 
@@ -47,6 +54,7 @@ module Candidates
         @background_check = registration_session.background_check
         @education = registration_session.education
         @teaching_preference = registration_session.teaching_preference
+        @subject_and_date_information = registration_session.subject_and_date_information
       end
 
       def ==(other)
@@ -85,7 +93,7 @@ module Candidates
       end
 
       def placement_date
-        placement_preference.placement_date.to_s
+        subject_and_date_information.placement_date.to_s
       end
 
       def placement_availability

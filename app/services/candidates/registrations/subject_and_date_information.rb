@@ -10,11 +10,15 @@ module Candidates
       attribute :bookings_placement_dates_subject_id, :integer
 
       def placement_date
-        @placement_date ||= Bookings::PlacementDate.find(bookings_placement_date_id)
+        @placement_date ||= Bookings::PlacementDate.find_by(id: bookings_placement_date_id)
       end
 
       def placement_date_subject
-        @placement_date_subject ||= Bookings::PlacementDateSubject.find(bookings_placement_dates_subject_id)
+        @placement_date_subject ||= Bookings::PlacementDateSubject.find_by(id: bookings_placement_dates_subject_id)
+      end
+
+      def subject_and_date_ids
+        [placement_date.id, placement_date_subject.id].join('_')
       end
     end
   end

@@ -10,7 +10,7 @@
         <% @placement_dates_grouped_by_date.each do |date, placement_dates| %>
           <h3 class="govuk-heading-m"><%= date.to_formatted_s(:govuk) %></h3>
 
-          <%= f.radio_button_fieldset :bookings_placement_date_id,
+          <%= f.radio_button_fieldset :subject_and_date_ids,
             choices: placement_dates,
             value_method: :id,
             text_method: :name

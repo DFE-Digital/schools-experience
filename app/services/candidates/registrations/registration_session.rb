@@ -116,7 +116,7 @@ module Candidates
       end
 
       def fetch(klass)
-        klass.new @registration_session.fetch(klass.model_name.param_key)
+        klass.new(@registration_session.fetch(klass.model_name.param_key)).tap { |model| model.urn = self.urn }
       rescue KeyError => e
         raise StepNotFound, e.key
       end
