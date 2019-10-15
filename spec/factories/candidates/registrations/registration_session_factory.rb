@@ -141,7 +141,11 @@ FactoryBot.define do
 
     trait :with_school do
       after :build do |reg|
-        Bookings::School.find_by(urn: reg.urn) || FactoryBot.create(:bookings_school, urn: reg.urn)
+        school = Bookings::School.find_by(urn: reg.urn) || FactoryBot.create(:bookings_school, urn: reg.urn)
+
+        if school.availability_preference_fixed?
+          reg.save FactoryBot.build :placement_preference, availability: nil, urn: school.urn
+        end
       end
     end
   end
