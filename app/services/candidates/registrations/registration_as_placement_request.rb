@@ -11,6 +11,8 @@ module Candidates
         teaching_preference
       ).freeze
 
+      OPTIONAL_STEPS = [:subject_and_date_information].freeze
+
       OTHER_IGNORED_ATTRS = %w(created_at updated_at).freeze
 
       def initialize(registration_session)
@@ -18,12 +20,20 @@ module Candidates
       end
 
       def attributes
-        NON_PII_MODELS.inject({}) { |kept_attrs, model_name|
+        non_pii_models.inject({}) { |kept_attrs, model_name|
           kept_attrs.merge attributes_for(model_name)
         }.merge("bookings_school_id" => @registration_session.school.id)
       end
 
     private
+
+      def non_pii_models
+        if @registration_session.school.availability_preference_fixed?
+          NON_PII_MODELS + OPTIONAL_STEPS
+        else
+          NON_PII_MODELS
+        end
+      end
 
       def attributes_for(model_name)
         @registration_session.public_send(model_name).attributes.reject do |k, _|

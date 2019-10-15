@@ -54,7 +54,8 @@ describe Candidates::Registrations::RegistrationSession do
       ).to eq \
         'has_dbs_check' => true,
         'created_at' => date,
-        'updated_at' => date
+        'updated_at' => date,
+        'urn' => model.urn
     end
 
     it 'doesnt over write other keys' do
@@ -226,6 +227,7 @@ describe Candidates::Registrations::RegistrationSession do
   context '#fetch' do
     let :session do
       {
+        'urn' => '11048',
         'candidates_registrations_background_check' => {
           'has_dbs_check' => true
         }

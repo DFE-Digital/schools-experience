@@ -54,7 +54,11 @@ module Candidates
         @background_check = registration_session.background_check
         @education = registration_session.education
         @teaching_preference = registration_session.teaching_preference
-        @subject_and_date_information = registration_session.subject_and_date_information
+        @subject_and_date_information = if registration_session.school.availability_preference_fixed?
+                                          registration_session.subject_and_date_information
+                                        else
+                                          false
+                                        end
       end
 
       def ==(other)
@@ -90,6 +94,10 @@ module Candidates
 
       def email_address
         email
+      end
+
+      def has_subject_and_date_information?
+        !!@subject_and_date_information
       end
 
       def placement_date

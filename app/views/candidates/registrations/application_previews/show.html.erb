@@ -65,7 +65,7 @@
         'School or college',
         @application_preview.school_name %>
 
-      <%- if @application_preview.placement_date.present? -%>
+      <%- if @application_preview.has_subject_and_date_information? -%>
 
         <%= summary_row \
           'Start date and subject',
