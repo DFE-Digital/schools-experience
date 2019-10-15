@@ -5,12 +5,13 @@ describe Candidates::Registrations::GitisRegistrationSession do
 
   let(:key) { model.model_name.param_key }
   let(:model_name) { model.model_name.element }
+  let(:data_with_urn) { { key => data, 'urn' => '123456' } }
 
   shared_examples 'attributes with and without gitis data' do
     subject { registration.public_send(:"#{model_name}_attributes") }
 
     context 'with overridden data' do
-      let(:registration) { described_class.new({ key => data }, contact) }
+      let(:registration) { described_class.new(data_with_urn, contact) }
       it { is_expected.to include(data) }
     end
 
@@ -24,7 +25,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
     subject { registration.public_send(model_name.to_sym) }
 
     context 'with overridden data' do
-      let(:registration) { described_class.new({ key => data }, contact) }
+      let(:registration) { described_class.new(data_with_urn, contact) }
       it { is_expected.to have_attributes(data) }
     end
 
