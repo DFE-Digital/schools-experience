@@ -76,7 +76,7 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
-    scope :with_unviewed_canidate_cancellation, -> do
+    scope :with_unviewed_candidate_cancellation, -> do
       left_joins(:candidate_cancellation)
         .merge Cancellation.unviewed
     end
@@ -88,7 +88,7 @@ module Bookings
 
     scope :requiring_attention, -> do
       without_booking
-        .with_unviewed_canidate_cancellation
+        .with_unviewed_candidate_cancellation
         .not_cancelled_by_school
     end
 
