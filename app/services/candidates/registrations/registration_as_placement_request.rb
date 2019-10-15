@@ -9,11 +9,10 @@ module Candidates
         placement_preference
         education
         teaching_preference
+        subject_and_date_information
       ).freeze
 
-      OPTIONAL_STEPS = [:subject_and_date_information].freeze
-
-      OTHER_IGNORED_ATTRS = %w(created_at updated_at).freeze
+      IGNORED_ATTRS = %w(created_at updated_at).freeze
 
       def initialize(registration_session)
         @registration_session = registration_session
@@ -28,17 +27,18 @@ module Candidates
     private
 
       def non_pii_models
-        if @registration_session.school.availability_preference_fixed?
-          NON_PII_MODELS + OPTIONAL_STEPS
-        else
-          NON_PII_MODELS
-        end
+        registration_state.steps & NON_PII_MODELS
+      end
+
+      def registration_state
+        @registration_state ||= RegistrationState.new @registration_session
       end
 
       def attributes_for(model_name)
-        @registration_session.public_send(model_name).attributes.reject do |k, _|
-          OTHER_IGNORED_ATTRS.include? k
-        end
+        @registration_session
+          .public_send(model_name)
+          .attributes
+          .except(*IGNORED_ATTRS)
       end
     end
   end
