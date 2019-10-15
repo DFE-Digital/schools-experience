@@ -49,6 +49,10 @@ describe Candidates::Registrations::ApplicationPreview do
       subject_second_choice: "Maths"
   end
 
+  let :subject_and_date_information do
+    build :subject_and_date_information
+  end
+
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new \
       'urn' => school.urn,
@@ -57,7 +61,8 @@ describe Candidates::Registrations::ApplicationPreview do
       'candidates_registrations_placement_preference' => placement_preference.attributes,
       'candidates_registrations_education' => education.attributes,
       'candidates_registrations_teaching_preference' => teaching_preference.attributes,
-      'candidates_registrations_background_check' => background_check.attributes
+      'candidates_registrations_background_check' => background_check.attributes,
+      'candidates_registrations_subject_and_date_information' => subject_and_date_information.attributes
   end
 
   subject do

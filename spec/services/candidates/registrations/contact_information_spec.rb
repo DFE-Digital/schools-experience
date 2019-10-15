@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::ContactInformation, type: :model do
+  include_context 'Stubbed candidates school'
   it_behaves_like 'a registration step'
 
   context 'attributes' do
