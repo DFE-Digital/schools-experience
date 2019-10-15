@@ -24,7 +24,7 @@
           <%= attendance_status booking %>
         </td>
         <td class="govuk-table__cell">
-          <%= link_to "View", schools_booking_path(booking),
+          <%= link_to "View", schools_previous_booking_path(booking),
             'aria-label': "View booking for #{booking.candidate_name}, #{booking.date.to_formatted_s(:govuk)}" %>
         </td>
       </tr>
