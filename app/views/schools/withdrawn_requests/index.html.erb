@@ -9,6 +9,30 @@
   <div class="govuk-grid-column-full">
     <%= page_heading 'Withdrawn requests' %>
 
+    <details class="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          Status key
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col"></th>
+              <th class="govuk-table__header" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row"><strong class="govuk-tag govuk-tag--unavailable">cancelled</strong></th>
+              <td class="govuk-table__cell">The candidate has withdrawn their request</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
     <% if @requests.any? %>
       <div class="pagination-info higher">
         <div class="pagination-slice">
@@ -34,7 +58,7 @@
                 <%= request.candidate_name %>
               </td>
               <td class="govuk-table__cell">
-                <strong tag="govuk-tag govuk-tag--unavailable">CANCELLED</strong>
+                <strong class="govuk-tag govuk-tag--unavailable">CANCELLED</strong>
               </td>
               <td class="subject govuk-table__cell">
                 <%- if request&.placement_date&.subject_specific -%>
