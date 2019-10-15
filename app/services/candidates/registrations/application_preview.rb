@@ -109,7 +109,11 @@ module Candidates
       end
 
       def placement_availability_description
-        placement_preference.availability || placement_preference.placement_date.to_s
+        if @subject_and_date_information
+          placement_date.to_s
+        else
+          placement_preference.availability
+        end
       end
 
       def placement_outcome
