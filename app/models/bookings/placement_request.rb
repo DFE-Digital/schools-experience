@@ -92,6 +92,10 @@ module Bookings
         .not_cancelled_by_school
     end
 
+    scope :withdrawn, -> do
+      without_booking.joins(:candidate_cancellation)
+    end
+
     default_scope { where.not(candidate_id: nil) }
 
     delegate :gitis_contact, :fetch_gitis_contact, to: :candidate

@@ -89,6 +89,12 @@ describe Bookings::PlacementRequest, type: :model do
       FactoryBot.create :placement_request, school: school
     end
 
+    let! :booked_then_cancelled_by_candidate do
+      FactoryBot
+        .create(:bookings_booking, :accepted, :cancelled_by_candidate, bookings_school: school)
+        .bookings_placement_request
+    end
+
     context '.unprocessed' do
       subject { described_class.unprocessed }
       it do
@@ -118,7 +124,8 @@ describe Bookings::PlacementRequest, type: :model do
       it do
         is_expected.to match_array [
           placement_request_closed_by_candidate,
-          placement_request_closed_by_school
+          placement_request_closed_by_school,
+          booked_then_cancelled_by_candidate
         ]
       end
     end
@@ -133,6 +140,11 @@ describe Bookings::PlacementRequest, type: :model do
           booked_but_not_accepted_placement_request
         ]
       end
+    end
+
+    context '.withdrawn' do
+      subject { described_class.withdrawn }
+      it { is_expected.to match_array [placement_request_closed_by_candidate] }
     end
   end
 
