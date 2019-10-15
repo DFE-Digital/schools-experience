@@ -103,6 +103,11 @@ FactoryBot.define do
             .merge(
               "availability" => nil,
               "bookings_placement_date_id" => placement_date.id
+            ),
+          "candidates_registrations_subject_and_date_information" => candidates_registrations_subject_and_date_information
+            .merge(
+              "availability" => nil,
+              "bookings_placement_date_id" => placement_date.id
             )
       end
     end
