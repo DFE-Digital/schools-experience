@@ -76,7 +76,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
         context 'when the school has set dates' do
           let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
 
-          let(:rs) { build(:registration_session, urn: school.urn) }
+          let(:rs) { build(:registration_session, :with_school, urn: school.urn) }
           specify 'bookings_placement_date_id is correctly-assigned' do
             expect(subject.placement_availability).to eql(Bookings::PlacementDate.last.to_s)
           end
