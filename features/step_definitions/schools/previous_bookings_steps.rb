@@ -72,3 +72,14 @@ Given("there is a cancelled previous booking") do
 
   @booking_id = @booking.id
 end
+
+Then("every booking should contain a link to view previous booking details") do
+  within('#bookings') do
+    page.all('.booking').each do |sr|
+      within(sr) do
+        booking_id = sr['data-booking']
+        expect(page).to have_link('View', href: schools_previous_booking_path(booking_id))
+      end
+    end
+  end
+end

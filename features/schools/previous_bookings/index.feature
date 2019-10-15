@@ -41,7 +41,7 @@ Feature: Viewing previous bookings
     Scenario: Open booking links
         Given there are some previous bookings
         When I am on the 'previous bookings' page
-        Then every booking should contain a link to view more details
+        Then every booking should contain a link to view previous booking details
 
     Scenario:
         Given there are no bookings
