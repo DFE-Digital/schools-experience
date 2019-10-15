@@ -74,7 +74,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
 
     let! :placement_request_cancelled_by_school_but_not_sent do
-      FactoryBot.create :placement_request, school: school
+      FactoryBot.create :placement_request, :with_school_cancellation, school: school
     end
 
     let! :booked_placement_request do
@@ -501,31 +501,29 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   context '#cancellation' do
-    subject { described_class.new }
-
     context 'when cancelled by candidate' do
-      let! :candidate_cancellation do
-        subject.build_candidate_cancellation
-      end
+      subject { create(:placement_request, :cancelled) }
 
       it 'returns the candidate_cancellation' do
-        expect(subject.cancellation).to eq candidate_cancellation
+        expect(subject.cancellation).not_to be_nil
+        expect(subject.cancellation).to eq subject.candidate_cancellation
       end
     end
 
     context 'when cancelled by school' do
-      let! :school_cancellation do
-        subject.build_school_cancellation
-      end
+      subject { create(:placement_request, :cancelled_by_school) }
 
       it 'returns the school_cancellation' do
-        expect(subject.cancellation).to eq school_cancellation
+        expect(subject.cancellation).not_to be_nil
+        expect(subject.cancellation).to eq subject.school_cancellation
       end
     end
 
     context 'when not cancelled' do
+      subject { described_class.new }
+
       it 'returns nil' do
-        expect(subject.cancellation).not_to be_present
+        expect(subject.cancellation).to be_nil
       end
     end
   end

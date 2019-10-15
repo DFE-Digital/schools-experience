@@ -1,39 +1,39 @@
 Feature: Viewing a booking
-    To help me make decisions about school experience requests
+    To help me review past school experiece bookings
     As a school administrator
     I want to be able to view all submitted information
 
     Background:
         Given I am logged in as a DfE user
         And my school is fully-onboarded
-        And the scheduled booking date is in the future
+        And the scheduled booking date is in the past
 
     Scenario: Page title
-        Given there is at least one booking
-        When I am viewing my chosen booking
+        Given there is at least one previous booking
+        When I am viewing my chosen previous booking
         Then the page title should start with 'Booking details' and include the booking reference
 
     Scenario: Breadcrumbs
-        Given there is at least one booking
-        When I am viewing my chosen booking
+        Given there is at least one previous booking
+        When I am viewing my chosen previous booking
         Then I should see the following breadcrumbs:
-            | Text           | Link               |
-            | Some school    | /schools/dashboard |
-            | All bookings   | /schools/bookings  |
-            | Booking        | None               |
+            | Text              | Link                        |
+            | Some school       | /schools/dashboard          |
+            | Previous bookings | /schools/previous_bookings  |
+            | Booking           | None                        |
 
     Scenario: Personal details
-        Given there is at least one booking
-        When I am viewing my chosen booking
+        Given there is at least one previous booking
+        When I am viewing my chosen previous booking
         Then I should see a 'Personal details' section with the following values:
-            | Heading             | Value                                                                |
+            | Heading             | Value                                                                 |
             | Address             | First Line, Second Line, Third Line, Manchester, Manchester, TE57 1NG |
-            | UK telephone number | 07123 456789                                                         |
-            | Email address       | second@thisaddress.com                                               |
+            | UK telephone number | 07123 456789                                                          |
+            | Email address       | second@thisaddress.com                                                |
 
     Scenario: Booking details
-        Given there is at least one booking
-        When I am viewing my chosen booking
+        Given there is at least one previous booking
+        When I am viewing my chosen previous booking
         Then I should see a 'Booking details' section with the following values:
             | Heading          | Value                                                                  |
             | Subject          | Biology                                                                |
@@ -42,8 +42,8 @@ Feature: Viewing a booking
         And the future booking date should be listed
 
     Scenario: Candidate details
-        Given there is at least one booking
-        When I am viewing my chosen booking
+        Given there is at least one previous booking
+        When I am viewing my chosen previous booking
         Then I should see a 'Candidate details' section with the following values:
             | Heading                                 | Value                             |
             | What they want out of school experience | It’s just an idea                 |
@@ -54,21 +54,13 @@ Feature: Viewing a booking
             | Teaching subject                        | Second choice: Biology            |
 
     Scenario: Without a candidate cancellation
-        Given there is at least one booking
-        When I am viewing my chosen booking
+        Given there is at least one previous booking
+        When I am viewing my chosen previous booking
         Then I should not see a 'Cancellation details' section
 
-    Scenario: Candidate cancellation details
-        Given there is a booking cancelled by the candidate
-        When I am viewing my chosen booking
-        Then I should see a 'Cancellation details' section with the following values:
-            | Heading              | Value             |
-            | Cancellation reason  | MyText            |
-            | Cancellation sent at | \d{2}\s\w+\s\d{4} |
-    
-    Scenario: School Cancellation details
-        Given there is a booking cancelled by the school
-        When I am viewing my chosen booking
+    Scenario: Cancellation details
+        Given there is a cancelled previous booking
+        When I am viewing my chosen previous booking
         Then I should see a 'Cancellation details' section with the following values:
             | Heading              | Value             |
             | Cancellation reason  | MyText            |

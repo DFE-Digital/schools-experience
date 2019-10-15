@@ -10,12 +10,25 @@ Given("there is at least one booking") do
   step "there is 1 booking"
 end
 
-Given("there is a cancelled booking") do
+Given("there is a booking cancelled by the candidate") do
   unless @school.subjects.where(name: 'Biology').any?
     @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
   end
   @booking = FactoryBot.create :bookings_booking,
     :cancelled_by_candidate,
+    bookings_school: @school,
+    bookings_subject: @school.subjects.last,
+    date: 1.week.from_now.strftime("%d %B %Y")
+
+  @booking_id = @booking.id
+end
+
+Given("there is a booking cancelled by the school") do
+  unless @school.subjects.where(name: 'Biology').any?
+    @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
+  end
+  @booking = FactoryBot.create :bookings_booking,
+    :cancelled_by_school,
     bookings_school: @school,
     bookings_subject: @school.subjects.last,
     date: 1.week.from_now.strftime("%d %B %Y")

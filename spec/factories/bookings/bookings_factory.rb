@@ -14,8 +14,17 @@ FactoryBot.define do
       accepted_at { 5.minutes.ago }
     end
 
-    trait :upcoming do
-      date { Bookings::Booking::UPCOMING_TIMEFRAME.from_now }
+    trait :attended do
+      attended { true }
+    end
+
+    trait :unattended do
+      attended { false }
+    end
+
+    trait :previous do
+      to_create { |instance| instance.save(validate: false) }
+      date { 2.weeks.ago }
     end
 
     trait :with_existing_subject do
@@ -33,18 +42,15 @@ FactoryBot.define do
 
     trait :cancelled_by_candidate do
       after :create do |bb|
-        FactoryBot.create :cancellation,
-          :sent,
-          placement_request: bb.bookings_placement_request
+        bb.bookings_placement_request.create_candidate_cancellation! \
+          attributes_for :cancellation, :sent, :cancelled_by_candidate
       end
     end
 
     trait :cancelled_by_school do
       after :create do |bb|
-        FactoryBot.create :cancellation,
-          :sent,
-          placement_request: bb.bookings_placement_request,
-          cancelled_by: 'school'
+        bb.bookings_placement_request.create_school_cancellation! \
+          attributes_for :cancellation, :sent, :cancelled_by_school
       end
     end
 

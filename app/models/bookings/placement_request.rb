@@ -177,11 +177,11 @@ module Bookings
     end
 
     def cancellation
-      candidate_cancellation || school_cancellation
+      [candidate_cancellation, school_cancellation].compact.find(&:sent?)
     end
 
     def cancelled?
-      cancellation&.sent?
+      !!cancellation
     end
 
     def requested_on

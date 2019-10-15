@@ -43,10 +43,12 @@ module Bookings
       :closed?,
       :received_on,
       :gitis_contact,
+      :fetch_gitis_contact,
       :contact_uuid,
       :candidate_email,
       :candidate_name,
       :cancelled?,
+      :cancellation,
       to: :bookings_placement_request
 
     scope :not_cancelled, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
@@ -72,6 +74,10 @@ module Bookings
     scope :requiring_attention, -> do
       where(id: with_unviewed_candidate_cancellation.select('id')).or \
         where(id: to_manage.select('id'))
+    end
+
+    scope :historical, -> do
+      previous.accepted
     end
 
     def self.from_confirm_booking(confirm_booking)
@@ -128,8 +134,22 @@ module Bookings
       accepted_at.present?
     end
 
+    def accept!
+      return true if accepted?
+
+      update(accepted_at: Time.zone.now)
+    end
+
     def reference
       bookings_placement_request.token.first(5)
+    end
+
+    def in_future?
+      date > Date.today
+    end
+
+    def cancellable?
+      in_future? && !cancelled?
     end
   end
 end

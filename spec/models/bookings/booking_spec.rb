@@ -199,6 +199,70 @@ describe Bookings::Booking do
 
       it { is_expected.to match_array [with_unviewed_candidate_cancellation] }
     end
+
+    describe '.historical' do
+      subject { described_class.historical.to_a }
+
+      context 'for previous bookings' do
+        let(:previous) { create(:bookings_booking, :previous, :accepted) }
+
+        context 'which have been accepted' do
+          let!(:previous_accepted) do
+            create(:bookings_booking, :previous, :accepted)
+          end
+          it { is_expected.to include(previous_accepted) }
+        end
+
+        context 'which have not been accepted' do
+          let!(:previous_unaccepted) { create(:bookings_booking, :previous) }
+          it { is_expected.not_to include(previous_unaccepted) }
+        end
+
+        context 'which were attended' do
+          let!(:previous_attended) do
+            create(:bookings_booking, :previous, :accepted, :attended)
+          end
+
+          it { is_expected.to include(previous_attended) }
+        end
+
+        context 'which the candidate did not attend' do
+          let!(:previous_unattended) do
+            create(:bookings_booking, :previous, :accepted, :unattended)
+          end
+
+          it { is_expected.to include(previous_unattended) }
+        end
+
+        context 'which were cancelled' do
+          let!(:previous_cancelled) do
+            create(:bookings_booking, :previous, :accepted, :cancelled_by_school)
+          end
+
+          it { is_expected.to include(previous_cancelled) }
+        end
+      end
+
+      context 'for future bookings' do
+        context 'which have been accepted' do
+          let!(:future_accepted) { create(:bookings_booking, :accepted) }
+          it { is_expected.not_to include(future_accepted) }
+        end
+
+        context 'which have not been accepted' do
+          let!(:future_unaccepted) { create(:bookings_booking) }
+          it { is_expected.not_to include(future_unaccepted) }
+        end
+
+        context 'which have been cancelled' do
+          let!(:future_cancelled) do
+            create(:bookings_booking, :accepted, :cancelled_by_school)
+          end
+
+          it { is_expected.not_to include(future_cancelled) }
+        end
+      end
+    end
   end
 
   describe 'Acceptance' do
@@ -314,6 +378,23 @@ describe Bookings::Booking do
         end
       end
     end
+
+    describe '#accept!' do
+      context 'when not accepted' do
+        let(:booking) { create(:bookings_booking) }
+        subject! { booking.accept! }
+        it { is_expected.to be true }
+        it { expect(booking.reload.accepted_at).to be_within(10.seconds).of(Time.zone.now) }
+      end
+
+      context 'when already accepted' do
+        let!(:ten_minutes_ago) { 10.minutes.ago }
+        let(:booking) { create(:bookings_booking, accepted_at: ten_minutes_ago) }
+        subject! { booking.accept! }
+        it { is_expected.to be true }
+        it { expect(booking.reload.accepted_at).to be_within(1.second).of(ten_minutes_ago) }
+      end
+    end
   end
 
   describe '#placement_start_date_with_duration' do
@@ -352,6 +433,35 @@ describe Bookings::Booking do
 
     specify 'should be the first 5 characters of the placement reference token' do
       expect(subject.reference).to eql(subject.bookings_placement_request.token.first(5))
+    end
+  end
+
+  describe '#in_future?' do
+    context 'for upcoming booking' do
+      subject { build :bookings_booking }
+      it { is_expected.to be_in_future }
+    end
+
+    context 'for previous booking' do
+      subject { build :bookings_booking, :previous }
+      it { is_expected.not_to be_in_future }
+    end
+  end
+
+  context '#cancellable?' do
+    context 'for uncancelled future booking' do
+      subject { create(:bookings_booking, :accepted) }
+      it { is_expected.to be_cancellable }
+    end
+
+    context 'for cancelled booking' do
+      subject { create(:bookings_booking, :cancelled_by_school) }
+      it { is_expected.not_to be_cancellable }
+    end
+
+    context 'for past booking' do
+      subject { create(:bookings_booking, :previous) }
+      it { is_expected.not_to be_cancellable }
     end
   end
 end
