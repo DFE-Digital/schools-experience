@@ -2,16 +2,13 @@ module Candidates
   module Registrations
     class PlacementPreference < RegistrationStep
       include Behaviours::PlacementPreference
-      attr_accessor :school
 
-      attribute :urn, :integer
-      attribute :bookings_placement_date_id, :integer
       attribute :availability, :string
       attribute :objectives, :string
 
-      def placement_date
-        @placement_date ||= Bookings::PlacementDate.find(bookings_placement_date_id)
-      end
+      # delete this at least 24 hours after subject-specific dates
+      # has been deployed
+      attribute :bookings_placement_date_id, :integer
     end
   end
 end

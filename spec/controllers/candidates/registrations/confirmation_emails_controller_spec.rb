@@ -13,6 +13,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
         teaching_preference
         placement_preference
         background_check
+        subject_and_date_information
       )
   end
 

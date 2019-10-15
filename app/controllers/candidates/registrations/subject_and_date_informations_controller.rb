@@ -16,8 +16,7 @@ module Candidates
       def create
         @subject_and_date_information = SubjectAndDateInformation.new(attributes_from_session)
 
-        # FIXME set the date and subject here
-        @subject_and_date_information.assign_attributes(subject_and_date_params)
+        @subject_and_date_information.assign_attributes(extract_subject_and_date_params)
 
         if @subject_and_date_information.valid?
           persist @subject_and_date_information
@@ -33,7 +32,7 @@ module Candidates
 
       def update
         @subject_and_date_information = SubjectAndDateInformation.new(attributes_from_session)
-        @subject_and_date_information.assign_attributes(subject_and_date_params)
+        @subject_and_date_information.assign_attributes(extract_subject_and_date_params)
 
         if @subject_and_date_information.valid?
           persist @subject_and_date_information
@@ -76,10 +75,19 @@ module Candidates
       end
 
       def subject_and_date_params
-        params.require(:candidates_registrations_subject_and_date_information).permit(
-          :bookings_placement_date_id,
-          :subject_id
-        )
+        params
+          .require(:candidates_registrations_subject_and_date_information)
+          .permit(:subject_and_date_ids)
+      end
+
+      def extract_subject_and_date_params
+        bookings_placement_date_id, bookings_placement_dates_subject_id = \
+          *subject_and_date_params.dig('subject_and_date_ids').split('_')
+
+        {
+          bookings_placement_date_id: bookings_placement_date_id,
+          bookings_placement_dates_subject_id: bookings_placement_dates_subject_id
+        }
       end
 
       def attributes_from_session

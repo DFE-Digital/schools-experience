@@ -8,8 +8,7 @@ module Candidates
           with_options unless: :dont_validate_availability? do
             validates :availability,
               presence: true,
-              if: :school_offers_flexible_dates?,
-              unless: -> { bookings_placement_date_id.present? }
+              if: :school_offers_flexible_dates?
           end
           validates :urn, presence: true
           validates :availability, number_of_words: { less_than: 150 }, if: -> { availability.present? }

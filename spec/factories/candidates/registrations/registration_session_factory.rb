@@ -14,6 +14,7 @@ FactoryBot.define do
           placement_preference
           education
           teaching_preference
+          subject_and_date_information
         )
       end
 
@@ -68,6 +69,13 @@ FactoryBot.define do
 
       candidates_registrations_teaching_preference do
         FactoryBot.attributes_for(:teaching_preference).stringify_keys.merge(
+          'created_at' => current_time,
+          'updated_at' => current_time
+        )
+      end
+
+      candidates_registrations_subject_and_date_information do
+        FactoryBot.attributes_for(:subject_and_date_information).stringify_keys.merge(
           'created_at' => current_time,
           'updated_at' => current_time
         )
