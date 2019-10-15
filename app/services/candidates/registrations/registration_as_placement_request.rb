@@ -9,6 +9,7 @@ module Candidates
         placement_preference
         education
         teaching_preference
+        subject_and_date_information
       ).freeze
 
       OTHER_IGNORED_ATTRS = %w(created_at updated_at).freeze

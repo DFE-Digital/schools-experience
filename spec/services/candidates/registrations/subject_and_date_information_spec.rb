@@ -1,9 +1,8 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
-  it_behaves_like 'a registration step' do
-    include_context 'Stubbed candidates school', fixed: true
-  end
+  include_context 'Stubbed candidates school', fixed: true
+  it_behaves_like 'a registration step'
 
   describe 'attributes' do
     it { is_expected.to respond_to :availability }
