@@ -12,7 +12,6 @@ describe Schools::WithdrawnRequestsController, type: :request do
     end
   end
 
-
   describe '#index' do
     before do
       create_list(:placement_request, 2, :cancelled, school: school)
@@ -21,5 +20,13 @@ describe Schools::WithdrawnRequestsController, type: :request do
 
     it { expect(response).to have_http_status(:success) }
     it { expect(response).to render_template('index') }
+  end
+
+  describe '#show' do
+    let(:withdrawn) { create :placement_request, :cancelled, school: school }
+    before { get schools_withdrawn_request_path(withdrawn) }
+
+    it { expect(response).to have_http_status(:success) }
+    it { expect(response).to render_template('show') }
   end
 end

@@ -10,6 +10,13 @@ module Schools
       assign_gitis_contacts @requests
     end
 
+    def show
+      @withdrawn_request = scope.find(params[:id])
+      @withdrawn_request.fetch_gitis_contact gitis_crm
+
+      @cancellation = @withdrawn_request.candidate_cancellation
+    end
+
   private
 
     def scope
