@@ -1,0 +1,15 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= link_to 'Back', request.referer || schools_booking_path(@booking), class: 'govuk-back-link' %>
+
+    <%= page_heading 'Booking date cannot be edited' %>
+
+    <p>
+      The booking you have selected can no longer have the date edited.
+    </p>
+
+    <p>
+      <%= govuk_link_to 'Return to booking', request.referer || schools_booking_date_path, secondary: true %>
+    </p>
+  </div>
+</div>

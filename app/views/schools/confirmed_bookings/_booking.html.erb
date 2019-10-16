@@ -13,7 +13,11 @@
     <h2>Booking details</h2>
 
     <dl class="govuk-summary-list">
-      <%= summary_row 'Date', booking.date.to_formatted_s(:govuk), edit_schools_booking_date_path(booking) %>
+      <% if booking.editable_date? %>
+        <%= summary_row 'Date', booking.date.to_formatted_s(:govuk), edit_schools_booking_date_path(booking) %>
+      <% else %>
+        <%= summary_row 'Date', booking.date.to_formatted_s(:govuk) %>
+      <% end %>
       <%= summary_row 'Subject', booking.bookings_subject.name %>
       <%= summary_row 'DBS certificate', format_has_dbs_certificate(booking.has_dbs_check) %>
       <%= summary_row 'Request received', booking.received_on.to_formatted_s(:govuk) %>

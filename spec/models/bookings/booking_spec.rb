@@ -464,4 +464,21 @@ describe Bookings::Booking do
       it { is_expected.not_to be_cancellable }
     end
   end
+
+  context '#cancellable?' do
+    context 'for uncancelled future booking' do
+      subject { create(:bookings_booking, :accepted) }
+      it { is_expected.to be_editable_date }
+    end
+
+    context 'for cancelled booking' do
+      subject { create(:bookings_booking, :cancelled_by_school) }
+      it { is_expected.not_to be_editable_date }
+    end
+
+    context 'for past booking' do
+      subject { create(:bookings_booking, :previous) }
+      it { is_expected.not_to be_editable_date }
+    end
+  end
 end

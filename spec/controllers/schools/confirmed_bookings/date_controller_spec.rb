@@ -17,6 +17,17 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
     specify do
       expect(subject).to render_template(:edit)
     end
+
+    context 'with cancelled booking' do
+      before do
+        booking.bookings_placement_request.create_candidate_cancellation! \
+          attributes_for(:cancellation, :cancelled_by_candidate, :sent)
+      end
+
+      specify do
+        is_expected.to render_template(:uneditable)
+      end
+    end
   end
 
   describe '#update' do
@@ -38,6 +49,19 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
 
       specify 'should update the booking' do
         expect(booking.reload.date).to eql(new_date)
+      end
+    end
+
+    context 'with cancelled booking' do
+      before do
+        booking.bookings_placement_request.create_candidate_cancellation! \
+          attributes_for(:cancellation, :cancelled_by_candidate, :sent)
+
+        subject
+      end
+
+      specify do
+        is_expected.to render_template(:uneditable)
       end
     end
 
