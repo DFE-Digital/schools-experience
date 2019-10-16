@@ -49,3 +49,26 @@ Given("the school has both primary and secondary dates set up") do
     And the school has some secondary placement dates set up
   )
 end
+
+Given("the school has a secondary date with Maths set up") do
+  @maths = FactoryBot.create(:bookings_subject, name: 'Maths')
+  @school.subjects << @maths
+  @secondary_date = FactoryBot.build(
+    :bookings_placement_date,
+    bookings_school: @school,
+    supports_subjects: true,
+    subject_specific: true
+  )
+
+  @secondary_date.subjects << @maths
+  @secondary_date.save
+end
+
+When("I select the first secondary date") do
+  choose "Maths"
+end
+
+Then("I should be on the {string} page for my chosen school") do |string|
+  path = path_for(string, school: @school)
+  expect(page.current_path).to eql(path)
+end
