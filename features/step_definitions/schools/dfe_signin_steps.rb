@@ -11,7 +11,7 @@ Given("I see the candidate requirements screen") do
   end
 end
 
-Given("my school is fully-onboarded") do
+Given("my/the school is fully-onboarded") do
   if @school.profile.blank?
     FactoryBot.create(:bookings_profile, school: @school)
   end
