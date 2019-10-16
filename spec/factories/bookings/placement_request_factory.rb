@@ -72,5 +72,10 @@ FactoryBot.define do
     trait :viewed do
       after :create, &:viewed!
     end
+
+    trait :with_a_fixed_date do
+      availability { nil }
+      association :placement_date, factory: :bookings_placement_date
+    end
   end
 end

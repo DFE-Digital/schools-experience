@@ -52,32 +52,32 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          <%- @requests.each do |request| -%>
-            <tr class="booking govuk-table__row" data-placement-request-id="<%= request.id %>">
+          <%- @requests.each do |withdrawn_request| -%>
+            <tr class="withdrawn-request govuk-table__row" data-placement-request-id="<%= withdrawn_request.id %>">
               <td class="name govuk-table__cell">
-                <%= request.candidate_name %>
+                <%= withdrawn_request.candidate_name %>
               </td>
-              <td class="govuk-table__cell">
+              <td class="status govuk-table__cell">
                 <strong class="govuk-tag govuk-tag--unavailable">CANCELLED</strong>
               </td>
               <td class="subject govuk-table__cell">
-                <%- if request&.placement_date&.subject_specific -%>
-                  <%= request.placement_date.subjects.map(&:name).to_sentence %>
+                <%- if withdrawn_request&.placement_date&.subject_specific -%>
+                  <%= withdrawn_request.placement_date.subjects.map(&:name).to_sentence %>
                 <%- else -%>
                   <em>Not specified</em>
                 <%- end -%>
               </td>
               <td class="date govuk-table__cell">
-                <%- if request.placement_date -%>
-                  <%= request.placement_date.date.to_formatted_s(:govuk) %>
+                <%- if withdrawn_request.placement_date -%>
+                  <%= withdrawn_request.placement_date.date.to_formatted_s(:govuk) %>
                 <%- else -%>
-                  <%= request.availability.truncate(50) %>
+                  <%= withdrawn_request.availability.truncate(50) %>
                 <%- end -%>
               </td>
 
               <td class="govuk-table__cell">
-                <%= link_to "View", schools_withdrawn_request_path(request),
-                  'aria-label': "View booking for #{request.candidate_name}, requested on #{request.created_at.to_formatted_s(:govuk)}" %>
+                <%= link_to "View", schools_withdrawn_request_path(withdrawn_request),
+                  'aria-label': "View booking for #{withdrawn_request.candidate_name}, requested on #{withdrawn_request.created_at.to_formatted_s(:govuk)}" %>
               </td>
             </tr>
           <%- end -%>
