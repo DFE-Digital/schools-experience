@@ -18,10 +18,10 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
 
   describe 'validations' do
     let(:school) { create(:bookings_school, availability_preference_fixed: true) }
-    subject { described_class.new(school: school) }
+    subject { described_class.new(urn: school.urn) }
 
     describe 'when the associated school has fixed availability' do
-      before { subject.school = create(:bookings_school, :with_fixed_availability_preference) }
+      before { subject.urn = create(:bookings_school, :with_fixed_availability_preference).urn }
       it { is_expected.to validate_presence_of(:bookings_placement_date_id) }
     end
 
