@@ -25,3 +25,11 @@ Feature: Selecting a subject and date
         When I am on the 'choose a subject and date' screen for my chosen school
         Then I should see the list of primary placement dates
         And I should see the list of secondary placement dates
+
+    Scenario: Submitting the form
+        Given the school is a 'primary and secondary' school
+        And the school has a secondary date with Maths set up
+        When I am on the 'choose a subject and date' screen for my chosen school
+        And I select the first secondary date
+        And I submit the form
+        Then I should be on the 'enter your personal details' page for my chosen school
