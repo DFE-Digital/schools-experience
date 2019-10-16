@@ -75,15 +75,15 @@ module Candidates
       end
     end
 
-    def available_dates
+    def secondary_dates
       school
         .bookings_placement_dates
+        .supporting_subjects
         .eager_load(:placement_date_subjects, :subjects).available
     end
 
-    def available_dates_grouped_by_date
-      # FIXME limit to secondary dates
-      available_dates
+    def secondary_dates_grouped_by_date
+      secondary_dates
         .group_by(&:date)
         .each
         .with_object({}) do |(date, placement_date), hash|
