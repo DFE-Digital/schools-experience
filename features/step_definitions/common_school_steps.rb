@@ -23,10 +23,6 @@ Given "the school offers {int} subjects" do |int|
   expect(@school.subjects.size).to eql(int)
 end
 
-Given "the school is a {string} school" do |phase_name|
-  @school.phases << Bookings::Phase.find_by(name: phase_name)
-end
-
 Given "the school is a {string} and {string} school" do |p1, p2|
   [p1, p2].each do |phase_name|
     @school.phases << Bookings::Phase.find_by(name: phase_name)
@@ -38,8 +34,8 @@ Given "my chosen school has the URN {int}" do |int|
   expect(@school.urn).to eql(int)
 end
 
-Given("my school is a {string} school") do |phase|
-  case phase
+Given("my/the school is a {string} school") do |phase|
+  case phase.downcase
   when 'primary'
     @school.phases << FactoryBot.create(:bookings_phase, :primary)
   when 'secondary'

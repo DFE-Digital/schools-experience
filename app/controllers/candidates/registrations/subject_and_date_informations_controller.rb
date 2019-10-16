@@ -7,7 +7,7 @@ module Candidates
     end
 
     class SubjectAndDateInformationsController < RegistrationsController
-      before_action :set_school, :set_placement_dates
+      before_action :set_school, :set_primary_placement_dates, :set_secondary_placement_dates
 
       def new
         @subject_and_date_information = SubjectAndDateInformation.new(attributes_from_session)
@@ -48,9 +48,16 @@ module Candidates
         @school = current_registration.school
       end
 
-      def set_placement_dates
-        @placement_dates_grouped_by_date = @school
+      def set_primary_placement_dates
+        @primary_placement_dates = @school
           .bookings_placement_dates
+          .not_supporting_subjects
+      end
+
+      def set_secondary_placement_dates
+        @secondary_placement_dates_grouped_by_date = @school
+          .bookings_placement_dates
+          .supporting_subjects
           .eager_load(placement_date_subjects: :bookings_subject)
           .published
           .available
