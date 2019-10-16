@@ -151,5 +151,9 @@ module Bookings
     def cancellable?
       in_future? && !cancelled?
     end
+
+    def editable_date?
+      in_future? && !cancelled?
+    end
   end
 end
