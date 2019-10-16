@@ -75,7 +75,7 @@ FactoryBot.define do
       end
 
       candidates_registrations_subject_and_date_information do
-        FactoryBot.attributes_for(:subject_and_date_information).stringify_keys.merge(
+        FactoryBot.attributes_for(:subject_and_date_information, bookings_placement_date_id: placement_date.id).stringify_keys.merge(
           'created_at' => current_time,
           'updated_at' => current_time
         )
@@ -99,16 +99,8 @@ FactoryBot.define do
           "candidates_registrations_background_check"     => candidates_registrations_background_check,
           "candidates_registrations_education"            => candidates_registrations_education,
           "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
-          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
-            .merge(
-              "availability" => nil,
-              "bookings_placement_date_id" => placement_date.id
-            ),
+          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference.merge("availability" => nil),
           "candidates_registrations_subject_and_date_information" => candidates_registrations_subject_and_date_information
-            .merge(
-              "availability" => nil,
-              "bookings_placement_date_id" => placement_date.id
-            )
       end
     end
 

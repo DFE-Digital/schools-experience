@@ -3,8 +3,6 @@ module Candidates
     class SubjectAndDateInformation < RegistrationStep
       include Behaviours::SubjectAndDateInformation
 
-      attr_accessor :school
-
       attribute :availability
       attribute :bookings_placement_date_id, :integer
       attribute :bookings_placement_dates_subject_id, :integer

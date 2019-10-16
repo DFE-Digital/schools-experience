@@ -67,7 +67,7 @@ module Candidates
       end
 
       def subject_and_date_information
-        fetch(SubjectAndDateInformation).tap { |sad| sad.school = school }
+        fetch SubjectAndDateInformation
       end
 
       def subject_and_date_information_attributes
