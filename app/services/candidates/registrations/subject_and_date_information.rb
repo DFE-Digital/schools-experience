@@ -20,7 +20,7 @@ module Candidates
       end
 
       def subject_and_date_ids
-        [placement_date.id, placement_date_subject.id].join('_')
+        [bookings_placement_date_id, bookings_placement_dates_subject_id].join('_')
       end
     end
   end
