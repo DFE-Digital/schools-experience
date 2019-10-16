@@ -5,7 +5,6 @@ module Candidates
       # FIXME delegate other methods to placement_preference once remove dates
       # pr is merged
       attr_reader :placement_preference
-      attr_reader :subject_and_date_information
 
       attr_reader :registration_session
 
@@ -37,11 +36,6 @@ module Candidates
         :subject_second_choice,
         to: :@teaching_preference
 
-      delegate \
-        :placement_date,
-        :placement_date_subject,
-        to: :@subject_and_date_information
-
       delegate :has_dbs_check, to: :@background_check
 
       delegate :school, to: :@registration_session
@@ -54,11 +48,15 @@ module Candidates
         @background_check = registration_session.background_check
         @education = registration_session.education
         @teaching_preference = registration_session.teaching_preference
-        @subject_and_date_information = if registration_session.school.availability_preference_fixed?
-                                          registration_session.subject_and_date_information
-                                        else
-                                          false
-                                        end
+      end
+
+      def subject_and_date_information
+        @subject_and_date_information ||= \
+          if @registration_session.school.availability_preference_fixed?
+            @registration_session.subject_and_date_information
+          else
+            false
+          end
       end
 
       def ==(other)
@@ -97,23 +95,29 @@ module Candidates
       end
 
       def has_subject_and_date_information?
-        !!@subject_and_date_information
+        !!subject_and_date_information
+      end
+
+      def placement_date_subject
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+
+        @subject_and_date_information.placement_date_subject
       end
 
       def placement_date
-        fail NotImplementedForThisDateType unless @subject_and_date_information
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
 
         subject_and_date_information.placement_date.to_s
       end
 
       def placement_availability
-        fail NotImplementedForThisDateType if @subject_and_date_information
+        fail NotImplementedForThisDateType if has_subject_and_date_information?
 
         placement_preference.availability
       end
 
       def placement_availability_description
-        if @subject_and_date_information
+        if has_subject_and_date_information?
           placement_date
         else
           placement_availability

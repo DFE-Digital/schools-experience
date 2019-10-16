@@ -219,6 +219,30 @@ describe Candidates::Registrations::ApplicationPreview do
       end
     end
 
+    context '#placement_date_subject' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'raises an error' do
+          expect { subject.placement_date_subject }.to raise_error \
+            described_class::NotImplementedForThisDateType
+        end
+      end
+
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'returns the placement date subject' do
+          expect(subject.placement_date_subject).to eq \
+            subject_and_date_information.placement_date_subject
+        end
+      end
+    end
+
     context '#placement_availability' do
       context 'when school has flexible dates' do
         let :school do
