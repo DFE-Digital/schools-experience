@@ -185,17 +185,108 @@ describe Candidates::Registrations::ApplicationPreview do
   end
 
   context 'placement dates' do
-    context 'when school has flexible dates' do
-      let(:pa) { 'From Epiphany to Whitsunday' }
-      context '#placement_availability' do
-        it 'returns the correct value' do
-          expect(subject.placement_availability).to eq pa
+    let :fixed_date_school do
+      create :bookings_school,
+        name: 'Fixed date school',
+        availability_preference_fixed: true
+    end
+
+    let :flexible_date_school do
+      create :bookings_school,
+        name: 'Flexible date school',
+        availability_preference_fixed: false
+    end
+
+    context '#has_subject_and_date_information?' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'returns false' do
+          expect(subject.has_subject_and_date_information?).to be false
         end
       end
 
-      context '#placement_availability_description' do
-        it 'returns the #placement_availability when it is present' do
-          expect(subject.placement_availability_description).to eq pa
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'returns true' do
+          expect(subject.has_subject_and_date_information?).to be true
+        end
+      end
+    end
+
+    context '#placement_availability' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'returns the availablility the candidate entered' do
+          expect(subject.placement_availability).to \
+            eq placement_preference.availability
+        end
+      end
+
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'raises an error' do
+          expect { subject.placement_availability }.to raise_error \
+            described_class::NotImplementedForThisDateType
+        end
+      end
+    end
+
+    context '#placement_date' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'raises an error' do
+          expect { subject.placement_date }.to raise_error \
+            described_class::NotImplementedForThisDateType
+        end
+      end
+
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'returns the placement date to_s' do
+          expect(subject.placement_date).to eq \
+            subject_and_date_information.placement_date.to_s
+        end
+      end
+    end
+
+    context '#placement_availability_description' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'returns the placement_availability' do
+          expect(subject.placement_availability_description).to eq \
+            placement_preference.availability
+        end
+      end
+
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'returns the placement_date' do
+          expect(subject.placement_availability_description).to eq \
+            subject_and_date_information.placement_date.to_s
         end
       end
     end
