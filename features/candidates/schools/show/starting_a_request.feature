@@ -5,11 +5,13 @@ Feature: Starting a request for experience at schools with different date option
 
     Scenario: When the school has flexible dates
         Given my school of choice has 'flexible' dates
+        And the school is fully-onboarded
         When I am on the profile page for the chosen school
         Then the start button should link to the 'enter your personal details' page
 
     Scenario: When the school has fixed dates
         Given my school of choice has 'fixed' dates
+        And the school is fully-onboarded
         And my school of choice has entered some placement dates
         When I am on the profile page for the chosen school
-        Then the start button should link to the 'enter your personal details' page
+        Then the start button should link to the 'choose a subject and date' page
