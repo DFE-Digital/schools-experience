@@ -54,6 +54,14 @@ module Bookings
     scope :available, -> { published.active.future.in_date_order }
     scope :published, -> { where.not published_at: nil }
 
+    # 'supporting subjects' are dates belonging to phases where
+    # teachers teach a particular subject - secondary and college
+    scope :supporting_subjects, -> { where(supports_subjects: true) }
+
+    # 'not supporting subjects' are dates belonging to phases where teachers
+    # don't yet teach a specific subject - primary and early years
+    scope :not_supporting_subjects, -> { where(supports_subjects: false) }
+
     def to_s
       "%<date>s (%<duration>d %<unit>s)" % {
         date: date.to_formatted_s(:govuk),

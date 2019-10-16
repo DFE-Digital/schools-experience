@@ -153,7 +153,7 @@ RSpec.describe Candidates::SchoolPresenter do
     end
   end
 
-  describe '#available_dates' do
+  describe '#secondary_dates' do
     let(:unavailable_date) { FactoryBot.create :bookings_placement_date, :inactive }
     let(:available_date) { FactoryBot.create :bookings_placement_date }
 
@@ -163,12 +163,12 @@ RSpec.describe Candidates::SchoolPresenter do
       school.bookings_placement_dates << available_date
     end
 
-    subject { described_class.new(school, profile).available_dates }
+    subject { described_class.new(school, profile).secondary_dates }
 
     it { is_expected.to eq school.bookings_placement_dates.available }
   end
 
-  describe '#available_dates_grouped_by_date' do
+  describe '#secondary_dates_grouped_by_date' do
     let(:early_date) { 1.week.from_now.to_date }
     let(:late_date) { 1.month.from_now.to_date }
     let(:all_subjects) { Array.wrap('All subjects') }
@@ -194,19 +194,19 @@ RSpec.describe Candidates::SchoolPresenter do
     end
 
     before do
-      allow(subject).to receive(:available_dates).and_return(placement_dates)
+      allow(subject).to receive(:secondary_dates).and_return(placement_dates)
     end
 
     specify 'should correctly itemise by date' do
-      expect(subject.available_dates_grouped_by_date.keys).to match_array([early_date.to_date, late_date.to_date])
+      expect(subject.secondary_dates_grouped_by_date.keys).to match_array([early_date.to_date, late_date.to_date])
     end
 
     specify 'dates with subject specific and non-specific dates should list both' do
-      expect(subject.available_dates_grouped_by_date[early_date]).to match_array(all_subjects.concat(%w(Maths)))
+      expect(subject.secondary_dates_grouped_by_date[early_date]).to match_array(all_subjects.concat(%w(Maths)))
     end
 
     specify "non-specific dates should be described as 'All subjects'" do
-      expect(subject.available_dates_grouped_by_date[late_date]).to match_array(all_subjects)
+      expect(subject.secondary_dates_grouped_by_date[late_date]).to match_array(all_subjects)
     end
   end
 end
