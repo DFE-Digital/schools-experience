@@ -75,6 +75,12 @@ module Candidates
       end
     end
 
+    def primary_dates
+      school
+        .bookings_placement_dates
+        .not_supporting_subjects
+    end
+
     def secondary_dates
       school
         .bookings_placement_dates

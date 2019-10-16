@@ -1,0 +1,51 @@
+Given("the school has some primary placement dates set up") do
+  @primary_dates = FactoryBot.create_list(
+    :bookings_placement_date,
+    3,
+    bookings_school: @school,
+    supports_subjects: false
+  )
+end
+
+When("I am on the {string} screen for my chosen school") do |page_name|
+  path = path_for(page_name, school: @school)
+  visit(path)
+  expect(page.current_path).to eql(path)
+end
+
+Then("I should see the list of primary placement dates") do
+  expect(page).to have_css('h3', text: 'Primary placement dates')
+
+  @primary_dates.each do |pd|
+    expect(page).to have_css(
+      'label',
+      text: "#{pd.date.strftime('%d %B %Y')} (#{pd.duration} day)".downcase
+    )
+  end
+end
+
+Given("the school has some secondary placement dates set up") do
+  @secondary_dates = FactoryBot.create_list(
+    :bookings_placement_date,
+    3,
+    bookings_school: @school,
+    supports_subjects: true
+  )
+end
+
+Then("I should see the list of secondary placement dates") do
+  @secondary_dates.each do |sd|
+    expect(page).to have_css('dt', text: sd.date.strftime('%d %B %Y'))
+
+    sd.subjects.each do |subject|
+      expect(page).to have_css('label', text: subject.name)
+    end
+  end
+end
+
+Given("the school has both primary and secondary dates set up") do
+  steps %(
+    And the school has some primary placement dates set up
+    And the school has some secondary placement dates set up
+  )
+end
