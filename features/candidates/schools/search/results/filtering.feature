@@ -17,7 +17,7 @@ Feature: Filtering school search results
     Scenario: Filtering by Subject
         Given there are some subjects
         When I have searched for 'Manchester' and am on the results page
-        Then I should see a 'Placement subjects' filter on the left
+        Then I should see a 'Subjects' filter on the left
         And it should have the hint text 'Select all that apply'
         And it should have checkboxes for all subjects
 
