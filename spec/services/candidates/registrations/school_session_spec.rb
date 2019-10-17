@@ -75,10 +75,8 @@ describe Candidates::Registrations::SchoolSession do
       end
 
       it 'stores the registration in the session' do
-        expect(session).to eq "schools/#{school_urn_1}/registrations" => {
-          'urn' => school_urn_1,
-          personal_information_1.model_name.param_key => personal_information_1.attributes
-        }
+        expect(session).to eq "schools/#{school_urn_1}/registrations" => \
+          personal_information_1.attributes_to_persist.merge('urn' => school_urn_1)
       end
     end
 
@@ -106,14 +104,10 @@ describe Candidates::Registrations::SchoolSession do
 
       it 'stores the registrations for each school seperatley' do
         expect(session).to eq \
-          "schools/#{school_urn_1}/registrations" => {
-            'urn' => school_urn_1,
-            personal_information_1.model_name.param_key => personal_information_1.attributes
-          },
-          "schools/#{school_urn_2}/registrations" => {
-            'urn' => school_urn_2,
-            personal_information_2.model_name.param_key => personal_information_2.attributes
-          }
+          "schools/#{school_urn_1}/registrations" => \
+            personal_information_1.attributes_to_persist.merge('urn' => school_urn_1),
+          "schools/#{school_urn_2}/registrations" => \
+              personal_information_2.attributes_to_persist.merge('urn' => school_urn_2)
       end
     end
 
@@ -139,7 +133,7 @@ describe Candidates::Registrations::SchoolSession do
           include('urn' => school_urn_1)
 
         expect(session["schools/#{school_urn_1}/registrations"]).to \
-          include(personal_information_1.model_name.param_key)
+          include(personal_information_1.attributes_to_persist)
       end
     end
   end
