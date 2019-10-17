@@ -1,13 +1,13 @@
 module Candidates
   module Registrations
-    PlacementDateOption = Struct.new(:placement_date_id, :placement_date_subject_id, :name) do
-      def id
-        [placement_date_id, placement_date_subject_id].compact.join('_')
-      end
-    end
-
     class SubjectAndDateInformationsController < RegistrationsController
       before_action :set_school, :set_primary_placement_dates, :set_secondary_placement_dates
+
+      PlacementDateOption = Struct.new(:placement_date_id, :placement_date_subject_id, :name) do
+        def id
+          [placement_date_id, placement_date_subject_id].compact.join('_')
+        end
+      end
 
       def new
         @subject_and_date_information = SubjectAndDateInformation.new(attributes_from_session)
@@ -82,9 +82,9 @@ module Candidates
       end
 
       def subject_and_date_params
-        params
-          .require(:candidates_registrations_subject_and_date_information)
-          .permit(:subject_and_date_ids)
+        params.require(:candidates_registrations_subject_and_date_information).permit(:subject_and_date_ids).tap do |subject_and_date_info|
+          subject_and_date_info.require(:subject_and_date_ids)
+        end
       end
 
       def extract_subject_and_date_params
