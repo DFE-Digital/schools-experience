@@ -28,5 +28,6 @@ describe Schools::WithdrawnRequestsController, type: :request do
 
     it { expect(response).to have_http_status(:success) }
     it { expect(response).to render_template('show') }
+    it { expect(withdrawn.candidate_cancellation.reload).to be_viewed }
   end
 end

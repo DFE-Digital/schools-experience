@@ -93,7 +93,13 @@ module Bookings
     end
 
     scope :withdrawn, -> do
-      without_booking.joins(:candidate_cancellation)
+      without_booking
+        .joins(:candidate_cancellation)
+        .merge(Cancellation.sent)
+    end
+
+    scope :withdrawn_but_unviewed, -> do
+      withdrawn.merge Cancellation.unviewed
     end
 
     default_scope { where.not(candidate_id: nil) }

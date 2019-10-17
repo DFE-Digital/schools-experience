@@ -146,6 +146,18 @@ describe Bookings::PlacementRequest, type: :model do
       subject { described_class.withdrawn }
       it { is_expected.to match_array [placement_request_closed_by_candidate] }
     end
+
+    context '.withdrawn_but_unviewed' do
+      let!(:withdrawn_and_viewed) do
+        create(:placement_request, :cancelled, school: school).tap do |pr|
+          pr.candidate_cancellation.viewed!
+        end
+      end
+
+      subject { described_class.withdrawn_but_unviewed }
+
+      it { is_expected.to match_array [placement_request_closed_by_candidate] }
+    end
   end
 
   context '.requiring_attention' do

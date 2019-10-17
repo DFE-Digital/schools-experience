@@ -25,7 +25,7 @@ module Schools
 
       @withdrawn_requests = current_school
         .placement_requests
-        .withdrawn
+        .withdrawn_but_unviewed
         .count
     end
   end

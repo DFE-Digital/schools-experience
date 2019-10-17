@@ -15,6 +15,7 @@ module Schools
       @withdrawn_request.fetch_gitis_contact gitis_crm
 
       @cancellation = @withdrawn_request.candidate_cancellation
+      @cancellation.viewed!
     end
 
   private
