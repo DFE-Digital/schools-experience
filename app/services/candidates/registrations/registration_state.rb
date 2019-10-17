@@ -1,7 +1,8 @@
 module Candidates
   module Registrations
     class RegistrationState
-      REQUIRED_STEPS = %i(
+      STEPS = %i(
+        subject_and_date_information
         personal_information
         contact_information
         education
@@ -10,24 +11,16 @@ module Candidates
         background_check
       ).freeze
 
-      # These steps will only be shown when the school has fixed dates
-      # and will be the first pages (currently only one) of the wizard
-      OPTIONAL_INITIAL_STEPS = %i(subject_and_date_information).freeze
-
       def initialize(registration_session)
         @registration_session = registration_session
       end
 
-      def steps
-        if @registration_session.school.availability_preference_fixed?
-          [OPTIONAL_INITIAL_STEPS, REQUIRED_STEPS].flatten
-        else
-          REQUIRED_STEPS
-        end
-      end
-
       def next_step
         steps.detect(&method(:step_not_completed?)) || :COMPLETED
+      end
+
+      def steps
+        STEPS.select(&method(:step_in_journey?))
       end
 
       def completed?
@@ -35,7 +28,7 @@ module Candidates
       end
 
       def step_completed?(wizard_step)
-        @registration_session.public_send(wizard_step).valid?
+        @registration_session.public_send(wizard_step).completed?
       rescue RegistrationSession::StepNotFound
         false
       end
@@ -44,6 +37,21 @@ module Candidates
 
       def step_not_completed?(step)
         !step_completed? step
+      end
+
+      def step_in_journey?(step)
+        send "#{step}_in_journey?"
+      end
+
+      # Override these methods to add branching based on the session.
+      STEPS.each do |step|
+        define_method "#{step}_in_journey?" do
+          true
+        end
+      end
+
+      def subject_and_date_information_in_journey?
+        @registration_session.school.availability_preference_fixed?
       end
     end
   end

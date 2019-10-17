@@ -14,6 +14,10 @@ module Candidates
         @school ||= Candidates::School.find(urn)
       end
 
+      def completed?
+        valid?
+      end
+
       def persisted?
         created_at.present?
       end
