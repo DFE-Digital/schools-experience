@@ -15,47 +15,27 @@ module Candidates
       end
 
       def save(model)
-        @data[model.model_name.param_key] =
-          model.tap(&:flag_as_persisted!).attributes
+        model
+          .tap(&:flag_as_persisted!)
+          .attributes_to_persist
+          .except('urn')
+          .each { |k, v| @data[k] = v }
       end
 
-      def uuid
-        @data['uuid'] ||= SecureRandom.urlsafe_base64
+      def fetch(klass)
+        model = klass.new_from_session @data.dup
+
+        if model.persisted?
+          model.tap { |m| m.urn = self.urn }
+        else
+          legacy_fetch!(klass).tap { |m| m.urn = self.urn }
+        end
       end
 
-      def flag_as_pending_email_confirmation!
-        raise NotCompletedError unless all_steps_completed?
-
-        @data['status'] = PENDING_EMAIL_CONFIRMATION_STATUS
-      end
-
-      def pending_email_confirmation?
-        @data['status'] == PENDING_EMAIL_CONFIRMATION_STATUS
-      end
-
-      def flag_as_completed!
-        @data['status'] = COMPLETED_STATUS
-      end
-
-      def completed?
-        @data['status'] == COMPLETED_STATUS
-      end
-
-      # TODO add spec
-      def email
-        personal_information.email
-      end
-
-      def urn
-        @data.fetch 'urn'
-      end
-
-      def school
-        @school ||= Candidates::School.find urn if urn.present?
-      end
-
-      def school_name
-        school.name
+      def fetch_attributes(klass, defaults = {})
+        fetch(klass).attributes.to_h
+      rescue StepNotFound
+        defaults
       end
 
       def background_check
@@ -127,14 +107,43 @@ module Candidates
         fetch(TeachingPreference).tap { |tp| tp.school = school }
       end
 
-      def fetch(klass)
-        klass.new(@data.fetch(klass.model_name.param_key)).tap { |model| model.urn = self.urn }
-      rescue KeyError => e
-        raise StepNotFound, e.key
+      def uuid
+        @data['uuid'] ||= SecureRandom.urlsafe_base64
       end
 
-      def fetch_attributes(klass, defaults = {})
-        @data.fetch(klass.model_name.param_key, defaults)
+      def flag_as_pending_email_confirmation!
+        raise NotCompletedError unless all_steps_completed?
+
+        @data['status'] = PENDING_EMAIL_CONFIRMATION_STATUS
+      end
+
+      def pending_email_confirmation?
+        @data['status'] == PENDING_EMAIL_CONFIRMATION_STATUS
+      end
+
+      def flag_as_completed!
+        @data['status'] = COMPLETED_STATUS
+      end
+
+      def completed?
+        @data['status'] == COMPLETED_STATUS
+      end
+
+      # TODO add spec
+      def email
+        personal_information.email
+      end
+
+      def urn
+        @data.fetch 'urn'
+      end
+
+      def school
+        @school ||= Candidates::School.find urn if urn.present?
+      end
+
+      def school_name
+        school.name
       end
 
       def to_h
@@ -154,6 +163,13 @@ module Candidates
 
       def all_steps_completed?
         RegistrationState.new(self).completed?
+      end
+
+      def legacy_fetch!(klass)
+        klass.new \
+          @data.fetch(klass.model_name.param_key)
+      rescue KeyError => e
+        raise RegistrationSession::StepNotFound, e.key
       end
     end
   end

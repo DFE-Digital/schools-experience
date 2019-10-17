@@ -50,12 +50,12 @@ describe Candidates::Registrations::RegistrationSession do
 
     it 'stores the models attributes under the correct key' do
       expect(
-        session['candidates_registrations_background_check']
+        session
       ).to eq \
         'has_dbs_check' => true,
-        'created_at' => date,
-        'updated_at' => date,
-        'urn' => model.urn
+        'background_check_created_at' => date,
+        'background_check_updated_at' => date,
+        'some' => 'information'
     end
 
     it 'doesnt over write other keys' do

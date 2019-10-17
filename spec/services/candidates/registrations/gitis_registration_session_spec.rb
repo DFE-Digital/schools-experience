@@ -99,7 +99,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
     describe "#personal_information_attributes" do
       context 'with overridden personal data' do
         subject do
-          described_class.new({ key => data }, contact).
+          described_class.new(data_with_urn, contact).
             personal_information_attributes
         end
 
@@ -127,7 +127,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
 
       context 'with only gitis data' do
         subject do
-          described_class.new({}, contact).personal_information_attributes
+          described_class.new({ 'urn' => '123456' }, contact).personal_information_attributes
         end
 
         it { is_expected.to include('first_name' => contact.firstname) }
@@ -141,7 +141,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
     describe '#personal_information' do
       context 'with overridden personal data' do
         subject do
-          described_class.new({ key => data }, contact).personal_information
+          described_class.new(data_with_urn, contact).personal_information
         end
 
         it { is_expected.to have_attributes(first_name: contact.firstname) }
@@ -167,7 +167,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
 
       context 'with only gitis data' do
         subject do
-          described_class.new({}, contact).personal_information
+          described_class.new({ 'urn' => '123456' }, contact).personal_information
         end
 
         it { is_expected.to have_attributes(first_name: contact.firstname) }
