@@ -70,7 +70,7 @@ module Schools
         else
           [
             'No - Candidates will be accompanied at all times',
-            @school_profile.dbs_requirement.no_dbs_policy_details
+            @school_profile.dbs_requirement.no_dbs_policy_details.presence
           ].compact.join(' - ')
         end
       end
