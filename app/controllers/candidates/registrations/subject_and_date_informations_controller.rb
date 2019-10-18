@@ -3,9 +3,13 @@ module Candidates
     class SubjectAndDateInformationsController < RegistrationsController
       before_action :set_school, :set_primary_placement_dates, :set_secondary_placement_dates
 
-      PlacementDateOption = Struct.new(:placement_date_id, :placement_date_subject_id, :name) do
+      PlacementDateOption = Struct.new(:placement_date_id, :placement_date_subject_id, :name, :duration) do
         def id
           [placement_date_id, placement_date_subject_id].compact.join('_')
+        end
+
+        def name_with_duration
+          "#{name} (#{duration} #{'day'.pluralize(duration)})"
         end
       end
 
@@ -55,7 +59,12 @@ module Candidates
       end
 
       def set_secondary_placement_dates
-        @secondary_placement_dates_grouped_by_date = @school
+        @secondary_placement_dates_grouped_by_date =  \
+          secondary_placement_dates.each_value { |v| v.sort_by!(&:name) }
+      end
+
+      def secondary_placement_dates
+        @school
           .bookings_placement_dates
           .supporting_subjects
           .eager_load(placement_date_subjects: :bookings_subject)
@@ -74,10 +83,10 @@ module Candidates
       def placement_date_options(placement_date)
         if placement_date.placement_date_subjects.any?
           placement_date.placement_date_subjects.map do |placement_date_subject|
-            PlacementDateOption.new(placement_date.id, placement_date_subject.id, placement_date_subject.bookings_subject.name)
+            PlacementDateOption.new(placement_date.id, placement_date_subject.id, placement_date_subject.bookings_subject.name, placement_date.duration)
           end
         else
-          Array.wrap(PlacementDateOption.new(placement_date.id, nil, 'All subjects'))
+          Array.wrap(PlacementDateOption.new(placement_date.id, nil, 'All subjects', placement_date.duration))
         end
       end
 

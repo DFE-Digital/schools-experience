@@ -72,3 +72,9 @@ Then("I should be on the {string} page for my chosen school") do |string|
   path = path_for(string, school: @school)
   expect(page.current_path).to eql(path)
 end
+
+Then("I should see the duration listed in each radio button label") do
+  page.all('label').each do |label|
+    expect(label.text).to end_with("(1 day)")
+  end
+end
