@@ -55,6 +55,7 @@ module Candidates
       def set_primary_placement_dates
         @primary_placement_dates = @school
           .bookings_placement_dates
+          .in_date_order
           .not_supporting_subjects
       end
 
@@ -66,6 +67,7 @@ module Candidates
       def secondary_placement_dates
         @school
           .bookings_placement_dates
+          .in_date_order
           .supporting_subjects
           .eager_load(placement_date_subjects: :bookings_subject)
           .published
