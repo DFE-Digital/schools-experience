@@ -7,6 +7,12 @@ Feature: Selecting a subject and date
         Given my school of choice exists
         And it has 'fixed' availability
 
+    Scenario: Displaying durations
+        Given the school is a 'primary and secondary' school
+        And the school has both primary and secondary dates set up
+        When I am on the 'choose a subject and date' screen for my chosen school
+        Then I should see the duration listed in each radio button label
+
     Scenario: When the school is a primary school
         Given the school is a 'primary' school
         And the school has some primary placement dates set up
