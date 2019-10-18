@@ -208,5 +208,30 @@ RSpec.describe Candidates::SchoolPresenter do
     specify "non-specific dates should be described as 'All subjects'" do
       expect(subject.secondary_dates_grouped_by_date[late_date]).to match_array(all_subjects)
     end
+
+    context 'sorting' do
+      let(:date) { 1.day.from_now.to_date }
+
+      let(:physics) { Bookings::Subject.find_by(name: 'Physics') }
+      let(:maths) { Bookings::Subject.find_by(name: 'Maths') }
+      let(:biology) { Bookings::Subject.find_by(name: 'Biology') }
+
+      let(:pd_subjects) { [physics, maths, biology] }
+
+      let(:placement_date_with_multiple_subjects) do
+        build(:bookings_placement_date, date: date, subject_specific: true).tap do |pd|
+          pd.subjects << pd_subjects
+          pd.save
+        end
+      end
+
+      before do
+        allow(subject).to receive(:secondary_dates).and_return(Array.wrap(placement_date_with_multiple_subjects))
+      end
+
+      specify 'subjects should be sorted alphabetically' do
+        expect(subject.secondary_dates_grouped_by_date[date]).to eql(pd_subjects.map(&:name).sort)
+      end
+    end
   end
 end
