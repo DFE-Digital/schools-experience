@@ -285,4 +285,45 @@ describe Candidates::Registrations::RegistrationSession do
       expect(registration_session).to be_completed
     end
   end
+
+  # TODO SE-1877 remove this
+  context 'with legacy session data' do
+    context 'the school has fixed dates' do
+      let :school do
+        create :bookings_school, :with_subjects, availability_preference_fixed: true
+      end
+
+      let :placement_date do
+        create \
+          :bookings_placement_date,
+          :subject_specific,
+          bookings_school: school,
+          subjects: school.subjects
+      end
+
+      let :registration_session do
+        build \
+          :legacy_registration_session,
+          urn: school.urn,
+          bookings_placement_date_id: placement_date.id
+      end
+
+      context '#placement_preference' do
+        it 'returns a valid instance' do
+          expect(registration_session.placement_preference).to be_valid
+        end
+      end
+
+      context '#subject_and_date_information' do
+        let :subject_and_date_information do
+          registration_session.subject_and_date_information
+        end
+
+        it 'returns an instance with non subject specific date' do
+          expect(subject_and_date_information.placement_date).to eq placement_date
+          expect(subject_and_date_information.placement_date_subject).to be nil
+        end
+      end
+    end
+  end
 end
