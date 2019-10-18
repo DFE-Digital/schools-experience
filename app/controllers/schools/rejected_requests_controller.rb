@@ -9,6 +9,13 @@ module Schools
       assign_gitis_contacts @requests
     end
 
+    def show
+      @rejected_request = scope.find(params[:id])
+      @rejected_request.fetch_gitis_contact gitis_crm
+
+      @cancellation = @rejected_request.school_cancellation
+    end
+
   private
 
     def scope

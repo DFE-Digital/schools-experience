@@ -21,4 +21,13 @@ describe Schools::RejectedRequestsController, type: :request do
     it { expect(response).to have_http_status(:success) }
     it { expect(response).to render_template('index') }
   end
+
+  describe '#show' do
+    let(:rejected) { create :placement_request, :cancelled_by_school, school: school }
+    before { get schools_withdrawn_request_path(rejected) }
+
+    it { expect(response).to have_http_status(:success) }
+    it { expect(response).to render_template('show') }
+    it { expect(rejected.school_cancellation.reload).not_to be_viewed }
+  end
 end

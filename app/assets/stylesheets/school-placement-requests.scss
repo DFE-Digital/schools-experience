@@ -41,3 +41,7 @@
   padding: 1.5rem;
   background-color: lighten(govuk-colour("light-blue"), 35%);
 }
+
+.govuk-error-summary__title--only-title {
+  margin-bottom: 0;
+}

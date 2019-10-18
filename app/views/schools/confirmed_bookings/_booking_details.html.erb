@@ -1,0 +1,11 @@
+<section id="booking-details">
+  <h2>Booking details</h2>
+
+  <dl class="govuk-summary-list">
+    <%= summary_row 'Date', booking_details.date.to_formatted_s(:govuk),
+          edit_schools_booking_date_path(booking_details) %>
+    <%= summary_row 'Subject', booking_details.bookings_subject.name %>
+    <%= summary_row 'DBS certificate', format_has_dbs_certificate(booking_details.has_dbs_check) %>
+    <%= summary_row 'Request received', booking_details.received_on.to_formatted_s(:govuk) %>
+  </dl>
+</section>
