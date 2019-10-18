@@ -93,9 +93,7 @@ module Candidates
       end
 
       def subject_and_date_params
-        params.require(:candidates_registrations_subject_and_date_information).permit(:subject_and_date_ids).tap do |subject_and_date_info|
-          subject_and_date_info.require(:subject_and_date_ids)
-        end
+        params.require(:candidates_registrations_subject_and_date_information).permit(:subject_and_date_ids)
       end
 
       def extract_subject_and_date_params

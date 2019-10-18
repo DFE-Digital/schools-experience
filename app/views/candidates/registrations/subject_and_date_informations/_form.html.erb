@@ -6,37 +6,43 @@
     <%= form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary subject_and_date_information, 'There is a problem', '' %>
 
-      <%- if @primary_placement_dates.any? %>
-        <section class="date-selector date-selector-primary">
-          <h3 class="govuk-heading-m">Primary placement dates</h3>
+      <%= f.hidden_field :subject_and_date_ids %>
 
-          <%= f.radio_button_fieldset :subject_and_date_ids, choices: @primary_placement_dates -%>
-        </section>
-      <%- end -%>
+      <section class="<%= subject_and_date_section_classes(subject_and_date_information) %>">
 
-      <%- if @secondary_placement_dates_grouped_by_date.any? %>
-        <h3 class="govuk-heading-m">Secondary placement dates</h3>
+        <%- if @primary_placement_dates.any? %>
+          <section class="date-selector date-selector-primary">
+            <h3 class="govuk-heading-m">Primary placement dates</h3>
 
-        <dl class="govuk-summary-list govuk-summary-list">
-        <% @secondary_placement_dates_grouped_by_date.each do |date, secondary_placement_dates| %>
+            <%= f.radio_button_fieldset :subject_and_date_ids, choices: @primary_placement_dates -%>
+          </section>
+        <%- end -%>
 
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              <%= date.to_formatted_s(:govuk) %>
-            </dt>
+        <%- if @secondary_placement_dates_grouped_by_date.any? %>
+          <h3 class="govuk-heading-m">Secondary placement dates</h3>
 
-            <dd class="govuk-summary-list__value date-selector date-selector-secondary">
-              <%= f.radio_button_fieldset :subject_and_date_ids,
-                choices: secondary_placement_dates,
-                value_method: :id,
-                text_method: :name_with_duration
-              -%>
-            </dd>
-          </div>
+          <dl class="govuk-summary-list govuk-summary-list">
+          <% @secondary_placement_dates_grouped_by_date.each do |date, secondary_placement_dates| %>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                <%= date.to_formatted_s(:govuk) %>
+              </dt>
+
+              <dd class="govuk-summary-list__value date-selector date-selector-secondary">
+                <%= f.radio_button_fieldset :subject_and_date_ids,
+                  choices: secondary_placement_dates,
+                  value_method: :id,
+                  text_method: :name_with_duration
+                -%>
+              </dd>
+            </div>
+          <% end %>
+          </dl>
+
         <% end %>
-        </dl>
 
-      <% end %>
+      </section>
 
       <%= f.submit 'Continue' %>
     <% end %>

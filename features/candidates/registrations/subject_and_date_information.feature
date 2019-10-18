@@ -13,6 +13,15 @@ Feature: Selecting a subject and date
         When I am on the 'choose a subject and date' screen for my chosen school
         Then I should see the duration listed in each radio button label
 
+    Scenario: Displaying errors
+        Given the school is a 'primary' school
+        And the school has some primary placement dates set up
+        When I am on the 'choose a subject and date' screen for my chosen school
+        And I make no selection
+        And I submit the form
+        Then I should see an error and the date and subject options should be marked as being incorrect
+
+
     Scenario: When the school is a primary school
         Given the school is a 'primary' school
         And the school has some primary placement dates set up

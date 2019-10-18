@@ -78,3 +78,12 @@ Then("I should see the duration listed in each radio button label") do
     expect(label.text).to end_with("(1 day)")
   end
 end
+
+When("I make no selection") do
+  # do nothing
+end
+
+Then("I should see an error and the date and subject options should be marked as being incorrect") do
+  expect(page).to have_css('.govuk-error-summary', text: /there is a problem/i)
+  expect(page).to have_css('.subject-and-date-selection--error')
+end
