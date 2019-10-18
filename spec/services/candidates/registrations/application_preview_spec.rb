@@ -315,4 +315,35 @@ describe Candidates::Registrations::ApplicationPreview do
       end
     end
   end
+
+  # TODO SE-1877 remove this
+  context 'with legacy session data' do
+    context 'the school has fixed dates' do
+      let :school do
+        create :bookings_school, :with_subjects, availability_preference_fixed: true
+      end
+
+      let :placement_date do
+        create \
+          :bookings_placement_date,
+          :subject_specific,
+          bookings_school: school,
+          subjects: school.subjects
+      end
+
+      let :registration_session do
+        build \
+          :legacy_registration_session,
+          urn: school.urn,
+          bookings_placement_date_id: placement_date.id
+      end
+
+      context '#placement_availability_description' do
+        it 'returns the placement date' do
+          expect(subject.placement_availability_description).to \
+            eq placement_date.to_s
+        end
+      end
+    end
+  end
 end
