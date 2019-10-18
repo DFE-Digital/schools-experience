@@ -51,12 +51,9 @@ module Candidates
       end
 
       def subject_and_date_information
-        @subject_and_date_information ||= \
-          if @registration_session.school.availability_preference_fixed?
-            @registration_session.subject_and_date_information
-          else
-            false
-          end
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+
+        @subject_and_date_information ||= @registration_session.subject_and_date_information
       end
 
       def ==(other)
@@ -95,13 +92,13 @@ module Candidates
       end
 
       def has_subject_and_date_information?
-        !!subject_and_date_information
+        RegistrationState.new(@registration_session).subject_and_date_information_in_journey?
       end
 
       def placement_date_subject
         fail NotImplementedForThisDateType unless has_subject_and_date_information?
 
-        @subject_and_date_information.placement_date_subject
+        subject_and_date_information.placement_date_subject
       end
 
       def placement_date
