@@ -12,6 +12,8 @@ en:
 
   subject_and_date_information_errors: &subject_and_date_information_errors
     attributes:
+      bookings_placement_date_id:
+        blank: "Choose a date"
       bookings_placement_dates_subject_id:
         blank: "Choose a subject"
 
