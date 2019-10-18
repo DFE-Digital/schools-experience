@@ -33,8 +33,6 @@ module Candidates
         false
       end
 
-    private
-
       def step_not_completed?(step)
         !step_completed? step
       end
