@@ -22,8 +22,6 @@ module Schools
         validates :no_dbs_policy_details, absence: true
       end
 
-      # Don't show no_dbs_policy_details validation message if the user hasn't
-      # selected an option
       with_options if: -> { requires_check == false } do
         validates :dbs_policy_details, absence: true
       end
