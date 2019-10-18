@@ -158,6 +158,23 @@ describe Bookings::PlacementRequest, type: :model do
 
       it { is_expected.to match_array [placement_request_closed_by_candidate] }
     end
+
+    context '.withdrawn_with_unviewed_first' do
+      let!(:unviewed) { create :placement_request, :cancelled, school: school }
+
+      before do
+        placement_request_closed_by_candidate.tap do |pr|
+          pr.candidate_cancellation.viewed!
+        end
+      end
+
+      subject { described_class.withdrawn_with_unviewed_first }
+
+      it do
+        is_expected.to eq \
+          [unviewed, placement_request_closed_by_candidate]
+      end
+    end
   end
 
   context '.requiring_attention' do

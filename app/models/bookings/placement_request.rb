@@ -95,6 +95,12 @@ module Bookings
       withdrawn.merge Cancellation.unviewed
     end
 
+    scope :withdrawn_with_unviewed_first, -> do
+      withdrawn
+        .reorder(Cancellation.arel_table[:viewed_at].not_eq(nil))
+        .order(created_at: :desc)
+    end
+
     default_scope { where.not(candidate_id: nil) }
 
     delegate :gitis_contact, :fetch_gitis_contact, to: :candidate

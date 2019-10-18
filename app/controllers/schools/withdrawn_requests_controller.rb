@@ -3,7 +3,6 @@ module Schools
     def index
       @requests = scope
         .includes(:candidate, :candidate_cancellation, placement_date: :subjects)
-        .order(created_at: :desc)
         .page(params[:page])
         .per(50)
 
@@ -21,7 +20,7 @@ module Schools
   private
 
     def scope
-      current_school.placement_requests.withdrawn
+      current_school.placement_requests.withdrawn_with_unviewed_first
     end
 
     def assign_gitis_contacts(requests)
