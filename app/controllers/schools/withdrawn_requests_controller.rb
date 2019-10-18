@@ -20,7 +20,7 @@ module Schools
   private
 
     def scope
-      current_school.placement_requests.withdrawn_with_unviewed_first
+      current_school.placement_requests.withdrawn
     end
 
     def assign_gitis_contacts(requests)

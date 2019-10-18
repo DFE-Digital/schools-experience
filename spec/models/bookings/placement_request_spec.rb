@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Bookings::PlacementRequest, type: :model do
+  include ActiveSupport::Testing::TimeHelpers
+
   include_context 'Stubbed candidates school'
   subject { described_class.new bookings_school_id: school.id }
 
@@ -143,8 +145,13 @@ describe Bookings::PlacementRequest, type: :model do
     end
 
     context '.withdrawn' do
+      let!(:unviewed) do
+        travel_to 2.minutes.from_now do
+          create :placement_request, :cancelled, school: school
+        end
+      end
       subject { described_class.withdrawn }
-      it { is_expected.to match_array [placement_request_closed_by_candidate] }
+      it { is_expected.to eq [unviewed, placement_request_closed_by_candidate] }
     end
 
     context '.withdrawn_but_unviewed' do
@@ -157,23 +164,6 @@ describe Bookings::PlacementRequest, type: :model do
       subject { described_class.withdrawn_but_unviewed }
 
       it { is_expected.to match_array [placement_request_closed_by_candidate] }
-    end
-
-    context '.withdrawn_with_unviewed_first' do
-      let!(:unviewed) { create :placement_request, :cancelled, school: school }
-
-      before do
-        placement_request_closed_by_candidate.tap do |pr|
-          pr.candidate_cancellation.viewed!
-        end
-      end
-
-      subject { described_class.withdrawn_with_unviewed_first }
-
-      it do
-        is_expected.to eq \
-          [unviewed, placement_request_closed_by_candidate]
-      end
     end
   end
 

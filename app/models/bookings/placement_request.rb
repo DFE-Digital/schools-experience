@@ -88,17 +88,11 @@ module Bookings
     scope :withdrawn, -> do
       without_booking
         .joins(:candidate_cancellation)
-        .merge(Cancellation.sent)
+        .merge(Cancellation.sent.order(sent_at: :desc))
     end
 
     scope :withdrawn_but_unviewed, -> do
       withdrawn.merge Cancellation.unviewed
-    end
-
-    scope :withdrawn_with_unviewed_first, -> do
-      withdrawn
-        .reorder(Cancellation.arel_table[:viewed_at].not_eq(nil))
-        .order(created_at: :desc)
     end
 
     default_scope { where.not(candidate_id: nil) }
