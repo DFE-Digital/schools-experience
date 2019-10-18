@@ -92,6 +92,32 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
           end
         end
 
+        context 'when doesnt support subjects' do
+          let :max_bookings_count do
+            nil
+          end
+
+          let :attributes do
+            {
+              max_bookings_count: max_bookings_count,
+              has_limited_availability: false,
+              supports_subjects: false
+            }
+          end
+
+          it 'sets subject specific' do
+            expect(placement_date).not_to be_subject_specific
+          end
+
+          it 'empties subject_ids' do
+            expect(placement_date.subjects).to be_empty
+          end
+
+          it 'sets published_at' do
+            expect(placement_date).to be_published
+          end
+        end
+
         context 'when not available_for_all_subjects' do
           let :max_bookings_count do
             nil
