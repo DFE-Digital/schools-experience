@@ -1,8 +1,8 @@
-<% self.page_title = 'Choose a date' %>
+<% self.page_title = 'Request a school experience date' %>
 
 <div class="govuk-grid-row" id="placement-preference">
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l">Select a date and subject</h2>
+    <h1 class="govuk-heading-l">Request a school experience date at <%= @school.name %></h1>
     <%= form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary subject_and_date_information, 'There is a problem', '' %>
 
@@ -46,6 +46,8 @@
 
       <%= f.submit 'Continue' %>
     <% end %>
+
+    <%= link_to 'Back', :back, class: 'govuk-back-link', data: { controller: 'back-link' } %>
 
   </div>
 </div>
