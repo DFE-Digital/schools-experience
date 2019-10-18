@@ -30,7 +30,10 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     end
 
     context 'email is present' do
-      VALID_EMAILS = ['test@example.com', 'testymctest@gmail.com', 'test%.mctest@domain.co.uk'].freeze
+      VALID_EMAILS = [
+        'test@example.com', 'testymctest@gmail.com',
+        'test%.mctest@domain.co.uk', ' with@space.com '
+      ].freeze
       INVALID_EMAILS = ['test.com', 'test@@test.com', 'FFFF', 'test@test'].freeze
       BLANK_EMAILS = ['', ' ', '   '].freeze
 

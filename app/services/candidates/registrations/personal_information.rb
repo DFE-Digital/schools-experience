@@ -43,7 +43,13 @@ module Candidates
       end
 
       def email=(*args)
-        read_only ? email : super
+        if read_only
+          email
+        elsif args.empty? || args.first.nil?
+          super
+        else
+          super(*([args.shift.to_s.strip] + args))
+        end
       end
 
       # Rescue argument error thrown by
