@@ -135,7 +135,8 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     context 'without requirements' do
       let :profile do
         FactoryBot.build \
-          :school_profile, candidate_requirement_requirements: false
+          :school_profile, candidate_requirement_requirements: false,
+          show_candidate_requirements_selection: false
       end
 
       it 'returns no' do
@@ -145,7 +146,8 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
     context 'with requirements' do
       let :profile do
-        FactoryBot.build :school_profile, :with_candidate_requirement
+        FactoryBot.build :school_profile, :with_candidate_requirement,
+          show_candidate_requirements_selection: false
       end
 
       it 'returns yes with the requirements' do

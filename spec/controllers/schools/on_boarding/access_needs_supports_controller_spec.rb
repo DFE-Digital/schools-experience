@@ -40,6 +40,8 @@ describe Schools::OnBoarding::AccessNeedsSupportsController, type: :request do
         :school_profile,
         :with_dbs_requirement,
         :with_candidate_requirement,
+        :with_candidate_requirements_choice,
+        :with_candidate_requirements_selection,
         :with_fees,
         :with_administration_fee,
         :with_dbs_fee,
