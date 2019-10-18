@@ -92,9 +92,10 @@ module Candidates
       secondary_dates
         .group_by(&:date)
         .each
-        .with_object({}) do |(date, placement_date), hash|
+        .with_object({}) { |(date, placement_date), hash|
           hash[date] = placement_date_subjects(placement_date)
-        end
+        }
+        .each_value(&:sort!)
     end
 
   private
