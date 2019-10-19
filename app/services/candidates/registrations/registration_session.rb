@@ -38,51 +38,21 @@ module Candidates
         defaults
       end
 
-      def background_check
-        fetch BackgroundCheck
+      RegistrationState::STEPS.each do |step|
+        self.class_eval <<~RUBY, __FILE__, __LINE__ + 1
+          def #{step}
+            fetch #{step.to_s.classify}
+          end
+
+          def #{step}_attributes
+            fetch_attributes #{step.to_s.classify}
+          end
+        RUBY
       end
 
-      def background_check_attributes
-        fetch_attributes BackgroundCheck
-      end
-
-      # TODO add specs for these
-      def contact_information
-        fetch ContactInformation
-      end
-
-      def contact_information_attributes
-        fetch_attributes ContactInformation
-      end
-
-      def personal_information
-        fetch PersonalInformation
-      end
-
-      def personal_information_attributes
-        fetch_attributes PersonalInformation
-      end
-
-      def placement_preference
-        fetch PlacementPreference
-      end
-
-      def placement_preference_attributes
-        fetch_attributes PlacementPreference
-      end
-
-      def education_attributes
-        fetch_attributes Education
-      end
-
-      def education
-        fetch Education
-      end
-
-      def teaching_preference_attributes
-        fetch_attributes TeachingPreference
-      end
-
+      # NOTE
+      # This is a special case as we need to pass in a school to limit
+      # the available subject choices.
       def teaching_preference
         fetch(TeachingPreference).tap { |tp| tp.school = school }
       end
