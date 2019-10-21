@@ -1,5 +1,5 @@
-Feature: Viewing a booking
-    To help me review past school experiece bookings
+Feature: Viewing a previous booking
+    To help me review past school experience bookings
     As a school administrator
     I want to be able to view all submitted information
 
@@ -11,7 +11,8 @@ Feature: Viewing a booking
     Scenario: Page title
         Given there is at least one previous booking
         When I am viewing my chosen previous booking
-        Then the page title should start with 'Booking details' and include the booking reference
+        Then the page title should start with 'Booking details'
+        And the page title should include the booking reference
 
     Scenario: Breadcrumbs
         Given there is at least one previous booking

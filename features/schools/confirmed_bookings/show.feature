@@ -11,7 +11,8 @@ Feature: Viewing a booking
     Scenario: Page title
         Given there is at least one booking
         When I am viewing my chosen booking
-        Then the page title should start with 'Booking details' and include the booking reference
+        Then the page title should start with 'Booking details'
+        And the page title should include the booking reference
 
     Scenario: Breadcrumbs
         Given there is at least one booking

@@ -13,5 +13,5 @@
 <%= render 'schools/confirmed_bookings/booking', booking: @booking %>
 
 <div>
-  <%= govuk_link_to 'Return to previous bookings', schools_previous_bookings_path %>
+  <%= govuk_link_to 'Return to previous bookings', request.referer || schools_previous_bookings_path, secondary: true %>
 </div>

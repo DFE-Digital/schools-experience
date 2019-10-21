@@ -22,6 +22,11 @@ module Schools
         .accepted
         .attendance_unlogged
         .count
+
+      @withdrawn_requests = current_school
+        .placement_requests
+        .withdrawn_but_unviewed
+        .count
     end
   end
 end
