@@ -7,7 +7,7 @@ And("there is/are {int} rejected requests") do |count|
     @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
   end
 
-  @rejected_requests = (1..count).map do |index|
+  @rejected_requests = (1..count).map do |_index|
     FactoryBot.create(
       :placement_request,
       :with_a_fixed_date,
