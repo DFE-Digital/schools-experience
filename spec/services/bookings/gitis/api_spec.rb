@@ -55,6 +55,37 @@ describe Bookings::Gitis::API do
       it { is_expected.to include('firstname' => 'test', 'lastname' => 'test') }
     end
 
+    context 'with a timeout that gets retried' do
+      before do
+        stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1").
+          with(headers: {
+            'Accept' => 'application/json',
+            'Authorization' => /\ABearer #{token}/,
+            "OData-MaxVersion" => "4.0",
+            "OData-Version" => "4.0",
+          })
+          .to_timeout
+          .then.to_return(
+            status: 200,
+            headers: {
+              'content-type' => 'application/json; odata.metadata=minimal',
+              'odata-version' => '4.0'
+            },
+            body: {
+              'contactid' => uuid,
+              'firstname' => 'test',
+              'lastname' => 'test'
+            }.to_json
+          )
+      end
+
+      subject { api.get('contacts', '$top' => 1) }
+
+      it { is_expected.to be_kind_of Hash }
+      it { is_expected.to include('contactid' => uuid) }
+      it { is_expected.to include('firstname' => 'test', 'lastname' => 'test') }
+    end
+
     context 'for inaccessible url' do
       let(:url) { "#{service_url}#{endpoint}/contacts" }
 
