@@ -15,7 +15,7 @@ describe Schools::RejectedRequestsController, type: :request do
   describe '#index' do
     before do
       create_list(:placement_request, 2, :cancelled_by_school, school: school)
-      get schools_withdrawn_requests_path
+      get schools_rejected_requests_path
     end
 
     it { expect(response).to have_http_status(:success) }
@@ -24,7 +24,7 @@ describe Schools::RejectedRequestsController, type: :request do
 
   describe '#show' do
     let(:rejected) { create :placement_request, :cancelled_by_school, school: school }
-    before { get schools_withdrawn_request_path(rejected) }
+    before { get schools_rejected_request_path(rejected) }
 
     it { expect(response).to have_http_status(:success) }
     it { expect(response).to render_template('show') }
