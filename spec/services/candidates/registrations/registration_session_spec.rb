@@ -91,7 +91,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when education is in session' do
-      # TODO open ticket to remove
+      # TODO SE-1881
       context 'when legacy session' do
         subject { FactoryBot.build :registration_session, :with_education }
 
@@ -122,7 +122,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when education in session' do
-      # TODO open ticket to remove
+      # TODO SE-1881
       context 'when legacy session' do
         let :session do
           FactoryBot.build :registration_session, :with_education
@@ -163,7 +163,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when teaching_preference is in session' do
-      # TODO open ticket to remove
+      # TODO SE-1881
       context 'when legacy session' do
         subject { FactoryBot.build :registration_session, :with_teaching_preference }
 
@@ -194,7 +194,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when teaching_preference is in the session' do
-      # TODO open ticket to remove
+      # TODO SE-1881
       context 'when legacy session' do
         let :session do
           FactoryBot.build \
@@ -272,7 +272,7 @@ describe Candidates::Registrations::RegistrationSession do
     context 'when registration is complete' do
       include_context 'Stubbed candidates school'
 
-      # TODO open ticket to remove
+      # TODO SE-1881
       context 'when legacy session' do
         subject do
           FactoryBot.build :new_registration_session
@@ -351,7 +351,7 @@ describe Candidates::Registrations::RegistrationSession do
   context '#flag_as_completed!' do
     include_context 'Stubbed candidates school'
 
-    # TODO open ticket to remove
+    # TODO SE-1881
     context 'when legacy session' do
       let :registration_session do
         FactoryBot.build :new_registration_session
