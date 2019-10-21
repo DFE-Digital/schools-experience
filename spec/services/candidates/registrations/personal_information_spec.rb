@@ -30,40 +30,30 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     end
 
     context 'email is present' do
-      VALID_EMAILS = ['test@example.com', 'testymctest@gmail.com'].freeze
-      INVALID_EMAILS = ['test.com', 'test@@test.com', 'FFFF'].freeze
+      VALID_EMAILS = [
+        'test@example.com', 'testymctest@gmail.com',
+        'test%.mctest@domain.co.uk', ' with@space.com '
+      ].freeze
+      INVALID_EMAILS = ['test.com', 'test@@test.com', 'FFFF', 'test@test'].freeze
       BLANK_EMAILS = ['', ' ', '   '].freeze
 
-      context 'valid emails' do
-        VALID_EMAILS.each do |email|
-          subject { described_class.new email: email }
-          before { subject.validate }
+      VALID_EMAILS.each do |email|
+        it { is_expected.to allow_value(email).for(:email) }
+      end
 
-          it "permits #{email}" do
-            expect(subject.errors[:email]).to be_empty
-          end
+      INVALID_EMAILS.each do |email|
+        it "will not allow email address '#{email}'" do
+          is_expected.not_to allow_value(email) \
+            .for(:email)
+            .with_message('Enter a valid email address')
         end
       end
 
-      context 'invalid emails' do
-        INVALID_EMAILS.each do |email|
-          subject { described_class.new email: email }
-          before { subject.validate }
-
-          it "doesn't permit #{email}" do
-            expect(subject.errors[:email]).to eq ['Enter a valid email address']
-          end
-        end
-      end
-
-      context 'blank emails' do
-        BLANK_EMAILS.each do |email|
-          subject { described_class.new email: email }
-          before { subject.validate }
-
-          it "doesn't permit #{email}" do
-            expect(subject.errors[:email]).to eq ['Enter your email address']
-          end
+      BLANK_EMAILS.each do |email|
+        it "will not allow email address '#{email}'" do
+          is_expected.not_to allow_value(email) \
+            .for(:email)
+            .with_message('Enter your email address')
         end
       end
     end
