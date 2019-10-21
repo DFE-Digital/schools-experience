@@ -668,7 +668,8 @@ en:
         acceptance_html: >-
           By checking this box and setting up your school experience profile
           you’re confirming, to the best of your knowledge, the details you’re
-          providing are correct and you accept our
+          providing are correct, you agree to manage the data your receive in
+          line with current GDPR regulations and you accept our
           <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a>
       schools_on_boarding_key_stage_list:
         early_years: 'Early years foundation stage (EYFS)'
