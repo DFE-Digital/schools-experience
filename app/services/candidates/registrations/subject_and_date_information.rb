@@ -11,6 +11,12 @@ module Candidates
         def name_with_duration
           "#{name} (#{duration} #{'day'.pluralize(duration)})"
         end
+
+        # Sorted here rather than in the db so 'All subjects' (which isn't in the DB)
+        # comes back first
+        def <=>(other)
+          name <=> other.name
+        end
       end
 
       attribute :availability
