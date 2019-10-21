@@ -31,7 +31,7 @@
 
               <dd class="govuk-summary-list__value date-selector date-selector-secondary">
                 <%= f.radio_button_fieldset :subject_and_date_ids,
-                  choices: secondary_placement_dates,
+                  choices: secondary_placement_dates.sort,
                   value_method: :id,
                   text_method: :name_with_duration
                 -%>
