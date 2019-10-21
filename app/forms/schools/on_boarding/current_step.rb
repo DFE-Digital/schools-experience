@@ -4,7 +4,6 @@ module Schools
     class CurrentStep
       STEPS = %i(
         dbs_requirement
-        candidate_requirement
         candidate_requirements_choice
         candidate_requirements_selection
         fees
@@ -46,21 +45,11 @@ module Schools
         !@school_profile.dbs_requirement.dup.valid?
       end
 
-      def candidate_requirement_required?
-        return false unless @school_profile.show_candidate_requirement?
-
-        @school_profile.candidate_requirement.dup.invalid?
-      end
-
       def candidate_requirements_choice_required?
-        return false unless @school_profile.show_candidate_requirements_selection?
-
         @school_profile.candidate_requirements_choice.dup.invalid?
       end
 
       def candidate_requirements_selection_required?
-        return false unless @school_profile.show_candidate_requirements_selection?
-
         return false unless @school_profile.candidate_requirements_choice.has_requirements
 
         return true if @school_profile.candidate_requirements_selection.dup.invalid?

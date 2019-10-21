@@ -34,69 +34,51 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'candidate_requirement required' do
-      context 'school is not shown candidate_requirement' do
+    context 'candidate_requirements_choice required' do
+      let :school_profile do
+        FactoryBot.build :school_profile, :with_dbs_requirement
+      end
+
+      it 'returns :candidate_requirements_choice' do
+        expect(returned_step).to eq :candidate_requirements_choice
+      end
+    end
+
+    context 'candidate_requirements_selection not required' do
+      let :school_profile do
+        FactoryBot.build :school_profile,
+          :with_dbs_requirement,
+          :without_candidate_requirements_choice
+      end
+
+      it 'returns :fees' do
+        expect(returned_step).to eq :fees
+      end
+    end
+
+    context 'candidate_requirements_selection required' do
+      context 'step not completed' do
         let :school_profile do
-          FactoryBot.build :school_profile, :with_dbs_requirement,
-            show_candidate_requirements_selection: false
+          FactoryBot.build :school_profile,
+            :with_dbs_requirement,
+            :with_candidate_requirements_choice
         end
 
-        it 'returns :candidate_requirement' do
-          expect(returned_step).to eq :candidate_requirement
+        it 'returns :candidate_requirements_selection' do
+          expect(returned_step).to eq :candidate_requirements_selection
         end
       end
 
-      context 'school is shown select_candidate_requirement' do
-        context 'candidate_requirements_choice required' do
-          let :school_profile do
-            FactoryBot.build :school_profile, :with_dbs_requirement
-          end
-
-          it 'returns :candidate_requirements_choice' do
-            expect(returned_step).to eq :candidate_requirements_choice
-          end
+      context 'step completed' do
+        let :school_profile do
+          FactoryBot.build :school_profile,
+            :with_dbs_requirement,
+            :with_candidate_requirements_choice,
+            :with_candidate_requirements_selection
         end
 
-        context 'candidate_requirements_selection not required' do
-          let :school_profile do
-            FactoryBot.build :school_profile,
-              :with_dbs_requirement,
-              :without_candidate_requirements_choice,
-              show_candidate_requirements_selection: true
-          end
-
-          it 'returns :fees' do
-            expect(returned_step).to eq :fees
-          end
-        end
-
-        context 'candidate_requirements_selection required' do
-          context 'step not completed' do
-            let :school_profile do
-              FactoryBot.build :school_profile,
-                :with_dbs_requirement,
-                :with_candidate_requirements_choice,
-                show_candidate_requirements_selection: true
-            end
-
-            it 'returns :candidate_requirements_selection' do
-              expect(returned_step).to eq :candidate_requirements_selection
-            end
-          end
-
-          context 'step completed' do
-            let :school_profile do
-              FactoryBot.build :school_profile,
-                :with_dbs_requirement,
-                :with_candidate_requirements_choice,
-                :with_candidate_requirements_selection,
-                show_candidate_requirements_selection: true
-            end
-
-            it 'returns :fees' do
-              expect(returned_step).to eq :fees
-            end
-          end
+        it 'returns :fees' do
+          expect(returned_step).to eq :fees
         end
       end
     end

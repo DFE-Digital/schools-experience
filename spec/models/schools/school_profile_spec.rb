@@ -296,30 +296,6 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
-    context '#candidate_requirement' do
-      let :form_model do
-        FactoryBot.build :candidate_requirement
-      end
-
-      before do
-        model.candidate_requirement = form_model
-      end
-
-      it 'sets candidate_requirement_requirements' do
-        expect(model.candidate_requirement_requirements).to eq \
-          form_model.requirements
-      end
-
-      it 'sets candidate_requirement_requirements_details' do
-        expect(model.candidate_requirement_requirements_details).to eq \
-          form_model.requirements_details
-      end
-
-      it 'returns the form model' do
-        expect(model.candidate_requirement).to eq form_model
-      end
-    end
-
     context '#fees' do
       let :form_model do
         FactoryBot.build :fees

@@ -50,18 +50,8 @@ Given "I have completed the Candidate Requirements selection step" do
   )
 end
 
-Given "I have completed the Candidate Requirements step" do
-  steps %(
-    Given I am on the 'candidate requirements' page
-    And I choose 'Yes' from the 'Do you have any requirements for school experience candidates?' radio buttons
-    And I provide details
-    When I submit the form
-  )
-end
-
 Given "I have completed the Fees step, choosing only Administration costs" do
   steps %(
-    Given I have completed the Candidate Requirements step
     Given I am on the 'fees charged' page
     And I choose 'Yes' from the 'Administration costs' radio buttons
     And I choose 'No' from the 'DBS check costs' radio buttons

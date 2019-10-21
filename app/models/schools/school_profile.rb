@@ -66,15 +66,6 @@ module Schools
       constructor: :compose
 
     composed_of \
-      :candidate_requirement,
-      class_name: 'Schools::OnBoarding::CandidateRequirement',
-      mapping: [
-        %w(candidate_requirement_requirements requirements),
-        %w(candidate_requirement_requirements_details requirements_details)
-      ],
-      constructor: :compose
-
-    composed_of \
       :candidate_requirements_choice,
       class_name: 'Schools::OnBoarding::CandidateRequirementsChoice',
       mapping: [
@@ -281,10 +272,6 @@ module Schools
 
     def requires_subjects?
       phases_list.secondary? || phases_list.college?
-    end
-
-    def show_candidate_requirement?
-      !show_candidate_requirements_selection?
     end
   end
 end
