@@ -45,7 +45,11 @@
           value_for_no_degree: f.object.no_degree_subject
         },
         label_options: { class: 'govuk-heading-m' }
-      } %>
+      } do %>
+      <p>
+        Select the nearest or equivalent subject.
+      </p>
+      <% end %>
   </section>
 
   <%= f.submit 'Continue' %>
