@@ -61,4 +61,48 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
     end
   end
+
+  describe 'methods' do
+    describe '#placement_date' do
+      it { is_expected.to respond_to(:placement_date) }
+
+      before { allow(subject).to receive(:bookings_placement_date_id).and_return(1) }
+      before { allow(Bookings::PlacementDate).to receive(:find_by).and_return('a') }
+
+
+      specify 'should find the placement date via its id' do
+        subject.placement_date
+        expect(Bookings::PlacementDate).to have_received(:find_by).with(id: 1)
+      end
+    end
+
+    describe '#placement_date_subject' do
+      it { is_expected.to respond_to(:placement_date_subject) }
+
+      before { allow(subject).to receive(:bookings_placement_dates_subject_id).and_return(1) }
+      before { allow(Bookings::PlacementDateSubject).to receive(:find_by).and_return('a') }
+
+
+      specify 'should find the placement date via its id' do
+        subject.placement_date_subject
+        expect(Bookings::PlacementDateSubject).to have_received(:find_by).with(id: 1)
+      end
+    end
+
+    describe '#subject_and_date_ids' do
+      it { is_expected.to respond_to(:placement_date_subject) }
+
+      let(:bookings_placement_date_id) { 55 }
+      let(:bookings_placement_dates_subject_id) { 66 }
+
+      before do
+        allow(subject).to receive(:bookings_placement_date_id).and_return(bookings_placement_date_id)
+        allow(subject).to receive(:bookings_placement_dates_subject_id).and_return(bookings_placement_dates_subject_id)
+      end
+
+      specify 'should join the placement date and placement date subject ids separated by an underscore' do
+        expect(subject.subject_and_date_ids).to eql("#{bookings_placement_date_id}_#{bookings_placement_dates_subject_id}")
+      end
+    end
+  end
 end
