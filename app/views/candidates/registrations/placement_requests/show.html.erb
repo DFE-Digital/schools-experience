@@ -4,27 +4,28 @@
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-panel govuk-panel--confirmation">
       <h1 class="govuk-panel__title">
-        Your school experience request has been sent
+        You've requested school experience at <%= @school_name %>
       </h1>
     </div>
+
     <h3 class="govuk-heading-m">What happens next</h3>
+
     <p>
-      Your request for school experience will be forwarded to
-      <%= @school_name %>.
-    </p>
-    <p class="govuk-!-font-weight-bold">
-      The school will email or call you to discuss your request and experience
-      date. During term time this could typically take up to 2 weeks.
+      You will be contacted about your request. Schools aim to get in touch
+      within 10 working days during term time.
     </p>
 
     <p>
-      We'll email you a copy of your request details to confirm you've requested
-      school experience.
+      If you can't find any messages from the school in your inbox - check your
+      spam and other mailbox folders.
     </p>
 
     <p>
-      This service is still in development. If you would like to make another
-      request, you will have to submit your details again.
+      We'll email you a copy of your request for your records.
+    </p>
+
+    <p>
+      <%= govuk_link_to 'Search for school experience', new_candidates_school_search_path %>
     </p>
   </div>
 </div>
