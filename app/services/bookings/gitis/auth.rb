@@ -3,6 +3,17 @@ module Bookings
     class Auth
       prepend FakeAuth if Rails.application.config.x.gitis.fake_crm
 
+      GET_TIMEOUT_SECS = 25
+      GET_RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
+      GET_RETRY_OPTIONS = {
+        max: 2,
+        methods: %i{post}, # Auth only makes a POST request
+        exceptions: (
+          ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
+          GET_RETRY_EXCEPTIONS
+        ).freeze
+      }.freeze
+
       CACHE_KEY = 'gitis-auth-token'.freeze
       EXPIRY_MARGIN = 300
       AUTH_URL = "https://login.microsoftonline.com/{tenant_id}/oauth2/token".freeze
@@ -53,8 +64,15 @@ module Bookings
         Addressable::Template.new(AUTH_URL).expand(tenant_id: @tenant_id).to_s
       end
 
+      def faraday
+        Faraday.new do |f|
+          f.request(:retry, GET_RETRY_OPTIONS)
+          f.adapter(Faraday.default_adapter)
+        end
+      end
+
       def retrieve_token
-        response = Faraday.post(auth_url) do |request|
+        response = faraday.post(auth_url) do |request|
           request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
           request.headers['Accept'] = 'application/json'
           request.body = params.to_query
