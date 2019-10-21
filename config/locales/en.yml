@@ -626,7 +626,7 @@ en:
           false: 'No'
         disabled_facilities_details: 'Provide details.'
         start_time: 'Start time. For example, 8:15am.'
-        end_time: 'Finish time. For example, 4:30pm'
+        end_time: 'Finish time. For example, 4:30pm.'
         times_flexible:
           true: 'Yes'
           false: 'No'
