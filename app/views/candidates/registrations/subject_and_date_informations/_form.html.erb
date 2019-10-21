@@ -10,19 +10,19 @@
 
       <section class="<%= subject_and_date_section_classes(subject_and_date_information) %>">
 
-        <%- if @primary_placement_dates.any? %>
+        <%- if @subject_and_date_information.primary_placement_dates.any? %>
           <section class="date-selector date-selector-primary">
             <h3 class="govuk-heading-m">Primary placement dates</h3>
 
-            <%= f.radio_button_fieldset :subject_and_date_ids, choices: @primary_placement_dates -%>
+            <%= f.radio_button_fieldset :subject_and_date_ids, choices: @subject_and_date_information.primary_placement_dates -%>
           </section>
         <%- end -%>
 
-        <%- if @secondary_placement_dates_grouped_by_date.any? %>
+        <%- if @subject_and_date_information.secondary_placement_dates_grouped_by_date.any? %>
           <h3 class="govuk-heading-m">Secondary placement dates</h3>
 
           <dl class="govuk-summary-list govuk-summary-list">
-          <% @secondary_placement_dates_grouped_by_date.each do |date, secondary_placement_dates| %>
+          <% @subject_and_date_information.secondary_placement_dates_grouped_by_date.each do |date, secondary_placement_dates| %>
 
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
