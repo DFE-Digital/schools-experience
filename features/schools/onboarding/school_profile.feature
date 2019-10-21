@@ -75,13 +75,13 @@ Feature: School Profile
 
     Scenario: Publishing with accepting the privacy policy
         Given I click the 'Continue' button
-        And I check the 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our' checkbox
+        And I check the 'By checking this box and setting up your school experience profile' checkbox
         When I click the 'Accept and set up profile' button
         Then the page title should be "You've successfully set up your school experience profile"
 
     Scenario: Publishing with accepting the privacy policy
         Given I click the 'Continue' button
-        And I check the 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our' checkbox
+        And I check the 'By checking this box and setting up your school experience profile' checkbox
         And I click the 'Accept and set up profile' button
         When I am on the profile page for the school
         Then I should see the following summary rows:
@@ -98,5 +98,4 @@ Feature: School Profile
             | Start and finish times            | 8:15 am to 4:30 pm                                                                                                                                      |
             | Parking                           | Not available on site\nCarpark next door                                                                                                                |
             | School teacher training info      | We run our own training\nMore information                                                                                                               |
-
        And I should see the accessability information I have entered
