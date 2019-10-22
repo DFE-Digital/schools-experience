@@ -60,6 +60,8 @@ describe Schools::PlacementRequestsController, type: :request do
         FactoryBot.create :placement_request, school: school
       end
 
+      before { get "/schools/placement_requests/#{placement_request.id}" }
+
       it 'assigns the correct placement_request' do
         expect(assigns(:placement_request)).to eq placement_request
       end
@@ -77,6 +79,8 @@ describe Schools::PlacementRequestsController, type: :request do
       let :placement_request do
         create :placement_request, :cancelled, school: school
       end
+
+      before { get "/schools/placement_requests/#{placement_request.id}" }
 
       it 'marks the cancellation as viewed' do
         expect(placement_request.reload.candidate_cancellation).to be_viewed
@@ -124,6 +128,42 @@ describe Schools::PlacementRequestsController, type: :request do
         specify 'should raise a record not found error' do
           expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
         end
+      end
+    end
+
+    context 'with a timeout response from Gitis' do
+      include_context 'stubbed out Gitis'
+
+      let :placement_request do
+        FactoryBot.create :placement_request, school: school
+      end
+
+      before do
+        gitis_stubs.stub_failed_contact_request placement_request.candidate.gitis_uuid
+        get "/schools/placement_requests/#{placement_request.id}"
+      end
+
+      it "renders the Gitis connection error page" do
+        expect(response).to have_http_status(:service_unavailable)
+        expect(response).to render_template('shared/failed_gitis_connection')
+      end
+    end
+
+    context 'with a 404 response from Gitis' do
+      include_context 'stubbed out Gitis'
+
+      let :placement_request do
+        FactoryBot.create :placement_request, school: school
+      end
+
+      before do
+        gitis_stubs.stub_contact_request placement_request.candidate.gitis_uuid, {}, 404
+        get "/schools/placement_requests/#{placement_request.id}"
+      end
+
+      it "renders the Gitis connection error page" do
+        expect(response).to have_http_status(:service_unavailable)
+        expect(response).to render_template('shared/failed_gitis_connection')
       end
     end
   end

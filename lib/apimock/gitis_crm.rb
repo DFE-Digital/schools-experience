@@ -9,11 +9,11 @@ module Apimock
       @service_url = service_url
     end
 
-    def stub_contact_request(uuid, return_params = {})
+    def stub_contact_request(uuid, return_params = {}, status_code = 200)
       stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})?$top=1&$select=#{contact_attributes}").
         with(headers: get_headers).
         to_return(
-          status: 200,
+          status: status_code,
           headers: {
             'Content-Type' => 'application/json; odata.metadata=minimal',
           },
@@ -22,6 +22,13 @@ module Apimock
             'contactid' => uuid
           ).merge(return_params.stringify_keys).to_json
         )
+    end
+
+    def stub_failed_contact_request(uuid)
+      stub_request(:get, "#{service_url}#{endpoint}/contacts(#{uuid})?$top=1&$select=#{contact_attributes}").
+        with(headers: get_headers).
+        to_timeout.
+        then.to_timeout
     end
 
     def stub_multiple_contact_request(uuids, return_params = {})
