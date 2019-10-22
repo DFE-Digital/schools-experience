@@ -14,7 +14,10 @@
           <section class="date-selector date-selector-primary">
             <h3 class="govuk-heading-m">Primary placement dates</h3>
 
-            <%= f.radio_button_fieldset :subject_and_date_ids, choices: @subject_and_date_information.primary_placement_dates -%>
+            <%= f.radio_button_fieldset :subject_and_date_ids,
+              choices: @subject_and_date_information.primary_placement_dates,
+              value_method: :id,
+              text_method: :name_with_duration -%>
           </section>
         <%- end -%>
 

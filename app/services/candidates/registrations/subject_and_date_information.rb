@@ -34,7 +34,7 @@ module Candidates
       end
 
       def subject_and_date_ids
-        [bookings_placement_date_id, bookings_placement_dates_subject_id].join('_')
+        [bookings_placement_date_id, bookings_placement_dates_subject_id].compact.join('_')
       end
 
       def primary_placement_dates
@@ -42,6 +42,9 @@ module Candidates
           .bookings_placement_dates
           .in_date_order
           .not_supporting_subjects
+          .map do |date|
+            PlacementDateOption.new(date.id, nil, date.date.to_formatted_s(:govuk), date.duration)
+          end
       end
 
       def secondary_placement_dates_grouped_by_date
