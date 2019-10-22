@@ -29,10 +29,10 @@ Accordion.prototype.setExpanded = function (expanded, $section) {
     const segment = $section.querySelector('button').id;
 
     if (expanded && !$section.classList.contains(this.sectionExpandedClass)) {
-      sendGAEvent(eventName, segment, 'open');
+      sendGAEvent(eventName.value, segment, 'open');
     }
     else if (!expanded && $section.classList.contains(this.sectionExpandedClass)) {
-      sendGAEvent(eventName, segment, 'closed');
+      sendGAEvent(eventName.value, segment, 'closed');
     }
   }
 
