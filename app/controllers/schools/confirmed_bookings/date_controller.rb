@@ -2,6 +2,7 @@ module Schools
   module ConfirmedBookings
     class DateController < Schools::BaseController
       before_action :set_booking
+      before_action :check_editable, except: :show
 
       def edit; end
 
@@ -56,6 +57,13 @@ module Schools
         @booking
           .bookings_placement_request
           .fetch_gitis_contact(gitis_crm)
+      end
+
+      def check_editable
+        return true if @booking.editable_date?
+
+        render 'uneditable'
+        false
       end
     end
   end
