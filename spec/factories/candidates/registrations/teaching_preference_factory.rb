@@ -1,11 +1,11 @@
 FactoryBot.define do
   factory :teaching_preference, class: Candidates::Registrations::TeachingPreference do
     transient do
-      school { FactoryBot.create :bookings_school }
+      registration_session { FactoryBot.build :flattened_registration_session }
     end
 
     initialize_with do
-      new school: school
+      new registration_session: registration_session
     end
 
     teaching_stage { "I’m very sure and think I’ll apply" }

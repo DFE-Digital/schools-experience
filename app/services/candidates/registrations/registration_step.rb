@@ -9,18 +9,24 @@ module Candidates
       attribute :created_at, :datetime
       attribute :updated_at, :datetime
 
+      attr_accessor :registration_session
+
+      delegate :school, to: :registration_session
+
       # Attempts to populate a new registration_step with attributes from the
       # session.
       # Returns an unpersisted instance if no applicable attributes are found.
       def self.new_from_session(session)
         instance = new
-        attributes_from_session = session.slice(*instance.attributes_to_persist.keys)
+        attributes_from_session = session.to_h.slice(*instance.attributes_to_persist.keys)
         created_at, updated_at = attributes_from_session.values_at(*instance.time_stamp_keys)
         attributes = attributes_from_session.except(*instance.time_stamp_keys).merge \
           'created_at' => created_at,
           'updated_at' => updated_at
 
         instance.assign_attributes attributes
+
+        instance.registration_session = session
 
         instance
       end
@@ -45,6 +51,27 @@ module Candidates
 
       def attributes_to_ignore
         TIME_STAMPS
+      end
+
+      def save
+        unless registration_session
+          fail <<~MSG.squish
+            registration_session not set.
+            Instantiate with `RegistrationSession#build_#{model_name.element}`
+            to ensure registration_session is set
+          MSG
+        end
+
+        return false unless valid?
+
+        registration_session.save self
+
+        self
+      end
+
+      def update(params)
+        assign_attributes params
+        save
       end
 
       def persisted?

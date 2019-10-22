@@ -4,7 +4,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
   include_context 'Stubbed candidates school'
 
   let :registration_session do
-    FactoryBot.build :registration_session, urn: school.urn
+    build :flattened_registration_session, urn: school.urn
   end
 
   let :uuid do

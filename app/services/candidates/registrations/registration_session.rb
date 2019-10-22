@@ -16,19 +16,21 @@ module Candidates
 
       def save(model)
         model
+          .tap { |m| m.registration_session = self.dup }
           .tap(&:flag_as_persisted!)
           .attributes_to_persist
-          .except('urn')
+          .except('urn') # TODO move this into attributes_to_ignore / remove this
           .each { |k, v| @registration_session[k] = v }
       end
 
       def fetch(klass)
-        model = klass.new_from_session @registration_session.dup
+        model = klass.new_from_session self.dup
 
         if model.persisted?
           model
         else
-          legacy_fetch! klass
+          # TODO remove this
+          legacy_fetch!(klass).tap { |step| step.registration_session = self.dup }
         end
       end
 
@@ -47,14 +49,11 @@ module Candidates
           def #{step}_attributes
             fetch_attributes #{step.to_s.classify}
           end
-        RUBY
-      end
 
-      # NOTE
-      # This is a special case as we need to pass in a school to limit
-      # the available subject choices.
-      def teaching_preference
-        fetch(TeachingPreference).tap { |tp| tp.school = school }
+          def build_#{step}(params = {})
+            #{step.to_s.classify}.new params.merge(registration_session: self)
+          end
+        RUBY
       end
 
       def uuid

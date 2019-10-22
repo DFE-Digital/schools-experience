@@ -2,15 +2,15 @@ module Candidates
   module Registrations
     class TeachingPreferencesController < RegistrationsController
       def new
-        @teaching_preference = TeachingPreference.new attributes_from_session
+        @teaching_preference = \
+          current_registration.build_teaching_preference attributes_from_session
       end
 
       def create
-        @teaching_preference = TeachingPreference.new \
-          teaching_preference_params.merge(school: current_registration.school)
+        @teaching_preference = \
+          current_registration.build_teaching_preference teaching_preference_params
 
-        if @teaching_preference.valid?
-          persist @teaching_preference
+        if @teaching_preference.save
           redirect_to next_step_path
         else
           render :new
@@ -23,10 +23,8 @@ module Candidates
 
       def update
         @teaching_preference = current_registration.teaching_preference
-        @teaching_preference.assign_attributes teaching_preference_params
 
-        if @teaching_preference.valid?
-          persist @teaching_preference
+        if @teaching_preference.update teaching_preference_params
           redirect_to candidates_school_registrations_application_preview_path
         else
           render :edit
@@ -44,7 +42,6 @@ module Candidates
 
       def attributes_from_session
         current_registration.teaching_preference_attributes
-          .merge(school: current_registration.school)
       end
     end
   end

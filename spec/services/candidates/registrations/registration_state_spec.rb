@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationState do
-  before do
-    FactoryBot.create :bookings_school, urn: 11048
-  end
+  let(:school) { create :bookings_school, urn: 11048 }
+
+  let(:urn) { school.urn }
 
   subject { described_class.new registration_session }
 
   context 'without personal information' do
     let :registration_session do
-      Candidates::Registrations::RegistrationSession.new({})
+      Candidates::Registrations::RegistrationSession.new urn: urn
     end
 
     it { expect(subject.next_step).to eq :personal_information }
@@ -18,7 +18,7 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with personal information' do
     let :registration_session do
-      FactoryBot.build :registration_session, with: [:personal_information]
+      build :flattened_registration_session, urn: urn, with: [:personal_information]
     end
 
     it { expect(subject.next_step).to eq :contact_information }
@@ -27,7 +27,7 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with contact_information' do
     let :registration_session do
-      FactoryBot.build :registration_session,
+      build :flattened_registration_session, urn: urn,
         with: %i(personal_information contact_information)
     end
 
@@ -37,7 +37,7 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with education' do
     let :registration_session do
-      FactoryBot.build :registration_session,
+      build :flattened_registration_session, urn: urn,
         with: %i(personal_information contact_information education)
     end
 
@@ -47,7 +47,7 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with teaching_preference' do
     let :registration_session do
-      FactoryBot.build :registration_session, with: %i(
+      build :flattened_registration_session, urn: urn, with: %i(
         personal_information
         contact_information
         education
@@ -61,7 +61,7 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with placement_preference' do
     let :registration_session do
-      FactoryBot.build :registration_session, with: %i(
+      build :flattened_registration_session, urn: urn, with: %i(
         personal_information
         contact_information
         education
@@ -76,7 +76,7 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with background_check' do
     let :registration_session do
-      FactoryBot.build :registration_session, with: %i(
+      build :flattened_registration_session, urn: urn, with: %i(
         personal_information
         contact_information
         education

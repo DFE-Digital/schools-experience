@@ -24,7 +24,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
     specify { expect(described_class).to respond_to(:from_application_preview) }
 
     let!(:school) { create(:bookings_school, urn: 11048) }
-    let(:rs) { build(:registration_session) }
+    let(:rs) { build(:flattened_registration_session) }
     let(:to) { "morris.szyslak@moes.net" }
     let(:cancellation_url) { 'https://example.com/placement_request/cancellations' }
     let(:ap) { Candidates::Registrations::ApplicationPreview.new(rs) }
@@ -74,7 +74,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
         end
 
         context 'when the school has set dates' do
-          let(:rs) { build(:registration_session, :with_placement_date) }
+          let(:rs) { build(:flattened_registration_session, :with_placement_date) }
           specify 'bookings_placement_date_id is correctly-assigned' do
             expect(subject.placement_availability).to eql(Bookings::PlacementDate.last.to_s)
           end

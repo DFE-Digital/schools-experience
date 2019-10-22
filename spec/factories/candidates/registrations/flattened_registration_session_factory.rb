@@ -51,7 +51,6 @@ FactoryBot.define do
 
       placement_preference do
         {
-          "urn"                             => urn,
           "availability"                    => "Every third Tuesday",
           "objectives"                      => "test the software",
           "placement_preference_created_at" => current_time,
@@ -61,7 +60,6 @@ FactoryBot.define do
 
       placement_preference_with_placement_date do
         {
-          "urn"                             => urn,
           "availability"                    => nil,
           "objectives"                      => "test the software",
           "bookings_placement_date_id"      => placement_date.id,

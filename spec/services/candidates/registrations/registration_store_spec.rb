@@ -6,7 +6,7 @@ describe Candidates::Registrations::RegistrationStore do
   end
 
   let :session do
-    FactoryBot.build :registration_session, uuid: 'sekret'
+    build :flattened_registration_session, uuid: 'sekret'
   end
 
   subject { described_class.instance }

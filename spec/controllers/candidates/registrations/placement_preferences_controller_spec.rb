@@ -5,7 +5,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
   include_context 'Stubbed current_registration'
 
   let :registration_session do
-    FactoryBot.build :registration_session, with: %i(
+    build :flattened_registration_session, urn: school.urn, with: %i(
       personal_information
       contact_information
       education
@@ -58,7 +58,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
       context 'valid' do
         let :placement_preference do
-          FactoryBot.build :placement_preference, urn: school.urn
+          FactoryBot.build :placement_preference
         end
 
         it 'stores the placement_preference details in the session' do
@@ -76,7 +76,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
   context 'with existing placement_preference in session' do
     let :existing_placement_preference do
-      FactoryBot.build :placement_preference, urn: school.urn
+      FactoryBot.build :placement_preference
     end
 
     before do
@@ -144,7 +144,6 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
       context 'valid' do
         let :placement_preference do
           FactoryBot.build :placement_preference,
-            urn: school.urn,
             availability: 'Every second Friday',
             objectives: 'I would like to become a teacher'
         end

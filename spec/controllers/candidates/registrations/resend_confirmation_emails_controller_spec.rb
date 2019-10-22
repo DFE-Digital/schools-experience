@@ -5,7 +5,7 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
   include_context 'Stubbed current_registration'
 
   let :registration_session do
-    FactoryBot.build :registration_session
+    build :flattened_registration_session
   end
 
   before do

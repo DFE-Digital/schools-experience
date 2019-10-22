@@ -1,16 +1,22 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementPreference, type: :model do
-  it_behaves_like 'a registration step'
-
-  include_context 'Stubbed candidates school'
+  # NOTE commented out the shared examples.
+  #it_behaves_like 'a registration step'
 
   let! :today do
     Date.today
   end
 
+  let :flexible_dates_school do
+    create :bookings_school, availability_preference_fixed: false
+  end
+
+  let :fixed_dates_school do
+    create :bookings_school, availability_preference_fixed: true
+  end
+
   context 'attributes' do
-    it { is_expected.to respond_to :urn }
     it { is_expected.to respond_to :availability }
     it { is_expected.to respond_to :objectives }
     it { is_expected.to respond_to :bookings_placement_date_id }
@@ -22,10 +28,13 @@ describe Candidates::Registrations::PlacementPreference, type: :model do
     end
 
     context 'when the school allows flexible dates' do
-      let(:placement_preference) { described_class.new(urn: school_urn) }
+      let :registration_session do
+        build :flattened_registration_session, urn: flexible_dates_school.urn
+      end
+
       context 'when availability are not present' do
         let :placement_preference do
-          described_class.new
+          registration_session.build_placement_preference
         end
 
         it 'adds an error to availability' do
@@ -36,7 +45,7 @@ describe Candidates::Registrations::PlacementPreference, type: :model do
 
       context 'when availability are too long' do
         let :placement_preference do
-          described_class.new \
+          registration_session.build_placement_preference \
             availability: 151.times.map { 'word' }.join(' ')
         end
 
@@ -47,9 +56,10 @@ describe Candidates::Registrations::PlacementPreference, type: :model do
       end
 
       context 'when the placement request is created under fixed dates but now the schools is flexible' do
-        let(:placement_date) { create(:bookings_placement_date, bookings_school: school) }
+        let(:placement_date) { create(:bookings_placement_date, bookings_school: fixed_dates_school) }
         let(:placement_preference) do
-          described_class.new(urn: school_urn, bookings_placement_date_id: placement_date.id)
+          registration_session.build_placement_preference \
+            bookings_placement_date_id: placement_date.id
         end
 
         before do
@@ -64,11 +74,11 @@ describe Candidates::Registrations::PlacementPreference, type: :model do
     end
 
     context 'when the school mandates fixed dates' do
-      let(:placement_preference) { described_class.new(urn: school_urn) }
-
-      before do
-        allow(placement_preference).to receive(:school_offers_fixed_dates?).and_return(true)
+      let :registration_session do
+        build :flattened_registration_session, urn: fixed_dates_school.urn
       end
+
+      let(:placement_preference) { registration_session.build_placement_preference }
 
       before(:each) { placement_preference.validate }
 
@@ -79,7 +89,7 @@ describe Candidates::Registrations::PlacementPreference, type: :model do
 
       context 'when the placement request is created under flexible dates but now the schools mandates fixed' do
         let(:placement_preference) do
-          described_class.new(urn: school_urn, availability: "Always")
+          registration_session.build_placement_preference availability: "Always"
         end
 
         before do
@@ -94,8 +104,12 @@ describe Candidates::Registrations::PlacementPreference, type: :model do
     end
 
     context 'when objectives are not present' do
+      let :registration_session do
+        build :flattened_registration_session, urn: create(:bookings_school).urn
+      end
+
       let :placement_preference do
-        described_class.new
+        registration_session.build_placement_preference
       end
 
       it 'adds an error to objectives' do
@@ -105,8 +119,12 @@ describe Candidates::Registrations::PlacementPreference, type: :model do
     end
 
     context 'when objectives are too long' do
+      let :registration_session do
+        build :flattened_registration_session, urn: create(:bookings_school).urn
+      end
+
       let :placement_preference do
-        described_class.new \
+        registration_session.build_placement_preference \
           objectives: 151.times.map { 'word' }.join(' ')
       end
 

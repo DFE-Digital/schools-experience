@@ -2,9 +2,13 @@ require 'rails_helper'
 
 describe Candidates::Registrations::TeachingPreference, type: :model do
   include_context 'Stubbed candidates school'
-  it_behaves_like 'a registration step'
+  #it_behaves_like 'a registration step'
 
-  subject { described_class.new school: school }
+  let :registration_session do
+    build :flattened_registration_session, urn: school.urn
+  end
+
+  subject { registration_session.build_teaching_preference }
 
   context 'attriubtes' do
     it { is_expected.to respond_to :school }

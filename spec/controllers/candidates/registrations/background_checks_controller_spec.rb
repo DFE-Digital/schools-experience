@@ -3,13 +3,13 @@ require 'rails_helper'
 describe Candidates::Registrations::BackgroundChecksController, type: :request do
   include_context 'Stubbed current_registration'
 
-  before do
-    FactoryBot.create :bookings_school, urn: 11048
+  let :school do
+    create :bookings_school, urn: 11048
   end
 
   context 'without existing background_check in session' do
     let :registration_session do
-      FactoryBot.build :registration_session, with: %i(
+      FactoryBot.build :flattened_registration_session, urn: school.urn, with: %i(
         personal_information
         contact_information
         education
@@ -79,6 +79,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
     let :registration_session do
       FactoryBot.build :gitis_registration_session,
+        urn: school.urn,
         gitis_contact: gitis_contact,
         with: %i(
           personal_information
@@ -107,7 +108,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
   context 'with existing background check in session' do
     let :registration_session do
-      FactoryBot.build :gitis_registration_session, with: %i(
+      FactoryBot.build :gitis_registration_session, urn: school.urn, with: %i(
         personal_information
         contact_information
         education

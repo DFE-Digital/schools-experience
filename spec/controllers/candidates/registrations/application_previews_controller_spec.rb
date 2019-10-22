@@ -11,7 +11,7 @@ describe Candidates::Registrations::ApplicationPreviewsController, type: :reques
 
     context 'candidate skipped ahead' do
       let :registration_session do
-        FactoryBot.build :registration_session, urn: school.urn, with: []
+        FactoryBot.build :flattened_registration_session, urn: school.urn, with: []
       end
 
       it 'redirects to the first missing step' do
@@ -22,7 +22,7 @@ describe Candidates::Registrations::ApplicationPreviewsController, type: :reques
 
     context 'candidate has not skipped ahead' do
       let :registration_session do
-        FactoryBot.build :registration_session
+        FactoryBot.build :flattened_registration_session
       end
 
       it 'renders the show template' do

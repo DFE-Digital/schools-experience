@@ -21,7 +21,6 @@ module Candidates
               if: :school_offers_flexible_dates?,
               unless: -> { bookings_placement_date_id.present? }
           end
-          validates :urn, presence: true
           validates :availability, number_of_words: { less_than: 150 }, if: -> { availability.present? }
           validates :objectives, presence: true
           validates :objectives, number_of_words: { less_than: 150 }, if: -> { objectives.present? }

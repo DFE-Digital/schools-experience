@@ -2,14 +2,13 @@ module Candidates
   module Registrations
     class EducationsController < RegistrationsController
       def new
-        @education = Education.new attributes_from_session
+        @education = current_registration.build_education attributes_from_session
       end
 
       def create
-        @education = Education.new education_params
+        @education = current_registration.build_education education_params
 
-        if @education.valid?
-          persist @education
+        if @education.save
           redirect_to next_step_path
         else
           render :new
@@ -22,10 +21,8 @@ module Candidates
 
       def update
         @education = current_registration.education
-        @education.assign_attributes education_params
 
-        if @education.valid?
-          persist @education
+        if @education.update education_params
           redirect_to candidates_school_registrations_application_preview_path
         else
           render :edit

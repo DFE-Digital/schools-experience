@@ -2,13 +2,15 @@ module Candidates
   module Registrations
     class BackgroundChecksController < RegistrationsController
       def new
-        @background_check = BackgroundCheck.new attributes_from_session
+        @background_check = \
+          current_registration.build_background_check attributes_from_session
       end
 
       def create
-        @background_check = BackgroundCheck.new background_check_params
-        if @background_check.valid?
-          persist @background_check
+        @background_check = \
+          current_registration.build_background_check background_check_params
+
+        if @background_check.save
           redirect_to next_step_path
         else
           render :new
@@ -21,10 +23,8 @@ module Candidates
 
       def update
         @background_check = current_registration.background_check
-        @background_check.assign_attributes background_check_params
 
-        if @background_check.valid?
-          persist @background_check
+        if @background_check.update background_check_params
           redirect_to candidates_school_registrations_application_preview_path
         else
           render :edit

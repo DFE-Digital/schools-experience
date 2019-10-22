@@ -182,12 +182,13 @@ describe Bookings::PlacementRequest, type: :model do
     context 'invalid session' do
       let :invalid_session do
         Candidates::Registrations::RegistrationSession.new \
-          "candidates_registrations_background_check" => {},
-          "candidates_registrations_contact_information" => {},
-          "candidates_registrations_placement_preference" => {},
-          "candidates_registrations_education" => {},
-          "candidates_registrations_teaching_preference" => {},
-          "urn" => 123456
+          "personal_information_created_at" => DateTime.now,
+          "contact_information_created_at"  => DateTime.now,
+          "background_check_created_at"     => DateTime.now,
+          "placement_preference_created_at" => DateTime.now,
+          "education_created_at"            => DateTime.now,
+          "teaching_preference_created_at"  => DateTime.now,
+          "urn"                             => 123456
       end
 
       it 'raises a validation error' do
@@ -202,7 +203,7 @@ describe Bookings::PlacementRequest, type: :model do
       include_context 'Stubbed candidates school'
 
       let :registration_session do
-        FactoryBot.build :registration_session
+        build :flattened_registration_session
       end
 
       it 'creates the placement request' do
@@ -219,7 +220,7 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       let :registration_session do
-        FactoryBot.build :registration_session
+        build :flattened_registration_session
       end
 
       subject do

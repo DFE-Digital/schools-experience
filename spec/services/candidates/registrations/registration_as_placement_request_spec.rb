@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationAsPlacementRequest do
   let :session do
-    FactoryBot.build :registration_session
+    build :flattened_registration_session
   end
 
   let(:urn) { 11048 }

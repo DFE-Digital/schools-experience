@@ -5,7 +5,7 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
   include_context 'Stubbed current_registration'
 
   let :registration_session do
-    FactoryBot.build :registration_session, with: %i(
+    build :flattened_registration_session, urn: school.urn, with: %i(
       personal_information
       contact_information
       education
@@ -43,11 +43,12 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
 
       it 'assigns the model with the existing attributes' do
         expect(assigns(:teaching_preference).attributes).to eq \
-          teaching_preference.attributes
+          registration_session.teaching_preference.attributes
       end
 
       it "sets the model's school" do
-        expect(assigns(:teaching_preference).school).to eq school
+        expect(assigns(:teaching_preference).school).to eq \
+          registration_session.school
       end
 
       it 'renders the new template' do

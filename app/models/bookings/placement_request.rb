@@ -11,6 +11,7 @@ module Bookings
     has_secure_token
 
     validates_presence_of :candidate, unless: :pre_phase3_record?
+    validates_presence_of :urn
 
     belongs_to :school,
       class_name: 'Bookings::School',

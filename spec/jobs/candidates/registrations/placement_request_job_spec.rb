@@ -9,7 +9,7 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
   end
 
   let :registration_session do
-    FactoryBot.build :registration_session, urn: school.urn
+    build :flattened_registration_session, urn: school.urn
   end
 
   let :placement_request do

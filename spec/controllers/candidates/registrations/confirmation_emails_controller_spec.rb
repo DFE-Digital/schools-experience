@@ -5,7 +5,7 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
   include_context 'Stubbed current_registration'
 
   let :registration_session do
-    FactoryBot.build :registration_session, urn: school.urn,
+    FactoryBot.build :flattened_registration_session, urn: school.urn,
       with: %i(
         personal_information
         contact_information
