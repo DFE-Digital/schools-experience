@@ -19,7 +19,7 @@ Then("I should see the list of primary placement dates") do
   @primary_dates.each do |pd|
     expect(page).to have_css(
       'label',
-      text: "#{pd.date.strftime('%d %B %Y')} (#{pd.duration} day)".downcase
+      text: "#{pd.date.strftime('%d %B %Y')} (#{pd.duration} day)"
     )
   end
 end
