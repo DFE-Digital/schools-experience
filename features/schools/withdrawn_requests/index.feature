@@ -5,6 +5,7 @@ Feature: Viewing withdrawn requests
 		
     Background:
         Given I am logged in as a DfE user
+        And my school has fixed dates
         And my school is fully-onboarded
     
     Scenario: Page title
