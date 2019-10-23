@@ -102,7 +102,7 @@ describe Candidates::Registrations::RegistrationSession do
       end
 
       context 'when new session' do
-        subject { FactoryBot.build :new_registration_session, :with_education }
+        subject { FactoryBot.build :flattened_registration_session, :with_education }
 
         it 'returns the correct attributes' do
           expect(subject.education_attributes.except('created_at', 'updated_at')).to eq \
@@ -139,7 +139,7 @@ describe Candidates::Registrations::RegistrationSession do
 
       context 'when new session' do
         let :session do
-          FactoryBot.build :new_registration_session, :with_education
+          FactoryBot.build :flattened_registration_session, :with_education
         end
 
         subject { session.education }
@@ -174,7 +174,7 @@ describe Candidates::Registrations::RegistrationSession do
       end
 
       context 'when new session' do
-        subject { FactoryBot.build :new_registration_session, :with_teaching_preference }
+        subject { FactoryBot.build :flattened_registration_session, :with_teaching_preference }
 
         it 'returns the correct attributes' do
           expect(subject.teaching_preference_attributes.except('created_at', 'updated_at')).to eq \
@@ -218,7 +218,7 @@ describe Candidates::Registrations::RegistrationSession do
       context 'when new session' do
         let :session do
           FactoryBot.build \
-            :new_registration_session, :with_teaching_preference, :with_school
+            :flattened_registration_session, :with_teaching_preference, :with_school
         end
 
         subject { session.teaching_preference }
@@ -277,7 +277,7 @@ describe Candidates::Registrations::RegistrationSession do
       # TODO SE-1881
       context 'when legacy session' do
         subject do
-          FactoryBot.build :new_registration_session
+          FactoryBot.build :flattened_registration_session
         end
 
         before do
@@ -291,7 +291,7 @@ describe Candidates::Registrations::RegistrationSession do
 
       context 'when new session' do
         subject do
-          FactoryBot.build :new_registration_session
+          FactoryBot.build :flattened_registration_session
         end
 
         before do
@@ -357,7 +357,7 @@ describe Candidates::Registrations::RegistrationSession do
     # TODO SE-1881
     context 'when legacy session' do
       let :registration_session do
-        FactoryBot.build :new_registration_session
+        FactoryBot.build :flattened_registration_session
       end
 
       before do
@@ -371,7 +371,7 @@ describe Candidates::Registrations::RegistrationSession do
 
     context 'when new session' do
       let :registration_session do
-        FactoryBot.build :new_registration_session
+        FactoryBot.build :flattened_registration_session
       end
 
       before do

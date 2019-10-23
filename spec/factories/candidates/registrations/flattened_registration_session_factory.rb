@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :new_registration_session, class: Candidates::Registrations::RegistrationSession do
+  factory :flattened_registration_session, class: Candidates::Registrations::RegistrationSession do
     transient do
       current_time { DateTime.current }
       urn { 11048 }
