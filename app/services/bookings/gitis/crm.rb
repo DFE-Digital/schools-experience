@@ -41,16 +41,12 @@ module Bookings
       end
 
       def find_by_email(address)
-        params = {
-          '$filter' => filter_pairs(emailaddress2: address, emailaddress1: address),
-          '$select' => Contact.attributes_to_select,
-          '$top' => 1
-        }
-
-        contacts = api.get("contacts", params)['value']
+        contacts = store.fetch Contact,
+          filter: filter_pairs(emailaddress2: address, emailaddress1: address),
+          limit: 1
 
         if contacts.any?
-          Contact.new(contacts[0]).tap do |c|
+          contacts.first.tap do |c|
             crmlog "Read contact #{c.contactid}"
           end
         end
