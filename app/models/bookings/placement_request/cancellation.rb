@@ -53,6 +53,14 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     end
   end
 
+  def cancelled_by_school?
+    cancelled_by == 'school'
+  end
+
+  def cancelled_by_candidate?
+    cancelled_by == 'candidate'
+  end
+
 private
 
   def placement_request_not_closed

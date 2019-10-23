@@ -1,5 +1,28 @@
-<% if @cancellation.booking.present? %>
-  <%= render partial: 'show_booking', locals: { cancellation: @cancellation } %>
+<% if @cancellation.cancelled_by_candidate? %>
+  <% if @cancellation.booking.present? %>
+    <%= render 'show_booking_cancelled_by_candidate',
+      booking_date: @cancellation.booking_date,
+      school_name: @cancellation.school_name
+    %>
+  <% else %>
+    <%= render 'show_placement_request_cancelled_by_candidate',
+      school_name: @cancellation.school_name
+    %>
+  <% end %>
 <% else %>
-  <%= render partial: 'show_placement_request', locals: { cancellation: @cancellation } %>
+  <% if @cancellation.booking.present? %>
+    <%= render 'show_booking_cancelled_by_school',
+      school_name: @cancellation.school.name,
+      dates_requested: @cancellation.dates_requested,
+      rejection_reasons: @cancellation.reason,
+      extra_details: @cancellation.extra_details
+    %>
+  <% else %>
+    <%= render 'show_placement_request_cancelled_by_school',
+      school_name: @cancellation.school.name,
+      dates_requested: @cancellation.dates_requested,
+      rejection_reasons: @cancellation.reason,
+      extra_details: @cancellation.extra_details
+    %>
+  <% end %>
 <% end %>
