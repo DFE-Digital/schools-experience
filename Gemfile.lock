@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DFE-Digital/govuk_elements_form_builder.git
-  revision: e2443c2932a1a56f488dda68bcab43b586d79427
+  revision: 40dbcb1b3dd19f62052321c45ce40aefaa7e5111
   specs:
     govuk_elements_form_builder (1.2.0)
       govuk_elements_rails (>= 3.0.0)
@@ -108,7 +108,7 @@ GEM
     concurrent-ruby (1.1.5)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.4)
+    crass (1.0.5)
     cucumber (3.1.2)
       builder (>= 2.1.2)
       cucumber-core (~> 3.2.0)
@@ -206,7 +206,7 @@ GEM
     listen (3.2.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.3.0)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
