@@ -31,6 +31,22 @@ module Bookings
           end
         end
 
+        def fetch(entity_type, filter: nil, limit: 10, order: nil)
+          params = {
+            '$select' => entity_type.attributes_to_select,
+            '$top' => limit
+          }
+
+          params['$filter'] = filter if filter.present?
+          params['$orderby'] = order if order.present?
+
+          records = api.get(entity_type.entity_path, params)['value']
+
+          records.map do |record_data|
+            entity_type.new(record_data)
+          end
+        end
+
       private
 
         def filter_by_uuid(key, uuids)

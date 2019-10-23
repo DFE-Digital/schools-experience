@@ -34,16 +34,15 @@ RSpec.describe Bookings::SubjectSync do
       [
         gitis_subject_1, gitis_subject_2, gitis_subject_3,
         gitis_subject_4, gitis_subject_5
-      ].map(&:attributes)
+      ]
     end
 
     before do
-      expect(fake_gitis.send(:api)).to receive(:get).
+      expect(fake_gitis.store).to receive(:fetch).
         with(
-          Bookings::Gitis::TeachingSubject.entity_path,
-          '$select' => 'dfe_name',
-          '$top' => described_class::LIMIT
-        ).and_return('value' => response)
+          Bookings::Gitis::TeachingSubject,
+          limit: described_class::LIMIT
+        ).and_return(response)
     end
 
     context 'for a successful sync' do
@@ -83,7 +82,7 @@ RSpec.describe Bookings::SubjectSync do
     context 'with more than can be handled in a single batch' do
       let(:response) do
         (1..(described_class::LIMIT + 1)).map do
-          build(:gitis_subject).attributes
+          build(:gitis_subject)
         end
       end
 

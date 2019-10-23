@@ -62,6 +62,13 @@ module Bookings
           end
         end
 
+        def fetch(_entity_type, _filter: nil, limit: 10, _order: nil)
+          (1..limit).map do |_index|
+            Contact.new \
+              fake_contact_data.merge('contactid' => SecureRandom.uuid)
+          end
+        end
+
       private
 
         def fake_contact_id

@@ -3,6 +3,7 @@ module Bookings
     class CRM
       prepend FakeCrm if Rails.application.config.x.gitis.fake_crm
       delegate :logger, to: Rails
+      delegate :fetch, to: :store
 
       attr_reader :store
 
@@ -55,31 +56,11 @@ module Bookings
         end
       end
 
-      def fetch(entity_type, filter: nil, limit: 10, order: nil)
-        params = {
-          '$select' => entity_type.attributes_to_select,
-          '$top' => limit
-        }
-
-        params['$filter'] = filter if filter.present?
-        params['$orderby'] = order if order.present?
-
-        records = api.get(entity_type.entity_path, params)['value']
-
-        logline = "Read #{records.length} #{entity_type.to_s.pluralize} from Gitis"
-        logline << " - filter: #{filter}" if filter.present?
-        crmlog logline
-
-        records.map do |record_data|
-          entity_type.new(record_data)
-        end
-      end
-
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
         filter = filter_pairs(emailaddress2: email, emailaddress1: email)
 
-        fetch(Contact, filter: filter, limit: 20, order: 'createdon desc')
+        store.fetch(Contact, filter: filter, limit: 20, order: 'createdon desc')
           .find { |c| c.signin_attributes_match? firstname, lastname, date_of_birth }
           .tap { |c| crmlog "Read contact #{c.contactid}" if c }
       end
