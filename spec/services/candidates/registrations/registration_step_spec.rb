@@ -6,7 +6,7 @@ describe Candidates::Registrations::RegistrationStep, type: :model do
       Candidates::Registrations::PlacementPreference.new_from_session session
     end
 
-    context 'when the session contains the nescesary attributes' do
+    context 'when the session contains the necessary attributes' do
       let :session do
         attributes_for(:placement_preference).merge \
           'placement_preference_created_at' => DateTime.now,
@@ -16,7 +16,7 @@ describe Candidates::Registrations::RegistrationStep, type: :model do
       it { is_expected.to be_persisted }
     end
 
-    context 'when the session does not contain the nescesary attributes' do
+    context 'when the session does not contain the necessary attributes' do
       let :session do
         {}
       end
