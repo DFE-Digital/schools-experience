@@ -11,7 +11,7 @@ module Schools
 
       validates :date,
         timeliness: {
-          after: :today,
+          on_or_after: :today,
           before: -> { 2.years.from_now },
           type: :date
         },

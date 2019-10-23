@@ -21,8 +21,8 @@ describe Schools::PlacementRequests::ConfirmBooking, type: :model do
     end
 
     context '#date' do
-      let(:past_dates) { [1.week.ago, 1.day.ago, Date.today] }
-      let(:future_dates) { [1.day.from_now, 1.week.from_now, 1.year.from_now] }
+      let(:past_dates) { [1.week.ago, 1.day.ago, Date.yesterday] }
+      let(:future_dates) { [Date.today, 1.day.from_now, 1.week.from_now, 1.year.from_now] }
       let!(:bookings_subject) { create(:bookings_subject) }
 
       specify 'should not allow past dates' do
