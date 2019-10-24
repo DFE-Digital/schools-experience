@@ -268,7 +268,7 @@ module Schools
       foreign_key: 'bookings_school_id'
 
     def available_subjects
-      Bookings::Subject.available
+      Bookings::Subject.all
     end
 
     def current_step

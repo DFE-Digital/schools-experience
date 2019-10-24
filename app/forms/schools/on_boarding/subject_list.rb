@@ -21,7 +21,7 @@ module Schools
       end
 
       def available_subjects
-        Bookings::Subject.available.secondary_subjects
+        Bookings::Subject.secondary_subjects
       end
 
     private
