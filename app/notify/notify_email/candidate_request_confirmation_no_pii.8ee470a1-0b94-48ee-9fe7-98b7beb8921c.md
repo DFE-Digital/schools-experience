@@ -9,7 +9,7 @@ You've requested school experience at ((school_name)).
 Here's a copy of your request details which have been forwarded to the school.
 
 * School or college: ((school_name))
-* Availability/preferred dates: ((placement_availability))
+* Availability / start dates: ((placement_availability))
 * What you want to get out of school experience: ((placement_outcome))
 * Degree stage: ((candidate_degree_stage))
 * Degree subject: ((candidate_degree_subject))
@@ -21,7 +21,5 @@ Here's a copy of your request details which have been forwarded to the school.
 ---
 
 # Help and support
-
-If you haven’t heard from the school after 2 weeks email our School Experience Support Team at schoolexperience@ta-recruit.education.gov.uk.
 
 If you'd like to withdraw your school experience request use the following link ((cancellation_url)).

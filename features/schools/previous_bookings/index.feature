@@ -26,7 +26,7 @@ Feature: Viewing previous bookings
     Scenario: Table headings
         Given there are some previous bookings
         When I am on the 'previous bookings' page
-        Then the bookings table should have the following values:
+        Then the 'bookings' table should have the following values:
 			      | Heading | Value            |
             | Name    | Matthew Richards |
             | Subject | Biology          |

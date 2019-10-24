@@ -83,8 +83,8 @@ Then("I should see all the bookings listed") do
   end
 end
 
-Then("the bookings table should have the following values:") do |table|
-  within('table#bookings') do
+Then("the {string} table should have the following values:") do |table_id, table|
+  within("table##{table_id}") do
     table.hashes.each do |row|
       within(page.find('thead > tr')) do
         expect(page).to have_css('th', text: row['Heading'])
@@ -177,8 +177,11 @@ Then("I should not see the bookings table") do
   expect(page).not_to have_css('table#bookings')
 end
 
-Then("the page title should start with {string} and include the booking reference") do |string|
+Then("the page title should start with {string}") do |string|
   expect(page.title).to start_with(string)
+end
+
+Then("the page title should include the booking reference") do
   expect(page.title).to include(@booking.reference)
 end
 
