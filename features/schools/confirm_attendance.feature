@@ -12,7 +12,7 @@ Feature: Confirming candidate attendance
         Given there are no bookings
         When I am on the 'confirm attendance' page
         Then I should see a notification that 'There are no bookings that need their attendance to be confirmed'
-        And I should see a 'Return to requests and bookings' link to the 'schools dashboard'
+        And I should see a secondary 'Return to requests and bookings' link to the 'schools dashboard'
 
     Scenario: Listing bookings
         Given there are some bookings that were scheduled last week

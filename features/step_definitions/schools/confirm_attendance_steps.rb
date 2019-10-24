@@ -81,3 +81,7 @@ end
 Then("no bookings should be listed") do
   expect(page).to have_text('There are no bookings that need their attendance to be confirmed.')
 end
+
+Then("I should see a secondary {string} link to the {string}") do |link_text, path|
+  expect(page).to have_link(link_text, href: path_for(path), class: 'govuk-button--secondary')
+end
