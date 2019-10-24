@@ -44,7 +44,3 @@ end
 When("I change the date to an invalid date") do
   step "I fill in the date field 'Booking date' with 200-100-900"
 end
-
-Then("I should see a validation error") do
-  pending # Write code here that turns the phrase above into concrete actions
-end
