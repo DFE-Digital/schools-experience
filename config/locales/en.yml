@@ -24,7 +24,7 @@ en:
       degree_stage:
         blank: "Select a degree stage"
       degree_stage_explaination:
-        blank: "Enter an explaination"
+        blank: "Enter an explanation"
       degree_subject:
         blank: "Select a subject"
         inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
@@ -127,7 +127,7 @@ en:
             degree_stage:
               blank: "Select a degree stage"
             degree_stage_explaination:
-              blank: "Enter an explaination"
+              blank: "Enter an explanation"
             degree_subject:
               blank: "Select a subject"
               inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
