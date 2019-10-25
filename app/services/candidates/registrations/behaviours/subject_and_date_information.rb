@@ -12,17 +12,11 @@ module Candidates
 
           validates :bookings_placement_dates_subject_id,
             presence: true,
-            if: :check_placement_date_validity?,
-            unless: :dont_validate_placement_date_subject?
         end
 
       private
 
         def dont_validate_availability?
-          validation_context == :creating_placement_request_from_registration_session
-        end
-
-        def dont_validate_placement_date_subject?
           validation_context == :creating_placement_request_from_registration_session
         end
 
