@@ -49,7 +49,7 @@
           </p>
         </section>
 
-        <div class="govuk-accordion" data-module="govuk-accordion" data-track-event-name="school-logging-in-help" id="accordion-default">
+        <div class="govuk-accordion" data-module="govuk-accordion" data-track-event-name="school-logging-in-help" id="accordion-dfe-signin-help">
           <div class="govuk-accordion__section ">
             <div class="govuk-accordion__section-header">
               <h2 class="govuk-accordion__section-heading">
@@ -119,3 +119,12 @@
     </div>
   </main>
 </div>
+
+<script>
+  window.addEventListener('load', function(e) {
+    // attach to the accordion container so events bubbling up from sections will be caught
+    document.getElementById('accordion-dfe-signin-help').addEventListener('accordionToggle', function(e) {
+      window.logAccordionToggle(e.detail.name, e.detail.section, e.detail.expanded ? 'open' : 'closed');
+    });
+  });
+</script>

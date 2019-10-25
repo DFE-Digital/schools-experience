@@ -4,7 +4,7 @@ initAll();
 import "@stimulus/polyfills";
 import { Application } from "stimulus";
 import { definitionsFromContext } from "stimulus/webpack-helpers";
-import { descriptionSummary, descriptionToggleEvent } from 'analytics/school_description_helper.js';
+import { logAccordionToggle } from 'analytics/log_accordion_toggle';
 
 const application = Application.start();
 const context = require.context("controllers", true, /.js$/);
@@ -22,26 +22,30 @@ global.mapsLoadedCallback = function() {
 
 Accordion.prototype.originalSetExpanded = Accordion.prototype.setExpanded;
 Accordion.prototype.setExpanded = function (expanded, $section) {
+  // the name of the accordion as it will be categorised in GA
   const eventName = this.$module.attributes['data-track-event-name'];
 
-  if (eventName) {
-    const segment = $section.querySelector('button').id;
+  // the button inserted by the accordion plugin that replaces the
+  // provided span and takes its descriptive ID
+  const sectionButton = $section.querySelector('button');
 
-    if (expanded && !$section.classList.contains(this.sectionExpandedClass)) {
-      sendGAEvent(eventName.value, segment, 'open');
-    }
-    else if (!expanded && $section.classList.contains(this.sectionExpandedClass)) {
-      sendGAEvent(eventName.value, segment, 'closed');
-    }
+  if (eventName && sectionButton) {
+    const accordionExpanded = new CustomEvent('accordionToggle', {
+      bubbles: true,
+      detail: {
+        name: eventName.value,
+        section: sectionButton.id,
+        expanded: expanded
+      }
+    });
+
+    $section.dispatchEvent(accordionExpanded);
   }
 
   this.originalSetExpanded(expanded, $section);
 };
 
-window.descriptionTracker = {
-  element: descriptionSummary,
-  event: descriptionToggleEvent
-};
+window.logAccordionToggle = logAccordionToggle;
 
 global.preventDoubleClick = function(form) {
   let buttons = form.querySelectorAll('input[type=submit],button[type=submit]') ;
