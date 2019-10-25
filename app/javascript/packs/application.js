@@ -1,15 +1,14 @@
 import { initAll, Accordion } from "govuk-frontend";
 initAll();
 
-import "@stimulus/polyfills"
-import { Application } from "stimulus"
-import { definitionsFromContext } from "stimulus/webpack-helpers"
+import "@stimulus/polyfills";
+import { Application } from "stimulus";
+import { definitionsFromContext } from "stimulus/webpack-helpers";
 import { descriptionSummary, descriptionToggleEvent } from 'analytics/school_description_helper.js';
-import { sendGAEvent } from 'analytics/send_ga_event';
 
-const application = Application.start()
-const context = require.context("controllers", true, /.js$/)
-application.load(definitionsFromContext(context))
+const application = Application.start();
+const context = require.context("controllers", true, /.js$/);
+application.load(definitionsFromContext(context));
 
 global.mapsLoadedCallback = function() {
   global.mapsLoaded = true ;
@@ -19,7 +18,7 @@ global.mapsLoadedCallback = function() {
     let instance = application.getControllerForElementAndIdentifier(map, "map");
     instance.initMap() ;
   }
-}
+};
 
 Accordion.prototype.originalSetExpanded = Accordion.prototype.setExpanded;
 Accordion.prototype.setExpanded = function (expanded, $section) {
@@ -52,4 +51,4 @@ global.preventDoubleClick = function(form) {
   }
 
   return true ;
-}
+};
