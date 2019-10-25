@@ -106,7 +106,7 @@ module Bookings
           .new(registration_session)
           .attributes
           .merge(analytics_tracking_uuid: analytics_tracking_uuid)
-      ).tap { |r| r.save!(context: :returning_from_confirmation_email) }
+      ).tap { |r| r.save!(context: :creating_placement_request_from_registration_session) }
     end
 
     def sent_at

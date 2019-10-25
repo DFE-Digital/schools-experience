@@ -10,8 +10,10 @@ module Candidates
           validates :teaching_stage, presence: true
           validates :teaching_stage, inclusion: { in: :available_teaching_stages }, if: -> { teaching_stage.present? }
           validates :subject_first_choice, presence: true
+          # breaks if school removes subject
           validates :subject_first_choice, inclusion: { in: :available_subject_choices }, if: -> { subject_first_choice.present? }
           validates :subject_second_choice, presence: true
+          # breaks if school removes subject
           validates :subject_second_choice, inclusion: { in: :second_subject_choices }, if: -> { subject_second_choice.present? }
         end
 
