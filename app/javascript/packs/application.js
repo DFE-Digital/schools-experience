@@ -2,6 +2,7 @@ import { initAll, Accordion } from "govuk-frontend";
 initAll();
 
 import "@stimulus/polyfills";
+import "custom-event-polyfill";
 import { Application } from "stimulus";
 import { definitionsFromContext } from "stimulus/webpack-helpers";
 import { logAccordionToggle } from 'analytics/log_accordion_toggle';
