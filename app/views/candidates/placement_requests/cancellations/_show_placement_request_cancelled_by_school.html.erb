@@ -1,0 +1,28 @@
+<% self.page_title = 'Rejected placement request' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Your school experience request has been turned down by the school
+      </h1>
+    </div>
+
+    <p>
+      <%= school_name %> has turned down your school experience request for the following dates: <%= dates_requested %>
+    </p>
+
+    <p>
+      Your request was turned down for the following reasons:
+      <%= rejection_reasons %>
+    </p>
+
+    <p>
+      <%= link_to 'Request school experience at other schools', new_candidates_school_search_path %>
+    </p>
+
+    <p>
+      If you need any further help and support getting school experience or becoming a teacher visit the <%= link_to 'Get Into Teaching website', 'https://getintoteaching.education.gov.uk' %>.
+    </p>
+  </div>
+</div>
