@@ -1,8 +1,9 @@
 module Bookings
   module Gitis
     class Factory
-      def self.crm
-        new.crm
+      class << self
+        def crm; new.crm; end
+        alias_method :gitis, :crm
       end
 
       def crm

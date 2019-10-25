@@ -4,6 +4,9 @@ describe Bookings::Gitis::Factory do
   let(:factory) { described_class.new }
 
   describe '#token' do
+    let(:auth) { Bookings::Gitis::Auth.new }
+    before { allow(Bookings::Gitis::Auth).to receive(:new).and_return(auth) }
+    before { expect(auth).to receive(:token).and_return('a.fake.token') }
     subject { factory.token }
     it { is_expected.to match %r{\A\w+\.\w+\.\w+\z} }
   end

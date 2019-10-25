@@ -1,7 +1,3 @@
 class GitisJob < ApplicationJob
-private
-
-  def gitis
-    Bookings::Gitis::Factory.crm
-  end
+  delegate :gitis, to: Bookings::Gitis::Factory
 end
