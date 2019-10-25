@@ -76,7 +76,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
           "has_dbs_check" => true,
           "availability" => nil,
           "bookings_placement_date_id" => placement_date.id,
-          "bookings_placement_dates_subject_id" => nil,
+          "bookings_subject_id" => nil,
           "objectives" => "test the software",
           "degree_stage" => "Other",
           "degree_stage_explaination" => "Khan academy, level 3",

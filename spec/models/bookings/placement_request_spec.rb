@@ -365,24 +365,15 @@ describe Bookings::PlacementRequest, type: :model do
         let! :subject_and_date_information do
           build :subject_and_date_information,
             bookings_placement_date_id: placement_date.id,
-            bookings_placement_dates_subject_id: placement_date.placement_date_subjects.first.id
+            bookings_placement_dates_subject_id: placement_date.placement_date_subjects.first.id,
+            bookings_subject_id: placement_date.placement_date_subjects.first.bookings_subject.id
         end
 
         before do
           placement_date.update! subjects: [bookings_subject_2]
         end
 
-        # This fails due to a bug in subject specific dates.
-        # If the school updates the placement date to no longer include the
-        # subject chosen on subject_and_date_choice we remove the
-        # bookings_placement_dates_subject that corresponds to the
-        # bookings_placement_dates_subject_id stored on
-        # subject_and_date_information.  Attempting to create the placement
-        # request with the now invalid bookings_placement_dates_subject_id
-        # throws a referential integrity error in postgres.
-        # We need to store the subject_id on the placement_request when creating
-        # it from the session.
-        xit 'creates the placement_request' do
+        it 'creates the placement_request' do
           expect {
             candidate
               .placement_requests

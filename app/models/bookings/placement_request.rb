@@ -30,7 +30,12 @@ module Bookings
     belongs_to :placement_date,
       class_name: 'Bookings::PlacementDate',
       foreign_key: :bookings_placement_date_id,
-      optional: true
+      optional: true # If this is a placement_request to a school with fixed dates
+
+    belongs_to :subject,
+      class_name: 'Bookings::Subject',
+      foreign_key: :bookings_subject_id,
+      optional: true # If this is a placement_request for a subject_specific_date
 
     has_one :candidate_cancellation,
       -> { where cancelled_by: 'candidate' },
@@ -131,11 +136,6 @@ module Bookings
       else
         availability
       end
-    end
-
-    def subject
-      Bookings::PlacementDateSubject
-        .find_by(id: bookings_placement_dates_subject_id)&.bookings_subject
     end
 
     def requested_subject

@@ -21,10 +21,15 @@ module Candidates
       def attributes
         non_pii_models.inject({}) { |kept_attrs, model_name|
           kept_attrs.merge attributes_for(model_name)
-        }.merge("bookings_school_id" => @registration_session.school.id)
+        }.merge("bookings_school_id" => school_id)
+         .except("bookings_placement_dates_subject_id")
       end
 
     private
+
+      def school_id
+        @registration_session.school.id
+      end
 
       def non_pii_models
         registration_state.steps & NON_PII_MODELS

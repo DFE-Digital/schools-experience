@@ -14,6 +14,11 @@ module Candidates
             presence: true,
             if: :check_placement_date_validity?,
             unless: :dont_validate_placement_date_subject?
+
+          validates :bookings_placement_date_id,
+            presence: true,
+            if: :check_placement_date_validity?,
+            unless: :dont_validate_placement_date_subject?
         end
 
       private
