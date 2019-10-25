@@ -67,7 +67,7 @@ module Bookings
         if entity.id
           attrs = entity.attributes_for_update.sort.to_h
           crmlog "UPDATING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          store.update_entity entity.entity_id, attrs
+          store.update_entity entity.entity_id, attrs if attrs.any?
         else
           attrs = entity.attributes_for_create.sort.to_h
           crmlog "INSERTING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
