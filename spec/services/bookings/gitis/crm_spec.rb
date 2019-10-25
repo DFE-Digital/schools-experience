@@ -11,7 +11,12 @@ describe Bookings::Gitis::CRM, type: :model do
   let(:gitis_url) { 'https://gitis-crm.net' }
   let(:token) { 'my.secret.token' }
 
-  let(:gitis) { described_class.new(token, service_url: gitis_url) }
+  let(:gitis) do
+    described_class.new \
+      Bookings::Gitis::Store::Dynamics.new \
+        token, service_url: gitis_url
+  end
+
   let(:gitis_stub) do
     Apimock::GitisCrm.new(client_id, client_secret, tenant_id, gitis_url)
   end
@@ -84,12 +89,12 @@ describe Bookings::Gitis::CRM, type: :model do
         }
       end
 
-      before { allow(gitis.send(:api)).to receive(:get).and_return(response) }
+      before { allow(gitis.store.api).to receive(:get).and_return(response) }
 
       subject! { gitis.find(companyid, entity_type: CompanyEntity, includes: :leader) }
 
       it "will query for the team" do
-        expect(gitis.send(:api)).to have_received(:get).with \
+        expect(gitis.store.api).to have_received(:get).with \
           "#{CompanyEntity.entity_path}(#{companyid})",
           hash_including('$expand' => 'leader')
       end
@@ -248,7 +253,7 @@ describe Bookings::Gitis::CRM, type: :model do
 
     context 'with entity and no filter' do
       before do
-        expect(gitis.send(:api)).to receive(:get).
+        expect(gitis.store.api).to receive(:get).
           with('testentities', '$top' => 10, '$select' => selectattrs).
           and_return('value' => [t1, t2, t3])
       end
@@ -259,7 +264,7 @@ describe Bookings::Gitis::CRM, type: :model do
 
     context 'with entity and string filter' do
       before do
-        expect(gitis.send(:api)).to receive(:get).
+        expect(gitis.store.api).to receive(:get).
           with(
             'testentities',
             '$top' => 10,
@@ -275,7 +280,7 @@ describe Bookings::Gitis::CRM, type: :model do
 
     context 'with entity and limit' do
       before do
-        expect(gitis.send(:api)).to receive(:get).
+        expect(gitis.store.api).to receive(:get).
           with('testentities', '$top' => 5, '$select' => selectattrs).
           and_return('value' => [t1, t2, t3])
       end
@@ -286,7 +291,7 @@ describe Bookings::Gitis::CRM, type: :model do
 
     context 'with entity and order' do
       before do
-        expect(gitis.send(:api)).to receive(:get).
+        expect(gitis.store.api).to receive(:get).
           with(
             'testentities',
             '$top' => 5,

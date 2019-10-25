@@ -7,12 +7,8 @@ module Bookings
 
       attr_reader :store
 
-      def initialize(token, service_url: nil, endpoint: nil)
-        @token = token
-        @service_url = service_url
-        @endpoint = endpoint
-
-        @store = Store.load(api)
+      def initialize(store)
+        @store = store
       end
 
       def find(uuids, entity_type: Contact, includes: nil)
@@ -89,13 +85,7 @@ module Bookings
         write contact
       end
 
-      class InvalidApiError < RuntimeError; end
-
     private
-
-      def api
-        @api ||= API.new(@token, service_url: @service_url, endpoint: @endpoint)
-      end
 
       def normalise_ids(ids)
         Array.wrap(ids).flatten

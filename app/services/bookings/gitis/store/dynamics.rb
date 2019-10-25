@@ -4,8 +4,8 @@ module Bookings
       class Dynamics
         attr_reader :api
 
-        def initialize(api)
-          @api = api
+        def initialize(token, service_url: nil, endpoint: nil)
+          @api = API.new(token, service_url: service_url, endpoint: endpoint)
         end
 
         def create_entity(entity_id, data)
