@@ -133,6 +133,19 @@ module Bookings
       end
     end
 
+    def subject
+      Bookings::PlacementDateSubject
+        .find_by(id: bookings_placement_dates_subject_id)&.bookings_subject
+    end
+
+    def requested_subject
+      if subject
+        subject.name
+      else
+        subject_first_choice
+      end
+    end
+
     def received_on
       created_at.to_date
     end
