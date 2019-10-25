@@ -494,6 +494,7 @@ en:
         <<: *schools_on_boarding_school_fee_hints
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_hints
+        description: For example, 'The fee covers the cost of carrying out your DBS check'.
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_hints
 
