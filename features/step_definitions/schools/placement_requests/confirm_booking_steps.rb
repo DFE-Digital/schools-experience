@@ -26,7 +26,7 @@ When("I am on the {string} page for my fixed placement request") do |identifier|
 end
 
 Then("the subheading should be {string} followed by the candidate's name") do |subheading|
-  gitis = Bookings::Gitis::CRM.new('a.fake.token')
+  gitis = Bookings::Gitis::Factory.crm
   candidate_name = @placement_request.fetch_gitis_contact(gitis).full_name
   expect(page).to have_css('h3', text: "#{subheading} #{candidate_name}.")
 end
