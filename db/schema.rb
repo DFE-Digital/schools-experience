@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_152254) do
+ActiveRecord::Schema.define(version: 2019_10_25_215847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,9 +112,11 @@ ActiveRecord::Schema.define(version: 2019_10_15_152254) do
     t.datetime "viewed_at"
     t.bigint "candidate_id"
     t.integer "bookings_placement_dates_subject_id"
+    t.bigint "bookings_subject_id"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
     t.index ["bookings_placement_dates_subject_id"], name: "index_bookings_placement_requests_dates_subject_id"
     t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
+    t.index ["bookings_subject_id"], name: "index_bookings_placement_requests_on_bookings_subject_id"
     t.index ["candidate_id"], name: "index_bookings_placement_requests_on_candidate_id"
     t.index ["token"], name: "index_bookings_placement_requests_on_token", unique: true
   end
@@ -411,6 +413,7 @@ ActiveRecord::Schema.define(version: 2019_10_15_152254) do
   add_foreign_key "bookings_placement_requests", "bookings_placement_date_subjects", column: "bookings_placement_dates_subject_id", name: "bookings_placement_requests_date_subject_id"
   add_foreign_key "bookings_placement_requests", "bookings_placement_dates"
   add_foreign_key "bookings_placement_requests", "bookings_schools"
+  add_foreign_key "bookings_placement_requests", "bookings_subjects"
   add_foreign_key "bookings_profiles", "bookings_schools", column: "school_id"
   add_foreign_key "bookings_schools", "bookings_school_types"
   add_foreign_key "bookings_schools_phases", "bookings_phases"

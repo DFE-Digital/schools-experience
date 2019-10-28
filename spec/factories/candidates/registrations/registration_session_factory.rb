@@ -104,6 +104,21 @@ FactoryBot.define do
       end
     end
 
+    trait :with_flexible_dates do
+      initialize_with do
+        new \
+          "uuid"                                          => uuid,
+          "urn"                                           => urn,
+          "candidates_registrations_personal_information" => candidates_registrations_personal_information,
+          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
+          "candidates_registrations_background_check"     => candidates_registrations_background_check,
+          "candidates_registrations_education"            => candidates_registrations_education,
+          "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
+          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
+          "candidates_registrations_subject_and_date_information" => {}
+      end
+    end
+
     trait :with_education do
       initialize_with do
         new \

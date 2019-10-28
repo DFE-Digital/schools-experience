@@ -50,9 +50,12 @@ module Candidates
         bookings_placement_date_id, bookings_placement_dates_subject_id = \
           *subject_and_date_params.dig('subject_and_date_ids').split('_')
 
+        bookings_subject_id = Bookings::PlacementDateSubject.find_by(id: bookings_placement_dates_subject_id)&.bookings_subject_id
+
         {
           bookings_placement_date_id: bookings_placement_date_id,
-          bookings_placement_dates_subject_id: bookings_placement_dates_subject_id
+          bookings_placement_dates_subject_id: bookings_placement_dates_subject_id,
+          bookings_subject_id: bookings_subject_id
         }
       end
 

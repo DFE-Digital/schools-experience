@@ -18,12 +18,8 @@ module Candidates
 
       private
 
-        # If the school this placement request is for changes their availability
-        # preference after the candidate completes the registration wizard but
-        # before the candidate has completed the email confirmation step the
-        # placement request could become invalid.
         def dont_validate_availability?
-          validation_context == :returning_from_confirmation_email
+          validation_context == :creating_placement_request_from_registration_session
         end
 
         def school_offers_fixed_dates?

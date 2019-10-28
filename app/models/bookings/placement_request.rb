@@ -30,7 +30,12 @@ module Bookings
     belongs_to :placement_date,
       class_name: 'Bookings::PlacementDate',
       foreign_key: :bookings_placement_date_id,
-      optional: true
+      optional: true # If this is a placement_request to a school with fixed dates
+
+    belongs_to :subject,
+      class_name: 'Bookings::Subject',
+      foreign_key: :bookings_subject_id,
+      optional: true # If this is a placement_request for a subject_specific_date
 
     has_one :candidate_cancellation,
       -> { where cancelled_by: 'candidate' },
@@ -100,13 +105,13 @@ module Bookings
 
     delegate :gitis_contact, :fetch_gitis_contact, to: :candidate
 
-    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil, context: nil)
+    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
       self.new(
         Candidates::Registrations::RegistrationAsPlacementRequest
           .new(registration_session)
           .attributes
           .merge(analytics_tracking_uuid: analytics_tracking_uuid)
-      ).tap { |r| r.save!(context: context) }
+      ).tap { |r| r.save!(context: :creating_placement_request_from_registration_session) }
     end
 
     def sent_at
@@ -130,6 +135,14 @@ module Bookings
         placement_date.date.to_formatted_s(:govuk)
       else
         availability
+      end
+    end
+
+    def requested_subject
+      if subject
+        subject.name
+      else
+        subject_first_choice
       end
     end
 

@@ -22,6 +22,7 @@ module Candidates
       attribute :availability
       attribute :bookings_placement_date_id, :integer
       attribute :bookings_placement_dates_subject_id, :integer
+      attribute :bookings_subject_id, :integer
 
       validates :bookings_placement_date_id, presence: true
 
@@ -31,6 +32,10 @@ module Candidates
 
       def placement_date_subject
         @placement_date_subject ||= Bookings::PlacementDateSubject.find_by(id: bookings_placement_dates_subject_id)
+      end
+
+      def bookings_subject
+        @bookings_subject ||= Bookings::Subject.find_by(id: bookings_subject_id)
       end
 
       def subject_and_date_ids

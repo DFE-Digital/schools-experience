@@ -262,6 +262,152 @@ describe Bookings::PlacementRequest, type: :model do
         expect(subject.analytics_tracking_uuid).to eql(analytics_tracking_uuid)
       end
     end
+
+    context 'when the school changes date type' do
+      let! :candidate do
+        create :candidate
+      end
+
+      context 'from fixed to flex' do
+        let! :school do
+          create :bookings_school,
+            :with_placement_dates,
+            availability_preference_fixed: true
+        end
+
+        let! :registration_session do
+          build :registration_session, :with_placement_date, urn: school.urn
+        end
+
+        before do
+          school.update! availability_preference_fixed: false
+        end
+
+        it 'creates the placement_request' do
+          expect {
+            candidate
+              .placement_requests
+              .create_from_registration_session!(registration_session)
+          }.to change { candidate.placement_requests.count }.by 1
+        end
+      end
+
+      context 'from flex to fixed' do
+        let! :school do
+          create :bookings_school, availability_preference_fixed: false
+        end
+
+        let! :registration_session do
+          build :registration_session, :with_flexible_dates, urn: school.urn
+        end
+
+        before do
+          school.update! availability_preference_fixed: true
+        end
+
+        it 'creates the placement_request' do
+          expect {
+            candidate
+              .placement_requests
+              .create_from_registration_session!(registration_session)
+          }.to change { candidate.placement_requests.count }.by 1
+        end
+      end
+    end
+
+    context 'subject_specifc_date' do
+      let! :candidate do
+        create :candidate
+      end
+
+      let! :bookings_subject_1 do
+        create :bookings_subject
+      end
+
+      let! :bookings_subject_2 do
+        create :bookings_subject
+      end
+
+      let! :school do
+        create :bookings_school,
+          availability_preference_fixed: true,
+          subjects: [bookings_subject_1, bookings_subject_2]
+      end
+
+      let! :placement_preference do
+        build :placement_preference, availability: nil
+      end
+
+      let! :teaching_preference do
+        build :teaching_preference, school: school,
+          subject_first_choice: school.subjects.first.name,
+          subject_second_choice: school.subjects.second.name
+      end
+
+      let! :registration_session do
+        build(:registration_session, urn: school.urn).tap do |rs|
+          # Overwrite the default factory steps
+          # So we have a registration for a fixed date school with subjects.
+          rs.save subject_and_date_information
+          rs.save placement_preference
+          rs.save teaching_preference
+        end
+      end
+
+      context 'the school makes the applied for subject unavailable' do
+        let! :placement_date do
+          create :bookings_placement_date,
+            bookings_school: school,
+            subject_specific: true,
+            subjects: [bookings_subject_1]
+        end
+
+        let! :subject_and_date_information do
+          build :subject_and_date_information,
+            bookings_placement_date_id: placement_date.id,
+            bookings_placement_dates_subject_id: placement_date.placement_date_subjects.first.id,
+            bookings_subject_id: placement_date.placement_date_subjects.first.bookings_subject.id
+        end
+
+        before do
+          placement_date.update! subjects: [bookings_subject_2]
+        end
+
+        it 'creates the placement_request' do
+          expect {
+            candidate
+              .placement_requests
+              .create_from_registration_session!(registration_session)
+          }.to change { candidate.placement_requests.count }.by 1
+        end
+      end
+
+      context 'the school makes the applied for date subject_specific' do
+        let! :placement_date do
+          create :bookings_placement_date,
+            bookings_school: school,
+            subject_specific: false
+        end
+
+        let! :subject_and_date_information do
+          build :subject_and_date_information,
+            bookings_placement_date_id: placement_date.id
+        end
+
+        before do
+          placement_date.update! \
+            subject_specific: true, subjects: [bookings_subject_1]
+        end
+
+        it 'creates the placement_request' do
+          expect {
+            candidate
+              .placement_requests
+              .create_from_registration_session!(registration_session)
+          }.to change { candidate.placement_requests.count }.by 1
+        end
+      end
+    end
   end
 
   context 'attributes' do
