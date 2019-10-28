@@ -83,6 +83,7 @@ Rails.application.configure do
     subject_specific_dates
     candidate_requirement_ab_test
     access_needs_journey
+    capped_bookings
   )
 
   # dfe signin redirects back to https, so force it
