@@ -12,12 +12,12 @@ module Candidates
 
           validates :bookings_placement_dates_subject_id,
             presence: true,
-            if: :check_placement_date_validity?,
+            if: :for_subject_specific_date?,
             unless: :dont_validate_placement_date_subject?
 
           validates :bookings_placement_date_id,
             presence: true,
-            if: :check_placement_date_validity?,
+            if: :for_subject_specific_date?,
             unless: :dont_validate_placement_date_subject?
         end
 
@@ -35,7 +35,7 @@ module Candidates
           school.present? && school.availability_preference_fixed?
         end
 
-        def check_placement_date_validity?
+        def for_subject_specific_date?
           bookings_placement_date_id.present? && placement_date&.subject_specific?
         end
       end
