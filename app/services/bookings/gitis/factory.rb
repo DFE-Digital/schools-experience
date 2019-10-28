@@ -7,7 +7,11 @@ module Bookings
       end
 
       def crm
-        Bookings::Gitis::CRM.new store
+        if Rails.application.config.x.gitis.fake_crm
+          Bookings::Gitis::FakeCrm.new
+        else
+          Bookings::Gitis::CRM.new store
+        end
       end
 
       def token
@@ -15,11 +19,7 @@ module Bookings
       end
 
       def store
-        if Rails.application.config.x.gitis.fake_crm
-          Bookings::Gitis::Store::Fake.new
-        else
-          Bookings::Gitis::Store::Dynamics.new token
-        end
+        Bookings::Gitis::Store::Dynamics.new token
       end
     end
   end

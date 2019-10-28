@@ -1,5 +1,9 @@
 module Bookings::Gitis
-  module FakeCrm
+  class FakeCrm < CRM
+    def initialize
+      @store = Store::Fake.new
+    end
+
     def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
       return super unless store.is_a?(Store::Fake)
       return nil if email =~ /unknown/

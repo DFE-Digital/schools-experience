@@ -1,7 +1,6 @@
 module Bookings
   module Gitis
     class CRM
-      prepend FakeCrm if Rails.application.config.x.gitis.fake_crm
       delegate :logger, to: Rails
       delegate :fetch, to: :store
 
