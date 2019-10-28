@@ -124,27 +124,22 @@ module Schools
       end
 
       def access_needs_support_required?
-        return false unless Feature.instance.active? :access_needs_journey
-
         @school_profile.access_needs_support.dup.invalid?
       end
 
       def access_needs_detail_required?
-        return false unless Feature.instance.active? :access_needs_journey
         return false unless @school_profile.access_needs_support.supports_access_needs?
 
         @school_profile.access_needs_detail.dup.invalid?
       end
 
       def disability_confident_required?
-        return false unless Feature.instance.active? :access_needs_journey
         return false unless @school_profile.access_needs_support.supports_access_needs?
 
         @school_profile.disability_confident.dup.invalid?
       end
 
       def access_needs_policy_required?
-        return false unless Feature.instance.active? :access_needs_journey
         return false unless @school_profile.access_needs_support.supports_access_needs?
 
         @school_profile.access_needs_policy.dup.invalid?

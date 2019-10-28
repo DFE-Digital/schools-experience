@@ -193,15 +193,6 @@ module Schools
         end
       end
 
-      # TODO remove this
-      def disability_and_access_needs
-        if @school_profile.candidate_experience_detail.disabled_facilities
-          'Yes - ' + @school_profile.candidate_experience_detail.disabled_facilities_details
-        else
-          'No'
-        end
-      end
-
       def supports_access_needs?
         @school_profile.access_needs_support.supports_access_needs?
       end

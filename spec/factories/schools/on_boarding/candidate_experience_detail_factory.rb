@@ -9,8 +9,6 @@ FactoryBot.define do
     parking_provided { true }
     parking_details { 'Plenty of spaces' }
     nearby_parking_details { nil }
-    disabled_facilities { false }
-    disabled_facilities_details { '' }
     start_time { '8:15am' }
     end_time { '4:30pm' }
     times_flexible { true }
@@ -19,11 +17,6 @@ FactoryBot.define do
     trait :without_parking do
       parking_provided { false }
       nearby_parking_details { 'Public car park across the street' }
-    end
-
-    trait :with_disabled_facilities do
-      disabled_facilities { true }
-      disabled_facilities_details { 'Full wheelchair access and hearing loops' }
     end
 
     trait :without_flexible_times do

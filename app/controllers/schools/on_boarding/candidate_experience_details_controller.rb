@@ -51,8 +51,6 @@ module Schools
           :parking_provided,
           :parking_details,
           :nearby_parking_details,
-          :disabled_facilities,
-          :disabled_facilities_details,
           :start_time,
           :end_time,
           :times_flexible,

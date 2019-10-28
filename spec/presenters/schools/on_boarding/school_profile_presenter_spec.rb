@@ -325,32 +325,6 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     end
   end
 
-  context '#disability_and_access_needs' do
-    context 'when disability and access needs facilities not present' do
-      let :profile do
-        FactoryBot.build :school_profile, :with_candidate_experience_detail
-      end
-
-      it 'returns no' do
-        expect(subject.disability_and_access_needs).to eq 'No'
-      end
-    end
-
-    context 'when disability and access needs facilities present' do
-      let :profile do
-        FactoryBot.build \
-          :school_profile,
-          :with_candidate_experience_detail,
-          disabled_facilities: true
-      end
-
-      it 'returns the description' do
-        expect(subject.disability_and_access_needs).to \
-          eq 'Yes - Full wheelchair access and hearing loops'
-      end
-    end
-  end
-
   context '#start_time' do
     let :profile do
       FactoryBot.build :school_profile, :with_candidate_experience_detail
