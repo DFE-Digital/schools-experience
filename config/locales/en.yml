@@ -413,7 +413,7 @@ en:
       schools_on_boarding_phases_list:
         title: Select school experience phases
       schools_on_boarding_key_stage_list:
-        title: Confirm number of primary key stages
+        title: Select school experience key stages
       schools_on_boarding_subject_list:
         title: Select school experience subjects
       schools_on_boarding_specialism:
