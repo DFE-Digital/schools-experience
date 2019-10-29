@@ -15,9 +15,9 @@
       <%= f.check_box_fieldset :title, %i(), { page_heading: true } do |fieldset| %>
         <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
         <p>
-          Tell us which key stages you offer for your primary school experience.
+          Tell us which key stages you offer for primary school experience.
         </p>
-        <p>
+        <p class="govuk-hint">
           This will help candidates select a primary school experience.
         </p>
         <%= fieldset.check_box_input :early_years %>
