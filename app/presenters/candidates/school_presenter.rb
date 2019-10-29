@@ -104,8 +104,21 @@ module Candidates
 
     def placement_date_subjects(placement_date)
       placement_date
-        .flat_map { |pd| pd.has_subjects? ? pd.subjects.map(&:name) : 'All subjects' }
-        .uniq
+        .flat_map do |pd|
+          if pd.has_subjects?
+            pd.subjects.map { |s| subject_with_duration(s.name, pd) }
+          else
+            subject_with_duration('All subjects', pd)
+          end
+        end
+    end
+
+    def subject_with_duration(subject_name, placement_date)
+      "%<subject>s (%<duration>d %<unit>s)" % {
+        subject: subject_name,
+        duration: placement_date.duration,
+        unit: "day".pluralize(placement_date.duration)
+      }
     end
 
     def dbs_requirement
