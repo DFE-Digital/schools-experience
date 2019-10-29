@@ -94,16 +94,16 @@ module Candidates
       secondary_dates
         .group_by(&:date)
         .each
-        .with_object({}) { |(date, placement_date), hash|
-          hash[date] = placement_date_subjects(placement_date)
+        .with_object({}) { |(date, placement_dates), hash|
+          hash[date] = placement_date_subjects(placement_dates)
         }
         .each_value(&:sort!)
     end
 
   private
 
-    def placement_date_subjects(placement_date)
-      placement_date
+    def placement_date_subjects(placement_dates)
+      placement_dates
         .flat_map do |pd|
           if pd.has_subjects?
             pd.subjects.map { |s| subject_with_duration(s.name, pd) }
