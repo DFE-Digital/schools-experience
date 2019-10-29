@@ -24,18 +24,18 @@ global.mapsLoadedCallback = function() {
 Accordion.prototype.originalSetExpanded = Accordion.prototype.setExpanded;
 Accordion.prototype.setExpanded = function (expanded, $section) {
   // the name of the accordion as it will be categorised in GA
-  const eventName = this.$module.attributes['data-track-event-name'];
+  const eventName = this.$module.attributes.id;
 
   // the button inserted by the accordion plugin that replaces the
   // provided span and takes its descriptive ID
-  const sectionButton = $section.querySelector('button');
+  const sectionName = $section.querySelector('.govuk-accordion__section-content').id;
 
-  if (eventName && sectionButton) {
+  if (eventName && sectionName) {
     const accordionExpanded = new CustomEvent('accordionToggle', {
       bubbles: true,
       detail: {
         name: eventName.value,
-        section: sectionButton.id,
+        section: sectionName,
         expanded: expanded
       }
     });
@@ -46,7 +46,13 @@ Accordion.prototype.setExpanded = function (expanded, $section) {
   this.originalSetExpanded(expanded, $section);
 };
 
-window.logAccordionToggle = logAccordionToggle;
+// attach the listener to the outer accordion to catch messages bubbling
+// up from its segments
+document.querySelectorAll('.govuk-accordion').forEach((accordion) => {
+  accordion.addEventListener('accordionToggle', (e) => {
+    logAccordionToggle(e.detail.name, e.detail.section, e.detail.expanded ? 'open' : 'closed');
+  });
+});
 
 global.preventDoubleClick = function(form) {
   let buttons = form.querySelectorAll('input[type=submit],button[type=submit]') ;
