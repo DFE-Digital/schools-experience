@@ -25,6 +25,34 @@ Given("there is at least one placement request") do
     degree_subject: 'Law'
 end
 
+Given("there is at least one subject-specific placement request for {string}") do |subject_name|
+  @requested_subject = Bookings::Subject.find_by(name: subject_name)
+
+  @placement_date = FactoryBot.build(
+    :bookings_placement_date,
+    bookings_school: @school,
+    subject_specific: true,
+    supports_subjects: true
+  ).tap do |pd|
+    pd.subjects << @requested_subject
+    pd.save
+  end
+
+  @placement_request = FactoryBot.create \
+    :placement_request,
+    school: @school,
+    created_at: '2094-02-08',
+    availability: 'Any time during November 2019',
+    teaching_stage: 'I’ve applied for teacher training',
+    has_dbs_check: true,
+    objectives: 'To learn different teaching styles and what life is like in a classroom.',
+    degree_stage: 'Final year',
+    degree_subject: 'Law',
+    bookings_placement_date_id: @placement_date.id,
+    bookings_placement_dates_subject_id: @placement_date.subjects.first.id,
+    bookings_subject_id: @requested_subject.id
+end
+
 When("I am on a placement request page") do
   visit path_for 'placement request', placement_request: @placement_request
 end
