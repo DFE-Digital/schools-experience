@@ -69,7 +69,7 @@
 
         <%= summary_row \
           'Start date and subject',
-          subject_and_date_description(@application_preview.placement_date, @application_preview.placement_date_subject).html_safe,
+          subject_and_date_description(@application_preview.placement_date, @application_preview.placement_date_subject),
           edit_candidates_school_registrations_subject_and_date_information_path %>
 
       <% else %>
