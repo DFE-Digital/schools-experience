@@ -55,8 +55,12 @@ module Candidates
           .bookings_placement_dates
           .in_date_order
           .not_supporting_subjects
-          .map do |date|
-            PlacementDateOption.new(date.id, date.date.to_formatted_s(:govuk), date.duration)
+          .map do |placement_date|
+            PlacementDateOption.new(
+              placement_date.id,
+              placement_date.date.to_formatted_s(:govuk),
+              placement_date.duration
+            )
           end
       end
 
