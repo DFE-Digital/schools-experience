@@ -57,8 +57,6 @@ describe Schools::OnBoarding::DbsRequirement, type: :model do
     context 'when not dbs_required' do
       before { subject.requires_check = false }
 
-      it { is_expected.to validate_presence_of :no_dbs_policy_details }
-
       context 'word counts' do
         before { subject.no_dbs_policy_details = too_long_text }
         before { subject.validate }

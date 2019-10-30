@@ -92,7 +92,7 @@ describe Schools::PlacementRequests::Acceptance::ConfirmBookingController, type:
       end
 
       specify "should include an 'invalid date' error" do
-        expect(response.body).to match(/not a valid date/)
+        expect(response.body).to match(/Enter a valid date/)
       end
     end
   end

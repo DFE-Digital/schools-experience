@@ -1,0 +1,31 @@
+<% self.page_title = 'Cancelled booking' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Your school experience booking has been cancelled by the school
+      </h1>
+    </div>
+
+    <p>
+      <%= school_name %> has cancelled your school experience for the following
+      dates: <%= dates_requested %>
+    </p>
+
+    <p>
+      Your booking was cancelled for the following reasons: <%= rejection_reasons %>
+    </p>
+
+    <p>
+      Extra details from the school <%= extra_details %>
+    </p>
+
+    <% if Rails.application.config.x.phase >= 5 %>
+      <h2 class="govuk-heading-m">View and request more school experience</h2>
+      <p>
+        <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
+      </p>
+    <% end %>
+  </div>
+</div>
