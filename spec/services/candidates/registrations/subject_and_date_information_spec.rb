@@ -8,7 +8,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     it { is_expected.to respond_to :availability }
     it { is_expected.to respond_to :bookings_placement_date_id }
     it { is_expected.to respond_to :school }
-    it { is_expected.to respond_to :bookings_placement_dates_subject_id }
+    it { is_expected.to respond_to :bookings_subject_id }
   end
 
   context 'methods' do
@@ -51,12 +51,12 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
         before { subject.bookings_placement_date_id = placement_date.id }
         before { subject.valid? }
 
-        specify 'should validate the presence of bookings_placement_dates_subject_id' do
+        specify 'should validate the presence of bookings_subject_id' do
           expect(subject).not_to be_valid
         end
 
         specify 'should fail validation with an appropriate message' do
-          expect(subject.errors.messages[:bookings_placement_dates_subject_id]).to include("Choose a subject")
+          expect(subject.errors.messages[:bookings_subject_id]).to include("Choose a subject")
         end
       end
     end
@@ -79,29 +79,37 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     describe '#placement_date_subject' do
       it { is_expected.to respond_to(:placement_date_subject) }
 
-      before { allow(subject).to receive(:bookings_placement_dates_subject_id).and_return(1) }
+      before do
+        subject.bookings_placement_date_id = 1
+        subject.bookings_subject_id = 2
+      end
+
       before { allow(Bookings::PlacementDateSubject).to receive(:find_by).and_return('a') }
 
 
       specify 'should find the placement date via its id' do
         subject.placement_date_subject
-        expect(Bookings::PlacementDateSubject).to have_received(:find_by).with(id: 1)
+        expect(Bookings::PlacementDateSubject).to have_received(:find_by).with(
+          bookings_placement_date_id: 1,
+          bookings_subject_id: 2
+        )
       end
     end
 
     describe '#subject_and_date_ids' do
       it { is_expected.to respond_to(:placement_date_subject) }
 
-      let(:bookings_placement_date_id) { 55 }
-      let(:bookings_placement_dates_subject_id) { 66 }
+      let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
+      let!(:bookings_subject) { create :bookings_subject, schools: [school] }
+      let!(:bookings_placement_dates_subject) { create :bookings_placement_date_subject, bookings_placement_date: bookings_placement_date, bookings_subject: bookings_subject }
 
       before do
-        allow(subject).to receive(:bookings_placement_date_id).and_return(bookings_placement_date_id)
-        allow(subject).to receive(:bookings_placement_dates_subject_id).and_return(bookings_placement_dates_subject_id)
+        subject.bookings_placement_date_id = bookings_placement_date.id
+        subject.bookings_subject_id = bookings_subject.id
       end
 
       specify 'should join the placement date and placement date subject ids separated by an underscore' do
-        expect(subject.subject_and_date_ids).to eql("#{bookings_placement_date_id}_#{bookings_placement_dates_subject_id}")
+        expect(subject.subject_and_date_ids).to eql("#{bookings_placement_date.id}_#{bookings_placement_dates_subject.id}")
       end
     end
   end

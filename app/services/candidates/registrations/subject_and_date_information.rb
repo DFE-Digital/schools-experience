@@ -21,19 +21,19 @@ module Candidates
 
       attribute :availability
       attribute :bookings_placement_date_id, :integer
-      attribute :bookings_placement_dates_subject_id, :integer
       attribute :bookings_subject_id, :integer
 
-      validates :bookings_placement_dates_subject_id,
-        presence: true,
-        if: :for_subject_specific_date?
+      validates :bookings_subject_id, presence: true, if: :for_subject_specific_date?
 
       def placement_date
         @placement_date ||= Bookings::PlacementDate.find_by(id: bookings_placement_date_id)
       end
 
       def placement_date_subject
-        @placement_date_subject ||= Bookings::PlacementDateSubject.find_by(id: bookings_placement_dates_subject_id)
+        @placement_date_subject ||= Bookings::PlacementDateSubject.find_by(
+          bookings_placement_date_id: bookings_placement_date_id,
+          bookings_subject_id: bookings_subject_id
+        )
       end
 
       def bookings_subject
@@ -41,7 +41,7 @@ module Candidates
       end
 
       def subject_and_date_ids
-        [bookings_placement_date_id, bookings_placement_dates_subject_id].compact.join('_')
+        [placement_date, placement_date_subject].compact.map(&:id).join('_')
       end
 
       def primary_placement_dates
