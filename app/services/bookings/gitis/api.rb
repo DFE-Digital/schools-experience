@@ -1,14 +1,13 @@
 module Bookings::Gitis
   class API
     ENDPOINT = '/api/data/v9.1'.freeze
-    GET_TIMEOUT_SECS = 25
-    GET_RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
-    GET_RETRY_OPTIONS = {
+    TIMEOUT_SECS = 25
+    RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
+    RETRY_OPTIONS = {
       max: 2,
       methods: %i{get},
       exceptions: (
-        ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
-        GET_RETRY_EXCEPTIONS
+        ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS + RETRY_EXCEPTIONS
       ).freeze
     }.freeze
 
@@ -27,7 +26,7 @@ module Bookings::Gitis
       response = connection.get do |req|
         req.url url
         req.headers = get_headers.merge(headers.stringify_keys)
-        req.options.timeout = GET_TIMEOUT_SECS
+        req.options.timeout = TIMEOUT_SECS
         req.params = params if params.any?
       end
 
@@ -78,7 +77,7 @@ module Bookings::Gitis
 
     def connection
       Faraday.new(endpoint_url) do |f|
-        f.request(:retry, GET_RETRY_OPTIONS)
+        f.request(:retry, RETRY_OPTIONS)
         f.adapter(Faraday.default_adapter)
       end
     end

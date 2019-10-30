@@ -87,7 +87,7 @@ RSpec.describe Bookings::Gitis::Auth do
         )
       end
 
-      it "returns a token", :focus do
+      it "returns a token" do
         expect(subject.token).to match(/\w+\.\w+\.\w+/)
       end
 

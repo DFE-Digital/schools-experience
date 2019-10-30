@@ -3,14 +3,13 @@ module Bookings
     class Auth
       prepend FakeAuth if Rails.application.config.x.gitis.fake_crm
 
-      GET_TIMEOUT_SECS = 25
-      GET_RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
-      GET_RETRY_OPTIONS = {
+      TIMEOUT_SECS = 25
+      RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
+      RETRY_OPTIONS = {
         max: 2,
         methods: %i{post}, # Auth only makes a POST request
         exceptions: (
-          ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
-          GET_RETRY_EXCEPTIONS
+          ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS + RETRY_EXCEPTIONS
         ).freeze
       }.freeze
 
@@ -66,7 +65,7 @@ module Bookings
 
       def faraday
         Faraday.new do |f|
-          f.request(:retry, GET_RETRY_OPTIONS)
+          f.request(:retry, RETRY_OPTIONS)
           f.adapter(Faraday.default_adapter)
         end
       end
@@ -75,6 +74,8 @@ module Bookings
         response = faraday.post(auth_url) do |request|
           request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
           request.headers['Accept'] = 'application/json'
+          request.options.timeout = TIMEOUT_SECS
+
           request.body = params.to_query
         end
 
