@@ -124,7 +124,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
         end
       end
 
-      let(:placement_date_subject) { secondary_placement_date.subjects.first }
+      let(:placement_date_subject) { secondary_placement_date.placement_date_subjects.first }
 
       let(:params) do
         {
@@ -142,10 +142,10 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
         ).to eql(secondary_placement_date.id)
       end
 
-      specify 'correctly stores the secondary placement date subject in the registration session' do
+      specify 'correctly stores the secondary subject in the registration session' do
         expect(
-          session.to_h.dig('schools/11048/registrations', 'candidates_registrations_subject_and_date_information', 'bookings_placement_dates_subject_id')
-        ).to be(placement_date_subject.id)
+          session.to_h.dig('schools/11048/registrations', 'candidates_registrations_subject_and_date_information', 'bookings_subject_id')
+        ).to be(bookings_subject.id)
       end
     end
   end

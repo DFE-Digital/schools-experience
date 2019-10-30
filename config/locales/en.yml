@@ -14,7 +14,7 @@ en:
     attributes:
       bookings_placement_date_id:
         blank: "Choose a date"
-      bookings_placement_dates_subject_id:
+      bookings_subject_id:
         blank: "Choose a subject"
 
   placement_preference_errors: &placement_preference_errors

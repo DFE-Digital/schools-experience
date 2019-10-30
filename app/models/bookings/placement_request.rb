@@ -13,6 +13,10 @@ module Bookings
 
     validates_presence_of :candidate, unless: :pre_phase3_record?
 
+    validates :subject, presence: true,
+      if: -> { placement_date&.subject_specific? },
+      unless: :dont_validate_placement_date_subject?
+
     belongs_to :school,
       class_name: 'Bookings::School',
       foreign_key: :bookings_school_id

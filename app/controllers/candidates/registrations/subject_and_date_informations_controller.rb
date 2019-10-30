@@ -54,7 +54,6 @@ module Candidates
 
         {
           bookings_placement_date_id: bookings_placement_date_id,
-          bookings_placement_dates_subject_id: bookings_placement_dates_subject_id,
           bookings_subject_id: bookings_subject_id
         }
       end

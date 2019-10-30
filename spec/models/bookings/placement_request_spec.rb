@@ -365,7 +365,6 @@ describe Bookings::PlacementRequest, type: :model do
         let! :subject_and_date_information do
           build :subject_and_date_information,
             bookings_placement_date_id: placement_date.id,
-            bookings_placement_dates_subject_id: placement_date.placement_date_subjects.first.id,
             bookings_subject_id: placement_date.placement_date_subjects.first.bookings_subject.id
         end
 
