@@ -8,9 +8,7 @@ module Candidates
       end
 
       def create
-        @subject_and_date_information = SubjectAndDateInformation
-          .new(attributes_from_session)
-          .tap { |info| info.set_subject_and_date_ids(subject_and_date_params) }
+        @subject_and_date_information = SubjectAndDateInformation.new(subject_and_date_params)
 
         if @subject_and_date_information.valid?
           persist @subject_and_date_information
@@ -25,9 +23,8 @@ module Candidates
       end
 
       def update
-        @subject_and_date_information = SubjectAndDateInformation
-          .new(attributes_from_session)
-          .tap { |info| info.set_subject_and_date_ids(subject_and_date_params) }
+        @subject_and_date_information = SubjectAndDateInformation.new(attributes_from_session)
+        @subject_and_date_information.assign_attributes(subject_and_date_params)
 
         if @subject_and_date_information.valid?
           persist @subject_and_date_information
@@ -44,11 +41,17 @@ module Candidates
       end
 
       def subject_and_date_params
-        params.require(:candidates_registrations_subject_and_date_information).permit(:subject_and_date_ids)
+        params
+          .require(:candidates_registrations_subject_and_date_information)
+          .permit(:subject_and_date_ids)
+          .merge(urn: @school.urn)
       end
 
       def attributes_from_session
-        current_registration.subject_and_date_information_attributes.merge(urn: @school.urn)
+        current_registration
+          .subject_and_date_information_attributes
+          .except('created_at')
+          .merge(urn: @school.urn)
       end
     end
   end
