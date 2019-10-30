@@ -315,7 +315,7 @@ describe Bookings::PlacementRequest, type: :model do
       end
     end
 
-    context 'subject_specifc_date' do
+    context 'subject_specific_date' do
       let! :candidate do
         create :candidate
       end

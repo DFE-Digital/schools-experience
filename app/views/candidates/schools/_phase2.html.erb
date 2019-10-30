@@ -100,7 +100,7 @@
 
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__tablet_plus">
-        <%= render partial: 'start_request' %>
+        <%= render 'start_request', profile: @presenter %>
 
       </div>
 
@@ -118,7 +118,7 @@
       <% end %>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-        <%- if !@presenter.school.availability_preference_fixed? -%>
+        <%- unless @presenter.school.availability_preference_fixed? -%>
           <dt class="govuk-summary-list__key">
             Placement availability
           </dt>
@@ -215,7 +215,7 @@
 
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__mobile">
-        <%= render partial: 'start_request' %>
+        <%= render 'start_request', profile: @presenter %>
       </div>
     <% end %>
   </div>
