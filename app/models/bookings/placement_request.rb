@@ -15,7 +15,7 @@ module Bookings
 
     validates :subject, presence: true,
       if: -> { placement_date&.subject_specific? },
-      unless: :dont_validate_placement_date_subject?
+      unless: :creating_placement_request_from_registration_session?
 
     belongs_to :school,
       class_name: 'Bookings::School',
