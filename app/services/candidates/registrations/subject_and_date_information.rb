@@ -26,6 +26,10 @@ module Candidates
 
       validates :bookings_placement_date_id, presence: true
 
+      validates :bookings_placement_dates_subject_id,
+        presence: true,
+        if: :for_subject_specific_date?
+
       def placement_date
         @placement_date ||= Bookings::PlacementDate.find_by(id: bookings_placement_date_id)
       end

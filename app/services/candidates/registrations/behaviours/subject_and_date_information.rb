@@ -10,11 +10,6 @@ module Candidates
             if: :school_offers_fixed_dates?,
             unless: :dont_validate_availability?
 
-          validates :bookings_placement_dates_subject_id,
-            presence: true,
-            if: :for_subject_specific_date?,
-            unless: :dont_validate_placement_date_subject?
-
           validates :bookings_placement_date_id,
             presence: true,
             if: :for_subject_specific_date?,
