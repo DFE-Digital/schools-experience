@@ -3,11 +3,7 @@ module Candidates
     class SubjectAndDateInformation < RegistrationStep
       include Behaviours::SubjectAndDateInformation
 
-      PlacementDateOption = Struct.new(:placement_date_id, :placement_date_subject_id, :name, :duration) do
-        def id
-          [placement_date_id, placement_date_subject_id].compact.join('_')
-        end
-
+      PlacementDateOption = Struct.new(:id, :name, :duration) do
         def name_with_duration
           "#{name} (#{duration} #{'day'.pluralize(duration)})"
         end
@@ -50,7 +46,7 @@ module Candidates
           .in_date_order
           .not_supporting_subjects
           .map do |date|
-            PlacementDateOption.new(date.id, nil, date.date.to_formatted_s(:govuk), date.duration)
+            PlacementDateOption.new(date.id, date.date.to_formatted_s(:govuk), date.duration)
           end
       end
 
@@ -75,10 +71,10 @@ module Candidates
       def placement_date_options(placement_date)
         if placement_date.placement_date_subjects.any?
           placement_date.placement_date_subjects.map do |placement_date_subject|
-            PlacementDateOption.new(placement_date.id, placement_date_subject.id, placement_date_subject.bookings_subject.name, placement_date.duration)
+            PlacementDateOption.new(placement_date_subject.combined_id, placement_date_subject.bookings_subject.name, placement_date.duration)
           end
         else
-          Array.wrap(PlacementDateOption.new(placement_date.id, nil, 'All subjects', placement_date.duration))
+          Array.wrap(PlacementDateOption.new(placement_date.id, 'All subjects', placement_date.duration))
         end
       end
     end
