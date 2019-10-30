@@ -5,15 +5,10 @@ module Candidates
         extend ActiveSupport::Concern
 
         included do
-          with_options unless: :creating_placement_request_from_registration_session? do
-            validates :bookings_placement_date_id,
-              presence: true,
-              if: :school_offers_fixed_dates?
-
-            validates :bookings_placement_dates_subject_id,
-              presence: true,
-              if: :for_subject_specific_date?
-          end
+          validates :bookings_placement_date_id,
+            presence: true,
+            if: :school_offers_fixed_dates?,
+            unless: :creating_placement_request_from_registration_session?
         end
 
       private

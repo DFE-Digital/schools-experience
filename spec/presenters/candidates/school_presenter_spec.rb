@@ -171,7 +171,7 @@ RSpec.describe Candidates::SchoolPresenter do
   describe '#secondary_dates_grouped_by_date' do
     let(:early_date) { 1.week.from_now.to_date }
     let(:late_date) { 1.month.from_now.to_date }
-    let(:all_subjects) { Array.wrap('All subjects') }
+    let(:all_subjects) { Array.wrap('All subjects (1 day)') }
 
     let(:placement_date_early_with_maths) do
       build(:bookings_placement_date, date: early_date, subject_specific: true).tap do |pd|
@@ -202,7 +202,7 @@ RSpec.describe Candidates::SchoolPresenter do
     end
 
     specify 'dates with subject specific and non-specific dates should list both' do
-      expect(subject.secondary_dates_grouped_by_date[early_date]).to match_array(all_subjects.concat(%w(Maths)))
+      expect(subject.secondary_dates_grouped_by_date[early_date]).to match_array(all_subjects.concat(["Maths (1 day)"]))
     end
 
     specify "non-specific dates should be described as 'All subjects'" do
@@ -230,7 +230,7 @@ RSpec.describe Candidates::SchoolPresenter do
       end
 
       specify 'subjects should be sorted alphabetically' do
-        expect(subject.secondary_dates_grouped_by_date[date]).to eql(pd_subjects.map(&:name).sort)
+        expect(subject.secondary_dates_grouped_by_date[date]).to eql(pd_subjects.map(&:name).map { |s| "#{s} (1 day)" }.sort)
       end
     end
   end

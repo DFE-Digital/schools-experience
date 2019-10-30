@@ -49,7 +49,6 @@ Given("there is at least one subject-specific placement request for {string}") d
     degree_stage: 'Final year',
     degree_subject: 'Law',
     bookings_placement_date_id: @placement_date.id,
-    bookings_placement_dates_subject_id: @placement_date.subjects.first.id,
     bookings_subject_id: @requested_subject.id
 end
 
