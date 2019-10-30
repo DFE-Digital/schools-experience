@@ -118,7 +118,7 @@
       <% end %>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-        <%- if !@presenter.school.availability_preference_fixed? -%>
+        <%- unless @presenter.school.availability_preference_fixed? -%>
           <dt class="govuk-summary-list__key">
             Placement availability
           </dt>
