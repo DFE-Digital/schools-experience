@@ -34,8 +34,8 @@
                 <%= rejected_request.candidate_name %>
               </td>
               <td class="subject govuk-table__cell">
-                <%- if rejected_request&.placement_date&.subject_specific -%>
-                  <%= rejected_request.placement_date.subjects.map(&:name).to_sentence %>
+                <%- if rejected_request&.placement_date&.subject_specific && rejected_request.subject -%>
+                  <%= rejected_request.subject.name %>
                 <%- else -%>
                   <em>Not specified</em>
                 <%- end -%>
