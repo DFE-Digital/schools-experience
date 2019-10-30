@@ -16,13 +16,13 @@ module Bookings
           api.patch(entity_id, data)
         end
 
-        def find_one(entity_type, uuid, params)
+        def find_one(entity_type, uuid, params = {})
           params['$select'] ||= entity_type.attributes_to_select
 
           entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
         end
 
-        def find_many(entity_type, uuids, params)
+        def find_many(entity_type, uuids, params = {})
           params['$filter'] = filter_by_uuid(entity_type.primary_key, uuids)
           params['$select'] ||= entity_type.attributes_to_select
 

@@ -25,6 +25,7 @@ describe Bookings::Gitis::CRM, type: :model do
     it "will succeed with api object" do
       expect(described_class.new(token)).to \
         be_instance_of(Bookings::Gitis::CRM)
+      expect(false).to be true
     end
 
     it "will raise an exception without an api object" do
@@ -239,70 +240,9 @@ describe Bookings::Gitis::CRM, type: :model do
   end
 
   describe '#fetch' do
-    let(:selectattrs) { TestEntity.attributes_to_select }
-    let(:t1) { { 'testentityid' => SecureRandom.uuid, 'firstname' => 'A', 'lastname' => '1' } }
-    let(:t2) { { 'testentityid' => SecureRandom.uuid, 'firstname' => 'B', 'lastname' => '2' } }
-    let(:t3) { { 'testentityid' => SecureRandom.uuid, 'firstname' => 'C', 'lastname' => '3' } }
-    let(:response) { [TestEntity.new(t1), TestEntity.new(t2), TestEntity.new(t3)] }
-
-    context 'without entity' do
-      it "will raise an error" do
-        expect { subject.fetch }.to raise_exception(ArgumentError)
-      end
-    end
-
-    context 'with entity and no filter' do
-      before do
-        expect(gitis.store.api).to receive(:get).
-          with('testentities', '$top' => 10, '$select' => selectattrs).
-          and_return('value' => [t1, t2, t3])
-      end
-
-      subject { gitis.fetch(TestEntity) }
-      it { is_expected.to eq(response) }
-    end
-
-    context 'with entity and string filter' do
-      before do
-        expect(gitis.store.api).to receive(:get).
-          with(
-            'testentities',
-            '$top' => 10,
-            '$select' => selectattrs,
-            '$filter' => "firstname eq 'test'"
-          ).
-          and_return('value' => [t1, t2, t3])
-      end
-
-      subject { gitis.fetch(TestEntity, filter: "firstname eq 'test'") }
-      it { is_expected.to eq(response) }
-    end
-
-    context 'with entity and limit' do
-      before do
-        expect(gitis.store.api).to receive(:get).
-          with('testentities', '$top' => 5, '$select' => selectattrs).
-          and_return('value' => [t1, t2, t3])
-      end
-
-      subject { gitis.fetch(TestEntity, limit: 5) }
-      it { is_expected.to eq(response) }
-    end
-
-    context 'with entity and order' do
-      before do
-        expect(gitis.store.api).to receive(:get).
-          with(
-            'testentities',
-            '$top' => 5,
-            '$select' => selectattrs,
-            '$orderby' => 'createdon desc'
-          ).and_return('value' => [t1, t2, t3])
-      end
-
-      subject { gitis.fetch(TestEntity, limit: 5, order: 'createdon desc') }
-      it { is_expected.to eq(response) }
-    end
+    before { allow(gitis.store).to receive(:fetch).and_return([]) }
+    before { gitis.fetch TestEntity, limit: 3 }
+    it { expect(gitis.store).to have_received(:fetch) }
   end
 
   describe "#log_school_experience" do

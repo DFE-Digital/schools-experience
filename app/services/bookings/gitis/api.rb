@@ -56,7 +56,7 @@ module Bookings::Gitis
           @error = @data.dig('error', 'message')
         end
 
-        super "#{resp.status}: #{resp.env.url}: #{@error.presence || resp.body}"
+        super "#{resp.status}: #{resp&.env&.url}: #{@error.presence || resp.body}"
       end
     end
 
