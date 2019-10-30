@@ -24,8 +24,6 @@ module Candidates
       attribute :bookings_placement_dates_subject_id, :integer
       attribute :bookings_subject_id, :integer
 
-      validates :bookings_placement_date_id, presence: true
-
       validates :bookings_placement_dates_subject_id,
         presence: true,
         if: :for_subject_specific_date?
