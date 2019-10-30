@@ -101,7 +101,13 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
 
       let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
       let!(:bookings_subject) { create :bookings_subject, schools: [school] }
-      let!(:bookings_placement_dates_subject) { create :bookings_placement_date_subject, bookings_placement_date: bookings_placement_date, bookings_subject: bookings_subject }
+      let!(:bookings_placement_dates_subject) do
+        create(
+          :bookings_placement_date_subject,
+          bookings_placement_date: bookings_placement_date,
+          bookings_subject: bookings_subject
+        )
+      end
 
       before do
         subject.bookings_placement_date_id = bookings_placement_date.id
@@ -109,7 +115,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
 
       specify 'should join the placement date and placement date subject ids separated by an underscore' do
-        expect(subject.subject_and_date_ids).to eql("#{bookings_placement_date.id}_#{bookings_placement_dates_subject.id}")
+        expect(subject.subject_and_date_ids).to eql(bookings_placement_dates_subject.combined_id)
       end
     end
   end
