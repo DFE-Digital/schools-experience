@@ -27,4 +27,21 @@ describe Bookings::PlacementDateSubject, type: :model do
       end
     end
   end
+
+  describe 'methods' do
+    describe '#combined_id' do
+      let(:placement_date) { create(:bookings_placement_date) }
+      let(:chosen_subject) { create(:bookings_subject) }
+      subject do
+        Bookings::PlacementDateSubject.create(
+          bookings_placement_date: placement_date,
+          bookings_subject: chosen_subject
+        )
+      end
+
+      specify 'should be the bookings_placement_date id and own id delimited by an underscore' do
+        expect(subject.combined_id).to eql("#{placement_date.id}_#{subject.id}")
+      end
+    end
+  end
 end
