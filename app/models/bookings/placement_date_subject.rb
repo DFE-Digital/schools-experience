@@ -13,7 +13,7 @@ class Bookings::PlacementDateSubject < ApplicationRecord
   # date and are presented with a single list of options that contains subjects
   # AND placement dates
   def combined_id
-    [bookings_subject.id, id].join("_")
+    [bookings_placement_date.id, id].join("_")
   end
 
 private
