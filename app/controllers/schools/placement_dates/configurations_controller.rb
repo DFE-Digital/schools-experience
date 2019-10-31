@@ -8,7 +8,8 @@ module Schools
       end
 
       def create
-        @configuration = ConfigurationForm.new configuration_params.merge(supports_subjects: @placement_date.supports_subjects)
+        @configuration = ConfigurationForm.new configuration_params
+        @configuration.supports_subjects = @placement_date.supports_subjects
 
         if @configuration.save @placement_date
           redirect_to next_step
