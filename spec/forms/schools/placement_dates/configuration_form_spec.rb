@@ -210,4 +210,23 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       end
     end
   end
+
+  context '#subject_specific?' do
+    context 'when the date doesnt support subjects' do
+      subject { described_class.new supports_subjects: false }
+      it { is_expected.not_to be_subject_specific }
+    end
+
+    context 'when the date supports subject' do
+      context 'when the date is available_for_all_subjects' do
+        subject { described_class.new supports_subjects: true, available_for_all_subjects: true }
+        it { is_expected.not_to be_subject_specific }
+      end
+
+      context 'when the date is not available_for_all_subjects' do
+        subject { described_class.new supports_subjects: true, available_for_all_subjects: false }
+        it { is_expected.to be_subject_specific }
+      end
+    end
+  end
 end
