@@ -181,8 +181,6 @@ module Schools
         %w(candidate_experience_detail_parking_provided parking_provided),
         %w(candidate_experience_detail_parking_details parking_details),
         %w(candidate_experience_detail_nearby_parking_details nearby_parking_details),
-        %w(candidate_experience_detail_disabled_facilities disabled_facilities),
-        %w(candidate_experience_detail_disabled_facilities_details disabled_facilities_details),
         %w(candidate_experience_detail_start_time start_time),
         %w(candidate_experience_detail_end_time end_time),
         %w(candidate_experience_detail_times_flexible times_flexible),
