@@ -1,7 +1,7 @@
 module Bookings
   module Gitis
     module Store
-      class Fake
+      class Fake < Dynamics
         KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
         REQUIRED = %w{
           firstname lastname emailaddress2 telephone2 birthdate
@@ -19,6 +19,24 @@ module Bookings
         ).freeze
 
         def initialize(*_args); end
+
+        def fetch(_entity_type, **_options)
+          raise "Not Implemented"
+        end
+
+      private
+
+        # only Contacts are mocked for now
+        def find_one(_entity_type, uuid, _params)
+          Contact.new(fake_contact_data.merge('contactid' => uuid))
+        end
+
+        # only Contacts are mocked for now
+        def find_many(entity_type, uuids, params)
+          uuids.map do |uuid|
+            find_one(entity_type, uuid, params)
+          end
+        end
 
         def create_entity(entity_id, data)
           return "#{entity_id}(#{fake_contact_id})" unless entity_id == 'contacts'
@@ -49,24 +67,6 @@ module Bookings
 
           entity_id
         end
-
-        # only Contacts are mocked for now
-        def find_one(_entity_type, uuid, _params)
-          Contact.new(fake_contact_data.merge('contactid' => uuid))
-        end
-
-        # only Contacts are mocked for now
-        def find_many(entity_type, uuids, params)
-          uuids.map do |uuid|
-            find_one(entity_type, uuid, params)
-          end
-        end
-
-        def fetch(_entity_type, **_options)
-          raise "Not Implemented"
-        end
-
-      private
 
         def fake_contact_id
           fake_uuid = Rails.application.config.x.gitis.fake_crm_uuid

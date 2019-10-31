@@ -22,13 +22,12 @@ describe Bookings::Gitis::CRM, type: :model do
   end
 
   describe '.initialize' do
-    it "will succeed with api object" do
-      expect(described_class.new(token)).to \
+    it "will succeed with store object" do
+      expect(described_class.new(Bookings::Gitis::Store::Fake.new)).to \
         be_instance_of(Bookings::Gitis::CRM)
-      expect(false).to be true
     end
 
-    it "will raise an exception without an api object" do
+    it "will raise an exception without a store" do
       expect { described_class.new }.to raise_exception(ArgumentError)
     end
   end

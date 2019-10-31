@@ -20,95 +20,107 @@ describe Bookings::Gitis::Store::Dynamics do
     end
   end
 
-  describe '#find_one' do
-    let(:uuid) { SecureRandom.uuid }
+  describe '#find' do
+    context 'for single id' do
+      let(:uuid) { SecureRandom.uuid }
 
-    context 'with match' do
-      let(:attrs) { { 'testentityid' => uuid, 'firstname' => 'test' } }
-      before do
-        allow(dynamics.api).to receive(:get).with(
-          "testentities(#{uuid})",
-          '$select' => TestEntity.attributes_to_select
-        ).and_return(attrs)
-      end
-      subject { dynamics.find_one TestEntity, uuid }
-      it { is_expected.to eq TestEntity.new(attrs) }
-    end
-
-    context 'without match' do
-      let(:fourohfour) do
-        Bookings::Gitis::API::UnknownUrlError.new \
-          OpenStruct.new(status: 404, body: "Not found", headers: {})
+      context 'with match' do
+        let(:attrs) { { 'testentityid' => uuid, 'firstname' => 'test' } }
+        before do
+          allow(dynamics.api).to receive(:get).with(
+            "testentities(#{uuid})",
+            '$select' => TestEntity.attributes_to_select,
+            '$top' => 1
+          ).and_return(attrs)
+        end
+        subject { dynamics.find TestEntity, uuid }
+        it { is_expected.to eq TestEntity.new(attrs) }
       end
 
-      before do
-        allow(dynamics.api).to receive(:get).with(
-          "testentities(#{uuid})",
-          '$select' => TestEntity.attributes_to_select
-        ).and_raise(fourohfour)
-      end
+      context 'without match' do
+        let(:fourohfour) do
+          Bookings::Gitis::API::UnknownUrlError.new \
+            OpenStruct.new(status: 404, body: "Not found", headers: {})
+        end
 
-      it do
-        expect {
-          dynamics.find_one(TestEntity, uuid)
-        }.to raise_exception(Bookings::Gitis::API::UnknownUrlError)
-      end
-    end
-  end
+        before do
+          allow(dynamics.api).to receive(:get).with(
+            "testentities(#{uuid})",
+            '$select' => TestEntity.attributes_to_select,
+            '$top' => 1
+          ).and_raise(fourohfour)
+        end
 
-  describe '#find_many', :focus do
-    let(:uuids) do
-      [
-        "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
-        "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
-        "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
-      ]
-    end
-
-    let(:matches) do
-      uuids.map.with_index do |uuid, index|
-        { 'testentityid' => uuid, 'firstname' => "Test #{index}" }
+        it do
+          expect {
+            dynamics.find TestEntity, uuid
+          }.to raise_exception(Bookings::Gitis::API::UnknownUrlError)
+        end
       end
     end
 
-    subject { dynamics.find_many TestEntity, uuids }
-
-    context 'with no matches' do
-      before do
-        allow(dynamics.api).to receive(:get).with(
-          "testentities",
-          '$filter' => "testentityid eq '#{uuids[0]}' or testentityid eq '#{uuids[1]}' or testentityid eq '#{uuids[2]}'",
-          '$select' => TestEntity.attributes_to_select
-        ).and_return('value' => [])
+    context 'for multiple ids' do
+      let(:uuids) do
+        [
+          "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
+          "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
+          "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
+        ]
       end
 
-      it { is_expected.to eq [] }
-    end
-
-    context 'with some matches' do
-      before do
-        allow(dynamics.api).to receive(:get).with(
-          "testentities",
-          '$filter' => "testentityid eq '#{uuids[0]}' or testentityid eq '#{uuids[1]}' or testentityid eq '#{uuids[2]}'",
-          '$select' => TestEntity.attributes_to_select
-        ).and_return('value' => matches.slice(0, 2))
+      let(:matches) do
+        uuids.map.with_index do |uuid, index|
+          { 'testentityid' => uuid, 'firstname' => "Test #{index}" }
+        end
       end
 
-      it { is_expected.to all be_kind_of TestEntity }
-      it { expect(subject.map(&:id)).to eq uuids.slice(0, 2) }
-    end
+      subject { dynamics.find TestEntity, uuids }
 
-    context 'with all matching' do
-      before do
-        allow(dynamics.api).to receive(:get).with(
-          "testentities",
-          '$filter' => "testentityid eq '#{uuids[0]}' or testentityid eq '#{uuids[1]}' or testentityid eq '#{uuids[2]}'",
-          '$select' => TestEntity.attributes_to_select
-        ).and_return('value' => matches)
+      context 'with no ids' do
+        let(:uuids) { [] }
+        it { is_expected.to eq [] }
       end
 
-      it { is_expected.to all be_kind_of TestEntity }
-      it { expect(subject.map(&:id)).to eq uuids }
+      context 'with no matches' do
+        before do
+          allow(dynamics.api).to receive(:get).with(
+            "testentities",
+            '$filter' => "testentityid eq '#{uuids[0]}' or testentityid eq '#{uuids[1]}' or testentityid eq '#{uuids[2]}'",
+            '$select' => TestEntity.attributes_to_select,
+            '$top' => 3
+          ).and_return('value' => [])
+        end
+
+        it { is_expected.to eq [] }
+      end
+
+      context 'with some matches' do
+        before do
+          allow(dynamics.api).to receive(:get).with(
+            "testentities",
+            '$filter' => "testentityid eq '#{uuids[0]}' or testentityid eq '#{uuids[1]}' or testentityid eq '#{uuids[2]}'",
+            '$select' => TestEntity.attributes_to_select,
+            '$top' => 3
+          ).and_return('value' => matches.slice(0, 2))
+        end
+
+        it { is_expected.to all be_kind_of TestEntity }
+        it { expect(subject.map(&:id)).to eq uuids.slice(0, 2) }
+      end
+
+      context 'with all matching' do
+        before do
+          allow(dynamics.api).to receive(:get).with(
+            "testentities",
+            '$filter' => "testentityid eq '#{uuids[0]}' or testentityid eq '#{uuids[1]}' or testentityid eq '#{uuids[2]}'",
+            '$select' => TestEntity.attributes_to_select,
+            '$top' => 3
+          ).and_return('value' => matches)
+        end
+
+        it { is_expected.to all be_kind_of TestEntity }
+        it { expect(subject.map(&:id)).to eq uuids }
+      end
     end
   end
 
@@ -179,56 +191,62 @@ describe Bookings::Gitis::Store::Dynamics do
     end
   end
 
-  context 'create_entity' do
+  describe '#write' do
     let(:uuid) { SecureRandom.uuid }
+    subject { dynamics.write entity }
 
-    context 'without id' do
+    context 'for invalid entity' do
+      let(:entity) { TestEntity.new('firstname' => 'testuser') }
+      before { allow_any_instance_of(TestEntity).to receive(:valid?) { false } }
+      it { is_expected.to be false }
+    end
+
+    context 'for new entity' do
+      let(:entity) { TestEntity.new('firstname' => 'testuser') }
+
       before do
         expect(dynamics.api).to receive(:post).with(
-          '/entities', 'firstname' => 'test user'
-        ).and_return('')
+          'testentities', 'firstname' => 'testuser'
+        ).and_return("testentities(#{uuid})")
+
+        subject # ensure api call happens for id assignment spec
       end
 
-      subject { dynamics.create_entity TestEntity.new('firstname' => 'testuser') }
-      it { is_expected.to eq "entities(#{uuid})" }
+      it { is_expected.to eq uuid }
+      it { expect(entity).to have_attributes id: uuid }
     end
 
-    context 'with id' do
-      it do
-        expect {
-          dynamics.create_entity TestEntity.new(id: SecureRandom.uuid)
-        }.to raise_exception
-      end
-    end
+    context 'for existing entity' do
+      context 'with updated attributes' do
+        let(:entity) do
+          TestEntity.new('testentityid' => uuid).tap do |te|
+            te.firstname = 'testuser'
+          end
+        end
 
-    context 'with blank id' do
-      it do
-        expect {
-          dynamics.create_entity TestEntity.new(id: '')
-        }.to raise_exception
-      end
-    end
-  end
+        before do
+          expect(dynamics.api).to receive(:patch).with(
+            "testentities(#{uuid})", 'firstname' => 'testuser'
+          ).and_return("testentities(#{uuid})")
+        end
 
-  context 'update_entity' do
-    let(:uuid) { SecureRandom.uuid }
-
-    context 'with id' do
-      before do
-        expect(dynamics.api).to receive(:patch).with(
-          "/entities(#{uuid})", 'firstname' => 'test user'
-        ).and_return('')
+        it { is_expected.to eq uuid }
       end
 
-      subject { dynamics.create_entity TestEntity.new('firstname' => 'testuser') }
-      it { is_expected.to eq "entities(#{uuid})" }
-    end
+      context 'without updated attributes' do
+        let(:entity) do
+          TestEntity.new('testentityid' => uuid, 'firstname' => 'testuser')
+        end
 
-    context 'without id' do
-      it do
-        expect {
-          dynamics.update_entity TestEntity.new(id: SecureRandom.uuid)
-        }.to raise_exception
+        before do
+          allow(dynamics.api).to receive(:patch).and_call_original
+          allow(dynamics.api).to receive(:post).and_call_original
+          subject # force method call
+        end
+
+        it { is_expected.to eq uuid }
+        it { expect(dynamics.api).not_to have_received(:post) }
+        it { expect(dynamics.api).not_to have_received(:patch) }
       end
     end
   end

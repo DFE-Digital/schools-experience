@@ -8,26 +8,15 @@ module Bookings
           @api = API.new(token, service_url: service_url, endpoint: endpoint)
         end
 
-        def create_entity(entity_id, data)
-          api.post(entity_id, data)
-        end
+        def find(entity_type, id_or_ids, **options)
+          params = options.stringify_keys
 
-        def update_entity(entity_id, data)
-          api.patch(entity_id, data)
-        end
-
-        def find_one(entity_type, uuid, params = {})
-          params['$select'] ||= entity_type.attributes_to_select
-
-          entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
-        end
-
-        def find_many(entity_type, uuids, params = {})
-          params['$filter'] = filter_by_uuid(entity_type.primary_key, uuids)
-          params['$select'] ||= entity_type.attributes_to_select
-
-          api.get(entity_type.entity_path, params)['value'].map do |entity_data|
-            entity_type.new entity_data
+          if !id_or_ids.is_a?(Array)
+            find_one entity_type, id_or_ids, params.merge('$top' => 1)
+          elsif id_or_ids.empty?
+            []
+          else
+            find_many entity_type, id_or_ids, params.merge('$top' => id_or_ids.length)
           end
         end
 
@@ -47,10 +36,48 @@ module Bookings
           end
         end
 
+        def write(entity)
+          fail ArgumentError, "entity must include Entity" unless entity.class < Entity
+          return false unless entity.valid?
+
+          if entity.id.blank?
+            entity.entity_id = create_entity entity.entity_id, entity.attributes_for_create
+          elsif entity.attributes_for_update.any?
+            update_entity entity.entity_id, entity.attributes_for_update
+          end
+
+          entity.id
+        end
+
       private
 
         def filter_by_uuid(key, uuids)
           uuids.map { |id| "#{key} eq '#{id}'" }.join(' or ')
+        end
+
+        def find_one(entity_type, uuid, params = {})
+          params['$select'] ||= entity_type.attributes_to_select
+
+          entity_type.new api.get("#{entity_type.entity_path}(#{uuid})", params)
+        end
+
+        def find_many(entity_type, uuids, params = {})
+          return [] if uuids.empty?
+
+          params['$filter'] = filter_by_uuid(entity_type.primary_key, uuids)
+          params['$select'] ||= entity_type.attributes_to_select
+
+          api.get(entity_type.entity_path, params)['value'].map do |entity_data|
+            entity_type.new entity_data
+          end
+        end
+
+        def create_entity(entity_id, data)
+          api.post(entity_id, data)
+        end
+
+        def update_entity(entity_id, data)
+          api.patch(entity_id, data)
         end
       end
     end

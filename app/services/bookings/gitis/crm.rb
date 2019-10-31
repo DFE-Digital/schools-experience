@@ -29,9 +29,9 @@ module Bookings
         end
 
         if multiple_ids
-          store.find_many(entity_type, uuids, params)
+          store.send(:find_many, entity_type, uuids, params)
         else
-          store.find_one(entity_type, uuids[0], params)
+          store.send(:find_one, entity_type, uuids[0], params)
         end
       end
 
@@ -66,11 +66,11 @@ module Bookings
         if entity.id
           attrs = entity.attributes_for_update.sort.to_h
           crmlog "UPDATING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          store.update_entity entity.entity_id, attrs if attrs.any?
+          store.send :update_entity, entity.entity_id, attrs if attrs.any?
         else
           attrs = entity.attributes_for_create.sort.to_h
           crmlog "INSERTING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          entity.entity_id = store.create_entity entity.entity_id, attrs
+          entity.entity_id = store.send :create_entity, entity.entity_id, attrs
         end
 
         entity.id
