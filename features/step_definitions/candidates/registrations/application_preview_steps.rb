@@ -10,6 +10,8 @@ end
 
 Given("I have completed the wizard for a fixed date school") do
   @school.update_attributes(availability_preference_fixed: true)
+  @wanted_bookings_placement_date = @school.bookings_placement_dates.create!(
+    date: 2.weeks.from_now, published_at: 1.week.ago, supports_subjects: true)
 
   visit path_for('choose a subject and date', school: @school)
 
