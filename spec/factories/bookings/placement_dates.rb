@@ -21,5 +21,9 @@ FactoryBot.define do
     trait :subject_specific do
       subject_specific { true }
     end
+
+    trait :not_supporting_subjects do
+      supports_subjects { false }
+    end
   end
 end
