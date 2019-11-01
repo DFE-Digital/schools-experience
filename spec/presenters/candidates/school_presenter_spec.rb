@@ -153,19 +153,56 @@ RSpec.describe Candidates::SchoolPresenter do
     end
   end
 
-  describe '#secondary_dates' do
-    let(:unavailable_date) { FactoryBot.create :bookings_placement_date, :inactive }
-    let(:available_date) { FactoryBot.create :bookings_placement_date }
+  describe '#primary_dates' do
+    let(:placement_date_defaults) { { bookings_school: school } }
+    let(:unavailable_date) { FactoryBot.create :bookings_placement_date, :inactive, :not_supporting_subjects, **placement_date_defaults }
+    let(:available_date) { FactoryBot.create :bookings_placement_date, :not_supporting_subjects, **placement_date_defaults }
+    let(:secondary_date) { FactoryBot.create :bookings_placement_date, **placement_date_defaults }
+    let(:past_date) { FactoryBot.create :bookings_placement_date, :in_the_past, :not_supporting_subjects, **placement_date_defaults }
 
     before do
       school.save!
       school.bookings_placement_dates << unavailable_date
       school.bookings_placement_dates << available_date
+      school.bookings_placement_dates << secondary_date
+      school.bookings_placement_dates << past_date
+    end
+
+    subject { described_class.new(school, profile).primary_dates }
+
+    specify "should include the available primary date" do
+      expect(subject).to include(available_date)
+    end
+
+    specify "should not include the past and unavailable primary dates or secondary dates" do
+      expect(subject).not_to include(unavailable_date, past_date, secondary_date)
+    end
+  end
+
+  describe '#secondary_dates' do
+    let(:placement_date_defaults) { { bookings_school: school } }
+    let(:unavailable_date) { FactoryBot.create :bookings_placement_date, :inactive, **placement_date_defaults }
+    let(:available_date) { FactoryBot.create :bookings_placement_date, **placement_date_defaults }
+    let(:past_date) { FactoryBot.create :bookings_placement_date, :in_the_past, **placement_date_defaults }
+    let(:primary_date) { FactoryBot.create :bookings_placement_date, :not_supporting_subjects, **placement_date_defaults }
+
+    before do
+      school.save!
+      school.bookings_placement_dates << unavailable_date
+      school.bookings_placement_dates << available_date
+      school.bookings_placement_dates << primary_date
+      school.bookings_placement_dates << past_date
     end
 
     subject { described_class.new(school, profile).secondary_dates }
 
-    it { is_expected.to eq school.bookings_placement_dates.available }
+    specify "should include the available secondary date" do
+      expect(subject).to include(available_date)
+    end
+
+    specify "should not include the past and unavailable secondary dates or primary dates" do
+      expect(subject).not_to include(unavailable_date, past_date, primary_date)
+    end
   end
 
   describe '#secondary_dates_grouped_by_date' do
