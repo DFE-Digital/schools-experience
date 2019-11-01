@@ -136,6 +136,41 @@ describe Bookings::Gitis::Store::Dynamics do
         end
       end
     end
+
+    context 'with includes' do
+      let(:companyid) { SecureRandom.uuid }
+      let(:testentityid) { SecureRandom.uuid }
+
+      let(:response) do
+        {
+          'teamentityid' => companyid,
+          'title' => 'Human Resources',
+          'leader' => {
+            'testentityid' => testentityid,
+            'firstname' => 'John'
+          }
+        }
+      end
+
+      before { allow(dynamics.api).to receive(:get).and_return(response) }
+
+      subject! { dynamics.find(CompanyEntity, companyid, includes: :leader) }
+
+      it "will query for the team" do
+        expect(dynamics.api).to have_received(:get).with \
+          "#{CompanyEntity.entity_path}(#{companyid})",
+          hash_including('$expand' => 'leader')
+      end
+
+      it "will populate the team entity" do
+        is_expected.to have_attributes(id: companyid, title: 'Human Resources')
+      end
+
+      it "will populate the associated leader entity" do
+        expect(subject.leader).to have_attributes id: testentityid
+        expect(subject.leader).to have_attributes firstname: 'John'
+      end
+    end
   end
 
   describe '#fetch' do

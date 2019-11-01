@@ -9,7 +9,7 @@ module Bookings
         end
 
         def find(entity_type, id_or_ids, **options)
-          params = options.stringify_keys
+          params = parse_find_options(**options)
 
           if !id_or_ids.is_a?(Array)
             validate_id! id_or_ids
@@ -84,6 +84,17 @@ module Bookings
 
         def validate_id!(uuid)
           Entity.valid_id?(uuid) || fail(ArgumentError, "Invalid Entity Id")
+        end
+
+        def parse_find_options(includes: nil)
+          params = {}
+
+          expand = Array.wrap(includes).map(&:to_s).map(&:presence).compact
+          if expand.any?
+            params['$expand'] = expand.join(',')
+          end
+
+          params
         end
       end
     end
