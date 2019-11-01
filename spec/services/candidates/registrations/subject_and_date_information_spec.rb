@@ -118,5 +118,29 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
         expect(subject.subject_and_date_ids).to eql(bookings_placement_dates_subject.combined_id)
       end
     end
+
+    describe '#subject_and_date_ids=' do
+      let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
+      let!(:bookings_subject) { create :bookings_subject, schools: [school] }
+      let!(:bookings_placement_dates_subject) do
+        create(
+          :bookings_placement_date_subject,
+          bookings_placement_date: bookings_placement_date,
+          bookings_subject: bookings_subject
+        )
+      end
+
+      before do
+        subject.subject_and_date_ids = bookings_placement_dates_subject.combined_id
+      end
+
+      it 'sets the bookings_subject correctly' do
+        expect(subject.bookings_subject).to eq bookings_subject
+      end
+
+      it 'sets the placement_date correctly' do
+        expect(subject.placement_date).to eq bookings_placement_date
+      end
+    end
   end
 end
