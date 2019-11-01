@@ -12,11 +12,13 @@ module Bookings
           params = options.stringify_keys
 
           if !id_or_ids.is_a?(Array)
+            validate_id! id_or_ids
             find_one entity_type, id_or_ids, params.merge('$top' => 1)
-          elsif id_or_ids.empty?
-            []
-          else
+          elsif id_or_ids.any?
+            id_or_ids.each(&method(:validate_id!))
             find_many entity_type, id_or_ids, params.merge('$top' => id_or_ids.length)
+          else
+            []
           end
         end
 
@@ -78,6 +80,10 @@ module Bookings
 
         def update_entity(entity_id, data)
           api.patch(entity_id, data)
+        end
+
+        def validate_id!(uuid)
+          Entity.valid_id?(uuid) || fail(ArgumentError, "Invalid Entity Id")
         end
       end
     end

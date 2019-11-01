@@ -7,6 +7,9 @@ module Bookings::Gitis
     include ActiveModel::Conversion
 
     ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
+    def self.valid_id?(id)
+      ID_FORMAT.match? id.to_s
+    end
 
     included do
       extend ActiveModel::Naming

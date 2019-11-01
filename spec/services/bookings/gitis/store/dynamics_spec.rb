@@ -57,6 +57,13 @@ describe Bookings::Gitis::Store::Dynamics do
           }.to raise_exception(Bookings::Gitis::API::UnknownUrlError)
         end
       end
+
+      context 'with invalid id' do
+        it do
+          expect { dynamics.find TestEntity, 10 }.to \
+            raise_exception(ArgumentError)
+        end
+      end
     end
 
     context 'for multiple ids' do
@@ -120,6 +127,13 @@ describe Bookings::Gitis::Store::Dynamics do
 
         it { is_expected.to all be_kind_of TestEntity }
         it { expect(subject.map(&:id)).to eq uuids }
+      end
+
+      context 'with some invalid ids' do
+        it do
+          expect { dynamics.find TestEntity, uuids + [10] }.to \
+            raise_exception(ArgumentError)
+        end
       end
     end
   end

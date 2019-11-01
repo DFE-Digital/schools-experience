@@ -362,4 +362,16 @@ RSpec.describe Bookings::Gitis::Entity do
       end
     end
   end
+
+  describe '.valid_id?' do
+    context 'for valid uuid' do
+      subject { described_class.valid_id? SecureRandom.uuid }
+      it { is_expected.to be true }
+    end
+
+    context 'for valid uuid' do
+      subject { described_class.valid_id? '10' }
+      it { is_expected.to be false }
+    end
+  end
 end
