@@ -2,7 +2,7 @@ module Bookings
   module Gitis
     class CRM
       delegate :logger, to: Rails
-      delegate :fetch, to: :store
+      delegate :fetch, :write, to: :store
 
       attr_reader :store
 
@@ -11,28 +11,7 @@ module Bookings
       end
 
       def find(uuids, entity_type: Contact, includes: nil)
-        multiple_ids = uuids.is_a?(Array)
-
-        uuids = normalise_ids(uuids)
-        validate_ids(uuids)
-
-        # ensure we can't accidentally pull too much data
-        params = { '$top' => uuids.length }
-
-        expand = Array.wrap(includes).map(&:to_s).join(',')
-
-        if expand.present?
-          params['$expand'] = expand
-          crmlog "READING #{entity_type} #{uuids.inspect} with #{expand}"
-        else
-          crmlog "READING #{entity_type} #{uuids.inspect}"
-        end
-
-        if multiple_ids
-          store.send(:find_many, entity_type, uuids, params)
-        else
-          store.send(:find_one, entity_type, uuids[0], params)
-        end
+        store.find(entity_type, uuids, includes: includes)
       end
 
       def find_by_email(address)
@@ -56,26 +35,6 @@ module Bookings
           .tap { |c| crmlog "Read contact #{c.contactid}" if c }
       end
 
-      def write(entity)
-        raise ArgumentError unless entity.class < Entity
-        return false unless entity.valid?
-
-        # Sorting attributes allows stubbed http requests
-        # webmock compares the request body as a serialized string
-
-        if entity.id
-          attrs = entity.attributes_for_update.sort.to_h
-          crmlog "UPDATING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          store.send :update_entity, entity.entity_id, attrs if attrs.any?
-        else
-          attrs = entity.attributes_for_create.sort.to_h
-          crmlog "INSERTING #{entity.entity_id}, SETTING #{attrs.keys.inspect}"
-          entity.entity_id = store.send :create_entity, entity.entity_id, attrs
-        end
-
-        entity.id
-      end
-
       def log_school_experience(contact_id, logline)
         contact = find(contact_id)
         return false unless contact
@@ -85,24 +44,6 @@ module Bookings
       end
 
     private
-
-      def normalise_ids(ids)
-        Array.wrap(ids).flatten
-      end
-
-      def validate_ids(ids)
-        if ids.empty?
-          fail ArgumentError, "No Contact Ids supplied"
-        else
-          ids.each { |id| validate_id id }
-        end
-      end
-
-      def validate_id(id)
-        return true if id =~ Entity::ID_FORMAT
-
-        fail ArgumentError, "Invalid Entity Id"
-      end
 
       def filter_pairs(filter_data, join_with = 'or')
         parts = filter_data.map do |key, values|
