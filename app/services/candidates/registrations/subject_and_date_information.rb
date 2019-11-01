@@ -40,8 +40,8 @@ module Candidates
       def primary_placement_dates
         school
           .bookings_placement_dates
+          .primary
           .in_date_order
-          .not_supporting_subjects
           .map do |placement_date|
             PlacementDateOption.new(
               placement_date.id,
@@ -55,8 +55,8 @@ module Candidates
       def secondary_placement_dates_grouped_by_date
         school
           .bookings_placement_dates
+          .secondary
           .in_date_order
-          .supporting_subjects
           .eager_load(placement_date_subjects: :bookings_subject)
           .map(&PlacementDateOption.method(:for_secondary_date))
           .flatten

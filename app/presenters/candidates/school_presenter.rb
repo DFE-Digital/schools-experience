@@ -76,17 +76,13 @@ module Candidates
     end
 
     def primary_dates
-      school
-        .bookings_placement_dates
-        .available
-        .not_supporting_subjects
+      school.bookings_placement_dates.primary
     end
 
     def secondary_dates
       school
         .bookings_placement_dates
-        .available
-        .supporting_subjects
+        .secondary
         .eager_load(:placement_date_subjects, :subjects).available
     end
 
