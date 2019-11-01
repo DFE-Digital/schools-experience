@@ -21,10 +21,10 @@ module Schools
     private
 
       def next_step
-        if !@configuration.supports_subjects || @configuration.available_for_all_subjects
-          schools_placement_dates_path
-        else
+        if @configuration.subject_specific?
           new_schools_placement_date_subject_selection_path @placement_date
+        else
+          schools_placement_dates_path
         end
       end
 
