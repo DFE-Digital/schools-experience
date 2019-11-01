@@ -811,4 +811,34 @@ describe Bookings::PlacementRequest, type: :model do
     subject { create :placement_request }
     it { is_expected.to have_attributes(requested_on: subject.created_at.to_date) }
   end
+
+  describe '#requested_subject' do
+    let :subject_1 do
+      create :bookings_subject
+    end
+
+    let :subject_2 do
+      create :bookings_subject
+    end
+
+    let :school do
+      create :bookings_school, subjects: [subject_1, subject_2]
+    end
+
+    let :placement_request do
+      create :placement_request, school: school
+    end
+
+    subject { placement_request.requested_subject }
+
+    context 'when for a non subject specific date' do
+      it { is_expected.to eq subject_1 }
+    end
+
+    context 'when for a subject specific date' do
+      before { placement_request.subject = subject_2 }
+
+      it { is_expected.to eq subject_2 }
+    end
+  end
 end

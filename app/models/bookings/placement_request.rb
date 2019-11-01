@@ -143,11 +143,7 @@ module Bookings
     end
 
     def requested_subject
-      if subject
-        subject.name
-      else
-        subject_first_choice
-      end
+      subject || Bookings::Subject.find_by!(name: subject_first_choice)
     end
 
     def received_on
