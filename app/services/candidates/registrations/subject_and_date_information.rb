@@ -3,7 +3,7 @@ module Candidates
     class SubjectAndDateInformation < RegistrationStep
       include Behaviours::SubjectAndDateInformation
 
-      PlacementDateOption = Struct.new(:id, :name, :duration) do
+      PlacementDateOption = Struct.new(:id, :name, :duration, :date) do
         def name_with_duration
           "#{name} (#{duration} #{'day'.pluralize(duration)})"
         end
@@ -58,7 +58,8 @@ module Candidates
             PlacementDateOption.new(
               placement_date.id,
               placement_date.date.to_formatted_s(:govuk),
-              placement_date.duration
+              placement_date.duration,
+              placement_date.date
             )
           end
       end
@@ -71,23 +72,17 @@ module Candidates
           .eager_load(placement_date_subjects: :bookings_subject)
           .published
           .available
-          .each
-          .with_object({}) do |pd, h|
-            if h.has_key?(pd.date)
-              h[pd.date].concat(placement_date_options(pd))
-            else
-              h[pd.date] = Array.wrap(placement_date_options(pd))
-            end
-          end
+          .flat_map(&method(:placement_date_options))
+          .group_by(&:date)
       end
 
       def placement_date_options(placement_date)
         if placement_date.placement_date_subjects.any?
           placement_date.placement_date_subjects.map do |placement_date_subject|
-            PlacementDateOption.new(placement_date_subject.combined_id, placement_date_subject.bookings_subject.name, placement_date.duration)
+            PlacementDateOption.new(placement_date_subject.combined_id, placement_date_subject.bookings_subject.name, placement_date.duration, placement_date.date)
           end
         else
-          Array.wrap(PlacementDateOption.new(placement_date.id, 'All subjects', placement_date.duration))
+          Array.wrap(PlacementDateOption.new(placement_date.id, 'All subjects', placement_date.duration, placement_date.date))
         end
       end
     end
