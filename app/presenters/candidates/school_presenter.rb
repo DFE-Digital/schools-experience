@@ -76,50 +76,25 @@ module Candidates
     end
 
     def primary_dates
-      school
-        .bookings_placement_dates
-        .available
-        .not_supporting_subjects
+      school.bookings_placement_dates.primary
     end
 
     def secondary_dates
       school
         .bookings_placement_dates
-        .available
-        .supporting_subjects
+        .secondary
         .eager_load(:placement_date_subjects, :subjects).available
     end
 
     def secondary_dates_grouped_by_date
       secondary_dates
+        .map(&PlacementDateOption.method(:for_secondary_date))
+        .flatten
         .group_by(&:date)
-        .each
-        .with_object({}) { |(date, placement_dates), hash|
-          hash[date] = placement_date_subjects(placement_dates)
-        }
         .each_value(&:sort!)
     end
 
   private
-
-    def placement_date_subjects(placement_dates)
-      placement_dates
-        .flat_map do |pd|
-          if pd.has_subjects?
-            pd.subjects.map { |s| subject_with_duration(s.name, pd) }
-          else
-            subject_with_duration('All subjects', pd)
-          end
-        end
-    end
-
-    def subject_with_duration(subject_name, placement_date)
-      "%<subject>s (%<duration>d %<unit>s)" % {
-        subject: subject_name,
-        duration: placement_date.duration,
-        unit: "day".pluralize(placement_date.duration)
-      }
-    end
 
     def dbs_requirement
       if profile.dbs_requires_check?

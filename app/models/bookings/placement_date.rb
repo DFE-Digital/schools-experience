@@ -62,6 +62,9 @@ module Bookings
     # don't yet teach a specific subject - primary and early years
     scope :not_supporting_subjects, -> { where(supports_subjects: false) }
 
+    scope :primary, -> { available.not_supporting_subjects.published }
+    scope :secondary, -> { available.supporting_subjects.published }
+
     def to_s
       "%<date>s (%<duration>d %<unit>s)" % {
         date: date.to_formatted_s(:govuk),
