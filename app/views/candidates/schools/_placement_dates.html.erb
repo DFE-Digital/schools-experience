@@ -35,7 +35,7 @@
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
               <% subjects.each do |subject| %>
-                <li><%= subject %></li>
+                <li><%= subject.name_with_duration %></li>
               <% end %>
             </ul>
           </dd>

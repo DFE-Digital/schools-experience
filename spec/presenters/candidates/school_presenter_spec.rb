@@ -239,11 +239,11 @@ RSpec.describe Candidates::SchoolPresenter do
     end
 
     specify 'dates with subject specific and non-specific dates should list both' do
-      expect(subject.secondary_dates_grouped_by_date[early_date]).to match_array(all_subjects.concat(["Maths (1 day)"]))
+      expect(subject.secondary_dates_grouped_by_date[early_date].map(&:name_with_duration)).to match_array(all_subjects.concat(["Maths (1 day)"]))
     end
 
     specify "non-specific dates should be described as 'All subjects'" do
-      expect(subject.secondary_dates_grouped_by_date[late_date]).to match_array(all_subjects)
+      expect(subject.secondary_dates_grouped_by_date[late_date].map(&:name_with_duration)).to match_array(all_subjects)
     end
 
     context 'sorting' do
@@ -267,7 +267,7 @@ RSpec.describe Candidates::SchoolPresenter do
       end
 
       specify 'subjects should be sorted alphabetically' do
-        expect(subject.secondary_dates_grouped_by_date[date]).to eql(pd_subjects.map(&:name).map { |s| "#{s} (1 day)" }.sort)
+        expect(subject.secondary_dates_grouped_by_date[date].map(&:name_with_duration)).to eql(pd_subjects.map(&:name).map { |s| "#{s} (1 day)" }.sort)
       end
     end
   end
