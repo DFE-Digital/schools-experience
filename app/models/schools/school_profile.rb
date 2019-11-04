@@ -1,5 +1,7 @@
 module Schools
   class SchoolProfile < ApplicationRecord
+    self.ignored_columns = %w(show_candidate_requirements_selection)
+
     delegate :urn, to: :bookings_school
 
     validates :bookings_school, presence: true
