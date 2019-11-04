@@ -357,6 +357,9 @@ en:
           attributes:
             availability_preference_fixed:
               inclusion: Select an availability preference
+            availability_info:
+              blank: Enter a description of your school's availability
+              too_short: Availability description must be at least 3 characters
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:
