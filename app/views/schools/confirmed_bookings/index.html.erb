@@ -20,18 +20,11 @@
     </p>
 
     <% if @bookings.any? %>
-      <div class="pagination-info higher">
-        <div class="pagination-slice">
-          <%= page_entries_info @bookings %>
-        </div>
-        <%= paginate @bookings %>
-      </div>
+      <%= pagination_bar @bookings %>
 
       <%= render partial: 'schools/confirmed_bookings/booking_table', locals: { bookings: @bookings } %>
 
-      <div class="pagination-info lower">
-        <%= paginate @bookings %>
-      </div>
+      <%= pagination_lower @bookings %>
 
     <% else %>
       <p>
