@@ -64,15 +64,5 @@ module Schools
 
       placement_request_urn if other_school_urns.include? placement_request_urn
     end
-
-    def assign_gitis_contacts(reqs)
-      return reqs if reqs.empty?
-
-      contacts = gitis_crm.find(reqs.map(&:contact_uuid)).index_by(&:id)
-
-      reqs.each do |req|
-        req.candidate.gitis_contact = contacts[req.contact_uuid]
-      end
-    end
   end
 end
