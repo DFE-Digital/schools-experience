@@ -9,8 +9,6 @@ class EmailFormatValidator < ActiveModel::EachValidator
 
 private
 
-  # ensure it's a HTTP/HTTPS uri with at least one '.' in the hostname
-  # note that HTTPS inherits from HTTP
   def is_an_email_uri?(value)
     !!value.to_s.match?(URI::MailTo::EMAIL_REGEXP)
   end
