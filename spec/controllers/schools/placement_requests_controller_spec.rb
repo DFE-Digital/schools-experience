@@ -68,6 +68,21 @@ describe Schools::PlacementRequestsController, type: :request do
         expect(response).to render_template('shared/failed_gitis_connection')
       end
     end
+
+    context 'with missing contacts from Gitis' do
+      include_context 'fake gitis'
+
+      before do
+        allow(fake_gitis).to receive(:find).and_return([])
+        get "/schools/placement_requests"
+      end
+
+      it "renders the Gitis connection error page" do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template('show')
+        expect(response).to have_content('unavailable')
+      end
+    end
   end
 
   context '#show' do
