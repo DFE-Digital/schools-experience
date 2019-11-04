@@ -52,7 +52,12 @@ module Schools
       end
     end
 
-    def gitis_retrieval_error
+    def gitis_retrieval_error(exception)
+      if Rails.env.production?
+        ExceptionNotifier.notify_exception exception
+        Raven.capture_exception exception
+      end
+
       render 'shared/failed_gitis_connection', status: :service_unavailable
     end
   end
