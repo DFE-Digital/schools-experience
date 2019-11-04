@@ -3,6 +3,9 @@ Feature: Schools search page
     As a potential candidate
     I want to be able to search for schools in my area
 
+    Background:
+        Given the phases 'Primary' and 'Secondary' exist
+
     Scenario: Page contents
         Given I am on the 'find a school' page
         Then the page's main header should be 'Search for school experience'
@@ -26,10 +29,15 @@ Feature: Schools search page
         Then the 'location' input should require at least '3' characters
 
     Scenario: Navigating back to the search form
-        Given I search for schools near 'Rochdale'
+        Given I search for 'Primary schools' schools near 'Rochdale'
         When I click back on the results screen
         Then the location input should be populated with 'Rochdale'
+        And the age group input should be populated with 'Primary schools'
 
     Scenario: Entering an invalid search
-        Given I have made an invalid search for schools near 'Ex'
+        Given I have made an invalid search for 'Primary schools' schools near 'Ex'
         Then I should see an error message stating 'Must be at least 3 characters'
+
+    Scenario: Not choosing an age range
+        Given I have made an invalid search for '' schools near 'Rochdale'
+        Then I should see an error message stating 'Select the kind of school you want experience at'

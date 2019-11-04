@@ -40,7 +40,7 @@ private
   def search_params
     params.permit(
       :query, :location, :latitude, :longitude, :page,
-      :distance, :max_fee, :order, phases: [], subjects: []
+      :distance, :max_fee, :order, :age_group, phases: [], subjects: []
     )
   end
 

@@ -23,7 +23,7 @@ module Candidates
                   :longitude, :page, :analytics_tracking_uuid
     attr_reader :distance, :max_fee
 
-    delegate :location_name, :has_coordinates?, :valid?, :errors, to: :school_search
+    delegate :location_name, :has_coordinates?, to: :school_search
 
     class << self
       delegate :available_orders, to: Bookings::SchoolSearch
@@ -35,7 +35,29 @@ module Candidates
       def distances
         DISTANCES
       end
+
+      AgeGroup = Struct.new(:name, :to_s, :phases)
+
+      # Maps between primary & secondary radio buttons and their applicable
+      # phase_ids.
+      def age_group_options
+        [
+          AgeGroup.new(
+            'primary',
+            'Primary schools',
+            Bookings::Phase.where(name: 'Primary (4 to 11)').ids
+          ),
+          AgeGroup.new(
+            'secondary',
+            'Secondary schools, sixth forms and colleges',
+            Bookings::Phase.where(name: ['Secondary (11 to 16)', '16 to 18']).ids
+          )
+        ].freeze
+      end
     end
+
+    validates :location, length: { minimum: 3 }, allow_nil: true
+    validates :age_group, inclusion: age_group_options.map(&:name)
 
     def initialize(*args)
       @distance = 10
@@ -81,6 +103,16 @@ module Candidates
       @max_fee = FEES.map(&:first).include?(max_f) ? max_f : ''
     end
 
+    # Set the age_group for the selected phases
+    def age_group
+      self.class.age_group_options.detect { |g| g.phases == Array.wrap(phases).map(&:to_i) }&.name
+    end
+
+    # Set appropriate phases for the selected age group
+    def age_group=(age_group_name)
+      self.phases = self.class.age_group_options.detect { |g| g.name == age_group_name }&.phases
+    end
+
     def results
       school_search.results
     end
@@ -97,6 +129,10 @@ module Candidates
 
     def filtering_results?
       valid_search?
+    end
+
+    def secondary_search?
+      age_group == 'secondary'
     end
 
     def total_results

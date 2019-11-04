@@ -8,8 +8,8 @@ Feature: Schools search page contents
         And there are some schools with a range of fees containing the word 'Manchester'
 
     Scenario: Search result contents
-        Given I have searched for 'Manchester' and am on the results page
-        And there are 3 results
+        Given I have searched for 'Secondary' experience in 'Manchester' and am on the results page
+        And there are 2 results
         Then each result should have the following information
             | Address     |
             | Education   |
@@ -20,6 +20,6 @@ Feature: Schools search page contents
     Scenario: No closeby results
         Given there are no schools near my search location
         But there are some schools just outside it
-        When I search for schools within 5 miles
+        When I search for 'Secondary' schools within 5 miles
         Then the results page should include a warning that my search radius was expanded
         And the results from further out are displayed

@@ -8,11 +8,16 @@ Given("there there are schools with the following attributes:") do |table|
   end
 
   @schools = table.hashes.each.with_object([]) do |attributes, schools|
+    subjects = Array.wrap(attributes['Subject']).compact.map do |subject_name|
+      Bookings::Subject.find_or_create_by!(name: subject_name)
+    end
+
     schools << FactoryBot.create(
       :bookings_school,
       name: attributes["Name"],
       phases: Bookings::Phase.where(name: attributes["Phase"]),
-      coordinates: locate(attributes["Location"])
+      coordinates: locate(attributes["Location"]),
+      subjects: subjects
     )
   end
 
@@ -26,7 +31,7 @@ Given("I have provided {string} as my location") do |location|
   expect(path_with_query).to eql(path)
 end
 
-Given("I have provided a point in {string} as my location") do |centre|
+Given("I have provided a point in {string} as my location for {string} experience") do |centre, age_group|
   points = {
     "Bury" => {
       "latitude" => 53.593,
@@ -37,7 +42,7 @@ Given("I have provided a point in {string} as my location") do |centre|
   point = points[centre]
   fail "No point found for #{centre}" unless point.present?
 
-  path = candidates_schools_path(latitude: point["latitude"], longitude: point["longitude"], distance: 25)
+  path = candidates_schools_path(latitude: point["latitude"], longitude: point["longitude"], distance: 25, age_group: age_group.downcase)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
   expect(path_with_query).to eql(path)
@@ -71,6 +76,18 @@ Then("the results should be sorted by name, lowest to highest") do
       .all('#search-results > ul > li')
       .map { |ele| ele['data-school-urn'].to_i }
   ).to eql(urns_in_name_order)
+end
+
+Then "only schools teaching {string} are visible" do |subject|
+  schools_teaching_subject = Bookings::School
+    .joins(:subjects)
+    .where(bookings_subjects: { name: subject })
+
+  schools_teaching_subject.pluck(:name).each do |school_name|
+    within '#search-results' do
+      expect(page).to have_css 'h2', text: school_name
+    end
+  end
 end
 
 Given("I have changed the sort order to {string}") do |sort_by|

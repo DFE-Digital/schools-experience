@@ -23,15 +23,15 @@ Feature: School show page (enhanced data)
 
     Scenario: Education phase (singular)
         Given the phases 'Primary' and 'Secondary' exist
-        And the school is a 'Primary' school
+        And the school is a 'Primary (4 to 11)' school
         When I am on the profile page for the chosen school
         Then the age range should be 'Primary'
 
     Scenario: Education phase (Multiple)
         Given the phases 'Primary' and 'Secondary' exist
-        And the school is a 'Primary' and 'Secondary' school
+        And the school is a 'Primary (4 to 11)' and 'Secondary (11 to 16)' school
         When I am on the profile page for the chosen school
-        Then the age range should be 'Primary and Secondary'
+        Then the age range should be 'Primary (4 to 11) and Secondary (11 to 16)'
 
     Scenario: Subjects
         Given some subjects exist

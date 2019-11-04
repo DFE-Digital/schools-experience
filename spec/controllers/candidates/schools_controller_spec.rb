@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolsController, type: :request do
+  let!(:primary_phase) { create :bookings_phase, :primary }
+  let!(:secondary_phase) { create :bookings_phase, :secondary }
+  let!(:college_phase) { create :bookings_phase, :college }
+
   context "GET #index with search params" do
     let(:query_params) {
       {
@@ -9,7 +13,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         latitude: '53.481',
         longitude: '-2.241',
         distance: '10',
-        phases: %w{1},
+        age_group: 'primary',
         subjects: %w{2 3},
         max_fee: '30',
         order: 'Name'
@@ -23,7 +27,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       expect(assigns(:search).location).to eq('Manchester')
       expect(assigns(:search).latitude).to eq('53.481')
       expect(assigns(:search).longitude).to eq('-2.241')
-      expect(assigns(:search).phases).to eq([1])
+      expect(assigns(:search).phases).to eq([primary_phase.id])
       expect(assigns(:search).subjects).to eq([2, 3])
       expect(assigns(:search).max_fee).to eq('30')
       expect(assigns(:search).order).to eq('Name')

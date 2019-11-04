@@ -91,6 +91,13 @@ en:
   activemodel:
     errors:
       models:
+        candidates/school_search:
+          attributes:
+            age_group:
+              inclusion: 'Select the kind of school you want experience at'
+            location:
+              too_short: Must be at least 3 characters
+
         candidates/registrations/subject_preference:
           <<: *subject_preference_errors
 
@@ -349,10 +356,6 @@ en:
           attributes:
             reason:
               blank: 'Cancellation reason is required'
-        bookings/school_search:
-          attributes:
-            location:
-              too_short: Must be at least 3 characters
         bookings/school:
           attributes:
             availability_preference_fixed:
@@ -371,6 +374,7 @@ en:
 
   helpers:
     fieldset:
+      age_group: 'What kind of school do you want experience at?'
       order: Sorted by
       schools_placement_requests_confirm_booking:
         date: Confirm experience date

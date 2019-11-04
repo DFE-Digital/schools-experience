@@ -28,8 +28,8 @@ Then("the submit button should be labelled {string}") do |string|
   end
 end
 
-Given("I have made an invalid search for schools near {string}") do |string|
+Given("I have made an invalid search for {string} schools near {string}") do |phase, location|
   path = candidates_schools_path
-  visit(candidates_schools_path(location: string))
+  visit(candidates_schools_path(location: location, age_group: phase))
   expect(page.current_path).to eql(path)
 end

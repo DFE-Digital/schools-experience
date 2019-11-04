@@ -8,34 +8,9 @@
 </div>
 
 <div class="govuk-grid-row">
-  <aside class="govuk-grid-column-one-third filter-list" aria-label="Filter search results">
-    <div data-controller="collapsible" id="search-filter">
-      <button data-action="collapsible#toggle">
-        Filter the results
-      </button>
-
-      <div data-target="collapsible.panel">
-        <%= link_to 'Skip to search results', '#search-results', class: 'govuk-skip-link', id: 'skip-to-results' %>
-        <%= form_for @search, as: '',
-              method: :get,
-              html: {class: "collapsible__content"} do |f| %>
-
-          <%= f.hidden_field :query %>
-          <%= f.hidden_field :location %>
-          <%= f.hidden_field :distance %>
-          <%= f.hidden_field :latitude %>
-          <%= f.hidden_field :longitude %>
-
-          <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
-
-          <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
-          <%= f.hidden_field :order %>
-
-          <%= f.submit 'Update schools list', name: nil %>
-        <% end %>
-      </div>
-    </div>
-  </aside>
+  <% if @search.secondary_search? %>
+    <%= render "search_panel", { search: @search } %>
+  <% end %>
 
   <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
     <%- if @search.subjects.any? || @search.phases.any? -%>

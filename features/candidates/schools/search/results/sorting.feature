@@ -15,26 +15,26 @@ Feature: Schools search page sorting
         When I select 'Distance' from the 'Sorted by' radio buttons
         Then the results should be sorted by distance, nearest to furthest
 
-    @javascript
+  #@javascript
     Scenario: Sorting by distance when searching by current location
         Given there there are schools with the following attributes:
             | Name              | Location   |
             | Manchester School | Manchester |
             | Rochdale School   | Rochdale   |
             | Burnley School    | Burnley    |
-        And I have provided a point in 'Bury' as my location
+        And I have provided a point in 'Bury' as my location for 'Secondary' experience
         And I have changed the sort order to 'Name'
         When I select 'Distance' from the 'Sorted by' radio buttons
         Then the results should be sorted by distance, nearest to furthest
 
-    @javascript
+  #@javascript
     Scenario: When sorted by distance the mileage should increase
         Given there there are schools with the following attributes:
             | Name              | Location   |
             | Manchester School | Manchester |
             | Rochdale School   | Rochdale   |
             | Burnley School    | Burnley    |
-        And I have provided a point in 'Bury' as my location
+        And I have provided a point in 'Bury' as my location for 'Secondary' experience
         And I have changed the sort order to 'Name'
         When I select 'Distance' from the 'Sorted by' radio buttons
         Then the distance should be ordered from low to high
@@ -46,7 +46,7 @@ Feature: Schools search page sorting
             | Manton School              | Manchester |
             | Mansfield School           | Rochdale   |
             | Manningtree Primary School | Burnley    |
-        And I have searched for 'Man' and am on the results page
+        And I have searched for 'Secondary' experience in 'Man' and am on the results page
         And the sort order has defaulted to 'Distance'
         When I select 'Name' from the 'Sorted by' radio buttons
         Then the results should be sorted by name, lowest to highest

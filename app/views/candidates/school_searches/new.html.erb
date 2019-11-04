@@ -23,6 +23,11 @@
           <%= f.collection_select :distance,
                 Candidates::SchoolSearch.distances, :first, :last %>
 
+          <%= f.radio_button_fieldset :age_group,
+            choices: Candidates::SchoolSearch.age_group_options,
+            text_method: :to_s,
+            value_method: :name %>
+
           <div class="school-search-form__submit">
             <div class="govuk-form-group">
               <%= f.submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>

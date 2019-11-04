@@ -1,6 +1,6 @@
 Given("the phases {string} and {string} exist") do |phase_one, phase_two|
-  @phase_one = FactoryBot.create(:bookings_phase, name: phase_one)
-  @phase_two = FactoryBot.create(:bookings_phase, name: phase_two)
+  @phase_one = FactoryBot.create(:bookings_phase, phase_one.downcase.to_sym)
+  @phase_two = FactoryBot.create(:bookings_phase, phase_two.downcase.to_sym)
 end
 
 Given("there are some schools with a range of fees containing the word {string}") do |string|
@@ -28,8 +28,8 @@ Given("there are some schools with a range of fees containing the word {string}"
   end
 end
 
-Given("I have searched for {string} and am on the results page") do |string|
-  path = candidates_schools_path(location: string, distance: 100)
+Given("I have searched for {string} experience in {string} and am on the results page") do |age_group, location|
+  path = candidates_schools_path(location: location, distance: 100, age_group: age_group.downcase)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
   expect(path_with_query).to eql(path)
@@ -52,6 +52,10 @@ Then("I should see a/an {string} filter on the left") do |label|
   within('#search-filter') do
     expect(page).to have_css('legend', text: label)
   end
+end
+
+Then("I should not see a/an {string} filter on the left") do |label|
+  expect(page).not_to have_css '#search-filter'
 end
 
 Then("it should have the hint text {string}") do |hint|
@@ -98,9 +102,12 @@ When("I select {string} in/from the {string} radio buttons") do |option, label_t
   delay_page_load
 end
 
-Given("I search for schools near {string}") do |string|
+Given("I search for {string} schools near {string}") do |phase, location|
   visit(new_candidates_school_search_path)
-  fill_in 'Enter location or postcode', with: string
+  fill_in 'Enter location or postcode', with: location
+  within find 'fieldset', text: 'What kind of school do you want experience at?' do
+    choose phase
+  end
   click_button 'Search'
   expect(page.current_path).to eql(candidates_schools_path)
 end
@@ -114,6 +121,13 @@ Then("the location input should be populated with {string}") do |string|
   expect(page.find('input#location').value).to eql(string)
 end
 
+Then("the age group input should be populated with {string}") do |string|
+  radios = find 'fieldset', text: 'What kind of school do you want experience at?'
+  within radios do
+    expect(find_field(string)).to be_checked
+  end
+end
+
 Given("there are no schools near my search location") do
   # do nothing, my location is Bury, Greater Manchester
 end
@@ -122,8 +136,9 @@ Given("there are some schools just outside it") do
   FactoryBot.create_list(:bookings_school, 2, coordinates: Bookings::School::GEOFACTORY.point(-2.421, 53.624))
 end
 
-When("I search for schools within {int} miles") do |int|
-  path = candidates_schools_path(location: 'Bury', distance: int)
+When("I search for {string} schools within {int} miles") do |age_group, int|
+  @age_group = age_group.downcase
+  path = candidates_schools_path(location: 'Bury', distance: int, age_group: @age_group)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
   expect(path_with_query).to eql(path)
@@ -137,7 +152,9 @@ Then("the results page should include a warning that my search radius was expand
 end
 
 Then("the results from further out are displayed") do
-  expect(page).to have_css('article.school-result', count: Bookings::School.count)
+  phase_ids = Candidates::SchoolSearch.new(age_group: @age_group).phases
+  schools_offering_phase = Bookings::School.joins(:phases).where(bookings_phases: { id: phase_ids })
+  expect(page).to have_css('article.school-result', count: schools_offering_phase.count)
 end
 
 Given("there are no schools in or around my search location") do

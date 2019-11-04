@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolSearch do
+  let!(:primary_phase) { create :bookings_phase, :primary }
+  let!(:secondary_phase) { create :bookings_phase, :secondary }
+  let!(:college_phase) { create :bookings_phase, :college }
+
   context '.new' do
     subject do
       described_class.new(
@@ -23,9 +27,12 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
+  context 'validation' do
+    it { is_expected.to validate_inclusion_of(:age_group).in_array %w(primary secondary) }
+    it { is_expected.to validate_length_of(:location).is_at_least(3).allow_nil }
+  end
+
   context 'delegation' do
-    it { expect(subject).to delegate_method(:valid?).to(:school_search) }
-    it { expect(subject).to delegate_method(:errors).to(:school_search) }
     it { expect(subject).to delegate_method(:location_name).to(:school_search) }
     it { expect(subject).to delegate_method(:has_coordinates?).to(:school_search) }
   end
@@ -98,6 +105,36 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
+  context '.age_group_options' do
+    context 'primary age group' do
+      subject do
+        described_class.age_group_options.detect { |o| o.name == 'primary' }
+      end
+
+      it 'sets the description correctly' do
+        expect(subject.to_s).to eq 'Primary schools'
+      end
+
+      it 'sets the phases correctly' do
+        expect(subject.phases).to eq [primary_phase.id]
+      end
+    end
+
+    context 'secondary age group' do
+      subject do
+        described_class.age_group_options.detect { |o| o.name == 'secondary' }
+      end
+
+      it 'sets the description correctly' do
+        expect(subject.to_s).to eq 'Secondary schools, sixth forms and colleges'
+      end
+
+      it 'sets the phases correctly' do
+        expect(subject.phases).to eq [secondary_phase, college_phase].map(&:id)
+      end
+    end
+  end
+
   context 'max_fee=' do
     context 'with known value' do
       before { subject.max_fee = '30' }
@@ -137,6 +174,86 @@ RSpec.describe Candidates::SchoolSearch do
       it('should be blank') do
         expect(subject.max_fee).to eq ''
       end
+    end
+  end
+
+  context '#age_group=' do
+    context 'when "primary"' do
+      before { subject.age_group = 'primary' }
+
+      it('sets the phases') do
+        expect(subject.phases).to eq [primary_phase.id]
+      end
+
+      it('sets the age_group') do
+        expect(subject.age_group).to eq 'primary'
+      end
+    end
+
+    context 'when "seconday"' do
+      before { subject.age_group = 'secondary' }
+
+      it('sets the phases') do
+        expect(subject.phases).to eq [secondary_phase.id, college_phase.id]
+      end
+
+      it('sets the age_group') do
+        expect(subject.age_group).to eq 'secondary'
+      end
+    end
+
+    context 'when other' do
+      before { subject.age_group = 'other' }
+
+      it('sets phases to empty') do
+        expect(subject.phases).to eq []
+      end
+
+      it('sets age_group to nil') do
+        expect(subject.age_group).to eq nil
+      end
+    end
+  end
+
+  context '#age_group' do
+    context 'when primary phases selected' do
+      before { subject.phases = [primary_phase.id] }
+
+      it('returns primary') do
+        expect(subject.age_group).to eq 'primary'
+      end
+    end
+
+    context 'when secondary phases selected' do
+      before { subject.phases = [secondary_phase.id, college_phase.id] }
+
+      it('returns secondary') do
+        expect(subject.age_group).to eq 'secondary'
+      end
+    end
+
+    context 'when other' do
+      let(:other_phase) { create :bookings_phase, name: 'Elderly' }
+
+      before { subject.phases = [other_phase.id] }
+
+      it('returns nil') do
+        expect(subject.age_group).to eq nil
+      end
+    end
+  end
+
+  context '#secondary_search?' do
+    context 'when the age_group is secondary' do
+      subject { described_class.new age_group: 'secondary' }
+
+      it { is_expected.to be_a_secondary_search }
+    end
+
+    context 'when the age_group is primary' do
+      subject { described_class.new age_group: 'primary' }
+
+      it { is_expected.not_to be_a_secondary_search }
     end
   end
 
