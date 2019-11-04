@@ -17,7 +17,8 @@ module GitisAccess
     contacts = gitis_crm.find(contact_uuids).index_by(&:contactid)
 
     models.each do |model|
-      model.gitis_contact = contacts[model.contact_uuid]
+      model.gitis_contact = contacts[model.contact_uuid] ||
+        Bookings::Gitis::MissingContact.new(model.contact_uuid)
     end
   end
 end
