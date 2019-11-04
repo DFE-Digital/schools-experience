@@ -34,7 +34,12 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         'test@example.com', 'testymctest@gmail.com',
         'test%.mctest@domain.co.uk', ' with@space.com '
       ].freeze
-      INVALID_EMAILS = ['test.com', 'test@@test.com', 'FFFF', 'test@test'].freeze
+
+      INVALID_EMAILS = [
+        'test.com', 'test@@test.com', 'FFFF', 'test@test',
+        'test@test.'
+      ].freeze
+
       BLANK_EMAILS = ['', ' ', '   '].freeze
 
       VALID_EMAILS.each do |email|
