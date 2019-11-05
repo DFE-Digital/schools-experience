@@ -8,6 +8,8 @@ module Candidates
       attribute :bookings_subject_id, :integer
 
       validates :bookings_subject_id, presence: true, if: :for_subject_specific_date?
+      validates :placement_date_subject, presence: true, if:
+        -> { for_subject_specific_date? && bookings_subject_id }
 
       def placement_date
         @placement_date ||= Bookings::PlacementDate.find_by(id: bookings_placement_date_id)

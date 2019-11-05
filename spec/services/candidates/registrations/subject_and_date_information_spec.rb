@@ -56,16 +56,35 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
           end
         end
 
-        subject do
-          described_class.new \
-            urn: school.urn,
-            bookings_placement_date_id: placement_date.id
+        context 'and no date subject specified' do
+          subject do
+            described_class.new \
+              urn: school.urn,
+              bookings_placement_date_id: placement_date.id
+          end
+
+          specify 'should validate the presence of bookings_subject_id' do
+            is_expected.to \
+              validate_presence_of(:bookings_subject_id).
+                with_message('Choose a subject')
+          end
         end
 
-        specify 'should validate the presence of bookings_subject_id' do
-          is_expected.to \
-            validate_presence_of(:bookings_subject_id).
-              with_message('Choose a subject')
+        context 'and invalid date subject specified' do
+          # race scenario if school removes subject from date whilst
+          # candidate is viewing it
+
+          subject do
+            described_class.new \
+              urn: school.urn,
+              bookings_placement_date_id: placement_date.id,
+              bookings_subject_id: 999999
+          end
+
+          specify 'should validate the presence of bookings_placement_date_subject' do
+            is_expected.not_to be_valid
+            expect(subject.errors.full_messages).to include('Choose a subject')
+          end
         end
       end
     end
