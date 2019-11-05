@@ -115,7 +115,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
 
       specify 'should join the placement date and placement date subject ids separated by an underscore' do
-        expect(subject.subject_and_date_ids).to eql(bookings_placement_dates_subject.combined_id)
+        expect(subject.subject_and_date_ids).to eql(bookings_placement_dates_subject.date_and_subject_id)
       end
     end
 
@@ -131,7 +131,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
 
       before do
-        subject.subject_and_date_ids = bookings_placement_dates_subject.combined_id
+        subject.subject_and_date_ids = bookings_placement_dates_subject.date_and_subject_id
       end
 
       it 'sets the bookings_subject correctly' do

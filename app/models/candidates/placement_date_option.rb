@@ -4,7 +4,7 @@ class Candidates::PlacementDateOption
     if placement_date.placement_date_subjects.any?
       placement_date.placement_date_subjects.map do |placement_date_subject|
         new(
-          placement_date_subject.combined_id,
+          placement_date_subject.date_and_subject_id,
           placement_date_subject.bookings_subject.name,
           placement_date.duration,
           placement_date.date

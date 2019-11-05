@@ -25,7 +25,7 @@ module Candidates
       end
 
       def subject_and_date_ids
-        placement_date_subject&.combined_id || placement_date&.id
+        placement_date_subject&.date_and_subject_id || placement_date&.id
       end
 
       def subject_and_date_ids=(subject_and_date_id)
