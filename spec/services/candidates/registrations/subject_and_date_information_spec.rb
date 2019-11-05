@@ -29,11 +29,19 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       context 'when the placement date is not subject-specific' do
         let(:placement_date) { create(:bookings_placement_date, subject_specific: false) }
 
-        before { subject.bookings_placement_date_id = placement_date.id }
+#        before { subject.bookings_placement_date_id = placement_date.id }
+#
+#        specify 'should not validate the presence of bookings_subject_id' do
+#          expect(subject).to be_valid
+#        end
 
-        specify 'should not validate the presence of bookings_placement_dates_subject_id' do
-          expect(subject).to be_valid
+        subject do
+          described_class.new \
+            urn: school.urn,
+            bookings_placement_date_id: placement_date.id
         end
+
+        it { is_expected.not_to validate_presence_of :bookings_subject_id }
       end
 
       context 'when the placement date is subject-specific' do
@@ -48,15 +56,16 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
           end
         end
 
-        before { subject.bookings_placement_date_id = placement_date.id }
-        before { subject.valid? }
-
-        specify 'should validate the presence of bookings_subject_id' do
-          expect(subject).not_to be_valid
+        subject do
+          described_class.new \
+            urn: school.urn,
+            bookings_placement_date_id: placement_date.id
         end
 
-        specify 'should fail validation with an appropriate message' do
-          expect(subject.errors.messages[:bookings_subject_id]).to include("Choose a subject")
+        specify 'should validate the presence of bookings_subject_id' do
+          is_expected.to \
+            validate_presence_of(:bookings_subject_id).
+              with_message('Choose a subject')
         end
       end
     end
