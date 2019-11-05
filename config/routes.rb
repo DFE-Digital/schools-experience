@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     resource :session, only: %i(show) do
       get :logout
     end
-    resource :switch, only: %i(new), controller: 'switch'
+    resource :switch, only: %i(new show), controller: 'switch'
     resource :dashboard, only: :show
     resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
