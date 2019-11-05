@@ -24,12 +24,12 @@ module Candidates
         @bookings_subject ||= Bookings::Subject.find_by(id: bookings_subject_id)
       end
 
-      def subject_and_date_ids
+      def date_and_subject_ids
         placement_date_subject&.date_and_subject_id || placement_date&.id
       end
 
-      def subject_and_date_ids=(subject_and_date_id)
-        self.bookings_placement_date_id, self.bookings_subject_id = subject_and_date_id.split('_')
+      def date_and_subject_ids=(pair)
+        self.bookings_placement_date_id, self.bookings_subject_id = pair.split('_')
       end
 
       def primary_placement_dates

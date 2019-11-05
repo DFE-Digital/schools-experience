@@ -7,7 +7,7 @@
     <%= form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary subject_and_date_information, 'There is a problem', '' %>
 
-      <%= f.hidden_field :subject_and_date_ids %>
+      <%= f.hidden_field :date_and_subject_ids %>
 
       <section class="<%= subject_and_date_section_classes(subject_and_date_information) %>">
 
@@ -15,7 +15,7 @@
           <section class="date-selector date-selector-primary">
             <h3 class="govuk-heading-m">Primary placement dates</h3>
 
-            <%= f.radio_button_fieldset :subject_and_date_ids,
+            <%= f.radio_button_fieldset :date_and_subject_ids,
               choices: @subject_and_date_information.primary_placement_dates,
               value_method: :id,
               text_method: :name_with_duration -%>
@@ -34,7 +34,7 @@
               </dt>
 
               <dd class="govuk-summary-list__value date-selector date-selector-secondary">
-                <%= f.radio_button_fieldset :subject_and_date_ids,
+                <%= f.radio_button_fieldset :date_and_subject_ids,
                   choices: secondary_placement_dates.sort,
                   value_method: :id,
                   text_method: :name_with_duration

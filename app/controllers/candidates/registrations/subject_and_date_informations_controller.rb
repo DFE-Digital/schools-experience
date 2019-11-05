@@ -43,7 +43,7 @@ module Candidates
       def subject_and_date_params
         params
           .require(:candidates_registrations_subject_and_date_information)
-          .permit(:subject_and_date_ids)
+          .permit(:date_and_subject_ids)
           .merge(urn: @school.urn)
       end
 

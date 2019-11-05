@@ -96,7 +96,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
     end
 
-    describe '#subject_and_date_ids' do
+    describe '#date_and_subject_ids' do
       it { is_expected.to respond_to(:placement_date_subject) }
 
       let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
@@ -115,11 +115,11 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
 
       specify 'should join the placement date and placement date subject ids separated by an underscore' do
-        expect(subject.subject_and_date_ids).to eql(bookings_placement_dates_subject.date_and_subject_id)
+        expect(subject.date_and_subject_ids).to eql(bookings_placement_dates_subject.date_and_subject_id)
       end
     end
 
-    describe '#subject_and_date_ids=' do
+    describe '#date_and_subject_ids=' do
       let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
       let!(:bookings_subject) { create :bookings_subject, schools: [school] }
       let!(:bookings_placement_dates_subject) do
@@ -131,7 +131,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
 
       before do
-        subject.subject_and_date_ids = bookings_placement_dates_subject.date_and_subject_id
+        subject.date_and_subject_ids = bookings_placement_dates_subject.date_and_subject_id
       end
 
       it 'sets the bookings_subject correctly' do
