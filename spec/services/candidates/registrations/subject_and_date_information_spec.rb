@@ -29,12 +29,6 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       context 'when the placement date is not subject-specific' do
         let(:placement_date) { create(:bookings_placement_date, subject_specific: false) }
 
-#        before { subject.bookings_placement_date_id = placement_date.id }
-#
-#        specify 'should not validate the presence of bookings_subject_id' do
-#          expect(subject).to be_valid
-#        end
-
         subject do
           described_class.new \
             urn: school.urn,
