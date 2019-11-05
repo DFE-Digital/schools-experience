@@ -369,6 +369,11 @@ en:
         dress_code_remove_piercings: Remove piercings
         dress_code_smart_casual: Smart casual
 
+    models:
+      bookings/placement_request:
+        one: Request
+        other: Requests
+
   helpers:
     fieldset:
       order: Sorted by
