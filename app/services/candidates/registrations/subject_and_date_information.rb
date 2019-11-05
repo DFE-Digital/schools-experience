@@ -29,12 +29,7 @@ module Candidates
       end
 
       def subject_and_date_ids=(subject_and_date_id)
-        bookings_placement_date_id, bookings_placement_dates_subject_id = subject_and_date_id.split('_')
-
-        bookings_subject_id = Bookings::PlacementDateSubject.find_by(id: bookings_placement_dates_subject_id)&.bookings_subject_id
-
-        self.bookings_placement_date_id = bookings_placement_date_id
-        self.bookings_subject_id        = bookings_subject_id
+        self.bookings_placement_date_id, self.bookings_subject_id = subject_and_date_id.split('_')
       end
 
       def primary_placement_dates

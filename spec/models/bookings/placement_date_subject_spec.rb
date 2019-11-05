@@ -40,7 +40,7 @@ describe Bookings::PlacementDateSubject, type: :model do
       end
 
       specify 'should be the bookings_placement_date id and own id delimited by an underscore' do
-        expect(subject.combined_id).to eql("#{placement_date.id}_#{subject.id}")
+        expect(subject.combined_id).to eql("#{placement_date.id}_#{chosen_subject.id}")
       end
     end
   end

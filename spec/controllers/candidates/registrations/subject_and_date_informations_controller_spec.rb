@@ -129,7 +129,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
       let(:params) do
         {
           candidates_registrations_subject_and_date_information: {
-            subject_and_date_ids: [secondary_placement_date.id, placement_date_subject.id].join('_')
+            subject_and_date_ids: [secondary_placement_date.id, bookings_subject.id].join('_')
           }
         }
       end
