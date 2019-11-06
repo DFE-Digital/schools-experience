@@ -267,11 +267,11 @@ en:
         schools/on_boarding/access_needs_detail:
           attributes:
             description:
-              blank: 'Provide details about the kinds of facilities and support you can provide for candidates with disabilites and access needs.'
+              blank: 'Provide details about the kinds of facilities and support you can provide for candidates with disabilities and access needs.'
         schools/on_boarding/access_needs_support:
           attributes:
             supports_access_needs:
-              inclusion: 'Select if you want to add details about how you can support candidates with disabilites and access needs'
+              inclusion: 'Select if you want to add details about how you can support candidates with disabilities and access needs'
         schools/on_boarding/disability_confident:
           attributes:
             is_disability_confident:
