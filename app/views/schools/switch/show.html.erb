@@ -1,9 +1,16 @@
 <h1 class="govuk-heading-l">You're trying to view a placement request for another school</h1>
 
-<p>
-  You're currently logged in to <strong><%= @current_school.name %></strong>, you
-  need to change to <strong><%= @school.name %></strong> in order to view it.
-</p>
+<% if @school.present? %>
+  <p>
+    You're currently logged in to <strong><%= @current_school.name %></strong>, you
+    need to change to <strong><%= @school.name %></strong> in order to view it.
+  </p>
+<% else %>
+  <p>
+    You're currently logged in to <strong><%= @current_school.name %></strong> and
+    this placement request belongs to another school.
+  </p>
+<% end %>
 
 <%= link_to 'Change school', new_schools_switch_path, class: 'govuk-button govuk-!-margin-right-1' %>
 
