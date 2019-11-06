@@ -105,6 +105,10 @@ module Bookings::Gitis
       other.id == self.id
     end
 
+    def cache_key
+      "#{entity_path}/#{id}"
+    end
+
     class InvalidEntityIdError < RuntimeError; end
 
   private

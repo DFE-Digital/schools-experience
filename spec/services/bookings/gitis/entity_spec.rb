@@ -24,6 +24,12 @@ RSpec.describe Bookings::Gitis::Entity do
     it { expect(subject.send(:attributes)).to eq({}) }
   end
 
+  describe '#cache_key' do
+    let(:uuid) { SecureRandom.uuid }
+    subject { TestEntity.new testentityid: uuid, firstname: 'test' }
+    it { is_expected.to have_attributes cache_key: "testentities/#{uuid}" }
+  end
+
   describe '#persisted?' do
     context 'with persisted?' do
       subject { TestEntity.new('testentityid' => SecureRandom.uuid) }
