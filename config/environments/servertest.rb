@@ -16,7 +16,6 @@ Rails.application.configure do
   config.x.features = %i(
     subject_specific_dates
     candidate_requirement_ab_test
-    access_needs_journey
     capped_bookings
   )
 

@@ -132,14 +132,6 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:candidate_experience_detail_disabled_facilities).of_type :boolean
-    end
-
-    it do
-      is_expected.to have_db_column(:candidate_experience_detail_disabled_facilities_details).of_type :string
-    end
-
-    it do
       is_expected.to have_db_column(:candidate_experience_detail_start_time).of_type :string
     end
 
@@ -475,8 +467,6 @@ describe Schools::SchoolProfile, type: :model do
         parking_provided
         parking_details
         nearby_parking_details
-        disabled_facilities
-        disabled_facilities_details
         start_time
         end_time
         times_flexible
