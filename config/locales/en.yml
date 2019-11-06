@@ -16,6 +16,8 @@ en:
         blank: "Choose a date"
       bookings_subject_id:
         blank: "Choose a subject"
+      placement_date_subject:
+        blank: "Choose a subject"
 
   placement_preference_errors: &placement_preference_errors
     attributes:

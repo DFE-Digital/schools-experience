@@ -63,7 +63,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
       let(:params) do
         {
           candidates_registrations_subject_and_date_information: {
-            subject_and_date_ids: primary_placement_date.id
+            date_and_subject_ids: primary_placement_date.id
           }
         }
       end
@@ -92,7 +92,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
       let(:params) do
         {
           candidates_registrations_subject_and_date_information: {
-            subject_and_date_ids: secondary_placement_date.id
+            date_and_subject_ids: secondary_placement_date.id
           }
         }
       end
@@ -129,7 +129,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
       let(:params) do
         {
           candidates_registrations_subject_and_date_information: {
-            subject_and_date_ids: [secondary_placement_date.id, placement_date_subject.id].join('_')
+            date_and_subject_ids: [secondary_placement_date.id, bookings_subject.id].join('_')
           }
         }
       end

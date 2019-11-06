@@ -8,6 +8,8 @@ module Candidates
       attribute :bookings_subject_id, :integer
 
       validates :bookings_subject_id, presence: true, if: :for_subject_specific_date?
+      validates :placement_date_subject, presence: true, if:
+        -> { for_subject_specific_date? && bookings_subject_id }
 
       def placement_date
         @placement_date ||= Bookings::PlacementDate.find_by(id: bookings_placement_date_id)
@@ -24,17 +26,12 @@ module Candidates
         @bookings_subject ||= Bookings::Subject.find_by(id: bookings_subject_id)
       end
 
-      def subject_and_date_ids
-        placement_date_subject&.combined_id || placement_date&.id
+      def date_and_subject_ids
+        placement_date_subject&.date_and_subject_id || placement_date&.id
       end
 
-      def subject_and_date_ids=(subject_and_date_id)
-        bookings_placement_date_id, bookings_placement_dates_subject_id = subject_and_date_id.split('_')
-
-        bookings_subject_id = Bookings::PlacementDateSubject.find_by(id: bookings_placement_dates_subject_id)&.bookings_subject_id
-
-        self.bookings_placement_date_id = bookings_placement_date_id
-        self.bookings_subject_id        = bookings_subject_id
+      def date_and_subject_ids=(pair)
+        self.bookings_placement_date_id, self.bookings_subject_id = pair.split('_')
       end
 
       def primary_placement_dates

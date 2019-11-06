@@ -29,7 +29,7 @@ describe Bookings::PlacementDateSubject, type: :model do
   end
 
   describe 'methods' do
-    describe '#combined_id' do
+    describe '#date_and_subject_id' do
       let(:placement_date) { create(:bookings_placement_date) }
       let(:chosen_subject) { create(:bookings_subject) }
       subject do
@@ -40,7 +40,7 @@ describe Bookings::PlacementDateSubject, type: :model do
       end
 
       specify 'should be the bookings_placement_date id and own id delimited by an underscore' do
-        expect(subject.combined_id).to eql("#{placement_date.id}_#{subject.id}")
+        expect(subject.date_and_subject_id).to eql("#{placement_date.id}_#{chosen_subject.id}")
       end
     end
   end

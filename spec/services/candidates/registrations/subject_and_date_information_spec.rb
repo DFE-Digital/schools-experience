@@ -29,11 +29,13 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       context 'when the placement date is not subject-specific' do
         let(:placement_date) { create(:bookings_placement_date, subject_specific: false) }
 
-        before { subject.bookings_placement_date_id = placement_date.id }
-
-        specify 'should not validate the presence of bookings_placement_dates_subject_id' do
-          expect(subject).to be_valid
+        subject do
+          described_class.new \
+            urn: school.urn,
+            bookings_placement_date_id: placement_date.id
         end
+
+        it { is_expected.not_to validate_presence_of :bookings_subject_id }
       end
 
       context 'when the placement date is subject-specific' do
@@ -48,15 +50,35 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
           end
         end
 
-        before { subject.bookings_placement_date_id = placement_date.id }
-        before { subject.valid? }
+        context 'and no date subject specified' do
+          subject do
+            described_class.new \
+              urn: school.urn,
+              bookings_placement_date_id: placement_date.id
+          end
 
-        specify 'should validate the presence of bookings_subject_id' do
-          expect(subject).not_to be_valid
+          specify 'should validate the presence of bookings_subject_id' do
+            is_expected.to \
+              validate_presence_of(:bookings_subject_id).
+                with_message('Choose a subject')
+          end
         end
 
-        specify 'should fail validation with an appropriate message' do
-          expect(subject.errors.messages[:bookings_subject_id]).to include("Choose a subject")
+        context 'and invalid date subject specified' do
+          # race scenario if school removes subject from date whilst
+          # candidate is viewing it
+
+          subject do
+            described_class.new \
+              urn: school.urn,
+              bookings_placement_date_id: placement_date.id,
+              bookings_subject_id: 999999
+          end
+
+          specify 'should validate the presence of bookings_placement_date_subject' do
+            is_expected.not_to be_valid
+            expect(subject.errors.full_messages).to include('Choose a subject')
+          end
         end
       end
     end
@@ -96,7 +118,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
     end
 
-    describe '#subject_and_date_ids' do
+    describe '#date_and_subject_ids' do
       it { is_expected.to respond_to(:placement_date_subject) }
 
       let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
@@ -115,11 +137,11 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
 
       specify 'should join the placement date and placement date subject ids separated by an underscore' do
-        expect(subject.subject_and_date_ids).to eql(bookings_placement_dates_subject.combined_id)
+        expect(subject.date_and_subject_ids).to eql(bookings_placement_dates_subject.date_and_subject_id)
       end
     end
 
-    describe '#subject_and_date_ids=' do
+    describe '#date_and_subject_ids=' do
       let!(:bookings_placement_date) { create :bookings_placement_date, bookings_school: school }
       let!(:bookings_subject) { create :bookings_subject, schools: [school] }
       let!(:bookings_placement_dates_subject) do
@@ -131,7 +153,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
 
       before do
-        subject.subject_and_date_ids = bookings_placement_dates_subject.combined_id
+        subject.date_and_subject_ids = bookings_placement_dates_subject.date_and_subject_id
       end
 
       it 'sets the bookings_subject correctly' do
