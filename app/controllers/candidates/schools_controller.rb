@@ -32,15 +32,13 @@ class Candidates::SchoolsController < ApplicationController
 private
 
   def location_present?
-    search_params[:location].present? || (
-      search_params[:latitude].present? && search_params[:latitude].present?
-    )
+    search_params[:location].present?
   end
 
   def search_params
     params.permit(
-      :query, :location, :latitude, :longitude, :page,
-      :distance, :max_fee, :order, :age_group, phases: [], subjects: []
+      :query, :location, :page, :distance, :max_fee, :order, :age_group,
+      phases: [], subjects: []
     )
   end
 

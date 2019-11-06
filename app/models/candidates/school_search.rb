@@ -19,8 +19,7 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location, :order, :latitude,
-                  :longitude, :page, :analytics_tracking_uuid
+    attr_accessor :query, :location, :order, :page, :analytics_tracking_uuid
     attr_reader :distance, :max_fee
 
     delegate :location_name, :has_coordinates?, to: :school_search
@@ -122,9 +121,7 @@ module Candidates
     end
 
     def valid_search?
-      query.present? ||
-        (location.present? && distance.present?) ||
-        (longitude.present? && latitude.present? && distance.present?)
+      query.present? || (location.present? && distance.present?)
     end
 
     def filtering_results?
@@ -144,7 +141,7 @@ module Candidates
     def school_search
       @school_search ||= Bookings::SchoolSearch.new(
         query: query,
-        location: location_or_coords,
+        location: location,
         radius: distance,
         subjects: subjects,
         phases: phases,
@@ -153,14 +150,6 @@ module Candidates
         page: page,
         analytics_tracking_uuid: analytics_tracking_uuid
       )
-    end
-
-    def location_or_coords
-      if latitude.present? && longitude.present?
-        { latitude: latitude, longitude: longitude }
-      else
-        location
-      end
     end
   end
 end

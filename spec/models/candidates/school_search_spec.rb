@@ -294,26 +294,6 @@ RSpec.describe Candidates::SchoolSearch do
       it('should be valid') { expect(subject.valid_search?).to be true }
     end
 
-    context 'with latitude and distance' do
-      subject { described_class.new(latitude: '-2.241', distance: '10') }
-      it('should be invalid') { expect(subject.valid_search?).to be false }
-    end
-
-    context 'with longitude and distance' do
-      subject { described_class.new(longitude: '53.481', distance: '10') }
-      it('should be invalid') { expect(subject.valid_search?).to be false }
-    end
-
-    context 'with latitude, longitude and distance' do
-      subject do
-        described_class.new(
-          distance: '10', longitude: '53.481', latitude: '-2.241'
-        )
-      end
-
-      it('should be valid') { expect(subject.valid_search?).to be true }
-    end
-
     context 'with query, location and distance' do
       subject do
         described_class.new(

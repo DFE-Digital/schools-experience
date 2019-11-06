@@ -8,6 +8,6 @@ class Candidates::SchoolSearchesController < ApplicationController
 private
 
   def search_params
-    params.permit(:location, :latitude, :longitude, :age_group)
+    params.permit(:location, :age_group)
   end
 end

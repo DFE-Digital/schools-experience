@@ -10,8 +10,6 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       {
         query: 'Something',
         location: 'Manchester',
-        latitude: '53.481',
-        longitude: '-2.241',
         distance: '10',
         age_group: 'primary',
         subjects: %w{2 3},
@@ -25,8 +23,6 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     it "assigns params to search model" do
       expect(assigns(:search).query).to eq('Something')
       expect(assigns(:search).location).to eq('Manchester')
-      expect(assigns(:search).latitude).to eq('53.481')
-      expect(assigns(:search).longitude).to eq('-2.241')
       expect(assigns(:search).phases).to eq([primary_phase.id])
       expect(assigns(:search).subjects).to eq([2, 3])
       expect(assigns(:search).max_fee).to eq('30')
@@ -42,8 +38,6 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         {
           query: 'Something',
           location: '',
-          latitude: '',
-          longitude: '',
           distance: '10',
           phases: %w{1},
           subjects: %w{2 3},
@@ -56,7 +50,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         expect(subject).to redirect_to(new_candidates_school_search_path)
       end
 
-      context 'when coordinates are blank and location is present' do
+      context 'when location is present' do
         let(:query_params_with_location) do
           query_params.merge(location: 'Rochdale')
         end
@@ -66,14 +60,14 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         specify { expect(response).to have_http_status(:success) }
       end
 
-      context 'when coordinates are present and location is blank' do
-        let(:query_params_with_coordinates) do
-          query_params.merge(latitude: 53.479, longitude: -245)
+      context 'when location is absent' do
+        let(:query_params_with_location) do
+          query_params.merge(location: nil)
         end
 
-        before { get candidates_schools_path(query_params_with_coordinates) }
+        before { get candidates_schools_path(query_params_with_location) }
 
-        specify { expect(response).to have_http_status(:success) }
+        specify { expect(response).to redirect_to new_candidates_school_search_path }
       end
     end
 

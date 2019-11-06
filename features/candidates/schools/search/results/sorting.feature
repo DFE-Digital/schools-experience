@@ -15,7 +15,7 @@ Feature: Schools search page sorting
         When I select 'Distance' from the 'Sorted by' radio buttons
         Then the results should be sorted by distance, nearest to furthest
 
-  #@javascript
+   @javascript
     Scenario: Sorting by distance when searching by current location
         Given there there are schools with the following attributes:
             | Name              | Location   |
@@ -27,7 +27,7 @@ Feature: Schools search page sorting
         When I select 'Distance' from the 'Sorted by' radio buttons
         Then the results should be sorted by distance, nearest to furthest
 
-  #@javascript
+    @javascript
     Scenario: When sorted by distance the mileage should increase
         Given there there are schools with the following attributes:
             | Name              | Location   |

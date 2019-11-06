@@ -40,8 +40,6 @@
         <%= f.hidden_field :query %>
         <%= f.hidden_field :location %>
         <%= f.hidden_field :distance %>
-        <%= f.hidden_field :latitude %>
-        <%= f.hidden_field :longitude %>
         <% for phase_id in f.object.phases %>
           <%= f.hidden_field :phases, multiple: true, value: phase_id, id: nil %>
         <% end %>

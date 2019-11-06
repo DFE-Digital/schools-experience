@@ -105,7 +105,7 @@ module Candidates::SchoolHelper
   end
 
   def school_new_search_params
-    params.permit(:location, :latitude, :longitude, :age_group).reject { |_, v| v.blank? }
+    params.permit(:location, :age_group).reject { |_, v| v.blank? }
   end
 
   def dlist_item(key, attrs = {}, &block)
