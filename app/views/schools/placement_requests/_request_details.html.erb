@@ -1,0 +1,9 @@
+<section id="request-details">
+  <h2>Request details</h2>
+
+  <dl class="placement-details govuk-summary-list">
+    <%= summary_row 'Dates requested', request_details.dates_requested %>
+    <%= summary_row 'DBS certificate', format_boolean(request_details.has_dbs_check?) %>
+    <%= summary_row 'Request received', request_details.received_on.to_formatted_s(:govuk) %>
+  </dl>
+</section>

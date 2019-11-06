@@ -41,8 +41,8 @@
                 <%- end -%>
               </td>
               <td class="subject govuk-table__cell">
-                <%- if withdrawn_request&.placement_date&.subject_specific -%>
-                  <%= withdrawn_request.placement_date.subjects.map(&:name).to_sentence %>
+                <%- if withdrawn_request&.placement_date&.subject_specific && withdrawn_request.subject -%>
+                  <%= withdrawn_request.subject.name %>
                 <%- else -%>
                   <em>Not specified</em>
                 <%- end -%>

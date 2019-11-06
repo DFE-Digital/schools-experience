@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       end
     end
     resources :withdrawn_requests, only: %i(index show)
+    resources :rejected_requests, only: %i(index show)
     resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i(index show) do
       resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
         resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
