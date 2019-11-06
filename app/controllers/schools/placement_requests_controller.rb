@@ -2,7 +2,7 @@ module Schools
   class WrongSchoolError < StandardError
     attr_reader :urn
 
-    def initialize(urn)
+    def initialize(urn:)
       @urn = urn
       super
     end
@@ -42,7 +42,7 @@ module Schools
       current_school.placement_requests.find params[:id]
     rescue ActiveRecord::RecordNotFound => e
       if (other_school_urn = user_has_access_via_another_school)
-        return raise WrongSchoolError.new(other_school_urn)
+        return raise WrongSchoolError.new(urn: other_school_urn)
       end
 
       raise e
