@@ -674,7 +674,7 @@ en:
           you’re confirming, to the best of your knowledge:
             <ul class="govuk-list govuk-list--bullet govuk-!-padding-top-2">
               <li>the details you’re providing are correct</li>
-              <li>you agree to manage the data your receive in line with current GDPR regulations</li>
+              <li>you agree to manage the data you receive in line with current GDPR regulations</li>
               <li>you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a></li>
             </ul>
       schools_on_boarding_key_stage_list:
