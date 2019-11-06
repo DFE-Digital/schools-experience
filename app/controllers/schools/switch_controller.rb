@@ -1,5 +1,5 @@
 module Schools
-  class SwitchController < Schools::BaseController
+  class SwitchController < ApplicationController
     # Remove the current session and redirect to the dashboard, this will
     # trigger the standard OIDC flow
     #
@@ -18,7 +18,8 @@ module Schools
     end
 
     def show
-      @school = Bookings::School.find_by(urn: params[:urn])
+      @current_school = Bookings::School.find_by(urn: session[:urn])
+      @other_school   = Bookings::School.find_by(urn: params[:urn])
     end
   end
 end

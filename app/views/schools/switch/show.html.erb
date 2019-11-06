@@ -1,9 +1,9 @@
 <h1 class="govuk-heading-l">You're trying to view a placement request for another school</h1>
 
-<% if @school.present? %>
+<% if @other_school.present? %>
   <p>
     You're currently logged in to <strong><%= @current_school.name %></strong>, you
-    need to change to <strong><%= @school.name %></strong> in order to view it.
+    need to change to <strong><%= @other_school.name %></strong> in order to view it.
   </p>
 <% else %>
   <p>

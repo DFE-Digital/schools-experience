@@ -7,7 +7,7 @@ describe 'schools/switch/show.html.erb', type: :view do
   context 'when a URN param is present' do
     let(:other_school) { create(:bookings_school) }
 
-    before { assign :school, other_school }
+    before { assign :other_school, other_school }
     before { render }
 
     specify 'should render the page with information about the schools' do
@@ -17,7 +17,6 @@ describe 'schools/switch/show.html.erb', type: :view do
   end
 
   context 'when no URN param is present' do
-    before { assign :current_school, school }
     before { render }
 
     specify 'should render the page with information about the current school only' do
