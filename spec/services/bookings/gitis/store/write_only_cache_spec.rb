@@ -15,7 +15,7 @@ describe Bookings::Gitis::Store::WriteOnlyCache do
   let(:uuid) { SecureRandom.uuid }
   let(:entity) { Person.new(personid: uuid, fullname: 'Test Person') }
 
-  describe 'implementation of Store api' do
+  describe 'an implementation of Store api' do
     subject { store }
     it { is_expected.to respond_to :find }
     it { is_expected.to respond_to :fetch }

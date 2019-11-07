@@ -107,7 +107,7 @@ module Bookings::Gitis
     end
 
     def cache_key
-      "#{entity_path}/#{id}"
+      self.class.cache_key id
     end
 
     def to_cache
@@ -136,6 +136,10 @@ module Bookings::Gitis
 
       def all_attribute_names
         select_attribute_names + association_attribute_names
+      end
+
+      def cache_key(uuid)
+        "#{entity_path}/#{uuid}"
       end
 
       def from_cache(attrs)

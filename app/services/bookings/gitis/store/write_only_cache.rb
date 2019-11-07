@@ -19,11 +19,7 @@ module Bookings
         end
 
         def find(entity_type, uuids, **options)
-          store.find(entity_type, uuids, **options).tap do |entities|
-            if options.empty?
-              cache.write_multi entities_to_cache(entities), expires_in: ttl
-            end
-          end
+          find_and_write_to_cache(entity_type, uuids, **options)
         end
 
         def write(entity)
@@ -37,6 +33,14 @@ module Bookings
         def entities_to_cache(entities)
           Array.wrap(entities).each.with_object({}) do |entity, cache_set|
             cache_set[cache_key_for_entity(entity)] = entity.to_cache
+          end
+        end
+
+        def find_and_write_to_cache(entity_type, uuids, **options)
+          store.find(entity_type, uuids, **options).tap do |entities|
+            if options.empty?
+              cache.write_multi entities_to_cache(entities), expires_in: ttl
+            end
           end
         end
       end
