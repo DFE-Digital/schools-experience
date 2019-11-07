@@ -51,7 +51,7 @@ RSpec.describe Bookings::Gitis::Entity do
     end
   end
 
-  describe "#changed" do
+  describe "dirty tracking" do
     context 'for unpersisted object' do
       it "will use dirty tracking to return modified attributes since last reset" do
         expect(subject.changed).to eq(%w{firstname lastname})
@@ -83,6 +83,14 @@ RSpec.describe Bookings::Gitis::Entity do
         it "will include name" do
           expect(subject.changed).to eq(%w{firstname})
         end
+      end
+    end
+
+    context 'when modifying attribute in place' do
+      it "will raise exception" do
+        expect {
+          subject.firstname << 'more'
+        }.to raise_exception(FrozenError)
       end
     end
   end

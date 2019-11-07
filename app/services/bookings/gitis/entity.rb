@@ -130,6 +130,12 @@ module Bookings::Gitis
 
         attribute :"#{attr_name}"
 
+        # freeze the value on assignment since in place changes will break
+        # change tracking
+        define_method :"#{attr_name}=" do |value|
+          write_attribute(:"#{attr_name}", value.freeze)
+        end
+
         private :"#{attr_name}" if internal
         private :"#{attr_name}=" if internal
 
