@@ -10,6 +10,8 @@ describe Bookings::Gitis::Store::WriteThroughCache do
   let(:cache) { Rails.cache }
   let(:dynamics) { Bookings::Gitis::Store::Dynamics.new 'a.fake.token' }
   let(:store) { described_class.new dynamics, cache }
+  let(:uuid) { SecureRandom.uuid }
+  let(:entity) { Person.new(personid: uuid, fullname: 'Test Person') }
 
   describe 'implementation of Store api' do
     subject { store }
@@ -19,10 +21,14 @@ describe Bookings::Gitis::Store::WriteThroughCache do
   end
 
   describe '#cache_key_for_entity' do
-    let(:uuid) { SecureRandom.uuid }
-    let(:entity) { Person.new(personid: uuid, fullname: 'Test Person') }
     subject { store.cache_key_for_entity entity }
     it { is_expected.to eq "people/#{uuid}/v1" }
+  end
+
+  describe '#write' do
+    before { allow(cache).to receive(:delete).and_call_original }
+    subject! { store.write entity }
+    it { expect(cache).to have_received(:delete).with("people/#{uuid}/v1") }
   end
 
   it "should invalidate the cache entry on write"
