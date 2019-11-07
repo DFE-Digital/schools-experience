@@ -41,7 +41,7 @@ RSpec.describe Bookings::SubjectSync do
       expect(fake_gitis.send(:api)).to receive(:get).
         with(
           Bookings::Gitis::TeachingSubject.entity_path,
-          '$select' => 'dfe_name',
+          '$select' => 'dfe_teachingsubjectlistid,dfe_name',
           '$top' => described_class::LIMIT
         ).and_return('value' => response)
     end

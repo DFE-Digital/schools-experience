@@ -126,7 +126,7 @@ describe Bookings::Gitis::CRM, type: :model do
         'emailaddress1' => email,
         'firstname' => 'testy',
         'lastname' => 'mctest',
-        'date_of_birth' => '1980-01-01'
+        'birthdate' => '1980-01-01'
       }
     end
 
@@ -201,7 +201,7 @@ describe Bookings::Gitis::CRM, type: :model do
     context 'with a valid existing contact' do
       before do
         @contact = build(:gitis_contact, contact_attributes.merge(id: contactid))
-        @contact.reset_dirty_attributes
+        @contact.clear_changes_information
         @contact.address1_line1 = 'Changed'
         @contact.address1_line2 = 'Address'
         gitis_stub.stub_update_contact_request(
