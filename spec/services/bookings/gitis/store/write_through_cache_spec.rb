@@ -23,6 +23,11 @@ describe Bookings::Gitis::Store::WriteThroughCache do
   describe '#cache_key_for_entity' do
     subject { store.cache_key_for_entity entity }
     it { is_expected.to eq "people/#{uuid}/v1" }
+
+    context "with namespace" do
+      let(:store) { described_class.new dynamics, cache, namespace: 'dynamics' }
+      it { is_expected.to eq "dynamics/people/#{uuid}/v1" }
+    end
   end
 
   describe '#write' do
@@ -31,7 +36,7 @@ describe Bookings::Gitis::Store::WriteThroughCache do
     it { expect(cache).to have_received(:delete).with("people/#{uuid}/v1") }
   end
 
-  it "should invalidate the cache entry on write"
+
   it "find should push new data into cache"
   it "should check serialization is sufficiently complete"
 end
