@@ -50,7 +50,15 @@ RSpec.describe Bookings::Profile, type: :model do
     end
 
     describe "dbs_policy_details" do
-      it { is_expected.to validate_presence_of :dbs_policy_details }
+      context 'when dbs_requires_check' do
+        before { subject.dbs_requires_check = true }
+        it { is_expected.to validate_presence_of :dbs_policy_details }
+      end
+
+      context 'when not dbs_requires_check' do
+        before { subject.dbs_requires_check = false }
+        it { is_expected.not_to validate_presence_of :dbs_policy_details }
+      end
     end
 
     describe "individual_requirements" do

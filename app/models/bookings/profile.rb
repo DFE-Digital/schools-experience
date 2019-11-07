@@ -18,7 +18,7 @@ class Bookings::Profile < ApplicationRecord
   validates :school_id, uniqueness: true
 
   validates :dbs_requires_check, inclusion: [true, false]
-  validates :dbs_policy_details, presence: true
+  validates :dbs_policy_details, presence: true, if: :dbs_requires_check
 
   validates :individual_requirements, length: { minimum: 1 }, if: :individual_requirements
 
