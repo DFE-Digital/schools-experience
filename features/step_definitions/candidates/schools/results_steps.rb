@@ -54,7 +54,7 @@ Then("I should see a/an {string} filter on the left") do |label|
   end
 end
 
-Then("I should not see a/an {string} filter on the left") do |label|
+Then("I should not see a/an {string} filter on the left") do |_|
   expect(page).not_to have_css '#search-filter'
 end
 
