@@ -84,6 +84,14 @@
   select {
     width: 100%;
   }
+  .govuk-radios {
+    .govuk-label {
+      font-weight: bold;
+    }
+    .govuk-hint {
+      margin-left: 2.5rem;
+    }
+  }
 }
 
 .school-search-filter-info {

@@ -23,10 +23,17 @@
           <%= f.collection_select :distance,
                 Candidates::SchoolSearch.distances, :first, :last %>
 
-          <%= f.radio_button_fieldset :age_group,
-            choices: Candidates::SchoolSearch.age_group_options,
-            text_method: :to_s,
-            value_method: :name %>
+          <%= f.radio_button_fieldset :age_group do |fieldset| %>
+            <%= fieldset.radio_input :primary %>
+            <span class="govuk-hint govuk-radios__hint">
+              Primary schools Including early years, key stage 1 and key stage 2.
+            </span>
+
+            <%= fieldset.radio_input :secondary %>
+            <span class="govuk-hint govuk-radios__hint">
+              Including secondary schools, sixth-forms, colleges and 16 to 18 years.
+            </span>
+          <% end %>
 
           <div class="school-search-form__submit">
             <div class="govuk-form-group">

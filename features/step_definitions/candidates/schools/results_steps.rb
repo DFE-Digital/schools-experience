@@ -105,7 +105,7 @@ end
 Given("I search for {string} schools near {string}") do |phase, location|
   visit(new_candidates_school_search_path)
   fill_in 'Enter location or postcode', with: location
-  within find 'fieldset', text: 'What kind of school do you want experience at?' do
+  within find 'fieldset', text: 'What age group do you want your experience to cover?' do
     choose phase
   end
   click_button 'Search'
@@ -122,7 +122,7 @@ Then("the location input should be populated with {string}") do |string|
 end
 
 Then("the age group input should be populated with {string}") do |string|
-  radios = find 'fieldset', text: 'What kind of school do you want experience at?'
+  radios = find 'fieldset', text: 'What age group do you want your experience to cover?'
   within radios do
     expect(find_field(string)).to be_checked
   end

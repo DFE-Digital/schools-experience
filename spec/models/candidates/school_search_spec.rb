@@ -111,10 +111,6 @@ RSpec.describe Candidates::SchoolSearch do
         described_class.age_group_options.detect { |o| o.name == 'primary' }
       end
 
-      it 'sets the description correctly' do
-        expect(subject.to_s).to eq 'Primary schools'
-      end
-
       it 'sets the phases correctly' do
         expect(subject.phases).to eq [primary_phase.id]
       end
@@ -123,10 +119,6 @@ RSpec.describe Candidates::SchoolSearch do
     context 'secondary age group' do
       subject do
         described_class.age_group_options.detect { |o| o.name == 'secondary' }
-      end
-
-      it 'sets the description correctly' do
-        expect(subject.to_s).to eq 'Secondary schools, sixth forms and colleges'
       end
 
       it 'sets the phases correctly' do

@@ -374,7 +374,7 @@ en:
 
   helpers:
     fieldset:
-      age_group: 'What kind of school do you want experience at?'
+      age_group: 'What age group do you want your experience to cover?'
       order: Sorted by
       schools_placement_requests_confirm_booking:
         date: Confirm experience date
@@ -503,6 +503,10 @@ en:
         <<: *schools_on_boarding_school_fee_hints
 
     label:
+      age_group:
+        primary: Primary schools
+        secondary: Secondary schools, sixth forms and colleges
+
       schools_placement_requests_confirm_booking:
         bookings_subject_id: Confirm subject
         placement_details: Confirm experience details

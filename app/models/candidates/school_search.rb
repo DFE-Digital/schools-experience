@@ -35,7 +35,7 @@ module Candidates
         DISTANCES
       end
 
-      AgeGroup = Struct.new(:name, :to_s, :phases)
+      AgeGroup = Struct.new(:name, :phases)
 
       # Maps between primary & secondary radio buttons and their applicable
       # phase_ids.
@@ -43,12 +43,10 @@ module Candidates
         [
           AgeGroup.new(
             'primary',
-            'Primary schools',
             Bookings::Phase.where(name: 'Primary (4 to 11)').ids
           ),
           AgeGroup.new(
             'secondary',
-            'Secondary schools, sixth forms and colleges',
             Bookings::Phase.where(name: ['Secondary (11 to 16)', '16 to 18']).ids
           )
         ].freeze
