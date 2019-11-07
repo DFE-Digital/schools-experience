@@ -191,10 +191,14 @@ describe Bookings::Gitis::CRM, type: :model do
         gitis_stub.stub_create_contact_request(sorted_attrs, contactid)
       end
 
-      subject { gitis.write(contact) }
+      subject! { gitis.write(contact) }
 
       it "will return the id of the inserted record" do
         is_expected.to eq(contactid)
+      end
+
+      it "will reset change tracking" do
+        expect(contact.changed).to eql([])
       end
     end
 
@@ -210,8 +214,14 @@ describe Bookings::Gitis::CRM, type: :model do
         )
       end
 
+      subject! { gitis.write(@contact) }
+
       it "will succeed" do
-        expect(gitis.write(@contact)).to eq(contactid)
+        is_expected.to eq(contactid)
+      end
+
+      it "will reset change tracking" do
+        expect(@contact.changed).to eql([])
       end
     end
 
