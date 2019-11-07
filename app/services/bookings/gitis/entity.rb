@@ -37,6 +37,7 @@ module Bookings::Gitis
     end
 
     def initialize(attrs = {})
+      @initialization_attrs = attrs.dup
       populate attrs
 
       reset_dirty_attributes if persisted?
@@ -109,6 +110,10 @@ module Bookings::Gitis
       "#{entity_path}/#{id}"
     end
 
+    def to_cache
+      @initialization_attrs
+    end
+
     class InvalidEntityIdError < RuntimeError; end
 
   private
@@ -131,6 +136,10 @@ module Bookings::Gitis
 
       def all_attribute_names
         select_attribute_names + association_attribute_names
+      end
+
+      def from_cache(attrs)
+        new(attrs).freeze
       end
 
     protected

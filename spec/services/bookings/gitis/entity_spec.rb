@@ -24,12 +24,6 @@ RSpec.describe Bookings::Gitis::Entity do
     it { expect(subject.send(:attributes)).to eq({}) }
   end
 
-  describe '#cache_key' do
-    let(:uuid) { SecureRandom.uuid }
-    subject { TestEntity.new testentityid: uuid, firstname: 'test' }
-    it { is_expected.to have_attributes cache_key: "testentities/#{uuid}" }
-  end
-
   describe '#persisted?' do
     context 'with persisted?' do
       subject { TestEntity.new('testentityid' => SecureRandom.uuid) }
@@ -145,6 +139,32 @@ RSpec.describe Bookings::Gitis::Entity do
       it { is_expected.not_to include('id') }
       it { is_expected.to include('firstname' => 'changed') }
       it { is_expected.to include('lastname' => 'changed') }
+    end
+  end
+
+  describe "caching" do
+    let(:uuid) { SecureRandom.uuid }
+    let(:entity) { TestEntity.new 'testentityid' => uuid, 'firstname' => 'test' }
+
+    describe '#cache_key' do
+      subject { entity }
+      it { is_expected.to have_attributes cache_key: "testentities/#{uuid}" }
+    end
+
+    describe "#to_cache" do
+      before { entity.tap { |te| te.lastname = 'mctest' } }
+      subject { entity.to_cache }
+      it { is_expected.to include('testentityid' => uuid) }
+      it { is_expected.to include('firstname' => 'test') }
+      it { is_expected.not_to include('lastname') }
+    end
+
+    describe ".from_cache" do
+      let(:attrs) { { 'testentityid' => uuid, 'firstname' => 'test' } }
+      subject { TestEntity.from_cache attrs }
+      it { is_expected.to have_attributes testentityid: uuid }
+      it { is_expected.to have_attributes firstname: 'test' }
+      it { is_expected.to be_frozen }
     end
   end
 
