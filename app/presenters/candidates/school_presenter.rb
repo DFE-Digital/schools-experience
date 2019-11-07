@@ -83,7 +83,7 @@ module Candidates
       school
         .bookings_placement_dates
         .secondary
-        .eager_load(:placement_date_subjects, :subjects).available
+        .eager_load(:subjects, placement_date_subjects: :bookings_subject).available
     end
 
     def secondary_dates_grouped_by_date
