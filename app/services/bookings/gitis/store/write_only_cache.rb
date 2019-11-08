@@ -2,20 +2,19 @@ module Bookings
   module Gitis
     module Store
       class WriteOnlyCache
-        VERSION = 'v1'.freeze
-
-        attr_reader :store, :cache, :namespace, :ttl
+        attr_reader :store, :cache, :namespace, :ttl, :version
         delegate :fetch, to: :store
 
-        def initialize(store, cache, namespace: nil, ttl: 1.hour)
+        def initialize(store, cache, namespace: nil, ttl: 1.hour, version: 'v1')
           @store = store
           @cache = cache
           @namespace = namespace
           @ttl = ttl
+          @version = version
         end
 
         def cache_key_for_entity(entity)
-          [namespace, entity.cache_key, VERSION].compact.join('/')
+          [namespace, entity.cache_key, version].compact.join('/')
         end
 
         def find(entity_type, uuids, **options)

@@ -3,7 +3,7 @@ module Bookings
     module Store
       class ReadWriteCache < WriteOnlyCache
         def cache_key_for_uuid(entity_type, uuid)
-          [namespace, entity_type.cache_key(uuid), VERSION].compact.join('/')
+          [namespace, entity_type.cache_key(uuid), version].compact.join('/')
         end
 
         def cache_keys_for_uuids(entity_type, uuids)

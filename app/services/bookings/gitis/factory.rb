@@ -2,6 +2,7 @@ module Bookings
   module Gitis
     class Factory
       NAMESPACE = 'gitis'.freeze
+      VERSION = 'v1'.freeze
       TTL = 1.hour.freeze
 
       class << self
@@ -33,12 +34,12 @@ module Bookings
 
       def write_only_caching_store
         Bookings::Gitis::Store::WriteOnlyCache.new \
-          store, cache, namespace: NAMESPACE, ttl: TTL
+          store, cache, namespace: NAMESPACE, ttl: TTL, version: VERSION
       end
 
       def read_write_caching_store
         Bookings::Gitis::Store::ReadWriteCache.new \
-          store, cache, namespace: NAMESPACE, ttl: TTL
+          store, cache, namespace: NAMESPACE, ttl: TTL, version: VERSION
       end
 
       def caching_store(read_from_cache = false)
