@@ -15,7 +15,6 @@ Rails.application.configure do
   config.x.phase = 10000
   config.x.features = %i(
     subject_specific_dates
-    candidate_requirement_ab_test
     capped_bookings
   )
 

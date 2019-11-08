@@ -1,5 +1,7 @@
 module Schools
   class SchoolProfile < ApplicationRecord
+    self.ignored_columns = %w(show_candidate_requirements_selection)
+
     delegate :urn, to: :bookings_school
 
     validates :bookings_school, presence: true
@@ -62,15 +64,6 @@ module Schools
         %w(dbs_requirement_requires_check requires_check),
         %w(dbs_requirement_dbs_policy_details dbs_policy_details),
         %w(dbs_requirement_no_dbs_policy_details no_dbs_policy_details)
-      ],
-      constructor: :compose
-
-    composed_of \
-      :candidate_requirement,
-      class_name: 'Schools::OnBoarding::CandidateRequirement',
-      mapping: [
-        %w(candidate_requirement_requirements requirements),
-        %w(candidate_requirement_requirements_details requirements_details)
       ],
       constructor: :compose
 
@@ -279,10 +272,6 @@ module Schools
 
     def requires_subjects?
       phases_list.secondary? || phases_list.college?
-    end
-
-    def show_candidate_requirement?
-      !show_candidate_requirements_selection?
     end
   end
 end

@@ -85,7 +85,6 @@ Rails.application.routes.draw do
 
     namespace :on_boarding do
       resource :dbs_requirement, only: %i(new create edit update)
-      resource :candidate_requirement, only: %i(new create edit update)
       resource :candidate_requirements_choice, only: %i(new create edit update)
       resource :candidate_requirements_selection, only: %i(new create edit update)
       resource :fees, only: %i(new create edit update)

@@ -75,16 +75,8 @@ module Schools
         end
       end
 
-      def show_candidate_requirements_selection?
-        @school_profile.show_candidate_requirements_selection?
-      end
-
       def individual_requirements
-        if @school_profile.show_candidate_requirements_selection?
-          candidate_requirements_selection
-        else
-          candidate_requirements
-        end
+        candidate_requirements_selection
       end
 
       def school_experience_phases
