@@ -4,6 +4,8 @@ module Schools
 
   class BaseController < ApplicationController
     include GitisAccess
+    self.use_gitis_cache = true
+
     include DFEAuthentication
     before_action :require_auth
     before_action :set_current_school
