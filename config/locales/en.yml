@@ -459,7 +459,7 @@ en:
 
       schools_placement_dates_configuration_form:
         has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
-        available_for_all_subjects: Is this date available for all the subjects you offer?
+        available_for_all_subjects: Select type of experience
 
       schools_placement_dates_subject_selection:
         subject_ids: Select all that apply
@@ -529,7 +529,6 @@ en:
         supports_subjects:
           yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
           no: Primary including early years, key stage 1 and key stage 2
-
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
       candidates_registrations_contact_information:
@@ -693,6 +692,9 @@ en:
         has_limited_availability:
           true: 'Yes'
           false: 'No'
+        available_for_all_subjects:
+          false: About a specific subject
+          true: General / not subject specific experience
         max_bookings_count: 'Enter maximum number of bookings.'
       schools_placement_dates_subject_selection:
         available_for_all_subjects: 'All subjects'
