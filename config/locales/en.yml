@@ -43,7 +43,7 @@ en:
       description:
         blank: 'Explanation of what the fee covers is required'
       interval:
-        blank: 'Select whether this a daily or one-off fee'
+        blank: 'Select whether this is a daily or one-off fee'
         inclusion: 'Select an option'
       payment_method:
         blank: 'Explanation of how the fee is paid is required'
