@@ -84,6 +84,8 @@ module Schools
           %w(candidate_requirements_selection_has_or_working_towards_degree has_or_working_towards_degree),
           %w(candidate_requirements_selection_live_locally live_locally),
           %w(candidate_requirements_selection_maximum_distance_from_school maximum_distance_from_school),
+          %w(candidate_requirements_selection_provide_photo_identification provide_photo_identification),
+          %w(candidate_requirements_selection_photo_identification_details photo_identification_details),
           %w(candidate_requirements_selection_other other),
           %w(candidate_requirements_selection_other_details other_details)
       ],
