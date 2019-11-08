@@ -76,20 +76,29 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
     end
 
-    scope :with_unviewed_canidate_cancellation, -> do
-      left_joins(:candidate_cancellation)
-        .merge Cancellation.unviewed
-    end
-
-    scope :not_cancelled_by_school, -> do
-      left_joins(:school_cancellation)
-        .where(school_cancellations_bookings_placement_requests: { bookings_placement_request_id: nil })
-    end
-
     scope :requiring_attention, -> do
       without_booking
-        .with_unviewed_canidate_cancellation
-        .not_cancelled_by_school
+        .left_joins(:candidate_cancellation)
+        .merge(Cancellation.unviewed)
+        .merge(Cancellation.sent.or(Cancellation.where(id: nil)))
+        .left_joins(:school_cancellation)
+        .where(school_cancellations_bookings_placement_requests: { id: nil })
+    end
+
+    scope :withdrawn, -> do
+      without_booking
+        .joins(:candidate_cancellation)
+        .merge(Cancellation.sent.order(sent_at: :desc))
+    end
+
+    scope :withdrawn_but_unviewed, -> do
+      withdrawn.merge Cancellation.unviewed
+    end
+
+    scope :rejected, -> do
+      without_booking
+        .joins(:school_cancellation)
+        .merge(Cancellation.sent.order(sent_at: :desc))
     end
 
     default_scope { where.not(candidate_id: nil) }

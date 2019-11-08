@@ -70,7 +70,7 @@ module Schools
         else
           [
             'No - Candidates will be accompanied at all times',
-            @school_profile.dbs_requirement.no_dbs_policy_details
+            @school_profile.dbs_requirement.no_dbs_policy_details.presence
           ].compact.join(' - ')
         end
       end
@@ -182,15 +182,6 @@ module Schools
           @school_profile.candidate_experience_detail.parking_details
         else
           @school_profile.candidate_experience_detail.nearby_parking_details
-        end
-      end
-
-      # TODO remove this
-      def disability_and_access_needs
-        if @school_profile.candidate_experience_detail.disabled_facilities
-          'Yes - ' + @school_profile.candidate_experience_detail.disabled_facilities_details
-        else
-          'No'
         end
       end
 

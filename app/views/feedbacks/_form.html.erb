@@ -7,6 +7,8 @@
         Help us improve the manage school experience service.
       </p>
 
+      <%= f.hidden_field :referrer %>
+
       <%= f.radio_button_fieldset :reason_for_using_service do |fieldset| %>
         <% f.object.reasons_for_using_service.each do |option| %>
           <% if f.object.requires_explanation? option %>

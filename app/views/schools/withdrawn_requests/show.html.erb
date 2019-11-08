@@ -1,0 +1,31 @@
+<% self.page_title = "Withdrawn request #{@withdrawn_request.id}" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Withdrawn requests' => schools_withdrawn_requests_path,
+    "Request" => nil
+  }
+%>
+
+<div id="withdrawn-request-view" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      Cancellation from <%= @withdrawn_request.candidate_name %>
+    </h1>
+
+    <section id="cancellation-details">
+      <h2>Cancellation details</h2>
+
+      <dl class="placement-details govuk-summary-list">
+        <%= summary_row 'Reason', @cancellation.reason %>
+      </dl>
+    </section>
+
+    <%= render partial: 'schools/placement_requests/personal_details', object: @withdrawn_request.gitis_contact %>
+    <%= render partial: 'schools/placement_requests/request_details', object: @withdrawn_request %>
+    <%= render partial: 'schools/placement_requests/candidate_details', object: @withdrawn_request %>
+
+    <%= govuk_link_to "Return to withdrawn requests", request.referer || schools_withdrawn_requests_path, secondary: true %>
+  </div>
+</div>

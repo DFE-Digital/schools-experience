@@ -1,0 +1,76 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Withdrawn requests' => nil
+  }
+%>
+
+<div id="withdrawn-requests-index" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= page_heading 'Withdrawn requests' %>
+
+    <% if @requests.any? %>
+      <div class="pagination-info higher">
+        <div class="pagination-slice">
+          <%= page_entries_info @requests %>
+        </div>
+        <%= paginate @requests %>
+      </div>
+
+      <table id="withdrawn-requests" class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Name</th>
+            <th class="govuk-table__header" scope="col">School experience date</th>
+            <th class="govuk-table__header" scope="col">Subject</th>
+            <th class="govuk-table__header" scope="col">Status</th>
+            <th class="govuk-table__header"></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <%- @requests.each do |withdrawn_request| -%>
+            <tr class="withdrawn-request govuk-table__row" data-placement-request-id="<%= withdrawn_request.id %>">
+              <td class="name govuk-table__cell">
+                <%= withdrawn_request.candidate_name %>
+              </td>
+              <td class="date govuk-table__cell">
+                <%- if withdrawn_request.placement_date -%>
+                  <%= withdrawn_request.placement_date.date.to_formatted_s(:govuk) %>
+                <%- else -%>
+                  <%= withdrawn_request.availability.truncate(50) %>
+                <%- end -%>
+              </td>
+              <td class="subject govuk-table__cell">
+                <%- if withdrawn_request&.placement_date&.subject_specific && withdrawn_request.subject -%>
+                  <%= withdrawn_request.subject.name %>
+                <%- else -%>
+                  <em>Not specified</em>
+                <%- end -%>
+              </td>
+              <td class="status govuk-table__cell">
+                <% unless withdrawn_request.candidate_cancellation.viewed? %>
+                  <strong class="govuk-tag govuk-tag--default">UNVIEWED</strong>
+                <% end %>
+              </td>
+              <td class="govuk-table__cell">
+                <%= link_to "View", schools_withdrawn_request_path(withdrawn_request),
+                  'aria-label': "View booking for #{withdrawn_request.candidate_name}, requested on #{withdrawn_request.created_at.to_formatted_s(:govuk)}" %>
+              </td>
+            </tr>
+          <%- end -%>
+        </tbody>
+      </table>
+
+      <div class="pagination-info lower">
+        <%= paginate @requests %>
+      </div>
+
+    <% else %>
+      <p>
+        There are no withdrawn requests.
+      </p>
+    <% end %>
+
+    <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
+  </div>
+</div>

@@ -30,7 +30,7 @@ Feature: Creating new placement dates
         Given I am on the 'new placement date' page
         And I fill in the 'Enter a start date' date field with an invalid date of 31st September next year
         When I submit the form
-        Then I should see an error message stating 'is not a valid date'
+        Then I should see an error message stating 'Enter a valid date'
 
     Scenario: Filling in and submitting the form
         Given I am on the 'new placement date' page

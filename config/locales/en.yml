@@ -24,7 +24,7 @@ en:
       degree_stage:
         blank: "Select a degree stage"
       degree_stage_explaination:
-        blank: "Enter an explaination"
+        blank: "Enter an explanation"
       degree_subject:
         blank: "Select a subject"
         inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
@@ -127,7 +127,7 @@ en:
             degree_stage:
               blank: "Select a degree stage"
             degree_stage_explaination:
-              blank: "Enter an explaination"
+              blank: "Enter an explanation"
             degree_subject:
               blank: "Select a subject"
               inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
@@ -413,7 +413,7 @@ en:
       schools_on_boarding_phases_list:
         title: Select school experience phases
       schools_on_boarding_key_stage_list:
-        title: Confirm number of primary key stages
+        title: Select school experience key stages
       schools_on_boarding_subject_list:
         title: Select school experience subjects
       schools_on_boarding_specialism:
@@ -494,6 +494,7 @@ en:
         <<: *schools_on_boarding_school_fee_hints
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_hints
+        description: For example, 'The fee covers the cost of carrying out your DBS check'.
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_hints
 
@@ -626,7 +627,7 @@ en:
           false: 'No'
         disabled_facilities_details: 'Provide details.'
         start_time: 'Start time. For example, 8:15am.'
-        end_time: 'Finish time. For example, 4:30pm'
+        end_time: 'Finish time. For example, 4:30pm.'
         times_flexible:
           true: 'Yes'
           false: 'No'

@@ -25,7 +25,7 @@ describe WebsiteValidator do
     ['https://www.bbc.co.uk', 'http://bbc.co.uk', 'http://news.bbc.co.uk'].each do |valid_website|
       it "#{valid_website} should be valid" do
         expect(errors).not_to receive('add')
-        validator.validate_each(model, "website", "https://www.bbc.co.uk")
+        validator.validate_each(model, "website", valid_website)
       end
     end
   end

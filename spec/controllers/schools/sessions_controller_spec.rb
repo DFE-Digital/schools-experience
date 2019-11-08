@@ -180,6 +180,26 @@ describe Schools::SessionsController, type: :request do
         expect(subject).to redirect_to(schools_dashboard_path)
       end
     end
+
+    context 'when the session has timed out' do
+      let(:message) { 'sessionexpired' }
+      let(:expired_auth_callback_path) { "/auth/callback?error=#{message}" }
+
+      before do
+        allow(Rails.logger).to receive(:warn).and_return(true)
+      end
+
+      subject { get expired_auth_callback_path }
+
+      specify 'should log that the session has expired' do
+        subject
+        expect(Rails.logger).to have_received(:warn).with('DfE Sign-in session expiry error, restarting login process')
+      end
+
+      specify 'should redirect to the school dashboard' do
+        expect(subject).to redirect_to(schools_dashboard_path)
+      end
+    end
   end
 
   describe '#logout' do

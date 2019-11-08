@@ -11,7 +11,6 @@ module Bookings
 
       convert_dbs_required
       convert_individual_requirements
-      convert_nillable
       convert_dress_code
       convert_teacher_training
       convert_admin_details
@@ -23,7 +22,7 @@ module Bookings
       convert_fees(:administration)
       convert_fees(:dbs)
       convert_fees(:other)
-      convert_access_needs if Feature.instance.active? :access_needs_journey
+      convert_access_needs
 
       output
     end
@@ -60,13 +59,6 @@ module Bookings
     def convert_individual_requirements
       output[:individual_requirements] = \
         Schools::OnBoarding::CandidateRequirementsSelectionPresenter.new(input).to_s
-    end
-
-    def convert_nillable
-      # TODO not needed if disabled_facilities feature is on
-      output[:disabled_facilities] = \
-        conditional_assign(:candidate_experience_detail_disabled_facilities,
-          :candidate_experience_detail_disabled_facilities_details)
     end
 
     def convert_dress_code

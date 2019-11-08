@@ -97,6 +97,7 @@ module Bookings
           entity.entity_id = create_entity entity.entity_id, attrs
         end
 
+        entity.changes_applied
         entity.id
       end
 

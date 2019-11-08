@@ -14,10 +14,11 @@
       <%= f.check_box_fieldset :title, %i(), { page_heading: true } do |fieldset| %>
         <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
         <p>
-          Tick all the school experience subjects you offer and select continue.
+          Tell us which subjects you offer for secondary school experience and
+          select continue.
         </p>
-        <p>
-          This will help candidates select a school experience.
+        <p class="govuk-hint">
+          This will help candidates select a secondary school experience.
         </p>
 
         <%= f.collection_check_boxes \

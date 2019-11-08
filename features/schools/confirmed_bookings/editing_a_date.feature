@@ -25,6 +25,13 @@ Feature: Updating a date
             | Label        | Type |
             | Booking date | date |
 
+    Scenario: When validation fails
+        Given there is at least one booking
+        And I am on the 'change booking date' page for my booking
+        When I change the date to an invalid date
+        And I submit the form
+        Then I should see the validation error 'Enter a valid date'
+
     Scenario: Changing a date
         Given there is at least one booking
         And I am on the 'change booking date' page for my booking

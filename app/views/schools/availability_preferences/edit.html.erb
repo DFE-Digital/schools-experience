@@ -18,29 +18,49 @@
         <%= fieldset.radio_input true, 'aria-describedby': 'bookings-school-availability-preference-fixed-true-hint' %>
 
         <div id="bookings-school-availability-preference-fixed-true-hint" class="govuk-hint govuk-radios__hint preference-info">
-          You must enter specific school experience dates to start receiving requests from candidates
+          <p>
+            You must enter specific school experience dates to start receiving requests from candidates
+          </p>
 
-          <div class="govuk-inset-text">
-            <h3>Upcoming experience dates</h3>
 
-            <ul class="govuk-list">
-              <%- example_future_dates.each do |fd| %>
-                <li><%= fd.to_formatted_s(:govuk) %> (1 day)</li>
-              <% end %>
-            </ul>
-          </div>
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                View an example of how specific dates are displayed
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <h3>Upcoming experience dates</h3>
+
+              <ul class="govuk-list">
+                <%- example_future_dates.each do |fd| %>
+                  <li><%= fd.to_formatted_s(:govuk) %> (1 day)</li>
+                <% end %>
+              </ul>
+            </div>
+          </details>
         </div>
 
         <%= fieldset.radio_input false, 'aria-describedby': 'bookings-school-availability-preference-fixed-false-hint'  %>
 
         <div id="bookings-school-availability-preference-fixed-false-hint" class="govuk-hint govuk-radios__hint preference-info">
-          For example, on set days of the week or at certain times of the year such as around exams, holidays and busy term times
+          <p>
+            For example, on set days of the week or at certain times of the
+            year such as around exams, holidays and busy term times
+          </p>
 
-          <div class="govuk-inset-text">
-            <h3>Experience availability</h3>
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                View an example of how a description is displayed
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <h3>Experience availability</h3>
+              <p>We offer career experience placements throughout the school year.</p>
+            </div>
+          </details>
 
-            <p>We offer career experience placements throughout the school year.</p>
-          </div>
         </div>
 
       <% end %>

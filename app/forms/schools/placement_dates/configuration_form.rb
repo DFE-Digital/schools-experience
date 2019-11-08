@@ -10,7 +10,7 @@ module Schools
 
       validates :max_bookings_count, numericality: { greater_than: 0 }, if: :has_limited_availability
       validates :max_bookings_count, absence: true, unless: :has_limited_availability
-      validates :has_limited_availability, inclusion: [true, false]
+      validates :has_limited_availability, inclusion: [true, false], if: -> { Feature.instance.active? :capped_bookings }
       validates :available_for_all_subjects, inclusion: [true, false]
 
       def self.new_from_date(placement_date)

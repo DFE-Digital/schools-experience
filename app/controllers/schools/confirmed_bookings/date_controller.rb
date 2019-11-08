@@ -9,7 +9,15 @@ module Schools
       def update
         old_date = @booking.date
 
-        if change_booking_date(old_date)
+        if @booking.update(booking_params)
+          Event.create(
+            event_type: :booking_date_changed,
+            bookings_school: current_school,
+            recordable: @booking
+          )
+
+          date_changed_email(@booking, old_date).despatch_later!
+
           redirect_to schools_booking_date_path(@booking)
         else
           render :edit
@@ -19,20 +27,6 @@ module Schools
       def show; end
 
     private
-
-      def change_booking_date(old_date)
-        Bookings::Booking.transaction do
-          @booking.update(booking_params)
-
-          Event.create(
-            event_type: :booking_date_changed,
-            bookings_school: current_school,
-            recordable: @booking
-          )
-
-          date_changed_email(@booking, old_date).despatch_later!
-        end
-      end
 
       def date_changed_email(booking, old_date)
         NotifyEmail::CandidateBookingDateChanged.from_booking(

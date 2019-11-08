@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Bookings::PlacementRequest, type: :model do
+  include ActiveSupport::Testing::TimeHelpers
+
   include_context 'Stubbed candidates school'
   subject { described_class.new bookings_school_id: school.id }
 
@@ -89,6 +91,12 @@ describe Bookings::PlacementRequest, type: :model do
       FactoryBot.create :placement_request, school: school
     end
 
+    let! :booked_then_cancelled_by_candidate do
+      FactoryBot
+        .create(:bookings_booking, :accepted, :cancelled_by_candidate, bookings_school: school)
+        .bookings_placement_request
+    end
+
     context '.unprocessed' do
       subject { described_class.unprocessed }
       it do
@@ -118,7 +126,8 @@ describe Bookings::PlacementRequest, type: :model do
       it do
         is_expected.to match_array [
           placement_request_closed_by_candidate,
-          placement_request_closed_by_school
+          placement_request_closed_by_school,
+          booked_then_cancelled_by_candidate
         ]
       end
     end
@@ -133,6 +142,38 @@ describe Bookings::PlacementRequest, type: :model do
           booked_but_not_accepted_placement_request
         ]
       end
+    end
+
+    context '.withdrawn' do
+      let!(:unviewed) do
+        travel_to 2.minutes.from_now do
+          create :placement_request, :cancelled, school: school
+        end
+      end
+      subject { described_class.withdrawn }
+      it { is_expected.to eq [unviewed, placement_request_closed_by_candidate] }
+    end
+
+    context '.withdrawn_but_unviewed' do
+      let!(:withdrawn_and_viewed) do
+        create(:placement_request, :cancelled, school: school).tap do |pr|
+          pr.candidate_cancellation.viewed!
+        end
+      end
+
+      subject { described_class.withdrawn_but_unviewed }
+
+      it { is_expected.to match_array [placement_request_closed_by_candidate] }
+    end
+
+    context '.rejected' do
+      let!(:unviewed) do
+        travel_to 2.minutes.from_now do
+          create :placement_request, :cancelled_by_school, school: school
+        end
+      end
+      subject { described_class.rejected }
+      it { is_expected.to eq [unviewed, placement_request_closed_by_school] }
     end
   end
 

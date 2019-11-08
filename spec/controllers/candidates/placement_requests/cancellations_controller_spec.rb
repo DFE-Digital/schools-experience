@@ -295,24 +295,52 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
   end
 
   context '#show' do
-    let :placement_request do
-      FactoryBot.create :placement_request, :cancelled
-    end
-
     before do
       get \
         "/candidates/placement_requests/#{placement_request.token}/cancellation"
     end
 
-    context 'when does not have a booking' do
-      it 'renders the show template' do
-        expect(response).to render_template :show
+    context 'when cancelled by the candidate' do
+      let :placement_request do
+        create :placement_request, :cancelled
+      end
+
+      context 'when does not have a booking' do
+        it 'renders the show template' do
+          expect(response).to render_template :show
+        end
+      end
+
+      context 'when has a booking' do
+        let :placement_request do
+          create :placement_request, :cancelled, :booked
+        end
+
+        it 'renders the show template' do
+          expect(response).to render_template :show
+        end
       end
     end
 
-    context 'when has a booking' do
-      it 'renders the show template' do
-        expect(response).to render_template :show
+    context 'when cancelled by the school' do
+      let :placement_request do
+        create :placement_request, :cancelled_by_school
+      end
+
+      context 'when does not have a booking' do
+        it 'renders the show template' do
+          expect(response).to render_template :show
+        end
+      end
+
+      context 'when has a booking' do
+        let :placement_request do
+          create :placement_request, :cancelled_by_school, :booked
+        end
+
+        it 'renders the show template' do
+          expect(response).to render_template :show
+        end
       end
     end
   end

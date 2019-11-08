@@ -72,7 +72,7 @@ Rails.application.configure do
   config.x.phase = 10000
   config.x.features = %i(
     subject_specific_dates
-    access_needs_journey
+    capped_bookings
   )
 
   config.x.base_url = 'https://some-host'

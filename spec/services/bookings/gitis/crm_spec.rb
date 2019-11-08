@@ -126,7 +126,7 @@ describe Bookings::Gitis::CRM, type: :model do
         'emailaddress1' => email,
         'firstname' => 'testy',
         'lastname' => 'mctest',
-        'date_of_birth' => '1980-01-01'
+        'birthdate' => '1980-01-01'
       }
     end
 
@@ -191,17 +191,21 @@ describe Bookings::Gitis::CRM, type: :model do
         gitis_stub.stub_create_contact_request(sorted_attrs, contactid)
       end
 
-      subject { gitis.write(contact) }
+      subject! { gitis.write(contact) }
 
       it "will return the id of the inserted record" do
         is_expected.to eq(contactid)
+      end
+
+      it "will reset change tracking" do
+        expect(contact.changed).to eql([])
       end
     end
 
     context 'with a valid existing contact' do
       before do
         @contact = build(:gitis_contact, contact_attributes.merge(id: contactid))
-        @contact.reset_dirty_attributes
+        @contact.clear_changes_information
         @contact.address1_line1 = 'Changed'
         @contact.address1_line2 = 'Address'
         gitis_stub.stub_update_contact_request(
@@ -210,8 +214,14 @@ describe Bookings::Gitis::CRM, type: :model do
         )
       end
 
+      subject! { gitis.write(@contact) }
+
       it "will succeed" do
-        expect(gitis.write(@contact)).to eq(contactid)
+        is_expected.to eq(contactid)
+      end
+
+      it "will reset change tracking" do
+        expect(@contact.changed).to eql([])
       end
     end
 

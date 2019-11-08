@@ -6,7 +6,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
   describe "#profile_attrs" do
     context 'with completed profile' do
       let(:completed_attrs) do
-        build(:school_profile, :completed, disabled_facilities: true).attributes
+        build(:school_profile, :completed).attributes
       end
 
       subject do
@@ -17,7 +17,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(dbs_policy_details: 'Must have recent dbs check') }
       it { is_expected.to include(individual_requirements: "Must be applying to or have applied to our, or a partner school's, teacher training course. Must have a degree. They must live within 8 miles from the school. Some other requirements") }
       it { is_expected.to include(description_details: 'Horse archery') }
-      it { is_expected.to include(disabled_facilities: 'Full wheelchair access and hearing loops') }
       it { is_expected.to include(dress_code_business: true) }
       it { is_expected.to include(dress_code_cover_tattoos: true) }
       it { is_expected.to include(dress_code_remove_piercings: true) }
@@ -62,7 +61,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
 
     context 'with completed profile with blank fields' do
       let(:model_attrs) do
-        model = build(:school_profile, :completed, disabled_facilities: true)
+        model = build(:school_profile, :completed)
         model.dbs_requirement_requires_check = false
         model.dbs_requirement_dbs_policy_details = ''
         model.dbs_requirement_no_dbs_policy_details = ''
@@ -100,7 +99,6 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
       it { is_expected.to include(dbs_policy_details: nil) }
       it { is_expected.to include(individual_requirements: 'None') }
       it { is_expected.to include(description_details: nil) }
-      it { is_expected.to include(disabled_facilities: nil) }
       it { is_expected.to include(dress_code_other_details: nil) }
       it { is_expected.to include(admin_contact_email: nil) }
       it { is_expected.to include(admin_contact_email_secondary: nil) }

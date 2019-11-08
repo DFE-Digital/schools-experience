@@ -71,18 +71,16 @@ class Bookings::Profile < ApplicationRecord
   validates :other_fee_interval, inclusion: AVAILABLE_INTERVALS, if: :other_fee_assigned
   validates :other_fee_payment_method, presence: true, if: :other_fee_assigned
 
-  if Feature.instance.active? :access_needs_journey
-    validates :supports_access_needs, inclusion: [true, false]
-    validates :access_needs_description, presence: true, if: :supports_access_needs?
-    validates :disability_confident, inclusion: [true, false], if: :supports_access_needs?
-    validates :has_access_needs_policy, inclusion: [true, false], if: :supports_access_needs?
-    validates :access_needs_policy_url, presence: true, if: :has_access_needs_policy?
+  validates :supports_access_needs, inclusion: [true, false]
+  validates :access_needs_description, presence: true, if: :supports_access_needs?
+  validates :disability_confident, inclusion: [true, false], if: :supports_access_needs?
+  validates :has_access_needs_policy, inclusion: [true, false], if: :supports_access_needs?
+  validates :access_needs_policy_url, presence: true, if: :has_access_needs_policy?
 
-    validates :access_needs_description, absence: true, unless: :supports_access_needs?
-    validates :disability_confident, absence: true, unless: :supports_access_needs?
-    validates :has_access_needs_policy, absence: true, unless: :supports_access_needs?
-    validates :access_needs_policy_url, absence: true, unless: :has_access_needs_policy?
-  end
+  validates :access_needs_description, absence: true, unless: :supports_access_needs?
+  validates :disability_confident, absence: true, unless: :supports_access_needs?
+  validates :has_access_needs_policy, absence: true, unless: :supports_access_needs?
+  validates :access_needs_policy_url, absence: true, unless: :has_access_needs_policy?
 
   before_validation :nilify_blank_fields
   before_validation :strip_fields

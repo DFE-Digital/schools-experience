@@ -8,6 +8,20 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
   it { is_expected.not_to validate_presence_of :extra_details }
   it { is_expected.to validate_inclusion_of(:cancelled_by).in_array %w(candidate school) }
 
+  describe 'scopes' do
+    describe '#sent' do
+      let!(:cancellation) { create :cancellation }
+      subject { described_class.sent.to_a }
+
+      it { is_expected.not_to include cancellation }
+
+      context 'when sent' do
+        before { cancellation.sent! }
+        it { is_expected.to include cancellation }
+      end
+    end
+  end
+
   context 'when placement_request is already closed' do
     let :placement_request do
       FactoryBot.create :placement_request, :cancelled
