@@ -152,6 +152,7 @@ Rails.application.configure do
     config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID')
     config.x.gitis.privacy_policy_id = ENV['CRM_PRIVACY_POLICY_ID'].presence || 'd1adf2ad-e7c4-e911-a981-000d3a206976'
     config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
+    config.x.gitis.caching = truthy_strings.include?(ENV['CRM_CACHING'].to_s)
   end
 
   config.x.features = %i(candidate_requirement_ab_test)
