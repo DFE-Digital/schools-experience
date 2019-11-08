@@ -164,5 +164,52 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
         expect(subject.placement_date).to eq bookings_placement_date
       end
     end
+
+    describe '#has_primary_dates?' do
+      subject { described_class.new }
+      context 'when primary dates are present' do
+        before { allow(subject).to receive(:primary_placement_dates).and_return(%w(yes)) }
+
+        it { is_expected.to have_primary_dates }
+      end
+
+      context 'when no primary dates are present' do
+        before { allow(subject).to receive(:primary_placement_dates).and_return([]) }
+
+        it { is_expected.not_to have_primary_dates }
+      end
+    end
+
+    describe '#has_secondary_dates?' do
+      subject { described_class.new }
+      context 'when secondary dates are present' do
+        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w(yes)) }
+
+        it { is_expected.to have_secondary_dates }
+      end
+
+      context 'when no secondary dates are present' do
+        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return({}) }
+
+        it { is_expected.not_to have_secondary_dates }
+      end
+    end
+
+    describe '#has_primary_and_secondary_dates?' do
+      subject { described_class.new }
+      context 'when secondary dates are present' do
+        before { allow(subject).to receive(:primary_placement_dates).and_return(%w(yes)) }
+        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w(yes)) }
+
+        it { is_expected.to have_primary_and_secondary_dates }
+      end
+
+      context 'when no secondary dates are present' do
+        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return({}) }
+        before { allow(subject).to receive(:primary_placement_dates).and_return([]) }
+
+        it { is_expected.not_to have_primary_and_secondary_dates }
+      end
+    end
   end
 end

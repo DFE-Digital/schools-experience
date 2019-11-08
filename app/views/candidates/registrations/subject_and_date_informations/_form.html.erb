@@ -9,9 +9,16 @@
 
       <%= f.hidden_field :date_and_subject_ids %>
 
+      <p>
+        Choose a date.
+        <% if @subject_and_date_information.has_primary_and_secondary_dates? %>
+          For secondary school dates you can also choose a school experience subject.
+        <% end %>
+      </p>
+
       <section class="<%= subject_and_date_section_classes(subject_and_date_information) %>">
 
-        <%- if @subject_and_date_information.primary_placement_dates.any? %>
+        <%- if @subject_and_date_information.has_primary_dates? %>
           <section class="date-selector date-selector-primary">
             <h3 class="govuk-heading-m">Primary school dates</h3>
 
@@ -22,7 +29,7 @@
           </section>
         <%- end -%>
 
-        <%- if @subject_and_date_information.secondary_placement_dates_grouped_by_date.any? %>
+        <%- if @subject_and_date_information.has_secondary_dates? %>
           <h3 class="govuk-heading-m">Secondary school dates</h3>
 
           <dl class="govuk-summary-list govuk-summary-list">
