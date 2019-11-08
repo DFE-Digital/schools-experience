@@ -392,8 +392,8 @@ en:
         enabled: Turn requests on or off
         availability_preference_fixed: Choose how dates are displayed
       bookings_placement_date:
-        date: Enter a start date
-        supports_subjects: Which age groups will candidates be placed with?
+        date: Enter start date
+        supports_subjects: Select school experience phase
       phases: Education phases
       fees: Fees
       subjects: Subjects
@@ -478,8 +478,8 @@ en:
           Requests that are already in-progress will continue as normal.
         availability_preference_fixed: Select how you'd like to present school experience dates to candidates.
       bookings_placement_date:
-        date: For example, 01 09 2019
-        duration: Enter number of days
+        date: For example, 01 09 2020.
+        duration: Enter number of days.
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
@@ -527,8 +527,8 @@ en:
         duration: How long will it last?
         active: Make this date available to candidates?
         supports_subjects:
-          yes: Secondary or college
-          no: Primary or early years
+          yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
+          no: Primary including early years, key stage 1 and key stage 2
 
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
