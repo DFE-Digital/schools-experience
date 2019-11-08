@@ -13,7 +13,7 @@
 
         <%- if @subject_and_date_information.primary_placement_dates.any? %>
           <section class="date-selector date-selector-primary">
-            <h3 class="govuk-heading-m">Primary placement dates</h3>
+            <h3 class="govuk-heading-m">Primary school dates</h3>
 
             <%= f.radio_button_fieldset :date_and_subject_ids,
               choices: @subject_and_date_information.primary_placement_dates,
@@ -23,7 +23,7 @@
         <%- end -%>
 
         <%- if @subject_and_date_information.secondary_placement_dates_grouped_by_date.any? %>
-          <h3 class="govuk-heading-m">Secondary placement dates</h3>
+          <h3 class="govuk-heading-m">Secondary school dates</h3>
 
           <dl class="govuk-summary-list govuk-summary-list">
           <% @subject_and_date_information.secondary_placement_dates_grouped_by_date.each do |date, secondary_placement_dates| %>
