@@ -29,6 +29,10 @@ module Schools
           output << "They must live within #{distance} #{miles} from the school"
         end
 
+        if provide_photo_identification?
+          output << photo_identification_details
+        end
+
         if other?
           output << other_details
         end
@@ -61,13 +65,23 @@ module Schools
         @attributes.fetch :candidate_requirements_selection_live_locally
       end
 
-      def other?
-        @attributes.fetch :candidate_requirements_selection_other
-      end
-
       def maximum_distance_from_school
         @attributes.fetch \
           :candidate_requirements_selection_maximum_distance_from_school
+      end
+
+      def provide_photo_identification?
+        @attributes.fetch \
+          :candidate_requirements_selection_provide_photo_identification
+      end
+
+      def photo_identification_details
+        @attributes.fetch \
+          :candidate_requirements_selection_photo_identification_details
+      end
+
+      def other?
+        @attributes.fetch :candidate_requirements_selection_other
       end
 
       def other_details

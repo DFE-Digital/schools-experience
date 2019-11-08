@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_04_112809) do
+ActiveRecord::Schema.define(version: 2019_11_08_132921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -394,6 +394,8 @@ ActiveRecord::Schema.define(version: 2019_11_04_112809) do
     t.boolean "disability_confident_is_disability_confident"
     t.boolean "access_needs_policy_has_access_needs_policy"
     t.string "access_needs_policy_url"
+    t.boolean "candidate_requirements_selection_provide_photo_identification"
+    t.text "candidate_requirements_selection_photo_identification_details"
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

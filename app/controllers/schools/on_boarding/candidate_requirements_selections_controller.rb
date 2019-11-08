@@ -49,6 +49,8 @@ module Schools
           :has_or_working_towards_degree,
           :live_locally,
           :maximum_distance_from_school,
+          :provide_photo_identification,
+          :photo_identification_details,
           :other,
           :other_details
       end

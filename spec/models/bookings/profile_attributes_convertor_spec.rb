@@ -15,7 +15,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
 
       it { is_expected.to include(dbs_requires_check: true) }
       it { is_expected.to include(dbs_policy_details: 'Must have recent dbs check') }
-      it { is_expected.to include(individual_requirements: "Must be applying to or have applied to our, or a partner school's, teacher training course. Must have a degree. They must live within 8 miles from the school. Some other requirements") }
+      it { is_expected.to include(individual_requirements: "Must be applying to or have applied to our, or a partner school's, teacher training course. Must have a degree. They must live within 8 miles from the school. Make sure photo is clear. Some other requirements") }
       it { is_expected.to include(description_details: 'Horse archery') }
       it { is_expected.to include(dress_code_business: true) }
       it { is_expected.to include(dress_code_cover_tattoos: true) }
@@ -72,6 +72,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.candidate_requirements_selection_other = false
         model.candidate_requirements_selection_not_on_another_training_course = false
         model.candidate_requirements_selection_has_or_working_towards_degree = false
+        model.candidate_requirements_selection_provide_photo_identification = false
         model.description_details = ' '
         model.candidate_experience_detail_disabled_facilities = false
         model.candidate_experience_detail_other_dress_requirements = false
