@@ -14,7 +14,7 @@ When("I am on the {string} screen for my chosen school") do |page_name|
 end
 
 Then("I should see the list of primary placement dates") do
-  expect(page).to have_css('h3', text: 'Primary placement dates')
+  expect(page).to have_css('h3', text: 'Primary school dates')
 
   @primary_dates.each do |pd|
     expect(page).to have_css(

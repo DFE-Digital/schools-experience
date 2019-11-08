@@ -34,8 +34,20 @@ module Candidates
         self.bookings_placement_date_id, self.bookings_subject_id = pair.split('_')
       end
 
+      def has_primary_dates?
+        primary_placement_dates.any?
+      end
+
+      def has_secondary_dates?
+        secondary_placement_dates_grouped_by_date.any?
+      end
+
+      def has_primary_and_secondary_dates?
+        has_primary_dates? && has_secondary_dates?
+      end
+
       def primary_placement_dates
-        school
+        @primary_placement_dates ||= school
           .bookings_placement_dates
           .primary
           .in_date_order
@@ -50,7 +62,7 @@ module Candidates
       end
 
       def secondary_placement_dates_grouped_by_date
-        school
+        @secondary_placement_dates_grouped_by_date ||= school
           .bookings_placement_dates
           .secondary
           .in_date_order

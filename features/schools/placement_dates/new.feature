@@ -9,7 +9,7 @@ Feature: Creating new placement dates
 
     Scenario: Page title
         Given I am on the 'new placement date' page
-        Then the page title should be 'Create a placement date'
+        Then the page title should be 'Add a date'
 
     Scenario: Breadcrumbs
         Given I am on the 'new placement date' page
@@ -23,12 +23,12 @@ Feature: Creating new placement dates
         Given I am on the 'new placement date' page
         Then I should see a form with the following fields:
             | Label                  | Type   |
-            | Enter a start date     | date   |
+            | Enter start date       | date   |
             | How long will it last? | number |
 
     Scenario: Preventing invalid dates from being added
         Given I am on the 'new placement date' page
-        And I fill in the 'Enter a start date' date field with an invalid date of 31st September next year
+        And I fill in the 'Enter start date' date field with an invalid date of 31st September next year
         When I submit the form
         Then I should see an error message stating 'is not a valid date'
 
@@ -41,24 +41,24 @@ Feature: Creating new placement dates
     Scenario: Primary and secondary schools: extra option
         Given my school is a 'primary and secondary' school
         And I am on the 'new placement date' page
-        Then I should see radio buttons for 'Which age groups will candidates be placed with?' with the following options:
-          | Primary or early years |
-          | Secondary or college   |
+        Then I should see radio buttons for 'Select school experience phase' with the following options:
+          | Primary including early years, key stage 1 and key stage 2                      |
+          | Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years |
 
     Scenario: Primary and secondary schools: selecting primary
         Given my school is a 'primary and secondary' school
         And I am on the 'new placement date' page
         When I fill in the form with a future date and duration of 3
-        And I choose 'Primary or early years' from the 'Which age groups will candidates be placed with?' radio buttons
+        And I choose 'Primary including early years, key stage 1 and key stage 2' from the 'Select school experience phase' radio buttons
         And I submit the form
         Then I should be on the new configuration page for my placement date
         And there should be no subject specificity option
 
-    Scenario: Primary and secondary schools: selecting primary
+    Scenario: Primary and secondary schools: selecting secondary
         Given my school is a 'primary and secondary' school
         And I am on the 'new placement date' page
         When I fill in the form with a future date and duration of 3
-        And I choose 'Secondary or college' from the 'Which age groups will candidates be placed with?' radio buttons
+        And I choose 'Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years' from the 'Select school experience phase' radio buttons
         And I submit the form
         Then I should be on the new configuration page for my placement date
         And there should be a subject specificity option
