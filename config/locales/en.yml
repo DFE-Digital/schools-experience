@@ -609,7 +609,7 @@ en:
         secondary: 'Secondary (11 to 16 years)'
         secondary_and_college: 'Secondary with 16 to 18 years'
       schools_on_boarding_description:
-        details: 'Tell us about your school. Provide a summary to help candidates choose your school.'
+        details: 'Tell us about your school. Provide a summary to help candidates select your school experience.'
       schools_on_boarding_candidate_experience_detail:
         business_dress: 'Business dress'
         cover_up_tattoos: 'Cover up tattoos'

@@ -119,7 +119,7 @@ end
 Given "I have completed the Description step" do
   steps %(
     Given I am on the 'Description' page
-    And I enter 'We have a race track' into the 'Tell us about your school. Provide a summary to help candidates choose your school.' text area
+    And I enter 'We have a race track' into the 'Tell us about your school. Provide a summary to help candidates select your school experience.' text area
     When I submit the form
   )
 end
