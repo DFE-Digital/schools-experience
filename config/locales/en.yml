@@ -43,7 +43,7 @@ en:
       description:
         blank: 'Explanation of what the fee covers is required'
       interval:
-        blank: 'Select whether this a daily or one-off fee'
+        blank: 'Select whether this is a daily or one-off fee'
         inclusion: 'Select an option'
       payment_method:
         blank: 'Explanation of how the fee is paid is required'
@@ -269,11 +269,11 @@ en:
         schools/on_boarding/access_needs_detail:
           attributes:
             description:
-              blank: 'Provide details about the kinds of facilities and support you can provide for candidates with disabilites and access needs.'
+              blank: 'Provide details about the kinds of facilities and support you can provide for candidates with disabilities and access needs.'
         schools/on_boarding/access_needs_support:
           attributes:
             supports_access_needs:
-              inclusion: 'Select if you want to add details about how you can support candidates with disabilites and access needs'
+              inclusion: 'Select if you want to add details about how you can support candidates with disabilities and access needs'
         schools/on_boarding/disability_confident:
           attributes:
             is_disability_confident:
@@ -359,6 +359,9 @@ en:
           attributes:
             availability_preference_fixed:
               inclusion: Select an availability preference
+            availability_info:
+              blank: Enter a description of your school's availability
+              too_short: Availability description must be at least 3 characters
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:
@@ -553,7 +556,7 @@ en:
           <ul class=\"govuk-list govuk-list--bullet\">
             <li>the details you've provided are correct</li>
             <li>you've read our <a href=\"/privacy_policy\" class=\"govuk-link\">privacy policy</a></li>
-            <li>you undestand your personal details will be used by DfE's
+            <li>you understand your personal details will be used by DfE's
             <a href=\"https://getintoteaching.education.gov.uk/\" class=\"govuk-link\">Get Into Teaching Information Service</a>
             to provide you with tailored advice and information about teaching
             training and a career as a teacher</li>"
@@ -675,7 +678,14 @@ en:
       schools_on_boarding_availability_description:
         description: 'Outline when you offer school experience at your school.'
       schools_on_boarding_confirmation:
-        acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a>'
+        acceptance_html: >-
+          By checking this box and setting up your school experience profile
+          you’re confirming, to the best of your knowledge:
+            <ul class="govuk-list govuk-list--bullet govuk-!-padding-top-2">
+              <li>the details you’re providing are correct</li>
+              <li>you agree to manage the data you receive in line with current GDPR regulations</li>
+              <li>you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a></li>
+            </ul>
       schools_on_boarding_key_stage_list:
         early_years: 'Early years foundation stage (EYFS)'
 

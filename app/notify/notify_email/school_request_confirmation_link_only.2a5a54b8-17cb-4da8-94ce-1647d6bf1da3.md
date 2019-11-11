@@ -12,4 +12,10 @@ View the request – ((placement_request_url))
 
 # Help and support
  
-If you’ve got any feedback, questions or would like to take part in user testing email us with your URN at organise.schoolexperience@education.gov.uk.
+If you’ve got any questions or would like to take part in user testing email us with your URN at organise.schoolexperience@education.gov.uk.
+
+# Provide feedback
+
+Help us improve the manage school experience service:
+
+* Give feedback on this service - https://schoolexperience.education.gov.uk/schools/feedbacks/new
