@@ -43,7 +43,7 @@ describe Bookings::Booking do
     context '#date' do
       it { is_expected.to validate_presence_of(:date) }
 
-      context 'new placement dates must be in the future' do
+      context 'new placement dates must not be in the past' do
         specify 'should allow future dates' do
           [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
@@ -57,7 +57,7 @@ describe Bookings::Booking do
         end
 
         context 'error messages' do
-          let(:message) { 'Validation failed: Date must be in the future' }
+          let(:message) { 'Validation failed: Date must not be in the past' }
           let(:invalid_pd) { create(:bookings_placement_date, date: 3.weeks.ago) }
 
           specify 'should show a suitable error message' do

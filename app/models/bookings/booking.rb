@@ -20,6 +20,7 @@ module Bookings
       if: -> { date_changed? },
       timeliness: {
         on_or_after: :today,
+        on_or_after_message: 'Date must not be in the past',
         before: -> { 2.years.from_now },
         type: :date
       }
