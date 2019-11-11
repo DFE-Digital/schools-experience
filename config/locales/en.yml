@@ -478,13 +478,13 @@ en:
       max_fee: Schools may charge
       subjects: Select all that apply
       candidates_registrations_personal_information:
-        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
         bookings_placement_date_id: School experience is only available on the following days
       candidates_session:
-        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
       schools_on_boarding_candidate_requirements_choice:
         has_requirements_html: "<br> For example, they must want to apply for teacher training at your school or have a degree"
       schools_on_boarding_dbs_requirement:
