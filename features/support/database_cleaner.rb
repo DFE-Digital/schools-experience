@@ -1,3 +1,5 @@
+require 'database_cleaner/prevent_disabling_referential_integrity'
+
 exceptions = { except: %w{schema_migrations spatial_ref_sys} }
 
 DatabaseCleaner.clean_with :truncation, exceptions
