@@ -6,7 +6,6 @@ module Schools
           %i(candidate candidate_cancellation school_cancellation))
         .order(date: :desc)
         .page(params[:page])
-        .per(50)
 
       assign_gitis_contacts @bookings
     end

@@ -13,9 +13,20 @@
     <p>
       You'll need to refer to <strong>your own records</strong> for any requests received before this date.
     </p>
+    
+    <% if @placement_requests.any? %>
+      <%= pagination_bar @placement_requests %>
 
-    <%= render partial: 'schools/placement_requests/placement_requests_table',
-      locals: { placement_requests: @placement_requests } %>
+      <%= render partial: 'schools/placement_requests/placement_requests_table',
+        locals: { placement_requests: @placement_requests } %>
+
+      <%= pagination_lower @placement_requests %>
+
+    <% else %>
+      <p>
+        There are no requests.
+      </p>
+    <% end %>    
 
     <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
   </div>

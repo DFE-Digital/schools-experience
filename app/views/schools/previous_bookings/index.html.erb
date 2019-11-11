@@ -10,18 +10,11 @@
     <%= page_heading 'Previous bookings' %>
 
     <% if @bookings.any? %>
-      <div class="pagination-info higher">
-        <div class="pagination-slice">
-          <%= page_entries_info @bookings %>
-        </div>
-        <%= paginate @bookings %>
-      </div>
+      <%= pagination_bar @bookings %>
 
       <%= render 'table', bookings: @bookings %>
 
-      <div class="pagination-info lower">
-        <%= paginate @bookings %>
-      </div>
+      <%= pagination_lower @bookings %>
 
     <% else %>
       <p>
