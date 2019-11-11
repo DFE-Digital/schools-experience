@@ -33,7 +33,7 @@ en:
       degree_stage:
         blank: "Select a degree stage"
       degree_stage_explaination:
-        blank: "Enter an explaination"
+        blank: "Enter an explanation"
       degree_subject:
         blank: "Select a subject"
         inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
@@ -136,7 +136,7 @@ en:
             degree_stage:
               blank: "Select a degree stage"
             degree_stage_explaination:
-              blank: "Enter an explaination"
+              blank: "Enter an explanation"
             degree_subject:
               blank: "Select a subject"
               inclusion: "Select 'Not applicable' if you don't have a degree or are not studying for one"
@@ -207,6 +207,8 @@ en:
               blank: "Enter how close to your school a candidate must live"
               not_a_number: 'Enter a valid number for how close to your school a candidate must live'
               greater_than: 'Enter a number greater than 0 for how close to your school a candidate must live'
+            photo_identification_details:
+              blank: 'Provide details'
             other_details:
               blank: 'Provide details'
         schools/on_boarding/candidate_requirement:
@@ -381,6 +383,11 @@ en:
         dress_code_remove_piercings: Remove piercings
         dress_code_smart_casual: Smart casual
 
+    models:
+      bookings/placement_request:
+        one: Request
+        other: Requests
+
   helpers:
     fieldset:
       order: Sorted by
@@ -426,7 +433,7 @@ en:
       schools_on_boarding_phases_list:
         title: Select school experience phases
       schools_on_boarding_key_stage_list:
-        title: Confirm number of primary key stages
+        title: Select school experience key stages
       schools_on_boarding_subject_list:
         title: Select school experience subjects
       schools_on_boarding_specialism:
@@ -507,6 +514,7 @@ en:
         <<: *schools_on_boarding_school_fee_hints
       schools_on_boarding_dbs_fee:
         <<: *schools_on_boarding_school_fee_hints
+        description: For example, 'The fee covers the cost of carrying out your DBS check'.
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_hints
 
@@ -588,6 +596,8 @@ en:
         has_or_working_towards_degree: "They must have or be working towards a degree"
         live_locally: "They must live locally"
         maximum_distance_from_school: "Tell us within how many miles of your school. For example, 20 miles."
+        provide_photo_identification: "They must provide photo ID"
+        photo_identification_details: "Provide details. For example, passport or driving licence."
         other: "Other"
         other_details: "Provide details."
       schools_on_boarding_candidate_requirement:
@@ -624,7 +634,7 @@ en:
         secondary: 'Secondary (11 to 16 years)'
         secondary_and_college: 'Secondary with 16 to 18 years'
       schools_on_boarding_description:
-        details: 'Tell us about your school. Provide a summary to help candidates choose your school.'
+        details: 'Tell us about your school. Provide a summary to help candidates select your school experience.'
       schools_on_boarding_candidate_experience_detail:
         business_dress: 'Business dress'
         cover_up_tattoos: 'Cover up tattoos'

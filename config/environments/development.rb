@@ -74,15 +74,14 @@ Rails.application.configure do
 
   config.after_initialize do
     Bullet.enable = true
-    Bullet.console = true
+    Bullet.raise = true
     Bullet.rails_logger = true
   end
 
   config.x.phase = Integer(ENV.fetch('PHASE') { 10000 })
   config.x.features = %i(
     subject_specific_dates
-    candidate_requirement_ab_test
-    access_needs_journey
+    capped_bookings
   )
 
   # dfe signin redirects back to https, so force it

@@ -42,3 +42,9 @@ Feature: Feedback
       And I enter 'Keep up the good work' into the 'How could we improve the service? (optional)' field
       When I click the 'Submit feedback' button
       Then I should see the text 'Thank you for your feedback.'
+
+    Scenario: Recording the referrer
+        Given I am on the 'find a school' page prior to giving feedback
+        When I click 'Give feedback', fill in and submit the candidate feedback form
+        Then I should see the text 'Thank you for your feedback.'
+        And my referrer should have been recorded

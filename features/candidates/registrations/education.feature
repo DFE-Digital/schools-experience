@@ -17,7 +17,7 @@ Feature: Entering candidate education details
         Given I am on the 'education' page for my school of choice
         And I choose 'Other' as my degree stage
         When I submit the form
-        Then I should see the validation error 'Enter an explaination'
+        Then I should see the validation error 'Enter an explanation'
 
     Scenario: Filling in and submitting the form
         Given I am on the 'education' page for my school of choice

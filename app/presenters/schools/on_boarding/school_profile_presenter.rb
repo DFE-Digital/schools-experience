@@ -70,21 +70,13 @@ module Schools
         else
           [
             'No - Candidates will be accompanied at all times',
-            @school_profile.dbs_requirement.no_dbs_policy_details
+            @school_profile.dbs_requirement.no_dbs_policy_details.presence
           ].compact.join(' - ')
         end
       end
 
-      def show_candidate_requirements_selection?
-        @school_profile.show_candidate_requirements_selection?
-      end
-
       def individual_requirements
-        if @school_profile.show_candidate_requirements_selection?
-          candidate_requirements_selection
-        else
-          candidate_requirements
-        end
+        candidate_requirements_selection
       end
 
       def school_experience_phases
@@ -190,15 +182,6 @@ module Schools
           @school_profile.candidate_experience_detail.parking_details
         else
           @school_profile.candidate_experience_detail.nearby_parking_details
-        end
-      end
-
-      # TODO remove this
-      def disability_and_access_needs
-        if @school_profile.candidate_experience_detail.disabled_facilities
-          'Yes - ' + @school_profile.candidate_experience_detail.disabled_facilities_details
-        else
-          'No'
         end
       end
 

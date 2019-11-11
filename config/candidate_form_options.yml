@@ -1,10 +1,10 @@
 ---
 DEGREE_STAGES:
-  - I don't have a degree and am not studying for one
   - Graduate or postgraduate
   - Final year
   - Second year
   - First year
+  - I don't have a degree and am not studying for one
   - Other
 
 TEACHING_STAGES:

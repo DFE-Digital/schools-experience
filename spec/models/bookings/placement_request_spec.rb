@@ -165,6 +165,16 @@ describe Bookings::PlacementRequest, type: :model do
 
       it { is_expected.to match_array [placement_request_closed_by_candidate] }
     end
+
+    context '.rejected' do
+      let!(:unviewed) do
+        travel_to 2.minutes.from_now do
+          create :placement_request, :cancelled_by_school, school: school
+        end
+      end
+      subject { described_class.rejected }
+      it { is_expected.to eq [unviewed, placement_request_closed_by_school] }
+    end
   end
 
   context '.requiring_attention' do

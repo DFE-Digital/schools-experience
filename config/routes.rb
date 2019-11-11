@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       end
     end
     resources :withdrawn_requests, only: %i(index show)
+    resources :rejected_requests, only: %i(index show)
     resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i(index show) do
       resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
         resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
@@ -84,7 +85,6 @@ Rails.application.routes.draw do
 
     namespace :on_boarding do
       resource :dbs_requirement, only: %i(new create edit update)
-      resource :candidate_requirement, only: %i(new create edit update)
       resource :candidate_requirements_choice, only: %i(new create edit update)
       resource :candidate_requirements_selection, only: %i(new create edit update)
       resource :fees, only: %i(new create edit update)
@@ -96,12 +96,10 @@ Rails.application.routes.draw do
       resource :subjects, only: %i(new create edit update)
       resource :description, only: %i(new create edit update)
       resource :candidate_experience_detail, only: %i(new create edit update)
-      if Feature.instance.active? :access_needs_journey
-        resource :access_needs_support, only: %i(new create edit update)
-        resource :access_needs_detail, only: %i(new create edit update)
-        resource :disability_confident, only: %i(new create edit update)
-        resource :access_needs_policy, only: %i(new create edit update)
-      end
+      resource :access_needs_support, only: %i(new create edit update)
+      resource :access_needs_detail, only: %i(new create edit update)
+      resource :disability_confident, only: %i(new create edit update)
+      resource :access_needs_policy, only: %i(new create edit update)
       resource :experience_outline, only: %i(new create edit update)
       resource :admin_contact, only: %i(new create edit update)
       resource :profile, only: :show

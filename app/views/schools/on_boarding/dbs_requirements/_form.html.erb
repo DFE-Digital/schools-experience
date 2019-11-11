@@ -10,8 +10,20 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Enter your school experience details
+    </h1>
+
+    <p>
+      These details will help candidates select a school experience.
+    </p>
+
+    <p>
+      You'll be given a chance to check and change the details you enter.
+    </p>
+
     <%= form_for dbs_requirement, url: url, method: method do |f| %>
-      <%= f.radio_button_fieldset :requires_check, page_heading: true do |fieldset| %>
+      <%= f.radio_button_fieldset :requires_check do |fieldset| %>
         <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
         <%= fieldset.radio_input true do  %>

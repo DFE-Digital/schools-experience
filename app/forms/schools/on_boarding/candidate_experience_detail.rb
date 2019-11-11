@@ -15,8 +15,6 @@ module Schools
       attribute :parking_provided, :boolean
       attribute :parking_details, :string
       attribute :nearby_parking_details, :string
-      attribute :disabled_facilities, :boolean
-      attribute :disabled_facilities_details, :string
       attribute :start_time, :string
       attribute :end_time, :string
       attribute :times_flexible, :boolean
@@ -31,11 +29,6 @@ module Schools
       validates :parking_provided, inclusion: [true, false]
       validates :parking_details, presence: true, if: :parking_provided
       validates :nearby_parking_details, presence: true, if: -> { !parking_provided && !parking_provided.nil? }
-
-      with_options unless: -> { Feature.instance.active? :access_needs_journey } do
-        validates :disabled_facilities, inclusion: [true, false]
-        validates :disabled_facilities_details, presence: true, if: :disabled_facilities
-      end
 
       validates :start_time, presence: true
       validates :start_time, format: { with: SCHOOL_TIME_FORMAT }, if: -> { start_time.present? }
@@ -54,8 +47,6 @@ module Schools
           parking_provided,
           parking_details,
           nearby_parking_details,
-          disabled_facilities,
-          disabled_facilities_details,
           start_time,
           end_time,
           times_flexible,
@@ -71,8 +62,6 @@ module Schools
           parking_provided: parking_provided,
           parking_details: parking_details,
           nearby_parking_details: nearby_parking_details,
-          disabled_facilities: disabled_facilities,
-          disabled_facilities_details: disabled_facilities_details,
           start_time: start_time,
           end_time: end_time,
           times_flexible: times_flexible,

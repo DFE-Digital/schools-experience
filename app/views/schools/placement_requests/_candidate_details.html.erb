@@ -1,0 +1,12 @@
+<section id="candidate-details">
+  <h2>Candidate details</h2>
+
+  <dl class="govuk-summary-list">
+    <%= summary_row 'What they want out of school experience', candidate_details.objectives %>
+    <%= summary_row 'Degree stage', candidate_details.degree_stage %>
+    <%= summary_row 'Degree subject', candidate_details.degree_subject %>
+    <%= summary_row 'Teaching stage', candidate_details.teaching_stage %>
+    <%= summary_row 'Teaching subject', "First choice: #{candidate_details.subject_first_choice}", id: 'teaching-subject-first-choice' %>
+    <%= summary_row 'Teaching subject', "Second choice: #{candidate_details.subject_second_choice}", id: 'teaching-subject-second-choice' %>
+  </dl>
+</section>

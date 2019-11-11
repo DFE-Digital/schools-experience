@@ -28,7 +28,7 @@ Feature: Viewing withdrawn requests
         Given there are some withdrawn requests
         When I am on the 'withdrawn requests' page
         Then the 'withdrawn-requests' table should have the following values:
-			      | Heading | Value            |
+            | Heading | Value            |
             | Name    | Matthew Richards |
             | Subject | Not specified    |
         And the withdrawn requests date should be correct

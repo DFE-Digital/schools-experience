@@ -5,7 +5,7 @@ module Schools
     def show; end
 
     def new
-      @feedback = Schools::Feedback.new
+      @feedback = Schools::Feedback.new referrer_params
     end
 
     def create
@@ -21,6 +21,10 @@ module Schools
 
   private
 
+    def referrer_params
+      { referrer: request.env['HTTP_REFERER'] }
+    end
+
     def feedback_params
       params.require(:schools_feedback).permit \
         :reason_for_using_service,
@@ -28,7 +32,8 @@ module Schools
         :rating,
         :improvements,
         :successful_visit,
-        :unsuccessful_visit_explanation
+        :unsuccessful_visit_explanation,
+        :referrer
     end
   end
 end

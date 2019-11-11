@@ -132,14 +132,6 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:candidate_experience_detail_disabled_facilities).of_type :boolean
-    end
-
-    it do
-      is_expected.to have_db_column(:candidate_experience_detail_disabled_facilities_details).of_type :string
-    end
-
-    it do
       is_expected.to have_db_column(:candidate_experience_detail_start_time).of_type :string
     end
 
@@ -191,11 +183,6 @@ describe Schools::SchoolProfile, type: :model do
     it do
       is_expected.to \
         have_db_column(:confirmation_acceptance).of_type(:boolean)
-    end
-
-    it do
-      is_expected.to \
-        have_db_column(:show_candidate_requirements_selection).of_type(:boolean)
     end
 
     it do
@@ -293,30 +280,6 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'returns the form_model' do
         expect(model.dbs_requirement).to eq_model form_model
-      end
-    end
-
-    context '#candidate_requirement' do
-      let :form_model do
-        FactoryBot.build :candidate_requirement
-      end
-
-      before do
-        model.candidate_requirement = form_model
-      end
-
-      it 'sets candidate_requirement_requirements' do
-        expect(model.candidate_requirement_requirements).to eq \
-          form_model.requirements
-      end
-
-      it 'sets candidate_requirement_requirements_details' do
-        expect(model.candidate_requirement_requirements_details).to eq \
-          form_model.requirements_details
-      end
-
-      it 'returns the form model' do
-        expect(model.candidate_requirement).to eq form_model
       end
     end
 
@@ -475,8 +438,6 @@ describe Schools::SchoolProfile, type: :model do
         parking_provided
         parking_details
         nearby_parking_details
-        disabled_facilities
-        disabled_facilities_details
         start_time
         end_time
         times_flexible

@@ -12,7 +12,7 @@ shared_context 'Stubbed candidates school' do |fixed|
   end
 
   let :allowed_subject_choices do
-    Bookings::Subject.available.pluck(:name)
+    Bookings::Subject.pluck(:name)
   end
 
   let :second_subject_choices do

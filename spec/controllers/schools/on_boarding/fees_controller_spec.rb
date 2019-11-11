@@ -7,7 +7,9 @@ describe Schools::OnBoarding::FeesController, type: :request do
   context '#new' do
     let! :school_profile do
       FactoryBot.create :school_profile,
-        :with_dbs_requirement, :with_candidate_requirement
+        :with_dbs_requirement,
+        :with_candidate_requirements_choice,
+        :with_candidate_requirements_selection
     end
 
     before do
@@ -26,7 +28,9 @@ describe Schools::OnBoarding::FeesController, type: :request do
   context '#create' do
     let! :school_profile do
       FactoryBot.create :school_profile,
-        :with_dbs_requirement, :with_candidate_requirement
+        :with_dbs_requirement,
+        :with_candidate_requirements_choice,
+        :with_candidate_requirements_selection
     end
 
     let :params do

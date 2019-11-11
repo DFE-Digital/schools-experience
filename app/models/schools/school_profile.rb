@@ -1,5 +1,7 @@
 module Schools
   class SchoolProfile < ApplicationRecord
+    self.ignored_columns = %w(show_candidate_requirements_selection)
+
     delegate :urn, to: :bookings_school
 
     validates :bookings_school, presence: true
@@ -66,15 +68,6 @@ module Schools
       constructor: :compose
 
     composed_of \
-      :candidate_requirement,
-      class_name: 'Schools::OnBoarding::CandidateRequirement',
-      mapping: [
-        %w(candidate_requirement_requirements requirements),
-        %w(candidate_requirement_requirements_details requirements_details)
-      ],
-      constructor: :compose
-
-    composed_of \
       :candidate_requirements_choice,
       class_name: 'Schools::OnBoarding::CandidateRequirementsChoice',
       mapping: [
@@ -91,6 +84,8 @@ module Schools
           %w(candidate_requirements_selection_has_or_working_towards_degree has_or_working_towards_degree),
           %w(candidate_requirements_selection_live_locally live_locally),
           %w(candidate_requirements_selection_maximum_distance_from_school maximum_distance_from_school),
+          %w(candidate_requirements_selection_provide_photo_identification provide_photo_identification),
+          %w(candidate_requirements_selection_photo_identification_details photo_identification_details),
           %w(candidate_requirements_selection_other other),
           %w(candidate_requirements_selection_other_details other_details)
       ],
@@ -181,8 +176,6 @@ module Schools
         %w(candidate_experience_detail_parking_provided parking_provided),
         %w(candidate_experience_detail_parking_details parking_details),
         %w(candidate_experience_detail_nearby_parking_details nearby_parking_details),
-        %w(candidate_experience_detail_disabled_facilities disabled_facilities),
-        %w(candidate_experience_detail_disabled_facilities_details disabled_facilities_details),
         %w(candidate_experience_detail_start_time start_time),
         %w(candidate_experience_detail_end_time end_time),
         %w(candidate_experience_detail_times_flexible times_flexible),
@@ -268,7 +261,7 @@ module Schools
       foreign_key: 'bookings_school_id'
 
     def available_subjects
-      Bookings::Subject.available
+      Bookings::Subject.all
     end
 
     def current_step
@@ -281,10 +274,6 @@ module Schools
 
     def requires_subjects?
       phases_list.secondary? || phases_list.college?
-    end
-
-    def show_candidate_requirement?
-      !show_candidate_requirements_selection?
     end
   end
 end

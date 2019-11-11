@@ -2,6 +2,7 @@ module Schools
   class StateMismatchError < StandardError; end
   class AuthFailedError < StandardError; end
   class InsufficientPrivilegesError < StandardError; end
+  class SessionExpiredError < StandardError; end
 
   class SessionsController < ApplicationController
     include DFEAuthentication
@@ -9,6 +10,7 @@ module Schools
     rescue_from AuthFailedError,    with: :authentication_failure
     rescue_from StateMismatchError, with: :authentication_failure
     rescue_from InsufficientPrivilegesError, with: :insufficient_privileges_failure
+    rescue_from SessionExpiredError, with: :session_expired_failure
 
     def show
       # nothing yet, the view just contains a 'logout' button
@@ -102,6 +104,12 @@ module Schools
     end
 
     def check_for_errors(params_error)
+      if params_error == 'sessionexpired'
+        Rails.logger.warn("DfE Sign-in session expiry error, restarting login process")
+
+        raise SessionExpiredError
+      end
+
       if params_error
         Rails.logger.error("DfE Sign-in error response #{params_error}, #{params}")
 
@@ -121,6 +129,12 @@ module Schools
       Raven.capture_exception(exception)
 
       redirect_to schools_errors_insufficient_privileges_path
+    end
+
+    def session_expired_failure(_exception)
+      # we're redirecting to the dashboard so the user will be sent back to
+      # DfE Sign-in where they can log in again.
+      redirect_to schools_dashboard_path
     end
 
     def build_logout_query(id_token)
