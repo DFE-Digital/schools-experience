@@ -1,4 +1,4 @@
-Dear ((candidate_name)),
+Hello,
 
 ((school_name)) has turned down your school experience request for the following dates: 
 * ((dates_requested))

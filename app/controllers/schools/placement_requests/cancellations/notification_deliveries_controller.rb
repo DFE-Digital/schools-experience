@@ -43,7 +43,6 @@ module Schools
           NotifyEmail::CandidateRequestRejection.new(
             to: cancellation.candidate_email,
             school_name: cancellation.school_name,
-            candidate_name: cancellation.candidate_name,
             rejection_reasons: cancellation.reason,
             extra_details: cancellation.extra_details,
             dates_requested: cancellation.dates_requested,
