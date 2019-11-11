@@ -234,3 +234,58 @@ Then("I should see the dress code policy information") do
     expect(page).to have_css('p', text: 'We were all blue on fridays')
   end
 end
+
+Then("there should be no breakdown of dates at all") do
+  expect(page).not_to have_css("#date-and-subject-summary")
+end
+
+Then("I should see a breakdown of upcoming dates and subjects") do
+  expect(page).to have_css("#date-and-subject-summary")
+end
+
+Given("the following dates have been added:") do |table|
+  @subjects = [
+    FactoryBot.create(:bookings_subject, name: 'English'),
+    FactoryBot.create(:bookings_subject, name: 'Maths'),
+    FactoryBot.create(:bookings_subject, name: 'Biology')
+  ].index_by(&:name)
+
+  @school.subjects << @subjects.values
+
+  table.hashes.each do |row|
+    named_subjects = extract_subjects_from_table(row['Subjects'])
+
+    placement_date = FactoryBot.build(
+      :bookings_placement_date,
+      bookings_school: @school,
+      subject_specific: named_subjects.any?,
+      date: row['Weeks from now'].to_i.weeks.from_now.to_date
+    )
+
+    named_subjects.each { |subject_name| placement_date.subjects << @subjects[subject_name] }
+
+    placement_date.save
+  end
+end
+
+Then("I should see the following list of available dates and subjects:") do |table|
+  table.hashes.each do |row|
+    formatted_date = row['Weeks from now'].to_i.weeks.from_now.strftime('%d %B %Y')
+
+    list_item = page.find('dt', text: formatted_date).ancestor('.govuk-summary-list__row').find('dd')
+
+    extract_subjects_from_table(row['Subjects']).each do |named_subject|
+      expect(list_item).to have_content(named_subject)
+    end
+  end
+end
+
+# get the subjects named in the table row, split to an array
+# and get rid of 'None'
+def extract_subjects_from_table(subject_list)
+  subject_list
+    .split(',')
+    .map(&:strip)
+    .reject { |subject| subject == 'None' }
+    .compact
+end
