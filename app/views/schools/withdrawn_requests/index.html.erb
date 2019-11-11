@@ -10,13 +10,8 @@
     <%= page_heading 'Withdrawn requests' %>
 
     <% if @requests.any? %>
-      <div class="pagination-info higher">
-        <div class="pagination-slice">
-          <%= page_entries_info @requests %>
-        </div>
-        <%= paginate @requests %>
-      </div>
-
+      <%= pagination_bar @requests %>
+    
       <table id="withdrawn-requests" class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -41,8 +36,8 @@
                 <%- end -%>
               </td>
               <td class="subject govuk-table__cell">
-                <%- if withdrawn_request&.placement_date&.subject_specific -%>
-                  <%= withdrawn_request.placement_date.subjects.map(&:name).to_sentence %>
+                <%- if withdrawn_request&.placement_date&.subject_specific && withdrawn_request.subject -%>
+                  <%= withdrawn_request.subject.name %>
                 <%- else -%>
                   <em>Not specified</em>
                 <%- end -%>
@@ -61,9 +56,7 @@
         </tbody>
       </table>
 
-      <div class="pagination-info lower">
-        <%= paginate @requests %>
-      </div>
+      <%= pagination_lower @requests %>
 
     <% else %>
       <p>

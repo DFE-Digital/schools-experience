@@ -7,7 +7,7 @@ RSpec.describe Candidates::Session, type: :model do
     {
       'firstname' => 'Test',
       'lastname' => 'User',
-      'date_of_birth' => '1980-10-01',
+      'birthdate' => '1980-10-01',
       'emailaddress1' => 'existing@candidate.com'
     }
   end

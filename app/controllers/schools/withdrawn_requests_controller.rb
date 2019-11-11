@@ -4,7 +4,6 @@ module Schools
       @requests = scope
         .includes(:candidate, :candidate_cancellation, placement_date: :subjects)
         .page(params[:page])
-        .per(50)
 
       assign_gitis_contacts @requests
     end

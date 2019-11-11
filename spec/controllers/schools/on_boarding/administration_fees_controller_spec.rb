@@ -6,7 +6,10 @@ describe Schools::OnBoarding::AdministrationFeesController, type: :request do
 
   let! :school_profile do
     FactoryBot.create :school_profile,
-      :with_dbs_requirement, :with_candidate_requirement, :with_fees
+      :with_dbs_requirement,
+      :with_candidate_requirements_choice,
+      :with_candidate_requirements_selection,
+      :with_fees
   end
 
   context '#new' do

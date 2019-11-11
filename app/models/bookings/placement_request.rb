@@ -95,6 +95,12 @@ module Bookings
       withdrawn.merge Cancellation.unviewed
     end
 
+    scope :rejected, -> do
+      without_booking
+        .joins(:school_cancellation)
+        .merge(Cancellation.sent.order(sent_at: :desc))
+    end
+
     default_scope { where.not(candidate_id: nil) }
 
     delegate :gitis_contact, :fetch_gitis_contact, to: :candidate

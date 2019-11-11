@@ -195,6 +195,8 @@ en:
               blank: "Enter how close to your school a candidate must live"
               not_a_number: 'Enter a valid number for how close to your school a candidate must live'
               greater_than: 'Enter a number greater than 0 for how close to your school a candidate must live'
+            photo_identification_details:
+              blank: 'Provide details'
             other_details:
               blank: 'Provide details'
         schools/on_boarding/candidate_requirement:
@@ -372,6 +374,11 @@ en:
         dress_code_remove_piercings: Remove piercings
         dress_code_smart_casual: Smart casual
 
+    models:
+      bookings/placement_request:
+        one: Request
+        other: Requests
+
   helpers:
     fieldset:
       order: Sorted by
@@ -474,13 +481,13 @@ en:
       max_fee: Schools may charge
       subjects: Select all that apply
       candidates_registrations_personal_information:
-        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
         bookings_placement_date_id: School experience is only available on the following days
       candidates_session:
-        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
       schools_on_boarding_candidate_requirements_choice:
         has_requirements_html: "<br> For example, they must want to apply for teacher training at your school or have a degree"
       schools_on_boarding_dbs_requirement:
@@ -576,6 +583,8 @@ en:
         has_or_working_towards_degree: "They must have or be working towards a degree"
         live_locally: "They must live locally"
         maximum_distance_from_school: "Tell us within how many miles of your school. For example, 20 miles."
+        provide_photo_identification: "They must provide photo ID"
+        photo_identification_details: "Provide details. For example, passport or driving licence."
         other: "Other"
         other_details: "Provide details."
       schools_on_boarding_candidate_requirement:
@@ -612,7 +621,7 @@ en:
         secondary: 'Secondary (11 to 16 years)'
         secondary_and_college: 'Secondary with 16 to 18 years'
       schools_on_boarding_description:
-        details: 'Tell us about your school. Provide a summary to help candidates choose your school.'
+        details: 'Tell us about your school. Provide a summary to help candidates select your school experience.'
       schools_on_boarding_candidate_experience_detail:
         business_dress: 'Business dress'
         cover_up_tattoos: 'Cover up tattoos'

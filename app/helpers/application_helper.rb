@@ -108,6 +108,19 @@ module ApplicationHelper
     end
   end
 
+  def pagination_bar(query)
+    content_tag :div, class: 'pagination-info higher' do
+      content_tag(:div, page_entries_info(query), class: 'pagination-slice') +
+        paginate(query)
+    end
+  end
+
+  def pagination_lower(query)
+    content_tag :div, class: 'pagination-info lower' do
+      paginate query
+    end
+  end
+
 private
 
   def valid_user?(user)

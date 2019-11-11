@@ -7,6 +7,8 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
     it { is_expected.to respond_to :has_or_working_towards_degree }
     it { is_expected.to respond_to :live_locally }
     it { is_expected.to respond_to :maximum_distance_from_school }
+    it { is_expected.to respond_to :provide_photo_identification }
+    it { is_expected.to respond_to :photo_identification_details }
     it { is_expected.to respond_to :other }
     it { is_expected.to respond_to :other_details }
   end
@@ -33,6 +35,30 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
 
       it 'removes maximum_distance_from_school' do
         expect(subject.maximum_distance_from_school).to be nil
+      end
+    end
+
+    context 'when provide_photo_identification is selected' do
+      before do
+        subject.provide_photo_identification = true
+        subject.photo_identification_details = 'photo details'
+        subject.valid?
+      end
+
+      it 'doesnt remove photo_identification_details' do
+        expect(subject.photo_identification_details).to eq 'photo details'
+      end
+    end
+
+    context 'when provide_photo_identification is not selected' do
+      before do
+        subject.provide_photo_identification = false
+        subject.photo_identification_details = 'photo details'
+        subject.valid?
+      end
+
+      it 'removes photo_identification_details' do
+        expect(subject.photo_identification_details).to be nil
       end
     end
 
@@ -71,6 +97,18 @@ describe Schools::OnBoarding::CandidateRequirementsSelection, type: :model do
       context 'when the live_locally is not selected' do
         before { subject.live_locally = false }
         it { is_expected.not_to validate_presence_of :maximum_distance_from_school }
+      end
+    end
+
+    context 'photo_identification_details' do
+      context 'when provide_photo_identification is selected' do
+        before { subject.provide_photo_identification = true }
+        it { is_expected.to validate_presence_of :photo_identification_details }
+      end
+
+      context 'when provide_photo_identification is not selected' do
+        before { subject.provide_photo_identification = false }
+        it { is_expected.not_to validate_presence_of :photo_identification_details }
       end
     end
 

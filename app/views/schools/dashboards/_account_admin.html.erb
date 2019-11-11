@@ -2,6 +2,15 @@
   <h2 class="govuk-heading-m">
     Account admin
   </h2>
+  
+  <div id="rejected-requests" class="subsection">
+    <header class="dashboard-medium-priority">
+      <%= link_to "View rejected requests", schools_rejected_requests_path %>
+    </header>
+    <span class="govuk-hint">
+      View request dates, subjects, candidate names and reasons for rejection
+    </span>
+  </div>
 
   <div id="previous-bookings" class="subsection">
     <header class="dashboard-medium-priority">

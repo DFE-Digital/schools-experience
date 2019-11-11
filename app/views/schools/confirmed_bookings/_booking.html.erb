@@ -1,41 +1,7 @@
 <div id="school-booking-show-<%= booking.id %>" class="booking school-booking-show">
-  <section id="personal-details">
-    <h2>Personal details</h2>
-
-    <dl class="placement-details govuk-summary-list">
-      <%= summary_row 'Address', booking.gitis_contact.address %>
-      <%= summary_row 'UK telephone number', booking.gitis_contact.phone %>
-      <%= summary_row 'Email address', booking.gitis_contact.email %>
-    </dl>
-  </section>
-
-  <section id="booking-details">
-    <h2>Booking details</h2>
-
-    <dl class="govuk-summary-list">
-      <% if booking.editable_date? %>
-        <%= summary_row 'Date', booking.date.to_formatted_s(:govuk), edit_schools_booking_date_path(booking) %>
-      <% else %>
-        <%= summary_row 'Date', booking.date.to_formatted_s(:govuk) %>
-      <% end %>
-      <%= summary_row 'Subject', booking.bookings_subject.name %>
-      <%= summary_row 'DBS certificate', format_has_dbs_certificate(booking.has_dbs_check) %>
-      <%= summary_row 'Request received', booking.received_on.to_formatted_s(:govuk) %>
-    </dl>
-  </section>
-
-  <section id="candidate-details">
-    <h2>Candidate details</h2>
-
-    <dl class="govuk-summary-list">
-      <%= summary_row 'What they want out of school experience', booking.objectives %>
-      <%= summary_row 'Degree stage', booking.degree_stage %>
-      <%= summary_row 'Degree subject', booking.degree_subject %>
-      <%= summary_row 'Teaching stage', booking.teaching_stage %>
-      <%= summary_row 'Teaching subject', "First choice: #{booking.bookings_placement_request.subject_first_choice}", id: 'teaching-subject-first-choice' %>
-      <%= summary_row 'Teaching subject', "Second choice: #{booking.bookings_placement_request.subject_second_choice}", id: 'teaching-subject-second-choice' %>
-    </dl>
-  </section>
+  <%= render partial: 'schools/placement_requests/personal_details', object: booking.gitis_contact %>
+  <%= render partial: 'schools/confirmed_bookings/booking_details', object: booking %>
+  <%= render partial: 'schools/placement_requests/candidate_details', object: booking.bookings_placement_request %>
 
   <% if booking.cancellation %>
     <%= render 'schools/confirmed_bookings/cancellation', cancellation: booking.cancellation %>
