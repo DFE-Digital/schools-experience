@@ -76,6 +76,35 @@ describe Bookings::Booking do
           end
         end
       end
+
+      context 'attended' do
+        context 'when cancelled by candidate' do
+          subject { create :bookings_booking, :cancelled_by_candidate }
+
+          specify 'does not allow attended to be set' do
+            expect(subject).not_to allow_value(true).for :attended
+            expect(subject).not_to allow_value(false).for :attended
+          end
+        end
+
+        context 'when cancelled by school' do
+          subject { create :bookings_booking, :cancelled_by_school }
+
+          specify 'does not allow attended to be set' do
+            expect(subject).not_to allow_value(true).for :attended
+            expect(subject).not_to allow_value(false).for :attended
+          end
+        end
+
+        context 'when not cancelled' do
+          subject { create :bookings_booking }
+
+          specify 'allows attended to be set' do
+            expect(subject).to allow_value(true).for :attended
+            expect(subject).to allow_value(false).for :attended
+          end
+        end
+      end
     end
   end
 

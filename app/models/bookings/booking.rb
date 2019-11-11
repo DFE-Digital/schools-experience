@@ -29,6 +29,7 @@ module Bookings
     validates :bookings_subject, presence: true
     validates :bookings_school, presence: true
     validates :duration, presence: true, numericality: { greater_than: 0 }
+    validates :attended, inclusion: [nil], if: -> { bookings_placement_request&.cancelled? }
 
     delegate \
       :availability,

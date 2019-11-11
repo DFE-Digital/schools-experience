@@ -104,7 +104,7 @@ describe Schools::ConfirmedBookings::CancellationsController, type: :request do
         end
 
         it 'creates the cancellation' do
-          expect(placement_request.school_cancellation.reason).to \
+          expect(placement_request.reload.school_cancellation.reason).to \
             eq "school's out for summer"
         end
 
