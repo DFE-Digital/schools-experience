@@ -24,13 +24,13 @@ Feature: Configuring a placement date
 
   Scenario: Date is not subject specific
     When I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
-    And I choose 'General / not subject specific experience' from the "Select type of experience" radio buttons
+    And I choose 'General experience' from the "Select type of experience" radio buttons
     And I submit the form
     Then I should be on the 'placement dates' page
     And my newly-created placement date should be listed
 
   Scenario: Date is subject specific
     Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
-    And I choose 'About a specific subject' from the "Select type of experience" radio buttons
+    And I choose 'Specific to a subject' from the "Select type of experience" radio buttons
     When I submit the form
     Then I should be on the new subject selection page for this date

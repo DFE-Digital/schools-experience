@@ -9,7 +9,7 @@ end
 Given "the placement date is subject specific" do
   steps %(
     Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
-    And I choose 'About a specific subject' from the "Select type of experience" radio buttons
+    And I choose 'Specific to a subject' from the "Select type of experience" radio buttons
     And I submit the form
   )
 end
