@@ -63,7 +63,12 @@ jobs:
   - script: |
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Push Docker image (built from master)'
+    displayName: 'Tag Docker image (built from master)'
+
+  - script: |
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-debug
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
+    displayName: 'Tag Docker image (built from debug)'
 
   - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
@@ -72,7 +77,7 @@ jobs:
     displayName: Run the GovUK Lint check
 
   - task: Docker@2
-    displayName: 'push to docker hub'
+    displayName: 'Push tagged image to DockerHub'
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
@@ -80,13 +85,22 @@ jobs:
       tags: $(imageTag)
 
   - task: Docker@2
-    displayName: 'push to docker hub'
+    displayName: 'Push :latest to DockerHub'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
       command: push
       tags: latest
+
+  - task: Docker@2
+    displayName: 'Push :debug to DockerHub'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      repository: $(DOCKER_HUB_REPO)
+      command: push
+      tags: $(imageTag)-debug
 
   - task: Bash@3
     name: mtrx
