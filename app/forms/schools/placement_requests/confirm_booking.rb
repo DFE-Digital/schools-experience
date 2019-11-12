@@ -12,7 +12,6 @@ module Schools
       validates :date,
         timeliness: {
           after: :today,
-          after_message: 'Date must be in the future',
           before: -> { 2.years.from_now },
           type: :date
         },
