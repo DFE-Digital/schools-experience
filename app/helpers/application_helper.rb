@@ -121,6 +121,10 @@ module ApplicationHelper
     end
   end
 
+  def safe_format(content)
+    simple_format strip_tags content
+  end
+
 private
 
   def valid_user?(user)
