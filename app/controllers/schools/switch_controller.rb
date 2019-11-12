@@ -16,5 +16,10 @@ module Schools
 
       redirect_to(schools_dashboard_path)
     end
+
+    def show
+      @current_school = Bookings::School.find_by(urn: session[:urn])
+      @other_school   = Bookings::School.find_by(urn: params[:urn])
+    end
   end
 end
