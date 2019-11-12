@@ -19,12 +19,17 @@
         <% end %>
       <% end %>
 
-      <% # Ensure the form submits with out error if no option is selected %>
-      <%= f.hidden_field :available_for_all_subjects, value: nil %>
+      <%- if @placement_date.supports_subjects? -%>
+        <%= f.hidden_field :available_for_all_subjects, value: nil %>
 
-      <%= f.radio_button_fieldset :available_for_all_subjects do |fieldset| %>
-        <%= f.radio_input true %>
-        <%= f.radio_input false %>
+        <%= f.radio_button_fieldset :available_for_all_subjects do |fieldset| %>
+          <p>
+          Tell us if the experience is about a specific subject <strong>or</strong> a general
+            experience and not about a specific subject.
+          </p>
+          <%= f.radio_input true %>
+          <%= f.radio_input false %>
+        <% end %>
       <% end %>
 
       <%= f.submit 'Continue' %>

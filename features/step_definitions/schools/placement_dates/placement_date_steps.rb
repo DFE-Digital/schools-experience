@@ -9,7 +9,7 @@ end
 Given "the placement date is subject specific" do
   steps %(
     Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
-    And I choose 'No' from the "Is this date available for all the subjects you offer?" radio buttons
+    And I choose 'About a specific subject' from the "Select type of experience" radio buttons
     And I submit the form
   )
 end
@@ -51,4 +51,17 @@ Then "my date should be listed" do
   else
     date.subjects.map(&:name).each { |name| expect(page).to have_text name }
   end
+end
+
+Then("I should be on the new configuration page for my placement date") do
+  pd = Bookings::PlacementDate.last
+  expect(page.current_path).to eql(path_for('new configuration', placement_date_id: pd.id))
+end
+
+Then("there should be no subject specificity option") do
+  expect(page).not_to have_text('Is this date available for all the subjects you offer?')
+end
+
+Then("there should be a subject specificity option") do
+  expect(page).not_to have_css('label', text: 'Is this date available for all the subjects you offer?')
 end

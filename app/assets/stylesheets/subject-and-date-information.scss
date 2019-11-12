@@ -1,0 +1,17 @@
+.subject-and-date-selection {
+  &.subject-and-date-selection--error {
+    border-left: 5px solid govuk-colour('red');
+    padding-left: 2rem;
+  }
+
+  /*
+    FIXME check the usability consequences of doing this
+
+    Not really achieveable using the form builder
+   */
+  .date-selector {
+    fieldset legend {
+      display: none;
+    }
+  }
+}

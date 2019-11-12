@@ -1,6 +1,7 @@
 module Candidates
   module Registrations
     class ApplicationPreview
+      class NotImplementedForThisDateType < StandardError; end
       # FIXME delegate other methods to placement_preference once remove dates
       # pr is merged
       attr_reader :placement_preference
@@ -49,6 +50,12 @@ module Candidates
         @teaching_preference = registration_session.teaching_preference
       end
 
+      def subject_and_date_information
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+
+        @subject_and_date_information ||= @registration_session.subject_and_date_information
+      end
+
       def ==(other)
         other.is_a?(self.class) && \
           other.registration_session == @registration_session
@@ -84,16 +91,34 @@ module Candidates
         email
       end
 
+      def has_subject_and_date_information?
+        RegistrationState.new(@registration_session).subject_and_date_information_in_journey?
+      end
+
+      def placement_date_subject
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+
+        subject_and_date_information.placement_date_subject
+      end
+
       def placement_date
-        placement_preference.placement_date.to_s
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+
+        subject_and_date_information.placement_date.to_s
       end
 
       def placement_availability
+        fail NotImplementedForThisDateType if has_subject_and_date_information?
+
         placement_preference.availability
       end
 
       def placement_availability_description
-        placement_preference.availability || placement_preference.placement_date.to_s
+        if has_subject_and_date_information?
+          placement_date
+        else
+          placement_availability
+        end
       end
 
       def placement_outcome

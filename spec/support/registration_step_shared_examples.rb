@@ -8,7 +8,7 @@ shared_examples 'a registration step' do
   end
 
   subject do
-    described_class.new
+    described_class.new(urn: school.urn)
   end
 
   context 'methods' do

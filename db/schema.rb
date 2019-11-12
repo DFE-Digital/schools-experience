@@ -23,13 +23,13 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
     t.integer "bookings_school_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "duration", default: 1, null: false
     t.text "placement_details"
     t.string "contact_name"
     t.string "contact_number"
     t.string "contact_email"
     t.text "location"
     t.string "candidate_instructions"
+    t.integer "duration", default: 1, null: false
     t.datetime "accepted_at"
     t.boolean "attended"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
     t.datetime "updated_at", null: false
     t.integer "position"
     t.integer "edubase_id"
+    t.boolean "supports_subjects", default: true, null: false
     t.index ["name"], name: "index_bookings_phases_on_name", unique: true
     t.index ["position"], name: "index_bookings_phases_on_position", unique: true
   end
@@ -75,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
     t.integer "max_bookings_count"
     t.datetime "published_at"
     t.boolean "subject_specific", default: false, null: false
+    t.boolean "supports_subjects"
     t.index ["bookings_school_id"], name: "index_bookings_placement_dates_on_bookings_school_id"
   end
 
@@ -109,8 +111,10 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
     t.uuid "analytics_tracking_uuid"
     t.datetime "viewed_at"
     t.bigint "candidate_id"
+    t.bigint "bookings_subject_id"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
     t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
+    t.index ["bookings_subject_id"], name: "index_bookings_placement_requests_on_bookings_subject_id"
     t.index ["candidate_id"], name: "index_bookings_placement_requests_on_candidate_id"
     t.index ["token"], name: "index_bookings_placement_requests_on_token", unique: true
   end
@@ -251,11 +255,6 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
   end
 
-  create_table "candidates_feedbacks", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "candidates_session_tokens", force: :cascade do |t|
     t.string "token", null: false
     t.bigint "candidate_id", null: false
@@ -372,10 +371,10 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
     t.boolean "phases_list_secondary_and_college", default: false, null: false
     t.boolean "confirmation_acceptance", default: false
     t.text "candidate_experience_detail_times_flexible_details"
+    t.string "admin_contact_email_secondary"
     t.boolean "administration_fee_step_completed", default: false
     t.boolean "dbs_fee_step_completed", default: false
     t.boolean "other_fee_step_completed", default: false
-    t.string "admin_contact_email_secondary"
     t.boolean "dbs_requirement_requires_check"
     t.text "dbs_requirement_dbs_policy_details"
     t.text "dbs_requirement_no_dbs_policy_details"
@@ -385,11 +384,11 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
     t.integer "candidate_requirements_selection_maximum_distance_from_school"
     t.boolean "candidate_requirements_selection_other"
     t.text "candidate_requirements_selection_other_details"
+    t.boolean "access_needs_support_supports_access_needs"
     t.boolean "candidate_requirements_choice_has_requirements"
     t.boolean "candidate_requirements_selection_step_completed", default: false
     t.boolean "candidate_requirements_selection_not_on_another_training_course"
     t.boolean "candidate_requirements_selection_has_or_working_towards_degree"
-    t.boolean "access_needs_support_supports_access_needs"
     t.string "access_needs_detail_description"
     t.boolean "disability_confident_is_disability_confident"
     t.boolean "access_needs_policy_has_access_needs_policy"
@@ -409,6 +408,7 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
   add_foreign_key "bookings_placement_requests", "bookings_candidates", column: "candidate_id"
   add_foreign_key "bookings_placement_requests", "bookings_placement_dates"
   add_foreign_key "bookings_placement_requests", "bookings_schools"
+  add_foreign_key "bookings_placement_requests", "bookings_subjects"
   add_foreign_key "bookings_profiles", "bookings_schools", column: "school_id"
   add_foreign_key "bookings_schools", "bookings_school_types"
   add_foreign_key "bookings_schools_phases", "bookings_phases"

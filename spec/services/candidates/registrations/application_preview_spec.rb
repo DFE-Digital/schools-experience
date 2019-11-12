@@ -49,6 +49,10 @@ describe Candidates::Registrations::ApplicationPreview do
       subject_second_choice: "Maths"
   end
 
+  let :subject_and_date_information do
+    build :subject_and_date_information
+  end
+
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new \
       'urn' => school.urn,
@@ -57,7 +61,8 @@ describe Candidates::Registrations::ApplicationPreview do
       'candidates_registrations_placement_preference' => placement_preference.attributes,
       'candidates_registrations_education' => education.attributes,
       'candidates_registrations_teaching_preference' => teaching_preference.attributes,
-      'candidates_registrations_background_check' => background_check.attributes
+      'candidates_registrations_background_check' => background_check.attributes,
+      'candidates_registrations_subject_and_date_information' => subject_and_date_information.attributes
   end
 
   subject do
@@ -180,48 +185,163 @@ describe Candidates::Registrations::ApplicationPreview do
   end
 
   context 'placement dates' do
-    context 'when school has flexible dates' do
-      let(:pa) { 'From Epiphany to Whitsunday' }
-      context '#placement_availability' do
-        it 'returns the correct value' do
-          expect(subject.placement_availability).to eq pa
+    let :fixed_date_school do
+      create :bookings_school,
+        name: 'Fixed date school',
+        availability_preference_fixed: true
+    end
+
+    let :flexible_date_school do
+      create :bookings_school,
+        name: 'Flexible date school',
+        availability_preference_fixed: false
+    end
+
+    context '#has_subject_and_date_information?' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'returns false' do
+          expect(subject.has_subject_and_date_information?).to be false
         end
       end
 
-      context '#placement_availability_description' do
-        it 'returns the #placement_availability when it is present' do
-          expect(subject.placement_availability_description).to eq pa
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'returns true' do
+          expect(subject.has_subject_and_date_information?).to be true
         end
       end
     end
 
-    context 'when school has fixed dates' do
-      let :placement_date do
-        3.days.from_now.strftime "%d %B %Y"
-      end
+    context '#placement_date_subject' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
 
-      let :bookings_placement_date do
-        create :bookings_placement_date,
-          date: placement_date, bookings_school: school
-      end
-
-      let :placement_preference do
-        build :placement_preference,
-          objectives: "test the software",
-          bookings_placement_date_id: bookings_placement_date.id,
-          availability: nil
-      end
-
-      context '#placement_availability' do
-        it 'returns the correct value' do
-          expect(subject.placement_date).to eq placement_date + ' (1 day)'
+        it 'raises an error' do
+          expect { subject.placement_date_subject }.to raise_error \
+            described_class::NotImplementedForThisDateType
         end
       end
 
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'returns the placement date subject' do
+          expect(subject.placement_date_subject).to eq \
+            subject_and_date_information.placement_date_subject
+        end
+      end
+    end
+
+    context '#placement_availability' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'returns the availablility the candidate entered' do
+          expect(subject.placement_availability).to \
+            eq placement_preference.availability
+        end
+      end
+
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'raises an error' do
+          expect { subject.placement_availability }.to raise_error \
+            described_class::NotImplementedForThisDateType
+        end
+      end
+    end
+
+    context '#placement_date' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'raises an error' do
+          expect { subject.placement_date }.to raise_error \
+            described_class::NotImplementedForThisDateType
+        end
+      end
+
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'returns the placement date to_s' do
+          expect(subject.placement_date).to eq \
+            subject_and_date_information.placement_date.to_s
+        end
+      end
+    end
+
+    context '#placement_availability_description' do
+      context 'when school has flexible dates' do
+        let :school do
+          flexible_date_school
+        end
+
+        it 'returns the placement_availability' do
+          expect(subject.placement_availability_description).to eq \
+            placement_preference.availability
+        end
+      end
+
+      context 'when school has fixed dates' do
+        let :school do
+          fixed_date_school
+        end
+
+        it 'returns the placement_date' do
+          expect(subject.placement_availability_description).to eq \
+            subject_and_date_information.placement_date.to_s
+        end
+      end
+    end
+  end
+
+  # TODO SE-1877 remove this
+  context 'with legacy session data' do
+    context 'the school has fixed dates' do
+      let :school do
+        create :bookings_school, :with_subjects, availability_preference_fixed: true
+      end
+
+      let :placement_date do
+        create \
+          :bookings_placement_date,
+          :subject_specific,
+          bookings_school: school,
+          subjects: school.subjects
+      end
+
+      let :registration_session do
+        build \
+          :legacy_registration_session,
+          urn: school.urn,
+          bookings_placement_date_id: placement_date.id
+      end
+
       context '#placement_availability_description' do
-        it 'returns the placement date when #placement_availability is absent' do
+        it 'returns the placement date' do
           expect(subject.placement_availability_description).to \
-            eq placement_date + ' (1 day)'
+            eq placement_date.to_s
         end
       end
     end

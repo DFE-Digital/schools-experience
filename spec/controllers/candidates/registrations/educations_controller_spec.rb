@@ -9,6 +9,7 @@ describe Candidates::Registrations::EducationsController, type: :request do
       contact_information
     )
   end
+  let!(:school) { create(:bookings_school, urn: 11048) }
 
 
   context '#new' do

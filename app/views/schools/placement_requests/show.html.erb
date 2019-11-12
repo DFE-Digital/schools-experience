@@ -40,8 +40,8 @@
     <h2>Request details</h2>
 
     <dl class="placement-details govuk-summary-list">
-      <div class="date-requested govuk-summary-list__row">
 
+      <div class="date-requested govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Dates requested
         </dt>
@@ -49,6 +49,17 @@
           <%= @placement_request.dates_requested %>
         </dd>
       </div>
+
+      <% if @placement_request.subject.present? %>
+        <div class="date-requested govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Requested subject
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= @placement_request.requested_subject.name %>
+          </dd>
+        </div>
+      <% end %>
 
       <div class="date-received-on govuk-summary-list__row">
         <dt class="govuk-summary-list__key">

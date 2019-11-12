@@ -130,6 +130,7 @@ Rails.application.routes.draw do
         resource :teaching_preference, only: %i(new create edit update)
         resource :placement_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
+        resource :subject_and_date_information, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
         resource :confirmation_email, only: %i(show create)
         resource :resend_confirmation_email, only: %i(create)

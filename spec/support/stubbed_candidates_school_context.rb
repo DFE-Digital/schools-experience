@@ -1,4 +1,4 @@
-shared_context 'Stubbed candidates school' do
+shared_context 'Stubbed candidates school' do |fixed|
   let :school_urn do
     11048
   end
@@ -7,7 +7,8 @@ shared_context 'Stubbed candidates school' do
     create :bookings_school, \
       name: 'Test School',
       contact_email: 'test@test.com',
-      urn: school_urn
+      urn: school_urn,
+      availability_preference_fixed: fixed
   end
 
   let :allowed_subject_choices do

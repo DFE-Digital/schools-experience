@@ -7,10 +7,9 @@ class Bookings::SchoolsSubject < ApplicationRecord
 
   validates_associated :bookings_subject, :bookings_school
 
-  validates :bookings_school_id,
-    presence: true
+  validates :bookings_school, presence: true
 
-  validates :bookings_subject_id,
-    presence: true,
-    uniqueness: { scope: :bookings_school_id }
+  validates :bookings_subject, presence: true
+
+  validates :bookings_subject_id, uniqueness: { scope: :bookings_school_id }
 end

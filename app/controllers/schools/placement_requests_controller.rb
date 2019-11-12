@@ -22,7 +22,7 @@ module Schools
       current_school
         .placement_requests
         .unbooked
-        .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date, :booking)
+        .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date, :booking, :subject)
         .order(created_at: 'desc')
         .page(params[:page])
     end

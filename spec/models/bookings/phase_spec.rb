@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::Phase, type: :model do
+  describe 'Columns' do
+    it { is_expected.to have_db_column(:supports_subjects).of_type(:boolean).with_options(default: true, null: false) }
+  end
+
   describe "Validation" do
     context "Name" do
       it { is_expected.to validate_presence_of(:name) }

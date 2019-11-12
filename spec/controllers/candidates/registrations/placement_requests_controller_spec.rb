@@ -149,6 +149,10 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
         end
 
         context 'school has changed availability type' do
+          let :registration_session do
+            FactoryBot.build :registration_session, :with_placement_date, urn: school.urn
+          end
+
           before do
             school.update! availability_preference_fixed: true
           end
