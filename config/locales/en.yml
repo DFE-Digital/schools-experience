@@ -27,6 +27,8 @@ en:
         blank: "Enter what you want to get out of a placement"
       bookings_placement_date_id:
         blank: "Choose a placement date"
+      date:
+        after: 'Date must be in the future'
 
   subject_preference_errors: &subject_preference_errors
     attributes:
@@ -374,6 +376,15 @@ en:
             availability_info:
               blank: Enter a description of your school's availability
               too_short: Availability description must be at least 3 characters
+        bookings/placement_date:
+          attributes:
+            date:
+              on_or_after: Date must not be in the past
+        bookings/bookings:
+          attributes:
+            date:
+              on_or_after: Date must not be in the past
+
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:
