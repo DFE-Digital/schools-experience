@@ -8,10 +8,7 @@ en:
       before: "must be before %{restriction}"
       on_or_before: "must be on or before %{restriction}"
       after: "must be after %{restriction}"
-
-      # note, this tranlsation only works when comparing
-      # the value to today
-      on_or_after: "Date must be in the future"
+      on_or_after: "must be on or after %{restriction}"
 
   validates_timeliness:
     error_value_formats:

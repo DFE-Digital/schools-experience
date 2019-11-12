@@ -58,20 +58,13 @@ end
 Given("the school I'm applying to is not flexible on dates") do
   @school ||= FactoryBot.create(:bookings_school)
   @school.update! availability_preference_fixed: true
-end
 
-Given("the school has {int} placements available in the upcoming weeks") do |int|
-  (1..int).to_a.map { |i| i.weeks.from_now.to_date }.each do |date|
-    FactoryBot.create(
-      :bookings_placement_date,
-      date: date,
-      bookings_school: @school
-    )
+  (1..3).each { |i| i.weeks.from_now }.each do |date|
+    @school.bookings_placement_dates.create!(date: date.weeks.from_now, published_at: 1.week.ago, supports_subjects: true)
+    @wanted_bookings_placement_date = @school.bookings_placement_dates.last
   end
-
-  expect(@school.bookings_placement_dates.count).to eql(int)
-  @placement_dates = @school.bookings_placement_dates.map(&:to_s)
 end
+
 
 Then("there should be a radio button per date the school has specified") do
   @school.bookings_placement_dates.map(&:to_s).each do |date_string|

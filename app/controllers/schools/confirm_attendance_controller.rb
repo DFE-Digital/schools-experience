@@ -13,7 +13,7 @@ module Schools
 
     def update
       bookings = unlogged_bookings.where(id: bookings_params.keys). \
-        includes(bookings_placement_request: :candidate)
+        includes(bookings_placement_request: %i(candidate candidate_cancellation school_cancellation))
       attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
 
       if attendance.save

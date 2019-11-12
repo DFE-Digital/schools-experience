@@ -4,15 +4,17 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
   include ActiveJob::TestHelper
   include_context 'Stubbed current_registration'
   include_context 'fake gitis'
+  let!(:other_school) { create(:bookings_school, urn: 10020) }
+  let!(:school) { create(:bookings_school, urn: 11048) }
 
   let :registration_session do
-    Candidates::Registrations::RegistrationSession.new('urn' => '10020')
+    Candidates::Registrations::RegistrationSession.new('urn' => '11048')
   end
 
   context 'without existing personal information in the session' do
     context '#new' do
       before do
-        get '/candidates/schools/11048/registrations/personal_information/new'
+        get '/candidates/schools/10020/registrations/personal_information/new'
       end
 
       it 'renders the new template' do
@@ -36,7 +38,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       context 'invalid' do
         before do
           post \
-            '/candidates/schools/11048/registrations/personal_information',
+            '/candidates/schools/10020/registrations/personal_information',
             params: personal_information_params
         end
 
@@ -63,7 +65,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
         before do
           post \
-            '/candidates/schools/11048/registrations/personal_information',
+            '/candidates/schools/10020/registrations/personal_information',
             params: personal_information_params
         end
 
@@ -85,7 +87,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/sign_in'
+            '/candidates/schools/10020/registrations/sign_in'
         end
       end
 
@@ -96,7 +98,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
         before do
           post \
-            '/candidates/schools/11048/registrations/personal_information',
+            '/candidates/schools/10020/registrations/personal_information',
             params: personal_information_params
         end
 
@@ -111,7 +113,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
         it 'redirects to the contact information step' do
           expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/contact_information/new'
+            '/candidates/schools/10020/registrations/contact_information/new'
         end
       end
 
@@ -128,7 +130,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
         before do
           post \
-            '/candidates/schools/11048/registrations/personal_information',
+            '/candidates/schools/10020/registrations/personal_information',
             params: personal_information_params
         end
 
@@ -154,7 +156,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/contact_information/new'
+            '/candidates/schools/10020/registrations/contact_information/new'
         end
       end
     end
@@ -169,7 +171,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
     context '#new' do
       before do
-        get '/candidates/schools/11048/registrations/personal_information/new'
+        get '/candidates/schools/10020/registrations/personal_information/new'
       end
 
       it 'populates the form with the values from gitis' do
@@ -186,7 +188,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
   context 'with existing personal information in session' do
     let :existing_personal_information do
-      FactoryBot.build :personal_information
+      FactoryBot.build :personal_information, urn: 10020
     end
 
     let :registration_session do
@@ -199,7 +201,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
     context '#new' do
       before do
-        get '/candidates/schools/11048/registrations/personal_information/new'
+        get '/candidates/schools/10020/registrations/personal_information/new'
       end
 
       it 'populates the form with the values from the session' do
@@ -214,7 +216,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
     context '#edit' do
       before do
-        get '/candidates/schools/11048/registrations/personal_information/edit'
+        get '/candidates/schools/10020/registrations/personal_information/edit'
       end
 
       it 'populates the form with the values from the session' do
@@ -236,7 +238,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
       before do
         patch \
-          '/candidates/schools/11048/registrations/personal_information',
+          '/candidates/schools/10020/registrations/personal_information',
           params: personal_information_params
       end
 
@@ -257,7 +259,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
       context 'valid' do
         let :personal_information do
-          FactoryBot.build :personal_information, email: 'new-email@test.com'
+          FactoryBot.build :personal_information, email: 'new-email@test.com', urn: 10020
         end
 
         it 'updates the session' do
@@ -267,7 +269,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
         it 'redirects to application preview' do
           expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/application_preview'
+            '/candidates/schools/10020/registrations/application_preview'
         end
       end
     end

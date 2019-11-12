@@ -10,6 +10,54 @@ describe Schools::PlacementDatesController, type: :request do
     end
   end
 
+  describe '#create' do
+    let(:base_params) do
+      {
+        bookings_placement_date: {
+          date: 2.weeks.from_now.strftime('%Y-%m-%d'),
+          duration: 1,
+          active: true,
+        }
+      }
+    end
+
+    subject { post "/schools/placement_dates", params: params }
+    let(:placement_date) { Bookings::PlacementDate.last }
+
+    describe 'setting supports_subjects' do
+      let(:option) { false }
+      context "when supports_subjects hasn't been set" do
+        let(:params) do
+          base_params.deep_merge(bookings_placement_date: {})
+        end
+
+        context "when the school has only primary" do
+          before do
+            Bookings::School.find_by!(urn: urn).phases << create(:bookings_phase, :primary)
+          end
+
+          before { subject }
+
+          specify 'supports_subjects should be set to false' do
+            expect(placement_date.supports_subjects).to be false
+          end
+        end
+
+        context "when the school has secondary or college" do
+          before do
+            Bookings::School.find_by!(urn: urn).phases << create(:bookings_phase, :secondary)
+          end
+
+          before { subject }
+
+          specify 'supports_subjects should be set to true' do
+            expect(placement_date.supports_subjects).to be true
+          end
+        end
+      end
+    end
+  end
+
   context '#edit' do
     let :placement_date do
       create :bookings_placement_date, bookings_school: school

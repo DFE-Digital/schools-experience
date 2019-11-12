@@ -4,8 +4,19 @@ module Candidates
       include ActiveModel::Model
       include ActiveModel::Attributes
 
+      attribute :urn, :integer
       attribute :created_at, :datetime
       attribute :updated_at, :datetime
+
+      def school
+        return nil unless urn.present?
+
+        @school ||= Candidates::School.find(urn)
+      end
+
+      def completed?
+        valid?
+      end
 
       def persisted?
         created_at.present?

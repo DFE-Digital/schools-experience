@@ -30,7 +30,7 @@ Feature: Previewing my application
 
     Scenario: Page contents (when the school has fixed availability)
         Given my school has fixed dates
-        And I have completed the wizard
+        And I have completed the wizard for a fixed date school
         When I am on the 'Check your answers' page for my choice of school
         Then I should see a summary row containing my selected date
-        And the row should have a 'Change' link to '/candidates/schools/123456/registrations/placement_preference/edit'
+        And the row should have a 'Change' link to '/candidates/schools/123456/registrations/subject_and_date_information/edit'

@@ -6,9 +6,8 @@ module Schools
         before_action :set_available_subjects
 
         def new
-          subject_id = Bookings::Subject.find_by(name: @placement_request.subject_first_choice).id
           @confirm_booking = Schools::PlacementRequests::ConfirmBooking.new(
-            bookings_subject_id: subject_id,
+            bookings_subject_id: @placement_request.requested_subject.id,
             date: @placement_request.placement_date&.date,
             placement_details: @current_school&.profile&.experience_details
           )

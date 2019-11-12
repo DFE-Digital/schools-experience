@@ -6,6 +6,7 @@ Feature: Viewing a rejected request
     Background:
         Given I am logged in as a DfE user
         And my school is fully-onboarded
+        And it has 'fixed' availability
         And the school has subjects
 
     Scenario: Page title

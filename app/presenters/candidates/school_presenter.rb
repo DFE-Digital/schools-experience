@@ -75,8 +75,23 @@ module Candidates
       end
     end
 
-    def available_dates
-      school.bookings_placement_dates.available
+    def primary_dates
+      school.bookings_placement_dates.primary
+    end
+
+    def secondary_dates
+      school
+        .bookings_placement_dates
+        .secondary
+        .eager_load(:subjects, placement_date_subjects: :bookings_subject).available
+    end
+
+    def secondary_dates_grouped_by_date
+      secondary_dates
+        .map(&PlacementDateOption.method(:for_secondary_date))
+        .flatten
+        .group_by(&:date)
+        .each_value(&:sort!)
     end
 
   private

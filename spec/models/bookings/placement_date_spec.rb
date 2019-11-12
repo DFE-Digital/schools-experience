@@ -13,6 +13,7 @@ describe Bookings::PlacementDate, type: :model do
     it { is_expected.to have_db_column(:max_bookings_count).of_type(:integer) }
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:subject_specific).of_type(:boolean).with_options(default: false, null: false) }
+    it { is_expected.to have_db_column(:supports_subjects).of_type(:boolean) }
   end
 
   describe 'Validation' do
@@ -21,7 +22,7 @@ describe Bookings::PlacementDate, type: :model do
     context '#date' do
       it { expect(subject).to validate_presence_of(:date) }
 
-      context 'new placement dates must be in the future' do
+      context 'new placement dates must not be in the past' do
         specify 'should allow future dates' do
           [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
@@ -35,7 +36,7 @@ describe Bookings::PlacementDate, type: :model do
         end
 
         context 'error messages' do
-          let(:message) { 'Validation failed: Date must be in the future' }
+          let(:message) { 'Validation failed: Date must not be in the past' }
           let(:invalid_pd) { create(:bookings_placement_date, date: 3.weeks.ago) }
 
           specify 'should show a suitable error message' do

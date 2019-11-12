@@ -10,6 +10,15 @@ en:
         unit: '£'
         delimiter: ''
 
+  subject_and_date_information_errors: &subject_and_date_information_errors
+    attributes:
+      bookings_placement_date_id:
+        blank: "Choose a date"
+      bookings_subject_id:
+        blank: "Choose a subject"
+      placement_date_subject:
+        blank: "Choose a subject"
+
   placement_preference_errors: &placement_preference_errors
     attributes:
       availability:
@@ -18,6 +27,8 @@ en:
         blank: "Enter what you want to get out of a placement"
       bookings_placement_date_id:
         blank: "Choose a placement date"
+      date:
+        after: 'Date must be in the future'
 
   subject_preference_errors: &subject_preference_errors
     attributes:
@@ -158,6 +169,9 @@ en:
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
+
+        candidates/registrations/subject_and_date_information:
+          <<: *subject_and_date_information_errors
 
         candidates/registrations/privacy_policy:
           attributes:
@@ -362,6 +376,15 @@ en:
             availability_info:
               blank: Enter a description of your school's availability
               too_short: Availability description must be at least 3 characters
+        bookings/placement_date:
+          attributes:
+            date:
+              on_or_after: Date must not be in the past
+        bookings/bookings:
+          attributes:
+            date:
+              on_or_after: Date must not be in the past
+
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:
@@ -390,7 +413,8 @@ en:
         enabled: Turn requests on or off
         availability_preference_fixed: Choose how dates are displayed
       bookings_placement_date:
-        date: Enter a start date
+        date: Enter start date
+        supports_subjects: Select school experience phase
       phases: Education phases
       fees: Fees
       subjects: Subjects
@@ -456,10 +480,10 @@ en:
 
       schools_placement_dates_configuration_form:
         has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
-        available_for_all_subjects: Is this date available for all the subjects you offer?
+        available_for_all_subjects: Select type of experience
 
       schools_placement_dates_subject_selection:
-        subject_ids: Select all that apply
+        subject_ids: Select all that apply.
 
       candidates_feedback:
         <<: *feedback_fieldset
@@ -475,8 +499,8 @@ en:
           Requests that are already in-progress will continue as normal.
         availability_preference_fixed: Select how you'd like to present school experience dates to candidates.
       bookings_placement_date:
-        date: For example, 01 09 2019
-        duration: Enter number of days
+        date: For example, 01 09 2020.
+        duration: Enter number of days.
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
@@ -524,6 +548,9 @@ en:
       bookings_placement_date:
         duration: How long will it last?
         active: Make this date available to candidates?
+        supports_subjects:
+          yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
+          no: Primary including early years, key stage 1 and key stage 2
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
       candidates_registrations_contact_information:
@@ -690,12 +717,12 @@ en:
         early_years: 'Early years foundation stage (EYFS)'
 
       schools_placement_dates_configuration_form:
-        available_for_all_subjects:
-          true: 'Yes'
-          false: 'No'
         has_limited_availability:
           true: 'Yes'
           false: 'No'
+        available_for_all_subjects:
+          true: 'General experience'
+          false: 'Specific to a subject'
         max_bookings_count: 'Enter maximum number of bookings.'
       schools_placement_dates_subject_selection:
         available_for_all_subjects: 'All subjects'

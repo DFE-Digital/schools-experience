@@ -65,7 +65,6 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
         expect(NotifyEmail::CandidateRequestRejection).to have_received(:new).with \
           to: gitis_contact.email,
           school_name: cancellation.school_name,
-          candidate_name: gitis_contact.full_name,
           rejection_reasons: cancellation.reason,
           extra_details: cancellation.extra_details,
           dates_requested: cancellation.dates_requested,

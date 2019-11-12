@@ -126,4 +126,12 @@ module Candidates::SchoolHelper
 
     content.presence || msg
   end
+
+  def start_request_link(school)
+    if school.availability_preference_fixed?
+      new_candidates_school_registrations_subject_and_date_information_path(school)
+    else
+      new_candidates_school_registrations_personal_information_path(school)
+    end
+  end
 end

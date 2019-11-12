@@ -526,5 +526,34 @@ describe Bookings::School, type: :model do
         end
       end
     end
+
+    describe '#supports_subjects?' do
+      let(:phase_supporting_subjects) { double(Bookings::Phase, supports_subjects?: true) }
+      let(:phase_not_supporting_subjects) { double(Bookings::Phase, supports_subjects?: false) }
+
+      context 'when all phases support subjects' do
+        before do
+          allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
+        end
+
+        specify { expect(subject).to be_supports_subjects }
+      end
+
+      context 'when no phases support subjects' do
+        before do
+          allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
+        end
+
+        specify { expect(subject).not_to be_supports_subjects }
+      end
+
+      context "when some phases support subjects and some don't" do
+        before do
+          allow(subject).to receive(:phases).and_return([phase_supporting_subjects, phase_not_supporting_subjects])
+        end
+
+        specify { expect(subject).to be_supports_subjects }
+      end
+    end
   end
 end
