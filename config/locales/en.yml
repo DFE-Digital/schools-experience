@@ -717,15 +717,12 @@ en:
         early_years: 'Early years foundation stage (EYFS)'
 
       schools_placement_dates_configuration_form:
-        available_for_all_subjects:
-          true: 'Yes'
-          false: 'No'
         has_limited_availability:
           true: 'Yes'
           false: 'No'
         available_for_all_subjects:
-          false: About a specific subject
-          true: General / not subject specific experience
+          true: 'General experience'
+          false: 'Specific to a subject'
         max_bookings_count: 'Enter maximum number of bookings.'
       schools_placement_dates_subject_selection:
         available_for_all_subjects: 'All subjects'
