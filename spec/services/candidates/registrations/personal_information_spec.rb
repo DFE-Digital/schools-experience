@@ -118,7 +118,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
 
         it 'is invalid' do
           expect(subject.errors[:date_of_birth]).to eq [
-            'Enter a valid date of birth. You must be at least 18 years old'
+            'Enter a valid date of birth. You must be younger than 100 years old'
           ]
         end
       end
