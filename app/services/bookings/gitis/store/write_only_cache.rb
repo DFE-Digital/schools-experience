@@ -37,7 +37,7 @@ module Bookings
 
         def find_and_write_to_cache(entity_type, uuids, **options)
           store.find(entity_type, uuids, **options).tap do |entities|
-            if options.empty?
+            if options.compact.empty?
               cache.write_multi entities_to_cache(entities), expires_in: ttl
             end
           end

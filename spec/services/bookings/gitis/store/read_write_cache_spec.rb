@@ -81,6 +81,13 @@ describe Bookings::Gitis::Store::ReadWriteCache do
             have_received(:find).with(Person, uuid, includes: :nested)
         end
       end
+
+      context 'in cache but has blank options' do
+        subject! { store.find Person, uuid, includes: nil }
+        it { is_expected.to be_frozen }
+        it { expect(dynamics).not_to have_received(:find) }
+        it { expect(cache).to have_received(:read_multi).with(cache_key) }
+      end
     end
 
     context 'with multiple ids' do
@@ -140,6 +147,20 @@ describe Bookings::Gitis::Store::ReadWriteCache do
         it { is_expected.to match_array [entity, p2] }
         it { expect(dynamics).to have_received(:find).with(Person, uuids, includes: :nested) }
         it { expect(cache).not_to have_received(:read_multi) }
+      end
+
+      context 'in cache but has blank options' do
+        before do
+          allow(cache).to \
+            receive(:read_multi).with(*keys) do
+              { keys[0] => entity.to_cache, keys[1] => p2.to_cache }
+            end
+        end
+        subject! { store.find Person, uuids, includes: nil }
+        it { is_expected.to all be_frozen }
+        it { is_expected.to match_array [entity, p2] }
+        it { expect(dynamics).not_to have_received(:find) }
+        it { expect(cache).to have_received(:read_multi).with(*keys) }
       end
     end
   end

@@ -70,6 +70,18 @@ describe Bookings::Gitis::Store::WriteOnlyCache do
         it { is_expected.to eql entity }
         it { expect(cache).not_to have_received(:write_multi) }
       end
+
+      context 'with blank options' do
+        before do
+          allow(dynamics).to \
+            receive(:find).with(Person, uuid, includes: :nested) { entity }
+        end
+
+        subject! { store.find Person, uuid, includes: :nested }
+
+        it { is_expected.to eql entity }
+        it { expect(cache).not_to have_received(:write_multi) }
+      end
     end
 
     context 'with multiple ids' do
@@ -78,10 +90,10 @@ describe Bookings::Gitis::Store::WriteOnlyCache do
 
       context 'without any options' do
         before do
-          allow(dynamics).to receive(:find).with(Person, uuids, {}) { [entity] }
+          allow(dynamics).to receive(:find).with(Person, uuids, includes: nil) { [entity] }
         end
 
-        subject! { store.find Person, uuids }
+        subject! { store.find Person, uuids, includes: nil }
 
         it { is_expected.to eql [entity] }
 

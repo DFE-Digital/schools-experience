@@ -13,7 +13,7 @@ module Bookings
         end
 
         def find(entity_type, uuids, **options)
-          return super if options.any?
+          return super if options.compact.any?
 
           if uuids.respond_to? :each
             find_many entity_type, uuids
