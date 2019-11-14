@@ -15,7 +15,7 @@ module Schools
             available_for_all_subjects: !placement_date.subject_specific?,
             subject_ids: placement_date.subject_ids
         else
-          new
+          new subject_ids: placement_date.subject_ids
         end
       end
 
