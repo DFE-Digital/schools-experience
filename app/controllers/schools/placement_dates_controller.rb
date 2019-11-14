@@ -51,7 +51,7 @@ private
   end
 
   def next_step(placement_date)
-    if Feature.instance.active? :subject_specific_dates
+    if Feature.instance.active?(:subject_specific_dates) && placement_date.supports_subjects?
       redirect_to new_schools_placement_date_configuration_path(placement_date)
     else
       placement_date.update! published_at: DateTime.now
