@@ -33,10 +33,11 @@ Feature: Creating new placement dates
         Then I should see an error message stating 'Enter a valid date'
 
     Scenario: Filling in and submitting the form
-        Given I am on the 'new placement date' page
-        And I fill in the form with a future date and duration of 3
-        When I submit the form
-        Then I should be on the new configuration page for this date
+        Given my school is a 'primary' school
+        And I am on the 'new placement date' page
+        When I fill in the form with a future date and duration of 3
+        And I submit the form
+        Then I should be on the 'placement dates' page
 
     Scenario: Primary and secondary schools: extra option
         Given my school is a 'primary and secondary' school
@@ -51,8 +52,7 @@ Feature: Creating new placement dates
         When I fill in the form with a future date and duration of 3
         And I choose 'Primary including early years, key stage 1 and key stage 2' from the 'Select school experience phase' radio buttons
         And I submit the form
-        Then I should be on the new configuration page for my placement date
-        And there should be no subject specificity option
+        Then I should be on the 'placement dates' page
 
     Scenario: Primary and secondary schools: selecting secondary
         Given my school is a 'primary and secondary' school
