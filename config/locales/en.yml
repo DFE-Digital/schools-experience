@@ -380,6 +380,7 @@ en:
         bookings/placement_date:
           attributes:
             date:
+              blank: Enter a start date
               on_or_after: Date must not be in the past
         bookings/bookings:
           attributes:
