@@ -10,35 +10,35 @@ module Candidates
       PENDING_EMAIL_CONFIRMATION_STATUS = 'pending_email_confirmation'.freeze
       COMPLETED_STATUS = 'completed'.freeze
 
-      def initialize(session)
-        @registration_session = session
+      def initialize(data)
+        @data = data
       end
 
       def save(model)
-        @registration_session[model.model_name.param_key] =
+        @data[model.model_name.param_key] =
           model.tap(&:flag_as_persisted!).attributes
       end
 
       def uuid
-        @registration_session['uuid'] ||= SecureRandom.urlsafe_base64
+        @data['uuid'] ||= SecureRandom.urlsafe_base64
       end
 
       def flag_as_pending_email_confirmation!
         raise NotCompletedError unless all_steps_completed?
 
-        @registration_session['status'] = PENDING_EMAIL_CONFIRMATION_STATUS
+        @data['status'] = PENDING_EMAIL_CONFIRMATION_STATUS
       end
 
       def pending_email_confirmation?
-        @registration_session['status'] == PENDING_EMAIL_CONFIRMATION_STATUS
+        @data['status'] == PENDING_EMAIL_CONFIRMATION_STATUS
       end
 
       def flag_as_completed!
-        @registration_session['status'] = COMPLETED_STATUS
+        @data['status'] = COMPLETED_STATUS
       end
 
       def completed?
-        @registration_session['status'] == COMPLETED_STATUS
+        @data['status'] == COMPLETED_STATUS
       end
 
       # TODO add spec
@@ -47,7 +47,7 @@ module Candidates
       end
 
       def urn
-        @registration_session.fetch 'urn'
+        @data.fetch 'urn'
       end
 
       def school
@@ -128,17 +128,17 @@ module Candidates
       end
 
       def fetch(klass)
-        klass.new(@registration_session.fetch(klass.model_name.param_key)).tap { |model| model.urn = self.urn }
+        klass.new(@data.fetch(klass.model_name.param_key)).tap { |model| model.urn = self.urn }
       rescue KeyError => e
         raise StepNotFound, e.key
       end
 
       def fetch_attributes(klass, defaults = {})
-        @registration_session.fetch(klass.model_name.param_key, defaults)
+        @data.fetch(klass.model_name.param_key, defaults)
       end
 
       def to_h
-        @registration_session
+        @data
       end
 
       def to_json(*args)
