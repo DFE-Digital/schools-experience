@@ -141,7 +141,7 @@
           <%= @presenter.administration_fee_payment_method %>
         </p>
 
-        <%= simple_format @presenter.administration_fee_description %>
+        <%= safe_format @presenter.administration_fee_description %>
       <% end if @presenter.administration_fee_amount_pounds %>
 
       <%= dlist_item 'DBS check fees', id: 'dbs-fee-info' do %>
@@ -151,7 +151,7 @@
           <%= @presenter.dbs_fee_payment_method %>
         </p>
 
-        <%= simple_format @presenter.dbs_fee_description %>
+        <%= safe_format @presenter.dbs_fee_description %>
       <% end if @presenter.dbs_fee_amount_pounds %>
 
       <%= dlist_item 'Other fees', id: 'other-fee-info' do %>
@@ -161,7 +161,7 @@
           <%= @presenter.other_fee_payment_method %>
         </p>
 
-        <%= simple_format @presenter.other_fee_description %>
+        <%= safe_format @presenter.other_fee_description %>
       <% end if @presenter.other_fee_amount_pounds %>
 
       <%= dlist_item 'Dress code', id: 'dress-code' do %>
