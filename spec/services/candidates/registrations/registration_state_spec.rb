@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationState do
-  let! :school do
+  let :school do
     create :bookings_school, urn: 11048
   end
 

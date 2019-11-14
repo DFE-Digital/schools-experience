@@ -1,6 +1,8 @@
 module Candidates
   module Registrations
     class PersonalInformationsController < RegistrationsController
+      include SignInEmails
+
       def new
         @personal_information = PersonalInformation.new attributes_from_session
       end
@@ -63,20 +65,6 @@ module Candidates
 
       def attributes_from_session
         current_registration.personal_information_attributes.except 'created_at'
-      end
-
-      def verification_email(token)
-        NotifyEmail::CandidateVerifyEmailLink.new(
-          to: current_registration.personal_information.email,
-          verification_link: verification_link(token)
-        )
-      end
-
-      def verification_link(token)
-        candidates_registration_verify_url \
-          current_registration.urn,
-          token,
-          host: request.host
       end
     end
   end
