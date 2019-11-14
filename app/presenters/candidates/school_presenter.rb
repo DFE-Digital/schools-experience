@@ -56,7 +56,7 @@ module Candidates
     def formatted_dress_code
       return unless dress_code?
 
-      simple_format [dress_code, dress_code_other_details].join("\n\n")
+      simple_format strip_tags [dress_code, dress_code_other_details].join("\n\n")
     end
 
     def dbs_required

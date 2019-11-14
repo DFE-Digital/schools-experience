@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
     <%- if @presenter.description_details.present? -%>
     <section id="school-placement-info">
-      <%= simple_format @presenter.description_details %>
+      <%= safe_format @presenter.description_details %>
     </section>
     <%- end -%>
 
@@ -131,7 +131,7 @@
           <%= @presenter.dbs_required %>
         </p>
 
-        <%= simple_format @presenter.dbs_policy if @presenter.dbs_policy %>
+        <%= safe_format @presenter.dbs_policy if @presenter.dbs_policy %>
       <% end %>
 
       <%= dlist_item 'Administration fees', id: 'administration-fee-info' do %>
@@ -178,7 +178,7 @@
         </p>
 
         <%- if @presenter.flexible_on_times_details.present? -%>
-        <%= simple_format @presenter.flexible_on_times_details %>
+        <%= safe_format @presenter.flexible_on_times_details %>
         <%- end -%>
       <% end %>
 
@@ -189,11 +189,11 @@
           <p>Not available on site</p>
         <%- end -%>
 
-        <%= simple_format @presenter.parking_details %>
+        <%= safe_format @presenter.parking_details %>
       <% end %>
 
       <%= dlist_item 'Teacher training offered', id: 'school-teacher-training-info' do %>
-        <%= simple_format @presenter.teacher_training_info %>
+        <%= safe_format @presenter.teacher_training_info %>
 
         <p>
           <%= link_to 'More information', @presenter.teacher_training_url %>
