@@ -33,3 +33,8 @@ Feature: Selecting subjects for a placement date
         When I submit the form
         Then I should be on the 'placement dates' page
         And my date should be listed
+
+    Scenario: Already-selected subjects should be checked
+        Given I have previously selected 'Biology'
+        When I try to edit the subjects for my newly-created placement date
+        Then the 'Biology' checkbox should be checked
