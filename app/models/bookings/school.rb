@@ -188,6 +188,14 @@ class Bookings::School < ApplicationRecord
     phases.any?(&:supports_subjects?)
   end
 
+  def does_not_support_subjects?
+    phases.any? { |p| !p.supports_subjects? }
+  end
+
+  def primary_and_secondary?
+    supports_subjects? && does_not_support_subjects?
+  end
+
 private
 
   def has_available_dates?
