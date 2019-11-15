@@ -26,7 +26,7 @@ class Schools::PlacementDatesController < Schools::BaseController
 
     if @placement_date.valid?
       unless new_placement_date_params.has_key?(:supports_subjects)
-        @placement_date.assign_attributes(supports_subjects: current_school.supports_subjects?)
+        @placement_date.assign_attributes(supports_subjects: school_supports_subjects?)
       end
 
       @placement_date.save
@@ -49,7 +49,7 @@ class Schools::PlacementDatesController < Schools::BaseController
 private
 
   def school_supports_subjects?
-    @current_school.supports_subjects?
+    @current_school.has_secondary_phase?
   end
 
   def next_step(placement_date)

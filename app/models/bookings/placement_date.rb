@@ -44,7 +44,7 @@ module Bookings
     validates :supports_subjects,
       inclusion: [true, false],
       on: :create,
-      if: -> { bookings_school&.primary_and_secondary? }
+      if: -> { bookings_school&.has_primary_and_secondary_phases? }
 
     with_options if: :published? do
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
