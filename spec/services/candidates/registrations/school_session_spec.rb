@@ -10,11 +10,11 @@ describe Candidates::Registrations::SchoolSession do
   end
 
   let :personal_information_1 do
-    FactoryBot.build :personal_information
+    FactoryBot.build :personal_information, urn: school_urn_1
   end
 
   let :personal_information_2 do
-    FactoryBot.build :personal_information, first_name: 'Someone', last_name: 'Else'
+    FactoryBot.build :personal_information, first_name: 'Someone', last_name: 'Else', urn: school_urn_2
   end
 
   let :session do

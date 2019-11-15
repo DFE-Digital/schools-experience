@@ -9,6 +9,7 @@ module Schools
 
       def create
         @configuration = ConfigurationForm.new configuration_params
+        @configuration.supports_subjects = @placement_date.supports_subjects
 
         if @configuration.save @placement_date
           redirect_to next_step
@@ -20,10 +21,10 @@ module Schools
     private
 
       def next_step
-        if @configuration.available_for_all_subjects
-          schools_placement_dates_path
-        else
+        if @configuration.subject_specific?
           new_schools_placement_date_subject_selection_path @placement_date
+        else
+          schools_placement_dates_path
         end
       end
 

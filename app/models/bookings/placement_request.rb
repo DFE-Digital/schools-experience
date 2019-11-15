@@ -7,10 +7,15 @@ module Bookings
     include Candidates::Registrations::Behaviours::Education
     include Candidates::Registrations::Behaviours::TeachingPreference
     include Candidates::Registrations::Behaviours::BackgroundCheck
+    include Candidates::Registrations::Behaviours::SubjectAndDateInformation
 
     has_secure_token
 
     validates_presence_of :candidate, unless: :pre_phase3_record?
+
+    validates :subject, presence: true,
+      if: -> { placement_date&.subject_specific? },
+      unless: :creating_placement_request_from_registration_session?
 
     belongs_to :school,
       class_name: 'Bookings::School',
@@ -29,7 +34,12 @@ module Bookings
     belongs_to :placement_date,
       class_name: 'Bookings::PlacementDate',
       foreign_key: :bookings_placement_date_id,
-      optional: true
+      optional: true # If this is a placement_request to a school with fixed dates
+
+    belongs_to :subject,
+      class_name: 'Bookings::Subject',
+      foreign_key: :bookings_subject_id,
+      optional: true # If this is a placement_request for a subject_specific_date
 
     has_one :candidate_cancellation,
       -> { where cancelled_by: 'candidate' },
@@ -95,17 +105,23 @@ module Bookings
       withdrawn.merge Cancellation.unviewed
     end
 
+    scope :rejected, -> do
+      without_booking
+        .joins(:school_cancellation)
+        .merge(Cancellation.sent.order(sent_at: :desc))
+    end
+
     default_scope { where.not(candidate_id: nil) }
 
     delegate :gitis_contact, :fetch_gitis_contact, to: :candidate
 
-    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil, context: nil)
+    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
       self.new(
         Candidates::Registrations::RegistrationAsPlacementRequest
           .new(registration_session)
           .attributes
           .merge(analytics_tracking_uuid: analytics_tracking_uuid)
-      ).tap { |r| r.save!(context: context) }
+      ).tap { |r| r.save!(context: :creating_placement_request_from_registration_session) }
     end
 
     def sent_at
@@ -130,6 +146,10 @@ module Bookings
       else
         availability
       end
+    end
+
+    def requested_subject
+      subject || Bookings::Subject.find_by!(name: subject_first_choice)
     end
 
     def received_on

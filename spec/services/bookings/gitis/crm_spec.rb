@@ -65,7 +65,7 @@ describe Bookings::Gitis::CRM, type: :model do
         'emailaddress1' => email,
         'firstname' => 'testy',
         'lastname' => 'mctest',
-        'date_of_birth' => '1980-01-01'
+        'birthdate' => '1980-01-01'
       }
     end
 

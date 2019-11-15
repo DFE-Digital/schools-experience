@@ -92,11 +92,13 @@
         locals: { presenter: @presenter } %>
     <% end %>
 
+    <% if @presenter.school.availability_preference_fixed? %>
+      <%= render partial: 'candidates/schools/placement_dates', locals: { primary_dates: @presenter.primary_dates, secondary_dates_grouped_by_date: @presenter.secondary_dates_grouped_by_date } %>
+    <% end %>
+
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__tablet_plus">
-        <%= govuk_link_to "Start request",
-                    new_candidates_school_registrations_personal_information_path(@presenter.school),
-                    aria: { label: "Start request for school experience at #{@presenter.school.name}" } %>
+        <%= render 'start_request', profile: @presenter %>
 
       </div>
 
@@ -114,9 +116,7 @@
       <% end %>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-        <%- if @presenter.school.availability_preference_fixed? -%>
-          <%= render partial: 'candidates/schools/placement_dates', locals: { available_dates: @presenter.available_dates } %>
-        <%- else -%>
+        <%- unless @presenter.school.availability_preference_fixed? -%>
           <dt class="govuk-summary-list__key">
             Placement availability
           </dt>
@@ -203,9 +203,7 @@
 
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__mobile">
-        <%= govuk_link_to "Start request",
-                    new_candidates_school_registrations_personal_information_path(@presenter.school),
-                    aria: { label: "Start request for school experience at #{@presenter.school.name}" } %>
+        <%= render 'start_request', profile: @presenter %>
       </div>
     <% end %>
   </div>

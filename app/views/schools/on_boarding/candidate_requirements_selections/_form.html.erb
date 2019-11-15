@@ -28,6 +28,9 @@
         <%= fieldset.check_box_input :live_locally do %>
           <%= f.number_field :maximum_distance_from_school %>
         <% end %>
+        <%= fieldset.check_box_input :provide_photo_identification do %>
+          <%= f.text_field :photo_identification_details %>
+        <% end %>
         <%= fieldset.check_box_input :other do %>
           <%= f.text_field :other_details %>
         <% end %>

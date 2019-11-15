@@ -43,7 +43,7 @@ describe Bookings::Booking do
     context '#date' do
       it { is_expected.to validate_presence_of(:date) }
 
-      context 'new placement dates must be in the future' do
+      context 'new placement dates must not be in the past' do
         specify 'should allow future dates' do
           [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
@@ -57,7 +57,7 @@ describe Bookings::Booking do
         end
 
         context 'error messages' do
-          let(:message) { 'Validation failed: Date must be in the future' }
+          let(:message) { 'Validation failed: Date must not be in the past' }
           let(:invalid_pd) { create(:bookings_placement_date, date: 3.weeks.ago) }
 
           specify 'should show a suitable error message' do
@@ -73,6 +73,35 @@ describe Bookings::Booking do
           specify 'should not allow dates more than 2 years in the future' do
             expect(subject).not_to allow_value((2.years + 1.day).from_now).for(:date)
             expect(subject).to allow_value((2.years - 1.day).from_now).for(:date)
+          end
+        end
+      end
+
+      context 'attended' do
+        context 'when cancelled by candidate' do
+          subject { create :bookings_booking, :cancelled_by_candidate }
+
+          specify 'does not allow attended to be set' do
+            expect(subject).not_to allow_value(true).for :attended
+            expect(subject).not_to allow_value(false).for :attended
+          end
+        end
+
+        context 'when cancelled by school' do
+          subject { create :bookings_booking, :cancelled_by_school }
+
+          specify 'does not allow attended to be set' do
+            expect(subject).not_to allow_value(true).for :attended
+            expect(subject).not_to allow_value(false).for :attended
+          end
+        end
+
+        context 'when not cancelled' do
+          subject { create :bookings_booking }
+
+          specify 'allows attended to be set' do
+            expect(subject).to allow_value(true).for :attended
+            expect(subject).to allow_value(false).for :attended
           end
         end
       end

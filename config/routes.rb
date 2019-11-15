@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     resource :session, only: %i(show) do
       get :logout
     end
-    resource :switch, only: %i(new), controller: 'switch'
+    resource :switch, only: %i(new show), controller: 'switch'
     resource :dashboard, only: :show
     resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       end
     end
     resources :withdrawn_requests, only: %i(index show)
+    resources :rejected_requests, only: %i(index show)
     resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i(index show) do
       resource :cancellation, only: %i(show new create edit update), controller: 'confirmed_bookings/cancellations' do
         resource :notification_delivery, only: %i(show create), controller: 'confirmed_bookings/cancellations/notification_deliveries'
@@ -84,7 +85,6 @@ Rails.application.routes.draw do
 
     namespace :on_boarding do
       resource :dbs_requirement, only: %i(new create edit update)
-      resource :candidate_requirement, only: %i(new create edit update)
       resource :candidate_requirements_choice, only: %i(new create edit update)
       resource :candidate_requirements_selection, only: %i(new create edit update)
       resource :fees, only: %i(new create edit update)
@@ -130,6 +130,7 @@ Rails.application.routes.draw do
         resource :teaching_preference, only: %i(new create edit update)
         resource :placement_preference, only: %i(new create edit update)
         resource :background_check, only: %i(new create edit update)
+        resource :subject_and_date_information, only: %i(new create edit update)
         resource :application_preview, only: %i(show)
         resource :confirmation_email, only: %i(show create)
         resource :resend_confirmation_email, only: %i(create)

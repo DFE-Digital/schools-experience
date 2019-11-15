@@ -48,6 +48,7 @@ module Bookings
             update_entity entity.entity_id, entity.attributes_for_update
           end
 
+          entity.changes_applied
           entity.id
         end
 

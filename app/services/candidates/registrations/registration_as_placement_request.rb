@@ -9,26 +9,40 @@ module Candidates
         placement_preference
         education
         teaching_preference
+        subject_and_date_information
       ).freeze
 
-      OTHER_IGNORED_ATTRS = %w(created_at updated_at).freeze
+      IGNORED_ATTRS = %w(created_at updated_at).freeze
 
       def initialize(registration_session)
         @registration_session = registration_session
       end
 
       def attributes
-        NON_PII_MODELS.inject({}) { |kept_attrs, model_name|
+        non_pii_models.inject({}) { |kept_attrs, model_name|
           kept_attrs.merge attributes_for(model_name)
-        }.merge("bookings_school_id" => @registration_session.school.id)
+        }.merge("bookings_school_id" => school_id)
       end
 
     private
 
+      def school_id
+        @registration_session.school.id
+      end
+
+      def non_pii_models
+        registration_state.steps & NON_PII_MODELS
+      end
+
+      def registration_state
+        @registration_state ||= RegistrationState.new @registration_session
+      end
+
       def attributes_for(model_name)
-        @registration_session.public_send(model_name).attributes.reject do |k, _|
-          OTHER_IGNORED_ATTRS.include? k
-        end
+        @registration_session
+          .public_send(model_name)
+          .attributes
+          .except(*IGNORED_ATTRS)
       end
     end
   end

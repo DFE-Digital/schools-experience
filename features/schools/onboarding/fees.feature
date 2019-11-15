@@ -5,11 +5,11 @@ Feature: Fees
 
   Background: I have completed the candidate requirement step
     Given I am logged in as a DfE user
-    And I see the candidate requirements screen
     And the secondary school phase is availble
     And the college phase is availble
     And I have completed the DBS Requirements step
-    And I have completed the Candidate Requirements step
+    And I have completed the Candidate Requirements choice step
+    And I have completed the Candidate Requirements selection step
 
   Scenario: Page title
     Given I am on the 'fees charged' page

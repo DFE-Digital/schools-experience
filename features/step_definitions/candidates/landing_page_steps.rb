@@ -2,7 +2,7 @@ Then("the leading paragraph should provide me with a summary of the service") do
   within('.govuk-main-wrapper div > p:first-of-type') do
     [
       'Use this service',
-      'request school experience in a primary and secondary school',
+      'request school experience in a primary or secondary school',
       'England'
     ].each do |snippet|
       expect(page).to have_text(snippet)

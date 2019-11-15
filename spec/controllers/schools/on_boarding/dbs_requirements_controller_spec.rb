@@ -60,7 +60,7 @@ describe Schools::OnBoarding::DbsRequirementsController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_candidate_requirement_path
+          new_schools_on_boarding_candidate_requirements_choice_path
       end
     end
   end

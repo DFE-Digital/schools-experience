@@ -25,11 +25,7 @@
     <dl class="govuk-summary-list">
       <%= summary_row 'Fees', @profile.fees, edit_schools_on_boarding_fees_path %>
       <%= summary_row 'DBS check required', @profile.dbs_check, edit_schools_on_boarding_dbs_requirement_path %>
-      <% if @profile.show_candidate_requirements_selection? %>
-        <%= summary_row 'Individual requirements', @profile.individual_requirements, edit_schools_on_boarding_candidate_requirements_choice_path %>
-      <% else %>
-        <%= summary_row 'Individual requirements', @profile.individual_requirements, edit_schools_on_boarding_candidate_requirement_path %>
-      <% end %>
+      <%= summary_row 'Individual requirements', @profile.individual_requirements, edit_schools_on_boarding_candidate_requirements_choice_path %>
       <%= summary_row 'School experience phases', @profile.school_experience_phases, edit_schools_on_boarding_phases_list_path %>
       <%= summary_row 'Primary key stages', @profile.primary_key_stages, \
         @profile.primary_key_stages_offered? ? edit_schools_on_boarding_key_stage_list_path : edit_schools_on_boarding_phases_list_path %>
@@ -44,7 +40,7 @@
     <dl class="govuk-summary-list">
       <%= summary_row 'Dress code', @profile.dress_code, edit_schools_on_boarding_candidate_experience_detail_path %>
       <%= summary_row 'Parking', @profile.parking, edit_schools_on_boarding_candidate_experience_detail_path %>
-      <%= summary_row 'Show disabilites and access needs support', @profile.supports_access_needs_description, edit_schools_on_boarding_access_needs_support_path %>
+      <%= summary_row 'Show disabilities and access needs support', @profile.supports_access_needs_description, edit_schools_on_boarding_access_needs_support_path %>
       <% if @profile.supports_access_needs? %>
         <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs_description, edit_schools_on_boarding_access_needs_detail_path %>
         <%= summary_row 'Disability Confident employer scheme', @profile.disability_confident_scheme, edit_schools_on_boarding_disability_confident_path %>

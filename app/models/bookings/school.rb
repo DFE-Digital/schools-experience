@@ -24,8 +24,9 @@ class Bookings::School < ApplicationRecord
     }
 
   validates :availability_info,
-    allow_nil: true,
-    length: { minimum: 3 }
+    presence: true,
+    length: { minimum: 3 },
+    on: :configuring_availability
 
   validates :availability_preference_fixed,
     inclusion: { in: [true, false] },
@@ -181,6 +182,10 @@ class Bookings::School < ApplicationRecord
 
       Event.create!(event_type: 'school_enabled', bookings_school: self)
     end
+  end
+
+  def supports_subjects?
+    phases.any?(&:supports_subjects?)
   end
 
 private

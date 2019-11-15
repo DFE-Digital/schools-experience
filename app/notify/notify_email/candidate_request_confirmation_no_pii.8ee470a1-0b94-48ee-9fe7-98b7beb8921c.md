@@ -23,3 +23,7 @@ Here's a copy of your request details which have been forwarded to the school.
 # Help and support
 
 If you'd like to withdraw your school experience request use the following link ((cancellation_url)).
+
+# Help us improve the get school experience service:
+
+Give feedback on this service - https://schoolexperience.education.gov.uk/candidates/feedbacks/new

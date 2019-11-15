@@ -10,7 +10,7 @@
 <h1>Manage dates</h1>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
 
     <%- if @placement_dates.any? -%>
       <table id="placement-dates" class="govuk-table">
@@ -35,11 +35,7 @@
               <%= pluralize(placement_date.duration, 'day') %>
             </td>
             <td class="govuk-table__cell">
-              <% if placement_date.subject_specific? %>
-                <%= placement_date.subjects.pluck(:name).join(',') %>
-              <% else %>
-                All subjects
-              <% end %>
+              <%= placement_date_subject_description(placement_date) %>
             </td>
             <td class="govuk-table__cell status">
               <strong class="govuk-tag <%= placement_date_display_class(placement_date.active) %>">
@@ -64,7 +60,7 @@
 </div>
 
 <div>
-  <%= govuk_link_to "Add dates", new_schools_placement_date_path %>
+  <%= govuk_link_to "Add a date", new_schools_placement_date_path %>
 </div>
 
 <div>

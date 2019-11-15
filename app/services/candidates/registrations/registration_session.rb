@@ -51,7 +51,7 @@ module Candidates
       end
 
       def school
-        @school ||= Candidates::School.find urn
+        @school ||= Candidates::School.find urn if urn.present?
       end
 
       def school_name
@@ -64,6 +64,26 @@ module Candidates
 
       def background_check_attributes
         fetch_attributes BackgroundCheck
+      end
+
+      # TODO SE-1877 remove this
+      def legacy_session?
+        fetch_attributes(PlacementPreference).key? 'bookings_placement_date_id'
+      end
+
+      # TODO SE-1877 remove this
+      def subject_and_date_information
+        if legacy_session?
+          attributes = fetch_attributes PlacementPreference
+          SubjectAndDateInformation.new \
+            attributes.slice "bookings_placement_date_id"
+        else
+          fetch SubjectAndDateInformation
+        end
+      end
+
+      def subject_and_date_information_attributes
+        fetch_attributes SubjectAndDateInformation
       end
 
       # TODO add specs for these
@@ -108,7 +128,7 @@ module Candidates
       end
 
       def fetch(klass)
-        klass.new @registration_session.fetch(klass.model_name.param_key)
+        klass.new(@registration_session.fetch(klass.model_name.param_key)).tap { |model| model.urn = self.urn }
       rescue KeyError => e
         raise StepNotFound, e.key
       end

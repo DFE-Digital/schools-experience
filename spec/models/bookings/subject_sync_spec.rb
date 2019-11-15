@@ -73,7 +73,7 @@ RSpec.describe Bookings::SubjectSync do
       end
 
       context "with blacklisted new subject" do
-        subject { Bookings::Subject.where(gitis_uuid: gitis_subject_5.id).first }
+        subject { Bookings::Subject.unscoped.where(gitis_uuid: gitis_subject_5.id).first }
         it { is_expected.to have_attributes(name: gitis_subject_5.dfe_name) }
         it { is_expected.to have_attributes(hidden: true) }
       end

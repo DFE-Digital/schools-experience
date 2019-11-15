@@ -7,15 +7,7 @@
     <%= form_for placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>
       <%= GovukElementsErrorsHelper.error_summary placement_preference, 'There is a problem', '' %>
 
-      <%- if @school.availability_preference_fixed? %>
-
-        <%= f.radio_button_fieldset :bookings_placement_date_id,
-          choices: @placement_dates,
-          value_method: :id,
-          text_method: :to_s
-        -%>
-
-      <%- else -%>
+      <%- unless @school.availability_preference_fixed? %>
         <%= f.text_area_with_maxwords \
             :availability,
             rows: 5,

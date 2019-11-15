@@ -3,7 +3,7 @@ module Candidates
     def show; end
 
     def new
-      @feedback = Candidates::Feedback.new
+      @feedback = Candidates::Feedback.new referrer_params
     end
 
     def create
@@ -18,6 +18,10 @@ module Candidates
 
   private
 
+    def referrer_params
+      { referrer: request.env['HTTP_REFERER'] }
+    end
+
     def feedback_params
       params.require(:candidates_feedback).permit \
         :reason_for_using_service,
@@ -25,7 +29,8 @@ module Candidates
         :rating,
         :improvements,
         :successful_visit,
-        :unsuccessful_visit_explanation
+        :unsuccessful_visit_explanation,
+        :referrer
     end
   end
 end

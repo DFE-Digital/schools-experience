@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PersonalInformation, type: :model do
+  include_context 'Stubbed candidates school'
   it_behaves_like 'a registration step'
 
   context 'attributes' do
@@ -34,7 +35,12 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         'test@example.com', 'testymctest@gmail.com',
         'test%.mctest@domain.co.uk', ' with@space.com '
       ].freeze
-      INVALID_EMAILS = ['test.com', 'test@@test.com', 'FFFF', 'test@test'].freeze
+
+      INVALID_EMAILS = [
+        'test.com', 'test@@test.com', 'FFFF', 'test@test',
+        'test@test.'
+      ].freeze
+
       BLANK_EMAILS = ['', ' ', '   '].freeze
 
       VALID_EMAILS.each do |email|
@@ -112,7 +118,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
 
         it 'is invalid' do
           expect(subject.errors[:date_of_birth]).to eq [
-            'Enter a valid date of birth. You must be at least 18 years old'
+            'Enter a valid date of birth. You must be younger than 100 years old'
           ]
         end
       end
