@@ -184,8 +184,16 @@ class Bookings::School < ApplicationRecord
     end
   end
 
-  def supports_subjects?
+  def has_secondary_phase?
     phases.any?(&:supports_subjects?)
+  end
+
+  def has_primary_phase?
+    phases.any? { |p| !p.supports_subjects? }
+  end
+
+  def has_primary_and_secondary_phases?
+    has_primary_phase? && has_secondary_phase?
   end
 
 private
