@@ -28,9 +28,10 @@ module Candidates
       end
 
       def registration_session_attributes
-        if store.has_registration? current_registration_session_uuid
+        if store.has_registration?(current_registration_session_uuid)
           store.retrieve!(current_registration_session_uuid).to_h
         elsif session.has_key? "schools/#{current_urn}/registrations"
+          # TODO SE-1992 Remove this
           # Get attributes from legacy session
           session["schools/#{current_urn}/registrations"]
         else

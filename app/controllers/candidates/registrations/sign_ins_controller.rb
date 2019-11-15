@@ -27,6 +27,11 @@ module Candidates
         if candidate
           self.current_candidate = candidate
 
+          # Update the registration data in redis with the candidate
+          # information from gitis.
+          personal_information = PersonalInformation.new attributes_from_session
+          persist personal_information
+
           redirect_to new_candidates_school_registrations_contact_information_path
         elsif attributes_from_session.any?
           @resend_link = candidates_school_registrations_sign_in_path

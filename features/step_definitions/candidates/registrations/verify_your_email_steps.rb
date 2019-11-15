@@ -23,7 +23,7 @@ Given("I change device") do
   Capybara.reset_session!
 end
 
-Given "A clear registration_store" do
+Given "there are no registration sessions" do
   # We need to do this so when we fetch out the session key in the next step
   # it's always the key we expect as there's only going to be one
   # this will probably break parralel tests
@@ -37,6 +37,11 @@ Given("I follow the verify link in the confirmation email") do
 
   visit path_for('verify your email with token',
     school: @school, session_token: @session_token, uuid: uuid)
+end
+
+# TODO SE-1992 Remove this
+Given("I follow the legacy verify link in the confirmation email") do
+  visit "/candidates/verify/#{@school.to_param}/#{@session_token.to_param}"
 end
 
 Given "I have chosen a subject specific date" do

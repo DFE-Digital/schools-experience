@@ -12,6 +12,13 @@ Feature: Verify your email
         Then the page's main header should be 'We already have your details'
         And I should see an email was sent to my email address
 
+    # TODO SE-1992 Remove this
+    Scenario: Confirming the Eamil
+        Given I have completed the Personal Information step for my school of choice
+        And I have a valid session token
+        And I follow the legacy verify link in the confirmation email
+        Then I should be on the 'enter your contact details' page for my school of choice
+
     # Disabled these features as they will be flakey when run in parralel
     @wip
     Scenario: Confirming the Eamil
@@ -24,7 +31,7 @@ Feature: Verify your email
     Scenario: Confirming the Eamil
         Given the school offers 'Physics, Mathematics'
         And the school I'm applying to is not flexible on dates
-        And A clear registration_store
+        And there are no registration sessions
         And I have chosen a subject specific date
         And I have completed the Personal Information step for my school of choice
         And I have a valid session token
