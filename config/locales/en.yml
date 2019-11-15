@@ -566,6 +566,7 @@ en:
         subject_second_choice: "Second choice"
       candidates_registrations_education:
         degree_subject: If you have or are studying for a degree, tell us about your degree subject
+        degree_stage_explaination: 'Degree stage explanation'
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"
