@@ -41,6 +41,13 @@ module Bookings
       if: -> { date.present? },
       on: :create
 
+    # users manually selecting this only happens when schools are both primary
+    # and secondary, otherwise it's automatically set in the controller
+    validates :supports_subjects,
+      inclusion: [true, false],
+      on: :create,
+      if: -> { bookings_school&.primary_and_secondary? }
+
     with_options if: :published? do
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
       validates :subjects, presence: true, if: %i(subject_specific? published?)

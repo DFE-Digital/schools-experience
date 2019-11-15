@@ -6,6 +6,17 @@ Given "I have entered a placement date" do
   )
 end
 
+Given "I have entered a secondary placement date for a multi-phase school" do
+  secondary_label = "Secondary including secondary schools"
+
+  steps %(
+    Given I am on the 'new placement date' page
+    And I fill in the form with a future date and duration of 3
+    And I choose '#{secondary_label}' from the 'Select school experience phase' radio buttons
+    And I submit the form
+  )
+end
+
 Given "the placement date is subject specific" do
   steps %(
     Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons

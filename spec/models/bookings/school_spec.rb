@@ -527,32 +527,86 @@ describe Bookings::School, type: :model do
       end
     end
 
-    describe '#supports_subjects?' do
+    describe 'subject support' do
       let(:phase_supporting_subjects) { double(Bookings::Phase, supports_subjects?: true) }
       let(:phase_not_supporting_subjects) { double(Bookings::Phase, supports_subjects?: false) }
 
-      context 'when all phases support subjects' do
-        before do
-          allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
+      describe '#supports_subjects?' do
+        context 'when all phases support subjects' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_supports_subjects }
         end
 
-        specify { expect(subject).to be_supports_subjects }
+        context 'when no phases support subjects' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).not_to be_supports_subjects }
+        end
+
+        context "when some phases support subjects and some don't" do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects, phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_supports_subjects }
+        end
       end
 
-      context 'when no phases support subjects' do
-        before do
-          allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
+      describe '#does_not_support_subjects?' do
+        context 'when all phases support subjects' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
+          end
+
+          specify { expect(subject).not_to be_does_not_support_subjects }
         end
 
-        specify { expect(subject).not_to be_supports_subjects }
+        context 'when no phases support subjects' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_does_not_support_subjects }
+        end
+
+        context "when some phases support subjects and some don't" do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects, phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_does_not_support_subjects }
+        end
       end
 
-      context "when some phases support subjects and some don't" do
-        before do
-          allow(subject).to receive(:phases).and_return([phase_supporting_subjects, phase_not_supporting_subjects])
+      describe '#primary_and_secondary?' do
+        context 'when primary but not secondary' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).not_to be_primary_and_secondary }
         end
 
-        specify { expect(subject).to be_supports_subjects }
+        context 'when secondary but not primary' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
+          end
+
+          specify { expect(subject).not_to be_primary_and_secondary }
+        end
+
+        context 'when primary and secondary' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects, phase_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_primary_and_secondary }
+        end
       end
     end
   end
