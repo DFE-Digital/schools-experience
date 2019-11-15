@@ -43,7 +43,6 @@ module Bookings
     # and secondary, otherwise it's automatically set in the controller
     validates :supports_subjects,
       inclusion: [true, false],
-      on: :create,
       if: -> { bookings_school&.has_primary_and_secondary_phases? }
 
     with_options if: :published? do
