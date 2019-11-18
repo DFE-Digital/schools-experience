@@ -26,7 +26,7 @@
         <%= form_for @preference do |f| %>
           <%= GovukElementsErrorsHelper.error_summary @preference, 'There is a problem', '' %>
 
-          <%= f.radio_button_fieldset :tracking do |fieldset| %>
+          <%= f.radio_button_fieldset :analytics do |fieldset| %>
             <%= fieldset.radio_input true %>
             <%= fieldset.radio_input false %>
           <% end %>
