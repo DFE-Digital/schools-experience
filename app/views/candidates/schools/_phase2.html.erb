@@ -87,13 +87,13 @@
       </ul>
     </div>
 
+    <% if @presenter.school.availability_preference_fixed? %>
+      <%= render partial: 'candidates/schools/placement_dates', locals: { primary_dates: @presenter.primary_dates, secondary_dates_grouped_by_date: @presenter.secondary_dates_grouped_by_date } %>
+    <% end %>
+
     <% if @presenter.supports_access_needs? %>
       <%= render partial: 'candidates/schools/access_needs_statement.html.erb',
         locals: { presenter: @presenter } %>
-    <% end %>
-
-    <% if @presenter.school.availability_preference_fixed? %>
-      <%= render partial: 'candidates/schools/placement_dates', locals: { primary_dates: @presenter.primary_dates, secondary_dates_grouped_by_date: @presenter.secondary_dates_grouped_by_date } %>
     <% end %>
 
     <% if include_candidate_request_links %>
