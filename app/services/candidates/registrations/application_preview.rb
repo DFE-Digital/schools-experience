@@ -26,7 +26,6 @@ module Candidates
         to: :@contact_information
 
       delegate \
-        :degree_stage,
         :degree_subject,
         to: :@education
 
@@ -135,6 +134,13 @@ module Candidates
 
       def teaching_subject_second_choice
         subject_second_choice
+      end
+
+      def degree_stage
+        [
+          @education.degree_stage,
+          @education.degree_stage_explaination
+        ].map(&:presence).compact.join("\n")
       end
 
       def dbs_check_document

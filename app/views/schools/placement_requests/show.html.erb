@@ -101,6 +101,9 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <%= @placement_request.degree_stage %>
+          <% if @placement_request.degree_stage_explaination.present? %>
+            - <%= @placement_request.degree_stage_explaination %>
+          <% end %>
         </dd>
       </div>
 
