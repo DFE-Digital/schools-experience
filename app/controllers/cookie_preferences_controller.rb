@@ -11,6 +11,7 @@ class CookiePreferencesController < ApplicationController
     @preference.assign_attributes preference_attributes
 
     if @preference.valid?
+      persist @preference
       redirect_to edit_cookie_preference_path
     else
       render 'edit'
@@ -25,5 +26,13 @@ private
 
   def preference_attributes
     params.fetch(:cookie_preference, {}).permit(:analytics)
+  end
+
+  def persist(preferences)
+    cookies['cookie_preference'] = {
+      expires: preferences.expires,
+      value: preferences.to_json,
+      httponly: false,
+    }
   end
 end

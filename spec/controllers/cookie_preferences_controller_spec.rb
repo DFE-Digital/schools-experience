@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe CookiePreferencesController, type: :request do
+  let(:cookie_name) { 'cookie_preference' }
   subject { response }
 
   describe "#show" do
@@ -19,12 +20,17 @@ describe CookiePreferencesController, type: :request do
     context "with valid" do
       let(:params) { { cookie_preference: { analytics: false } } }
       it { is_expected.to redirect_to edit_cookie_preference_path }
-      it "Should set cookies to persist settings"
+
+      it do
+        expect(cookies[cookie_name]).to \
+          eql({ 'analytics' => false, 'required' => true }.to_json)
+      end
     end
 
     context "with invalid" do
       let(:params) { { cookie_preference: {} } }
       it { expect(subject.body).to match 'Edit your cookie settings' }
+      it { expect(cookies[cookie_name]).to be_nil }
     end
   end
 end
