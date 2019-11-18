@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   get '/service_update', to: 'pages#service_update'
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
 
+  resource :cookie_preference, only: %i(show edit update)
+
   get '/auth/callback', to: 'schools/sessions#create'
 
   if Rails.env.servertest? || Rails.env.test?
