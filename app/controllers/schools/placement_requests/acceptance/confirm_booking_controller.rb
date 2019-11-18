@@ -12,6 +12,7 @@ module Schools
             placement_details: @current_school&.profile&.experience_details
           )
           @placement_request.fetch_gitis_contact gitis_crm
+          @contact_details = Schools::PlacementRequests::AddMoreDetails.for_school(@current_school)
         end
 
         def create

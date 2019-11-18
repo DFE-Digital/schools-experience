@@ -30,7 +30,6 @@ module Bookings
         less_than: 100
       }
 
-
     validates :date, presence: true
     validates :date,
       timeliness: {

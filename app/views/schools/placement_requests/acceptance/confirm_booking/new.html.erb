@@ -1,14 +1,15 @@
+<%= link_to 'Back', :back, class: 'govuk-back-link', data: {controller: 'back-link'} %>
+
 <%- self.page_title = "Confirm booking" %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1>Confirm booking</h1>
-
-    <h3>
+  <div class="govuk-grid-column-three-quarters">
+    <h1>
       Confirm the booking for <%= @placement_request.candidate_name %>.
-    </h3>
+    </h1>
 
-    <dl id="placement-request-details" class="govuk-summary-list govuk-summary-list--no-border">
+    <dl class="govuk-summary-list">
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           School
@@ -17,51 +18,74 @@
           <%= @placement_request.school.name %>
         </dd>
       </div>
+
+      <div class="govuk-summary-list__row">
+        <%- if @placement_request.placement_date.present? -%>
+          <dt class="govuk-summary-list__key">
+            Date requested
+          </dt>
+          <dd class="govuk-summary-list__value">
+              <%= @placement_request.placement_date.date.to_formatted_s(:govuk) %>
+          </dd>
+        <%- else -%>
+          <dt class="govuk-summary-list__key">
+            Availability
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= @placement_request.availability %>
+          </dd>
+        <%- end -%>
+      </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Availability/requested date
+          Subject requested
         </dt>
-        <dd class="govuk-summary-list__value availability-requested-date">
-          <%- if @placement_request.placement_date.present? -%>
-            <%= @placement_request.placement_date.date.to_formatted_s(:govuk) %>
-          <%- else -%>
-            <%= @placement_request.availability %>
-          <%- end -%>
+        <dd class="govuk-summary-list__value">
+          <%= @placement_request.requested_subject.name %>
         </dd>
       </div>
 
-      <%- if @placement_request.placement_date.present? -%>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Duration
+          Contact details
         </dt>
-        <dd class="govuk-summary-list__value availability-requested-date">
-          <%= pluralize(@placement_request.placement_date.duration, 'day') %>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li aria-label="Contact name" >
+              <%= @contact_details.contact_name %>
+            </li>
+            <li aria-label="Contact telephone number" >
+              <%= @contact_details.contact_number %>
+            </li>
+            <li aria-label="Contact email address" >
+              <%= @contact_details.contact_email %>
+            </li>
+          </ul>
         </dd>
       </div>
-      <%- end -%>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Admin details
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li aria-label="Admin email address">
+              <%= @placement_request.school.profile.admin_contact_email %>
+            </li>
+            <li aria-label="Admin phone number">
+              <%= @placement_request.school.profile.admin_contact_phone %>
+            </li>
+          </ul>
+        </dd>
+      </div>
+
     </dl>
 
-    <%= form_for @confirm_booking, url: schools_placement_request_acceptance_confirm_booking_path do |form| %>
-
-      <%= form.date_field :date %>
-
-      <%= form.collection_select \
-        :bookings_subject_id,
-        @available_subjects,
-        :id,
-        :name,
-        { prompt: 'Select' },
-        { class: 'govuk-select govuk-!-width-one-half' } %>
-
-      <%= form.text_area :placement_details %>
-
-      <%= form.submit 'Continue' %>
-
-    <% end %>
-
     <div>
-      <%= link_to 'Back to request', schools_placement_request_path(@placement_request.id), class: 'govuk-back-link' %>
+      <%= govuk_link_to 'Preview confirmation email', '#', class: 'govuk-!-margin-right-1', data: { module: "govuk-button" } %>
+      <%= govuk_link_to 'Make changes', '#', secondary: true, data: { module: "govuk-button" } %>
     </div>
   </div>
 </div>
