@@ -1,0 +1,10 @@
+<section id="cancellation-details">
+  <h2><%= cancellation_noun cancellation %> details</h2>
+
+  <dl class="govuk-summary-list">
+    <%= summary_row 'Reason', cancellation.reason %>
+    <% if cancellation.extra_details.present? %>
+      <%= summary_row 'Extra details', cancellation.extra_details %>
+    <% end %>
+  </dl>
+</section>

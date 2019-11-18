@@ -214,3 +214,39 @@ Then("the viewed requests should have no status") do
     expect(page).not_to have_css('.govuk-tag')
   end
 end
+
+Given("the request has been withdrawn") do
+  FactoryBot.create :cancellation,
+    :sent,
+    :cancelled_by_candidate,
+    placement_request: @placement_request
+
+  @placement_request.reload
+end
+
+Given("the request has been rejected") do
+  FactoryBot.create :cancellation,
+    :sent,
+    :cancelled_by_school,
+    placement_request: @placement_request,
+    extra_details: 'Better luck next time'
+
+  @placement_request.reload
+end
+
+Then("I should see the withdrawal details") do
+  expect(page).to have_css 'h1', text: "Matthew Richards has withdrawn their request"
+
+  within '#cancellation-details' do
+    expect(page).to have_text @placement_request.candidate_cancellation.reason
+  end
+end
+
+Then("I should see the rejection details") do
+  expect(page).to have_css 'h1', text: "This request from Matthew Richards has been rejected"
+
+  within '#cancellation-details' do
+    expect(page).to have_text @placement_request.school_cancellation.reason
+    expect(page).to have_text @placement_request.school_cancellation.extra_details
+  end
+end
