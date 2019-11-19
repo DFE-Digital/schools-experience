@@ -15,6 +15,7 @@ describe CookiePreferencesController, type: :request do
   end
 
   describe "#update" do
+    before { cookies['analytics_tracking_uuid'] = 'google' }
     before { patch cookie_preference_path, params: params }
 
     context "with valid" do
@@ -25,6 +26,8 @@ describe CookiePreferencesController, type: :request do
         expect(cookies[cookie_name]).to \
           eql({ 'analytics' => false, 'required' => true }.to_json)
       end
+
+      it { expect(cookies['analytics_tracking_uuid']).to be_blank }
     end
 
     context "with all" do

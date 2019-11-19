@@ -1,6 +1,9 @@
 class CookiePreference
   EXPIRES_IN = 30.days.freeze
   VERSION = 'v1'.freeze
+  COOKIES = {
+    analytics: %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
+  }.freeze
 
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -11,7 +14,7 @@ class CookiePreference
   validates :analytics, inclusion: [true, false]
   validates :required, acceptance: true
 
-  delegate :cookie_key, to: :class
+  delegate :cookie_key, :all_cookies, to: :class
   delegate :to_json, to: :attributes
 
   class << self
@@ -25,6 +28,10 @@ class CookiePreference
 
     def from_cookie(cookie)
       cookie.present? ? from_json(cookie) : new
+    end
+
+    def all_cookies
+      COOKIES.values.flatten
     end
   end
 
@@ -46,5 +53,14 @@ class CookiePreference
 
   def expires
     EXPIRES_IN.from_now
+  end
+
+  def accepted_cookies
+    cookie_types = attributes.select { |_k, v| v }.keys.map(&:to_sym)
+    COOKIES.slice(*cookie_types).values.flatten
+  end
+
+  def rejected_cookies
+    all_cookies - accepted_cookies
   end
 end

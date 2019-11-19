@@ -12,6 +12,7 @@ class CookiePreferencesController < ApplicationController
 
     if @preference.valid?
       persist @preference
+      remove_rejected_cookies @preference
       redirect_to request.referer.presence || edit_cookie_preference_path
     else
       render 'edit'
@@ -38,5 +39,11 @@ private
 
   def cookie_key
     CookiePreference.cookie_key
+  end
+
+  def remove_rejected_cookies(preferences)
+    preferences.rejected_cookies.each do |cookie_key|
+      cookies.delete cookie_key
+    end
   end
 end

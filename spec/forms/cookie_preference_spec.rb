@@ -79,4 +79,49 @@ describe CookiePreference, type: :model do
       it { is_expected.to have_attributes analytics: nil }
     end
   end
+
+  context '.all_cookies' do
+    subject { described_class.all_cookies }
+
+    it do
+      is_expected.to eql \
+        %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
+    end
+  end
+
+  context '#accepted_cookies' do
+    subject { preference.accepted_cookies }
+
+    context 'with analytics accepted' do
+      let(:preference) { described_class.new(analytics: true) }
+
+      it do
+        is_expected.to eql \
+          %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
+      end
+    end
+
+    context 'with analytics rejected' do
+      let(:preference) { described_class.new(analytics: false) }
+      it { is_expected.to be_empty }
+    end
+  end
+
+  context '#rejected_cookies' do
+    subject { preference.rejected_cookies }
+
+    context 'with analytics accepted' do
+      let(:preference) { described_class.new(analytics: true) }
+      it { is_expected.to be_empty }
+    end
+
+    context 'with analytics accepted' do
+      let(:preference) { described_class.new(analytics: false) }
+
+      it do
+        is_expected.to eql \
+          %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
+      end
+    end
+  end
 end
