@@ -1,6 +1,4 @@
 class CookiePreferencesController < ApplicationController
-  before_action :load_existing_preference, except: :show
-
   def show
     redirect_to edit_cookie_preference_path
   end
@@ -8,11 +6,11 @@ class CookiePreferencesController < ApplicationController
   def edit; end
 
   def update
-    @preference.assign_attributes preference_attributes
+    cookie_preferences.assign_attributes preference_attributes
 
-    if @preference.valid?
-      persist @preference
-      remove_rejected_cookies @preference
+    if cookie_preferences.valid?
+      persist cookie_preferences
+      remove_rejected_cookies cookie_preferences
       redirect_to request.referer.presence || edit_cookie_preference_path
     else
       render 'edit'
@@ -21,24 +19,16 @@ class CookiePreferencesController < ApplicationController
 
 private
 
-  def load_existing_preference
-    @preference = CookiePreference.from_cookie(cookies[cookie_key])
-  end
-
   def preference_attributes
     params.fetch(:cookie_preference, {}).permit(:analytics, :all)
   end
 
   def persist(preferences)
-    cookies[cookie_key] = {
+    cookies[CookiePreference.cookie_key] = {
       expires: preferences.expires,
       value: preferences.to_json,
       httponly: false,
     }
-  end
-
-  def cookie_key
-    CookiePreference.cookie_key
   end
 
   def remove_rejected_cookies(preferences)

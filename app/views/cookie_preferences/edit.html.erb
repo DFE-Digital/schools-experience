@@ -23,7 +23,7 @@
           for us to use.
         </p>
 
-        <%= form_for @preference do |f| %>
+        <%= form_for cookie_preferences do |f| %>
           <%= GovukElementsErrorsHelper.error_summary @preference, 'There is a problem', '' %>
 
           <%= f.radio_button_fieldset :analytics do |fieldset| %>
