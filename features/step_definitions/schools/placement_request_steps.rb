@@ -250,3 +250,14 @@ Then("I should see the rejection details") do
     expect(page).to have_text @placement_request.school_cancellation.extra_details
   end
 end
+
+Then("I should see the withdrawn details with the following values:") do |table|
+  within "section#cancellation-details" do
+    expect(page).to have_css('h2', text: 'Withdrawal details')
+
+    table.hashes.each do |row|
+      expect(page).to have_css('dt', text: row['Heading'])
+      expect(page).to have_css('dd', text: /#{row['Value']}/i)
+    end
+  end
+end
