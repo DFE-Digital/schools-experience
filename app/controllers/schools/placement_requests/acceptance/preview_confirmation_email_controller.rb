@@ -1,0 +1,41 @@
+module Schools
+  module PlacementRequests
+    module Acceptance
+      class PreviewConfirmationEmailController < Schools::BaseController
+        include Acceptance
+
+        def edit
+          @placement_request.fetch_gitis_contact gitis_crm
+          @booking = @placement_request.booking
+        end
+
+        def update
+          @booking = @placement_request.booking
+
+          @booking.assign_attributes(booking_params)
+
+          if @booking.valid?(:acceptance_email_preview) && @booking.accept! && candidate_booking_notification(@booking).despatch_later!
+            Bookings::Gitis::EventLogger.write_later \
+              @booking.contact_uuid, :booking, @booking
+
+            redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
+          else
+            @placement_request.fetch_gitis_contact gitis_crm
+            render :edit
+          end
+        end
+
+      private
+
+        def booking_params
+          params.require(:bookings_booking).permit(:candidate_instructions)
+        end
+
+        def candidate_booking_notification(booking)
+          NotifyEmail::CandidateBookingConfirmation
+            .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token))
+        end
+      end
+    end
+  end
+end
