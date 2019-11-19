@@ -5,6 +5,7 @@ module Candidates
       include Singleton
 
       class SessionNotFound < StandardError; end
+      class NoKey < StandardError; end
 
       def initialize
         @namespace = 'registrations'.freeze
@@ -16,8 +17,14 @@ module Candidates
       end
 
       def store!(registration_session)
+        key = registration_session.uuid
+
+        unless key.present?
+          fail NoKey, "`registration_session#uuid` can't be blank"
+        end
+
         @redis.set \
-          namespace(registration_session.uuid),
+          namespace(key),
           serialize(registration_session),
           ex: @ttl
       end
