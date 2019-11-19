@@ -13,8 +13,22 @@ class CookiePreference
   delegate :cookie_key, to: :class
   delegate :to_json, to: :attributes
 
-  def self.cookie_key
-    model_name.param_key
+  class << self
+    def cookie_key
+      model_name.param_key
+    end
+
+    def from_json(json)
+      new JSON.parse(json)
+    end
+
+    def from_cookie(cookie)
+      cookie.present? ? from_json(cookie) : new
+    end
+  end
+
+  def required=(_value)
+    required
   end
 
   def persisted?

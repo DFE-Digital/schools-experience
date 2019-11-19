@@ -21,7 +21,7 @@ class CookiePreferencesController < ApplicationController
 private
 
   def load_existing_preference
-    @preference = CookiePreference.new
+    @preference = CookiePreference.from_cookie(cookies[cookie_key])
   end
 
   def preference_attributes
@@ -29,10 +29,14 @@ private
   end
 
   def persist(preferences)
-    cookies['cookie_preference'] = {
+    cookies[cookie_key] = {
       expires: preferences.expires,
       value: preferences.to_json,
       httponly: false,
     }
+  end
+
+  def cookie_key
+    CookiePreference.cookie_key
   end
 end
