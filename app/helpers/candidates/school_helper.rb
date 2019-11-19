@@ -29,7 +29,7 @@ module Candidates::SchoolHelper
   end
 
   def format_school_availability(availability_info)
-    availability_info.present? ? simple_format(availability_info) : 'No information supplied'
+    availability_info.present? ? safe_format(availability_info) : 'No information supplied'
   end
 
   def format_phases(school)

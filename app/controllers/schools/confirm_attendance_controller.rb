@@ -28,6 +28,10 @@ module Schools
       params
         .select { |key, _| key.match(/\A\d+\z/) }
         .transform_keys(&:to_i)
+        .slice(*unlogged_bookings.ids)
+        # Avoid throwing key error if the user hits back button then
+        # resubmits the form causing the params to no longer match up with
+        # the unlogged_bookings.
     end
 
     def unlogged_bookings

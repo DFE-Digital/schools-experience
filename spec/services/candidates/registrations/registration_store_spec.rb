@@ -26,6 +26,18 @@ describe Candidates::Registrations::RegistrationStore do
     end
   end
 
+  context '#store! with a blank key' do
+    before do
+      allow(session).to receive(:uuid) { nil }
+    end
+
+    it 'raises an error' do
+      expect { subject.store! session }.to \
+        raise_error(described_class::NoKey).with_message \
+          "`registration_session#uuid` can't be blank"
+    end
+  end
+
   context '#get!' do
     before do
       subject.store! session

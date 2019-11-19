@@ -165,7 +165,8 @@ en:
               blank: "Enter your full name"
             date_of_birth:
               blank: "Enter your date of birth"
-              inclusion: "Enter a valid date of birth. You must be at least 18 years old"
+              on_or_before: "Enter a valid date of birth. You must be at least 18 years old"
+              on_or_after: "Enter a valid date of birth. You must be younger than 100 years old"
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
@@ -345,6 +346,7 @@ en:
               not_a_number: "Enter a valid number for maximum number of bookings you'll accept for this date"
             subjects:
               blank: 'Select which subjects are available for this date'
+
         schools/placement_requests/add_more_details:
           attributes:
             contact_name:
@@ -353,8 +355,19 @@ en:
               blank: 'Enter a contact phone number'
             contact_email:
               blank: 'Enter a contact email address'
+              invalid: 'Enter a valid email address'
             location:
               blank: 'Enter a location for the candidate to report to'
+
+        schools/placement_requests/confirm_booking:
+          attributes:
+            placement_details:
+              blank: 'Provide details for the experience'
+
+        schools/placement_requests/review_and_send_email:
+          attributes:
+            candidate_instructions:
+              blank: 'Provide candidate instructions'
 
   activerecord:
     errors:
@@ -381,6 +394,7 @@ en:
             duration:
               blank: Enter a duration
             date:
+              blank: Enter a start date
               on_or_after: Date must not be in the past
             supports_subjects:
               inclusion: Select a school experience phase
@@ -569,6 +583,7 @@ en:
         subject_second_choice: "Second choice"
       candidates_registrations_education:
         degree_subject: If you have or are studying for a degree, tell us about your degree subject
+        degree_stage_explaination: 'Degree stage explanation'
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"

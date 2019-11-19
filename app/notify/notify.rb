@@ -2,7 +2,7 @@ class Notify
   attr_accessor :to
 
   def initialize(to:)
-    self.to = Array.wrap to
+    self.to = Array.wrap(to).uniq
   end
 
   def despatch_later!

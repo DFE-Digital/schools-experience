@@ -1,6 +1,8 @@
 module Candidates
   module Registrations
     class SignInsController < RegistrationsController
+      include SignInEmails
+
       skip_before_action :ensure_step_permitted!, only: :update
 
       def show
@@ -20,11 +22,13 @@ module Candidates
       def update
         candidate = Candidates::Session.signin!(params[:token])
 
+        self.current_registration_session_uuid = params[:uuid]
+
         if candidate
           self.current_candidate = candidate
 
-          # Ensure PersonalInformation is updated in session
-          # necessary for if switching device as part of email verification
+          # Update the registration data in redis with the candidate
+          # information from gitis.
           personal_information = PersonalInformation.new attributes_from_session
           persist personal_information
 
@@ -38,20 +42,6 @@ module Candidates
 
       def attributes_from_session
         current_registration.personal_information_attributes
-      end
-
-      def verification_email(token)
-        NotifyEmail::CandidateVerifyEmailLink.new(
-          to: current_registration.personal_information.email,
-          verification_link: verification_link(token)
-        )
-      end
-
-      def verification_link(token)
-        candidates_registration_verify_url \
-          current_registration.urn,
-          token,
-          host: request.host
       end
     end
   end

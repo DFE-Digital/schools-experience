@@ -30,13 +30,15 @@ module Bookings
         less_than: 100
       }
 
+
+    validates :date, presence: true
     validates :date,
       timeliness: {
         on_or_after: :today,
         before: -> { 2.years.from_now },
         type: :date
       },
-      presence: true,
+      if: -> { date.present? },
       on: :create
 
     # users manually selecting this only happens when schools are both primary

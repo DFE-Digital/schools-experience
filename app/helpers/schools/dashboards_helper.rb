@@ -36,6 +36,6 @@ module Schools::DashboardsHelper
 
   def show_no_availability_info_warning?(school)
     !school.availability_preference_fixed? &&
-      school.availability_info.nil?
+      school.availability_info.blank?
   end
 end
