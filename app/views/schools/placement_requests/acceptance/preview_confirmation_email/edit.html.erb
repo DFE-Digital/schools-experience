@@ -1,0 +1,40 @@
+<%- self.page_title = "Send details to candidate" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1>Send details to candidate</h1>
+
+    <p>
+      The following contains the wording of the confirmation email which will be
+      sent to <%= @placement_request.candidate_name %>
+      to confirm their booking.
+    </p>
+
+    <%= form_for @booking, url: schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id) do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <div class="email-preview">
+        <p>Dear <%= @placement_request.candidate_name %>,</p>
+
+        <p>Here are the details about your school experience at <%= @placement_request.school.name %>.</p>
+
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_details' %>
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_contacts' %>
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_details' %>
+
+        <section id="extra-details-from-the-school">
+          <p><%= f.text_area :candidate_instructions, rows: 6, label_options: { overwrite_defaults!: true, class: 'govuk-heading-s' } %></p>
+        </section>
+
+        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/help_and_support' %>
+      </div>
+
+      <p>
+        By sending this email you’re confirming, to the best of your knowledge, the
+        booking details you’re providing are correct.
+      </p>
+
+      <%= f.submit 'Send confirmation email', class: 'govuk-button', data: { module: 'govuk-button' } %>
+    <%- end -%>
+
+  </div>
+</div>
