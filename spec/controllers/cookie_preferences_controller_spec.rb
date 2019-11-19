@@ -27,6 +27,16 @@ describe CookiePreferencesController, type: :request do
       end
     end
 
+    context "with all" do
+      let(:params) { { cookie_preference: { all: 'true' } } }
+      it { is_expected.to redirect_to edit_cookie_preference_path }
+
+      it do
+        expect(cookies[cookie_name]).to \
+          eql({ 'analytics' => true, 'required' => true }.to_json)
+      end
+    end
+
     context "with invalid" do
       let(:params) { { cookie_preference: {} } }
       it { expect(subject.body).to match 'Edit your cookie settings' }

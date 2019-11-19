@@ -12,7 +12,7 @@ class CookiePreferencesController < ApplicationController
 
     if @preference.valid?
       persist @preference
-      redirect_to edit_cookie_preference_path
+      redirect_to request.referer.presence || edit_cookie_preference_path
     else
       render 'edit'
     end
@@ -25,7 +25,7 @@ private
   end
 
   def preference_attributes
-    params.fetch(:cookie_preference, {}).permit(:analytics)
+    params.fetch(:cookie_preference, {}).permit(:analytics, :all)
   end
 
   def persist(preferences)

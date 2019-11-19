@@ -31,6 +31,14 @@ class CookiePreference
     required
   end
 
+  def all=(accept_all_cookies)
+    return unless accept_all_cookies.to_s.in? %w(true 1)
+
+    attributes.keys.map do |key|
+      self.send :"#{key}=", true
+    end
+  end
+
   def persisted?
     true
   end

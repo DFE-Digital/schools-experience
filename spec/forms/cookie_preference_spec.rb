@@ -33,6 +33,28 @@ describe CookiePreference, type: :model do
     it { is_expected.to have_attributes expires: 30.days.from_now }
   end
 
+  context '#all=' do
+    subject { described_class.new(all: all) }
+
+    context 'with true' do
+      let(:all) { true }
+      it { is_expected.to have_attributes required: true }
+      it { is_expected.to have_attributes analytics: true }
+    end
+
+    context 'with 1' do
+      let(:all) { '1' }
+      it { is_expected.to have_attributes required: true }
+      it { is_expected.to have_attributes analytics: true }
+    end
+
+    context 'with something else' do
+      let(:all) { '0' }
+      it { is_expected.to have_attributes required: true }
+      it { is_expected.to have_attributes analytics: nil }
+    end
+  end
+
   context '#to_json' do
     subject { described_class.new.to_json }
     it { is_expected.to eql({ 'analytics' => nil, 'required' => true }.to_json) }
