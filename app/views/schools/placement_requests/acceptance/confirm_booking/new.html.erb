@@ -5,7 +5,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
     <h1>
-      Confirm the booking for <%= @placement_request.candidate_name %>.
+      Confirm the booking for <%= @placement_request.candidate_name %>
     </h1>
 
     <dl class="govuk-summary-list">
@@ -46,24 +46,29 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Contact details
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li aria-label="Contact name" >
-              <%= @contact_details.contact_name %>
-            </li>
-            <li aria-label="Contact telephone number" >
-              <%= @contact_details.contact_number %>
-            </li>
-            <li aria-label="Contact email address" >
-              <%= @contact_details.contact_email %>
-            </li>
-          </ul>
-        </dd>
-      </div>
+      <% if @last_booking.present? %>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Contact details
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <ul class="govuk-list">
+              <li aria-label="Contact name" >
+                <%= @last_booking.contact_name %>
+              </li>
+              <li aria-label="Contact telephone number" >
+                <%= @last_booking.contact_number %>
+              </li>
+              <li aria-label="Contact email address" >
+                <%= @last_booking.contact_email %>
+              </li>
+              <li aria-label="Location" >
+                <%= @last_booking.location %>
+              </li>
+            </ul>
+          </dd>
+        </div>
+      <% end %>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -84,8 +89,14 @@
     </dl>
 
     <div>
-      <%= govuk_link_to 'Preview confirmation email', '#', class: 'govuk-!-margin-right-1', data: { module: "govuk-button" } %>
-      <%= govuk_link_to 'Make changes', '#', secondary: true, data: { module: "govuk-button" } %>
+      <% if @placement_request&.placement_date&.in_future? && @last_booking.present?  %>
+        <%# contact details are present and school has fixed dates, allow for move on to the email preview%>
+        <%= button_to 'Accept request', schools_placement_request_acceptance_confirm_booking_path, class: 'govuk-button' %>
+        <%= govuk_link_to 'Make changes', new_schools_placement_request_acceptance_make_changes_path(@placement_request), secondary: true, data: { module: "govuk-button" } %>
+      <% else %>
+        <%# contact details are missing (this is the first time) or it's a flex booking %>
+        <%= govuk_link_to 'Continue', new_schools_placement_request_acceptance_make_changes_path(@placement_request), data: { module: "govuk-button" } %>
+      <% end %>
     </div>
   </div>
 </div>

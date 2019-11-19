@@ -74,6 +74,10 @@ module Bookings
       }
     end
 
+    def in_future?
+      date > Date.today
+    end
+
     def has_subjects?
       placement_date_subjects.any?
     end

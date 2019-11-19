@@ -1,0 +1,47 @@
+<%= link_to 'Back', :back, class: 'govuk-back-link', data: {controller: 'back-link'} %>
+
+<%- self.page_title = "Confirm booking" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1>
+      Confirm the booking for <%= @placement_request.candidate_name %> at <%= @placement_request.school.name %>
+    </h1>
+
+    <%= form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary @booking, 'There is a problem', '' %>
+      <div>
+
+
+        <% if @placement_request.school.availability_preference_fixed? %>
+          <h3 class="govuk-heading-m">The candidate requested</h3>
+
+          <p><%= @placement_request.requested_subject.name %> on <%= @placement_request.dates_requested %></p>
+        <% else %>
+          <h3 class="govuk-heading-m">The candidate requested</h3>
+
+          <p><%= @placement_request.requested_subject.name %></p>
+
+          <p class="govuk-inset-text"><%= @placement_request.dates_requested %></p>
+        <% end %>
+
+        <%= f.date_field :date, heading: true %>
+        <%= f.collection_select :bookings_subject_id, @subjects, :id, :name, {}, label_options: { class: 'govuk-heading-m' } %>
+      </div>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h3 class="govuk-fieldset__heading">Contact details</h3>
+        </legend>
+
+
+        <%= f.text_field :contact_name, width: 'two-thirds' %>
+        <%= f.phone_field :contact_number, width: 'two-thirds' %>
+        <%= f.email_field :contact_email, width: 'two-thirds' %>
+      </fieldset>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+
+  </div>
+</div>
