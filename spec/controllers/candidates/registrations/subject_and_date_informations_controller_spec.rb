@@ -71,9 +71,11 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
       subject! { post subject_and_date_info_path, params: params }
 
       specify 'correctly stores the primary placement date in the registration session' do
-        expect(
-          session.to_h.dig('schools/11048/registrations', 'candidates_registrations_subject_and_date_information', 'bookings_placement_date_id')
-        ).to eql(primary_placement_date.id)
+        persisted_session = \
+          Candidates::Registrations::RegistrationStore.instance.retrieve! session['registrations']['11048']
+
+        expect(persisted_session.subject_and_date_information.bookings_placement_date_id).to \
+          eql(primary_placement_date.id)
       end
     end
 
@@ -100,14 +102,18 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
       subject! { post subject_and_date_info_path, params: params }
 
       specify 'correctly stores the secondary placement date in the registration session' do
+        persisted_session = \
+          Candidates::Registrations::RegistrationStore.instance.retrieve! session['registrations']['11048']
         expect(
-          session.to_h.dig('schools/11048/registrations', 'candidates_registrations_subject_and_date_information', 'bookings_placement_date_id')
+          persisted_session.subject_and_date_information.bookings_placement_date_id
         ).to eql(secondary_placement_date.id)
       end
 
       specify 'stores no subject information' do
+        persisted_session = \
+          Candidates::Registrations::RegistrationStore.instance.retrieve! session['registrations']['11048']
         expect(
-          session.to_h.dig('schools/11048/registrations', 'candidates_registrations_subject_and_date_information', 'bookings_placement_dates_subject_id')
+          persisted_session.subject_and_date_information.bookings_subject_id
         ).to be_nil
       end
     end
@@ -137,14 +143,18 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
       subject! { post subject_and_date_info_path, params: params }
 
       specify 'correctly stores the secondary placement date in the registration session' do
+        persisted_session = \
+          Candidates::Registrations::RegistrationStore.instance.retrieve! session['registrations']['11048']
         expect(
-          session.to_h.dig('schools/11048/registrations', 'candidates_registrations_subject_and_date_information', 'bookings_placement_date_id')
+          persisted_session.subject_and_date_information.bookings_placement_date_id
         ).to eql(secondary_placement_date.id)
       end
 
       specify 'correctly stores the secondary subject in the registration session' do
+        persisted_session = \
+          Candidates::Registrations::RegistrationStore.instance.retrieve! session['registrations']['11048']
         expect(
-          session.to_h.dig('schools/11048/registrations', 'candidates_registrations_subject_and_date_information', 'bookings_subject_id')
+          persisted_session.subject_and_date_information.bookings_subject_id
         ).to be(bookings_subject.id)
       end
     end

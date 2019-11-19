@@ -24,6 +24,7 @@ protected
     if current_contact && current_contact.contactid != contact.contactid
       Rails.logger.warn \
         "Signed in Candidate overwritten - #{current_contact.contactid} to #{contact.contactid}"
+
       delete_registration_sessions!
     end
 
@@ -57,6 +58,6 @@ protected
   end
 
   def delete_registration_sessions!
-    Candidates::Registrations::SchoolSession.delete_all_registrations session
+    session[:registrations] = nil
   end
 end
