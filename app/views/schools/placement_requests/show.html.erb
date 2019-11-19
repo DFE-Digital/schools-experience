@@ -1,3 +1,13 @@
+<% self.page_title = "Request #{@placement_request.id}" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Requests' => schools_placement_requests_path,
+    "Request" => nil
+  }
+%>
+
 <%= link_to 'Back', schools_placement_requests_path, class: 'govuk-back-link' %>
 
 <% if @placement_request.candidate_cancellation&.sent? %>
