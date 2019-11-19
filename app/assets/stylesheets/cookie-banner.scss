@@ -20,8 +20,10 @@
     }
 
     form {
-      display: inline-block;
-      margin-right: 1em;
+      @include govuk-media-query($from: tablet) {
+        display: inline-block;
+        margin-right: 1em;
+      }
     }
   }
 }
