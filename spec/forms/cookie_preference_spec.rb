@@ -3,7 +3,7 @@ require 'rails_helper'
 describe CookiePreference, type: :model do
   include ActiveSupport::Testing::TimeHelpers
 
-  context 'attributes' do
+  describe 'attributes' do
     it { is_expected.to be_persisted }
     it { is_expected.to respond_to :analytics }
     it { is_expected.to respond_to :required }
@@ -15,7 +15,7 @@ describe CookiePreference, type: :model do
     end
   end
 
-  context 'validations' do
+  describe 'validations' do
     context 'for analytics' do
       it { is_expected.to allow_value(true).for(:analytics) }
       it { is_expected.to allow_value(false).for(:analytics) }
@@ -27,13 +27,13 @@ describe CookiePreference, type: :model do
     end
   end
 
-  context 'methods' do
+  describe 'methods' do
     before { freeze_time }
     it { is_expected.to have_attributes cookie_key: 'cookie_preference-v1' }
     it { is_expected.to have_attributes expires: 30.days.from_now }
   end
 
-  context '#all=' do
+  describe '#all=' do
     subject { described_class.new(all: all) }
 
     context 'with true' do
@@ -55,18 +55,18 @@ describe CookiePreference, type: :model do
     end
   end
 
-  context '#to_json' do
+  describe '#to_json' do
     subject { described_class.new.to_json }
     it { is_expected.to eql({ 'analytics' => nil, 'required' => true }.to_json) }
   end
 
-  context '.from_json' do
+  describe '.from_json' do
     let(:json) { { analytics: true }.to_json }
     subject { described_class.from_json(json) }
     it { is_expected.to have_attributes analytics: true }
   end
 
-  context '.from_cookie' do
+  describe '.from_cookie' do
     subject { described_class.from_cookie(cookie) }
 
     context 'with cookie' do
@@ -80,7 +80,7 @@ describe CookiePreference, type: :model do
     end
   end
 
-  context '.all_cookies' do
+  describe '.all_cookies' do
     subject { described_class.all_cookies }
 
     it do
@@ -89,7 +89,7 @@ describe CookiePreference, type: :model do
     end
   end
 
-  context '#accepted_cookies' do
+  describe '#accepted_cookies' do
     subject { preference.accepted_cookies }
 
     context 'with analytics accepted' do
@@ -107,7 +107,7 @@ describe CookiePreference, type: :model do
     end
   end
 
-  context '#rejected_cookies' do
+  describe '#rejected_cookies' do
     subject { preference.rejected_cookies }
 
     context 'with analytics accepted' do
@@ -122,6 +122,30 @@ describe CookiePreference, type: :model do
         is_expected.to eql \
           %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
       end
+    end
+  end
+
+  describe '.category' do
+    subject { described_class.category '_ga' }
+    it { is_expected.to eql(:analytics) }
+  end
+
+  describe '.allowed?' do
+    subject { described_class.new(params).allowed?('_ga') }
+
+    context 'for neither accepted nor rejected' do
+      let(:params) { {} }
+      it { is_expected.to be true }
+    end
+
+    context 'for accepted' do
+      let(:params) { { analytics: true } }
+      it { is_expected.to be true }
+    end
+
+    context 'for rejected' do
+      let(:params) { { analytics: false } }
+      it { is_expected.to be false }
     end
   end
 end

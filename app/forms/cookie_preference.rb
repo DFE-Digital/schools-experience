@@ -14,7 +14,7 @@ class CookiePreference
   validates :analytics, inclusion: [true, false]
   validates :required, acceptance: true
 
-  delegate :cookie_key, :all_cookies, to: :class
+  delegate :cookie_key, :all_cookies, :category, to: :class
   delegate :to_json, to: :attributes
 
   class << self
@@ -32,6 +32,16 @@ class CookiePreference
 
     def all_cookies
       COOKIES.values.flatten
+    end
+
+    def category(cookie_name)
+      COOKIES.each do |category, names|
+        if names.include?(cookie_name.to_s)
+          return category
+        end
+      end
+
+      raise UnknownCookieError
     end
   end
 
@@ -63,4 +73,14 @@ class CookiePreference
   def rejected_cookies
     all_cookies - accepted_cookies
   end
+
+  # Note: allowed is not the same as accepted
+  # allowed = 'not explicitly rejected, and maybe explicitly accepted'
+  # accepted = 'explicitly accepted'
+  def allowed?(cookie_name)
+    value = attributes[category(cookie_name).to_s]
+    value.nil? || value == true
+  end
+
+  class UnknownCookieError < RuntimeError; end
 end
