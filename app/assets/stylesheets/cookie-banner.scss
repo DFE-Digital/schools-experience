@@ -4,9 +4,6 @@
 
   #cookie-banner-message {
     > p {
-      padding: 0rem;
-      margin: 0rem;
-      line-height: 1;
       color: $govuk-text-colour;
 
       // forego the underline, it interferes with the header bar immediately
@@ -20,6 +17,11 @@
           color: darken($govuk-link-colour, 15%);
         }
       }
+    }
+
+    form {
+      display: inline-block;
+      margin-right: 1em;
     }
   }
 }

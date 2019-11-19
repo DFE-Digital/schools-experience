@@ -17,15 +17,6 @@ describe "Displaying the cookie banner", type: :request do
     end
   end
 
-  context 'on subsequent visits (when the seen_cookie_message is present)' do
-    before { cookies[cookie_name] = 'yes' }
-
-    specify 'the page should not display the cookie banner' do
-      get candidates_root_path
-      expect(response.body).not_to match(banner_contents)
-    end
-  end
-
   context 'on subsequent visits (when the cookie_preference is present)' do
     let(:preference) { CookiePreference.new(analytics: true) }
     before { cookies[preference.cookie_key] = { value: preference.to_json } }
