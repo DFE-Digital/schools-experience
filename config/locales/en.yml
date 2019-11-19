@@ -382,10 +382,19 @@ en:
             date:
               blank: Enter a start date
               on_or_after: Date must not be in the past
-        bookings/bookings:
+        bookings/booking:
           attributes:
             date:
+              blank: Enter a booking date
               on_or_after: Date must not be in the past
+            contact_email:
+              blank: Enter your a contact email address
+              invalid: Enter a valid contact email address
+            contact_number:
+              blank: Enter your a contact telephone number
+              invalid: Enter a valid contact telephone number
+            candidate_instructions:
+              blank: Enter some instructions for the candidate
 
         candidates/feedback:
           <<: *feedback_errors
@@ -407,10 +416,8 @@ en:
   helpers:
     fieldset:
       order: Sorted by
-      schools_placement_requests_confirm_booking:
-        date: Confirm experience date
       bookings_booking:
-        date: Booking date
+        date: Confirm booking date
       bookings_school:
         enabled: Turn requests on or off
         availability_preference_fixed: Choose how dates are displayed
@@ -555,6 +562,8 @@ en:
           no: Primary including early years, key stage 1 and key stage 2
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
+      bookings_booking:
+        candidate_instructions: Extra instructions for the candidate
       candidates_registrations_contact_information:
         building: "Building and street"
         phone: "UK telephone number"
