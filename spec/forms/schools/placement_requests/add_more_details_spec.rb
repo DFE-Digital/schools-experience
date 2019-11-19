@@ -17,6 +17,17 @@ describe Schools::PlacementRequests::AddMoreDetails, type: :model do
         expect(subject).to validate_presence_of(attribute_name).with_message(/\AEnter a/)
       end
     end
+
+    context 'contact_email' do
+      context 'when present but invalid' do
+        ['candidate@example'].each do |value|
+          it do
+            is_expected.not_to allow_value(value).for(:contact_email).with_message \
+              'Enter a valid email address'
+          end
+        end
+      end
+    end
   end
 
   describe 'Methods' do
