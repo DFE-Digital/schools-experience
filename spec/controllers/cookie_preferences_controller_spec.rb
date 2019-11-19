@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe CookiePreferencesController, type: :request do
-  let(:cookie_name) { 'cookie_preference' }
+  let(:cookie_name) { 'cookie_preference-v1' }
   subject { response }
 
   describe "#show" do

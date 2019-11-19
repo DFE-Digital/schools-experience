@@ -1,5 +1,6 @@
 class CookiePreference
   EXPIRES_IN = 30.days.freeze
+  VERSION = 'v1'.freeze
 
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -15,7 +16,7 @@ class CookiePreference
 
   class << self
     def cookie_key
-      model_name.param_key
+      "#{model_name.param_key}-#{VERSION}"
     end
 
     def from_json(json)
