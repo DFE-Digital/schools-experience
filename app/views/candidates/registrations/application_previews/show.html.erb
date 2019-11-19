@@ -76,7 +76,7 @@
 
         <%= summary_row \
           'Experience availability',
-          @application_preview.placement_availability,
+          safe_format(@application_preview.placement_availability),
           edit_candidates_school_registrations_placement_preference_path(
             anchor: 'candidates_registrations_placement_preference_availability_container'
           ) %>
