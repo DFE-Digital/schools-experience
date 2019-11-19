@@ -6,5 +6,7 @@
     <% if cancellation.extra_details.present? %>
       <%= summary_row 'Extra details', cancellation.extra_details %>
     <% end %>
+    <%= summary_row 'Date cancellation received', cancellation.sent_at.to_date.to_formatted_s(:govuk) %>
+    <%= summary_row 'Cancelled by', cancellation.cancelled_by.humanize %>
   </dl>
 </section>
