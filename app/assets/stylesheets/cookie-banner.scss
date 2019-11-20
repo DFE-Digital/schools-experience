@@ -37,3 +37,9 @@
     }
   }
 }
+
+#cookies-tables {
+  table td.govuk-table__cell:first-of-type {
+    white-space: nowrap;
+  }
+}
