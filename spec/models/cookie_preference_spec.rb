@@ -131,21 +131,42 @@ describe CookiePreference, type: :model do
   end
 
   describe '.allowed?' do
-    subject { described_class.new(params).allowed?('_ga') }
+    context 'with cookie name' do
+      subject { described_class.new(params).allowed?('_ga') }
 
-    context 'for neither accepted nor rejected' do
-      let(:params) { {} }
-      it { is_expected.to be true }
+      context 'for neither accepted nor rejected' do
+        let(:params) { {} }
+        it { is_expected.to be true }
+      end
+
+      context 'for accepted' do
+        let(:params) { { analytics: true } }
+        it { is_expected.to be true }
+      end
+
+      context 'for rejected' do
+        let(:params) { { analytics: false } }
+        it { is_expected.to be false }
+      end
     end
 
-    context 'for accepted' do
-      let(:params) { { analytics: true } }
-      it { is_expected.to be true }
-    end
+    context 'with category' do
+      subject { described_class.new(params).allowed?(:analytics) }
 
-    context 'for rejected' do
-      let(:params) { { analytics: false } }
-      it { is_expected.to be false }
+      context 'without neither accepted or rejected' do
+        let(:params) { {} }
+        it { is_expected.to be true }
+      end
+
+      context 'with accepted' do
+        let(:params) { { analytics: true } }
+        it { is_expected.to be true }
+      end
+
+      context 'with rejected' do
+        let(:params) { { analytics: false } }
+        it { is_expected.to be false }
+      end
     end
   end
 end

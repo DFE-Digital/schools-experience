@@ -77,8 +77,13 @@ class CookiePreference
   # Note: allowed is not the same as accepted
   # allowed = 'not explicitly rejected, and maybe explicitly accepted'
   # accepted = 'explicitly accepted'
-  def allowed?(cookie_name)
-    value = attributes[category(cookie_name).to_s]
+  def allowed?(cookie_category_or_name)
+    value = if attributes.has_key? cookie_category_or_name.to_s
+              attributes[cookie_category_or_name.to_s]
+            else
+              attributes[category(cookie_category_or_name).to_s]
+            end
+
     value.nil? || value == true
   end
 
