@@ -417,7 +417,7 @@ en:
     fieldset:
       order: Sorted by
       bookings_booking:
-        date: Confirm booking date
+        date: Booking date
       bookings_school:
         enabled: Turn requests on or off
         availability_preference_fixed: Choose how dates are displayed
