@@ -98,3 +98,46 @@ end
 Then("the future booking date should be listed") do
   expect(page).to have_content(@booking.date.to_formatted_s(:govuk))
 end
+
+Given("I am on the {string} page for the placement request") do |string|
+  path = path_for(string, placement_request: @placement_request)
+  visit(path)
+  expect(page.current_path).to eql(path)
+end
+
+When("the school has no prior accepted placement requests") do
+  # do nothing
+end
+
+Then("there should be a list with the following subheadings:") do |table|
+  within('dl') do
+    table.raw.transpose.flatten.each do |row|
+      expect(page).to have_css('dt', text: row)
+    end
+  end
+end
+
+Then("there should be {string} button") do |string|
+  expect(page).to have_css("input[value='#{string}']")
+end
+
+Then("there should be a {string} link to the {string} page") do |link, target|
+  expect(page).to have_link(
+    link,
+    href: path_for(target, placement_request: @placement_request)
+  )
+end
+
+Given("the school has a prior booking") do
+  FactoryBot.create(:bookings_booking, :accepted, bookings_school: @school)
+end
+
+Then("there should be an {string} button and a {string} link") do |button_text, link_text|
+  expect(page).to have_button(button_text)
+  expect(page).to have_link(link_text)
+end
+
+Then("I should be on the {string} page for the placement request") do |string|
+  expect(@placement_request.booking).to be_present
+  expect(page.current_path).to eql(path_for(string, placement_request: @placement_request))
+end
