@@ -111,6 +111,8 @@ module Bookings
     def populate_contact_details!
       last_booking = Bookings::Booking.last_accepted_booking_by(bookings_school)
 
+      return self unless last_booking.present?
+
       assign_attributes(
         contact_name: last_booking.contact_name,
         contact_email: last_booking.contact_email,
@@ -133,32 +135,6 @@ module Bookings
 
     def duration_days
       duration.to_s + ' day'.pluralize(duration)
-    end
-
-    # stage one of the placement request acceptance mini-wizard
-    def booking_confirmed?
-      Schools::PlacementRequests::ConfirmBooking.new(
-        date: date,
-        placement_details: placement_details,
-        bookings_subject_id: bookings_subject_id
-      ).valid?
-    end
-
-    # stage two of the placement request acceptance mini-wizard
-    def more_details_added?
-      Schools::PlacementRequests::AddMoreDetails.new(
-        contact_name: contact_name,
-        contact_number: contact_number,
-        contact_email:  contact_email,
-        location:  location
-      ).valid?
-    end
-
-    # stage three of the placement request acceptance mini-wizard
-    def reviewed_and_candidate_instructions_added?
-      Schools::PlacementRequests::ReviewAndSendEmail.new(
-        candidate_instructions: candidate_instructions
-      ).valid?
     end
 
     def accepted?

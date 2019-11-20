@@ -388,10 +388,10 @@ en:
               blank: Enter a booking date
               on_or_after: Date must not be in the past
             contact_email:
-              blank: Enter your a contact email address
+              blank: Enter your contact email address
               invalid: Enter a valid contact email address
             contact_number:
-              blank: Enter your a contact telephone number
+              blank: Enter your contact telephone number
               invalid: Enter a valid contact telephone number
             candidate_instructions:
               blank: Enter some instructions for the candidate
