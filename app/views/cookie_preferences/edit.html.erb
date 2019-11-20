@@ -1,5 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
+    <%= link_to 'Back', :back, class: 'govuk-back-link' %>
+
     <%= page_heading 'Edit your cookie settings' %>
 
     <div class="govuk-grid-row">
@@ -53,8 +55,12 @@
               </p>
             </fieldset>
           </div>
+          
+          <p>
+            <%= link_to 'Find out more about cookies on this service', cookies_policy_path %>
+          </p>
 
-          <%= f.submit 'Save your cookie preferences' %>
+          <%= f.submit 'Save your cookie settings' %>
         <% end %>
       </div>
     </div>
