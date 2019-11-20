@@ -534,15 +534,15 @@ en:
       candidates_session:
         date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
       cookie_preference:
-        analytics_html: "<p>We use Google Analytics to measure how you use the
+        analytics_html: "We use Google Analytics to measure how you use the
           website so we can improve it based on user needs. Google Analytics sets
-          cookies that store anonymised information about:</p>
-          <ul class=\"govuk-list govuk-list--bullet\">
+          cookies that store anonymised information about:
+          <ul>
             <li>how you got to the site</li>
             <li>the pages you visit on Get school experience and Manage school experience, and how long you spend on each page</li>
             <li>what you click on while you're visiting the site</li>
           </ul>
-          <p>We do not allow Google to use or share the data about how you use this site.</p>"
+          We do not allow Google to use or share the data about how you use this site."
       schools_on_boarding_candidate_requirements_choice:
         has_requirements_html: "<br> For example, they must want to apply for teacher training at your school or have a degree"
       schools_on_boarding_dbs_requirement:
