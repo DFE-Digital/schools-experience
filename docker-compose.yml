@@ -33,7 +33,7 @@ services:
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      depends_on:
        - db-tasks
-  
+
    db-tasks:
      image: school-experience:latest
      command: rake db:create db:schema:load
@@ -47,12 +47,14 @@ services:
        - SECRET_KEY_BASE=stubbed
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
+     volumes:
+       - .:/ci_build
      depends_on:
        - postgres
        - redis
 
    postgres:
      image: mdillon/postgis:11-alpine
-     
+
    redis:
      image: redis:5-alpine

@@ -54,8 +54,15 @@ jobs:
       until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
     displayName: bring up postgres, redis and create database (for the web app) and spin up application
 
-  - script: docker-compose run --rm db-tasks rspec
+  - script: docker-compose run --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
     displayName: Run the Specs
+
+  - task: PublishTestResults@2
+    displayName: Upload RSpec results
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: rspec_results.xml
+      testRunTitle: RSpec results
 
   - script: docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks cucumber --profile=$(CUCUMBER_PROFILE)
     displayName: Run the Cucumber features
