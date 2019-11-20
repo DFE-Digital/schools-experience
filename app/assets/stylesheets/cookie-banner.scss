@@ -19,10 +19,20 @@
       }
     }
 
-    form {
-      @include govuk-media-query($from: tablet) {
+    @include govuk-media-query($from: tablet) {
+      form {
         display: inline-block;
         margin-right: 1em;
+      }
+
+      div.govuk-grid-column-one-third {
+        text-align: right;
+      }
+    }
+
+    @include govuk-media-query($until: tablet) {
+      div.govuk-grid-column-one-third {
+        margin-top: govuk-spacing(2);
       }
     }
   }

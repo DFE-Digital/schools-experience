@@ -11,6 +11,7 @@ class CookiePreferencesController < ApplicationController
     if cookie_preferences.valid?
       persist cookie_preferences
       remove_rejected_cookies cookie_preferences
+      flash[:cookies] = 'updated'
       redirect_to request.referer.presence || edit_cookie_preference_path
     else
       render 'edit'

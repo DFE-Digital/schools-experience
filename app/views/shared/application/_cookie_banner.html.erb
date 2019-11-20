@@ -19,4 +19,22 @@
       <%= govuk_link_to 'Cookie settings', edit_cookie_preference_path %>
     </div>
   </div>
+<% elsif flash[:cookies].present? %>
+  <div id="cookie-banner" aria-label="cookie banner" role="region">
+    <div id="cookie-banner-message" class="govuk-width-container">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          We've updated your cookie settings. You can
+
+          <%= link_to 'change your cookie settings', edit_cookie_preference_path %>
+
+          at any time.
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+          <%= link_to 'Hide', request.fullpath %>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>

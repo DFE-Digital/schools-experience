@@ -1,5 +1,5 @@
 class CookiePreference
-  EXPIRES_IN = 30.days.freeze
+  EXPIRES_IN = 1.year.freeze
   VERSION = 'v1'.freeze
   COOKIES = {
     analytics: %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)

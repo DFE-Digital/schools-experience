@@ -30,7 +30,7 @@ describe CookiePreference, type: :model do
   describe 'methods' do
     before { freeze_time }
     it { is_expected.to have_attributes cookie_key: 'cookie_preference-v1' }
-    it { is_expected.to have_attributes expires: 30.days.from_now }
+    it { is_expected.to have_attributes expires: 1.year.from_now }
   end
 
   describe '#all=' do
