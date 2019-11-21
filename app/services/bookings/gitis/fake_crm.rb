@@ -51,8 +51,8 @@ module Bookings::Gitis
           raise "Bad Response - attribute '#{key}' is not recognised"
         end
 
-        if key =~ /@odata.bind\z/ && value.blank?
-          raise "Bad Response - odata.bind attribute '#{key}' is blank"
+        if key =~ /@odata.bind\z/ && (value.blank? || value !~ Bookings::Gitis::Entity::BIND_FORMAT)
+          raise "Bad Response - odata.bind attribute '#{key}' is invalid"
         end
       end
 
@@ -68,8 +68,8 @@ module Bookings::Gitis
           raise "Bad Response - attribute '#{key}' is not recognised"
         end
 
-        if key =~ /@odata.bind\z/ && value.blank?
-          raise "Bad Response - odata.bind attribute '#{key}' is blank"
+        if key =~ /@odata.bind\z/ && (value.blank? || value !~ Bookings::Gitis::Entity::BIND_FORMAT)
+          raise "Bad Response - odata.bind attribute '#{key}' is invalid"
         end
       end
 
