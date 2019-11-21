@@ -5,8 +5,10 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
     <h1>
-      Confirm the booking for <%= @placement_request.candidate_name %>
+      Confirm the contact details for <%= @placement_request.candidate_name %>
     </h1>
+
+    <h3 class="govuk-heading-m">Candidate details</h3>
 
     <dl class="govuk-summary-list">
 
@@ -25,7 +27,7 @@
             Date requested
           </dt>
           <dd class="govuk-summary-list__value">
-              <%= @placement_request.placement_date.date.to_formatted_s(:govuk) %>
+            <%= @placement_request.placement_date.date.to_formatted_s(:govuk) %>
           </dd>
         <%- else -%>
           <dt class="govuk-summary-list__key">
@@ -45,6 +47,12 @@
           <%= @placement_request.requested_subject.name %>
         </dd>
       </div>
+
+    </dl>
+
+    <h3 class="govuk-heading-m">Contact details</h3>
+
+    <dl class="govuk-summary-list">
 
       <% if @last_booking.present? %>
         <div class="govuk-summary-list__row">
@@ -91,7 +99,7 @@
     <div>
       <% if @placement_request&.placement_date&.in_future? && @last_booking.present?  %>
         <%# contact details are present and school has fixed dates, allow for move on to the email preview%>
-        <%= button_to 'Accept request', schools_placement_request_acceptance_confirm_booking_path, class: 'govuk-button' %>
+        <%= button_to 'Continue', schools_placement_request_acceptance_confirm_booking_path, class: 'govuk-button' %>
         <%= govuk_link_to 'Make changes', new_schools_placement_request_acceptance_make_changes_path(@placement_request), secondary: true, data: { module: "govuk-button" } %>
       <% else %>
         <%# contact details are missing (this is the first time) or it's a flex booking %>

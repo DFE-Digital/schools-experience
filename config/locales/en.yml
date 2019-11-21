@@ -336,27 +336,6 @@ en:
             acceptance:
               accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
-        schools/placement_dates/configuration_form:
-          attributes:
-            available_for_all_subjects:
-              inclusion: 'Select if this date is available for all the subjects you offer'
-            has_limited_availability:
-              inclusion: 'Select if there is a maximum number of bookings you’ll accept for this date'
-            max_bookings_count:
-              not_a_number: "Enter a valid number for maximum number of bookings you'll accept for this date"
-            subjects:
-              blank: 'Select which subjects are available for this date'
-        schools/placement_requests/add_more_details:
-          attributes:
-            contact_name:
-              blank: 'Enter a contact name'
-            contact_number:
-              blank: 'Enter a contact phone number'
-            contact_email:
-              blank: 'Enter a contact email address'
-            location:
-              blank: 'Enter a location for the candidate to report to'
-
   activerecord:
     errors:
       models:
@@ -387,11 +366,13 @@ en:
             date:
               blank: Enter a booking date
               on_or_after: Date must not be in the past
+            contact_name:
+              blank: You must provide a contact name to the candidate
             contact_email:
-              blank: Enter your contact email address
+              blank: Enter a contact email address
               invalid: Enter a valid contact email address
             contact_number:
-              blank: Enter your contact telephone number
+              blank: Enter a contact telephone number
               invalid: Enter a valid contact telephone number
             candidate_instructions:
               blank: Enter some instructions for the candidate
@@ -563,6 +544,9 @@ en:
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
       bookings_booking:
+        contact_name: Name
+        contact_number: Telephone number
+        contact_email: Email address
         candidate_instructions: Extra instructions for the candidate
       candidates_registrations_contact_information:
         building: "Building and street"

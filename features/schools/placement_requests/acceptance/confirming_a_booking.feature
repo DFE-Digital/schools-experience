@@ -29,10 +29,10 @@ Feature: Confirming a booking
             | Subject requested |
             | Contact details   |
             | Admin details     |
-        And there should be an 'Accept request' button and a 'Make changes' link
+        And there should be an 'Continue' button and a 'Make changes' link
 
     Scenario: Confirming a booking
         Given the school has a prior booking
         And I am on the 'confirm booking' page for the placement request
-        When I click the 'Accept request' button
+        When I click the 'Continue' button
         Then I should be on the 'preview confirmation email' page for the placement request

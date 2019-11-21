@@ -110,10 +110,8 @@ When("the school has no prior accepted placement requests") do
 end
 
 Then("there should be a list with the following subheadings:") do |table|
-  within('dl') do
-    table.raw.transpose.flatten.each do |row|
-      expect(page).to have_css('dt', text: row)
-    end
+  table.raw.transpose.flatten.each do |row|
+    expect(page).to have_css('dt', text: row)
   end
 end
 
