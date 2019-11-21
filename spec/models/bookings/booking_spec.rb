@@ -378,4 +378,33 @@ describe Bookings::Booking do
       it { is_expected.not_to be_editable_date }
     end
   end
+
+  describe '.from_placement_request' do
+    specify { expect(described_class).to respond_to(:from_placement_request) }
+    let(:placement_request) { create(:bookings_placement_request, placement_date: placement_date) }
+    subject { described_class.from_placement_request(placement_request) }
+
+    context 'when the placement date is in the future' do
+      let(:placement_date) { create(:bookings_placement_date) }
+
+      specify 'should set the date' do
+        expect(subject.date).to be_present
+      end
+
+      specify 'should set the school, placement request, subject and details' do
+        expect(subject.bookings_school).to eql(placement_request.school)
+        expect(subject.bookings_placement_request).to eql(placement_request)
+        expect(subject.bookings_subject_id).to eql(placement_request.requested_subject.id)
+        expect(subject.placement_details).to eql(placement_request.school.placement_info)
+      end
+    end
+
+    context 'when the placement date is in the past' do
+      let(:placement_date) { create(:bookings_placement_date, :in_the_past) }
+
+      specify 'should not set the date' do
+        expect(subject.date).to be_blank
+      end
+    end
+  end
 end
