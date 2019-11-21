@@ -58,6 +58,7 @@ jobs:
     displayName: Run the Specs
 
   - task: PublishTestResults@2
+    condition: failed()
     displayName: Upload RSpec results
     inputs:
       testResultsFormat: 'JUnit'
@@ -68,6 +69,7 @@ jobs:
     displayName: Run the Cucumber features
 
   - task: PublishTestResults@2
+    condition: failed()
     displayName: Upload Cucumber results
     inputs:
       testResultsFormat: 'JUnit'
@@ -128,7 +130,9 @@ jobs:
       echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
       docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber --format junit --out /ci_build/junit $(features)
     displayName: Run Cucumber Tests
+
   - task: PublishTestResults@2
+    condition: failed()
     displayName: Upload Cucumber results
     inputs:
       testResultsFormat: 'JUnit'
