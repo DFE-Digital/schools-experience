@@ -38,6 +38,6 @@ RSpec.describe Bookings::Gitis::Country, type: :model do
     end
 
     subject { described_class.default }
-    it { is_expected.to eql(uuid) }
+    it { is_expected.to eql("dfe_countries(#{uuid})") }
   end
 end

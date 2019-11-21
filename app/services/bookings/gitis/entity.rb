@@ -17,6 +17,7 @@ module Bookings::Gitis
     include ActiveModel::Dirty
 
     ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
+    BIND_FORMAT = /\A[^\(]+\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)\z/.freeze
 
     included do
       delegate :attributes_to_select, to: :class
@@ -67,7 +68,7 @@ module Bookings::Gitis
     end
 
     def entity_id
-      id ? "#{entity_path}(#{id})" : entity_path
+      id ? self.class.entity_id_for_id(id) : entity_path
     end
 
     def attributes_for_update
@@ -121,6 +122,10 @@ module Bookings::Gitis
 
       def all_attribute_names
         select_attribute_names + association_attribute_names
+      end
+
+      def entity_id_for_id(id)
+        "#{entity_path}(#{id})"
       end
 
     protected
@@ -200,7 +205,7 @@ module Bookings::Gitis
           if id_value.nil?
             send :"#{attr_name}@odata.bind=", nil
           elsif ID_FORMAT.match?(id_value)
-            send :"#{attr_name}@odata.bind=", "#{entity_type.entity_path}(#{id_value})"
+            send :"#{attr_name}@odata.bind=", entity_type.entity_id_for_id(id_value)
           else
             raise InvalidEntityId
           end

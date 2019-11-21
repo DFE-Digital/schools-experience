@@ -12,6 +12,11 @@ RSpec.describe Bookings::Gitis::Entity do
   it { is_expected.to have_attributes select_attribute_names: Set.new(expected_attrs) }
   it { is_expected.to have_attributes attributes_to_select: expected_attrs.join(',') }
 
+  describe '.entity_id_for_id' do
+    subject { TestEntity.entity_id_for_id uuid }
+    it { is_expected.to eql("testentities(#{uuid})") }
+  end
+
   describe "#attributes" do
     it do
       expect(subject.attributes).to eq(

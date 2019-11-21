@@ -8,7 +8,7 @@ module Bookings::Gitis
     entity_attribute :dfe_name
 
     def self.default
-      Rails.application.config.x.gitis.country_id
+      entity_id_for_id Rails.application.config.x.gitis.country_id
     end
   end
 end

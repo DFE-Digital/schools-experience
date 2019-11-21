@@ -35,9 +35,9 @@ module Bookings
       alias_attribute :postcode, :address1_postalcode
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
-      validates :'dfe_Country@odata.bind', presence: true, allow_nil: true
-      validates :'dfe_PreferredTeachingSubject01@odata.bind', presence: true, allow_nil: true
-      validates :'dfe_PreferredTeachingSubject02@odata.bind', presence: true, allow_nil: true
+      validates :'dfe_Country@odata.bind', presence: true, format: BIND_FORMAT, allow_nil: true
+      validates :'dfe_PreferredTeachingSubject01@odata.bind', presence: true, format: BIND_FORMAT, allow_nil: true
+      validates :'dfe_PreferredTeachingSubject02@odata.bind', presence: true, format: BIND_FORMAT, allow_nil: true
 
       def initialize(crm_contact_data = {})
         super # handles populating
