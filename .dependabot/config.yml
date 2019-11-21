@@ -2,11 +2,11 @@ version: 1
 update_configs:
   - package_manager: "ruby:bundler"
     directory: "/"
-    update_schedule: "live"
+    update_schedule: "weekly"
     target_branch: "master"
   - package_manager: "javascript"
     directory: "/"
-    update_schedule: "live"
+    update_schedule: "weekly"
     target_branch: "master"
   - package_manager: "docker"
     directory: "/"
