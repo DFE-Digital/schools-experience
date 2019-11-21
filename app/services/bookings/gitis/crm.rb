@@ -101,6 +101,10 @@ module Bookings
         entity.id
       end
 
+      def write!(entity)
+        write(entity) || fail(Bookings::Gitis::InvalidEntity.new(entity))
+      end
+
       def log_school_experience(contact_id, logline)
         contact = find(contact_id)
         return false unless contact

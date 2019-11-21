@@ -68,8 +68,6 @@ describe Bookings::Gitis::CRM, type: :model do
     end
 
     context 'with includes' do
-      include_context 'test entity'
-
       let(:companyid) { SecureRandom.uuid }
       let(:testentityid) { SecureRandom.uuid }
 
@@ -239,6 +237,30 @@ describe Bookings::Gitis::CRM, type: :model do
 
       it "will return false" do
         expect(gitis.write(contact)).to be false
+      end
+    end
+  end
+
+  describe '#write!' do
+    before do
+      allow(Rails.application.config.x.gitis).to \
+        receive(:fake_crm).and_return(true)
+    end
+
+    context 'with valid' do
+      let(:testentity) { TestEntity.new(firstname: 'Joe') }
+      subject! { gitis.write! testentity }
+      it { is_expected.to be_present }
+      it { expect(testentity.id).to be_present }
+    end
+
+    context 'with invalid' do
+      let(:testentity) { TestEntity.new(firstname: '') }
+
+      it "will raise an error" do
+        expect { gitis.write! testentity }.to \
+          raise_exception(Bookings::Gitis::InvalidEntity) \
+          .with_message('TestEntity is invalid: {:firstname=>[{:error=>:blank}]}')
       end
     end
   end

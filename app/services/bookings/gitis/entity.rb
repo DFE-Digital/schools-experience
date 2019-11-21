@@ -3,6 +3,12 @@ module Bookings::Gitis
   class MissingPrimaryKey < RuntimeError; end
   class InvalidEntityId < RuntimeError; end
 
+  class InvalidEntity < RuntimeError
+    def initialize(entity)
+      super "#{entity.class} is invalid: #{entity.errors.details.inspect}"
+    end
+  end
+
   module Entity
     extend ActiveSupport::Concern
 
