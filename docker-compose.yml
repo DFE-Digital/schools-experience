@@ -17,6 +17,8 @@ services:
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      depends_on:
        - db-tasks
+     volumes:
+       - .:/ci_build
 
    delayed-jobs:
      image: school-experience:latest
