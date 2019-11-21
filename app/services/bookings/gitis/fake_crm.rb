@@ -46,9 +46,13 @@ module Bookings::Gitis
         end
       end
 
-      data.keys.each do |key|
+      data.each do |key, value|
         unless ALLOWED.include?(key)
           raise "Bad Response - attribute '#{key}' is not recognised"
+        end
+
+        if key =~ /@odata.bind\z/ && value.blank?
+          raise "Bad Response - odata.bind attribute '#{key}' is blank"
         end
       end
 
@@ -59,9 +63,13 @@ module Bookings::Gitis
       return super unless stubbed?
       return entity_id unless entity_id.start_with?('contacts(')
 
-      data.keys.each do |key|
+      data.each do |key, value|
         unless ALLOWED.include?(key)
           raise "Bad Response - attribute '#{key}' is not recognised"
+        end
+
+        if key =~ /@odata.bind\z/ && value.blank?
+          raise "Bad Response - odata.bind attribute '#{key}' is blank"
         end
       end
 
