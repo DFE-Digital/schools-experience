@@ -64,8 +64,15 @@ jobs:
       testResultsFiles: rspec_results.xml
       testRunTitle: RSpec results
 
-  - script: docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks cucumber --profile=$(CUCUMBER_PROFILE)
+  - script: docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks cucumber --profile=$(CUCUMBER_PROFILE) --format junit --out /ci_build/junit
     displayName: Run the Cucumber features
+
+  - task: PublishTestResults@2
+    displayName: Upload Cucumber results
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit/TEST-*.xml'
+      testRunTitle: Cucumber results
 
   - script: |
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
