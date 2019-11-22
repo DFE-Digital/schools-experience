@@ -65,7 +65,9 @@ module Bookings::Gitis
     end
 
     def attributes_for_update
-      attributes.slice(*(changed - update_blacklist))
+      attributes.slice(*(changed - update_blacklist)).reject do |k, v|
+        k =~ /@odata\.bind\z/ && v.nil?
+      end
     end
 
     def attributes_for_create
