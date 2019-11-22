@@ -143,7 +143,7 @@ module Candidates::SchoolHelper
 private
 
   def filtered_subject_ids(subject_ids)
-    return [] unless subject_ids.any?
+    return [] unless subject_ids&.any?
 
     subject_ids.reject(&:blank?).map(&:to_i)
   end
