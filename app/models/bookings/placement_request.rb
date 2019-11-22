@@ -149,7 +149,7 @@ module Bookings
     end
 
     def requested_subject
-      subject || Bookings::Subject.find_by!(name: subject_first_choice)
+      subject || Bookings::Subject.unscoped.find_by!(name: subject_first_choice)
     end
 
     def received_on

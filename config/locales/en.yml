@@ -391,9 +391,14 @@ en:
               too_short: Availability description must be at least 3 characters
         bookings/placement_date:
           attributes:
+            duration:
+              blank: Enter a duration
             date:
               blank: Enter a start date
               on_or_after: Date must not be in the past
+            supports_subjects:
+              inclusion: Select a school experience phase
+
         bookings/bookings:
           attributes:
             date:

@@ -125,12 +125,10 @@ module Bookings::Gitis
         end
       end
 
-      def entity_attribute(attr_name, type = ActiveModel::Type::Value.new,
-        internal: false, except: nil, **options)
-
+      def entity_attribute(attr_name, internal: false, except: nil)
         except = Array.wrap(except).map(&:to_sym)
 
-        attribute :"#{attr_name}", type, **options
+        attribute :"#{attr_name}"
 
         # freeze the value on assignment since in place changes will break
         # change tracking
@@ -154,12 +152,9 @@ module Bookings::Gitis
         end
       end
 
-      def entity_attributes(*attr_names, type: ActiveModel::Type::Value.new,
-        internal: false, except: nil, **options)
-
+      def entity_attributes(*attr_names, internal: false, except: nil)
         Array.wrap(attr_names).flatten.each do |attr_name|
-          entity_attribute attr_name, type,
-            internal: internal, except: except, **options
+          entity_attribute(attr_name, internal: internal, except: except)
         end
       end
 
@@ -167,9 +162,9 @@ module Bookings::Gitis
         model_name.to_s.downcase.split('::').last.pluralize
       end
 
-      def entity_association(attr_name, entity_type, **options)
+      def entity_association(attr_name, entity_type)
         self.association_attribute_names = association_attribute_names + [attr_name.to_s]
-        entity_attribute :"#{attr_name}@odata.bind", except: :select, **options
+        entity_attribute :"#{attr_name}@odata.bind", except: :select
 
         value_name = "_#{attr_name.downcase}_value"
         self.select_attribute_names = select_attribute_names + [value_name]

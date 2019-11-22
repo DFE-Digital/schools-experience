@@ -43,7 +43,7 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
 
       it 'returns a new subject_selection without attributes set' do
         expect(subject.available_for_all_subjects).to eq nil
-        expect(subject.subject_ids).to eq nil
+        expect(subject.subject_ids).to be_empty
       end
     end
   end
