@@ -66,7 +66,10 @@ module Bookings::Gitis
 
     def attributes_for_update
       attributes.slice(*(changed - update_blacklist)).reject do |k, v|
-        k =~ /@odata\.bind\z/ && v.nil?
+        # Don't attempt to set bind values to NULL - this is invalid syntax
+        # Dissasociating requires deleting the $ref
+        # Which is not currently supported
+        k.ends_with?('@odata.bind') && v.nil?
       end
     end
 
