@@ -134,10 +134,6 @@ module Bookings
         self.dfe_notesforclassroomexperience = "#{dfe_notesforclassroomexperience}#{log_line}\r\n"
       end
 
-      def attributes_for_update
-        super.except('dfe_PreferredTeachingSubject02@odata.bind')
-      end
-
     private
 
       def set_email_address_2_if_blank
