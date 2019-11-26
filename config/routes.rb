@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     end
     resource :switch, only: %i(new show), controller: 'switch'
 
-    resources :change, only: %i(index update), as: 'change', controller: 'schools'
+    resource :change_school, only: %i(show create), as: 'change', path: 'change', controller: 'change_schools'
 
     resource :dashboard, only: :show
     resource :contact_us, only: :show, controller: 'contact_us'
