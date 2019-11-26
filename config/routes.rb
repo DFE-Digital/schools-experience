@@ -84,6 +84,7 @@ Rails.application.routes.draw do
       resource :no_school, controller: :no_school, only: :show
       resource :auth_failed, controller: :auth_failed, only: :show
       resource :insufficient_privileges, controller: :insufficient_privileges, only: :show
+      resource :inaccessible_school, controller: :insufficient_privileges, only: :show
     end
 
     namespace :on_boarding do
