@@ -3,10 +3,10 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ChangeSchoolsController, type: :request do
   include_context "logged in DfE user"
-  let!(:profile) { create(:bookings_profile, school: @current_user_school) }
 
   describe '#show' do
     subject { get '/schools/change' }
+    let!(:profile) { create(:bookings_profile, school: @current_user_school) }
     before { subject }
 
     it { is_expected.to render_template(:show) }
@@ -14,11 +14,11 @@ describe Schools::ChangeSchoolsController, type: :request do
 
   describe '#create' do
     let(:old_school) { @current_user_school }
+    let!(:profile) { create(:bookings_profile, school: @current_user_school) }
 
     context 'when the user has access to the new school' do
-      let(:schools) { create_list(:bookings_school, 3) }
-      let(:urns) { schools.map(&:urn) }
-      let(:new_school) { schools.first }
+      let(:new_school) { create(:bookings_school) }
+      let(:urns) { [old_school, new_school].map(&:urn) }
 
       before do
         allow_any_instance_of(Schools::DFESignInAPI::Organisations).to(

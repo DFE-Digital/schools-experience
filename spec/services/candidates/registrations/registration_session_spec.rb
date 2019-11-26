@@ -218,7 +218,7 @@ describe Candidates::Registrations::RegistrationSession do
         subject.flag_as_pending_email_confirmation!
       end
 
-      it 'marks the session as pending_email_confirmation' do
+      it 'marks the4 session as pending_email_confirmation' do
         expect(subject).to be_pending_email_confirmation
       end
     end
