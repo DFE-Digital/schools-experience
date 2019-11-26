@@ -30,6 +30,9 @@ Rails.application.routes.draw do
       get :logout
     end
     resource :switch, only: %i(new show), controller: 'switch'
+
+    resources :change, only: %i(index update), as: 'change', controller: 'schools'
+
     resource :dashboard, only: :show
     resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
