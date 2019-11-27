@@ -3,6 +3,9 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ChangeSchoolsController, type: :request do
   include_context "logged in DfE user"
+  before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true) }
+  before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled).and_return(true) }
+  before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_school_change_enabled).and_return(true) }
 
   describe '#show' do
     subject { get '/schools/change' }
