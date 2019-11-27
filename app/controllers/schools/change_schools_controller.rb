@@ -14,9 +14,7 @@ module Schools
     def create
       new_school = Bookings::School.find(change_school_params[:id])
 
-      unless new_school.urn.in?(urns)
-        raise Schools::InaccessibleSchoolError, "cannot access"
-      end
+      raise Schools::InaccessibleSchoolError unless user_has_role_at_school?(current_user.sub, new_school.urn)
 
       session[:urn]         = new_school.urn
       session[:school_name] = new_school.name
@@ -49,6 +47,17 @@ module Schools
 
     def organisations
       @organisations ||= Schools::DFESignInAPI::Organisations.new(current_user.sub)
+    end
+
+    def user_has_role_at_school?(user_uuid, urn)
+      Schools::DFESignInAPI::Roles.new(user_uuid, urn).has_school_experience_role?
+    rescue Faraday::ResourceNotFound
+      # if the role isn't found the API returns a 404 - this means that the user
+      # has insufficient privileges but this *isn't* really an error, so log it
+      # and return false
+      Rails.logger.warn("Role query yielded 404, uuid: #{user_uuid}, urn: #{urn}")
+
+      false
     end
   end
 end

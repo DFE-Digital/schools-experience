@@ -25,8 +25,8 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:urns) { [old_school, new_school].map(&:urn) }
 
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to(
-          receive(:urns).and_return(urns)
+        allow_any_instance_of(Schools::DFESignInAPI::Roles).to(
+          receive(:has_school_experience_role?).and_return(true)
         )
       end
 
@@ -49,8 +49,8 @@ describe Schools::ChangeSchoolsController, type: :request do
 
     context 'when the user does not have access to the new school' do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to(
-          receive(:urns).and_return([old_school.urn])
+        allow_any_instance_of(Schools::DFESignInAPI::Roles).to(
+          receive(:has_school_experience_role?).and_return(false)
         )
       end
       let(:new_school) { create(:bookings_school) }
