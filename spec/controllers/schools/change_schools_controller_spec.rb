@@ -7,6 +7,9 @@ describe Schools::ChangeSchoolsController, type: :request do
   before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled).and_return(true) }
   before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_school_change_enabled).and_return(true) }
 
+  let(:old_school) { @current_user_school }
+  let(:new_school) { create(:bookings_school) }
+
   describe '#show' do
     subject { get '/schools/change' }
     let!(:profile) { create(:bookings_profile, school: @current_user_school) }
@@ -16,11 +19,9 @@ describe Schools::ChangeSchoolsController, type: :request do
   end
 
   describe '#create' do
-    let(:old_school) { @current_user_school }
     let!(:profile) { create(:bookings_profile, school: @current_user_school) }
 
     context 'when the user has access to the new school' do
-      let(:new_school) { create(:bookings_school) }
       let(:urns) { [old_school, new_school].map(&:urn) }
 
       before do
@@ -59,6 +60,20 @@ describe Schools::ChangeSchoolsController, type: :request do
 
       it 'should raise an invalid school error and redirect to an appropriate error page' do
         expect(subject).to redirect_to(schools_errors_inaccessible_school_path)
+      end
+    end
+
+    context 'when internal changing is disabled' do
+      before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled).and_return(false) }
+      before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_school_change_enabled).and_return(false) }
+
+      let(:params) { { schools_change_school: { id: new_school.id } } }
+
+      let(:change_school_page) { get '/schools/change' }
+      subject { post('/schools/change', params: params) }
+
+      specify 'should fail with a 403: forbidden' do
+        expect(subject).to eql(403)
       end
     end
   end

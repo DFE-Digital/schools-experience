@@ -10,19 +10,33 @@ describe 'schools/dashboards/show.html.erb', type: :view do
 
   context 'when the user has other schools' do
     before { assign :other_urns, [111111] }
-    before { render }
+    subject { render }
 
-    specify 'the page should have a change school link' do
-      expect(rendered).to have_link('Change school')
+    context 'when in-app school switching is not enabled' do
+      specify 'the page should have a change school link that initiates a DfE Sign-in switch' do
+        expect(subject).to have_link('Change school', href: '/schools/switch/new')
+      end
+    end
+
+    context 'when in-app school switching is enabled' do
+      before do
+        allow(view).to receive(:allow_school_change_in_app?).and_return(true)
+      end
+
+      subject { render }
+
+      specify 'the page should have a change school link that initiates an internal switch' do
+        expect(subject).to have_link('Change school', href: '/schools/change')
+      end
     end
   end
 
   context 'when the user has no other schools' do
     before { assign :other_urns, [] }
-    before { render }
+    subject { render }
 
     specify 'the page should have no change school link' do
-      expect(rendered).not_to have_link('Change school')
+      expect(subject).not_to have_link('Change school')
     end
   end
 end

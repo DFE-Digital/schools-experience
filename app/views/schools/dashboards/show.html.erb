@@ -7,9 +7,16 @@
     <article id="dashboard">
 
       <% if has_other_schools? %>
-        <section id="change-school">
-          <%= link_to "Change school", new_schools_switch_path %>
-        </section>
+
+        <% if allow_school_change_in_app? %>
+          <section id="change-school">
+            <%= link_to "Change school", schools_change_path %>
+          </section>
+        <% else %>
+          <section id="change-school">
+            <%= link_to "Change school", new_schools_switch_path %>
+          </section>
+        <% end %>
       <% end %>
 
       <% if @current_school.private_beta? %>

@@ -2,6 +2,8 @@ module Schools
   class InaccessibleSchoolError < StandardError; end
 
   class ChangeSchoolsController < Schools::BaseController
+    before_action :ensure_in_app_school_changing_enabled?, only: :create
+
     rescue_from Schools::InaccessibleSchoolError, with: :access_denied
 
     def show
@@ -23,6 +25,15 @@ module Schools
     end
 
   private
+
+    def ensure_in_app_school_changing_enabled?
+      enabled = [
+        Rails.configuration.x.dfe_sign_in_api_enabled,
+        Rails.configuration.x.dfe_sign_in_api_school_change_enabled
+      ].all?
+
+      head(:forbidden) unless enabled
+    end
 
     def change_school_params
       params.require(:schools_change_school).permit(:id)
