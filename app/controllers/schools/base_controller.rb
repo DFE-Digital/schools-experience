@@ -3,6 +3,8 @@ module Schools
   class MissingURN < StandardError; end
 
   class BaseController < ApplicationController
+    self.forgery_protection_origin_check = false
+
     include GitisAccess
     include DFEAuthentication
     before_action :require_auth
