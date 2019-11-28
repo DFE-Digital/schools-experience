@@ -15,6 +15,15 @@
       <% if @current_school.private_beta? %>
 
         <%= render partial: 'your_school_is_disabled' if @current_school.disabled? %>
+
+        <%- if show_no_placement_dates_warning?(@current_school) -%>
+          <%= render partial: 'schools/dashboards/no_placement_dates_warning' %>
+        <%- end -%>
+
+        <%- if show_no_availability_info_warning?(@current_school) -%>
+          <%= render partial: 'schools/dashboards/no_availability_info_warning' %>
+        <%- end -%>
+
         <%= render partial: 'new_requests_and_bookings' %>
         <%= render partial: 'manage_dates' %>
         <%= render partial: 'account_admin' %>
