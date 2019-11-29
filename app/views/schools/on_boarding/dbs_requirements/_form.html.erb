@@ -30,9 +30,7 @@
           <%= f.text_area_with_maxwords :dbs_policy_details, maxwords: { count: 50 } %>
         <% end %>
 
-        <%= fieldset.radio_input false do  %>
-          <%= f.text_area_with_maxwords :no_dbs_policy_details, maxwords: { count: 50 } %>
-        <% end %>
+        <%= fieldset.radio_input false %>
       <% end %>
 
       <%= f.submit 'Continue' %>
