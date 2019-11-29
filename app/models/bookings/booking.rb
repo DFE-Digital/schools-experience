@@ -81,6 +81,10 @@ module Bookings
       previous.accepted
     end
 
+    scope :days_in_the_future, ->(days_away) { where(date: days_away.from_now.to_date) }
+    scope :tomorrow,           -> { days_in_the_future(1.day) }
+    scope :one_week_from_now,  -> { days_in_the_future(7.days) }
+
     def self.from_confirm_booking(confirm_booking)
       new(
         date: confirm_booking.date,
