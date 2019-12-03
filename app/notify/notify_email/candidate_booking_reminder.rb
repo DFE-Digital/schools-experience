@@ -55,7 +55,7 @@ class NotifyEmail::CandidateBookingReminder < Notify
     super(to: to)
   end
 
-  def self.from_booking(to, time_until_booking, booking, cancellation_url)
+  def self.from_booking(to, time_until_booking, booking)
     school = booking.bookings_school
     profile = school.profile
 
@@ -89,8 +89,22 @@ class NotifyEmail::CandidateBookingReminder < Notify
       school_teacher_email: booking.contact_email,
       school_teacher_telephone: booking.contact_number,
       placement_details: booking.placement_details,
-      cancellation_url: cancellation_url
+      cancellation_url: candidates_cancel_url(booking.token)
     )
+  end
+
+  # FIXME is there a nicer way of doing this? Being able to
+  # call the helper from .from_booking is definitely a nicety
+  # as the helper isn't available from models or services
+  def self.candidates_cancel_url(token)
+    Rails
+      .application
+      .routes
+      .url_helpers
+      .candidates_cancel_url(
+        token,
+        host: Rails.configuration.x.base_url
+      )
   end
 
   def template_id

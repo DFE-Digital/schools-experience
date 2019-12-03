@@ -17,7 +17,7 @@ describe NotifyEmail::CandidateBookingReminder do
     school_teacher_email: "ednak@springfield.co.uk",
     school_teacher_telephone: "01234 234 1245",
     placement_details: "You will shadow a teacher and assist with lesson planning",
-    cancellation_url: 'https://example.com/candiates/cancel/abc-123'
+    cancellation_url: "#{Rails.configuration.x.base_url}/candiates/cancel/abc-123"
 
   describe ".from_booking" do
     before do
@@ -48,9 +48,9 @@ describe NotifyEmail::CandidateBookingReminder do
       allow(booking).to receive(:candidate_name).and_return(candidate_name)
     end
 
-    let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
+    let!(:cancellation_url) { "#{Rails.configuration.x.base_url}/candidates/cancel/#{booking.token}" }
 
-    subject { described_class.from_booking(to, time_until_booking, booking, cancellation_url) }
+    subject { described_class.from_booking(to, time_until_booking, booking) }
 
     it { is_expected.to be_a(described_class) }
 
