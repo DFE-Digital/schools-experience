@@ -2,6 +2,7 @@
 # informing them that they have an upcoming school experience
 class Bookings::Reminder
   include GitisAccess
+  include Rails.application.routes.url_helpers
 
   def initialize(time_until_booking, bookings)
     @time_until_booking = time_until_booking
@@ -16,13 +17,18 @@ class Bookings::Reminder
         NotifyEmail::CandidateBookingReminder.from_booking(
           booking.candidate_email,
           @time_until_booking,
-          booking
+          booking,
+          candidates_cancel_url(booking.token)
         ).despatch_later!
       end
     end
   end
 
 private
+
+  def default_url_options
+    { host: Rails.configuration.x.base_url }
+  end
 
   def assign_gitis_contacts(bookings)
     return bookings if bookings.empty?

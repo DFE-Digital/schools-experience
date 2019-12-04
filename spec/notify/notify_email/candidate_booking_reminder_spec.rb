@@ -50,7 +50,7 @@ describe NotifyEmail::CandidateBookingReminder do
 
     let!(:cancellation_url) { "#{Rails.configuration.x.base_url}/candidates/cancel/#{booking.token}" }
 
-    subject { described_class.from_booking(to, time_until_booking, booking) }
+    subject { described_class.from_booking(to, time_until_booking, booking, cancellation_url) }
 
     it { is_expected.to be_a(described_class) }
 
