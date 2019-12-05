@@ -89,7 +89,8 @@ Feature: School Profile
             | Individual requirements           | Must be applying to or have applied to our, or a partner school's, teacher training course. They must live within 7 miles from the school. Some details |
             | Experience details                | A really good one                                                                                                                                       |
             | School subjects                   | Maths                                                                                                                                                   |
-            | School phases                     | Secondary (11 to 16) and 16 to 18                                                                                                                       |
+            | School phases                     | Secondary (11 to 16)                                                                                                                       |
+            | School phases                     | 16 to 18                                                                                                                       |
             | School Address                    | 22 something                                                                                                                                            |
             | School availability info          | No information supplied                                                                                                                                 |
             | DBS check info                    | Yes\nAlways require DBS check                                                                                                                           |
