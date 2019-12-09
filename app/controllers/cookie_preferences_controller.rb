@@ -1,4 +1,7 @@
 class CookiePreferencesController < ApplicationController
+  REFERER_BLACKLIST = %r{/(cookie_preference|cookies_policy)}.freeze
+  before_action :save_refererer
+
   def show
     redirect_to edit_cookie_preference_path
   end
@@ -12,7 +15,7 @@ class CookiePreferencesController < ApplicationController
       persist cookie_preferences
       remove_rejected_cookies cookie_preferences
       flash[:cookies] = 'updated'
-      redirect_to request.referer.presence || edit_cookie_preference_path
+      redirect_to return_url
     else
       render 'edit'
     end
@@ -36,5 +39,16 @@ private
     preferences.rejected_cookies.each do |cookie_key|
       cookies.delete cookie_key
     end
+  end
+
+  def save_refererer
+    if request.referer.present? && request.referer !~ REFERER_BLACKLIST
+      session[:cookie_preference_referer] = request.referer
+    end
+  end
+
+  def return_url
+    session.delete(:cookie_preference_referer).presence ||
+      edit_cookie_preference_path
   end
 end
