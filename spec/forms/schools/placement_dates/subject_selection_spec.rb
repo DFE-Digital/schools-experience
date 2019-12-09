@@ -40,7 +40,6 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
       end
 
       it 'returns a new subject_selection without attributes set' do
-        expect(subject.available_for_all_subjects).to eq nil
         expect(subject.subject_ids).to be_empty
       end
     end
@@ -66,8 +65,10 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
 
     context 'invalid' do
       let :attributes do
-        { available_for_all_subjects: nil, subject_ids: nil }
+        { subject_ids: nil }
       end
+
+      it { is_expected.to(be_invalid) }
 
       it 'doesnt update the placement_date' do
         expect(placement_date.published_at).to be nil
@@ -75,36 +76,20 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
     end
 
     context 'valid' do
-      context 'when available_for_all_subjects' do
-        let :attributes do
-          { available_for_all_subjects: true, subject_ids: [] }
-        end
-
-        it 'updates the placement_date to not be subject_specific' do
-          expect(placement_date).not_to be_subject_specific
-        end
-
-        it 'updates published_at' do
-          expect(placement_date.published_at).to eq stubbed_time
-        end
+      let :subjects do
+        school.subjects.first(2)
       end
 
-      context 'when not available_for_all_subjects' do
-        let :subjects do
-          school.subjects.first(2)
-        end
+      let :attributes do
+        { subject_ids: subjects.map(&:id) }
+      end
 
-        let :attributes do
-          { available_for_all_subjects: false, subject_ids: subjects.map(&:id) }
-        end
+      it 'updates the placement_date subjects to the selected_subjects' do
+        expect(placement_date.subjects).to eq subjects
+      end
 
-        it 'updates the placement_date subjects to the selected_subjects' do
-          expect(placement_date.subjects).to eq subjects
-        end
-
-        it 'updates published_at' do
-          expect(placement_date.published_at).to eq stubbed_time
-        end
+      it 'updates published_at' do
+        expect(placement_date.published_at).to eq stubbed_time
       end
     end
   end
