@@ -4,19 +4,12 @@ module Schools
       include ActiveModel::Model
       include ActiveModel::Attributes
 
-      attribute :available_for_all_subjects, :boolean
       attr_reader :subject_ids
 
-      validates :subject_ids, presence: true, unless: :available_for_all_subjects
+      validates :subject_ids, presence: true
 
       def self.new_from_date(placement_date)
-        if placement_date.published?
-          new \
-            available_for_all_subjects: !placement_date.subject_specific?,
-            subject_ids: placement_date.subject_ids
-        else
-          new subject_ids: placement_date.subject_ids
-        end
+        new(subject_ids: placement_date.subject_ids)
       end
 
       def subject_ids=(array)
