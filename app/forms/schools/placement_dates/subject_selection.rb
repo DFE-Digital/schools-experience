@@ -19,17 +19,13 @@ module Schools
       def save(placement_date)
         return false unless valid?
 
-        if available_for_all_subjects
-          placement_date.subject_specific = false
-          placement_date.subject_ids = []
-        else
-          placement_date.subject_specific = true
-          placement_date.subject_ids = self.subject_ids
+        placement_date.tap do |pd|
+          pd.subject_specific = true
+          pd.subject_ids = self.subject_ids
+          pd.published_at = DateTime.now
+
+          pd.save!
         end
-
-        placement_date.published_at = DateTime.now
-
-        placement_date.save!
       end
     end
   end

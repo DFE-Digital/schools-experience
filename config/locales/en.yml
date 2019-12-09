@@ -502,7 +502,7 @@ en:
         available_for_all_subjects: Select type of experience
 
       schools_placement_dates_subject_selection:
-        subject_ids: Select all that apply.
+        subject_ids: Select school experience subjects
 
       candidates_feedback:
         <<: *feedback_fieldset

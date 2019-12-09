@@ -23,12 +23,10 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
         create \
           :bookings_placement_date,
           published_at: DateTime.now,
-          bookings_school: school,
-          subject_specific: false
+          bookings_school: school
       end
 
       it 'returns a new subject_selection with attributes set' do
-        expect(subject.available_for_all_subjects).to eq true
         expect(subject.subject_ids).to eq placement_date.subject_ids
       end
     end
