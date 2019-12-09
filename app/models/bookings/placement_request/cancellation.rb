@@ -1,6 +1,16 @@
 class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   include ViewTrackable
 
+  SCHOOL_REJECTION_REASONS = %i(
+    fully_booked
+    accepted_on_ttc
+    date_not_available
+    no_relevant_degree
+    no_phase_availability
+    candidate_not_local
+    duplicate
+  ).freeze
+
   scope :candidate_cancellation, -> { where cancelled_by: 'candidate' }
   scope :school_cancellation,    -> { where cancelled_by: 'school' }
 

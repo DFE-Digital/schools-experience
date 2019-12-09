@@ -20,10 +20,13 @@
           <%= render partial: "letter", locals: {
             cancellation: cancellation,
             reason: capture do
-              f.text_area :reason,
-                rows: 7,
-                placeholder: "Explain why the request was rejected. For example, the school is fully booked or there's no longer school experience available on the requested date",
-                label_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
+              f.radio_button_fieldset(
+                :rejection_category,
+                choices: Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS,
+                heading: true,
+                small: true,
+                legend_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
+              )
             end,
             extra_details: capture do
               f.text_area :extra_details,
