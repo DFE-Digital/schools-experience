@@ -25,4 +25,28 @@ module Schools::PlacementRequestsHelper
       fail 'cancellation not sent'
     end
   end
+
+  def cancellation_reasons(cancellation)
+    safe_join(
+      [
+        rejection_category_translation(cancellation.rejection_category),
+        cancellation.reason
+      ].reject(&:blank?).map { |r| tag.p(r) }
+    )
+  end
+
+private
+
+  def rejection_category_translation(category)
+    return nil if category == 'other'
+
+    I18n.t(
+      %w(
+        helpers
+        label
+        bookings_placement_request_cancellation
+        rejection_category
+      ).push(category).join('.')
+    )
+  end
 end

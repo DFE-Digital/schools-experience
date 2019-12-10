@@ -90,6 +90,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
       context 'success' do
         let :cancellation do
           FactoryBot.build :cancellation,
+            rejection_category: 'fully_booked',
             reason: "school's out for summer",
             placement_request: placement_request
         end
@@ -159,6 +160,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
       let :cancellation do
         FactoryBot.build :cancellation,
           reason: "school's out for ever",
+          rejection_category: 'fully_booked',
           placement_request: placement_request
       end
 
@@ -200,6 +202,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
         let :cancellation do
           FactoryBot.build :cancellation,
             reason: "school's out for ever",
+            rejection_category: :fully_booked,
             placement_request: placement_request
         end
 
