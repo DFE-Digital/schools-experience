@@ -573,7 +573,7 @@ en:
           yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
           no: Primary including early years, key stage 1 and key stage 2
       bookings_placement_request_cancellation:
-        reason: Cancellation reasons
+        reason: Why are you rejecting this candidate?
         rejection_category:
           fully_booked: The date you requested is fully booked
           accepted_on_ttc: We cannot offer you school experience because you have already been accepted on a Teacher Training Course

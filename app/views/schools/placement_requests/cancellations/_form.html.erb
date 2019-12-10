@@ -20,13 +20,26 @@
           <%= render partial: "letter", locals: {
             cancellation: cancellation,
             reason: capture do
-              f.radio_button_fieldset(
-                :rejection_category,
-                choices: Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS,
-                heading: true,
-                small: true,
-                legend_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
-              )
+              content_tag('div', class: 'editable') do
+                f.radio_button_fieldset(
+                  :rejection_category,
+                  heading: true,
+                  small: true,
+                  legend_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
+                ) do
+                  safe_join(
+                    [
+                      Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS.map do |option|
+                        f.radio_input option
+                      end,
+
+                      f.radio_input(:other) do
+                        f.text_area(:reason)
+                      end
+                    ]
+                  )
+                end
+              end
             end,
             extra_details: capture do
               f.text_area :extra_details,
