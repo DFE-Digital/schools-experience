@@ -378,6 +378,8 @@ en:
           attributes:
             reason:
               blank: 'Cancellation reason is required'
+            rejection_category:
+              inclusion: Chooose a reason for rejecting this candidate
         bookings/school_search:
           attributes:
             location:
@@ -435,7 +437,7 @@ en:
         date: Enter start date
         supports_subjects: Select school experience phase
       bookings_placement_request_cancellation:
-        rejection_category: Cancellation reason
+        rejection_category: Rejection reason
       phases: Education phases
       fees: Fees
       subjects: Subjects
