@@ -10,6 +10,12 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
     it { is_expected.to validate_inclusion_of(:cancelled_by).in_array %w(candidate school) }
     it { is_expected.to validate_presence_of(:reason).on(%i(school_cancellation candidate_cancellation)) }
 
+    it do
+      is_expected.to validate_inclusion_of(:rejection_category).in_array(
+        Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS
+      ).on(:rejection)
+    end
+
     describe 'rejection' do
       context "when #rejection_category is not 'other'" do
         subject { described_class.new(rejection_category: :fully_booked) }

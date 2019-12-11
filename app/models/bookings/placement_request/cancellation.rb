@@ -1,7 +1,7 @@
 class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   include ViewTrackable
 
-  SCHOOL_REJECTION_REASONS = %i(
+  SCHOOL_REJECTION_REASONS = %w(
     fully_booked
     accepted_on_ttc
     date_not_available
@@ -9,6 +9,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     no_phase_availability
     candidate_not_local
     duplicate
+    other
   ).freeze
 
   scope :candidate_cancellation, -> { where cancelled_by: 'candidate' }
@@ -26,6 +27,8 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
 
   validates :reason, presence: true, on: %i(school_cancellation candidate_cancellation)
   validates :reason, presence: true, on: :rejection, if: -> { rejection_category == 'other' }
+
+  validates :rejection_category, inclusion: SCHOOL_REJECTION_REASONS, on: :rejection
 
   delegate \
     :candidate_email,

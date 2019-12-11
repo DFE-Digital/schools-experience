@@ -29,10 +29,11 @@
                 ) do
                   safe_join(
                     [
-                      Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS.map do |option|
-                        f.radio_input option
-                      end,
-
+                      Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS
+                        .reject { |reason| reason == 'other' }
+                        .map do |option|
+                          f.radio_input option
+                        end,
                       f.radio_input(:other) do
                         f.text_area(:reason)
                       end
