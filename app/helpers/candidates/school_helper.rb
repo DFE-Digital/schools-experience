@@ -11,9 +11,14 @@ module Candidates::SchoolHelper
   end
 
   def format_school_subjects(school)
-    safe_subjects = school.subjects.map(&:name).sort.map do |subj|
-      ERB::Util.h(subj)
-    end
+    filtered_subject_ids = filtered_subject_ids(params[:subjects])
+
+    safe_subjects = school
+      .subjects
+      .ordered_by_name
+      .each
+      .with_object({}) { |subject, hash| hash[subject.name] = subject.id.in?(filtered_subject_ids) }
+      .map { |subject, bold| bold ? tag.strong(ERB::Util.h(subject)) : ERB::Util.h(subject) }
 
     if safe_subjects.empty?
       'Not specified'
@@ -29,7 +34,7 @@ module Candidates::SchoolHelper
   end
 
   def format_school_availability(availability_info)
-    availability_info.present? ? simple_format(availability_info) : 'No information supplied'
+    availability_info.present? ? safe_format(availability_info) : 'No information supplied'
   end
 
   def format_phases(school)
@@ -133,5 +138,13 @@ module Candidates::SchoolHelper
     else
       new_candidates_school_registrations_personal_information_path(school)
     end
+  end
+
+private
+
+  def filtered_subject_ids(subject_ids)
+    return [] unless subject_ids&.any?
+
+    subject_ids.reject(&:blank?).map(&:to_i)
   end
 end

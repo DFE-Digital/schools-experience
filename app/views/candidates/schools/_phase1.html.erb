@@ -3,7 +3,7 @@
 
     <%- if @school.placement_info.present? -%>
     <section id="school-placement-info">
-      <%= simple_format @school.placement_info %>
+      <%= safe_format @school.placement_info %>
     </section>
     <%- end -%>
 
@@ -120,7 +120,7 @@
           Teacher training offered
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= simple_format(@school.teacher_training_info) %>
+          <%= safe_format(@school.teacher_training_info) %>
         </dd>
       </div>
       <%- end -%>

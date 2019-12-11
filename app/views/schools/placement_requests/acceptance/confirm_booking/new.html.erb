@@ -25,7 +25,7 @@
           <%- if @placement_request.placement_date.present? -%>
             <%= @placement_request.placement_date.date.to_formatted_s(:govuk) %>
           <%- else -%>
-            <%= @placement_request.availability %>
+            <%= safe_format @placement_request.availability %>
           <%- end -%>
         </dd>
       </div>

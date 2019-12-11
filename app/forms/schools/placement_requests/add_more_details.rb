@@ -12,6 +12,7 @@ module Schools
       validates :contact_name, presence: true
       validates :contact_number, presence: true
       validates :contact_email, presence: true
+      validates :contact_email, email_format: true, if: -> { contact_email.present? }
       validates :location, presence: true
 
       def self.for_school(school)

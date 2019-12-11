@@ -22,11 +22,11 @@ Feature: Viewing a withdrawn request
             | Some school        | /schools/dashboard           |
             | Withdrawn requests | /schools/withdrawn_requests  |
             | Request            | None                         |
-    
+
     Scenario: Cancellation details
         Given there is at least one withdrawn request
         When I am viewing the withdrawn request
-        Then I should see a 'Cancellation details' section with the following values:
+        Then I should see the withdrawn details with the following values:
             | Heading      | Value      |
             | Reason       | MyText     |
 

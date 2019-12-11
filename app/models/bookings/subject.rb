@@ -22,4 +22,6 @@ class Bookings::Subject < ApplicationRecord
 
   default_scope -> { where.not(hidden: true) }
   scope :secondary_subjects, -> { where(secondary_subject: true) }
+
+  scope :ordered_by_name, -> { order(name: 'asc') }
 end

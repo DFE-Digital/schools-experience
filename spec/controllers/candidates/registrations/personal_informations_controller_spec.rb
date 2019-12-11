@@ -82,7 +82,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             eql(registration_session.personal_information.email)
 
           expect(delivery[:personalisation][:verification_link]).to \
-            match(%r{/candidates/verify/[0-9]+/[^/]{24}\z})
+            match(%r{/candidates/verify/[0-9]+/[^/]{24}/#{registration_session.uuid}\z})
         end
 
         it 'redirects to the next step' do

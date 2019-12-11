@@ -35,10 +35,13 @@ module Candidates
     private
 
       def education_params
-        params.require(:candidates_registrations_education).permit \
+        params.require(:candidates_registrations_education).permit(
           :degree_stage,
           :degree_stage_explaination,
           :degree_subject
+        ).tap do |params|
+          params[:degree_stage_explaination] = nil unless params[:degree_stage] == 'Other'
+        end
       end
 
       def attributes_from_session

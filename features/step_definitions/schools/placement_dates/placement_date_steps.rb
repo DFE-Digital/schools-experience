@@ -6,12 +6,42 @@ Given "I have entered a placement date" do
   )
 end
 
+Given "I have entered a secondary placement date for a multi-phase school" do
+  secondary_label = "Secondary including secondary schools"
+
+  steps %(
+    Given I am on the 'new placement date' page
+    And I fill in the form with a future date and duration of 3
+    And I choose '#{secondary_label}' from the 'Select school experience phase' radio buttons
+    And I submit the form
+  )
+end
+
 Given "the placement date is subject specific" do
   steps %(
     Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
     And I choose 'Specific to a subject' from the "Select type of experience" radio buttons
     And I submit the form
   )
+end
+
+Given "I have previously selected {string}" do |subject_name|
+  # pick biology from the subjects list and continue
+  check(subject_name)
+  click_button('Continue')
+
+  expect(page.current_path).to eql(path_for('placement dates'))
+  expect(page).to have_content(subject_name)
+end
+
+When "I try to edit the subjects for my newly-created placement date" do
+  path = path_for('new subject selection', placement_date_id: Bookings::PlacementDate.last.id)
+  visit path
+  expect(page.current_path).to eql(path)
+end
+
+Then("the {string} checkbox should be checked") do |subject_name|
+  expect(get_input(page, subject_name)).to be_checked
 end
 
 Then "the page's main heading should be the date I just entered" do

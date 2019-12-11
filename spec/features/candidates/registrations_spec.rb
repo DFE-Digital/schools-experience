@@ -72,7 +72,7 @@ feature 'Candidate Registrations', type: :feature do
 
       scenario "completing the Journey" do
         complete_personal_information_step
-        complete_sign_in_step(token.token)
+        complete_sign_in_step(token.token, registration_session.uuid)
         complete_contact_information_step
         complete_education_step
         complete_teaching_preference_step
@@ -100,7 +100,7 @@ feature 'Candidate Registrations', type: :feature do
 
       scenario "completing the Journey" do
         complete_personal_information_step
-        complete_sign_in_step(token.token)
+        complete_sign_in_step(token.token, registration_session.uuid)
         complete_contact_information_step
         complete_education_step
         complete_teaching_preference_step
@@ -188,13 +188,13 @@ feature 'Candidate Registrations', type: :feature do
     click_button 'Continue'
   end
 
-  def complete_sign_in_step(token)
+  def complete_sign_in_step(token, session_uuid)
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/sign_in"
     expect(page).to have_text 'We already have your details'
 
     # Follow the link from email
-    visit "/candidates/verify/#{school_urn}/#{token}"
+    visit "/candidates/verify/#{school_urn}/#{token}/#{session_uuid}"
   end
 
   def complete_contact_information_step
@@ -288,7 +288,7 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "Email address #{email || email_address}"
     expect(page).to have_text "Date of birth #{date_of_birth.strftime '%d/%m/%Y'}"
     expect(page).to have_text "School or college #{school.name}"
-    expect(page).to have_text 'Experience availability Only free from Epiphany to Whitsunday'
+    expect(page).to have_text "Experience availability\nOnly free from Epiphany to Whitsunday"
     expect(page).to have_text "What you want to get out of school experience I enjoy teaching"
     expect(page).to have_text "Degree stage Graduate or postgraduate"
     expect(page).to have_text "Degree subject Physics"

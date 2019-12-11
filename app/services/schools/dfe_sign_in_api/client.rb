@@ -6,9 +6,9 @@ module Schools
       def self.enabled?
         Rails.application.config.x.dfe_sign_in_api_enabled &&
           [
-            ENV.fetch('DFE_SIGNIN_API_CLIENT'),
-            ENV.fetch('DFE_SIGNIN_API_SECRET')
-          ].map(&:presence).all?
+            ENV.fetch('DFE_SIGNIN_API_CLIENT', nil),
+            ENV.fetch('DFE_SIGNIN_API_SECRET', nil)
+          ].all?(&:present?)
       end
       delegate :enabled?, to: :class
 
@@ -16,9 +16,9 @@ module Schools
         enabled? &&
           Rails.application.config.x.dfe_sign_in_api_role_check_enabled &&
           [
-            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID'),
-            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID')
-          ].map(&:presence).all?
+            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID', nil),
+            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID', nil)
+          ].all?(&:present?)
       end
       delegate :role_check_enabled?, to: :class
 

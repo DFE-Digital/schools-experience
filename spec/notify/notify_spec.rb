@@ -19,6 +19,14 @@ describe Notify do
     specify 'should assign an array of email address' do
       expect(subject.to).to match_array(to)
     end
+
+    context 'with duplicates' do
+      let(:to) { ['somename@somecompany.org', 'somename@somecompany.org'] }
+
+      specify 'should remove duplicates' do
+        expect(subject.to).to match_array(to.uniq)
+      end
+    end
   end
 
   describe 'Methods' do

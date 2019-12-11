@@ -310,6 +310,18 @@ RSpec.describe Bookings::Gitis::Entity do
             include('testassoc@odata.bind' => e2.entity_id)
         end
       end
+
+      context "and updated to null" do
+        before { subject.testassoc = nil }
+
+        it { is_expected.to have_attributes _testassoc_value: nil }
+        it "is not included in update attributes" do
+          expect(subject.attributes_for_update).not_to \
+            include('testassoc@odata.bind')
+        end
+
+        it "should review this behaviour - ideally we should break the connection instead"
+      end
     end
 
     context 'initializing with existing data' do

@@ -28,5 +28,6 @@ When("I click {string}, fill in and submit the school feedback form") do |string
 end
 
 Then("my referrer should have been recorded") do
-  expect(Feedback.last.referrer).to eql(@referrer)
+  referrer_without_credentials = @referrer.gsub(/(https?:\/\/)([^\/]+@)?/, '\1')
+  expect(Feedback.last.referrer).to match(referrer_without_credentials)
 end
