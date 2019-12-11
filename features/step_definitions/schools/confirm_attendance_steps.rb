@@ -13,7 +13,7 @@ Then("I should see a table containing those bookings") do
 end
 
 Then("the correct data should be present in each row") do
-  gitis = Bookings::Gitis::CRM.new('a.fake.token')
+  gitis = Bookings::Gitis::Factory.crm
 
   within("table > tbody > tr[data-booking-id='#{@first_booking.id}']") do
     expect(page).to have_content(
