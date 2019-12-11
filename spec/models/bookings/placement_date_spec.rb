@@ -36,13 +36,14 @@ describe Bookings::PlacementDate, type: :model do
         end
 
         context 'error messages' do
-          let(:message) { 'Validation failed: Date must not be in the past' }
-          let(:invalid_pd) { create(:bookings_placement_date, date: 3.weeks.ago) }
+          let(:message) { 'Date must not be in the past' }
+          let(:invalid_pd) { build(:bookings_placement_date, date: 3.weeks.ago) }
+
+          before { invalid_pd.valid? }
+          subject { invalid_pd.errors.full_messages }
 
           specify 'should show a suitable error message' do
-            expect { invalid_pd }.to(
-              raise_error(ActiveRecord::RecordInvalid, message)
-            )
+            is_expected.to include(message)
           end
         end
 
