@@ -45,7 +45,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
 
   context '#create' do
     let :cancellation_params do
-      { bookings_placement_request_cancellation: cancellation.attributes }
+      { bookings_placement_request_cancellation: cancellation.attributes.merge(rejection_category: :other) }
     end
 
     before do
@@ -185,7 +185,8 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
         let :cancellation do
           FactoryBot.build :cancellation,
             reason: "",
-            placement_request: placement_request
+            placement_request: placement_request,
+            rejection_category: :other
         end
 
         it 'rerenders the edit template' do

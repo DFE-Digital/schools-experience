@@ -23,7 +23,7 @@ module Schools
         @cancellation = @placement_request.build_school_cancellation \
           cancellation_params
 
-        if @cancellation.save
+        if @cancellation.save(context: :school_cancellation)
           redirect_to schools_booking_cancellation_path \
             @booking
         else
@@ -35,7 +35,9 @@ module Schools
       def update
         @cancellation = @placement_request.school_cancellation
 
-        if @cancellation.update cancellation_params
+        @cancellation.assign_attributes(cancellation_params)
+
+        if @cancellation.save(context: :school_cancellation)
           redirect_to schools_booking_cancellation_path \
             @booking
         else

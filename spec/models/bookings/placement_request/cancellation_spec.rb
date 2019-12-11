@@ -4,9 +4,32 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
   it { is_expected.to belong_to :placement_request }
   it { is_expected.to have_db_column(:reason).of_type(:text).with_options null: true }
   it { is_expected.to have_db_column(:extra_details).of_type(:text) }
-  it { is_expected.to validate_presence_of :reason }
-  it { is_expected.not_to validate_presence_of :extra_details }
-  it { is_expected.to validate_inclusion_of(:cancelled_by).in_array %w(candidate school) }
+
+  describe 'Validation' do
+    it { is_expected.not_to validate_presence_of :extra_details }
+    it { is_expected.to validate_inclusion_of(:cancelled_by).in_array %w(candidate school) }
+    it { is_expected.to validate_presence_of(:reason).on(%i(school_cancellation candidate_cancellation)) }
+
+    describe 'rejection' do
+      context "when #rejection_category is not 'other'" do
+        subject { described_class.new(rejection_category: :fully_booked) }
+        before { subject.valid?(context: :rejection) }
+
+        specify 'reason should be valid' do
+          expect(subject.errors.messages[:reason]).to be_empty
+        end
+      end
+
+      context "when #rejection_category is 'other'" do
+        subject { described_class.new(rejection_category: :other) }
+        before { subject.valid?(context: :rejection) }
+
+        specify 'reason should be valid' do
+          expect(subject.errors.messages[:reason]).to be_empty
+        end
+      end
+    end
+  end
 
   describe 'scopes' do
     describe '#sent' do
