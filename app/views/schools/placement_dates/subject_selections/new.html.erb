@@ -1,5 +1,7 @@
 <% self.page_title = 'Select school experience subjects' %>
 
+<%= link_to 'Back', :back, class: 'govuk-back-link' %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for @subject_selection, method: :post, url: schools_placement_date_subject_selection_path(@placement_date) do |f| %>

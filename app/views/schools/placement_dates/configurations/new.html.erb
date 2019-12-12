@@ -1,4 +1,6 @@
-<% self.page_title = 'Manage attendees' %>
+<% self.page_title = 'Set date options' %>
+
+<%= link_to 'Back', :back, class: 'govuk-back-link' %>
 
 <h1><%= @placement_date.date.to_formatted_s :govuk %> (<%= pluralize @placement_date.duration, 'day' %>)</h1>
 
