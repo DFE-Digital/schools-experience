@@ -83,7 +83,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   end
 
   def humanised_rejection_category
-    return nil if rejection_category == 'other'
+    return nil if rejection_category == 'other' || rejection_category.nil?
 
     I18n.t(
       %w(
