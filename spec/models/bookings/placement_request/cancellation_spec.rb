@@ -111,4 +111,30 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
       end
     end
   end
+
+  describe '#humanised_rejection_category' do
+    let(:placement_request) { FactoryBot.create(:placement_request) }
+
+    context 'when set to a value' do
+      let(:category) { 'fully_booked' }
+      let(:translated_string) { "sorry, we're totally full" }
+      subject { build :cancellation, placement_request: placement_request, rejection_category: category }
+
+      before do
+        allow(I18n).to(receive(:t).with(
+          "helpers.label.bookings_placement_request_cancellation.rejection_category.#{category}"
+        ).and_return(translated_string))
+      end
+
+      specify 'should return the translated string' do
+        expect(subject.humanised_rejection_category).to eql(translated_string)
+      end
+    end
+
+    context "when set to 'other'" do
+      subject { build :cancellation, placement_request: placement_request, rejection_category: 'other' }
+
+      specify { expect(subject.humanised_rejection_category).to be_nil }
+    end
+  end
 end

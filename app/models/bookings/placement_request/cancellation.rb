@@ -78,6 +78,23 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     cancelled_by == 'candidate'
   end
 
+  def rejection_description
+    humanised_rejection_category || reason
+  end
+
+  def humanised_rejection_category
+    return nil if rejection_category == 'other'
+
+    I18n.t(
+      %w(
+        helpers
+        label
+        bookings_placement_request_cancellation
+        rejection_category
+      ).push(rejection_category).join('.')
+    )
+  end
+
 private
 
   def placement_request_not_closed
