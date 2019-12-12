@@ -1,4 +1,4 @@
-<% if allow_school_change_in_app? %>
+<% if Schools::ChangeSchool.allow_school_change_in_app? %>
   <%= form_for @change_school, url: schools_change_path, method: :post do |f| %>
     <%= f.radio_button_fieldset :id, choices: @schools, value_method: :id, text_method: :name, page_heading: true%>
     <%= f.submit "Change school" %>

@@ -25,12 +25,7 @@ module Schools
   private
 
     def ensure_in_app_school_changing_enabled?
-      enabled = [
-        Rails.configuration.x.dfe_sign_in_api_enabled,
-        Rails.configuration.x.dfe_sign_in_api_school_change_enabled
-      ].all?
-
-      head(:forbidden) unless enabled
+      head(:forbidden) unless Schools::ChangeSchool.allow_school_change_in_app?
     end
 
     def change_school_params

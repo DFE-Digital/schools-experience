@@ -20,7 +20,7 @@ describe 'schools/dashboards/show.html.erb', type: :view do
 
     context 'when in-app school switching is enabled' do
       before do
-        allow(view).to receive(:allow_school_change_in_app?).and_return(true)
+        allow(Schools::ChangeSchool).to receive(:allow_school_change_in_app?).and_return(true)
       end
 
       subject { render }

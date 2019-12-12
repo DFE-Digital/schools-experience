@@ -8,7 +8,7 @@
 
       <% if has_other_schools? %>
 
-        <% if allow_school_change_in_app? %>
+        <% if Schools::ChangeSchool.allow_school_change_in_app? %>
           <section id="change-school">
             <%= link_to "Change school", schools_change_path %>
           </section>
