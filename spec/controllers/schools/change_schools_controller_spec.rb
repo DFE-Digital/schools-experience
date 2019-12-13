@@ -6,6 +6,7 @@ describe Schools::ChangeSchoolsController, type: :request do
   before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true) }
   before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled).and_return(true) }
   before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_school_change_enabled).and_return(true) }
+  before { allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true) }
 
   let(:old_school) { @current_user_school }
   let(:new_school) { create(:bookings_school) }
@@ -44,6 +45,38 @@ describe Schools::ChangeSchoolsController, type: :request do
         subject
         expect(request.session.fetch(:urn)).to eql(new_school.urn)
         expect(request.session.fetch(:school_name)).to eql(new_school.name)
+      end
+
+      context 'role checking' do
+        let(:roles_instance) { double Schools::DFESignInAPI::Roles, has_school_experience_role?: true }
+        before do
+          allow(Schools::DFESignInAPI::Roles).to receive(:new).and_return(roles_instance)
+        end
+
+        context 'when role checking is enabled' do
+          before { subject }
+
+          specify 'the roles API status should be checked' do
+            expect(Schools::DFESignInAPI::Client).to have_received(:role_check_enabled?).exactly(1).times
+          end
+
+          specify 'Schools::DFESignInAPI::Roles should be initialised' do
+            expect(Schools::DFESignInAPI::Roles).to have_received(:new).exactly(1).times
+          end
+        end
+
+        context 'when role checking is disabled' do
+          before { allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(false) }
+          before { subject }
+
+          specify 'the roles API status should be checked' do
+            expect(Schools::DFESignInAPI::Client).to have_received(:role_check_enabled?).exactly(1).times
+          end
+
+          specify 'Schools::DFESignInAPI::Roles should not be initialised' do
+            expect(Schools::DFESignInAPI::Roles).not_to have_received(:new)
+          end
+        end
       end
     end
 

@@ -45,6 +45,8 @@ module Schools
     end
 
     def user_has_role_at_school?(user_uuid, urn)
+      return true unless Schools::DFESignInAPI::Client.role_check_enabled?
+
       Schools::DFESignInAPI::Roles.new(user_uuid, urn).has_school_experience_role?
     rescue Faraday::ResourceNotFound
       # if the role isn't found the API returns a 404 - this means that the user
