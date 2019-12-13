@@ -27,10 +27,10 @@ describe NotifyJob, type: :job do
       personalisation_json: personalisation.to_json
   end
 
+  around { |example| perform_enqueued_jobs { example.run } }
+
   before do
     stub_const 'NotifyJob::API_KEY', api_key
-
-    allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)
 
     allow(NotifyService.instance).to receive(:notification_class) { notify_class }
     allow(described_class.queue_adapter).to receive :enqueue_at
