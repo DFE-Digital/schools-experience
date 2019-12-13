@@ -238,7 +238,7 @@ RSpec.describe Candidates::SchoolSearch do
     subject { described_class.new(subjects: [@first.id, @third.id]) }
 
     it "will return an array of subjects" do
-      expect(subject.subject_names).to eq([@first.name, @third.name])
+      expect(subject.subject_names).to match_array([@first.name, @third.name])
     end
   end
 
@@ -252,7 +252,7 @@ RSpec.describe Candidates::SchoolSearch do
     subject { described_class.new(phases: [@first.id, @third.id]) }
 
     it "will return an array of phases" do
-      expect(subject.phase_names).to eq([@first.name, @third.name])
+      expect(subject.phase_names).to match_array([@first.name, @third.name])
     end
   end
 end
