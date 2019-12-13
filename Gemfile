@@ -96,6 +96,8 @@ group :development, :test do
   gem 'brakeman', '>= 4.4.0'
 
   gem 'bullet'
+  
+  gem 'parallel_tests'
 end
 
 group :development do
