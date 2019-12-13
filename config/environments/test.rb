@@ -50,7 +50,12 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   # Use Redis for Session and cache
-  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_URL'].presence,
+    db: ENV['TEST_ENV_NUMBER'].presence, # Note DB overrides db in URL if both specified
+    namespace: 'test-cache'
+  }
+
   config.session_store :cache_store,
     key: 'schoolex-test-session',
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
