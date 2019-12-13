@@ -1,8 +1,6 @@
 module Bookings
   module Gitis
     class Auth
-      prepend FakeAuth if Rails.application.config.x.gitis.fake_crm
-
       TIMEOUT_SECS = 25
       RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
       RETRY_OPTIONS = {

@@ -30,7 +30,7 @@ class Bookings::SchoolSearch < ApplicationRecord
 
   def results
     base_query
-      .includes(%i{subjects phases})
+      .includes(%i{phases})
       .reorder(order_by(requested_order))
       .page(self.page)
       .per(PER_PAGE)

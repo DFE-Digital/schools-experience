@@ -11,6 +11,9 @@ module Bookings::Gitis
     include ActiveModel::Dirty
 
     ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
+    def self.valid_id?(id)
+      ID_FORMAT.match? id.to_s
+    end
 
     included do
       delegate :attributes_to_select, to: :class
@@ -65,7 +68,12 @@ module Bookings::Gitis
     end
 
     def attributes_for_update
-      attributes.slice(*(changed - update_blacklist))
+      attributes.slice(*(changed - update_blacklist)).reject do |k, v|
+        # Don't attempt to set bind values to NULL - this is invalid syntax
+        # Dissasociating requires deleting the $ref
+        # Which is not currently supported
+        k.ends_with?('@odata.bind') && v.nil?
+      end
     end
 
     def attributes_for_create

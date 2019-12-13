@@ -13,7 +13,9 @@ shared_context "stubbed out Gitis" do
   end
 
   let(:gitis) do
-    Bookings::Gitis::CRM.new('a.stub.token', service_url: service_url)
+    Bookings::Gitis::CRM.new \
+      Bookings::Gitis::Store::Dynamics.new \
+        'a.stub.token', service_url: service_url
   end
 
   let(:gitis_auth) do
