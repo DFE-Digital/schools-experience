@@ -16,6 +16,7 @@
     <%= favicon_link_tag 'govuk-apple-touch-icon-167x167.png', rel: 'apple-touch-icon', type: 'image/png', size: '167x167' %>
     <%= favicon_link_tag 'govuk-apple-touch-icon-180x180.png', rel: 'apple-touch-icon', type: 'image/png', size: '180x180' %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= render 'shared/application/javascript_cookie_preferences' %>
     <%= yield :head %>
   </head>
 
@@ -71,7 +72,7 @@
 
             <ul class="govuk-footer__inline-list">
               <li class="govuk-footer__inline-list-item">
-                <%= link_to 'Cookies', cookies_policy_path, class: 'govuk-footer__link' %>
+                <%= link_to 'Cookies', edit_cookie_preference_path, class: 'govuk-footer__link' %>
               </li>
               <li class="govuk-footer__inline-list-item">
                 <%= link_to 'Privacy policy', privacy_policy_path, class: 'govuk-footer__link' %>
