@@ -1,6 +1,6 @@
 <% self.page_title = 'Set date options' %>
 
-<%= link_to 'Back', :back, class: 'govuk-back-link' %>
+<%= link_to 'Back', schools_placement_dates_path, class: 'govuk-back-link' %>
 
 <h1><%= @placement_date.date.to_formatted_s :govuk %> (<%= pluralize @placement_date.duration, 'day' %>)</h1>
 
