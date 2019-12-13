@@ -3,6 +3,7 @@ require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
 require File.join(Rails.root, 'spec', 'support', 'notify_retryable_erroring_client')
 
 describe Notify do
+  include ActiveJob::TestHelper
   let(:to) { 'somename@somecompany.org' }
 
   before do
@@ -80,8 +81,11 @@ describe Notify do
     end
 
     describe '#despatch_later!' do
-      before { ActiveJob::Base.queue_adapter = :inline }
-      before { notification.despatch_later! }
+      before do
+        perform_enqueued_jobs do
+          notification.despatch_later!
+        end
+      end
 
       it "should enqueue a notify job with the correct parameters" do
         recipients.each do |recipient|

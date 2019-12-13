@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe NotifyJob, type: :job do
+  include ActiveJob::TestHelper
   include ActiveSupport::Testing::TimeHelpers
 
   let :api_key do
@@ -29,7 +30,7 @@ describe NotifyJob, type: :job do
   before do
     stub_const 'NotifyJob::API_KEY', api_key
 
-    ActiveJob::Base.queue_adapter = :inline
+    allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)
 
     allow(NotifyService.instance).to receive(:notification_class) { notify_class }
     allow(described_class.queue_adapter).to receive :enqueue_at

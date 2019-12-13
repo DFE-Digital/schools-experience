@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::PlacementRequestJob, type: :job do
+  include ActiveJob::TestHelper
   include ActiveSupport::Testing::TimeHelpers
   include_context 'Stubbed candidates school'
 
@@ -45,14 +46,14 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
       receive(:from_application_preview) { candidate_request_confirmation_notification_with_confirmation_link }
 
     registration_store.store! registration_session
-
-    ActiveJob::Base.queue_adapter = :inline
   end
 
   context '#perform' do
     context 'no errors' do
       before do
-        described_class.perform_later registration_session.uuid, cancellation_url, placement_request_url
+        perform_enqueued_jobs do
+          described_class.perform_later registration_session.uuid, cancellation_url, placement_request_url
+        end
       end
 
       it 'notifies the school' do
