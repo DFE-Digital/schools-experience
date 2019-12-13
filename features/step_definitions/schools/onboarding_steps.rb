@@ -15,7 +15,6 @@ Given "I have completed the DBS Requirements step, choosing No" do
   steps %(
     Given I am on the 'DBS requirements' page
     And I choose 'No - Candidates will be accompanied at all times' from the 'Do you require candidates to have or get a DBS check?' radio buttons
-    And I enter 'No more details' into the 'Provide any extra details in 50 words or less.' text area
     When I submit the form
   )
 end

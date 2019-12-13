@@ -57,8 +57,7 @@ module Schools
       def dbs_requirement_params
         params.require(:schools_on_boarding_dbs_requirement).permit \
           :requires_check,
-          :dbs_policy_details,
-          :no_dbs_policy_details
+          :dbs_policy_details
       end
     end
   end
