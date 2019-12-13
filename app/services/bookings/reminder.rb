@@ -1,27 +1,23 @@
-# Bookings::Reminder is responsible for sending emails to candidates
+# Bookings::Reminder is responsible for sending an email to a candidate
 # informing them that they have an upcoming school experience
 class Bookings::Reminder
   include GitisAccess
   include Rails.application.routes.url_helpers
 
-  def initialize(time_until_booking, bookings)
+  def initialize(booking, time_until_booking)
     @time_until_booking = time_until_booking
 
-    @bookings = bookings
-    assign_gitis_contacts(@bookings)
+    @booking = booking
+    assign_gitis_contact(@booking)
   end
 
   def enqueue
-    Delayed::Job.transaction do
-      @bookings.each do |booking|
-        NotifyEmail::CandidateBookingReminder.from_booking(
-          booking.candidate_email,
-          @time_until_booking,
-          booking,
-          candidates_cancel_url(booking.token)
-        ).despatch_later!
-      end
-    end
+    NotifyEmail::CandidateBookingReminder.from_booking(
+      @booking.candidate_email,
+      @time_until_booking,
+      @booking,
+      candidates_cancel_url(@booking.token)
+    ).despatch_later!
   end
 
 private
@@ -30,14 +26,11 @@ private
     { host: Rails.configuration.x.base_url }
   end
 
-  def assign_gitis_contacts(bookings)
-    return bookings if bookings.empty?
+  def assign_gitis_contact(booking)
+    return unless booking.present?
 
-    contacts = gitis_crm.find(bookings.map(&:contact_uuid)).index_by(&:id)
-
-    bookings.each do |booking|
-      booking.bookings_placement_request.candidate.gitis_contact = \
-        contacts[booking.contact_uuid]
-    end
+    booking
+      .bookings_placement_request
+      .candidate.gitis_contact = gitis_crm.find(booking.contact_uuid)
   end
 end

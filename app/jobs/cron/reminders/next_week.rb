@@ -4,7 +4,9 @@ module Cron
       self.cron_expression = '35 2 * * *'
 
       def perform
-        Bookings::Reminder.new(time_until_booking, bookings).enqueue
+        bookings.all? do |booking|
+          Bookings::ReminderBuilder.perform_later(booking, time_until_booking)
+        end
       end
 
       def bookings

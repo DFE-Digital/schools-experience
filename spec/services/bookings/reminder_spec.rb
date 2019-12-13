@@ -5,9 +5,9 @@ describe Bookings::Reminder do
 
   let(:time_until_booking) { '3 weeks' }
   let(:school) { create(:bookings_school, :onboarded) }
-  let(:bookings) { create_list(:bookings_booking, 3, bookings_school: school, date: 3.weeks.from_now) }
+  let(:booking) { create(:bookings_booking,  bookings_school: school, date: 3.weeks.from_now) }
 
-  subject { Bookings::Reminder.new(time_until_booking, bookings) }
+  subject { Bookings::Reminder.new(booking, time_until_booking) }
 
   describe '#enqueue' do
     specify 'should enqueue one job per provided booking' do
@@ -15,7 +15,7 @@ describe Bookings::Reminder do
 
       subject.enqueue
 
-      expect(enqueued_jobs.size).to eql(bookings.size)
+      expect(enqueued_jobs.size).to eql(1)
     end
   end
 end

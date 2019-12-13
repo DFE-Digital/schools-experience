@@ -10,16 +10,15 @@ describe Cron::Reminders::Tomorrow, type: :job do
   end
 
   describe '#perform' do
-    let(:reminder_instance) { double Bookings::Reminder, enqueue: true }
-
     before do
-      allow(Bookings::Reminder).to receive(:new).and_return(reminder_instance)
+      allow_any_instance_of(Cron::Reminders::Tomorrow).to receive(:bookings).and_return(%w(a b c))
+      allow(Bookings::ReminderBuilder).to receive(:perform_later).and_return(true)
     end
 
     subject! { described_class.new.perform }
 
     specify 'calling perform should call Bookings::Reminder.new.enqueue' do
-      expect(reminder_instance).to have_received(:enqueue)
+      expect(Bookings::ReminderBuilder).to have_received(:perform_later).exactly(3).times
     end
   end
 end
