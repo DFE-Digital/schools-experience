@@ -39,7 +39,6 @@ Feature: Dbs required toggling available fees
         | Admin contact                    |                           |
     And I am on the 'edit DBS requirements' page
     And I choose 'No - Candidates will be accompanied at all times' from the 'Do you require candidates to have or get a DBS check?' radio buttons
-    And I enter 'No more details' into the 'Provide any extra details in 50 words or less.' text area
     When I submit the form
     Then I should be on the 'profile' page
 

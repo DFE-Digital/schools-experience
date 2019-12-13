@@ -55,7 +55,7 @@ describe Bookings::Gitis::AcceptPrivacyPolicy do
   describe '#accept!' do
     context 'without existing acceptance' do
       before do
-        allow(fake_gitis).to \
+        allow(fake_gitis.store).to \
           receive(:create_entity).
           and_return("#{cpp_entity_path}(#{candidate_pp_id})")
 
@@ -65,7 +65,7 @@ describe Bookings::Gitis::AcceptPrivacyPolicy do
       subject! { described_class.new(fake_gitis, contact.id, policy_id).accept! }
 
       it "will write to gitis" do
-        expect(fake_gitis).to have_received(:create_entity).with \
+        expect(fake_gitis.store).to have_received(:create_entity).with \
           cpp_entity_path,
           'dfe_name' => /school experience/,
           'dfe_consentreceivedby' => consent_id,
@@ -99,7 +99,7 @@ describe Bookings::Gitis::AcceptPrivacyPolicy do
           with(contact.id, includes: :dfe_contact_dfe_candidateprivacypolicy_Candidate).
           and_return(contact)
 
-        allow(fake_gitis).to receive(:create_entity).and_call_original
+        allow(fake_gitis.store).to receive(:create_entity).and_call_original
 
         freeze_time
       end
@@ -111,7 +111,7 @@ describe Bookings::Gitis::AcceptPrivacyPolicy do
       end
 
       it "will write to gitis" do
-        expect(fake_gitis).not_to have_received(:create_entity)
+        expect(fake_gitis.store).not_to have_received(:create_entity)
       end
     end
   end
