@@ -21,7 +21,7 @@ describe NotifyService do
 
   before do
     stub_const 'NotifyService::API_KEY', api_key
-    described_class.instance.notification_class = Notifications::Client
+    allow(described_class.instance).to receive(:notification_class) { Notifications::Client }
     stub_request(:post, endpoint).with(body: body).to_return(response)
   end
 
