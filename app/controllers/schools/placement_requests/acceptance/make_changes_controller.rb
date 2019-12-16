@@ -8,7 +8,7 @@ module Schools
           set_placement_request
 
           @placement_request.fetch_gitis_contact gitis_crm
-          @booking = Bookings::Booking.from_placement_request(@placement_request)
+          @booking = @placement_request.booking || Bookings::Booking.from_placement_request(@placement_request)
           @booking.populate_contact_details!
 
           @subjects = @current_school.subjects.all
