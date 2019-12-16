@@ -23,7 +23,6 @@ module Schools
           if @booking.save
             redirect_to edit_schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id)
           else
-            @placement_request.fetch_gitis_contact gitis_crm
             @subjects = @current_school.subjects.all
 
             render :new

@@ -13,7 +13,9 @@ module Schools
         end
 
         def create
-          set_placement_request
+          @placement_request = @current_school
+            .bookings_placement_requests
+            .find(params[:placement_request_id])
 
           booking = find_or_build_booking(@placement_request)
           booking.populate_contact_details!

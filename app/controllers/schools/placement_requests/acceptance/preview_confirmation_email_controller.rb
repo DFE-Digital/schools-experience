@@ -7,7 +7,6 @@ module Schools
         def edit
           set_placement_request
 
-          @placement_request.fetch_gitis_contact gitis_crm
           @booking = @placement_request.booking
         end
 
@@ -23,7 +22,6 @@ module Schools
 
             redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
           else
-            @placement_request.fetch_gitis_contact gitis_crm
             render :edit
           end
         end
