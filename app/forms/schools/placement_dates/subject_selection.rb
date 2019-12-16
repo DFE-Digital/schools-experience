@@ -4,19 +4,12 @@ module Schools
       include ActiveModel::Model
       include ActiveModel::Attributes
 
-      attribute :available_for_all_subjects, :boolean
       attr_reader :subject_ids
 
-      validates :subject_ids, presence: true, unless: :available_for_all_subjects
+      validates :subject_ids, presence: true
 
       def self.new_from_date(placement_date)
-        if placement_date.published?
-          new \
-            available_for_all_subjects: !placement_date.subject_specific?,
-            subject_ids: placement_date.subject_ids
-        else
-          new subject_ids: placement_date.subject_ids
-        end
+        new(subject_ids: placement_date.subject_ids)
       end
 
       def subject_ids=(array)
@@ -26,17 +19,13 @@ module Schools
       def save(placement_date)
         return false unless valid?
 
-        if available_for_all_subjects
-          placement_date.subject_specific = false
-          placement_date.subject_ids = []
-        else
-          placement_date.subject_specific = true
-          placement_date.subject_ids = self.subject_ids
+        placement_date.tap do |pd|
+          pd.subject_specific = true
+          pd.subject_ids = self.subject_ids
+          pd.published_at = DateTime.now
+
+          pd.save!
         end
-
-        placement_date.published_at = DateTime.now
-
-        placement_date.save!
       end
     end
   end
