@@ -548,6 +548,7 @@ en:
         contact_number: Telephone number
         contact_email: Email address
         candidate_instructions: Extra instructions for the candidate
+        bookings_subject_id: Subject
       candidates_registrations_contact_information:
         building: "Building and street"
         phone: "UK telephone number"

@@ -1,4 +1,4 @@
-Feature: Confirming a booking
+Feature: Confirming a request with a future date
     So I can quickly accept a placement request
     As a school administrator
     I want to be able check and accept a booking in one step

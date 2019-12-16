@@ -12,11 +12,22 @@
       <%= GovukElementsErrorsHelper.error_summary @booking, 'There is a problem', '' %>
       <div>
 
-
         <% if @placement_request.school.availability_preference_fixed? %>
-          <h3 class="govuk-heading-m">The candidate requested</h3>
+          <%- if @placement_request.placement_date.in_past? %>
+            <div class="govuk-warning-text">
+              <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+              <strong class="govuk-warning-text__text">
+                <span class="govuk-warning-text__assistive">Warning</span>
+                The candidate requested <%= @placement_request.requested_subject.name %>
+                on <%= @placement_request.dates_requested %>
+                which has elapsed. Select a new booking date.
+              </strong>
+            </div>
+          <% else %>
+            <h3 class="govuk-heading-m">The candidate requested</h3>
 
-          <p><%= @placement_request.requested_subject.name %> on <%= @placement_request.dates_requested %></p>
+            <p><%= @placement_request.requested_subject.name %> on <%= @placement_request.dates_requested %></p>
+          <% end %>
         <% else %>
           <h3 class="govuk-heading-m">The candidate requested</h3>
 
@@ -33,7 +44,6 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h3 class="govuk-fieldset__heading">Contact details</h3>
         </legend>
-
 
         <%= f.text_field :contact_name, width: 'two-thirds' %>
         <%= f.phone_field :contact_number, width: 'two-thirds' %>

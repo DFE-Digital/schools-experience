@@ -78,6 +78,10 @@ module Bookings
       date > Date.today
     end
 
+    def in_past?
+      date <= Date.today
+    end
+
     def has_subjects?
       placement_date_subjects.any?
     end

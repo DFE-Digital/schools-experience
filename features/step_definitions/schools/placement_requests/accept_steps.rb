@@ -42,3 +42,24 @@ Then("the {string} link should take me to the {string} page") do |link_text, scr
     href: path_for(screen, placement_request: @placement_request)
   )
 end
+
+Given("I enter a future date in the {string} date field") do |label|
+  @future_date = 2.weeks.from_now
+
+  step("I fill in the date field '%<label>s' with %<day>d-%<month>d-%<year>d" % {
+    label: label,
+    day: @future_date.day,
+    month: @future_date.month,
+    year: @future_date.year
+  })
+end
+
+Then("the booking details should have been saved") do
+  @placement_request.booking.tap do |b|
+    expect(b.contact_name).to eql('Joey Test')
+    expect(b.contact_number).to eql('01234 456 421')
+    expect(b.contact_email).to eql('test@test.org')
+    expect(b.bookings_subject.name).to eql('Biology')
+    expect(b.date).to eql(@future_date.to_date)
+  end
+end
