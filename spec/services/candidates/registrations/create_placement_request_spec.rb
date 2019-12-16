@@ -136,14 +136,28 @@ describe Candidates::Registrations::CreatePlacementRequest do
     context 'with known registration uuid' do
       before { registration_store.store! registration_session }
 
-      context 'but without gitis contact' do
+      context 'but without gitis contactid and unknown email address' do
         let(:requests_contactid) { fake_gitis_uuid }
         let(:signedin_contactid) { nil }
 
-        before { subject.create! }
+        before do
+          allow(fake_gitis).to \
+            receive(:find_contact_for_signin).and_return(nil)
 
-        it "does not retrieve the contact from gitis" do
+          subject.create!
+        end
+
+        it "does not retrieve the contact from gitis byt id" do
           expect(fake_gitis).not_to have_received(:find)
+        end
+
+        it "searches for the contact in gitis using PersonalInformation" do
+          expect(fake_gitis).to \
+            have_received(:find_contact_for_signin).with \
+              email: personal_information.email,
+              firstname: personal_information.first_name,
+              lastname: personal_information.last_name,
+              date_of_birth: personal_information.date_of_birth
         end
 
         it "creates a contact in gitis" do
@@ -153,6 +167,10 @@ describe Candidates::Registrations::CreatePlacementRequest do
               'firstname' => personal_information.first_name,
               'lastname' => personal_information.last_name
             )
+        end
+
+        it "does not update a contact in gitis" do
+          expect(fake_gitis.store).not_to have_received(:update_entity)
         end
 
         it "creates a new Candidate record" do
@@ -166,7 +184,52 @@ describe Candidates::Registrations::CreatePlacementRequest do
         include_examples 'schedule gitis jobs'
       end
 
-      context 'and known gitis contact' do
+      context 'but without gitis contactid but known email address' do
+        let(:requests_contactid) { fake_gitis_uuid }
+        let(:signedin_contactid) { nil }
+
+        before do
+          allow(fake_gitis).to \
+            receive(:find_contact_for_signin).and_call_original
+
+          subject.create!
+        end
+
+        it "does not retrieve the contact from gitis" do
+          expect(fake_gitis).not_to have_received(:find)
+        end
+
+        it "searches for the contact in gitis using PersonalInformation" do
+          expect(fake_gitis).to \
+            have_received(:find_contact_for_signin).with \
+              email: personal_information.email,
+              firstname: personal_information.first_name,
+              lastname: personal_information.last_name,
+              date_of_birth: personal_information.date_of_birth
+        end
+
+        it "does not create a contact in gitis" do
+          expect(fake_gitis.store).not_to have_received(:create_entity)
+        end
+
+        it "does update a contact in gitis" do
+          expect(fake_gitis.store).to have_received(:update_entity).with \
+            "contacts(#{fake_gitis_uuid})",
+            hash_including('address1_city' => 'Test town')
+        end
+
+        it "creates a new Candidate record" do
+          candidates = Bookings::Candidate.where(gitis_uuid: fake_gitis_uuid)
+          expect(candidates.count).to eql(1)
+        end
+
+        include_examples 'create placement request'
+        include_examples 'send emails'
+        include_examples 'remove from registration session'
+        include_examples 'schedule gitis jobs'
+      end
+
+      context 'and known gitis contactid' do
         let(:contact) { build(:gitis_contact, :persisted) }
         let(:requests_contactid) { contact.id }
         let(:signedin_contactid) { contact.id }
@@ -194,7 +257,7 @@ describe Candidates::Registrations::CreatePlacementRequest do
         include_examples 'schedule gitis jobs'
       end
 
-      context 'but unknown gitis contact' do
+      context 'but unknown gitis contactid' do
         let(:signedin_contactid) { SecureRandom.uuid }
 
         before do

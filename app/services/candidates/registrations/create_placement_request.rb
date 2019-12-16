@@ -1,8 +1,10 @@
 module Candidates
   module Registrations
     class CreatePlacementRequest
-      attr_reader :placement_request, :registration_uuid, :gitis_contact_id
+      attr_reader :placement_request, :registration_uuid
       attr_reader :registration_session
+
+      delegate :personal_information, to: :registration_session
 
       def initialize(crm, registration_uuid, gitis_contact_id, host, analytics_uuid = nil)
         @crm = crm
@@ -15,7 +17,7 @@ module Candidates
       def create!
         fetch_registration_session
 
-        fetch_gitis_contact
+        fetch_gitis_contact || lookup_gitis_contact_by_email
         create_or_update_gitis_contact
 
         create_placement_request
@@ -27,6 +29,10 @@ module Candidates
 
         accept_privacy_policy
         log_request_to_gitis_contact
+      end
+
+      def gitis_contact_id
+        @gitis_contact&.contactid || @gitis_contact_id
       end
 
     private
@@ -92,6 +98,16 @@ module Candidates
 
       def fetch_gitis_contact
         @gitis_contact = @crm.find(gitis_contact_id) if gitis_contact_id
+      end
+
+      def lookup_gitis_contact_by_email
+        @gitis_contact = @crm.find_contact_for_signin \
+          email: personal_information.email,
+          firstname: personal_information.first_name,
+          lastname: personal_information.last_name,
+          date_of_birth: personal_information.date_of_birth
+
+        @gitis_contact
       end
 
       def create_or_update_gitis_contact
