@@ -11,7 +11,7 @@ module Schools
         @placement_request.fetch_gitis_contact gitis_crm
       end
 
-      def find_or_create_booking(placement_request)
+      def find_or_build_booking(placement_request)
         placement_request.booking || Bookings::Booking.from_placement_request(placement_request)
       end
     end

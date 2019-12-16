@@ -15,8 +15,9 @@ module Schools
         end
 
         def create
-          @booking = find_or_create_booking(@placement_request)
           set_placement_request
+
+          @booking = find_or_build_booking(@placement_request)
           @booking.assign_attributes(booking_params)
 
           if @booking.save
