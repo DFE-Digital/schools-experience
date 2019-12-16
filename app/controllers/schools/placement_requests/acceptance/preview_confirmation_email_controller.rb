@@ -5,13 +5,16 @@ module Schools
         include Acceptance
 
         def edit
+          set_placement_request
+
           @placement_request.fetch_gitis_contact gitis_crm
           @booking = @placement_request.booking
         end
 
         def update
-          @booking = @placement_request.booking
+          set_placement_request
 
+          @booking = @placement_request.booking
           @booking.assign_attributes(booking_params)
 
           if @booking.valid?(:acceptance_email_preview) && @booking.accept! && candidate_booking_notification(@booking).despatch_later!

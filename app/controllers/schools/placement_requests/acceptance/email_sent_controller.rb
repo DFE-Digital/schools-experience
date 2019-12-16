@@ -5,6 +5,8 @@ module Schools
         include Acceptance
 
         def show
+          set_placement_request
+
           unless @placement_request.booking.accepted?
             redirect_to new_schools_placement_request_acceptance_make_changes_path(@placement_request.id)
           end
