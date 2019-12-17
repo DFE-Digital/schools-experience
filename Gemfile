@@ -90,7 +90,6 @@ group :development, :test do
 
   # Testing framework
   gem 'rspec-rails', '~> 3.9'
-  gem 'rspec_junit_formatter'
   gem 'factory_bot_rails'
 
   gem 'brakeman', '>= 4.4.0'
