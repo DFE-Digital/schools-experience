@@ -54,27 +54,11 @@ jobs:
       until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
     displayName: bring up postgres, redis and create database (for the web app) and spin up application
 
-  - script: docker-compose run --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+  - script: docker-compose run --rm db-tasks rspec
     displayName: Run the Specs
 
-  - task: PublishTestResults@2
-    condition: failed()
-    displayName: Upload RSpec results
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: rspec_results.xml
-      testRunTitle: RSpec results
-
-  - script: docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks cucumber --profile=$(CUCUMBER_PROFILE) --format junit --out /ci_build/junit
+  - script: docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks cucumber --profile=$(CUCUMBER_PROFILE)
     displayName: Run the Cucumber features
-
-  - task: PublishTestResults@2
-    condition: failed()
-    displayName: Upload Cucumber results
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit/TEST-*.xml'
-      testRunTitle: Cucumber results
 
   - script: |
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
@@ -142,16 +126,8 @@ jobs:
       WAIT_COUNT=0
       until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
       echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
-      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber --format junit --out /ci_build/junit $(features)
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber $(features)
     displayName: Run Cucumber Tests
-
-  - task: PublishTestResults@2
-    condition: failed()
-    displayName: Upload Cucumber results
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit/TEST-*.xml'
-      testRunTitle: Cucumber results
 
 - job: PublishArtifacts
   pool:
