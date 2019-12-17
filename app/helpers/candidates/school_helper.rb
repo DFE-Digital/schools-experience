@@ -129,7 +129,7 @@ module Candidates::SchoolHelper
       msg = content_tag(:em, msg)
     end
 
-    content.presence || msg
+    content.present? ? sanitize(content) : msg
   end
 
   def start_request_link(school)
