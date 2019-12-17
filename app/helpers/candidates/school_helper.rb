@@ -122,14 +122,16 @@ module Candidates::SchoolHelper
     end
   end
 
-  def content_or_msg(content, msg = nil)
+  def content_or_msg(content, msg = nil, display_as_list: false)
     if block_given?
       msg = yield
     elsif msg
       msg = content_tag(:em, msg)
     end
 
-    content.present? ? sanitize(content) : msg
+    output = content.presence || msg
+
+    display_as_list ? split_to_list(output) : output
   end
 
   def start_request_link(school)
@@ -141,6 +143,12 @@ module Candidates::SchoolHelper
   end
 
 private
+
+  def split_to_list(content)
+    content_tag('ul', class: 'govuk-list') do
+      safe_join(content.split("\n").map { |req| tag.li(req) })
+    end
+  end
 
   def filtered_subject_ids(subject_ids)
     return [] unless subject_ids&.any?

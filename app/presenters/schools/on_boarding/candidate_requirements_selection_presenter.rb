@@ -2,7 +2,6 @@ module Schools
   module OnBoarding
     class CandidateRequirementsSelectionPresenter
       include ActionView::Helpers
-      include ActionView::Context
 
       # Initalized with a hash of attributes rather than a profile so it can be
       # shared between Bookings::ProfileAttributesConvertor and
@@ -14,13 +13,7 @@ module Schools
       def to_s
         reqs = requirements
 
-        if reqs.empty?
-          'None'
-        else
-          content_tag('ul', class: 'govuk-list') do
-            safe_join(reqs.map { |req| tag.li(req) })
-          end
-        end
+        reqs.empty? ? 'None' : reqs.join("\n")
       end
 
       def requirements

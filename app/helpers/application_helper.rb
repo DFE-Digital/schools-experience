@@ -54,12 +54,14 @@ module ApplicationHelper
     request.path.start_with?('/schools')
   end
 
-  def summary_row(key, value, change_path = nil, id: nil, show_action: true)
+  def summary_row(key, value, change_path = nil, id: nil, show_action: true, display_as_list: false)
     action = show_action && (change_path ? link_to('Change', change_path, 'aria-label': "Change #{key}") : "")
+
+    value_content = display_as_list ? split_to_list(value) : value
 
     render \
       partial: "shared/list_row",
-      locals: { key: key, value: value, action: action, id: id }
+      locals: { key: key, value: value_content, action: action, id: id }
   end
 
   def service_update_last_updated_at
