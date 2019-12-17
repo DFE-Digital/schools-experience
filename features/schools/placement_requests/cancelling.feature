@@ -39,14 +39,38 @@ Feature: Rejecting placement requests
     Scenario: Reject form
         Given there is at least one placement request
         When I am on the reject placement request page
-        Then there should be a 'Cancellation reasons' text area
+        Then I should see radio buttons for 'Rejection reason' with the following options:
+            | The date you requested is fully booked                                                                    |
+            | We cannot offer you school experience because you have already been accepted on a Teacher Training Course |
+            | We cannot support the date you have requested                                                             |
+            | We do not believe you have a relevant degree for the school experience you are applying for               |
+            | We are unable to offer you school experience for the teaching phase you are interested in                 |
+            | We are looking for candidates that live locally to the school                                             |
+            | This is a duplicate request                                                                               |
+            | Other                                                                                                     |
         And there should be a 'Extra details' text area
         And the submit button should contain text 'Preview rejection email'
 
     Scenario: Rejecting the requests
         Given there is at least one placement request
         And I am on the reject placement request page
-        And I have entered a reason in the cancellation reasons text area
+        And I choose 'We cannot support the date you have requested' from the 'Rejection reason' radio buttons
         And I have entered a extra details in the extra details text area
         When I click the 'Preview rejection email' button
         Then I should see a preview of what I have entered
+
+    @javascript
+    Scenario: Entering a custom option
+        Given there is at least one placement request
+        And I am on the reject placement request page
+        And I choose 'Other' from the 'Rejection reason' radio buttons
+        Then a text area labelled 'Cancellation reasons' should have appeared
+
+    @javascript
+    Scenario: Rejecting the requests with a custom reason
+        Given there is at least one placement request
+        And I am on the reject placement request page
+        And I choose 'Other' from the 'Rejection reason' radio buttons
+		And I enter 'The school will be closed' into the 'Cancellation reasons' text area
+        When I click the 'Preview rejection email' button
+        Then I should see my custom cancellation reason
