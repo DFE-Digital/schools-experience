@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/service_update', to: 'pages#service_update'
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
+  get '/dfe_signin_help', to: 'pages#dfe_signin_help'
 
   resource :cookie_preference, only: %i(show edit update)
 
