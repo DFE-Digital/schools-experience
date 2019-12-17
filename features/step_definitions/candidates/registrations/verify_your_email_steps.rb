@@ -39,11 +39,6 @@ Given("I follow the verify link in the confirmation email") do
     school: @school, session_token: @session_token, uuid: uuid)
 end
 
-# TODO SE-1992 Remove this
-Given("I follow the legacy verify link in the confirmation email") do
-  visit "/candidates/verify/#{@school.to_param}/#{@session_token.to_param}"
-end
-
 Given "I have chosen a subject specific date" do
   steps %(
     And I am on the 'choose a subject and date' screen for my chosen school

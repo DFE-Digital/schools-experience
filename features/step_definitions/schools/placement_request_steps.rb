@@ -246,7 +246,7 @@ Then("I should see the rejection details") do
   expect(page).to have_css 'h1', text: "This request from Matthew Richards has been rejected"
 
   within '#cancellation-details' do
-    expect(page).to have_text @placement_request.school_cancellation.reason
+    expect(page).to have_text @placement_request.school_cancellation.rejection_description
     expect(page).to have_text @placement_request.school_cancellation.extra_details
   end
 end

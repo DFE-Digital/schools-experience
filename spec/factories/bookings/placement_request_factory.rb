@@ -45,7 +45,7 @@ FactoryBot.define do
       before :create do |placement_request|
         placement_request.school_cancellation = \
           FactoryBot.build :cancellation,
-            :sent, placement_request: placement_request, cancelled_by: 'school'
+            :sent, placement_request: placement_request, cancelled_by: 'school', rejection_category: :fully_booked
       end
     end
 
@@ -53,6 +53,7 @@ FactoryBot.define do
       before :create do |placement_request|
         placement_request.school_cancellation = \
           FactoryBot.build :cancellation,
+            rejection_category: :fully_booked,
             placement_request: placement_request, cancelled_by: 'school'
       end
     end

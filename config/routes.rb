@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/service_update', to: 'pages#service_update'
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
+  get '/dfe_signin_help', to: 'pages#dfe_signin_help'
+
+  resource :cookie_preference, only: %i(show edit update)
 
   get '/auth/callback', to: 'schools/sessions#create'
 
@@ -120,8 +123,6 @@ Rails.application.routes.draw do
     resources :school_searches, only: %i{new}
 
     get 'verify/:school_id/:token/:uuid', to: 'registrations/sign_ins#update', as: :registration_verify
-    # TODO SE-1992 Remove this
-    get 'verify/:school_id/:token', to: 'registrations/sign_ins#update'
 
     resources :schools, only: %i{index show} do
       namespace :registrations do

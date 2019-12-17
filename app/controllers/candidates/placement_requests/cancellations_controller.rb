@@ -16,7 +16,7 @@ module Candidates
         @cancellation = placement_request.build_candidate_cancellation \
           placement_request_params
 
-        if @cancellation.save
+        if @cancellation.save(context: :candidate_cancellation)
           @placement_request.fetch_gitis_contact gitis_crm
 
           notify_school @cancellation

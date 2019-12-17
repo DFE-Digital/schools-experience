@@ -65,10 +65,6 @@ Then "I should see a list of subjects the school offers" do
   end
 end
 
-Then "an option to select all subjects" do
-  expect(page).to have_field('All subjects', type: 'checkbox')
-end
-
 Then "my date should be listed" do
   date = @school.bookings_placement_dates.last
 
