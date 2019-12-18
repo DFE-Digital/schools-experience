@@ -141,7 +141,9 @@ module Candidates::SchoolHelper
   end
 
   def split_to_list(content)
-    items = content&.split("\n")
+    return nil if content.nil?
+
+    items = content.split("\n").reject(&:blank?)
 
     return nil if items.blank?
 
