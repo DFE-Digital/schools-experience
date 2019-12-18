@@ -165,8 +165,8 @@ en:
               blank: "Enter your full name"
             date_of_birth:
               blank: "Enter your date of birth"
-              on_or_before: "Enter a valid date of birth. You must be at least 18 years old"
-              on_or_after: "Enter a valid date of birth. You must be younger than 100 years old"
+              on_or_before: "You must be at least 18 years old"
+              on_or_after: "You must be younger than 100 years old"
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
