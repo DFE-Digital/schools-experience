@@ -56,8 +56,12 @@ describe Bookings::Booking do
           end
         end
 
+        specify 'new placement dates should not allow today' do
+          expect(subject).not_to allow_value(Date.today).for(:date)
+        end
+
         context 'error messages' do
-          let(:message) { 'Date must not be in the past' }
+          let(:message) { 'Date must be in the future' }
           let(:invalid_pd) { build(:bookings_placement_date, date: 3.weeks.ago).tap(&:valid?) }
           subject { invalid_pd.errors.full_messages }
 
@@ -184,19 +188,21 @@ describe Bookings::Booking do
 
       let!(:future_bookings) do
         [
-          FactoryBot.create(:bookings_booking, date: Date.today),
-          FactoryBot.create(:bookings_booking, date: Date.tomorrow),
-          FactoryBot.create(:bookings_booking, date: 3.weeks.from_now)
-        ]
+          FactoryBot.build(:bookings_booking, date: Date.today),
+          FactoryBot.build(:bookings_booking, date: Date.tomorrow),
+          FactoryBot.build(:bookings_booking, date: 3.weeks.from_now)
+        ].each do |booking|
+          booking.save(validate: false)
+        end
       end
 
       subject { described_class.future }
 
-      specify 'should include dates today or before' do
+      specify 'should not include dates before today' do
         expect(subject).not_to include(*previous_bookings)
       end
 
-      specify 'should not include dates after today' do
+      specify 'should include dates on or after today' do
         expect(subject).to match_array(future_bookings)
       end
     end

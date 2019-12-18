@@ -1,5 +1,7 @@
 module Bookings
   class Booking < ApplicationRecord
+    MIN_BOOKING_DELAY = 1.day.freeze
+
     belongs_to :bookings_placement_request,
       class_name: 'Bookings::PlacementRequest',
       inverse_of: :booking
@@ -19,7 +21,7 @@ module Bookings
     validates :date,
       if: -> { date_changed? },
       timeliness: {
-        on_or_after: :today,
+        on_or_after: -> { MIN_BOOKING_DELAY.from_now.to_date },
         before: -> { 2.years.from_now },
         type: :date
       }

@@ -34,7 +34,7 @@ module Bookings
     validates :date, presence: true
     validates :date,
       timeliness: {
-        on_or_after: :today,
+        on_or_after: -> { Booking::MIN_BOOKING_DELAY.from_now.to_date },
         before: -> { 2.years.from_now },
         type: :date
       },

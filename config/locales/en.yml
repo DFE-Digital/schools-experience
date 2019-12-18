@@ -402,14 +402,14 @@ en:
               blank: Enter a duration
             date:
               blank: Enter a start date
-              on_or_after: Date must not be in the past
+              on_or_after: Date must be in the future
             supports_subjects:
               inclusion: Select a school experience phase
 
         bookings/bookings:
           attributes:
             date:
-              on_or_after: Date must not be in the past
+              on_or_after: Date must be in the future
 
         candidates/feedback:
           <<: *feedback_errors
