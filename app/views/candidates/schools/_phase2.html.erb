@@ -17,7 +17,7 @@
         <% end %>
 
         <%= dlist_item 'Details:', id: 'experience-details' do %>
-          <%= content_or_msg @presenter.experience_details, "No information supplied" %>
+          <%= conditional_format content_or_msg @presenter.experience_details, "No information supplied" %>
         <% end %>
 
         <%= dlist_item 'Subjects:', id: "school-subjects" do %>
