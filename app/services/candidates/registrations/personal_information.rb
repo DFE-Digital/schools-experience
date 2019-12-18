@@ -14,8 +14,8 @@ module Candidates
       attribute :date_of_birth, :date
       attribute :read_only, :boolean, default: false
 
-      validates :first_name, presence: true, unless: :read_only
-      validates :last_name, presence: true, unless: :read_only
+      validates :first_name, presence: true, length: { maximum: 50 }, unless: :read_only
+      validates :last_name, presence: true, length: { maximum: 50 }, unless: :read_only
       validates :email, presence: true, length: { maximum: 100 }
       validates :email, email_format: true, if: -> { email.present? }
       validates :date_of_birth, presence: true, unless: :read_only
