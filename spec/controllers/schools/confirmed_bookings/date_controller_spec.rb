@@ -110,6 +110,20 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
         )
       end
     end
+
+    context 'updating with same date' do
+      let(:date) { booking.date }
+      let(:params) do
+        { bookings_booking: { date: date.to_formatted_s(:govuk) } }
+      end
+
+      subject! { patch schools_booking_date_path(booking.id, params: params) }
+
+      specify("should render edit page") do
+        expect(response).to have_http_status 200
+        expect(response).to have_attributes body: /change the booking date/i
+      end
+    end
   end
 
   describe '#show' do

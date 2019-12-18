@@ -67,6 +67,22 @@ describe Bookings::Booking do
         end
       end
 
+      context 'updating placement date with same date' do
+        let(:booking) { create(:bookings_booking) }
+        subject { booking.errors.to_hash }
+
+        context 'defaults to being allowed' do
+          before { booking.valid? }
+          it { is_expected.to be_empty }
+        end
+
+        context 'is disallowed if updating_date is enabled' do
+          before { booking.valid?(:updating_date) }
+          it { is_expected.to be_any }
+          it { is_expected.to include(date: ["Date has not been changed"]) }
+        end
+      end
+
       context 'new placement dates must be in the future' do
         context 'not too far in the future' do
           specify 'should not allow dates more than 2 years in the future' do

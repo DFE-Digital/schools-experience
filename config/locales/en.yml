@@ -406,10 +406,11 @@ en:
             supports_subjects:
               inclusion: Select a school experience phase
 
-        bookings/bookings:
+        bookings/booking:
           attributes:
             date:
               on_or_after: Date must not be in the past
+              not_changed: Date has not been changed
 
         candidates/feedback:
           <<: *feedback_errors
