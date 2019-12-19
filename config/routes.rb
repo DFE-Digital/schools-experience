@@ -48,14 +48,11 @@ Rails.application.routes.draw do
         resource :confirm_booking,
           only: %i(new create),
           controller: '/schools/placement_requests/acceptance/confirm_booking'
-        resource :add_more_details,
+        resource :make_changes,
           only: %i(new create),
-          controller: '/schools/placement_requests/acceptance/add_more_details'
-        resource :review_and_send_email,
-          only: %i(new create),
-          controller: '/schools/placement_requests/acceptance/review_and_send_email'
+          controller: '/schools/placement_requests/acceptance/make_changes'
         resource :preview_confirmation_email,
-          only: %i(new create),
+          only: %i(edit update),
           controller: '/schools/placement_requests/acceptance/preview_confirmation_email'
         resource :email_sent,
           only: %i(show),

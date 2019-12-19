@@ -403,13 +403,23 @@ en:
             date:
               blank: Enter a start date
               on_or_after: Date must not be in the past
+        bookings/booking:
+          attributes:
             supports_subjects:
               inclusion: Select a school experience phase
-
-        bookings/bookings:
-          attributes:
             date:
+              blank: Enter a booking date
               on_or_after: Date must not be in the past
+            contact_name:
+              blank: You must provide a contact name to the candidate
+            contact_email:
+              blank: Enter a contact email address
+              invalid: Enter a valid contact email address
+            contact_number:
+              blank: Enter a contact telephone number
+              invalid: Enter a valid contact telephone number
+            candidate_instructions:
+              blank: Enter some instructions for the candidate
 
         candidates/feedback:
           <<: *feedback_errors
@@ -431,8 +441,6 @@ en:
   helpers:
     fieldset:
       order: Sorted by
-      schools_placement_requests_confirm_booking:
-        date: Confirm experience date
       bookings_booking:
         date: Booking date
       bookings_school:
@@ -602,6 +610,12 @@ en:
           no_phase_availability: We are unable to offer you school experience for the teaching phase you are interested in
           candidate_not_local: We are looking for candidates that live locally to the school
           duplicate: This is a duplicate request
+      bookings_booking:
+        contact_name: Name
+        contact_number: Telephone number
+        contact_email: Email address
+        candidate_instructions: Extra instructions for the candidate
+        bookings_subject_id: Subject
       candidates_registrations_contact_information:
         building: "Building and street"
         phone: "UK telephone number"

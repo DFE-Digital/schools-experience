@@ -30,7 +30,6 @@ module Bookings
         less_than: 100
       }
 
-
     validates :date, presence: true
     validates :date,
       timeliness: {
@@ -79,6 +78,14 @@ module Bookings
         duration: duration,
         unit: "day".pluralize(duration)
       }
+    end
+
+    def in_future?
+      date > Date.today
+    end
+
+    def in_past?
+      date <= Date.today
     end
 
     def has_subjects?

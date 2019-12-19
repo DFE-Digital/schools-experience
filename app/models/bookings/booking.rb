@@ -31,6 +31,12 @@ module Bookings
     validates :duration, presence: true, numericality: { greater_than: 0 }
     validates :attended, inclusion: [nil], if: -> { bookings_placement_request&.cancelled? }
 
+    validates :contact_name, presence: true
+    validates :contact_number, presence: true, phone: true
+    validates :contact_email, presence: true, email_format: true
+
+    validates :candidate_instructions, presence: true, on: :acceptance_email_preview
+
     delegate \
       :availability,
       :degree_stage,
@@ -85,11 +91,37 @@ module Bookings
     scope :tomorrow,           -> { days_in_the_future(1.day) }
     scope :one_week_from_now,  -> { days_in_the_future(7.days) }
 
-    def self.from_confirm_booking(confirm_booking)
+    def self.from_placement_request(placement_request)
+      # only populate the date if it's in the future
+      date = if placement_request&.placement_date&.in_future?
+               placement_request.placement_date.date
+             end
+
       new(
-        date: confirm_booking.date,
-        bookings_subject_id: confirm_booking.bookings_subject_id,
-        placement_details: confirm_booking.placement_details
+        bookings_school: placement_request.school,
+        bookings_placement_request: placement_request,
+        date: date,
+        bookings_subject_id: placement_request.requested_subject.id,
+        placement_details: placement_request.school.placement_info
+      )
+    end
+
+    def self.last_accepted_booking_by(school)
+      school.bookings.accepted.order(id: 'desc').first
+    end
+
+    # on subsequent placement request acceptances, pre-populate the contact details and
+    # candidate instructions to shorten the process
+    def populate_contact_details!
+      last_booking = Bookings::Booking.last_accepted_booking_by(bookings_school)
+
+      return self unless last_booking.present?
+
+      assign_attributes(
+        contact_name: last_booking.contact_name,
+        contact_email: last_booking.contact_email,
+        contact_number: last_booking.contact_number,
+        location: last_booking.location,
       )
     end
 
@@ -107,32 +139,6 @@ module Bookings
 
     def duration_days
       duration.to_s + ' day'.pluralize(duration)
-    end
-
-    # stage one of the placement request acceptance mini-wizard
-    def booking_confirmed?
-      Schools::PlacementRequests::ConfirmBooking.new(
-        date: date,
-        placement_details: placement_details,
-        bookings_subject_id: bookings_subject_id
-      ).valid?
-    end
-
-    # stage two of the placement request acceptance mini-wizard
-    def more_details_added?
-      Schools::PlacementRequests::AddMoreDetails.new(
-        contact_name: contact_name,
-        contact_number: contact_number,
-        contact_email:  contact_email,
-        location:  location
-      ).valid?
-    end
-
-    # stage three of the placement request acceptance mini-wizard
-    def reviewed_and_candidate_instructions_added?
-      Schools::PlacementRequests::ReviewAndSendEmail.new(
-        candidate_instructions: candidate_instructions
-      ).valid?
     end
 
     def accepted?

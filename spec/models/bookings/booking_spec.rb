@@ -325,138 +325,6 @@ describe Bookings::Booking do
     end
   end
 
-  describe 'Acceptance' do
-    let(:booking_confirmed_params) do
-      {
-        date: 3.weeks.from_now,
-        placement_details: "an amazing experience"
-      }
-    end
-
-    let(:more_details_params) do
-      booking_confirmed_params.merge(
-        contact_name: 'Gary Chalmers',
-        contact_email: 'gary.chalmers@springfield.edu',
-        contact_number: '01234 456 678',
-        location: 'Near the assembly hall'
-      )
-    end
-
-    let(:reviewed_and_email_sent_params) do
-      more_details_params.merge(
-        candidate_instructions: 'Just go down the main corridor then turn left'
-      )
-    end
-
-    describe '#booking_confirmed?' do
-      context 'when the relevant attributes are present' do
-        subject do
-          create(:bookings_booking, **booking_confirmed_params)
-        end
-
-        specify 'should be true' do
-          expect(subject).to be_booking_confirmed
-        end
-      end
-
-      context 'when the relevant attributes are absent' do
-        subject do
-          create(
-            :bookings_booking,
-            **booking_confirmed_params.except(:placement_details)
-          )
-        end
-
-        specify 'should be false' do
-          expect(subject).not_to be_booking_confirmed
-        end
-      end
-    end
-
-    describe '#more_details_added?' do
-      context 'when the relevant attributes are present' do
-        subject do
-          create(:bookings_booking, **more_details_params)
-        end
-
-        specify 'should be true' do
-          expect(subject).to be_more_details_added
-        end
-      end
-
-      context 'when the relevant attributes are absent' do
-        subject do
-          create(:bookings_booking, **more_details_params.except(:contact_name))
-        end
-
-        specify 'should be false' do
-          expect(subject).not_to be_more_details_added
-        end
-      end
-    end
-
-    describe '#reviewed_and_candidate_instructions_added?' do
-      context 'when the relevant attributes are present' do
-        subject do
-          create(:bookings_booking, **reviewed_and_email_sent_params)
-        end
-
-        specify 'should be true' do
-          expect(subject).to be_reviewed_and_candidate_instructions_added
-        end
-      end
-
-      context 'when the relevant attributes are absent' do
-        subject do
-          create(:bookings_booking, **reviewed_and_email_sent_params.except(:candidate_instructions))
-        end
-
-        specify 'should be false' do
-          expect(subject).not_to be_reviewed_and_candidate_instructions_added
-        end
-      end
-    end
-
-    describe '#accepted?' do
-      context 'when the relevant attributes are present' do
-        subject do
-          create(:bookings_booking, :accepted)
-        end
-
-        specify 'should be true' do
-          expect(subject).to be_accepted
-        end
-      end
-
-      context 'when the relevant attributes are absent' do
-        subject do
-          create(:bookings_booking)
-        end
-
-        specify 'should be false' do
-          expect(subject).not_to be_accepted
-        end
-      end
-    end
-
-    describe '#accept!' do
-      context 'when not accepted' do
-        let(:booking) { create(:bookings_booking) }
-        subject! { booking.accept! }
-        it { is_expected.to be true }
-        it { expect(booking.reload.accepted_at).to be_within(10.seconds).of(Time.zone.now) }
-      end
-
-      context 'when already accepted' do
-        let!(:ten_minutes_ago) { 10.minutes.ago }
-        let(:booking) { create(:bookings_booking, accepted_at: ten_minutes_ago) }
-        subject! { booking.accept! }
-        it { is_expected.to be true }
-        it { expect(booking.reload.accepted_at).to be_within(1.second).of(ten_minutes_ago) }
-      end
-    end
-  end
-
   describe '#placement_start_date_with_duration' do
     context 'when the placement request has a flexible date' do
       let! :date do
@@ -539,6 +407,35 @@ describe Bookings::Booking do
     context 'for past booking' do
       subject { create(:bookings_booking, :previous) }
       it { is_expected.not_to be_editable_date }
+    end
+  end
+
+  describe '.from_placement_request' do
+    specify { expect(described_class).to respond_to(:from_placement_request) }
+    let(:placement_request) { create(:bookings_placement_request, placement_date: placement_date) }
+    subject { described_class.from_placement_request(placement_request) }
+
+    context 'when the placement date is in the future' do
+      let(:placement_date) { create(:bookings_placement_date) }
+
+      specify 'should set the date' do
+        expect(subject.date).to be_present
+      end
+
+      specify 'should set the school, placement request, subject and details' do
+        expect(subject.bookings_school).to eql(placement_request.school)
+        expect(subject.bookings_placement_request).to eql(placement_request)
+        expect(subject.bookings_subject_id).to eql(placement_request.requested_subject.id)
+        expect(subject.placement_details).to eql(placement_request.school.placement_info)
+      end
+    end
+
+    context 'when the placement date is in the past' do
+      let(:placement_date) { create(:bookings_placement_date, :in_the_past) }
+
+      specify 'should not set the date' do
+        expect(subject.date).to be_blank
+      end
     end
   end
 end
