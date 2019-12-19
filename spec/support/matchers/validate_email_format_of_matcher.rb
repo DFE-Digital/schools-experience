@@ -1,14 +1,4 @@
 RSpec::Matchers.define :validate_email_format_of do |attribute|
-  VALID_EMAILS = [
-    'test@example.com', 'testymctest@gmail.com',
-    'test%.mctest@domain.co.uk', ' with@space.com '
-  ].freeze
-
-  INVALID_EMAILS = [
-    'test.com', 'test@@test.com', 'FFFF', 'test@test',
-    'test@test.'
-  ].freeze
-
   match do |model|
     test_with_valid_emails?(model, attribute) &&
       test_with_invalid_emails?(model, attribute)
@@ -41,7 +31,10 @@ RSpec::Matchers.define :validate_email_format_of do |attribute|
 private
 
   def test_with_valid_emails?(model, attribute)
-    VALID_EMAILS.all? do |email|
+    [
+      'test@example.com', 'testymctest@gmail.com',
+      'test%.mctest@domain.co.uk', ' with@space.com '
+    ].all? do |email|
       @testing_address = email
 
       model.send(:"#{attribute}=", email)
@@ -52,7 +45,10 @@ private
   end
 
   def test_with_invalid_emails?(model, attribute)
-    INVALID_EMAILS.all? do |email|
+    [
+      'test.com', 'test@@test.com', 'FFFF', 'test@test',
+      'test@test.'
+    ].all? do |email|
       @testing_address = email
 
       model.send(:"#{attribute}=", email)
