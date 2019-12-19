@@ -342,7 +342,11 @@ Then "I should see the dress code policy information I entered in the wizard" do
 end
 
 Then "I should see the accessability information I have entered" do
-  within '#access-needs-statement' do
-    expect(page).to have_text "Disability and access needs details We offer facilities and provide an inclusive environment for students, staff and school experience candidates with disability and access needs. We're happy to discuss your disability or access needs before or as part of your school experience request. Access needs policy", normalize_ws: true
+  within('#disability-and-access') do
+    expect(page).to have_css('dt', text: 'Disability and access details')
+
+    within('#access-needs-statement') do
+      expect(page).to have_text "We offer facilities and provide an inclusive environment for students, staff and school experience candidates with disability and access needs. We're happy to discuss your disability or access needs before or as part of your school experience request. Access needs policy", normalize_ws: true
+    end
   end
 end

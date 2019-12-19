@@ -208,11 +208,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when registration is complete' do
-      include_context 'Stubbed candidates school'
-
-      subject do
-        FactoryBot.build :registration_session
-      end
+      subject { FactoryBot.build :registration_session }
 
       before do
         subject.flag_as_pending_email_confirmation!

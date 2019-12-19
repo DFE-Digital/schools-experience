@@ -20,7 +20,7 @@ module Schools
 
         @placement_request.fetch_gitis_contact gitis_crm
 
-        if @cancellation.save
+        if @cancellation.save(context: :rejection)
           redirect_to schools_placement_request_cancellation_path \
             @placement_request
         else
@@ -35,8 +35,9 @@ module Schools
 
       def update
         @cancellation = @placement_request.school_cancellation
+        @cancellation.assign_attributes(cancellation_params)
 
-        if @cancellation.update cancellation_params
+        if @cancellation.save(context: :rejection)
           redirect_to schools_placement_request_cancellation_path \
             @placement_request
         else
@@ -60,7 +61,7 @@ module Schools
 
       def cancellation_params
         params.require(:bookings_placement_request_cancellation).permit \
-          :reason, :extra_details
+          :rejection_category, :reason, :extra_details
       end
     end
   end
