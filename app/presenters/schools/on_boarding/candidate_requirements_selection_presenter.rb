@@ -1,6 +1,8 @@
 module Schools
   module OnBoarding
     class CandidateRequirementsSelectionPresenter
+      include ActionView::Helpers
+
       # Initalized with a hash of attributes rather than a profile so it can be
       # shared between Bookings::ProfileAttributesConvertor and
       # Schools::OnBoarding::SchoolProfilePresenter
@@ -9,6 +11,12 @@ module Schools
       end
 
       def to_s
+        reqs = requirements
+
+        reqs.empty? ? 'None' : reqs.join("\n")
+      end
+
+      def requirements
         output = []
 
         if on_teacher_training_course?
@@ -26,22 +34,18 @@ module Schools
         if live_locally?
           distance = maximum_distance_from_school
           miles = 'mile'.pluralize distance
-          output << "They must live within #{distance} #{miles} from the school"
+          output << "They must live within #{distance} #{miles} of the school"
         end
 
         if provide_photo_identification?
-          output << photo_identification_details
+          output << "Photo identification: #{photo_identification_details}"
         end
 
         if other?
           output << other_details
         end
 
-        if output.empty?
-          'None'
-        else
-          output.join('. ')
-        end
+        output
       end
 
     private

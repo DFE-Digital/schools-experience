@@ -11,9 +11,9 @@
         About our school experience
       </h2>
 
-      <dl class="govuk-summary-list govuk-summary-list--no-border inline">
+      <dl class="govuk-summary-list govuk-summary-list--no-border">
         <%= dlist_item 'Individual requirements:', id: 'individual-requirements' do %>
-          <%= content_or_msg @presenter.individual_requirements, "No requirements specified" %>
+          <%= content_or_msg(split_to_list(@presenter.individual_requirements), "No requirements specified") %>
         <% end %>
 
         <%= dlist_item 'Details:', id: 'experience-details' do %>
