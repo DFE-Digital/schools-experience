@@ -17,6 +17,20 @@ end
 
 Then("I should see a preview of what I have entered") do
   within '#rejection-details' do
+    expect(page).to have_content 'We cannot support the date you have requested'
+  end
+
+  within '#extra-details' do
+    expect(page).to have_content "It's a popular school"
+  end
+end
+
+Then("I should see my custom cancellation reason") do
+  expect(page).to have_content(@filled_in_value)
+end
+
+Then("I should see the details I entered") do
+  within '#rejection-details' do
     expect(page).to have_content 'The school is full'
   end
 

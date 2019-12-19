@@ -1,3 +1,6 @@
+# this feature is awaiting capping, until then there is no configuration
+# for primary dates
+@wip
 Feature: Configuring a placement date
     So I can manage placement dates
     As a primary school administrator

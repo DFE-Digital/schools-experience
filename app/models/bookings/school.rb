@@ -91,6 +91,7 @@ class Bookings::School < ApplicationRecord
     dependent: :destroy
 
   scope :enabled, -> { where(enabled: true) }
+  scope :ordered_by_name, -> { order(name: 'asc') }
 
   scope :that_provide, ->(subject_ids) do
     if subject_ids.present?
@@ -184,8 +185,16 @@ class Bookings::School < ApplicationRecord
     end
   end
 
-  def supports_subjects?
+  def has_secondary_phase?
     phases.any?(&:supports_subjects?)
+  end
+
+  def has_primary_phase?
+    phases.any? { |p| !p.supports_subjects? }
+  end
+
+  def has_primary_and_secondary_phases?
+    has_primary_phase? && has_secondary_phase?
   end
 
 private

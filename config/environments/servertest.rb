@@ -27,6 +27,7 @@ Rails.application.configure do
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
   config.x.dfe_sign_in_api_enabled = false
   config.x.dfe_sign_in_api_role_check_enabled = false
+  config.x.dfe_sign_in_api_school_change_enabled = false
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'

@@ -59,3 +59,15 @@ Feature: Viewing a placement request
         And I am on the placement request page
         When I click the 'Accept request' button
         Then I should be on the confirm booking page
+
+    Scenario: Viewing a withdrawn request
+        Given there is at least one placement request
+        And the request has been withdrawn
+        When I am on the placement request page
+        Then I should see the withdrawal details
+
+    Scenario: Viewing a rejected request
+        Given there is at least one placement request
+        And the request has been rejected
+        When I am on the placement request page
+        Then I should see the rejection details

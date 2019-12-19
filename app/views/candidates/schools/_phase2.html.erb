@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
     <%- if @presenter.description_details.present? -%>
     <section id="school-placement-info">
-      <%= simple_format @presenter.description_details %>
+      <%= safe_format @presenter.description_details %>
     </section>
     <%- end -%>
 
@@ -24,6 +24,11 @@
           <%= format_school_subjects @presenter.school %>
         <% end %>
       </dl>
+
+      <% if @presenter.school.availability_preference_fixed? %>
+        <%= render partial: 'candidates/schools/placement_dates', locals: { primary_dates: @presenter.primary_dates, secondary_dates_grouped_by_date: @presenter.secondary_dates_grouped_by_date } %>
+      <% end %>
+
     </div>
 
     <div>
@@ -42,14 +47,6 @@
     </div>
 
     <div>
-      <h2>About our school</h2>
-
-      <dl class="govuk-summary-list govuk-summary-list--no-border inline">
-        <%= dlist_item 'Age range:', id: 'school-phases' do %>
-          <%= format_phases(@presenter.school) %>
-        <% end %>
-      </dl>
-
       <p>
         <strong>
           For more information about our school:
@@ -87,17 +84,8 @@
       </ul>
     </div>
 
-    <% if @presenter.supports_access_needs? %>
-      <%= render partial: 'candidates/schools/access_needs_statement.html.erb',
-        locals: { presenter: @presenter } %>
-    <% end %>
-
-    <% if @presenter.school.availability_preference_fixed? %>
-      <%= render partial: 'candidates/schools/placement_dates', locals: { primary_dates: @presenter.primary_dates, secondary_dates_grouped_by_date: @presenter.secondary_dates_grouped_by_date } %>
-    <% end %>
-
     <% if include_candidate_request_links %>
-      <div class="school-start-request-button__tablet_plus">
+      <div class="school-start-request-button__tablet_plus govuk-!-margin-top-8">
         <%= render 'start_request', profile: @presenter %>
 
       </div>
@@ -111,6 +99,11 @@
 
   <div class="candidate-profile-sidebar govuk-grid-column-one-third column-top-border">
     <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+
+      <%= dlist_item 'School phases', id: 'school-phases' do %>
+        <%= format_school_phases(@presenter.school) %>
+      <% end %>
+
       <%= dlist_item 'Address', id: 'school-address' do %>
         <%= format_school_address @presenter.school, tag(:br) %>
       <% end %>
@@ -131,7 +124,7 @@
           <%= @presenter.dbs_required %>
         </p>
 
-        <%= simple_format @presenter.dbs_policy if @presenter.dbs_policy %>
+        <%= safe_format @presenter.dbs_policy if @presenter.dbs_policy %>
       <% end %>
 
       <%= dlist_item 'Administration fees', id: 'administration-fee-info' do %>
@@ -141,7 +134,7 @@
           <%= @presenter.administration_fee_payment_method %>
         </p>
 
-        <%= simple_format @presenter.administration_fee_description %>
+        <%= safe_format @presenter.administration_fee_description %>
       <% end if @presenter.administration_fee_amount_pounds %>
 
       <%= dlist_item 'DBS check fees', id: 'dbs-fee-info' do %>
@@ -151,7 +144,7 @@
           <%= @presenter.dbs_fee_payment_method %>
         </p>
 
-        <%= simple_format @presenter.dbs_fee_description %>
+        <%= safe_format @presenter.dbs_fee_description %>
       <% end if @presenter.dbs_fee_amount_pounds %>
 
       <%= dlist_item 'Other fees', id: 'other-fee-info' do %>
@@ -161,7 +154,7 @@
           <%= @presenter.other_fee_payment_method %>
         </p>
 
-        <%= simple_format @presenter.other_fee_description %>
+        <%= safe_format @presenter.other_fee_description %>
       <% end if @presenter.other_fee_amount_pounds %>
 
       <%= dlist_item 'Dress code', id: 'dress-code' do %>
@@ -178,7 +171,7 @@
         </p>
 
         <%- if @presenter.flexible_on_times_details.present? -%>
-        <%= simple_format @presenter.flexible_on_times_details %>
+        <%= safe_format @presenter.flexible_on_times_details %>
         <%- end -%>
       <% end %>
 
@@ -189,11 +182,19 @@
           <p>Not available on site</p>
         <%- end -%>
 
-        <%= simple_format @presenter.parking_details %>
+        <%= safe_format @presenter.parking_details %>
       <% end %>
 
+      <% if @presenter.supports_access_needs? %>
+        <%= dlist_item 'Disability and access details', id: 'disability-and-access' do %>
+          <%= render partial: 'candidates/schools/access_needs_statement.html.erb',
+            locals: { presenter: @presenter } %>
+        <% end %>
+      <% end %>
+
+
       <%= dlist_item 'Teacher training offered', id: 'school-teacher-training-info' do %>
-        <%= simple_format @presenter.teacher_training_info %>
+        <%= safe_format @presenter.teacher_training_info %>
 
         <p>
           <%= link_to 'More information', @presenter.teacher_training_url %>

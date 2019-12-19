@@ -19,11 +19,11 @@ module Candidates
       end
 
       def edit
-        @subject_and_date_information = SubjectAndDateInformation.new(attributes_from_session)
+        @subject_and_date_information = current_registration.subject_and_date_information
       end
 
       def update
-        @subject_and_date_information = SubjectAndDateInformation.new(attributes_from_session)
+        @subject_and_date_information = current_registration.subject_and_date_information
         @subject_and_date_information.assign_attributes(subject_and_date_params)
 
         if @subject_and_date_information.valid?

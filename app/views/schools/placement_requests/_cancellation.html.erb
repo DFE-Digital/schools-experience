@@ -1,0 +1,12 @@
+<section id="cancellation-details">
+  <h2><%= cancellation_noun cancellation %> details</h2>
+
+  <dl class="govuk-summary-list">
+    <%= summary_row 'Reason', cancellation.rejection_description %>
+    <% if cancellation.extra_details.present? %>
+      <%= summary_row 'Extra details', cancellation.extra_details %>
+    <% end %>
+    <%= summary_row 'Date cancellation received', cancellation.sent_at.to_date.to_formatted_s(:govuk) %>
+    <%= summary_row 'Cancelled by', cancellation.cancelled_by.humanize %>
+  </dl>
+</section>

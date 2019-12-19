@@ -1,6 +1,6 @@
 module Candidates
   class SchoolPresenter
-    include ActionView::Helpers::TextHelper
+    include TextFormattingHelper
 
     attr_reader :school, :profile
 
@@ -56,7 +56,7 @@ module Candidates
     def formatted_dress_code
       return unless dress_code?
 
-      simple_format [dress_code, dress_code_other_details].join("\n\n")
+      safe_format [dress_code, dress_code_other_details].join("\n\n")
     end
 
     def dbs_required

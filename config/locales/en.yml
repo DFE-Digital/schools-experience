@@ -191,6 +191,11 @@ en:
             date_of_birth:
               blank: Enter your date of birth
 
+        cookie_preference:
+          attributes:
+            analytics:
+              inclusion: Choose On or Off for cookies which measure website use
+
         schools/on_boarding/dbs_requirement:
           attributes:
             requires_check:
@@ -336,6 +341,39 @@ en:
             acceptance:
               accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
+        schools/placement_dates/configuration_form:
+          attributes:
+            available_for_all_subjects:
+              inclusion: 'Select if this date is available for all the subjects you offer'
+            has_limited_availability:
+              inclusion: 'Select if there is a maximum number of bookings you’ll accept for this date'
+            max_bookings_count:
+              not_a_number: "Enter a valid number for maximum number of bookings you'll accept for this date"
+            subjects:
+              blank: 'Select which subjects are available for this date'
+
+        schools/placement_requests/add_more_details:
+          attributes:
+            contact_name:
+              blank: 'Enter a contact name'
+            contact_number:
+              blank: 'Enter a contact phone number'
+            contact_email:
+              blank: 'Enter a contact email address'
+              invalid: 'Enter a valid email address'
+            location:
+              blank: 'Enter a location for the candidate to report to'
+
+        schools/placement_requests/confirm_booking:
+          attributes:
+            placement_details:
+              blank: 'Provide details for the experience'
+
+        schools/placement_requests/review_and_send_email:
+          attributes:
+            candidate_instructions:
+              blank: 'Provide candidate instructions'
+
   activerecord:
     errors:
       models:
@@ -345,6 +383,8 @@ en:
           attributes:
             reason:
               blank: 'Cancellation reason is required'
+            rejection_category:
+              inclusion: Chooose a reason for rejecting this candidate
         bookings/school_search:
           attributes:
             location:
@@ -358,11 +398,15 @@ en:
               too_short: Availability description must be at least 3 characters
         bookings/placement_date:
           attributes:
+            duration:
+              blank: Enter a duration
             date:
               blank: Enter a start date
               on_or_after: Date must not be in the past
         bookings/booking:
           attributes:
+            supports_subjects:
+              inclusion: Select a school experience phase
             date:
               blank: Enter a booking date
               on_or_after: Date must not be in the past
@@ -405,6 +449,8 @@ en:
       bookings_placement_date:
         date: Enter start date
         supports_subjects: Select school experience phase
+      bookings_placement_request_cancellation:
+        rejection_category: Rejection reason
       phases: Education phases
       fees: Fees
       subjects: Subjects
@@ -417,6 +463,8 @@ en:
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
+      cookie_preference:
+        analytics: Cookies that measure website use
       schools_on_boarding_candidate_requirements_choice:
         has_requirements: "Do you have any candidate requirements?"
       schools_on_boarding_dbs_requirement:
@@ -453,7 +501,8 @@ en:
           </p>
       schools_on_boarding_availability_preference:
         fixed: 'Enter school experience availability or fixed dates'
-
+      schools_change_school:
+        id: Select your school
       schools_on_boarding_access_needs_support:
         supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
       schools_on_boarding_disability_confident:
@@ -473,7 +522,7 @@ en:
         available_for_all_subjects: Select type of experience
 
       schools_placement_dates_subject_selection:
-        subject_ids: Select all that apply.
+        subject_ids: Select school experience subjects
 
       candidates_feedback:
         <<: *feedback_fieldset
@@ -502,6 +551,16 @@ en:
         bookings_placement_date_id: School experience is only available on the following days
       candidates_session:
         date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
+      cookie_preference:
+        analytics_html: "We use Google Analytics to measure how you use the
+          website so we can improve it based on user needs. Google Analytics sets
+          cookies that store anonymised information about:
+          <ul>
+            <li>how you got to the site</li>
+            <li>the pages you visit on Get school experience and Manage school experience, and how long you spend on each page</li>
+            <li>what you click on while you're visiting the site</li>
+          </ul>
+          We do not allow Google to use or share the data about how you use this site."
       schools_on_boarding_candidate_requirements_choice:
         has_requirements_html: "<br> For example, they must want to apply for teacher training at your school or have a degree"
       schools_on_boarding_dbs_requirement:
@@ -543,6 +602,14 @@ en:
           no: Primary including early years, key stage 1 and key stage 2
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
+        rejection_category:
+          fully_booked: The date you requested is fully booked
+          accepted_on_ttc: We cannot offer you school experience because you have already been accepted on a Teacher Training Course
+          date_not_available: We cannot support the date you have requested
+          no_relevant_degree: We do not believe you have a relevant degree for the school experience you are applying for
+          no_phase_availability: We are unable to offer you school experience for the teaching phase you are interested in
+          candidate_not_local: We are looking for candidates that live locally to the school
+          duplicate: This is a duplicate request
       bookings_booking:
         contact_name: Name
         contact_number: Telephone number
@@ -588,6 +655,10 @@ en:
         firstname: First name
         lastname: Last name
         email: Email address
+      cookie_preference:
+        analytics:
+          true: "On"
+          false: "Off"
       query: Find what?
       location: Enter location or postcode
       distance: Select search area

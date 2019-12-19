@@ -31,7 +31,7 @@ Feature: School show page (enhanced data)
         Given the phases 'Primary' and 'Secondary' exist
         And the school is a 'Primary' and 'Secondary' school
         When I am on the profile page for the chosen school
-        Then the age range should be 'Primary and Secondary'
+        Then the age range should contain 'Primary' and 'Secondary'
 
     Scenario: Subjects
         Given some subjects exist

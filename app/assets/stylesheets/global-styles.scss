@@ -106,6 +106,12 @@ section.govuk-se-letter {
   $govuk-se-light-blue: #f2f8fc;
   background-color: $govuk-se-light-blue;
   margin-bottom: 1rem;
+
+  .editable {
+    background-color: white;
+    padding: 2rem;
+    border: 2px solid black;
+  }
 }
 
 ul.govuk-se-spaced-list li {

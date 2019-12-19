@@ -97,5 +97,5 @@ Then("I should see a notification that {string}") do |string|
 end
 
 Then("I should see a back link") do
-  expect(page).to have_link("Back", href: 'javascript:history.back()')
+  expect(page).to have_link("Back")
 end

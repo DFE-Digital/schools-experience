@@ -8,7 +8,7 @@ When "I visit the cancellation link" do
 end
 
 Then "I should see a form to enter my cancellation reason" do
-  within page.find 'form' do
+  within page.find 'main form' do
     expect(page).to have_css 'label', text: 'Cancellation reasons'
     expect(page).to have_field 'reason'
   end

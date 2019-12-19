@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
+  include ActiveJob::TestHelper
   include_context 'Stubbed candidates school'
 
   let(:registration_session) { FactoryBot.build :registration_session }
@@ -9,7 +10,6 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
   let(:template_id) { NotifyEmail::CandidateMagicLink.template_id }
 
   before do
-    ActiveJob::Base.queue_adapter = :inline
     allow(SecureRandom).to receive(:urlsafe_base64) { uuid }
     allow(NotifyService.instance).to receive :send_email
     Candidates::Registrations::RegistrationStore.instance.store! \
@@ -23,7 +23,9 @@ describe Candidates::Registrations::SendEmailConfirmationJob, type: :job do
 
   context '#perform' do
     before do
-      described_class.perform_later uuid, host
+      perform_enqueued_jobs do
+        described_class.perform_later uuid, host
+      end
     end
 
     it 'delivers the email' do

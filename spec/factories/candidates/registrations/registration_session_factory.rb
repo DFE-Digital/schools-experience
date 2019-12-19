@@ -3,8 +3,12 @@ FactoryBot.define do
     transient do
       current_time { DateTime.current }
       urn { 11048 }
-      placement_date { create(:bookings_placement_date) }
       uuid { 'some-uuid' }
+
+      placement_date do
+        school = Bookings::School.find_by(urn: urn) || create(:bookings_school, urn: urn)
+        create :bookings_placement_date, bookings_school: school
+      end
 
       with do
         %i(

@@ -34,9 +34,10 @@
             Availability
           </dt>
           <dd class="govuk-summary-list__value">
-            <%= @placement_request.availability %>
+            <%= safe_format @placement_request.availability %>
           </dd>
         <%- end -%>
+        </dd>
       </div>
 
       <div class="govuk-summary-list__row">

@@ -47,7 +47,7 @@ Feature: Cancelling bookings
         And I have entered a reason in the cancellation reasons text area
         And I have entered a extra details in the extra details text area
         When I click the 'Preview cancellation email' button
-        Then I should see a preview of what I have entered
+        Then I should see the details I entered
 
     Scenario: Sending the email
         Given I have progressed to the cancellation email preview page

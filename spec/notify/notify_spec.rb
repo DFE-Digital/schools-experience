@@ -3,6 +3,7 @@ require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
 require File.join(Rails.root, 'spec', 'support', 'notify_retryable_erroring_client')
 
 describe Notify do
+  include ActiveJob::TestHelper
   let(:to) { 'somename@somecompany.org' }
 
   before do
@@ -18,6 +19,14 @@ describe Notify do
   describe 'Initialization' do
     specify 'should assign an array of email address' do
       expect(subject.to).to match_array(to)
+    end
+
+    context 'with duplicates' do
+      let(:to) { ['somename@somecompany.org', 'somename@somecompany.org'] }
+
+      specify 'should remove duplicates' do
+        expect(subject.to).to match_array(to.uniq)
+      end
     end
   end
 
@@ -72,8 +81,11 @@ describe Notify do
     end
 
     describe '#despatch_later!' do
-      before { ActiveJob::Base.queue_adapter = :inline }
-      before { notification.despatch_later! }
+      before do
+        perform_enqueued_jobs do
+          notification.despatch_later!
+        end
+      end
 
       it "should enqueue a notify job with the correct parameters" do
         recipients.each do |recipient|

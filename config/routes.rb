@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/service_update', to: 'pages#service_update'
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
+  get '/dfe_signin_help', to: 'pages#dfe_signin_help'
+
+  resource :cookie_preference, only: %i(show edit update)
 
   get '/auth/callback', to: 'schools/sessions#create'
 
@@ -30,6 +33,9 @@ Rails.application.routes.draw do
       get :logout
     end
     resource :switch, only: %i(new show), controller: 'switch'
+
+    resource :change_school, only: %i(show create), as: 'change', path: 'change', controller: 'change_schools'
+
     resource :dashboard, only: :show
     resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
@@ -78,6 +84,7 @@ Rails.application.routes.draw do
       resource :no_school, controller: :no_school, only: :show
       resource :auth_failed, controller: :auth_failed, only: :show
       resource :insufficient_privileges, controller: :insufficient_privileges, only: :show
+      resource :inaccessible_school, controller: :insufficient_privileges, only: :show
     end
 
     namespace :on_boarding do
@@ -116,7 +123,7 @@ Rails.application.routes.draw do
 
     resources :school_searches, only: %i{new}
 
-    get 'verify/:school_id/:token', to: 'registrations/sign_ins#update', as: :registration_verify
+    get 'verify/:school_id/:token/:uuid', to: 'registrations/sign_ins#update', as: :registration_verify
 
     resources :schools, only: %i{index show} do
       namespace :registrations do

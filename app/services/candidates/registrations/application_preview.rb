@@ -140,7 +140,7 @@ module Candidates
         [
           @education.degree_stage,
           @education.degree_stage_explaination
-        ].map(&:presence).compact.join("\n")
+        ].map(&:presence).compact.join(" - ")
       end
 
       def dbs_check_document

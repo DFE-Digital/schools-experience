@@ -10,6 +10,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new(
       'urn' => school_id,
+      'uuid' => '123abc',
       Candidates::Registrations::PersonalInformation.model_name.param_key => \
         {
           'first_name' => 'Testy',
@@ -38,7 +39,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       include_context 'Stubbed current_registration'
 
       before do
-        get candidates_registration_verify_path(school_id, token)
+        get candidates_registration_verify_path(school_id, token, registration_session.uuid)
       end
 
       it "will redirect_to ContactInformation step" do
@@ -56,7 +57,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
       before do
         expect(Candidates::Session).to receive(:signin!).and_return(nil)
-        get candidates_registration_verify_path(school_id, token)
+        get candidates_registration_verify_path(school_id, token, registration_session.uuid)
       end
 
       it "will show error screen" do
@@ -72,7 +73,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         expect_any_instance_of(described_class).to \
           receive(:delete_registration_sessions!)
 
-        get candidates_registration_verify_path(school_id, token)
+        get candidates_registration_verify_path(school_id, token, registration_session.uuid)
       end
 
       it "will redirect_to ContactInformation step" do
@@ -83,7 +84,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
     context 'when having swapped device' do
       before do
-        get candidates_registration_verify_path(school_id, token)
+        get candidates_registration_verify_path(school_id, token, registration_session.uuid)
       end
 
       it "will redirect_to ContactInformation step" do
@@ -103,7 +104,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       end
 
       before do
-        get candidates_registration_verify_path(school_id, token)
+        get candidates_registration_verify_path(school_id, token, registration_session.uuid)
       end
 
       it "will redirect_to ContactInformation step" do
@@ -120,16 +121,15 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   describe 'POST #create' do
     include_context 'Stubbed current_registration'
 
-    before do
-      NotifyFakeClient.reset_deliveries!
-      allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)
-    end
+    before { NotifyFakeClient.reset_deliveries! }
 
     let!(:candidate) { create(:candidate, gitis_uuid: fake_gitis_uuid) }
     let(:token) { create(:candidate_session_token, candidate: candidate) }
 
     before do
-      post candidates_school_registrations_sign_in_path(school_id)
+      perform_enqueued_jobs do
+        post candidates_school_registrations_sign_in_path(school_id)
+      end
     end
 
     it "will redirect to the show page" do
@@ -149,7 +149,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         eql(registration_session.personal_information.email)
 
       expect(delivery[:personalisation][:verification_link]).to \
-        match(%r{/candidates/verify/[0-9]+/[^/]{24}\z})
+        match(%r{/candidates/verify/[0-9]+/[^/]{24}/#{registration_session.uuid}\z})
     end
   end
 end
