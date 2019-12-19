@@ -9,12 +9,9 @@ RSpec::Matchers.define :validate_email_format_of do |attribute|
     'test@test.'
   ].freeze
 
-  BLANK_EMAILS = ['', ' ', '   '].freeze
-
   match do |model|
     test_with_valid_emails?(model, attribute) &&
-      test_with_invalid_emails?(model, attribute) &&
-      test_with_blank_emails?(model, attribute)
+      test_with_invalid_emails?(model, attribute)
   end
 
   failure_message do |model|
@@ -45,17 +42,6 @@ RSpec::Matchers.define :validate_email_format_of do |attribute|
       model.validate
 
       model.errors.details[attribute].pluck(:error).include? :invalid
-    end
-  end
-
-  def test_with_blank_emails?(model, attribute)
-    BLANK_EMAILS.all? do |email|
-      @testing_address = email
-
-      model.send(:"#{attribute}=", email)
-      model.validate
-
-      model.errors.details[attribute].pluck(:error).include? :blank
     end
   end
 end
