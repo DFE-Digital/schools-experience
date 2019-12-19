@@ -47,33 +47,41 @@ describe Schools::OnBoarding::AdminContact, type: :model do
     end
 
     context 'email address format' do
-      subject { described_class.new(email: email, email_secondary: email).tap(&:validate) }
+      VALID_EMAILS = [
+        'test@example.com', 'testymctest@gmail.com',
+        'test%.mctest@domain.co.uk', ' with@space.com '
+      ].freeze
 
-      context 'incorrect format' do
-        let :email do
-          'test@'
-        end
+      INVALID_EMAILS = [
+        'test.com', 'test@@test.com', 'FFFF', 'test@test',
+        'test@test.'
+      ].freeze
 
-        it 'is invalid' do
-          expect(subject.errors[:email]).to eq ['Enter a valid email address']
-        end
+      BLANK_EMAILS = ['', ' ', '   '].freeze
 
-        it 'is invalid for email_secondary' do
-          expect(subject.errors[:email_secondary]).to eq ['Enter a valid email address']
+      context 'primary email field' do
+        BLANK_EMAILS.each do |email|
+          it "will not allow email address '#{email}'" do
+            is_expected.not_to allow_value(email) \
+              .for(:email)
+              .with_message("Enter admin contact's email address")
+          end
         end
       end
 
-      context 'correct format' do
-        let :email do
-          'test@example.com'
-        end
+      %i(email email_secondary).each do |field|
+        context "email field '#{field}'" do
+          VALID_EMAILS.each do |email|
+            it { is_expected.to allow_value(email).for(field) }
+          end
 
-        it 'is valid' do
-          expect(subject.errors[:email]).to be_empty
-        end
-
-        it 'is valid for email_secondary' do
-          expect(subject.errors[:email_secondary]).to be_empty
+          INVALID_EMAILS.each do |email|
+            it "will not allow email address '#{email}'" do
+              is_expected.not_to allow_value(email) \
+                .for(field)
+                .with_message('Enter a valid email address')
+            end
+          end
         end
       end
     end
