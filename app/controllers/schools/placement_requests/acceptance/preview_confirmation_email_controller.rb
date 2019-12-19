@@ -5,13 +5,13 @@ module Schools
         include Acceptance
 
         def edit
-          set_placement_request
+          set_placement_request_and_fetch_gitis_contact
 
           @booking = @placement_request.booking
         end
 
         def update
-          set_placement_request
+          set_placement_request_and_fetch_gitis_contact
 
           @booking = @placement_request.booking
           @booking.assign_attributes(booking_params)

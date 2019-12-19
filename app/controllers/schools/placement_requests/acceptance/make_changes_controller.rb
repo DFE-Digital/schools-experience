@@ -5,7 +5,7 @@ module Schools
         include Acceptance
 
         def new
-          set_placement_request
+          set_placement_request_and_fetch_gitis_contact
 
           @placement_request.fetch_gitis_contact gitis_crm
           @booking = @placement_request.booking || Bookings::Booking.from_placement_request(@placement_request)
@@ -15,7 +15,7 @@ module Schools
         end
 
         def create
-          set_placement_request
+          set_placement_request_and_fetch_gitis_contact
 
           @booking = find_or_build_booking(@placement_request)
           @booking.assign_attributes(booking_params)

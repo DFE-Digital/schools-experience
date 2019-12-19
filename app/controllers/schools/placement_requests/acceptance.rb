@@ -3,7 +3,7 @@ module Schools
     module Acceptance
       extend ActiveSupport::Concern
 
-      def set_placement_request
+      def set_placement_request_and_fetch_gitis_contact
         @placement_request = @current_school
           .bookings_placement_requests
           .find(params[:placement_request_id])
