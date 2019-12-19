@@ -33,6 +33,9 @@ Rails.application.routes.draw do
       get :logout
     end
     resource :switch, only: %i(new show), controller: 'switch'
+
+    resource :change_school, only: %i(show create), as: 'change', path: 'change', controller: 'change_schools'
+
     resource :dashboard, only: :show
     resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i(edit update), as: 'enabled', controller: 'toggle_enabled'
@@ -84,6 +87,7 @@ Rails.application.routes.draw do
       resource :no_school, controller: :no_school, only: :show
       resource :auth_failed, controller: :auth_failed, only: :show
       resource :insufficient_privileges, controller: :insufficient_privileges, only: :show
+      resource :inaccessible_school, controller: :insufficient_privileges, only: :show
     end
 
     namespace :on_boarding do

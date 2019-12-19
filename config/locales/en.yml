@@ -493,7 +493,8 @@ en:
           </p>
       schools_on_boarding_availability_preference:
         fixed: 'Enter school experience availability or fixed dates'
-
+      schools_change_school:
+        id: Select your school
       schools_on_boarding_access_needs_support:
         supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
       schools_on_boarding_disability_confident:

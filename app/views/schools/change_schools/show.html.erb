@@ -1,0 +1,17 @@
+<% if Schools::ChangeSchool.allow_school_change_in_app? %>
+  <%= form_for @change_school, url: schools_change_path, method: :post do |f| %>
+    <%= f.radio_button_fieldset :id, choices: @schools, value_method: :id, text_method: :name, page_heading: true%>
+    <%= f.submit "Change school" %>
+  <% end %>
+  <%= link_to "Remain logged in as current school", schools_dashboard_path, class: 'govuk-link' %>
+<% else %>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-warning-text__assistive">Warning</span>
+      Changing school is not enabled, use the 'change school' link on the dashboard
+    </strong>
+  </div>
+
+  <%= govuk_link_to "Return to the dashboard", schools_dashboard_path, class: 'govuk-link', secondary: false %>
+<% end %>
