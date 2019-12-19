@@ -3,6 +3,7 @@ module Schools
     class AddMoreDetails
       include ActiveModel::Model
       include ActiveModel::Attributes
+      include ActiveModel::Validations::Callbacks
 
       attribute :contact_name
       attribute :contact_number
@@ -14,6 +15,8 @@ module Schools
       validates :contact_email, presence: true
       validates :contact_email, email_format: true, if: -> { contact_email.present? }
       validates :location, presence: true
+
+      before_validation(if: :contact_email) { self.contact_email = contact_email.strip }
 
       def self.for_school(school)
         return new unless (last_booking = school.bookings.accepted.order(id: 'desc').first)
