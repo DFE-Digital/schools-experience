@@ -404,14 +404,14 @@ en:
               blank: Enter a duration
             date:
               blank: Enter a start date
-              on_or_after: Date must not be in the past
+              on_or_after: Date must be in the future
         bookings/booking:
           attributes:
             supports_subjects:
               inclusion: Select a school experience phase
             date:
               blank: Enter a booking date
-              on_or_after: Date must not be in the past
+              on_or_after: Date must be in the future
             contact_name:
               blank: You must provide a contact name to the candidate
             contact_email:
