@@ -437,7 +437,7 @@ describe Bookings::Gitis::Contact, type: :model do
 
       before do
         contact.dfe_notesforclassroomexperience = "#{headerline}\r\n\r\n#{logline}\r\n"
-        contact.reset_dirty_attributes
+        contact.clear_changes_information
         contact.add_school_experience secondline
       end
 

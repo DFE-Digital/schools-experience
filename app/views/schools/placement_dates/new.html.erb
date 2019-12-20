@@ -1,4 +1,4 @@
-<%- self.page_title = "Create a placement date" %>
+<%- self.page_title = "Add a date" %>
 
 <%
   self.breadcrumbs = {
@@ -8,10 +8,10 @@
   }
 %>
 
-<h1>Create a placement date</h1>
+<h1>Add a date</h1>
 
 <p>
-  Enter the start date and tell us how long it will last.
+  Enter a start date and tell us how long the experience will last.
 </p>
 
 <p>
@@ -23,6 +23,10 @@
   <%= GovukElementsErrorsHelper.error_summary form.object, 'There is a problem', '' %>
   <%= form.date_field :date, heading: true %>
   <%= form.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true } %>
+
+  <% if show_subject_support_option(@current_school) %>
+    <%= form.radio_button_fieldset :supports_subjects, choices: [false, true] %>
+  <% end %>
   <%= form.submit 'Continue' %>
 <%- end -%>
 

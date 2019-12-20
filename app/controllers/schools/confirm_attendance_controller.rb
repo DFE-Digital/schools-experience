@@ -13,7 +13,7 @@ module Schools
 
     def update
       bookings = unlogged_bookings.where(id: bookings_params.keys). \
-        includes(bookings_placement_request: :candidate)
+        includes(bookings_placement_request: %i(candidate candidate_cancellation school_cancellation))
       attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
 
       if attendance.save
@@ -28,6 +28,10 @@ module Schools
       params
         .select { |key, _| key.match(/\A\d+\z/) }
         .transform_keys(&:to_i)
+        .slice(*unlogged_bookings.ids)
+        # Avoid throwing key error if the user hits back button then
+        # resubmits the form causing the params to no longer match up with
+        # the unlogged_bookings.
     end
 
     def unlogged_bookings

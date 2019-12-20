@@ -10,13 +10,6 @@ FactoryBot.define do
       end
     end
 
-    trait :with_candidate_requirement do
-      candidate_requirement_dbs_requirement { 'sometimes' }
-      candidate_requirement_dbs_policy { 'Super secure' }
-      candidate_requirement_requirements { true }
-      candidate_requirement_requirements_details { 'Gotta go fast' }
-    end
-
     trait :with_candidate_requirements_choice do
       after :build do |profile|
         profile.candidate_requirements_choice = \
@@ -166,8 +159,8 @@ FactoryBot.define do
 
     trait :completed do
       with_dbs_requirement
-      without_candidate_requirements_choice
-      with_candidate_requirement
+      with_candidate_requirements_choice
+      with_candidate_requirements_selection
       with_fees
       with_administration_fee
       with_dbs_fee

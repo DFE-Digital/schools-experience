@@ -25,6 +25,33 @@ Given("there is at least one placement request") do
     degree_subject: 'Law'
 end
 
+Given("there is at least one subject-specific placement request for {string}") do |subject_name|
+  @requested_subject = Bookings::Subject.find_by(name: subject_name)
+
+  @placement_date = FactoryBot.build(
+    :bookings_placement_date,
+    bookings_school: @school,
+    subject_specific: true,
+    supports_subjects: true
+  ).tap do |pd|
+    pd.subjects << @requested_subject
+    pd.save
+  end
+
+  @placement_request = FactoryBot.create \
+    :placement_request,
+    school: @school,
+    created_at: '2094-02-08',
+    availability: 'Any time during November 2019',
+    teaching_stage: 'I’ve applied for teacher training',
+    has_dbs_check: true,
+    objectives: 'To learn different teaching styles and what life is like in a classroom.',
+    degree_stage: 'Final year',
+    degree_subject: 'Law',
+    bookings_placement_date_id: @placement_date.id,
+    bookings_subject_id: @requested_subject.id
+end
+
 When("I am on a placement request page") do
   visit path_for 'placement request', placement_request: @placement_request
 end
@@ -185,5 +212,52 @@ end
 Then("the viewed requests should have no status") do
   within('table#placement-requests') do
     expect(page).not_to have_css('.govuk-tag')
+  end
+end
+
+Given("the request has been withdrawn") do
+  FactoryBot.create :cancellation,
+    :sent,
+    :cancelled_by_candidate,
+    placement_request: @placement_request
+
+  @placement_request.reload
+end
+
+Given("the request has been rejected") do
+  FactoryBot.create :cancellation,
+    :sent,
+    :cancelled_by_school,
+    placement_request: @placement_request,
+    extra_details: 'Better luck next time'
+
+  @placement_request.reload
+end
+
+Then("I should see the withdrawal details") do
+  expect(page).to have_css 'h1', text: "Matthew Richards has withdrawn their request"
+
+  within '#cancellation-details' do
+    expect(page).to have_text @placement_request.candidate_cancellation.reason
+  end
+end
+
+Then("I should see the rejection details") do
+  expect(page).to have_css 'h1', text: "This request from Matthew Richards has been rejected"
+
+  within '#cancellation-details' do
+    expect(page).to have_text @placement_request.school_cancellation.rejection_description
+    expect(page).to have_text @placement_request.school_cancellation.extra_details
+  end
+end
+
+Then("I should see the withdrawn details with the following values:") do |table|
+  within "section#cancellation-details" do
+    expect(page).to have_css('h2', text: 'Withdrawal details')
+
+    table.hashes.each do |row|
+      expect(page).to have_css('dt', text: row['Heading'])
+      expect(page).to have_css('dd', text: /#{row['Value']}/i)
+    end
   end
 end

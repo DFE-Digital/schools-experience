@@ -263,6 +263,9 @@ describe Bookings::Gitis::Store::Dynamics do
 
       it { is_expected.to eq uuid }
       it { expect(entity).to have_attributes id: uuid }
+      it "will reset change tracking" do
+        expect(entity).to have_attributes changed: []
+      end
     end
 
     context 'for existing entity' do
@@ -280,6 +283,10 @@ describe Bookings::Gitis::Store::Dynamics do
         end
 
         it { is_expected.to eq uuid }
+        it "will reset change tracking" do
+          subject # subject api is called
+          expect(entity).to have_attributes changed: []
+        end
       end
 
       context 'without updated attributes' do

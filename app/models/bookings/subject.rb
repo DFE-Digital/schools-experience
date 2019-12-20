@@ -20,6 +20,8 @@ class Bookings::Subject < ApplicationRecord
     foreign_key: :bookings_subject_id,
     dependent: :destroy
 
-  scope :available, -> { where.not(hidden: true) }
+  default_scope -> { where.not(hidden: true) }
   scope :secondary_subjects, -> { where(secondary_subject: true) }
+
+  scope :ordered_by_name, -> { order(name: 'asc') }
 end

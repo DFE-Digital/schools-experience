@@ -22,11 +22,11 @@ Feature: Editing availability info
     Scenario: Page contents
         Given I am on the 'availability information' page
         Then there should be a 'Describe your school experience availability' text area
-        And the submit button should contain text 'Continue'
+        And the submit button should contain text 'Save availability description'
 
     Scenario: Submitting the form
         Given I am on the 'availability information' page
         When I enter 'Every third Tuesday' into the 'Describe your school experience availability' text area
-        And I submit the form
+        And I click the 'Save availability description' submit button
         Then I should be on the 'schools dashboard' page
         And my school's availabiltiy info should have been updated

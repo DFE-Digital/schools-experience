@@ -11,6 +11,7 @@ class Bookings::SchoolSearch < ApplicationRecord
 
   REGION = 'England'.freeze
   GEOCODER_PARAMS = { maxRes: 1 }.freeze
+  PER_PAGE = 15
 
   def self.available_orders
     AVAILABLE_ORDERS.map
@@ -29,9 +30,10 @@ class Bookings::SchoolSearch < ApplicationRecord
 
   def results
     base_query
-      .includes(%i{subjects phases})
+      .includes(%i{phases})
       .reorder(order_by(requested_order))
       .page(self.page)
+      .per(PER_PAGE)
   end
 
   def total_count

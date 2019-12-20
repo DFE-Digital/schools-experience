@@ -54,7 +54,8 @@ describe Candidates::Registrations::RegistrationSession do
       ).to eq \
         'has_dbs_check' => true,
         'created_at' => date,
-        'updated_at' => date
+        'updated_at' => date,
+        'urn' => model.urn
     end
 
     it 'doesnt over write other keys' do
@@ -190,8 +191,10 @@ describe Candidates::Registrations::RegistrationSession do
 
   context '#flag_as_pending_email_confirmation!' do
     context 'when registration is not complete' do
+      let(:urn) { 11048 }
+      let!(:school) { create(:bookings_school, urn: 11048) }
       subject do
-        described_class.new({})
+        described_class.new("urn" => urn)
       end
 
       it 'raises an error' do
@@ -205,11 +208,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when registration is complete' do
-      include_context 'Stubbed candidates school'
-
-      subject do
-        FactoryBot.build :registration_session
-      end
+      subject { FactoryBot.build :registration_session }
 
       before do
         subject.flag_as_pending_email_confirmation!
@@ -224,6 +223,7 @@ describe Candidates::Registrations::RegistrationSession do
   context '#fetch' do
     let :session do
       {
+        'urn' => '11048',
         'candidates_registrations_background_check' => {
           'has_dbs_check' => true
         }
@@ -279,6 +279,47 @@ describe Candidates::Registrations::RegistrationSession do
 
     it 'marks the registration_session as completed' do
       expect(registration_session).to be_completed
+    end
+  end
+
+  # TODO SE-1877 remove this
+  context 'with legacy session data' do
+    context 'the school has fixed dates' do
+      let :school do
+        create :bookings_school, :with_subjects, availability_preference_fixed: true
+      end
+
+      let :placement_date do
+        create \
+          :bookings_placement_date,
+          :subject_specific,
+          bookings_school: school,
+          subjects: school.subjects
+      end
+
+      let :registration_session do
+        build \
+          :legacy_registration_session,
+          urn: school.urn,
+          bookings_placement_date_id: placement_date.id
+      end
+
+      context '#placement_preference' do
+        it 'returns a valid instance' do
+          expect(registration_session.placement_preference).to be_valid
+        end
+      end
+
+      context '#subject_and_date_information' do
+        let :subject_and_date_information do
+          registration_session.subject_and_date_information
+        end
+
+        it 'returns an instance with non subject specific date' do
+          expect(subject_and_date_information.placement_date).to eq placement_date
+          expect(subject_and_date_information.placement_date_subject).to be nil
+        end
+      end
     end
   end
 end

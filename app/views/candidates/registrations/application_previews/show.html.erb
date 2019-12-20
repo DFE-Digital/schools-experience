@@ -65,20 +65,18 @@
         'School or college',
         @application_preview.school_name %>
 
-      <%- if @application_preview.has_bookings_date? -%>
+      <%- if @application_preview.has_subject_and_date_information? -%>
 
         <%= summary_row \
-          'Start date availability',
-          @application_preview.placement_date,
-          edit_candidates_school_registrations_placement_preference_path(
-            anchor: 'candidates_registrations_placement_preference_availability_container'
-          ) %>
+          'Start date and subject',
+          subject_and_date_description(@application_preview.placement_date, @application_preview.placement_date_subject),
+          edit_candidates_school_registrations_subject_and_date_information_path %>
 
-      <%- else -%>
+      <% else %>
 
         <%= summary_row \
           'Experience availability',
-          @application_preview.placement_availability,
+          safe_format(@application_preview.placement_availability),
           edit_candidates_school_registrations_placement_preference_path(
             anchor: 'candidates_registrations_placement_preference_availability_container'
           ) %>

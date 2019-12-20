@@ -18,8 +18,7 @@ module Candidates
 
           placement_request = current_candidate.placement_requests.create_from_registration_session! \
             registration_session,
-            cookies[:analytics_tracking_uuid],
-            context: :returning_from_confirmation_email
+            cookies[:analytics_tracking_uuid]
 
           unless Bookings::Gitis::PrivacyPolicy.default.nil?
             AcceptPrivacyPolicyJob.perform_later \

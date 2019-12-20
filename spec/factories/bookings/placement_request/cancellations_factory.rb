@@ -5,6 +5,7 @@ FactoryBot.define do
     cancelled_by { 'candidate' }
 
     trait :cancelled_by_school do
+      rejection_category { 'fully_booked' }
       cancelled_by { 'school' }
     end
 

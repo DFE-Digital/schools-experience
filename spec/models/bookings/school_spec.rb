@@ -13,8 +13,14 @@ describe Bookings::School, type: :model do
     end
 
     context 'availability_info' do
-      it { is_expected.to allow_value(nil).for(:availability_info) }
-      it { is_expected.to validate_length_of(:availability_info).is_at_least(3) }
+      context 'with no context' do
+        it { is_expected.not_to validate_presence_of(:availability_info) }
+      end
+
+      context 'when configuring availability' do
+        it { is_expected.to validate_presence_of(:availability_info).on(:configuring_availability) }
+        it { is_expected.to validate_length_of(:availability_info).is_at_least(3).on(:configuring_availability) }
+      end
 
       context 'overwriting empty strings before validation' do
         subject { create(:bookings_school) }
@@ -517,6 +523,89 @@ describe Bookings::School, type: :model do
         specify 'should create a school_disabled event' do
           expect(Event).to have_received(:create!)
             .with(event_type: 'school_disabled', bookings_school: subject)
+        end
+      end
+    end
+
+    describe 'subject support' do
+      let(:phase_supporting_subjects) { double(Bookings::Phase, supports_subjects?: true) }
+      let(:phase_not_supporting_subjects) { double(Bookings::Phase, supports_subjects?: false) }
+
+      describe '#has_secondary_phase?' do
+        context 'when all phases support subjects' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_has_secondary_phase }
+        end
+
+        context 'when no phases support subjects' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).not_to be_has_secondary_phase }
+        end
+
+        context "when some phases support subjects and some don't" do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects, phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_has_secondary_phase }
+        end
+      end
+
+      describe '#has_primary_phase?' do
+        context 'when all phases support subjects' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
+          end
+
+          specify { expect(subject).not_to be_has_primary_phase }
+        end
+
+        context 'when no phases support subjects' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_has_primary_phase }
+        end
+
+        context "when some phases support subjects and some don't" do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects, phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_has_primary_phase }
+        end
+      end
+
+      describe '#has_primary_and_secondary_phases?' do
+        context 'when primary but not secondary' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects])
+          end
+
+          specify { expect(subject).not_to be_has_primary_and_secondary_phases }
+        end
+
+        context 'when secondary but not primary' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_supporting_subjects])
+          end
+
+          specify { expect(subject).not_to be_has_primary_and_secondary_phases }
+        end
+
+        context 'when primary and secondary' do
+          before do
+            allow(subject).to receive(:phases).and_return([phase_not_supporting_subjects, phase_supporting_subjects])
+          end
+
+          specify { expect(subject).to be_has_primary_and_secondary_phases }
         end
       end
     end

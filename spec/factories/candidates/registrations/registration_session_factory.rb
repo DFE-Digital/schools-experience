@@ -3,8 +3,12 @@ FactoryBot.define do
     transient do
       current_time { DateTime.current }
       urn { 11048 }
-      placement_date { create(:bookings_placement_date) }
       uuid { 'some-uuid' }
+
+      placement_date do
+        school = Bookings::School.find_by(urn: urn) || create(:bookings_school, urn: urn)
+        create :bookings_placement_date, bookings_school: school
+      end
 
       with do
         %i(
@@ -14,6 +18,7 @@ FactoryBot.define do
           placement_preference
           education
           teaching_preference
+          subject_and_date_information
         )
       end
 
@@ -72,6 +77,13 @@ FactoryBot.define do
           'updated_at' => current_time
         )
       end
+
+      candidates_registrations_subject_and_date_information do
+        FactoryBot.attributes_for(:subject_and_date_information, bookings_placement_date_id: placement_date.id).stringify_keys.merge(
+          'created_at' => current_time,
+          'updated_at' => current_time
+        )
+      end
     end
 
     initialize_with do
@@ -91,11 +103,23 @@ FactoryBot.define do
           "candidates_registrations_background_check"     => candidates_registrations_background_check,
           "candidates_registrations_education"            => candidates_registrations_education,
           "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
-          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
-            .merge(
-              "availability" => nil,
-              "bookings_placement_date_id" => placement_date.id
-            )
+          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference.merge("availability" => nil),
+          "candidates_registrations_subject_and_date_information" => candidates_registrations_subject_and_date_information
+      end
+    end
+
+    trait :with_flexible_dates do
+      initialize_with do
+        new \
+          "uuid"                                          => uuid,
+          "urn"                                           => urn,
+          "candidates_registrations_personal_information" => candidates_registrations_personal_information,
+          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
+          "candidates_registrations_background_check"     => candidates_registrations_background_check,
+          "candidates_registrations_education"            => candidates_registrations_education,
+          "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
+          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
+          "candidates_registrations_subject_and_date_information" => {}
       end
     end
 
@@ -128,7 +152,11 @@ FactoryBot.define do
 
     trait :with_school do
       after :build do |reg|
-        Bookings::School.find_by(urn: reg.urn) || FactoryBot.create(:bookings_school, urn: reg.urn)
+        school = Bookings::School.find_by(urn: reg.urn) || FactoryBot.create(:bookings_school, urn: reg.urn)
+
+        if school.availability_preference_fixed?
+          reg.save FactoryBot.build :placement_preference, availability: nil, urn: school.urn
+        end
       end
     end
   end

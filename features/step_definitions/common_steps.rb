@@ -95,3 +95,7 @@ end
 Then("I should see a notification that {string}") do |string|
   expect(page).to have_content(string)
 end
+
+Then("I should see a back link") do
+  expect(page).to have_link("Back")
+end

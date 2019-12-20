@@ -42,11 +42,11 @@ RSpec.describe Bookings::Subject, type: :model do
   end
 
   describe "Scopes" do
-    describe '.available' do
+    describe 'default_scope' do
       let!(:visible) { create(:bookings_subject, hidden: false) }
       let!(:hidden) { create(:bookings_subject, hidden: true) }
 
-      subject { described_class.available.to_a }
+      subject { described_class.all.to_a }
 
       it 'should include non-hidden subjects' do
         is_expected.to include(visible)

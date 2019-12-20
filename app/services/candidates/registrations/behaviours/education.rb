@@ -14,9 +14,12 @@ module Candidates
           validates :degree_stage, inclusion: { in: :available_degree_stages }, if: -> { degree_stage.present? }
           validates :degree_stage_explaination, presence: true, if: :degree_stage_explaination_required?
           validates :degree_subject, presence: true
-          validates :degree_subject, inclusion: { in: :available_degree_subjects }, if: -> { degree_subject.present? }
-          validates :degree_subject, inclusion: [NO_DEGREE_SUBJECT], if: -> { degree_stage.present? && !degree_stage_requires_subject? }
-          validates :degree_subject, exclusion: [NO_DEGREE_SUBJECT], if: -> { degree_stage.present? && degree_stage_requires_subject? }
+          validates :degree_subject, inclusion: { in: :available_degree_subjects },
+            if: -> { degree_subject.present? && degree_stage_requires_subject? }
+          validates :degree_subject, inclusion: [NO_DEGREE_SUBJECT],
+            if: :degree_stage_requires_n_a_subject?
+          validates :degree_subject, exclusion: [NO_DEGREE_SUBJECT],
+            if: :degree_stage_requires_subject_in_subjects_list?
         end
 
         def available_degree_stages
@@ -47,6 +50,18 @@ module Candidates
 
         def degree_stage_explaination_required?
           requires_explanation_for_degree_stage? degree_stage
+        end
+
+        def degree_stage_requires_subject_in_subjects_list?
+          degree_subject.present? &&
+            degree_stage.present? &&
+            degree_stage_requires_subject?
+        end
+
+        def degree_stage_requires_n_a_subject?
+          degree_subject.present? &&
+            degree_stage.present? &&
+            !degree_stage_requires_subject?
         end
       end
     end

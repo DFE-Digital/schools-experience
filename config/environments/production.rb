@@ -141,6 +141,7 @@ Rails.application.configure do
 
   config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
+  config.x.dfe_sign_in_api_school_change_enabled = ENV['DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED']&.in?(truthy_strings)
 
   config.x.gitis.fake_crm = truthy_strings.include?(ENV['FAKE_CRM'].to_s)
   if ENV['CRM_CLIENT_ID'].present?
@@ -155,7 +156,7 @@ Rails.application.configure do
     config.x.gitis.caching = truthy_strings.include?(ENV['CRM_CACHING'].to_s)
   end
 
-  config.x.features = %i(candidate_requirement_ab_test)
+  config.x.features = %i(subject_specific_dates)
 
   config.sass[:style] = :compressed if config.sass
 

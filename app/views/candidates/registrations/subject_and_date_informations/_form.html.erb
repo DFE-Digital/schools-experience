@@ -1,0 +1,62 @@
+<% self.page_title = 'Request a school experience date' %>
+<%= link_to 'Back', :back, class: 'govuk-back-link', data: { controller: 'back-link' } %>
+
+<div class="govuk-grid-row" id="placement-preference">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">Request a school experience date at <%= @school.name %></h1>
+    <%= form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
+      <%= GovukElementsErrorsHelper.error_summary subject_and_date_information, 'There is a problem', '' %>
+
+      <%= f.hidden_field :date_and_subject_ids %>
+
+      <p>
+        Choose a date.
+        <% if @subject_and_date_information.has_primary_and_secondary_dates? %>
+          For secondary school dates you can also choose a school experience subject.
+        <% end %>
+      </p>
+
+      <section class="<%= subject_and_date_section_classes(subject_and_date_information) %>">
+
+        <%- if @subject_and_date_information.has_primary_dates? %>
+          <section class="date-selector date-selector-primary">
+            <h3 class="govuk-heading-m">Primary school dates</h3>
+
+            <%= f.radio_button_fieldset :date_and_subject_ids,
+              choices: @subject_and_date_information.primary_placement_dates,
+              value_method: :id,
+              text_method: :name_with_duration -%>
+          </section>
+        <%- end -%>
+
+        <%- if @subject_and_date_information.has_secondary_dates? %>
+          <h3 class="govuk-heading-m">Secondary school dates</h3>
+
+          <dl class="govuk-summary-list govuk-summary-list">
+          <% @subject_and_date_information.secondary_placement_dates_grouped_by_date.each do |date, secondary_placement_dates| %>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                <%= date.to_formatted_s(:govuk) %>
+              </dt>
+
+              <dd class="govuk-summary-list__value date-selector date-selector-secondary">
+                <%= f.radio_button_fieldset :date_and_subject_ids,
+                  choices: secondary_placement_dates.sort,
+                  value_method: :id,
+                  text_method: :name_with_duration
+                -%>
+              </dd>
+            </div>
+          <% end %>
+          </dl>
+
+        <% end %>
+
+      </section>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+
+  </div>
+</div>

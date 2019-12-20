@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 5.2.4'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -18,7 +18,7 @@ gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 4.2'
+gem 'puma', '~> 4.3'
 
 # Use SCSS for stylesheets
 gem 'sassc-rails'
@@ -90,6 +90,7 @@ group :development, :test do
 
   # Testing framework
   gem 'rspec-rails', '~> 3.9'
+  gem 'rspec_junit_formatter'
   gem 'factory_bot_rails'
 
   gem 'brakeman', '>= 4.4.0'

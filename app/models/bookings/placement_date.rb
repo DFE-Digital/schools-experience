@@ -30,14 +30,21 @@ module Bookings
         less_than: 100
       }
 
+    validates :date, presence: true
     validates :date,
       timeliness: {
-        on_or_after: :today,
+        on_or_after: -> { Booking::MIN_BOOKING_DELAY.from_now.to_date },
         before: -> { 2.years.from_now },
         type: :date
       },
-      presence: true,
+      if: -> { date.present? },
       on: :create
+
+    # users manually selecting this only happens when schools are both primary
+    # and secondary, otherwise it's automatically set in the controller
+    validates :supports_subjects,
+      inclusion: [true, false],
+      if: -> { bookings_school&.has_primary_and_secondary_phases? }
 
     with_options if: :published? do
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
@@ -54,12 +61,35 @@ module Bookings
     scope :available, -> { published.active.future.in_date_order }
     scope :published, -> { where.not published_at: nil }
 
+    # 'supporting subjects' are dates belonging to phases where
+    # teachers teach a particular subject - secondary and college
+    scope :supporting_subjects, -> { where(supports_subjects: true) }
+
+    # 'not supporting subjects' are dates belonging to phases where teachers
+    # don't yet teach a specific subject - primary and early years
+    scope :not_supporting_subjects, -> { where(supports_subjects: false) }
+
+    scope :primary, -> { available.not_supporting_subjects.published }
+    scope :secondary, -> { available.supporting_subjects.published }
+
     def to_s
       "%<date>s (%<duration>d %<unit>s)" % {
         date: date.to_formatted_s(:govuk),
         duration: duration,
         unit: "day".pluralize(duration)
       }
+    end
+
+    def in_future?
+      date > Date.today
+    end
+
+    def in_past?
+      date <= Date.today
+    end
+
+    def has_subjects?
+      placement_date_subjects.any?
     end
 
     def has_limited_availability?

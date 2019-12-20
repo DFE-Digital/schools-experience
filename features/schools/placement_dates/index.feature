@@ -31,7 +31,7 @@ Feature: Listing placement dates
 
     Scenario: The add a new placement date button
         Given I am on the 'placement dates' page
-        Then there should be a 'Add dates' link to the new placement date page
+        Then there should be a 'Add a date' link to the new placement date page
 
     Scenario: Warning displayed when there are no dates
         Given my school has no placement dates

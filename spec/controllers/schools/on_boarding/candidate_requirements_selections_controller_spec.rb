@@ -5,9 +5,9 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
   include_context "logged in DfE user"
 
   let! :school_profile do
-    FactoryBot.create :school_profile, :with_dbs_requirement,
-      :with_candidate_requirements_choice,
-      show_candidate_requirements_selection: true
+    FactoryBot.create :school_profile,
+      :with_dbs_requirement,
+      :with_candidate_requirements_choice
   end
 
   context '#new' do

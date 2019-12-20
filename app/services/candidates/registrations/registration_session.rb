@@ -10,35 +10,35 @@ module Candidates
       PENDING_EMAIL_CONFIRMATION_STATUS = 'pending_email_confirmation'.freeze
       COMPLETED_STATUS = 'completed'.freeze
 
-      def initialize(session)
-        @registration_session = session
+      def initialize(data)
+        @data = data
       end
 
       def save(model)
-        @registration_session[model.model_name.param_key] =
+        @data[model.model_name.param_key] =
           model.tap(&:flag_as_persisted!).attributes
       end
 
       def uuid
-        @registration_session['uuid'] ||= SecureRandom.urlsafe_base64
+        @data['uuid'] ||= SecureRandom.urlsafe_base64
       end
 
       def flag_as_pending_email_confirmation!
         raise NotCompletedError unless all_steps_completed?
 
-        @registration_session['status'] = PENDING_EMAIL_CONFIRMATION_STATUS
+        @data['status'] = PENDING_EMAIL_CONFIRMATION_STATUS
       end
 
       def pending_email_confirmation?
-        @registration_session['status'] == PENDING_EMAIL_CONFIRMATION_STATUS
+        @data['status'] == PENDING_EMAIL_CONFIRMATION_STATUS
       end
 
       def flag_as_completed!
-        @registration_session['status'] = COMPLETED_STATUS
+        @data['status'] = COMPLETED_STATUS
       end
 
       def completed?
-        @registration_session['status'] == COMPLETED_STATUS
+        @data['status'] == COMPLETED_STATUS
       end
 
       # TODO add spec
@@ -47,11 +47,11 @@ module Candidates
       end
 
       def urn
-        @registration_session.fetch 'urn'
+        @data.fetch 'urn'
       end
 
       def school
-        @school ||= Candidates::School.find urn
+        @school ||= Candidates::School.find urn if urn.present?
       end
 
       def school_name
@@ -64,6 +64,26 @@ module Candidates
 
       def background_check_attributes
         fetch_attributes BackgroundCheck
+      end
+
+      # TODO SE-1877 remove this
+      def legacy_session?
+        fetch_attributes(PlacementPreference).key? 'bookings_placement_date_id'
+      end
+
+      # TODO SE-1877 remove this
+      def subject_and_date_information
+        if legacy_session?
+          attributes = fetch_attributes PlacementPreference
+          SubjectAndDateInformation.new \
+            attributes.slice "bookings_placement_date_id"
+        else
+          fetch SubjectAndDateInformation
+        end
+      end
+
+      def subject_and_date_information_attributes
+        fetch_attributes SubjectAndDateInformation
       end
 
       # TODO add specs for these
@@ -108,17 +128,17 @@ module Candidates
       end
 
       def fetch(klass)
-        klass.new @registration_session.fetch(klass.model_name.param_key)
+        klass.new(@data.fetch(klass.model_name.param_key)).tap { |model| model.urn = self.urn }
       rescue KeyError => e
         raise StepNotFound, e.key
       end
 
       def fetch_attributes(klass, defaults = {})
-        @registration_session.fetch(klass.model_name.param_key, defaults)
+        @data.fetch(klass.model_name.param_key, defaults)
       end
 
       def to_h
-        @registration_session
+        @data
       end
 
       def to_json(*args)

@@ -2,7 +2,9 @@ class Schools::AvailabilityInfoController < Schools::BaseController
   def edit; end
 
   def update
-    if @current_school.update(placement_date_params)
+    @current_school.assign_attributes(placement_date_params)
+
+    if @current_school.save(context: :configuring_availability)
       redirect_to schools_dashboard_path
     else
       render :edit

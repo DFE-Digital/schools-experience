@@ -3,6 +3,8 @@ module Schools
   class MissingURN < StandardError; end
 
   class BaseController < ApplicationController
+    self.forgery_protection_origin_check = false
+
     include GitisAccess
     self.use_gitis_cache = true
 

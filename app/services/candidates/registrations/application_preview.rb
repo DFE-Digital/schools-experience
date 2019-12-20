@@ -1,6 +1,7 @@
 module Candidates
   module Registrations
     class ApplicationPreview
+      class NotImplementedForThisDateType < StandardError; end
       # FIXME delegate other methods to placement_preference once remove dates
       # pr is merged
       attr_reader :placement_preference
@@ -25,7 +26,6 @@ module Candidates
         to: :@contact_information
 
       delegate \
-        :degree_stage,
         :degree_subject,
         to: :@education
 
@@ -47,6 +47,12 @@ module Candidates
         @background_check = registration_session.background_check
         @education = registration_session.education
         @teaching_preference = registration_session.teaching_preference
+      end
+
+      def subject_and_date_information
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+
+        @subject_and_date_information ||= @registration_session.subject_and_date_information
       end
 
       def ==(other)
@@ -84,16 +90,34 @@ module Candidates
         email
       end
 
+      def has_subject_and_date_information?
+        RegistrationState.new(@registration_session).subject_and_date_information_in_journey?
+      end
+
+      def placement_date_subject
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+
+        subject_and_date_information.placement_date_subject
+      end
+
       def placement_date
-        placement_preference.placement_date.to_s
+        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+
+        subject_and_date_information.placement_date.to_s
       end
 
       def placement_availability
+        fail NotImplementedForThisDateType if has_subject_and_date_information?
+
         placement_preference.availability
       end
 
       def placement_availability_description
-        placement_preference.availability || placement_preference.placement_date.to_s
+        if has_subject_and_date_information?
+          placement_date
+        else
+          placement_availability
+        end
       end
 
       def placement_outcome
@@ -110,6 +134,13 @@ module Candidates
 
       def teaching_subject_second_choice
         subject_second_choice
+      end
+
+      def degree_stage
+        [
+          @education.degree_stage,
+          @education.degree_stage_explaination
+        ].map(&:presence).compact.join(" - ")
       end
 
       def dbs_check_document

@@ -10,6 +10,15 @@ en:
         unit: '£'
         delimiter: ''
 
+  subject_and_date_information_errors: &subject_and_date_information_errors
+    attributes:
+      bookings_placement_date_id:
+        blank: "Choose a date"
+      bookings_subject_id:
+        blank: "Choose a subject"
+      placement_date_subject:
+        blank: "Choose a subject"
+
   placement_preference_errors: &placement_preference_errors
     attributes:
       availability:
@@ -18,6 +27,8 @@ en:
         blank: "Enter what you want to get out of a placement"
       bookings_placement_date_id:
         blank: "Choose a placement date"
+      date:
+        after: 'Date must be in the future'
 
   subject_preference_errors: &subject_preference_errors
     attributes:
@@ -43,7 +54,7 @@ en:
       description:
         blank: 'Explanation of what the fee covers is required'
       interval:
-        blank: 'Select whether this a daily or one-off fee'
+        blank: 'Select whether this is a daily or one-off fee'
         inclusion: 'Select an option'
       payment_method:
         blank: 'Explanation of how the fee is paid is required'
@@ -148,16 +159,22 @@ en:
               too_long: "Email must be 100 characters or fewer"
             first_name:
               blank: 'Enter your first name'
+              too_long: "First name must be 50 characters or fewer"
             last_name:
               blank: 'Enter your last name'
+              too_long: "Last name must be 50 characters or fewer"
             full_name:
               blank: "Enter your full name"
             date_of_birth:
               blank: "Enter your date of birth"
-              inclusion: "Enter a valid date of birth. You must be at least 18 years old"
+              on_or_before: "You must be at least 18 years old"
+              on_or_after: "You must be younger than 100 years old"
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
+
+        candidates/registrations/subject_and_date_information:
+          <<: *subject_and_date_information_errors
 
         candidates/registrations/privacy_policy:
           attributes:
@@ -175,6 +192,11 @@ en:
               blank: Enter your last name
             date_of_birth:
               blank: Enter your date of birth
+
+        cookie_preference:
+          attributes:
+            analytics:
+              inclusion: Choose On or Off for cookies which measure website use
 
         schools/on_boarding/dbs_requirement:
           attributes:
@@ -195,6 +217,8 @@ en:
               blank: "Enter how close to your school a candidate must live"
               not_a_number: 'Enter a valid number for how close to your school a candidate must live'
               greater_than: 'Enter a number greater than 0 for how close to your school a candidate must live'
+            photo_identification_details:
+              blank: 'Provide details'
             other_details:
               blank: 'Provide details'
         schools/on_boarding/candidate_requirement:
@@ -267,11 +291,11 @@ en:
         schools/on_boarding/access_needs_detail:
           attributes:
             description:
-              blank: 'Provide details about the kinds of facilities and support you can provide for candidates with disabilites and access needs.'
+              blank: 'Provide details about the kinds of facilities and support you can provide for candidates with disabilities and access needs.'
         schools/on_boarding/access_needs_support:
           attributes:
             supports_access_needs:
-              inclusion: 'Select if you want to add details about how you can support candidates with disabilites and access needs'
+              inclusion: 'Select if you want to add details about how you can support candidates with disabilities and access needs'
         schools/on_boarding/disability_confident:
           attributes:
             is_disability_confident:
@@ -329,6 +353,7 @@ en:
               not_a_number: "Enter a valid number for maximum number of bookings you'll accept for this date"
             subjects:
               blank: 'Select which subjects are available for this date'
+
         schools/placement_requests/add_more_details:
           attributes:
             contact_name:
@@ -337,8 +362,19 @@ en:
               blank: 'Enter a contact phone number'
             contact_email:
               blank: 'Enter a contact email address'
+              invalid: 'Enter a valid email address'
             location:
               blank: 'Enter a location for the candidate to report to'
+
+        schools/placement_requests/confirm_booking:
+          attributes:
+            placement_details:
+              blank: 'Provide details for the experience'
+
+        schools/placement_requests/review_and_send_email:
+          attributes:
+            candidate_instructions:
+              blank: 'Provide candidate instructions'
 
   activerecord:
     errors:
@@ -349,6 +385,8 @@ en:
           attributes:
             reason:
               blank: 'Cancellation reason is required'
+            rejection_category:
+              inclusion: Chooose a reason for rejecting this candidate
         bookings/school_search:
           attributes:
             location:
@@ -357,6 +395,34 @@ en:
           attributes:
             availability_preference_fixed:
               inclusion: Select an availability preference
+            availability_info:
+              blank: Enter a description of your school's availability
+              too_short: Availability description must be at least 3 characters
+        bookings/placement_date:
+          attributes:
+            duration:
+              blank: Enter a duration
+            date:
+              blank: Enter a start date
+              on_or_after: Date must be in the future
+        bookings/booking:
+          attributes:
+            supports_subjects:
+              inclusion: Select a school experience phase
+            date:
+              blank: Enter a booking date
+              on_or_after: Date must be in the future
+              not_changed: Date has not been changed
+            contact_name:
+              blank: You must provide a contact name to the candidate
+            contact_email:
+              blank: Enter a contact email address
+              invalid: Enter a valid contact email address
+            contact_number:
+              blank: Enter a contact telephone number
+              invalid: Enter a valid contact telephone number
+            candidate_instructions:
+              blank: Enter some instructions for the candidate
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:
@@ -369,18 +435,24 @@ en:
         dress_code_remove_piercings: Remove piercings
         dress_code_smart_casual: Smart casual
 
+    models:
+      bookings/placement_request:
+        one: Request
+        other: Requests
+
   helpers:
     fieldset:
       order: Sorted by
-      schools_placement_requests_confirm_booking:
-        date: Confirm experience date
       bookings_booking:
         date: Booking date
       bookings_school:
         enabled: Turn requests on or off
         availability_preference_fixed: Choose how dates are displayed
       bookings_placement_date:
-        date: Enter a start date
+        date: Enter start date
+        supports_subjects: Select school experience phase
+      bookings_placement_request_cancellation:
+        rejection_category: Rejection reason
       phases: Education phases
       fees: Fees
       subjects: Subjects
@@ -393,6 +465,8 @@ en:
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
+      cookie_preference:
+        analytics: Cookies that measure website use
       schools_on_boarding_candidate_requirements_choice:
         has_requirements: "Do you have any candidate requirements?"
       schools_on_boarding_dbs_requirement:
@@ -429,7 +503,8 @@ en:
           </p>
       schools_on_boarding_availability_preference:
         fixed: 'Enter school experience availability or fixed dates'
-
+      schools_change_school:
+        id: Select your school
       schools_on_boarding_access_needs_support:
         supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
       schools_on_boarding_disability_confident:
@@ -446,10 +521,10 @@ en:
 
       schools_placement_dates_configuration_form:
         has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
-        available_for_all_subjects: Is this date available for all the subjects you offer?
+        available_for_all_subjects: Select type of experience
 
       schools_placement_dates_subject_selection:
-        subject_ids: Select all that apply
+        subject_ids: Select school experience subjects
 
       candidates_feedback:
         <<: *feedback_fieldset
@@ -465,19 +540,29 @@ en:
           Requests that are already in-progress will continue as normal.
         availability_preference_fixed: Select how you'd like to present school experience dates to candidates.
       bookings_placement_date:
-        date: For example, 01 09 2019
-        duration: Enter number of days
+        date: For example, 01 09 2020.
+        duration: Enter number of days.
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
       candidates_registrations_personal_information:
-        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
         bookings_placement_date_id: School experience is only available on the following days
       candidates_session:
-        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 2007
+        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
+      cookie_preference:
+        analytics_html: "We use Google Analytics to measure how you use the
+          website so we can improve it based on user needs. Google Analytics sets
+          cookies that store anonymised information about:
+          <ul>
+            <li>how you got to the site</li>
+            <li>the pages you visit on Get school experience and Manage school experience, and how long you spend on each page</li>
+            <li>what you click on while you're visiting the site</li>
+          </ul>
+          We do not allow Google to use or share the data about how you use this site."
       schools_on_boarding_candidate_requirements_choice:
         has_requirements_html: "<br> For example, they must want to apply for teacher training at your school or have a degree"
       schools_on_boarding_dbs_requirement:
@@ -514,8 +599,25 @@ en:
       bookings_placement_date:
         duration: How long will it last?
         active: Make this date available to candidates?
+        supports_subjects:
+          yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
+          no: Primary including early years, key stage 1 and key stage 2
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
+        rejection_category:
+          fully_booked: The date you requested is fully booked
+          accepted_on_ttc: We cannot offer you school experience because you have already been accepted on a Teacher Training Course
+          date_not_available: We cannot support the date you have requested
+          no_relevant_degree: We do not believe you have a relevant degree for the school experience you are applying for
+          no_phase_availability: We are unable to offer you school experience for the teaching phase you are interested in
+          candidate_not_local: We are looking for candidates that live locally to the school
+          duplicate: This is a duplicate request
+      bookings_booking:
+        contact_name: Name
+        contact_number: Telephone number
+        contact_email: Email address
+        candidate_instructions: Extra instructions for the candidate
+        bookings_subject_id: Subject
       candidates_registrations_contact_information:
         building: "Building and street"
         phone: "UK telephone number"
@@ -527,6 +629,7 @@ en:
         subject_second_choice: "Second choice"
       candidates_registrations_education:
         degree_subject: If you have or are studying for a degree, tell us about your degree subject
+        degree_stage_explaination: 'Degree stage explanation'
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"
@@ -546,7 +649,7 @@ en:
           <ul class=\"govuk-list govuk-list--bullet\">
             <li>the details you've provided are correct</li>
             <li>you've read our <a href=\"/privacy_policy\" class=\"govuk-link\">privacy policy</a></li>
-            <li>you undestand your personal details will be used by DfE's
+            <li>you understand your personal details will be used by DfE's
             <a href=\"https://getintoteaching.education.gov.uk/\" class=\"govuk-link\">Get Into Teaching Information Service</a>
             to provide you with tailored advice and information about teaching
             training and a career as a teacher</li>"
@@ -554,6 +657,10 @@ en:
         firstname: First name
         lastname: Last name
         email: Email address
+      cookie_preference:
+        analytics:
+          true: "On"
+          false: "Off"
       query: Find what?
       location: Enter location or postcode
       distance: Select search area
@@ -573,6 +680,8 @@ en:
         has_or_working_towards_degree: "They must have or be working towards a degree"
         live_locally: "They must live locally"
         maximum_distance_from_school: "Tell us within how many miles of your school. For example, 20 miles."
+        provide_photo_identification: "They must provide photo ID"
+        photo_identification_details: "Provide details. For example, passport or driving licence."
         other: "Other"
         other_details: "Provide details."
       schools_on_boarding_candidate_requirement:
@@ -609,7 +718,7 @@ en:
         secondary: 'Secondary (11 to 16 years)'
         secondary_and_college: 'Secondary with 16 to 18 years'
       schools_on_boarding_description:
-        details: 'Tell us about your school. Provide a summary to help candidates choose your school.'
+        details: 'Tell us about your school. Provide a summary to help candidates select your school experience.'
       schools_on_boarding_candidate_experience_detail:
         business_dress: 'Business dress'
         cover_up_tattoos: 'Cover up tattoos'
@@ -666,17 +775,24 @@ en:
       schools_on_boarding_availability_description:
         description: 'Outline when you offer school experience at your school.'
       schools_on_boarding_confirmation:
-        acceptance_html: 'By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge, the details you’re providing are correct and you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a>'
+        acceptance_html: >-
+          By checking this box and setting up your school experience profile
+          you’re confirming, to the best of your knowledge:
+            <ul class="govuk-list govuk-list--bullet govuk-!-padding-top-2">
+              <li>the details you’re providing are correct</li>
+              <li>you agree to manage the data you receive in line with current GDPR regulations</li>
+              <li>you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a></li>
+            </ul>
       schools_on_boarding_key_stage_list:
         early_years: 'Early years foundation stage (EYFS)'
 
       schools_placement_dates_configuration_form:
-        available_for_all_subjects:
-          true: 'Yes'
-          false: 'No'
         has_limited_availability:
           true: 'Yes'
           false: 'No'
+        available_for_all_subjects:
+          true: 'General experience'
+          false: 'Specific to a subject'
         max_bookings_count: 'Enter maximum number of bookings.'
       schools_placement_dates_subject_selection:
         available_for_all_subjects: 'All subjects'

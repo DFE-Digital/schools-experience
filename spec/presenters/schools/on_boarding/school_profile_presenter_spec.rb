@@ -134,22 +134,31 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   context '#individual_requirements' do
     context 'without requirements' do
       let :profile do
-        FactoryBot.build \
-          :school_profile, candidate_requirement_requirements: false
+        FactoryBot.build :school_profile, :without_candidate_requirements_choice
       end
 
       it 'returns no' do
-        expect(subject.individual_requirements).to eq 'No'
+        expect(subject.individual_requirements).to eq 'None'
       end
     end
 
     context 'with requirements' do
       let :profile do
-        FactoryBot.build :school_profile, :with_candidate_requirement
+        FactoryBot.build :school_profile,
+          :with_candidate_requirements_choice,
+          :with_candidate_requirements_selection
       end
 
       it 'returns yes with the requirements' do
-        expect(subject.individual_requirements).to eq 'Yes - Gotta go fast'
+        [
+          /Must be applying to or have applied to our, or a partner school/,
+          /Must have a degree/,
+          /They must live within 8 miles of the school/,
+          /Make sure photo is clear/,
+          /Some other requirements/
+        ].each do |req|
+          expect(subject.individual_requirements).to match(req)
+        end
       end
     end
   end

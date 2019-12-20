@@ -34,11 +34,11 @@ jobs:
 
   - script: docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(buildCacheTag)
     displayName: Tag build cache image
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/development')))
 
   - task: Docker@2
     displayName: 'Upload build cache image to DockerHub'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/development')))
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
@@ -54,16 +54,37 @@ jobs:
       until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
     displayName: bring up postgres, redis and create database (for the web app) and spin up application
 
-  - script: docker-compose run --rm db-tasks rspec
+  - script: docker-compose run --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
     displayName: Run the Specs
 
-  - script: docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks cucumber --profile=$(CUCUMBER_PROFILE)
+  - task: PublishTestResults@2
+    condition: failed()
+    displayName: Upload RSpec results
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: rspec_results.xml
+      testRunTitle: RSpec results
+
+  - script: docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks cucumber --profile=$(CUCUMBER_PROFILE) --format junit --out /ci_build/junit
     displayName: Run the Cucumber features
+
+  - task: PublishTestResults@2
+    condition: failed()
+    displayName: Upload Cucumber results
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit/TEST-*.xml'
+      testRunTitle: Cucumber results
 
   - script: |
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Push Docker image (built from master)'
+    displayName: 'Tag Docker image (built from master)'
+
+  - script: |
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-debug
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
+    displayName: 'Tag Docker image (built from debug)'
 
   - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
@@ -72,7 +93,7 @@ jobs:
     displayName: Run the GovUK Lint check
 
   - task: Docker@2
-    displayName: 'push to docker hub'
+    displayName: 'Push tagged image to DockerHub'
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
@@ -80,13 +101,22 @@ jobs:
       tags: $(imageTag)
 
   - task: Docker@2
-    displayName: 'push to docker hub'
+    displayName: 'Push :latest to DockerHub'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
       command: push
       tags: latest
+
+  - task: Docker@2
+    displayName: 'Push :debug to DockerHub'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      repository: $(DOCKER_HUB_REPO)
+      command: push
+      tags: $(imageTag)-debug
 
   - task: Bash@3
     name: mtrx
@@ -112,8 +142,16 @@ jobs:
       WAIT_COUNT=0
       until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
       echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
-      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber $(features)
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber --format junit --out /ci_build/junit $(features)
     displayName: Run Cucumber Tests
+
+  - task: PublishTestResults@2
+    condition: failed()
+    displayName: Upload Cucumber results
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit/TEST-*.xml'
+      testRunTitle: Cucumber results
 
 - job: PublishArtifacts
   pool:

@@ -8,6 +8,38 @@ Given("I have completed the wizard") do
   step "I have filled in my background checks successfully"
 end
 
+Given("I have completed the wizard for a fixed date school") do
+  @school.update_attributes(availability_preference_fixed: true)
+  @wanted_bookings_placement_date = @school.bookings_placement_dates.create!(
+    date: 2.weeks.from_now, published_at: 1.week.ago, supports_subjects: true
+  )
+
+  visit path_for('choose a subject and date', school: @school)
+
+  step "I have filled in my subject and date information successfully"
+  step "I have filled in my personal information successfully"
+  step "I have filled in my contact information successfully"
+  step "I have filled in my education details successfully"
+  step "I have filled in my teaching preferences successfully"
+  step "I have filled in my placement preferences successfully"
+  step "I have filled in my background checks successfully"
+end
+
+Given("I have filled in my subject and date information successfully") do
+  within(
+    page
+      .find('dt', text: @wanted_bookings_placement_date.date.strftime("%d %B %Y"))
+      .sibling('dd')
+  ) do
+    choose("All subjects (1 day)")
+  end
+
+  click_button 'Continue'
+
+  expect(page.current_path).to eql \
+    "/candidates/schools/#{@school.urn}/registrations/personal_information/new"
+end
+
 Given("I have filled in my personal information successfully") do
   # Submit contact information form successfully
   fill_in 'First name', with: 'testy'
@@ -52,12 +84,10 @@ Given("I have filled in my teaching preferences successfully") do
 end
 
 Given("I have filled in my placement preferences successfully") do
-  # Submit registrations/placement_preference form successfully
-  if @fixed_dates
-    choose @wanted_bookings_placement_date
-  else
+  unless @fixed_dates
     fill_in 'Tell us about your availability', with: 'Only free from Epiphany to Whitsunday'
   end
+
   fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
   click_button 'Continue'
 
@@ -78,12 +108,12 @@ Given("my school has flexible dates") do
   # do nothing, it's the default
 end
 
-Given("my school has fixed dates") do
+Given("the/my school has fixed dates") do
   @fixed_dates = true
   @school.update_attributes(availability_preference_fixed: true)
   (1..3).each { |i| i.weeks.from_now }.each do |date|
     @school.bookings_placement_dates.create(date: date.weeks.from_now, published_at: 1.week.ago)
-    @wanted_bookings_placement_date = @school.bookings_placement_dates.last.to_s
+    @wanted_bookings_placement_date = @school.bookings_placement_dates.last
   end
   # do nothing, it's the default
 end
@@ -112,13 +142,13 @@ Then("I should see the following summary rows:") do |table|
 end
 
 Then("I should see a summary row containing my selected date") do
-  within(".start-date-availability") do
-    expect(page).to have_content(@wanted_bookings_placement_date)
+  within(".start-date-and-subject") do
+    expect(page).to have_content(@wanted_bookings_placement_date.to_s)
   end
 end
 
 Then("the row should have a {string} link to {string}") do |link_text, path|
-  within(".start-date-availability") do
+  within(".start-date-and-subject") do
     expect(page).to have_link(link_text, href: /#{path}/)
   end
 end

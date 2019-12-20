@@ -5,6 +5,8 @@ FactoryBot.define do
     has_or_working_towards_degree { true }
     live_locally { true }
     maximum_distance_from_school { 8 }
+    provide_photo_identification { true }
+    photo_identification_details { 'Make sure photo is clear' }
     other { true }
     other_details { 'Some other requirements' }
   end

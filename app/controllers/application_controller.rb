@@ -26,4 +26,10 @@ protected
 
     render 'shared/session_expired'
   end
+
+  def cookie_preferences
+    @cookie_preferences ||= \
+      CookiePreference.from_cookie cookies[CookiePreference.cookie_key]
+  end
+  helper_method :cookie_preferences
 end

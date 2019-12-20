@@ -3,7 +3,7 @@
 
     <%- if @school.placement_info.present? -%>
     <section id="school-placement-info">
-      <%= simple_format @school.placement_info %>
+      <%= safe_format @school.placement_info %>
     </section>
     <%- end -%>
 
@@ -106,17 +106,12 @@
       </div>
 
       <div id="school-availability-info" class="govuk-summary-list__row">
-
-        <%- if @school.availability_preference_fixed? -%>
-          <%= render partial: 'placement_dates', locals: { available_dates: @available_dates } %>
-        <%- else -%>
-          <dt class="govuk-summary-list__key">
-            Placement availability
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <%= format_school_availability(@school.availability_info) %>
-          </dd>
-        <%- end -%>
+        <dt class="govuk-summary-list__key">
+          Placement availability
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= format_school_availability(@school.availability_info) %>
+        </dd>
       </div>
 
       <%- if @school.teacher_training_provider? -%>
@@ -125,7 +120,7 @@
           Teacher training offered
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= simple_format(@school.teacher_training_info) %>
+          <%= safe_format(@school.teacher_training_info) %>
         </dd>
       </div>
       <%- end -%>

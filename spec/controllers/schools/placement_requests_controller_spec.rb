@@ -51,11 +51,11 @@ describe Schools::PlacementRequestsController, type: :request do
   end
 
   context '#show' do
-    before do
-      get "/schools/placement_requests/#{placement_request.id}"
-    end
-
     context 'with a new placement request' do
+      before do
+        get "/schools/placement_requests/#{placement_request.id}"
+      end
+
       let :placement_request do
         FactoryBot.create :placement_request, school: school
       end
@@ -70,12 +70,60 @@ describe Schools::PlacementRequestsController, type: :request do
     end
 
     context 'with a placement request cancelled by candidate' do
+      before do
+        get "/schools/placement_requests/#{placement_request.id}"
+      end
+
       let :placement_request do
         create :placement_request, :cancelled, school: school
       end
 
       it 'marks the cancellation as viewed' do
         expect(placement_request.reload.candidate_cancellation).to be_viewed
+      end
+    end
+
+    context 'cannot find the placement request' do
+      subject { get(schools_placement_request_path(placement_request.id)) }
+      let(:another_school) { create(:bookings_school) }
+      let(:placement_request) { create(:bookings_placement_request, school: another_school) }
+
+      context 'when the user has access via another school' do
+        before do
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+
+          allow_any_instance_of(Schools::DFESignInAPI::Organisations).to(
+            receive(:urns).and_return([another_school.urn])
+          )
+        end
+
+        specify 'redirects to the switch school page with urn param present' do
+          expect(subject).to redirect_to(schools_switch_path(urn: another_school.urn))
+        end
+      end
+
+      context 'when the DfE Sign-in API is disabled' do
+        before do
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(false)
+        end
+
+        specify 'should raise a record not found error' do
+          expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context 'when the user has no access via any school' do
+        before do
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+
+          allow_any_instance_of(Schools::DFESignInAPI::Organisations).to(
+            receive(:urns).and_return([])
+          )
+        end
+
+        specify 'should raise a record not found error' do
+          expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+        end
       end
     end
   end

@@ -1,17 +1,19 @@
-shared_context 'Stubbed candidates school' do
+shared_context 'Stubbed candidates school' do |fixed|
   let :school_urn do
     11048
   end
 
   let :school do
-    create :bookings_school, \
-      name: 'Test School',
-      contact_email: 'test@test.com',
-      urn: school_urn
+    Bookings::School.find_by(urn: school_urn) ||
+      create(:bookings_school,
+        name: 'Test School',
+        contact_email: 'test@test.com',
+        urn: school_urn,
+        availability_preference_fixed: fixed)
   end
 
   let :allowed_subject_choices do
-    Bookings::Subject.available.pluck(:name)
+    Bookings::Subject.pluck(:name)
   end
 
   let :second_subject_choices do

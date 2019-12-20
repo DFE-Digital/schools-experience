@@ -74,14 +74,13 @@ Rails.application.configure do
 
   config.after_initialize do
     Bullet.enable = true
-    Bullet.console = true
+    Bullet.raise = true
     Bullet.rails_logger = true
   end
 
   config.x.phase = Integer(ENV.fetch('PHASE') { 10000 })
   config.x.features = %i(
     subject_specific_dates
-    candidate_requirement_ab_test
     capped_bookings
   )
 
@@ -100,6 +99,7 @@ Rails.application.configure do
 
   config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
+  config.x.dfe_sign_in_api_school_change_enabled = ENV['DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED']&.in?(truthy_strings)
 
   if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize

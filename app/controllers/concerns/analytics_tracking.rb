@@ -7,7 +7,9 @@ module AnalyticsTracking
   private
 
     def set_analytics_tracking_uuid
-      if cookies[:analytics_tracking_uuid].blank?
+      if cookies[:analytics_tracking_uuid].blank? &&
+          cookie_preferences.allowed?(:analytics_tracking_uuid)
+
         cookies[:analytics_tracking_uuid] = { value: SecureRandom.uuid, httponly: true }
       end
     end

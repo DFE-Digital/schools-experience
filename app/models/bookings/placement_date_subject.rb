@@ -9,6 +9,13 @@ class Bookings::PlacementDateSubject < ApplicationRecord
     inclusion: { in: :allowed_subject_choices },
     if: :bookings_subject_id
 
+  # this combined id is used when candidates are choosing a subject specific
+  # date and are presented with a single list of options that contain
+  # placement dates and subjects
+  def date_and_subject_id
+    [bookings_placement_date.id, bookings_subject_id].join("_")
+  end
+
 private
 
   def allowed_subject_choices

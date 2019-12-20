@@ -17,10 +17,10 @@ Feature: Viewing a placement request
         Given there is at least one placement request
         When I am on the placement request page
         Then I should see a 'Personal details' section with the following values:
-            | Heading             | Value                                                                |
+            | Heading             | Value                                                                 |
             | Address             | First Line, Second Line, Third Line, Manchester, Manchester, TE57 1NG |
-            | UK telephone number | 07123 456789                                                         |
-            | Email address       | second@thisaddress.com                                               |
+            | UK telephone number | 07123 456789                                                          |
+            | Email address       | second@thisaddress.com                                                |
 
     Scenario: Request details
         Given there is at least one placement request
@@ -29,6 +29,12 @@ Feature: Viewing a placement request
             | Heading         | Value                         |
             | Dates requested | Any time during November 2019 |
             | DBS certificate | Yes                           |
+
+    Scenario: Request details
+        Given there is at least one subject-specific placement request for 'Maths'
+        When I am on the placement request page
+        Then I should see a 'Request details' section with the following values:
+            | Requested subject | Maths                         |
 
     Scenario: Candidate details
         Given there is at least one placement request
@@ -53,3 +59,15 @@ Feature: Viewing a placement request
         And I am on the placement request page
         When I click the 'Accept request' button
         Then I should be on the confirm booking page
+
+    Scenario: Viewing a withdrawn request
+        Given there is at least one placement request
+        And the request has been withdrawn
+        When I am on the placement request page
+        Then I should see the withdrawal details
+
+    Scenario: Viewing a rejected request
+        Given there is at least one placement request
+        And the request has been rejected
+        When I am on the placement request page
+        Then I should see the rejection details

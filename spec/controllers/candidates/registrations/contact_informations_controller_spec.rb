@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::ContactInformationsController, type: :request do
   include_context 'Stubbed current_registration'
+  let!(:school) { create(:bookings_school, urn: 11048) }
 
   let(:gitis_contact) { build(:gitis_contact, :persisted) }
 

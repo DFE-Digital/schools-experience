@@ -15,7 +15,13 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
 
       it { is_expected.to include(dbs_requires_check: true) }
       it { is_expected.to include(dbs_policy_details: 'Must have recent dbs check') }
-      it { is_expected.to include(individual_requirements: 'Gotta go fast') }
+
+      it { is_expected.to include(individual_requirements: /Must be applying to or have applied to our, or a partner school/) }
+      it { is_expected.to include(individual_requirements: /Must have a degree/) }
+      it { is_expected.to include(individual_requirements: /They must live within 8 miles of the school/) }
+      it { is_expected.to include(individual_requirements: /Make sure photo is clear/) }
+      it { is_expected.to include(individual_requirements: /Some other requirements/) }
+
       it { is_expected.to include(description_details: 'Horse archery') }
       it { is_expected.to include(dress_code_business: true) }
       it { is_expected.to include(dress_code_cover_tattoos: true) }
@@ -66,7 +72,13 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.dbs_requirement_dbs_policy_details = ''
         model.dbs_requirement_no_dbs_policy_details = ''
         model.candidate_requirement_dbs_requirement = 'never'
-        model.candidate_requirement_requirements = false
+        model.candidate_requirements_selection_on_teacher_training_course = false
+        model.candidate_requirements_selection_live_locally = false
+        model.candidate_requirements_selection_maximum_distance_from_school = false
+        model.candidate_requirements_selection_other = false
+        model.candidate_requirements_selection_not_on_another_training_course = false
+        model.candidate_requirements_selection_has_or_working_towards_degree = false
+        model.candidate_requirements_selection_provide_photo_identification = false
         model.description_details = ' '
         model.candidate_experience_detail_disabled_facilities = false
         model.candidate_experience_detail_other_dress_requirements = false
@@ -92,7 +104,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
 
       it { is_expected.to include(dbs_requires_check: false) }
       it { is_expected.to include(dbs_policy_details: nil) }
-      it { is_expected.to include(individual_requirements: nil) }
+      it { is_expected.to include(individual_requirements: 'None') }
       it { is_expected.to include(description_details: nil) }
       it { is_expected.to include(dress_code_other_details: nil) }
       it { is_expected.to include(admin_contact_email: nil) }

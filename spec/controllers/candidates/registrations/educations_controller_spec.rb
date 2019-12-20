@@ -9,7 +9,7 @@ describe Candidates::Registrations::EducationsController, type: :request do
       contact_information
     )
   end
-
+  let!(:school) { create(:bookings_school, urn: 11048) }
 
   context '#new' do
     context 'without existing education in session' do
@@ -127,12 +127,12 @@ describe Candidates::Registrations::EducationsController, type: :request do
       { candidates_registrations_education: education.attributes }
     end
 
-    before do
-      patch '/candidates/schools/11048/registrations/education',
-        params: education_params
-    end
-
     context 'invalid' do
+      before do
+        patch '/candidates/schools/11048/registrations/education',
+          params: education_params
+      end
+
       let :education do
         Candidates::Registrations::Education.new
       end
@@ -149,6 +149,11 @@ describe Candidates::Registrations::EducationsController, type: :request do
     end
 
     context 'valid' do
+      before do
+        patch '/candidates/schools/11048/registrations/education',
+          params: education_params
+      end
+
       let :education do
         FactoryBot.build \
           :education,
@@ -165,6 +170,48 @@ describe Candidates::Registrations::EducationsController, type: :request do
       it 'redirects to the application preview page' do
         expect(response).to redirect_to \
           candidates_school_registrations_application_preview_path
+      end
+    end
+
+    context 'unsetting explanation when changed from other' do
+      let :education do
+        FactoryBot.build \
+          :education,
+          degree_stage: 'Other',
+          degree_stage_explaination: 'On an important quest'
+      end
+
+      before do
+        registration_session.save education
+      end
+
+      let(:degree_stage) { 'Final year' }
+      let(:degree_subject) { 'Art' }
+      let(:params) do
+        {
+          candidates_registrations_education: {
+            degree_stage: degree_stage,
+            degree_subject: degree_subject
+          }
+        }
+      end
+
+      subject do
+        patch '/candidates/schools/11048/registrations/education', params: params
+      end
+
+      specify 'should set degree_stage_explaination to nil' do
+        expect(registration_session.education.degree_stage_explaination).not_to be_nil
+        subject
+        expect(registration_session.education.degree_stage_explaination).to be_nil
+      end
+
+      specify 'should set the other attributes in the normal fashion' do
+        subject
+        registration_session.education.tap do |ed|
+          expect(ed.degree_stage).to eql(degree_stage)
+          expect(ed.degree_subject).to eql(degree_subject)
+        end
       end
     end
   end

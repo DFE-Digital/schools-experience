@@ -57,16 +57,8 @@ module Bookings
     end
 
     def convert_individual_requirements
-      # rubocop:disable ConditionalAssignment
-      if input.fetch :show_candidate_requirements_selection
-        output[:individual_requirements] = \
-          Schools::OnBoarding::CandidateRequirementsSelectionPresenter.new(input).to_s
-      else
-        output[:individual_requirements] = \
-          conditional_assign(:candidate_requirement_requirements,
-            :candidate_requirement_requirements_details)
-      end
-      # rubocop:enable ConditionalAssignment
+      output[:individual_requirements] = \
+        Schools::OnBoarding::CandidateRequirementsSelectionPresenter.new(input).to_s
     end
 
     def convert_dress_code

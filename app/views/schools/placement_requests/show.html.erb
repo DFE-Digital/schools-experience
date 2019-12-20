@@ -1,8 +1,29 @@
+<% self.page_title = "Request #{@placement_request.id}" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Requests' => schools_placement_requests_path,
+    "Request" => nil
+  }
+%>
+
 <%= link_to 'Back', schools_placement_requests_path, class: 'govuk-back-link' %>
 
-<h1>Request from <%= @gitis_contact.full_name %></h1>
+<% if @placement_request.candidate_cancellation&.sent? %>
+  <h1><%= @gitis_contact.full_name %> has withdrawn their request</h1>
+<% elsif @placement_request.school_cancellation&.sent? %>
+  <h1>This request from <%= @gitis_contact.full_name %> has been rejected</h1>
+<% else %>
+  <h1>Request from <%= @gitis_contact.full_name %></h1>
+<% end %>
 
 <div class="school-request">
+
+  <% if @placement_request.cancelled? %>
+    <%= render "cancellation", cancellation: @placement_request.cancellation %>
+  <% end %>
+
   <section id="personal-details">
     <h2>Personal details</h2>
 
@@ -40,8 +61,8 @@
     <h2>Request details</h2>
 
     <dl class="placement-details govuk-summary-list">
-      <div class="date-requested govuk-summary-list__row">
 
+      <div class="date-requested govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Dates requested
         </dt>
@@ -49,6 +70,17 @@
           <%= @placement_request.dates_requested %>
         </dd>
       </div>
+
+      <% if @placement_request.subject.present? %>
+        <div class="date-requested govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Requested subject
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= @placement_request.requested_subject.name %>
+          </dd>
+        </div>
+      <% end %>
 
       <div class="date-received-on govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -80,7 +112,7 @@
           What they want out of school experience
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.objectives %>
+          <%= safe_format @placement_request.objectives %>
         </dd>
       </div>
 
@@ -90,6 +122,9 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <%= @placement_request.degree_stage %>
+          <% if @placement_request.degree_stage_explaination.present? %>
+            - <%= @placement_request.degree_stage_explaination %>
+          <% end %>
         </dd>
       </div>
 
@@ -133,7 +168,11 @@
     <% if @placement_request.open? %>
       <div class="accept-or-reject">
         <div class="govuk-se-button-container">
-          <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request) %>
+          <% if @placement_request.placement_date&.in_future? %>
+            <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request) %>
+          <% else %>
+            <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_make_changes_path(@placement_request) %>
+          <% end %>
         </div>
         <div class="govuk-se-button-container">
           <div>
