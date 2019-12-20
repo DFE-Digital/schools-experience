@@ -26,6 +26,10 @@ module Bookings
         type: :date
       }
 
+    validate on: :updating_date do
+      errors.add :date, :not_changed unless date_changed?
+    end
+
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true

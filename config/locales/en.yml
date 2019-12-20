@@ -412,6 +412,7 @@ en:
             date:
               blank: Enter a booking date
               on_or_after: Date must be in the future
+              not_changed: Date has not been changed
             contact_name:
               blank: You must provide a contact name to the candidate
             contact_email:
@@ -422,7 +423,6 @@ en:
               invalid: Enter a valid contact telephone number
             candidate_instructions:
               blank: Enter some instructions for the candidate
-
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:
