@@ -52,6 +52,12 @@ module Bookings::Gitis
       restore_attributes
     end
 
+    # Will get overwritten if entity_id_attribute is defined
+    def id
+      fail MissingPrimaryKey
+    end
+    alias_method :id=, :id
+
     def entity_id=(e_id)
       normalised_id = e_id.to_s.downcase
       id_match = normalised_id.match(/\A#{entity_path}\(([a-z0-9-]{36})\)\z/)
@@ -86,11 +92,15 @@ module Bookings::Gitis
       other.id == self.id
     end
 
-    # Will get overwritten if entity_id_attribute is defined
-    def id
-      fail MissingPrimaryKey
+    def cache_key
+      self.class.cache_key id
     end
-    alias_method :id=, :id
+
+    def to_cache
+      @init_data
+    end
+
+    class InvalidEntityIdError < RuntimeError; end
 
   private
 
@@ -118,6 +128,14 @@ module Bookings::Gitis
 
       def all_attribute_names
         select_attribute_names + association_attribute_names
+      end
+
+      def cache_key(uuid)
+        "#{entity_path}/#{uuid}"
+      end
+
+      def from_cache(attrs)
+        new(attrs).freeze
       end
 
     protected
