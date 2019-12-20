@@ -18,6 +18,16 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     it { is_expected.to validate_presence_of :last_name }
     it { is_expected.to validate_presence_of :date_of_birth }
 
+    it do
+      is_expected.to validate_length_of(:first_name).is_at_most(50).
+        with_message('First name must be 50 characters or fewer')
+    end
+
+    it do
+      is_expected.to validate_length_of(:last_name).is_at_most(50).
+        with_message('Last name must be 50 characters or fewer')
+    end
+
     let(:too_long_msg) { 'Email must be 100 characters or fewer' }
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_length_of(:email).is_at_most(100).with_message(too_long_msg) }
