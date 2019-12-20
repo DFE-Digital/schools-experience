@@ -91,6 +91,7 @@ class Bookings::School < ApplicationRecord
     dependent: :destroy
 
   scope :enabled, -> { where(enabled: true) }
+  scope :ordered_by_name, -> { order(name: 'asc') }
 
   scope :that_provide, ->(subject_ids) do
     if subject_ids.present?

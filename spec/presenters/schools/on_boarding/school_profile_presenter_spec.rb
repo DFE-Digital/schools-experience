@@ -150,8 +150,15 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns yes with the requirements' do
-        expect(subject.individual_requirements).to eq \
-          "Must be applying to or have applied to our, or a partner school's, teacher training course. Must have a degree. They must live within 8 miles from the school. Make sure photo is clear. Some other requirements"
+        [
+          /Must be applying to or have applied to our, or a partner school/,
+          /Must have a degree/,
+          /They must live within 8 miles of the school/,
+          /Make sure photo is clear/,
+          /Some other requirements/
+        ].each do |req|
+          expect(subject.individual_requirements).to match(req)
+        end
       end
     end
   end
