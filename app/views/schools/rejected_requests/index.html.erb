@@ -48,7 +48,7 @@
                 <%- end -%>
               </td>
               <td class="reason govuk-table__cell">
-                <%= rejected_request.school_cancellation.reason.truncate(80) %>
+                <%= rejected_request.school_cancellation.rejection_description.truncate(80) %>
               </td>
               <td class="govuk-table__cell">
                 <%= link_to "View", schools_rejected_request_path(rejected_request),

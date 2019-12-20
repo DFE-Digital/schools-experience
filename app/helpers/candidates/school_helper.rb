@@ -140,6 +140,18 @@ module Candidates::SchoolHelper
     end
   end
 
+  def split_to_list(content)
+    return nil if content.nil?
+
+    items = content.split("\n").reject(&:blank?)
+
+    return nil if items.blank?
+
+    content_tag('ul', class: 'govuk-list') do
+      safe_join(items.map { |req| tag.li(req) })
+    end
+  end
+
 private
 
   def filtered_subject_ids(subject_ids)

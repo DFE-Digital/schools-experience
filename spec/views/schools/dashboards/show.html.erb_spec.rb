@@ -10,19 +10,19 @@ describe 'schools/dashboards/show.html.erb', type: :view do
 
   context 'when the user has other schools' do
     before { assign :other_urns, [111111] }
-    before { render }
+    subject { render }
 
-    specify 'the page should have a change school link' do
-      expect(rendered).to have_link('Change school')
+    specify 'the page should have a change school link that initiates a DfE Sign-in switch' do
+      expect(subject).to have_link('Change school', href: '/schools/switch/new')
     end
   end
 
   context 'when the user has no other schools' do
     before { assign :other_urns, [] }
-    before { render }
+    subject { render }
 
     specify 'the page should have no change school link' do
-      expect(rendered).not_to have_link('Change school')
+      expect(subject).not_to have_link('Change school')
     end
   end
 end
