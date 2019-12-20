@@ -37,6 +37,8 @@ module Bookings
 
     validates :candidate_instructions, presence: true, on: :acceptance_email_preview
 
+    before_validation(if: :contact_email) { self.contact_email = contact_email.to_s.strip }
+
     delegate \
       :availability,
       :degree_stage,

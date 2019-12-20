@@ -10,6 +10,8 @@ describe Schools::OnBoarding::AdminContact, type: :model do
   context 'validations' do
     it { is_expected.to validate_presence_of :phone }
     it { is_expected.to validate_presence_of :email }
+    it { is_expected.to validate_email_format_of :email }
+    it { is_expected.to validate_email_format_of :email_secondary }
 
     context 'phone number format' do
       subject { described_class.new(phone: phone).tap(&:validate) }
@@ -42,38 +44,6 @@ describe Schools::OnBoarding::AdminContact, type: :model do
 
         it 'is valid' do
           expect(subject.errors[:phone]).to be_empty
-        end
-      end
-    end
-
-    context 'email address format' do
-      subject { described_class.new(email: email, email_secondary: email).tap(&:validate) }
-
-      context 'incorrect format' do
-        let :email do
-          'test@'
-        end
-
-        it 'is invalid' do
-          expect(subject.errors[:email]).to eq ['Enter a valid email address']
-        end
-
-        it 'is invalid for email_secondary' do
-          expect(subject.errors[:email_secondary]).to eq ['Enter a valid email address']
-        end
-      end
-
-      context 'correct format' do
-        let :email do
-          'test@example.com'
-        end
-
-        it 'is valid' do
-          expect(subject.errors[:email]).to be_empty
-        end
-
-        it 'is valid for email_secondary' do
-          expect(subject.errors[:email_secondary]).to be_empty
         end
       end
     end
