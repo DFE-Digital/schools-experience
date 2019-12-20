@@ -1,8 +1,8 @@
 version: '3.3'
-  
+
 services:
 
    selenium-firefox:
-     image: selenium/standalone-firefox
+     image: selenium/standalone-firefox:3.141.59-xenon
      volumes:
        - /dev/shm:/dev/shm

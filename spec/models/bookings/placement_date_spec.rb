@@ -35,8 +35,12 @@ describe Bookings::PlacementDate, type: :model do
           end
         end
 
+        specify 'new placement dates should not allow today' do
+          expect(subject).not_to allow_value(Date.today).for(:date)
+        end
+
         context 'error messages' do
-          let(:message) { 'Date must not be in the past' }
+          let(:message) { 'Date must be in the future' }
           let(:invalid_pd) { build(:bookings_placement_date, date: 3.weeks.ago) }
 
           before { invalid_pd.valid? }

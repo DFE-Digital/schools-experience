@@ -30,11 +30,10 @@ module Bookings
         less_than: 100
       }
 
-
     validates :date, presence: true
     validates :date,
       timeliness: {
-        on_or_after: :today,
+        on_or_after: -> { Booking::MIN_BOOKING_DELAY.from_now.to_date },
         before: -> { 2.years.from_now },
         type: :date
       },
@@ -79,6 +78,14 @@ module Bookings
         duration: duration,
         unit: "day".pluralize(duration)
       }
+    end
+
+    def in_future?
+      date > Date.today
+    end
+
+    def in_past?
+      date <= Date.today
     end
 
     def has_subjects?

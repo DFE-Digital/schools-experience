@@ -3,29 +3,33 @@ module Schools
     module Acceptance
       class PreviewConfirmationEmailController < Schools::BaseController
         include Acceptance
-        before_action :ensure_previous_step_complete
 
-        def new; end
+        def edit
+          set_placement_request_and_fetch_gitis_contact
 
-        def create
-          booking = @placement_request.booking
+          @booking = @placement_request.booking
+        end
 
-          if booking.accept! && candidate_booking_notification(booking).despatch_later!
+        def update
+          set_placement_request_and_fetch_gitis_contact
+
+          @booking = @placement_request.booking
+          @booking.assign_attributes(booking_params)
+
+          if @booking.valid?(:acceptance_email_preview) && @booking.accept! && candidate_booking_notification(@booking).despatch_later!
             Bookings::Gitis::EventLogger.write_later \
-              booking.contact_uuid, :booking, booking
+              @booking.contact_uuid, :booking, @booking
 
             redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
           else
-            render :new
+            render :edit
           end
         end
 
       private
 
-        def ensure_previous_step_complete
-          unless @placement_request.booking.reviewed_and_candidate_instructions_added?
-            redirect_to new_schools_placement_request_acceptance_add_more_details_path(@placement_request.id)
-          end
+        def booking_params
+          params.require(:bookings_booking).permit(:candidate_instructions)
         end
 
         def candidate_booking_notification(booking)

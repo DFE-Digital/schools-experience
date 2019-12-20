@@ -72,6 +72,7 @@ end
 
 Given("there is at least one rejected request") do
   step "there is 1 rejected requests"
+  @rejected_request.cancellation.update(rejection_category: :other, reason: 'MyText')
 end
 
 When("I am viewing the rejected request") do
@@ -79,4 +80,19 @@ When("I am viewing the rejected request") do
 
   visit(path)
   expect(page.current_path).to eql(path)
+end
+
+Given("a request has been rejected because of {string}") do |rejection_category|
+  step %(there is 1 rejected requests)
+  @cancellation = @rejected_request.cancellation.tap do |cancellation|
+    cancellation.update(rejection_category: rejection_category)
+  end
+end
+
+Then("I should see a rejected request with the rejection reason displayed") do
+  expect(page).to have_css('td', text: 'We cannot support the date you have requested', count: 1)
+end
+
+Then("I should see a rejected request with the rejection reason displayed in full") do
+  expect(page).to have_css('dd', text: 'We cannot support the date you have requested', count: 1)
 end

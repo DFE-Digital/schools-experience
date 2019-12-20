@@ -17,12 +17,17 @@ Feature: Viewing rejected requests
         Then I should see the following breadcrumbs:
             | Text               | Link               |
             | Some school        | /schools/dashboard |
-            | Rejected requests | None               |
+            | Rejected requests  | None               |
 
     Scenario: List presence
         Given there are some rejected requests
         When I am on the 'rejected requests' page
         Then I should see the rejected requests listed
+
+    Scenario: Rejection category
+        Given a request has been rejected because of 'date_not_available'
+        When I am on the 'rejected requests' page
+        Then I should see a rejected request with the rejection reason displayed
 
     Scenario: Table headings
         Given there are some rejected requests
