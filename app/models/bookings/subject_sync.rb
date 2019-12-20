@@ -13,8 +13,8 @@ module Bookings
 
     def synchronise
       uuids = gitis_subjects.map(&:dfe_teachingsubjectlistid)
-      assigned = Bookings::Subject.where(gitis_uuid: uuids).index_by(&:gitis_uuid)
-      unassigned = Bookings::Subject.where(gitis_uuid: nil).index_by do |s|
+      assigned = Bookings::Subject.unscoped.where(gitis_uuid: uuids).index_by(&:gitis_uuid)
+      unassigned = Bookings::Subject.unscoped.where(gitis_uuid: nil).index_by do |s|
         s.name.to_s.strip.downcase
       end
 

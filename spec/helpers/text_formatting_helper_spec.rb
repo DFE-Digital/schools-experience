@@ -14,4 +14,18 @@ describe TextFormattingHelper, type: :helper do
       it { is_expected.to eql "<p>hello world</p>" }
     end
   end
+
+  describe '#conditional_format' do
+    subject { conditional_format content }
+
+    context "with new lines" do
+      let(:content) { "foo\nbar" }
+      it { is_expected.to eql "<p>foo\n<br />bar</p>" }
+    end
+
+    context "without new lines" do
+      let(:content) { "foobar" }
+      it { is_expected.to eql "foobar" }
+    end
+  end
 end

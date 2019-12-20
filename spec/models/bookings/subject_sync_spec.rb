@@ -46,9 +46,8 @@ RSpec.describe Bookings::SubjectSync do
     end
 
     context 'for a successful sync' do
-      before { sync.synchronise }
-
       context 'when matched on id' do
+        before { sync.synchronise }
         it "will update name" do
           expect(matched1.reload).to have_attributes(name: gitis_subject_1.dfe_name)
           expect(matched2.reload).to have_attributes(name: gitis_subject_2.dfe_name)
@@ -56,23 +55,35 @@ RSpec.describe Bookings::SubjectSync do
       end
 
       context 'when matched on name' do
+        before { sync.synchronise }
         subject { unmatched.reload }
         it { is_expected.to have_attributes(gitis_uuid: gitis_subject_3.id) }
       end
 
       context "with new subjects" do
+        before { sync.synchronise }
         subject { Bookings::Subject.where(gitis_uuid: gitis_subject_4.id).first }
         it { is_expected.to have_attributes(name: gitis_subject_4.dfe_name) }
         it { is_expected.to have_attributes(hidden: false) }
       end
 
       context "with subjects it cannot match" do
+        before { sync.synchronise }
         subject { nomatch.reload }
         it { is_expected.to have_attributes(name: 'nomatch') }
         it { is_expected.to have_attributes(gitis_uuid: nil) }
       end
 
       context "with blacklisted new subject" do
+        before { sync.synchronise }
+        subject { Bookings::Subject.unscoped.where(gitis_uuid: gitis_subject_5.id).first }
+        it { is_expected.to have_attributes(name: gitis_subject_5.dfe_name) }
+        it { is_expected.to have_attributes(hidden: true) }
+      end
+
+      context "with blacklisted existing subject" do
+        before { Bookings::Subject.create!(name: gitis_subject_5.dfe_name, hidden: true) }
+        before { sync.synchronise }
         subject { Bookings::Subject.unscoped.where(gitis_uuid: gitis_subject_5.id).first }
         it { is_expected.to have_attributes(name: gitis_subject_5.dfe_name) }
         it { is_expected.to have_attributes(hidden: true) }

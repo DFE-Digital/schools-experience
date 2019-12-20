@@ -22,13 +22,18 @@ Feature: Viewing a rejected request
             | Some school        | /schools/dashboard           |
             | Rejected requests  | /schools/rejected_requests  |
             | Request            | None                         |
-    
+
     Scenario: Rejection details
         Given there is at least one rejected request
         When I am viewing the rejected request
         Then I should see a 'Rejection details' section with the following values:
             | Heading      | Value      |
             | Reason       | MyText     |
+
+    Scenario: Rejection category
+        Given a request has been rejected because of 'date_not_available'
+        When I am viewing the rejected request
+        Then I should see a rejected request with the rejection reason displayed in full
 
     Scenario: Personal details
         Given there is at least one rejected request
