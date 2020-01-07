@@ -54,6 +54,8 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       end
 
       context 'skipped step' do
+        before { registration_store.send :delete, 'some-uuid' } # ensure key not left lying around
+
         let :registration_session do
           FactoryBot.build :registration_session, with: []
         end

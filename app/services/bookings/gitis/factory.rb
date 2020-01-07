@@ -1,17 +1,27 @@
 module Bookings
   module Gitis
     class Factory
+      NAMESPACE = 'gitis'.freeze
+      VERSION = 'v1'.freeze
+      TTL = 1.hour.freeze
+
       class << self
-        def crm; new.crm; end
+        delegate :crm, :caching_crm, to: :new
         alias_method :gitis, :crm
       end
 
-      def crm
+      def crm(read_from_cache: false)
         if Rails.application.config.x.gitis.fake_crm
           Bookings::Gitis::FakeCrm.new
+        elsif Rails.application.config.x.gitis.caching
+          Bookings::Gitis::CRM.new caching_store(read_from_cache)
         else
           Bookings::Gitis::CRM.new store
         end
+      end
+
+      def caching_crm
+        crm read_from_cache: true
       end
 
       def token
@@ -20,6 +30,26 @@ module Bookings
 
       def store
         Bookings::Gitis::Store::Dynamics.new token
+      end
+
+      def write_only_caching_store
+        Bookings::Gitis::Store::WriteOnlyCache.new \
+          store, cache, namespace: NAMESPACE, ttl: TTL, version: VERSION
+      end
+
+      def read_write_caching_store
+        Bookings::Gitis::Store::ReadWriteCache.new \
+          store, cache, namespace: NAMESPACE, ttl: TTL, version: VERSION
+      end
+
+      def caching_store(read_from_cache = false)
+        read_from_cache ? read_write_caching_store : write_only_caching_store
+      end
+
+    private
+
+      def cache
+        Rails.cache
       end
     end
   end

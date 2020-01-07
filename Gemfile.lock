@@ -242,6 +242,8 @@ GEM
       validate_url
       webfinger (>= 1.0.1)
     parallel (1.17.0)
+    parallel_tests (2.30.0)
+      parallel
     parser (2.6.5.0)
       ast (~> 2.4.0)
     pg (1.1.4)
@@ -333,6 +335,8 @@ GEM
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (0.65.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -470,6 +474,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.3)
   notifications-ruby-client
   openid_connect
+  parallel_tests
   pg (>= 0.18, < 2.0)
   pg_search
   phonelib
@@ -482,6 +487,7 @@ DEPENDENCIES
   rails-controller-testing
   redis (~> 4.1)
   rspec-rails (~> 3.9)
+  rspec_junit_formatter
   rubocop (~> 0.65.0)
   sassc-rails
   selenium-webdriver

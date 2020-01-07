@@ -9,7 +9,9 @@ module Schools
       def update
         old_date = @booking.date
 
-        if @booking.update(booking_params)
+        @booking.assign_attributes(booking_params)
+
+        if @booking.save(context: :updating_date)
           Event.create(
             event_type: :booking_date_changed,
             bookings_school: current_school,

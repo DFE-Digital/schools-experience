@@ -50,7 +50,12 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   # Use Redis for Session and cache
-  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_URL'].presence,
+    db: ENV['TEST_ENV_NUMBER'].presence, # Note DB overrides db in URL if both specified
+    namespace: 'test-cache'
+  }
+
   config.session_store :cache_store,
     key: 'schoolex-test-session',
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
@@ -85,12 +90,14 @@ Rails.application.configure do
   config.x.dfe_sign_in_admin_role_id = '66666666-5555-4444-3333-222222222222'
   config.x.dfe_sign_in_api_enabled = false
   config.x.dfe_sign_in_api_role_check_enabled = false
+  config.x.dfe_sign_in_api_school_change_enabled = false
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
   config.x.gitis.privacy_policy_id = SecureRandom.uuid
   config.x.gitis.privacy_consent_id = '10'
+  config.x.gitis.caching = false
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)

@@ -6,6 +6,8 @@ module Schools
     self.forgery_protection_origin_check = false
 
     include GitisAccess
+    self.use_gitis_cache = true
+
     include DFEAuthentication
     before_action :require_auth
     before_action :set_current_school

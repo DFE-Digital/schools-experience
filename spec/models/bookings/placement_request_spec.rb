@@ -851,4 +851,44 @@ describe Bookings::PlacementRequest, type: :model do
       it { is_expected.to eq subject_2 }
     end
   end
+
+  describe '#fixed_date' do
+    subject { pr.fixed_date }
+
+    context 'with fixed date' do
+      let(:pr) { build :placement_request, :with_a_fixed_date }
+      it { is_expected.to eql pr.placement_date.date }
+    end
+
+    context 'with flexible date' do
+      let(:pr) { build :placement_request }
+      it { is_expected.to be_nil }
+    end
+  end
+
+  describe '#fixed_date_is_bookable?' do
+    let(:pr) { build :placement_request, :with_a_fixed_date }
+    let(:date) { pr.placement_date }
+    subject { pr.fixed_date_is_bookable? }
+
+    context 'for today' do
+      before { date.date = Date.today }
+      it { is_expected.to be false }
+    end
+
+    context 'for yesterday' do
+      before { date.date = Date.yesterday }
+      it { is_expected.to be false }
+    end
+
+    context 'for tomorrow' do
+      before { date.date = Date.tomorrow }
+      it { is_expected.to be true }
+    end
+
+    context 'with flexible' do
+      let(:pr) { build(:placement_request) }
+      it { is_expected.to be false }
+    end
+  end
 end

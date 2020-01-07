@@ -18,9 +18,20 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     it { is_expected.to validate_presence_of :last_name }
     it { is_expected.to validate_presence_of :date_of_birth }
 
+    it do
+      is_expected.to validate_length_of(:first_name).is_at_most(50).
+        with_message('First name must be 50 characters or fewer')
+    end
+
+    it do
+      is_expected.to validate_length_of(:last_name).is_at_most(50).
+        with_message('Last name must be 50 characters or fewer')
+    end
+
     let(:too_long_msg) { 'Email must be 100 characters or fewer' }
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_length_of(:email).is_at_most(100).with_message(too_long_msg) }
+    it { is_expected.to validate_email_format_of(:email) }
 
     context 'when read only' do
       subject { described_class.new read_only: true }
@@ -28,40 +39,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       it { is_expected.not_to validate_presence_of :last_name }
       it { is_expected.to validate_presence_of :email }
       it { is_expected.not_to validate_presence_of :date_of_birth }
-    end
-
-    context 'email is present' do
-      VALID_EMAILS = [
-        'test@example.com', 'testymctest@gmail.com',
-        'test%.mctest@domain.co.uk', ' with@space.com '
-      ].freeze
-
-      INVALID_EMAILS = [
-        'test.com', 'test@@test.com', 'FFFF', 'test@test',
-        'test@test.'
-      ].freeze
-
-      BLANK_EMAILS = ['', ' ', '   '].freeze
-
-      VALID_EMAILS.each do |email|
-        it { is_expected.to allow_value(email).for(:email) }
-      end
-
-      INVALID_EMAILS.each do |email|
-        it "will not allow email address '#{email}'" do
-          is_expected.not_to allow_value(email) \
-            .for(:email)
-            .with_message('Enter a valid email address')
-        end
-      end
-
-      BLANK_EMAILS.each do |email|
-        it "will not allow email address '#{email}'" do
-          is_expected.not_to allow_value(email) \
-            .for(:email)
-            .with_message('Enter your email address')
-        end
-      end
     end
   end
 

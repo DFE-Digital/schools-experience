@@ -40,6 +40,11 @@ describe Bookings::Booking do
     it { is_expected.to validate_presence_of(:duration) }
     it { is_expected.to validate_numericality_of(:duration).is_greater_than 0 }
 
+    it { is_expected.to validate_presence_of(:contact_name) }
+    it { is_expected.to validate_presence_of(:contact_number) }
+    it { is_expected.to validate_presence_of(:contact_email) }
+    it { is_expected.to validate_email_format_of(:contact_email).with_message('Enter a valid contact email address') }
+
     context '#date' do
       it { is_expected.to validate_presence_of(:date) }
 
@@ -56,14 +61,34 @@ describe Bookings::Booking do
           end
         end
 
+        specify 'new placement dates should not allow today' do
+          expect(subject).not_to allow_value(Date.today).for(:date)
+        end
+
         context 'error messages' do
-          let(:message) { 'Date must not be in the past' }
+          let(:message) { 'Date must be in the future' }
           let(:invalid_pd) { build(:bookings_placement_date, date: 3.weeks.ago).tap(&:valid?) }
           subject { invalid_pd.errors.full_messages }
 
           specify 'should show a suitable error message' do
             is_expected.to include(message)
           end
+        end
+      end
+
+      context 'updating placement date with same date' do
+        let(:booking) { create(:bookings_booking) }
+        subject { booking.errors.to_hash }
+
+        context 'defaults to being allowed' do
+          before { booking.valid? }
+          it { is_expected.to be_empty }
+        end
+
+        context 'is disallowed if updating_date is enabled' do
+          before { booking.valid?(:updating_date) }
+          it { is_expected.to be_any }
+          it { is_expected.to include(date: ["Date has not been changed"]) }
         end
       end
 
@@ -184,19 +209,21 @@ describe Bookings::Booking do
 
       let!(:future_bookings) do
         [
-          FactoryBot.create(:bookings_booking, date: Date.today),
-          FactoryBot.create(:bookings_booking, date: Date.tomorrow),
-          FactoryBot.create(:bookings_booking, date: 3.weeks.from_now)
-        ]
+          FactoryBot.build(:bookings_booking, date: Date.today),
+          FactoryBot.build(:bookings_booking, date: Date.tomorrow),
+          FactoryBot.build(:bookings_booking, date: 3.weeks.from_now)
+        ].each do |booking|
+          booking.save(validate: false)
+        end
       end
 
       subject { described_class.future }
 
-      specify 'should include dates today or before' do
+      specify 'should not include dates before today' do
         expect(subject).not_to include(*previous_bookings)
       end
 
-      specify 'should not include dates after today' do
+      specify 'should include dates on or after today' do
         expect(subject).to match_array(future_bookings)
       end
     end
@@ -291,136 +318,35 @@ describe Bookings::Booking do
         end
       end
     end
-  end
 
-  describe 'Acceptance' do
-    let(:booking_confirmed_params) do
-      {
-        date: 3.weeks.from_now,
-        placement_details: "an amazing experience"
-      }
-    end
+    describe '.days_in_the_future' do
+      let!(:booking_in_1_days) { create(:bookings_booking, date: Date.tomorrow) }
+      let!(:booking_in_3_days) { create(:bookings_booking, date: 3.days.from_now.to_date) }
+      let!(:booking_in_7_days) { create(:bookings_booking, date: 7.days.from_now.to_date) }
+      let!(:booking_in_8_days) { create(:bookings_booking, date: 8.days.from_now.to_date) }
 
-    let(:more_details_params) do
-      booking_confirmed_params.merge(
-        contact_name: 'Gary Chalmers',
-        contact_email: 'gary.chalmers@springfield.edu',
-        contact_number: '01234 456 678',
-        location: 'Near the assembly hall'
-      )
-    end
+      specify 'should return bookings the specified number of days away' do
+        expect(described_class.days_in_the_future(1.days)).to include(booking_in_1_days)
+      end
 
-    let(:reviewed_and_email_sent_params) do
-      more_details_params.merge(
-        candidate_instructions: 'Just go down the main corridor then turn left'
-      )
-    end
+      specify 'should not return other bookings' do
+        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_3_days)
+        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_7_days)
+        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_8_days)
+      end
 
-    describe '#booking_confirmed?' do
-      context 'when the relevant attributes are present' do
-        subject do
-          create(:bookings_booking, **booking_confirmed_params)
-        end
-
-        specify 'should be true' do
-          expect(subject).to be_booking_confirmed
+      describe '.tomorrow' do
+        after { described_class.tomorrow }
+        specify 'should call .days_in_the_future with 1 days' do
+          expect(described_class).to receive(:days_in_the_future).with(1.day)
         end
       end
 
-      context 'when the relevant attributes are absent' do
-        subject do
-          create(
-            :bookings_booking,
-            **booking_confirmed_params.except(:placement_details)
-          )
+      describe '.one_week_from_now' do
+        after { described_class.one_week_from_now }
+        specify 'should call .days_in_the_future with 7 days' do
+          expect(described_class).to receive(:days_in_the_future).with(7.days)
         end
-
-        specify 'should be false' do
-          expect(subject).not_to be_booking_confirmed
-        end
-      end
-    end
-
-    describe '#more_details_added?' do
-      context 'when the relevant attributes are present' do
-        subject do
-          create(:bookings_booking, **more_details_params)
-        end
-
-        specify 'should be true' do
-          expect(subject).to be_more_details_added
-        end
-      end
-
-      context 'when the relevant attributes are absent' do
-        subject do
-          create(:bookings_booking, **more_details_params.except(:contact_name))
-        end
-
-        specify 'should be false' do
-          expect(subject).not_to be_more_details_added
-        end
-      end
-    end
-
-    describe '#reviewed_and_candidate_instructions_added?' do
-      context 'when the relevant attributes are present' do
-        subject do
-          create(:bookings_booking, **reviewed_and_email_sent_params)
-        end
-
-        specify 'should be true' do
-          expect(subject).to be_reviewed_and_candidate_instructions_added
-        end
-      end
-
-      context 'when the relevant attributes are absent' do
-        subject do
-          create(:bookings_booking, **reviewed_and_email_sent_params.except(:candidate_instructions))
-        end
-
-        specify 'should be false' do
-          expect(subject).not_to be_reviewed_and_candidate_instructions_added
-        end
-      end
-    end
-
-    describe '#accepted?' do
-      context 'when the relevant attributes are present' do
-        subject do
-          create(:bookings_booking, :accepted)
-        end
-
-        specify 'should be true' do
-          expect(subject).to be_accepted
-        end
-      end
-
-      context 'when the relevant attributes are absent' do
-        subject do
-          create(:bookings_booking)
-        end
-
-        specify 'should be false' do
-          expect(subject).not_to be_accepted
-        end
-      end
-    end
-
-    describe '#accept!' do
-      context 'when not accepted' do
-        let(:booking) { create(:bookings_booking) }
-        subject! { booking.accept! }
-        it { is_expected.to be true }
-        it { expect(booking.reload.accepted_at).to be_within(10.seconds).of(Time.zone.now) }
-      end
-
-      context 'when already accepted' do
-        let!(:ten_minutes_ago) { 10.minutes.ago }
-        let(:booking) { create(:bookings_booking, accepted_at: ten_minutes_ago) }
-        subject! { booking.accept! }
-        it { is_expected.to be true }
-        it { expect(booking.reload.accepted_at).to be_within(1.second).of(ten_minutes_ago) }
       end
     end
   end
@@ -507,6 +433,35 @@ describe Bookings::Booking do
     context 'for past booking' do
       subject { create(:bookings_booking, :previous) }
       it { is_expected.not_to be_editable_date }
+    end
+  end
+
+  describe '.from_placement_request' do
+    specify { expect(described_class).to respond_to(:from_placement_request) }
+    let(:placement_request) { create(:bookings_placement_request, placement_date: placement_date) }
+    subject { described_class.from_placement_request(placement_request) }
+
+    context 'when the placement date is in the future' do
+      let(:placement_date) { create(:bookings_placement_date) }
+
+      specify 'should set the date' do
+        expect(subject.date).to be_present
+      end
+
+      specify 'should set the school, placement request, subject and details' do
+        expect(subject.bookings_school).to eql(placement_request.school)
+        expect(subject.bookings_placement_request).to eql(placement_request)
+        expect(subject.bookings_subject_id).to eql(placement_request.requested_subject.id)
+        expect(subject.placement_details).to eql(placement_request.school.placement_info)
+      end
+    end
+
+    context 'when the placement date is in the past' do
+      let(:placement_date) { create(:bookings_placement_date, :in_the_past) }
+
+      specify 'should not set the date' do
+        expect(subject.date).to be_blank
+      end
     end
   end
 end

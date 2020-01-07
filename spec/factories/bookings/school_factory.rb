@@ -44,7 +44,7 @@ FactoryBot.define do
     end
 
     trait :with_subjects do
-      after :create do |school, evaluator|
+      after :build do |school, evaluator|
         evaluator.subject_count.times do
           school.subjects << FactoryBot.create(:bookings_subject)
         end
