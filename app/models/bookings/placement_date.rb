@@ -52,7 +52,10 @@ module Bookings
       validates :subjects, absence: true, unless: :subject_specific?
     end
 
-    scope :bookable_date, -> { where(arel_table[:date].gteq(Time.now)) }
+    scope :bookable_date, -> do
+      where arel_table[:date].gteq Bookings::Booking::MIN_BOOKING_DELAY.from_now.to_date
+    end
+
     scope :in_date_order, -> { order(date: 'asc') }
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
