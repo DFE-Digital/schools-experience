@@ -216,7 +216,7 @@ module Bookings
     end
 
     def fixed_date_is_bookable?
-      !!placement_date&.in_future?
+      !!placement_date&.bookable?
     end
 
   private

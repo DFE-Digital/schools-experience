@@ -79,12 +79,8 @@ module Bookings
       }
     end
 
-    def in_future?
+    def bookable?
       date > Date.today
-    end
-
-    def in_past?
-      date <= Date.today
     end
 
     def has_subjects?

@@ -13,7 +13,11 @@
       <div>
 
         <% if @placement_request.school.availability_preference_fixed? %>
-          <%- if @placement_request.placement_date.in_past? %>
+          <%- if @placement_request.placement_date.bookable? %>
+            <h3 class="govuk-heading-m">The candidate requested</h3>
+
+            <p><%= @placement_request.requested_subject.name %> on <%= @placement_request.dates_requested %></p>
+          <%- else -%>
             <div class="govuk-warning-text">
               <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
               <strong class="govuk-warning-text__text">
@@ -23,10 +27,6 @@
                 which has elapsed. Select a new booking date.
               </strong>
             </div>
-          <% else %>
-            <h3 class="govuk-heading-m">The candidate requested</h3>
-
-            <p><%= @placement_request.requested_subject.name %> on <%= @placement_request.dates_requested %></p>
           <% end %>
         <% else %>
           <h3 class="govuk-heading-m">The candidate requested</h3>
