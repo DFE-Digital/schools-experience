@@ -150,7 +150,7 @@ describe Bookings::PlacementDate, type: :model do
       end
 
       it 'should include dates on today' do
-        is_expected.to include(today_date)
+        is_expected.not_to include(today_date)
       end
     end
 
