@@ -211,6 +211,14 @@ module Bookings
       created_at&.to_date
     end
 
+    def fixed_date
+      placement_date&.date
+    end
+
+    def fixed_date_is_bookable?
+      !!placement_date&.in_future?
+    end
+
   private
 
     def completed?
