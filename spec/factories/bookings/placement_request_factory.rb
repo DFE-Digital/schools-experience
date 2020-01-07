@@ -75,6 +75,15 @@ FactoryBot.define do
     end
 
     trait :with_a_fixed_date do
+      association \
+        :school,
+        :with_profile,
+        :with_subjects,
+        :with_fixed_availability_preference,
+        factory: :bookings_school,
+        urn: 11048,
+        subject_count: 2
+
       availability { nil }
       association :placement_date, factory: :bookings_placement_date
     end

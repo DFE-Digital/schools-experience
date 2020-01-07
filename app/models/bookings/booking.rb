@@ -101,8 +101,8 @@ module Bookings
 
     def self.from_placement_request(placement_request)
       # only populate the date if it's in the future
-      date = if placement_request&.placement_date&.in_future?
-               placement_request.placement_date.date
+      date = if placement_request&.fixed_date_is_bookable?
+               placement_request.fixed_date
              end
 
       new(
