@@ -52,13 +52,12 @@ module Bookings
       validates :subjects, absence: true, unless: :subject_specific?
     end
 
-    scope :future, -> { where(arel_table[:date].gteq(Time.now)) }
-    scope :past, -> { where(arel_table[:date].lt(Time.now)) }
+    scope :bookable_date, -> { where(arel_table[:date].gteq(Time.now)) }
     scope :in_date_order, -> { order(date: 'asc') }
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
 
-    scope :available, -> { published.active.future.in_date_order }
+    scope :available, -> { published.active.bookable_date.in_date_order }
     scope :published, -> { where.not published_at: nil }
 
     # 'supporting subjects' are dates belonging to phases where
