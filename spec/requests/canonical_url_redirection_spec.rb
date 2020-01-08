@@ -9,6 +9,11 @@ describe "Redirecting to Canonical Domain", type: :request do
         encode_credentials(username, password)
     end
 
+    before do
+      allow_any_instance_of(HealthchecksController).to \
+        receive(:check_gitis_api).and_return(true)
+    end
+
     specify "will allow direct access to healthcheck.txt" do
       get healthcheck_path
 
@@ -21,6 +26,13 @@ describe "Redirecting to Canonical Domain", type: :request do
 
       expect(response).to have_http_status(200)
       expect(response.body).to match('not set')
+    end
+
+    specify "will allow direct access to all healthcheck paths" do
+      get api_health_path, headers: { "Authorization" => encoded }
+
+      expect(response).to have_http_status(200)
+      expect(response.body).to match('healthy')
     end
   end
 

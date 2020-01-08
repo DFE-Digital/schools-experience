@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
   get '/deployment.txt', to: 'healthchecks#deployment', as: :deployment
+  get '/healthchecks/api.txt', to: 'healthchecks#api_health', as: :api_health
 
   if Rails.application.config.x.maintenance_mode
     match '*path', to: 'pages#maintenance', via: :all
