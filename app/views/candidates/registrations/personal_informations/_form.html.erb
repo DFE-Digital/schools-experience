@@ -22,7 +22,10 @@
           so you can get help and advice about becoming a teacher.
         </p>
 
-        <%= form_for personal_information, url: candidates_school_registrations_personal_information_path do |f| %>
+        <%= form_for personal_information,
+              url: candidates_school_registrations_personal_information_path,
+              html: { onsubmit: 'preventDoubleClick(this)' } do |f| %>
+
           <%= GovukElementsErrorsHelper.error_summary personal_information, 'There is a problem', '' %>
 
           <%= f.text_field :first_name, autocomplete: 'given-name',
