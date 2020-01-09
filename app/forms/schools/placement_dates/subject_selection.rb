@@ -19,12 +19,14 @@ module Schools
       def save(placement_date)
         return false unless valid?
 
-        placement_date.tap do |pd|
-          pd.subject_specific = true
-          pd.subject_ids = self.subject_ids
-          pd.published_at = DateTime.now
+        Bookings::PlacementDate.transaction do
+          placement_date.tap do |pd|
+            pd.subject_specific = true
+            pd.subject_ids = self.subject_ids
+            pd.published_at = DateTime.now
 
-          pd.save!
+            pd.save!
+          end
         end
       end
     end
