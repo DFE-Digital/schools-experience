@@ -25,9 +25,6 @@ gem 'sassc-rails'
 gem "autoprefixer-rails"
 gem "sprockets", "< 4.0.0"
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker'
 
@@ -96,7 +93,7 @@ group :development, :test do
   gem 'brakeman', '>= 4.4.0'
 
   gem 'bullet'
-  
+
   gem 'parallel_tests'
 end
 
