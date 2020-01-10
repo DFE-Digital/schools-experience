@@ -46,6 +46,8 @@ module Bookings
       inclusion: [true, false],
       if: -> { bookings_school&.has_primary_and_secondary_phases? }
 
+    validates :capped, inclusion: [true, false], allow_nil: false
+
     with_options if: :published? do
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
       validates :subjects, presence: true, if: %i(subject_specific? published?)

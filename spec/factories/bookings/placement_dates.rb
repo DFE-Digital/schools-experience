@@ -4,6 +4,7 @@ FactoryBot.define do
     association :bookings_school, factory: :bookings_school
     published_at { DateTime.now }
     supports_subjects { true }
+    capped { false }
 
     trait :in_the_past do
       date { 6.weeks.ago }

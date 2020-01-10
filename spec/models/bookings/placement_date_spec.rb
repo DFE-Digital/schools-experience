@@ -14,6 +14,7 @@ describe Bookings::PlacementDate, type: :model do
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:subject_specific).of_type(:boolean).with_options(default: false, null: false) }
     it { is_expected.to have_db_column(:supports_subjects).of_type(:boolean) }
+    it { is_expected.to have_db_column(:capped).of_type(:boolean) }
   end
 
   describe 'Validation' do
@@ -125,6 +126,12 @@ describe Bookings::PlacementDate, type: :model do
           it { is_expected.not_to validate_presence_of(:subjects) }
         end
       end
+    end
+
+    context '#capped' do
+      it { is_expected.to allow_value(true).for :capped }
+      it { is_expected.to allow_value(false).for :capped }
+      it { is_expected.not_to allow_value(nil).for :capped }
     end
   end
 
