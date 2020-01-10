@@ -20,7 +20,7 @@ module Schools
         if placement_date.published?
           new \
             max_bookings_count: placement_date.max_bookings_count,
-            has_limited_availability: placement_date.has_limited_availability?,
+            has_limited_availability: placement_date.capped?,
             available_for_all_subjects: !placement_date.subject_specific?,
             supports_subjects: placement_date.supports_subjects?
         else

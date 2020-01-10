@@ -49,9 +49,14 @@ module Bookings
     validates :capped, inclusion: [true, false], allow_nil: false
 
     with_options if: :published? do
-      validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
+      validates :max_bookings_count,
+        numericality: { greater_than: 0, only_integer: true, allow_nil: true }
+      validates :max_bookings_count, presence: true,
+        if: %i(capped? published?),
+        unless: :subject_specific?
       validates :subjects, presence: true, if: %i(subject_specific? published?)
       validates :subjects, absence: true, unless: :subject_specific?
+      validates :placement_date_subjects, associated: true
     end
 
     scope :bookable_date, -> do
@@ -90,10 +95,6 @@ module Bookings
 
     def has_subjects?
       placement_date_subjects.any?
-    end
-
-    def has_limited_availability?
-      max_bookings_count.present?
     end
 
     def published?

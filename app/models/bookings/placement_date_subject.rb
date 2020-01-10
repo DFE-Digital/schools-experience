@@ -9,6 +9,12 @@ class Bookings::PlacementDateSubject < ApplicationRecord
     inclusion: { in: :allowed_subject_choices },
     if: :bookings_subject_id
 
+  validates :max_bookings_count,
+    numericality: { greater_than: 0, only_integer: true, allow_nil: true },
+    presence: {
+      if: -> { bookings_placement_date&.capped && bookings_placement_date&.published? }
+    }
+
   # this combined id is used when candidates are choosing a subject specific
   # date and are presented with a single list of options that contain
   # placement dates and subjects
@@ -20,5 +26,10 @@ private
 
   def allowed_subject_choices
     bookings_placement_date.bookings_school.subject_ids
+  end
+
+  def uncapped_date
+#    !bookings_placement_date&.capped
+    !bookings_placement_date || !bookings_placement_date.capped
   end
 end

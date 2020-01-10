@@ -21,6 +21,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
           published_at: DateTime.now,
           bookings_school: school,
           max_bookings_count: 3,
+          capped: true,
           subject_specific: false
       end
 
@@ -64,7 +65,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
         end
 
         it 'doesnt update the placement request' do
-          expect(placement_date.has_limited_availability?).to be false
+          expect(placement_date.capped?).to be false
         end
       end
 
@@ -163,7 +164,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
         end
 
         it 'doesnt update the placement request' do
-          expect(placement_date.has_limited_availability?).to be false
+          expect(placement_date.capped?).to be false
           expect(placement_date).to be_subject_specific
         end
       end

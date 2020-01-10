@@ -106,7 +106,7 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
 
         it 'updates the placement date' do
           expect(placement_date.reload.max_bookings_count).to eq max_bookings_count
-          expect(placement_date.reload.has_limited_availability?).to eq has_limited_availability
+          expect(placement_date.reload.capped?).to eq has_limited_availability
         end
 
         it 'redirects to the dashboard' do

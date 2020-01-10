@@ -87,15 +87,40 @@ describe Bookings::PlacementDate, type: :model do
     end
 
     context '#max_bookings_count' do
-      before { subject.published_at = Date.today }
-      it do
-        is_expected.to \
-          validate_numericality_of(:max_bookings_count).is_greater_than(0).allow_nil
+      context 'unpublished' do
+        before { subject.published_at = nil }
+        it { is_expected.to allow_value(nil).for :max_bookings_count }
+      end
+
+      context 'when published' do
+        before { subject.published_at = Date.today }
+
+        context 'for uncapped' do
+          before { subject.capped = false }
+          it { is_expected.to allow_value(nil).for :max_bookings_count }
+        end
+
+        context 'for capped' do
+          before { subject.capped = true }
+
+          context 'for general days' do
+            before { subject.subject_specific = false }
+            it { is_expected.to allow_value(1).for :max_bookings_count }
+            it { is_expected.to allow_value(10).for :max_bookings_count }
+            it { is_expected.not_to allow_value(0.1).for :max_bookings_count }
+            it { is_expected.not_to allow_value(nil).for :max_bookings_count }
+          end
+
+          context 'for subject_specific' do
+            before { subject.subject_specific = true }
+            it { is_expected.to allow_value(nil).for :max_bookings_count }
+          end
+        end
       end
     end
 
     context '#subjects' do
-      context 'published' do
+      context 'published?' do
         before { subject.published_at = Date.today }
 
         context 'when not subject_specific?' do
@@ -108,6 +133,22 @@ describe Bookings::PlacementDate, type: :model do
           before { subject.subject_specific = true }
 
           it { is_expected.to validate_presence_of(:subjects) }
+
+          context 'with placement_date_subjects' do
+            let(:date_subject) { subject.placement_date_subjects.build }
+
+            context 'with invalid placement_date_subjects' do
+              before { allow(date_subject).to receive(:valid?) { false } }
+              before { subject.validate }
+              it { expect(subject.errors).to include(:placement_date_subjects) }
+            end
+
+            context 'with valid placement_date_subjects' do
+              before { allow(date_subject).to receive(:valid?) { true } }
+              before { subject.validate }
+              it { expect(subject.errors).not_to include(:placement_date_subjects) }
+            end
+          end
         end
       end
 
@@ -132,6 +173,32 @@ describe Bookings::PlacementDate, type: :model do
       it { is_expected.to allow_value(true).for :capped }
       it { is_expected.to allow_value(false).for :capped }
       it { is_expected.not_to allow_value(nil).for :capped }
+    end
+
+    context '#placement_date_subjects' do
+      let(:school) { create(:bookings_school, :with_subjects) }
+      let(:new_subject) { create(:bookings_subject) }
+
+      subject do
+        create :bookings_placement_date, :subject_specific,
+          published_at: nil,
+          bookings_school: school,
+          subjects: school.subjects
+      end
+
+      before do
+        subject.placement_date_subjects[0].bookings_subject = new_subject
+      end
+
+      context 'when published' do
+        before { subject.published_at = DateTime.now }
+        it { is_expected.not_to be_valid }
+      end
+
+      context 'when unpublished' do
+        before { subject.published_at = nil }
+        it { is_expected.to be_valid }
+      end
     end
   end
 
@@ -209,28 +276,10 @@ describe Bookings::PlacementDate, type: :model do
 
     context '.published' do
       let!(:published) { create :bookings_placement_date }
-      let!(:un_publised) { create :bookings_placement_date, published_at: nil }
+      let!(:unpublished) { create :bookings_placement_date, published_at: nil }
 
       specify 'should return only the published placement_dates' do
         expect(described_class.published).to match_array [published]
-      end
-    end
-  end
-
-  context '#has_limited_availability?' do
-    context 'when max_bookings_count' do
-      before { subject.max_bookings_count = 7 }
-
-      it 'returns true' do
-        expect(subject.has_limited_availability?).to be true
-      end
-    end
-
-    context 'when no max_bookings_count' do
-      before { subject.max_bookings_count = nil }
-
-      it 'returns false' do
-        expect(subject.has_limited_availability?).to be false
       end
     end
   end

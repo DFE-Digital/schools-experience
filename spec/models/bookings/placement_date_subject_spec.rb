@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Bookings::PlacementDateSubject, type: :model do
-  context 'relationships' do
+  describe 'relationships' do
     it { is_expected.to belong_to :bookings_placement_date }
     it { is_expected.to belong_to :bookings_subject }
   end
 
-  context 'validations' do
+  describe 'validations' do
     it { is_expected.to validate_presence_of :bookings_placement_date }
     it { is_expected.to validate_presence_of :bookings_subject }
 
@@ -24,6 +24,69 @@ describe Bookings::PlacementDateSubject, type: :model do
       it do
         is_expected.to \
           validate_inclusion_of(:bookings_subject_id).in_array(school.subject_ids)
+      end
+    end
+
+    context '#max_bookings_count' do
+      let(:date) { build :bookings_placement_date }
+      subject { build :bookings_placement_date_subject, bookings_placement_date: date }
+
+      context 'with no placement_date' do
+        before { subject.bookings_placement_date = nil }
+
+        it { is_expected.to allow_value(1).for :max_bookings_count }
+        it { is_expected.to allow_value(nil).for :max_bookings_count }
+        it { is_expected.not_to allow_value(0).for :max_bookings_count }
+        it { is_expected.not_to allow_value(-1).for :max_bookings_count }
+        it { is_expected.not_to allow_value(0.5).for :max_bookings_count }
+      end
+
+      context 'when placement_date is published' do
+        before { subject.bookings_placement_date.published_at = DateTime.now }
+
+        context 'with an uncapped placement_date' do
+          before { subject.bookings_placement_date.capped = false }
+
+          it { is_expected.to allow_value(1).for :max_bookings_count }
+          it { is_expected.to allow_value(nil).for :max_bookings_count }
+          it { is_expected.not_to allow_value(0).for :max_bookings_count }
+          it { is_expected.not_to allow_value(-1).for :max_bookings_count }
+          it { is_expected.not_to allow_value(0.5).for :max_bookings_count }
+        end
+
+        context 'with a capped placement_date' do
+          before { subject.bookings_placement_date.capped = true }
+
+          it { is_expected.to allow_value(1).for :max_bookings_count }
+          it { is_expected.not_to allow_value(nil).for :max_bookings_count }
+          it { is_expected.not_to allow_value(0).for :max_bookings_count }
+          it { is_expected.not_to allow_value(-1).for :max_bookings_count }
+          it { is_expected.not_to allow_value(0.5).for :max_bookings_count }
+        end
+      end
+
+      context 'when placement_date is not published' do
+        before { subject.bookings_placement_date.published_at = nil }
+
+        context 'with an uncapped placement_date' do
+          before { subject.bookings_placement_date.capped = false }
+
+          it { is_expected.to allow_value(1).for :max_bookings_count }
+          it { is_expected.to allow_value(nil).for :max_bookings_count }
+          it { is_expected.not_to allow_value(0).for :max_bookings_count }
+          it { is_expected.not_to allow_value(-1).for :max_bookings_count }
+          it { is_expected.not_to allow_value(0.5).for :max_bookings_count }
+        end
+
+        context 'with a capped placement_date' do
+          before { subject.bookings_placement_date.capped = true }
+
+          it { is_expected.to allow_value(1).for :max_bookings_count }
+          it { is_expected.to allow_value(nil).for :max_bookings_count }
+          it { is_expected.not_to allow_value(0).for :max_bookings_count }
+          it { is_expected.not_to allow_value(-1).for :max_bookings_count }
+          it { is_expected.not_to allow_value(0.5).for :max_bookings_count }
+        end
       end
     end
   end
