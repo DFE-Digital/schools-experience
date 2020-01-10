@@ -13,7 +13,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter'
+gem 'activerecord-postgis-adapter', '~> 5.2' # v6 is incompatible with rails 5.2
 gem 'breasal'
 gem 'geocoder'
 
@@ -70,7 +70,7 @@ gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: '
 gem 'addressable'
 gem 'faraday'
 
-gem 'validates_timeliness', '~> 5.0.0.alpha5'
+gem 'validates_timeliness', '>= 5.0.0.beta1'
 gem 'activerecord-import'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -102,7 +102,7 @@ end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
+  gem 'web-console', '>= 3.3.0', '~> 3.3'
   gem 'listen', '>= 3.0.5', '< 3.3'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -124,7 +124,7 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
 
-  gem 'shoulda-matchers', '~> 4.1'
+  gem 'shoulda-matchers', '~> 4.2'
   gem 'rails-controller-testing'
 
   gem 'webmock'
