@@ -13,7 +13,7 @@ class Notify
       NotifyJob.perform_later \
         to: address,
         template_id: template_id,
-        personalisation_json: personalisation.to_json
+        personalisation_json: personalisation_json
     end
   end
 
@@ -39,5 +39,9 @@ private
 
     fail InvalidPersonalisationError.new \
       template_id, self.class.to_s, invalid_fields
+  end
+
+  def personalisation_json
+    personalisation.transform_values(&:to_s).to_json
   end
 end

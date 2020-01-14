@@ -108,6 +108,27 @@ describe Notify do
             raise_exception Notify::InvalidPersonalisationError
         end
       end
+
+      context 'with none string personalisation' do
+        let :notification do
+          StubNotification.new to: recipients, name: 1
+        end
+
+        before do
+          perform_enqueued_jobs do
+            notification.despatch_later!
+          end
+        end
+
+        it "should cast personalisations to string" do
+          recipients.each do |recipient|
+            expect(NotifyService.instance).to have_received(:send_email).with \
+              email_address: recipient,
+              template_id: notification.send(:template_id),
+              personalisation: { name: '1' }
+          end
+        end
+      end
     end
   end
 end
