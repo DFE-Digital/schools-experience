@@ -38,7 +38,8 @@ describe NotifyEmail::CandidateBookingConfirmation do
       create(
         :bookings_booking,
         bookings_school: school,
-        bookings_placement_request: pr
+        bookings_placement_request: pr,
+        placement_details: 'something'
       )
     end
 
@@ -111,6 +112,11 @@ describe NotifyEmail::CandidateBookingConfirmation do
       specify 'cancellation_url is correctly-assigned' do
         expect(subject.cancellation_url).to eql(cancellation_url)
       end
+    end
+
+    context 'with nil placemement_details' do
+      before { booking.placement_details = nil }
+      specify { expect(subject.placement_details).to eql('') }
     end
   end
 end
