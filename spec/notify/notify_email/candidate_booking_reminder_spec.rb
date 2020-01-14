@@ -115,7 +115,7 @@ describe NotifyEmail::CandidateBookingReminder do
       end
 
       specify 'placement_details is correctly-assigned' do
-        expect(subject.placement_details).to eql(booking.placement_details)
+        expect(subject.placement_details).to eql(booking.placement_details.to_s)
       end
 
       specify 'cancellation_url is correctly-assigned' do
