@@ -9,7 +9,10 @@
 
     <ul class="govuk-list">
       <%- primary_dates.each do |primary_date| -%>
-        <li><strong><%= primary_date.date.to_formatted_s(:govuk) %></strong></li>
+        <li>
+          <%= primary_date.date.to_formatted_s(:govuk) %>
+          (<%= pluralize primary_date.duration, 'day' %>)
+        </li>
       <%- end -%>
     </ul>
 
