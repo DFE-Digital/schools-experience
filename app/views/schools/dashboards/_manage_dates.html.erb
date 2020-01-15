@@ -1,7 +1,7 @@
 <section class="manage-dates">
   <h2 class="govuk-heading-m">Manage dates</h3>
 
-  <%- if is_fixed_and_has_active_dates?(@current_school) -%>
+  <%- if @current_school.availability_preference_fixed? -%>
     <div id="add-remove-and-change-dates" class="subsection">
       <header class="dashboard-medium-priority">
         <%= link_to "Add, remove and change dates", schools_placement_dates_path %>

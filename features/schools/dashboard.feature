@@ -64,7 +64,10 @@ Feature: The School Dashboard
         Given my school has fully-onboarded
         And it has 'fixed' availability
         When I am on the 'schools dashboard' page
-        Then there should be no 'Add, remove and change dates' link
+        Then I should see the following 'medium-priority' links:
+            | Text                                   | Hint | Path                                  |
+            | Change dates and how they're displayed | None | /schools/availability_preference/edit |
+            | Add, remove and change dates           | None | /schools/placement_dates              |
 
 
     Scenario: Account admin
