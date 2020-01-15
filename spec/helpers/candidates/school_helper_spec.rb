@@ -297,10 +297,10 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         CONTENT
       end
 
-      subject { Nokogiri.parse(split_to_list(content)) }
+      subject { split_to_list content }
 
       specify 'should create a list with the correct number of entries' do
-        expect(subject.css(%(ul[class='govuk-list'])).css('li').count).to eql(3)
+        is_expected.to have_css('ul.govuk-list--bullet > li', count: 3)
       end
     end
 
@@ -313,10 +313,10 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         CONTENT
       end
 
-      subject { Nokogiri.parse(split_to_list(content)) }
+      subject { split_to_list content }
 
       specify 'should create a list with the correct number of entries' do
-        expect(subject.css(%(ul[class='govuk-list'])).css('li').count).to eql(2)
+        is_expected.to have_css('ul.govuk-list--bullet > li', count: 2)
       end
     end
   end
