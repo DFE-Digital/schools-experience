@@ -82,7 +82,7 @@ group :development, :test do
 
   gem 'rubocop', '~> 0.65.0', require: false
   # GOV.UK interpretation of rubocop for linting Ruby
-  gem 'govuk-lint', '3.11.0', require: false
+  gem 'govuk-lint', '3.11.3', require: false
 
   # Debugging
   gem 'pry-rails'
