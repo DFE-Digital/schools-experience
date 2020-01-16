@@ -1,7 +1,7 @@
 require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
-describe Schools::PlacementDates::ConfigurationsController, type: :request do
+describe Schools::PlacementDates::SubjectSpecificsController, type: :request do
   include_context "logged in DfE user"
 
   let! :school do
@@ -19,7 +19,7 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
 
   context '#new' do
     before do
-      get "/schools/placement_dates/#{placement_date.id}/configuration/new"
+      get "/schools/placement_dates/#{placement_date.id}/subject_specific/new"
     end
 
     it 'assigns the correct placement_date' do
@@ -34,14 +34,14 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
   context '#create' do
     let :params do
       {
-        schools_placement_dates_configuration_form: {
+        schools_placement_dates_subject_specific_form: {
           available_for_all_subjects: available_for_all_subjects
         }
       }
     end
 
     before do
-      post "/schools/placement_dates/#{placement_date.id}/configuration",
+      post "/schools/placement_dates/#{placement_date.id}/subject_specific",
         params: params
     end
 

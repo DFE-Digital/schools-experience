@@ -113,7 +113,7 @@ describe Schools::PlacementDatesController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          "http://www.example.com/schools/placement_dates/#{placement_date.id}/configuration/new"
+          "http://www.example.com/schools/placement_dates/#{placement_date.id}/subject_specific/new"
       end
     end
   end

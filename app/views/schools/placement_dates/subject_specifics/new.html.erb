@@ -6,7 +6,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for @configuration, method: :post, url: schools_placement_date_configuration_path(@placement_date) do |f| %>
+    <%= form_for @subject_specific, method: :post, url: schools_placement_date_subject_specific_path(@placement_date) do |f| %>
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
       <%- if @placement_date.supports_subjects? -%>

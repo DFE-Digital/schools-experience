@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Schools::PlacementDates::ConfigurationForm, type: :model do
+describe Schools::PlacementDates::SubjectSpecificForm, type: :model do
   let :school do
     create :bookings_school, :with_subjects, subject_count: 3
   end

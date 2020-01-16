@@ -1,6 +1,6 @@
 module Schools
   module PlacementDates
-    class ConfigurationForm
+    class SubjectSpecificForm
       include ActiveModel::Model
       include ActiveModel::Attributes
 
