@@ -400,6 +400,8 @@ en:
               too_short: Availability description must be at least 3 characters
         bookings/placement_date:
           attributes:
+            capped:
+              inclusion: Select if there is a limited number of spaces
             duration:
               blank: Enter a duration
             date:
@@ -449,6 +451,7 @@ en:
         enabled: Turn requests on or off
         availability_preference_fixed: Choose how dates are displayed
       bookings_placement_date:
+        capped: Is there a limit on the number of spaces
         date: Enter start date
         supports_subjects: Select school experience phase
       bookings_placement_request_cancellation:
@@ -597,6 +600,9 @@ en:
         availability_info: Describe your school experience availability
 
       bookings_placement_date:
+        capped:
+          true: 'Limited spaces'
+          no: 'No limit'
         duration: How long will it last?
         active: Make this date available to candidates?
         supports_subjects:
