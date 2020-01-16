@@ -12,7 +12,7 @@ describe Bookings::PlacementDate, type: :model do
     it { is_expected.to have_db_column(:active).of_type(:boolean) }
     it { is_expected.to have_db_column(:max_bookings_count).of_type(:integer) }
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:subject_specific).of_type(:boolean).with_options(default: false, null: false) }
+    it { is_expected.to have_db_column(:subject_specific).of_type(:boolean).with_options(default: nil, null: true) }
     it { is_expected.to have_db_column(:supports_subjects).of_type(:boolean) }
     it { is_expected.to have_db_column(:capped).of_type(:boolean) }
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_10_174112) do
+ActiveRecord::Schema.define(version: 2020_01_16_170913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 2020_01_10_174112) do
     t.integer "bookings_school_id", null: false
     t.integer "max_bookings_count"
     t.datetime "published_at"
-    t.boolean "subject_specific", default: false, null: false
+    t.boolean "subject_specific"
     t.boolean "supports_subjects"
     t.boolean "capped"
     t.index ["bookings_school_id"], name: "index_bookings_placement_dates_on_bookings_school_id"
