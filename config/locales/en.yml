@@ -405,6 +405,8 @@ en:
             date:
               blank: Enter a start date
               on_or_after: Date must be in the future
+            supports_subjects:
+              inclusion: Select the phase for this date
         bookings/booking:
           attributes:
             supports_subjects:
