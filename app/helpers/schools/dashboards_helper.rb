@@ -7,11 +7,6 @@ module Schools::DashboardsHelper
     end
   end
 
-  def is_fixed_and_has_active_dates?(school)
-    school.availability_preference_fixed? &&
-      school.bookings_placement_dates.available.any?
-  end
-
   def numbered_circle(number, aria_label:, id: nil, show_if_zero: false)
     # Does string comparison in case its not a number
     return if number.to_s == '0' && !show_if_zero

@@ -147,7 +147,7 @@ module Candidates::SchoolHelper
 
     return nil if items.blank?
 
-    content_tag('ul', class: 'govuk-list') do
+    content_tag('ul', class: 'govuk-list govuk-list--bullet') do
       safe_join(items.map { |req| tag.li(req) })
     end
   end

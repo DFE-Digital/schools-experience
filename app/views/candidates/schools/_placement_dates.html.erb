@@ -9,7 +9,10 @@
 
     <ul class="govuk-list">
       <%- primary_dates.each do |primary_date| -%>
-        <li><strong><%= primary_date.date.to_formatted_s(:govuk) %></strong></li>
+        <li>
+          <%= primary_date.date.to_formatted_s(:govuk) %>
+          (<%= pluralize primary_date.duration, 'day' %>)
+        </li>
       <%- end -%>
     </ul>
 
@@ -17,7 +20,7 @@
 
   <%- if secondary_dates_grouped_by_date.any? -%>
 
-    <%- if secondary_dates_grouped_by_date.any? -%>
+    <%- if primary_dates.any? -%>
       <h4 class="govuk-heading-m">Secondary school dates</h4>
     <%- else -%>
       <h4 class="govuk-heading-m">Dates</h4>
@@ -45,11 +48,11 @@
       <%- end -%>
     </dl>
 
-  <%- else -%>
+  <%- end -%>
 
+  <%- if primary_dates.none? and secondary_dates_grouped_by_date.none? -%>
     <div class="govuk-inset-text">
       There are no upcoming dates
     </div>
-
   <%- end -%>
 </div>
