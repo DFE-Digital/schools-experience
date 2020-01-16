@@ -35,8 +35,6 @@ module Schools
 
       def configuration_params
         params.require(:schools_placement_dates_configuration_form).permit(
-          :has_limited_availability,
-          :max_bookings_count,
           :available_for_all_subjects
         )
       end

@@ -27,8 +27,6 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
 
       it 'returns a new subject selection with attributes set' do
         expect(subject.available_for_all_subjects).to be true
-        expect(subject.max_bookings_count).to eq 3
-        expect(subject.has_limited_availability).to be true
       end
     end
 
@@ -40,8 +38,6 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
 
       it 'returns a new subject selection without attributes set' do
         expect(subject.available_for_all_subjects).to be nil
-        expect(subject.max_bookings_count).to be nil
-        expect(subject.has_limited_availability).to be nil
       end
     end
   end
@@ -58,8 +54,6 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       context 'when invalid' do
         let :attributes do
           {
-             max_bookings_count: nil,
-             has_limited_availability: true,
              available_for_all_subjects: true
           }
         end
@@ -71,14 +65,8 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
 
       context 'when valid' do
         context 'when available_for_all_subjects' do
-          let :max_bookings_count do
-            5
-          end
-
           let :attributes do
             {
-              max_bookings_count: max_bookings_count,
-              has_limited_availability: true,
               available_for_all_subjects: true,
               supports_subjects: true
             }
@@ -88,20 +76,14 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
             expect(placement_date).not_to be_subject_specific
           end
 
-          it 'sets published_at' do
-            expect(placement_date.published_at).to eq stubbed_time
+          it 'sets published_at back to nil' do
+            expect(placement_date.published_at).to be_nil
           end
         end
 
         context 'when doesnt support subjects' do
-          let :max_bookings_count do
-            nil
-          end
-
           let :attributes do
             {
-              max_bookings_count: max_bookings_count,
-              has_limited_availability: false,
               supports_subjects: false
             }
           end
@@ -114,20 +96,14 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
             expect(placement_date.subjects).to be_empty
           end
 
-          it 'sets published_at' do
-            expect(placement_date).to be_published
+          it 'sets published_at back to nil' do
+            expect(placement_date.published_at).to be_nil
           end
         end
 
         context 'when not available_for_all_subjects' do
-          let :max_bookings_count do
-            nil
-          end
-
           let :attributes do
             {
-              max_bookings_count: max_bookings_count,
-              has_limited_availability: false,
               available_for_all_subjects: false,
               supports_subjects: true
             }
@@ -138,7 +114,7 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
           end
 
           it 'sets published_at to nil' do
-            expect(placement_date.published_at).to eq nil
+            expect(placement_date.published_at).to be_nil
           end
         end
       end
@@ -157,28 +133,19 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       context 'when invalid' do
         let :attributes do
           {
-             max_bookings_count: nil,
-             has_limited_availability: true,
              available_for_all_subjects: true
           }
         end
 
         it 'doesnt update the placement request' do
-          expect(placement_date.capped?).to be false
           expect(placement_date).to be_subject_specific
         end
       end
 
       context 'when valid' do
         context 'when available_for_all_subjects' do
-          let :max_bookings_count do
-            5
-          end
-
           let :attributes do
             {
-              max_bookings_count: max_bookings_count,
-              has_limited_availability: true,
               available_for_all_subjects: true,
               supports_subjects: true
             }
@@ -191,14 +158,8 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
         end
 
         context 'when not available_for_all_subjects' do
-          let :max_bookings_count do
-            5
-          end
-
           let :attributes do
             {
-              max_bookings_count: max_bookings_count,
-              has_limited_availability: true,
               available_for_all_subjects: false,
               supports_subjects: true
             }
