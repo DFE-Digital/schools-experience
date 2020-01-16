@@ -80,7 +80,6 @@ Rails.application.configure do
 
   config.x.phase = Integer(ENV.fetch('PHASE') { 10000 })
   config.x.features = %i(
-    subject_specific_dates
     capped_bookings
   )
 
