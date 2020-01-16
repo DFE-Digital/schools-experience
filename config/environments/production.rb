@@ -156,7 +156,8 @@ Rails.application.configure do
     config.x.gitis.caching = truthy_strings.include?(ENV['CRM_CACHING'].to_s)
   end
 
-  config.x.features = %i(subject_specific_dates)
+  config.x.features = %i(
+  )
 
   config.sass[:style] = :compressed if config.sass
 
