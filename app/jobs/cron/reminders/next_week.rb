@@ -1,6 +1,6 @@
 module Cron
   module Reminders
-    class NextWeekJob < CronJob
+    class NextWeek < CronJob
       self.cron_expression = '35 2 * * *'
 
       def perform
