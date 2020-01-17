@@ -1,0 +1,33 @@
+<% self.page_title = 'Set limit on places' %>
+
+<%= link_to 'Back', schools_placement_dates_path, class: 'govuk-back-link' %>
+
+<h1>Set booking limits for <%= @placement_date.date.to_formatted_s :govuk %></h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @subject_limit,
+          url: schools_placement_date_subject_limit_path(@placement_date) do |f| %>
+
+      <%= GovukElementsErrorsHelper.error_summary f.object,
+            'There is a problem', '' %>
+
+      <p>
+        You have placed a limit on the number of bookings
+        accepted for
+        <strong>
+          <%= @placement_date.date.to_formatted_s :govuk %>
+          (<%= pluralize @placement_date.duration, 'day' %>)
+        </strong>.
+      </p>
+
+      <% f.object.subject_names.each do |subject_id, subject_name| %>
+        <%= f.text_field :"max_bookings_count_for_subject_#{subject_id}",
+              label_options: { text: "Spaces for #{subject_name}" },
+              class: 'govuk-!-width-one-half' %>
+      <% end %>
+
+      <%= f.submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

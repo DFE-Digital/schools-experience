@@ -3,15 +3,6 @@ require 'rails_helper'
 describe Schools::PlacementDates::DateLimitForm, type: :model do
   let(:placement_date) { create :bookings_placement_date, :capped }
 
-  describe '.new_from_date' do
-    subject { described_class.new_from_date placement_date }
-
-    it "will retrieve attributes from placement_date" do
-      is_expected.to have_attributes \
-        max_bookings_count: placement_date.max_bookings_count
-    end
-  end
-
   describe '#validations' do
     subject { described_class.new }
     it { is_expected.to allow_value(1).for(:max_bookings_count) }
@@ -21,6 +12,15 @@ describe Schools::PlacementDates::DateLimitForm, type: :model do
     it { is_expected.not_to allow_value(-1).for(:max_bookings_count) }
     it { is_expected.not_to allow_value(nil).for(:max_bookings_count) }
     it { is_expected.not_to allow_value('').for(:max_bookings_count) }
+  end
+
+  describe '.new_from_date' do
+    subject { described_class.new_from_date placement_date }
+
+    it "will retrieve attributes from placement_date" do
+      is_expected.to have_attributes \
+        max_bookings_count: placement_date.max_bookings_count
+    end
   end
 
   describe '#save' do

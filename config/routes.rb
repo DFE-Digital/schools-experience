@@ -79,6 +79,7 @@ Rails.application.routes.draw do
         resource :subject_specific, only: %i(new create)
         resource :subject_selection, only: %i(new create)
         resource :date_limit, only: %i(new create)
+        resource :subject_limit, only: %i(new create)
       end
     end
 

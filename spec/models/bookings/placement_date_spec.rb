@@ -126,13 +126,13 @@ describe Bookings::PlacementDate, type: :model do
         context 'when not subject_specific?' do
           before { subject.subject_specific = false }
 
-          it { is_expected.to validate_absence_of(:subjects) }
+          it { is_expected.to validate_absence_of(:placement_date_subjects) }
         end
 
         context 'when subject_specific?' do
           before { subject.subject_specific = true }
 
-          it { is_expected.to validate_presence_of(:subjects) }
+          it { is_expected.to validate_presence_of(:placement_date_subjects) }
 
           context 'with placement_date_subjects' do
             let(:date_subject) { subject.placement_date_subjects.build }
@@ -190,15 +190,7 @@ describe Bookings::PlacementDate, type: :model do
         subject.placement_date_subjects[0].bookings_subject = new_subject
       end
 
-      context 'when published' do
-        before { subject.published_at = DateTime.now }
-        it { is_expected.not_to be_valid }
-      end
-
-      context 'when unpublished' do
-        before { subject.published_at = nil }
-        it { is_expected.to be_valid }
-      end
+      it { is_expected.not_to be_valid }
     end
   end
 
