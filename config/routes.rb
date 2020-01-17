@@ -74,9 +74,11 @@ Rails.application.routes.draw do
     resource :availability_preference, only: %i(edit update)
     resource :availability_info, only: %i(edit update), controller: 'availability_info'
     resources :placement_dates do
-      resource :configuration, only: %i(new create), controller: 'placement_dates/subject_specifics' # FIXME for compatibility with code - to be removed in follow on release
-      resource :subject_specific, only: %i(new create), controller: 'placement_dates/subject_specifics'
-      resource :subject_selection, only: %i(new create), controller: 'placement_dates/subject_selections'
+      scope module: 'placement_dates' do
+        resource :configuration, only: %i(new create), controller: 'subject_specifics' # FIXME for compatibility with code - to be removed in follow on release
+        resource :subject_specific, only: %i(new create)
+        resource :subject_selection, only: %i(new create)
+      end
     end
 
     namespace :errors do
