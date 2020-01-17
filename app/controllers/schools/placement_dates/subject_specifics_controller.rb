@@ -43,7 +43,7 @@ module Schools
       end
 
       def form_params
-        params.require(form_key).permit(
+        params.fetch(form_key, {}).permit(
           :available_for_all_subjects
         )
       end
