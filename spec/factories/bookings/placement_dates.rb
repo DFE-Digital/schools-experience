@@ -26,5 +26,10 @@ FactoryBot.define do
     trait :not_supporting_subjects do
       supports_subjects { false }
     end
+
+    trait :capped do
+      capped { true }
+      max_bookings_count { 3 }
+    end
   end
 end

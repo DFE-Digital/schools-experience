@@ -44,6 +44,10 @@ describe Schools::PlacementDatesController, type: :request do
           end
         end
 
+        context "when the school has primary and has capped places" do
+          it "will redirect to date limits page"
+        end
+
         context "when the school has secondary or college" do
           before do
             Bookings::School.find_by!(urn: urn).phases << create(:bookings_phase, :secondary)

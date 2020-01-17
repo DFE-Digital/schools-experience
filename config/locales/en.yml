@@ -354,6 +354,12 @@ en:
             subjects:
               blank: 'Select which subjects are available for this date'
 
+        schools/placement_dates/date_limit_form:
+          attributes:
+            max_bookings_count:
+              greater_than: "Enter a number greater than 0 for the maximum bookings"
+              blank: "Enter the maximum number of bookings you'll accept for this date"
+
         schools/placement_requests/add_more_details:
           attributes:
             contact_name:
@@ -798,6 +804,9 @@ en:
 
       schools_placement_dates_subject_selection:
         available_for_all_subjects: 'All subjects'
+
+      schools_placement_dates_date_limit_form:
+        max_bookings_count: 'Enter maximum number of bookings'
 
       candidates_feedback:
         <<: *feedback_label

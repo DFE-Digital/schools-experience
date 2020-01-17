@@ -55,6 +55,8 @@ private
   def next_step(placement_date)
     if placement_date.supports_subjects?
       redirect_to new_schools_placement_date_subject_specific_path(placement_date)
+    elsif placement_date.capped?
+      redirect_to new_schools_placement_date_date_limit_path(placement_date)
     else
       placement_date.update! published_at: DateTime.now
       redirect_to schools_placement_dates_path

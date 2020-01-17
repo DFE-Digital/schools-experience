@@ -78,6 +78,7 @@ Rails.application.routes.draw do
         resource :configuration, only: %i(new create), controller: 'subject_specifics' # FIXME for compatibility with code - to be removed in follow on release
         resource :subject_specific, only: %i(new create)
         resource :subject_selection, only: %i(new create)
+        resource :date_limit, only: %i(new create)
       end
     end
 
