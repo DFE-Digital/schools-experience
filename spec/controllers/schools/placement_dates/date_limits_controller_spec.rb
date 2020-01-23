@@ -11,9 +11,8 @@ describe Schools::PlacementDates::DateLimitsController, type: :request do
   end
 
   let :placement_date do
-    create :bookings_placement_date,
+    create :bookings_placement_date, :unpublished,
       bookings_school: school,
-      published_at: nil,
       subject_specific: nil
   end
 

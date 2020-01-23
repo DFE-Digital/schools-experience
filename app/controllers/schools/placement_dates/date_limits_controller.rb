@@ -8,7 +8,7 @@ module Schools
       end
 
       def create
-        @date_limit = DateLimitForm.new form_params
+        @date_limit = DateLimitForm.new
         @date_limit.assign_attributes form_params
 
         if @date_limit.save @placement_date
