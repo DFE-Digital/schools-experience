@@ -53,13 +53,15 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
   end
 
   context '#save' do
-    let :placement_date do
-      create \
-        :bookings_placement_date,
+    let(:pdattrs) do
+      {
         bookings_school: school,
         published_at: nil,
         subject_specific: true
+      }
     end
+
+    let(:placement_date) { create :bookings_placement_date, pdattrs }
 
     before { described_class.new(attributes).save(placement_date) }
 
@@ -90,6 +92,28 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
 
       it 'updates published_at' do
         expect(placement_date.published_at).to eq stubbed_time
+      end
+    end
+
+    context 'valid for capped' do
+      let(:placement_date) do
+        create :bookings_placement_date, pdattrs.merge(capped: true)
+      end
+
+      let :subjects do
+        school.subjects.first(2)
+      end
+
+      let :attributes do
+        { subject_ids: subjects.map(&:id) }
+      end
+
+      it 'updates the placement_date subjects to the selected_subjects' do
+        expect(placement_date.subjects).to eq subjects
+      end
+
+      it 'updates published_at' do
+        expect(placement_date.published_at).to eq nil
       end
     end
   end

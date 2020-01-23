@@ -23,7 +23,9 @@ module Schools
           placement_date.tap do |pd|
             pd.subject_specific = true
             pd.subject_ids = self.subject_ids
-            pd.published_at = DateTime.now
+
+            # capped needs limits adding to subjects
+            pd.published_at = (pd.capped? ? nil : DateTime.now)
 
             pd.save!
           end

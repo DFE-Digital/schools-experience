@@ -11,13 +11,21 @@ module Schools
         @subject_selection = SubjectSelection.new subject_selection_params
 
         if @subject_selection.save @placement_date
-          redirect_to schools_placement_dates_path
+          redirect_to next_step
         else
           render :new
         end
       end
 
     private
+
+      def next_step
+        if @placement_date.capped?
+          new_schools_placement_date_subject_limit_path @placement_date
+        else
+          schools_placement_dates_path
+        end
+      end
 
       def set_placement_date
         @placement_date = \

@@ -11,7 +11,7 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
       subject_count: 3
   end
 
-  let! :placement_date do
+  let :placement_date do
     create \
       :bookings_placement_date,
       bookings_school: school,
@@ -49,9 +49,7 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
     end
 
     context 'invalid' do
-      let :subject_ids do
-        []
-      end
+      let(:subject_ids) { [] }
 
       it 'rerenders the new template' do
         expect(response).to render_template :new
@@ -70,6 +68,28 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
 
       it 'redirects to placement dates index' do
         expect(response).to redirect_to schools_placement_dates_path
+      end
+    end
+
+    context 'when valid and capped' do
+      let :placement_date do
+        create :bookings_placement_date, :unpublished,
+          bookings_school: school,
+          capped: true
+      end
+
+      let :subject_ids do
+        school.subject_ids.first 2
+      end
+
+      it "sets the subjects" do
+        expect(placement_date).to be_subject_specific
+        expect(placement_date.subjects).to match_array school.subjects.first(2)
+      end
+
+      it 'redirects to placement dates index' do
+        expect(response).to redirect_to \
+          new_schools_placement_date_subject_limit_path(placement_date)
       end
     end
   end
