@@ -1,9 +1,11 @@
 class Feature
   include Singleton
 
-  delegate :only_phase, :from_phase, :until_phase, to: :instance
-  delegate :only, :from, :until, to: :instance
-  delegate :active?, to: :instance
+  class << self
+    delegate :only_phase, :from_phase, :until_phase, to: :instance
+    delegate :only, :from, :until, to: :instance
+    delegate :enabled?, to: :instance
+  end
 
   def only_phase(phase_to_test)
     return false unless Integer(phase_to_test) == current_phase
@@ -36,7 +38,7 @@ class Feature
   end
   alias_method :current=, :current_phase=
 
-  def active?(feature_key)
+  def enabled?(feature_key)
     Array.wrap(Rails.application.config.x.features).include? feature_key
   end
 end

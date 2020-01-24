@@ -24,7 +24,7 @@
   <%= form.date_field :date, heading: true %>
   <%= form.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true } %>
 
-  <%= form.radio_button_fieldset :capped, choices: [true, false] %>
+  <%= form.radio_button_fieldset :capped, choices: [true, false] if Feature.enabled? :capped_bookings %>
 
   <% if show_subject_support_option(@current_school) %>
     <%= form.radio_button_fieldset :supports_subjects, choices: [false, true] %>
