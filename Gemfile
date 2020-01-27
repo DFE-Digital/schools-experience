@@ -96,7 +96,7 @@ group :development, :test do
   gem 'brakeman', '>= 4.4.0'
 
   gem 'bullet'
-  
+
   gem 'parallel_tests'
 end
 
@@ -112,6 +112,7 @@ group :development do
 
   # Manage multiple processes i.e. web server and webpack
   gem 'foreman'
+  gem 'rails-erd'
 end
 
 group :test do
