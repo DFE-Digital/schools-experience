@@ -246,7 +246,7 @@ GEM
     pg_search (2.3.2)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
-    phonelib (0.6.40)
+    phonelib (0.6.41)
     powerpack (0.1.2)
     pry (0.12.2)
       coderay (~> 1.1.0)
