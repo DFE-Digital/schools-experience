@@ -47,8 +47,7 @@ describe Schools::PlacementDates::SubjectSpecificForm, type: :model do
 
     context 'for a unpublished placement_date' do
       let :placement_date do
-        create \
-          :bookings_placement_date, bookings_school: school, published_at: nil
+        create :bookings_placement_date, :unpublished, bookings_school: school
       end
 
       context 'when invalid' do
@@ -77,7 +76,7 @@ describe Schools::PlacementDates::SubjectSpecificForm, type: :model do
           end
 
           it 'sets published_at back to nil' do
-            expect(placement_date.published_at).to be_nil
+            expect(placement_date.published_at).not_to be_nil
           end
         end
 
@@ -97,7 +96,7 @@ describe Schools::PlacementDates::SubjectSpecificForm, type: :model do
           end
 
           it 'sets published_at back to nil' do
-            expect(placement_date.published_at).to be_nil
+            expect(placement_date.published_at).not_to be_nil
           end
         end
 
@@ -114,6 +113,30 @@ describe Schools::PlacementDates::SubjectSpecificForm, type: :model do
           end
 
           it 'sets published_at to nil' do
+            expect(placement_date.published_at).to be_nil
+          end
+        end
+
+        context 'when doesnt support subjects but is capped' do
+          let :placement_date do
+            create :bookings_placement_date, :unpublished, :capped, bookings_school: school
+          end
+
+          let :attributes do
+            {
+              supports_subjects: false
+            }
+          end
+
+          it 'sets subject specific' do
+            expect(placement_date).not_to be_subject_specific
+          end
+
+          it 'empties subject_ids' do
+            expect(placement_date.subjects).to be_empty
+          end
+
+          it 'sets published_at back to nil' do
             expect(placement_date.published_at).to be_nil
           end
         end

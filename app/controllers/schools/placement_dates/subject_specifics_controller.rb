@@ -23,6 +23,8 @@ module Schools
       def next_step
         if @subject_specific.subject_specific?
           new_schools_placement_date_subject_selection_path @placement_date
+        elsif @placement_date.capped?
+          new_schools_placement_date_date_limit_path @placement_date
         else
           schools_placement_dates_path
         end

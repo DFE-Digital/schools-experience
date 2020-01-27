@@ -10,10 +10,10 @@ describe Schools::PlacementDates::SubjectSpecificsController, type: :request do
     end
   end
 
-  let! :placement_date do
+  let :placement_date do
     create :bookings_placement_date,
+      :unpublished,
       bookings_school: school,
-      published_at: nil,
       subject_specific: nil
   end
 
@@ -69,6 +69,10 @@ describe Schools::PlacementDates::SubjectSpecificsController, type: :request do
           expect(placement_date.reload.subject_specific).to eq true
         end
 
+        it "publishes the date" do
+          expect(placement_date.reload).not_to be_published
+        end
+
         it 'redirects to the next step' do
           expect(response).to redirect_to \
             new_schools_placement_date_subject_selection_path placement_date
@@ -81,11 +85,42 @@ describe Schools::PlacementDates::SubjectSpecificsController, type: :request do
         end
 
         it 'updates the placement date' do
-          expect(placement_date.reload.subject_specific).to eq false
+          expect(placement_date.reload.subject_specific).to eql false
+        end
+
+        it "publishes the date" do
+          expect(placement_date.reload).to be_published
         end
 
         it 'redirects to the dashboard' do
           expect(response).to redirect_to schools_placement_dates_path
+        end
+      end
+
+      context "when available_for_all_subjects and capped" do
+        let :placement_date do
+          create :bookings_placement_date,
+            :unpublished, :capped,
+            max_bookings_count: nil,
+            bookings_school: school,
+            subject_specific: nil
+        end
+
+        let :available_for_all_subjects do
+          true
+        end
+
+        it 'updates the placement date' do
+          expect(placement_date.reload.subject_specific).to eql false
+        end
+
+        it "does not publish the date" do
+          expect(placement_date.reload).not_to be_published
+        end
+
+        it 'redirects to the dashboard' do
+          expect(response).to redirect_to \
+            new_schools_placement_date_date_limit_path(placement_date)
         end
       end
     end

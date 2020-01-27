@@ -37,7 +37,12 @@ module Schools
     private
 
       def assign_attributes_to_placement_date(placement_date)
-        placement_date.published_at = nil
+        placement_date.published_at = if placement_date.capped? || subject_specific?
+                                        nil
+                                      else
+                                        DateTime.now
+                                      end
+
         placement_date.subject_ids = [] unless subject_specific?
         placement_date.subject_specific = subject_specific?
 

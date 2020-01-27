@@ -33,7 +33,7 @@ class Schools::PlacementDatesController < Schools::BaseController
         @placement_date.assign_attributes(supports_subjects: school_supports_subjects?)
       end
 
-      @placement_date.save
+      @placement_date.save!
       next_step @placement_date
     else
       render :new
