@@ -10,9 +10,10 @@ end
 
 Given("I have completed the wizard for a fixed date school") do
   @school.update_attributes(availability_preference_fixed: true)
-  @wanted_bookings_placement_date = @school.bookings_placement_dates.create!(
-    date: 2.weeks.from_now, published_at: 1.week.ago, supports_subjects: true
-  )
+  @wanted_bookings_placement_date = @school.bookings_placement_dates.create! \
+    FactoryBot.attributes_for :bookings_placement_date,
+      date: 2.weeks.from_now,
+      published_at: 1.week.ago
 
   visit path_for('choose a subject and date', school: @school)
 
@@ -111,8 +112,13 @@ end
 Given("the/my school has fixed dates") do
   @fixed_dates = true
   @school.update_attributes(availability_preference_fixed: true)
-  (1..3).each { |i| i.weeks.from_now }.each do |date|
-    @school.bookings_placement_dates.create(date: date.weeks.from_now, published_at: 1.week.ago)
+  (1..3).each do |i|
+    @school.bookings_placement_dates.create! \
+      FactoryBot.attributes_for :bookings_placement_date,
+        :not_supporting_subjects,
+        date: i.weeks.from_now,
+        published_at: 1.week.ago
+
     @wanted_bookings_placement_date = @school.bookings_placement_dates.last
   end
   # do nothing, it's the default

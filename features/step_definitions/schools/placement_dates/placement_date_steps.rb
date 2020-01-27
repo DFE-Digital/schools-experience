@@ -2,6 +2,7 @@ Given "I have entered a placement date" do
   steps %(
     Given I am on the 'new placement date' page
     And I fill in the form with a future date and duration of 3
+    And I choose 'No' from the 'Is there a limit on the number of spaces' radio buttons
     And I submit the form
   )
 end
@@ -12,6 +13,7 @@ Given "I have entered a secondary placement date for a multi-phase school" do
   steps %(
     Given I am on the 'new placement date' page
     And I fill in the form with a future date and duration of 3
+    And I choose 'No' from the 'Is there a limit on the number of spaces' radio buttons
     And I choose '#{secondary_label}' from the 'Select school experience phase' radio buttons
     And I submit the form
   )
@@ -19,8 +21,7 @@ end
 
 Given "the placement date is subject specific" do
   steps %(
-    Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
-    And I choose 'Specific to a subject' from the "Select type of experience" radio buttons
+    Given I choose 'Specific to a subject' from the "Select type of experience" radio buttons
     And I submit the form
   )
 end
@@ -79,9 +80,9 @@ Then "my date should be listed" do
   end
 end
 
-Then("I should be on the new configuration page for my placement date") do
+Then("I should be on the new subject specific page for my placement date") do
   pd = Bookings::PlacementDate.last
-  expect(page.current_path).to eql(path_for('new configuration', placement_date_id: pd.id))
+  expect(page.current_path).to eql path_for('new subject specific', placement_date_id: pd.id)
 end
 
 Then("there should be no subject specificity option") do

@@ -60,7 +60,10 @@ Given("the school I'm applying to is not flexible on dates") do
   @school.update! availability_preference_fixed: true
 
   (1..3).each { |i| i.weeks.from_now }.each do |date|
-    @school.bookings_placement_dates.create!(date: date.weeks.from_now, published_at: 1.week.ago, supports_subjects: true)
+    @school.bookings_placement_dates.create! FactoryBot.attributes_for \
+      :bookings_placement_date,
+      date: date.weeks.from_now,
+      published_at: 1.week.ago
     @wanted_bookings_placement_date = @school.bookings_placement_dates.last
   end
 end

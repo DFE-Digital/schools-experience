@@ -21,6 +21,6 @@ Given("I fill in the {string} date field with an invalid date of 31st September 
   step "I fill in the date field '#{label}' with 31-09-#{year}"
 end
 
-Then "I should be on the new configuration page for this date" do
-  expect(page.current_path).to eq path_for 'new configuration', placement_date_id: Bookings::PlacementDate.last.id
+Then "I should be on the new subject specific page for this date" do
+  expect(page.current_path).to eq path_for 'new subject specific', placement_date_id: Bookings::PlacementDate.last.id
 end

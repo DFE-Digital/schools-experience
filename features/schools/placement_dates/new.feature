@@ -58,7 +58,8 @@ Feature: Creating new placement dates
         Given my school is a 'primary and secondary' school
         And I am on the 'new placement date' page
         When I fill in the form with a future date and duration of 3
+        And I choose 'No' from the 'Is there a limit on the number of spaces' radio buttons
         And I choose 'Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years' from the 'Select school experience phase' radio buttons
         And I submit the form
-        Then I should be on the new configuration page for my placement date
+        Then I should be on the new subject specific page for my placement date
         And there should be a subject specificity option
