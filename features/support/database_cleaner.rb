@@ -14,6 +14,10 @@ deletion_options = {
 }
 
 DatabaseCleaner.clean_with :truncation, truncation_options
+at_exit do
+  DatabaseCleaner.clean_with :truncation, truncation_options
+end
+
 DatabaseCleaner.strategy = :deletion, deletion_options
 Cucumber::Rails::Database.javascript_strategy = :deletion, deletion_options
 if ENV['DEBUG_DATABASE_CLEANER'].present?
