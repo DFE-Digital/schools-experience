@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DFE-Digital/govuk_elements_form_builder.git
-  revision: 011e54d188b7b16558a5c544abb38847c1ce2961
+  revision: 11717a8939c13237dbe335c492475271606b6c9e
   specs:
     govuk_elements_form_builder (1.2.0)
       govuk_elements_rails (>= 3.0.0)
@@ -104,7 +104,7 @@ GEM
     concurrent-ruby (1.1.5)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.5)
+    crass (1.0.6)
     cucumber (3.1.2)
       builder (>= 2.1.2)
       cucumber-core (~> 3.2.0)
@@ -157,7 +157,7 @@ GEM
       railties (>= 4.2.0)
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
-    ffi (1.11.3)
+    ffi (1.12.1)
     foreman (0.87.0)
     geocoder (1.6.0)
     gherkin (5.1.0)
