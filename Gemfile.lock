@@ -225,7 +225,7 @@ GEM
     nio4r (2.5.2)
     nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
-    notifications-ruby-client (5.1.0)
+    notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
     openid_connect (1.1.8)
       activemodel
