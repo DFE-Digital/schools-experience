@@ -21,8 +21,6 @@ module Bookings
       through: :placement_date_subjects,
       source: :bookings_subject
 
-    accepts_nested_attributes_for :subjects, allow_destroy: true
-
     validates :bookings_school, presence: true
     validates :duration,
       presence: true,
