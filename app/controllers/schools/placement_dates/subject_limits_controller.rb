@@ -8,6 +8,8 @@ module Schools
       end
 
       def create
+        @placement_date.placement_date_subjects.includes(:bookings_subject).all
+
         @subject_limit = SubjectLimitForm.new_from_date @placement_date
         @subject_limit.assign_attributes form_params
 
@@ -22,7 +24,10 @@ module Schools
 
       def set_placement_date
         @placement_date = \
-          current_school.bookings_placement_dates.find params[:placement_date_id]
+          current_school.
+            bookings_placement_dates.
+            includes(:subjects).
+            find(params[:placement_date_id])
       end
 
       def form_key
