@@ -73,10 +73,12 @@ Then "my date should be listed" do
   expect(page).to have_text("#{date.duration} " + 'day'.pluralize(date.duration))
   expect(page).to have_text date.date.to_formatted_s(:govuk)
 
-  if date.subjects == @school.subjects
-    expect(page).to have_text 'All subjects'
-  else
+  if !date.supports_subjects
+    'Primary'
+  elsif date.subject_specific
     date.subjects.map(&:name).each { |name| expect(page).to have_text name }
+  else
+    expect(page).to have_text 'All subjects'
   end
 end
 

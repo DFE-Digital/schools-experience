@@ -1,4 +1,4 @@
-Feature: Selecting subjects for a all subjects placement date
+Feature: Selecting subjects for All Subjects placement date at Secondary School
     So I can manage placement dates
     As a school administrator
     I want to be able to specify the maximum bookings a date can accept
