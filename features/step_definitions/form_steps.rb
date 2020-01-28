@@ -134,7 +134,7 @@ When("I uncheck the {string} checkbox") do |string|
   uncheck string
 end
 
-When("I enter {string} into the {string} text area") do |value, label|
+When("I enter {string} into the {string} text area/field") do |value, label|
   @filled_in_value = value
   fill_in label, with: value
 end

@@ -2,7 +2,7 @@ Given "I have entered a placement date" do
   steps %(
     Given I am on the 'new placement date' page
     And I fill in the form with a future date and duration of 3
-    And I choose 'No' from the 'Is there a limit on the number of spaces' radio buttons
+    And I choose 'No limit' from the 'Is there a limit on the number of spaces' radio buttons
     And I submit the form
   )
 end
@@ -13,7 +13,7 @@ Given "I have entered a secondary placement date for a multi-phase school" do
   steps %(
     Given I am on the 'new placement date' page
     And I fill in the form with a future date and duration of 3
-    And I choose 'No' from the 'Is there a limit on the number of spaces' radio buttons
+    And I choose 'No limit' from the 'Is there a limit on the number of spaces' radio buttons
     And I choose '#{secondary_label}' from the 'Select school experience phase' radio buttons
     And I submit the form
   )
