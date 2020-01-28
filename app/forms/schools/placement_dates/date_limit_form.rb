@@ -26,6 +26,7 @@ module Schools
 
       def assign_attributes_to_placement_date(placement_date)
         placement_date.max_bookings_count = self.max_bookings_count
+        placement_date.published_at = DateTime.now
       end
     end
   end

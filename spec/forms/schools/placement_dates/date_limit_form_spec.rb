@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Schools::PlacementDates::DateLimitForm, type: :model do
-  let(:placement_date) { create :bookings_placement_date, :capped }
+  let(:placement_date) { create :bookings_placement_date, :capped, :unpublished }
 
   describe '#validations' do
     subject { described_class.new }
@@ -33,7 +33,10 @@ describe Schools::PlacementDates::DateLimitForm, type: :model do
       subject { described_class.new max_bookings_count: 5 }
 
       context 'when valid placement_date' do
-        it { expect(subject.save(placement_date)).to be true }
+        it "save and publish the placement date" do
+          expect(subject.save(placement_date)).to be true
+          expect(placement_date.reload).to be_published
+        end
       end
 
       context 'when invalid placement_date' do
@@ -45,6 +48,8 @@ describe Schools::PlacementDates::DateLimitForm, type: :model do
 
           expect(placement_date.reload).not_to \
             have_attributes max_bookings_count: 5
+
+          expect(placement_date).not_to be_published
         end
       end
     end

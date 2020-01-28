@@ -44,12 +44,14 @@ describe Schools::PlacementDates::DateLimitsController, type: :request do
       let(:params) { { key => { max_bookings_count: 4 } } }
       it { is_expected.to redirect_to schools_placement_dates_path }
       it { expect(placement_date.reload.max_bookings_count).to eq 4 }
+      it { expect(placement_date.reload).to be_published }
     end
 
     context 'with invalid data' do
       let(:params) { { key => { max_bookings_count: 0 } } }
       it { is_expected.to have_http_status :success }
       it { is_expected.to render_template :new }
+      it { expect(placement_date).not_to be_published }
     end
   end
 end
