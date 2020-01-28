@@ -27,9 +27,4 @@ private
   def allowed_subject_choices
     bookings_placement_date.bookings_school.subject_ids
   end
-
-  def uncapped_date
-#    !bookings_placement_date&.capped
-    !bookings_placement_date || !bookings_placement_date.capped
-  end
 end
