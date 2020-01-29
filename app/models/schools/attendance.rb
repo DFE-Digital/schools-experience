@@ -10,11 +10,9 @@ module Schools
     end
 
     def save
-      Bookings::Booking.transaction do
-        bookings_params.each do |booking_id, attended|
-          fetch(booking_id).tap do |booking|
-            booking.update(attended: ActiveModel::Type::Boolean.new.cast(attended))
-          end
+      bookings_params.each do |booking_id, attended|
+        fetch(booking_id).tap do |booking|
+          booking.update(attended: ActiveModel::Type::Boolean.new.cast(attended))
         end
       end
     end
