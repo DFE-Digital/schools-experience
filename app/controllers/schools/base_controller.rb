@@ -11,7 +11,6 @@ module Schools
     include DFEAuthentication
     before_action :require_auth
     before_action :set_current_school
-    before_action :set_other_urns
     before_action :set_site_header_text
     before_action :ensure_onboarded
 
@@ -32,23 +31,12 @@ module Schools
       @site_header_text = "Manage school experience"
     end
 
-    def set_other_urns
-      @other_urns = (session[:other_urns] || retrieve_other_urns)
-    end
-
     def retrieve_school(urn)
       unless (school = Bookings::School.find_by(urn: urn))
         raise SchoolNotRegistered, "school #{urn} not found" unless school.present?
       end
 
       school
-    end
-
-    def retrieve_other_urns
-      Schools::DFESignInAPI::Organisations
-        .new(current_user.sub)
-        .urns
-        .reject { |urn| urn == @current_school.urn }
     end
 
     def ensure_onboarded
