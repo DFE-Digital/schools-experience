@@ -62,11 +62,7 @@ module Schools
         .school
         .urn
 
-      dfe_sign_in_organisations.urns.delete(placement_request_urn)
-    end
-
-    def dfe_sign_in_organisations
-      DFESignInAPI::Organisations.new(current_user.sub)
+      placement_request_urn if other_school_urns.include? placement_request_urn
     end
 
     def assign_gitis_contacts(reqs)
