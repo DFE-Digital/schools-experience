@@ -45,5 +45,42 @@ describe DFEAuthentication do
         end
       end
     end
+
+    describe '#school_urns' do
+      before { allow(controller).to receive(:retrieve_school_urns) { [4, 5, 6] } }
+
+      context 'with nothing loaded' do
+        it { expect(subject.send(:school_urns)).to eql [4, 5, 6] }
+      end
+
+      context 'with loaded' do
+        before { controller.session[:urns] = [1, 2, 3] }
+        it { expect(subject.send(:school_urns)).to eql [1, 2, 3] }
+      end
+
+      context 'with forced reload' do
+        before { controller.session[:urns] = [1, 2, 3] }
+        it { expect(subject.send(:school_urns, true)).to eql [4, 5, 6] }
+      end
+    end
+
+    describe '#other_school_urns' do
+      before { allow(controller).to receive(:school_urns) { [1, 2, 3] } }
+      before { allow(controller).to receive(:current_school) { build(:bookings_school, urn: 2) } }
+      it { expect(subject.send(:other_school_urns)).to eql [1, 3] }
+    end
+
+    describe '#has_other_schools' do
+      context 'when other schools' do
+        before { allow(controller).to receive(:other_school_urns) { [1, 2] } }
+        it { expect(subject.send(:has_other_schools?)).to be true }
+      end
+
+      context 'when only one school' do
+        before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true } }
+        before { allow(controller).to receive(:other_school_urns) { [] } }
+        it { expect(subject.send(:has_other_schools?)).to be false }
+      end
+    end
   end
 end
