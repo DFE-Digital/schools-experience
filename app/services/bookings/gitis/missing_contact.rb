@@ -9,7 +9,7 @@ module Bookings
       alias_method :contactid, :id
 
       def full_name
-        'unavailable'
+        'Unavailable'.freeze
       end
       alias_method :firstname, :full_name
       alias_method :lastname, :full_name

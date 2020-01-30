@@ -80,7 +80,7 @@ describe Schools::PlacementRequestsController, type: :request do
       it "renders the Gitis connection error page" do
         expect(response).to have_http_status(:success)
         expect(response).to render_template('index')
-        expect(response.body).to match(/unavailable/)
+        expect(response.body).to match(/Unavailable/)
       end
     end
   end
