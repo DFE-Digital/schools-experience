@@ -16,6 +16,8 @@ module Schools
 
     rescue_from MissingURN, with: -> { redirect_to schools_errors_no_school_path }
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
+    rescue_from Bookings::Gitis::API::BadResponseError, with: :gitis_retrieval_error
+    rescue_from Bookings::Gitis::API::ConnectionFailed, with: :gitis_retrieval_error
 
     def current_school
       urn = session[:urn]
@@ -48,6 +50,15 @@ module Schools
 
         redirect_to schools_dashboard_path
       end
+    end
+
+    def gitis_retrieval_error(exception)
+      if Rails.env.production?
+        ExceptionNotifier.notify_exception exception
+        Raven.capture_exception exception
+      end
+
+      render 'shared/failed_gitis_connection', status: :service_unavailable
     end
   end
 end

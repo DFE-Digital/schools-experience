@@ -113,7 +113,7 @@ module Bookings
 
     default_scope { where.not(candidate_id: nil) }
 
-    delegate :gitis_contact, :fetch_gitis_contact, to: :candidate
+    delegate :gitis_contact, :gitis_contact=, :fetch_gitis_contact, to: :candidate
 
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
       self.new(

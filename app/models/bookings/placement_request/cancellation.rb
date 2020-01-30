@@ -34,6 +34,8 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     :candidate_email,
     :candidate_name,
     :contact_uuid,
+    :gitis_contact,
+    :gitis_contact=,
     :dates_requested,
     :token,
     :booking,

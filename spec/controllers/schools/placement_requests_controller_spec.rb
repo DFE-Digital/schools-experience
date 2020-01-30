@@ -17,35 +17,70 @@ describe Schools::PlacementRequestsController, type: :request do
   end
 
   context '#index' do
-    let(:placement_requests) do
+    let!(:placement_requests) do
       FactoryBot.create_list :placement_request, 5, school: school
     end
 
-    before do
-      get '/schools/placement_requests'
-    end
+    context 'for unaccepted placement requests' do
+      before { get '/schools/placement_requests' }
 
-    it 'assigns the placement_requests belonging to the school' do
-      expect(assigns(:placement_requests)).to eq school.placement_requests
-      expect(assigns(:placement_requests).map(&:gitis_contact)).to all \
-        be_kind_of Bookings::Gitis::Contact
-    end
+      it 'assigns the placement_requests belonging to the school' do
+        expect(assigns(:placement_requests)).to eq school.placement_requests
+        expect(assigns(:placement_requests).map(&:gitis_contact)).to all \
+          be_kind_of Bookings::Gitis::Contact
+      end
 
-    it 'renders the index template' do
-      expect(response).to render_template :index
+      it 'renders the index template' do
+        expect(response).to render_template :index
+      end
     end
 
     context 'after placement requests have been accepted' do
       let(:booked) { placement_requests.last }
       before do
-        create(:bookings_booking, :accepted, bookings_placement_request: booked, bookings_school: school)
+        create :bookings_booking, :accepted,
+          bookings_placement_request: booked,
+          bookings_school: school
+
+        get '/schools/placement_requests'
       end
 
-      before { get '/schools/placement_requests' }
-
       specify 'they should be omitted' do
-        expect(assigns(:placement_requests).sort_by(&:id)).to \
-          eq((school.placement_requests - Array.wrap(booked)).sort_by(&:id))
+        expect(assigns(:placement_requests)).to \
+          match_array(school.placement_requests - [booked])
+      end
+    end
+
+    context 'with a timeout response from Gitis' do
+      include_context 'fake gitis'
+
+      let :gitis_exception do
+        Bookings::Gitis::API::BadResponseError.new OpenStruct.new(headers: {})
+      end
+
+      before do
+        allow(fake_gitis).to receive(:find).and_raise gitis_exception
+        get "/schools/placement_requests"
+      end
+
+      it "renders the Gitis connection error page" do
+        expect(response).to have_http_status(:service_unavailable)
+        expect(response).to render_template('shared/failed_gitis_connection')
+      end
+    end
+
+    context 'with missing contacts from Gitis' do
+      include_context 'fake gitis'
+
+      before do
+        allow(fake_gitis).to receive(:find).and_return([])
+        get "/schools/placement_requests"
+      end
+
+      it "renders the Gitis connection error page" do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template('index')
+        expect(response.body).to match(/Unavailable/)
       end
     end
   end
@@ -59,6 +94,8 @@ describe Schools::PlacementRequestsController, type: :request do
       let :placement_request do
         FactoryBot.create :placement_request, school: school
       end
+
+      before { get "/schools/placement_requests/#{placement_request.id}" }
 
       it 'assigns the correct placement_request' do
         expect(assigns(:placement_request)).to eq placement_request
@@ -77,6 +114,8 @@ describe Schools::PlacementRequestsController, type: :request do
       let :placement_request do
         create :placement_request, :cancelled, school: school
       end
+
+      before { get "/schools/placement_requests/#{placement_request.id}" }
 
       it 'marks the cancellation as viewed' do
         expect(placement_request.reload.candidate_cancellation).to be_viewed
@@ -124,6 +163,42 @@ describe Schools::PlacementRequestsController, type: :request do
         specify 'should raise a record not found error' do
           expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
         end
+      end
+    end
+
+    context 'with a timeout response from Gitis' do
+      include_context 'stubbed out Gitis'
+
+      let :placement_request do
+        FactoryBot.create :placement_request, school: school
+      end
+
+      before do
+        gitis_stubs.stub_failed_contact_request placement_request.candidate.gitis_uuid
+        get "/schools/placement_requests/#{placement_request.id}"
+      end
+
+      it "renders the Gitis connection error page" do
+        expect(response).to have_http_status(:service_unavailable)
+        expect(response).to render_template('shared/failed_gitis_connection')
+      end
+    end
+
+    context 'with a 404 response from Gitis' do
+      include_context 'stubbed out Gitis'
+
+      let :placement_request do
+        FactoryBot.create :placement_request, school: school
+      end
+
+      before do
+        gitis_stubs.stub_contact_request placement_request.candidate.gitis_uuid, {}, 404
+        get "/schools/placement_requests/#{placement_request.id}"
+      end
+
+      it "renders the Gitis connection error page" do
+        expect(response).to have_http_status(:service_unavailable)
+        expect(response).to render_template('shared/failed_gitis_connection')
       end
     end
   end

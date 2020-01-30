@@ -21,15 +21,5 @@ module Schools
     def scope
       current_school.placement_requests.withdrawn
     end
-
-    def assign_gitis_contacts(requests)
-      return requests if requests.empty?
-
-      contacts = gitis_crm.find(requests.map(&:contact_uuid)).index_by(&:id)
-
-      requests.each do |req|
-        req.candidate.gitis_contact = contacts[req.contact_uuid]
-      end
-    end
   end
 end

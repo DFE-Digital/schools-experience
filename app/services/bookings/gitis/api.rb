@@ -31,6 +31,8 @@ module Bookings::Gitis
       end
 
       parse_response response
+    rescue Faraday::ConnectionFailed
+      raise ConnectionFailed.new(url)
     end
 
     def post(url, params, headers = {})
@@ -58,6 +60,11 @@ module Bookings::Gitis
     end
 
     class UnsupportedAbsoluteUrlError < RuntimeError; end
+    class ConnectionFailed < RuntimeError
+      def initialize(url)
+        super "Connection Failed: #{url}"
+      end
+    end
 
     class BadResponseError < RuntimeError
       def initialize(resp)

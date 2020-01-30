@@ -23,18 +23,5 @@ module Schools
         @booking.candidate_cancellation.viewed!
       end
     end
-
-  private
-
-    def assign_gitis_contacts(bookings)
-      return bookings if bookings.empty?
-
-      contacts = gitis_crm.find(bookings.map(&:contact_uuid)).index_by(&:id)
-
-      bookings.each do |booking|
-        booking.bookings_placement_request.candidate.gitis_contact = \
-          contacts[booking.contact_uuid]
-      end
-    end
   end
 end
