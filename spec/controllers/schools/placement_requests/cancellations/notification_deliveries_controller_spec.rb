@@ -24,8 +24,6 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
 
   context '#create' do
     before do
-      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
-
       post schools_placement_request_cancellation_notification_delivery_path \
         placement_request
     end
@@ -38,10 +36,6 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
       it 'redirects to the placement_show path' do
         expect(response).to redirect_to \
           schools_placement_requests_path(placement_request)
-      end
-
-      it 'does not enqueue a log to gitis job' do
-        expect(Bookings::LogToGitisJob).not_to have_received(:perform_later)
       end
     end
 
@@ -76,12 +70,6 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
 
       it 'updates the placement_request to closed' do
         expect(placement_request.reload).to be_closed
-      end
-
-      it 'enqueues a log to gitis job' do
-        expect(Bookings::LogToGitisJob).to \
-          have_received(:perform_later).with \
-            placement_request.contact_uuid, /CANCELLED BY SCHOOL/
       end
 
       it 'redirects to the show action' do

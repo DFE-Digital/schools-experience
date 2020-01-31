@@ -126,20 +126,4 @@ describe Bookings::Gitis::EventLogger, type: :model do
       expect { subject }.to raise_exception(NoMethodError)
     end
   end
-
-  context 'write_later' do
-    let(:contactid) { SecureRandom.uuid }
-    let(:placement_request) { create(:placement_request) }
-
-    before do
-      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
-
-      described_class.write_later contactid, :request, placement_request
-    end
-
-    it "will schedule an update job" do
-      expect(Bookings::LogToGitisJob).to have_received(:perform_later).with \
-        contactid, /REQUEST/
-    end
-  end
 end

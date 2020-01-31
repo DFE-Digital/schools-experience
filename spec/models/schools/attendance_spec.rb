@@ -57,22 +57,4 @@ describe Schools::Attendance do
       end
     end
   end
-
-  describe '#update_gitis' do
-    before do
-      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return('cattlee')
-      subject.save
-      subject.update_gitis
-    end
-
-    specify 'should correctly update bookings with param values' do
-      bookings_params.each do |id, _status|
-        booking = Bookings::Booking.find(id)
-        expect(Bookings::LogToGitisJob).to \
-          have_received(:perform_later).with \
-            booking.contact_uuid,
-            booking.attended ? /ATTENDED/ : /DID NOT ATTEND/
-      end
-    end
-  end
 end

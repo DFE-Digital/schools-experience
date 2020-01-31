@@ -74,9 +74,6 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       context 'registration job not already enqueued' do
         shared_examples 'a successful create' do
           before do
-            allow(Bookings::LogToGitisJob).to \
-              receive(:perform_later).and_return(true)
-
             allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
               receive(:perform_later).and_return(true)
           end
@@ -126,13 +123,6 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
               have_received(:perform_later).with \
                 fake_gitis_uuid,
                 Bookings::Gitis::PrivacyPolicy.default
-          end
-
-          it 'enqueues a log to gitis job' do
-            expect(Bookings::LogToGitisJob).to \
-              have_received(:perform_later).with \
-                fake_gitis_uuid,
-                %r{#{Date.today.to_formatted_s(:gitis)} REQUEST}
           end
 
           it 'redirects to placement request show' do

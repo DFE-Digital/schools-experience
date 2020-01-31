@@ -11,9 +11,8 @@ module Bookings
           new(type, subject).entry
         end
 
-        def write_later(contactid, type, subject)
-          Bookings::LogToGitisJob.perform_later \
-            contactid, new(type, subject).entry
+        def write_later(_contactid, _type, _subject)
+          true
         end
       end
 
