@@ -26,9 +26,6 @@ module Candidates
               Bookings::Gitis::PrivacyPolicy.default
           end
 
-          Bookings::Gitis::EventLogger.write_later \
-            current_candidate.gitis_uuid, :request, placement_request
-
           registration_session.flag_as_completed!
 
           RegistrationStore.instance.store! registration_session

@@ -35,14 +35,6 @@ module Bookings
           .tap { |c| crmlog "Read contact #{c.contactid}" if c }
       end
 
-      def log_school_experience(contact_id, logline)
-        contact = find(contact_id)
-        return false unless contact
-
-        contact.add_school_experience(logline)
-        write contact
-      end
-
     private
 
       def filter_pairs(filter_data, join_with = 'or')

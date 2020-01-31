@@ -17,8 +17,6 @@ module Schools
           @booking.assign_attributes(booking_params)
 
           if @booking.valid?(:acceptance_email_preview) && @booking.accept! && candidate_booking_notification(@booking).despatch_later!
-            Bookings::Gitis::EventLogger.write_later \
-              @booking.contact_uuid, :booking, @booking
 
             redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
           else

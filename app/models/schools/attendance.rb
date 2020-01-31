@@ -19,15 +19,6 @@ module Schools
       end
     end
 
-    def update_gitis
-      bookings_params.each do |booking_id, _attended|
-        fetch(booking_id).tap do |booking|
-          Bookings::Gitis::EventLogger.write_later \
-            booking.contact_uuid, :attendance, booking
-        end
-      end
-    end
-
   private
 
     def indexed_bookings

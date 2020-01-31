@@ -17,7 +17,6 @@ module Schools
       attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
 
       if attendance.save
-        attendance.update_gitis
         redirect_to schools_dashboard_path
       end
     end
