@@ -12,12 +12,14 @@ module Schools
       @updated_attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
 
       if @updated_attendance.save
-        @updated_attendance.update_gitis
         redirect_to schools_dashboard_path
       else
         build_outstanding_attendance
         render 'show'
       end
+
+      # will only update those bookings which were successfully updated
+      @updated_attendance.update_gitis
     end
 
   private
