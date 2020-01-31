@@ -1,7 +1,7 @@
 require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
-describe Schools::PlacementRequestsController, type: :request do
+describe Schools::ConfirmAttendanceController, type: :request do
   include_context "logged in DfE user"
 
   let(:school) { Bookings::School.find_by(urn: urn) }
