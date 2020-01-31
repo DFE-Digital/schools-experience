@@ -25,7 +25,7 @@ describe Schools::PlacementRequestsController, type: :request do
       before { get '/schools/placement_requests' }
 
       it 'assigns the placement_requests belonging to the school' do
-        expect(assigns(:placement_requests)).to eq school.placement_requests
+        expect(assigns(:placement_requests)).to match_array school.placement_requests
         expect(assigns(:placement_requests).map(&:gitis_contact)).to all \
           be_kind_of Bookings::Gitis::Contact
       end
