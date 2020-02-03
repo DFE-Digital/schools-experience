@@ -98,6 +98,9 @@ group :development, :test do
   gem 'bullet'
 
   gem 'parallel_tests'
+  
+  # Held back for now because 1.12.x seems buggy
+  gem 'ffi', '~> 1.11.3'
 end
 
 group :development do
