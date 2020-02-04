@@ -13,12 +13,14 @@ describe Schools::Attendance do
     }
   end
 
-  subject do
+  let(:attendance) do
     described_class.new(
       bookings: bookings,
       bookings_params: bookings_params
     )
   end
+
+  subject { attendance }
 
   describe '#initialize' do
     specify 'should correctly assign bookings' do
@@ -39,21 +41,46 @@ describe Schools::Attendance do
       before do
         create :cancellation, :sent, placement_request: booking_1.bookings_placement_request
         bookings.each(&:reload)
-        subject.save
       end
+
+      subject! { attendance.save }
 
       specify 'should not update cancelled bookings' do
         expect(booking_1.reload.attended).to be nil
       end
+
+      specify 'save should return false' do
+        is_expected.to be false
+      end
+
+      specify 'attendance should have 1 error' do
+        expect(attendance.errors.messages.length).to eql 1
+        expect(attendance.errors.messages[:bookings_params].length).to eql 1
+        expect(attendance.errors.messages[:bookings_params].first).to \
+          match(/unable to set attendance/i)
+      end
+
+      specify 'attendance.updated_bookings' do
+        expect(attendance.updated_bookings).to match_array \
+          [booking_2.id, booking_3.id]
+      end
     end
 
     context 'when booking not cancelled' do
-      before { subject.save }
+      subject! { attendance.save }
 
       specify 'should correctly update bookings with param values' do
         bookings_params.each do |id, status|
           expect(Bookings::Booking.find(id).attended).to be(status)
         end
+      end
+
+      specify 'save should return true' do
+        is_expected.to be true
+      end
+
+      specify 'attendance.updated_bookings' do
+        expect(attendance.updated_bookings).to match_array bookings.pluck(:id)
       end
     end
   end
