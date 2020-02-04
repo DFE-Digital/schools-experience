@@ -203,7 +203,7 @@ en:
             requires_check:
               inclusion: 'Select whether you require candidates to have a DBS check'
             dbs_policy_details:
-              blank: 'Provide details'
+              blank: 'Provide details of your DBS check requirements'
             no_dbs_policy_details:
               blank: 'Provide details'
         schools/on_boarding/candidate_requirements_choice:
