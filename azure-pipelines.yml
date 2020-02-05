@@ -125,39 +125,39 @@ jobs:
       targetType: filePath
       filePath: ./script/generate_matrix.sh
 
-#- job: FunctionalTesting
-#  pool:
-#    vmImage: 'ubuntu-16.04'
-#  dependsOn: BuildAndNonBrowserTesting
-#  strategy:
-#    maxParallel: 5
-#    matrix: $[ dependencies.BuildAndNonBrowserTesting.outputs['mtrx.legs'] ]
+- job: FunctionalTesting
+  pool:
+    vmImage: 'ubuntu-16.04'
+  dependsOn: BuildAndNonBrowserTesting
+  strategy:
+    maxParallel: 5
+    matrix: $[ dependencies.BuildAndNonBrowserTesting.outputs['mtrx.legs'] ]
 
-#  steps:
+  steps:
 
-#  - script: |
-#      docker pull $(DOCKER_HUB_REPO):$(imageTag)
-#      docker tag $(DOCKER_HUB_REPO):$(imageTag) school-experience:latest
-#      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d
-#      WAIT_COUNT=0
-#      until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
-#      echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
-#      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber --format junit --out /ci_build/junit $(features)
-#    displayName: Run Cucumber Tests
+  - script: |
+      docker pull $(DOCKER_HUB_REPO):$(imageTag)
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) school-experience:latest
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d
+      WAIT_COUNT=0
+      until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+      echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber --format junit --out /ci_build/junit $(features)
+    displayName: Run Cucumber Tests
 
-#  - task: PublishTestResults@2
-#    condition: failed()
-#    displayName: Upload Cucumber results
-#    inputs:
-#      testResultsFormat: 'JUnit'
-#      testResultsFiles: 'junit/TEST-*.xml'
-#      testRunTitle: Cucumber results
+  - task: PublishTestResults@2
+    condition: failed()
+    displayName: Upload Cucumber results
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit/TEST-*.xml'
+      testRunTitle: Cucumber results
 
 - job: PublishArtifacts
   pool:
     vmImage: 'ubuntu-16.04'
   dependsOn:
-  - BuildAndNonBrowserTesting
+  - FunctionalTesting
 
   steps:
 
