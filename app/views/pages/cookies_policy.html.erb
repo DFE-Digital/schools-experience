@@ -1,7 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= link_to 'Back', :back, class: 'govuk-back-link' %>
-    
+
     <%= page_heading 'Cookies' %>
 
     <section>
@@ -20,7 +20,7 @@
         <%= link_to 'Find out more about how to manage cookies', 'https://ico.org.uk/your-data-matters/online/cookies/' %>
       </p>
     </section>
-    <section>
+    <section id="cookies-tables">
       <h2 class="govuk-heading-m">How cookies are used on this site</h2>
       <section>
         <h3 class="govuk-heading-s">Measuring website usage (Google Analytics)</h3>
@@ -53,7 +53,7 @@
               <th class="govuk-table__header" scope="col">
                 Name
               </th>
-              <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              <th class="govuk-table__header" scope="col">
                 Purpose
               </th>
               <th class="govuk-table__header govuk-table__header--numeric" scope="col">
@@ -66,7 +66,7 @@
               <td class="govuk-table__cell">
                 <strong>_ga</strong>
               </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
+              <td class="govuk-table__cell">
                 Helps count how many people visit this site by tracking if you’ve visited before
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
@@ -77,7 +77,7 @@
               <td class="govuk-table__cell">
                 <strong>_gid</strong>
               </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
+              <td class="govuk-table__cell">
                 Helps count how many people visit this site by tracking if you’ve visited before
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
@@ -88,7 +88,7 @@
               <td class="govuk-table__cell">
                 <strong>_gat</strong>
               </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
+              <td class="govuk-table__cell">
                 Used to manage the rate at which page view requests are made
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
@@ -112,7 +112,7 @@
               <th class="govuk-table__header" scope="col">
                 Name
               </th>
-              <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              <th class="govuk-table__header" scope="col">
                 Purpose
               </th>
               <th class="govuk-table__header govuk-table__header--numeric" scope="col">
@@ -125,7 +125,7 @@
               <td class="govuk-table__cell">
                 <strong>seen_cookie_message</strong>
               </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
+              <td class="govuk-table__cell">
                 Saves a cookie to let us know you’ve seen our cookie message
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
@@ -146,7 +146,7 @@
               <th class="govuk-table__header" scope="col">
                 Name
               </th>
-              <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              <th class="govuk-table__header" scope="col">
                 Purpose
               </th>
               <th class="govuk-table__header govuk-table__header--numeric" scope="col">
@@ -159,7 +159,7 @@
               <td class="govuk-table__cell">
                 <strong>schoolex-session</strong>
               </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
+              <td class="govuk-table__cell">
                 Used to identify your current session with the School Experience Service
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
@@ -180,7 +180,7 @@
               <th class="govuk-table__header" scope="col">
                 Name
               </th>
-              <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              <th class="govuk-table__header" scope="col">
                 Purpose
               </th>
               <th class="govuk-table__header govuk-table__header--numeric" scope="col">
@@ -193,7 +193,7 @@
               <td class="govuk-table__cell">
                 <strong>analytics_tracking_uuid</strong>
               </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
+              <td class="govuk-table__cell">
                 Links searches and subsequent placement requests using a cookie
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
@@ -204,9 +204,9 @@
         </table>
       </section>
       <section>
-        <h3 class="govuk-heading-m">Microsoft Application Insights</h3>
+        <h3 class="govuk-heading-m">Cookie settings</h3>
         <p>
-          Used to track visits to help us improve the quality of our service.
+          Records your requested cookie settings.
         </p>
         <table class="govuk-table">
           <thead class="govuk-table__head">
@@ -214,7 +214,7 @@
               <th class="govuk-table__header" scope="col">
                 Name
               </th>
-              <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              <th class="govuk-table__header" scope="col">
                 Purpose
               </th>
               <th class="govuk-table__header govuk-table__header--numeric" scope="col">
@@ -225,26 +225,14 @@
           <tbody class="govuk-table__body">
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
-                <strong>ai_session</strong>
+                <strong><%= CookiePreference.cookie_key %></strong>
               </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                Used by Microsoft Application Insights to collect statistics and
-                telemetry information during a single visit to the site
-              </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                30 minutes
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
               <td class="govuk-table__cell">
-                <strong>ai_user</strong>
+                Used by Get school experience and Manage school experience to
+                control which cookies can be recorded as part of the service.
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                Used by Microsoft Application Insights to link more than a
-                single visit to the site
-              </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                1 year
+                <%= CookiePreference::EXPIRES_IN.inspect %>
               </td>
             </tr>
           </tbody>

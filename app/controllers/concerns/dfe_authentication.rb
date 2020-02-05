@@ -20,8 +20,8 @@ module DFEAuthentication
 
       client = get_oidc_client
 
-      session[:state] = SecureRandom.uuid # You can specify or pass in your own state here
-      session[:nonce] = SecureRandom.hex(16) # You should store this and validate it on return.
+      session[:state] ||= SecureRandom.uuid # You can specify or pass in your own state here
+      session[:nonce] ||= SecureRandom.hex(16) # You should store this and validate it on return.
       session[:return_url] = request.original_url
       redirect_to client.authorization_uri(
         state: session[:state],
@@ -29,6 +29,8 @@ module DFEAuthentication
         scope: %i(profile organisation)
       )
     end
+
+    helper_method :has_other_schools?
   end
 
 private
@@ -43,5 +45,29 @@ private
       token_endpoint: '/token',
       userinfo_endpoint: '/me'
     )
+  end
+
+  def school_urns(reload = false)
+    session[:urns] = nil if reload
+
+    session[:urns] ||= retrieve_school_urns.freeze # should only be replaced, not changed immutable
+  end
+
+  def retrieve_school_urns
+    Schools::DFESignInAPI::Organisations
+      .new(current_user.sub)
+      .urns
+  end
+
+  def other_school_urns
+    school_urns.without(current_school.urn)
+  end
+
+  # if the DfE Sign-in api client isn't configured assume users
+  # may have other schools
+  def has_other_schools?
+    return true unless Schools::DFESignInAPI::Client.enabled?
+
+    other_school_urns.any?
   end
 end

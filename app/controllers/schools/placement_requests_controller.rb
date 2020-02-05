@@ -62,21 +62,7 @@ module Schools
         .school
         .urn
 
-      dfe_sign_in_organisations.urns.delete(placement_request_urn)
-    end
-
-    def dfe_sign_in_organisations
-      DFESignInAPI::Organisations.new(current_user.sub)
-    end
-
-    def assign_gitis_contacts(reqs)
-      return reqs if reqs.empty?
-
-      contacts = gitis_crm.find(reqs.map(&:contact_uuid)).index_by(&:id)
-
-      reqs.each do |req|
-        req.candidate.gitis_contact = contacts[req.contact_uuid]
-      end
+      placement_request_urn if other_school_urns.include? placement_request_urn
     end
   end
 end

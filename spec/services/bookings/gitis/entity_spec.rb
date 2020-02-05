@@ -166,6 +166,37 @@ RSpec.describe Bookings::Gitis::Entity do
     end
   end
 
+  describe "caching" do
+    let(:uuid) { SecureRandom.uuid }
+    let(:entity) { TestEntity.new 'testentityid' => uuid, 'firstname' => 'test' }
+
+    describe '.cache_key' do
+      subject { TestEntity.cache_key uuid }
+      it { is_expected.to eql "testentities/#{uuid}" }
+    end
+
+    describe '#cache_key' do
+      subject { entity }
+      it { is_expected.to have_attributes cache_key: "testentities/#{uuid}" }
+    end
+
+    describe "#to_cache" do
+      before { entity.tap { |te| te.lastname = 'mctest' } }
+      subject { entity.to_cache }
+      it { is_expected.to include('testentityid' => uuid) }
+      it { is_expected.to include('firstname' => 'test') }
+      it { is_expected.not_to include('lastname') }
+    end
+
+    describe ".from_cache" do
+      let(:attrs) { { 'testentityid' => uuid, 'firstname' => 'test' } }
+      subject { TestEntity.from_cache attrs }
+      it { is_expected.to have_attributes testentityid: uuid }
+      it { is_expected.to have_attributes firstname: 'test' }
+      it { is_expected.to be_frozen }
+    end
+  end
+
   describe '#==' do
     let(:entity) { TestEntity.new('testentityid' => uuid, 'firstname' => 'test', 'lastname' => 'user') }
 
@@ -392,6 +423,18 @@ RSpec.describe Bookings::Gitis::Entity do
         expect(subject.players[2]).to have_attributes \
           testentityid: player3, firstname: 'Joe'
       end
+    end
+  end
+
+  describe '.valid_id?' do
+    context 'for valid uuid' do
+      subject { described_class.valid_id? SecureRandom.uuid }
+      it { is_expected.to be true }
+    end
+
+    context 'for valid uuid' do
+      subject { described_class.valid_id? '10' }
+      it { is_expected.to be false }
     end
   end
 end

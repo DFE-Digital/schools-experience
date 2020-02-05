@@ -121,16 +121,15 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   describe 'POST #create' do
     include_context 'Stubbed current_registration'
 
-    before do
-      NotifyFakeClient.reset_deliveries!
-      allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)
-    end
+    before { NotifyFakeClient.reset_deliveries! }
 
     let!(:candidate) { create(:candidate, gitis_uuid: fake_gitis_uuid) }
     let(:token) { create(:candidate_session_token, candidate: candidate) }
 
     before do
-      post candidates_school_registrations_sign_in_path(school_id)
+      perform_enqueued_jobs do
+        post candidates_school_registrations_sign_in_path(school_id)
+      end
     end
 
     it "will redirect to the show page" do

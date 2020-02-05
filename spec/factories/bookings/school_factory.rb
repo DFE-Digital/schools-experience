@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence(:name) { |n| "school #{n}" }
     coordinates { Bookings::School::GEOFACTORY.point(-2.241, 53.481) }
     fee { 0 }
-    sequence(:urn) { |n| 10000 + n }
+    sequence(:urn) { |n| n }
     sequence(:address_1) { |n| "#{n} Something Street" }
     sequence(:postcode) { |n| "M#{n} 2JF" }
     association :school_type, factory: :bookings_school_type
@@ -44,7 +44,7 @@ FactoryBot.define do
     end
 
     trait :with_subjects do
-      after :create do |school, evaluator|
+      after :build do |school, evaluator|
         evaluator.subject_count.times do
           school.subjects << FactoryBot.create(:bookings_subject)
         end

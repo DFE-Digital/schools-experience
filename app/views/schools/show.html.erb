@@ -9,23 +9,22 @@
 
         <section>
           <p>
-            Use this service if you're a primary or secondary school in England
-            and want to offer school experience to potential teachers.
+            Use this service if you're a school in England and want to offer
+            school experience.
           </p>
 
           <p>
-            You'll see details about candidates who've requested to visit your
-            school so you can decide whether to offer them experience.
+            The service will enable you to advertise your school and allow
+            candidates to request experience dates. You'll be able to accept
+            or reject each request.
           </p>
 
           <p>
-            The service is currently only open to specific schools. To sign up
-            for the service email us with your URN at
-            <%= mail_to('organise.school-experience@education.gov.uk') %>
+            You need a <strong>DfE Sign-in account</strong> with access to School Experience.
           </p>
 
           <p>
-            You’ll be asked to sign in using DfE Sign-in.
+            If you have any questions read our <%= link_to 'DfE Sign-in help', dfe_signin_help_path %>.
           </p>
         </section>
 
@@ -48,63 +47,6 @@
             school DBS and safeguarding policies.
           </p>
         </section>
-
-        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-dfe-signin-help">
-          <div class="govuk-accordion__section ">
-            <div class="govuk-accordion__section-header">
-              <h2 class="govuk-accordion__section-heading">
-                <span class="govuk-accordion__section-button" id="i-have-no-dfe-signin-account-heading">
-                  I do not have a DfE Sign-in account
-                </span>
-              </h2>
-            </div>
-
-            <div id="i-have-no-dfe-signin-account-content" class="govuk-accordion__section-content" aria-labelledby="i-have-no-dfe-signin-account-heading">
-              <p class='govuk-body'>
-                You’ll need to ask your organisation’s ‘DfE Sign-in approver’
-                (often your head or deputy head) to create a DfE Sign-in
-                account for you.
-              </p>
-
-              <p>
-                They’ll need your email address but make sure this is one
-                that only you have access to.
-              </p>
-
-              <p>
-                It will only be used for DfE Sign-in purposes and we won’t
-                use it to send you anything to do with the service.
-              </p>
-
-              <p>
-                If you don’t know who's your DfE Sign-in approver email us
-                with your URN at <%= mail_to "organise.school-experience@education.gov.uk" %>.
-              </p>
-            </div>
-          </div>
-
-          <div class="govuk-accordion__section ">
-            <div class="govuk-accordion__section-header">
-              <h2 class="govuk-accordion__section-heading">
-                <span class="govuk-accordion__section-button" id="i-have-forgotten-about-my-dfe-signin-status-heading">
-                  I cannot remember if I have a DfE Sign-in account
-                </span>
-              </h2>
-            </div>
-            <div id="i-have-forgotten-about-my-dfe-signin-status-content" class="govuk-accordion__section-content" aria-labelledby="i-have-forgotten-about-my-dfe-signin-status-heading">
-              <p class='govuk-body'>
-                You’ll need to fill in the following online form and ask DfE
-                Sign-in if they can provide you with your DfE Sign-in account
-                details.
-              </p>
-
-              <p>
-                Submit a <%= link_to 'DfE Sign-in support request',
-                  href: "https://help.signin.education.gov.uk/contact/submit?type=create-account" %>
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="govuk-grid-column-one-third column-top-border">
@@ -113,6 +55,10 @@
           <ul class="govuk-list">
             <li>
               <%= link_to 'Manage school experience: information for schools', 'https://www.gov.uk/government/publications/school-experience-programme-information-for-schools' %>
+            </li>
+            <li>
+              <%= link_to 'DfE Sign-in help', dfe_signin_help_path %>
+            </li>
           </ul>
         </nav>
       </div>

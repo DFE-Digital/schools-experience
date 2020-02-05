@@ -108,7 +108,7 @@ Given("my school has flexible dates") do
   # do nothing, it's the default
 end
 
-Given("my school has fixed dates") do
+Given("the/my school has fixed dates") do
   @fixed_dates = true
   @school.update_attributes(availability_preference_fixed: true)
   (1..3).each { |i| i.weeks.from_now }.each do |date|

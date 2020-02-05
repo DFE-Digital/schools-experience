@@ -5,7 +5,7 @@ class Schools::PlacementDatesController < Schools::BaseController
     @placement_dates = current_school
       .bookings_placement_dates
       .published
-      .future
+      .bookable_date
       .in_date_order
       .eager_load(:bookings_school, :placement_date_subjects, :subjects)
   end

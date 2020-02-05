@@ -6,15 +6,18 @@ module Schools
     self.forgery_protection_origin_check = false
 
     include GitisAccess
+    self.use_gitis_cache = true
+
     include DFEAuthentication
     before_action :require_auth
     before_action :set_current_school
-    before_action :set_other_urns
     before_action :set_site_header_text
     before_action :ensure_onboarded
 
     rescue_from MissingURN, with: -> { redirect_to schools_errors_no_school_path }
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
+    rescue_from Bookings::Gitis::API::BadResponseError, with: :gitis_retrieval_error
+    rescue_from Bookings::Gitis::API::ConnectionFailed, with: :gitis_retrieval_error
 
     def current_school
       urn = session[:urn]
@@ -30,23 +33,12 @@ module Schools
       @site_header_text = "Manage school experience"
     end
 
-    def set_other_urns
-      @other_urns = (session[:other_urns] || retrieve_other_urns)
-    end
-
     def retrieve_school(urn)
       unless (school = Bookings::School.find_by(urn: urn))
         raise SchoolNotRegistered, "school #{urn} not found" unless school.present?
       end
 
       school
-    end
-
-    def retrieve_other_urns
-      Schools::DFESignInAPI::Organisations
-        .new(current_user.sub)
-        .urns
-        .reject { |urn| urn == @current_school.urn }
     end
 
     def ensure_onboarded
@@ -58,6 +50,15 @@ module Schools
 
         redirect_to schools_dashboard_path
       end
+    end
+
+    def gitis_retrieval_error(exception)
+      if Rails.env.production?
+        ExceptionNotifier.notify_exception exception
+        Raven.capture_exception exception
+      end
+
+      render 'shared/failed_gitis_connection', status: :service_unavailable
     end
   end
 end

@@ -168,7 +168,11 @@
     <% if @placement_request.open? %>
       <div class="accept-or-reject">
         <div class="govuk-se-button-container">
-          <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request) %>
+          <% if @placement_request.fixed_date_is_bookable? %>
+            <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request) %>
+          <% else %>
+            <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_make_changes_path(@placement_request) %>
+          <% end %>
         </div>
         <div class="govuk-se-button-container">
           <div>

@@ -99,6 +99,7 @@ Rails.application.configure do
 
   config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
+  config.x.dfe_sign_in_api_school_change_enabled = ENV['DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED']&.in?(truthy_strings)
 
   if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
@@ -112,8 +113,9 @@ Rails.application.configure do
   config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL', 'notset')
   config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION', '0')
   config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID', SecureRandom.uuid)
-  config.x.gitis.privacy_policy_id = ENV['CRM_PRIVACY_POLICY_ID'].presence || 'd1adf2ad-e7c4-e911-a981-000d3a206976'
+  config.x.gitis.privacy_policy_id = ENV['CRM_PRIVACY_POLICY_ID'].presence || '0a203956-e935-ea11-a813-000d3a44a8e9'
   config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
+  config.x.gitis.caching = truthy_strings.include?(ENV['CRM_CACHING'].to_s)
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 

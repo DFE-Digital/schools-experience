@@ -30,11 +30,10 @@ module Bookings
         less_than: 100
       }
 
-
     validates :date, presence: true
     validates :date,
       timeliness: {
-        on_or_after: :today,
+        on_or_after: -> { Booking::MIN_BOOKING_DELAY.from_now.to_date },
         before: -> { 2.years.from_now },
         type: :date
       },
@@ -53,13 +52,15 @@ module Bookings
       validates :subjects, absence: true, unless: :subject_specific?
     end
 
-    scope :future, -> { where(arel_table[:date].gteq(Time.now)) }
-    scope :past, -> { where(arel_table[:date].lt(Time.now)) }
+    scope :bookable_date, -> do
+      where arel_table[:date].gteq Bookings::Booking::MIN_BOOKING_DELAY.from_now.to_date
+    end
+
     scope :in_date_order, -> { order(date: 'asc') }
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
 
-    scope :available, -> { published.active.future.in_date_order }
+    scope :available, -> { published.active.bookable_date.in_date_order }
     scope :published, -> { where.not published_at: nil }
 
     # 'supporting subjects' are dates belonging to phases where
@@ -79,6 +80,10 @@ module Bookings
         duration: duration,
         unit: "day".pluralize(duration)
       }
+    end
+
+    def bookable?
+      date >= (Date.today + Bookings::Booking::MIN_BOOKING_DELAY)
     end
 
     def has_subjects?

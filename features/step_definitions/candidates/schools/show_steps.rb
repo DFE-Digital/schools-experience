@@ -33,6 +33,12 @@ Then("the age range should be {string}") do |string|
   end
 end
 
+Then("the age range should contain {string} and {string}") do |phase1, phase2|
+  within("#school-phases") do
+    [phase1, phase2].all? { |p| expect(page).to have_content(p) }
+  end
+end
+
 Given("some subjects exist") do
   @subjects = FactoryBot.create_list(:bookings_subject, 5)
 end

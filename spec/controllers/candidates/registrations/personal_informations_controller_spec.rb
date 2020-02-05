@@ -30,10 +30,8 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         }
       end
 
-      before do
-        NotifyFakeClient.reset_deliveries!
-        allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)
-      end
+      around { |example| perform_enqueued_jobs { example.run } }
+      before { NotifyFakeClient.reset_deliveries! }
 
       context 'invalid' do
         before do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_08_132921) do
+ActiveRecord::Schema.define(version: 2019_12_10_142537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,14 +82,16 @@ ActiveRecord::Schema.define(version: 2019_11_08_132921) do
 
   create_table "bookings_placement_request_cancellations", force: :cascade do |t|
     t.bigint "bookings_placement_request_id"
-    t.text "reason", null: false
+    t.text "reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "cancelled_by", null: false
     t.datetime "sent_at"
     t.text "extra_details"
     t.datetime "viewed_at"
+    t.string "rejection_category"
     t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id"
+    t.index ["rejection_category"], name: "index_bookings_placement_request_cancellations_category"
   end
 
   create_table "bookings_placement_requests", force: :cascade do |t|

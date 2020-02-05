@@ -2,10 +2,9 @@ require 'rails_helper'
 
 describe Bookings::LogToGitisJob, type: :job do
   include ActiveSupport::Testing::TimeHelpers
+  include_context 'fake gitis'
 
   let(:contact) { build(:gitis_contact, :persisted) }
-  let(:crm) { double Bookings::Gitis::CRM }
-  before { allow(Bookings::Gitis::CRM).to receive(:new).and_return(crm) }
 
   context '#perform' do
     before do
@@ -16,7 +15,7 @@ describe Bookings::LogToGitisJob, type: :job do
     context 'on error' do
       before do
         allow(described_class.queue_adapter).to receive(:enqueue_at).and_return(true)
-        allow(crm).to receive(:log_school_experience) { raise "network error" }
+        allow(fake_gitis).to receive(:log_school_experience) { raise "network error" }
 
         freeze_time
 
@@ -34,14 +33,14 @@ describe Bookings::LogToGitisJob, type: :job do
 
     context 'on success' do
       before do
-        allow(crm).to receive(:log_school_experience).and_return(contact.id)
+        allow(fake_gitis).to receive(:log_school_experience).and_return(contact.id)
 
         described_class.perform_later \
           contact.id, '01/10/2019 test 01/11/2019 9999 Test School'
       end
 
       it "logs adds an entry to Gitis" do
-        expect(crm).to have_received(:log_school_experience).with \
+        expect(fake_gitis).to have_received(:log_school_experience).with \
           contact.id, '01/10/2019 test 01/11/2019 9999 Test School'
       end
     end

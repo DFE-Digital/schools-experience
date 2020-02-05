@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Candidates::SessionsController, type: :request do
   include ActiveJob::TestHelper
+
   include_context "stubbed out Gitis"
 
   describe "GET #new" do
@@ -13,10 +14,8 @@ RSpec.describe Candidates::SessionsController, type: :request do
   end
 
   describe "POST #create" do
-    before do
-      NotifyFakeClient.reset_deliveries!
-      allow(queue_adapter).to receive(:perform_enqueued_jobs).and_return(true)
-    end
+    around { |example| perform_enqueued_jobs { example.run } }
+    before { NotifyFakeClient.reset_deliveries! }
 
     let(:valid_creds) do
       {

@@ -3,23 +3,23 @@ module Schools
   # attended a booking
   class ConfirmAttendanceController < Schools::BaseController
     def show
-      @bookings = unlogged_bookings.eager_load(
-        :bookings_subject,
-        bookings_placement_request: :candidate
-      )
-
-      assign_gitis_contacts(@bookings)
+      @updated_attendance = build_outstanding_attendance
     end
 
     def update
       bookings = unlogged_bookings.where(id: bookings_params.keys). \
         includes(bookings_placement_request: %i(candidate candidate_cancellation school_cancellation))
-      attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
+      @updated_attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
 
-      if attendance.save
-        attendance.update_gitis
+      if @updated_attendance.save
         redirect_to schools_dashboard_path
+      else
+        build_outstanding_attendance
+        render 'show'
       end
+
+      # will only update those bookings which were successfully updated
+      @updated_attendance.update_gitis
     end
 
   private
@@ -49,15 +49,15 @@ module Schools
         .order(date: 'desc')
     end
 
-    def assign_gitis_contacts(bookings)
-      return bookings if bookings.empty?
+    def build_outstanding_attendance
+      @bookings = unlogged_bookings.eager_load(
+        :bookings_subject,
+        bookings_placement_request: :candidate
+      )
 
-      contacts = gitis_crm.find(bookings.map(&:contact_uuid)).index_by(&:id)
+      assign_gitis_contacts(@bookings)
 
-      bookings.each do |booking|
-        booking.bookings_placement_request.candidate.gitis_contact = \
-          contacts[booking.contact_uuid]
-      end
+      @attendance = Schools::Attendance.new bookings: @bookings, bookings_params: {}
     end
   end
 end

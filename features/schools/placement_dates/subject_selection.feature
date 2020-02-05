@@ -14,19 +14,9 @@ Feature: Selecting subjects for a placement date
     Scenario: Page title
         Then the page's main heading should be 'Select school experience subjects'
 
-    Scenario: Page content
-        Then I should see a list of subjects the school offers
-        And an option to select all subjects
-
     Scenario: Selecting nothing
         When I submit the form
         Then I should see a validation error message
-
-    Scenario: Selecting all subjects
-        Given I check 'All subjects'
-        When I submit the form
-        Then I should be on the 'placement dates' page
-        And my date should be listed
 
     Scenario: Selecting some subjects
         Given I check 'Maths'

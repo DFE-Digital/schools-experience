@@ -27,12 +27,14 @@ Rails.application.configure do
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
   config.x.dfe_sign_in_api_enabled = false
   config.x.dfe_sign_in_api_role_check_enabled = false
+  config.x.dfe_sign_in_api_school_change_enabled = false
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
   config.x.gitis.privacy_policy_id = SecureRandom.uuid
   config.x.gitis.privacy_consent_id = '10'
+  config.x.gitis.caching = false
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 

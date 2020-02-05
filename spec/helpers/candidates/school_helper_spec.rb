@@ -278,4 +278,46 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       it { is_expected.to have_css('b', text: 'no content') }
     end
   end
+
+  describe '#split to list' do
+    specify 'should return nil when nil passed in' do
+      expect(split_to_list(nil)).to be_nil
+    end
+
+    specify 'should return nil when empty string passed in' do
+      expect(split_to_list('')).to be_nil
+    end
+
+    context 'splitting up items into a HTML list' do
+      let(:content) do
+        <<~CONTENT
+          The good,
+          the bad
+          and the ugly
+        CONTENT
+      end
+
+      subject { split_to_list content }
+
+      specify 'should create a list with the correct number of entries' do
+        is_expected.to have_css('ul.govuk-list--bullet > li', count: 3)
+      end
+    end
+
+    context 'dealing with blank lines' do
+      let(:content) do
+        <<~CONTENT
+          The good,
+
+          and the ugly
+        CONTENT
+      end
+
+      subject { split_to_list content }
+
+      specify 'should create a list with the correct number of entries' do
+        is_expected.to have_css('ul.govuk-list--bullet > li', count: 2)
+      end
+    end
+  end
 end

@@ -15,7 +15,7 @@
 
     <%= render partial: "letter", locals: {
       cancellation: @cancellation,
-      reason: @cancellation.reason,
+      reason: cancellation_reasons(@cancellation),
       extra_details: @cancellation.extra_details
     } %>
 
