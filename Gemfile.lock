@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DFE-Digital/govuk_elements_form_builder.git
-  revision: 11717a8939c13237dbe335c492475271606b6c9e
+  revision: 2025b83536968f928f4a416420bfb7eab1467f59
   specs:
     govuk_elements_form_builder (1.2.0)
       govuk_elements_rails (>= 3.0.0)
@@ -157,7 +157,7 @@ GEM
       railties (>= 4.2.0)
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
-    ffi (1.12.1)
+    ffi (1.12.2)
     foreman (0.87.0)
     geocoder (1.6.1)
     gherkin (5.1.0)
@@ -212,7 +212,7 @@ GEM
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.1009)
-    mimemagic (0.3.3)
+    mimemagic (0.3.4)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.0)
@@ -260,7 +260,7 @@ GEM
     public_suffix (4.0.3)
     puma (4.3.1)
       nio4r (~> 2.0)
-    rack (2.1.1)
+    rack (2.1.2)
     rack-oauth2 (1.10.1)
       activesupport
       attr_required
