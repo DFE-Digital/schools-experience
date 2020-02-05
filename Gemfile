@@ -112,7 +112,6 @@ group :development do
 
   # Manage multiple processes i.e. web server and webpack
   gem 'foreman'
-  gem 'rails-erd'
 end
 
 group :test do
@@ -120,12 +119,13 @@ group :test do
   gem 'capybara', '>= 2.15'
 
   gem 'selenium-webdriver'
-  gem 'webdrivers'
+  # Easy installation and use of chromedriver to run system tests with Chrome
+  gem 'chromedriver-helper', platforms: [:mri]
 
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
 
-  gem 'shoulda-matchers', '~> 4.2'
+  gem 'shoulda-matchers', '~> 4.1'
   gem 'rails-controller-testing'
 
   gem 'webmock'
