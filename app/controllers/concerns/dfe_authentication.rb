@@ -20,8 +20,8 @@ module DFEAuthentication
 
       client = get_oidc_client
 
-      session[:state] = SecureRandom.uuid # You can specify or pass in your own state here
-      session[:nonce] = SecureRandom.hex(16) # You should store this and validate it on return.
+      session[:state] ||= SecureRandom.uuid # You can specify or pass in your own state here
+      session[:nonce] ||= SecureRandom.hex(16) # You should store this and validate it on return.
       session[:return_url] = request.original_url
       redirect_to client.authorization_uri(
         state: session[:state],
