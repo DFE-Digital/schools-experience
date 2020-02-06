@@ -1,3 +1,6 @@
+pool:
+  vmImage: ubuntu-18.04
+
 variables:
   imageTag: v$(Build.BuildId)
   # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
@@ -6,8 +9,6 @@ variables:
 
 jobs:
 - job: BuildAndNonBrowserTesting
-  pool:
-    vmImage: 'ubuntu-16.04'
 
   steps:
 
@@ -126,8 +127,6 @@ jobs:
       filePath: ./script/generate_matrix.sh
 
 - job: FunctionalTesting
-  pool:
-    vmImage: 'ubuntu-16.04'
   dependsOn: BuildAndNonBrowserTesting
   strategy:
     maxParallel: 5
@@ -154,8 +153,6 @@ jobs:
       testRunTitle: Cucumber results
 
 - job: PublishArtifacts
-  pool:
-    vmImage: 'ubuntu-16.04'
   dependsOn:
   - FunctionalTesting
 
