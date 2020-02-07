@@ -10,7 +10,7 @@ module Cron
       end
 
       def bookings
-        Bookings::Booking.not_cancelled.one_week_from_now
+        Bookings::Booking.not_cancelled.accepted.for_one_week_from_now
       end
 
       # this string will be used in the email subject, something along the lines

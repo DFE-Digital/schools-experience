@@ -96,9 +96,9 @@ module Bookings
       previous.accepted
     end
 
-    scope :days_in_the_future, ->(days_away) { where(date: days_away.from_now.to_date) }
-    scope :tomorrow,           -> { days_in_the_future(1.day) }
-    scope :one_week_from_now,  -> { days_in_the_future(7.days) }
+    scope :for_days_in_the_future, ->(days_away) { where(date: days_away.from_now.to_date) }
+    scope :for_tomorrow,           -> { for_days_in_the_future(1.day) }
+    scope :for_one_week_from_now,  -> { for_days_in_the_future(7.days) }
 
     def self.from_placement_request(placement_request)
       # only populate the date if it's in the future

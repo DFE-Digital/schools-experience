@@ -319,33 +319,33 @@ describe Bookings::Booking do
       end
     end
 
-    describe '.days_in_the_future' do
+    describe '.for_days_in_the_future' do
       let!(:booking_in_1_days) { create(:bookings_booking, date: Date.tomorrow) }
       let!(:booking_in_3_days) { create(:bookings_booking, date: 3.days.from_now.to_date) }
       let!(:booking_in_7_days) { create(:bookings_booking, date: 7.days.from_now.to_date) }
       let!(:booking_in_8_days) { create(:bookings_booking, date: 8.days.from_now.to_date) }
 
       specify 'should return bookings the specified number of days away' do
-        expect(described_class.days_in_the_future(1.days)).to include(booking_in_1_days)
+        expect(described_class.for_days_in_the_future(1.days)).to include(booking_in_1_days)
       end
 
       specify 'should not return other bookings' do
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_3_days)
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_7_days)
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_8_days)
+        expect(described_class.for_days_in_the_future(1.days)).not_to include(booking_in_3_days)
+        expect(described_class.for_days_in_the_future(1.days)).not_to include(booking_in_7_days)
+        expect(described_class.for_days_in_the_future(1.days)).not_to include(booking_in_8_days)
       end
 
       describe '.tomorrow' do
-        after { described_class.tomorrow }
+        after { described_class.for_tomorrow }
         specify 'should call .days_in_the_future with 1 days' do
-          expect(described_class).to receive(:days_in_the_future).with(1.day)
+          expect(described_class).to receive(:for_days_in_the_future).with(1.day)
         end
       end
 
       describe '.one_week_from_now' do
-        after { described_class.one_week_from_now }
+        after { described_class.for_one_week_from_now }
         specify 'should call .days_in_the_future with 7 days' do
-          expect(described_class).to receive(:days_in_the_future).with(7.days)
+          expect(described_class).to receive(:for_days_in_the_future).with(7.days)
         end
       end
     end

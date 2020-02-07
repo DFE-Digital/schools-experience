@@ -11,14 +11,19 @@ describe Cron::Reminders::TomorrowJob, type: :job do
 
   describe '#perform' do
     before do
-      allow_any_instance_of(described_class).to receive(:bookings).and_return(%w(a b c))
+      FactoryBot.create(:bookings_booking, :accepted, date: Date.tomorrow)
+      FactoryBot.create(:bookings_booking, :accepted, date: Date.tomorrow)
+      FactoryBot.create(:bookings_booking, :accepted, date: 2.days.from_now.to_date)
+      FactoryBot.create(:bookings_booking, :accepted, :previous, date: Date.today)
+      FactoryBot.create(:bookings_booking, date: Date.tomorrow)
+
       allow(Bookings::ReminderJob).to receive(:perform_later).and_return(true)
     end
 
     subject! { described_class.new.perform }
 
-    specify 'calling perform should schedule Bookings::ReminderJob' do
-      expect(Bookings::ReminderJob).to have_received(:perform_later).exactly(3).times
+    specify 'should schedule Bookings::ReminderJob for accepted bookings' do
+      expect(Bookings::ReminderJob).to have_received(:perform_later).exactly(2).times
     end
   end
 end

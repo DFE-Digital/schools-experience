@@ -14,7 +14,7 @@ module Cron
       end
 
       def bookings
-        Bookings::Booking.not_cancelled.tomorrow
+        Bookings::Booking.not_cancelled.accepted.for_tomorrow
       end
 
       # this string will be used in the email subject, something along the lines
