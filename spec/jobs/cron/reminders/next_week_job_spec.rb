@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Cron::Reminders::NextWeek, type: :job do
+describe Cron::Reminders::NextWeekJob, type: :job do
   specify 'should have a schedule of daily at 02:35' do
     expect(described_class.cron_expression).to eql('35 2 * * *')
   end
@@ -11,7 +11,7 @@ describe Cron::Reminders::NextWeek, type: :job do
 
   describe '#perform' do
     before do
-      allow_any_instance_of(Cron::Reminders::NextWeek).to receive(:bookings).and_return(%w(a b c))
+      allow_any_instance_of(described_class).to receive(:bookings).and_return(%w(a b c))
       allow(Bookings::ReminderBuilder).to receive(:perform_later).and_return(true)
     end
 

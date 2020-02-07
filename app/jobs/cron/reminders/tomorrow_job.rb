@@ -1,6 +1,6 @@
 module Cron
   module Reminders
-    class Tomorrow < CronJob
+    class TomorrowJob < CronJob
       self.cron_expression = '30 2 * * *'
 
       # Create one Bookings::ReminderBuilder task _per booking_, each
