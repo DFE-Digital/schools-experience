@@ -3,13 +3,13 @@ module Cron
     class TomorrowJob < CronJob
       self.cron_expression = '30 2 * * *'
 
-      # Create one Bookings::ReminderBuilder task _per booking_, each
-      # Bookings::ReminderBuilder, via Bookings::Reminder is responsible
+      # Create one Bookings::ReminderJob _per booking_, each
+      # Bookings::ReminderJob, via Bookings::Reminder is responsible
       # for pulling its own information (name, email) from Gitis and should
       # individually retry if the API isn't available
       def perform
         bookings.each do |booking|
-          Bookings::ReminderBuilder.perform_later(booking, time_until_booking)
+          Bookings::ReminderJob.perform_later(booking, time_until_booking)
         end
       end
 

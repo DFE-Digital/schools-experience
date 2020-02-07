@@ -5,7 +5,7 @@ module Cron
 
       def perform
         bookings.all? do |booking|
-          Bookings::ReminderBuilder.perform_later(booking, time_until_booking)
+          Bookings::ReminderJob.perform_later(booking, time_until_booking)
         end
       end
 

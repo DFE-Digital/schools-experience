@@ -9,11 +9,11 @@ describe Bookings::Reminder do
 
   subject { Bookings::Reminder.new(booking, time_until_booking) }
 
-  describe '#enqueue' do
-    specify 'should enqueue one job per provided booking' do
+  describe '#deliver' do
+    specify 'should deliver one job per provided booking' do
       expect(enqueued_jobs.size).to be_zero
 
-      subject.enqueue
+      subject.deliver
 
       expect(enqueued_jobs.size).to eql(1)
     end
