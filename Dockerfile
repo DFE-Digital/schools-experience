@@ -4,7 +4,8 @@ ENV RAILS_ENV=production \
     NODE_ENV=production \
     RAILS_SERVE_STATIC_FILES=true \
     RAILS_LOG_TO_STDOUT=true \
-    RACK_TIMEOUT_SERVICE_TIMEOUT=60
+    RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
+    BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
 RUN mkdir /app
 WORKDIR /app
