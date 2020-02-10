@@ -29,6 +29,7 @@ RUN yarn install && yarn cache clean
 
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
+RUN bundle config --local build.sassc --disable-march-tune-native
 RUN bundle install --without development --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
