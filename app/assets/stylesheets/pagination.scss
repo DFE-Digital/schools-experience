@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  @include govuk-responsive-margin(6, "bottom");
 
   @include govuk-media-query($until: tablet) {
     flex-direction: column;

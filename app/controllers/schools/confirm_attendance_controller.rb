@@ -7,9 +7,7 @@ module Schools
     end
 
     def update
-      bookings = unlogged_bookings.where(id: bookings_params.keys). \
-        includes(bookings_placement_request: %i(candidate candidate_cancellation school_cancellation))
-      @updated_attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
+      @updated_attendance = build_updated_attendance
 
       if @updated_attendance.save
         redirect_to schools_dashboard_path
@@ -50,14 +48,20 @@ module Schools
     end
 
     def build_outstanding_attendance
-      @bookings = unlogged_bookings.eager_load(
-        :bookings_subject,
-        bookings_placement_request: :candidate
-      )
+      @bookings = unlogged_bookings \
+        .eager_load(:bookings_subject, bookings_placement_request: :candidate) \
+        .page(params[:page])
 
       assign_gitis_contacts(@bookings)
 
       @attendance = Schools::Attendance.new bookings: @bookings, bookings_params: {}
+    end
+
+    def build_updated_attendance
+      bookings = unlogged_bookings.where(id: bookings_params.keys). \
+        includes(bookings_placement_request: %i(candidate candidate_cancellation school_cancellation))
+
+      @updated_attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
     end
   end
 end
