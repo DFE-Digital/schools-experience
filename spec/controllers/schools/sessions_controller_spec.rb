@@ -155,10 +155,14 @@ describe Schools::SessionsController, type: :request do
         allow_any_instance_of(Schools::DFESignInAPI::Roles).to receive(:has_school_experience_role?).and_return(false)
       end
 
-      subject { get callback }
+      subject! { get callback }
 
       specify 'should redirect to the insufficient privileges error page' do
         expect(subject).to redirect_to(schools_errors_insufficient_privileges_path)
+      end
+
+      specify 'should not assign current_user' do
+        expect(request.session[:current_user]).to be_nil
       end
     end
 

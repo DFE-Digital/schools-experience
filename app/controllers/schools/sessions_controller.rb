@@ -51,10 +51,11 @@ module Schools
       client = get_oidc_client
       client.authorization_code = params[:code]
 
-      populate_session(client.access_token!)
+      userinfo = extract_userinfo(client.access_token!)
 
       # now we have the dfe sign-in user uuid and urn in the session, check permissions
-      check_role(session[:dfe_sign_in_user_uuid], session[:urn])
+      check_role!(userinfo[:dfe_sign_in_user_uuid], userinfo[:urn])
+      populate_session(userinfo)
 
       redirect_to(session.delete(:return_url) || schools_dashboard_path)
 
@@ -72,7 +73,7 @@ module Schools
 
   private
 
-    def check_role(user_uuid, urn)
+    def check_role!(user_uuid, urn)
       return true unless Schools::DFESignInAPI::Client.role_check_enabled?
 
       unless Schools::DFESignInAPI::Roles.new(user_uuid, urn).has_school_experience_role?
@@ -93,13 +94,21 @@ module Schools
       end
     end
 
-    def populate_session(access_token)
-      access_token.userinfo!.tap do |userinfo|
-        session[:id_token]              = access_token.id_token # store this for logout flows.
-        session[:current_user]          = userinfo
-        session[:urn]                   = userinfo.raw_attributes.dig("organisation", "urn").to_i
-        session[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
-        session[:dfe_sign_in_user_uuid] = userinfo.sub
+    def populate_session(extracted_info)
+      extracted_info.each do |key, value|
+        session[key] = value
+      end
+    end
+
+    def extract_userinfo(access_token)
+      {}.tap do |info|
+        access_token.userinfo!.tap do |userinfo|
+          info[:id_token]              = access_token.id_token # store this for logout flows.
+          info[:current_user]          = userinfo
+          info[:urn]                   = userinfo.raw_attributes.dig("organisation", "urn").to_i
+          info[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
+          info[:dfe_sign_in_user_uuid] = userinfo.sub
+        end
       end
     end
 
