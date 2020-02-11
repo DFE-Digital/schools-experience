@@ -88,7 +88,7 @@ class NotifyEmail::CandidateBookingReminder < Notify
       school_teacher_name: booking.contact_name,
       school_teacher_email: booking.contact_email,
       school_teacher_telephone: booking.contact_number,
-      placement_details: booking.placement_details,
+      placement_details: booking.placement_details.to_s,
       cancellation_url: candidates_cancel_url
     )
   end
