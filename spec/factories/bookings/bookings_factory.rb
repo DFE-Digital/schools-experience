@@ -14,6 +14,7 @@ FactoryBot.define do
     date { 2.months.from_now }
 
     trait :accepted do
+      candidate_instructions { 'Report to reception on arrival' }
       accepted_at { 5.minutes.ago }
     end
 
