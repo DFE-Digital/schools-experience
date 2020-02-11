@@ -47,9 +47,15 @@ module Bookings
             end
           end
 
-          data.keys.each do |key|
+          data.each do |key, value|
             unless ALLOWED.include?(key)
               raise "Bad Response - attribute '#{key}' is not recognised"
+            end
+
+            if key.end_with?('@odata.bind') &&
+                (value.blank? || value !~ Bookings::Gitis::Entity::BIND_FORMAT)
+
+              raise "Bad Response - odata.bind attribute '#{key}' is invalid"
             end
           end
 
@@ -59,9 +65,15 @@ module Bookings
         def update_entity(entity_id, data)
           return entity_id unless entity_id.start_with?('contacts(')
 
-          data.keys.each do |key|
+          data.each do |key, value|
             unless ALLOWED.include?(key)
               raise "Bad Response - attribute '#{key}' is not recognised"
+            end
+
+            if key.end_with?('@odata.bind') &&
+                (value.blank? || value !~ Bookings::Gitis::Entity::BIND_FORMAT)
+
+              raise "Bad Response - odata.bind attribute '#{key}' is invalid"
             end
           end
 

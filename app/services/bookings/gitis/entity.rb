@@ -3,6 +3,12 @@ module Bookings::Gitis
   class MissingPrimaryKey < RuntimeError; end
   class InvalidEntityId < RuntimeError; end
 
+  class InvalidEntity < RuntimeError
+    def initialize(entity)
+      super "#{entity.class} is invalid: #{entity.errors.details.inspect}"
+    end
+  end
+
   module Entity
     extend ActiveSupport::Concern
 
@@ -11,6 +17,8 @@ module Bookings::Gitis
     include ActiveModel::Dirty
 
     ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
+    BIND_FORMAT = /\A[^\(]+\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)\z/.freeze
+
     def self.valid_id?(id)
       ID_FORMAT.match? id.to_s
     end
@@ -70,7 +78,7 @@ module Bookings::Gitis
     end
 
     def entity_id
-      id ? "#{entity_path}(#{id})" : entity_path
+      id ? self.class.entity_id_for_id(id) : entity_path
     end
 
     def attributes_for_update
@@ -130,6 +138,10 @@ module Bookings::Gitis
         select_attribute_names + association_attribute_names
       end
 
+      def entity_id_for_id(id)
+        "#{entity_path}(#{id})"
+      end
+
       def cache_key(uuid)
         "#{entity_path}/#{uuid}"
       end
@@ -151,10 +163,12 @@ module Bookings::Gitis
         end
       end
 
-      def entity_attribute(attr_name, internal: false, except: nil)
+      def entity_attribute(attr_name, type = ActiveModel::Type::Value.new,
+        internal: false, except: nil, **options)
+
         except = Array.wrap(except).map(&:to_sym)
 
-        attribute :"#{attr_name}"
+        attribute :"#{attr_name}", type, **options
 
         # freeze the value on assignment since in place changes will break
         # change tracking
@@ -178,9 +192,12 @@ module Bookings::Gitis
         end
       end
 
-      def entity_attributes(*attr_names, internal: false, except: nil)
+      def entity_attributes(*attr_names, type: ActiveModel::Type::Value.new,
+        internal: false, except: nil, **options)
+
         Array.wrap(attr_names).flatten.each do |attr_name|
-          entity_attribute(attr_name, internal: internal, except: except)
+          entity_attribute attr_name, type,
+            internal: internal, except: except, **options
         end
       end
 
@@ -188,9 +205,9 @@ module Bookings::Gitis
         model_name.to_s.downcase.split('::').last.pluralize
       end
 
-      def entity_association(attr_name, entity_type)
+      def entity_association(attr_name, entity_type, **options)
         self.association_attribute_names = association_attribute_names + [attr_name.to_s]
-        entity_attribute :"#{attr_name}@odata.bind", except: :select
+        entity_attribute :"#{attr_name}@odata.bind", except: :select, **options
 
         value_name = "_#{attr_name.downcase}_value"
         self.select_attribute_names = select_attribute_names + [value_name]
@@ -210,7 +227,7 @@ module Bookings::Gitis
           if id_value.nil?
             send :"#{attr_name}@odata.bind=", nil
           elsif ID_FORMAT.match?(id_value)
-            send :"#{attr_name}@odata.bind=", "#{entity_type.entity_path}(#{id_value})"
+            send :"#{attr_name}@odata.bind=", entity_type.entity_id_for_id(id_value)
           else
             raise InvalidEntityId
           end

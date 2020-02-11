@@ -65,6 +65,31 @@ describe Bookings::Gitis::Contact, type: :model do
     end
   end
 
+  describe 'validations' do
+    let(:uuid) { SecureRandom.uuid }
+
+    context 'dfe_Country' do
+      let(:attr) { :'dfe_Country@odata.bind' }
+      it { is_expected.to allow_value("dfe_countries(#{uuid})").for(attr) }
+      it { is_expected.to allow_value(nil).for(attr) }
+      it { is_expected.not_to allow_value("").for(attr) }
+    end
+
+    context 'dfe_PreferredTeachingSubject01' do
+      let(:attr) { :'dfe_Country@odata.bind' }
+      it { is_expected.to allow_value("dfe_countries(#{uuid})").for(attr) }
+      it { is_expected.to allow_value(nil).for(attr) }
+      it { is_expected.not_to allow_value("").for(attr) }
+    end
+
+    context 'dfe_PreferredTeachingSubject02' do
+      let(:attr) { :'dfe_Country@odata.bind' }
+      it { is_expected.to allow_value("dfe_teachingsubjectlist(#{uuid})").for(attr) }
+      it { is_expected.to allow_value(nil).for(attr) }
+      it { is_expected.not_to allow_value("").for(attr) }
+    end
+  end
+
   describe '#created_by_us?' do
     context 'with our record' do
       subject do

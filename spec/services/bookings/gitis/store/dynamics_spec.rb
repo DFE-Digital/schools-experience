@@ -306,4 +306,25 @@ describe Bookings::Gitis::Store::Dynamics do
       end
     end
   end
+
+  describe '#write!' do
+    let(:uuid) { SecureRandom.uuid }
+
+    context 'with valid' do
+      let(:testentity) { TestEntity.new(firstname: 'Joe') }
+      before { expect(dynamics).to receive(:write).and_return(uuid) }
+      subject! { dynamics.write! testentity }
+      it { is_expected.to eql uuid }
+    end
+
+    context 'with invalid' do
+      let(:testentity) { TestEntity.new(firstname: '') }
+
+      it "will raise an error" do
+        expect { dynamics.write! testentity }.to \
+          raise_exception(Bookings::Gitis::InvalidEntity) \
+          .with_message('TestEntity is invalid: {:firstname=>[{:error=>:blank}]}')
+      end
+    end
+  end
 end

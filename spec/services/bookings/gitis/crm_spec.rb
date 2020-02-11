@@ -126,6 +126,14 @@ describe Bookings::Gitis::CRM, type: :model do
     it { is_expected.to eq contactid }
   end
 
+  describe '#write!' do
+    let(:contactid) { SecureRandom.uuid }
+    let(:contact) { build(:gitis_contact) }
+    before { expect(gitis.store).to receive(:write!).and_return(contactid) }
+    subject! { gitis.write! contact }
+    it { is_expected.to eq contactid }
+  end
+
   describe '#fetch' do
     before { allow(gitis.store).to receive(:fetch).and_return([]) }
     before { gitis.fetch TestEntity, limit: 3 }
