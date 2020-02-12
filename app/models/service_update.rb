@@ -7,16 +7,15 @@ class ServiceUpdate
   attribute :content, :string
 
   class << self
+    def dates; keys; end
+
     def latest
       find latest_date
     end
 
     def latest_date
-      dates.last
-    end
-
-    def dates
-      keys
+      # This is part of the code base so shouldn't change
+      @latest_date ||= dates.last
     end
   end
 end
