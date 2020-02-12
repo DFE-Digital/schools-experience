@@ -26,6 +26,10 @@ class ServiceUpdate
       files.map { |f| File.basename(f, '.yml') }
     end
 
+    def all
+      dates.map(&method(:find))
+    end
+
   private
 
     def load_yaml(date)
@@ -43,5 +47,9 @@ class ServiceUpdate
     def files
       Dir[data_path.join('*.yml')]
     end
+  end
+
+  def ==(other)
+    other.respond_to?(:attributes) && other.attributes == self.attributes
   end
 end

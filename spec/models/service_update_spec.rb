@@ -33,6 +33,7 @@ describe ServiceUpdate, type: :model do
     end
 
     let(:test_date) { '20200202' }
+    let(:second_date) { '20200203' }
 
     describe '.find' do
       subject { described_class.find test_date }
@@ -44,7 +45,7 @@ describe ServiceUpdate, type: :model do
 
     describe '.dates' do
       subject { described_class.dates }
-      it { is_expected.to eql [test_date] }
+      it { is_expected.to eql [test_date, second_date] }
     end
 
     describe '.latest_date' do
@@ -58,10 +59,23 @@ describe ServiceUpdate, type: :model do
     end
 
     describe '.latest' do
-      before { allow(described_class).to receive(:latest_date).and_call_original }
+      before { allow(described_class).to receive(:latest_date) { test_date } }
       subject! { described_class.latest }
-      it { is_expected.to have_attributes date: Date.parse('20200202') }
+      it { is_expected.to have_attributes date: Date.parse(test_date) }
       it { expect(described_class).to have_received(:latest_date) }
+    end
+
+    describe '#==' do
+      let(:other) { described_class.new attrs }
+      subject { described_class.new attrs }
+      it { is_expected.to eq other }
+    end
+
+    describe '.all' do
+      let(:first) { described_class.find test_date }
+      let(:second) { described_class.find second_date }
+      subject { described_class.all }
+      it { is_expected.to eq [first, second] }
     end
   end
 end
