@@ -14,6 +14,18 @@ class ServiceUpdate
       new load_yaml(date).merge(date: date)
     end
 
+    def latest
+      find latest_date
+    end
+
+    def latest_date
+      dates.last
+    end
+
+    def dates
+      files.map { |f| File.basename(f, '.yml') }
+    end
+
   private
 
     def load_yaml(date)
@@ -26,6 +38,10 @@ class ServiceUpdate
 
     def data_path
       DATA_PATH
+    end
+
+    def files
+      Dir[data_path.join('*.yml')]
     end
   end
 end

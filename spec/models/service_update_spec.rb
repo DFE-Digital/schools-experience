@@ -26,18 +26,42 @@ describe ServiceUpdate, type: :model do
     it { is_expected.to have_attributes content: attrs[:content] }
   end
 
-  describe '.find' do
+  context 'with test data' do
     before do
       allow(described_class).to receive(:data_path).and_return \
         Rails.root.join('spec', 'sample_data', 'service_updates')
     end
 
     let(:test_date) { '20200202' }
-    subject { described_class.find test_date }
 
-    it { is_expected.to have_attributes date: Date.parse('2020-02-02') }
-    it { is_expected.to have_attributes title: 'Test Service Update' }
-    it { is_expected.to have_attributes summary: 'Now you can apply for School Experience' }
-    it { is_expected.to have_attributes content: /School Experience.\nYou can search/i }
+    describe '.find' do
+      subject { described_class.find test_date }
+      it { is_expected.to have_attributes date: Date.parse('2020-02-02') }
+      it { is_expected.to have_attributes title: 'Test Service Update' }
+      it { is_expected.to have_attributes summary: 'Now you can apply for School Experience' }
+      it { is_expected.to have_attributes content: /School Experience.\nYou can search/i }
+    end
+
+    describe '.dates' do
+      subject { described_class.dates }
+      it { is_expected.to eql [test_date] }
+    end
+
+    describe '.latest_date' do
+      before do
+        allow(described_class).to receive(:dates).and_return \
+          %w(20200101 20200202 20200203)
+      end
+
+      subject { described_class.latest_date }
+      it { is_expected.to eql '20200203' }
+    end
+
+    describe '.latest' do
+      before { allow(described_class).to receive(:latest_date).and_call_original }
+      subject! { described_class.latest }
+      it { is_expected.to have_attributes date: Date.parse('20200202') }
+      it { expect(described_class).to have_received(:latest_date) }
+    end
   end
 end
