@@ -123,10 +123,10 @@ module Bookings
 
     # on subsequent placement request acceptances, pre-populate the contact details and
     # candidate instructions to shorten the process
-    def populate_contact_details!
+    def populate_contact_details
       last_booking = Bookings::Booking.last_accepted_booking_by(bookings_school)
 
-      return self unless last_booking.present?
+      return false unless last_booking.present?
 
       assign_attributes(
         contact_name: last_booking.contact_name,
@@ -134,6 +134,8 @@ module Bookings
         contact_number: last_booking.contact_number,
         location: last_booking.location,
       )
+
+      true
     end
 
     def status

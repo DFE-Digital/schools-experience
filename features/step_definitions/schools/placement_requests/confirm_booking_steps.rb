@@ -136,6 +136,6 @@ Then("there should be an {string} button and a {string} link") do |button_text, 
 end
 
 Then("I should be on the {string} page for the placement request") do |string|
-  expect(@placement_request.booking).to be_present
   expect(page.current_path).to eql(path_for(string, placement_request: @placement_request))
+  expect(@placement_request.booking).to be_present
 end
