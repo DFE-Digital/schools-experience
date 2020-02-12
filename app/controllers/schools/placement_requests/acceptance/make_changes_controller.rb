@@ -20,7 +20,7 @@ module Schools
           @booking = find_or_build_booking(@placement_request)
           @booking.assign_attributes(booking_params)
 
-          if @booking.save
+          if @booking.save(context: :acceptance)
             redirect_to edit_schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id)
           else
             @subjects = @current_school.subjects.all
