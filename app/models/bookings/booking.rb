@@ -36,6 +36,7 @@ module Bookings
     validates :bookings_school, presence: true
     validates :duration, presence: true, numericality: { greater_than: 0 }
     validates :attended, inclusion: [nil], if: -> { bookings_placement_request&.cancelled? }
+    validates :attended, inclusion: [true, false], on: :attendance
 
     validates :contact_name, presence: true, on: %i(create acceptance)
     validates :contact_number, presence: true, on: %i(create acceptance)

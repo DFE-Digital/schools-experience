@@ -48,6 +48,10 @@ describe Bookings::Booking do
     it { is_expected.to validate_presence_of(:contact_email).on(:acceptance) }
     it { is_expected.to validate_email_format_of(:contact_email).with_message('Enter a valid contact email address') }
 
+    it { is_expected.to allow_value(true).for(:attended).on(:attendance) }
+    it { is_expected.to allow_value(false).for(:attended).on(:attendance) }
+    it { is_expected.not_to allow_value(nil).for(:attended).on(:attendance) }
+
     context '#date' do
       it { is_expected.to validate_presence_of(:date) }
 
