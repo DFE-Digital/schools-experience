@@ -36,10 +36,13 @@ module Bookings
     validates :bookings_school, presence: true
     validates :duration, presence: true, numericality: { greater_than: 0 }
     validates :attended, inclusion: [nil], if: -> { bookings_placement_request&.cancelled? }
+    validates :attended, inclusion: [true, false], on: :attendance
 
-    validates :contact_name, presence: true
-    validates :contact_number, presence: true, phone: true
-    validates :contact_email, presence: true, email_format: true
+    validates :contact_name, presence: true, on: %i(create acceptance)
+    validates :contact_number, presence: true, on: %i(create acceptance)
+    validates :contact_number, phone: true, if: -> { contact_number.present? }
+    validates :contact_email, presence: true, on: %i(create acceptance)
+    validates :contact_email, email_format: true, if: -> { contact_email.present? }
 
     validates :candidate_instructions, presence: true, on: :acceptance_email_preview
 
@@ -121,10 +124,10 @@ module Bookings
 
     # on subsequent placement request acceptances, pre-populate the contact details and
     # candidate instructions to shorten the process
-    def populate_contact_details!
+    def populate_contact_details
       last_booking = Bookings::Booking.last_accepted_booking_by(bookings_school)
 
-      return self unless last_booking.present?
+      return false unless last_booking.present?
 
       assign_attributes(
         contact_name: last_booking.contact_name,
@@ -132,6 +135,8 @@ module Bookings
         contact_number: last_booking.contact_number,
         location: last_booking.location,
       )
+
+      true
     end
 
     def status

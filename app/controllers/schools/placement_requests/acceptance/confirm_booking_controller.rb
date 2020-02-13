@@ -9,7 +9,7 @@ module Schools
 
           @placement_request.fetch_gitis_contact gitis_crm
           @booking = find_or_build_booking(@placement_request)
-          @last_booking = Bookings::Booking.last_accepted_booking_by(@placement_request.school)
+          @last_booking_found = @booking.populate_contact_details
         end
 
         def create
@@ -18,9 +18,8 @@ module Schools
             .find(params[:placement_request_id])
 
           booking = find_or_build_booking(@placement_request)
-          booking.populate_contact_details!
 
-          if booking.save
+          if booking.save(context: :acceptance)
             redirect_to edit_schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id)
           else
             @placement_request.fetch_gitis_contact gitis_crm
