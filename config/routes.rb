@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get '/accessibility_statement', to: 'pages#accessibility_statement'
   get '/cookies_policy', to: 'pages#cookies_policy'
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
-  get '/service_update', to: 'pages#service_update'
+  get '/service_update', to: 'service_updates#show'
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
   get '/dfe_signin_help', to: 'pages#dfe_signin_help'
 

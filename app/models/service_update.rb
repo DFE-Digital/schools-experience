@@ -1,5 +1,6 @@
 class ServiceUpdate
   include YamlModel
+  KEY_FORMAT = '%Y%m%d'.freeze
 
   pk_attribute :date, :date
   attribute :title, :string
@@ -9,13 +10,21 @@ class ServiceUpdate
   class << self
     def dates; keys; end
 
-    def latest
-      find latest_date
+    def latest(limit = nil)
+      if limit
+        dates.reverse.slice(0, limit).map(&method(:find))
+      else
+        find latest_date
+      end
     end
 
     def latest_date
       # This is part of the code base so shouldn't change
       @latest_date ||= dates.last
     end
+  end
+
+  def key
+    date.strftime KEY_FORMAT
   end
 end
