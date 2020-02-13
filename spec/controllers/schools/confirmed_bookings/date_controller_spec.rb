@@ -6,7 +6,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
   include_context "logged in DfE user"
 
   let(:booking) do
-    create(:bookings_booking, bookings_school: @current_user_school)
+    create(:bookings_booking, :accepted, bookings_school: @current_user_school)
   end
 
   let!(:profile) { create(:bookings_profile, school: @current_user_school) }
