@@ -24,7 +24,7 @@
           <%= render partial: 'schools/dashboards/no_availability_info_warning' %>
         <%- end -%>
 
-        <%= render partial: 'service_update_notice' if @latest_service_update %>
+        <%= render 'service_update_notice' if @latest_service_update && !@viewed_latest_service_update %>
 
         <%= render partial: 'new_requests_and_bookings' %>
         <%= render partial: 'manage_dates' %>

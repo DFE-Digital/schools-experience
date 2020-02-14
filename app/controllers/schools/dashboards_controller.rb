@@ -28,7 +28,20 @@ module Schools
         .withdrawn_but_unviewed
         .count
 
+      set_latest_service_update
+    end
+
+  private
+
+    def set_latest_service_update
       @latest_service_update = ServiceUpdate.latest
+
+      @viewed_latest_service_update =
+        !!(service_update_cookie && service_update_cookie >= @latest_service_update.to_param)
+    end
+
+    def service_update_cookie
+      cookies[ServiceUpdate.cookie_key]
     end
   end
 end

@@ -2,7 +2,11 @@ require 'rails_helper'
 require_relative 'session_context'
 
 describe Schools::DashboardsController, type: :request do
+  let(:service_update) { build :service_update }
+
   context '#show' do
+    before { allow(ServiceUpdate).to receive(:latest) { service_update } }
+
     context 'when a school exists' do
       let!(:school) do
         FactoryBot.create(:bookings_school, name: 'organisation one', urn: '123456')
@@ -19,6 +23,27 @@ describe Schools::DashboardsController, type: :request do
 
         it 'renders the show template' do
           expect(response).to render_template :show
+        end
+
+        it 'sets the latest_service_update' do
+          expect(assigns[:latest_service_update]).to eq ServiceUpdate.latest
+        end
+
+        it 'sets view_latest_service_update' do
+          expect(assigns[:viewed_latest_service_update]).to be false
+        end
+      end
+
+      context 'when viewed latest update' do
+        before do
+          cookies[ServiceUpdate.cookie_key] = ServiceUpdate.latest.to_param
+        end
+        include_context "logged in DfE user"
+
+        subject! { get '/schools/dashboard' }
+
+        it 'sets view_latest_service_update' do
+          expect(assigns[:viewed_latest_service_update]).to be true
         end
       end
 
