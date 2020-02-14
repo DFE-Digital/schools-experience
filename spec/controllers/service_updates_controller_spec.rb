@@ -3,9 +3,9 @@ require 'rails_helper'
 describe ServiceUpdatesController, type: :request do
   let(:updates) { build_list :service_update, 3 }
 
-  describe '#show' do
+  describe '#index' do
     before { allow(ServiceUpdate).to receive(:latest).with(10) { updates } }
-    before { get service_update_path }
+    before { get service_updates_path }
     subject { response }
 
     it { is_expected.to have_http_status(:success) }
