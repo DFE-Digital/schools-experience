@@ -22,9 +22,9 @@ class ServiceUpdate
       # This is part of the code base so shouldn't change
       @latest_date ||= dates.last
     end
-  end
 
-  def key
-    date.strftime KEY_FORMAT
+    def from_param(id)
+      find Date.parse(id).strftime KEY_FORMAT
+    end
   end
 end

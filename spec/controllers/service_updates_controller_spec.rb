@@ -8,8 +8,21 @@ describe ServiceUpdatesController, type: :request do
     before { get service_updates_path }
     subject { response }
 
-    it { is_expected.to have_http_status(:success) }
+    it { is_expected.to have_http_status :success }
     it { is_expected.to render_template 'index' }
     it { is_expected.to render_template '_service_update' }
+  end
+
+  describe '#show' do
+    before do
+      allow(ServiceUpdate).to \
+        receive(:from_param).with(updates[0].to_param) { updates[0] }
+
+      get service_update_path updates[0]
+    end
+    subject { response }
+
+    it { is_expected.to have_http_status :success }
+    it { is_expected.to render_template 'show' }
   end
 end

@@ -10,6 +10,8 @@ describe ServiceUpdate, type: :model do
     }
   end
 
+  let(:service_update) { described_class.new attrs }
+
   describe 'attributes' do
     subject { described_class.new attrs }
 
@@ -17,7 +19,7 @@ describe ServiceUpdate, type: :model do
     it { is_expected.to have_attributes title: attrs[:title] }
     it { is_expected.to have_attributes summary: attrs[:summary] }
     it { is_expected.to have_attributes content: attrs[:content] }
-    it { is_expected.to have_attributes key: '20200601' }
+    it { is_expected.to have_attributes to_param: '2020-06-01' }
   end
 
   context 'with stub data' do
@@ -50,7 +52,7 @@ describe ServiceUpdate, type: :model do
       end
 
       context 'with limit' do
-        let(:updates) { build_list(:service_update, 10).index_by(&:key) }
+        let(:updates) { build_list(:service_update, 10).index_by(&:id) }
         before { allow(described_class).to receive(:find) { |k| updates[k] } }
         before { allow(described_class).to receive(:dates) { updates.keys } }
 
@@ -59,5 +61,15 @@ describe ServiceUpdate, type: :model do
         it { is_expected.to eq updates.values.reverse.slice(0, 5) }
       end
     end
+  end
+
+  describe '.from_param' do
+    before do
+      allow(described_class).to \
+        receive(:find).with('20200601') { service_update }
+    end
+
+    subject { described_class.from_param attrs[:date] }
+    it { is_expected.to eq service_update }
   end
 end
