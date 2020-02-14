@@ -27,6 +27,8 @@ module Schools
         .placement_requests
         .withdrawn_but_unviewed
         .count
+
+      @latest_service_update = ServiceUpdate.latest
     end
   end
 end

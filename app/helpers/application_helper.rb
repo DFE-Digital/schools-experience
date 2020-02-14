@@ -62,10 +62,6 @@ module ApplicationHelper
       locals: { key: key, value: value, action: action, id: id }
   end
 
-  def service_update_last_updated_at
-    SERVICE_UPDATE_LAST_UPDATED_AT.to_formatted_s :govuk
-  end
-
   def current_user_info_and_logout_link
     logout_link = link_to("Logout", logout_schools_session_path)
 

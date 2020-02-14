@@ -13,8 +13,8 @@ class ServiceUpdate
     def latest(limit = nil)
       if limit
         dates.reverse.slice(0, limit).map(&method(:find))
-      else
-        find(latest_date)
+      elsif (date = latest_date)
+        find date
       end
     end
 

@@ -37,14 +37,16 @@
           Help and support
         </h2>
 
+        <%- if @latest_service_update -%>
         <div id="service-updates-and-guidance" class="subsection">
           <header class="dashboard-low-priority">
-            <%= link_to "Service updates and guidance - #{service_update_last_updated_at}", service_update_path %>
+            <%= link_to "Service updates and guidance - #{@latest_service_update.date.to_formatted_s(:govuk)}", service_updates_path %>
           </header>
           <span class="govuk-hint">
             Find out about the latest changes to the service and how it works
           </span>
         </div>
+        <%- end -%>
 
         <div id="contact-us" class="subsection">
           <header class="dashboard-low-priority">
