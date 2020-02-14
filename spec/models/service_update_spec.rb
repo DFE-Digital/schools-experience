@@ -22,7 +22,7 @@ describe ServiceUpdate, type: :model do
 
   context 'with stub data' do
     let(:stub_dates) { %w(20010201 20200202 20200203) }
-    before { allow(described_class).to receive(:keys) { stub_dates } }
+    before { allow(described_class).to receive(:ids) { stub_dates } }
 
     describe '.dates' do
       subject { described_class.dates }
@@ -38,7 +38,7 @@ describe ServiceUpdate, type: :model do
       context 'without limit' do
         before do
           allow(described_class).to receive(:find).with(stub_dates.last) \
-            { |key| described_class.new attrs.merge date: key }
+            { |date| described_class.new attrs.merge date: date }
 
           allow(described_class).to receive(:latest_date) { stub_dates.last }
         end
@@ -52,7 +52,7 @@ describe ServiceUpdate, type: :model do
       context 'with limit' do
         let(:updates) { build_list(:service_update, 10).index_by(&:key) }
         before { allow(described_class).to receive(:find) { |k| updates[k] } }
-        before { allow(described_class).to receive(:keys) { updates.keys } }
+        before { allow(described_class).to receive(:dates) { updates.keys } }
 
         subject { described_class.latest(5) }
 

@@ -3,7 +3,7 @@ describe YamlModel, type: :model do
   class YamlTestModel
     include YamlModel
 
-    pk_attribute :dob, :date
+    id_attribute :dob, :date
     attribute :firstname, :string
     attribute :lastname, :string
   end
@@ -33,8 +33,8 @@ describe YamlModel, type: :model do
       it { is_expected.to have_attributes lastname: 'Smith' }
     end
 
-    describe '.keys' do
-      subject { described_class.keys }
+    describe '.ids' do
+      subject { described_class.ids }
       it { is_expected.to eql [test_dob, second_dob] }
     end
 
@@ -51,5 +51,17 @@ describe YamlModel, type: :model do
       subject { described_class.all }
       it { is_expected.to eq [first, second] }
     end
+  end
+
+  context 'attributes' do
+    subject do
+      described_class.new dob: '1978-01-01', firstname: 'James', lastname: 'Smith'
+    end
+
+    it { is_expected.to have_attributes id: Date.parse('1978-01-01') }
+    it { is_expected.to have_attributes dob: Date.parse('1978-01-01') }
+    it { is_expected.to have_attributes firstname: 'James' }
+    it { is_expected.to have_attributes lastname: 'Smith' }
+    it { is_expected.to have_attributes to_param: '1978-01-01' }
   end
 end

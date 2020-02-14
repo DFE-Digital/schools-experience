@@ -2,13 +2,13 @@ class ServiceUpdate
   include YamlModel
   KEY_FORMAT = '%Y%m%d'.freeze
 
-  pk_attribute :date, :date
+  id_attribute :date, :date
   attribute :title, :string
   attribute :summary, :string
   attribute :content, :string
 
   class << self
-    def dates; keys; end
+    def dates; ids; end
 
     def latest(limit = nil)
       if limit
