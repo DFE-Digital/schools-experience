@@ -238,6 +238,43 @@
           </tbody>
         </table>
       </section>
+      <section>
+        <h3 class="govuk-heading-m">Service update cookie</h3>
+        <p>
+          Records whether you've seen the latest service update
+        </p>
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">
+                Name
+              </th>
+              <th class="govuk-table__header" scope="col">
+                Purpose
+              </th>
+              <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+                Expires
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <strong><%= ServiceUpdate.cookie_key %></strong>
+              </td>
+              <td class="govuk-table__cell">
+                Used by Get school experience and Manage school experience to
+                decide whether to highlight the latest Service Update to you
+                via a banner.
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <%# This is correct - the ServiceUpdates controller uses the CookiePreferences timeout to set the expiry time %>
+                <%= CookiePreference::EXPIRES_IN.inspect %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </section>
 
     <br>
