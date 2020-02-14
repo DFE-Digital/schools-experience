@@ -1,6 +1,7 @@
 class ServiceUpdate
   include YamlModel
   KEY_FORMAT = '%Y%m%d'.freeze
+  COOKIE_KEY = 'latest-viewed-service-update'.freeze
 
   id_attribute :date, :date
   attribute :title, :string
@@ -25,6 +26,10 @@ class ServiceUpdate
 
     def from_param(id)
       find Date.parse(id).strftime KEY_FORMAT
+    end
+
+    def cookie_key
+      COOKIE_KEY
     end
   end
 end

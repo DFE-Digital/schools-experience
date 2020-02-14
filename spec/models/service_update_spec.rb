@@ -12,6 +12,11 @@ describe ServiceUpdate, type: :model do
 
   let(:service_update) { described_class.new attrs }
 
+  describe 'class' do
+    subject { described_class.cookie_key }
+    it { is_expected.to eql 'latest-viewed-service-update' }
+  end
+
   describe 'attributes' do
     subject { described_class.new attrs }
 
