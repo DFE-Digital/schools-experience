@@ -49,8 +49,12 @@ module YamlModel
       data_path.join "#{id}.yml"
     end
 
+    def base_path
+      Rails.root.join 'data'
+    end
+
     def data_path
-      Rails.root.join('data', model_name.collection).freeze
+      base_path.join model_name.collection
     end
 
     def files

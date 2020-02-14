@@ -14,13 +14,13 @@ class ServiceUpdate
       if limit
         dates.reverse.slice(0, limit).map(&method(:find))
       else
-        find latest_date
+        find(latest_date)
       end
     end
 
     def latest_date
       # This is part of the code base so shouldn't change
-      @latest_date ||= dates.last
+      dates.last
     end
 
     def from_param(id)
