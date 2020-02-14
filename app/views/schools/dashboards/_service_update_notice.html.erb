@@ -1,0 +1,12 @@
+<div class="govuk-inset-text">
+  <h2 class="govuk-heading-m">
+    <%= @latest_service_update.date.to_formatted_s(:govuk) %> -
+    <%= @latest_service_update.title %>
+  </h2>
+
+  <p>
+    <%= @latest_service_update.summary %>
+    -
+    <%= link_to 'read more', service_updates_path %>
+  </p>
+</div>
