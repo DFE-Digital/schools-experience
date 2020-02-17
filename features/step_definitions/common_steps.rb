@@ -99,3 +99,7 @@ end
 Then("I should see a back link") do
   expect(page).to have_link("Back")
 end
+
+Then("I click {string}") do |link|
+  click_on link
+end
