@@ -10,7 +10,7 @@
       <%= @update.title %>
     </h2>
 
-    <%= raw @update.content %>
+    <%= sanitize @update.html_content %>
   </div>
 </div>
 

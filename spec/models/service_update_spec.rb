@@ -6,7 +6,7 @@ describe ServiceUpdate, type: :model do
       date: '2020-06-01',
       title: 'Service Update A',
       summary: 'This is a short summary of Update A',
-      content: "This is the full description of Update A.\n\nWith a longer explanation",
+      html_content: "This is the full description of Update A.\n\nWith a longer explanation",
     }
   end
 
@@ -23,7 +23,7 @@ describe ServiceUpdate, type: :model do
     it { is_expected.to have_attributes date: Date.parse(attrs[:date]) }
     it { is_expected.to have_attributes title: attrs[:title] }
     it { is_expected.to have_attributes summary: attrs[:summary] }
-    it { is_expected.to have_attributes content: attrs[:content] }
+    it { is_expected.to have_attributes html_content: attrs[:html_content] }
     it { is_expected.to have_attributes to_param: '2020-06-01' }
   end
 

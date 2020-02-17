@@ -15,7 +15,7 @@
       <%= @latest.title %>
     </h2>
 
-    <%= raw @latest.content %>
+    <%= sanitize @latest.html_content %>
     <%- else -%>
     <p>
       <em>No service updates are currently available</em>

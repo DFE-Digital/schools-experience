@@ -6,7 +6,7 @@ class ServiceUpdate
   id_attribute :date, :date
   attribute :title, :string
   attribute :summary, :string
-  attribute :content, :string
+  attribute :html_content, :string
 
   class << self
     def dates; ids; end
@@ -24,8 +24,9 @@ class ServiceUpdate
       dates.last
     end
 
-    def from_param(id)
-      find Date.parse(id).strftime KEY_FORMAT
+    def from_param(date)
+      safe_date = date.gsub(%r([^\d-]), '')
+      find Date.parse(safe_date).strftime KEY_FORMAT
     end
 
     def cookie_key
