@@ -9,6 +9,17 @@ module LinkAndButtonHelper
     button_to(*args, link_defaults(classes).deep_merge(options), &block)
   end
 
+  def govuk_back_link(path = :back, text: 'Back', javascript: false, **options)
+    if javascript
+      options[:data] ||= {}
+      options[:data][:controller] = "back-link #{options[:data][:controller]}".strip
+    end
+
+    options[:class] = "govuk-back-link #{options[:class]}".strip
+
+    link_to text, path, **options
+  end
+
 private
 
   def link_defaults(classes)
