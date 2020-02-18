@@ -8,7 +8,7 @@
   }
 %>
 
-<%= link_to 'Back', schools_placement_requests_path, class: 'govuk-back-link' %>
+<%= govuk_back_link schools_placement_requests_path %>
 
 <% if @placement_request.candidate_cancellation&.sent? %>
   <h1><%= @gitis_contact.full_name %> has withdrawn their request</h1>

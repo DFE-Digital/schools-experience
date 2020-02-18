@@ -1,6 +1,6 @@
 <%- self.page_title = "Send details to candidate" %>
 
-<%= link_to "Back", new_schools_placement_request_acceptance_make_changes_path(@placement_request), class: 'govuk-back-link', data: { controller: 'back-link' } %>
+<%= govuk_back_link new_schools_placement_request_acceptance_make_changes_path(@placement_request), javascript: true %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
