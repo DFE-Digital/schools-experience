@@ -40,9 +40,9 @@ module Bookings
 
     validates :contact_name, presence: true, on: %i(create acceptance)
     validates :contact_number, presence: true, on: %i(create acceptance)
-    validates :contact_number, phone: true, if: -> { contact_number.present? }
+    validates :contact_number, phone: true, on: %i(create acceptance), if: -> { contact_number.present? }
     validates :contact_email, presence: true, on: %i(create acceptance)
-    validates :contact_email, email_format: true, if: -> { contact_email.present? }
+    validates :contact_email, email_format: true, on: %i(create acceptance), if: -> { contact_email.present? }
 
     validates :candidate_instructions, presence: true, on: :acceptance_email_preview
 
