@@ -115,7 +115,7 @@ describe LinkAndButtonHelper do
       it { is_expected.to have_css 'a[data-controller="back-link test"]' }
     end
 
-    context 'with back path', :focus do
+    context 'with back path' do
       subject { govuk_back_link '/test' }
       it { is_expected.to have_content 'Back' }
       it { is_expected.to have_css 'a.govuk-back-link' }
