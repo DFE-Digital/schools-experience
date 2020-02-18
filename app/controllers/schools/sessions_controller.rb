@@ -54,14 +54,14 @@ module Schools
       userinfo = extract_userinfo(client.access_token!)
 
       # now we have the dfe sign-in user uuid and urn in the session, check permissions
-      check_role!(userinfo[:dfe_sign_in_user_uuid], userinfo[:urn])
+      check_role!(userinfo[:dfe_sign_in_user_uuid], userinfo[:dfe_sign_in_org_uuid])
       populate_session(userinfo)
 
       redirect_to(session.delete(:return_url) || schools_dashboard_path)
 
     # the DfE Sign-in api returns a 404 if the resource (permission) we're looking
     # for isn't there
-    rescue Faraday::ResourceNotFound => e
+    rescue Faraday::ResourceNotFound, Schools::DFESignInAPI::NoOrganisationError => e
       raise InsufficientPrivilegesError, e
 
     # if we fail with an AttrRequired::AttrMissing error here it's likely that
@@ -73,10 +73,10 @@ module Schools
 
   private
 
-    def check_role!(user_uuid, urn)
+    def check_role!(user_uuid, organisation_uuid)
       return true unless Schools::DFESignInAPI::Client.role_check_enabled?
 
-      unless Schools::DFESignInAPI::Roles.new(user_uuid, urn).has_school_experience_role?
+      unless Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
         raise InsufficientPrivilegesError, 'missing school experience administrator role'
       end
     end
@@ -107,6 +107,7 @@ module Schools
           info[:current_user]          = userinfo
           info[:urn]                   = userinfo.raw_attributes.dig("organisation", "urn").to_i
           info[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
+          info[:dfe_sign_in_org_uuid]  = userinfo.raw_attributes.dig("organisation", "id")
           info[:dfe_sign_in_user_uuid] = userinfo.sub
         end
       end
