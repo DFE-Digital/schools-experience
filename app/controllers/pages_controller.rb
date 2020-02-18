@@ -30,7 +30,6 @@ private
     when 'schools_privacy_policy' then 'pages/schools_privacy_policy'
     when 'cookies_policy' then 'pages/cookies_policy'
     when 'migration' then 'pages/migration'
-    when 'service_update' then 'pages/service_update'
     when 'help_and_support_access_needs' then 'pages/help_and_support_access_needs'
     else
       raise ActiveRecord::RecordNotFound

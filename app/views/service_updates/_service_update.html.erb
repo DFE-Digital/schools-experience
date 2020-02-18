@@ -1,0 +1,10 @@
+<h3 class="govuk-heading-s">
+  <%= service_update.date.to_formatted_s(:govuk) %> -
+  <%= service_update.title %>
+</h3>
+
+<p>
+  <%= service_update.summary %>
+  -
+  <%= link_to 'read more', service_update %>
+</p>
