@@ -48,7 +48,7 @@ Rails.application.routes.draw do
       end
       namespace :acceptance do
         resource :confirm_booking,
-          only: %i(new create),
+          only: %i(new),
           controller: '/schools/placement_requests/acceptance/confirm_booking'
         resource :make_changes,
           only: %i(new create),
