@@ -48,15 +48,19 @@ private
   end
 
   def school_urns(reload = false)
-    session[:urns] = nil if reload
-
-    session[:urns] ||= retrieve_school_urns.freeze # should only be replaced, not changed immutable
+    school_uuids(reload).values
   end
 
-  def retrieve_school_urns
+  def school_uuids(reload = false)
+    session[:uuid_map] = nil if reload
+
+    session[:uuid_map] ||= retrieve_school_uuids.freeze
+  end
+
+  def retrieve_school_uuids
     Schools::DFESignInAPI::Organisations
       .new(current_user.sub)
-      .urns
+      .uuids
   end
 
   def other_school_urns

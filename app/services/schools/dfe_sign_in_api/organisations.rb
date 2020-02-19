@@ -19,6 +19,12 @@ module Schools
         organisations.map { |record| record.fetch('urn').to_i }
       end
 
+      def uuids
+        organisations.each.with_object({}) do |record, uuidmap|
+          uuidmap[record['id']] = record['urn']
+        end
+      end
+
       def id(urn)
         organisations
           .find { |org| org['urn'].to_i == urn }

@@ -37,17 +37,17 @@ module Schools
     end
 
     def urns
-      organisations.urns
+      organisations.uuids.values
     end
 
     def organisations
       @organisations ||= Schools::DFESignInAPI::Organisations.new(current_user.sub)
     end
 
-    def user_has_role_at_school?(user_uuid, urn)
+    def user_has_role_at_school?(user_uuid, organisation_uuid)
       return true unless Schools::DFESignInAPI::Client.role_check_enabled?
 
-      Schools::DFESignInAPI::Roles.new(user_uuid, urn).has_school_experience_role?
+      Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
     rescue Faraday::ResourceNotFound
       # if the role isn't found the API returns a 404 - this means that the user
       # has insufficient privileges but this *isn't* really an error, so log it
