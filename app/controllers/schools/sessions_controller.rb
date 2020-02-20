@@ -61,7 +61,7 @@ module Schools
 
     # the DfE Sign-in api returns a 404 if the resource (permission) we're looking
     # for isn't there
-    rescue Faraday::ResourceNotFound, Schools::DFESignInAPI::NoOrganisationError => e
+    rescue Faraday::ResourceNotFound, Schools::DFESignInAPI::Roles::NoOrganisationError => e
       raise InsufficientPrivilegesError, e
 
     # if we fail with an AttrRequired::AttrMissing error here it's likely that

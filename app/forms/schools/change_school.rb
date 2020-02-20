@@ -10,8 +10,6 @@ module Schools
     validates :urn, inclusion: { in: :organisation_urns }, if: -> { urn.present? }
     validate :validate_user_has_role_at_school, if: -> { urn.present? }
 
-    delegate :role_check_enabled?, to: Schools::DFESignInAPI::Client
-
     def self.allow_school_change_in_app?
       [
         Rails.configuration.x.dfe_sign_in_api_enabled,
@@ -53,8 +51,6 @@ module Schools
     end
 
     def user_has_role_at_school?
-      return true unless role_check_enabled?
-
       role_checker.has_school_experience_role?
     rescue Faraday::ResourceNotFound
       # if the role isn't found the API returns a 404 - this means that the user

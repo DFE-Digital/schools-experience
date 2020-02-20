@@ -10,7 +10,6 @@ describe Schools::ChangeSchoolsController, type: :request do
 
   before do
     allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { enable_signin_api }
-    allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?) { true }
 
     allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled) { true }
     allow(Rails.application.config.x).to \
@@ -79,25 +78,8 @@ describe Schools::ChangeSchoolsController, type: :request do
         context 'when role checking is enabled' do
           before { subject }
 
-          specify 'the roles API status should be checked' do
-            expect(Schools::DFESignInAPI::Client).to have_received(:role_check_enabled?).exactly(1).times
-          end
-
           specify 'Schools::DFESignInAPI::Roles should be initialised' do
             expect(Schools::DFESignInAPI::Roles).to have_received(:new).exactly(1).times
-          end
-        end
-
-        context 'when role checking is disabled' do
-          before { allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(false) }
-          before { subject }
-
-          specify 'the roles API status should be checked' do
-            expect(Schools::DFESignInAPI::Client).to have_received(:role_check_enabled?).exactly(1).times
-          end
-
-          specify 'Schools::DFESignInAPI::Roles should not be initialised' do
-            expect(Schools::DFESignInAPI::Roles).not_to have_received(:new)
           end
         end
       end

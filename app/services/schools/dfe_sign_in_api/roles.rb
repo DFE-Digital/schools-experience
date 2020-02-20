@@ -1,7 +1,5 @@
 module Schools
   module DFESignInAPI
-    class NoOrganisationError < RuntimeError; end
-
     class Roles < Client
       attr_accessor :user_uuid, :organisation_uuid
 
@@ -23,6 +21,8 @@ module Schools
       def has_school_experience_role?
         roles.any? { |role| role['id'] == self.class.role_id }
       end
+
+      class NoOrganisationError < RuntimeError; end
 
     private
 
