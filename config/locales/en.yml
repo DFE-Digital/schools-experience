@@ -198,6 +198,11 @@ en:
             analytics:
               inclusion: Choose On or Off for cookies which measure website use
 
+        schools/change_school:
+          attributes:
+            urn:
+              missing_dfe_signin_role: You need to request school experience administrator access to this school in DfE Sign-in
+
         schools/on_boarding/dbs_requirement:
           attributes:
             requires_check:
