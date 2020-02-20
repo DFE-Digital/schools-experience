@@ -3,13 +3,19 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ChangeSchoolsController, type: :request do
   include_context "logged in DfE user"
-  before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true) }
-  before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled).and_return(true) }
-  before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_school_change_enabled).and_return(true) }
-  before { allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true) }
-
+  let(:enable_signin_api) { true }
+  let(:enable_school_change) { true }
   let(:old_school) { @current_user_school }
   let(:new_school) { create(:bookings_school) }
+
+  before do
+    allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { enable_signin_api }
+    allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?) { true }
+
+    allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled) { true }
+    allow(Rails.application.config.x).to \
+      receive(:dfe_sign_in_api_school_change_enabled) { enable_school_change }
+  end
 
   describe '#show' do
     subject { get '/schools/change' }
@@ -26,9 +32,8 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:urns) { [old_school, new_school].map(&:urn) }
 
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to(
+        allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
           receive(:has_school_experience_role?).and_return(true)
-        )
       end
 
       let(:params) { { schools_change_school: { id: new_school.id } } }
@@ -82,9 +87,8 @@ describe Schools::ChangeSchoolsController, type: :request do
 
     context 'when the user does not have access to the new school' do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to(
+        allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
           receive(:has_school_experience_role?).and_return(false)
-        )
       end
       let(:new_school) { create(:bookings_school) }
       let(:params) { { schools_change_school: { id: new_school.id } } }
@@ -97,12 +101,11 @@ describe Schools::ChangeSchoolsController, type: :request do
     end
 
     context 'when internal changing is disabled' do
-      before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled).and_return(false) }
-      before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_school_change_enabled).and_return(false) }
-
+      let(:enable_signin_api) { false }
+      let(:enable_school_change) { false }
       let(:params) { { schools_change_school: { id: new_school.id } } }
-
       let(:change_school_page) { get '/schools/change' }
+
       subject { post('/schools/change', params: params) }
 
       specify 'should fail with a 403: forbidden' do
