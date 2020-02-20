@@ -47,6 +47,11 @@ describe Schools::ChangeSchoolsController, type: :request do
       before do
         allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
           receive(:has_school_experience_role?).and_return(true)
+
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+          receive(:uuids).and_return \
+            SecureRandom.uuid => old_school.urn,
+            SecureRandom.uuid => new_school.urn
       end
 
       let(:params) { { schools_change_school: { urn: new_school.urn } } }
@@ -100,6 +105,9 @@ describe Schools::ChangeSchoolsController, type: :request do
 
     context 'when the user does not have access to the new school' do
       before do
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+          receive(:uuids).and_return SecureRandom.uuid => new_school.urn
+
         allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
           receive(:has_school_experience_role?).and_return(false)
       end
@@ -133,6 +141,9 @@ describe Schools::ChangeSchoolsController, type: :request do
 
       before do
         allow_any_instance_of(described_class).to receive(:current_urn) { nil }
+
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+          receive(:uuids).and_return SecureRandom.uuid => new_school.urn
 
         allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
           receive(:has_school_experience_role?).and_return(true)

@@ -21,7 +21,7 @@ module Schools
 
       def uuids
         organisations.each.with_object({}) do |record, uuidmap|
-          uuidmap[record['id']] = record['urn']
+          uuidmap[record['id']] = record['urn'].to_i
         end
       end
 

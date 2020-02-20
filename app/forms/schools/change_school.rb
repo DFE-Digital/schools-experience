@@ -7,6 +7,7 @@ module Schools
 
     attribute :urn, :integer
     validates :urn, presence: true
+    validates :urn, inclusion: { in: :organisation_urns }, if: -> { urn.present? }
     validate :validate_user_has_role_at_school, if: -> { urn.present? }
 
     delegate :role_check_enabled?, to: Schools::DFESignInAPI::Client
