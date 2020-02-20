@@ -5,8 +5,8 @@ module Schools
 
     attr_reader :current_user, :organisation_uuids
 
-    attribute :id
-    validates :id, presence: true
+    attribute :urn
+    validates :urn, presence: true
 
     def self.allow_school_change_in_app?
       [
@@ -22,25 +22,25 @@ module Schools
       super attributes
     end
 
-    def id=(school_id)
+    def urn=(school_urn)
       @_current_school = nil
       super
     end
 
     def retrieve_valid_school!
       validate!
-      Bookings::School.find(id)
+      Bookings::School.find_by!(urn: urn)
     end
 
     def available_schools
-      Bookings::School.ordered_by_name.where(urn: urns)
+      Bookings::School.ordered_by_name.where(urn: organisation_urns)
     end
 
     class InaccessibleSchoolError < StandardError; end
 
   private
 
-    def urns
+    def organisation_urns
       organisation_uuids.values
     end
   end

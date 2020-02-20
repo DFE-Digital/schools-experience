@@ -19,7 +19,7 @@ describe 'schools/change_schools/show.html.erb', type: :view do
     before do
       assign :current_school, school
       assign :schools, all_schools
-      assign :change_school, Schools::ChangeSchool.new(nil, {}, id: school.id)
+      assign :change_school, Schools::ChangeSchool.new(nil, {}, urn: school.urn)
     end
 
     before { render }
@@ -30,8 +30,8 @@ describe 'schools/change_schools/show.html.erb', type: :view do
 
     specify 'the current school should already be selected' do
       expect(rendered).to have_css(
-        "input[type='radio'][value='%<school_id>d'][checked='checked']" % {
-          school_id: school.id
+        "input[type='radio'][value='%<school_urn>d'][checked='checked']" % {
+          school_urn: school.urn
         }
       )
     end

@@ -7,7 +7,7 @@ module Schools
 
     def show
       @change_school = Schools::ChangeSchool.new \
-        current_user, school_uuids, id: @current_school&.id
+        current_user, school_uuids, urn: @current_school&.urn
 
       @schools = @change_school.available_schools
     end
@@ -34,7 +34,7 @@ module Schools
     end
 
     def change_school_params
-      params.require(:schools_change_school).permit(:id)
+      params.require(:schools_change_school).permit(:urn)
     end
 
     def access_denied

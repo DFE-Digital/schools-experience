@@ -49,7 +49,7 @@ describe Schools::ChangeSchoolsController, type: :request do
           receive(:has_school_experience_role?).and_return(true)
       end
 
-      let(:params) { { schools_change_school: { id: new_school.id } } }
+      let(:params) { { schools_change_school: { urn: new_school.urn } } }
 
       let(:change_school_page) { get '/schools/change' }
       subject { post('/schools/change', params: params) }
@@ -104,7 +104,7 @@ describe Schools::ChangeSchoolsController, type: :request do
           receive(:has_school_experience_role?).and_return(false)
       end
       let(:new_school) { create(:bookings_school) }
-      let(:params) { { schools_change_school: { id: new_school.id } } }
+      let(:params) { { schools_change_school: { urn: new_school.urn } } }
 
       subject { post('/schools/change', params: params) }
 
@@ -116,7 +116,7 @@ describe Schools::ChangeSchoolsController, type: :request do
     context 'when internal changing is disabled' do
       let(:enable_signin_api) { false }
       let(:enable_school_change) { false }
-      let(:params) { { schools_change_school: { id: new_school.id } } }
+      let(:params) { { schools_change_school: { urn: new_school.urn } } }
       let(:change_school_page) { get '/schools/change' }
 
       subject { post('/schools/change', params: params) }
@@ -128,7 +128,7 @@ describe Schools::ChangeSchoolsController, type: :request do
 
     context 'when no existing urn set' do
       let(:urns) { [old_school, new_school].map(&:urn) }
-      let(:params) { { schools_change_school: { id: new_school.id } } }
+      let(:params) { { schools_change_school: { urn: new_school.urn } } }
       let(:change_school_page) { get '/schools/change' }
 
       before do
