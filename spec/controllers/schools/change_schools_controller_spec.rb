@@ -18,16 +18,29 @@ describe Schools::ChangeSchoolsController, type: :request do
   end
 
   describe '#show' do
-    subject { get '/schools/change' }
-    let!(:profile) { create(:bookings_profile, school: @current_user_school) }
-    before { subject }
+    before do
+      allow_any_instance_of(described_class).to \
+        receive(:current_urn) { current_urn }
 
-    it { is_expected.to render_template(:show) }
+      get '/schools/change'
+    end
+
+    subject { response }
+
+    context 'with URN set' do
+      let(:current_urn) { old_school.urn }
+      it { is_expected.to have_http_status :success }
+      it { is_expected.to have_rendered :show }
+    end
+
+    context 'with no URN set' do
+      let(:current_urn) { nil }
+      it { is_expected.to have_http_status :success }
+      it { is_expected.to have_rendered :show }
+    end
   end
 
   describe '#create' do
-    let!(:profile) { create(:bookings_profile, school: @current_user_school) }
-
     context 'when the user has access to the new school' do
       let(:urns) { [old_school, new_school].map(&:urn) }
 
@@ -111,6 +124,23 @@ describe Schools::ChangeSchoolsController, type: :request do
       specify 'should fail with a 403: forbidden' do
         expect(subject).to eql(403)
       end
+    end
+
+    context 'when no existing urn set' do
+      let(:urns) { [old_school, new_school].map(&:urn) }
+      let(:params) { { schools_change_school: { id: new_school.id } } }
+      let(:change_school_page) { get '/schools/change' }
+
+      before do
+        allow_any_instance_of(described_class).to receive(:current_urn) { nil }
+
+        allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
+          receive(:has_school_experience_role?).and_return(true)
+      end
+
+      subject { post('/schools/change', params: params) }
+
+      it { is_expected.to redirect_to(schools_dashboard_path) }
     end
   end
 end

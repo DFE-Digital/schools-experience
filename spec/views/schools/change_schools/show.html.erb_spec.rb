@@ -19,7 +19,7 @@ describe 'schools/change_schools/show.html.erb', type: :view do
     before do
       assign :current_school, school
       assign :schools, all_schools
-      assign :change_school, Schools::ChangeSchool.new(id: school.id)
+      assign :change_school, Schools::ChangeSchool.new(nil, {}, id: school.id)
     end
 
     before { render }

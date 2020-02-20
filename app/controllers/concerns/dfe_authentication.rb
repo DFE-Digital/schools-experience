@@ -74,4 +74,9 @@ private
 
     other_school_urns.any?
   end
+
+  def current_school=(new_school)
+    session[:urn]         = new_school.urn
+    session[:school_name] = new_school.name
+  end
 end

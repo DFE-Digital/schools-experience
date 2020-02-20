@@ -1,23 +1,28 @@
 module Schools
-  class InaccessibleSchoolError < StandardError; end
-
   class ChangeSchoolsController < Schools::BaseController
     before_action :ensure_in_app_school_changing_enabled?, only: :create
+    skip_before_action :ensure_onboarded, :set_current_school
 
-    rescue_from Schools::InaccessibleSchoolError, with: :access_denied
+    rescue_from Schools::ChangeSchool::InaccessibleSchoolError, with: :access_denied
 
     def show
-      @schools = Bookings::School.ordered_by_name.where(urn: urns)
-      @change_school = Schools::ChangeSchool.new(id: @current_school.id)
+      @change_school = Schools::ChangeSchool.new \
+        current_user, school_uuids, id: @current_school&.id
+
+      @schools = @change_school.available_schools
     end
 
     def create
-      new_school = Bookings::School.find(change_school_params[:id])
+      @change_school = Schools::ChangeSchool.new \
+        current_user, school_uuids, change_school_params
 
-      raise Schools::InaccessibleSchoolError unless user_has_role_at_school?(current_user.sub, new_school.urn)
+      new_school = @change_school.retrieve_valid_school!
 
-      session[:urn]         = new_school.urn
-      session[:school_name] = new_school.name
+      unless user_has_role_at_school?(current_user.sub, new_school.urn)
+        raise Schools::ChangeSchool::InaccessibleSchoolError
+      end
+
+      self.current_school = new_school
 
       redirect_to schools_dashboard_path
     end
@@ -34,14 +39,6 @@ module Schools
 
     def access_denied
       redirect_to schools_errors_inaccessible_school_path
-    end
-
-    def urns
-      organisations.uuids.values
-    end
-
-    def organisations
-      @organisations ||= Schools::DFESignInAPI::Organisations.new(current_user.sub)
     end
 
     def user_has_role_at_school?(user_uuid, organisation_uuid)
