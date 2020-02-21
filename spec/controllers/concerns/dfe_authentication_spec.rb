@@ -7,6 +7,53 @@ describe DFEAuthentication do
     it { expect(described_class.ancestors).to include(DFEAuthentication) }
 
     let(:teacher) { { name: "Seymour Skinner" } }
+    let(:auth_host) { Rails.application.config.x.oidc_host }
+
+    describe '#show' do
+      subject { get :show; response }
+
+      context 'when signed in' do
+        before do
+          controller.session[:current_user] = teacher
+          controller.session[:urn] = create(:bookings_school).urn
+        end
+
+        it { is_expected.to have_http_status :success }
+        it { is_expected.to have_rendered :show }
+      end
+
+      context 'when not signed in' do
+        before do
+          allow(Schools::ChangeSchool).to \
+            receive(:allow_school_change_in_app?).and_return allow_change_school
+        end
+
+        context 'and ChangeSchool not enabled' do
+          let(:allow_change_school) { false }
+
+          it 'will redirect to DfE Sign in' do
+            is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
+          end
+
+          it 'will request organisation from DfE Sign-in' do
+            is_expected.to redirect_to %r(\&scope=profile\+organisation\+openid)
+          end
+        end
+
+        context 'and ChangeSchool enabled' do
+          let(:allow_change_school) { true }
+
+          it 'will redirect to DfE Sign in' do
+            is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
+          end
+
+          it 'will not request organisation from DfE Sign-in' do
+            is_expected.to redirect_to %r(\&scope=profile\+openid)
+          end
+        end
+      end
+    end
+
     context '#current_user' do
       context 'when the current_user is set' do
         before do

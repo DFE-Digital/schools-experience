@@ -26,7 +26,7 @@ module DFEAuthentication
       redirect_to client.authorization_uri(
         state: session[:state],
         nonce: session[:nonce],
-        scope: %i(profile organisation)
+        scope: oidc_auth_scope
       )
     end
 
@@ -34,6 +34,14 @@ module DFEAuthentication
   end
 
 private
+
+  def oidc_auth_scope
+    if Schools::ChangeSchool.allow_school_change_in_app?
+      %i(profile)
+    else
+      %i(profile organisation)
+    end
+  end
 
   def get_oidc_client
     OpenIDConnect::Client.new(

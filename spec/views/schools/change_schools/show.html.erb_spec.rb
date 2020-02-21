@@ -5,7 +5,7 @@ describe 'schools/change_schools/show.html.erb', type: :view do
 
   let(:school) { create(:bookings_school) }
   let(:other_schools) { create_list(:bookings_school, 3) }
-  let(:all_schools) { other_schools.push(school) }
+  let(:all_schools) { other_schools.push(school).compact }
   let(:urns) { other_schools.map(&:urn) }
 
   before do
@@ -19,7 +19,10 @@ describe 'schools/change_schools/show.html.erb', type: :view do
     before do
       assign :current_school, school
       assign :schools, all_schools
-      assign :change_school, Schools::ChangeSchool.new(nil, {}, urn: school.urn)
+      assign :change_school, Schools::ChangeSchool.new(nil, {}, urn: school&.urn)
+      without_partial_double_verification do
+        allow(view).to receive(:current_urn).and_return school&.urn
+      end
     end
 
     before { render }
@@ -34,6 +37,19 @@ describe 'schools/change_schools/show.html.erb', type: :view do
           school_urn: school.urn
         }
       )
+    end
+
+    context 'no existing school chosen' do
+      let(:school) { nil }
+
+      specify 'there should be one radio button per school' do
+        expect(rendered).to have_css("input[type='radio']", count: all_schools.size)
+      end
+
+      specify 'the no school should be selected' do
+        expect(rendered).not_to \
+          have_css "input[type='radio'][checked='checked']"
+      end
     end
   end
 

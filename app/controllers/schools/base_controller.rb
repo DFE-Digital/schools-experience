@@ -31,17 +31,18 @@ module Schools
     def current_urn
       session[:urn]
     end
+    helper_method :current_urn
 
     def set_site_header_text
       @site_header_text = "Manage school experience"
     end
 
     def retrieve_school(urn)
-      unless (school = Bookings::School.find_by(urn: urn))
-        raise SchoolNotRegistered, "school #{urn} not found" unless school.present?
-      end
+      raise MissingURN unless urn.present?
 
-      school
+      Bookings::School.find_by!(urn: urn)
+    rescue ActiveRecord::RecordNotFound
+      raise SchoolNotRegistered, "school #{urn} not found"
     end
 
     def ensure_onboarded

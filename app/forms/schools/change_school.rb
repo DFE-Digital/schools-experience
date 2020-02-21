@@ -38,8 +38,12 @@ module Schools
       Bookings::School.ordered_by_name.where(urn: organisation_urns)
     end
 
-    def uuid
+    def school_uuid
       urns_to_uuids[urn]
+    end
+
+    def user_uuid
+      current_user.sub
     end
 
     class InaccessibleSchoolError < StandardError; end
@@ -56,13 +60,13 @@ module Schools
       # if the role isn't found the API returns a 404 - this means that the user
       # has insufficient privileges but this *isn't* really an error, so log it
       # and return false
-      Rails.logger.warn("Role query yielded 404, uuid: #{user_uuid}, urn: #{urn}")
+      Rails.logger.warn("Role query yielded 404, user_uuid: #{user_uuid}, school_uuid: #{school_uuid}")
 
       false
     end
 
     def role_checker
-      Schools::DFESignInAPI::Roles.new current_user[:dfe_sign_in_user_uuid], uuid
+      Schools::DFESignInAPI::Roles.new user_uuid, school_uuid
     end
 
     def urns_to_uuids

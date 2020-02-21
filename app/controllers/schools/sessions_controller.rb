@@ -75,6 +75,7 @@ module Schools
 
     def check_role!(user_uuid, organisation_uuid)
       return true unless Schools::DFESignInAPI::Client.role_check_enabled?
+      return true if Schools::ChangeSchool.allow_school_change_in_app? && organisation_uuid.nil?
 
       unless Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
         raise InsufficientPrivilegesError, 'missing school experience administrator role'
@@ -103,11 +104,13 @@ module Schools
     def extract_userinfo(access_token)
       {}.tap do |info|
         access_token.userinfo!.tap do |userinfo|
+          urn = userinfo.raw_attributes.dig("organisation", "urn")
+
           info[:id_token]              = access_token.id_token # store this for logout flows.
           info[:current_user]          = userinfo
-          info[:urn]                   = userinfo.raw_attributes.dig("organisation", "urn").to_i
+          info[:urn]                   = urn.presence && urn.to_i
           info[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
-          info[:dfe_sign_in_org_uuid]  = userinfo.raw_attributes.dig("organisation", "id")
+          info[:dfe_sign_in_org_uuid]  = userinfo.raw_attributes.dig("organisation", "id").presence
           info[:dfe_sign_in_user_uuid] = userinfo.sub
         end
       end

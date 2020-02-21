@@ -120,20 +120,28 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:urns) { [old_school, new_school].map(&:urn) }
       let(:params) { { schools_change_school: { urn: new_school.urn } } }
       let(:change_school_page) { get '/schools/change' }
+      let(:new_school_uuid) { SecureRandom.uuid }
 
       before do
         allow_any_instance_of(described_class).to receive(:current_urn) { nil }
 
         allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:uuids).and_return SecureRandom.uuid => new_school.urn
+          receive(:uuids).and_return new_school_uuid => new_school.urn
+
+        allow(Schools::DFESignInAPI::Roles).to receive(:new).and_call_original
 
         allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
           receive(:has_school_experience_role?).and_return(true)
       end
 
-      subject { post('/schools/change', params: params) }
+      subject! { post('/schools/change', params: params) }
 
       it { is_expected.to redirect_to(schools_dashboard_path) }
+
+      it 'calls roles API appropriately' do
+        expect(Schools::DFESignInAPI::Roles).to \
+          have_received(:new).with user_guid, new_school_uuid
+      end
     end
   end
 end

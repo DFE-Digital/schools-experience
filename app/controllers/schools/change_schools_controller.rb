@@ -7,7 +7,7 @@ module Schools
 
     def show
       @change_school = Schools::ChangeSchool.new \
-        current_user, school_uuids, urn: @current_school&.urn
+        current_user, school_uuids, urn: current_urn
 
       @schools = @change_school.available_schools
     end
