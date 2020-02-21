@@ -14,7 +14,10 @@ describe 'schools/change_schools/show.html.erb', type: :view do
   end
 
   context 'when the user has access to multiple schools' do
-    before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_school_change_enabled).and_return(true) }
+    before do
+      allow(Schools::ChangeSchool).to \
+        receive(:allow_school_change_in_app?) { true }
+    end
 
     before do
       assign :current_school, school

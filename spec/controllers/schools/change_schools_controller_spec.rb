@@ -9,11 +9,8 @@ describe Schools::ChangeSchoolsController, type: :request do
   let(:new_school) { create(:bookings_school) }
 
   before do
-    allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { enable_signin_api }
-
-    allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled) { true }
-    allow(Rails.application.config.x).to \
-      receive(:dfe_sign_in_api_school_change_enabled) { enable_school_change }
+    allow(Schools::ChangeSchool).to \
+      receive(:allow_school_change_in_app?) { enable_school_change }
   end
 
   describe '#show' do
