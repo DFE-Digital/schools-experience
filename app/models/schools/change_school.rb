@@ -24,11 +24,6 @@ module Schools
       super attributes
     end
 
-    def urn=(school_urn)
-      @_current_school = nil
-      super
-    end
-
     def retrieve_valid_school!
       validate!
       Bookings::School.find_by!(urn: urn)
