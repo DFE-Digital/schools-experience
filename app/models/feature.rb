@@ -61,6 +61,6 @@ private
   end
 
   def tokenised_env_features
-    ENV['FEATURE_FLAGS'].to_s.strip.split(%r(\s+))
+    ENV['FEATURE_FLAGS'].to_s.strip.split(%r([\s,]+))
   end
 end

@@ -124,8 +124,9 @@ describe Feature do
   end
 
   describe '#active?' do
+    let(:feature_flags) { 'env1 env2' }
     before do
-      allow(ENV).to receive(:[]).with('FEATURE_FLAGS') { 'env1 env2' }
+      allow(ENV).to receive(:[]).with('FEATURE_FLAGS') { feature_flags }
       allow(Rails.application.config.x).to \
         receive(:features) { %i(config1 config2) }
 
@@ -136,7 +137,7 @@ describe Feature do
 
     shared_examples "test feature sources" do
       context 'with env feature' do
-        let(:feature) { 'env1' }
+        let(:feature) { 'env2' }
         it { is_expected.to be true }
       end
 
@@ -163,6 +164,18 @@ describe Feature do
 
     context 'from class' do
       let(:feature_tester) { described_class }
+      include_examples 'test feature sources'
+    end
+
+    context 'with comma separated env var' do
+      let(:feature_flags) { 'env1,env2' }
+      let(:feature_tester) { described_class.instance }
+      include_examples 'test feature sources'
+    end
+
+    context 'with mixed separator separated env var' do
+      let(:feature_flags) { 'env1, env2 env3' }
+      let(:feature_tester) { described_class.instance }
       include_examples 'test feature sources'
     end
   end
