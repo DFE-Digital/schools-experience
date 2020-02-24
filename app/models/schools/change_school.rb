@@ -65,7 +65,7 @@ module Schools
     end
 
     def urns_to_uuids
-      @uuids_to_urns.invert
+      uuids_to_urns.invert
     end
 
     def validate_user_has_role_at_school

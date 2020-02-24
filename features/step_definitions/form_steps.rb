@@ -147,6 +147,14 @@ Then("there should not be a {string} checkbox") do |label_text|
   expect(page).not_to have_css('label', text: label_text)
 end
 
+Then("{string} radio button should be selected") do |label_text|
+  expect(find(:radio_button, label_text)).to be_checked
+end
+
+Then("no radio buttons should be selected") do
+  expect(page).not_to have_css('input[type="radio"][selected]')
+end
+
 def get_form_group(page, label_text)
   selector = get_selector label_text
   label = page.find(selector, text: label_text)

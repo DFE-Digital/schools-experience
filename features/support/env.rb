@@ -7,6 +7,7 @@
 require 'cucumber/rails'
 require 'selenium/webdriver'
 require 'capybara-screenshot/cucumber'
+require 'cucumber/rspec/doubles'
 
 Rails.application.config.x.gitis.fake_crm = true
 
