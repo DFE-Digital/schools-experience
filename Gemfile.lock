@@ -127,7 +127,7 @@ GEM
       railties (>= 4.2, < 7)
     cucumber-tag_expressions (1.1.1)
     cucumber-wire (0.0.1)
-    database_cleaner (1.8.2)
+    database_cleaner (1.8.3)
     delayed_cron_job (0.7.2)
       delayed_job (>= 4.1)
     delayed_job (4.1.8)
