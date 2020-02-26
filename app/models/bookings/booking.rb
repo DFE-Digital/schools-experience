@@ -16,8 +16,8 @@ module Bookings
     has_one :school_cancellation, through: :bookings_placement_request
 
     validates :date,
-      presence: true,
-      on: :create
+      presence: true
+
     validates :date,
       if: -> { date_changed? },
       timeliness: {
