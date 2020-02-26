@@ -3,6 +3,13 @@
     <%= f.radio_button_fieldset :urn, choices: @schools, value_method: :urn, text_method: :name, page_heading: true%>
     <%= f.submit "Change school" %>
   <% end %>
+
+  <%- if Schools::ChangeSchool.request_approval_url -%>
+    <p>
+      <%= govuk_link_to "Add a school", schools_request_organisation_path, secondary: true %>
+    </p>
+  <%- end -%>
+
   <%= link_to "Remain logged in as current school", schools_dashboard_path, class: 'govuk-link' if current_urn %>
 <% else %>
   <div class="govuk-warning-text">

@@ -10,11 +10,17 @@ module Schools
     validates :urn, inclusion: { in: :organisation_urns }, if: -> { urn.present? }
     validate :validate_user_has_role_at_school, if: -> { urn.present? }
 
-    def self.allow_school_change_in_app?
-      [
-        Rails.configuration.x.dfe_sign_in_api_enabled,
-        Rails.configuration.x.dfe_sign_in_api_school_change_enabled
-      ].all?
+    class << self
+      def allow_school_change_in_app?
+        [
+          Rails.configuration.x.dfe_sign_in_api_enabled,
+          Rails.configuration.x.dfe_sign_in_api_school_change_enabled
+        ].all?
+      end
+
+      def request_approval_url
+        Rails.configuration.x.dfe_sign_in_request_organisation_url
+      end
     end
 
     def initialize(current_user, uuids_to_urns, attributes = {})

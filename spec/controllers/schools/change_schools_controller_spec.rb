@@ -17,11 +17,9 @@ describe Schools::ChangeSchoolsController, type: :request do
     before do
       allow_any_instance_of(described_class).to \
         receive(:current_urn) { current_urn }
-
-      get '/schools/change'
     end
 
-    subject { response }
+    subject { get '/schools/change'; response }
 
     context 'with URN set' do
       let(:current_urn) { old_school.urn }

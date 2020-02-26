@@ -70,4 +70,34 @@ describe 'schools/change_schools/show.html.erb', type: :view do
       expect(rendered).to match(/Changing school is not enabled/)
     end
   end
+
+  context 'when there is an request_organisation_url' do
+    let(:change_school) do
+      Schools::ChangeSchool.new \
+        SecureRandom.uuid, { SecureRandom.uuid => school.urn }, urn: school.urn
+    end
+
+    before do
+      assign :current_school, school
+      assign :schools, all_schools
+      assign :change_school, change_school
+
+      allow(Schools::ChangeSchool).to \
+        receive(:allow_school_change_in_app?).and_return true
+
+      allow(Schools::ChangeSchool).to \
+        receive(:request_approval_url).and_return 'https://dfesignin.url'
+
+      without_partial_double_verification do
+        allow(view).to receive(:current_urn).and_return nil
+      end
+    end
+
+    before { render }
+
+    specify 'there should be an add a school button' do
+      expect(rendered).to have_css "a.govuk-button.govuk-button--secondary",
+        text: 'Add a school'
+    end
+  end
 end
