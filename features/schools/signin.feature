@@ -6,6 +6,7 @@ Feature: School Chooser
         And I have two schools
         And I am logged in as a DfE user
     
+    @mocks
     Scenario: Signing in
         Given I go to the 'schools dashboard' page
         Then I should be on the 'school chooser' page
@@ -18,6 +19,7 @@ Feature: School Chooser
         Then I should be on the 'schools dashboard' page
         Then the page's main heading should be 'Manage requests and bookings at School A'
     
+    @mocks
     Scenario: Changing school
         Given I am signed in as School A
         And I am on the 'schools dashboard' page
