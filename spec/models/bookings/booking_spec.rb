@@ -64,12 +64,14 @@ describe Bookings::Booking do
         specify 'should allow future dates' do
           [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
+            expect(subject).to allow_value(d).for(:date).on(:acceptance)
           end
         end
 
         specify 'new placement dates should not allow historic dates' do
-          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago].each do |d|
+          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago, nil].each do |d|
             expect(subject).not_to allow_value(d).for(:date)
+            expect(subject).not_to allow_value(d).for(:date).on(:acceptance)
           end
         end
 
