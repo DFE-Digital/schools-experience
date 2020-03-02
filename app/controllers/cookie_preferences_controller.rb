@@ -1,5 +1,6 @@
 class CookiePreferencesController < ApplicationController
   REFERER_BLACKLIST = %r{/(cookie_preference|cookies_policy)}.freeze
+  skip_before_action :verify_authenticity_token, only: %i(update)
   before_action :save_refererer
 
   def show
