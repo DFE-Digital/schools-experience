@@ -70,9 +70,9 @@ private
   end
 
   def retrieve_school_uuids
-    Schools::DFESignInAPI::Organisations
+    Schools::DFESignInAPI::RoleCheckedOrganisations
       .new(current_user.sub)
-      .uuids
+      .organisation_uuid_pairs
   end
 
   def other_school_urns

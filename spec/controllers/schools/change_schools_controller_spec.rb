@@ -42,8 +42,8 @@ describe Schools::ChangeSchoolsController, type: :request do
         allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
           receive(:has_school_experience_role?).and_return(true)
 
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:uuids).and_return \
+        allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
+          receive(:organisation_uuid_pairs).and_return \
             SecureRandom.uuid => old_school.urn,
             SecureRandom.uuid => new_school.urn
       end
@@ -82,8 +82,9 @@ describe Schools::ChangeSchoolsController, type: :request do
 
     context 'when the user does not have access to the new school' do
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-          receive(:uuids).and_return SecureRandom.uuid => new_school.urn
+        allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
+          receive(:organisation_uuid_pairs).and_return \
+            SecureRandom.uuid => new_school.urn
 
         allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
           receive(:has_school_experience_role?).and_return(false)
@@ -135,7 +136,7 @@ describe Schools::ChangeSchoolsController, type: :request do
 
       it 'calls roles API appropriately' do
         expect(Schools::DFESignInAPI::Roles).to \
-          have_received(:new).with user_guid, new_school_uuid
+          have_received(:new).with(user_guid, new_school_uuid).twice
       end
     end
   end

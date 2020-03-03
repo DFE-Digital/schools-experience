@@ -131,8 +131,8 @@ describe Schools::PlacementRequestsController, type: :request do
         before do
           allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
 
-          allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
-            receive(:uuids).and_return \
+          allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
+            receive(:organisation_uuid_pairs).and_return \
               SecureRandom.uuid => another_school.urn
         end
 
@@ -155,9 +155,8 @@ describe Schools::PlacementRequestsController, type: :request do
         before do
           allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
 
-          allow_any_instance_of(Schools::DFESignInAPI::Organisations).to(
-            receive(:urns).and_return([])
-          )
+          allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
+            receive(:organisation_uuid_pairs).and_return({})
         end
 
         specify 'should raise a record not found error' do
