@@ -35,13 +35,10 @@ describe Schools::ChangeSchoolsController, type: :request do
   end
 
   describe '#create' do
-    context 'when the user has access to the new school' do
+    context 'when internal school chooser is enabled' do
       let(:urns) { [old_school, new_school].map(&:urn) }
 
       before do
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
-          receive(:has_school_experience_role?).and_return(true)
-
         allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
           receive(:organisation_uuid_pairs).and_return \
             SecureRandom.uuid => old_school.urn,
@@ -62,40 +59,6 @@ describe Schools::ChangeSchoolsController, type: :request do
         subject
         expect(request.session.fetch(:urn)).to eql(new_school.urn)
         expect(request.session.fetch(:school_name)).to eql(new_school.name)
-      end
-
-      context 'role checking' do
-        let(:roles_instance) { double Schools::DFESignInAPI::Roles, has_school_experience_role?: true }
-        before do
-          allow(Schools::DFESignInAPI::Roles).to receive(:new).and_return(roles_instance)
-        end
-
-        context 'when role checking is enabled' do
-          before { subject }
-
-          specify 'Schools::DFESignInAPI::Roles should be initialised' do
-            expect(Schools::DFESignInAPI::Roles).to have_received(:new).exactly(1).times
-          end
-        end
-      end
-    end
-
-    context 'when the user does not have access to the new school' do
-      before do
-        allow_any_instance_of(Schools::DFESignInAPI::RoleCheckedOrganisations).to \
-          receive(:organisation_uuid_pairs).and_return \
-            SecureRandom.uuid => new_school.urn
-
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to \
-          receive(:has_school_experience_role?).and_return(false)
-      end
-      let(:new_school) { create(:bookings_school) }
-      let(:params) { { schools_change_school: { urn: new_school.urn } } }
-
-      subject { post('/schools/change', params: params) }
-
-      it 'should raise an invalid school error and redirect to an appropriate error page' do
-        expect(subject).to redirect_to(schools_errors_inaccessible_school_path)
       end
     end
 
@@ -136,7 +99,7 @@ describe Schools::ChangeSchoolsController, type: :request do
 
       it 'calls roles API appropriately' do
         expect(Schools::DFESignInAPI::Roles).to \
-          have_received(:new).with(user_guid, new_school_uuid).twice
+          have_received(:new).with user_guid, new_school_uuid
       end
     end
   end

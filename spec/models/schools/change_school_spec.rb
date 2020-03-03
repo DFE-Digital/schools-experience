@@ -23,7 +23,8 @@ describe Schools::ChangeSchool, type: :model do
       receive(:has_school_experience_role?) { user_has_role }
   end
 
-  subject { described_class.new(user, uuid_map, urn: current_urn) }
+  let(:change_school) { described_class.new(user, uuid_map, urn: current_urn) }
+  subject { change_school }
 
   describe 'attributes' do
     it { is_expected.to respond_to :urn }
@@ -62,24 +63,11 @@ describe Schools::ChangeSchool, type: :model do
       end
     end
 
-    context 'with valid urn and passing role check' do
-      before { subject.retrieve_valid_school! }
+    context 'with valid urn' do
+      subject { change_school.retrieve_valid_school! }
 
-      it 'should call role api' do
-        expect(Schools::DFESignInAPI::Roles).to \
-          have_received(:new).with(user_uuid, uuid_map.keys[1])
-      end
-    end
-
-    context 'wth valid urn and failing role check' do
-      let(:user_has_role) { false }
-
-      it 'should call role api and raise exception' do
-        expect { subject.retrieve_valid_school! }.to \
-          raise_exception(Schools::ChangeSchool::InaccessibleSchoolError)
-
-        expect(Schools::DFESignInAPI::Roles).to \
-          have_received(:new).with(user_uuid, uuid_map.keys[1])
+      it 'should return school' do
+        is_expected.to eql second_school
       end
     end
   end
