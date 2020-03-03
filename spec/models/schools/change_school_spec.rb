@@ -76,7 +76,7 @@ describe Schools::ChangeSchool, type: :model do
 
       it 'should call role api and raise exception' do
         expect { subject.retrieve_valid_school! }.to \
-          raise_exception(ActiveModel::ValidationError)
+          raise_exception(Schools::ChangeSchool::InaccessibleSchoolError)
 
         expect(Schools::DFESignInAPI::Roles).to \
           have_received(:new).with(user_uuid, uuid_map.keys[1])

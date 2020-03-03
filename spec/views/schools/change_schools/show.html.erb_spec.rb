@@ -95,9 +95,9 @@ describe 'schools/change_schools/show.html.erb', type: :view do
 
     before { render }
 
-    specify 'there should be an add a school button' do
+    specify 'there should be an request access button' do
       expect(rendered).to have_css "a.govuk-button.govuk-button--secondary",
-        text: 'Add a school'
+        text: 'Request access to a school'
     end
   end
 end

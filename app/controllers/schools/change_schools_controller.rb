@@ -16,11 +16,13 @@ module Schools
       @change_school = Schools::ChangeSchool.new \
         current_user, school_uuids, change_school_params
 
-      self.current_school = @change_school.retrieve_valid_school!
-
-      redirect_to schools_dashboard_path
-    rescue ActiveModel::ValidationError
-      raise Schools::ChangeSchool::InaccessibleSchoolError
+      if @change_school.valid?
+        self.current_school = @change_school.retrieve_valid_school!
+        redirect_to schools_dashboard_path
+      else
+        @schools = @change_school.available_schools
+        render :show
+      end
     end
 
   private
@@ -30,7 +32,7 @@ module Schools
     end
 
     def change_school_params
-      params.require(:schools_change_school).permit(:urn)
+      params.fetch(:schools_change_school, {}).permit(:urn)
     end
 
     def access_denied

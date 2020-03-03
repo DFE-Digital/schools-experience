@@ -8,7 +8,6 @@ module Schools
     attribute :urn, :integer
     validates :urn, presence: true
     validates :urn, inclusion: { in: :organisation_urns }, if: -> { urn.present? }
-    validate :validate_user_has_role_at_school, if: -> { urn.present? }
 
     class << self
       def allow_school_change_in_app?
@@ -32,7 +31,12 @@ module Schools
 
     def retrieve_valid_school!
       validate!
-      Bookings::School.find_by!(urn: urn)
+
+      if user_has_role_at_school?
+        Bookings::School.find_by!(urn: urn)
+      else
+        raise InaccessibleSchoolError
+      end
     end
 
     def available_schools
@@ -57,7 +61,7 @@ module Schools
 
     def user_has_role_at_school?
       role_checker.has_school_experience_role?
-    rescue Faraday::ResourceNotFound
+    rescue Faraday::ResourceNotFound, Schools::DFESignInAPI::Roles::NoOrganisationError
       # if the role isn't found the API returns a 404 - this means that the user
       # has insufficient privileges but this *isn't* really an error, so log it
       # and return false
@@ -72,12 +76,6 @@ module Schools
 
     def urns_to_uuids
       uuids_to_urns.invert
-    end
-
-    def validate_user_has_role_at_school
-      unless user_has_role_at_school?
-        errors.add :urn, :missing_dfe_signin_role
-      end
     end
   end
 end
