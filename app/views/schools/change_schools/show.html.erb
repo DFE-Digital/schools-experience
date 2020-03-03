@@ -1,24 +1,54 @@
-<% if Schools::ChangeSchool.allow_school_change_in_app? %>
-  <%= form_for @change_school, url: schools_change_path, method: :post do |f| %>
-    <%= f.radio_button_fieldset :urn, choices: @schools, value_method: :urn, text_method: :name, page_heading: true%>
-    <%= f.submit "Change school" %>
-  <% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if Schools::ChangeSchool.allow_school_change_in_app? %>
+      <% if @schools.any? %>
+        <%= form_for @change_school, url: schools_change_path, method: :post do |f| %>
+          <%= f.radio_button_fieldset :urn, choices: @schools, value_method: :urn, text_method: :name, page_heading: true%>
+          <%= f.submit "Change school" %>
+        <% end %>
 
-  <%- if Schools::ChangeSchool.request_approval_url -%>
-    <p>
-      <%= govuk_link_to "Add a school", schools_request_organisation_path, secondary: true %>
-    </p>
-  <%- end -%>
+        <%- if Schools::ChangeSchool.request_approval_url -%>
+          <p>
+            <%= govuk_link_to "Request access to a school", schools_request_organisation_path, secondary: true %>
+          </p>
+        <%- end -%>
+      <% elsif Schools::ChangeSchool.request_approval_url %>
+        <h1 class="govuk-heading-l">Manage school experience</h1>
 
-  <%= link_to "Remain logged in as current school", schools_dashboard_path, class: 'govuk-link' if current_urn %>
-<% else %>
-  <div class="govuk-warning-text">
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-warning-text__assistive">Warning</span>
-      Changing school is not enabled, use the 'change school' link on the dashboard
-    </strong>
+        <p class="govuk-body-l">
+          You have not yet been granted have access to the Manage school
+          experience service.
+        </p>
+
+        <%= render 'pages/request_organisation_access' %>
+      <% else %>
+        <h1 class="govuk-heading-l">Manage school experience</h1>
+
+        <p class="govuk-body-l">
+          You have not yet been granted have access to the Manage school
+          experience service.
+        </p>
+
+        <p>
+          To find out out more about or sign up for manage school experience email
+          your request - including your full name and school's name and URN - to
+          <a href="mailto:organise.school-experience@education.gov.uk">
+            organise.school-experience@education.gov.uk
+          </a>
+        </p>
+      <% end %>
+
+      <%= link_to "Remain logged in as current school", schools_dashboard_path, class: 'govuk-link' if current_urn %>
+    <% else %>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          Changing school is not enabled, use the 'change school' link on the dashboard
+        </strong>
+      </div>
+
+      <%= govuk_link_to "Return to the dashboard", schools_dashboard_path, class: 'govuk-link', secondary: false %>
+    <% end %>
   </div>
-
-  <%= govuk_link_to "Return to the dashboard", schools_dashboard_path, class: 'govuk-link', secondary: false %>
-<% end %>
+</div>

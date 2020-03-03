@@ -4,25 +4,6 @@
   <div class="govuk-grid-column-two-thirds">
     <%= page_heading 'Request access to a school' %>
 
-    <section>
-      <p>
-        You can use the DfE Sign-in service to request access to the Manage
-        school experience service for a school you are responsible for.
-      </p>
-
-      <p>
-        An approver from that school will receive the request and decide whether
-        to grant you access.
-      </p>
-
-      <p>
-        You will now be take to the DfE Sign-in service to make the request.
-      </p>
-
-      <p>
-        <%= govuk_link_to "Request access to a school",
-              Schools::ChangeSchool.request_approval_url %>
-      </p>
-    </section>
+    <%= render 'request_organisation_access' %>
   </div>
 </div>
