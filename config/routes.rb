@@ -61,6 +61,9 @@ Rails.application.routes.draw do
           only: %i(show),
           controller: '/schools/placement_requests/acceptance/email_sent'
       end
+      resources :past_attendances,
+        only: %i(index),
+        controller: 'placement_requests/past_attendance'
     end
     resources :withdrawn_requests, only: %i(index show)
     resources :rejected_requests, only: %i(index show)
