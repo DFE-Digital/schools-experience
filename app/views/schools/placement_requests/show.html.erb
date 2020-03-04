@@ -164,6 +164,17 @@
     </dl>
   </section>
 
+  <%- if @attendance.any_stats? -%>
+  <section id="candidate-details">
+    <h2>Bookings attendance</h2>
+
+    <dl class="bookings-attendance govuk-summary-list">
+      <%= summary_row 'Attended', @attendance.attended_count, '/tbd', 'View' %>
+      <%= summary_row 'Did not attend', @attendance.did_not_attend_count, '/tbd', 'View' %>
+    </dl>
+  </section>
+  <%- end -%>
+
   <div class="request-options">
     <% if @placement_request.open? %>
       <div class="accept-or-reject">

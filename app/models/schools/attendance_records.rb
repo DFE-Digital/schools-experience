@@ -7,12 +7,16 @@ module Schools
       @school_urns = school_urns
     end
 
+    def any_stats?
+      stats.any?
+    end
+
     def attended_count
-      stats[true]
+      stats[true].to_i
     end
 
     def did_not_attend_count
-      stats[false]
+      stats[false].to_i
     end
 
     def records
