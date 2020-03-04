@@ -4,7 +4,7 @@
       <% if @schools.any? %>
         <%= form_for @change_school, url: schools_change_path, method: :post do |f| %>
           <%= f.radio_button_fieldset :urn, choices: @schools, value_method: :urn, text_method: :name, page_heading: true%>
-          <%= f.submit "Change school" %>
+          <%= f.submit "Choose school" %>
         <% end %>
 
         <%- if Schools::ChangeSchool.request_approval_url -%>
