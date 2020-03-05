@@ -8,6 +8,8 @@ require "active_record/railtie"
 # require "active_storage/engine" # We don't need activestorage
 require "action_controller/railtie"
 # require "action_mailer/railtie" # We don't need actionmailer
+# require "action_mailbox/engine" # We don't need actionmailbox
+# require "action_text/engine" # We don't need actiontext
 require "action_view/railtie"
 # require "action_cable/engine" # We don't need actioncable
 require "sprockets/railtie"
