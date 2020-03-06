@@ -10,7 +10,7 @@ describe Bookings::Data::SchoolMassImporter do
   context 'Initialization' do
     let(:edubase_data) do
       CSV.parse(
-        File.read(File.join(Rails.root, 'spec', 'sample_data', 'edubase.csv')).scrub,
+        Rails.root.join('spec', 'sample_data', 'edubase.csv').read.scrub,
         headers: true
       )
     end

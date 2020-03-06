@@ -58,7 +58,7 @@ end
 
 Then("I should see a select box containing degree subjects labelled {string}") do |string|
   @degree_subjects ||= YAML
-    .load_file("#{Rails.root}/config/candidate_form_options.yml")['DEGREE_SUBJECTS']
+    .load_file(Rails.root.join('config', 'candidate_form_options.yml'))['DEGREE_SUBJECTS']
     .sample(10) # we don't need all of them, just pick out 10
   ensure_select_options_exist(get_form_group(page, string), @degree_subjects)
 end

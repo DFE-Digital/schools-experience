@@ -1,5 +1,5 @@
 require File.expand_path('production.rb', __dir__)
-require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
+require Rails.root.join('spec', 'support', 'notify_fake_client')
 require Rails.root.join("lib", "servertest", "geocoder")
 require Rails.root.join("lib", "servertest", "dfe_sign_in_api")
 

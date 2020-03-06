@@ -24,3 +24,5 @@ Style/TrailingCommaInArrayLiteral:
 Style/TrailingCommaInHashLiteral:
   Enabled: false
 
+Rails/FilePath:
+  EnforcedStyle: arguments
