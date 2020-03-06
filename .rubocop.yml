@@ -24,6 +24,9 @@ Style/TrailingCommaInArrayLiteral:
 Style/TrailingCommaInHashLiteral:
   Enabled: false
 
+Rails/DynamicFindBy:
+  Enabled: false
+
 Rails/FilePath:
   EnforcedStyle: arguments
 
