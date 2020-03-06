@@ -26,3 +26,8 @@ Style/TrailingCommaInHashLiteral:
 
 Rails/FilePath:
   EnforcedStyle: arguments
+
+Rails/RakeEnvironment:
+  Exclude:
+    - lib/tasks/dev_ssl_generator.rake
+    - lib/tasks/cucumber.rake
