@@ -76,7 +76,7 @@ describe Bookings::Booking do
         end
 
         specify 'new placement dates should not allow today' do
-          expect(subject).not_to allow_value(Date.today).for(:date)
+          expect(subject).not_to allow_value(Time.zone.today).for(:date)
         end
 
         context 'error messages' do
@@ -187,7 +187,7 @@ describe Bookings::Booking do
         [
           FactoryBot.build(:bookings_booking, date: 1.week.ago),
           FactoryBot.build(:bookings_booking, date: Date.yesterday),
-          FactoryBot.build(:bookings_booking, date: Date.today)
+          FactoryBot.build(:bookings_booking, date: Time.zone.today)
         ].each do |booking|
           booking.save(validate: false)
         end
@@ -223,7 +223,7 @@ describe Bookings::Booking do
 
       let!(:future_bookings) do
         [
-          FactoryBot.build(:bookings_booking, date: Date.today),
+          FactoryBot.build(:bookings_booking, date: Time.zone.today),
           FactoryBot.build(:bookings_booking, date: Date.tomorrow),
           FactoryBot.build(:bookings_booking, date: 3.weeks.from_now)
         ].each do |booking|
@@ -368,7 +368,7 @@ describe Bookings::Booking do
   describe '#placement_start_date_with_duration' do
     context 'when the placement request has a flexible date' do
       let! :date do
-        Date.today
+        Time.zone.today
       end
 
       subject { described_class.new date: date }
@@ -381,7 +381,7 @@ describe Bookings::Booking do
 
     context 'when the placement request has a fixed date' do
       let! :date do
-        Date.today
+        Time.zone.today
       end
 
       let(:placement_date) { create(:bookings_placement_date) }

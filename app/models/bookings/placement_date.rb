@@ -83,7 +83,7 @@ module Bookings
     end
 
     def bookable?
-      date >= (Date.today + Bookings::Booking::MIN_BOOKING_DELAY)
+      date >= (Time.zone.today + Bookings::Booking::MIN_BOOKING_DELAY)
     end
 
     def has_subjects?

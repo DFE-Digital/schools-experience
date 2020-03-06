@@ -74,8 +74,8 @@ module Bookings
     scope :upcoming, -> { not_cancelled.accepted.future }
 
     scope :accepted, -> { where.not(accepted_at: nil) }
-    scope :previous, -> { where(arel_table[:date].lteq(Date.today)) }
-    scope :future, -> { where(arel_table[:date].gteq(Date.today)) }
+    scope :previous, -> { where(arel_table[:date].lteq(Time.zone.today)) }
+    scope :future, -> { where(arel_table[:date].gteq(Time.zone.today)) }
     scope :attendance_unlogged, -> { where(attended: nil) }
 
     scope :with_unviewed_candidate_cancellation, -> do
@@ -170,7 +170,7 @@ module Bookings
     end
 
     def in_future?
-      date > Date.today
+      date > Time.zone.today
     end
 
     def cancellable?

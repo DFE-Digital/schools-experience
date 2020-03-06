@@ -376,7 +376,7 @@ private
       'dfe_channelcreation' => ENV.fetch('CRM_CHANNEL_CREATION'),
       'dfe_notesforclassroomexperience' => "Written by School Experience",
       'dfe_hasdbscertificate' => true,
-      'dfe_dateofissueofdbscertificate' => Date.today.to_s(:db),
+      'dfe_dateofissueofdbscertificate' => Time.zone.today.to_s(:db),
       'dfe_Country@odata.bind' => "dfe_countries(#{countryid})", # UK
       'dfe_PreferredTeachingSubject01@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})",
       'dfe_PreferredTeachingSubject02@odata.bind' => "dfe_teachingsubjectlists(#{teaching_subject_guid})"

@@ -565,7 +565,7 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   let! :today do
-    Date.today
+    Time.zone.today
   end
 
   context 'validations for placement preferences' do
@@ -872,7 +872,7 @@ describe Bookings::PlacementRequest, type: :model do
     subject { pr.fixed_date_is_bookable? }
 
     context 'for today' do
-      before { date.date = Date.today }
+      before { date.date = Time.zone.today }
       it { is_expected.to be false }
     end
 
