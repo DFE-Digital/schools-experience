@@ -1,0 +1,30 @@
+<li class="expanded-search-radius">
+  <h3 class="govuk-heading-l">
+    0 results found
+
+    <%- if search.has_coordinates? -%>
+      within <%= pluralize(params[:distance], 'mile') %>
+    <%- end -%>
+  </h3>
+
+  <div class="nearby-info">
+    <%- if search.results.any? -%>
+      <p>
+        However, we did find the following schools nearby:
+      </p>
+    <%- else -%>
+      <%- if @search.has_coordinates? -%>
+      <p>
+        Not all schools in your area have signed up to use this website.
+      </p>
+      <%- end -%>
+
+      <p>
+        To find out about arranging school experience with schools who are
+        not yet on this website visit
+        <%= link_to 'Get into teaching',
+          'https://getintoteaching.education.gov.uk/school-experience/arranging-school-experience-independently' %>.
+      </p>
+    <%- end -%>
+  </div>
+</li>
