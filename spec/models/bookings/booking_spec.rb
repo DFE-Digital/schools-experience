@@ -340,13 +340,13 @@ describe Bookings::Booking do
       let!(:booking_in_8_days) { create(:bookings_booking, date: 8.days.from_now.to_date) }
 
       specify 'should return bookings the specified number of days away' do
-        expect(described_class.days_in_the_future(1.days)).to include(booking_in_1_days)
+        expect(described_class.days_in_the_future(1.day)).to include(booking_in_1_days)
       end
 
       specify 'should not return other bookings' do
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_3_days)
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_7_days)
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_8_days)
+        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_3_days)
+        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_7_days)
+        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_8_days)
       end
 
       describe '.tomorrow' do
