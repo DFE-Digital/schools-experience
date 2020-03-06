@@ -17,7 +17,7 @@ module Candidates::MapsHelper
   end
 
   def static_map_url(latitude, longitude, mapsize:, zoom: 10)
-    return unless ENV['BING_MAPS_KEY'].present?
+    return if ENV['BING_MAPS_KEY'].blank?
 
     location = "#{latitude},#{longitude}"
 
@@ -32,7 +32,7 @@ module Candidates::MapsHelper
   end
 
   def ajax_map(latitude, longitude, mapsize:, title: nil, description: nil, zoom: 10, described_by: nil)
-    return unless ENV['BING_MAPS_KEY'].present?
+    return if ENV['BING_MAPS_KEY'].blank?
 
     map_data = {
       controller: 'map',

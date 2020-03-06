@@ -21,7 +21,7 @@ module Bookings
         Bookings::School.transaction do
           urns.each do |row|
             Bookings::School.find_by(urn: row['urn']).tap do |bs|
-              fail "no school found with urn #{row['urn']}" unless bs.present?
+              fail "no school found with urn #{row['urn']}" if bs.blank?
 
               puts "Updating #{bs.name}, enabled: #{new_status}"
               if new_status

@@ -21,7 +21,7 @@ module Schools
 
     def current_school
       urn = session[:urn]
-      raise MissingURN, 'urn is missing, unable to match with school' unless urn.present?
+      raise MissingURN, 'urn is missing, unable to match with school' if urn.blank?
 
       @current_school ||= retrieve_school(urn)
     end
@@ -35,7 +35,7 @@ module Schools
 
     def retrieve_school(urn)
       unless (school = Bookings::School.find_by(urn: urn))
-        raise SchoolNotRegistered, "school #{urn} not found" unless school.present?
+        raise SchoolNotRegistered, "school #{urn} not found" if school.blank?
       end
 
       school

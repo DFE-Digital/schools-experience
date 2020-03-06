@@ -1,5 +1,5 @@
 # Test the Redis connection on boot
-unless ENV['SKIP_REDIS'].present?
+if ENV['SKIP_REDIS'].blank?
   Redis.current = Redis.new(
     db: (Rails.env.test? ? ENV['TEST_ENV_NUMBER'].presence : nil),
     connect_timeout: 20, # Default is 5s but logic is we're better being slower booting than failing to boot

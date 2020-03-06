@@ -10,7 +10,7 @@ Rails.application.configure do
   config.x.notify_client = NotifyFakeClient
 
   # default to true but allow overriding in CI
-  config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
+  config.force_ssl = ENV['SKIP_FORCE_SSL'].blank?
 
   config.x.phase = 10000
   config.x.features = %i(
