@@ -36,7 +36,8 @@ class Bookings::School < ApplicationRecord
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
     inverse_of: :bookings_school,
-    foreign_key: :bookings_school_id
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
 
   has_many :subjects,
     class_name: "Bookings::Subject",
@@ -46,7 +47,8 @@ class Bookings::School < ApplicationRecord
   has_many :bookings_schools_phases,
     class_name: "Bookings::SchoolsPhase",
     inverse_of: :bookings_school,
-    foreign_key: :bookings_school_id
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
 
   has_many :phases,
     class_name: "Bookings::Phase",

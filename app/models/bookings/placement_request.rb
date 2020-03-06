@@ -31,7 +31,8 @@ module Bookings
     has_one :booking,
       class_name: 'Bookings::Booking',
       foreign_key: 'bookings_placement_request_id',
-      inverse_of: :bookings_placement_request
+      inverse_of: :bookings_placement_request,
+      dependent: :destroy
 
     belongs_to :placement_date,
       class_name: 'Bookings::PlacementDate',

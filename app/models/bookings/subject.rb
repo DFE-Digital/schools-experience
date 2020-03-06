@@ -7,7 +7,8 @@ class Bookings::Subject < ApplicationRecord
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
     inverse_of: :bookings_subject,
-    foreign_key: :bookings_subject_id
+    foreign_key: :bookings_subject_id,
+    dependent: :destroy
 
   has_many :schools,
     class_name: "Bookings::School",
@@ -28,7 +29,8 @@ class Bookings::Subject < ApplicationRecord
 
   has_many :placement_requests,
     inverse_of: :subject,
-    foreign_key: :bookings_subject_id
+    foreign_key: :bookings_subject_id,
+    dependent: :restrict_with_exception
 
   default_scope -> { where.not(hidden: true) }
   scope :secondary_subjects, -> { where(secondary_subject: true) }

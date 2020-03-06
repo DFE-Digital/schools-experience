@@ -8,7 +8,8 @@ module Bookings
     has_many :placement_requests,
       class_name: 'Bookings::PlacementRequest',
       inverse_of: :placement_date,
-      foreign_key: :bookings_placement_date_id
+      foreign_key: :bookings_placement_date_id,
+      dependent: :restrict_with_exception
 
     has_many :placement_date_subjects,
       class_name: 'Bookings::PlacementDateSubject',
