@@ -31,3 +31,10 @@ Rails/RakeEnvironment:
   Exclude:
     - lib/tasks/dev_ssl_generator.rake
     - lib/tasks/cucumber.rake
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - servertest
+    - production
