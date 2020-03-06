@@ -1,5 +1,26 @@
+inherit_gem:
+  rubocop-govuk:
+    - config/default.yml
+    - config/rails.yml
+
 Metrics/BlockLength:
   Exclude:
     - config/**/*
     - spec/**/*
     - spec_external/**/*
+
+Layout/ArgumentAlignment:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
