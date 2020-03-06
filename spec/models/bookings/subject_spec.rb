@@ -39,6 +39,15 @@ RSpec.describe Bookings::Subject, type: :model do
     specify do
       is_expected.to have_many(:placement_date_subjects).dependent(:destroy)
     end
+
+    specify do
+      is_expected.to have_many(:onboarding_profile_subjects).dependent(:destroy)
+    end
+
+    specify do
+      is_expected.to have_many(:placement_requests)
+        .with_foreign_key(:bookings_subject_id)
+    end
   end
 
   describe "Scopes" do

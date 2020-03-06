@@ -20,6 +20,16 @@ class Bookings::Subject < ApplicationRecord
     foreign_key: :bookings_subject_id,
     dependent: :destroy
 
+  has_many :onboarding_profile_subjects,
+    class_name: 'Schools::OnBoarding::ProfileSubject',
+    inverse_of: :subject,
+    foreign_key: :bookings_subject_id,
+    dependent: :destroy
+
+  has_many :placement_requests,
+    inverse_of: :subject,
+    foreign_key: :bookings_subject_id
+
   default_scope -> { where.not(hidden: true) }
   scope :secondary_subjects, -> { where(secondary_subject: true) }
 

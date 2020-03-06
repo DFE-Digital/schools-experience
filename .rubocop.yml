@@ -27,6 +27,12 @@ Style/TrailingCommaInHashLiteral:
 Rails/FilePath:
   EnforcedStyle: arguments
 
+# Excluded for cancellation because we use the same model for both school
+# and candidate cancellations
+Rails/InverseOf:
+  Exclude:
+    - app/models/bookings/placement_request/cancellation.rb
+
 Rails/RakeEnvironment:
   Exclude:
     - lib/tasks/dev_ssl_generator.rake

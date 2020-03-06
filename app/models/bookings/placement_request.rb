@@ -19,10 +19,12 @@ module Bookings
 
     belongs_to :school,
       class_name: 'Bookings::School',
+      inverse_of: :placement_requests,
       foreign_key: :bookings_school_id
 
     belongs_to :candidate,
       class_name: 'Bookings::Candidate',
+      inverse_of: :placement_requests,
       foreign_key: :candidate_id,
       optional: true
 
@@ -34,11 +36,13 @@ module Bookings
     belongs_to :placement_date,
       class_name: 'Bookings::PlacementDate',
       foreign_key: :bookings_placement_date_id,
+      inverse_of: :placement_requests,
       optional: true # If this is a placement_request to a school with fixed dates
 
     belongs_to :subject,
       class_name: 'Bookings::Subject',
       foreign_key: :bookings_subject_id,
+      inverse_of: :placement_requests,
       optional: true # If this is a placement_request for a subject_specific_date
 
     has_one :candidate_cancellation,

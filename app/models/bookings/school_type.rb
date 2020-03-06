@@ -6,5 +6,6 @@ class Bookings::SchoolType < ApplicationRecord
 
   has_many :schools,
     class_name: "Bookings::School",
-    foreign_key: :bookings_school_type_id
+    foreign_key: :bookings_school_type_id,
+    inverse_of: :school_type
 end
