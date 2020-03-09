@@ -107,7 +107,9 @@ describe Schools::DFESignInAPI::Client do
         end
 
         it 'will raise an error' do
-          expect { subject }.to raise_exception Faraday::ConnectionFailed
+          expect { subject }.to raise_exception \
+            described_class::ApiConnectionFailed
+              # confusing but the timeout helper doesnt actually trigger a faraday timeout error
         end
       end
     end

@@ -22,6 +22,9 @@ module Schools
       delegate :enabled?, to: :class
 
       class ApiDisabled < RuntimeError; end
+      class ApiError < RuntimeError; end
+      class ApiTimeout < ApiError; end
+      class ApiConnectionFailed < ApiError; end
 
     private
 
@@ -34,6 +37,10 @@ module Schools
         end
 
         JSON.parse(resp.body)
+      rescue Faraday::TimeoutError => e
+        raise ApiTimeout.new(e)
+      rescue Faraday::ConnectionFailed => e
+        raise ApiConnectionFailed.new(e)
       end
 
       def faraday
