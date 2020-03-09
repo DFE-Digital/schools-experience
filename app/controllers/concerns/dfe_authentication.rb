@@ -57,7 +57,11 @@ private
   end
 
   def school_urns(reload = false)
-    school_uuids(reload).values
+    if Schools::DFESignInAPI::Client.enabled?
+      school_uuids(reload).values
+    else
+      Array.wrap current_urn
+    end
   end
 
   def school_uuids(reload = false)
@@ -67,9 +71,9 @@ private
   end
 
   def retrieve_school_uuids
-    Schools::DFESignInAPI::Organisations
+    Schools::DFESignInAPI::RoleCheckedOrganisations
       .new(current_user.sub)
-      .uuids
+      .organisation_uuid_pairs
   end
 
   def other_school_urns

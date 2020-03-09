@@ -22,21 +22,16 @@ module Schools
       end
     end
 
-    def initialize(current_user, uuids_to_urns, attributes = {})
+    def initialize(current_user, role_checked_uuids_to_urns, attributes = {})
       @current_user   = current_user
-      @uuids_to_urns  = uuids_to_urns
+      @uuids_to_urns  = role_checked_uuids_to_urns
 
       super attributes
     end
 
     def retrieve_valid_school!
       validate!
-
-      if user_has_role_at_school?
-        Bookings::School.find_by!(urn: urn)
-      else
-        raise InaccessibleSchoolError
-      end
+      Bookings::School.find_by!(urn: urn)
     end
 
     def available_schools
@@ -57,21 +52,6 @@ module Schools
 
     def organisation_urns
       uuids_to_urns.values
-    end
-
-    def user_has_role_at_school?
-      role_checker.has_school_experience_role?
-    rescue Faraday::ResourceNotFound, Schools::DFESignInAPI::Roles::NoOrganisationError
-      # if the role isn't found the API returns a 404 - this means that the user
-      # has insufficient privileges but this *isn't* really an error, so log it
-      # and return false
-      Rails.logger.warn("Role query yielded 404, user_uuid: #{user_uuid}, school_uuid: #{school_uuid}")
-
-      false
-    end
-
-    def role_checker
-      Schools::DFESignInAPI::Roles.new user_uuid, school_uuid
     end
 
     def urns_to_uuids

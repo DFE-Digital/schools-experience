@@ -95,6 +95,8 @@ describe DFEAuthentication do
 
     describe '#school_urns' do
       before do
+        allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true }
+
         allow(controller).to receive(:retrieve_school_uuids).and_return \
           SecureRandom.uuid => 4,
           SecureRandom.uuid => 5,
@@ -119,6 +121,16 @@ describe DFEAuthentication do
       context 'with forced reload' do
         before { controller.session[:urns] = [1, 2, 3] }
         it { expect(subject.send(:school_urns, true)).to eql [4, 5, 6] }
+        it { expect(controller).not_to have_received(:retrieve_school_uuids) }
+      end
+
+      context 'when DfE Sign-in API is disabled' do
+        before do
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { false }
+          allow(controller).to receive(:current_urn) { 1 }
+        end
+
+        it { expect(subject.send(:school_urns)).to eql [1] }
         it { expect(controller).not_to have_received(:retrieve_school_uuids) }
       end
     end
