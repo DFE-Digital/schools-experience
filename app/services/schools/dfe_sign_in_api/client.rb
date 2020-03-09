@@ -31,10 +31,12 @@ module Schools
       end
       delegate :role_check_enabled?, to: :class
 
+      class ApiDisabled < RuntimeError; end
+
     private
 
       def response
-        return [] unless enabled?
+        raise ApiDisabled unless enabled?
 
         resp = faraday.get(endpoint) do |req|
           req.headers['Authorization'] = "bearer #{token}"
