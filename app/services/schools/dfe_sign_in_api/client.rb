@@ -21,16 +21,6 @@ module Schools
       end
       delegate :enabled?, to: :class
 
-      def self.role_check_enabled?
-        enabled? &&
-          Rails.application.config.x.dfe_sign_in_api_role_check_enabled &&
-          [
-            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID', nil),
-            ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID', nil)
-          ].all?(&:present?)
-      end
-      delegate :role_check_enabled?, to: :class
-
       class ApiDisabled < RuntimeError; end
 
     private

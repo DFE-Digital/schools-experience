@@ -3,11 +3,53 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::DFESignInAPI::Roles do
   include_context "logged in DfE user"
+  before { allow(described_class).to receive(:enabled?) { true } }
   subject { described_class.new(user_guid, dfe_signin_school_id) }
 
-  before do
-    allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
-    allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true)
+  describe '.enabled?' do
+    before do
+      allow(Schools::DFESignInAPI::Roles).to \
+        receive(:enabled?).and_call_original
+    end
+
+    subject { Schools::DFESignInAPI::Roles.enabled? }
+
+    context 'when the client is disabled' do
+      before do
+        allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { false }
+        allow(ENV).to receive(:fetch).and_return(true)
+      end
+
+      specify 'should be disabled' do
+        is_expected.to be false
+      end
+    end
+
+    context 'when the client is enabled' do
+      before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true } }
+
+      context 'when role check is disabled' do
+        before do
+          allow(Rails.application.config.x).to \
+            receive(:dfe_sign_in_api_role_check_enabled).and_return false
+        end
+
+        specify 'should be disabled' do
+          expect(subject).to be false
+        end
+      end
+
+      context 'when role check is enabled' do
+        before do
+          allow(Rails.application.config.x).to \
+            receive(:dfe_sign_in_api_role_check_enabled).and_return true
+        end
+
+        specify 'should be enabled' do
+          expect(subject).to be true
+        end
+      end
+    end
   end
 
   specify 'should respond to #has_school_experience_role?' do
@@ -18,6 +60,16 @@ describe Schools::DFESignInAPI::Roles do
     context 'when the role is present' do
       specify 'should return true when the role is present' do
         expect(subject.has_school_experience_role?).to be true
+      end
+    end
+
+    context 'when env vars are not present' do
+      before { allow(ENV).to receive(:fetch).and_return '' }
+      before { allow(described_class).to receive(:enabled?).and_return true }
+
+      specify 'should raise an exception' do
+        expect { subject.has_school_experience_role? }.to \
+          raise_exception described_class::MissingConfigVariable
       end
     end
 

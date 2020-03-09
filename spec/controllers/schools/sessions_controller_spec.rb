@@ -149,11 +149,9 @@ describe Schools::SessionsController, type: :request do
 
     describe 'role checking' do
       include_context 'oidc callback'
-      before do
-        allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
-        allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true)
-        allow_any_instance_of(Schools::DFESignInAPI::Roles).to receive(:has_school_experience_role?).and_return(false)
-      end
+      include_context 'stub role check api'
+
+      let(:signin_role_check_response) { false }
 
       subject! { get callback }
 

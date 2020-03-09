@@ -74,7 +74,7 @@ module Schools
   private
 
     def check_role!(user_uuid, organisation_uuid)
-      return true unless Schools::DFESignInAPI::Client.role_check_enabled?
+      return true unless Schools::DFESignInAPI::Roles.enabled?
       return true if Schools::ChangeSchool.allow_school_change_in_app? && organisation_uuid.nil?
 
       unless Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
