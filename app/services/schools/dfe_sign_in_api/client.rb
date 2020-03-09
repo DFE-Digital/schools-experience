@@ -3,6 +3,15 @@ module Schools
     class APIResponseError < RuntimeError; end
 
     class Client
+      TIMEOUT_SECS = 10
+      RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
+      RETRY_OPTIONS = {
+        max: 2,
+        methods: %i{get},
+        exceptions:
+          ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS + RETRY_EXCEPTIONS
+      }.freeze
+
       def self.enabled?
         Rails.application.config.x.dfe_sign_in_api_enabled &&
           [
@@ -37,8 +46,9 @@ module Schools
 
       def faraday
         Faraday.new do |f|
-          f.use(Faraday::Response::RaiseError)
-          f.adapter(Faraday.default_adapter)
+          f.use Faraday::Response::RaiseError
+          f.adapter Faraday.default_adapter
+          f.request :retry, RETRY_OPTIONS
         end
       end
 
