@@ -3,6 +3,11 @@ require 'rails_helper'
 describe ApplicationHelper, type: :helper do
   let(:given_name) { 'Martin' }
   let(:family_name) { 'Prince' }
+  let(:user) do
+    OpenIDConnect::ResponseObject::UserInfo.new \
+      given_name: given_name,
+      family_name: family_name
+  end
 
   context 'Breadcrumbs' do
     let(:args) do
@@ -55,18 +60,8 @@ describe ApplicationHelper, type: :helper do
   end
 
   context '#current_user_info_and_logout_link' do
-    subject { helper.current_user_info_and_logout_link }
+    subject { helper.current_user_info_and_logout_link user }
     context 'when a user is logged in' do
-      before do
-        assign(
-          :current_user,
-          OpenIDConnect::ResponseObject::UserInfo.new(
-            given_name: given_name,
-            family_name: family_name
-          )
-        )
-      end
-
       specify "should contain the person's name and a logout link" do
         expect(subject).to include("#{given_name} #{family_name}")
       end
@@ -78,25 +73,16 @@ describe ApplicationHelper, type: :helper do
   end
 
   describe '#current_user_full_name' do
-    subject { helper.current_user_full_name }
+    subject { helper.current_user_full_name user }
 
     context 'when current_user present' do
-      before do
-        assign(
-          :current_user,
-          OpenIDConnect::ResponseObject::UserInfo.new(
-            given_name: given_name,
-            family_name: family_name
-          )
-        )
-      end
-
       specify 'should return the combined given and family names' do
         expect(subject).to eql("#{given_name} #{family_name}")
       end
     end
 
     context 'when current_user absent' do
+      let(:user) { nil }
       specify "should return 'Unknown'" do
         expect(subject).to eql("Unknown")
       end

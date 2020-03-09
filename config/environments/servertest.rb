@@ -1,5 +1,5 @@
 require File.expand_path('production.rb', __dir__)
-require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
+require Rails.root.join('spec', 'support', 'notify_fake_client')
 require Rails.root.join("lib", "servertest", "geocoder")
 require Rails.root.join("lib", "servertest", "dfe_sign_in_api")
 
@@ -10,7 +10,7 @@ Rails.application.configure do
   config.x.notify_client = NotifyFakeClient
 
   # default to true but allow overriding in CI
-  config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
+  config.force_ssl = ENV['SKIP_FORCE_SSL'].blank?
 
   config.x.phase = 10000
   config.x.features = %i(

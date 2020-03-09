@@ -13,7 +13,7 @@ Then("I should see the previous bookings listed") do
 end
 
 And("there is/are {int} previous booking/bookings") do |count|
-  now = Date.today
+  now = Time.zone.today
 
   travel_to 1.year.ago do
     unless @school.subjects.where(name: 'Biology').any?

@@ -30,7 +30,7 @@ Given "the school is a {string} and {string} school" do |p1, p2|
 end
 
 Given "my chosen school has the URN {int}" do |int|
-  @school.update_attributes(urn: int)
+  @school.update(urn: int)
   expect(@school.urn).to eql(int)
 end
 

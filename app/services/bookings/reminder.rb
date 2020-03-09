@@ -27,7 +27,7 @@ private
   end
 
   def assign_gitis_contact(booking)
-    return unless booking.present?
+    return if booking.blank?
 
     booking
       .bookings_placement_request

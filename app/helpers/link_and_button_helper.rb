@@ -30,7 +30,7 @@ private
   end
 
   def link_classes(options)
-    classes = ['govuk-button'].tap do |c|
+    classes = %w(govuk-button).tap do |c|
       c << 'govuk-button--secondary' if options.delete(:secondary)
       c << 'govuk-button--warning'   if options.delete(:warning)
 

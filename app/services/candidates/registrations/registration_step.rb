@@ -9,7 +9,7 @@ module Candidates
       attribute :updated_at, :datetime
 
       def school
-        return nil unless urn.present?
+        return nil if urn.blank?
 
         @school ||= Candidates::School.find(urn)
       end

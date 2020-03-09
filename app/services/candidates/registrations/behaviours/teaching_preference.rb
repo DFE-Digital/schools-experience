@@ -4,7 +4,7 @@ module Candidates
       module TeachingPreference
         extend ActiveSupport::Concern
 
-        OPTIONS_CONFIG = YAML.load_file "#{Rails.root}/config/candidate_form_options.yml"
+        OPTIONS_CONFIG = YAML.load_file Rails.root.join('config', 'candidate_form_options.yml')
 
         included do
           validates :teaching_stage, presence: true

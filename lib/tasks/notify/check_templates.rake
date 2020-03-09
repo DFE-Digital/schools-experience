@@ -1,4 +1,4 @@
-require File.join(Rails.root, "lib", "notify", "notify_sync")
+require Rails.root.join("lib", "notify", "notify_sync")
 
 namespace :notify do
   desc "See if local copies of email templates are up to date"
