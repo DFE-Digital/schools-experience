@@ -13,12 +13,12 @@ describe Schools::PlacementRequestsController, type: :request do
   end
 
   before do
-    school.subjects << FactoryBot.create_list(:bookings_subject, 5)
+    school.subjects << FactoryBot.create_list(:bookings_subject, 1)
   end
 
   context '#index' do
     let!(:placement_requests) do
-      FactoryBot.create_list :placement_request, 5, school: school
+      FactoryBot.create_list :placement_request, 2, school: school
     end
 
     context 'for unaccepted placement requests' do
@@ -131,9 +131,9 @@ describe Schools::PlacementRequestsController, type: :request do
         before do
           allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
 
-          allow_any_instance_of(Schools::DFESignInAPI::Organisations).to(
-            receive(:urns).and_return([another_school.urn])
-          )
+          allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+            receive(:uuids).and_return \
+              SecureRandom.uuid => another_school.urn
         end
 
         specify 'redirects to the switch school page with urn param present' do

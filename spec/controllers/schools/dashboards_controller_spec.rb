@@ -68,14 +68,29 @@ describe Schools::DashboardsController, type: :request do
 
     context "when the urn isn't present in the session" do
       include_context "logged in DfE user"
+
       before do
-        get '/'
-        request.session[:urn] = nil
+        allow(Schools::ChangeSchool).to \
+          receive(:allow_school_change_in_app?) { allow_school_change }
+
+        allow_any_instance_of(described_class).to receive(:current_urn) { nil }
         get '/schools/dashboard'
       end
 
-      specify 'should redirect to school not registered error page' do
-        expect(subject).to redirect_to(schools_errors_no_school_path)
+      context 'and in app school change is deactivated' do
+        let(:allow_school_change) { false }
+
+        specify 'should redirect to school not registered error page' do
+          expect(subject).to redirect_to(schools_errors_no_school_path)
+        end
+      end
+
+      context 'and DfE Sign-in api integration is activated' do
+        let(:allow_school_change) { true }
+
+        specify 'should redirect to change school page' do
+          expect(subject).to redirect_to(schools_change_path)
+        end
       end
     end
   end

@@ -27,7 +27,7 @@ module DFEAuthentication
       redirect_to client.authorization_uri(
         state: session[:state],
         nonce: session[:nonce],
-        scope: %i(profile organisation)
+        scope: oidc_auth_scope
       )
     end
 
@@ -35,6 +35,14 @@ module DFEAuthentication
   end
 
 private
+
+  def oidc_auth_scope
+    if Schools::ChangeSchool.allow_school_change_in_app?
+      %i(profile)
+    else
+      %i(profile organisation)
+    end
+  end
 
   def get_oidc_client
     OpenIDConnect::Client.new(
@@ -49,15 +57,19 @@ private
   end
 
   def school_urns(reload = false)
-    session[:urns] = nil if reload
-
-    session[:urns] ||= retrieve_school_urns.freeze # should only be replaced, not changed immutable
+    school_uuids(reload).values
   end
 
-  def retrieve_school_urns
+  def school_uuids(reload = false)
+    session[:uuid_map] = nil if reload
+
+    session[:uuid_map] ||= retrieve_school_uuids.freeze
+  end
+
+  def retrieve_school_uuids
     Schools::DFESignInAPI::Organisations
       .new(current_user.sub)
-      .urns
+      .uuids
   end
 
   def other_school_urns
@@ -70,5 +82,10 @@ private
     return true unless Schools::DFESignInAPI::Client.enabled?
 
     other_school_urns.any?
+  end
+
+  def current_school=(new_school)
+    session[:urn]         = new_school.urn
+    session[:school_name] = new_school.name
   end
 end

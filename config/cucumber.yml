@@ -8,3 +8,4 @@ default: <%= std_opts %> features
 wip: --tags @wip:3 --wip features
 rerun: <%= rerun_opts %> --format rerun --out rerun.txt --strict --tags 'not @wip'
 continuous_integration: <%= std_opts %> --tags 'not (@wip or @javascript)' features
+selenium: <%= std_opts %> --tags 'not (@wip or @mocks)' features

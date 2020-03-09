@@ -14,31 +14,35 @@ module Schools
     before_action :set_site_header_text
     before_action :ensure_onboarded
 
-    rescue_from MissingURN, with: -> { redirect_to schools_errors_no_school_path }
+    rescue_from MissingURN, with: :no_school_selected
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
     rescue_from Bookings::Gitis::API::BadResponseError, with: :gitis_retrieval_error
     rescue_from Bookings::Gitis::API::ConnectionFailed, with: :gitis_retrieval_error
 
     def current_school
-      urn = session[:urn]
-      raise MissingURN, 'urn is missing, unable to match with school' if urn.blank?
+      raise MissingURN, 'urn is missing, unable to match with school' if current_urn.blank?
 
-      @current_school ||= retrieve_school(urn)
+      @current_school ||= retrieve_school(current_urn)
     end
     alias_method :set_current_school, :current_school
 
   private
+
+    def current_urn
+      session[:urn]
+    end
+    helper_method :current_urn
 
     def set_site_header_text
       @site_header_text = "Manage school experience"
     end
 
     def retrieve_school(urn)
-      unless (school = Bookings::School.find_by(urn: urn))
-        raise SchoolNotRegistered, "school #{urn} not found" if school.blank?
-      end
+      raise MissingURN if urn.blank?
 
-      school
+      Bookings::School.find_by!(urn: urn)
+    rescue ActiveRecord::RecordNotFound
+      raise SchoolNotRegistered, "school #{urn} not found"
     end
 
     def ensure_onboarded
@@ -59,6 +63,14 @@ module Schools
       end
 
       render 'shared/failed_gitis_connection', status: :service_unavailable
+    end
+
+    def no_school_selected
+      if Schools::ChangeSchool.allow_school_change_in_app?
+        redirect_to schools_change_path
+      else
+        redirect_to schools_errors_no_school_path
+      end
     end
   end
 end
