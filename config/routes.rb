@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/schools/request_organisation', to: 'pages#schools_request_organisation'
   resources :service_updates, only: %i(index show)
-  get '/service_update', to: 'pages#service_update'
+  get '/service_update', to: 'service_updates#index'
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
   get '/dfe_signin_help', to: 'pages#dfe_signin_help'
 

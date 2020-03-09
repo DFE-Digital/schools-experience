@@ -4,7 +4,7 @@ feature 'Candidate Registrations', type: :feature do
   include_context 'Stubbed candidates school'
 
   let! :today do
-    Date.today
+    Time.zone.today
   end
 
   let! :tomorrow do

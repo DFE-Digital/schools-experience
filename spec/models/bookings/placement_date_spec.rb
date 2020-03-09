@@ -36,7 +36,7 @@ describe Bookings::PlacementDate, type: :model do
         end
 
         specify 'new placement dates should not allow today' do
-          expect(subject).not_to allow_value(Date.today).for(:date)
+          expect(subject).not_to allow_value(Time.zone.today).for(:date)
         end
 
         context 'error messages' do
@@ -86,7 +86,7 @@ describe Bookings::PlacementDate, type: :model do
     end
 
     context '#max_bookings_count' do
-      before { subject.published_at = Date.today }
+      before { subject.published_at = Time.zone.today }
       it do
         is_expected.to \
           validate_numericality_of(:max_bookings_count).is_greater_than(0).allow_nil
@@ -95,7 +95,7 @@ describe Bookings::PlacementDate, type: :model do
 
     context '#subjects' do
       context 'published' do
-        before { subject.published_at = Date.today }
+        before { subject.published_at = Time.zone.today }
 
         context 'when not subject_specific?' do
           before { subject.subject_specific = false }
@@ -136,7 +136,7 @@ describe Bookings::PlacementDate, type: :model do
   describe 'Scopes' do
     let(:future_date) { create(:bookings_placement_date) }
     let(:past_date) { create(:bookings_placement_date, :in_the_past) }
-    let(:today_date) { create(:bookings_placement_date, :in_the_past, date: Date.today) }
+    let(:today_date) { create(:bookings_placement_date, :in_the_past, date: Time.zone.today) }
 
     context '.bookable_date' do
       subject { described_class.bookable_date }

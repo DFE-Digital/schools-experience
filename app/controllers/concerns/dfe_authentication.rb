@@ -10,6 +10,7 @@ module DFEAuthentication
       @current_user ||= session[:current_user]
     end
     alias_method :set_current_user, :current_user
+    helper_method :current_user
 
     def user_signed_in?
       current_user.present?

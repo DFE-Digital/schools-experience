@@ -64,17 +64,19 @@ describe Bookings::Booking do
         specify 'should allow future dates' do
           [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
+            expect(subject).to allow_value(d).for(:date).on(:acceptance)
           end
         end
 
         specify 'new placement dates should not allow historic dates' do
-          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago].each do |d|
+          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago, nil].each do |d|
             expect(subject).not_to allow_value(d).for(:date)
+            expect(subject).not_to allow_value(d).for(:date).on(:acceptance)
           end
         end
 
         specify 'new placement dates should not allow today' do
-          expect(subject).not_to allow_value(Date.today).for(:date)
+          expect(subject).not_to allow_value(Time.zone.today).for(:date)
         end
 
         context 'error messages' do
@@ -185,7 +187,7 @@ describe Bookings::Booking do
         [
           FactoryBot.build(:bookings_booking, date: 1.week.ago),
           FactoryBot.build(:bookings_booking, date: Date.yesterday),
-          FactoryBot.build(:bookings_booking, date: Date.today)
+          FactoryBot.build(:bookings_booking, date: Time.zone.today)
         ].each do |booking|
           booking.save(validate: false)
         end
@@ -221,7 +223,7 @@ describe Bookings::Booking do
 
       let!(:future_bookings) do
         [
-          FactoryBot.build(:bookings_booking, date: Date.today),
+          FactoryBot.build(:bookings_booking, date: Time.zone.today),
           FactoryBot.build(:bookings_booking, date: Date.tomorrow),
           FactoryBot.build(:bookings_booking, date: 3.weeks.from_now)
         ].each do |booking|
@@ -338,13 +340,13 @@ describe Bookings::Booking do
       let!(:booking_in_8_days) { create(:bookings_booking, date: 8.days.from_now.to_date) }
 
       specify 'should return bookings the specified number of days away' do
-        expect(described_class.days_in_the_future(1.days)).to include(booking_in_1_days)
+        expect(described_class.days_in_the_future(1.day)).to include(booking_in_1_days)
       end
 
       specify 'should not return other bookings' do
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_3_days)
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_7_days)
-        expect(described_class.days_in_the_future(1.days)).not_to include(booking_in_8_days)
+        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_3_days)
+        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_7_days)
+        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_8_days)
       end
 
       describe '.tomorrow' do
@@ -366,7 +368,7 @@ describe Bookings::Booking do
   describe '#placement_start_date_with_duration' do
     context 'when the placement request has a flexible date' do
       let! :date do
-        Date.today
+        Time.zone.today
       end
 
       subject { described_class.new date: date }
@@ -379,7 +381,7 @@ describe Bookings::Booking do
 
     context 'when the placement request has a fixed date' do
       let! :date do
-        Date.today
+        Time.zone.today
       end
 
       let(:placement_date) { create(:bookings_placement_date) }

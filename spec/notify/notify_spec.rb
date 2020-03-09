@@ -1,6 +1,6 @@
 require 'rails_helper'
-require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
-require File.join(Rails.root, 'spec', 'support', 'notify_retryable_erroring_client')
+require Rails.root.join('spec', 'support', 'notify_fake_client')
+require Rails.root.join('spec', 'support', 'notify_retryable_erroring_client')
 
 describe Notify do
   include ActiveJob::TestHelper

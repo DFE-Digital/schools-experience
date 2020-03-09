@@ -132,7 +132,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
             expect(Bookings::LogToGitisJob).to \
               have_received(:perform_later).with \
                 fake_gitis_uuid,
-                %r{#{Date.today.to_formatted_s(:gitis)} REQUEST}
+                %r{#{Time.zone.today.to_formatted_s(:gitis)} REQUEST}
           end
 
           it 'redirects to placement request show' do

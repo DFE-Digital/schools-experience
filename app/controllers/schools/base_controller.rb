@@ -20,7 +20,7 @@ module Schools
     rescue_from Bookings::Gitis::API::ConnectionFailed, with: :gitis_retrieval_error
 
     def current_school
-      raise MissingURN, 'urn is missing, unable to match with school' unless current_urn.present?
+      raise MissingURN, 'urn is missing, unable to match with school' if current_urn.blank?
 
       @current_school ||= retrieve_school(current_urn)
     end
@@ -38,7 +38,7 @@ module Schools
     end
 
     def retrieve_school(urn)
-      raise MissingURN unless urn.present?
+      raise MissingURN if urn.blank?
 
       Bookings::School.find_by!(urn: urn)
     rescue ActiveRecord::RecordNotFound

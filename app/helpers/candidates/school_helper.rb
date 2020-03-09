@@ -13,17 +13,18 @@ module Candidates::SchoolHelper
   def format_school_subjects(school)
     filtered_subject_ids = filtered_subject_ids(params[:subjects])
 
-    safe_subjects = school
-      .subjects
-      .ordered_by_name
-      .each
-      .with_object({}) { |subject, hash| hash[subject.name] = subject.id.in?(filtered_subject_ids) }
-      .map { |subject, bold| bold ? tag.strong(ERB::Util.h(subject)) : ERB::Util.h(subject) }
+    subjects = school.subjects.ordered_by_name.map do |subject|
+      if subject.id.in? filtered_subject_ids
+        tag.strong(subject.name)
+      else
+        subject.name
+      end
+    end
 
-    if safe_subjects.empty?
+    if subjects.empty?
       'Not specified'
     else
-      safe_subjects.to_sentence.html_safe
+      to_sentence subjects
     end
   end
 

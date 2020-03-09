@@ -565,7 +565,7 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   let! :today do
-    Date.today
+    Time.zone.today
   end
 
   context 'validations for placement preferences' do
@@ -790,7 +790,7 @@ describe Bookings::PlacementRequest, type: :model do
     context 'when #viewed_at has not already been set' do
       before { subject.viewed! }
       specify 'should set #viewed_at to now' do
-        expect(subject.viewed_at).to be_within(0.1).of(Time.now)
+        expect(subject.viewed_at).to be_within(0.1).of(Time.zone.now)
       end
     end
 
@@ -872,7 +872,7 @@ describe Bookings::PlacementRequest, type: :model do
     subject { pr.fixed_date_is_bookable? }
 
     context 'for today' do
-      before { date.date = Date.today }
+      before { date.date = Time.zone.today }
       it { is_expected.to be false }
     end
 

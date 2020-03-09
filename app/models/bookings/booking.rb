@@ -16,8 +16,8 @@ module Bookings
     has_one :school_cancellation, through: :bookings_placement_request
 
     validates :date,
-      presence: true,
-      on: :create
+      presence: true
+
     validates :date,
       if: -> { date_changed? },
       timeliness: {
@@ -74,8 +74,8 @@ module Bookings
     scope :upcoming, -> { not_cancelled.accepted.future }
 
     scope :accepted, -> { where.not(accepted_at: nil) }
-    scope :previous, -> { where(arel_table[:date].lteq(Date.today)) }
-    scope :future, -> { where(arel_table[:date].gteq(Date.today)) }
+    scope :previous, -> { where(arel_table[:date].lteq(Time.zone.today)) }
+    scope :future, -> { where(arel_table[:date].gteq(Time.zone.today)) }
     scope :attendance_unlogged, -> { where(attended: nil) }
 
     scope :with_unviewed_candidate_cancellation, -> do
@@ -127,7 +127,7 @@ module Bookings
     def populate_contact_details
       last_booking = Bookings::Booking.last_accepted_booking_by(bookings_school)
 
-      return false unless last_booking.present?
+      return false if last_booking.blank?
 
       assign_attributes(
         contact_name: last_booking.contact_name,
@@ -170,7 +170,7 @@ module Bookings
     end
 
     def in_future?
-      date > Date.today
+      date > Time.zone.today
     end
 
     def cancellable?

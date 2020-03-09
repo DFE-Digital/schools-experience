@@ -2,10 +2,10 @@ namespace :assets do
   desc "Symlink non digested versions of assets, for use by static error pages"
   task symlink_non_digested: :environment do
     # limit to stylesheets for the time being
-    assets = Dir.glob(Rails.root.join('public/assets/**/*.{css,ico,png}'))
+    assets_path = Rails.root.join('public', 'assets', '**', '*.{css,ico,png}')
 
     regex = /(-{1}[a-z0-9]{32}*\.{1}){1}/
-    assets.each do |file|
+    Dir.glob(assets_path).each do |file|
       next if File.directory?(file) || file !~ regex
 
       source = file.split('/')

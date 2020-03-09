@@ -144,8 +144,9 @@ module Schools
       def teacher_training_links
         if @school_profile.experience_outline.provides_teacher_training
           details = sanitize(@school_profile.experience_outline.teacher_training_details)
-          url = link_to 'Teacher training information', sanitize(@school_profile.experience_outline.teacher_training_url)
-          "Yes - #{details}. #{url}".html_safe
+          link = link_to 'Teacher training information', sanitize(@school_profile.experience_outline.teacher_training_url)
+
+          safe_join ["Yes - #{details}.", link], ' '
         else
           'No'
         end

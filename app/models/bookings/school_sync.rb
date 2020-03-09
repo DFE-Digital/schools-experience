@@ -54,7 +54,7 @@ private
 
   def download
     Rails.logger.debug("Downloading latest edubase data")
-    date = Date.today.strftime('%Y%m%d')
+    date = Time.zone.today.strftime('%Y%m%d')
     url = "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date}.csv"
     File.open(FILE_LOCATION, 'wb') { |f| f.write(Net::HTTP.get(URI.parse(url))) }
   end

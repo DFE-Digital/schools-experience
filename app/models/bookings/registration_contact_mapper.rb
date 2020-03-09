@@ -85,7 +85,7 @@ module Bookings
     end
 
     def subject_from_gitis_uuid(uuid)
-      return nil unless uuid.present?
+      return nil if uuid.blank?
 
       @subjects_from_gitis_uuids ||= begin
         uuids = [

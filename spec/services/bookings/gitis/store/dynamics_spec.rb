@@ -68,11 +68,11 @@ describe Bookings::Gitis::Store::Dynamics do
 
     context 'for multiple ids' do
       let(:uuids) do
-        [
-          "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
-          "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
-          "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
-        ]
+        %w(
+          03ec3075-a9f9-400f-bc43-a7a5cdf68579
+          e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56
+          2ec079dd-35a2-419a-9d01-48d63c09cdcc
+        )
       end
 
       let(:matches) do
