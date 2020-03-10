@@ -35,47 +35,81 @@ describe Schools::DFESignInAPI::Client do
     end
   end
 
-  describe '.role_check_enabled?' do
-    context 'when the client is disabled' do
-      before { allow(subject).to receive(:enabled?).and_return(false) }
-      before { allow(ENV).to receive(:fetch).and_return(true) }
+  describe 'error handling' do
+    let(:testdata) { { hello: 'world' } }
+    let(:apihost) { "https://some-test-api-host.signin.education.gov.uk" }
 
-      specify 'should be disabled' do
-        expect(subject).not_to be_role_check_enabled
+    before do
+      allow(ENV).to receive(:fetch).and_return('123')
+
+      allow(Schools::DFESignInAPI::Client).to \
+        receive(:enabled?).and_return true
+    end
+
+    class TestAPI < Schools::DFESignInAPI::Client
+      def data; response; end
+
+    private
+
+      def endpoint
+        URI::HTTPS.build \
+          host: "some-test-api-host.signin.education.gov.uk",
+          path: '/testapi'
       end
     end
 
-    context 'when the client is enabled' do
-      subject { described_class }
-      before { allow(subject).to receive(:enabled?).and_return(true) }
-      before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled).and_return(true) }
+    subject { TestAPI.new.data }
 
+    {
+      400 => Faraday::ClientError,
+      404 => Faraday::ResourceNotFound,
+      405 => Faraday::ClientError,
+      500 => Faraday::ServerError,
+      502 => Faraday::ServerError,
+      503 => Faraday::ServerError
+    }.each do |code, error|
+      context code.to_s do
+        before do
+          stub_request(:get, "#{apihost}/testapi")
+            .to_return(
+              status: code,
+              body: testdata.to_json,
+              headers: {}
+            )
+        end
 
-      context 'when role check is disabled' do
-        context 'when the DfE Sign-in role and service environment variables are absent' do
-          before { allow(ENV).to receive(:fetch).and_return(nil) }
-
-          specify 'should be disabled' do
-            expect(subject).not_to be_role_check_enabled
-          end
+        specify "should raise a #{error} error" do
+          expect { subject }.to raise_error(error)
         end
       end
+    end
 
-      context 'when role check is enabled' do
-        context 'when the DfE Sign-in role and service environment variables are absent' do
-          before { allow(ENV).to receive(:fetch).and_return(nil) }
-
-          specify 'should be disabled' do
-            expect(subject).not_to be_role_check_enabled
-          end
+    context 'timeouts' do
+      context 'first timeout' do
+        before do
+          stub_request(:get, "#{apihost}/testapi")
+            .to_timeout.then
+            .to_return(
+              status: :success,
+              body: testdata.to_json,
+              headers: {}
+            )
         end
 
-        context 'when the DfE Sign-in role and service environment variables are present' do
-          before { allow(ENV).to receive(:fetch).and_return('yes') }
+        it { is_expected.to eql('hello' => 'world') }
+      end
 
-          specify 'should be enabled' do
-            expect(subject).to be_role_check_enabled
-          end
+      context 'second timeout' do
+        before do
+          stub_request(:get, "#{apihost}/testapi")
+            .to_timeout.then
+            .to_timeout
+        end
+
+        it 'will raise an error' do
+          expect { subject }.to raise_exception \
+            described_class::ApiConnectionFailed
+              # confusing but the timeout helper doesnt actually trigger a faraday timeout error
         end
       end
     end
