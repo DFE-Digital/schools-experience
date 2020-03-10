@@ -6,52 +6,6 @@ describe Schools::DFESignInAPI::Roles do
   before { allow(described_class).to receive(:enabled?) { true } }
   subject { described_class.new(user_guid, dfe_signin_school_id) }
 
-  describe '.enabled?' do
-    before do
-      allow(Schools::DFESignInAPI::Roles).to \
-        receive(:enabled?).and_call_original
-    end
-
-    subject { Schools::DFESignInAPI::Roles.enabled? }
-
-    context 'when the client is disabled' do
-      before do
-        allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { false }
-        allow(ENV).to receive(:fetch).and_return(true)
-      end
-
-      specify 'should be disabled' do
-        is_expected.to be false
-      end
-    end
-
-    context 'when the client is enabled' do
-      before { allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true } }
-
-      context 'when role check is disabled' do
-        before do
-          allow(Rails.application.config.x).to \
-            receive(:dfe_sign_in_api_role_check_enabled).and_return false
-        end
-
-        specify 'should be disabled' do
-          expect(subject).to be false
-        end
-      end
-
-      context 'when role check is enabled' do
-        before do
-          allow(Rails.application.config.x).to \
-            receive(:dfe_sign_in_api_role_check_enabled).and_return true
-        end
-
-        specify 'should be enabled' do
-          expect(subject).to be true
-        end
-      end
-    end
-  end
-
   specify 'should respond to #has_school_experience_role?' do
     expect(subject).to respond_to(:has_school_experience_role?)
   end
