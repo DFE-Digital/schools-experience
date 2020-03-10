@@ -13,10 +13,6 @@ module Schools
           ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID').presence ||
             raise(MissingConfigVariable)
         end
-
-        def enabled?
-          super && Rails.application.config.x.dfe_sign_in_api_role_check_enabled
-        end
       end
 
       def initialize(user_uuid, organisation_uuid)
