@@ -29,7 +29,7 @@ module Bookings
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
         filter = filter_pairs(emailaddress2: email, emailaddress1: email)
-        contacts = fetch(Contact, filter: filter, limit: 20, order: 'createdon desc')
+        contacts = fetch(Contact, filter: filter, limit: 30, order: 'createdon desc')
 
         matcher = ContactFuzzyMatcher.new(firstname, lastname, date_of_birth)
         matcher.find(contacts).tap do |match|

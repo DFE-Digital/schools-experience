@@ -79,7 +79,7 @@ module Apimock
           .merge(contactdata.stringify_keys)
       end
 
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=20&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'&$select=#{contact_attributes}&$orderby=createdon desc").
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=30&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'&$select=#{contact_attributes}&$orderby=createdon desc").
         with(headers: get_headers).
         to_return(
           status: 200,
