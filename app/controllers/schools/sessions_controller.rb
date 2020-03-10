@@ -69,6 +69,13 @@ module Schools
     rescue AttrRequired::AttrMissing => e
       Rails.logger.error("Login failed #{e.backtrace}")
       raise AuthFailedError
+
+    # Timed out querying OIDC callback, show auth failed to let the user retry
+    rescue HTTPClient::TimeoutError => e
+      ExceptionNotifier.notify_exception(e)
+      Raven.capture_exception(e)
+
+      raise AuthFailedError
     end
 
   private
