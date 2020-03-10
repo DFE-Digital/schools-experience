@@ -69,7 +69,7 @@ module Schools
       if Schools::ChangeSchool.allow_school_change_in_app?
         redirect_to schools_change_path
       else
-        redirect_to schools_errors_no_school_path
+        redirect_to schools_errors_insufficient_privileges_path
       end
     end
   end
