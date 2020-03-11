@@ -94,7 +94,7 @@ module Schools
       end
 
       unless Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
-        raise InsufficientPrivilegesError, 'missing school experience administrator role'
+        raise InsufficientPrivilegesError, "missing school experience administrator role - #{user_uuid} : #{organisation_uuid}"
       end
     end
 

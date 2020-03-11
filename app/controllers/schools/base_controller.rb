@@ -67,10 +67,13 @@ module Schools
       render 'shared/failed_gitis_connection', status: :service_unavailable
     end
 
-    def no_school_selected
+    def no_school_selected(exception)
       if Schools::ChangeSchool.allow_school_change_in_app?
         redirect_to schools_change_path
       else
+        ExceptionNotifier.notify_exception exception
+        Raven.capture_exception exception
+
         redirect_to schools_errors_insufficient_privileges_path
       end
     end
