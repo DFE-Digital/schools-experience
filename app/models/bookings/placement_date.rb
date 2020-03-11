@@ -2,12 +2,14 @@ module Bookings
   class PlacementDate < ApplicationRecord
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
+      inverse_of: :bookings_placement_dates,
       foreign_key: 'bookings_school_id'
 
     has_many :placement_requests,
       class_name: 'Bookings::PlacementRequest',
       inverse_of: :placement_date,
-      foreign_key: :bookings_placement_date_id
+      foreign_key: :bookings_placement_date_id,
+      dependent: :restrict_with_exception
 
     has_many :placement_date_subjects,
       class_name: 'Bookings::PlacementDateSubject',
@@ -30,16 +32,21 @@ module Bookings
         less_than: 100
       }
 
-
     validates :date, presence: true
     validates :date,
       timeliness: {
-        on_or_after: :today,
+        on_or_after: -> { Booking::MIN_BOOKING_DELAY.from_now.to_date },
         before: -> { 2.years.from_now },
         type: :date
       },
       if: -> { date.present? },
       on: :create
+
+    # users manually selecting this only happens when schools are both primary
+    # and secondary, otherwise it's automatically set in the controller
+    validates :supports_subjects,
+      inclusion: [true, false],
+      if: -> { bookings_school&.has_primary_and_secondary_phases? }
 
     with_options if: :published? do
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
@@ -47,13 +54,15 @@ module Bookings
       validates :subjects, absence: true, unless: :subject_specific?
     end
 
-    scope :future, -> { where(arel_table[:date].gteq(Time.now)) }
-    scope :past, -> { where(arel_table[:date].lt(Time.now)) }
+    scope :bookable_date, -> do
+      where arel_table[:date].gteq Bookings::Booking::MIN_BOOKING_DELAY.from_now.to_date
+    end
+
     scope :in_date_order, -> { order(date: 'asc') }
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
 
-    scope :available, -> { published.active.future.in_date_order }
+    scope :available, -> { published.active.bookable_date.in_date_order }
     scope :published, -> { where.not published_at: nil }
 
     # 'supporting subjects' are dates belonging to phases where
@@ -73,6 +82,10 @@ module Bookings
         duration: duration,
         unit: "day".pluralize(duration)
       }
+    end
+
+    def bookable?
+      date >= (Time.zone.today + Bookings::Booking::MIN_BOOKING_DELAY)
     end
 
     def has_subjects?

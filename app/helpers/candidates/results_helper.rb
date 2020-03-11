@@ -24,34 +24,6 @@ module Candidates::ResultsHelper
         ].min,
         total: school_search.total_count
       )
-    end.html_safe
-  end
-
-  def expanded_search_radius_header_text
-    if @search.has_coordinates?
-      "0 results found within #{pluralize(params[:distance], 'mile')}"
-    else
-      "0 results found"
-    end
-  end
-
-  def expanded_search_nearby_info_text
-    if @search.results.empty?
-      capture do
-        if @search.has_coordinates?
-          concat(tag.p { 'Not all schools in your area have signed up to use this website.' })
-        end
-
-        concat(tag.p do
-          <<~FIND_OUT_MORE
-            To find out about arranging school experience with schools who are
-            not yet on this website visit #{link_to('Get into teaching', 'https://getintoteaching.education.gov.uk/school-experience/arranging-school-experience-independently')}.
-          FIND_OUT_MORE
-          .html_safe
-        end)
-      end
-    else
-      tag.p { 'However, we did find the following schools nearby:' }.html_safe
     end
   end
 end

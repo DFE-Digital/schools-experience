@@ -35,14 +35,19 @@ describe Bookings::PlacementDate, type: :model do
           end
         end
 
+        specify 'new placement dates should not allow today' do
+          expect(subject).not_to allow_value(Time.zone.today).for(:date)
+        end
+
         context 'error messages' do
-          let(:message) { 'Validation failed: Date must not be in the past' }
-          let(:invalid_pd) { create(:bookings_placement_date, date: 3.weeks.ago) }
+          let(:message) { 'Date must be in the future' }
+          let(:invalid_pd) { build(:bookings_placement_date, date: 3.weeks.ago) }
+
+          before { invalid_pd.valid? }
+          subject { invalid_pd.errors.full_messages }
 
           specify 'should show a suitable error message' do
-            expect { invalid_pd }.to(
-              raise_error(ActiveRecord::RecordInvalid, message)
-            )
+            is_expected.to include(message)
           end
         end
 
@@ -81,7 +86,7 @@ describe Bookings::PlacementDate, type: :model do
     end
 
     context '#max_bookings_count' do
-      before { subject.published_at = Date.today }
+      before { subject.published_at = Time.zone.today }
       it do
         is_expected.to \
           validate_numericality_of(:max_bookings_count).is_greater_than(0).allow_nil
@@ -90,7 +95,7 @@ describe Bookings::PlacementDate, type: :model do
 
     context '#subjects' do
       context 'published' do
-        before { subject.published_at = Date.today }
+        before { subject.published_at = Time.zone.today }
 
         context 'when not subject_specific?' do
           before { subject.subject_specific = false }
@@ -131,23 +136,21 @@ describe Bookings::PlacementDate, type: :model do
   describe 'Scopes' do
     let(:future_date) { create(:bookings_placement_date) }
     let(:past_date) { create(:bookings_placement_date, :in_the_past) }
-    context '.past' do
-      it 'should include past dates' do
-        expect(described_class.past).to include(past_date)
-      end
+    let(:today_date) { create(:bookings_placement_date, :in_the_past, date: Time.zone.today) }
 
-      it 'should not include future dates' do
-        expect(described_class.past).not_to include(future_date)
-      end
-    end
+    context '.bookable_date' do
+      subject { described_class.bookable_date }
 
-    context '.future' do
       it 'should include future dates' do
-        expect(described_class.future).to include(future_date)
+        is_expected.to include(future_date)
       end
 
       it 'should not include past dates' do
-        expect(described_class.future).not_to include(past_date)
+        is_expected.not_to include(past_date)
+      end
+
+      it 'should include dates on today' do
+        is_expected.not_to include(today_date)
       end
     end
 
@@ -193,7 +196,7 @@ describe Bookings::PlacementDate, type: :model do
     context '.available' do
       after { described_class.available }
       specify 'should combine the future, active, published, and in_date_order scopes' do
-        expect(described_class).to receive_message_chain(:published, :active, :future, :in_date_order)
+        expect(described_class).to receive_message_chain(:published, :active, :bookable_date, :in_date_order)
       end
     end
 

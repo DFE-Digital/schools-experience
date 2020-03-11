@@ -35,6 +35,9 @@ module Bookings
       alias_attribute :postcode, :address1_postalcode
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
+      validates :'dfe_Country@odata.bind', presence: true, format: BIND_FORMAT, allow_nil: true
+      validates :'dfe_PreferredTeachingSubject01@odata.bind', presence: true, format: BIND_FORMAT, allow_nil: true
+      validates :'dfe_PreferredTeachingSubject02@odata.bind', presence: true, format: BIND_FORMAT, allow_nil: true
 
       def initialize(crm_contact_data = {})
         super # handles populating
@@ -123,7 +126,7 @@ module Bookings
       end
 
       def add_school_experience(log_line)
-        unless dfe_notesforclassroomexperience.present?
+        if dfe_notesforclassroomexperience.blank?
           self.dfe_notesforclassroomexperience = EventLogger::NOTES_HEADER + "\r\n\r\n"
         end
 

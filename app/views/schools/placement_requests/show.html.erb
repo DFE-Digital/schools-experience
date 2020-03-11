@@ -1,8 +1,29 @@
-<%= link_to 'Back', schools_placement_requests_path, class: 'govuk-back-link' %>
+<% self.page_title = "Request #{@placement_request.id}" %>
 
-<h1>Request from <%= @gitis_contact.full_name %></h1>
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Requests' => schools_placement_requests_path,
+    "Request" => nil
+  }
+%>
+
+<%= govuk_back_link schools_placement_requests_path %>
+
+<% if @placement_request.candidate_cancellation&.sent? %>
+  <h1><%= @gitis_contact.full_name %> has withdrawn their request</h1>
+<% elsif @placement_request.school_cancellation&.sent? %>
+  <h1>This request from <%= @gitis_contact.full_name %> has been rejected</h1>
+<% else %>
+  <h1>Request from <%= @gitis_contact.full_name %></h1>
+<% end %>
 
 <div class="school-request">
+
+  <% if @placement_request.cancelled? %>
+    <%= render "cancellation", cancellation: @placement_request.cancellation %>
+  <% end %>
+
   <section id="personal-details">
     <h2>Personal details</h2>
 
@@ -91,7 +112,7 @@
           What they want out of school experience
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @placement_request.objectives %>
+          <%= safe_format @placement_request.objectives %>
         </dd>
       </div>
 
@@ -147,7 +168,11 @@
     <% if @placement_request.open? %>
       <div class="accept-or-reject">
         <div class="govuk-se-button-container">
-          <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request) %>
+          <% if @placement_request.fixed_date_is_bookable? %>
+            <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request) %>
+          <% else %>
+            <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_make_changes_path(@placement_request) %>
+          <% end %>
         </div>
         <div class="govuk-se-button-container">
           <div>

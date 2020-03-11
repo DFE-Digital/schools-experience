@@ -32,7 +32,7 @@ module Bookings
 
             school = Bookings::School.find_by(urn: urn)
 
-            next unless school.present?
+            next if school.blank?
 
             assign_phases(school, row['PhaseOfEducation (code)'])
           end
@@ -86,7 +86,7 @@ module Bookings
       end
 
       def cleanup_website(urn, url)
-        return nil unless url.present?
+        return nil if url.blank?
 
         fail "invalid hostname for #{urn}, #{url}" unless url.split(".").size > 1
 
@@ -126,7 +126,7 @@ module Bookings
           urn:                     nilify(edubase_row['URN']),
           name:                    nilify(edubase_row['EstablishmentName']),
           website:                 cleanup_website(edubase_row['URN'], edubase_row['SchoolWebsite']),
-          contact_email:           email_override.present? ? email_override : nil,
+          contact_email:           email_override.presence,
           address_1:               nilify(edubase_row['Street']),
           address_2:               nilify(edubase_row['Locality']),
           address_3:               nilify(edubase_row['Address3']),

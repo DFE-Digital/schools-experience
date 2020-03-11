@@ -58,7 +58,7 @@ development:
 test: &test
   <<: *default
   host: <%= ENV.fetch('CUC_DB_HOST') { 'localhost' } %>
-  database: <%= ENV.fetch('CUC_DB_DATABASE') { 'school_experience_candidate_test' } %>
+  database: <%= ENV.fetch('CUC_DB_DATABASE') { "school_experience_candidate_test#{ENV['TEST_ENV_NUMBER']}" } %>
   username: <%= ENV.fetch('CUC_DB_USERNAME') { nil } %>
   password: <%= ENV.fetch('CUC_DB_PASSWORD') { nil } %>
 

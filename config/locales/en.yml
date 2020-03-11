@@ -159,14 +159,16 @@ en:
               too_long: "Email must be 100 characters or fewer"
             first_name:
               blank: 'Enter your first name'
+              too_long: "First name must be 50 characters or fewer"
             last_name:
               blank: 'Enter your last name'
+              too_long: "Last name must be 50 characters or fewer"
             full_name:
               blank: "Enter your full name"
             date_of_birth:
               blank: "Enter your date of birth"
-              on_or_before: "Enter a valid date of birth. You must be at least 18 years old"
-              on_or_after: "Enter a valid date of birth. You must be younger than 100 years old"
+              on_or_before: "You must be at least 18 years old"
+              on_or_after: "You must be younger than 100 years old"
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
@@ -191,12 +193,22 @@ en:
             date_of_birth:
               blank: Enter your date of birth
 
+        cookie_preference:
+          attributes:
+            analytics:
+              inclusion: Choose On or Off for cookies which measure website use
+
+        schools/change_school:
+          attributes:
+            urn:
+              blank: Select a school
+
         schools/on_boarding/dbs_requirement:
           attributes:
             requires_check:
               inclusion: 'Select whether you require candidates to have a DBS check'
             dbs_policy_details:
-              blank: 'Provide details'
+              blank: 'Provide details of your DBS check requirements'
             no_dbs_policy_details:
               blank: 'Provide details'
         schools/on_boarding/candidate_requirements_choice:
@@ -378,6 +390,8 @@ en:
           attributes:
             reason:
               blank: 'Cancellation reason is required'
+            rejection_category:
+              inclusion: Chooose a reason for rejecting this candidate
         bookings/school_search:
           attributes:
             location:
@@ -391,14 +405,31 @@ en:
               too_short: Availability description must be at least 3 characters
         bookings/placement_date:
           attributes:
+            duration:
+              blank: Enter a duration
             date:
               blank: Enter a start date
-              on_or_after: Date must not be in the past
-        bookings/bookings:
+              on_or_after: Date must be in the future
+            supports_subjects:
+              inclusion: Select the phase for this date
+        bookings/booking:
           attributes:
+            supports_subjects:
+              inclusion: Select a school experience phase
             date:
-              on_or_after: Date must not be in the past
-
+              blank: Enter a booking date
+              on_or_after: Date must be in the future
+              not_changed: Date has not been changed
+            contact_name:
+              blank: You must provide a contact name to the candidate
+            contact_email:
+              blank: Enter a contact email address
+              invalid: Enter a valid contact email address
+            contact_number:
+              blank: Enter a contact telephone number
+              invalid: Enter a valid contact telephone number
+            candidate_instructions:
+              blank: Enter some instructions for the candidate
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:
@@ -419,8 +450,6 @@ en:
   helpers:
     fieldset:
       order: Sorted by
-      schools_placement_requests_confirm_booking:
-        date: Confirm experience date
       bookings_booking:
         date: Booking date
       bookings_school:
@@ -429,6 +458,8 @@ en:
       bookings_placement_date:
         date: Enter start date
         supports_subjects: Select school experience phase
+      bookings_placement_request_cancellation:
+        rejection_category: Rejection reason
       phases: Education phases
       fees: Fees
       subjects: Subjects
@@ -441,6 +472,8 @@ en:
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         teaching_stage: Which of the following teaching stages are you at?
+      cookie_preference:
+        analytics: Cookies that measure website use
       schools_on_boarding_candidate_requirements_choice:
         has_requirements: "Do you have any candidate requirements?"
       schools_on_boarding_dbs_requirement:
@@ -477,7 +510,8 @@ en:
           </p>
       schools_on_boarding_availability_preference:
         fixed: 'Enter school experience availability or fixed dates'
-
+      schools_change_school:
+        urn: Select your school
       schools_on_boarding_access_needs_support:
         supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
       schools_on_boarding_disability_confident:
@@ -497,7 +531,7 @@ en:
         available_for_all_subjects: Select type of experience
 
       schools_placement_dates_subject_selection:
-        subject_ids: Select all that apply.
+        subject_ids: Select school experience subjects
 
       candidates_feedback:
         <<: *feedback_fieldset
@@ -526,6 +560,16 @@ en:
         bookings_placement_date_id: School experience is only available on the following days
       candidates_session:
         date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
+      cookie_preference:
+        analytics_html: "We use Google Analytics to measure how you use the
+          website so we can improve it based on user needs. Google Analytics sets
+          cookies that store anonymised information about:
+          <ul>
+            <li>how you got to the site</li>
+            <li>the pages you visit on Get school experience and Manage school experience, and how long you spend on each page</li>
+            <li>what you click on while you're visiting the site</li>
+          </ul>
+          We do not allow Google to use or share the data about how you use this site."
       schools_on_boarding_candidate_requirements_choice:
         has_requirements_html: "<br> For example, they must want to apply for teacher training at your school or have a degree"
       schools_on_boarding_dbs_requirement:
@@ -567,6 +611,20 @@ en:
           no: Primary including early years, key stage 1 and key stage 2
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
+        rejection_category:
+          fully_booked: The date you requested is fully booked
+          accepted_on_ttc: We cannot offer you school experience because you have already been accepted on a Teacher Training Course
+          date_not_available: We cannot support the date you have requested
+          no_relevant_degree: We do not believe you have a relevant degree for the school experience you are applying for
+          no_phase_availability: We are unable to offer you school experience for the teaching phase you are interested in
+          candidate_not_local: We are looking for candidates that live locally to the school
+          duplicate: This is a duplicate request
+      bookings_booking:
+        contact_name: Name
+        contact_number: Telephone number
+        contact_email: Email address
+        candidate_instructions: Extra instructions for the candidate
+        bookings_subject_id: Subject
       candidates_registrations_contact_information:
         building: "Building and street"
         phone: "UK telephone number"
@@ -606,6 +664,10 @@ en:
         firstname: First name
         lastname: Last name
         email: Email address
+      cookie_preference:
+        analytics:
+          true: "On"
+          false: "Off"
       query: Find what?
       location: Enter location or postcode
       distance: Select search area
@@ -764,7 +826,7 @@ en:
           one: "Displaying the only %{entry_name}"
           other: "Displaying all %{count} %{entry_name}"
       more_pages:
-        display_entries: "Showing %{first}&ndash;%{last} of %{total} %{entry_name}"
+        display_entries: "Showing %{first}–%{last} of %{total} %{entry_name}"
 
     candidates:
       school_search:

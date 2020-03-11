@@ -45,7 +45,7 @@ FactoryBot.define do
       before :create do |placement_request|
         placement_request.school_cancellation = \
           FactoryBot.build :cancellation,
-            :sent, placement_request: placement_request, cancelled_by: 'school'
+            :sent, placement_request: placement_request, cancelled_by: 'school', rejection_category: :fully_booked
       end
     end
 
@@ -53,6 +53,7 @@ FactoryBot.define do
       before :create do |placement_request|
         placement_request.school_cancellation = \
           FactoryBot.build :cancellation,
+            rejection_category: :fully_booked,
             placement_request: placement_request, cancelled_by: 'school'
       end
     end
@@ -74,6 +75,15 @@ FactoryBot.define do
     end
 
     trait :with_a_fixed_date do
+      association \
+        :school,
+        :with_profile,
+        :with_subjects,
+        :with_fixed_availability_preference,
+        factory: :bookings_school,
+        urn: 11048,
+        subject_count: 2
+
       availability { nil }
       association :placement_date, factory: :bookings_placement_date
     end

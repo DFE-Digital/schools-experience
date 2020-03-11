@@ -12,6 +12,11 @@ RSpec.describe Bookings::Gitis::Entity do
   it { is_expected.to have_attributes select_attribute_names: Set.new(expected_attrs) }
   it { is_expected.to have_attributes attributes_to_select: expected_attrs.join(',') }
 
+  describe '.entity_id_for_id' do
+    subject { TestEntity.entity_id_for_id uuid }
+    it { is_expected.to eql("testentities(#{uuid})") }
+  end
+
   describe "#attributes" do
     it do
       expect(subject.attributes).to eq(
@@ -158,6 +163,37 @@ RSpec.describe Bookings::Gitis::Entity do
       it { is_expected.not_to include('id') }
       it { is_expected.to include('firstname' => 'changed') }
       it { is_expected.to include('lastname' => 'changed') }
+    end
+  end
+
+  describe "caching" do
+    let(:uuid) { SecureRandom.uuid }
+    let(:entity) { TestEntity.new 'testentityid' => uuid, 'firstname' => 'test' }
+
+    describe '.cache_key' do
+      subject { TestEntity.cache_key uuid }
+      it { is_expected.to eql "testentities/#{uuid}" }
+    end
+
+    describe '#cache_key' do
+      subject { entity }
+      it { is_expected.to have_attributes cache_key: "testentities/#{uuid}" }
+    end
+
+    describe "#to_cache" do
+      before { entity.tap { |te| te.lastname = 'mctest' } }
+      subject { entity.to_cache }
+      it { is_expected.to include('testentityid' => uuid) }
+      it { is_expected.to include('firstname' => 'test') }
+      it { is_expected.not_to include('lastname') }
+    end
+
+    describe ".from_cache" do
+      let(:attrs) { { 'testentityid' => uuid, 'firstname' => 'test' } }
+      subject { TestEntity.from_cache attrs }
+      it { is_expected.to have_attributes testentityid: uuid }
+      it { is_expected.to have_attributes firstname: 'test' }
+      it { is_expected.to be_frozen }
     end
   end
 
@@ -310,6 +346,18 @@ RSpec.describe Bookings::Gitis::Entity do
             include('testassoc@odata.bind' => e2.entity_id)
         end
       end
+
+      context "and updated to null" do
+        before { subject.testassoc = nil }
+
+        it { is_expected.to have_attributes _testassoc_value: nil }
+        it "is not included in update attributes" do
+          expect(subject.attributes_for_update).not_to \
+            include('testassoc@odata.bind')
+        end
+
+        it "should review this behaviour - ideally we should break the connection instead"
+      end
     end
 
     context 'initializing with existing data' do
@@ -375,6 +423,18 @@ RSpec.describe Bookings::Gitis::Entity do
         expect(subject.players[2]).to have_attributes \
           testentityid: player3, firstname: 'Joe'
       end
+    end
+  end
+
+  describe '.valid_id?' do
+    context 'for valid uuid' do
+      subject { described_class.valid_id? SecureRandom.uuid }
+      it { is_expected.to be true }
+    end
+
+    context 'for valid uuid' do
+      subject { described_class.valid_id? '10' }
+      it { is_expected.to be false }
     end
   end
 end

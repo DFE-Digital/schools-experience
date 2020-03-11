@@ -1,0 +1,60 @@
+<%= govuk_back_link schools_dashboard_path %>
+
+<%= page_heading do %>
+  Service updates and guidance - <%= @latest&.date&.to_formatted_s(:govuk) %>
+<% end %>
+
+<div id="service-update" class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p>
+      Find out about the latest changes and planned future updates for the service.
+    </p>
+
+    <%- if @latest -%>
+    <h2 class="govuk-heading-m">
+      <%= @latest.title %>
+    </h2>
+
+    <%= sanitize @latest.html_content %>
+    <%- else -%>
+    <p>
+      <em>No service updates are currently available</em>
+    </p>
+    <%- end -%>
+
+    <%- if @recent_updates.any? -%>
+    <h2 class="govuk-heading-m">
+      Recent service updates
+    </h2>
+
+    <%= render @recent_updates %>
+    <%- end -%>
+
+    <h2 class="govuk-heading-m">
+      Help and support
+    </h2>
+
+    <p>
+      If you’ve got any feedback, questions or would like to take part in user
+      testing email us with your URN at <%= mail_to "organise.school-experience@education.gov.uk" %>.
+    </p>
+
+    <p>
+      <%= link_to "Back to requests and bookings", schools_dashboard_path %>
+    </p>
+  </div>
+
+  <div id="service-guidance" class="govuk-grid-column-one-third app-related-items">
+    <h2 class="govuk-heading-m">Service guidance</h2>
+    <p>
+      Find out more about the service and how it works.
+    </p>
+    <p>
+      <%= link_to "Manage school experience: information for schools", "https://www.gov.uk/government/publications/school-experience-programme-information-for-schools" %>
+    </p>
+    <p>
+    <%= link_to "DfE Sign-in help", "https://help.signin.education.gov.uk/contact" %>
+    </p>
+  </div>
+</div>
+

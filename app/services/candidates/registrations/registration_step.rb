@@ -49,7 +49,7 @@ module Candidates
       end
 
       def school
-        return nil unless urn.present?
+        return nil if urn.blank?
 
         @school ||= Candidates::School.find(urn)
       end

@@ -25,11 +25,8 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
   end
 
   context '.format_school_subjects' do
-    before do
-      @school = OpenStruct.new(subjects: subjects)
-
-      @formatted = format_school_subjects(@school)
-    end
+    let(:school) { create(:bookings_school) }
+    let(:output) { format_school_subjects(school) }
 
     context 'without subjects' do
       let :subjects do
@@ -37,25 +34,43 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       end
 
       it 'should return "Not specified"' do
-        expect(@formatted).to eq 'Not specified'
+        expect(output).to eq 'Not specified'
       end
     end
 
     context 'with subjects' do
-      let :subjects do
-        [
-          OpenStruct.new(id: 1, name: 'First'),
-          OpenStruct.new(id: 2, name: 'Second'),
-          OpenStruct.new(id: 3, name: 'Third')
-        ]
+      let(:subject_1) { create(:bookings_subject, name: 'First') }
+      let(:subject_2) { create(:bookings_subject, name: 'Second') }
+      let(:subject_3) { create(:bookings_subject, name: 'Third') }
+
+      let!(:subjects) { [subject_1, subject_2, subject_3] }
+      before do
+        school.subjects << subjects
       end
 
       it 'should be html_safe' do
-        expect(@formatted.html_safe?).to be true
+        expect(output.html_safe?).to be true
       end
 
       it 'should turn them into a sentence' do
-        expect(@formatted).to eq "First, Second, and Third"
+        expect(output).to eq "First, Second, and Third"
+      end
+
+      context 'highlighting filter matches' do
+        before do
+          allow(self).to receive(:filtered_subject_ids).and_return([subject_2.id])
+        end
+
+        it 'should bolden matched subjects' do
+          expect(output).to have_css('strong', text: subject_2.name)
+        end
+
+        it 'should include but not bolden unmatched subjects' do
+          [subject_1, subject_3].each do |subj|
+            expect(output).to have_content(subj.name)
+            expect(output).not_to have_css('strong', text: subj.name)
+          end
+        end
       end
     end
   end
@@ -261,6 +276,48 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     context 'without content but block msg' do
       subject { content_or_msg('') { '<b>no content</b>' } }
       it { is_expected.to have_css('b', text: 'no content') }
+    end
+  end
+
+  describe '#split to list' do
+    specify 'should return nil when nil passed in' do
+      expect(split_to_list(nil)).to be_nil
+    end
+
+    specify 'should return nil when empty string passed in' do
+      expect(split_to_list('')).to be_nil
+    end
+
+    context 'splitting up items into a HTML list' do
+      let(:content) do
+        <<~CONTENT
+          The good,
+          the bad
+          and the ugly
+        CONTENT
+      end
+
+      subject { split_to_list content }
+
+      specify 'should create a list with the correct number of entries' do
+        is_expected.to have_css('ul.govuk-list--bullet > li', count: 3)
+      end
+    end
+
+    context 'dealing with blank lines' do
+      let(:content) do
+        <<~CONTENT
+          The good,
+
+          and the ugly
+        CONTENT
+      end
+
+      subject { split_to_list content }
+
+      specify 'should create a list with the correct number of entries' do
+        is_expected.to have_css('ul.govuk-list--bullet > li', count: 2)
+      end
     end
   end
 end

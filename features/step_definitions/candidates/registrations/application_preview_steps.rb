@@ -9,7 +9,7 @@ Given("I have completed the wizard") do
 end
 
 Given("I have completed the wizard for a fixed date school") do
-  @school.update_attributes(availability_preference_fixed: true)
+  @school.update(availability_preference_fixed: true)
   @wanted_bookings_placement_date = @school.bookings_placement_dates.create!(
     date: 2.weeks.from_now, published_at: 1.week.ago, supports_subjects: true
   )
@@ -108,9 +108,9 @@ Given("my school has flexible dates") do
   # do nothing, it's the default
 end
 
-Given("my school has fixed dates") do
+Given("the/my school has fixed dates") do
   @fixed_dates = true
-  @school.update_attributes(availability_preference_fixed: true)
+  @school.update(availability_preference_fixed: true)
   (1..3).each { |i| i.weeks.from_now }.each do |date|
     @school.bookings_placement_dates.create(date: date.weeks.from_now, published_at: 1.week.ago)
     @wanted_bookings_placement_date = @school.bookings_placement_dates.last

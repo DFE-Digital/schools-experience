@@ -1,5 +1,69 @@
+inherit_gem:
+  rubocop-govuk:
+    - config/default.yml
+    - config/rails.yml
+
 Metrics/BlockLength:
   Exclude:
     - config/**/*
     - spec/**/*
     - spec_external/**/*
+
+Layout/ArgumentAlignment:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+# Excluded because all our jobs are set to retry by default, we dont want that
+# logic applied to CronJobs so we are inheriting from ApplicationJobs parent to
+# solve this.
+Rails/ApplicationJob:
+  Exclude:
+    - app/jobs/cron_job.rb
+
+Rails/DynamicFindBy:
+  Enabled: false
+
+Rails/FilePath:
+  EnforcedStyle: arguments
+
+Rails/HttpPositionalArguments:
+  Exclude:
+    - spec/controllers/candidates/dashboard_base_controller_spec.rb
+
+# Excluded for cancellation because we use the same model for both school
+# and candidate cancellations
+Rails/InverseOf:
+  Exclude:
+    - app/models/bookings/placement_request/cancellation.rb
+
+Rails/RakeEnvironment:
+  Exclude:
+    - lib/tasks/dev_ssl_generator.rake
+    - lib/tasks/cucumber.rake
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - servertest
+    - production

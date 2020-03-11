@@ -78,4 +78,49 @@ describe LinkAndButtonHelper do
   describe '#govuk_button_to' do
     include_examples 'govuk-styled links and buttons', 'govuk_button_to', 'input'
   end
+
+  describe '#govuk_back_link' do
+    context 'without params' do
+      subject { govuk_back_link }
+      it { is_expected.to have_content 'Back' }
+      it { is_expected.to have_css 'a.govuk-back-link' }
+      it { is_expected.not_to have_css 'a[data-controller]' }
+    end
+
+    context 'with title' do
+      subject { govuk_back_link text: 'Dashboard' }
+      it { is_expected.to have_content 'Dashboard' }
+      it { is_expected.to have_css 'a.govuk-back-link' }
+      it { is_expected.not_to have_css 'a[data-controller]' }
+    end
+
+    context 'with title and js enabled' do
+      subject { govuk_back_link text: 'Dashboard', javascript: true }
+      it { is_expected.to have_content 'Dashboard' }
+      it { is_expected.to have_css 'a.govuk-back-link' }
+      it { is_expected.to have_css 'a[data-controller="back-link"]' }
+    end
+
+    context 'with custom class' do
+      subject { govuk_back_link class: 'some-other' }
+      it { is_expected.to have_content 'Back' }
+      it { is_expected.to have_css 'a.govuk-back-link.some-other' }
+      it { is_expected.not_to have_css 'a[data-controller]' }
+    end
+
+    context 'with javascript and custom data controller' do
+      subject { govuk_back_link javascript: true, data: { controller: 'test' } }
+      it { is_expected.to have_content 'Back' }
+      it { is_expected.to have_css 'a.govuk-back-link' }
+      it { is_expected.to have_css 'a[data-controller="back-link test"]' }
+    end
+
+    context 'with back path' do
+      subject { govuk_back_link '/test' }
+      it { is_expected.to have_content 'Back' }
+      it { is_expected.to have_css 'a.govuk-back-link' }
+      it { is_expected.to have_css 'a[href="/test"]' }
+      it { is_expected.not_to have_css 'a[data-controller="back-link"]' }
+    end
+  end
 end

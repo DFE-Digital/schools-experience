@@ -20,10 +20,6 @@ module ApplicationHelper
     content_tag(:h1, title, **options)
   end
 
-  def site_header_text
-    @site_header_text || "Get school experience"
-  end
-
   def breadcrumbs
     content_for(:breadcrumbs)
   end
@@ -62,15 +58,11 @@ module ApplicationHelper
       locals: { key: key, value: value, action: action, id: id }
   end
 
-  def service_update_last_updated_at
-    SERVICE_UPDATE_LAST_UPDATED_AT.to_formatted_s :govuk
-  end
-
-  def current_user_info_and_logout_link
+  def current_user_info_and_logout_link(user)
     logout_link = link_to("Logout", logout_schools_session_path)
 
-    greeting = if valid_user?(@current_user)
-                 "Welcome #{current_user_full_name}"
+    greeting = if valid_user?(user)
+                 "Welcome #{current_user_full_name user}"
                end
 
     switch_service = link_to("switch service", Rails.configuration.x.oidc_services_list_url)
@@ -78,18 +70,10 @@ module ApplicationHelper
     safe_join([greeting, logout_link, "or", switch_service].compact, " ")
   end
 
-  # if the DfE Sign-in api client isn't configured assume users
-  # may have other schools
-  def has_other_schools?
-    return true unless Schools::DFESignInAPI::Client.enabled?
+  def current_user_full_name(user)
+    return 'Unknown' unless valid_user?(user)
 
-    @other_urns.any?
-  end
-
-  def current_user_full_name
-    return 'Unknown' unless valid_user?(@current_user)
-
-    [@current_user.given_name, @current_user.family_name].join(' ')
+    [user.given_name, user.family_name].join(' ')
   end
 
   def phase_three_release_date

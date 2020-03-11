@@ -6,7 +6,7 @@ describe Candidates::Registrations::PlacementPreference, type: :model do
   include_context 'Stubbed candidates school'
 
   let! :today do
-    Date.today
+    Time.zone.today
   end
 
   context 'attributes' do

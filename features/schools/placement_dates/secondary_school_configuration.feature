@@ -9,8 +9,10 @@ Feature: Configuring a placement date
     And my school is fully-onboarded
     And I have entered a placement date
 
-  Scenario: Page title
+  Scenario: Page contents
     Then the page's main heading should be the date I just entered
+    And I should see a back link
+    And the page title should be 'Set date options'
 
   @javascript
   Scenario: Select no max number of bookings

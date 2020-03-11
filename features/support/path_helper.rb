@@ -51,9 +51,8 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "withdrawn request" => [:schools_withdrawn_request_path, placement_request],
     "rejected request" => [:schools_rejected_request_path, placement_request],
     "confirm booking" => [:new_schools_placement_request_acceptance_confirm_booking_path, placement_request],
-    "add more details" => [:new_schools_placement_request_acceptance_add_more_details_path, placement_request],
-    "review and send email" => [:new_schools_placement_request_acceptance_review_and_send_email_path, placement_request],
-    "preview confirmation email" => [:new_schools_placement_request_acceptance_preview_confirmation_email_path, placement_request],
+    "make changes" => [:new_schools_placement_request_acceptance_make_changes_path, placement_request],
+    "preview confirmation email" => [:edit_schools_placement_request_acceptance_preview_confirmation_email_path, placement_request],
     "email sent" => [:schools_placement_request_acceptance_email_sent_path, placement_request],
     "reject placement request" => [:new_schools_placement_request_cancellation_path, placement_request&.id],
     "dbs requirements" => [:new_schools_on_boarding_dbs_requirement_path],
@@ -89,7 +88,9 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "not registered error" => [:schools_errors_not_registered_path],
     "change school" => [:new_schools_switch_path],
     "confirm attendance" => [:schools_confirm_attendance_path],
-    "new schools feedback" => [:new_schools_feedback_path]
+    "new schools feedback" => [:new_schools_feedback_path],
+    "service updates" => [:service_updates_path],
+    "school chooser" => [:schools_change_path]
   }
 
   (path = mappings[descriptor.downcase]) ? send(*path) : fail("No mapping for #{descriptor}")

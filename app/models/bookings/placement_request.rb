@@ -19,26 +19,31 @@ module Bookings
 
     belongs_to :school,
       class_name: 'Bookings::School',
+      inverse_of: :placement_requests,
       foreign_key: :bookings_school_id
 
     belongs_to :candidate,
       class_name: 'Bookings::Candidate',
+      inverse_of: :placement_requests,
       foreign_key: :candidate_id,
       optional: true
 
     has_one :booking,
       class_name: 'Bookings::Booking',
       foreign_key: 'bookings_placement_request_id',
-      inverse_of: :bookings_placement_request
+      inverse_of: :bookings_placement_request,
+      dependent: :destroy
 
     belongs_to :placement_date,
       class_name: 'Bookings::PlacementDate',
       foreign_key: :bookings_placement_date_id,
+      inverse_of: :placement_requests,
       optional: true # If this is a placement_request to a school with fixed dates
 
     belongs_to :subject,
       class_name: 'Bookings::Subject',
       foreign_key: :bookings_subject_id,
+      inverse_of: :placement_requests,
       optional: true # If this is a placement_request for a subject_specific_date
 
     has_one :candidate_cancellation,
@@ -113,7 +118,7 @@ module Bookings
 
     default_scope { where.not(candidate_id: nil) }
 
-    delegate :gitis_contact, :fetch_gitis_contact, to: :candidate
+    delegate :gitis_contact, :gitis_contact=, :fetch_gitis_contact, to: :candidate
 
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
       self.new(
@@ -149,7 +154,7 @@ module Bookings
     end
 
     def requested_subject
-      subject || Bookings::Subject.find_by!(name: subject_first_choice)
+      subject || Bookings::Subject.unscoped.find_by!(name: subject_first_choice)
     end
 
     def received_on
@@ -209,6 +214,14 @@ module Bookings
 
     def requested_on
       created_at&.to_date
+    end
+
+    def fixed_date
+      placement_date&.date
+    end
+
+    def fixed_date_is_bookable?
+      !!placement_date&.bookable?
     end
 
   private

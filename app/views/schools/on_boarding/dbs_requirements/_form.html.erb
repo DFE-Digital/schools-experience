@@ -6,7 +6,7 @@
   }
 %>
 
-<%= link_to 'Back', :back, class: 'govuk-back-link', data: {controller: 'back-link'} %>
+<%= govuk_back_link javascript: true %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -30,9 +30,7 @@
           <%= f.text_area_with_maxwords :dbs_policy_details, maxwords: { count: 50 } %>
         <% end %>
 
-        <%= fieldset.radio_input false do  %>
-          <%= f.text_area_with_maxwords :no_dbs_policy_details, maxwords: { count: 50 } %>
-        <% end %>
+        <%= fieldset.radio_input false %>
       <% end %>
 
       <%= f.submit 'Continue' %>

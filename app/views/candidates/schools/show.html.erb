@@ -1,8 +1,6 @@
 <% self.page_title = @school.name %>
 
-<%= link_to 'Back', :back,
-            class: 'govuk-back-link',
-            data: {controller: 'back-link'} %>
+<%= govuk_back_link javascript: true %>
 
 <h1 class="govuk-heading-l govuk-!-margin-top-4"><%= @school.name %></h1>
 

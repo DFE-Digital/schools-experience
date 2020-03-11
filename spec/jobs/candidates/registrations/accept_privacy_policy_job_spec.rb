@@ -36,7 +36,7 @@ describe Candidates::Registrations::AcceptPrivacyPolicyJob, type: :job do
 
     context 'on success' do
       before do
-        allow(fake_gitis).to receive(:create_entity).and_return(SecureRandom.uuid)
+        allow(fake_gitis.store).to receive(:create_entity).and_return(SecureRandom.uuid)
 
         freeze_time
 
@@ -45,7 +45,7 @@ describe Candidates::Registrations::AcceptPrivacyPolicyJob, type: :job do
       end
 
       it "creates a CandidatePrivacyPolicy entity" do
-        expect(fake_gitis).to have_received(:create_entity).with \
+        expect(fake_gitis.store).to have_received(:create_entity).with \
           'dfe_candidateprivacypolicies', hash_including(
             'dfe_meanofconsent' => Bookings::Gitis::PrivacyPolicy.consent,
             'dfe_timeofconsent' => Time.now.utc.iso8601,

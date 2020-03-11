@@ -3,6 +3,12 @@ module Bookings::Gitis
   class MissingPrimaryKey < RuntimeError; end
   class InvalidEntityId < RuntimeError; end
 
+  class InvalidEntity < RuntimeError
+    def initialize(entity)
+      super "#{entity.class} is invalid: #{entity.errors.details.inspect}"
+    end
+  end
+
   module Entity
     extend ActiveSupport::Concern
 
@@ -11,6 +17,11 @@ module Bookings::Gitis
     include ActiveModel::Dirty
 
     ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
+    BIND_FORMAT = /\A[^\(]+\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)\z/.freeze
+
+    def self.valid_id?(id)
+      ID_FORMAT.match? id.to_s
+    end
 
     included do
       delegate :attributes_to_select, to: :class
@@ -49,6 +60,12 @@ module Bookings::Gitis
       restore_attributes
     end
 
+    # Will get overwritten if entity_id_attribute is defined
+    def id
+      fail MissingPrimaryKey
+    end
+    alias_method :id=, :id
+
     def entity_id=(e_id)
       normalised_id = e_id.to_s.downcase
       id_match = normalised_id.match(/\A#{entity_path}\(([a-z0-9-]{36})\)\z/)
@@ -61,11 +78,16 @@ module Bookings::Gitis
     end
 
     def entity_id
-      id ? "#{entity_path}(#{id})" : entity_path
+      id ? self.class.entity_id_for_id(id) : entity_path
     end
 
     def attributes_for_update
-      attributes.slice(*(changed - update_blacklist))
+      attributes.slice(*(changed - update_blacklist)).reject do |k, v|
+        # Don't attempt to set bind values to NULL - this is invalid syntax
+        # Dissasociating requires deleting the $ref
+        # Which is not currently supported
+        k.ends_with?('@odata.bind') && v.nil?
+      end
     end
 
     def attributes_for_create
@@ -78,11 +100,15 @@ module Bookings::Gitis
       other.id == self.id
     end
 
-    # Will get overwritten if entity_id_attribute is defined
-    def id
-      fail MissingPrimaryKey
+    def cache_key
+      self.class.cache_key id
     end
-    alias_method :id=, :id
+
+    def to_cache
+      @init_data
+    end
+
+    class InvalidEntityIdError < RuntimeError; end
 
   private
 
@@ -110,6 +136,18 @@ module Bookings::Gitis
 
       def all_attribute_names
         select_attribute_names + association_attribute_names
+      end
+
+      def entity_id_for_id(id)
+        "#{entity_path}(#{id})"
+      end
+
+      def cache_key(uuid)
+        "#{entity_path}/#{uuid}"
+      end
+
+      def from_cache(attrs)
+        new(attrs).freeze
       end
 
     protected
@@ -189,7 +227,7 @@ module Bookings::Gitis
           if id_value.nil?
             send :"#{attr_name}@odata.bind=", nil
           elsif ID_FORMAT.match?(id_value)
-            send :"#{attr_name}@odata.bind=", "#{entity_type.entity_path}(#{id_value})"
+            send :"#{attr_name}@odata.bind=", entity_type.entity_id_for_id(id_value)
           else
             raise InvalidEntityId
           end

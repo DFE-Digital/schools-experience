@@ -273,16 +273,11 @@ describe Candidates::Registrations::RegistrationSession do
 
     context 'when registration is complete' do
       include_context 'Stubbed candidates school'
+      before { subject.flag_as_pending_email_confirmation! }
 
       # TODO SE-1881
       context 'when legacy session' do
-        subject do
-          FactoryBot.build :flattened_registration_session
-        end
-
-        before do
-          subject.flag_as_pending_email_confirmation!
-        end
+        subject { build :flattened_registration_session }
 
         it 'marks the session as pending_email_confirmation' do
           expect(subject).to be_pending_email_confirmation
@@ -290,13 +285,7 @@ describe Candidates::Registrations::RegistrationSession do
       end
 
       context 'when new session' do
-        subject do
-          FactoryBot.build :flattened_registration_session
-        end
-
-        before do
-          subject.flag_as_pending_email_confirmation!
-        end
+        subject { build :flattened_registration_session }
 
         it 'marks the session as pending_email_confirmation' do
           expect(subject).to be_pending_email_confirmation

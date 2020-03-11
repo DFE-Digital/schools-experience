@@ -565,7 +565,7 @@ describe Bookings::PlacementRequest, type: :model do
   end
 
   let! :today do
-    Date.today
+    Time.zone.today
   end
 
   context 'validations for placement preferences' do
@@ -790,7 +790,7 @@ describe Bookings::PlacementRequest, type: :model do
     context 'when #viewed_at has not already been set' do
       before { subject.viewed! }
       specify 'should set #viewed_at to now' do
-        expect(subject.viewed_at).to be_within(0.1).of(Time.now)
+        expect(subject.viewed_at).to be_within(0.1).of(Time.zone.now)
       end
     end
 
@@ -849,6 +849,46 @@ describe Bookings::PlacementRequest, type: :model do
       before { placement_request.subject = subject_2 }
 
       it { is_expected.to eq subject_2 }
+    end
+  end
+
+  describe '#fixed_date' do
+    subject { pr.fixed_date }
+
+    context 'with fixed date' do
+      let(:pr) { build :placement_request, :with_a_fixed_date }
+      it { is_expected.to eql pr.placement_date.date }
+    end
+
+    context 'with flexible date' do
+      let(:pr) { build :placement_request }
+      it { is_expected.to be_nil }
+    end
+  end
+
+  describe '#fixed_date_is_bookable?' do
+    let(:pr) { build :placement_request, :with_a_fixed_date }
+    let(:date) { pr.placement_date }
+    subject { pr.fixed_date_is_bookable? }
+
+    context 'for today' do
+      before { date.date = Time.zone.today }
+      it { is_expected.to be false }
+    end
+
+    context 'for yesterday' do
+      before { date.date = Date.yesterday }
+      it { is_expected.to be false }
+    end
+
+    context 'for tomorrow' do
+      before { date.date = Date.tomorrow }
+      it { is_expected.to be true }
+    end
+
+    context 'with flexible' do
+      let(:pr) { build(:placement_request) }
+      it { is_expected.to be false }
     end
   end
 end

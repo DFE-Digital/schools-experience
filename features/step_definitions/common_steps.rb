@@ -1,12 +1,14 @@
-Given("I am on a/the {string} page") do |string|
-  path_for(string).tap do |p|
-    visit(p)
-    expect(page.current_path).to eql(p)
-  end
+Given("I go to a/the {string} page") do |string|
+  visit path_for string
 end
 
 Given("I am already on the {string} page") do |string|
   expect(page.current_path).to eql(path_for(string))
+end
+
+Given("I am on a/the {string} page") do |string|
+  step "I go to the '#{string}' page"
+  step "I am already on the '#{string}' page"
 end
 
 Given("I navigate to the {string} path") do |string|
@@ -97,5 +99,9 @@ Then("I should see a notification that {string}") do |string|
 end
 
 Then("I should see a back link") do
-  expect(page).to have_link("Back", href: 'javascript:history.back()')
+  expect(page).to have_link("Back")
+end
+
+Then("I click {string}") do |link|
+  click_on link
 end

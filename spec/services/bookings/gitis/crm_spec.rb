@@ -11,98 +11,37 @@ describe Bookings::Gitis::CRM, type: :model do
   let(:gitis_url) { 'https://gitis-crm.net' }
   let(:token) { 'my.secret.token' }
 
-  let(:gitis) { described_class.new(token, service_url: gitis_url) }
+  let(:gitis) do
+    described_class.new \
+      Bookings::Gitis::Store::Dynamics.new \
+        token, service_url: gitis_url
+  end
+
   let(:gitis_stub) do
     Apimock::GitisCrm.new(client_id, client_secret, tenant_id, gitis_url)
   end
 
   describe '.initialize' do
-    it "will succeed with api object" do
-      expect(described_class.new(token)).to \
+    it "will succeed with store object" do
+      expect(described_class.new(Bookings::Gitis::Store::Fake.new)).to \
         be_instance_of(Bookings::Gitis::CRM)
     end
 
-    it "will raise an exception without an api object" do
+    it "will raise an exception without a store" do
       expect { described_class.new }.to raise_exception(ArgumentError)
     end
   end
 
   describe '#find' do
-    let!(:uuids) do
-      [
-        "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
-        "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
-        "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
-      ]
+    let(:contact) { build(:gitis_contact, :persisted) }
+    before do
+      expect(gitis.store).to \
+        receive(:find).with(
+          Bookings::Gitis::Contact, contact.id, includes: nil
+        ).and_return(contact)
     end
-
-    context 'with no account_ids' do
-      it "will raise an exception" do
-        expect {
-          gitis.find
-        }.to raise_exception(ArgumentError)
-      end
-    end
-
-    context 'with single account_ids' do
-      before { gitis_stub.stub_contact_request(uuids[1]) }
-      subject { gitis.find(uuids[1]) }
-
-      it "will return a single account" do
-        is_expected.to be_instance_of Bookings::Gitis::Contact
-        is_expected.to have_attributes(id: uuids[1])
-      end
-    end
-
-    context 'with array of account_ids' do
-      before { gitis_stub.stub_multiple_contact_request(uuids) }
-      subject { gitis.find(uuids) }
-
-      it "will return an account per id" do
-        is_expected.to have_attributes(length: 3)
-        is_expected.to all be_instance_of(Bookings::Gitis::Contact)
-        subject.each_with_index do |contact, index|
-          expect(contact.id).to eq(uuids[index])
-        end
-      end
-    end
-
-    context 'with includes' do
-      include_context 'test entity'
-
-      let(:companyid) { SecureRandom.uuid }
-      let(:testentityid) { SecureRandom.uuid }
-
-      let(:response) do
-        {
-          'teamentityid' => companyid,
-          'title' => 'Human Resources',
-          'leader' => {
-            'testentityid' => testentityid,
-            'firstname' => 'John'
-          }
-        }
-      end
-
-      before { allow(gitis.send(:api)).to receive(:get).and_return(response) }
-
-      subject! { gitis.find(companyid, entity_type: CompanyEntity, includes: :leader) }
-
-      it "will query for the team" do
-        expect(gitis.send(:api)).to have_received(:get).with \
-          "#{CompanyEntity.entity_path}(#{companyid})",
-          hash_including('$expand' => 'leader')
-      end
-
-      it "will populate the team entity" do
-        is_expected.to have_attributes(id: companyid, title: 'Human Resources')
-      end
-
-      it "will populate the associated leader entity" do
-        expect(subject.leader).to have_attributes id: testentityid
-        expect(subject.leader).to have_attributes firstname: 'John'
-      end
-    end
+    subject! { gitis.find contact.id }
+    it { is_expected.to eq contact }
   end
 
   describe '#find_by_email' do
@@ -181,133 +120,24 @@ describe Bookings::Gitis::CRM, type: :model do
 
   describe '#write' do
     let(:contactid) { SecureRandom.uuid }
-    let(:contact_attributes) { attributes_for(:gitis_contact) }
+    let(:contact) { build(:gitis_contact) }
+    before { expect(gitis.store).to receive(:write).and_return(contactid) }
+    subject! { gitis.write contact }
+    it { is_expected.to eq contactid }
+  end
 
-    context 'with a valid new contact' do
-      let(:contact) { build(:gitis_contact, contact_attributes) }
-
-      before do
-        sorted_attrs = contact.attributes_for_create.sort.to_h
-        gitis_stub.stub_create_contact_request(sorted_attrs, contactid)
-      end
-
-      subject! { gitis.write(contact) }
-
-      it "will return the id of the inserted record" do
-        is_expected.to eq(contactid)
-      end
-
-      it "will reset change tracking" do
-        expect(contact.changed).to eql([])
-      end
-    end
-
-    context 'with a valid existing contact' do
-      before do
-        @contact = build(:gitis_contact, contact_attributes.merge(id: contactid))
-        @contact.clear_changes_information
-        @contact.address1_line1 = 'Changed'
-        @contact.address1_line2 = 'Address'
-        gitis_stub.stub_update_contact_request(
-          { 'address1_line1' => 'Changed', 'address1_line2' => 'Address' },
-          contactid
-        )
-      end
-
-      subject! { gitis.write(@contact) }
-
-      it "will succeed" do
-        is_expected.to eq(contactid)
-      end
-
-      it "will reset change tracking" do
-        expect(@contact.changed).to eql([])
-      end
-    end
-
-    context 'without a contact' do
-      it "will raise an exception" do
-        expect {
-          gitis.write(OpenStruct.new)
-        }.to raise_exception(ArgumentError)
-      end
-    end
-
-    context 'with an invalid contact' do
-      let(:contact) { build(:gitis_contact, emailaddress1: '') }
-      before { gitis_stub.stub_create_contact_request(contact.attributes) }
-
-      it "will return false" do
-        expect(gitis.write(contact)).to be false
-      end
-    end
+  describe '#write!' do
+    let(:contactid) { SecureRandom.uuid }
+    let(:contact) { build(:gitis_contact) }
+    before { expect(gitis.store).to receive(:write!).and_return(contactid) }
+    subject! { gitis.write! contact }
+    it { is_expected.to eq contactid }
   end
 
   describe '#fetch' do
-    let(:selectattrs) { TestEntity.attributes_to_select }
-    let(:t1) { { 'testentityid' => SecureRandom.uuid, 'firstname' => 'A', 'lastname' => '1' } }
-    let(:t2) { { 'testentityid' => SecureRandom.uuid, 'firstname' => 'B', 'lastname' => '2' } }
-    let(:t3) { { 'testentityid' => SecureRandom.uuid, 'firstname' => 'C', 'lastname' => '3' } }
-    let(:response) { [TestEntity.new(t1), TestEntity.new(t2), TestEntity.new(t3)] }
-
-    context 'without entity' do
-      it "will raise an error" do
-        expect { subject.fetch }.to raise_exception(ArgumentError)
-      end
-    end
-
-    context 'with entity and no filter' do
-      before do
-        expect(gitis.send(:api)).to receive(:get).
-          with('testentities', '$top' => 10, '$select' => selectattrs).
-          and_return('value' => [t1, t2, t3])
-      end
-
-      subject { gitis.fetch(TestEntity) }
-      it { is_expected.to eq(response) }
-    end
-
-    context 'with entity and string filter' do
-      before do
-        expect(gitis.send(:api)).to receive(:get).
-          with(
-            'testentities',
-            '$top' => 10,
-            '$select' => selectattrs,
-            '$filter' => "firstname eq 'test'"
-          ).
-          and_return('value' => [t1, t2, t3])
-      end
-
-      subject { gitis.fetch(TestEntity, filter: "firstname eq 'test'") }
-      it { is_expected.to eq(response) }
-    end
-
-    context 'with entity and limit' do
-      before do
-        expect(gitis.send(:api)).to receive(:get).
-          with('testentities', '$top' => 5, '$select' => selectattrs).
-          and_return('value' => [t1, t2, t3])
-      end
-
-      subject { gitis.fetch(TestEntity, limit: 5) }
-      it { is_expected.to eq(response) }
-    end
-
-    context 'with entity and order' do
-      before do
-        expect(gitis.send(:api)).to receive(:get).
-          with(
-            'testentities',
-            '$top' => 5,
-            '$select' => selectattrs,
-            '$orderby' => 'createdon desc'
-          ).and_return('value' => [t1, t2, t3])
-      end
-
-      subject { gitis.fetch(TestEntity, limit: 5, order: 'createdon desc') }
-      it { is_expected.to eq(response) }
-    end
+    before { allow(gitis.store).to receive(:fetch).and_return([]) }
+    before { gitis.fetch TestEntity, limit: 3 }
+    it { expect(gitis.store).to have_received(:fetch) }
   end
 
   describe "#log_school_experience" do
@@ -318,13 +148,13 @@ describe Bookings::Gitis::CRM, type: :model do
 
     before do
       allow(gitis).to receive(:find).with(contact.id).and_return(contact)
-      allow(gitis).to receive(:update_entity).and_return(true)
+      allow(gitis.store).to receive(:update_entity).and_return(true)
 
       gitis.log_school_experience(contact.id, logline)
     end
 
     it "will create a new entry with a single row" do
-      expect(gitis).to have_received(:update_entity).with(
+      expect(gitis.store).to have_received(:update_entity).with(
         contact.entity_id,
         'dfe_notesforclassroomexperience' => "#{headerline}\r\n\r\n#{logline}\r\n"
       )

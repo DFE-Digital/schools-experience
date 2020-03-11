@@ -1,10 +1,11 @@
-FROM ruby:2.5.7
+FROM ruby:2.6.5
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
     RAILS_SERVE_STATIC_FILES=true \
     RAILS_LOG_TO_STDOUT=true \
-    RACK_TIMEOUT_SERVICE_TIMEOUT=60
+    RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
+    BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
 RUN mkdir /app
 WORKDIR /app
@@ -17,7 +18,7 @@ CMD ["rails", "server" ]
 RUN apt-get update && apt-get install apt-transport-https && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get update && \
     apt-get install -y -o Dpkg::Options::="--force-confold" --no-install-recommends yarn nodejs && \
     apt-get clean && \

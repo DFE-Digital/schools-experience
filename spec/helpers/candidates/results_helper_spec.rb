@@ -29,7 +29,7 @@ describe Candidates::ResultsHelper, type: :helper do
 
     context 'When there are more than one page of results' do
       let!(:schools) { create_list(:bookings_school, 18, coordinates: point_in_manchester) }
-      specify { expect(subject).to eql("Showing 1&ndash;15 of 18 results") }
+      specify { expect(subject).to eql("Showing 1–15 of 18 results") }
     end
   end
 end

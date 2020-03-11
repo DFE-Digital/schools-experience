@@ -1,8 +1,9 @@
 require 'rails_helper'
-require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
-require File.join(Rails.root, 'spec', 'support', 'notify_retryable_erroring_client')
+require Rails.root.join('spec', 'support', 'notify_fake_client')
+require Rails.root.join('spec', 'support', 'notify_retryable_erroring_client')
 
 describe Notify do
+  include ActiveJob::TestHelper
   let(:to) { 'somename@somecompany.org' }
 
   before do
@@ -71,24 +72,61 @@ describe Notify do
       end
     end
 
-    let :notification do
-      StubNotification.new to: recipients, name: 'Test User'
-    end
-
     let :recipients do
       %w(test1@user.com test2@user.com)
     end
 
     describe '#despatch_later!' do
-      before { ActiveJob::Base.queue_adapter = :inline }
-      before { notification.despatch_later! }
+      context 'with valid personalisation' do
+        let :notification do
+          StubNotification.new to: recipients, name: 'Test User'
+        end
 
-      it "should enqueue a notify job with the correct parameters" do
-        recipients.each do |recipient|
-          expect(NotifyService.instance).to have_received(:send_email).with \
-            email_address: recipient,
-            template_id: notification.send(:template_id),
-            personalisation: notification.send(:personalisation)
+        before do
+          perform_enqueued_jobs do
+            notification.despatch_later!
+          end
+        end
+
+        it "should send emails with the correct parameters" do
+          recipients.each do |recipient|
+            expect(NotifyService.instance).to have_received(:send_email).with \
+              email_address: recipient,
+              template_id: notification.send(:template_id),
+              personalisation: notification.send(:personalisation)
+          end
+        end
+      end
+
+      context 'with invalid personalisation' do
+        let :notification do
+          StubNotification.new to: recipients, name: nil
+        end
+
+        it "should raise an error whilst trying to enqueue" do
+          expect { notification.despatch_later! }.to \
+            raise_exception Notify::InvalidPersonalisationError
+        end
+      end
+
+      context 'with none string personalisation' do
+        let :notification do
+          StubNotification.new to: recipients, name: 1
+        end
+
+        before do
+          perform_enqueued_jobs do
+            notification.despatch_later!
+          end
+        end
+
+        it "should cast personalisations to string" do
+          recipients.each do |recipient|
+            expect(NotifyService.instance).to have_received(:send_email).with \
+              email_address: recipient,
+              template_id: notification.send(:template_id),
+              personalisation: { name: '1' }
+          end
         end
       end
     end

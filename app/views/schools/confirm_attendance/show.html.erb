@@ -1,12 +1,15 @@
 <%- self.page_title = "Confirm attendance" -%>
 
-<%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+<%= govuk_back_link schools_dashboard_path %>
 
 <h1>Confirm attendance</h1>
 
 <%- if @bookings.any? %>
 
   <%= form_with url: schools_confirm_attendance_path, method: 'put' do |f| %>
+    <%= GovukElementsErrorsHelper.error_summary @updated_attendance, 'There is a problem', '' %>
+
+    <%= pagination_bar @bookings %>
 
     <table class="govuk-table">
       <thead class="govuk-table__head">
@@ -41,6 +44,8 @@
         <% end %>
       </tbody>
     </table>
+
+    <%= pagination_bar @bookings %>
 
     <div>
       <%= f.submit 'Save and return to requests and bookings' %>

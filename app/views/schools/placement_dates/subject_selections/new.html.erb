@@ -1,21 +1,13 @@
 <% self.page_title = 'Select school experience subjects' %>
 
-<h1>Select school experience subjects</h1>
+<%= govuk_back_link new_schools_placement_date_configuration_path %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for @subject_selection, method: :post, url: schools_placement_date_subject_selection_path(@placement_date) do |f| %>
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
-      <p>
-        Tell us which subjects you offer for this date and select continue
-      </p>
-
-      <%= f.check_box_input :available_for_all_subjects %>
-
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-      <%= f.collection_check_boxes :subject_ids, @placement_date.bookings_school.subjects, :id, :name %>
+      <%= f.collection_check_boxes :subject_ids, @placement_date.bookings_school.subjects, :id, :name, { page_heading: true} %>
       <%= f.submit 'Continue' %>
     <% end %>
   </div>

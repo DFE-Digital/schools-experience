@@ -1,8 +1,6 @@
 <% self.page_title = @school.name %>
 
-<%= link_to 'Back', schools_on_boarding_profile_path,
-            class: 'govuk-back-link',
-            data: {controller: 'back-link'} %>
+<%= govuk_back_link schools_on_boarding_profile_path, javascript: true %>
 
 <h1 class="govuk-heading-l govuk-!-margin-top-4">
   Preview your school experience profile

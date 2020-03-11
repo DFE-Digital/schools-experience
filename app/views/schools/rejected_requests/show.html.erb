@@ -25,8 +25,13 @@
       <h2>Rejection details</h2>
 
       <dl class="govuk-summary-list">
-        <%= summary_row 'Reason', @cancellation.reason %>
+        <%= summary_row 'Reason', @cancellation.rejection_description %>
+
+        <% if @cancellation.extra_details.present? %>
+          <%= summary_row 'Extra details', @cancellation.extra_details %>
+        <% end %>
       </dl>
+
     </section>
 
     <%= render partial: 'schools/placement_requests/personal_details', object: @rejected_request.gitis_contact %>

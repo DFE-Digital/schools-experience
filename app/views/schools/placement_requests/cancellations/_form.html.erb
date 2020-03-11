@@ -1,6 +1,6 @@
 <%- self.page_title = "Review and send rejection email to candidate" %>
 
-<%= link_to 'Back', schools_placement_requests_path, class: 'govuk-back-link' %>
+<%= govuk_back_link schools_placement_requests_path %>
 
 <%= form_for cancellation, url: schools_placement_request_cancellation_path do |f| %>
   <div class="govuk-grid-row">
@@ -20,10 +20,27 @@
           <%= render partial: "letter", locals: {
             cancellation: cancellation,
             reason: capture do
-              f.text_area :reason,
-                rows: 7,
-                placeholder: "Explain why the request was rejected. For example, the school is fully booked or there's no longer school experience available on the requested date",
-                label_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
+              content_tag('div', class: 'editable') do
+                f.radio_button_fieldset(
+                  :rejection_category,
+                  heading: true,
+                  small: true,
+                  legend_options: { class: 'govuk-visually-hidden' }
+                ) do
+                  safe_join(
+                    [
+                      Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS
+                        .reject { |reason| reason == 'other' }
+                        .map do |option|
+                          f.radio_input option
+                        end,
+                      f.radio_input(:other) do
+                        f.text_area(:reason)
+                      end
+                    ]
+                  )
+                end
+              end
             end,
             extra_details: capture do
               f.text_area :extra_details,

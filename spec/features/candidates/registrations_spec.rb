@@ -4,7 +4,7 @@ feature 'Candidate Registrations', type: :feature do
   include_context 'Stubbed candidates school'
 
   let! :today do
-    Date.today
+    Time.zone.today
   end
 
   let! :tomorrow do
@@ -59,10 +59,16 @@ feature 'Candidate Registrations', type: :feature do
       include_context 'fake gitis with known uuid'
 
       let(:token) { create(:candidate_session_token) }
-      let(:fake_data) { fake_gitis.send(:fake_contact_data) }
+      let(:fake_data) { fake_gitis.store.send(:fake_contact_data) }
       let(:email_address) { fake_data['emailaddress2'] }
       let(:name) { fake_data['firstname'] + ' ' + fake_data['lastname'] }
       let(:date_of_birth) { Date.parse fake_data['birthdate'] }
+
+      before do
+        allow(fake_gitis).to \
+          receive(:find_contact_for_signin).and_return \
+            Bookings::Gitis::Contact.new(fake_data)
+      end
 
       scenario "completing the Journey" do
         complete_personal_information_step
@@ -80,7 +86,7 @@ feature 'Candidate Registrations', type: :feature do
     context 'for known Candidate not signed in' do
       include_context 'fake gitis with known uuid'
 
-      let(:fake_data) { fake_gitis.send(:fake_contact_data) }
+      let(:fake_data) { fake_gitis.store.send(:fake_contact_data) }
       let(:email_address) { fake_data['emailaddress2'] }
       let(:name) { fake_data['firstname'] + ' ' + fake_data['lastname'] }
       let(:date_of_birth) { Date.parse fake_data['birthdate'] }
@@ -109,7 +115,7 @@ feature 'Candidate Registrations', type: :feature do
       include_context 'fake gitis with known uuid'
 
       # Contact gets default email address after reload via token lookup
-      let(:fake_data) { fake_gitis.send(:fake_contact_data) }
+      let(:fake_data) { fake_gitis.store.send(:fake_contact_data) }
       let(:email_address) { fake_data['emailaddress2'] }
       let(:name) { fake_data['firstname'] + ' ' + fake_data['lastname'] }
       let(:date_of_birth) { Date.parse fake_data['birthdate'] }
@@ -282,7 +288,7 @@ feature 'Candidate Registrations', type: :feature do
     expect(page).to have_text "Email address #{email || email_address}"
     expect(page).to have_text "Date of birth #{date_of_birth.strftime '%d/%m/%Y'}"
     expect(page).to have_text "School or college #{school.name}"
-    expect(page).to have_text 'Experience availability Only free from Epiphany to Whitsunday'
+    expect(page).to have_text "Experience availability\nOnly free from Epiphany to Whitsunday"
     expect(page).to have_text "What you want to get out of school experience I enjoy teaching"
     expect(page).to have_text "Degree stage Graduate or postgraduate"
     expect(page).to have_text "Degree subject Physics"

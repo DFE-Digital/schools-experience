@@ -51,16 +51,17 @@ module Schools
       client = get_oidc_client
       client.authorization_code = params[:code]
 
-      populate_session(client.access_token!)
+      userinfo = extract_userinfo(client.access_token!)
 
       # now we have the dfe sign-in user uuid and urn in the session, check permissions
-      check_role(session[:dfe_sign_in_user_uuid], session[:urn])
+      check_role!(userinfo[:dfe_sign_in_user_uuid], userinfo[:dfe_sign_in_org_uuid])
+      populate_session(userinfo)
 
       redirect_to(session.delete(:return_url) || schools_dashboard_path)
 
     # the DfE Sign-in api returns a 404 if the resource (permission) we're looking
     # for isn't there
-    rescue Faraday::ResourceNotFound => e
+    rescue Faraday::ResourceNotFound, Schools::DFESignInAPI::Roles::NoOrganisationError => e
       raise InsufficientPrivilegesError, e
 
     # if we fail with an AttrRequired::AttrMissing error here it's likely that
@@ -68,14 +69,22 @@ module Schools
     rescue AttrRequired::AttrMissing => e
       Rails.logger.error("Login failed #{e.backtrace}")
       raise AuthFailedError
+
+    # Timed out querying OIDC callback, show auth failed to let the user retry
+    rescue HTTPClient::TimeoutError => e
+      ExceptionNotifier.notify_exception(e)
+      Raven.capture_exception(e)
+
+      raise AuthFailedError
     end
 
   private
 
-    def check_role(user_uuid, urn)
-      return true unless Schools::DFESignInAPI::Client.role_check_enabled?
+    def check_role!(user_uuid, organisation_uuid)
+      return true unless Schools::DFESignInAPI::Roles.enabled?
+      return true if Schools::ChangeSchool.allow_school_change_in_app? && organisation_uuid.nil?
 
-      unless Schools::DFESignInAPI::Roles.new(user_uuid, urn).has_school_experience_role?
+      unless Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
         raise InsufficientPrivilegesError, 'missing school experience administrator role'
       end
     end
@@ -93,13 +102,24 @@ module Schools
       end
     end
 
-    def populate_session(access_token)
-      access_token.userinfo!.tap do |userinfo|
-        session[:id_token]              = access_token.id_token # store this for logout flows.
-        session[:current_user]          = userinfo
-        session[:urn]                   = userinfo.raw_attributes.dig("organisation", "urn").to_i
-        session[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
-        session[:dfe_sign_in_user_uuid] = userinfo.sub
+    def populate_session(extracted_info)
+      extracted_info.each do |key, value|
+        session[key] = value
+      end
+    end
+
+    def extract_userinfo(access_token)
+      {}.tap do |info|
+        access_token.userinfo!.tap do |userinfo|
+          urn = userinfo.raw_attributes.dig("organisation", "urn")
+
+          info[:id_token]              = access_token.id_token # store this for logout flows.
+          info[:current_user]          = userinfo
+          info[:urn]                   = urn.presence && urn.to_i
+          info[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
+          info[:dfe_sign_in_org_uuid]  = userinfo.raw_attributes.dig("organisation", "id").presence
+          info[:dfe_sign_in_user_uuid] = userinfo.sub
+        end
       end
     end
 

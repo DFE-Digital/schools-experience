@@ -15,7 +15,7 @@ end
 
 Given("the school profile has description details text:") do |pi|
   @raw_placement_info = pi
-  @profile.update_attributes(description_details: pi)
+  @profile.update(description_details: pi)
   expect(@profile.description_details).to eql(pi)
 end
 
@@ -33,6 +33,12 @@ Then("the age range should be {string}") do |string|
   end
 end
 
+Then("the age range should contain {string} and {string}") do |phase1, phase2|
+  within("#school-phases") do
+    [phase1, phase2].all? { |p| expect(page).to have_content(p) }
+  end
+end
+
 Given("some subjects exist") do
   @subjects = FactoryBot.create_list(:bookings_subject, 5)
 end
@@ -46,7 +52,7 @@ Then("all of the subjects should be listed") do
 end
 
 Given("the school's website is {string}") do |url|
-  @school.update_attributes(website: url)
+  @school.update(website: url)
   expect(@school.website).to eql(url)
 end
 
@@ -83,7 +89,7 @@ end
 
 Given("the chosen school has the following availability information") do |string|
   @raw_availability_info = string
-  @school.update_attributes(availability_info: string)
+  @school.update(availability_info: string)
   expect(@school.availability_info).to eql(string)
 end
 
@@ -97,7 +103,7 @@ end
 
 Given("the chosen school offers teacher training and has the following info") do |string|
   @teacher_training_info = string
-  @profile.update_attributes(
+  @profile.update(
     teacher_training_info: string,
     teacher_training_url: "https://www.altervista.com/teacher-training"
   )

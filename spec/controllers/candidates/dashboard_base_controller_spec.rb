@@ -7,11 +7,13 @@ RSpec.describe Candidates::DashboardBaseController, type: :request do
     end
   end
 
-  Rails.application.routes.send(:eval_block, -> {
-    get 'restricted', to: 'stub#index'
-  })
+  describe "GET #index" do
+    before do
+      Rails.application.routes.send(:eval_block, -> {
+        get 'restricted', to: 'stub#index'
+      })
+    end
 
-  describe "GET #show" do
     context 'when logged in' do
       include_context 'candidate signin'
 

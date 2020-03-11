@@ -25,14 +25,14 @@
     <dl class="govuk-summary-list">
       <%= summary_row 'Fees', @profile.fees, edit_schools_on_boarding_fees_path %>
       <%= summary_row 'DBS check required', @profile.dbs_check, edit_schools_on_boarding_dbs_requirement_path %>
-      <%= summary_row 'Individual requirements', @profile.individual_requirements, edit_schools_on_boarding_candidate_requirements_choice_path %>
+      <%= summary_row 'Individual requirements', split_to_list(@profile.individual_requirements), edit_schools_on_boarding_candidate_requirements_choice_path %>
       <%= summary_row 'School experience phases', @profile.school_experience_phases, edit_schools_on_boarding_phases_list_path %>
       <%= summary_row 'Primary key stages', @profile.primary_key_stages, \
         @profile.primary_key_stages_offered? ? edit_schools_on_boarding_key_stage_list_path : edit_schools_on_boarding_phases_list_path %>
       <%= summary_row 'Subjects', @profile.subjects, \
         @profile.subjects_offered? ? edit_schools_on_boarding_subjects_path : edit_schools_on_boarding_phases_list_path %>
-      <%= summary_row 'Description', simple_format(@profile.descriptions), edit_schools_on_boarding_description_path %>
-      <%= summary_row 'School experience details', @profile.school_experience_details, edit_schools_on_boarding_experience_outline_path %>
+      <%= summary_row 'Description', safe_format(@profile.descriptions), edit_schools_on_boarding_description_path %>
+      <%= summary_row 'School experience details', safe_format(@profile.school_experience_details), edit_schools_on_boarding_experience_outline_path %>
       <%= summary_row 'Teacher training links', @profile.teacher_training_links, edit_schools_on_boarding_experience_outline_path %>
     </dl>
 
@@ -42,7 +42,7 @@
       <%= summary_row 'Parking', @profile.parking, edit_schools_on_boarding_candidate_experience_detail_path %>
       <%= summary_row 'Show disabilities and access needs support', @profile.supports_access_needs_description, edit_schools_on_boarding_access_needs_support_path %>
       <% if @profile.supports_access_needs? %>
-        <%= summary_row 'Disability and access needs', @profile.disability_and_access_needs_description, edit_schools_on_boarding_access_needs_detail_path %>
+        <%= summary_row 'Disability and access needs', safe_format(@profile.disability_and_access_needs_description), edit_schools_on_boarding_access_needs_detail_path %>
         <%= summary_row 'Disability Confident employer scheme', @profile.disability_confident_scheme, edit_schools_on_boarding_disability_confident_path %>
         <%= summary_row 'Disability and access needs policy', @profile.disability_and_access_needs_policy, edit_schools_on_boarding_access_needs_policy_path %>
       <% end %>

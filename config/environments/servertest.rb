@@ -1,5 +1,5 @@
 require File.expand_path('production.rb', __dir__)
-require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
+require Rails.root.join('spec', 'support', 'notify_fake_client')
 require Rails.root.join("lib", "servertest", "geocoder")
 require Rails.root.join("lib", "servertest", "dfe_sign_in_api")
 
@@ -10,7 +10,7 @@ Rails.application.configure do
   config.x.notify_client = NotifyFakeClient
 
   # default to true but allow overriding in CI
-  config.force_ssl = !ENV['SKIP_FORCE_SSL'].present?
+  config.force_ssl = ENV['SKIP_FORCE_SSL'].blank?
 
   config.x.phase = 10000
   config.x.features = %i(
@@ -26,13 +26,14 @@ Rails.application.configure do
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
   config.x.dfe_sign_in_api_enabled = false
-  config.x.dfe_sign_in_api_role_check_enabled = false
+  config.x.dfe_sign_in_api_school_change_enabled = false
 
   config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
   config.x.gitis.privacy_policy_id = SecureRandom.uuid
   config.x.gitis.privacy_consent_id = '10'
+  config.x.gitis.caching = false
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 

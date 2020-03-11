@@ -23,10 +23,10 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
   context '#new' do
     before do
-      get new_schools_placement_request_acceptance_preview_confirmation_email_path(pr.id)
+      get edit_schools_placement_request_acceptance_preview_confirmation_email_path(pr.id)
     end
 
-    specify('renders the new template') { expect(response).to render_template(:new) }
+    specify('renders the edit template') { expect(response).to render_template(:edit) }
 
     specify "the booking's accepted_at time should be nil" do
       expect(booking.reload.accepted_at).to be_nil
@@ -43,7 +43,9 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
       )
     end
 
-    before { post schools_placement_request_acceptance_preview_confirmation_email_path(pr.id) }
+    let(:params) { { bookings_booking: { candidate_instructions: 'Come to the main reception' } } }
+
+    before { patch schools_placement_request_acceptance_preview_confirmation_email_path(pr.id, params) }
 
     specify 'should send a candidate booking confirmation notification email' do
       expect(NotifyEmail::CandidateBookingConfirmation).to have_received(:from_booking)

@@ -4,13 +4,17 @@ FactoryBot.define do
 
     association :bookings_placement_request,
       factory: :bookings_placement_request,
-      created_at: Time.new(2019, 2, 8, 15, 37)
+      created_at: Time.new(2019, 2, 8, 15, 37).in_time_zone
 
     bookings_school { bookings_placement_request.school }
+    contact_name { 'William MacDougal' }
+    contact_email { 'gcw@springfield.edu' }
+    contact_number { '01234 456 245' }
 
     date { 2.months.from_now }
 
     trait :accepted do
+      candidate_instructions { 'Report to reception on arrival' }
       accepted_at { 5.minutes.ago }
     end
 
@@ -31,13 +35,6 @@ FactoryBot.define do
       before(:create) do |bb|
         bb.bookings_subject = bb.bookings_school.subjects.first
       end
-    end
-
-    trait :with_more_details_added do
-      contact_name { 'William MacDougal' }
-      contact_email { 'gcw@springfield.edu' }
-      contact_number { '01234 456 245' }
-      location { 'Come to reception in the East building' }
     end
 
     trait :cancelled_by_candidate do

@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= link_to 'Back', schools_dashboard_path, class: 'govuk-back-link' %>
+    <%= govuk_back_link schools_dashboard_path %>
 
     <h1>Manage requests</h1>
 
@@ -13,7 +13,7 @@
     <p>
       You'll need to refer to <strong>your own records</strong> for any requests received before this date.
     </p>
-    
+
     <% if @placement_requests.any? %>
       <%= pagination_bar @placement_requests %>
 
@@ -26,7 +26,7 @@
       <p>
         There are no requests.
       </p>
-    <% end %>    
+    <% end %>
 
     <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
   </div>

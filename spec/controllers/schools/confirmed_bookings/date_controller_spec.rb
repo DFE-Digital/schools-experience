@@ -6,7 +6,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
   include_context "logged in DfE user"
 
   let(:booking) do
-    create(:bookings_booking, bookings_school: @current_user_school)
+    create(:bookings_booking, :accepted, bookings_school: @current_user_school)
   end
 
   let!(:profile) { create(:bookings_profile, school: @current_user_school) }
@@ -108,6 +108,20 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
           candidates_cancel_url(booking.token),
           old_date.strftime("%d %B %Y")
         )
+      end
+    end
+
+    context 'updating with same date' do
+      let(:date) { booking.date }
+      let(:params) do
+        { bookings_booking: { date: date.to_formatted_s(:govuk) } }
+      end
+
+      subject! { patch schools_booking_date_path(booking.id, params: params) }
+
+      specify("should render edit page") do
+        expect(response).to have_http_status 200
+        expect(response).to have_attributes body: /change the booking date/i
       end
     end
   end

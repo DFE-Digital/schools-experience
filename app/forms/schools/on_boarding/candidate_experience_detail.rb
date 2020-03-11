@@ -38,19 +38,19 @@ module Schools
       validates :times_flexible_details, presence: true, if: :times_flexible
 
       def self.compose(
-          business_dress,
-          cover_up_tattoos,
-          remove_piercings,
-          smart_casual,
-          other_dress_requirements,
-          other_dress_requirements_detail,
-          parking_provided,
-          parking_details,
-          nearby_parking_details,
-          start_time,
-          end_time,
-          times_flexible,
-          times_flexible_details
+        business_dress,
+        cover_up_tattoos,
+        remove_piercings,
+        smart_casual,
+        other_dress_requirements,
+        other_dress_requirements_detail,
+        parking_provided,
+        parking_details,
+        nearby_parking_details,
+        start_time,
+        end_time,
+        times_flexible,
+        times_flexible_details
       )
         new \
           business_dress: business_dress,

@@ -1,0 +1,17 @@
+<%= govuk_back_link service_updates_path %>
+
+<%= page_heading do %>
+  Service update - <%= @update.date.to_formatted_s(:govuk) %>
+<% end %>
+
+<div id="service-update" class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">
+      <%= @update.title %>
+    </h2>
+
+    <%= sanitize @update.html_content %>
+  </div>
+</div>
+
+<%= link_to 'Back', service_updates_path, class: 'govuk-back-link' %>

@@ -58,7 +58,7 @@ end
 
 Then("I should see a select box containing degree subjects labelled {string}") do |string|
   @degree_subjects ||= YAML
-    .load_file("#{Rails.root}/config/candidate_form_options.yml")['DEGREE_SUBJECTS']
+    .load_file(Rails.root.join('config', 'candidate_form_options.yml'))['DEGREE_SUBJECTS']
     .sample(10) # we don't need all of them, just pick out 10
   ensure_select_options_exist(get_form_group(page, string), @degree_subjects)
 end
@@ -145,6 +145,14 @@ end
 
 Then("there should not be a {string} checkbox") do |label_text|
   expect(page).not_to have_css('label', text: label_text)
+end
+
+Then("{string} radio button should be selected") do |label_text|
+  expect(find(:radio_button, label_text)).to be_checked
+end
+
+Then("no radio buttons should be selected") do
+  expect(page).not_to have_css('input[type="radio"][selected]')
 end
 
 def get_form_group(page, label_text)

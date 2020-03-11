@@ -11,14 +11,20 @@ module Candidates::SchoolHelper
   end
 
   def format_school_subjects(school)
-    safe_subjects = school.subjects.map(&:name).sort.map do |subj|
-      ERB::Util.h(subj)
+    filtered_subject_ids = filtered_subject_ids(params[:subjects])
+
+    subjects = school.subjects.ordered_by_name.map do |subject|
+      if subject.id.in? filtered_subject_ids
+        tag.strong(subject.name)
+      else
+        subject.name
+      end
     end
 
-    if safe_subjects.empty?
+    if subjects.empty?
       'Not specified'
     else
-      safe_subjects.to_sentence.html_safe
+      to_sentence subjects
     end
   end
 
@@ -29,7 +35,7 @@ module Candidates::SchoolHelper
   end
 
   def format_school_availability(availability_info)
-    availability_info.present? ? simple_format(availability_info) : 'No information supplied'
+    availability_info.present? ? safe_format(availability_info) : 'No information supplied'
   end
 
   def format_phases(school)
@@ -133,5 +139,25 @@ module Candidates::SchoolHelper
     else
       new_candidates_school_registrations_personal_information_path(school)
     end
+  end
+
+  def split_to_list(content)
+    return nil if content.nil?
+
+    items = content.split("\n").reject(&:blank?)
+
+    return nil if items.blank?
+
+    content_tag('ul', class: 'govuk-list govuk-list--bullet') do
+      safe_join(items.map { |req| tag.li(req) })
+    end
+  end
+
+private
+
+  def filtered_subject_ids(subject_ids)
+    return [] unless subject_ids&.any?
+
+    subject_ids.reject(&:blank?).map(&:to_i)
   end
 end

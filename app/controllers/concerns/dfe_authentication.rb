@@ -10,6 +10,7 @@ module DFEAuthentication
       @current_user ||= session[:current_user]
     end
     alias_method :set_current_user, :current_user
+    helper_method :current_user
 
     def user_signed_in?
       current_user.present?
@@ -20,18 +21,28 @@ module DFEAuthentication
 
       client = get_oidc_client
 
-      session[:state] = SecureRandom.uuid # You can specify or pass in your own state here
-      session[:nonce] = SecureRandom.hex(16) # You should store this and validate it on return.
+      session[:state] ||= SecureRandom.uuid # You can specify or pass in your own state here
+      session[:nonce] ||= SecureRandom.hex(16) # You should store this and validate it on return.
       session[:return_url] = request.original_url
       redirect_to client.authorization_uri(
         state: session[:state],
         nonce: session[:nonce],
-        scope: %i(profile organisation)
+        scope: oidc_auth_scope
       )
     end
+
+    helper_method :has_other_schools?
   end
 
 private
+
+  def oidc_auth_scope
+    if Schools::ChangeSchool.allow_school_change_in_app?
+      %i(profile)
+    else
+      %i(profile organisation)
+    end
+  end
 
   def get_oidc_client
     OpenIDConnect::Client.new(
@@ -43,5 +54,42 @@ private
       token_endpoint: '/token',
       userinfo_endpoint: '/me'
     )
+  end
+
+  def school_urns(reload = false)
+    if Schools::DFESignInAPI::Client.enabled?
+      school_uuids(reload).values
+    else
+      Array.wrap current_urn
+    end
+  end
+
+  def school_uuids(reload = false)
+    session[:uuid_map] = nil if reload
+
+    session[:uuid_map] ||= retrieve_school_uuids.freeze
+  end
+
+  def retrieve_school_uuids
+    Schools::DFESignInAPI::RoleCheckedOrganisations
+      .new(current_user.sub)
+      .organisation_uuid_pairs
+  end
+
+  def other_school_urns
+    school_urns.without(current_school.urn)
+  end
+
+  # if the DfE Sign-in api client isn't configured assume users
+  # may have other schools
+  def has_other_schools?
+    return true unless Schools::DFESignInAPI::Client.enabled?
+
+    other_school_urns.any?
+  end
+
+  def current_school=(new_school)
+    session[:urn]         = new_school.urn
+    session[:school_name] = new_school.name
   end
 end
