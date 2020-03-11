@@ -1,5 +1,5 @@
 require 'rails_helper'
-require File.join(Rails.root, 'spec', 'support', 'notify_fake_client')
+require Rails.root.join('spec', 'support', 'notify_fake_client')
 
 shared_examples_for "email template" do |template_id, personalisation|
   let(:to) { "someone@somecompany.org" }

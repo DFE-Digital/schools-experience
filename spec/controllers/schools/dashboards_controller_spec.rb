@@ -81,7 +81,8 @@ describe Schools::DashboardsController, type: :request do
         let(:allow_school_change) { false }
 
         specify 'should redirect to school not registered error page' do
-          expect(subject).to redirect_to(schools_errors_no_school_path)
+          expect(subject).to \
+            redirect_to(schools_errors_insufficient_privileges_path)
         end
       end
 

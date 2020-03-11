@@ -38,7 +38,7 @@ describe NotifyJob, type: :job do
     allow(Raven).to receive :capture_exception
 
     allow(ActiveJob::Base.logger).to receive :info do |&block|
-      personalisation.values.each { |v| expect(block.call).not_to include v }
+      personalisation.each_value { |v| expect(block.call).not_to include v }
       expect(block.call).not_to include email_address
     end
 

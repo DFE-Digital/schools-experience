@@ -1,1 +1,1 @@
-require File.join(Rails.root, 'lib', 'conversions')
+require Rails.root.join('lib', 'conversions')

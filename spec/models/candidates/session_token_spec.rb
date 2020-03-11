@@ -96,7 +96,7 @@ RSpec.describe Candidates::SessionToken, type: :model do
       before { token.expire! }
 
       it("will be expired now") do
-        expect(token.expired_at).to be > 1.minutes.ago
+        expect(token.expired_at).to be > 1.minute.ago
       end
     end
   end

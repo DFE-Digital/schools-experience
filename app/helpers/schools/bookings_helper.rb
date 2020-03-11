@@ -25,4 +25,13 @@ module Schools::BookingsHelper
       end
     end
   end
+
+  def descriptive_attendance_status(record)
+    case record.attended
+    when true
+      'Attended'
+    when false
+      'Did not attend'
+    end
+  end
 end

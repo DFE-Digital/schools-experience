@@ -248,6 +248,7 @@ module Schools
     has_many :profile_subjects,
       class_name: 'Schools::OnBoarding::ProfileSubject',
       foreign_key: :schools_school_profile_id,
+      inverse_of: :school_profile,
       dependent: :destroy
 
     has_many :subjects,
@@ -258,6 +259,7 @@ module Schools
 
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
+      inverse_of: :school_profile,
       foreign_key: 'bookings_school_id'
 
     def available_subjects

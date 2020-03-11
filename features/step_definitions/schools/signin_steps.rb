@@ -18,5 +18,5 @@ end
 Given("I am signed in as School A") do
   step "I am on the 'School chooser' page"
   step "I choose 'School A' from the 'Select your school' radio buttons"
-  step "I click the 'Change school' submit button"
+  step "I click the 'Choose school' submit button"
 end

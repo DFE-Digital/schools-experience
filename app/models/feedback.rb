@@ -1,11 +1,11 @@
 class Feedback < ApplicationRecord
-  enum rating: %i(
-    very_satisfied
-    satisfied
-    neither_satisfied_or_dissatisfied
-    dissatisfied
-    very_dissatisfied
-  )
+  enum rating: {
+    very_satisfied: 0,
+    satisfied: 1,
+    neither_satisfied_or_dissatisfied: 2,
+    dissatisfied: 3,
+    very_dissatisfied: 4
+  }
 
   REASON_REQUIRING_EXPLANATION = :something_else
 

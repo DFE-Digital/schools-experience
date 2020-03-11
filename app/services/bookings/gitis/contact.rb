@@ -126,7 +126,7 @@ module Bookings
       end
 
       def add_school_experience(log_line)
-        unless dfe_notesforclassroomexperience.present?
+        if dfe_notesforclassroomexperience.blank?
           self.dfe_notesforclassroomexperience = EventLogger::NOTES_HEADER + "\r\n\r\n"
         end
 

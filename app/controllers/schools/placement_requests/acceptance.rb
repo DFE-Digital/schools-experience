@@ -4,8 +4,7 @@ module Schools
       extend ActiveSupport::Concern
 
       def set_placement_request_and_fetch_gitis_contact
-        @placement_request = @current_school
-          .bookings_placement_requests
+        @placement_request = @current_school.placement_requests \
           .find(params[:placement_request_id])
 
         @placement_request.fetch_gitis_contact gitis_crm

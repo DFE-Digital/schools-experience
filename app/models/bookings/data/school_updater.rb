@@ -75,9 +75,7 @@ module Bookings
         # Will be converted to:
         # { name: 'Some School' }
         #
-        attributes = ATTRIBUTE_MAPPING.each_with_object({}) do |(k, v), h|
-          h[k] = row[v]
-        end
+        attributes = ATTRIBUTE_MAPPING.transform_values { |v| row[v] }
 
         # In addition to the directly-mappable attributes we also need
         # to assign a school type and convert its coordinates

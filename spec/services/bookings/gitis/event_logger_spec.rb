@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Bookings::Gitis::EventLogger, type: :model do
   subject { described_class.entry log_type, log_subject }
-  let(:today) { Date.today.to_formatted_s(:gitis) }
+  let(:today) { Time.zone.today.to_formatted_s(:gitis) }
   let(:padded_urn) { sprintf('%-6s', school.urn) }
 
   context 'with a PlacementRequest' do
@@ -43,7 +43,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
   context 'with a Cancellation' do
     let(:log_type) { 'cancellation' }
-    let(:today) { Date.today.to_formatted_s(:gitis) }
+    let(:today) { Time.zone.today.to_formatted_s(:gitis) }
 
     context 'by the Candidate of a Request' do
       let(:request) { create(:placement_request, :cancelled) }

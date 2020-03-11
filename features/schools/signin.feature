@@ -15,7 +15,7 @@ Feature: School Chooser
             | School B |
         But no radio buttons should be selected
         Then I choose 'School A' from the 'Select your school' radio buttons
-        And I click the 'Change school' submit button
+        And I click the 'Choose school' submit button
         Then I should be on the 'schools dashboard' page
         Then the page's main heading should be 'Manage requests and bookings at School A'
     
@@ -31,7 +31,7 @@ Feature: School Chooser
             | School B |
         And 'School A' radio button should be selected
         Then I choose 'School B' from the 'Select your school' radio buttons
-        And I click the 'Change school' submit button
+        And I click the 'Choose school' submit button
         Then I should be on the 'schools dashboard' page
         Then the page's main heading should be 'Manage requests and bookings at School B'
         

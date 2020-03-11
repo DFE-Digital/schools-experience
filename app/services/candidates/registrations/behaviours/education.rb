@@ -5,7 +5,7 @@ module Candidates
         extend ActiveSupport::Concern
 
         NO_DEGREE_SUBJECT = 'Not applicable'.freeze
-        OPTIONS_CONFIG = YAML.load_file "#{Rails.root}/config/candidate_form_options.yml"
+        OPTIONS_CONFIG = YAML.load_file Rails.root.join('config', 'candidate_form_options.yml')
         DEGREE_STAGE_REQUIRING_EXPLANATION = 'Other'.freeze
         NOT_APPLYING_FOR_DEGREE = "I don't have a degree and am not studying for one".freeze
 

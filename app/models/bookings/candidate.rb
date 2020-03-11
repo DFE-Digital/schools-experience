@@ -14,6 +14,10 @@ class Bookings::Candidate < ApplicationRecord
               dependent: :destroy
 
   has_many :bookings, through: :placement_requests
+  has_many :events,
+    inverse_of: :bookings_candidate,
+    foreign_key: :bookings_candidate_id,
+    dependent: :destroy
 
   validates :gitis_uuid, presence: true, format: { with: Bookings::Gitis::Entity::ID_FORMAT }
   validates :gitis_uuid, uniqueness: { case_sensitive: false }

@@ -35,7 +35,7 @@ Given("I have provided a point in {string} as my location") do |centre|
   }
 
   point = points[centre]
-  fail "No point found for #{centre}" unless point.present?
+  fail "No point found for #{centre}" if point.blank?
 
   path = candidates_schools_path(latitude: point["latitude"], longitude: point["longitude"], distance: 25)
   visit(path)

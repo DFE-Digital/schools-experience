@@ -1,9 +1,11 @@
 class Feature
   include Singleton
 
-  delegate :only_phase, :from_phase, :until_phase, to: :instance
-  delegate :only, :from, :until, to: :instance
-  delegate :active?, to: :instance
+  class << self
+    delegate :only_phase, :from_phase, :until_phase, to: :instance
+    delegate :only, :from, :until, to: :instance
+    delegate :active?, to: :instance
+  end
 
   def only_phase(phase_to_test)
     return false unless Integer(phase_to_test) == current_phase
@@ -37,6 +39,28 @@ class Feature
   alias_method :current=, :current_phase=
 
   def active?(feature_key)
-    Array.wrap(Rails.application.config.x.features).include? feature_key
+    all_features.include? feature_key.to_sym
+  end
+
+private
+
+  def env_features
+    tokenised_env_features.compact.map(&:to_sym)
+  end
+
+  def config_features
+    Array.wrap(Rails.application.config.x.features).compact.map(&:to_sym)
+  end
+
+  def all_features
+    use_env_var? ? config_features + env_features : config_features
+  end
+
+  def use_env_var?
+    Rails.env.test? || Rails.env.servertest?
+  end
+
+  def tokenised_env_features
+    ENV['FEATURE_FLAGS'].to_s.strip.split(%r([\s,]+))
   end
 end

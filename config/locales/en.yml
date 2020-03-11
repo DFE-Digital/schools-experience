@@ -826,7 +826,7 @@ en:
           one: "Displaying the only %{entry_name}"
           other: "Displaying all %{count} %{entry_name}"
       more_pages:
-        display_entries: "Showing %{first}&ndash;%{last} of %{total} %{entry_name}"
+        display_entries: "Showing %{first}–%{last} of %{total} %{entry_name}"
 
     candidates:
       school_search:

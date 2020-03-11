@@ -5,11 +5,13 @@ module Schools
 
       class << self
         def service_id
-          ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID')
+          ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID').presence ||
+            raise(MissingConfigVariable)
         end
 
         def role_id
-          ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID')
+          ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID').presence ||
+            raise(MissingConfigVariable)
         end
       end
 
@@ -24,6 +26,7 @@ module Schools
         false
       end
 
+      class MissingConfigVariable < RuntimeError; end
       class NoOrganisationError < RuntimeError; end
 
     private
