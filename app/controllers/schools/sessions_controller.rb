@@ -3,6 +3,7 @@ module Schools
   class AuthFailedError < StandardError; end
   class InsufficientPrivilegesError < StandardError; end
   class SessionExpiredError < StandardError; end
+  class NoOrganisationError < StandardError; end
 
   class SessionsController < ApplicationController
     include DFEAuthentication
@@ -11,6 +12,7 @@ module Schools
     rescue_from StateMismatchError, with: :authentication_failure
     rescue_from InsufficientPrivilegesError, with: :insufficient_privileges_failure
     rescue_from SessionExpiredError, with: :session_expired_failure
+    rescue_from NoOrganisationError, with: :no_organisation_failure
 
     def show
       # nothing yet, the view just contains a 'logout' button
@@ -82,7 +84,14 @@ module Schools
 
     def check_role!(user_uuid, organisation_uuid)
       return true unless Schools::DFESignInAPI::Roles.enabled?
-      return true if Schools::ChangeSchool.allow_school_change_in_app? && organisation_uuid.nil?
+
+      if organisation_uuid.blank?
+        if Schools::ChangeSchool.allow_school_change_in_app?
+          return true
+        else
+          raise NoOrganisationError
+        end
+      end
 
       unless Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
         raise InsufficientPrivilegesError, 'missing school experience administrator role'
@@ -155,6 +164,13 @@ module Schools
       # we're redirecting to the dashboard so the user will be sent back to
       # DfE Sign-in where they can log in again.
       redirect_to schools_dashboard_path
+    end
+
+    def no_organisation_failure(exception)
+      ExceptionNotifier.notify_exception(exception)
+      Raven.capture_exception(exception)
+
+      redirect_to schools_errors_insufficient_privileges_path
     end
 
     def build_logout_query(id_token)
