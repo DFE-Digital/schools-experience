@@ -8,6 +8,8 @@ module Cron
       # for pulling its own information (name, email) from Gitis and should
       # individually retry if the API isn't available
       def perform
+        return true unless Feature.active? :reminders
+
         bookings.each do |booking|
           Bookings::ReminderJob.perform_later(booking, time_until_booking)
         end

@@ -16,6 +16,7 @@ Rails.application.configure do
   config.x.features = %i(
     subject_specific_dates
     capped_bookings
+    reminders
   )
 
   # dfe signin config, should be in credentials or env vars

@@ -4,6 +4,8 @@ module Cron
       self.cron_expression = '35 2 * * *'
 
       def perform
+        return true unless Feature.active? :reminders
+
         bookings.all? do |booking|
           Bookings::ReminderJob.perform_later(booking, time_until_booking)
         end
