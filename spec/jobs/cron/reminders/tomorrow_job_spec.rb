@@ -11,11 +11,11 @@ describe Cron::Reminders::TomorrowJob, type: :job do
 
   describe '#perform' do
     before do
-      FactoryBot.create(:bookings_booking, :accepted, date: Date.tomorrow)
-      FactoryBot.create(:bookings_booking, :accepted, date: Date.tomorrow)
+      FactoryBot.create(:bookings_booking, :accepted, date: Time.zone.tomorrow)
+      FactoryBot.create(:bookings_booking, :accepted, date: Time.zone.tomorrow)
       FactoryBot.create(:bookings_booking, :accepted, date: 2.days.from_now.to_date)
-      FactoryBot.create(:bookings_booking, :accepted, :previous, date: Date.today)
-      FactoryBot.create(:bookings_booking, date: Date.tomorrow)
+      FactoryBot.create(:bookings_booking, :accepted, :previous, date: Time.zone.today)
+      FactoryBot.create(:bookings_booking, date: Time.zone.tomorrow)
 
       allow(Bookings::ReminderJob).to receive(:perform_later).and_return(true)
     end

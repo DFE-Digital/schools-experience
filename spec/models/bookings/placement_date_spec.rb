@@ -24,13 +24,13 @@ describe Bookings::PlacementDate, type: :model do
 
       context 'new placement dates must not be in the past' do
         specify 'should allow future dates' do
-          [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
+          [Time.zone.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
           end
         end
 
         specify 'new placement dates should not allow historic dates' do
-          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago].each do |d|
+          [Time.zone.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago].each do |d|
             expect(subject).not_to allow_value(d).for(:date)
           end
         end

@@ -62,14 +62,14 @@ describe Bookings::Booking do
 
       context 'new placement dates must not be in the past' do
         specify 'should allow future dates' do
-          [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
+          [Time.zone.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
             expect(subject).to allow_value(d).for(:date).on(:acceptance)
           end
         end
 
         specify 'new placement dates should not allow historic dates' do
-          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago, nil].each do |d|
+          [Time.zone.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago, nil].each do |d|
             expect(subject).not_to allow_value(d).for(:date)
             expect(subject).not_to allow_value(d).for(:date).on(:acceptance)
           end
@@ -186,7 +186,7 @@ describe Bookings::Booking do
       let!(:previous_bookings) do
         [
           FactoryBot.build(:bookings_booking, date: 1.week.ago),
-          FactoryBot.build(:bookings_booking, date: Date.yesterday),
+          FactoryBot.build(:bookings_booking, date: Time.zone.yesterday),
           FactoryBot.build(:bookings_booking, date: Time.zone.today)
         ].each do |booking|
           booking.save(validate: false)
@@ -195,7 +195,7 @@ describe Bookings::Booking do
 
       let!(:non_previous_bookings) do
         [
-          FactoryBot.create(:bookings_booking, date: Date.tomorrow),
+          FactoryBot.create(:bookings_booking, date: Time.zone.tomorrow),
           FactoryBot.create(:bookings_booking, date: 1.week.from_now)
         ]
       end
@@ -215,7 +215,7 @@ describe Bookings::Booking do
       let!(:previous_bookings) do
         [
           FactoryBot.build(:bookings_booking, date: 1.week.ago),
-          FactoryBot.build(:bookings_booking, date: Date.yesterday)
+          FactoryBot.build(:bookings_booking, date: Time.zone.yesterday)
         ].each do |booking|
           booking.save(validate: false)
         end
@@ -224,7 +224,7 @@ describe Bookings::Booking do
       let!(:future_bookings) do
         [
           FactoryBot.build(:bookings_booking, date: Time.zone.today),
-          FactoryBot.build(:bookings_booking, date: Date.tomorrow),
+          FactoryBot.build(:bookings_booking, date: Time.zone.tomorrow),
           FactoryBot.build(:bookings_booking, date: 3.weeks.from_now)
         ].each do |booking|
           booking.save(validate: false)
@@ -340,7 +340,7 @@ describe Bookings::Booking do
     end
 
     describe '.for_days_in_the_future' do
-      let!(:booking_in_1_days) { create(:bookings_booking, date: Date.tomorrow) }
+      let!(:booking_in_1_days) { create(:bookings_booking, date: Time.zone.tomorrow) }
       let!(:booking_in_3_days) { create(:bookings_booking, date: 3.days.from_now.to_date) }
       let!(:booking_in_7_days) { create(:bookings_booking, date: 7.days.from_now.to_date) }
       let!(:booking_in_8_days) { create(:bookings_booking, date: 8.days.from_now.to_date) }
