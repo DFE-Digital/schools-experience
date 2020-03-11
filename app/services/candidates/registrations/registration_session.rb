@@ -66,20 +66,8 @@ module Candidates
         fetch_attributes BackgroundCheck
       end
 
-      # TODO SE-1877 remove this
-      def legacy_session?
-        fetch_attributes(PlacementPreference).key? 'bookings_placement_date_id'
-      end
-
-      # TODO SE-1877 remove this
       def subject_and_date_information
-        if legacy_session?
-          attributes = fetch_attributes PlacementPreference
-          SubjectAndDateInformation.new \
-            attributes.slice "bookings_placement_date_id"
-        else
-          fetch SubjectAndDateInformation
-        end
+        fetch SubjectAndDateInformation
       end
 
       def subject_and_date_information_attributes
