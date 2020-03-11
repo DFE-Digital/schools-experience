@@ -27,7 +27,7 @@ FactoryBot.define do
     end
 
     trait :previous do
-      to_create { |instance| instance.save(validate: false) }
+      to_create { |instance| instance.save!(validate: false) }
       date { 2.weeks.ago }
     end
 
