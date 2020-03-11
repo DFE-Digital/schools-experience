@@ -27,6 +27,12 @@ module Bookings
           end
         end
 
+        def write!(entity)
+          store.write!(entity).tap do
+            cache.delete cache_key_for_entity entity
+          end
+        end
+
       private
 
         def entities_to_cache(entities)
