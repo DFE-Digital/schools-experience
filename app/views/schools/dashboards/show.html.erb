@@ -6,7 +6,7 @@
 
     <article id="dashboard">
 
-      <% if has_other_schools? %>
+      <% if has_other_schools? || (Schools::ChangeSchool.allow_school_change_in_app? && Schools::ChangeSchool.request_approval_url) %>
         <section id="change-school">
           <%= link_to "Change school", new_schools_switch_path %>
         </section>
