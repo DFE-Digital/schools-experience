@@ -68,11 +68,11 @@ describe Bookings::Gitis::Store::Dynamics do
 
     context 'for multiple ids' do
       let(:uuids) do
-        [
-          "03ec3075-a9f9-400f-bc43-a7a5cdf68579",
-          "e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56",
-          "2ec079dd-35a2-419a-9d01-48d63c09cdcc"
-        ]
+        %w(
+          03ec3075-a9f9-400f-bc43-a7a5cdf68579
+          e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56
+          2ec079dd-35a2-419a-9d01-48d63c09cdcc
+        )
       end
 
       let(:matches) do
@@ -303,6 +303,27 @@ describe Bookings::Gitis::Store::Dynamics do
         it { is_expected.to eq uuid }
         it { expect(dynamics.api).not_to have_received(:post) }
         it { expect(dynamics.api).not_to have_received(:patch) }
+      end
+    end
+  end
+
+  describe '#write!' do
+    let(:uuid) { SecureRandom.uuid }
+
+    context 'with valid' do
+      let(:testentity) { TestEntity.new(firstname: 'Joe') }
+      before { expect(dynamics).to receive(:write).and_return(uuid) }
+      subject! { dynamics.write! testentity }
+      it { is_expected.to eql uuid }
+    end
+
+    context 'with invalid' do
+      let(:testentity) { TestEntity.new(firstname: '') }
+
+      it "will raise an error" do
+        expect { dynamics.write! testentity }.to \
+          raise_exception(Bookings::Gitis::InvalidEntity) \
+          .with_message('TestEntity is invalid: {:firstname=>[{:error=>:blank}]}')
       end
     end
   end

@@ -1,4 +1,5 @@
 class Bookings::School < ApplicationRecord
+  self.ignored_columns += %w(dfe_signin_organisation_uuid)
   include FullTextSearch
   include GeographicSearch
 
@@ -35,7 +36,8 @@ class Bookings::School < ApplicationRecord
   has_many :bookings_schools_subjects,
     class_name: "Bookings::SchoolsSubject",
     inverse_of: :bookings_school,
-    foreign_key: :bookings_school_id
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
 
   has_many :subjects,
     class_name: "Bookings::Subject",
@@ -45,7 +47,8 @@ class Bookings::School < ApplicationRecord
   has_many :bookings_schools_phases,
     class_name: "Bookings::SchoolsPhase",
     inverse_of: :bookings_school,
-    foreign_key: :bookings_school_id
+    foreign_key: :bookings_school_id,
+    dependent: :destroy
 
   has_many :phases,
     class_name: "Bookings::Phase",
@@ -54,40 +57,42 @@ class Bookings::School < ApplicationRecord
 
   belongs_to :school_type,
     class_name: "Bookings::SchoolType",
+    inverse_of: :schools,
     foreign_key: :bookings_school_type_id
 
   has_one :school_profile,
     class_name: "Schools::SchoolProfile",
+    inverse_of: :bookings_school,
     foreign_key: :bookings_school_id,
     dependent: :destroy
 
   has_one :profile,
     class_name: "Bookings::Profile",
     foreign_key: :school_id,
+    inverse_of: :school,
     dependent: :destroy
 
   has_many :bookings_placement_dates,
     class_name: 'Bookings::PlacementDate',
     foreign_key: :bookings_school_id,
-    dependent: :destroy
-
-  has_many :bookings_placement_requests,
-    class_name: 'Bookings::PlacementRequest',
-    foreign_key: :bookings_school_id,
+    inverse_of: :bookings_school,
     dependent: :destroy
 
   has_many :bookings,
     class_name: 'Bookings::Booking',
     foreign_key: :bookings_school_id,
+    inverse_of: :bookings_school,
     dependent: :destroy
 
   has_many :placement_requests,
     class_name: 'Bookings::PlacementRequest',
     foreign_key: :bookings_school_id,
+    inverse_of: :school,
     dependent: :destroy
 
   has_many :events,
     foreign_key: :bookings_school_id,
+    inverse_of: :bookings_school,
     dependent: :destroy
 
   scope :enabled, -> { where(enabled: true) }

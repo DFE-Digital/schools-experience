@@ -26,6 +26,9 @@ module Schools
       if @placement_request.candidate_cancellation
         @placement_request.candidate_cancellation.viewed!
       end
+
+      @attendance = Schools::AttendanceRecords.new \
+        @placement_request.candidate_id, school_urns
     end
 
   private

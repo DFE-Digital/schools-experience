@@ -15,7 +15,8 @@ module Schools
       bookings_params.each do |booking_id, attended|
         fetch(booking_id).tap do |booking|
           begin
-            booking.update! attended: ActiveModel::Type::Boolean.new.cast(attended)
+            booking.attended = ActiveModel::Type::Boolean.new.cast(attended)
+            booking.save!(context: :attendance)
             @updated_bookings << booking.id
           rescue ActiveRecord::RecordInvalid => e
             errors.add :bookings_params,

@@ -1,5 +1,5 @@
 class Schools::PlacementDatesController < Schools::BaseController
-  before_action :set_placement_date, only: %w(destroy edit update)
+  before_action :set_placement_date, only: %w(edit update)
 
   def index
     @placement_dates = current_school

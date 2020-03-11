@@ -2,12 +2,14 @@ module Bookings
   class PlacementDate < ApplicationRecord
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
+      inverse_of: :bookings_placement_dates,
       foreign_key: 'bookings_school_id'
 
     has_many :placement_requests,
       class_name: 'Bookings::PlacementRequest',
       inverse_of: :placement_date,
-      foreign_key: :bookings_placement_date_id
+      foreign_key: :bookings_placement_date_id,
+      dependent: :restrict_with_exception
 
     has_many :placement_date_subjects,
       class_name: 'Bookings::PlacementDateSubject',
@@ -83,7 +85,7 @@ module Bookings
     end
 
     def bookable?
-      date >= (Date.today + Bookings::Booking::MIN_BOOKING_DELAY)
+      date >= (Time.zone.today + Bookings::Booking::MIN_BOOKING_DELAY)
     end
 
     def has_subjects?

@@ -1,25 +1,28 @@
 module Schools
-  class InaccessibleSchoolError < StandardError; end
-
   class ChangeSchoolsController < Schools::BaseController
     before_action :ensure_in_app_school_changing_enabled?, only: :create
+    skip_before_action :ensure_onboarded, :set_current_school
 
-    rescue_from Schools::InaccessibleSchoolError, with: :access_denied
+    rescue_from Schools::ChangeSchool::InaccessibleSchoolError, with: :access_denied
 
     def show
-      @schools = Bookings::School.ordered_by_name.where(urn: urns)
-      @change_school = Schools::ChangeSchool.new(id: @current_school.id)
+      @change_school = Schools::ChangeSchool.new \
+        current_user, school_uuids, urn: current_urn
+
+      @schools = @change_school.available_schools
     end
 
     def create
-      new_school = Bookings::School.find(change_school_params[:id])
+      @change_school = Schools::ChangeSchool.new \
+        current_user, school_uuids, change_school_params
 
-      raise Schools::InaccessibleSchoolError unless user_has_role_at_school?(current_user.sub, new_school.urn)
-
-      session[:urn]         = new_school.urn
-      session[:school_name] = new_school.name
-
-      redirect_to schools_dashboard_path
+      if @change_school.valid?
+        self.current_school = @change_school.retrieve_valid_school!
+        redirect_to schools_dashboard_path
+      else
+        @schools = @change_school.available_schools
+        render :show
+      end
     end
 
   private
@@ -29,32 +32,11 @@ module Schools
     end
 
     def change_school_params
-      params.require(:schools_change_school).permit(:id)
+      params.fetch(:schools_change_school, {}).permit(:urn)
     end
 
     def access_denied
       redirect_to schools_errors_inaccessible_school_path
-    end
-
-    def urns
-      organisations.urns
-    end
-
-    def organisations
-      @organisations ||= Schools::DFESignInAPI::Organisations.new(current_user.sub)
-    end
-
-    def user_has_role_at_school?(user_uuid, urn)
-      return true unless Schools::DFESignInAPI::Client.role_check_enabled?
-
-      Schools::DFESignInAPI::Roles.new(user_uuid, urn).has_school_experience_role?
-    rescue Faraday::ResourceNotFound
-      # if the role isn't found the API returns a 404 - this means that the user
-      # has insufficient privileges but this *isn't* really an error, so log it
-      # and return false
-      Rails.logger.warn("Role query yielded 404, uuid: #{user_uuid}, urn: #{urn}")
-
-      false
     end
   end
 end

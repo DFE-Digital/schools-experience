@@ -39,6 +39,6 @@ private
   def check_dfe_signin_api
     return true unless Schools::DFESignInAPI::Organisations.enabled?
 
-    Schools::DFESignInAPI::Organisations.new(SecureRandom.uuid).urns
+    Schools::DFESignInAPI::Organisations.new(SecureRandom.uuid).uuids
   end
 end

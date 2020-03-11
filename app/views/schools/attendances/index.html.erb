@@ -1,0 +1,28 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Confirm attendance' => schools_confirm_attendance_path,
+    'Attendances' => nil
+  }
+%>
+
+<div id="attendances-container" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= page_heading 'Attendances' %>
+
+    <% if @attendances.any? %>
+      <%= pagination_bar @attendances %>
+
+      <%= render 'table', attendances: @attendances %>
+
+      <%= pagination_lower @attendances %>
+
+    <% else %>
+      <p>
+        There are no attendance records.
+      </p>
+    <% end %>
+
+    <%= govuk_back_link schools_confirm_attendance_path %>
+  </div>
+</div>

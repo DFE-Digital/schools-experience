@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateBookingDateChanged do
-  it_should_behave_like "email template", "b02bb4c7-ae3a-466a-8d2d-5bda3c45ff6a",
+  it_should_behave_like "email template", "3c1fd380-db1c-4efb-8e98-f3a0ef3e2661",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",
     placement_schedule: "2022-03-04 for 3 days",
@@ -16,7 +16,9 @@ describe NotifyEmail::CandidateBookingDateChanged do
     school_teacher_email: "ednak@springfield.co.uk",
     school_teacher_telephone: "01234 234 1245",
     placement_details: "You will shadow a teacher and assist with lesson planning",
+    candidate_instructions: "Please report to reception on arrival",
     cancellation_url: 'https://example.com/candiates/cancel/abc-123',
+    subject_name: 'Biology',
     old_date: '24 July 2019',
     new_date: '28 July 2019'
 
@@ -38,11 +40,7 @@ describe NotifyEmail::CandidateBookingDateChanged do
 
     let!(:pr) { create(:bookings_placement_request, school: school) }
     let!(:booking) do
-      create(
-        :bookings_booking,
-        bookings_school: school,
-        bookings_placement_request: pr
-      )
+      create :bookings_booking, :accepted, bookings_placement_request: pr
     end
 
     let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
@@ -108,7 +106,15 @@ describe NotifyEmail::CandidateBookingDateChanged do
       end
 
       specify 'placement_details is correctly-assigned' do
-        expect(subject.placement_details).to eql(booking.placement_details)
+        expect(subject.placement_details).to eql(profile.experience_details)
+      end
+
+      specify 'candidate_instructions' do
+        expect(subject.candidate_instructions).to eql(booking.candidate_instructions)
+      end
+
+      specify 'subject_name' do
+        expect(subject.subject_name).to eql(booking.bookings_subject.name)
       end
 
       specify 'cancellation_url is correctly-assigned' do

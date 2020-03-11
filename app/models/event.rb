@@ -13,11 +13,13 @@ class Event < ApplicationRecord
   belongs_to :bookings_school,
     class_name: 'Bookings::School',
     foreign_key: :bookings_school_id,
+    inverse_of: :events,
     optional: true
 
   belongs_to :bookings_candidate,
     class_name: 'Bookings::Candidate',
     foreign_key: :bookings_candidate_id,
+    inverse_of: :events,
     optional: true
 
   validates :event_type, inclusion: EVENT_TYPES

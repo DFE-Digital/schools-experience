@@ -1,5 +1,5 @@
 require 'rails_helper'
-require File.join(Rails.root, "lib", "notify", "notify_sync")
+require Rails.root.join("lib", "notify", "notify_sync")
 
 describe NotifySync do
   before do

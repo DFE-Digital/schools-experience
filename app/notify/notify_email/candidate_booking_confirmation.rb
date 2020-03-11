@@ -13,6 +13,8 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     :school_teacher_email,
     :school_teacher_telephone,
     :placement_details,
+    :candidate_instructions,
+    :subject_name,
     :cancellation_url
 
   def initialize(
@@ -31,6 +33,8 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     school_teacher_email:,
     school_teacher_telephone:,
     placement_details:,
+    candidate_instructions:,
+    subject_name:,
     cancellation_url:
   )
 
@@ -48,6 +52,8 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
     self.school_teacher_email = school_teacher_email
     self.school_teacher_telephone = school_teacher_telephone
     self.placement_details = placement_details
+    self.candidate_instructions = candidate_instructions
+    self.subject_name = subject_name
     self.cancellation_url = cancellation_url
 
     super(to: to)
@@ -85,7 +91,9 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
       school_teacher_name: booking.contact_name,
       school_teacher_email: booking.contact_email,
       school_teacher_telephone: booking.contact_number,
-      placement_details: booking.placement_details.to_s,
+      placement_details: profile.experience_details,
+      candidate_instructions: booking.candidate_instructions,
+      subject_name: booking.bookings_subject.name,
       cancellation_url: cancellation_url
     )
   end
@@ -93,7 +101,7 @@ class NotifyEmail::CandidateBookingConfirmation < Notify
 private
 
   def template_id
-    'feb44a3a-c2f9-47a3-9be2-b8b665912570'
+    'f66aaa08-df33-4be6-95b6-7e1cf8595a2b'
   end
 
   def personalisation
@@ -112,6 +120,8 @@ private
       school_teacher_email: school_teacher_email,
       school_teacher_telephone: school_teacher_telephone,
       placement_details: placement_details,
+      candidate_instructions: candidate_instructions,
+      subject_name: subject_name,
       cancellation_url: cancellation_url
     }
   end

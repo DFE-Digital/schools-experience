@@ -8,7 +8,7 @@
   }
 %>
 
-<%= link_to 'Back', schools_placement_requests_path, class: 'govuk-back-link' %>
+<%= govuk_back_link schools_placement_requests_path %>
 
 <% if @placement_request.candidate_cancellation&.sent? %>
   <h1><%= @gitis_contact.full_name %> has withdrawn their request</h1>
@@ -163,6 +163,22 @@
 
     </dl>
   </section>
+
+  <%- if @attendance.any_stats? -%>
+  <section id="candidate-details">
+    <h2>Past attendance</h2>
+
+    <dl class="bookings-attendance govuk-summary-list">
+      <%= summary_row 'Attended', @attendance.attended_count,
+            schools_placement_request_past_attendances_path(@placement_request),
+            'View' %>
+
+      <%= summary_row 'Did not attend', @attendance.did_not_attend_count,
+            schools_placement_request_past_attendances_path(@placement_request),
+            'View' %>
+    </dl>
+  </section>
+  <%- end -%>
 
   <div class="request-options">
     <% if @placement_request.open? %>

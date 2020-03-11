@@ -2,7 +2,7 @@ module Bookings
   module Gitis
     class CRM
       delegate :logger, to: Rails
-      delegate :fetch, :write, to: :store
+      delegate :fetch, :write, :write!, to: :store
 
       attr_reader :store
 

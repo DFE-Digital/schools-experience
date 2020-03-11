@@ -28,11 +28,34 @@
           </p>
         </section>
 
-        <%= govuk_link_to schools_dashboard_path,
-          role:'button',
-          class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' do %>
-          Start now <%= render 'shared/start_button_chevron' %>
-        <% end %>
+        <%- if @signin_deactivated -%>
+          <div id="dfe-signin-deactivated" class="govuk-inset-text">
+            <p>
+              Sign-ins to this service are currently unavailable.
+            </p>
+
+            <p>
+              <%- if @signin_message -%>
+                <%= @signin_message %>
+              <%- else -%>
+                You will be able to use this service later today.
+              <%- end -%>
+            </p>
+
+            <p>
+              Contact
+              <a href="mailto:organise.school-experience@education.gov.uk">
+                organise.school-experience@education.gov.uk
+              </a> if you need further information.
+            </p>
+          </div>
+        <%- else -%>
+          <%= govuk_link_to schools_dashboard_path,
+            role:'button',
+            class:'govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8' do %>
+            Start now <%= render 'shared/start_button_chevron' %>
+          <% end %>
+        <%- end -%>
 
         <section>
           <h2 class="govuk-heading-m">Before you start</h2>

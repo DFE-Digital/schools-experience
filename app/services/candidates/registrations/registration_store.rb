@@ -19,7 +19,7 @@ module Candidates
       def store!(registration_session)
         key = registration_session.uuid
 
-        unless key.present?
+        if key.blank?
           fail NoKey, "`registration_session#uuid` can't be blank"
         end
 

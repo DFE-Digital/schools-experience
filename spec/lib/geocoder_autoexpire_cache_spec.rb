@@ -29,7 +29,7 @@ describe GeocoderAutoexpireCache do
     subject { described_class.new(store, 2.months) }
 
     it 'should set the ttl of new records to be the newly-specified value' do
-      expect(subject.ttl).to be_within(1).of(2.month)
+      expect(subject.ttl).to be_within(1).of(2.months)
     end
   end
 end

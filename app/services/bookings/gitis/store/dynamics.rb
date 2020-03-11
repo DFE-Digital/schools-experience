@@ -52,6 +52,10 @@ module Bookings
           entity.id
         end
 
+        def write!(entity)
+          write(entity) || fail(Bookings::Gitis::InvalidEntity.new(entity))
+        end
+
       private
 
         def filter_by_uuid(key, uuids)

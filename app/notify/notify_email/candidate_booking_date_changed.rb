@@ -13,6 +13,8 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
     :school_teacher_email,
     :school_teacher_telephone,
     :placement_details,
+    :candidate_instructions,
+    :subject_name,
     :cancellation_url,
     :new_date,
     :old_date
@@ -33,6 +35,8 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
     school_teacher_email:,
     school_teacher_telephone:,
     placement_details:,
+    candidate_instructions:,
+    subject_name:,
     cancellation_url:,
     new_date:,
     old_date:
@@ -52,6 +56,8 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
     self.school_teacher_email = school_teacher_email
     self.school_teacher_telephone = school_teacher_telephone
     self.placement_details = placement_details
+    self.candidate_instructions = candidate_instructions
+    self.subject_name = subject_name
     self.cancellation_url = cancellation_url
     self.new_date = new_date
     self.old_date = old_date
@@ -91,7 +97,9 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
       school_teacher_name: booking.contact_name,
       school_teacher_email: booking.contact_email,
       school_teacher_telephone: booking.contact_number,
-      placement_details: booking.placement_details,
+      placement_details: profile.experience_details,
+      candidate_instructions: booking.candidate_instructions,
+      subject_name: booking.bookings_subject.name,
       cancellation_url: cancellation_url,
       new_date: booking.date.to_formatted_s(:govuk),
       old_date: old_date
@@ -101,7 +109,7 @@ class NotifyEmail::CandidateBookingDateChanged < Notify
 private
 
   def template_id
-    'b02bb4c7-ae3a-466a-8d2d-5bda3c45ff6a'
+    '3c1fd380-db1c-4efb-8e98-f3a0ef3e2661'
   end
 
   def personalisation
@@ -120,6 +128,8 @@ private
       school_teacher_email: school_teacher_email,
       school_teacher_telephone: school_teacher_telephone,
       placement_details: placement_details,
+      candidate_instructions: candidate_instructions,
+      subject_name: subject_name,
       cancellation_url: cancellation_url,
       new_date: new_date,
       old_date: old_date

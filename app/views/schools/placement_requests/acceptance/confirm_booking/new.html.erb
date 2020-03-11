@@ -1,4 +1,4 @@
-<%= link_to 'Back', :back, class: 'govuk-back-link', data: {controller: 'back-link'} %>
+<%= govuk_back_link javascript: true %>
 
 <%- self.page_title = "Confirm booking" %>
 
@@ -55,24 +55,21 @@
 
     <dl class="govuk-summary-list">
 
-      <% if @last_booking.present? %>
+      <% if @last_booking_found %>
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Contact details
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li aria-label="Contact name" >
-                <%= @last_booking.contact_name %>
+              <li aria-label="Contact name">
+                <%= @booking.contact_name %>
               </li>
-              <li aria-label="Contact telephone number" >
-                <%= @last_booking.contact_number %>
+              <li aria-label="Contact telephone number">
+                <%= @booking.contact_number %>
               </li>
-              <li aria-label="Contact email address" >
-                <%= @last_booking.contact_email %>
-              </li>
-              <li aria-label="Location" >
-                <%= @last_booking.location %>
+              <li aria-label="Contact email address">
+                <%= @booking.contact_email %>
               </li>
             </ul>
           </dd>
@@ -98,9 +95,14 @@
     </dl>
 
     <div>
-      <% if @placement_request.fixed_date_is_bookable? && @last_booking.present? %>
+      <% if @placement_request.fixed_date_is_bookable? && @last_booking_found %>
         <%# contact details are present and school has fixed dates, allow for move on to the email preview%>
-        <%= button_to 'Continue', schools_placement_request_acceptance_confirm_booking_path, class: 'govuk-button' %>
+        <%= form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>
+          <%= f.hidden_field :contact_name %>
+          <%= f.hidden_field :contact_number %>
+          <%= f.hidden_field :contact_email %>
+          <%= f.submit 'Continue' %>
+        <% end %>
         <%= govuk_link_to 'Make changes', new_schools_placement_request_acceptance_make_changes_path(@placement_request), secondary: true, data: { module: "govuk-button" } %>
       <% else %>
         <%# contact details are missing (this is the first time) or it's a flex booking %>

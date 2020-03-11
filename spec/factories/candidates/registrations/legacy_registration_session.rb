@@ -4,7 +4,7 @@ FactoryBot.define do
     transient do
       urn { 11048 }
       bookings_placement_date_id { 16 }
-      timestamp { Date.today }
+      timestamp { Time.zone.today }
     end
 
     initialize_with do

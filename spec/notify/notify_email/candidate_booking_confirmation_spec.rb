@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe NotifyEmail::CandidateBookingConfirmation do
-  it_should_behave_like "email template", "feb44a3a-c2f9-47a3-9be2-b8b665912570",
+  it_should_behave_like "email template", "f66aaa08-df33-4be6-95b6-7e1cf8595a2b",
     school_name: "Springfield Elementary",
     candidate_name: "Kearney Zzyzwicz",
     placement_schedule: "2022-03-04 for 3 days",
@@ -16,6 +16,8 @@ describe NotifyEmail::CandidateBookingConfirmation do
     school_teacher_email: "ednak@springfield.co.uk",
     school_teacher_telephone: "01234 234 1245",
     placement_details: "You will shadow a teacher and assist with lesson planning",
+    candidate_instructions: "Report to reception on arrival",
+    subject_name: "Biology",
     cancellation_url: 'https://example.com/candiates/cancel/abc-123'
 
   describe ".from_booking" do
@@ -35,12 +37,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
 
     let!(:pr) { create(:bookings_placement_request, school: school) }
     let!(:booking) do
-      create(
-        :bookings_booking,
-        bookings_school: school,
-        bookings_placement_request: pr,
-        placement_details: 'something'
-      )
+      create :bookings_booking, :accepted, bookings_placement_request: pr
     end
 
     let!(:cancellation_url) { "https://example.com/candidates/cancel/#{booking.token}" }
@@ -106,17 +103,20 @@ describe NotifyEmail::CandidateBookingConfirmation do
       end
 
       specify 'placement_details is correctly-assigned' do
-        expect(subject.placement_details).to eql(booking.placement_details)
+        expect(subject.placement_details).to eql(school.profile.experience_details)
+      end
+
+      specify 'candidate_instructions are correctly-assigned' do
+        expect(subject.candidate_instructions).to eql(booking.candidate_instructions)
+      end
+
+      specify 'subject_name is correctly-assigned' do
+        expect(subject.subject_name).to eql(booking.bookings_subject.name)
       end
 
       specify 'cancellation_url is correctly-assigned' do
         expect(subject.cancellation_url).to eql(cancellation_url)
       end
-    end
-
-    context 'with nil placemement_details' do
-      before { booking.placement_details = nil }
-      specify { expect(subject.placement_details).to eql('') }
     end
   end
 end

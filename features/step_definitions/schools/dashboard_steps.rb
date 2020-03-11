@@ -86,3 +86,11 @@ end
 Then("I shouldn't see any warnings") do
   expect(page).not_to have_css('.govuk-error-summary')
 end
+
+Then("I should see the latest service update notification") do
+  expect(page).to have_css('#service-update-notice')
+end
+
+Then("I should not see the latest service update notification") do
+  expect(page).not_to have_css('#service-update-notice')
+end
