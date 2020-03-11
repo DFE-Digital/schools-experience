@@ -9,7 +9,7 @@ module Schools
 
     def attendances(page)
       scope.
-        order(date: :desc).
+        order(date: :desc, id: :desc).
         includes(:bookings_subject, bookings_placement_request: :candidate).
         page(page)
     end
