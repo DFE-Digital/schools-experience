@@ -242,19 +242,25 @@ describe Bookings::Booking do
       end
     end
 
-    describe '.attendance_unlogged' do
+    describe 'attendance scopes' do
       let!(:attended) { FactoryBot.create(:bookings_booking, attended: true) }
       let!(:skipped) { FactoryBot.create(:bookings_booking, attended: false) }
       let!(:unlogged) { FactoryBot.create(:bookings_booking) }
 
-      subject { described_class.attendance_unlogged }
+      describe '.attendance_unlogged' do
+        subject { described_class.attendance_unlogged }
 
-      specify 'when attended is nil' do
-        expect(subject).to include(unlogged)
+        it { is_expected.to include(unlogged) }
+        it { is_expected.not_to include(attended) }
+        it { is_expected.not_to include(skipped) }
       end
 
-      specify 'when attended is not nil' do
-        expect(subject).not_to include(attended, skipped)
+      describe '.attendance_logged' do
+        subject { described_class.attendance_logged }
+
+        it { is_expected.not_to include(unlogged) }
+        it { is_expected.to include(attended) }
+        it { is_expected.to include(skipped) }
       end
     end
 

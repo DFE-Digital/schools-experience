@@ -71,6 +71,7 @@ Rails.application.routes.draw do
       resource :date, only: %i(edit update show), controller: 'confirmed_bookings/date'
     end
     resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
+    resources :attendances, only: %i(index)
     resources :previous_bookings, only: %i(index show)
 
     resource :availability_preference, only: %i(edit update)

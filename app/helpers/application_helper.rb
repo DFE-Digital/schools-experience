@@ -38,7 +38,8 @@ module ApplicationHelper
                     text
                   end
                 end
-              end
+              end,
+              "\n"
             )
           end
         end

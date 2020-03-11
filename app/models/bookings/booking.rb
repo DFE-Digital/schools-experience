@@ -77,6 +77,7 @@ module Bookings
     scope :previous, -> { where(arel_table[:date].lteq(Time.zone.today)) }
     scope :future, -> { where(arel_table[:date].gteq(Time.zone.today)) }
     scope :attendance_unlogged, -> { where(attended: nil) }
+    scope :attendance_logged, -> { where.not(attended: nil) }
 
     scope :with_unviewed_candidate_cancellation, -> do
       joins(bookings_placement_request: :candidate_cancellation)
