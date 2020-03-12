@@ -59,7 +59,7 @@ feature 'Candidate Registrations', type: :feature do
       include_context 'fake gitis with known uuid'
 
       let(:token) { create(:candidate_session_token) }
-      let(:fake_data) { fake_gitis.store.send(:fake_contact_data) }
+      let(:fake_data) { fake_gitis.fake_contact_data }
       let(:email_address) { fake_data['emailaddress2'] }
       let(:name) { fake_data['firstname'] + ' ' + fake_data['lastname'] }
       let(:date_of_birth) { Date.parse fake_data['birthdate'] }
@@ -86,7 +86,7 @@ feature 'Candidate Registrations', type: :feature do
     context 'for known Candidate not signed in' do
       include_context 'fake gitis with known uuid'
 
-      let(:fake_data) { fake_gitis.store.send(:fake_contact_data) }
+      let(:fake_data) { fake_gitis.fake_contact_data }
       let(:email_address) { fake_data['emailaddress2'] }
       let(:name) { fake_data['firstname'] + ' ' + fake_data['lastname'] }
       let(:date_of_birth) { Date.parse fake_data['birthdate'] }
@@ -115,7 +115,7 @@ feature 'Candidate Registrations', type: :feature do
       include_context 'fake gitis with known uuid'
 
       # Contact gets default email address after reload via token lookup
-      let(:fake_data) { fake_gitis.store.send(:fake_contact_data) }
+      let(:fake_data) { fake_gitis.fake_contact_data }
       let(:email_address) { fake_data['emailaddress2'] }
       let(:name) { fake_data['firstname'] + ' ' + fake_data['lastname'] }
       let(:date_of_birth) { Date.parse fake_data['birthdate'] }

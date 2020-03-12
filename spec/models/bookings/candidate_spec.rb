@@ -162,7 +162,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       let(:contact) { candidate.gitis_contact }
 
       before do
-        expect(fake_gitis.store).to receive(:update_entity).and_return(contact.entity_id)
+        expect(fake_gitis.fake_store).to receive(:update_entity).and_return(contact.entity_id)
       end
 
       subject do
@@ -189,7 +189,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       let(:contact) { build(:gitis_contact, :persisted) }
 
       before do
-        expect(fake_gitis.store).to receive(:update_entity).and_return(contact.entity_id)
+        expect(fake_gitis.fake_store).to receive(:update_entity).and_return(contact.entity_id)
       end
 
       subject do
@@ -217,7 +217,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       let(:contact_id) { SecureRandom.uuid }
 
       before do
-        expect(fake_gitis.store).to receive(:create_entity) do |entity_id, _data|
+        expect(fake_gitis.fake_store).to receive(:create_entity) do |entity_id, _data|
           "#{entity_id}(#{contact_id})"
         end
       end
