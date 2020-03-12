@@ -50,12 +50,12 @@ describe Candidates::Registrations::RegistrationSession do
 
     it 'stores the models attributes under the correct key' do
       expect(
-        session['candidates_registrations_background_check']
+        session
       ).to eq \
         'has_dbs_check' => true,
-        'created_at' => date,
-        'updated_at' => date,
-        'urn' => model.urn
+        'background_check_created_at' => date,
+        'background_check_updated_at' => date,
+        'some' => 'information'
     end
 
     it 'doesnt over write other keys' do
@@ -91,11 +91,23 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when education is in session' do
-      subject { FactoryBot.build :registration_session, :with_education }
+      # TODO SE-1881
+      context 'when legacy session' do
+        subject { FactoryBot.build :registration_session, :with_education }
 
-      it 'returns the correct attributes' do
-        expect(subject.education_attributes.except('created_at', 'updated_at')).to eq \
-          FactoryBot.attributes_for(:education).stringify_keys
+        it 'returns the correct attributes' do
+          expect(subject.education_attributes.except('created_at', 'updated_at')).to eq \
+            FactoryBot.attributes_for(:education).stringify_keys
+        end
+      end
+
+      context 'when new session' do
+        subject { FactoryBot.build :flattened_registration_session, :with_education }
+
+        it 'returns the correct attributes' do
+          expect(subject.education_attributes.except('created_at', 'updated_at')).to eq \
+            FactoryBot.attributes_for(:education).stringify_keys
+        end
       end
     end
   end
@@ -110,16 +122,33 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when education in session' do
-      let :session do
-        FactoryBot.build :registration_session, :with_education
+      # TODO SE-1881
+      context 'when legacy session' do
+        let :session do
+          FactoryBot.build :registration_session, :with_education
+        end
+
+        subject { session.education }
+
+        it { is_expected.to be_a Candidates::Registrations::Education }
+        it do
+          expect(subject.attributes.except('created_at', 'updated_at')).to \
+            eq FactoryBot.build(:education).attributes.except('created_at', 'updated_at')
+        end
       end
 
-      subject { session.education }
+      context 'when new session' do
+        let :session do
+          FactoryBot.build :flattened_registration_session, :with_education
+        end
 
-      it { is_expected.to be_a Candidates::Registrations::Education }
-      it do
-        expect(subject.attributes.except('created_at', 'updated_at')).to \
-          eq FactoryBot.build(:education).attributes.except('created_at', 'updated_at')
+        subject { session.education }
+
+        it { is_expected.to be_a Candidates::Registrations::Education }
+        it do
+          expect(subject.attributes.except('created_at', 'updated_at')).to \
+            eq FactoryBot.build(:education).attributes.except('created_at', 'updated_at')
+        end
       end
     end
   end
@@ -134,11 +163,23 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when teaching_preference is in session' do
-      subject { FactoryBot.build :registration_session, :with_teaching_preference }
+      # TODO SE-1881
+      context 'when legacy session' do
+        subject { FactoryBot.build :registration_session, :with_teaching_preference }
 
-      it 'returns the correct attributes' do
-        expect(subject.teaching_preference_attributes.except('created_at', 'updated_at')).to eq \
-          FactoryBot.attributes_for(:teaching_preference).stringify_keys
+        it 'returns the correct attributes' do
+          expect(subject.teaching_preference_attributes.except('created_at', 'updated_at')).to eq \
+            FactoryBot.attributes_for(:teaching_preference).stringify_keys
+        end
+      end
+
+      context 'when new session' do
+        subject { FactoryBot.build :flattened_registration_session, :with_teaching_preference }
+
+        it 'returns the correct attributes' do
+          expect(subject.teaching_preference_attributes.except('created_at', 'updated_at')).to eq \
+            FactoryBot.attributes_for(:teaching_preference).stringify_keys
+        end
       end
     end
   end
@@ -153,22 +194,45 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when teaching_preference is in the session' do
-      let :session do
-        FactoryBot.build \
-          :registration_session, :with_teaching_preference, :with_school
+      # TODO SE-1881
+      context 'when legacy session' do
+        let :session do
+          FactoryBot.build \
+            :registration_session, :with_teaching_preference, :with_school
+        end
+
+        subject { session.teaching_preference }
+
+        it { is_expected.to be_a Candidates::Registrations::TeachingPreference }
+
+        it do
+          expect(subject.attributes.except('created_at', 'updated_at')).to \
+            eq FactoryBot.build(:teaching_preference).attributes.except('created_at', 'updated_at')
+        end
+
+        it 'sets the school correctly' do
+          expect(subject.school).to eq session.school
+        end
       end
 
-      subject { session.teaching_preference }
+      context 'when new session' do
+        let :session do
+          FactoryBot.build \
+            :flattened_registration_session, :with_teaching_preference, :with_school
+        end
 
-      it { is_expected.to be_a Candidates::Registrations::TeachingPreference }
+        subject { session.teaching_preference }
 
-      it do
-        expect(subject.attributes.except('created_at', 'updated_at')).to \
-          eq FactoryBot.build(:teaching_preference).attributes.except('created_at', 'updated_at')
-      end
+        it { is_expected.to be_a Candidates::Registrations::TeachingPreference }
 
-      it 'sets the school correctly' do
-        expect(subject.school).to eq session.school
+        it do
+          expect(subject.attributes.except('created_at', 'updated_at')).to \
+            eq FactoryBot.build(:teaching_preference).attributes.except('created_at', 'updated_at')
+        end
+
+        it 'sets the school correctly' do
+          expect(subject.school).to eq session.school
+        end
       end
     end
   end
@@ -208,14 +272,24 @@ describe Candidates::Registrations::RegistrationSession do
     end
 
     context 'when registration is complete' do
-      subject { FactoryBot.build :registration_session }
+      include_context 'Stubbed candidates school'
+      before { subject.flag_as_pending_email_confirmation! }
 
-      before do
-        subject.flag_as_pending_email_confirmation!
+      # TODO SE-1881
+      context 'when legacy session' do
+        subject { build :flattened_registration_session }
+
+        it 'marks the session as pending_email_confirmation' do
+          expect(subject).to be_pending_email_confirmation
+        end
       end
 
-      it 'marks the session as pending_email_confirmation' do
-        expect(subject).to be_pending_email_confirmation
+      context 'when new session' do
+        subject { build :flattened_registration_session }
+
+        it 'marks the session as pending_email_confirmation' do
+          expect(subject).to be_pending_email_confirmation
+        end
       end
     end
   end
@@ -269,16 +343,33 @@ describe Candidates::Registrations::RegistrationSession do
   context '#flag_as_completed!' do
     include_context 'Stubbed candidates school'
 
-    let :registration_session do
-      FactoryBot.build :registration_session
+    # TODO SE-1881
+    context 'when legacy session' do
+      let :registration_session do
+        FactoryBot.build :flattened_registration_session
+      end
+
+      before do
+        registration_session.flag_as_completed!
+      end
+
+      it 'marks the registration_session as completed' do
+        expect(registration_session).to be_completed
+      end
     end
 
-    before do
-      registration_session.flag_as_completed!
-    end
+    context 'when new session' do
+      let :registration_session do
+        FactoryBot.build :flattened_registration_session
+      end
 
-    it 'marks the registration_session as completed' do
-      expect(registration_session).to be_completed
+      before do
+        registration_session.flag_as_completed!
+      end
+
+      it 'marks the registration_session as completed' do
+        expect(registration_session).to be_completed
+      end
     end
   end
 

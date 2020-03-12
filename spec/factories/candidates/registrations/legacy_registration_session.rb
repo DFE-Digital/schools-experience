@@ -55,6 +55,12 @@ FactoryBot.define do
             "created_at" => timestamp,
             "updated_at" => timestamp,
             "bookings_placement_date_id" => bookings_placement_date_id
+          },
+          "candidates_registrations_subject_and_date_information" => {
+            "created_at" => timestamp,
+            "updated_at" => timestamp,
+            "bookings_placement_date_id" => bookings_placement_date_id,
+            "bookings_subject_id" => nil
           }
     end
   end

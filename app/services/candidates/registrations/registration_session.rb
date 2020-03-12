@@ -15,8 +15,62 @@ module Candidates
       end
 
       def save(model)
-        @data[model.model_name.param_key] =
-          model.tap(&:flag_as_persisted!).attributes
+        model
+          .tap(&:flag_as_persisted!)
+          .attributes_to_persist
+          .except('urn')
+          .each { |k, v| @data[k] = v }
+      end
+
+      def fetch(klass)
+        model = klass.new_from_session @data.dup
+
+        if model.persisted?
+          model.tap { |m| m.urn = self.urn }
+        else
+          legacy_fetch!(klass).tap { |m| m.urn = self.urn }
+        end
+      end
+
+      def fetch_attributes(klass, defaults = {})
+        fetch(klass).attributes.to_h
+      rescue StepNotFound
+        defaults
+      end
+
+      # TODO SE-1877 remove this
+      def legacy_session?
+        fetch_attributes(PlacementPreference).key? 'bookings_placement_date_id'
+      end
+
+      RegistrationState::STEPS.each do |step|
+        self.class_eval <<~RUBY, __FILE__, __LINE__ + 1
+          def #{step}
+            fetch #{step.to_s.classify}
+          end
+
+          def #{step}_attributes
+            fetch_attributes #{step.to_s.classify}
+          end
+        RUBY
+      end
+
+      # TODO SE-1877 remove this
+      def subject_and_date_information
+        if legacy_session?
+          attributes = fetch_attributes PlacementPreference
+          SubjectAndDateInformation.new \
+            attributes.slice "bookings_placement_date_id"
+        else
+          fetch SubjectAndDateInformation
+        end
+      end
+
+      # NOTE
+      # This is a special case as we need to pass in a school to limit
+      # the available subject choices.
+      def teaching_preference
+        fetch(TeachingPreference).tap { |tp| tp.school = school }
       end
 
       def uuid
@@ -58,85 +112,6 @@ module Candidates
         school.name
       end
 
-      def background_check
-        fetch BackgroundCheck
-      end
-
-      def background_check_attributes
-        fetch_attributes BackgroundCheck
-      end
-
-      # TODO SE-1877 remove this
-      def legacy_session?
-        fetch_attributes(PlacementPreference).key? 'bookings_placement_date_id'
-      end
-
-      # TODO SE-1877 remove this
-      def subject_and_date_information
-        if legacy_session?
-          attributes = fetch_attributes PlacementPreference
-          SubjectAndDateInformation.new \
-            attributes.slice "bookings_placement_date_id"
-        else
-          fetch SubjectAndDateInformation
-        end
-      end
-
-      def subject_and_date_information_attributes
-        fetch_attributes SubjectAndDateInformation
-      end
-
-      # TODO add specs for these
-      def contact_information
-        fetch ContactInformation
-      end
-
-      def contact_information_attributes
-        fetch_attributes ContactInformation
-      end
-
-      def personal_information
-        fetch PersonalInformation
-      end
-
-      def personal_information_attributes
-        fetch_attributes PersonalInformation
-      end
-
-      def placement_preference
-        fetch PlacementPreference
-      end
-
-      def placement_preference_attributes
-        fetch_attributes PlacementPreference
-      end
-
-      def education_attributes
-        fetch_attributes Education
-      end
-
-      def education
-        fetch Education
-      end
-
-      def teaching_preference_attributes
-        fetch_attributes TeachingPreference
-      end
-
-      def teaching_preference
-        fetch(TeachingPreference).tap { |tp| tp.school = school }
-      end
-
-      def fetch(klass)
-        klass.new(@data.fetch(klass.model_name.param_key)).tap { |model| model.urn = self.urn }
-      rescue KeyError => e
-        raise StepNotFound, e.key
-      end
-
-      def fetch_attributes(klass, defaults = {})
-        @data.fetch(klass.model_name.param_key, defaults)
-      end
-
       def to_h
         @data
       end
@@ -154,6 +129,13 @@ module Candidates
 
       def all_steps_completed?
         RegistrationState.new(self).completed?
+      end
+
+      def legacy_fetch!(klass)
+        klass.new \
+          @data.fetch(klass.model_name.param_key)
+      rescue KeyError => e
+        raise RegistrationSession::StepNotFound, e.key
       end
     end
   end
