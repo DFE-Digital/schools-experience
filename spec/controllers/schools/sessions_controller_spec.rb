@@ -74,33 +74,30 @@ describe Schools::SessionsController, type: :request do
     context 'when the user is not yet signed in' do
       include_context 'oidc callback'
 
-      context 'when successful' do
-        subject! { get callback }
+      subject! { get callback }
 
-        specify 'should redirect to the return url' do
-          expect(response.body).to redirect_to(return_url)
-        end
-
-        specify 'should save the URN in the session' do
-          expect(session[:urn]).to eql(urn)
-        end
-
-        specify 'should save the school name in the session' do
-          expect(session[:school_name]).to eql(school_name)
-        end
-
-        specify 'should save the current user in the session' do
-          expect(session[:current_user]).to be_a(OpenIDConnect::ResponseObject::UserInfo)
-        end
+      specify 'should redirect to the return url' do
+        expect(response.body).to redirect_to(return_url)
       end
 
-      context 'when there are errors' do
+      specify 'should save the URN in the session' do
+        expect(session[:urn]).to eql(urn)
+      end
+
+      specify 'should save the school name in the session' do
+        expect(session[:school_name]).to eql(school_name)
+      end
+
+      specify 'should save the current user in the session' do
+        expect(session[:current_user]).to be_a(OpenIDConnect::ResponseObject::UserInfo)
+      end
+
+      context 'errors' do
         context 'Errors returned by DfE Sign-in' do
           let(:error) { 'baderror' }
           let(:callback) { "/auth/callback?error=#{error}" }
-          before { allow(Rails.logger).to receive(:error).and_call_original }
 
-          subject! { get callback }
+          after { get callback }
 
           specify 'should raise an AuthFailed error' do
             expect(response.status).to eql 302
@@ -108,7 +105,7 @@ describe Schools::SessionsController, type: :request do
           end
 
           specify 'should write a message to the log' do
-            expect(Rails.logger).to have_received(:error).with(/DfE Sign-in error response/)
+            expect(Rails.logger).to receive(:error).with(/DfE Sign-in error response/)
           end
         end
 
@@ -120,12 +117,10 @@ describe Schools::SessionsController, type: :request do
           }.each do |bad_state, description|
             context description do
               let(:callback) { "/auth/callback?code=#{code}&state=#{bad_state}&session_state=#{session_state}" }
-              before { allow(Rails.logger).to receive(:error).and_call_original }
-
-              subject! { get callback }
+              after { get callback }
 
               specify 'should raise StateMismatchError' do
-                expect(Rails.logger).to have_received(:error).with(/doesn't match session state/)
+                expect(Rails.logger).to receive(:error).with(/doesn't match session state/)
               end
 
               specify 'should redirect to an error page' do
@@ -138,35 +133,11 @@ describe Schools::SessionsController, type: :request do
 
         context 'AuthFailedError' do
           let(:code) { nil }
-          before { allow(Rails.logger).to receive(:error).and_call_original }
-
-          subject! { get callback }
+          after { get callback }
 
           specify 'should raise AuthFailedError' do
-            expect(Rails.logger).to have_received(:error).with(/Login failed/)
+            expect(Rails.logger).to receive(:error).with(/Login failed/)
           end
-
-          specify 'should redirect to an error page' do
-            expect(response.status).to eql 302
-            expect(response.redirect_url).to end_with('schools/errors/auth_failed')
-          end
-        end
-
-        context 'when the OIDC endpoint times out' do
-          before do
-            stub_request(:get, "https://#{Rails.configuration.x.oidc_host}/me")
-              .with(
-                headers: {
-                  'Accept'        => '*/*',
-                  'Authorization' => "Bearer #{access_token}",
-                  'Date'          => /.*/,
-                  'User-Agent'    => /OpenIDConnect::AccessToken/
-                }
-              )
-              .to_timeout
-          end
-
-          subject! { get callback }
 
           specify 'should redirect to an error page' do
             expect(response.status).to eql 302
@@ -178,9 +149,11 @@ describe Schools::SessionsController, type: :request do
 
     describe 'role checking' do
       include_context 'oidc callback'
-      include_context 'stub role check api'
-
-      let(:signin_role_check_response) { false }
+      before do
+        allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+        allow(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true)
+        allow_any_instance_of(Schools::DFESignInAPI::Roles).to receive(:has_school_experience_role?).and_return(false)
+      end
 
       subject! { get callback }
 
@@ -212,7 +185,7 @@ describe Schools::SessionsController, type: :request do
       end
     end
 
-    context 'when the session has expired' do
+    context 'when the session has timed out' do
       let(:message) { 'sessionexpired' }
       let(:expired_auth_callback_path) { "/auth/callback?error=#{message}" }
 

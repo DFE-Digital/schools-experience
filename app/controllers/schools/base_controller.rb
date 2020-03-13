@@ -18,8 +18,6 @@ module Schools
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
     rescue_from Bookings::Gitis::API::BadResponseError, with: :gitis_retrieval_error
     rescue_from Bookings::Gitis::API::ConnectionFailed, with: :gitis_retrieval_error
-    rescue_from Schools::DFESignInAPI::Client::ApiTimeout, with: :signin_api_failure
-    rescue_from Schools::DFESignInAPI::Client::ApiConnectionFailed, with: :signin_api_failure
 
     def current_school
       raise MissingURN, 'urn is missing, unable to match with school' if current_urn.blank?
@@ -76,13 +74,6 @@ module Schools
 
         redirect_to schools_errors_insufficient_privileges_path
       end
-    end
-
-    def signin_api_failure(exception)
-      ExceptionNotifier.notify_exception(exception)
-      Raven.capture_exception(exception)
-
-      redirect_to schools_errors_auth_failed_path
     end
   end
 end

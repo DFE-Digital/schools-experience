@@ -3,8 +3,12 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::DFESignInAPI::Roles do
   include_context "logged in DfE user"
-  before { allow(described_class).to receive(:enabled?) { true } }
   subject { described_class.new(user_guid, dfe_signin_school_id) }
+
+  before do
+    allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
+    allow_any_instance_of(Schools::DFESignInAPI::Client).to receive(:role_check_enabled?).and_return(true)
+  end
 
   specify 'should respond to #has_school_experience_role?' do
     expect(subject).to respond_to(:has_school_experience_role?)
@@ -14,16 +18,6 @@ describe Schools::DFESignInAPI::Roles do
     context 'when the role is present' do
       specify 'should return true when the role is present' do
         expect(subject.has_school_experience_role?).to be true
-      end
-    end
-
-    context 'when env vars are not present' do
-      before { allow(ENV).to receive(:fetch).and_return '' }
-      before { allow(described_class).to receive(:enabled?).and_return true }
-
-      specify 'should raise an exception' do
-        expect { subject.has_school_experience_role? }.to \
-          raise_exception described_class::MissingConfigVariable
       end
     end
 

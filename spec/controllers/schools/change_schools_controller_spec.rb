@@ -3,8 +3,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ChangeSchoolsController, type: :request do
   include_context "logged in DfE user"
-  include_context "stub role check api"
-
+  let(:enable_signin_api) { true }
   let(:enable_school_change) { true }
   let(:old_school) { @current_user_school }
   let(:new_school) { create(:bookings_school) }
@@ -64,6 +63,7 @@ describe Schools::ChangeSchoolsController, type: :request do
     end
 
     context 'when internal changing is disabled' do
+      let(:enable_signin_api) { false }
       let(:enable_school_change) { false }
       let(:params) { { schools_change_school: { urn: new_school.urn } } }
       let(:change_school_page) { get '/schools/change' }
