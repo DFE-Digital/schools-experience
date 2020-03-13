@@ -15,7 +15,7 @@ module Bookings
       end
 
       def find_by_email(address)
-        contacts = store.fetch Contact,
+        contacts = fetch Contact,
           filter: email_filter(address),
           limit: 1
 
@@ -28,8 +28,10 @@ module Bookings
 
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
-        filter = email_filter(email)
-        contacts = fetch(Contact, filter: filter, limit: 30, order: 'createdon desc')
+        contacts = fetch Contact,
+          filter: master_record_filter.and(email_filter(email)),
+          limit: 30,
+          order: 'createdon desc'
 
         matcher = ContactFuzzyMatcher.new(firstname, lastname, date_of_birth)
         matcher.find(contacts).tap do |match|
@@ -51,6 +53,13 @@ module Bookings
         FilterBuilder \
           .new(:emailaddress2, email_address)
           .or(:emailaddress1, email_address)
+      end
+
+      def master_record_filter
+        FilterBuilder \
+          .new(:_masterid_value, nil) # reference to master record if merged
+          .and(:merged, false) # whether merged, duplicates presence of masterid
+          .and(:statecode, 0) # 0 = read/write, 1 = read only
       end
 
       def crmlog(msg)
