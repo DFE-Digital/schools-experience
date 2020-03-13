@@ -43,8 +43,7 @@ describe Schools::DFESignInAPI::Roles do
       subject { described_class.new(user_guid, org_uuid) }
 
       specify "should raise an 'no organisation' error" do
-#        expect(subject.has_school_experience_role?).to be false
-        expect { subject.has_school_experience_role? }.to raise_error(Schools::DFESignInAPI::NoOrganisationError, /No organisation ID found for user/)
+        expect(subject.has_school_experience_role?).to be false
       end
     end
 

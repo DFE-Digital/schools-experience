@@ -69,6 +69,7 @@ Rails.application.configure do
   config.x.features = %i(
     subject_specific_dates
     capped_bookings
+    reminders
   )
 
   config.x.base_url = 'https://some-host'
@@ -80,7 +81,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_admin_service_id = '66666666-5555-aaaa-bbbb-cccccccccccc'
   config.x.dfe_sign_in_admin_role_id = '66666666-5555-4444-3333-222222222222'
   config.x.dfe_sign_in_api_enabled = false
-  config.x.dfe_sign_in_api_role_check_enabled = false
   config.x.dfe_sign_in_api_school_change_enabled = false
 
   config.x.gitis.fake_crm = true

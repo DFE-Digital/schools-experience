@@ -116,6 +116,20 @@ describe Bookings::Gitis::CRM, type: :model do
         is_expected.to have_attributes(id: firstuuid)
       end
     end
+
+    context 'with multiple matches and one has been used by us before' do
+      before do
+        create(:candidate, gitis_uuid: seconduuid)
+
+        gitis_stub.stub_contact_signin_request(email,
+          firstuuid => signin_attrs.merge('emailaddress1' => 'foo@bar.com', 'emailaddress2' => email),
+          seconduuid => signin_attrs)
+      end
+
+      it "will return the first contact record" do
+        is_expected.to have_attributes(id: seconduuid)
+      end
+    end
   end
 
   describe '#write' do

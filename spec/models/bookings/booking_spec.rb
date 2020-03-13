@@ -62,14 +62,14 @@ describe Bookings::Booking do
 
       context 'new placement dates must not be in the past' do
         specify 'should allow future dates' do
-          [Date.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
+          [Time.zone.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
             expect(subject).to allow_value(d).for(:date)
             expect(subject).to allow_value(d).for(:date).on(:acceptance)
           end
         end
 
         specify 'new placement dates should not allow historic dates' do
-          [Date.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago, nil].each do |d|
+          [Time.zone.yesterday, 3.days.ago, 3.weeks.ago, 3.years.ago, nil].each do |d|
             expect(subject).not_to allow_value(d).for(:date)
             expect(subject).not_to allow_value(d).for(:date).on(:acceptance)
           end
@@ -186,7 +186,7 @@ describe Bookings::Booking do
       let!(:previous_bookings) do
         [
           FactoryBot.build(:bookings_booking, date: 1.week.ago),
-          FactoryBot.build(:bookings_booking, date: Date.yesterday),
+          FactoryBot.build(:bookings_booking, date: Time.zone.yesterday),
           FactoryBot.build(:bookings_booking, date: Time.zone.today)
         ].each do |booking|
           booking.save(validate: false)
@@ -195,7 +195,7 @@ describe Bookings::Booking do
 
       let!(:non_previous_bookings) do
         [
-          FactoryBot.create(:bookings_booking, date: Date.tomorrow),
+          FactoryBot.create(:bookings_booking, date: Time.zone.tomorrow),
           FactoryBot.create(:bookings_booking, date: 1.week.from_now)
         ]
       end
@@ -215,7 +215,7 @@ describe Bookings::Booking do
       let!(:previous_bookings) do
         [
           FactoryBot.build(:bookings_booking, date: 1.week.ago),
-          FactoryBot.build(:bookings_booking, date: Date.yesterday)
+          FactoryBot.build(:bookings_booking, date: Time.zone.yesterday)
         ].each do |booking|
           booking.save(validate: false)
         end
@@ -224,7 +224,7 @@ describe Bookings::Booking do
       let!(:future_bookings) do
         [
           FactoryBot.build(:bookings_booking, date: Time.zone.today),
-          FactoryBot.build(:bookings_booking, date: Date.tomorrow),
+          FactoryBot.build(:bookings_booking, date: Time.zone.tomorrow),
           FactoryBot.build(:bookings_booking, date: 3.weeks.from_now)
         ].each do |booking|
           booking.save(validate: false)
@@ -242,19 +242,25 @@ describe Bookings::Booking do
       end
     end
 
-    describe '.attendance_unlogged' do
+    describe 'attendance scopes' do
       let!(:attended) { FactoryBot.create(:bookings_booking, attended: true) }
       let!(:skipped) { FactoryBot.create(:bookings_booking, attended: false) }
       let!(:unlogged) { FactoryBot.create(:bookings_booking) }
 
-      subject { described_class.attendance_unlogged }
+      describe '.attendance_unlogged' do
+        subject { described_class.attendance_unlogged }
 
-      specify 'when attended is nil' do
-        expect(subject).to include(unlogged)
+        it { is_expected.to include(unlogged) }
+        it { is_expected.not_to include(attended) }
+        it { is_expected.not_to include(skipped) }
       end
 
-      specify 'when attended is not nil' do
-        expect(subject).not_to include(attended, skipped)
+      describe '.attendance_logged' do
+        subject { described_class.attendance_logged }
+
+        it { is_expected.not_to include(unlogged) }
+        it { is_expected.to include(attended) }
+        it { is_expected.to include(skipped) }
       end
     end
 
@@ -333,33 +339,33 @@ describe Bookings::Booking do
       end
     end
 
-    describe '.days_in_the_future' do
-      let!(:booking_in_1_days) { create(:bookings_booking, date: Date.tomorrow) }
+    describe '.for_days_in_the_future' do
+      let!(:booking_in_1_days) { create(:bookings_booking, date: Time.zone.tomorrow) }
       let!(:booking_in_3_days) { create(:bookings_booking, date: 3.days.from_now.to_date) }
       let!(:booking_in_7_days) { create(:bookings_booking, date: 7.days.from_now.to_date) }
       let!(:booking_in_8_days) { create(:bookings_booking, date: 8.days.from_now.to_date) }
 
       specify 'should return bookings the specified number of days away' do
-        expect(described_class.days_in_the_future(1.day)).to include(booking_in_1_days)
+        expect(described_class.for_days_in_the_future(1.day)).to include(booking_in_1_days)
       end
 
       specify 'should not return other bookings' do
-        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_3_days)
-        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_7_days)
-        expect(described_class.days_in_the_future(1.day)).not_to include(booking_in_8_days)
+        expect(described_class.for_days_in_the_future(1.day)).not_to include(booking_in_3_days)
+        expect(described_class.for_days_in_the_future(1.day)).not_to include(booking_in_7_days)
+        expect(described_class.for_days_in_the_future(1.day)).not_to include(booking_in_8_days)
       end
 
       describe '.tomorrow' do
-        after { described_class.tomorrow }
+        after { described_class.for_tomorrow }
         specify 'should call .days_in_the_future with 1 days' do
-          expect(described_class).to receive(:days_in_the_future).with(1.day)
+          expect(described_class).to receive(:for_days_in_the_future).with(1.day)
         end
       end
 
       describe '.one_week_from_now' do
-        after { described_class.one_week_from_now }
+        after { described_class.for_one_week_from_now }
         specify 'should call .days_in_the_future with 7 days' do
-          expect(described_class).to receive(:days_in_the_future).with(7.days)
+          expect(described_class).to receive(:for_days_in_the_future).with(7.days)
         end
       end
     end

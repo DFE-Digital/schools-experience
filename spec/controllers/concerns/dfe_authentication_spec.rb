@@ -7,6 +7,53 @@ describe DFEAuthentication do
     it { expect(described_class.ancestors).to include(DFEAuthentication) }
 
     let(:teacher) { { name: "Seymour Skinner" } }
+    let(:auth_host) { Rails.application.config.x.oidc_host }
+
+    describe '#show' do
+      subject { get :show; response }
+
+      context 'when signed in' do
+        before do
+          controller.session[:current_user] = teacher
+          controller.session[:urn] = create(:bookings_school).urn
+        end
+
+        it { is_expected.to have_http_status :success }
+        it { is_expected.to have_rendered :show }
+      end
+
+      context 'when not signed in' do
+        before do
+          allow(Schools::ChangeSchool).to \
+            receive(:allow_school_change_in_app?).and_return allow_change_school
+        end
+
+        context 'and ChangeSchool not enabled' do
+          let(:allow_change_school) { false }
+
+          it 'will redirect to DfE Sign in' do
+            is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
+          end
+
+          it 'will request organisation from DfE Sign-in' do
+            is_expected.to redirect_to %r(\&scope=profile\+organisation\+openid)
+          end
+        end
+
+        context 'and ChangeSchool enabled' do
+          let(:allow_change_school) { true }
+
+          it 'will redirect to DfE Sign in' do
+            is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
+          end
+
+          it 'will not request organisation from DfE Sign-in' do
+            is_expected.to redirect_to %r(\&scope=profile\+openid)
+          end
+        end
+      end
+    end
+
     context '#current_user' do
       context 'when the current_user is set' do
         before do
@@ -47,20 +94,44 @@ describe DFEAuthentication do
     end
 
     describe '#school_urns' do
-      before { allow(controller).to receive(:retrieve_school_urns) { [4, 5, 6] } }
+      before do
+        allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { true }
+
+        allow(controller).to receive(:retrieve_school_uuids).and_return \
+          SecureRandom.uuid => 4,
+          SecureRandom.uuid => 5,
+          SecureRandom.uuid => 6
+      end
 
       context 'with nothing loaded' do
         it { expect(subject.send(:school_urns)).to eql [4, 5, 6] }
       end
 
       context 'with loaded' do
-        before { controller.session[:urns] = [1, 2, 3] }
+        before do
+          controller.session[:uuid_map] = {
+            SecureRandom.uuid => 1,
+            SecureRandom.uuid => 2,
+            SecureRandom.uuid => 3
+          }
+        end
         it { expect(subject.send(:school_urns)).to eql [1, 2, 3] }
       end
 
       context 'with forced reload' do
         before { controller.session[:urns] = [1, 2, 3] }
         it { expect(subject.send(:school_urns, true)).to eql [4, 5, 6] }
+        it { expect(controller).not_to have_received(:retrieve_school_uuids) }
+      end
+
+      context 'when DfE Sign-in API is disabled' do
+        before do
+          allow(Schools::DFESignInAPI::Client).to receive(:enabled?) { false }
+          allow(controller).to receive(:current_urn) { 1 }
+        end
+
+        it { expect(subject.send(:school_urns)).to eql [1] }
+        it { expect(controller).not_to have_received(:retrieve_school_uuids) }
       end
     end
 

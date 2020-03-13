@@ -11,7 +11,7 @@ class Bookings::Reminder
     assign_gitis_contact(@booking)
   end
 
-  def enqueue
+  def deliver
     NotifyEmail::CandidateBookingReminder.from_booking(
       @booking.candidate_email,
       @time_until_booking,

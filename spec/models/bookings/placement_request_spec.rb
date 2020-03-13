@@ -877,12 +877,12 @@ describe Bookings::PlacementRequest, type: :model do
     end
 
     context 'for yesterday' do
-      before { date.date = Date.yesterday }
+      before { date.date = Time.zone.yesterday }
       it { is_expected.to be false }
     end
 
     context 'for tomorrow' do
-      before { date.date = Date.tomorrow }
+      before { date.date = Time.zone.tomorrow }
       it { is_expected.to be true }
     end
 

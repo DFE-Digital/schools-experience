@@ -3,6 +3,7 @@ module Schools
   class AuthFailedError < StandardError; end
   class InsufficientPrivilegesError < StandardError; end
   class SessionExpiredError < StandardError; end
+  class NoOrganisationError < StandardError; end
 
   class SessionsController < ApplicationController
     include DFEAuthentication
@@ -11,6 +12,7 @@ module Schools
     rescue_from StateMismatchError, with: :authentication_failure
     rescue_from InsufficientPrivilegesError, with: :insufficient_privileges_failure
     rescue_from SessionExpiredError, with: :session_expired_failure
+    rescue_from NoOrganisationError, with: :no_organisation_failure
 
     def show
       # nothing yet, the view just contains a 'logout' button
@@ -61,7 +63,7 @@ module Schools
 
     # the DfE Sign-in api returns a 404 if the resource (permission) we're looking
     # for isn't there
-    rescue Faraday::ResourceNotFound, Schools::DFESignInAPI::NoOrganisationError => e
+    rescue Faraday::ResourceNotFound, Schools::DFESignInAPI::Roles::NoOrganisationError => e
       raise InsufficientPrivilegesError, e
 
     # if we fail with an AttrRequired::AttrMissing error here it's likely that
@@ -76,8 +78,16 @@ module Schools
     def check_role!(user_uuid, organisation_uuid)
       return true unless Schools::DFESignInAPI::Client.role_check_enabled?
 
+      if organisation_uuid.blank?
+        if Schools::ChangeSchool.allow_school_change_in_app?
+          return true
+        else
+          raise NoOrganisationError
+        end
+      end
+
       unless Schools::DFESignInAPI::Roles.new(user_uuid, organisation_uuid).has_school_experience_role?
-        raise InsufficientPrivilegesError, 'missing school experience administrator role'
+        raise InsufficientPrivilegesError, "missing school experience administrator role - #{user_uuid} : #{organisation_uuid}"
       end
     end
 
@@ -103,11 +113,13 @@ module Schools
     def extract_userinfo(access_token)
       {}.tap do |info|
         access_token.userinfo!.tap do |userinfo|
+          urn = userinfo.raw_attributes.dig("organisation", "urn")
+
           info[:id_token]              = access_token.id_token # store this for logout flows.
           info[:current_user]          = userinfo
-          info[:urn]                   = userinfo.raw_attributes.dig("organisation", "urn").to_i
+          info[:urn]                   = urn.presence && urn.to_i
           info[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
-          info[:dfe_sign_in_org_uuid]  = userinfo.raw_attributes.dig("organisation", "id")
+          info[:dfe_sign_in_org_uuid]  = userinfo.raw_attributes.dig("organisation", "id").presence
           info[:dfe_sign_in_user_uuid] = userinfo.sub
         end
       end
@@ -145,6 +157,13 @@ module Schools
       # we're redirecting to the dashboard so the user will be sent back to
       # DfE Sign-in where they can log in again.
       redirect_to schools_dashboard_path
+    end
+
+    def no_organisation_failure(exception)
+      ExceptionNotifier.notify_exception(exception)
+      Raven.capture_exception(exception)
+
+      redirect_to schools_errors_insufficient_privileges_path
     end
 
     def build_logout_query(id_token)

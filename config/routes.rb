@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get '/accessibility_statement', to: 'pages#accessibility_statement'
   get '/cookies_policy', to: 'pages#cookies_policy'
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
+  get '/schools/request_organisation', to: 'pages#schools_request_organisation'
   resources :service_updates, only: %i(index show)
   get '/service_update', to: 'service_updates#index'
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
@@ -60,6 +61,9 @@ Rails.application.routes.draw do
           only: %i(show),
           controller: '/schools/placement_requests/acceptance/email_sent'
       end
+      resources :past_attendances,
+        only: %i(index),
+        controller: 'placement_requests/past_attendance'
     end
     resources :withdrawn_requests, only: %i(index show)
     resources :rejected_requests, only: %i(index show)
@@ -70,6 +74,7 @@ Rails.application.routes.draw do
       resource :date, only: %i(edit update show), controller: 'confirmed_bookings/date'
     end
     resource :confirm_attendance, only: %i(show update), controller: 'confirm_attendance'
+    resources :attendances, only: %i(index)
     resources :previous_bookings, only: %i(index show)
 
     resource :availability_preference, only: %i(edit update)

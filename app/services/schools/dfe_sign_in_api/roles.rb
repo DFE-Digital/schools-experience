@@ -1,7 +1,5 @@
 module Schools
   module DFESignInAPI
-    class NoOrganisationError < RuntimeError; end
-
     class Roles < Client
       attr_accessor :user_uuid, :organisation_uuid
 
@@ -22,7 +20,11 @@ module Schools
 
       def has_school_experience_role?
         roles.any? { |role| role['id'] == self.class.role_id }
+      rescue NoOrganisationError
+        false
       end
+
+      class NoOrganisationError < RuntimeError; end
 
     private
 
@@ -39,7 +41,8 @@ module Schools
       def response
         super
       rescue Faraday::ResourceNotFound
-        fail NoOrganisationError, "No organisation ID found for user #{user_uuid}"
+        fail NoOrganisationError,
+          "Organisation '#{organisation_uuid}' not found for user '#{user_uuid}'"
       end
 
       def endpoint

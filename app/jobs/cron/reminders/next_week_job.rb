@@ -1,16 +1,18 @@
 module Cron
   module Reminders
-    class NextWeek < CronJob
+    class NextWeekJob < CronJob
       self.cron_expression = '35 2 * * *'
 
       def perform
+        return true unless Feature.active? :reminders
+
         bookings.all? do |booking|
-          Bookings::ReminderBuilder.perform_later(booking, time_until_booking)
+          Bookings::ReminderJob.perform_later(booking, time_until_booking)
         end
       end
 
       def bookings
-        Bookings::Booking.not_cancelled.one_week_from_now
+        Bookings::Booking.not_cancelled.accepted.for_one_week_from_now
       end
 
       # this string will be used in the email subject, something along the lines

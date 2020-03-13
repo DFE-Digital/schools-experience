@@ -1,0 +1,46 @@
+<% self.page_title = "Past attendance" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= govuk_back_link schools_placement_request_path @placement_request %>
+
+    <h1>Past attendance for <%= @candidate.full_name %></h1>
+
+    <% if @attendance.any? %>
+      <table id="placement-requests" class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header">School</th>
+            <th class="govuk-table__header">Subject</th>
+            <th class="govuk-table__header">Date</th>
+            <th class="govuk-table__header">Attendance</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% @attendance.each do |record| %>
+          <tr class="govuk-table__row attendance-record" data-booking="<%= record.id %>">
+            <td class="govuk-table__cell">
+              <%= record.bookings_school.name.truncate(35) %>
+            </td>
+            <td class="govuk-table__cell">
+              <%= record.bookings_subject.name %>
+            </td>
+            <td class="govuk-table__cell">
+              <%= record.date.to_formatted_s :govuk %>
+            </td>
+            <td class="govuk-table__cell">
+              <%= attendance_status record %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p>
+        There is no attendance information available.
+      </p>
+    <% end %>
+
+    <%= govuk_back_link schools_placement_request_path @placement_request %>
+  </div>
+</div>

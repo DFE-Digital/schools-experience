@@ -29,10 +29,12 @@ module Bookings
       # Will return nil of it cannot match a Contact on final implementation
       def find_contact_for_signin(email:, firstname:, lastname:, date_of_birth:)
         filter = filter_pairs(emailaddress2: email, emailaddress1: email)
+        contacts = fetch(Contact, filter: filter, limit: 30, order: 'createdon desc')
 
-        store.fetch(Contact, filter: filter, limit: 20, order: 'createdon desc')
-          .find { |c| c.signin_attributes_match? firstname, lastname, date_of_birth }
-          .tap { |c| crmlog "Read contact #{c.contactid}" if c }
+        matcher = ContactFuzzyMatcher.new(firstname, lastname, date_of_birth)
+        matcher.find(contacts).tap do |match|
+          crmlog "Read contact #{match.contactid}" if match
+        end
       end
 
       def log_school_experience(contact_id, logline)
