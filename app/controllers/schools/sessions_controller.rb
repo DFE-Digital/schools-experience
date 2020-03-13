@@ -71,19 +71,12 @@ module Schools
     rescue AttrRequired::AttrMissing => e
       Rails.logger.error("Login failed #{e.backtrace}")
       raise AuthFailedError
-
-    # Timed out querying OIDC callback, show auth failed to let the user retry
-    rescue HTTPClient::TimeoutError => e
-      ExceptionNotifier.notify_exception(e)
-      Raven.capture_exception(e)
-
-      raise AuthFailedError
     end
 
   private
 
     def check_role!(user_uuid, organisation_uuid)
-      return true unless Schools::DFESignInAPI::Roles.enabled?
+      return true unless Schools::DFESignInAPI::Client.role_check_enabled?
 
       if organisation_uuid.blank?
         if Schools::ChangeSchool.allow_school_change_in_app?
