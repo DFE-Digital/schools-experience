@@ -14,11 +14,10 @@ end
 
 Then("the correct data should be present in each row") do
   gitis = Bookings::Gitis::Factory.crm
+  contact = gitis.find(@first_booking.contact_uuid)
 
   within("table > tbody > tr[data-booking-id='#{@first_booking.id}']") do
-    expect(page).to have_content(
-      @first_booking.bookings_placement_request.fetch_gitis_contact(gitis).full_name
-    )
+    expect(page).to have_content(contact.full_name)
     expect(page).to have_content(@first_booking.date.strftime('%d %B %Y'))
     expect(page).to have_content(@first_booking.bookings_subject.name)
   end

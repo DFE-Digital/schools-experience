@@ -5,7 +5,7 @@ module Schools
         @placement_request = load_placement_request
 
         @candidate = @placement_request.candidate
-        @candidate.fetch_gitis_contact gitis_crm
+        assign_gitis_contact @candidate
 
         @attendance = load_attendance_records(@candidate.id, school_urns).to_a
       end

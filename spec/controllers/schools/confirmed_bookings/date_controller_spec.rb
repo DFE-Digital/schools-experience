@@ -93,9 +93,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       end
 
       before do
-        booking
-          .bookings_placement_request
-          .fetch_gitis_contact(fake_gitis)
+        booking.gitis_contact = fake_gitis.find(booking.contact_uuid)
       end
 
       before { subject }

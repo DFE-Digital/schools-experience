@@ -50,9 +50,7 @@ module Schools
           .eager_load(bookings_placement_request: :candidate)
           .find(params[:booking_id])
 
-        @booking
-          .bookings_placement_request
-          .fetch_gitis_contact(gitis_crm)
+        assign_gitis_contact @booking
       end
 
       def check_editable

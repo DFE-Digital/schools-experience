@@ -48,7 +48,7 @@ protected
     raise UnconfirmedCandidate unless candidate.confirmed?
 
     self.current_contact = candidate.gitis_contact ||
-      candidate.fetch_gitis_contact(gitis_crm)
+      assign_gitis_contact(candidate).gitis_contact
 
     @current_candidate = candidate
   end

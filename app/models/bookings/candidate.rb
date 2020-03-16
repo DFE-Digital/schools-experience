@@ -96,12 +96,4 @@ class Bookings::Candidate < ApplicationRecord
 
     self
   end
-
-  def fetch_gitis_contact(crm)
-    raise NoGitisUuid unless gitis_uuid?
-
-    self.gitis_contact = crm.find(gitis_uuid)
-  end
-
-  class NoGitisUuid < RuntimeError; end
 end

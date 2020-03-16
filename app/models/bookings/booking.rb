@@ -62,7 +62,6 @@ module Bookings
       :received_on,
       :gitis_contact,
       :gitis_contact=,
-      :fetch_gitis_contact,
       :contact_uuid,
       :candidate_email,
       :candidate_name,
