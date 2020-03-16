@@ -1,6 +1,7 @@
 module Bookings
   module Gitis
     class ContactFetcher
+      MAX_NESTING = 5 # max depth we will try to unwind to
       attr_reader :crm
 
       def initialize(crm)
@@ -28,11 +29,30 @@ module Bookings
 
         raise NoGitisUuid unless candidate.gitis_uuid?
 
-        candidate.gitis_contact = crm.find(candidate.gitis_uuid)
+        candidate.gitis_contact = single_unmerged_contact(candidate.gitis_uuid)
+
+        if candidate.gitis_uuid != candidate.gitis_contact.contactid
+          candidate.update_column :gitis_uuid, candidate.gitis_contact.contactid
+        end
+
         model
       end
 
       class NoGitisUuid < RuntimeError; end
+
+    private
+
+      def single_unmerged_contact(contactid)
+        contact = nil
+
+        1.upto(MAX_NESTING) do |i|
+          contact = crm.find contactid
+          break unless contact.been_merged?
+          contactid = contact._masterid_value
+        end
+
+        contact
+      end
     end
   end
 end

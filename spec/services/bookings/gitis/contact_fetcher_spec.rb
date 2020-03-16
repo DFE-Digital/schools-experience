@@ -39,4 +39,56 @@ describe Bookings::Gitis::ContactFetcher do
         requests[0].candidate.gitis_uuid
     end
   end
+
+  describe 'merged records' do
+    let(:first) { build :gitis_contact, :persisted }
+    let(:second) { build :gitis_contact, :persisted }
+    let(:merged) do
+      build :gitis_contact, :persisted, :merged, _masterid_value: first.contactid
+    end
+    let(:third) do
+      build :gitis_contact, :persisted, :merged, _masterid_value: merged.contactid
+    end
+
+    context 'for single record' do
+      before do
+        allow(fake_gitis).to receive(:find).and_call_original
+        allow(fake_gitis).to receive(:find).with(first.contactid).and_return first
+        allow(fake_gitis).to receive(:find).with(merged.contactid).and_return merged
+        allow(fake_gitis).to receive(:find).with(third.contactid).and_return third
+      end
+
+      let(:candidate) { create :candidate, gitis_uuid: merged.contactid }
+      subject { fetcher.assign_to_model candidate }
+
+      it { is_expected.to have_attributes gitis_contact: first }
+      it { is_expected.to have_attributes gitis_uuid: first.contactid }
+      it { is_expected.to have_attributes changes: {} }
+
+      context 'with chained records' do
+        let(:candidate) { create :candidate, gitis_uuid: third.contactid }
+        it { is_expected.to have_attributes gitis_contact: first }
+        it { is_expected.to have_attributes gitis_uuid: first.contactid }
+        it { is_expected.to have_attributes changes: {} }
+      end
+
+      context 'with max chained records' do
+        let(:fourth) { build :gitis_contact, :persisted, :merged, _masterid_value: third.contactid }
+        let(:fifth) { build :gitis_contact, :persisted, :merged, _masterid_value: fourth.contactid }
+        let(:sixth) { build :gitis_contact, :persisted, :merged, _masterid_value: fifth.contactid }
+
+        before do
+          allow(fake_gitis).to receive(:find).with(fourth.contactid).and_return fourth
+          allow(fake_gitis).to receive(:find).with(fifth.contactid).and_return fifth
+          allow(fake_gitis).to receive(:find).with(sixth.contactid).and_return sixth
+        end
+
+        let(:candidate) { create :candidate, gitis_uuid: sixth.contactid }
+
+        it { is_expected.to have_attributes gitis_contact: merged }
+        it { is_expected.to have_attributes gitis_uuid: merged.contactid }
+        it { is_expected.to have_attributes changes: {} }
+      end
+    end
+  end
 end
