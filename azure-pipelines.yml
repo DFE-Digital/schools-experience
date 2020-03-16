@@ -1,6 +1,11 @@
 pool:
   vmImage: ubuntu-18.04
 
+trigger:
+  branches:
+    include:
+    - '*'
+
 variables:
   imageTag: v$(Build.BuildId)
   # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
