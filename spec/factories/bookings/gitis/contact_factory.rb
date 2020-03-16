@@ -19,6 +19,15 @@ FactoryBot.define do
     trait :persisted do
       after(:build, &:clear_changes_information)
       contactid { SecureRandom.uuid }
+      _masterid_value { nil }
+      merged { false }
+      statecode { Bookings::Gitis::Contact::READWRITE }
+    end
+
+    trait :merged do
+      _masterid_value { SecureRandom.uuid }
+      merged { true }
+      statecode { Bookings::Gitis::Contact::READONLY }
     end
   end
 end
