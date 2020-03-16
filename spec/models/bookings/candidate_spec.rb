@@ -8,6 +8,10 @@ RSpec.describe Bookings::Candidate, type: :model do
     it { is_expected.to have_db_index(:gitis_uuid).unique }
   end
 
+  describe 'attributes' do
+    it { is_expected.to respond_to :contact_uuid }
+  end
+
   describe 'validations' do
     it { is_expected.to validate_presence_of :gitis_uuid }
 

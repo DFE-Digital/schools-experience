@@ -47,19 +47,20 @@ describe Bookings::Gitis::ContactFetcher do
       build :gitis_contact, :persisted, :merged, _masterid_value: first.contactid
     end
     let(:third) do
-      build :gitis_contact, :persisted, :merged, _masterid_value: merged.contactid
+      build :gitis_contact, :persisted, :merged, _masterid_value: merged.contactid, firstname: 'third'
     end
 
     context 'for single record' do
+      let(:candidate) { create :candidate, gitis_uuid: merged.contactid }
+      subject { fetcher.assign_to_model candidate }
+
       before do
         allow(fake_gitis).to receive(:find).and_call_original
         allow(fake_gitis).to receive(:find).with(first.contactid).and_return first
+        allow(fake_gitis).to receive(:find).with(second.contactid).and_return second
         allow(fake_gitis).to receive(:find).with(merged.contactid).and_return merged
         allow(fake_gitis).to receive(:find).with(third.contactid).and_return third
       end
-
-      let(:candidate) { create :candidate, gitis_uuid: merged.contactid }
-      subject { fetcher.assign_to_model candidate }
 
       it { is_expected.to have_attributes gitis_contact: first }
       it { is_expected.to have_attributes gitis_uuid: first.contactid }
@@ -88,6 +89,39 @@ describe Bookings::Gitis::ContactFetcher do
         it { is_expected.to have_attributes gitis_contact: merged }
         it { is_expected.to have_attributes gitis_uuid: merged.contactid }
         it { is_expected.to have_attributes changes: {} }
+      end
+    end
+
+    context 'with multiple records' do
+      let(:candidate) { create :candidate, gitis_uuid: third.contactid }
+      let(:second_candidate) { create :candidate, gitis_uuid: second.contactid }
+
+      before do
+        allow(fake_gitis).to receive(:find).
+          with([third.contactid, second.contactid]).and_return [third, second]
+
+        allow(fake_gitis).to receive(:find).with([merged.contactid]).and_return [merged]
+        allow(fake_gitis).to receive(:find).with([first.contactid]).and_return [first]
+      end
+
+      context 'retrieving multiple records' do
+        subject { fetcher.fetch_for_models [candidate, second_candidate] }
+
+        it { is_expected.to include third.contactid => first }
+        it { is_expected.to include second.contactid => second }
+      end
+
+      context 'assigning multiple records' do
+        subject { fetcher.assign_to_models [candidate, second_candidate] }
+
+        it "will update contact ids" do
+          expect(subject.map(&:reload).map(&:gitis_uuid)).to \
+            eq [first.contactid, second.contactid]
+        end
+
+        it "will return expected contacts" do
+          expect(subject.map(&:gitis_contact)).to eq [first, second]
+        end
       end
     end
   end

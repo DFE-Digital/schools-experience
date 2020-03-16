@@ -25,6 +25,8 @@ class Bookings::Candidate < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :unconfirmed, -> { where(confirmed_at: nil) }
 
+  alias_attribute :contact_uuid, :gitis_uuid
+
   delegate :full_name, :email, to: :gitis_contact
 
   class << self
