@@ -66,6 +66,7 @@ module Bookings
       :contact_uuid,
       :candidate_email,
       :candidate_name,
+      :candidate,
       :cancelled?,
       :cancellation,
       to: :bookings_placement_request
