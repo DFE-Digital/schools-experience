@@ -98,4 +98,24 @@ class Bookings::Candidate < ApplicationRecord
 
     self
   end
+
+  def assign_gitis_contact(contact)
+    self.gitis_contact = contact
+
+    if gitis_uuid != contact.contactid
+      # using update column to avoid accidentally persisting any other
+      # changed state on the candidate
+
+      # This is to handle when a Gitis record gets merged - we request one
+      # contactid but the ContactFetcher returns a different contactid
+
+      if persisted?
+        update_column :gitis_uuid, contact.contactid
+      else
+        self.gitis_uuid = contact.contactid
+      end
+    end
+
+    gitis_contact
+  end
 end

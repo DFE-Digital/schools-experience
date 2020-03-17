@@ -21,29 +21,20 @@ module Bookings
         models.each do |model|
           candidate = model.is_a?(Bookings::Candidate) ? model : model.candidate
 
-          if contacts.has_key? candidate.gitis_uuid
-            candidate.gitis_contact = contacts[candidate.gitis_uuid]
-
-            if candidate.gitis_uuid != candidate.gitis_contact.contactid
-              candidate.update_column :gitis_uuid, candidate.gitis_contact.contactid
-            end
+          if contacts.has_key?(candidate.gitis_uuid)
+            candidate.assign_gitis_contact contacts[candidate.gitis_uuid]
           else
-            candidate.gitis_contact = \
-              Bookings::Gitis::MissingContact.new(model.contact_uuid)
+            candidate.gitis_contact = missing_contact(candidate)
           end
         end
       end
 
       def assign_to_model(model)
         candidate = model.is_a?(Bookings::Candidate) ? model : model.candidate
-
         raise NoGitisUuid unless candidate.gitis_uuid?
 
-        candidate.gitis_contact = fetch_single_master_contact(candidate.gitis_uuid)
-
-        if candidate.gitis_uuid != candidate.gitis_contact.contactid
-          candidate.update_column :gitis_uuid, candidate.gitis_contact.contactid
-        end
+        candidate.assign_gitis_contact \
+          fetch_single_master_contact(candidate.gitis_uuid)
 
         model
       end
@@ -66,32 +57,25 @@ module Bookings
       end
 
       def fetch_multiple_master_contacts(contactids)
-        contacts = nil
-        parentids = contactids.dup
+        contacts = crm.find(contactids).index_by(&:contactid)
 
-        1.upto(MAX_NESTING) do
-          fetched = crm.find(parentids).index_by(&:contactid)
+        2.upto(MAX_NESTING) do
+          merged = contacts.values.select(&:been_merged?)
+          break if merged.empty?
 
-          if contacts.nil?
-            contacts = fetched
-          else
-            contacts.transform_values! do |contact|
-              if contact.been_merged?
-                fetched[contact._masterid_value]
-              else
-                contact
-              end
-            end
-          end
+          masterids = merged.map(&:_masterid_value)
+          masters = crm.find(masterids).index_by(&:contactid)
 
-          if contacts.values.any?(&:been_merged?)
-            parentids = contacts.values.select(&:been_merged?).map(&:_masterid_value)
-          else
-            return contacts
+          contacts.transform_values! do |contact|
+            contact.been_merged? ? masters[contact._masterid_value] : contact
           end
         end
 
         contacts
+      end
+
+      def missing_contact(candidate)
+        Bookings::Gitis::MissingContact.new candidate.contact_uuid
       end
     end
   end
