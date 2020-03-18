@@ -3,7 +3,7 @@ module Schools
     class APIResponseError < RuntimeError; end
 
     class Client
-      TIMEOUT_SECS = 10
+      TIMEOUT_SECS = 15
       RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
       RETRY_OPTIONS = {
         max: 2,

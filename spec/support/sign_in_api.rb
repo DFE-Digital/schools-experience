@@ -15,7 +15,8 @@ shared_context "stub role check api" do
   let(:signin_role_check_response) { true }
 
   before do
-    allow(role_check_class).to receive(:enabled?) { enable_signin_role_check_api }
+    allow(Schools::DFESignInAPI::Client).to \
+      receive(:role_check_enabled?) { enable_signin_role_check_api }
 
     allow_any_instance_of(role_check_class).to \
       receive(:has_school_experience_role?) { signin_role_check_response }
