@@ -9,6 +9,6 @@ shared_context "fake gitis with known uuid" do
   let(:fake_gitis_uuid) { SecureRandom.uuid }
 
   before do
-    allow(fake_gitis.store).to receive(:fake_contact_id).and_return(fake_gitis_uuid)
+    allow(fake_gitis.fake_store).to receive(:fake_contact_id).and_return(fake_gitis_uuid)
   end
 end

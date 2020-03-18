@@ -55,7 +55,8 @@ describe Bookings::Gitis::Factory do
       end
 
       it { is_expected.to be_kind_of Bookings::Gitis::FakeCrm }
-      it { is_expected.to have_attributes store: kind_of(Bookings::Gitis::Store::Fake) }
+      it { is_expected.to have_attributes store: kind_of(Bookings::Gitis::Store::WriteOnlyCache) }
+      it { expect(subject.store).to have_attributes store: kind_of(Bookings::Gitis::Store::Fake) }
     end
 
     context 'with caching enabled' do

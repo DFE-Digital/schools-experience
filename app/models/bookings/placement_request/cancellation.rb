@@ -33,6 +33,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   delegate \
     :candidate_email,
     :candidate_name,
+    :candidate,
     :contact_uuid,
     :gitis_contact,
     :gitis_contact=,

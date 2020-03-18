@@ -8,6 +8,10 @@ RSpec.describe Bookings::Candidate, type: :model do
     it { is_expected.to have_db_index(:gitis_uuid).unique }
   end
 
+  describe 'attributes' do
+    it { is_expected.to respond_to :contact_uuid }
+  end
+
   describe 'validations' do
     it { is_expected.to validate_presence_of :gitis_uuid }
 
@@ -162,7 +166,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       let(:contact) { candidate.gitis_contact }
 
       before do
-        expect(fake_gitis.store).to receive(:update_entity).and_return(contact.entity_id)
+        expect(fake_gitis.fake_store).to receive(:update_entity).and_return(contact.entity_id)
       end
 
       subject do
@@ -189,7 +193,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       let(:contact) { build(:gitis_contact, :persisted) }
 
       before do
-        expect(fake_gitis.store).to receive(:update_entity).and_return(contact.entity_id)
+        expect(fake_gitis.fake_store).to receive(:update_entity).and_return(contact.entity_id)
       end
 
       subject do
@@ -217,7 +221,7 @@ RSpec.describe Bookings::Candidate, type: :model do
       let(:contact_id) { SecureRandom.uuid }
 
       before do
-        expect(fake_gitis.store).to receive(:create_entity) do |entity_id, _data|
+        expect(fake_gitis.fake_store).to receive(:create_entity) do |entity_id, _data|
           "#{entity_id}(#{contact_id})"
         end
       end
@@ -261,6 +265,15 @@ RSpec.describe Bookings::Candidate, type: :model do
         firstname: registration.personal_information.first_name,
         lastname: registration.personal_information.last_name
     end
+  end
+
+  describe '#assign_gitis_contact' do
+    let(:contact) { build(:gitis_contact, :persisted) }
+    let(:candidate) { create(:candidate) }
+    before { candidate.assign_gitis_contact contact }
+    subject { candidate.reload }
+
+    it { is_expected.to have_attributes gitis_uuid: contact.contactid }
   end
 
   describe '#generate_session_token!' do
@@ -312,19 +325,6 @@ RSpec.describe Bookings::Candidate, type: :model do
       it "will return last confirmed token timestamp" do
         expect(first.candidate.last_signed_in_at.to_i).to eql(second.confirmed_at.to_i)
       end
-    end
-  end
-
-  describe '#fetch_gitis_contact' do
-    include_context 'fake gitis'
-    subject { FactoryBot.create :candidate }
-
-    it "will assign contact" do
-      expect(subject.fetch_gitis_contact(fake_gitis)).to \
-        be_kind_of(Bookings::Gitis::Contact)
-
-      expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
-      expect(subject.contact).to be_kind_of(Bookings::Gitis::Contact)
     end
   end
 

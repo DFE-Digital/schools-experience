@@ -6,19 +6,19 @@ module Schools
 
       def show
         @cancellation = @placement_request.school_cancellation
-        @placement_request.fetch_gitis_contact gitis_crm
+        assign_gitis_contact @placement_request
       end
 
       def new
         @cancellation = @placement_request.build_school_cancellation
-        @placement_request.fetch_gitis_contact gitis_crm
+        assign_gitis_contact @placement_request
       end
 
       def create
         @cancellation = @placement_request.build_school_cancellation \
           cancellation_params
 
-        @placement_request.fetch_gitis_contact gitis_crm
+        assign_gitis_contact @placement_request
 
         if @cancellation.save(context: :rejection)
           redirect_to schools_placement_request_cancellation_path \
@@ -30,7 +30,7 @@ module Schools
 
       def edit
         @cancellation = @placement_request.school_cancellation
-        @placement_request.fetch_gitis_contact gitis_crm
+        assign_gitis_contact @placement_request
       end
 
       def update
@@ -41,7 +41,7 @@ module Schools
           redirect_to schools_placement_request_cancellation_path \
             @placement_request
         else
-          @placement_request.fetch_gitis_contact gitis_crm
+          assign_gitis_contact @placement_request
           render :edit
         end
       end

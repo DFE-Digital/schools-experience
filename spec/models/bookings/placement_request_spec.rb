@@ -805,18 +805,6 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  describe '#fetch_gitis_contact' do
-    include_context 'fake gitis'
-    subject { FactoryBot.create :placement_request }
-
-    it "will assign contact" do
-      expect(subject.fetch_gitis_contact(fake_gitis)).to \
-        be_kind_of(Bookings::Gitis::Contact)
-
-      expect(subject.gitis_contact).to be_kind_of(Bookings::Gitis::Contact)
-    end
-  end
-
   describe '#requested_on' do
     subject { create :placement_request }
     it { is_expected.to have_attributes(requested_on: subject.created_at.to_date) }

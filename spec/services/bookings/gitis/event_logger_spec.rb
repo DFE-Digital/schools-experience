@@ -13,7 +13,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
     context 'with flexible dates' do
       it "will generate an entry" do
         is_expected.to eql \
-          "#{today} REQUEST                         #{padded_urn} #{school.name}"
+          "#{today} REQUEST                           #{padded_urn} #{school.name}"
       end
     end
 
@@ -52,7 +52,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by Candidate" do
         is_expected.to eql \
-          "#{today} CANCELLED BY CANDIDATE          #{padded_urn} #{school.name}"
+          "#{today} CANCELLED BY CANDIDATE            #{padded_urn} #{school.name}"
       end
     end
 
@@ -63,7 +63,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by School" do
         is_expected.to eql \
-          "#{today} CANCELLED BY SCHOOL             #{padded_urn} #{school.name}"
+          "#{today} CANCELLED BY SCHOOL               #{padded_urn} #{school.name}"
       end
     end
 

@@ -19,7 +19,7 @@ module Schools
     def show
       @placement_request = placement_request
 
-      @gitis_contact = placement_request.fetch_gitis_contact(gitis_crm)
+      @gitis_contact = assign_gitis_contact(placement_request).gitis_contact
 
       @placement_request.viewed!
 
