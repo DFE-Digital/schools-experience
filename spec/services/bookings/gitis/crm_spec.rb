@@ -107,6 +107,8 @@ describe Bookings::Gitis::CRM, type: :model do
 
     context 'with multiple matches' do
       before do
+        allow(gitis).to receive(:master_record_filter).and_call_original
+
         gitis_stub.stub_contact_signin_request(email,
           firstuuid => signin_attrs.merge('emailaddress1' => 'foo@bar.com', 'emailaddress2' => email),
           seconduuid => signin_attrs.merge('firstname' => 'Joe', 'lastname' => 'Bloggs'))
@@ -114,6 +116,12 @@ describe Bookings::Gitis::CRM, type: :model do
 
       it "will return the first contact record" do
         is_expected.to have_attributes(id: firstuuid)
+      end
+
+      it "will only fetch active records" do
+        subject
+
+        expect(gitis).to have_received(:master_record_filter)
       end
     end
 

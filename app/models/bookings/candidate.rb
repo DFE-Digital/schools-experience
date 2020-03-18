@@ -25,6 +25,8 @@ class Bookings::Candidate < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :unconfirmed, -> { where(confirmed_at: nil) }
 
+  alias_attribute :contact_uuid, :gitis_uuid
+
   delegate :full_name, :email, to: :gitis_contact
 
   class << self
@@ -97,11 +99,23 @@ class Bookings::Candidate < ApplicationRecord
     self
   end
 
-  def fetch_gitis_contact(crm)
-    raise NoGitisUuid unless gitis_uuid?
+  def assign_gitis_contact(contact)
+    self.gitis_contact = contact
 
-    self.gitis_contact = crm.find(gitis_uuid)
+    if gitis_uuid != contact.contactid
+      # using update column to avoid accidentally persisting any other
+      # changed state on the candidate
+
+      # This is to handle when a Gitis record gets merged - we request one
+      # contactid but the ContactFetcher returns a different contactid
+
+      if persisted?
+        update_column :gitis_uuid, contact.contactid
+      else
+        self.gitis_uuid = contact.contactid
+      end
+    end
+
+    gitis_contact
   end
-
-  class NoGitisUuid < RuntimeError; end
 end

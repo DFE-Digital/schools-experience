@@ -13,12 +13,14 @@ module GitisAccess
   def assign_gitis_contacts(models)
     return models if models.empty?
 
-    contact_uuids = models.map(&:contact_uuid)
-    contacts = gitis_crm.find(contact_uuids).index_by(&:contactid)
+    Bookings::Gitis::ContactFetcher \
+      .new(gitis_crm)
+      .assign_to_models(models)
+  end
 
-    models.each do |model|
-      model.gitis_contact = contacts[model.contact_uuid] ||
-        Bookings::Gitis::MissingContact.new(model.contact_uuid)
-    end
+  def assign_gitis_contact(candidate)
+    Bookings::Gitis::ContactFetcher \
+      .new(gitis_crm)
+      .assign_to_model(candidate)
   end
 end

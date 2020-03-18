@@ -30,7 +30,7 @@ module Schools
         end
 
         def fetch_gitis_contact_for_placement_request
-          @placement_request.fetch_gitis_contact gitis_crm
+          assign_gitis_contact @placement_request
         end
 
         def ensure_placement_request_is_open

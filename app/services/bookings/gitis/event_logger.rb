@@ -4,7 +4,7 @@ module Bookings
       attr_reader :type, :subject
 
       NOTES_HEADER = "RECORDED   ACTION                 EXP DATE   URN    NAME".freeze
-      LOG_LINE = "%10<recorded>s %-22<action>s %8<date>s %-6<urn>s %.25<name>s".freeze
+      LOG_LINE = "%10<recorded>s %-22<action>s %10<date>s %-6<urn>s %.25<name>s".freeze
 
       class << self
         def entry(type, subject)

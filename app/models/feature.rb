@@ -57,7 +57,7 @@ private
   end
 
   def use_env_var?
-    Rails.env.test? || Rails.env.servertest?
+    !Rails.env.test? && !Rails.env.servertest?
   end
 
   def tokenised_env_features

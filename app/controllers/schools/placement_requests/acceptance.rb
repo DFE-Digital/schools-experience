@@ -7,7 +7,7 @@ module Schools
         @placement_request = @current_school.placement_requests \
           .find(params[:placement_request_id])
 
-        @placement_request.fetch_gitis_contact gitis_crm
+        assign_gitis_contact @placement_request
       end
 
       def find_or_build_booking(placement_request)

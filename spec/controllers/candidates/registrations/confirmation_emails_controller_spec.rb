@@ -115,9 +115,8 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
         include_context 'fake gitis'
 
         let(:candidate) { create(:candidate, :confirmed) }
-        let(:contact_attributes) do
-          candidate.fetch_gitis_contact(fake_gitis).attributes
-        end
+        let(:contact) { fake_gitis.find candidate.gitis_uuid }
+        let(:contact_attributes) { contact.attributes }
 
         before do
           allow_any_instance_of(ActionDispatch::Request::Session).to \

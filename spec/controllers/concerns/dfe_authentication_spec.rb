@@ -9,47 +9,35 @@ describe DFEAuthentication do
     let(:teacher) { { name: "Seymour Skinner" } }
     let(:auth_host) { Rails.application.config.x.oidc_host }
 
-    describe '#show' do
+    describe 'login redirect' do
       subject { get :show; response }
 
-      context 'when signed in' do
-        before do
-          controller.session[:current_user] = teacher
-          controller.session[:urn] = create(:bookings_school).urn
-        end
-
-        it { is_expected.to have_http_status :success }
-        it { is_expected.to have_rendered :show }
+      before do
+        allow(Schools::ChangeSchool).to \
+          receive(:allow_school_change_in_app?).and_return allow_change_school
       end
 
-      context 'when not signed in' do
-        before do
-          allow(Schools::ChangeSchool).to \
-            receive(:allow_school_change_in_app?).and_return allow_change_school
+      context 'and ChangeSchool not enabled' do
+        let(:allow_change_school) { false }
+
+        it 'will redirect to DfE Sign in' do
+          is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
         end
 
-        context 'and ChangeSchool not enabled' do
-          let(:allow_change_school) { false }
+        it 'will request organisation from DfE Sign-in' do
+          is_expected.to redirect_to %r(\&scope=profile\+organisation\+openid)
+        end
+      end
 
-          it 'will redirect to DfE Sign in' do
-            is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
-          end
+      context 'and ChangeSchool enabled' do
+        let(:allow_change_school) { true }
 
-          it 'will request organisation from DfE Sign-in' do
-            is_expected.to redirect_to %r(\&scope=profile\+organisation\+openid)
-          end
+        it 'will redirect to DfE Sign in' do
+          is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
         end
 
-        context 'and ChangeSchool enabled' do
-          let(:allow_change_school) { true }
-
-          it 'will redirect to DfE Sign in' do
-            is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
-          end
-
-          it 'will not request organisation from DfE Sign-in' do
-            is_expected.to redirect_to %r(\&scope=profile\+openid)
-          end
+        it 'will not request organisation from DfE Sign-in' do
+          is_expected.to redirect_to %r(\&scope=profile\+openid)
         end
       end
     end

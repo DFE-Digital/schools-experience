@@ -7,7 +7,6 @@ module Schools
         def new
           set_placement_request_and_fetch_gitis_contact
 
-          @placement_request.fetch_gitis_contact gitis_crm
           @booking = @placement_request.booking || Bookings::Booking.from_placement_request(@placement_request)
           @booking.populate_contact_details
 

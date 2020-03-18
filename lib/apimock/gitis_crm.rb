@@ -79,7 +79,10 @@ module Apimock
           .merge(contactdata.stringify_keys)
       end
 
-      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=30&$filter=emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'&$select=#{contact_attributes}&$orderby=createdon desc").
+      email_filter = "emailaddress2 eq '#{email}' or emailaddress1 eq '#{email}'"
+      master_record_filter = "_masterid_value eq null and merged eq false and statecode eq 0"
+
+      stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=30&$filter=#{master_record_filter} and (#{email_filter})&$select=#{contact_attributes}&$orderby=createdon desc").
         with(headers: get_headers).
         to_return(
           status: 200,

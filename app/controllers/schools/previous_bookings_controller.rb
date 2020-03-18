@@ -13,7 +13,7 @@ module Schools
     def show
       @booking = scope.find(params[:id])
 
-      @booking.fetch_gitis_contact gitis_crm
+      assign_gitis_contact @booking
     end
 
   private

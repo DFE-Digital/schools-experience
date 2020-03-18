@@ -133,6 +133,7 @@ class Bookings::School < ApplicationRecord
   scope :fixed_with_available_dates, -> {
     fixed.where(
       id: Bookings::School
+        .default_scoped
         .joins(:bookings_placement_dates)
         .merge(Bookings::PlacementDate.available)
         .except(:select)

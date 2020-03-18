@@ -9,6 +9,10 @@ describe Bookings::Gitis::Store::Dynamics do
 
   subject { dynamics }
 
+  describe 'the Caches api' do
+    it_behaves_like 'an implementation of a Gitis store'
+  end
+
   describe '.initialize' do
     it "will succeed with api object" do
       expect(described_class.new(token)).to \

@@ -10,7 +10,7 @@ module Schools
 
     def show
       @withdrawn_request = scope.find(params[:id])
-      @withdrawn_request.fetch_gitis_contact gitis_crm
+      assign_gitis_contact @withdrawn_request
 
       @cancellation = @withdrawn_request.candidate_cancellation
       @cancellation.viewed!

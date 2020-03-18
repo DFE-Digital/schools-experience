@@ -3,6 +3,10 @@ module Bookings
     class Contact
       include Entity
 
+      # statecode field values
+      READWRITE = 0
+      READONLY = 1
+
       def self.channel_creation
         Rails.application.config.x.gitis.channel_creation
       end
@@ -20,10 +24,13 @@ module Bookings
       entity_attributes :dfe_notesforclassroomexperience
       entity_attributes :mobilephone, except: :update
       entity_attribute  :dfe_channelcreation, except: :update, default: channel_creation
+      entity_attribute  :statecode, except: %i(create update), default: READWRITE
+      entity_attribute  :merged, except: %i(create update), default: false
 
       entity_association :dfe_Country, Country, default: Country.default
       entity_association :dfe_PreferredTeachingSubject01, TeachingSubject
       entity_association :dfe_PreferredTeachingSubject02, TeachingSubject
+      entity_association :masterid, Contact
 
       entity_collection :dfe_contact_dfe_candidateprivacypolicy_Candidate, CandidatePrivacyPolicy
 
@@ -122,6 +129,14 @@ module Bookings
 
         self.dfe_notesforclassroomexperience = "#{dfe_notesforclassroomexperience}#{log_line}\r\n"
       end
+
+      def been_merged?
+        raise InconsistentState unless merged == _masterid_value.present?
+
+        merged
+      end
+
+      class InconsistentState < RuntimeError; end
 
     private
 
