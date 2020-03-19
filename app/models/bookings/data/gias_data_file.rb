@@ -35,7 +35,7 @@ module Bookings
       end
 
       def source_url
-        "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{today}.csv"
+        "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata#{today}.csv"
       end
 
       def valid_file?
