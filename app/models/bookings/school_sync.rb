@@ -1,8 +1,6 @@
 require 'csv'
 
 class Bookings::SchoolSync
-  FILE_LOCATION = Rails.root.join('tmp', 'edubase.csv').freeze
-
   attr_accessor :email_override
 
   def initialize(email_override: nil)
@@ -23,9 +21,6 @@ private
   def import_and_update
     import_all
     update_all
-  ensure
-    Rails.logger.debug("Deleting edubase data")
-    File.delete(FILE_LOCATION)
   end
 
   def sync_disabled?
@@ -44,18 +39,11 @@ private
   end
 
   def data
-    download unless File.exist?(FILE_LOCATION)
+    gias_data_file = Bookings::Data::GiasDataFile.new.path
 
     @data ||= CSV.parse(
-      File.read(FILE_LOCATION).scrub,
+      File.read(gias_data_file).force_encoding('ISO-8859-1'),
       headers: true
     )
-  end
-
-  def download
-    Rails.logger.debug("Downloading latest edubase data")
-    date = Time.zone.today.strftime('%Y%m%d')
-    url = "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date}.csv"
-    File.open(FILE_LOCATION, 'wb') { |f| f.write(Net::HTTP.get(URI.parse(url))) }
   end
 end
