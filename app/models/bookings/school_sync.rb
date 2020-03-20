@@ -1,6 +1,8 @@
 require 'csv'
 
 class Bookings::SchoolSync
+  BATCH_SIZE = 1000
+
   attr_accessor :email_override
 
   def initialize(email_override: nil)
@@ -30,7 +32,9 @@ private
 
   # import any school records that aren't currently in our db
   def import_all
-    Bookings::Data::SchoolMassImporter.new(data, email_override).import
+    data_in_batches do |batch|
+      Bookings::Data::SchoolMassImporter.new(batch, email_override).import
+    end
   end
 
   # update any school records that differ from edubase source
@@ -38,12 +42,30 @@ private
     Bookings::Data::SchoolUpdater.new(data).update
   end
 
-  def data
-    gias_data_file = Bookings::Data::GiasDataFile.new.path
+  def gias_data_file
+    Bookings::Data::GiasDataFile.new.path
+  end
 
+  def data
     @data ||= CSV.parse(
       File.read(gias_data_file).force_encoding('ISO-8859-1'),
       headers: true
     )
+  end
+
+  def data_in_batches
+    rows = []
+    CSV.foreach(gias_data_file, headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
+      rows << row
+
+      if rows.length >= BATCH_SIZE
+        yield rows
+        rows = []
+      end
+    end
+
+    yield rows if rows.any?
+
+    true
   end
 end
