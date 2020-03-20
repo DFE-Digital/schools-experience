@@ -39,18 +39,13 @@ private
 
   # update any school records that differ from edubase source
   def update_all
-    Bookings::Data::SchoolUpdater.new(data).update
+    data_in_batches do |batch|
+      Bookings::Data::SchoolUpdater.new(batch).update
+    end
   end
 
   def gias_data_file
     Bookings::Data::GiasDataFile.new.path
-  end
-
-  def data
-    @data ||= CSV.parse(
-      File.read(gias_data_file).force_encoding('ISO-8859-1'),
-      headers: true
-    )
   end
 
   def data_in_batches

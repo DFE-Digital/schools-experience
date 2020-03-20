@@ -15,26 +15,36 @@ module Bookings
 
       include EdubaseDataHelpers
 
-      attr_accessor :edubase_data
+      attr_reader :edubase_data
 
       def initialize(edubase_data)
-        self.edubase_data = edubase_data
-          .each
-          .with_object({}) do |record, h|
-            h[record['URN'].to_i] = record
-          end
+        @edubase_data = edubase_data
       end
 
       def update
-        Bookings::School.eager_load(:school_type).find_each(batch_size: BATCH_SIZE) do |school|
+        edubase_data.each_slice(BATCH_SIZE) do |csv_batch|
+          urns = csv_batch.pluck('URN').map(&:presence).compact.map(&:to_i)
+
           Bookings::School.transaction do
-            row = edubase_data[school.urn]
+            schools = Bookings::School \
+              .eager_load(:school_type)
+              .where(urn: urns)
+              .index_by(&:urn)
 
-            next if row.nil?
-            next if matches?(school, row)
+            csv_batch.each do |row|
+              next if row.nil?
 
-            school.update!(build_attributes(row))
-            Event.create(bookings_school: school, event_type: 'school_edubase_data_refreshed')
+              urn = row['URN'].presence && row['URN'].to_i
+              next unless urn
+
+              school = schools[urn]
+              next unless school
+
+              next if matches?(school, row)
+
+              school.update!(build_attributes(row))
+              Event.create(bookings_school: school, event_type: 'school_edubase_data_refreshed')
+            end
           end
         end
       end
