@@ -3,6 +3,8 @@ class Candidates::SchoolsController < ApplicationController
   include BingMapsContentSecurityPolicy
   EXPANDED_SEARCH_RADIUS = 50
 
+  before_action :redirect_if_deactivated
+
   def index
     return redirect_to new_candidates_school_search_path unless location_present?
 
@@ -46,5 +48,11 @@ private
 
   def search_params_with_analytics_tracking
     search_params.merge(analytics_tracking_uuid: cookies[:analytics_tracking_uuid])
+  end
+
+  def redirect_if_deactivated
+    if Rails.application.config.x.candidates.deactivate_applications
+      redirect_to candidates_root_path
+    end
   end
 end

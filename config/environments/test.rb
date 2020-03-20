@@ -71,6 +71,7 @@ Rails.application.configure do
     capped_bookings
     reminders
   )
+  config.x.candidates.disable_applications = false
 
   config.x.base_url = 'https://some-host'
   config.x.oidc_client_id = 'se-test'
