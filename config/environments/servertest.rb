@@ -18,6 +18,7 @@ Rails.application.configure do
     capped_bookings
     reminders
   )
+  config.x.candidates.disable_applications = false
 
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = "https://localhost:#{ENV.fetch('PORT') { 3000 }}"

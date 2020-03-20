@@ -76,6 +76,7 @@ Rails.application.configure do
     subject_specific_dates
     capped_bookings
   )
+  config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
 
   # dfe signin redirects back to https, so force it
   config.force_ssl = true
