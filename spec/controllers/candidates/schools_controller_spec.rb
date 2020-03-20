@@ -122,4 +122,24 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       end
     end
   end
+
+  context 'when candidate applications are deactivated' do
+    before do
+      allow(Rails.application.config.x.candidates).to \
+        receive(:deactivate_applications).and_return \
+          "This service is not available"
+    end
+
+    let(:school) { create :bookings_school }
+
+    describe '#index' do
+      subject { get candidates_schools_path; response }
+      it { is_expected.to redirect_to candidates_root_path }
+    end
+
+    describe '#show' do
+      subject { get candidates_school_path(school); response }
+      it { is_expected.to redirect_to candidates_root_path }
+    end
+  end
 end

@@ -12,6 +12,16 @@ RSpec.describe "candidates/home/index.html.erb", type: :view do
     end
   end
 
+  context 'when deactivated' do
+    let(:msg) { "This is a test\n\non multiple lines" }
+    before { assign :applications_deactivated, msg }
+    subject { render }
+    it { is_expected.not_to have_css('a.govuk-button', text: 'Start now') }
+    it { is_expected.to have_css('#candidate-applications-deactivated') }
+    it { is_expected.to have_css('p', text: %r(\AThis is a test\z)) }
+    it { is_expected.to have_css('p', text: %r(\Aon multiple lines\z)) }
+  end
+
   describe 'Used the service before?' do
     let(:heading_text) { 'Used the service before?' }
 
