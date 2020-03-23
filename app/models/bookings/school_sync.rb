@@ -1,7 +1,7 @@
 require 'csv'
 
 class Bookings::SchoolSync
-  FILE_LOCATION = Rails.root.join('tmp', 'edubase.csv').freeze
+  BATCH_SIZE = 1000
 
   attr_accessor :email_override
 
@@ -23,9 +23,6 @@ private
   def import_and_update
     import_all
     update_all
-  ensure
-    Rails.logger.debug("Deleting edubase data")
-    File.delete(FILE_LOCATION)
   end
 
   def sync_disabled?
@@ -35,27 +32,35 @@ private
 
   # import any school records that aren't currently in our db
   def import_all
-    Bookings::Data::SchoolMassImporter.new(data, email_override).import
+    data_in_batches do |batch|
+      Bookings::Data::SchoolMassImporter.new(batch, email_override).import
+    end
   end
 
   # update any school records that differ from edubase source
   def update_all
-    Bookings::Data::SchoolUpdater.new(data).update
+    data_in_batches do |batch|
+      Bookings::Data::SchoolUpdater.new(batch).update
+    end
   end
 
-  def data
-    download unless File.exist?(FILE_LOCATION)
-
-    @data ||= CSV.parse(
-      File.read(FILE_LOCATION).scrub,
-      headers: true
-    )
+  def gias_data_file
+    Bookings::Data::GiasDataFile.new.path
   end
 
-  def download
-    Rails.logger.debug("Downloading latest edubase data")
-    date = Time.zone.today.strftime('%Y%m%d')
-    url = "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date}.csv"
-    File.open(FILE_LOCATION, 'wb') { |f| f.write(Net::HTTP.get(URI.parse(url))) }
+  def data_in_batches
+    rows = []
+    CSV.foreach(gias_data_file, headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
+      rows << row
+
+      if rows.length >= BATCH_SIZE
+        yield rows
+        rows = []
+      end
+    end
+
+    yield rows if rows.any?
+
+    true
   end
 end
