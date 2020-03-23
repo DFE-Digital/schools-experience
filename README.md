@@ -4,30 +4,40 @@
 
 ## Prerequisites
 
-- Ruby 2.5.3
-- PostgreSQL
-- PostGIS extension
-- Redis
-- NodeJS 8.11.x
-- Yarn 1.12.x
+- Ruby 2.6.5
+  - easiest with rbenv and ruby-build, 
+  - `brew install rbenv; brew install ruby-build; rbenv install 2.6.5`
+- Bundler 2.1.4 - `gem install bundler --version 2.1.4`
+- PostgreSQL with PostGIS extension, `brew install postgis; brew services start postgresql`
+- Redis, `brew install redis; brew services start redis`
+- NodeJS 10.x
+- Yarn
 
 ## Setting up the app in development
 
-1. Run `bundle install` to install the gem dependencies
-2. Run `yarn` to install node dependencies
-3. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
-4. If you don't wish to use the first Redis Database, set the `REDIS_URL`, eg in the `.env` file
-5. Run `bundle exec rails s` to launch the app on http://localhost:3000.
-6. If in production, DelayedJob is needed for background job processing - run `bundle exec rake jobs:work`
+1. Clone this repo
+2. Check your dependencies
+  1. ruby -v
+  2. node -v
+  3. bundler -v
+  4. yarn -v
+2. Run `bundle intall` to install ruby dependencies
+3. Run `yarn` to install node dependencies
+4. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
+5. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
+6. Run `bundle exec rails s` to launch the app on http://localhost:3000.
+7. If running in production, DelayedJob is needed for background job processing
+  1. running `bundle exec rake jobs:work` will start an instance
 
 ## Whats included in this App?
 
-- Rails 5.2 with Webpacker
+- Rails 6.0 app with Webpacker
 - SassC (replacement for deprecated sass-rails)
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
-- [GOV.UK Lint](https://github.com/alphagov/govuk-lint)
+- [GOV.UK Lint](https://github.com/alphagov/rubocop-govuk)
 - Autoprefixer rails
 - RSpec
+- Cucumber
 - Dotenv (managing environment variables)
 - Dockerfile to package app for deployment
 - Azure DevOps integration
@@ -40,31 +50,10 @@ It's best to lint just your app directories and not those belonging to the frame
 bundle exec govuk-lint-ruby app lib spec
 ```
 
-Seems to be an issue with files already known to git being ignored. If so use
+## Configuring the application
 
-```bash
-GIT_DIR=ignore bundle exec govuk-lint-ruby app lib spec
-```
-
-## HTTP Basic Auth access control
-
-If its required to password protect then entire application then you can set two
-environment variables when booting the app. This can either be part of the 
-deployment configuration.
-
-```
-SECURE_USERNAME = <my-username>
-SECURE_PASSWORD = <my-password>
-```
-
-## Exception notification
-
-If required Exceptions Notifications can be sent to a Slack channel. This is 
-enabled and configured via environment variables.
-
-**SLACK_WEBHOOK** _(required)_ Webhook to use to post to Slack
-**SLACK_CHANNEL** _(optional)_ Channel to post to, should be left blank if hook defaults to a specifi channel
-**SLACK_ENV** _(optional)_ Identifier for deployment environment - eg Staging or Production
+This can be controlled from various environment variables, see 
+[Env Vars](doc/env-vars.md) for more information.
 
 ## Monitoring health and deployment version
 
@@ -80,3 +69,7 @@ environment variables.
 `DEPLOYMENT_ID` - identifier for the current deployment
 `DEPLOYMENT_USERNAME` - username to protect the endpoint
 `DEPLOYMENT_PASSWORD` - password to protect the endpoint
+
+There is also an `/healthchecks/api.txt` which is password protected using the
+above credentials and will perform a check against each of the configured API 
+endpoints.
