@@ -2,6 +2,18 @@
 
 [![Build Status](https://dfe-ssp.visualstudio.com/School-Experience/_apis/build/status/School-Experience-CI?branchName=master)](https://dfe-ssp.visualstudio.com/School-Experience/_build/latest?definitionId=33&branchName=master)
 
+## Documentation
+
+Confluence contains most of the project documentation, a good starting point is
+the Development page.
+
+[Confluence Development page](https://dfedigital.atlassian.net/wiki/spaces/SE/pages/945618970/Development)
+
+We also have markdown pages within the `doc` folder of this git repo
+
+- [Environment Variables](doc/env-vars.md)
+- [Release process](doc/release-process.md)
+
 ## Prerequisites
 
 - Ruby 2.6.5
