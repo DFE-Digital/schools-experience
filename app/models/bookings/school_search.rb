@@ -68,6 +68,14 @@ class Bookings::SchoolSearch < ApplicationRecord
     whitelisted_urns.any?
   end
 
+  def radius=(dist)
+    if whitelisted_urns?
+      write_attribute(:radius, 1000) # include all whitelisted schools but still order by distance
+    else
+      write_attribute(:radius, dist)
+    end
+  end
+
 private
 
   def save_with_result_count(count)
@@ -79,7 +87,7 @@ private
   # amend the +ActiveRecord::Relation+ if no param is provided, meaning
   # they can be safely chained
   def base_query(include_distance: true)
-    Bookings::School
+    whitelisted_base_query
       .close_to(coordinates, radius: radius, include_distance: include_distance)
       .that_provide(subjects)
       .at_phases(phases)
@@ -87,6 +95,14 @@ private
       .enabled
       .with_availability
       .distinct
+  end
+
+  def whitelisted_base_query
+    if whitelisted_urns?
+      Bookings::School.where(urn: whitelisted_urns)
+    else
+      Bookings::School
+    end
   end
 
   def parse_location(location)
