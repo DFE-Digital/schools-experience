@@ -22,6 +22,11 @@ class Candidates::SchoolsController < ApplicationController
 
   def show
     @school = Candidates::School.find(params[:id])
+
+    unless school_in_whitelist? @school
+      return redirect_to candidates_root_path
+    end
+
     @school.increment!(:views)
 
     if @school.private_beta?
@@ -54,5 +59,10 @@ private
     if Rails.application.config.x.candidates.deactivate_applications
       redirect_to candidates_root_path
     end
+  end
+
+  def school_in_whitelist?(school)
+    !Bookings::SchoolSearch.whitelisted_urns? ||
+      Bookings::SchoolSearch.whitelisted_urns.include?(school.urn)
   end
 end
