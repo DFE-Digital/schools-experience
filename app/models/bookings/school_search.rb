@@ -58,6 +58,16 @@ class Bookings::SchoolSearch < ApplicationRecord
     coordinates.present?
   end
 
+  def whitelisted_urns
+    return [] if ENV['COVID_URN_WHITELIST'].blank?
+
+    ENV['COVID_URN_WHITELIST'].to_s.strip.split(%r([\s,]+)).map(&:to_i)
+  end
+
+  def whitelisted_urns?
+    whitelisted_urns.any?
+  end
+
 private
 
   def save_with_result_count(count)

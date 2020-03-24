@@ -467,4 +467,23 @@ describe Bookings::SchoolSearch do
       it { is_expected.not_to have_coordinates }
     end
   end
+
+  context 'whitelisted_urns' do
+    let(:whitelist) { '1' }
+    subject { described_class.new(location: "Bury") }
+
+    before do
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('COVID_URN_WHITELIST').and_return(whitelist)
+    end
+
+    it { is_expected.to have_attributes whitelisted_urns?: true }
+    it { is_expected.to have_attributes whitelisted_urns: [1] }
+
+    context 'without whitelist' do
+      let(:whitelist) { '' }
+      it { is_expected.to have_attributes whitelisted_urns?: false }
+      it { is_expected.to have_attributes whitelisted_urns: [] }
+    end
+  end
 end
