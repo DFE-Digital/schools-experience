@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe "candidates/schools/index.html.erb", type: :view do
   context 'with fresh search' do
     before do
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('COVID_NOTIFICATION') { notification }
       assign(:search, Candidates::SchoolSearch.new)
       render
     end
