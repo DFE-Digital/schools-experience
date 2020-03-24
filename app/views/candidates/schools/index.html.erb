@@ -116,6 +116,8 @@
         </article>
       </li>
       <% end %>
+
+      <%= render 'no_results', search: @search if @search.results.empty? && !@expanded_search_radius %>
     </ul>
 
     <%- if show_lower_navigation?(@search.results.length) %>
