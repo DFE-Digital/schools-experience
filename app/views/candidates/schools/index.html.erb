@@ -38,6 +38,12 @@
   </aside>
 
   <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
+    <%- if @candidate_application_notification -%>
+    <div id="candidate-application-notification" class="govuk-inset-text">
+      <%= safe_format @candidate_application_notification %>
+    </div>
+    <%- end -%>
+
     <%- if @search.subjects.any? || @search.phases.any? -%>
     <div class="school-search-filter-info">
       <div>
@@ -116,6 +122,8 @@
         </article>
       </li>
       <% end %>
+
+      <%= render 'no_results', search: @search if @search.results.empty? && !@expanded_search_radius %>
     </ul>
 
     <%- if show_lower_navigation?(@search.results.length) %>

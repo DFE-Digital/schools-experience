@@ -22,6 +22,16 @@ RSpec.describe "candidates/home/index.html.erb", type: :view do
     it { is_expected.to have_css('p', text: %r(\Aon multiple lines\z)) }
   end
 
+  context 'when application_notification' do
+    let(:msg) { "This is a test\n\non multiple lines" }
+    before { assign :candidate_application_notification, msg }
+    subject { render }
+    it { is_expected.to have_css('a.govuk-button', text: 'Start now') }
+    it { is_expected.to have_css('#candidate-application-notification') }
+    it { is_expected.to have_css('.govuk-inset-text p', text: %r(\AThis is a test\z)) }
+    it { is_expected.to have_css('.govuk-inset-text p', text: %r(\Aon multiple lines\z)) }
+  end
+
   describe 'Used the service before?' do
     let(:heading_text) { 'Used the service before?' }
 

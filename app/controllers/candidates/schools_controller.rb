@@ -12,16 +12,23 @@ class Candidates::SchoolsController < ApplicationController
 
     return render 'candidates/school_searches/new' unless @search.valid?
 
-    if @search.results.empty?
+    if @search.results.empty? && !@search.whitelisted_urns?
       @expanded_search_radius = true
       @search = Candidates::SchoolSearch.new(
         search_params_with_analytics_tracking.merge(distance: EXPANDED_SEARCH_RADIUS)
       )
     end
+
+    @candidate_application_notification = ENV['CANDIDATE_NOTIFICATION'].presence
   end
 
   def show
     @school = Candidates::School.find(params[:id])
+
+    unless school_in_whitelist? @school
+      return redirect_to candidates_root_path
+    end
+
     @school.increment!(:views)
 
     if @school.private_beta?
@@ -54,5 +61,10 @@ private
     if Rails.application.config.x.candidates.deactivate_applications
       redirect_to candidates_root_path
     end
+  end
+
+  def school_in_whitelist?(school)
+    !Bookings::SchoolSearch.whitelisted_urns? ||
+      Bookings::SchoolSearch.whitelisted_urns.include?(school.urn)
   end
 end

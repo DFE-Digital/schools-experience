@@ -13,9 +13,22 @@ class Bookings::SchoolSearch < ApplicationRecord
   GEOCODER_PARAMS = { maxRes: 1 }.freeze
   PER_PAGE = 15
 
-  def self.available_orders
-    AVAILABLE_ORDERS.map
+  class << self
+    def available_orders
+      AVAILABLE_ORDERS.map
+    end
+
+    def whitelisted_urns
+      return [] if ENV['CANDIDATE_URN_WHITELIST'].blank?
+
+      ENV['CANDIDATE_URN_WHITELIST'].to_s.strip.split(%r([\s,]+)).map(&:to_i)
+    end
+
+    def whitelisted_urns?
+      whitelisted_urns.any?
+    end
   end
+  delegate :whitelisted_urns, :whitelisted_urns?, to: :class
 
   def initialize(attributes = {})
     # location can be passed in as a hash or a string, we don't want to write a
@@ -58,6 +71,14 @@ class Bookings::SchoolSearch < ApplicationRecord
     coordinates.present?
   end
 
+  def radius=(dist)
+    if whitelisted_urns?
+      write_attribute(:radius, 1000) # include all whitelisted schools but still order by distance
+    else
+      write_attribute(:radius, dist)
+    end
+  end
+
 private
 
   def save_with_result_count(count)
@@ -69,7 +90,7 @@ private
   # amend the +ActiveRecord::Relation+ if no param is provided, meaning
   # they can be safely chained
   def base_query(include_distance: true)
-    Bookings::School
+    whitelisted_base_query
       .close_to(coordinates, radius: radius, include_distance: include_distance)
       .that_provide(subjects)
       .at_phases(phases)
@@ -77,6 +98,14 @@ private
       .enabled
       .with_availability
       .distinct
+  end
+
+  def whitelisted_base_query
+    if whitelisted_urns?
+      Bookings::School.where(urn: whitelisted_urns)
+    else
+      Bookings::School
+    end
   end
 
   def parse_location(location)

@@ -142,4 +142,27 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       it { is_expected.to redirect_to candidates_root_path }
     end
   end
+
+  context 'when urns whitelisted' do
+    let(:school) { create :bookings_school }
+
+    before do
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('CANDIDATE_URN_WHITELIST') { whitelist }
+    end
+
+    describe '#show' do
+      context 'when in whitelist' do
+        let(:whitelist) { school.urn.to_s }
+        subject { get candidates_school_path(school); response }
+        it { is_expected.to have_rendered 'show' }
+      end
+
+      context 'when not in whitelist' do
+        let(:whitelist) { '-1' }
+        subject { get candidates_school_path(school); response }
+        it { is_expected.to redirect_to candidates_root_path }
+      end
+    end
+  end
 end

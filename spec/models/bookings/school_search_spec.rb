@@ -467,4 +467,36 @@ describe Bookings::SchoolSearch do
       it { is_expected.not_to have_coordinates }
     end
   end
+
+  context 'whitelisted_urns' do
+    let(:whitelist) { '1' }
+    let(:school_search) { described_class.new(location: "Bury", radius: 10) }
+    subject { school_search }
+
+    before do
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('CANDIDATE_URN_WHITELIST').and_return(whitelist)
+    end
+
+    it { is_expected.to have_attributes whitelisted_urns?: true }
+    it { is_expected.to have_attributes whitelisted_urns: [1] }
+    it { is_expected.to have_attributes radius: 1000 }
+
+    context 'searching' do
+      let(:schools) { create_list :bookings_school, 3 }
+      let(:school_urns) { schools.map(&:urn) }
+      let(:whitelist) { school_urns.slice(0, 2).join(' ') }
+      subject { school_search.results.map(&:urn) }
+      it { is_expected.to include school_urns[0] }
+      it { is_expected.to include school_urns[1] }
+      it { is_expected.not_to include school_urns[2] }
+    end
+
+    context 'without whitelist' do
+      let(:whitelist) { '' }
+      it { is_expected.to have_attributes whitelisted_urns?: false }
+      it { is_expected.to have_attributes whitelisted_urns: [] }
+      it { is_expected.to have_attributes radius: 10 }
+    end
+  end
 end

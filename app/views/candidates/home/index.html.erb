@@ -30,6 +30,12 @@
             class: 'govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8') do %>
         Start now <%= render 'shared/start_button_chevron' %>
       <% end %>
+
+      <%- if @candidate_application_notification -%>
+      <div id="candidate-application-notification" class="govuk-inset-text">
+        <%= safe_format @candidate_application_notification %>
+      </div>
+      <%- end -%>
     <% end %>
 
     <section class="before-you-start">
