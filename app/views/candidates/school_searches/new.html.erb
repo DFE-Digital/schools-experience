@@ -21,7 +21,7 @@
           <%= f.search_field :location, required: true, minlength: "3" %>
 
           <%= f.collection_select :distance,
-                Candidates::SchoolSearch.distances, :first, :last %>
+                Candidates::SchoolSearch.distances, :first, :last unless f.object.whitelisted_urns? %>
 
           <div class="school-search-form__submit">
             <div class="govuk-form-group">

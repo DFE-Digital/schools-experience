@@ -24,6 +24,7 @@ module Candidates
     attr_reader :distance, :max_fee
 
     delegate :location_name, :has_coordinates?, :valid?, :errors, to: :school_search
+    delegate :whitelisted_urns, :whitelisted_urns?, to: Bookings::SchoolSearch
 
     class << self
       delegate :available_orders, to: Bookings::SchoolSearch

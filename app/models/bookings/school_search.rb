@@ -13,9 +13,22 @@ class Bookings::SchoolSearch < ApplicationRecord
   GEOCODER_PARAMS = { maxRes: 1 }.freeze
   PER_PAGE = 15
 
-  def self.available_orders
-    AVAILABLE_ORDERS.map
+  class << self
+    def available_orders
+      AVAILABLE_ORDERS.map
+    end
+
+    def whitelisted_urns
+      return [] if ENV['COVID_URN_WHITELIST'].blank?
+
+      ENV['COVID_URN_WHITELIST'].to_s.strip.split(%r([\s,]+)).map(&:to_i)
+    end
+
+    def whitelisted_urns?
+      whitelisted_urns.any?
+    end
   end
+  delegate :whitelisted_urns, :whitelisted_urns?, to: :class
 
   def initialize(attributes = {})
     # location can be passed in as a hash or a string, we don't want to write a
@@ -56,16 +69,6 @@ class Bookings::SchoolSearch < ApplicationRecord
 
   def has_coordinates?
     coordinates.present?
-  end
-
-  def whitelisted_urns
-    return [] if ENV['COVID_URN_WHITELIST'].blank?
-
-    ENV['COVID_URN_WHITELIST'].to_s.strip.split(%r([\s,]+)).map(&:to_i)
-  end
-
-  def whitelisted_urns?
-    whitelisted_urns.any?
   end
 
   def radius=(dist)
