@@ -19,7 +19,7 @@ class Candidates::SchoolsController < ApplicationController
       )
     end
 
-    @candidate_application_notification = ENV['COVID_NOTIFICATION'].presence
+    @candidate_application_notification = ENV['CANDIDATE_NOTIFICATION'].presence
   end
 
   def show

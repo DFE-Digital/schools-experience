@@ -3,6 +3,6 @@ class Candidates::HomeController < ApplicationController
     @applications_deactivated = \
       Rails.application.config.x.candidates.deactivate_applications
 
-    @candidate_application_notification = ENV['COVID_NOTIFICATION'].presence
+    @candidate_application_notification = ENV['CANDIDATE_NOTIFICATION'].presence
   end
 end

@@ -5,7 +5,7 @@ RSpec.describe "candidates/school_searches/new.html.erb", type: :view do
 
   before do
     allow(ENV).to receive(:[]).and_call_original
-    allow(ENV).to receive(:[]).with('COVID_URN_WHITELIST').and_return(whitelist)
+    allow(ENV).to receive(:[]).with('CANDIDATE_URN_WHITELIST').and_return(whitelist)
     assign(:search, Candidates::SchoolSearch.new)
     render
   end

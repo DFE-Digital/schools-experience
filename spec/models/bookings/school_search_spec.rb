@@ -475,7 +475,7 @@ describe Bookings::SchoolSearch do
 
     before do
       allow(ENV).to receive(:[]).and_call_original
-      allow(ENV).to receive(:[]).with('COVID_URN_WHITELIST').and_return(whitelist)
+      allow(ENV).to receive(:[]).with('CANDIDATE_URN_WHITELIST').and_return(whitelist)
     end
 
     it { is_expected.to have_attributes whitelisted_urns?: true }

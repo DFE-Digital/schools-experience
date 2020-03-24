@@ -148,7 +148,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
 
     before do
       allow(ENV).to receive(:[]).and_call_original
-      allow(ENV).to receive(:[]).with('COVID_URN_WHITELIST') { whitelist }
+      allow(ENV).to receive(:[]).with('CANDIDATE_URN_WHITELIST') { whitelist }
     end
 
     describe '#show' do
