@@ -61,6 +61,15 @@ We also have markdown pages within the `doc` folder of this git repo
 - Dockerfile to package app for deployment
 - Azure DevOps integration
 
+## Getting started
+
+1. The Get school experience service (the candidate facing part), is publicly 
+available but you'll need to setup School profiles to search for school. 
+   1. That can be done from the [Manage school experience](https://localhost:3000/schools) service
+2. The Manage school experience service requires a DfE Sign In account attached 
+to a School. You can sign up for an account from the login page, but you'll 
+need to get the DfE Sign-in team to approve you for a school.
+
 ## Linting
 
 It's best to lint just your app directories and not those belonging to the framework, e.g.
