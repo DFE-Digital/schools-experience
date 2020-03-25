@@ -57,7 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test: &test
   <<: *default
-  host: <%= ENV.fetch('CUC_DB_HOST') { 'localhost' } %>
+  host: <%= ENV.fetch('CUC_DB_HOST') { nil } %>
   database: <%= ENV.fetch('CUC_DB_DATABASE') { "school_experience_candidate_test#{ENV['TEST_ENV_NUMBER']}" } %>
   username: <%= ENV.fetch('CUC_DB_USERNAME') { nil } %>
   password: <%= ENV.fetch('CUC_DB_PASSWORD') { nil } %>
