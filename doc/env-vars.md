@@ -16,10 +16,9 @@ If its required to password protect then entire application then you can set two
 environment variables when booting the app. This can either be part of the 
 deployment configuration.
 
-```
-SECURE_USERNAME = <my-username>
-SECURE_PASSWORD = <my-password>
-```
+`SECURE_USERNAME` username for http auth
+
+`SECURE_PASSWORD` password for http auth
 
 ## Exception notification
 

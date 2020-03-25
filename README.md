@@ -29,6 +29,7 @@ We also have markdown pages within the `doc` folder of this git repo
   - `brew services start redis`
 - NodeJS 10.x
 - Yarn
+- Chrome (for javascript tests in Cucumber)
 
 ## Setting up the app in development
 
@@ -104,3 +105,12 @@ environment variables.
 There is also an `/healthchecks/api.txt` which is password protected using the
 above credentials and will perform a check against each of the configured API 
 endpoints.
+
+## Parallel testing
+
+If you have plenty of cpu cores, it faster to run tests with parallel_tests
+
+1. Create the databases - `bundle exec rake parallel:create`
+2. Copy the schema over from the main database - `bundle exec rake parallel:prepare`
+3. Run RSpecs - `bundle exec rake parallel:spec`
+3. Run Cucumber features - `bundle exec rake parallel:features`
