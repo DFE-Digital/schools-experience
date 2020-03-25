@@ -43,8 +43,9 @@ We also have markdown pages within the `doc` folder of this git repo
 4. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
 5. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
 6. Create SSL certificates - `bundle exec rake dev:ssl:generate`
-6. Run `bundle exec rails s` to launch the app on https://localhost:3000.
-7. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
+7. Add the `config/master.key` file - this is available from other team members
+8. Run `bundle exec rails s` to launch the app on https://localhost:3000.
+9. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
    1. running `bundle exec rake jobs:work` will start a DelayedJob Worker
 
 ## Whats included in this App?
