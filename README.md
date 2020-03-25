@@ -16,12 +16,17 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Prerequisites
 
-- Ruby 2.6.5
-  - easiest with rbenv and ruby-build, 
-  - `brew install rbenv; brew install ruby-build; rbenv install 2.6.5`
+- Ruby 2.6.5 - easiest with rbenv and ruby-build
+  - `brew install rbenv`
+  - `brew install ruby-build`
+  - `rbenv install 2.6.5`
 - Bundler 2.1.4 - `gem install bundler --version 2.1.4`
-- PostgreSQL with PostGIS extension, `brew install postgis; brew services start postgresql`
-- Redis, `brew install redis; brew services start redis`
+- PostgreSQL with PostGIS extension
+  - `brew install postgis`
+  - `brew services start postgresql`
+- Redis
+  - `brew install redis`
+  - `brew services start redis`
 - NodeJS 10.x
 - Yarn
 
@@ -37,9 +42,10 @@ We also have markdown pages within the `doc` folder of this git repo
 3. Run `yarn` to install node dependencies
 4. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
 5. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
-6. Run `bundle exec rails s` to launch the app on http://localhost:3000.
-7. If running in production, DelayedJob is needed for background job processing
-  1. running `bundle exec rake jobs:work` will start an instance
+6. Create SSL certificates - `bundle exec rake dev:ssl:generate`
+6. Run `bundle exec rails s` to launch the app on https://localhost:3000.
+7. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
+   1. running `bundle exec rake jobs:work` will start a DelayedJob Worker
 
 ## Whats included in this App?
 
