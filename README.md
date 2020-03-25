@@ -62,6 +62,9 @@ It's best to lint just your app directories and not those belonging to the frame
 bundle exec govuk-lint-ruby app lib spec
 ```
 
+You can copy the `script/pre-commit` to `.git/hooks/pre-commit` and `git` will
+then lint check your commits prior to committing.
+
 ## Configuring the application
 
 This can be controlled from various environment variables, see 
