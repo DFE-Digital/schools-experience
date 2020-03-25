@@ -18,18 +18,6 @@ class Bookings::SchoolSync
     import_and_update
   end
 
-private
-
-  def import_and_update
-    import_all
-    update_all
-  end
-
-  def sync_disabled?
-    disabled = ENV.fetch('GIAS_SYNC_DISABLED') { false }
-    disabled.to_s.in?(%w(1 true yes))
-  end
-
   # import any school records that aren't currently in our db
   def import_all
     data_in_batches do |batch|
@@ -42,6 +30,18 @@ private
     data_in_batches do |batch|
       Bookings::Data::SchoolUpdater.new(batch).update
     end
+  end
+
+private
+
+  def import_and_update
+    import_all
+    update_all
+  end
+
+  def sync_disabled?
+    disabled = ENV.fetch('GIAS_SYNC_DISABLED') { false }
+    disabled.to_s.in?(%w(1 true yes))
   end
 
   def gias_data_file
