@@ -28,11 +28,11 @@ defaults = {
   cache: GeocoderAutoexpireCache.new(Rails.cache)
 }
 
-if ENV['BING_MAPS_KEY'].present?
+if Rails.application.config.x.bing_maps_key.present?
   Geocoder.configure(
     defaults.merge(
       lookup: :bing,
-      api_key: ENV['BING_MAPS_KEY']
+      api_key: Rails.application.config.x.bing_maps_key
     )
   )
 else

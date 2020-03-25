@@ -72,6 +72,7 @@ Rails.application.configure do
     reminders
   )
   config.x.candidates.disable_applications = false
+  config.x.bing_maps_key = nil
 
   config.x.base_url = 'https://some-host'
   config.x.oidc_client_id = 'se-test'

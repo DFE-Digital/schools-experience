@@ -136,6 +136,7 @@ Rails.application.configure do
   config.x.default_phase = 4
   config.x.phase = Integer(ENV['PHASE'].presence || config.x.default_phase)
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
+  config.x.bing_maps_key = ENV['BING_MAPS_KEY'].presence
 
   config.x.base_url = ENV.fetch('DFE_SIGNIN_BASE_URL') { 'https://schoolexperience.education.gov.uk' }
   config.x.oidc_client_id = ENV.fetch('DFE_SIGNIN_CLIENT_ID') { 'schoolexperience' }
