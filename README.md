@@ -13,6 +13,8 @@ We also have markdown pages within the `doc` folder of this git repo
 
 - [Environment Variables](doc/env-vars.md)
 - [Release process](doc/release-process.md)
+- [DfE Sign-in](doc/dfe-sigin.md)
+- [Gitis CRM](doc/gitis-crm.md)
 
 ## Prerequisites
 
