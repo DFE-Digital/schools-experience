@@ -25,4 +25,8 @@ private
   def viewed_cookie
     cookies[ServiceUpdate.cookie_key]
   end
+
+  def show_candidate_alert_notification?
+    false
+  end
 end
