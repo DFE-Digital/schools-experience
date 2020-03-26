@@ -22,4 +22,8 @@ private
   def env_var
     ENV['DFE_SIGNIN_DEACTIVATED'].to_s
   end
+
+  def show_candidate_alert_notification?
+    false
+  end
 end

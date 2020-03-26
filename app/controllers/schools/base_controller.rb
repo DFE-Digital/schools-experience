@@ -75,5 +75,9 @@ module Schools
         redirect_to schools_errors_insufficient_privileges_path
       end
     end
+
+    def show_candidate_alert_notification?
+      false
+    end
   end
 end
