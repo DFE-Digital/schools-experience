@@ -51,10 +51,11 @@
     </header>
 
     <div class="govuk-width-container">
-
       <%= render partial: 'shared/application/phase_banner' %>
 
       <%= breadcrumbs %>
+
+      <%= render 'shared/candidates/alert_notification' if show_candidate_alert_notification? %>
 
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <%= yield %>
