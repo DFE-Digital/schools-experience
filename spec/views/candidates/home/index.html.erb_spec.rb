@@ -23,13 +23,18 @@ RSpec.describe "candidates/home/index.html.erb", type: :view do
   end
 
   context 'when application_notification' do
-    let(:msg) { "This is a test\n\non multiple lines" }
-    before { assign :candidate_application_notification, msg }
-    subject { render }
+    let(:msg) { "This is a test\n\non multiple lines\n\n<a\"mailto:help@info.com\">a link</a>" }
+    before do
+      without_partial_double_verification do
+        allow(view).to receive(:show_candidate_alert_notification?) { true }
+      end
+
+      allow(Rails.application.config.x.candidates).to \
+        receive(:alert_notification).and_return msg
+    end
+    subject { render template: 'candidates/home/index', layout: 'layouts/application' }
     it { is_expected.to have_css('a.govuk-button', text: 'Start now') }
-    it { is_expected.to have_css('#candidate-application-notification') }
-    it { is_expected.to have_css('.govuk-inset-text p', text: %r(\AThis is a test\z)) }
-    it { is_expected.to have_css('.govuk-inset-text p', text: %r(\Aon multiple lines\z)) }
+    it { is_expected.to have_css('#candidate-alert-notification') }
   end
 
   describe 'Used the service before?' do

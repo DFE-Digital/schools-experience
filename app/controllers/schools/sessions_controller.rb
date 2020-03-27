@@ -169,5 +169,9 @@ module Schools
     def build_logout_query(id_token)
       { id_token_hint: id_token, post_logout_redirect_uri: schools_url }.to_query
     end
+
+    def show_candidate_alert_notification?
+      false
+    end
   end
 end

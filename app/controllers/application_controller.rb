@@ -32,4 +32,9 @@ protected
       CookiePreference.from_cookie cookies[CookiePreference.cookie_key]
   end
   helper_method :cookie_preferences
+
+  def show_candidate_alert_notification?
+    !!Rails.application.config.x.candidates.alert_notification
+  end
+  helper_method :show_candidate_alert_notification?
 end

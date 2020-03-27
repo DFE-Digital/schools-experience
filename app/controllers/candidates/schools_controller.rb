@@ -18,8 +18,6 @@ class Candidates::SchoolsController < ApplicationController
         search_params_with_analytics_tracking.merge(distance: EXPANDED_SEARCH_RADIUS)
       )
     end
-
-    @candidate_application_notification = ENV['CANDIDATE_NOTIFICATION'].presence
   end
 
   def show
