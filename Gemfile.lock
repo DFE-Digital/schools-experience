@@ -186,6 +186,7 @@ GEM
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
+    json (2.3.0)
     json-jwt (1.11.0)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -487,6 +488,7 @@ DEPENDENCIES
   foreman
   geocoder
   govuk_elements_form_builder!
+  json (>= 2.3.0)
   kaminari
   listen (>= 3.0.5)
   notifications-ruby-client
