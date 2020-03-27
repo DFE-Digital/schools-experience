@@ -1,25 +1,15 @@
 namespace :data do
   namespace :schools do
-    desc "Import all GiaS (EduBase) data"
-    task :mass_import, %i{edubase email_override} => :environment do |_t, args|
+    desc "Import all GiaS (EduBase) data from local file"
+    task :mass_import, %i{email_override} => :environment do |_t, args|
       args.with_defaults(email_override: nil)
 
-      edubase_data = CSV.parse(
-        File.read(args[:edubase]).scrub,
-        headers: true
-      )
-
-      Bookings::Data::SchoolMassImporter.new(edubase_data, args[:email_override]).import
+      Bookings::SchoolSync.new(email_override: args[:email_override]).import_all
     end
 
     desc "Update schools"
-    task :update, %i{edubase} => :environment do |_t, args|
-      edubase_data = CSV.parse(
-        File.read(args[:edubase]).scrub,
-        headers: true
-      )
-
-      Bookings::Data::SchoolUpdater.new(edubase_data).update
+    task update: :environment do |_t, _args|
+      Bookings::SchoolSync.new.update_all
     end
 
     desc "Enable schools"

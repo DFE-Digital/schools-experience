@@ -14,13 +14,13 @@ module Candidates::MapsHelper
   end
 
   def static_map_url(latitude, longitude, mapsize:, zoom: 10)
-    return if ENV['BING_MAPS_KEY'].blank?
+    return if Rails.application.config.x.bing_maps_key.blank?
 
     location = "#{latitude},#{longitude}"
 
     params = {
       mapSize: mapsize,
-      key: ENV['BING_MAPS_KEY'],
+      key: Rails.application.config.x.bing_maps_key,
       pushpin: location
     }
 
@@ -30,7 +30,7 @@ module Candidates::MapsHelper
 
   def ajax_map(latitude, longitude, mapsize:, title: nil, description: nil,
     zoom: 10, described_by: nil, include_js_in_head: true)
-    return if ENV['BING_MAPS_KEY'].blank?
+    return if Rails.application.config.x.bing_maps_key.blank?
 
     map_data = {
       controller: 'map',
@@ -38,7 +38,7 @@ module Candidates::MapsHelper
       map_longitude: longitude,
       map_title: title,
       map_description: description,
-      map_api_key: ENV['BING_MAPS_KEY'].to_s
+      map_api_key: Rails.application.config.x.bing_maps_key.to_s
     }
 
     static_url = static_map_url(

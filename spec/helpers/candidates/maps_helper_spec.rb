@@ -2,13 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Candidates::MapsHelper, type: :helper do
   before do
-    @orig_maps_key = ENV['BING_MAPS_KEY']
-    ENV['BING_MAPS_KEY'] = '12345'
+    allow(Rails.application.config.x).to receive(:bing_maps_key) { '12345' }
     @latitude = "53.4782"
     @longitude = "-2.2299"
   end
-
-  after { ENV['BING_MAPS_KEY'] = @orig_maps_key }
 
   context '.static_map_url' do
     subject do

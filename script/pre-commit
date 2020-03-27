@@ -1,0 +1,4 @@
+#!/bin/sh
+if [ "x$SKIPLINT" == "x" ]; then
+    exec bundle exec rubocop $(git diff --cached --name-only --diff-filter=ACM | egrep '\.rb|\.feature|\.rake' | grep -v 'db/schema.rb') config.ru
+fi

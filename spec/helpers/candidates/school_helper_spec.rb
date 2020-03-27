@@ -155,8 +155,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     include Candidates::MapsHelper
 
     before do
-      @orig_api_key = ENV['BING_MAPS_KEY']
-      ENV['BING_MAPS_KEY'] = '12345'
+      allow(Rails.application.config.x).to receive(:bing_maps_key) { '12345' }
       @latitude = "53.4782"
       @longitude = "-2.2299"
       @school = OpenStruct.new(
@@ -164,8 +163,6 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         coordinates: OpenStruct.new(latitude: @latitude, longitude: @longitude)
         )
     end
-
-    after { ENV['BING_MAPS_KEY'] = @orig_api_key }
 
     subject { school_location_map @school }
 
