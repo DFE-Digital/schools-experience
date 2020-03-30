@@ -64,6 +64,23 @@ RSpec.describe Candidates::SessionToken, type: :model do
     it { is_expected.to have_attribute(:token) }
   end
 
+  describe '.remove_old!' do
+    subject do
+      described_class.remove_old!
+      described_class.find_by(id: token.id)
+    end
+
+    context 'with old token' do
+      let!(:token) { create(:candidate_session_token, created_at: 8.days.ago) }
+      it { is_expected.to be_nil }
+    end
+
+    context 'with new token' do
+      let!(:token) { create(:candidate_session_token, created_at: 1.day.ago) }
+      it { is_expected.to eql token }
+    end
+  end
+
   describe '#expired?' do
     context 'with valid' do
       subject { build(:candidate_session_token) }

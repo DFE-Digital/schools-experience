@@ -1,5 +1,6 @@
 class Candidates::SessionToken < ApplicationRecord
   AUTO_EXPIRE = 1.hour.freeze
+  AUTO_REMOVE = 7.days.freeze
 
   belongs_to :candidate, class_name: 'Bookings::Candidate'
   has_secure_token
@@ -21,6 +22,10 @@ class Candidates::SessionToken < ApplicationRecord
   class << self
     def expire_all!
       unexpired.update_all(expired_at: Time.zone.now)
+    end
+
+    def remove_old!
+      where(arel_table[:created_at].lt(AUTO_REMOVE.ago)).delete_all
     end
   end
 
