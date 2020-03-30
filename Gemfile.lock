@@ -84,7 +84,7 @@ GEM
     aes_key_wrap (1.0.1)
     ast (2.4.0)
     attr_required (1.0.1)
-    autoprefixer-rails (9.7.4)
+    autoprefixer-rails (9.7.5)
       execjs
     backports (3.17.0)
     bindata (2.4.6)
