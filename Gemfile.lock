@@ -169,7 +169,7 @@ GEM
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.12.2)
-    foreman (0.87.0)
+    foreman (0.87.1)
     geocoder (1.6.2)
     gherkin (5.1.0)
     globalid (0.4.2)
