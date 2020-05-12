@@ -2,7 +2,7 @@
   "name": "school_experience",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "^5.0.1",
+    "@rails/webpacker": "^5.1.1",
     "@stimulus/polyfills": "^1.1.1",
     "core-js": "3",
     "custom-event-polyfill": "^1.0.7",
@@ -11,6 +11,6 @@
     "stimulus": "^1.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "^3.10"
+    "webpack-dev-server": "^3.11"
   }
 }
