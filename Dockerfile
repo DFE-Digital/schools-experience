@@ -1,4 +1,4 @@
-FROM ruby:2.6.5
+FROM ruby:2.6.5-alpine3.11
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -14,15 +14,8 @@ EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
 
-# Install node, leaving as few artifacts as possible
-RUN apt-get update && apt-get install apt-transport-https && \
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-    apt-get update && \
-    apt-get install -y -o Dpkg::Options::="--force-confold" --no-install-recommends yarn nodejs && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/dpkg.log
+RUN apk add --no-cache build-base git tzdata libxml2 libxml2-dev \
+                        postgresql-libs postgresql-dev nodejs yarn
 
 # install NPM packages removign artifacts
 COPY package.json yarn.lock ./
