@@ -9,13 +9,13 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
   context 'without existing background_check in session' do
     let :registration_session do
-      FactoryBot.build :registration_session, with: %i(
+      FactoryBot.build :registration_session, with: %i[
         personal_information
         contact_information
         education
         teaching_preference
         placement_preference
-      )
+      ]
     end
 
     context '#new' do
@@ -80,13 +80,13 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
     let :registration_session do
       FactoryBot.build :gitis_registration_session,
         gitis_contact: gitis_contact,
-        with: %i(
+        with: %i[
           personal_information
           contact_information
           education
           teaching_preference
           placement_preference
-        )
+        ]
     end
 
     context '#new' do
@@ -107,13 +107,13 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
   context 'with existing background check in session' do
     let :registration_session do
-      FactoryBot.build :gitis_registration_session, with: %i(
+      FactoryBot.build :gitis_registration_session, with: %i[
         personal_information
         contact_information
         education
         teaching_preference
         placement_preference
-      )
+      ]
     end
 
     let :existing_background_check do

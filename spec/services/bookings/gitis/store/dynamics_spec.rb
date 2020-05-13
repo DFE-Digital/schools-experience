@@ -72,11 +72,11 @@ describe Bookings::Gitis::Store::Dynamics do
 
     context 'for multiple ids' do
       let(:uuids) do
-        %w(
+        %w[
           03ec3075-a9f9-400f-bc43-a7a5cdf68579
           e46fd2c9-ad04-4ebb-bc2a-26f3ad323c56
           2ec079dd-35a2-419a-9d01-48d63c09cdcc
-        )
+        ]
       end
 
       let(:matches) do
@@ -192,9 +192,9 @@ describe Bookings::Gitis::Store::Dynamics do
 
     context 'with entity and no filter' do
       before do
-        expect(dynamics.api).to receive(:get).
-          with('testentities', '$top' => 10, '$select' => selectattrs).
-          and_return('value' => [t1, t2, t3])
+        expect(dynamics.api).to receive(:get)
+          .with('testentities', '$top' => 10, '$select' => selectattrs)
+          .and_return('value' => [t1, t2, t3])
       end
 
       subject { dynamics.fetch(TestEntity) }
@@ -203,14 +203,14 @@ describe Bookings::Gitis::Store::Dynamics do
 
     context 'with entity and string filter' do
       before do
-        expect(dynamics.api).to receive(:get).
-          with(
+        expect(dynamics.api).to receive(:get)
+          .with(
             'testentities',
             '$top' => 10,
             '$select' => selectattrs,
             '$filter' => "firstname eq 'test'"
-          ).
-          and_return('value' => [t1, t2, t3])
+          )
+          .and_return('value' => [t1, t2, t3])
       end
 
       subject { dynamics.fetch(TestEntity, filter: "firstname eq 'test'") }
@@ -219,9 +219,9 @@ describe Bookings::Gitis::Store::Dynamics do
 
     context 'with entity and limit' do
       before do
-        expect(dynamics.api).to receive(:get).
-          with('testentities', '$top' => 5, '$select' => selectattrs).
-          and_return('value' => [t1, t2, t3])
+        expect(dynamics.api).to receive(:get)
+          .with('testentities', '$top' => 5, '$select' => selectattrs)
+          .and_return('value' => [t1, t2, t3])
       end
 
       subject { dynamics.fetch(TestEntity, limit: 5) }
@@ -230,8 +230,8 @@ describe Bookings::Gitis::Store::Dynamics do
 
     context 'with entity and order' do
       before do
-        expect(dynamics.api).to receive(:get).
-          with(
+        expect(dynamics.api).to receive(:get)
+          .with(
             'testentities',
             '$top' => 5,
             '$select' => selectattrs,
@@ -288,7 +288,7 @@ describe Bookings::Gitis::Store::Dynamics do
 
         it { is_expected.to eq uuid }
         it "will reset change tracking" do
-          subject # subject api is called
+          subject #  subject api is called
           expect(entity).to have_attributes changed: []
         end
       end

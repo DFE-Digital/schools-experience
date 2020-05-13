@@ -93,19 +93,19 @@ describe ApplicationHelper, type: :helper do
     context 'with parameter' do
       subject! { page_heading('My Page Title') }
       it { is_expected.to eql('<h1 class="govuk-heading-l">My Page Title</h1>') }
-      it { expect(self.page_title).to eql('My Page Title | DfE School Experience') }
+      it { expect(page_title).to eql('My Page Title | DfE School Experience') }
     end
 
     context 'with block' do
       subject! { page_heading { 'My Page Title' } }
       it { is_expected.to eql('<h1 class="govuk-heading-l">My Page Title</h1>') }
-      it { expect(self.page_title).to eql('My Page Title | DfE School Experience') }
+      it { expect(page_title).to eql('My Page Title | DfE School Experience') }
     end
 
     context 'with custom options' do
       subject! { page_heading('Page Title', class: 'govuk-heading-xl') }
       it { is_expected.to eql('<h1 class="govuk-heading-xl">Page Title</h1>') }
-      it { expect(self.page_title).to eql('Page Title | DfE School Experience') }
+      it { expect(page_title).to eql('Page Title | DfE School Experience') }
     end
   end
 end

@@ -38,8 +38,8 @@ RSpec.describe Bookings::SubjectSync do
     end
 
     before do
-      expect(fake_gitis.fake_store).to receive(:fetch).
-        with(
+      expect(fake_gitis.fake_store).to receive(:fetch)
+        .with(
           Bookings::Gitis::TeachingSubject,
           limit: described_class::LIMIT
         ).and_return(response)

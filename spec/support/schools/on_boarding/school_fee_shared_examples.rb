@@ -54,7 +54,7 @@ shared_examples 'a school fee' do
     it { is_expected.to validate_presence_of(:description) }
 
     it do
-      is_expected.to validate_inclusion_of(:interval).in_array %w(Daily One-off)
+      is_expected.to validate_inclusion_of(:interval).in_array %w[Daily One-off]
     end
 
     it { is_expected.to validate_presence_of(:payment_method) }

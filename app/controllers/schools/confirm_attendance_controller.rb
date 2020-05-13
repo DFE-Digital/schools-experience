@@ -27,9 +27,9 @@ module Schools
         .select { |key, _| key.match(/\A\d+\z/) }
         .transform_keys(&:to_i)
         .slice(*unlogged_bookings.ids)
-        # Avoid throwing key error if the user hits back button then
-        # resubmits the form causing the params to no longer match up with
-        # the unlogged_bookings.
+      # Avoid throwing key error if the user hits back button then
+      # resubmits the form causing the params to no longer match up with
+      # the unlogged_bookings.
     end
 
     def unlogged_bookings
@@ -58,8 +58,8 @@ module Schools
     end
 
     def build_updated_attendance
-      bookings = unlogged_bookings.where(id: bookings_params.keys). \
-        includes(bookings_placement_request: %i(candidate candidate_cancellation school_cancellation))
+      bookings = unlogged_bookings.where(id: bookings_params.keys) \
+        .includes(bookings_placement_request: %i[candidate candidate_cancellation school_cancellation])
 
       @updated_attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
     end

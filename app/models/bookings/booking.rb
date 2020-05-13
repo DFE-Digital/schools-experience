@@ -38,11 +38,11 @@ module Bookings
     validates :attended, inclusion: [nil], if: -> { bookings_placement_request&.cancelled? }
     validates :attended, inclusion: [true, false], on: :attendance
 
-    validates :contact_name, presence: true, on: %i(create acceptance)
-    validates :contact_number, presence: true, on: %i(create acceptance)
-    validates :contact_number, phone: true, on: %i(create acceptance), if: -> { contact_number.present? }
-    validates :contact_email, presence: true, on: %i(create acceptance)
-    validates :contact_email, email_format: true, on: %i(create acceptance), if: -> { contact_email.present? }
+    validates :contact_name, presence: true, on: %i[create acceptance]
+    validates :contact_number, presence: true, on: %i[create acceptance]
+    validates :contact_number, phone: true, on: %i[create acceptance], if: -> { contact_number.present? }
+    validates :contact_email, presence: true, on: %i[create acceptance]
+    validates :contact_email, email_format: true, on: %i[create acceptance], if: -> { contact_email.present? }
 
     validates :candidate_instructions, presence: true, on: :acceptance_email_preview
 
@@ -140,9 +140,7 @@ module Bookings
       true
     end
 
-    def status
-      bookings_placement_request.status
-    end
+    delegate :status, to: :bookings_placement_request
 
     def placement_start_date_with_duration
       if bookings_placement_request&.placement_date&.present?

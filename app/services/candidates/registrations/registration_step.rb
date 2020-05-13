@@ -25,13 +25,13 @@ module Candidates
       def flag_as_persisted!
         validate!
         self.updated_at = DateTime.now
-        self.created_at = self.updated_at unless persisted?
+        self.created_at = updated_at unless persisted?
       end
 
       def ==(other)
         return false unless other.is_a? self.class
 
-        other.attributes == self.attributes
+        other.attributes == attributes
       end
     end
   end

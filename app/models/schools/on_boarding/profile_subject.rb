@@ -13,5 +13,5 @@ class Schools::OnBoarding::ProfileSubject < ApplicationRecord
   validates :subject, presence: true
 
   validates :schools_school_profile_id,
-    uniqueness: { scope: %i(bookings_subject_id) }
+    uniqueness: { scope: %i[bookings_subject_id] }
 end

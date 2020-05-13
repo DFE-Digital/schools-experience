@@ -5,7 +5,7 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
 
   describe '#placement_date_subject_description' do
     context 'when the placement date is subject specific' do
-      let(:subjects) { Bookings::Subject.where(name: %w(Biology Maths)) }
+      let(:subjects) { Bookings::Subject.where(name: %w[Biology Maths]) }
       let(:pd) { double(Bookings::PlacementDate, subjects: subjects, subject_specific?: true) }
 
       specify 'should return the subjects list' do

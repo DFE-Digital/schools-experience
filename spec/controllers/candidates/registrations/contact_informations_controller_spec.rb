@@ -8,7 +8,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
   context 'without existing contact information in the session' do
     let :registration_session do
-      FactoryBot.build :registration_session, with: %i(personal_information)
+      FactoryBot.build :registration_session, with: %i[personal_information]
     end
 
     context '#new' do
@@ -72,7 +72,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
     let :registration_session do
       FactoryBot.build :gitis_registration_session,
         gitis_contact: gitis_contact,
-        with: %i(personal_information)
+        with: %i[personal_information]
     end
 
     context '#new' do
@@ -96,7 +96,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
     let :registration_session do
       FactoryBot.build :gitis_registration_session,
         gitis_contact: gitis_contact,
-        with: %i(personal_information)
+        with: %i[personal_information]
     end
 
     let :existing_contact_information do

@@ -1,7 +1,7 @@
 namespace :data do
   namespace :schools do
     desc "Import all GiaS (EduBase) data from local file"
-    task :mass_import, %i{email_override} => :environment do |_t, args|
+    task :mass_import, %i[email_override] => :environment do |_t, args|
       args.with_defaults(email_override: nil)
 
       Bookings::SchoolSync.new(email_override: args[:email_override]).import_all
@@ -13,7 +13,7 @@ namespace :data do
     end
 
     desc "Enable schools"
-    task :enable, %i{urns} => :environment do |_t, args|
+    task :enable, %i[urns] => :environment do |_t, args|
       response_data = CSV.parse(
         File.read(args[:urns]).scrub,
         headers: true
@@ -22,7 +22,7 @@ namespace :data do
     end
 
     desc "Disable schools"
-    task :disable, %i{urns} => :environment do |_t, args|
+    task :disable, %i[urns] => :environment do |_t, args|
       response_data = CSV.parse(
         File.read(args[:urns]).scrub,
         headers: true

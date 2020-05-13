@@ -80,7 +80,7 @@ describe Bookings::PlacementDate, type: :model do
           validate_numericality_of(:duration)
             .is_greater_than_or_equal_to(1)
             .is_less_than(100)
-          )
+        )
       end
       it { expect(subject).to validate_presence_of(:duration) }
     end

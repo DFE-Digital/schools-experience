@@ -1,12 +1,12 @@
 class Bookings::Profile < ApplicationRecord
-  AVAILABLE_INTERVALS = %w(Daily One-off).freeze
+  AVAILABLE_INTERVALS = %w[Daily One-off].freeze
   EMAIL_FORMAT = /\A.*@.*\..*\z/.freeze
 
-  FIELDS_TO_NILIFY = %i{teacher_training_info teacher_training_url}.freeze
+  FIELDS_TO_NILIFY = %i[teacher_training_info teacher_training_url].freeze
 
-  FIELDS_TO_STRIP = %i{
+  FIELDS_TO_STRIP = %i[
     start_time end_time admin_contact_email admin_contact_phone
-  }.freeze
+  ].freeze
 
   # Temporary while we're in the process of removing the admin_full_name
   # attribute as the column has a not null constraint
@@ -48,7 +48,7 @@ class Bookings::Profile < ApplicationRecord
   validates :flexible_on_times, inclusion: [true, false]
   validates :flexible_on_times_details, presence: true, if: :flexible_on_times
 
-  validates :teacher_training_url, format: URI::regexp(%w{http https}), if: :teacher_training_url
+  validates :teacher_training_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), if: :teacher_training_url
 
   validates :admin_contact_email, presence: true
   validates :admin_contact_email, format: EMAIL_FORMAT, allow_blank: true

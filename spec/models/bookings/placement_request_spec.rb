@@ -53,8 +53,8 @@ describe Bookings::PlacementRequest, type: :model do
     it { is_expected.to belong_to(:placement_date).class_name('Bookings::PlacementDate').with_foreign_key(:bookings_placement_date_id).optional }
 
     it do
-      is_expected.to belong_to(:candidate).class_name('Bookings::Candidate').\
-        with_foreign_key(:candidate_id).without_validating_presence
+      is_expected.to belong_to(:candidate).class_name('Bookings::Candidate')\
+        .with_foreign_key(:candidate_id).without_validating_presence
     end
   end
 
@@ -350,8 +350,8 @@ describe Bookings::PlacementRequest, type: :model do
 
       let! :teaching_preference do
         build :teaching_preference, school: school,
-          subject_first_choice: school.subjects.first.name,
-          subject_second_choice: school.subjects.second.name
+                                    subject_first_choice: school.subjects.first.name,
+                                    subject_second_choice: school.subjects.second.name
       end
 
       let! :registration_session do

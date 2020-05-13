@@ -26,7 +26,7 @@ end
 Then("my placement should have been {string}") do |operation|
   description = {
     'deactivated' => 'Closed',
-    'activated'   => 'Open'
+    'activated' => 'Open'
   }[operation]
 
   within("tr[data-placement-date-id='#{@placement_date.id}']") do

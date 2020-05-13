@@ -5,8 +5,8 @@ class Bookings::SchoolSearch < ApplicationRecord
   validates :location, length: { minimum: 3 }, allow_nil: true
 
   AVAILABLE_ORDERS = [
-    %w{distance Distance},
-    %w{name Name}
+    %w[distance Distance],
+    %w[name Name]
   ].freeze
 
   REGION = 'England'.freeze
@@ -21,7 +21,7 @@ class Bookings::SchoolSearch < ApplicationRecord
     def whitelisted_urns
       return [] if ENV['CANDIDATE_URN_WHITELIST'].blank?
 
-      ENV['CANDIDATE_URN_WHITELIST'].to_s.strip.split(%r([\s,]+)).map(&:to_i)
+      ENV['CANDIDATE_URN_WHITELIST'].to_s.strip.split(%r{[\s,]+}).map(&:to_i)
     end
 
     def whitelisted_urns?
@@ -43,9 +43,9 @@ class Bookings::SchoolSearch < ApplicationRecord
 
   def results
     base_query
-      .includes(%i{phases})
+      .includes(%i[phases])
       .reorder(order_by(requested_order))
-      .page(self.page)
+      .page(page)
       .per(PER_PAGE)
   end
 
@@ -72,11 +72,11 @@ class Bookings::SchoolSearch < ApplicationRecord
   end
 
   def radius=(dist)
-    if whitelisted_urns?
-      write_attribute(:radius, 1000) # include all whitelisted schools but still order by distance
-    else
-      write_attribute(:radius, dist)
-    end
+    self[:radius] = if whitelisted_urns?
+                      1000 # include all whitelisted schools but still order by distance
+                    else
+                      dist
+                    end
   end
 
 private

@@ -3,19 +3,19 @@ module Bookings
     module Store
       class Fake < Dynamics
         KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
-        REQUIRED = %w{
+        REQUIRED = %w[
           firstname lastname emailaddress2 telephone2 birthdate
           address1_line1 address1_city address1_stateorprovince address1_postalcode
           dfe_channelcreation dfe_hasdbscertificate
           dfe_Country@odata.bind
-        }.freeze
+        ].freeze
         ALLOWED = (
-          REQUIRED + %w{
+          REQUIRED + %w[
             telephone1 address1_telephone1 address1_line2 address1_line3
             emailaddress1 dfe_dateofissueofdbscertificate
             dfe_PreferredTeachingSubject01@odata.bind
             dfe_PreferredTeachingSubject02@odata.bind
-          }
+          ]
         ).freeze
 
         def initialize(*_args); end
@@ -83,7 +83,7 @@ module Bookings
         def fake_contact_id
           fake_uuid = Rails.application.config.x.gitis.fake_crm_uuid
 
-          if %w{true yes 1}.include? fake_uuid
+          if %w[true yes 1].include? fake_uuid
             KNOWN_UUID
           else
             fake_uuid.presence || SecureRandom.uuid

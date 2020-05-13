@@ -15,23 +15,23 @@ describe Schools::SessionsController, type: :request do
         .to receive(:session).and_return(
           return_url: return_url,
           state: state
-      )
+        )
     end
 
     before do
       stub_request(:post, "https://#{Rails.configuration.x.oidc_host}/token")
         .with(
           body: {
-            'code'         => code,
-            'grant_type'   => 'authorization_code',
+            'code' => code,
+            'grant_type' => 'authorization_code',
             'redirect_uri' => "#{Rails.configuration.x.base_url}/auth/callback"
           },
           headers: {
-            'Accept'        => '*/*',
+            'Accept' => '*/*',
             'Authorization' => 'Basic c2UtdGVzdDphYmMxMjM=',
-            'Content-Type'  => 'application/x-www-form-urlencoded',
-            'Date'          => /.*/,
-            'User-Agent'    => /Rack::OAuth2/
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Date' => /.*/,
+            'User-Agent' => /Rack::OAuth2/
           }
         )
         .to_return(
@@ -46,10 +46,10 @@ describe Schools::SessionsController, type: :request do
       stub_request(:get, "https://#{Rails.configuration.x.oidc_host}/me")
         .with(
           headers: {
-            'Accept'        => '*/*',
+            'Accept' => '*/*',
             'Authorization' => "Bearer #{access_token}",
-            'Date'          => /.*/,
-            'User-Agent'    => /OpenIDConnect::AccessToken/
+            'Date' => /.*/,
+            'User-Agent' => /OpenIDConnect::AccessToken/
           }
         )
         .to_return(
@@ -175,7 +175,7 @@ describe Schools::SessionsController, type: :request do
             return_url: return_url,
             state: state,
             current_user: { name: 'Milhouse' }
-        )
+          )
       end
 
       subject { get auth_callback_path }

@@ -22,14 +22,14 @@ describe Candidates::Registrations::RegistrationState do
       end
 
       it 'returns the correct steps' do
-        expect(subject.steps).to eq %i(
+        expect(subject.steps).to eq %i[
           personal_information
           contact_information
           education
           teaching_preference
           placement_preference
           background_check
-        )
+        ]
       end
     end
 
@@ -39,7 +39,7 @@ describe Candidates::Registrations::RegistrationState do
       end
 
       it 'returns the correct steps' do
-        expect(subject.steps).to eq %i(
+        expect(subject.steps).to eq %i[
           subject_and_date_information
           personal_information
           contact_information
@@ -47,7 +47,7 @@ describe Candidates::Registrations::RegistrationState do
           teaching_preference
           placement_preference
           background_check
-        )
+        ]
       end
     end
   end
@@ -64,7 +64,7 @@ describe Candidates::Registrations::RegistrationState do
     context 'with subject_and_date_information' do
       let :registration_session do
         build :registration_session, urn: school_with_fixed_dates.urn,
-          with: %i(subject_and_date_information)
+                                     with: %i[subject_and_date_information]
       end
 
       it { expect(subject.next_step).to eq :personal_information }
@@ -92,7 +92,7 @@ describe Candidates::Registrations::RegistrationState do
   context 'with contact_information' do
     let :registration_session do
       build :registration_session, urn: school.urn,
-        with: %i(personal_information contact_information)
+                                   with: %i[personal_information contact_information]
     end
 
     it { expect(subject.next_step).to eq :education }
@@ -102,7 +102,7 @@ describe Candidates::Registrations::RegistrationState do
   context 'with education' do
     let :registration_session do
       build :registration_session, urn: school.urn,
-        with: %i(personal_information contact_information education)
+                                   with: %i[personal_information contact_information education]
     end
 
     it { expect(subject.next_step).to eq :teaching_preference }
@@ -111,12 +111,12 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with teaching_preference' do
     let :registration_session do
-      build :registration_session, urn: school.urn, with: %i(
+      build :registration_session, urn: school.urn, with: %i[
         personal_information
         contact_information
         education
         teaching_preference
-      )
+      ]
     end
 
     it { expect(subject.next_step).to eq :placement_preference }
@@ -125,13 +125,13 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with placement_preference' do
     let :registration_session do
-      build :registration_session, urn: school.urn, with: %i(
+      build :registration_session, urn: school.urn, with: %i[
         personal_information
         contact_information
         education
         teaching_preference
         placement_preference
-      )
+      ]
     end
 
     it { expect(subject.next_step).to eq :background_check }
@@ -140,14 +140,14 @@ describe Candidates::Registrations::RegistrationState do
 
   context 'with background_check' do
     let :registration_session do
-      build :registration_session, urn: school.urn, with: %i(
+      build :registration_session, urn: school.urn, with: %i[
         personal_information
         contact_information
         education
         teaching_preference
         placement_preference
         background_check
-      )
+      ]
     end
 
     it { expect(subject.next_step).to eq :COMPLETED }

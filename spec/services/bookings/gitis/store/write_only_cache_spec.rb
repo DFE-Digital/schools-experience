@@ -52,8 +52,8 @@ describe Bookings::Gitis::Store::WriteOnlyCache do
 
         it do
           expect(cache).to \
-            have_received(:write_multi).
-              with({ key => entity.to_cache }, expires_in: ttl)
+            have_received(:write_multi)
+              .with({ key => entity.to_cache }, expires_in: ttl)
         end
       end
 
@@ -97,8 +97,8 @@ describe Bookings::Gitis::Store::WriteOnlyCache do
 
         it do
           expect(cache).to \
-            have_received(:write_multi).
-              with({ key => entity.to_cache }, expires_in: ttl)
+            have_received(:write_multi)
+              .with({ key => entity.to_cache }, expires_in: ttl)
         end
       end
 

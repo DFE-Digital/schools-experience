@@ -29,7 +29,7 @@ module Candidates::MapsHelper
   end
 
   def ajax_map(latitude, longitude, mapsize:, title: nil, description: nil,
-    zoom: 10, described_by: nil, include_js_in_head: true)
+               zoom: 10, described_by: nil, include_js_in_head: true)
     return if Rails.application.config.x.bing_maps_key.blank?
 
     map_data = {
@@ -60,7 +60,7 @@ module Candidates::MapsHelper
 
     content_tag :div, class: "embedded-map", data: map_data, **aria_attributes do
       content_tag :div, class: 'embedded-map__inner-container',
-        data: { target: 'map.container' } do
+                        data: { target: 'map.container' } do
         image_tag static_url, class: "embedded-map__nojs-img", alt: "Map showing #{title}", **aria_attributes
       end
     end

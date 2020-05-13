@@ -161,7 +161,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       @school = OpenStruct.new(
         name: 'Stub School',
         coordinates: OpenStruct.new(latitude: @latitude, longitude: @longitude)
-        )
+      )
     end
 
     subject { school_location_map @school }
@@ -187,7 +187,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     context 'with subject filters' do
       subject do
         double('Bookings::SchoolSearch',
-          phases: [1, 3], phase_names: %w{first third})
+          phases: [1, 3], phase_names: %w[first third])
       end
 
       it("should return a nil") do
@@ -212,7 +212,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     context 'with subject filters' do
       subject do
         double('Bookings::SchoolSearch',
-          subjects: [1, 3], subject_names: %w{first third})
+          subjects: [1, 3], subject_names: %w[first third])
       end
 
       it("should return a nil") do

@@ -12,10 +12,10 @@ module Schools
       validates :requires_check, inclusion: [true, false]
 
       validates :dbs_policy_details, number_of_words: { less_than: 50 }, \
-        if: -> { dbs_policy_details.present? }
+                                     if: -> { dbs_policy_details.present? }
 
       validates :no_dbs_policy_details, number_of_words: { less_than: 50 }, \
-        if: -> { no_dbs_policy_details.present? }
+                                        if: -> { no_dbs_policy_details.present? }
 
       with_options if: :requires_check do
         validates :dbs_policy_details, presence: true

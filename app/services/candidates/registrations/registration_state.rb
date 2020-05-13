@@ -1,7 +1,7 @@
 module Candidates
   module Registrations
     class RegistrationState
-      STEPS = %i(
+      STEPS = %i[
         subject_and_date_information
         personal_information
         contact_information
@@ -9,7 +9,7 @@ module Candidates
         teaching_preference
         placement_preference
         background_check
-      ).freeze
+      ].freeze
 
       def initialize(registration_session)
         @registration_session = registration_session

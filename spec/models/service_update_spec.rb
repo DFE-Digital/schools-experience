@@ -28,7 +28,7 @@ describe ServiceUpdate, type: :model do
   end
 
   context 'with stub data' do
-    let(:stub_dates) { %w(20010201 20200202 20200203) }
+    let(:stub_dates) { %w[20010201 20200202 20200203] }
     before { allow(described_class).to receive(:ids) { stub_dates } }
 
     describe '.dates' do

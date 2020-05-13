@@ -73,7 +73,7 @@ describe Notify do
     end
 
     let :recipients do
-      %w(test1@user.com test2@user.com)
+      %w[test1@user.com test2@user.com]
     end
 
     describe '#despatch_later!' do

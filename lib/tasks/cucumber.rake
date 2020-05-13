@@ -33,15 +33,15 @@ unless ARGV.any? { |a| a =~ /^gems/ } # Don't load anything when running the gem
       end
 
       desc 'Run all features'
-      task all: %i{ok wip}
+      task all: %i[ok wip]
 
-      task :statsetup do
+      task :statsetup do # rubocop:todo Rake/Desc
         require 'rails/code_statistics'
-        ::STATS_DIRECTORIES << %w(Cucumber\ features features) if File.exist?('features')
+        ::STATS_DIRECTORIES << %w[Cucumber\ features features] if File.exist?('features')
         ::CodeStatistics::TEST_TYPES << "Cucumber features" if File.exist?('features')
       end
 
-      task :annotations_setup do
+      task :annotations_setup do # rubocop:todo Rake/Desc
         Rails.application.configure do
           if config.respond_to?(:annotations)
             config.annotations.directories << 'features'
@@ -55,20 +55,20 @@ unless ARGV.any? { |a| a =~ /^gems/ } # Don't load anything when running the gem
 
     task default: :cucumber
 
-    task features: :cucumber do
+    task features: :cucumber do # rubocop:todo Rake/Desc
       warn "*** The 'features' task is deprecated. See rake -T cucumber ***"
     end
 
     # In case we don't have the generic Rails test:prepare hook, append a no-op task that we can depend upon.
-    task 'test:prepare' do
+    task 'test:prepare' do # rubocop:todo Rake/Desc
     end
 
-    task stats: 'cucumber:statsetup'
+    task stats: 'cucumber:statsetup' # rubocop:todo Rake/Desc
 
-    task notes: 'cucumber:annotations_setup'
+    task notes: 'cucumber:annotations_setup' # rubocop:todo Rake/Desc
   rescue LoadError
     desc 'cucumber rake task not available (cucumber not installed)'
-    task :cucumber do
+    task :cucumber do # rubocop:todo Rake/DuplicateTask
       abort 'Cucumber rake task is not available. Be sure to install cucumber as a gem or plugin'
     end
   end

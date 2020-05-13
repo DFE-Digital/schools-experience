@@ -11,7 +11,7 @@ FactoryBot.define do
       end
 
       with do
-        %i(
+        %i[
           personal_information
           contact_information
           background_check
@@ -19,48 +19,48 @@ FactoryBot.define do
           education
           teaching_preference
           subject_and_date_information
-        )
+        ]
       end
 
       candidates_registrations_personal_information do
         {
-          "first_name"   => 'Testy',
-          "last_name"    => 'McTest',
-          "email"        => 'test@example.com',
+          "first_name" => 'Testy',
+          "last_name" => 'McTest',
+          "email" => 'test@example.com',
           "date_of_birth" => "2000-01-01",
-          "created_at"   => current_time,
-          "updated_at"   => current_time
+          "created_at" => current_time,
+          "updated_at" => current_time
         }
       end
 
       candidates_registrations_contact_information do
         {
-          "building"     => "Test building",
-          "street"       => "Test street",
+          "building" => "Test building",
+          "street" => "Test street",
           "town_or_city" => "Test town",
-          "county"       => "Testshire",
-          "postcode"     => "TE57 1NG",
-          "phone"        => "01234567890",
-          "created_at"   => current_time,
-          "updated_at"   => current_time
+          "county" => "Testshire",
+          "postcode" => "TE57 1NG",
+          "phone" => "01234567890",
+          "created_at" => current_time,
+          "updated_at" => current_time
         }
       end
 
       candidates_registrations_background_check do
         {
           "has_dbs_check" => true,
-          "created_at"    => current_time,
-          "updated_at"    => current_time
+          "created_at" => current_time,
+          "updated_at" => current_time
         }
       end
 
       candidates_registrations_placement_preference do
         {
-          "urn"          => urn,
+          "urn" => urn,
           "availability" => "Every third Tuesday",
-          "objectives"   => "test the software",
-          "created_at"   => current_time,
-          "updated_at"   => current_time
+          "objectives" => "test the software",
+          "created_at" => current_time,
+          "updated_at" => current_time
         }
       end
 
@@ -96,13 +96,13 @@ FactoryBot.define do
     trait :with_placement_date do
       initialize_with do
         new \
-          "uuid"                                          => uuid,
-          "urn"                                           => urn,
+          "uuid" => uuid,
+          "urn" => urn,
           "candidates_registrations_personal_information" => candidates_registrations_personal_information,
-          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
-          "candidates_registrations_background_check"     => candidates_registrations_background_check,
-          "candidates_registrations_education"            => candidates_registrations_education,
-          "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
+          "candidates_registrations_contact_information" => candidates_registrations_contact_information,
+          "candidates_registrations_background_check" => candidates_registrations_background_check,
+          "candidates_registrations_education" => candidates_registrations_education,
+          "candidates_registrations_teaching_preference" => candidates_registrations_teaching_preference,
           "candidates_registrations_placement_preference" => candidates_registrations_placement_preference.merge("availability" => nil),
           "candidates_registrations_subject_and_date_information" => candidates_registrations_subject_and_date_information
       end
@@ -111,13 +111,13 @@ FactoryBot.define do
     trait :with_flexible_dates do
       initialize_with do
         new \
-          "uuid"                                          => uuid,
-          "urn"                                           => urn,
+          "uuid" => uuid,
+          "urn" => urn,
           "candidates_registrations_personal_information" => candidates_registrations_personal_information,
-          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
-          "candidates_registrations_background_check"     => candidates_registrations_background_check,
-          "candidates_registrations_education"            => candidates_registrations_education,
-          "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
+          "candidates_registrations_contact_information" => candidates_registrations_contact_information,
+          "candidates_registrations_background_check" => candidates_registrations_background_check,
+          "candidates_registrations_education" => candidates_registrations_education,
+          "candidates_registrations_teaching_preference" => candidates_registrations_teaching_preference,
           "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
           "candidates_registrations_subject_and_date_information" => {}
       end
@@ -126,26 +126,26 @@ FactoryBot.define do
     trait :with_education do
       initialize_with do
         new \
-          "uuid"                                          => uuid,
-          "urn"                                           => urn,
+          "uuid" => uuid,
+          "urn" => urn,
           "candidates_registrations_personal_information" => candidates_registrations_personal_information,
-          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
-          "candidates_registrations_background_check"     => candidates_registrations_background_check,
-          "candidates_registrations_education"            => candidates_registrations_education,
+          "candidates_registrations_contact_information" => candidates_registrations_contact_information,
+          "candidates_registrations_background_check" => candidates_registrations_background_check,
+          "candidates_registrations_education" => candidates_registrations_education,
           "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
       end
     end
 
-    # TODO refactor this to avoid duplication building up the session
+    # TODO: refactor this to avoid duplication building up the session
     trait :with_teaching_preference do
       initialize_with do
         new \
-          "uuid"                                          => uuid,
-          "urn"                                           => urn,
+          "uuid" => uuid,
+          "urn" => urn,
           "candidates_registrations_personal_information" => candidates_registrations_personal_information,
-          "candidates_registrations_contact_information"  => candidates_registrations_contact_information,
-          "candidates_registrations_background_check"     => candidates_registrations_background_check,
-          "candidates_registrations_teaching_preference"  => candidates_registrations_teaching_preference,
+          "candidates_registrations_contact_information" => candidates_registrations_contact_information,
+          "candidates_registrations_background_check" => candidates_registrations_background_check,
+          "candidates_registrations_teaching_preference" => candidates_registrations_teaching_preference,
           "candidates_registrations_placement_preference" => candidates_registrations_placement_preference
       end
     end

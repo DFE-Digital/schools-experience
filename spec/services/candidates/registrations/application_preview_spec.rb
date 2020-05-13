@@ -316,7 +316,7 @@ describe Candidates::Registrations::ApplicationPreview do
     end
   end
 
-  # TODO SE-1877 remove this
+  # TODO: SE-1877 remove this
   context 'with legacy session data' do
     context 'the school has fixed dates' do
       let :school do

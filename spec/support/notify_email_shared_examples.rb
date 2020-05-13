@@ -99,7 +99,6 @@ shared_examples_for "email template" do |template_id, personalisation|
   end
 end
 
-
 shared_examples_for "email template from application preview" do |args|
   describe ".from_application_preview" do
     before do

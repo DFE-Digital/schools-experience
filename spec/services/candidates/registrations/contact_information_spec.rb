@@ -39,7 +39,6 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       it { is_expected.to validate_length_of(:county).is_at_most(50).with_message(too_long_msg) }
     end
 
-
     context 'postcode' do
       it { is_expected.to validate_presence_of :postcode }
 

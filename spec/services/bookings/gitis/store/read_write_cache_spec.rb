@@ -34,13 +34,13 @@ describe Bookings::Gitis::Store::ReadWriteCache do
     let(:uuids) { [uuid, second] }
     subject { store.cache_keys_for_uuids Person, uuids }
 
-    it { is_expected.to eql %W(people/#{uuid}/#{version} people/#{second}/#{version}) }
+    it { is_expected.to eql %W[people/#{uuid}/#{version} people/#{second}/#{version}] }
 
     context 'with namespace' do
       let(:store) { described_class.new dynamics, cache, namespace: 'dynamics' }
       it do
         is_expected.to eql \
-          %W(dynamics/people/#{uuid}/#{version} dynamics/people/#{second}/#{version})
+          %W[dynamics/people/#{uuid}/#{version} dynamics/people/#{second}/#{version}]
       end
     end
   end

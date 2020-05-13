@@ -97,8 +97,8 @@ describe Bookings::Gitis::ContactFetcher do
       let(:second_candidate) { create :candidate, gitis_uuid: second.contactid }
 
       before do
-        allow(fake_gitis).to receive(:find).
-          with([third.contactid, second.contactid]).and_return [third, second]
+        allow(fake_gitis).to receive(:find)
+          .with([third.contactid, second.contactid]).and_return [third, second]
 
         allow(fake_gitis).to receive(:find).with([merged.contactid]).and_return [merged]
         allow(fake_gitis).to receive(:find).with([first.contactid]).and_return [first]

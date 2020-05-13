@@ -9,7 +9,7 @@ module Schools
       end
 
       def ==(other)
-        other.respond_to?(:attributes) && other.attributes == self.attributes
+        other.respond_to?(:attributes) && other.attributes == attributes
       end
     end
   end

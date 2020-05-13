@@ -1,5 +1,5 @@
 class Bookings::School < ApplicationRecord
-  self.ignored_columns += %w(dfe_signin_organisation_uuid)
+  self.ignored_columns += %w[dfe_signin_organisation_uuid]
   include FullTextSearch
   include GeographicSearch
 

@@ -13,7 +13,7 @@ module Schools
       end
 
       def ==(other)
-        other.school_profile_id == self.school_profile_id
+        other.school_profile_id == school_profile_id
       end
 
       def school_name

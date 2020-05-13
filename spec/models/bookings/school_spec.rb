@@ -32,7 +32,7 @@ describe Bookings::School, type: :model do
     end
 
     shared_examples "websites" do |field_name|
-      valid_urls = %w{http://www.bbc.co.uk https://bbc.co.uk http://news.bbc.com}
+      valid_urls = %w[http://www.bbc.co.uk https://bbc.co.uk http://news.bbc.com]
       invalid_urls = [
         "www.bbc.co.uk",
         "lizo.mzimba@bbc.co.uk",
@@ -257,13 +257,13 @@ describe Bookings::School, type: :model do
         context 'when one or more subjects are supplied' do
           specify 'all schools that match any provided subject are returned' do
             {
-              physics              => [school_a],
-              maths                => [school_a, school_b],
-              chemistry            => [school_b],
-              biology              => [school_c],
+              physics => [school_a],
+              maths => [school_a, school_b],
+              chemistry => [school_b],
+              biology => [school_c],
               [chemistry, biology] => [school_b, school_c],
-              [maths, chemistry]   => [school_a, school_b],
-              [maths, biology]     => [school_a, school_b, school_c]
+              [maths, chemistry] => [school_a, school_b],
+              [maths, biology] => [school_a, school_b, school_c]
             }.each do |subjects, results|
               expect(subject.that_provide(subjects).uniq).to match_array(results)
             end
@@ -293,10 +293,10 @@ describe Bookings::School, type: :model do
         context 'when one or more phases are supplied' do
           specify 'all schools that match any provided phase are returned' do
             {
-              primary              => [school_a, school_b],
-              secondary            => [school_b],
-              college              => [school_c],
-              [primary, college]   => [school_a, school_b, school_c],
+              primary => [school_a, school_b],
+              secondary => [school_b],
+              college => [school_c],
+              [primary, college] => [school_a, school_b, school_c],
               [secondary, college] => [school_b, school_c]
             }.each do |phases, results|
               expect(subject.at_phases(phases)).to match_array(results)

@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   rescue_from ActionController::InvalidAuthenticityToken, with: :session_expired
 
-  CRAWLABLE_PATHS = %w{/ /candidates}.freeze
+  CRAWLABLE_PATHS = %w[/ /candidates].freeze
   before_action :add_x_robots_tag
 
 protected

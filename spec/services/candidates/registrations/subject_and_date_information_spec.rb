@@ -59,8 +59,8 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
 
           specify 'should validate the presence of bookings_subject_id' do
             is_expected.to \
-              validate_presence_of(:bookings_subject_id).
-                with_message('Choose a subject')
+              validate_presence_of(:bookings_subject_id)
+                .with_message('Choose a subject')
           end
         end
 
@@ -91,7 +91,6 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       before { allow(subject).to receive(:bookings_placement_date_id).and_return(1) }
       before { allow(Bookings::PlacementDate).to receive(:find_by).and_return('a') }
 
-
       specify 'should find the placement date via its id' do
         subject.placement_date
         expect(Bookings::PlacementDate).to have_received(:find_by).with(id: 1)
@@ -107,7 +106,6 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
       end
 
       before { allow(Bookings::PlacementDateSubject).to receive(:find_by).and_return('a') }
-
 
       specify 'should find the placement date via its id' do
         subject.placement_date_subject
@@ -168,7 +166,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     describe '#has_primary_dates?' do
       subject { described_class.new }
       context 'when primary dates are present' do
-        before { allow(subject).to receive(:primary_placement_dates).and_return(%w(yes)) }
+        before { allow(subject).to receive(:primary_placement_dates).and_return(%w[yes]) }
 
         it { is_expected.to have_primary_dates }
       end
@@ -183,7 +181,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     describe '#has_secondary_dates?' do
       subject { described_class.new }
       context 'when secondary dates are present' do
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w(yes)) }
+        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w[yes]) }
 
         it { is_expected.to have_secondary_dates }
       end
@@ -198,8 +196,8 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
     describe '#has_primary_and_secondary_dates?' do
       subject { described_class.new }
       context 'when secondary dates are present' do
-        before { allow(subject).to receive(:primary_placement_dates).and_return(%w(yes)) }
-        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w(yes)) }
+        before { allow(subject).to receive(:primary_placement_dates).and_return(%w[yes]) }
+        before { allow(subject).to receive(:secondary_placement_dates_grouped_by_date).and_return(%w[yes]) }
 
         it { is_expected.to have_primary_and_secondary_dates }
       end

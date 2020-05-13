@@ -18,7 +18,10 @@ describe Schools::AttendancesController, type: :request do
   end
 
   describe '#index' do
-    subject { get schools_attendances_path; response }
+    subject {
+      get schools_attendances_path
+      response
+    }
 
     it { is_expected.to have_http_status :success }
     it { is_expected.to have_rendered 'index' }

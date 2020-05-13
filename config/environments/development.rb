@@ -72,10 +72,10 @@ Rails.application.configure do
   end
 
   config.x.phase = Integer(ENV.fetch('PHASE') { 10000 })
-  config.x.features = %i(
+  config.x.features = %i[
     subject_specific_dates
     capped_bookings
-  )
+  ]
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
   config.x.candidates.alert_notification = ENV['CANDIDATE_NOTIFICATION'].presence
   config.x.bing_maps_key = ENV['BING_MAPS_KEY'].presence || Rails.application.credentials.dig(:bing_maps_key)
@@ -91,7 +91,7 @@ Rails.application.configure do
   config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
 
-  truthy_strings = %w(true 1 yes)
+  truthy_strings = %w[true 1 yes]
 
   config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
@@ -116,5 +116,5 @@ Rails.application.configure do
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 
-  config.x.maintenance_mode = %w{1 yes true}.include?(ENV['MAINTENANCE_MODE'].to_s)
+  config.x.maintenance_mode = %w[1 yes true].include?(ENV['MAINTENANCE_MODE'].to_s)
 end
