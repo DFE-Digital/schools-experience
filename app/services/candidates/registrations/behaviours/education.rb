@@ -15,11 +15,11 @@ module Candidates
           validates :degree_stage_explaination, presence: true, if: :degree_stage_explaination_required?
           validates :degree_subject, presence: true
           validates :degree_subject, inclusion: { in: :available_degree_subjects },
-            if: -> { degree_subject.present? && degree_stage_requires_subject? }
+                                     if: -> { degree_subject.present? && degree_stage_requires_subject? }
           validates :degree_subject, inclusion: [NO_DEGREE_SUBJECT],
-            if: :degree_stage_requires_n_a_subject?
+                                     if: :degree_stage_requires_n_a_subject?
           validates :degree_subject, exclusion: [NO_DEGREE_SUBJECT],
-            if: :degree_stage_requires_subject_in_subjects_list?
+                                     if: :degree_stage_requires_subject_in_subjects_list?
         end
 
         def available_degree_stages

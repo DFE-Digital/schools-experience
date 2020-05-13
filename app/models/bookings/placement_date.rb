@@ -50,7 +50,7 @@ module Bookings
 
     with_options if: :published? do
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
-      validates :subjects, presence: true, if: %i(subject_specific? published?)
+      validates :subjects, presence: true, if: %i[subject_specific? published?]
       validates :subjects, absence: true, unless: :subject_specific?
     end
 

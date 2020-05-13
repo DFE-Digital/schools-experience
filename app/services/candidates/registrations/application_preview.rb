@@ -2,7 +2,7 @@ module Candidates
   module Registrations
     class ApplicationPreview
       class NotImplementedForThisDateType < StandardError; end
-      # FIXME delegate other methods to placement_preference once remove dates
+      # FIXME: delegate other methods to placement_preference once remove dates
       # pr is merged
       attr_reader :placement_preference
 
@@ -60,9 +60,7 @@ module Candidates
           other.registration_session == @registration_session
       end
 
-      def school_name
-        school.name
-      end
+      delegate :name, to: :school, prefix: true
 
       def full_address
         [

@@ -1,7 +1,7 @@
 class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   include ViewTrackable
 
-  SCHOOL_REJECTION_REASONS = %w(
+  SCHOOL_REJECTION_REASONS = %w[
     fully_booked
     accepted_on_ttc
     date_not_available
@@ -10,7 +10,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     candidate_not_local
     duplicate
     other
-  ).freeze
+  ].freeze
 
   scope :candidate_cancellation, -> { where cancelled_by: 'candidate' }
   scope :school_cancellation,    -> { where cancelled_by: 'school' }
@@ -22,10 +22,10 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     foreign_key: 'bookings_placement_request_id'
 
   validates :bookings_placement_request_id, uniqueness: true
-  validates :cancelled_by, inclusion: %w(candidate school)
+  validates :cancelled_by, inclusion: %w[candidate school]
   validate :placement_request_not_closed, on: :create, if: :placement_request
 
-  validates :reason, presence: true, on: %i(school_cancellation candidate_cancellation)
+  validates :reason, presence: true, on: %i[school_cancellation candidate_cancellation]
   validates :reason, presence: true, on: :rejection, if: -> { rejection_category == 'other' }
 
   validates :rejection_category, inclusion: SCHOOL_REJECTION_REASONS, on: :rejection
@@ -89,12 +89,12 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     return nil if rejection_category == 'other' || rejection_category.nil?
 
     I18n.t(
-      %w(
+      %w[
         helpers
         label
         bookings_placement_request_cancellation
         rejection_category
-      ).push(rejection_category).join('.')
+      ].push(rejection_category).join('.')
     )
   end
 

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::SubjectAndDateInformationsController, type: :request do
   let :registration_session do
-    FactoryBot.build :registration_session, with: %i()
+    FactoryBot.build :registration_session, with: %i[]
   end
 
   describe '#get' do
@@ -39,7 +39,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
 
       context 'with existing subject and date in session' do
         let :registration_session do
-          FactoryBot.build :registration_session, with: %i(subject_and_date_information)
+          FactoryBot.build :registration_session, with: %i[subject_and_date_information]
         end
 
         before { get subject_and_date_info_path }

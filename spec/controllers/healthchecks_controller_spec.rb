@@ -4,8 +4,8 @@ describe HealthchecksController, type: :request do
   let(:username) { Rails.application.config.x.healthchecks.username }
   let(:password) { Rails.application.config.x.healthchecks.password }
   let(:encoded) do
-    ActionController::HttpAuthentication::Basic.
-      encode_credentials(username, password)
+    ActionController::HttpAuthentication::Basic
+      .encode_credentials(username, password)
   end
 
   describe '#show' do

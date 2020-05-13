@@ -1,7 +1,7 @@
 module Schools
   module OnBoarding
     class SchoolFee < Step
-      AVAILABLE_INTERVALS = %w(Daily One-off).freeze
+      AVAILABLE_INTERVALS = %w[Daily One-off].freeze
 
       attribute :amount_pounds, :decimal, scale: 2, precision: 4
       attribute :description, :string

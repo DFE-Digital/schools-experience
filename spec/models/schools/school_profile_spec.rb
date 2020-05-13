@@ -54,7 +54,7 @@ describe Schools::SchoolProfile, type: :model do
       is_expected.to have_db_column(:fees_other_fees).of_type :boolean
     end
 
-    %w(administration_fee dbs_fee other_fee).each do |fee|
+    %w[administration_fee dbs_fee other_fee].each do |fee|
       it do
         is_expected.to \
           have_db_column(:"#{fee}_amount_pounds")
@@ -311,7 +311,7 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     context 'school_fees' do
-      %w(administration_fee dbs_fee other_fee).each do |fee|
+      %w[administration_fee dbs_fee other_fee].each do |fee|
         context fee do
           let :form_model do
             FactoryBot.build fee
@@ -428,7 +428,7 @@ describe Schools::SchoolProfile, type: :model do
         model.candidate_experience_detail = form_model
       end
 
-      %i(
+      %i[
         business_dress
         cover_up_tattoos
         remove_piercings
@@ -442,7 +442,7 @@ describe Schools::SchoolProfile, type: :model do
         end_time
         times_flexible
         times_flexible_details
-      ).each do |attribute|
+      ].each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("candidate_experience_detail_#{attribute}")).to \
             eq form_model.send attribute
@@ -463,7 +463,7 @@ describe Schools::SchoolProfile, type: :model do
         model.access_needs_support = form_model
       end
 
-      %i(supports_access_needs).each do |attribute|
+      %i[supports_access_needs].each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("access_needs_support_#{attribute}")).to \
             eq form_model.send attribute
@@ -484,7 +484,7 @@ describe Schools::SchoolProfile, type: :model do
         model.access_needs_detail = form_model
       end
 
-      %i(description).each do |attribute|
+      %i[description].each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("access_needs_detail_#{attribute}")).to \
             eq form_model.send attribute
@@ -505,7 +505,7 @@ describe Schools::SchoolProfile, type: :model do
         model.disability_confident = form_model
       end
 
-      %i(is_disability_confident).each do |attribute|
+      %i[is_disability_confident].each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("disability_confident_#{attribute}")).to \
             eq form_model.send attribute
@@ -526,7 +526,7 @@ describe Schools::SchoolProfile, type: :model do
         model.access_needs_policy = form_model
       end
 
-      %i(has_access_needs_policy url).each do |attribute|
+      %i[has_access_needs_policy url].each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("access_needs_policy_#{attribute}")).to \
             eq form_model.send attribute
@@ -547,12 +547,12 @@ describe Schools::SchoolProfile, type: :model do
         model.experience_outline = form_model
       end
 
-      %i(
+      %i[
         candidate_experience
         provides_teacher_training
         teacher_training_details
         teacher_training_url
-      ).each do |attribute|
+      ].each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("experience_outline_#{attribute}")).to \
             eq form_model.send attribute
@@ -573,7 +573,7 @@ describe Schools::SchoolProfile, type: :model do
         model.admin_contact = form_model
       end
 
-      %i(phone email email_secondary).each do |attribute|
+      %i[phone email email_secondary].each do |attribute|
         it "sets #{attribute} correctly" do
           expect(model.send("admin_contact_#{attribute}")).to \
             eq form_model.send attribute

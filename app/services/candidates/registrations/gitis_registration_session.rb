@@ -13,9 +13,9 @@ module Candidates
         # override anything set for which there's a gitis equivalent
         # finally lock it with read only
 
-        fetch_attributes(PersonalInformation, mapper.contact_to_personal_information).
-          merge(completed_contact_fields_for_personal_information).
-          merge('read_only' => true)
+        fetch_attributes(PersonalInformation, mapper.contact_to_personal_information)
+          .merge(completed_contact_fields_for_personal_information)
+          .merge('read_only' => true)
       end
 
       def personal_information

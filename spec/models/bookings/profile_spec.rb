@@ -19,7 +19,7 @@ RSpec.describe Bookings::Profile, type: :model do
         subject { create(:bookings_profile, dress_code_cover_tattoos: true, dress_code_remove_piercings: true) }
 
         specify 'should contain the correct information' do
-          %w(tattoos piercings).each do |dc|
+          %w[tattoos piercings].each do |dc|
             expect(subject.dress_code).to include(dc)
           end
         end

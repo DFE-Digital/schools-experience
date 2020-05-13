@@ -13,10 +13,10 @@ module Schools
       def ==(other)
         return false unless other.respond_to? :subject_ids
 
-        return false unless Array(other.subject_ids).size == Array(self.subject_ids).size
+        return false unless Array(other.subject_ids).size == Array(subject_ids).size
 
         Array(other.subject_ids).all? do |subject_id|
-          Array(self.subject_ids).include? subject_id
+          Array(subject_ids).include? subject_id
         end
       end
 

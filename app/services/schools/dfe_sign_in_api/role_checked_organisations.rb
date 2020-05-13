@@ -9,8 +9,8 @@ module Schools
 
       def organisation_uuid_pairs
         @organisation_uuid_pairs ||=
-          query_organisation_uuids.
-            select(&method(:has_role?))
+          query_organisation_uuids
+            .select(&method(:has_role?))
       end
 
       def organisation_urns

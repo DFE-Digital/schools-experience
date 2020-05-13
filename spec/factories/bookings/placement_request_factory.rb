@@ -24,7 +24,7 @@ FactoryBot.define do
     degree_subject { "Not applicable" }
     teaching_stage { "I’m very sure and think I’ll apply" }
 
-    # FIXME change this to cancelled_by_candidate
+    # FIXME: change this to cancelled_by_candidate
     trait :cancelled do
       before :create do |placement_request|
         placement_request.candidate_cancellation = \

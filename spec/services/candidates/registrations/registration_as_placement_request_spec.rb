@@ -15,7 +15,6 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "phone" => "01234567890"
   }.freeze
 
-
   context '#attributes' do
     context 'when flexible dates' do
       let(:school) { create(:bookings_school, urn: urn) }

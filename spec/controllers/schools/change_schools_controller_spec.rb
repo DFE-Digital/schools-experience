@@ -20,7 +20,10 @@ describe Schools::ChangeSchoolsController, type: :request do
         receive(:current_urn) { current_urn }
     end
 
-    subject { get '/schools/change'; response }
+    subject {
+      get '/schools/change'
+      response
+    }
 
     context 'with URN set' do
       let(:current_urn) { old_school.urn }

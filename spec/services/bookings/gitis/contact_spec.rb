@@ -94,7 +94,7 @@ describe Bookings::Gitis::Contact, type: :model do
     context 'with our record' do
       subject do
         build :gitis_contact, \
-          dfe_channelcreation: described_class::channel_creation
+          dfe_channelcreation: described_class.channel_creation
       end
 
       it { is_expected.to be_created_by_us }
@@ -103,7 +103,7 @@ describe Bookings::Gitis::Contact, type: :model do
     context 'with existing gitis record' do
       subject do
         build :gitis_contact, \
-          dfe_channelcreation: described_class::channel_creation.to_s + '1'
+          dfe_channelcreation: described_class.channel_creation.to_s + '1'
       end
 
       it { is_expected.not_to be_created_by_us }
@@ -166,7 +166,7 @@ describe Bookings::Gitis::Contact, type: :model do
       subject { contact.attributes_for_update }
 
       context 'with records we created' do
-        let(:channel) { described_class::channel_creation }
+        let(:channel) { described_class.channel_creation }
 
         context 'when unmodified' do
           it { is_expected.not_to include('contactid') }
@@ -202,7 +202,7 @@ describe Bookings::Gitis::Contact, type: :model do
       end
 
       context "with other gitis records" do
-        let(:channel) { described_class::channel_creation.to_s + '1' }
+        let(:channel) { described_class.channel_creation.to_s + '1' }
 
         context 'when unmodified' do
           it { is_expected.not_to include('contactid') }

@@ -11,11 +11,11 @@ module Bookings
 
     has_secure_token
 
-    validates_presence_of :candidate, unless: :pre_phase3_record?
+    validates :candidate, presence: { unless: :pre_phase3_record? }
 
     validates :subject, presence: true,
-      if: -> { placement_date&.subject_specific? },
-      unless: :creating_placement_request_from_registration_session?
+                        if: -> { placement_date&.subject_specific? },
+                        unless: :creating_placement_request_from_registration_session?
 
     belongs_to :school,
       class_name: 'Bookings::School',
@@ -121,7 +121,7 @@ module Bookings
     delegate :gitis_contact, :gitis_contact=, to: :candidate
 
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
-      self.new(
+      new(
         Candidates::Registrations::RegistrationAsPlacementRequest
           .new(registration_session)
           .attributes
@@ -188,17 +188,11 @@ module Bookings
       school.notification_emails
     end
 
-    def school_name
-      school.name
-    end
+    delegate :name, to: :school, prefix: true
 
-    def school_urn
-      school.urn
-    end
+    delegate :urn, to: :school, prefix: true
 
-    def candidate_email
-      candidate.email
-    end
+    delegate :email, to: :candidate, prefix: true
 
     def candidate_name
       candidate.full_name
@@ -227,7 +221,7 @@ module Bookings
   private
 
     def completed?
-      # FIXME SE-1096 determine from booking
+      # FIXME: SE-1096 determine from booking
       false
     end
 

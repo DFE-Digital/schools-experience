@@ -23,7 +23,7 @@ class NotifyFakeClient
       personalisation: personalisation
     }
 
-    self.deliveries << msg
+    deliveries << msg
 
     msg
   end

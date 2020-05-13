@@ -20,7 +20,7 @@ describe 'Concerns' do
       end
 
       specify 'should be case insensitive' do
-        %w{secondary Secondary sEcOndAry SECONDARY}.each do |term|
+        %w[secondary Secondary sEcOndAry SECONDARY].each do |term|
           expect(subject.search_by_name(term)).to include(secondary)
         end
       end

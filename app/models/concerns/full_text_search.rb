@@ -6,7 +6,7 @@ module FullTextSearch
 
   included do
     pg_search_scope :search_by_name,
-      against: %i(name),
+      against: %i[name],
       using: {
         tsearch: {
           any_word: true,

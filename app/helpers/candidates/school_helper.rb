@@ -101,7 +101,7 @@ module Candidates::SchoolHelper
   def cleanup_school_url(url)
     if url.blank?
       '#'
-    elsif url.match? %{:}
+    elsif url.match? %(:)
       url
     elsif url.match? %r{.*@.*}
       "mailto:#{url}"

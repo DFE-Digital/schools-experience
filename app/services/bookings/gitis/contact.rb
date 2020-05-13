@@ -24,8 +24,8 @@ module Bookings
       entity_attributes :dfe_notesforclassroomexperience
       entity_attributes :mobilephone, except: :update
       entity_attribute  :dfe_channelcreation, except: :update, default: channel_creation
-      entity_attribute  :statecode, except: %i(create update), default: READWRITE
-      entity_attribute  :merged, except: %i(create update), default: false
+      entity_attribute  :statecode, except: %i[create update], default: READWRITE
+      entity_attribute  :merged, except: %i[create update], default: false
 
       entity_association :dfe_Country, Country, default: Country.default
       entity_association :dfe_PreferredTeachingSubject01, TeachingSubject

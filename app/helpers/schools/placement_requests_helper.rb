@@ -1,5 +1,5 @@
 module Schools::PlacementRequestsHelper
-  HIDDEN_STATUSES = %w(Viewed Booked).freeze
+  HIDDEN_STATUSES = %w[Viewed Booked].freeze
 
   def placement_request_status(placement_request)
     status = placement_request.status

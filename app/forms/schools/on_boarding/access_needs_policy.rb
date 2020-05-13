@@ -27,7 +27,7 @@ module Schools
       end
 
       def url_is_valid?
-        url.match?(URI::regexp(%w(http https))) && url.match?(/\Ahttps?:\/\/.*/)
+        url.match?(URI::DEFAULT_PARSER.make_regexp(%w[http https])) && url.match?(/\Ahttps?:\/\/.*/)
       end
 
       def ux_fix

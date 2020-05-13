@@ -90,7 +90,7 @@ module Bookings
 
         fail "invalid hostname for #{urn}, #{url}" unless url.split(".").size > 1
 
-                          # do nothing if starting with a valid protocol
+        # do nothing if starting with a valid protocol
         url_with_prefix = if url.starts_with?("http:", "https:")
                             url
 
@@ -123,17 +123,17 @@ module Bookings
 
       def build_school(edubase_row)
         attributes = {
-          urn:                     nilify(edubase_row['URN']),
-          name:                    nilify(edubase_row['EstablishmentName']),
-          website:                 cleanup_website(edubase_row['URN'], edubase_row['SchoolWebsite']),
-          contact_email:           email_override.presence,
-          address_1:               nilify(edubase_row['Street']),
-          address_2:               nilify(edubase_row['Locality']),
-          address_3:               nilify(edubase_row['Address3']),
-          town:                    nilify(edubase_row['Town']),
-          county:                  nilify(edubase_row['County (name)']),
-          postcode:                nilify(edubase_row['Postcode']),
-          coordinates:             convert_to_point(edubase_row),
+          urn: nilify(edubase_row['URN']),
+          name: nilify(edubase_row['EstablishmentName']),
+          website: cleanup_website(edubase_row['URN'], edubase_row['SchoolWebsite']),
+          contact_email: email_override.presence,
+          address_1: nilify(edubase_row['Street']),
+          address_2: nilify(edubase_row['Locality']),
+          address_3: nilify(edubase_row['Address3']),
+          town: nilify(edubase_row['Town']),
+          county: nilify(edubase_row['County (name)']),
+          postcode: nilify(edubase_row['Postcode']),
+          coordinates: convert_to_point(edubase_row),
           bookings_school_type_id: school_types[edubase_row['TypeOfEstablishment (code)'].to_i].id
         }
 

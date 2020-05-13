@@ -5,11 +5,11 @@ describe Candidates::Registrations::TeachingPreferencesController, type: :reques
   include_context 'Stubbed current_registration'
 
   let :registration_session do
-    FactoryBot.build :registration_session, with: %i(
+    FactoryBot.build :registration_session, with: %i[
       personal_information
       contact_information
       education
-    )
+    ]
   end
 
   context '#new' do

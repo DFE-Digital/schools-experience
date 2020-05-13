@@ -21,8 +21,8 @@ describe CookiePreference, type: :model do
       it { is_expected.to allow_value(false).for(:analytics) }
 
       it do
-        is_expected.not_to allow_value(nil).for(:analytics).
-          with_message('Choose On or Off for cookies which measure website use')
+        is_expected.not_to allow_value(nil).for(:analytics)
+          .with_message('Choose On or Off for cookies which measure website use')
       end
     end
   end
@@ -85,7 +85,7 @@ describe CookiePreference, type: :model do
 
     it do
       is_expected.to eql \
-        %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
+        %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
     end
   end
 
@@ -97,7 +97,7 @@ describe CookiePreference, type: :model do
 
       it do
         is_expected.to eql \
-          %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
+          %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
       end
     end
 
@@ -120,7 +120,7 @@ describe CookiePreference, type: :model do
 
       it do
         is_expected.to eql \
-          %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
+          %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
       end
     end
   end
