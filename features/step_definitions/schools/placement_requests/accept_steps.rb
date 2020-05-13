@@ -29,7 +29,6 @@ Given("there is a new placement request with a past date") do
   @placement_request = FactoryBot.create(:bookings_placement_request, school: @school, placement_date: placement_date)
 end
 
-
 When("I am on the {string} screen for that placement request") do |string|
   path = path_for(string, placement_request: @placement_request)
   visit(path)

@@ -9,7 +9,7 @@ Then("the {string} date field should have day, month and year birth date auto-co
   date_field_set = page.find('.govuk-fieldset__heading', text: date_label)
 
   within(date_field_set.ancestor('.govuk-form-group')) do
-    %w(day month year).each do |part|
+    %w[day month year].each do |part|
       expect(page).to have_css("input[autocomplete='bday bday-#{part}']")
     end
   end

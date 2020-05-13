@@ -1,4 +1,4 @@
-#Geocoder.configure(
+# Geocoder.configure(
 #
 #  if ENV['BING_MAPS_KEY'].present?
 #    lookup:
@@ -18,7 +18,7 @@
 #  # timeout: 5,
 #
 #  units: :miles
-#)
+# )
 
 require Rails.root.join('lib', 'geocoder_autoexpire_cache')
 require File.join('geocoder', 'lookups', 'bing')

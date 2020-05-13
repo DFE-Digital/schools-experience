@@ -21,7 +21,6 @@ Then("there should be a link back to the placement request") do
   expect(page).to have_link('Back to request', href: schools_placement_request_path(@placement_request.id))
 end
 
-
 Then("the relevant fields in the booking should have been saved") do
   @placement_request.booking.tap do |b|
     expect(b.contact_name).to eql('Dewey Largo')
@@ -42,9 +41,9 @@ end
 
 Then("the contact details should have been filled with those from the latest accepted booking") do
   {
-    "Contact name"   => @latest_accepted_booking.contact_name,
+    "Contact name" => @latest_accepted_booking.contact_name,
     "Contact number" => @latest_accepted_booking.contact_number,
-    "Contact email"  => @latest_accepted_booking.contact_email,
+    "Contact email" => @latest_accepted_booking.contact_email,
   }.each do |label, value|
     expect(get_input(page, label)['value']).to eql(value)
   end

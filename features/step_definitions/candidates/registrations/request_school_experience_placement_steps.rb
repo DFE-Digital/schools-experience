@@ -65,7 +65,6 @@ Given("the school I'm applying to is not flexible on dates") do
   end
 end
 
-
 Then("there should be a radio button per date the school has specified") do
   @school.bookings_placement_dates.map(&:to_s).each do |date_string|
     expect(page).to have_field(date_string, type: 'radio')

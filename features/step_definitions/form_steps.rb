@@ -63,7 +63,6 @@ Then("I should see a select box containing degree subjects labelled {string}") d
   ensure_select_options_exist(get_form_group(page, string), @degree_subjects)
 end
 
-
 Then("I should see a select box containing school subjects labelled {string}") do |string|
   pending
   ensure_select_options_exist(get_form_group(page, string), @subjects.map(&:name))
@@ -167,13 +166,13 @@ def get_input(page, label_text)
   page.find('input', id: label['for'])
 end
 
-LABEL_SELECTORS = %w(.govuk-label legend label).freeze
+LABEL_SELECTORS = %w[.govuk-label legend label].freeze
 def get_selector(label_text)
   LABEL_SELECTORS.detect { |s| page.has_css?(s, text: label_text) }
 end
 
 def ensure_date_field_exists(form_group)
-  %w{Day Month Year}.each do |date_part|
+  %w[Day Month Year].each do |date_part|
     form_group.find('label', text: date_part).tap do |inner_label|
       expect(form_group).to have_field(inner_label.text, type: 'number')
     end

@@ -13,11 +13,11 @@ Rails.application.configure do
   config.force_ssl = ENV['SKIP_FORCE_SSL'].blank?
 
   config.x.phase = 10000
-  config.x.features = %i(
+  config.x.features = %i[
     subject_specific_dates
     capped_bookings
     reminders
-  )
+  ]
   config.x.candidates.disable_applications = false
   config.x.candidates.alert_notification = nil
   config.x.bing_maps_key = nil

@@ -155,7 +155,7 @@ Rails.application.configure do
     'api.signin.education.gov.uk'
   end
 
-  truthy_strings = %w(true 1 yes)
+  truthy_strings = %w[true 1 yes]
 
   config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
@@ -175,11 +175,11 @@ Rails.application.configure do
     config.x.gitis.caching = truthy_strings.include?(ENV['CRM_CACHING'].to_s)
   end
 
-  config.x.features = %i(subject_specific_dates)
+  config.x.features = %i[subject_specific_dates]
 
   config.sass[:style] = :compressed if config.sass
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
 
-  config.x.maintenance_mode = %w{1 yes true}.include?(ENV['MAINTENANCE_MODE'].to_s)
+  config.x.maintenance_mode = %w[1 yes true].include?(ENV['MAINTENANCE_MODE'].to_s)
 end
