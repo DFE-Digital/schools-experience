@@ -18,10 +18,10 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Prerequisites
 
-- Ruby 2.6.5 - easiest with rbenv and ruby-build
+- Ruby 2.6.6 - easiest with rbenv and ruby-build
   - `brew install rbenv`
   - `brew install ruby-build`
-  - `rbenv install 2.6.5`
+  - `rbenv install 2.6.6`
 - Bundler 2.1.4 - `gem install bundler --version 2.1.4`
 - PostgreSQL with PostGIS extension
   - `brew install postgis`
@@ -66,11 +66,11 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Getting started
 
-1. The Get school experience service (the candidate facing part), is publicly 
-available but you'll need to setup School profiles to search for school. 
+1. The Get school experience service (the candidate facing part), is publicly
+available but you'll need to setup School profiles to search for school.
    1. That can be done from the [Manage school experience](https://localhost:3000/schools) service
-2. The Manage school experience service requires a DfE Sign In account attached 
-to a School. You can sign up for an account from the login page, but you'll 
+2. The Manage school experience service requires a DfE Sign In account attached
+to a School. You can sign up for an account from the login page, but you'll
 need to get the DfE Sign-in team to approve you for a school.
 
 ## Linting
@@ -86,18 +86,18 @@ then lint check your commits prior to committing.
 
 ## Configuring the application
 
-This can be controlled from various environment variables, see 
+This can be controlled from various environment variables, see
 [Env Vars](doc/env-vars.md) for more information.
 
 ## Monitoring health and deployment version
 
-There is a `/healthcheck.txt` endpoint which will verify both Postgres and 
+There is a `/healthcheck.txt` endpoint which will verify both Postgres and
 Redis connectivity.
 
-There is a `/deployment.txt` endpoint which will reflect the contents of 
+There is a `/deployment.txt` endpoint which will reflect the contents of
 `DEPLOYMENT_ID` back to allow checking when the deployed version has changed.
 
-This is protected by HTTPS Basic Auth, and is configured by the following 3 
+This is protected by HTTPS Basic Auth, and is configured by the following 3
 environment variables.
 
 `DEPLOYMENT_ID` - identifier for the current deployment
@@ -105,7 +105,7 @@ environment variables.
 `DEPLOYMENT_PASSWORD` - password to protect the endpoint
 
 There is also an `/healthchecks/api.txt` which is password protected using the
-above credentials and will perform a check against each of the configured API 
+above credentials and will perform a check against each of the configured API
 endpoints.
 
 ## Parallel testing
