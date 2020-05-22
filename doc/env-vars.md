@@ -3,17 +3,17 @@
 The school experience application supports various environment variables
 to control different aspects of the application.
 
-These can be configured as part of your shell or more easily by editing the 
+These can be configured as part of your shell or more easily by editing the
 `.env` file. Optionally `.env.development / `.env.test` files can be created for
-environment specific variables. 
+environment specific variables.
 
-Full documentation is at 
+Full documentation is at
 [https://github.com/bkeepers/dotenv/blob/master/README.md](https://github.com/bkeepers/dotenv/blob/master/README.md)
 
 ## HTTP Basic Auth access control
 
 If its required to password protect then entire application then you can set two
-environment variables when booting the app. This can either be part of the 
+environment variables when booting the app. This can either be part of the
 deployment configuration.
 
 `SECURE_USERNAME` username for http auth
@@ -22,7 +22,7 @@ deployment configuration.
 
 ## Exception notification
 
-If required Exceptions Notifications can be sent to a Slack channel. This is 
+If required Exceptions Notifications can be sent to a Slack channel. This is
 enabled and configured via environment variables.
 
 `SLACK_WEBHOOK` Webhook to use to post to Slack
@@ -87,7 +87,7 @@ enabled and configured via environment variables.
 
 `NOTIFY_API_KEY` - API key used to send emails via Notify
 
-`BING_MAPS_KEY` - API key used to query bing maps
+`GOOGLE_MAPS_KEY` - API key used to query Google Maps
 
 `GA_TRACKING_ID` - Google Analytics API key
 
@@ -140,4 +140,3 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 
 `DEPLOYMENT_USERNAME` - username for `deployment.txt` endpoint, defaults to a randomly generated value on start up
 DEPLOYMENT_PASSWORD - password for `deployment.txt` endpoint, defaults to a randomly generated value on start up
-

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Candidates::MapsHelper, type: :helper do
   before do
-    allow(Rails.application.config.x).to receive(:bing_maps_key) { '12345' }
+    allow(Rails.application.config.x).to receive(:google_maps_key) { '12345' }
     @latitude = "53.4782"
     @longitude = "-2.2299"
   end
@@ -12,9 +12,9 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
       static_map_url(@latitude, @longitude, mapsize: '300x200', zoom: 8)
     end
 
-    it('should return a correct Bing Maps url') do
-      url = "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/#{@latitude}%2C#{@longitude}/8"
-      params = "mapSize=300x200&key=12345&pushpin=#{@latitude}%2C#{@longitude}"
+    it('should return a correct Google Maps url') do
+      url = "https://maps.google.com/maps/static/?#{@latitude},#{@longitude}"
+      params = "size=300x200&key=12345&location=#{@latitude},#{@longitude}"
       expect(subject).to eq("#{url}?#{params}")
     end
   end
@@ -41,7 +41,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
 
     it "should add in latitude and longitude" do
       expect(subject).to \
-        eq("https://bing.com/maps/default.aspx?mode=D&rtp=~pos.#{@latitude}_#{@longitude}_test")
+        eq("https://google.com/maps/default.aspx?mode=D&rtp=~pos.#{@latitude}_#{@longitude}_test")
     end
   end
 end

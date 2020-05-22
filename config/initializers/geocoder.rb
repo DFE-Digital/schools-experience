@@ -1,6 +1,6 @@
 # Geocoder.configure(
 #
-#  if ENV['BING_MAPS_KEY'].present?
+#  if ENV['GOOGLE_MAPS_KEY'].present?
 #    lookup:
 #    api_key: ENV[[]]
 #  end
@@ -21,28 +21,28 @@
 # )
 
 require Rails.root.join('lib', 'geocoder_autoexpire_cache')
-require File.join('geocoder', 'lookups', 'bing')
+require File.join('geocoder', 'lookups', 'google')
 
 defaults = {
   units: :miles,
   cache: GeocoderAutoexpireCache.new(Rails.cache)
 }
 
-if Rails.application.config.x.bing_maps_key.present?
+if Rails.application.config.x.google_maps_key.present?
   Geocoder.configure(
     defaults.merge(
-      lookup: :bing,
-      api_key: Rails.application.config.x.bing_maps_key
+      lookup: :google,
+      api_key: Rails.application.config.x.google_maps_key
     )
   )
 else
   Geocoder.configure(defaults)
 end
 
-module BingOverrideURLParams
+module GoogleOverrideURLParams
   def query_url_params(query)
     super.merge(c: 'en-gb')
   end
 end
 
-Geocoder::Lookup::Bing.prepend(BingOverrideURLParams)
+Geocoder::Lookup::Google.prepend(GoogleOverrideURLParams)

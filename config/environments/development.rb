@@ -78,7 +78,7 @@ Rails.application.configure do
   ]
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
   config.x.candidates.alert_notification = ENV['CANDIDATE_NOTIFICATION'].presence
-  config.x.bing_maps_key = ENV['BING_MAPS_KEY'].presence || Rails.application.credentials.dig(:bing_maps_key)
+  config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials.dig(:google_maps_key)
 
   # dfe signin redirects back to https, so force it
   config.force_ssl = true

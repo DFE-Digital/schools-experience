@@ -155,7 +155,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     include Candidates::MapsHelper
 
     before do
-      allow(Rails.application.config.x).to receive(:bing_maps_key) { '12345' }
+      allow(Rails.application.config.x).to receive(:google_maps_key) { '12345' }
       @latitude = "53.4782"
       @longitude = "-2.2299"
       @school = OpenStruct.new(
@@ -166,7 +166,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
 
     subject { school_location_map @school }
 
-    it('should return a correct Bing Maps for schools location') do
+    it('should return a correct Google Maps for schools location') do
       expect(subject).to match(/<img /)
       expect(subject).to match("#{@latitude}%2C#{@longitude}")
     end

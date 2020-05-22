@@ -20,7 +20,7 @@ Rails.application.configure do
   ]
   config.x.candidates.disable_applications = false
   config.x.candidates.alert_notification = nil
-  config.x.bing_maps_key = nil
+  config.x.google_maps_key = nil
 
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = "https://localhost:#{ENV.fetch('PORT') { 3000 }}"

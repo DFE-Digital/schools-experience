@@ -1,0 +1,62 @@
+version: '3.3'
+
+services:
+   school-experience:
+     build: .
+     ports:
+       - "3000:3000"
+     restart: always
+     healthcheck:
+       disable: true
+     environment:
+       - RAILS_ENV=servertest
+       - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
+       - REDIS_URL=redis://redis:6379/1
+       - SECRET_KEY_BASE=stubbed
+       - SKIP_FORCE_SSL=true
+       - WEB_URL=postgis://postgres:secret@postgres/school_experience
+     depends_on:
+       - db-tasks
+     volumes:
+       - .:/ci_build
+
+   delayed-jobs:
+     build: .
+     command: rake jobs:work
+     restart: always
+     healthcheck:
+       disable: true
+     environment:
+       - RAILS_ENV=servertest
+       - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
+       - REDIS_URL=redis://redis:6379/1
+       - SECRET_KEY_BASE=stubbed
+       - SKIP_FORCE_SSL=true
+       - WEB_URL=postgis://postgres:secret@postgres/school_experience
+     depends_on:
+       - db-tasks
+
+   db-tasks:
+     build: .
+     command: rake db:create db:schema:load
+     restart: on-failure
+     healthcheck:
+       disable: true
+     environment:
+       - RAILS_ENV=test
+       - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
+       - REDIS_URL=redis://redis:6379/1
+       - SECRET_KEY_BASE=stubbed
+       - SKIP_FORCE_SSL=true
+       - WEB_URL=postgis://postgres:secret@postgres/school_experience
+     volumes:
+       - .:/ci_build
+     depends_on:
+       - postgres
+       - redis
+
+   postgres:
+     image: mdillon/postgis:11-alpine
+
+   redis:
+     image: redis:5-alpine

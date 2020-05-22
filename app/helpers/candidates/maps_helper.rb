@@ -1,36 +1,36 @@
 require 'addressable'
 
 module Candidates::MapsHelper
-  BING_BASE_URL = "https://dev.virtualearth.net/REST/v1".freeze
-  EXTERNAL_MAP_URL = "https://bing.com/maps/default.aspx?mode=D&rtp=~pos.{latitude}_{longitude}_{name}".freeze
-  STATIC_MAP_URL = "#{BING_BASE_URL}/Imagery/Map/Road/{center_point}/{zoom_level}{?params*}".freeze
+  GOOGLE_BASE_URL = "https://maps.googleapis.com/".freeze
+  EXTERNAL_MAP_URL = "https://www.google.com/maps/@{latitude},{longitude},14z".freeze
+  STATIC_MAP_URL = "#{GOOGLE_BASE_URL}/maps/api/staticmap{?params*}".freeze
 
   def include_maps_in_head
     content_for :head do
       javascript_include_tag \
-        "https://www.bing.com/api/maps/mapcontrol?callback=mapsLoadedCallback",
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyDJZrrmjAnIm50WB_w8hb1OLXOnc_9JEms&callback=mapsLoadedCallback",
         defer: true, async: true
     end
   end
 
-  def static_map_url(latitude, longitude, mapsize:, zoom: 10)
-    return if Rails.application.config.x.bing_maps_key.blank?
+  def static_map_url(latitude, longitude, mapsize:, zoom: 10, scale: 2)
+    return if Rails.application.config.x.google_maps_key.blank?
 
     location = "#{latitude},#{longitude}"
 
     params = {
-      mapSize: mapsize,
-      key: Rails.application.config.x.bing_maps_key,
-      pushpin: location
+      size: mapsize,
+      key: Rails.application.config.x.google_maps_key,
+      markers: location
     }
 
     tmpl = Addressable::Template.new(STATIC_MAP_URL)
-    tmpl.expand(params: params, zoom_level: zoom, center_point: location).to_s
+    tmpl.expand(params: params, zoom: zoom, scale: scale, center: location).to_s
   end
 
   def ajax_map(latitude, longitude, mapsize:, title: nil, description: nil,
                zoom: 10, described_by: nil, include_js_in_head: true)
-    return if Rails.application.config.x.bing_maps_key.blank?
+    return if Rails.application.config.x.google_maps_key.blank?
 
     map_data = {
       controller: 'map',
@@ -38,7 +38,7 @@ module Candidates::MapsHelper
       map_longitude: longitude,
       map_title: title,
       map_description: description,
-      map_api_key: Rails.application.config.x.bing_maps_key.to_s
+      map_api_key: Rails.application.config.x.google_maps_key.to_s
     }
 
     static_url = static_map_url(

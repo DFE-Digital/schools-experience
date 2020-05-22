@@ -24,7 +24,9 @@ RUN yarn install && yarn cache clean
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
 RUN gem install bundler --version='~> 2.1.4' && \
-    bundle install --without development --jobs=$(nproc --all) && \
+    bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
+    bundle config set without 'development' && \
+    bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
 
