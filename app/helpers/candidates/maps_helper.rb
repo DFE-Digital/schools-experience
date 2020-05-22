@@ -1,7 +1,7 @@
 require 'addressable'
 
 module Candidates::MapsHelper
-  GOOGLE_BASE_URL = "https://maps.googleapis.com/".freeze
+  GOOGLE_BASE_URL = "https://maps.googleapis.com".freeze
   EXTERNAL_MAP_URL = "https://www.google.com/maps/@{latitude},{longitude},14z".freeze
   STATIC_MAP_URL = "#{GOOGLE_BASE_URL}/maps/api/staticmap{?params*}".freeze
 
