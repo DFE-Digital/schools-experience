@@ -14,7 +14,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
 
     it('should return a correct Google Maps url') do
       url = "https://maps.googleapis.com/maps/api/staticmap?"
-      params = "size=300x200&key=12345&markers=#{@latitude},#{@longitude}"
+      params = "size=300x200&key=12345&markers=#{@latitude}%2C#{@longitude}"
       expect(subject).to eq("#{url}?#{params}")
     end
   end
@@ -32,7 +32,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
 
     it "should include nested non-js fallback img" do
       expect(subject).to match(/<img /)
-      expect(subject).to match("/#{@latitude}%2C#{@longitude}/")
+      expect(subject).to match(";markers=#{@latitude}%2C#{@longitude}")
     end
   end
 
