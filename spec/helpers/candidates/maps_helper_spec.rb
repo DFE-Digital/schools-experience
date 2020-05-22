@@ -13,8 +13,8 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
     end
 
     it('should return a correct Google Maps url') do
-      url = "https://maps.google.com/maps/static/?#{@latitude},#{@longitude}"
-      params = "size=300x200&key=12345&location=#{@latitude},#{@longitude}"
+      url = "https://maps.googleapis.com/maps/api/staticmap?"
+      params = "size=300x200&key=12345&markers=#{@latitude},#{@longitude}"
       expect(subject).to eq("#{url}?#{params}")
     end
   end
@@ -41,7 +41,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
 
     it "should add in latitude and longitude" do
       expect(subject).to \
-        eq("https://google.com/maps/default.aspx?mode=D&rtp=~pos.#{@latitude}_#{@longitude}_test")
+        eq("https://www.google.com/maps/@#{@latitude},#{@longitude},14z")
     end
   end
 end
