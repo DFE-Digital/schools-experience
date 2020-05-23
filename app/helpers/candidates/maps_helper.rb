@@ -8,7 +8,7 @@ module Candidates::MapsHelper
   def include_maps_in_head
     content_for :head do
       javascript_include_tag \
-        "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.config.x.google_maps_key.to_s}&callback=mapsLoadedCallback",
+        "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.config.x.google_maps_key}&callback=mapsLoadedCallback",
         defer: true, async: true
     end
   end
