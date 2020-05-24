@@ -6,9 +6,11 @@ module Candidates::MapsHelper
   STATIC_MAP_URL = "#{GOOGLE_BASE_URL}/maps/api/staticmap{?params*}".freeze
 
   def include_maps_in_head
+    map_api_key = Rails.application.config.x.google_maps_key
+
     content_for :head do
       javascript_include_tag \
-        "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.config.x.google_maps_key}&callback=mapsLoadedCallback",
+        "https://maps.googleapis.com/maps/api/js?key=#{map_api_key}&callback=mapsLoadedCallback",
         defer: true, async: true
     end
   end
@@ -37,8 +39,7 @@ module Candidates::MapsHelper
       map_latitude: latitude,
       map_longitude: longitude,
       map_title: title,
-      map_description: description,
-      map_api_key: Rails.application.config.x.google_maps_key.to_s
+      map_description: description
     }
 
     static_url = static_map_url(

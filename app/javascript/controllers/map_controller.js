@@ -16,22 +16,27 @@ export default class extends Controller {
   }
 
   drawMap() {
-    let location = new Microsoft.Maps.Location(
+    let location = new google.maps.LatLng(
       this.data.get('latitude'),
       this.data.get('longitude')
     ) ;
 
-    this.map = new Microsoft.Maps.Map(this.containerTarget, {
-        credentials: this.data.get('apiKey'),
-        mapTypeId: Microsoft.Maps.MapTypeId.road,
+    this.map = new google.maps.Map(this.containerTarget, {
+        mapTypeId: :roadmap,
         center: location,
-        animate: true,
-        showDashboard: true,
-        enableSearchLogo: false,
-        enableClickableLogo: false,
-        showCopyright: true,
-        disableScrollWheelZoom: true
+        gestureHandling: 'none',
+        zoomControl: false,
+        mapTypeControl: true,
+        scaleControl: true,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true
     }) ;
+
+    let pin = new google.maps.Marker({
+      position: location,
+      map: this.map
+    });
 
     let pin = new Microsoft.Maps.Pushpin(location);
     this.map.entities.push(pin) ;
