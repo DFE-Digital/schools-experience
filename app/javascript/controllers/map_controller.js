@@ -22,7 +22,7 @@ export default class extends Controller {
     ) ;
 
     this.map = new google.maps.Map(this.containerTarget, {
-        mapTypeId: :roadmap,
+        mapTypeId: 'roadmap',
         center: location,
         gestureHandling: 'none',
         zoomControl: false,
