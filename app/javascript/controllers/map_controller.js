@@ -36,19 +36,23 @@ export default class extends Controller {
     let pin = new google.maps.Marker({
       position: location,
       map: this.map
-    });
-
-    let pin = new Microsoft.Maps.Pushpin(location);
-    this.map.entities.push(pin) ;
+    }) ;
 
     if (this.data.has('title')) {
-      let box = { title: this.data.get('title') }
+      let content = '<div id="content">'+
+        '<h1 id="firstHeading" class="firstHeading">' + this.data.get('title') + '</h1>'+
+        '<div id="bodyContent">'+
+          '<p>' + this.data.get('description') + '</p>' +
+        '</div>' +
+      '</div>';
 
-      if (this.data.has('description'))
-        box.description = this.data.get('description') ;
+      let infowindow = new google.maps.InfoWindow({
+        content: content
+      });
 
-      var infobox = new Microsoft.Maps.Infobox(location, box);
-      infobox.setMap(this.map) ;
+      pin.addListener('click', function() {
+        infowindow.open(map, pin);
+      });
     }
   }
 }
