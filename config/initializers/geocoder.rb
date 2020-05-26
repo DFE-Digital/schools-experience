@@ -32,6 +32,7 @@ if Rails.application.config.x.google_maps_key.present?
   Geocoder.configure(
     defaults.merge(
       lookup: :google,
+      use_https: true,
       api_key: Rails.application.config.x.google_maps_key
     )
   )
