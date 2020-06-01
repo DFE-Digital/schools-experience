@@ -146,8 +146,8 @@ private
 
     fail InvalidGeocoderResultError unless valid_geocoder_result?(result)
 
-    @location_name = result.name
-    extract_coords(latitude: result.latitude, longitude: result.longitude)
+    @location_name = result.name || result.address_components[0].fetch('long_name', location)
+    extract_coords(latitude: result.latitude || result.geometry.fetch('location').fetch('lat'), result.longitude || longitude: result.geometry.fetch('location').fetch('lng'))
   end
 
   def empty_geocoder_result?(result)
