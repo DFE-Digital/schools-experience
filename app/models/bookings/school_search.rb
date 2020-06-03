@@ -146,10 +146,11 @@ private
 
     fail InvalidGeocoderResultError unless valid_geocoder_result?(result)
 
-    @location_name = result.try(&:name) || result.address_components[0].fetch('long_name', location)
+    # this better work
+    @location_name = result.try(:name) || result.address_components.first.fetch('long_name', location)
     extract_coords(
-      latitude: result.try(&:latitude) || result.geometry.fetch('location').fetch('lat'),
-      longitude: result.try(&:longitude) || result.geometry.fetch('location').fetch('lng')
+      latitude: result.latitude,
+      longitude: result.longitude
     )
   end
 
