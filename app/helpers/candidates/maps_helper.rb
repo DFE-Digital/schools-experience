@@ -21,7 +21,7 @@ module Candidates::MapsHelper
     location = "#{latitude},#{longitude}"
 
     params = {
-      size: mapsize,
+      size: mapsize.join('x'),
       key: Rails.application.config.x.google_maps_key,
       markers: location
     }

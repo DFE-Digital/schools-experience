@@ -9,7 +9,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
 
   context '.static_map_url' do
     subject do
-      static_map_url(@latitude, @longitude, mapsize: '300x200', zoom: 8)
+      static_map_url(@latitude, @longitude, mapsize: [300, 200], zoom: 8)
     end
 
     it('should return a correct Google Maps url') do
@@ -20,7 +20,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
   end
 
   context '.ajax_map' do
-    subject { ajax_map(@latitude, @longitude, mapsize: '300x200', zoom: 8) }
+    subject { ajax_map(@latitude, @longitude, mapsize: [300, 200], zoom: 8) }
 
     it "should include wrapping div" do
       expect(subject).to match('class="embedded-map"')

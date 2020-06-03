@@ -29,3 +29,6 @@ yarn-debug.log*
 
 .env
 .env.*
+
+.idea
+.rakeTasks
