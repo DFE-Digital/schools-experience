@@ -70,12 +70,6 @@ module Candidates::MapsHelper
     end
   end
 
-#https://bing.com/maps/default.aspx?mode=D
-#rtp=~pos.53.573515084780595_-2.4362235019964307_University%20of%20Bolton
-
-#https://www.google.com/maps/dir/?api=1&destination=DY6+8JA&destination_place_id=ChIJgWMIEj-QcEgRdL_mreSoR6c
-#
-
   def external_map_url(latitude:, longitude:, name:, zoom: 17)
     tmpl = Addressable::Template.new(EXTERNAL_MAP_URL)
     tmpl.expand(latitude: latitude, longitude: longitude, zoom: zoom, name: name).to_s
