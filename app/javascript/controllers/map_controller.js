@@ -30,7 +30,8 @@ export default class extends Controller {
         scaleControl: true,
         streetViewControl: false,
         rotateControl: false,
-        fullscreenControl: true
+        fullscreenControl: true,
+        zoom: 17
     }) ;
 
     let pin = new google.maps.Marker({

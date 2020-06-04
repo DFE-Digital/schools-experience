@@ -2,7 +2,7 @@ require 'addressable'
 
 module Candidates::MapsHelper
   GOOGLE_BASE_URL = "https://maps.googleapis.com".freeze
-  EXTERNAL_MAP_URL = "https://www.google.com/maps/@{latitude},{longitude},14z".freeze
+  EXTERNAL_MAP_URL = "https://www.google.com/maps/@{latitude},{longitude},{zoom}z".freeze
   STATIC_MAP_URL = "#{GOOGLE_BASE_URL}/maps/api/staticmap{?params*}".freeze
 
   def include_maps_in_head
@@ -15,23 +15,26 @@ module Candidates::MapsHelper
     end
   end
 
-  def static_map_url(latitude, longitude, mapsize:, zoom: 10, scale: 2)
+  def static_map_url(latitude, longitude, mapsize:, zoom: 17, scale: 2)
     return if Rails.application.config.x.google_maps_key.blank?
 
     location = "#{latitude},#{longitude}"
 
     params = {
-      size: mapsize.join('x'),
+      center: location,
       key: Rails.application.config.x.google_maps_key,
-      markers: location
+      markers: location,
+      scale: scale,
+      size: mapsize.join('x'),
+      zoom: zoom
     }
 
     tmpl = Addressable::Template.new(STATIC_MAP_URL)
-    tmpl.expand(params: params, zoom: zoom, scale: scale, center: location).to_s
+    tmpl.expand(params: params).to_s
   end
 
   def ajax_map(latitude, longitude, mapsize:, title: nil, description: nil,
-               zoom: 10, described_by: nil, include_js_in_head: true)
+               zoom: 17, described_by: nil, include_js_in_head: true)
     return if Rails.application.config.x.google_maps_key.blank?
 
     map_data = {
@@ -67,8 +70,8 @@ module Candidates::MapsHelper
     end
   end
 
-  def external_map_url(latitude:, longitude:, name:)
+  def external_map_url(latitude:, longitude:, name:, zoom: 17)
     tmpl = Addressable::Template.new(EXTERNAL_MAP_URL)
-    tmpl.expand(latitude: latitude, longitude: longitude, name: name).to_s
+    tmpl.expand(latitude: latitude, longitude: longitude, zoom: zoom, name: name).to_s
   end
 end
