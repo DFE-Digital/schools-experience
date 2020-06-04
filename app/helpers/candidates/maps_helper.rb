@@ -2,7 +2,7 @@ require 'addressable'
 
 module Candidates::MapsHelper
   GOOGLE_BASE_URL = "https://maps.googleapis.com".freeze
-  EXTERNAL_MAP_URL = "https://www.google.com/maps/@{latitude},{longitude},{zoom}z".freeze
+  EXTERNAL_MAP_URL = "https://www.google.com/maps/dir/?api=1&origin={latitude},{longitude}&destination={name}".freeze
   STATIC_MAP_URL = "#{GOOGLE_BASE_URL}/maps/api/staticmap{?params*}".freeze
 
   def include_maps_in_head
@@ -69,6 +69,12 @@ module Candidates::MapsHelper
       end
     end
   end
+
+#https://bing.com/maps/default.aspx?mode=D
+#rtp=~pos.53.573515084780595_-2.4362235019964307_University%20of%20Bolton
+
+#https://www.google.com/maps/dir/?api=1&destination=DY6+8JA&destination_place_id=ChIJgWMIEj-QcEgRdL_mreSoR6c
+#
 
   def external_map_url(latitude:, longitude:, name:, zoom: 17)
     tmpl = Addressable::Template.new(EXTERNAL_MAP_URL)

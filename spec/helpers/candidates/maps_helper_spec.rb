@@ -42,7 +42,7 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
 
     it "should add in latitude and longitude" do
       expect(subject).to \
-        eq("https://www.google.com/maps/@#{@latitude},#{@longitude},#{@zoom}z")
+        eq("https://www.google.com/maps/dir/?api=1&origin=#{@latitude},#{@longitude}&destination=test")
     end
   end
 end
