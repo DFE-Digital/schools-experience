@@ -21,7 +21,7 @@ export default class extends Controller {
       this.data.get('longitude')
     ) ;
 
-    this.map = new google.maps.Map(this.containerTarget, {
+    let map = new google.maps.Map(this.containerTarget, {
         mapTypeId: 'roadmap',
         center: location,
         gestureHandling: 'none',
@@ -33,6 +33,8 @@ export default class extends Controller {
         fullscreenControl: true,
         zoom: 17
     }) ;
+
+    this.map = map;
 
     let pin = new google.maps.Marker({
       position: location,
