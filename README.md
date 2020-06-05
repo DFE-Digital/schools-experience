@@ -41,7 +41,7 @@ We also have markdown pages within the `doc` folder of this git repo
   2. node -v
   3. bundler -v
   4. yarn -v
-2. Run `bundle intall` to install ruby dependencies
+2. Run `bundle install` to install ruby dependencies
 3. Run `yarn` to install node dependencies
 4. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
 5. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
@@ -78,7 +78,7 @@ need to get the DfE Sign-in team to approve you for a school.
 It's best to lint just your app directories and not those belonging to the framework, e.g.
 
 ```bash
-bundle exec govuk-lint-ruby app lib spec
+bundle exec rubocop app lib spec
 ```
 
 You can copy the `script/pre-commit` to `.git/hooks/pre-commit` and `git` will
