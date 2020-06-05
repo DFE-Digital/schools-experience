@@ -42,20 +42,20 @@ export default class extends Controller {
     }) ;
 
     if (this.data.has('title')) {
-      let content = '<div id="content">'+
-        '<h1 id="firstHeading" class="firstHeading">' + this.data.get('title') + '</h1>'+
-        '<div id="bodyContent">'+
-          '<p>' + this.data.get('description') + '</p>' +
-        '</div>' +
-      '</div>';
+      let content = '<p class="govuk-!-font-size-14">'+
+          '<strong class="govuk-!-font-weight-bold">' + this.data.get('title') + '</strong><br/>' + this.data.get('description') + '</p>';
 
       let infowindow = new google.maps.InfoWindow({
         content: content
       });
 
-      pin.addListener('click', function() {
+      function openInfoWidow() {
         infowindow.open(map, pin);
-      });
+      }
+
+      pin.addListener('click', openInfoWidow);
+
+      openInfoWidow();
     }
   }
 }
