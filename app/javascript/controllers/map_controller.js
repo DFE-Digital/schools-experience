@@ -69,7 +69,7 @@ export default class extends Controller {
       this.data.get('longitude')
     );
 
-    const Popup = createPopupClass();
+    const Popup = this.createPopupClass();
     const bounds = new google.maps.LatLngBounds();
 
     const centerLat = this.data.get('latitude');
