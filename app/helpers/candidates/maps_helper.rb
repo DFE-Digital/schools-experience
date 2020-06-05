@@ -2,7 +2,7 @@ require 'addressable'
 
 module Candidates::MapsHelper
   GOOGLE_BASE_URL = "https://maps.googleapis.com".freeze
-  EXTERNAL_MAP_URL = "https://www.google.com/maps/dir/?api=1&origin={latitude},{longitude}&destination={name}".freeze
+  EXTERNAL_MAP_URL = "https://www.google.com/maps/dir/?api=1&destination={latitude},{longitude}".freeze
   STATIC_MAP_URL = "#{GOOGLE_BASE_URL}/maps/api/staticmap{?params*}".freeze
 
   def include_maps_in_head
