@@ -1,6 +1,6 @@
 find . -type f -name "*.feature" > features.txt
 
-split -n r/5 features.txt
+split -n r/10 features.txt
 
 ls -l
 

@@ -135,7 +135,7 @@ jobs:
 - job: FunctionalTesting
   dependsOn: BuildAndNonBrowserTesting
   strategy:
-    maxParallel: 5
+    maxParallel: 10
     matrix: $[ dependencies.BuildAndNonBrowserTesting.outputs['mtrx.legs'] ]
 
   steps:
