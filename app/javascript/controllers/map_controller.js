@@ -12,7 +12,7 @@ export default class extends Controller {
     if (!global.mapsLoaded || this.map)
       return ;
 
-    this.drawMap2() ;
+    this.drawMap() ;
   }
 
   drawMap() {
@@ -23,57 +23,7 @@ export default class extends Controller {
       this.data.get('longitude')
     );
 
-    let map = new google.maps.Map($map, {
-        mapTypeId: 'roadmap',
-        center: latLng,
-        gestureHandling: 'none',
-        zoomControl: true,
-        mapTypeControl: true,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: true,
-        zoom: 17
-    }) ;
-
-    this.map = map;
-
-    let pin = new google.maps.Marker({
-      position: latLng,
-      map: this.map
-    }) ;
-
-    if (this.data.has('title')) {
-      let content = '<p class="govuk-!-font-size-14">'+
-          '<strong class="govuk-!-font-weight-bold">' + this.data.get('title') + '</strong><br/>' + this.data.get('description') + '</p>';
-
-      let infowindow = new google.maps.InfoWindow({
-        content: content
-      });
-
-      function openInfoWidow() {
-        infowindow.open(map, pin);
-      }
-
-      pin.addListener('click', openInfoWidow);
-
-      openInfoWidow();
-    }
-  }
-
-  drawMap2() {
-    const $map = this.containerTarget;
-
-    const latLng = new google.maps.LatLng(
-      this.data.get('latitude'),
-      this.data.get('longitude')
-    );
-
     const Popup = this.createPopupClass();
-    const bounds = new google.maps.LatLngBounds();
-
-    const centerLat = this.data.get('latitude');
-    const centerLng = this.data.get('longitude');
 
     const map = new google.maps.Map($map, {
       mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -85,11 +35,8 @@ export default class extends Controller {
       fullscreenControlOptions: {
         position: google.maps.ControlPosition.RIGHT_BOTTOM
       },
-      zoom: 11,
-      center: {
-        lat: centerLat,
-        lng: centerLng
-      },
+      zoom: 17,
+      center: latLng,
       styles: [
         {
           featureType: "poi.business",
@@ -117,18 +64,11 @@ export default class extends Controller {
     const openContent = document.createElement("div");
     openContent.insertAdjacentHTML(
       "beforeend",
-      `<p class="govuk-body"><strong>${this.data.get('title')}</strong><br/>${this.data.get('description')}</p>`
+      `<p class="govuk-body">${this.data.get('description')}</p>`
     );
 
     const popup = new Popup(latLng, closedContent, openContent);
     popup.setMap(map);
-
-    // Extend the bounds by the locations so we get a decent number as part of the first view.
-    bounds.extend(latLng);
-
-    // Use provider address to center and zoom when only one location
-    map.fitBounds(bounds);
-    map.panToBounds(bounds);
   }
 
   // Based on: https://developers.google.com/maps/documentation/javascript/examples/overlay-popup
