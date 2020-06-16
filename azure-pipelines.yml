@@ -65,7 +65,7 @@ jobs:
     displayName: Run the Specs
 
   - task: PublishTestResults@2
-    condition: failed()
+    # condition: failed()
     displayName: Upload RSpec results
     inputs:
       testResultsFormat: 'JUnit'
@@ -76,7 +76,7 @@ jobs:
     displayName: Run the Cucumber features
 
   - task: PublishTestResults@2
-    condition: failed()
+    # condition: failed()
     displayName: Upload Cucumber results
     inputs:
       testResultsFormat: 'JUnit'
@@ -151,7 +151,7 @@ jobs:
     displayName: Run Cucumber Tests
 
   - task: PublishTestResults@2
-    condition: failed()
+    # condition: failed()
     displayName: Upload Cucumber results
     inputs:
       testResultsFormat: 'JUnit'
