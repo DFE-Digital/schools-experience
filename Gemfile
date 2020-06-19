@@ -44,7 +44,7 @@ gem 'delayed_job_active_record'
 gem 'delayed_cron_job'
 gem 'delayed_job_web'
 
-gem "redis", "~> 4.1"
+gem "redis", "~> 4.2"
 
 gem 'exception_notification'
 gem 'slack-notifier'
