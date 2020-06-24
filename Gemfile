@@ -25,7 +25,7 @@ gem 'puma', '~> 4.3'
 # Use SCSS for stylesheets
 gem 'sassc-rails'
 gem "autoprefixer-rails"
-gem "sprockets", "< 4.0.0"
+gem "sprockets", "< 5.0.0"
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker'
