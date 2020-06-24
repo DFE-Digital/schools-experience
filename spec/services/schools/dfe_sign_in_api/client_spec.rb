@@ -96,7 +96,9 @@ describe Schools::DFESignInAPI::Client do
     end
 
     class TestAPI < Schools::DFESignInAPI::Client
-      def data; response; end
+      def data
+        response
+      end
 
     private
 

@@ -21,7 +21,7 @@ module Bookings
         models.each do |model|
           candidate = model.is_a?(Bookings::Candidate) ? model : model.candidate
 
-          if contacts.has_key?(candidate.gitis_uuid)
+          if contacts.key?(candidate.gitis_uuid)
             candidate.assign_gitis_contact contacts[candidate.gitis_uuid]
           else
             candidate.gitis_contact = missing_contact(candidate)

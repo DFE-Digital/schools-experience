@@ -288,7 +288,7 @@ describe Bookings::Gitis::Store::Dynamics do
 
         it { is_expected.to eq uuid }
         it "will reset change tracking" do
-          subject #  subject api is called
+          subject # subject api is called
           expect(entity).to have_attributes changed: []
         end
       end

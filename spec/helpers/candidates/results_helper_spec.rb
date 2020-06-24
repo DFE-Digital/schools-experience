@@ -3,12 +3,12 @@ require 'rails_helper'
 describe Candidates::ResultsHelper, type: :helper do
   let(:point_in_manchester) { Bookings::School::GEOFACTORY.point(-2.241, 53.481) }
 
-  let(:geocoder_manchester_search_result) {
+  let(:geocoder_manchester_search_result) do
     [
       Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK'),
       Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK')
     ]
-  }
+  end
   let(:search) { Candidates::SchoolSearch.new(location: 'Manchester') }
 
   subject { school_results_info(search) }

@@ -25,7 +25,7 @@ class Schools::PlacementDatesController < Schools::BaseController
     # it here based on their available phases
 
     if @placement_date.valid?
-      unless new_placement_date_params.has_key?(:supports_subjects)
+      unless new_placement_date_params.key?(:supports_subjects)
         @placement_date.assign_attributes(supports_subjects: school_supports_subjects?)
       end
 

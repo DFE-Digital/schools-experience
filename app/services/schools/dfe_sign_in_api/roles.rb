@@ -31,8 +31,8 @@ module Schools
       def roles
         @response ||= response
 
-        unless @response.is_a?(Hash) && @response.has_key?('roles')
-          fail APIResponseError, 'invalid response from roles API'
+        unless @response.is_a?(Hash) && @response.key?('roles')
+          raise APIResponseError, 'invalid response from roles API'
         end
 
         @response.fetch('roles')
@@ -41,7 +41,7 @@ module Schools
       def response
         super
       rescue Faraday::ResourceNotFound
-        fail NoOrganisationError,
+        raise NoOrganisationError,
           "Organisation '#{organisation_uuid}' not found for user '#{user_uuid}'"
       end
 
@@ -49,9 +49,12 @@ module Schools
         URI::HTTPS.build(
           host: Rails.configuration.x.dfe_sign_in_api_host,
           path: [
-            '/services',     self.class.service_id,
-            'organisations', organisation_uuid,
-            'users',         user_uuid
+            '/services',
+            self.class.service_id,
+            'organisations',
+            organisation_uuid,
+            'users',
+            user_uuid
           ].join('/')
         )
       end

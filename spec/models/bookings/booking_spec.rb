@@ -156,8 +156,15 @@ describe Bookings::Booking do
 
   describe 'Delegation' do
     %i[
-      availability degree_stage degree_stage_explaination degree_subject
-      has_dbs_check objectives teaching_stage token closed?
+      availability
+      degree_stage
+      degree_stage_explaination
+      degree_subject
+      has_dbs_check
+      objectives
+      teaching_stage
+      token
+      closed?
     ].each do |delegated_method|
       it { is_expected.to delegate_method(delegated_method).to(:bookings_placement_request) }
     end

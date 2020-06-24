@@ -259,8 +259,7 @@ module Schools
 
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
-      inverse_of: :school_profile,
-      foreign_key: 'bookings_school_id'
+      inverse_of: :school_profile
 
     def available_subjects
       Bookings::Subject.all

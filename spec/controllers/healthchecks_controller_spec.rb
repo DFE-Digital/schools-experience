@@ -16,7 +16,7 @@ describe HealthchecksController, type: :request do
 
     context 'with non functional redis' do
       before do
-        allow(Redis.current).to receive(:ping) { fail Redis::TimeoutError }
+        allow(Redis.current).to receive(:ping) { raise Redis::TimeoutError }
       end
 
       it "will raise an exception" do

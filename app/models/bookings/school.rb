@@ -68,7 +68,6 @@ class Bookings::School < ApplicationRecord
 
   has_one :profile,
     class_name: "Bookings::Profile",
-    foreign_key: :school_id,
     inverse_of: :school,
     dependent: :destroy
 
@@ -98,31 +97,31 @@ class Bookings::School < ApplicationRecord
   scope :enabled, -> { where(enabled: true) }
   scope :ordered_by_name, -> { order(name: 'asc') }
 
-  scope :that_provide, ->(subject_ids) do
+  scope :that_provide, lambda { |subject_ids|
     if subject_ids.present?
       left_outer_joins(:bookings_schools_subjects)
         .where(bookings_schools_subjects: { bookings_subject_id: subject_ids })
     else
       all
     end
-  end
+  }
 
-  scope :at_phases, ->(phase_ids) do
+  scope :at_phases, lambda { |phase_ids|
     if phase_ids.present?
       left_outer_joins(:bookings_schools_phases)
         .where(bookings_schools_phases: { bookings_phase_id: phase_ids })
     else
       all
     end
-  end
+  }
 
-  scope :costing_upto, ->(limit) do
+  scope :costing_upto, lambda { |limit|
     if limit.present?
       where(arel_table[:fee].lteq(limit))
     else
       all
     end
-  end
+  }
 
   scope :flexible, -> { where(availability_preference_fixed: false) }
 
@@ -130,7 +129,7 @@ class Bookings::School < ApplicationRecord
 
   scope :fixed, -> { where(availability_preference_fixed: true) }
 
-  scope :fixed_with_available_dates, -> {
+  scope :fixed_with_available_dates, lambda {
     fixed.where(
       id: Bookings::School
         .default_scoped

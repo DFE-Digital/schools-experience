@@ -3,7 +3,7 @@ require 'csv'
 
 describe Bookings::Data::SchoolManager do
   let(:urns) do
-    [100111, 100112, 100113]
+    [100_111, 100_112, 100_113]
   end
 
   let(:raw_csv) do

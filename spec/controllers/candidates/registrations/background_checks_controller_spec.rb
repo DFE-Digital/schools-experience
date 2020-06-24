@@ -4,7 +4,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
   include_context 'Stubbed current_registration'
 
   before do
-    FactoryBot.create :bookings_school, urn: 11048
+    FactoryBot.create :bookings_school, urn: 11_048
   end
 
   context 'without existing background_check in session' do

@@ -19,7 +19,7 @@ shared_examples 'a school fee' do
 
       context 'greater than 9999.99' do
         let :amount do
-          10000
+          10_000
         end
 
         it 'adds an error' do

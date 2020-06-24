@@ -3,8 +3,8 @@ Given("the School Chooser feature is enabled") do
 end
 
 Given("I have two schools") do
-  schoola = FactoryBot.create(:bookings_school, name: 'School A', urn: 123489)
-  schoolb = FactoryBot.create(:bookings_school, name: 'School B', urn: 123490)
+  schoola = FactoryBot.create(:bookings_school, name: 'School A', urn: 123_489)
+  schoolb = FactoryBot.create(:bookings_school, name: 'School B', urn: 123_490)
 
   allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
     receive(:uuids).and_return \

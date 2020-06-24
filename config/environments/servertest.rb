@@ -12,7 +12,7 @@ Rails.application.configure do
   # default to true but allow overriding in CI
   config.force_ssl = ENV['SKIP_FORCE_SSL'].blank?
 
-  config.x.phase = 10000
+  config.x.phase = 10_000
   config.x.features = %i[
     subject_specific_dates
     capped_bookings

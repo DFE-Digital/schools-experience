@@ -17,22 +17,15 @@ module GeographicSearch
     # @param [String] column The name of the geographic column, defaults
     #   to 'coordinates'
     # @return [School::ActiveRecord_Relation] All matching records
-    scope :close_to, ->(point, radius: DEFAULT_RADIUS, column: 'coordinates', include_distance: true) do
+    scope :close_to, lambda { |point, radius: DEFAULT_RADIUS, column: 'coordinates', include_distance: true|
       if point.present?
-        query = where("st_dwithin(%<column>s, '%<coordinates>s', %<radius>d)" % {
-          column: column,
-          coordinates: point,
-          radius: Conversions::Distance::Miles::ToMetres.convert(radius || DEFAULT_RADIUS)
-        })
+        query = where(sprintf("st_dwithin(%<column>s, '%<coordinates>s', %<radius>d)", column: column, coordinates: point, radius: Conversions::Distance::Miles::ToMetres.convert(radius || DEFAULT_RADIUS)))
 
         if include_distance
           return query.select(
             [
               arel_table[Arel.star],
-              "st_distance(%<source>s, '%<destination>s', false) as distance" % {
-                source: column,
-                destination: point
-              }
+              sprintf("st_distance(%<source>s, '%<destination>s', false) as distance", source: column, destination: point)
             ]
           )
         end
@@ -41,6 +34,6 @@ module GeographicSearch
       else
         none
       end
-    end
+    }
   end
 end

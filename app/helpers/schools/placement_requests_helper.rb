@@ -22,7 +22,7 @@ module Schools::PlacementRequestsHelper
     elsif cancellation.cancelled_by_school?
       'Rejection'
     else
-      fail 'cancellation not sent'
+      raise 'cancellation not sent'
     end
   end
 

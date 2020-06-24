@@ -79,26 +79,26 @@ module Bookings
     scope :attendance_unlogged, -> { where(attended: nil) }
     scope :attendance_logged, -> { where.not(attended: nil) }
 
-    scope :with_unviewed_candidate_cancellation, -> do
+    scope :with_unviewed_candidate_cancellation, lambda {
       joins(bookings_placement_request: :candidate_cancellation)
         .where(bookings_placement_request_cancellations: { viewed_at: nil })
-    end
+    }
 
-    scope :to_manage, -> do
+    scope :to_manage, lambda {
       not_cancelled
       .attendance_unlogged
       .accepted
       .future
-    end
+    }
 
-    scope :requiring_attention, -> do
+    scope :requiring_attention, lambda {
       where(id: with_unviewed_candidate_cancellation.select('id')).or \
         where(id: to_manage.select('id'))
-    end
+    }
 
-    scope :historical, -> do
+    scope :historical, lambda {
       previous.accepted
-    end
+    }
 
     scope :for_days_in_the_future, ->(days_away) { where(date: days_away.from_now.to_date) }
     scope :for_tomorrow,           -> { for_days_in_the_future(1.day) }

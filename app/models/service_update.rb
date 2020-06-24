@@ -9,7 +9,9 @@ class ServiceUpdate
   attribute :html_content, :string
 
   class << self
-    def dates; ids; end
+    def dates
+      ids
+    end
 
     def latest(limit = nil)
       if limit

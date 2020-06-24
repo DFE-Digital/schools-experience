@@ -45,12 +45,7 @@ end
 Given("I enter a future date in the {string} date field") do |label|
   @future_date = 2.weeks.from_now
 
-  step("I fill in the date field '%<label>s' with %<day>d-%<month>d-%<year>d" % {
-    label: label,
-    day: @future_date.day,
-    month: @future_date.month,
-    year: @future_date.year
-  })
+  step(sprintf("I fill in the date field '%<label>s' with %<day>d-%<month>d-%<year>d", label: label, day: @future_date.day, month: @future_date.month, year: @future_date.year))
 end
 
 Then("the booking details should have been saved") do

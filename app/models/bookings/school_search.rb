@@ -119,15 +119,15 @@ private
   def extract_coords(coords)
     coords = coords.symbolize_keys
 
-    if coords.has_key?(:latitude) && coords.has_key?(:longitude)
+    if coords.key?(:latitude) && coords.key?(:longitude)
       Bookings::School::GEOFACTORY.point(
         coords[:longitude],
         coords[:latitude]
       )
-    elsif coords.has_key?(:lat)
-      if coords.has_key?(:lng)
+    elsif coords.key?(:lat)
+      if coords.key?(:lng)
         Bookings::School::GEOFACTORY.point(coords[:lng], coords[:lat])
-      elsif coords.has_key?(:lon)
+      elsif coords.key?(:lon)
         Bookings::School::GEOFACTORY.point(coords[:lon], coords[:lat])
       end
     end
@@ -144,7 +144,7 @@ private
       return
     end
 
-    fail InvalidGeocoderResultError unless valid_geocoder_result?(result)
+    raise InvalidGeocoderResultError unless valid_geocoder_result?(result)
 
     # this better work
     @location_name = result.try(:name) || result.address_components.first.fetch('long_name', location)

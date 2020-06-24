@@ -26,18 +26,18 @@ class Notify
 private
 
   def template_id
-    fail 'Not implemented'
+    raise 'Not implemented'
   end
 
   def personalisation
-    fail 'Not implemented'
+    raise 'Not implemented'
   end
 
   def validate_personalisation!
     @invalid_fields = personalisation.map { |k, v| v.nil? ? k : nil }.compact
     return true if invalid_fields.empty?
 
-    fail InvalidPersonalisationError.new \
+    raise InvalidPersonalisationError.new \
       template_id, self.class.to_s, invalid_fields
   end
 

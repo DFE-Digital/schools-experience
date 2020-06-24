@@ -2,7 +2,7 @@
 FactoryBot.define do
   factory :legacy_registration_session, class: Candidates::Registrations::RegistrationSession do
     transient do
-      urn { 11048 }
+      urn { 11_048 }
       bookings_placement_date_id { 16 }
       timestamp { Time.zone.today }
     end

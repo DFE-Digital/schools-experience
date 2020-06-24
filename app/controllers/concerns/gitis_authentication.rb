@@ -54,7 +54,7 @@ protected
   end
 
   def authenticate_user!
-    current_candidate || fail(UnauthorizedCandidate)
+    current_candidate || raise(UnauthorizedCandidate)
   end
 
   def delete_registration_sessions!

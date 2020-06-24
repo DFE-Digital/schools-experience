@@ -10,10 +10,10 @@ describe DFEAuthentication do
     let(:auth_host) { Rails.application.config.x.oidc_host }
 
     describe 'login redirect' do
-      subject {
+      subject do
         get :show
         response
-      }
+      end
 
       before do
         allow(Schools::ChangeSchool).to \

@@ -41,7 +41,7 @@ module Bookings
       @crm.fetch(Bookings::Gitis::TeachingSubject, limit: LIMIT)
     end
 
-    def create_or_update_from_gitis! internal, unassigned, gitis
+    def create_or_update_from_gitis!(internal, unassigned, gitis)
       if internal
         update_from_gitis! internal, gitis
       elsif unassigned

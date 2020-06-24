@@ -4,8 +4,8 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
   include ActiveJob::TestHelper
   include_context 'Stubbed current_registration'
   include_context 'fake gitis'
-  let!(:other_school) { create(:bookings_school, urn: 10020) }
-  let!(:school) { create(:bookings_school, urn: 11048) }
+  let!(:other_school) { create(:bookings_school, urn: 10_020) }
+  let!(:school) { create(:bookings_school, urn: 11_048) }
 
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new('urn' => '11048')
@@ -186,7 +186,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
   context 'with existing personal information in session' do
     let :existing_personal_information do
-      FactoryBot.build :personal_information, urn: 10020
+      FactoryBot.build :personal_information, urn: 10_020
     end
 
     let :registration_session do
@@ -257,7 +257,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
       context 'valid' do
         let :personal_information do
-          FactoryBot.build :personal_information, email: 'new-email@test.com', urn: 10020
+          FactoryBot.build :personal_information, email: 'new-email@test.com', urn: 10_020
         end
 
         it 'updates the session' do

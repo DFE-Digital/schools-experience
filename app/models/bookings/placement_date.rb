@@ -2,8 +2,7 @@ module Bookings
   class PlacementDate < ApplicationRecord
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
-      inverse_of: :bookings_placement_dates,
-      foreign_key: 'bookings_school_id'
+      inverse_of: :bookings_placement_dates
 
     has_many :placement_requests,
       class_name: 'Bookings::PlacementRequest',
@@ -54,9 +53,9 @@ module Bookings
       validates :subjects, absence: true, unless: :subject_specific?
     end
 
-    scope :bookable_date, -> do
+    scope :bookable_date, lambda {
       where arel_table[:date].gteq Bookings::Booking::MIN_BOOKING_DELAY.from_now.to_date
-    end
+    }
 
     scope :in_date_order, -> { order(date: 'asc') }
     scope :active, -> { where(active: true) }
@@ -77,11 +76,7 @@ module Bookings
     scope :secondary, -> { available.supporting_subjects.published }
 
     def to_s
-      "%<date>s (%<duration>d %<unit>s)" % {
-        date: date.to_formatted_s(:govuk),
-        duration: duration,
-        unit: "day".pluralize(duration)
-      }
+      sprintf("%<date>s (%<duration>d %<unit>s)", date: date.to_formatted_s(:govuk), duration: duration, unit: "day".pluralize(duration))
     end
 
     def bookable?

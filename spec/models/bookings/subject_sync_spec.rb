@@ -32,8 +32,11 @@ RSpec.describe Bookings::SubjectSync do
     let!(:nomatch) { create(:bookings_subject, name: 'nomatch') }
     let(:response) do
       [
-        gitis_subject_1, gitis_subject_2, gitis_subject_3,
-        gitis_subject_4, gitis_subject_5
+        gitis_subject_1,
+        gitis_subject_2,
+        gitis_subject_3,
+        gitis_subject_4,
+        gitis_subject_5
       ]
     end
 

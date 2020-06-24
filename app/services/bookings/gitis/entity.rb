@@ -62,7 +62,7 @@ module Bookings::Gitis
 
     # Will get overwritten if entity_id_attribute is defined
     def id
-      fail MissingPrimaryKey
+      raise MissingPrimaryKey
     end
     alias_method :id=, :id
 
@@ -73,7 +73,7 @@ module Bookings::Gitis
       if id_match && id_match[1]
         self.id = id_match[1]
       else
-        fail InvalidEntityId
+        raise InvalidEntityId
       end
     end
 
@@ -121,9 +121,9 @@ module Bookings::Gitis
       if value.blank?
         return
       elsif !value.to_s.match?(ID_FORMAT)
-        fail InvalidEntityId
+        raise InvalidEntityId
       elsif id.present? && id != value
-        fail IdChangedUnexpectedly
+        raise IdChangedUnexpectedly
       end
 
       write_attribute self.class.primary_key, value

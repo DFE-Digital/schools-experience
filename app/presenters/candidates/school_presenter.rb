@@ -38,12 +38,11 @@ module Candidates
 
     def dress_code
       dc_attrs = profile.attributes.map do |key, value|
-        if key.to_s =~ /dress_code_/ &&
-            key.to_s != 'dress_code_other_details' &&
-            value == true
+        next unless key.to_s =~ /dress_code_/ &&
+          key.to_s != 'dress_code_other_details' &&
+          value == true
 
-          profile.class.human_attribute_name(key)
-        end
+        profile.class.human_attribute_name(key)
       end
 
       dc_attrs.compact.join(', ')

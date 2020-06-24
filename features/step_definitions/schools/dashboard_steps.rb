@@ -19,7 +19,7 @@ When 'it has {string} availability' do |availability_option|
   case availability_option
   when 'fixed' then @school.update(availability_preference_fixed: true)
   when 'flexible' then @school.update(availability_preference_fixed: false)
-  else fail ArgumentError, 'must be true or false'
+  else raise ArgumentError, 'must be true or false'
   end
 end
 
@@ -54,7 +54,7 @@ Given("there is a booking in the past that has been cancelled") do
 end
 
 Then("the {string} should be {int}") do |string, int|
-  expect(page).to have_css("div#%<id>s" % { id: string.tr(' ', '-') }, text: int.to_s)
+  expect(page).to have_css(sprintf("div#%<id>s", id: string.tr(' ', '-')), text: int.to_s)
 end
 
 Given("my school has not yet fully-onboarded") do

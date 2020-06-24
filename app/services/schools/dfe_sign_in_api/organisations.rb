@@ -36,7 +36,7 @@ module Schools
       def organisations
         @response ||= response
 
-        fail APIResponseError, 'invalid response from organisations API' unless @response.is_a?(Array)
+        raise APIResponseError, 'invalid response from organisations API' unless @response.is_a?(Array)
 
         @response
       end

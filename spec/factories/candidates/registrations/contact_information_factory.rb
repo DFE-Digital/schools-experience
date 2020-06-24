@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :contact_information, class: Candidates::Registrations::ContactInformation do
-    urn { 11048 }
+    urn { 11_048 }
     building { 'New house' }
     street { 'Test street' }
     town_or_city { 'Test Town' }

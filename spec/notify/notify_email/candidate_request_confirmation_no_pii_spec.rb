@@ -23,7 +23,7 @@ describe NotifyEmail::CandidateRequestConfirmationNoPii do
 
     specify { expect(described_class).to respond_to(:from_application_preview) }
 
-    let!(:school) { create(:bookings_school, urn: 11048) }
+    let!(:school) { create(:bookings_school, urn: 11_048) }
     let(:rs) { build(:registration_session) }
     let(:to) { "morris.szyslak@moes.net" }
     let(:cancellation_url) { 'https://example.com/placement_request/cancellations' }

@@ -7,12 +7,12 @@ describe Bookings::SchoolSearch do
     { latitude: point_in_manchester.latitude, longitude: point_in_manchester.longitude }
   end
 
-  let(:geocoder_manchester_search_result) {
+  let(:geocoder_manchester_search_result) do
     [
       Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK'),
       Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK')
     ]
-  }
+  end
 
   describe 'Validation' do
     subject { described_class.new({}) }

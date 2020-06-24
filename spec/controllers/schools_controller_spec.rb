@@ -8,10 +8,10 @@ describe SchoolsController, type: :request do
       allow(ENV).to receive(:[]).with('DFE_SIGNIN_DEACTIVATED') { toggle }
     end
 
-    subject {
+    subject do
       get '/schools'
       response
-    }
+    end
 
     context 'when sign in is enabled' do
       let(:toggle) { 'false' }

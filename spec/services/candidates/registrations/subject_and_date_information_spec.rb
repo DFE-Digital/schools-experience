@@ -72,7 +72,7 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
             described_class.new \
               urn: school.urn,
               bookings_placement_date_id: placement_date.id,
-              bookings_subject_id: 999999
+              bookings_subject_id: 999_999
           end
 
           specify 'should validate the presence of bookings_placement_date_subject' do

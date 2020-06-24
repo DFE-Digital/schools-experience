@@ -62,9 +62,9 @@ module Candidates::MapsHelper
       aria_attributes[:'aria-describedby'] = described_by
     end
 
-    content_tag :div, class: "embedded-map", data: map_data, **aria_attributes do
-      content_tag :div, class: 'embedded-map__inner-container',
-                        data: { target: 'map.container' } do
+    tag.div class: "embedded-map", data: map_data, **aria_attributes do
+      tag.div class: 'embedded-map__inner-container',
+              data: { target: 'map.container' } do
         image_tag static_url, class: "embedded-map__nojs-img", alt: "Map showing #{title}", **aria_attributes
       end
     end

@@ -4,7 +4,7 @@ describe "Expired Session", type: :request do
   context 'when InvalidAuthenticityToken is raised' do
     before do
       allow_any_instance_of(Candidates::HomeController).to receive(:index) do
-        fail ActionController::InvalidAuthenticityToken
+        raise ActionController::InvalidAuthenticityToken
       end
     end
 

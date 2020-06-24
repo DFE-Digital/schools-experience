@@ -191,8 +191,8 @@ describe Candidates::Registrations::RegistrationSession do
 
   context '#flag_as_pending_email_confirmation!' do
     context 'when registration is not complete' do
-      let(:urn) { 11048 }
-      let!(:school) { create(:bookings_school, urn: 11048) }
+      let(:urn) { 11_048 }
+      let!(:school) { create(:bookings_school, urn: 11_048) }
       subject do
         described_class.new("urn" => urn)
       end

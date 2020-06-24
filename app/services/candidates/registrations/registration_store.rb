@@ -20,7 +20,7 @@ module Candidates
         key = registration_session.uuid
 
         if key.blank?
-          fail NoKey, "`registration_session#uuid` can't be blank"
+          raise NoKey, "`registration_session#uuid` can't be blank"
         end
 
         @redis.set \

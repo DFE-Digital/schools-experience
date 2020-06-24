@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationAsPlacementRequest do
-  let(:urn) { 11048 }
+  let(:urn) { 11_048 }
   subject { described_class.new session }
 
   PII = {

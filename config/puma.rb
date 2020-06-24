@@ -42,7 +42,7 @@ if Rails.env.development?
   key = Rails.root.join('config', 'ssl', 'localhost.key')
 
   unless File.exist?(cert) && File.exist?(key)
-    fail "No SSL certificate found, run `rails dev:ssl:generate` to proceed"
+    raise "No SSL certificate found, run `rails dev:ssl:generate` to proceed"
   end
 
   ssl_bind '127.0.0.1', listen_port, cert: cert, key: key, verify_mode: 'none'

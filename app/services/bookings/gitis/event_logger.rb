@@ -23,13 +23,7 @@ module Bookings
       end
 
       def entry
-        LOG_LINE % {
-          recorded: @recorded,
-          action: @action,
-          date: @date,
-          urn: @urn,
-          name: @name
-        }
+        sprintf(LOG_LINE, recorded: @recorded, action: @action, date: @date, urn: @urn, name: @name)
       end
 
     private

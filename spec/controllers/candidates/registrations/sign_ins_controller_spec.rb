@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   include ActiveJob::TestHelper
-  let(:school_id) { 11048 }
+  let(:school_id) { 11_048 }
   let!(:school) { create(:bookings_school, urn: school_id) }
 
   include_context 'fake gitis with known uuid'

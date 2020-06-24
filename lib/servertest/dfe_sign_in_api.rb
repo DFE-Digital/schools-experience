@@ -13,8 +13,8 @@ module DFESignInAPI
       ).to_return(
         status: 200,
         body: [
-          { urn: 123455 },
-          { urn: 123456 }
+          { urn: 123_455 },
+          { urn: 123_456 }
         ].to_json,
         headers: {}
       )

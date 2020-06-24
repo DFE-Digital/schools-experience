@@ -11,7 +11,7 @@ describe Schools::ChangeSchool, type: :model do
     {
       SecureRandom.uuid => first_school.urn,
       SecureRandom.uuid => second_school.urn,
-      SecureRandom.uuid => 1000000
+      SecureRandom.uuid => 1_000_000
     }
   end
 
@@ -55,7 +55,7 @@ describe Schools::ChangeSchool, type: :model do
     let(:current_urn) { second_school.urn }
 
     context 'with unknown urn' do
-      let(:current_urn) { 20000 }
+      let(:current_urn) { 20_000 }
 
       it 'will raise exception' do
         expect { subject.retrieve_valid_school! }.to \

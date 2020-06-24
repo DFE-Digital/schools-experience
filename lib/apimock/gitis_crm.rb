@@ -43,10 +43,10 @@ module Apimock
           },
           body: {
             '@odata.context' => "#{service_url}#{endpoint}/$metadata#contacts/$entity",
-            'value' => uuids.map { |uuid|
+            'value' => uuids.map do |uuid|
               contact_data.merge('contactid' => uuid)
                 .merge(return_params.stringify_keys)
-            }
+            end
           }.to_json
         )
     end
@@ -305,7 +305,7 @@ module Apimock
         'address1_stateorprovince' => "",
         'address1_postalcode' => "MA1 1AM",
         'address1_telephone1' => "01234567890",
-        'dfe_channelcreation' => 222750021
+        'dfe_channelcreation' => 222_750_021
       }
     end
 

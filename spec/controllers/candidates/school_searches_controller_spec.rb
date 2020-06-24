@@ -17,10 +17,10 @@ RSpec.describe Candidates::SchoolSearchesController, type: :request do
     end
 
     describe '#index' do
-      subject {
+      subject do
         get new_candidates_school_search_path
         response
-      }
+      end
       it { is_expected.to redirect_to candidates_root_path }
     end
   end

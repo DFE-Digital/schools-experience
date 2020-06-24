@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationState do
   let :school do
-    create :bookings_school, urn: 11048
+    create :bookings_school, urn: 11_048
   end
 
   let :school_with_flexible_dates do

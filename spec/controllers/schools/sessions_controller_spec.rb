@@ -7,7 +7,7 @@ describe Schools::SessionsController, type: :request do
     let(:session_state) { '652b5afc63d7c4875c42de4231f66e4940226f840b2a7ea02441544751ea0a2a.h3bd7bc2438a84dc' }
     let(:access_token) { 'abc123' }
 
-    let(:urn) { 123456 }
+    let(:urn) { 123_456 }
     let(:school_name) { "Springfield Elementary" }
 
     before do
@@ -225,13 +225,10 @@ describe Schools::SessionsController, type: :request do
 
       specify 'should redirect to the OpenID Connect end session endpoint with the correct query params' do
         expect(subject).to redirect_to(
-          "%<oidc_host>s?%<query>s" % {
-            oidc_host: ['https://', oidc_host, '/session/end'].join,
-            query: {
-              id_token_hint: id_token,
-              post_logout_redirect_uri: schools_url
-            }.to_query
-          }
+          sprintf("%<oidc_host>s?%<query>s", oidc_host: ['https://', oidc_host, '/session/end'].join, query: {
+            id_token_hint: id_token,
+            post_logout_redirect_uri: schools_url
+          }.to_query)
         )
       end
     end

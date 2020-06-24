@@ -41,11 +41,12 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   # Use Redis for Session and cache
-  config.cache_store = :redis_cache_store, {
-    url: ENV['REDIS_URL'].presence,
-    db: ENV['TEST_ENV_NUMBER'].presence, # Note DB overrides db in URL if both specified
-    namespace: 'test-cache'
-  }
+  config.cache_store = :redis_cache_store,
+                       {
+                         url: ENV['REDIS_URL'].presence,
+                         db: ENV['TEST_ENV_NUMBER'].presence, # Note DB overrides db in URL if both specified
+                         namespace: 'test-cache'
+                       }
 
   config.session_store :cache_store,
     key: 'schoolex-test-session',
@@ -65,7 +66,7 @@ Rails.application.configure do
   # Don't actually attempt to delivery emails during tests
   config.x.notify_client = NotifyFakeClient
 
-  config.x.phase = 10000
+  config.x.phase = 10_000
   config.x.features = %i[
     subject_specific_dates
     capped_bookings

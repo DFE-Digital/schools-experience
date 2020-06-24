@@ -4,15 +4,27 @@ module Bookings
       class Fake < Dynamics
         KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
         REQUIRED = %w[
-          firstname lastname emailaddress2 telephone2 birthdate
-          address1_line1 address1_city address1_stateorprovince address1_postalcode
-          dfe_channelcreation dfe_hasdbscertificate
+          firstname
+          lastname
+          emailaddress2
+          telephone2
+          birthdate
+          address1_line1
+          address1_city
+          address1_stateorprovince
+          address1_postalcode
+          dfe_channelcreation
+          dfe_hasdbscertificate
           dfe_Country@odata.bind
         ].freeze
         ALLOWED = (
           REQUIRED + %w[
-            telephone1 address1_telephone1 address1_line2 address1_line3
-            emailaddress1 dfe_dateofissueofdbscertificate
+            telephone1
+            address1_telephone1
+            address1_line2
+            address1_line3
+            emailaddress1
+            dfe_dateofissueofdbscertificate
             dfe_PreferredTeachingSubject01@odata.bind
             dfe_PreferredTeachingSubject02@odata.bind
           ]
@@ -42,7 +54,7 @@ module Bookings
           return "#{entity_id}(#{fake_contact_id})" unless entity_id == 'contacts'
 
           REQUIRED.each do |key|
-            unless data.has_key?(key)
+            unless data.key?(key)
               raise "Bad Response - attribute '#{key}' is missing"
             end
           end
@@ -52,11 +64,10 @@ module Bookings
               raise "Bad Response - attribute '#{key}' is not recognised"
             end
 
-            if key.end_with?('@odata.bind') &&
-                (value.blank? || value !~ Bookings::Gitis::Entity::BIND_FORMAT)
+            next unless key.end_with?('@odata.bind') &&
+              (value.blank? || value !~ Bookings::Gitis::Entity::BIND_FORMAT)
 
-              raise "Bad Response - odata.bind attribute '#{key}' is invalid"
-            end
+            raise "Bad Response - odata.bind attribute '#{key}' is invalid"
           end
 
           "#{entity_id}(#{fake_contact_id})"
@@ -70,11 +81,10 @@ module Bookings
               raise "Bad Response - attribute '#{key}' is not recognised"
             end
 
-            if key.end_with?('@odata.bind') &&
-                (value.blank? || value !~ Bookings::Gitis::Entity::BIND_FORMAT)
+            next unless key.end_with?('@odata.bind') &&
+              (value.blank? || value !~ Bookings::Gitis::Entity::BIND_FORMAT)
 
-              raise "Bad Response - odata.bind attribute '#{key}' is invalid"
-            end
+            raise "Bad Response - odata.bind attribute '#{key}' is invalid"
           end
 
           entity_id

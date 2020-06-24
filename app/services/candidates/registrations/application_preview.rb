@@ -50,7 +50,7 @@ module Candidates
       end
 
       def subject_and_date_information
-        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+        raise NotImplementedForThisDateType unless has_subject_and_date_information?
 
         @subject_and_date_information ||= @registration_session.subject_and_date_information
       end
@@ -93,19 +93,19 @@ module Candidates
       end
 
       def placement_date_subject
-        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+        raise NotImplementedForThisDateType unless has_subject_and_date_information?
 
         subject_and_date_information.placement_date_subject
       end
 
       def placement_date
-        fail NotImplementedForThisDateType unless has_subject_and_date_information?
+        raise NotImplementedForThisDateType unless has_subject_and_date_information?
 
         subject_and_date_information.placement_date.to_s
       end
 
       def placement_availability
-        fail NotImplementedForThisDateType if has_subject_and_date_information?
+        raise NotImplementedForThisDateType if has_subject_and_date_information?
 
         placement_preference.availability
       end

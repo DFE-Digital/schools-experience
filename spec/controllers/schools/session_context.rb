@@ -1,12 +1,12 @@
 shared_context "logged in DfE user" do
-  let(:urn) { 123456 }
+  let(:urn) { 123_456 }
   let(:user_guid) { '33333333-4444-5555-6666-777777777777' }
-  let(:dfe_signin_school_urn) { 123489 }
+  let(:dfe_signin_school_urn) { 123_489 }
   let(:dfe_signin_school_id) { '33333333-aaaa-5555-bbbb-777777777777' }
   let(:dfe_signin_school_data) do
     [
       { urn: dfe_signin_school_urn, name: 'School A', id: dfe_signin_school_id },
-      { urn: 123490, name: 'School B', id: '33333333-aaaa-5555-cccc-777777777777' }
+      { urn: 123_490, name: 'School B', id: '33333333-aaaa-5555-cccc-777777777777' }
     ]
   end
 

@@ -53,7 +53,7 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [:request_id, lambda { |_| "PID:#{Process.pid}" }]
+  config.log_tags = [:request_id, ->(_) { "PID:#{Process.pid}" }]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -107,21 +107,22 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
-  config.cache_store = :redis_cache_store, {
-    url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
-    reconnect_attempts: 1,
-    tcp_keepalive: 60,
-    error_handler: ->(_method:, returning:, exception:) do
-      ExceptionNotifier.notify_exception(
-        exception,
-        data: {
-          returning: returning.inspect
-        }
-      )
+  config.cache_store = :redis_cache_store,
+                       {
+                         url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
+                         reconnect_attempts: 1,
+                         tcp_keepalive: 60,
+                         error_handler: lambda do |_method:, returning:, exception:|
+                                          ExceptionNotifier.notify_exception(
+                                            exception,
+                                            data: {
+                                              returning: returning.inspect
+                                            }
+                                          )
 
-      Raven.capture_exception(exception)
-    end
-  }
+                                          Raven.capture_exception(exception)
+                                        end
+                       }
 
   config.session_store :cache_store,
     key: 'schoolex-session',
@@ -143,7 +144,7 @@ Rails.application.configure do
   config.x.oidc_client_id = ENV.fetch('DFE_SIGNIN_CLIENT_ID') { 'schoolexperience' }
   config.x.oidc_client_secret = ENV.fetch('DFE_SIGNIN_SECRET') do
     msg = "DFE_SIGNIN_SECRET has not been set"
-    config.logger ? config.logger.warn(msg) : puts(msg)
+    config.logger.warn(msg)
     ''
   end
   config.x.oidc_host = ENV.fetch('DFE_SIGNIN_HOST') { 'pp-oidc.signin.education.gov.uk' }

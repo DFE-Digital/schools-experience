@@ -9,7 +9,7 @@ RSpec.describe Candidates::DashboardBaseController, type: :request do
 
   describe "GET #index" do
     before do
-      Rails.application.routes.send(:eval_block, -> {
+      Rails.application.routes.send(:eval_block, lambda {
         get 'restricted', to: 'stub#index'
       })
     end

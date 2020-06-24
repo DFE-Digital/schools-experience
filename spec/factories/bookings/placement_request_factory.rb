@@ -5,7 +5,7 @@ FactoryBot.define do
       :with_profile,
       :with_subjects,
       factory: :bookings_school,
-      urn: 11048,
+      urn: 11_048,
       subject_count: 2
 
     association :candidate
@@ -81,7 +81,7 @@ FactoryBot.define do
         :with_subjects,
         :with_fixed_availability_preference,
         factory: :bookings_school,
-        urn: 11048,
+        urn: 11_048,
         subject_count: 2
 
       availability { nil }

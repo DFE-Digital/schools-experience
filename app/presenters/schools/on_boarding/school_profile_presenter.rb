@@ -59,7 +59,7 @@ module Schools
 
       def dbs_check
         unless [true, false].include? @school_profile.dbs_requirement.requires_check
-          fail "DBS requirement not set #{@school_profile.inspect}"
+          raise "DBS requirement not set #{@school_profile.inspect}"
         end
 
         if @school_profile.dbs_requirement.requires_check
@@ -94,7 +94,7 @@ module Schools
           output << '16 - 18 years'
         end
 
-        fail "No phases for #{@school_profile.inspect}" if output.empty?
+        raise "No phases for #{@school_profile.inspect}" if output.empty?
 
         output.to_sentence.capitalize
       end

@@ -94,5 +94,5 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "school chooser" => [:schools_change_path]
   }
 
-  (path = mappings[descriptor.downcase]) ? send(*path) : fail("No mapping for #{descriptor}")
+  (path = mappings[descriptor.downcase]) ? send(*path) : raise("No mapping for #{descriptor}")
 end

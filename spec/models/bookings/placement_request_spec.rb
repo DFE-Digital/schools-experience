@@ -228,7 +228,7 @@ describe Bookings::PlacementRequest, type: :model do
           "candidates_registrations_placement_preference" => {},
           "candidates_registrations_education" => {},
           "candidates_registrations_teaching_preference" => {},
-          "urn" => 123456
+          "urn" => 123_456
       end
 
       it 'raises a validation error' do

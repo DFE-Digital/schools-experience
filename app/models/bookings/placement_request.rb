@@ -25,7 +25,6 @@ module Bookings
     belongs_to :candidate,
       class_name: 'Bookings::Candidate',
       inverse_of: :placement_requests,
-      foreign_key: :candidate_id,
       optional: true
 
     has_one :booking,
@@ -60,61 +59,61 @@ module Bookings
       inverse_of: :placement_request,
       dependent: :destroy
 
-    scope :unprocessed, -> do
+    scope :unprocessed, lambda {
       not_cancelled.merge unbooked
-    end
+    }
 
-    scope :unbooked, -> do
+    scope :unbooked, lambda {
       without_booking.or booking_not_sent
-    end
+    }
 
-    scope :booking_not_sent, -> do
+    scope :booking_not_sent, lambda {
       left_joins(:booking).where(bookings_bookings: { accepted_at: nil })
-    end
+    }
 
-    scope :without_booking, -> do
+    scope :without_booking, lambda {
       left_joins(:booking)
         .where(bookings_bookings: { bookings_placement_request_id: nil })
-    end
+    }
 
-    scope :cancelled, -> do
+    scope :cancelled, lambda {
       left_joins(:candidate_cancellation, :school_cancellation)
         .where <<~SQL
           bookings_placement_request_cancellations.sent_at IS NOT NULL
           OR school_cancellations_bookings_placement_requests.sent_at IS NOT NULL
         SQL
-    end
+    }
 
-    scope :not_cancelled, -> do
+    scope :not_cancelled, lambda {
       left_joins(:candidate_cancellation, :school_cancellation)
         .where(bookings_placement_request_cancellations: { sent_at: nil })
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
-    end
+    }
 
-    scope :requiring_attention, -> do
+    scope :requiring_attention, lambda {
       without_booking
         .left_joins(:candidate_cancellation)
         .merge(Cancellation.unviewed)
         .merge(Cancellation.sent.or(Cancellation.where(id: nil)))
         .left_joins(:school_cancellation)
         .where(school_cancellations_bookings_placement_requests: { id: nil })
-    end
+    }
 
-    scope :withdrawn, -> do
+    scope :withdrawn, lambda {
       without_booking
         .joins(:candidate_cancellation)
         .merge(Cancellation.sent.order(sent_at: :desc))
-    end
+    }
 
-    scope :withdrawn_but_unviewed, -> do
+    scope :withdrawn_but_unviewed, lambda {
       withdrawn.merge Cancellation.unviewed
-    end
+    }
 
-    scope :rejected, -> do
+    scope :rejected, lambda {
       without_booking
         .joins(:school_cancellation)
         .merge(Cancellation.sent.order(sent_at: :desc))
-    end
+    }
 
     default_scope { where.not(candidate_id: nil) }
 

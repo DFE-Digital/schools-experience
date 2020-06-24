@@ -1,6 +1,6 @@
 Given("I am logged in as a DfE user") do
   visit insecure_auth_callback_path
-  @school ||= Bookings::School.find_by(urn: 123456)
+  @school ||= Bookings::School.find_by(urn: 123_456)
 end
 
 Given("I see the candidate requirements screen") do

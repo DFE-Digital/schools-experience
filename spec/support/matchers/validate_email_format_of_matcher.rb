@@ -32,8 +32,10 @@ private
 
   def test_with_valid_emails?(model, attribute)
     [
-      'test@example.com', 'testymctest@gmail.com',
-      'test%.mctest@domain.co.uk', ' with@space.com '
+      'test@example.com',
+      'testymctest@gmail.com',
+      'test%.mctest@domain.co.uk',
+      ' with@space.com '
     ].all? do |email|
       @testing_address = email
 
@@ -46,7 +48,10 @@ private
 
   def test_with_invalid_emails?(model, attribute)
     [
-      'test.com', 'test@@test.com', 'FFFF', 'test@test',
+      'test.com',
+      'test@@test.com',
+      'FFFF',
+      'test@test',
       'test@test.'
     ].all? do |email|
       @testing_address = email

@@ -4,7 +4,7 @@
 # **It should only be used by Cucumber**
 class Schools::InsecureSessionsController < ApplicationController
   def create
-    fail unless Rails.env.servertest? || Rails.env.test?
+    raise unless Rails.env.servertest? || Rails.env.test?
 
     session[:id_token]     = 'abc123'
 
@@ -18,7 +18,7 @@ class Schools::InsecureSessionsController < ApplicationController
     )
 
     unless Schools::ChangeSchool.allow_school_change_in_app?
-      Bookings::School.find_or_create_by(urn: 123456) do |school|
+      Bookings::School.find_or_create_by(urn: 123_456) do |school|
         school.name = "Some school"
         school.contact_email = "someone@someschool.org"
         school.address_1 = "22 something street"
@@ -27,7 +27,7 @@ class Schools::InsecureSessionsController < ApplicationController
         school.coordinates = Bookings::School::GEOFACTORY.point(-2.241, 53.481)
       end
 
-      session[:urn]         = 123456
+      session[:urn]         = 123_456
       session[:school_name] = 'Some school'
     end
 

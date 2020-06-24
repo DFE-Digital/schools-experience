@@ -4,7 +4,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   subject { described_class.new profile }
 
   let! :school do
-    FactoryBot.create :bookings_school, :full_address, urn: 123456
+    FactoryBot.create :bookings_school, :full_address, urn: 123_456
   end
 
   context '#school_name' do
