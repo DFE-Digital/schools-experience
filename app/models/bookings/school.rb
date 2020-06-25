@@ -68,6 +68,7 @@ class Bookings::School < ApplicationRecord
 
   has_one :profile,
     class_name: "Bookings::Profile",
+    foreign_key: :school_id,
     inverse_of: :school,
     dependent: :destroy
 

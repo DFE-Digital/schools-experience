@@ -21,10 +21,10 @@ module Bookings
         new_schools = edubase_data.reject { |urn, _| urn.in?(existing_urns) }
 
         Bookings::School.transaction do
-          Rails.logger.info("importing schools...")
+          Rails.logger.info "importing schools..."
           Bookings::School.import(new_schools.map { |_, row| build_school(row) }.compact)
 
-          Rails.logger.info("setting up phases...")
+          Rails.logger.info "setting up phases..."
           new_schools.each.with_index do |(urn, row), i|
             if (i % 1000).zero?
               Rails.logger.info '.'

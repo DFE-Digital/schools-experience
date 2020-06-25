@@ -67,3 +67,12 @@ Rails/UnknownEnv:
     - test
     - servertest
     - production
+
+# These are not redundant but are considered safe to autofix
+Rails/RedundantForeignKey:
+  Exclude:
+    - app/models/bookings/placement_date.rb
+    - app/models/bookings/placement_request.rb
+    - app/models/bookings/school.rb
+    - app/models/event.rb
+    - app/models/schools/school_profile.rb

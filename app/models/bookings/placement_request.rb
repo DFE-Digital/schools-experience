@@ -25,6 +25,7 @@ module Bookings
     belongs_to :candidate,
       class_name: 'Bookings::Candidate',
       inverse_of: :placement_requests,
+      foreign_key: :candidate_id,
       optional: true
 
     has_one :booking,

@@ -2,7 +2,8 @@ module Bookings
   class PlacementDate < ApplicationRecord
     belongs_to :bookings_school,
       class_name: 'Bookings::School',
-      inverse_of: :bookings_placement_dates
+      inverse_of: :bookings_placement_dates,
+      foreign_key: 'bookings_school_id'
 
     has_many :placement_requests,
       class_name: 'Bookings::PlacementRequest',
