@@ -46,7 +46,7 @@ module Candidates
       end
 
       def has_registration?(uuid)
-        @redis.exists namespace(uuid)
+        @redis.exists? namespace(uuid)
       end
 
     private

@@ -144,7 +144,7 @@ Rails.application.configure do
   config.x.oidc_client_id = ENV.fetch('DFE_SIGNIN_CLIENT_ID') { 'schoolexperience' }
   config.x.oidc_client_secret = ENV.fetch('DFE_SIGNIN_SECRET') do
     msg = "DFE_SIGNIN_SECRET has not been set"
-    config.logger.warn(msg)
+    config.logger ? config.logger.warn(msg) : Rails.logger.warn(msg)
     ''
   end
   config.x.oidc_host = ENV.fetch('DFE_SIGNIN_HOST') { 'pp-oidc.signin.education.gov.uk' }

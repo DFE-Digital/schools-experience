@@ -23,7 +23,7 @@ module Bookings
             Bookings::School.find_by(urn: row['urn']).tap do |bs|
               raise "no school found with urn #{row['urn']}" if bs.blank?
 
-              config.logger.warn("Updating #{bs.name}, enabled: #{new_status}")
+              Rails.logger.warn("Updating #{bs.name}, enabled: #{new_status}")
               if new_status
                 bs.enable!
               else

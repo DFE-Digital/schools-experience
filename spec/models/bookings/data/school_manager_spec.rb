@@ -20,7 +20,7 @@ describe Bookings::Data::SchoolManager do
   subject { described_class.new(parsed_csv) }
 
   before do
-    allow(STDOUT).to receive(:puts).and_return(true)
+    allow(Rails.logger).to receive(:warn).and_return(true)
   end
 
   context 'Initialization' do
@@ -48,7 +48,7 @@ describe Bookings::Data::SchoolManager do
 
       specify 'should print out enabling status' do
         targetted_schools.each do |ts|
-          expect(STDOUT).to have_received(:puts).with(
+          expect(Rails.logger).to have_received(:warn).with(
             "Updating #{ts.name}, enabled: true"
           )
         end
@@ -85,7 +85,7 @@ describe Bookings::Data::SchoolManager do
 
       specify 'should print out disabling status' do
         targetted_schools.each do |ts|
-          expect(STDOUT).to have_received(:puts).with(
+          expect(Rails.logger).to have_received(:warn).with(
             "Updating #{ts.name}, enabled: false"
           )
         end

@@ -50,6 +50,16 @@ We also have markdown pages within the `doc` folder of this git repo
 8. Run `bundle exec rails s` to launch the app on https://localhost:3000.
 9. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
    1. running `bundle exec rake jobs:work` will start a DelayedJob Worker
+   
+### If Chrome give a certificates error and will not let you proceed
+
+1. Double click on `./config/ssl/localhost.crt`
+2. Right click and select "Get Info"
+3. Open "Trust" Panel
+4. Change "When using this certificate" to "Always Trust"
+5. Reload the webpage
+6. Open the "Advanced" pane at the bottom
+7. Click "Proceed to website"
 
 ## Whats included in this App?
 
