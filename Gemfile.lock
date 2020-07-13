@@ -230,7 +230,7 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.2)
-    nokogiri (1.10.9)
+    nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     notifications-ruby-client (5.1.2)
       jwt (>= 1.5, < 3)
@@ -437,7 +437,7 @@ GEM
       public_suffix
     validates_timeliness (5.0.0.beta1)
       timeliness (>= 0.3.10, < 1)
-    web-console (4.0.3)
+    web-console (4.0.4)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
