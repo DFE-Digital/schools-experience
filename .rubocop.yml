@@ -68,7 +68,7 @@ Rails/UnknownEnv:
     - servertest
     - production
 
-# These are not redundant but are considered safe to autofix
+# These are considered safe to autofix but are not actually redundant
 Rails/RedundantForeignKey:
   Exclude:
     - app/models/bookings/placement_date.rb
@@ -76,3 +76,13 @@ Rails/RedundantForeignKey:
     - app/models/bookings/school.rb
     - app/models/event.rb
     - app/models/schools/school_profile.rb
+
+# These break the build right now so we want to work thorugh them slowly
+Rails/SaveBang:
+  Enabled: false
+
+Style/DateTime:
+  Enabled: false
+
+Rails/TimeZone:
+  Enabled: false

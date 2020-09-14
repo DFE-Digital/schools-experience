@@ -88,7 +88,7 @@ need to get the DfE Sign-in team to approve you for a school.
 It's best to lint just your app directories and not those belonging to the framework, e.g.
 
 ```bash
-bundle exec rubocop app lib spec
+bundle exec rubocop app config lib features spec spec_external
 ```
 
 You can copy the `script/pre-commit` to `.git/hooks/pre-commit` and `git` will
@@ -118,11 +118,17 @@ There is also an `/healthchecks/api.txt` which is password protected using the
 above credentials and will perform a check against each of the configured API
 endpoints.
 
-## Parallel testing
+## Testing
 
 If you have plenty of cpu cores, it faster to run tests with parallel_tests
 
 1. Create the databases - `bundle exec rake parallel:create`
 2. Copy the schema over from the main database - `bundle exec rake parallel:prepare`
 3. Run RSpecs - `bundle exec rake parallel:spec`
-3. Run Cucumber features - `bundle exec rake parallel:features`
+3. Run Cucumber features - `bundle exec rake parallel:spec`
+
+If you find your tests are failing with a notice about `application.css` not being declared to be precompiled in production, run the following command
+
+```bash
+rake tmp:clear
+```
