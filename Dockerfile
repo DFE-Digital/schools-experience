@@ -15,19 +15,25 @@ ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
 
 # hadolint ignore=DL3018
-RUN apk add --no-cache build-base git tzdata libxml2 libxml2-dev \
-                        postgresql-libs postgresql-dev nodejs yarn
+RUN apk add --no-cache build-base tzdata libxml2 libxml2-dev postgresql-libs postgresql-dev nodejs yarn
 
 # install NPM packages removign artifacts
 COPY package.json yarn.lock ./
 RUN yarn install && yarn cache clean
 
+# Install bundler
+RUN gem install bundler --version=2.1.4
+# Install git
+RUN apk add --no-cache git=2.24.3-r0
+
+ARG APP_SHA
+RUN echo "${APP_SHA}" > /etc/school-experience-sha
+
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
-RUN gem install bundler --version='~> 2.1.4' && \
-    bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
-    bundle config set without 'development' && \
-    bundle install --jobs=$(nproc --all) && \
+# hadolint ignore=SC2046
+RUN bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
+    bundle install --without development  --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
 
