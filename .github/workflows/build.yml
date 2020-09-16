@@ -30,7 +30,9 @@ jobs:
 
       - name: Install Ruby gems
         run: |-
-          gem install bundler
+          gem install bundler --version=2.1.4
+          bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
+          bundle config set without development \
           bundle install
 
       - name: Run Brakeman security scan
@@ -66,7 +68,7 @@ jobs:
           echo "New version tag: ${docker_image_tag}"
 
       - name: Build only
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         if: github.ref != 'refs/heads/master'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
