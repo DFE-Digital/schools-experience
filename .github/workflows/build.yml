@@ -1,0 +1,89 @@
+name: Build and Deploy
+on:
+  repository_dispatch:
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+  push:
+    branches:
+      - master
+env:
+  DOCKERHUB_REPOSITORY: dfedigital/school-experience
+  CONTAINER: school-experience
+
+jobs:
+  build:
+    name: Build container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Lint Dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+             dockerfile: "Dockerfile"
+
+      - name: Get Short SHA
+        id: sha
+        run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
+
+      - name: Get parent SHA if triggered from app pipeline
+        if: env.GITHUB_EVENT_NAME == 'repository_dispatch'
+        run: |
+          echo ::set-env name=parent_sha::${{ github.event.client_payload.parent_sha }}
+
+      - name: Get parent SHA if not triggered from app pipeline
+        if: env.GITHUB_EVENT_NAME != 'repository_dispatch'
+        run: |
+          echo ::set-env name=parent_sha::$(docker run dfedigital/school-experience:latest cat /etc/school-experience-sha)
+
+      - name: Set new docker image version
+        run: |
+          docker_image_tag="sha-${{ steps.sha.outputs.short }}-${parent_sha}"
+          echo ::set-env name=docker_image_tag::${docker_image_tag}
+          echo "Content SHA: ${{ steps.sha.outputs.short }}"
+          echo "Parent SHA: ${parent_sha}"
+          echo "New version tag: ${docker_image_tag}"
+
+      - name: Build only
+        uses: docker/build-push-action@v1
+        if: github.ref != 'refs/heads/master'
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
+          repository: ${{ env.DOCKERHUB_REPOSITORY }}
+          always_pull: true
+          add_git_labels: true
+          tags: ${{ env.docker_image_tag }}
+          tag_with_ref: true
+          tag_with_sha: true
+          push: false
+          build_args: APP_SHA=${{ env.parent_sha }},CONTENT_SHA=${{ steps.sha.outputs.short }}
+
+      - name: Set DOCKER_IMAGE environment variable
+        run: |-
+          echo ::set-env name=DOCKER_IMAGE::${{ env.APP_REPOSITORY }}:sha-$(echo "${{ github.sha }}" | cut -c -7)
+
+      - name: Run Brakeman security scan
+        run: docker run -t --rm $DOCKER_IMAGE \
+          bundle exec brakeman --no-pager
+
+      - name: Run GovUK Lint check
+        run: docker run -t --rm $DOCKER_IMAGE \
+          bundle exec rubocop app config lib features spec spec_external --format clang
+
+      - name: Create Docker Compose stack
+        run: |-
+          docker-compose up -d
+          WAIT_COUNT=0
+          until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ] ; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+
+      - name: Run Specs
+        run: |-
+          docker-compose run --rm db-tasks \
+            rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml --format documentation
+
+      - name: Run Cucumber features
+        run: |-
+          docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
+            cucumber --profile=$(CUCUMBER_PROFILE) --format junit --out /ci_build/junit --format documentation
