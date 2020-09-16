@@ -19,9 +19,6 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.6.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
-        run: |-
-          gem install bundler
-          bundle install
 
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -30,6 +27,11 @@ jobs:
         uses: brpaz/hadolint-action@master
         with:
              dockerfile: "Dockerfile"
+
+      - name: Install Ruby gems
+        run: |-
+          gem install bundler
+          bundle install
 
       - name: Run Brakeman security scan
         run: |-
