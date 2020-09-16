@@ -12,7 +12,7 @@ env:
 
 jobs:
   build:
-    name: Build container
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Set up Ruby 2.6.6
@@ -49,38 +49,19 @@ jobs:
         id: sha
         run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
 
-      - name: Get parent SHA if triggered from app pipeline
-        if: env.GITHUB_EVENT_NAME == 'repository_dispatch'
-        run: |
-          echo ::set-env name=parent_sha::${{ github.event.client_payload.parent_sha }}
-
-      - name: Get parent SHA if not triggered from app pipeline
-        if: env.GITHUB_EVENT_NAME != 'repository_dispatch'
-        run: |
-          echo ::set-env name=parent_sha::$(docker run dfedigital/school-experience:latest cat /etc/school-experience-sha)
-
-      - name: Set new docker image version
-        run: |
-          docker_image_tag="sha-${{ steps.sha.outputs.short }}-${parent_sha}"
-          echo ::set-env name=docker_image_tag::${docker_image_tag}
-          echo "Content SHA: ${{ steps.sha.outputs.short }}"
-          echo "Parent SHA: ${parent_sha}"
-          echo "New version tag: ${docker_image_tag}"
-
-      - name: Build only
+      - name: Build Only
         uses: docker/build-push-action@v2
         if: github.ref != 'refs/heads/master'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
-          repository: ${{ env.DOCKERHUB_REPOSITORY }}
+          repository: ${{ env.APP_REPOSITORY }}
           always_pull: true
           add_git_labels: true
-          tags: ${{ env.docker_image_tag }}
           tag_with_ref: true
           tag_with_sha: true
           push: false
-          build_args: APP_SHA=${{ env.parent_sha }},CONTENT_SHA=${{ steps.sha.outputs.short }}
+          build_args: APP_SHA=${{ steps.sha.outputs.short }}
 
       - name: Set DOCKER_IMAGE environment variable
         run: |-
