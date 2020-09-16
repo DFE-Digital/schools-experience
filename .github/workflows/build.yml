@@ -84,7 +84,7 @@ jobs:
 
       - name: Set DOCKER_IMAGE environment variable
         run: |-
-          echo ::set-env name=DOCKER_IMAGE::${{ env.APP_REPOSITORY }}:sha-$(echo "${{ github.sha }}" | cut -c -7)
+          echo ::set-env name=DOCKER_IMAGE::${{ env.DOCKERHUB_REPOSITORY }}:sha-$(echo "${{ github.sha }}" | cut -c -7)
 
       - name: Create Docker Compose stack
         run: |-
