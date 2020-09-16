@@ -76,7 +76,7 @@ jobs:
 
       - name: Build Only
         uses: docker/build-push-action@v2
-        if: false && github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/master'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
@@ -98,9 +98,9 @@ jobs:
       - name: Run Specs
         run: |-
           bundle exec \
-            rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml --format documentation
+            rspec --format RspecJunitFormatter --out results/specs.xml --format documentation
 
       - name: Run Cucumber features
         run: |-
           bundle exec \
-            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /ci_build/junit --format documentation
+            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out results/features --format documentation
