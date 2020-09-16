@@ -15,6 +15,14 @@ jobs:
     name: Build container
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Ruby 2.6.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
+        run: |-
+          gem install bundler
+          bundle install
+
       - name: Check out the repo
         uses: actions/checkout@v2
 
