@@ -43,16 +43,6 @@ jobs:
           bundle exec \
             rubocop app config lib features spec spec_external --format clang
 
-      - name: Run Specs
-        run: |-
-          bundle exec \
-            rspec --format progress --format documentation
-
-      - name: Run Cucumber features
-        run: |-
-          bundle exec \
-            cucumber --profile=$(CUCUMBER_PROFILE) --format documentation
-
       - name: Get Short SHA
         id: sha
         run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
