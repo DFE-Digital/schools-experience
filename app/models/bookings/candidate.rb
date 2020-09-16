@@ -109,11 +109,11 @@ class Bookings::Candidate < ApplicationRecord
       # This is to handle when a Gitis record gets merged - we request one
       # contactid but the ContactFetcher returns a different contactid
 
-      if persisted?
-        update_column :gitis_uuid, contact.contactid
-      else
-        self.gitis_uuid = contact.contactid
-      end
+      # if persisted?
+      update_column :gitis_uuid, contact.contactid
+      # else
+      #  self.gitis_uuid = contact.contactid
+      # end
     end
 
     gitis_contact
