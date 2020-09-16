@@ -15,25 +15,34 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Ruby 2.6.6
-        uses: actions/setup-ruby@v1
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.6.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
 
-      - name: Check out the repo
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
         with:
              dockerfile: "Dockerfile"
 
-      - name: Install Ruby gems
+      - name: Install Bundler
         run: |-
           gem install bundler --version=2.1.4
+
+      - name: Bundle install
+        run: |
           bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java
           bundle config set without development
-          bundle install
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Run Brakeman security scan
         run: |-
