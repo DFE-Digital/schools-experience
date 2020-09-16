@@ -23,6 +23,26 @@ jobs:
         with:
              dockerfile: "Dockerfile"
 
+      - name: Run Brakeman security scan
+        run: |-
+          bundle exec \
+            brakeman --no-pager
+
+      - name: Run GovUK Lint check
+        run: |-
+          bundle exec \
+            rubocop app config lib features spec spec_external --format clang
+
+      - name: Run Specs
+        run: |-
+          bundle exec \
+            rspec --format progress --format documentation
+
+      - name: Run Cucumber features
+        run: |-
+          bundle exec \
+            cucumber --profile=$(CUCUMBER_PROFILE) --format documentation
+
       - name: Get Short SHA
         id: sha
         run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
@@ -63,14 +83,6 @@ jobs:
       - name: Set DOCKER_IMAGE environment variable
         run: |-
           echo ::set-env name=DOCKER_IMAGE::${{ env.APP_REPOSITORY }}:sha-$(echo "${{ github.sha }}" | cut -c -7)
-
-      - name: Run Brakeman security scan
-        run: docker run -t --rm $DOCKER_IMAGE \
-          bundle exec brakeman --no-pager
-
-      - name: Run GovUK Lint check
-        run: docker run -t --rm $DOCKER_IMAGE \
-          bundle exec rubocop app config lib features spec spec_external --format clang
 
       - name: Create Docker Compose stack
         run: |-
