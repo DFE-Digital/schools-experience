@@ -84,10 +84,10 @@ jobs:
 
       - name: Run Specs
         run: |-
-          docker-compose run --rm db-tasks \
+          docker-compose -f docker-compose-local.yml run --rm db-tasks \
             rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml --format documentation
 
       - name: Run Cucumber features
         run: |-
-          docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
+          docker-compose -f docker-compose-local.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
             cucumber --profile=$(CUCUMBER_PROFILE) --format junit --out /ci_build/junit --format documentation
