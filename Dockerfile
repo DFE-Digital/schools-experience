@@ -33,7 +33,7 @@ RUN echo "${APP_SHA}" > /etc/school-experience-sha
 COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
 RUN bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
-    bundle config set without development \
+    bundle config set without development && \
     bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache

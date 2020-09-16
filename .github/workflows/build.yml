@@ -31,8 +31,8 @@ jobs:
       - name: Install Ruby gems
         run: |-
           gem install bundler --version=2.1.4
-          bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
-          bundle config set without development \
+          bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java
+          bundle config set without development
           bundle install
 
       - name: Run Brakeman security scan
