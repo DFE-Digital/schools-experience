@@ -9,11 +9,24 @@ on:
 env:
   DOCKERHUB_REPOSITORY: dfedigital/school-experience
   CONTAINER: school-experience
+  CUCUMBER_PROFILE: continuous_integration
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:5-alpine
+        ports:
+          - 6379:6379
+
+      postgres:
+        image: mdillon/postgis:11-alpine
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/cache@v2
         with:
@@ -24,9 +37,16 @@ jobs:
 
       - uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.6.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
+          ruby-version: '2.6.6'
 
       - uses: actions/checkout@v2
+
+      - name: Get Short SHA
+        id: sha
+        run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
+
+      - name: Set DOCKER_IMAGE environment variable
+        run: echo ::set-env name=DOCKER_IMAGE::${{ env.DOCKERHUB_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -54,13 +74,9 @@ jobs:
           bundle exec \
             rubocop app config lib features spec spec_external --format clang
 
-      - name: Get Short SHA
-        id: sha
-        run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
-
       - name: Build Only
         uses: docker/build-push-action@v2
-        if: github.ref != 'refs/heads/master'
+        if: false && github.ref != 'refs/heads/master'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
@@ -72,11 +88,8 @@ jobs:
           push: false
           build_args: APP_SHA=${{ steps.sha.outputs.short }}
 
-      - name: Set DOCKER_IMAGE environment variable
-        run: |-
-          echo ::set-env name=DOCKER_IMAGE::${{ env.DOCKERHUB_REPOSITORY }}:sha-$(echo "${{ github.sha }}" | cut -c -7)
-
       - name: Create Docker Compose stack
+        if: false
         run: |-
           docker-compose -f docker-compose-local.yml up -d
           WAIT_COUNT=0
@@ -84,10 +97,10 @@ jobs:
 
       - name: Run Specs
         run: |-
-          docker-compose -f docker-compose-local.yml run --rm db-tasks \
+          bundle exec \
             rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml --format documentation
 
       - name: Run Cucumber features
         run: |-
-          docker-compose -f docker-compose-local.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
-            cucumber --profile=$(CUCUMBER_PROFILE) --format junit --out /ci_build/junit --format documentation
+          bundle exec \
+            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /ci_build/junit --format documentation
