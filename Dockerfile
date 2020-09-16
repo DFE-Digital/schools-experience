@@ -14,6 +14,7 @@ EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
 
+# hadolint ignore=DL3018
 RUN apk add --no-cache build-base git tzdata libxml2 libxml2-dev \
                         postgresql-libs postgresql-dev nodejs yarn
 
