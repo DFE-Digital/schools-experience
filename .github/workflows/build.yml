@@ -25,10 +25,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Get Short SHA
+        if: false
         id: sha
         run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
 
       - name: Set DOCKER_IMAGE environment variable
+        if: false
         run: echo ::set-env name=DOCKER_IMAGE::${{ env.DOCKERHUB_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}
 
       - name: Lint Dockerfile
@@ -37,14 +39,17 @@ jobs:
              dockerfile: "Dockerfile"
 
       - uses: actions/setup-ruby@v1
+        if: false
         with:
           ruby-version: '2.6.6'
 
       - name: Install Bundler
+        if: false
         run: |-
           gem install bundler --version=2.1.4
 
       - name: Bundle install
+        if: false
         run: |
           bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java
           bundle config set without development
@@ -52,20 +57,16 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Run Brakeman security scan
+        if: false
         run: |-
           bundle exec \
             brakeman --no-pager
 
       - name: Run GovUK Lint check
+        if: false
         run: |-
           bundle exec \
             rubocop app config lib features spec spec_external --format clang
-
-      - name: Setup SonarQube
-        uses: warchant/setup-sonar-scanner@v1
-
-      - name: Add ouput folders
-        run: mkdir ${PWD}/out && mkdir ${PWD}/out/specs && mkdir ${PWD}/out/coverage && mkdir ${PWD}/out/features
 
       - name: Build Docker Compose container
         run: |-
@@ -79,34 +80,25 @@ jobs:
 
       - name: Run Specs
         run: |-
-          docker-compose -f docker-compose-local.yml run --rm -v ${PWD}/out/specs:/app/out -v ${PWD}/out/coverage:/app/coverage db-tasks \
-            rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
+          docker-compose -f docker-compose-local.yml run --rm db-tasks \
+            rspec --format documentation --format RspecJunitFormatter --out /ci_build/rspec_results.xml
 
       - name: Upload Spec Results
         uses: actions/upload-artifact@v2
         with:
           name: Spec_Results
-          path: ${PWD}/out/specs/*
-
-      - name: Fixup report file paths
-        run: sudo sed -i "s?\"/app/?\"${PWD}/?" ${PWD}/out/coverage/.resultset.json
-
-      - name: Upload Code Coverage Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: Code_Coverage
-          path: ${PWD}/out/coverage/*
+          path: rspec_results.xml
 
       - name: Run Cucumber features
         run: |-
-          docker-compose -f docker-compose-local.yml run --rm -v ${PWD}/out/features:/app/features -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
-            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /app/features --format pretty
+          docker-compose -f docker-compose-local.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
+            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /ci_build/junit
 
       - name: Upload Feature Results
         uses: actions/upload-artifact@v2
         with:
           name: Feature_Results
-          path: ${PWD}/out/features/*
+          path: junit/*
 
   publish:
     name: Publish

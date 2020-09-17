@@ -18,7 +18,7 @@ services:
      depends_on:
        - db-tasks
      volumes:
-       - .:/ci_build
+       - ./ci_build:/ci_build
 
    delayed-jobs:
      build: .
@@ -50,7 +50,7 @@ services:
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      volumes:
-       - .:/ci_build
+       - ./ci_build:/ci_build
      depends_on:
        - postgres
        - redis
