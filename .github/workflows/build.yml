@@ -1,38 +1,18 @@
-name: Build and Deploy
+name: Pull Requests
 on:
   repository_dispatch:
   pull_request:
     types: [assigned, opened, synchronize, reopened]
-  push:
-    branches:
-      - master
+
 env:
   DOCKERHUB_REPOSITORY: dfedigital/school-experience
   CONTAINER: school-experience
   CUCUMBER_PROFILE: continuous_integration
 
-  RAILS_ENV: servertest
-  DATABASE_URL: postgis://postgres:secret@localhost:5432
-  REDIS_URL: redis://localhost:6379
-  SECRET_KEY_BASE: stubbed
-  SKIP_FORCE_SSL: true
-  WEB_URL: postgis://postgres:secret@localhost:5432
-
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
-
-    services:
-      redis:
-        image: redis:5-alpine
-        ports:
-          - 6379:6379
-
-      postgres:
-        image: mdillon/postgis:11-alpine
-        ports:
-          - 5432:5432
+    runs-on: ubuntu-18.4
 
     steps:
       - uses: actions/cache@v2
@@ -41,10 +21,6 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.6.6'
 
       - uses: actions/checkout@v2
 
@@ -59,6 +35,10 @@ jobs:
         uses: brpaz/hadolint-action@master
         with:
              dockerfile: "Dockerfile"
+
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6.6'
 
       - name: Install Bundler
         run: |-
@@ -81,6 +61,59 @@ jobs:
           bundle exec \
             rubocop app config lib features spec spec_external --format clang
 
+      - name: Setup SonarQube
+        uses: warchant/setup-sonar-scanner@v1
+
+      - name: Add ouput folders
+        run: mkdir ${PWD}/out && mkdir ${PWD}/out/specs && mkdir ${PWD}/out/coverage && mkdir ${PWD}/out/features
+
+      - name: Build Docker Compose container
+        run: |-
+          docker-compose -f docker-compose-local.yml build
+
+      - name: Create Docker Compose stack
+        run: |-
+          docker-compose -f docker-compose-local.yml up -d
+          WAIT_COUNT=0
+          until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ] ; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+
+      - name: Run Specs
+        run: |-
+          docker-compose -f docker-compose-local.yml run --rm -v ${PWD}/out/specs:/app/out -v ${PWD}/out/coverage:/app/coverage db-tasks \
+            rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
+
+      - name: Upload Spec Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Spec_Results
+          path: ${PWD}/out/specs/*
+
+      - name: Fixup report file paths
+        run: sudo sed -i "s?\"/app/?\"${PWD}/?" ${PWD}/out/coverage/.resultset.json
+
+      - name: Upload Code Coverage Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Code_Coverage
+          path: ${PWD}/out/coverage/*
+
+      - name: Run Cucumber features
+        run: |-
+          docker-compose -f docker-compose-local.yml run --rm -v ${PWD}/out/features:/app/features -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
+            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /app/features --format pretty
+
+      - name: Upload Feature Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Feature_Results
+          path: ${PWD}/out/features/*
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-18.4
+    needs: build
+
+    steps:
       - name: Build Only
         uses: docker/build-push-action@v2
         if: false && github.ref != 'refs/heads/master'
@@ -94,20 +127,3 @@ jobs:
           tag_with_sha: true
           push: false
           build_args: APP_SHA=${{ steps.sha.outputs.short }}
-
-      - name: Create Docker Compose stack
-        if: false
-        run: |-
-          docker-compose -f docker-compose-local.yml up -d
-          WAIT_COUNT=0
-          until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ] ; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
-
-      - name: Run Specs
-        run: |-
-          docker-compose -f docker-compose-local.yml run --rm db-tasks \
-            rspec --format RspecJunitFormatter --out results/specs.xml --format documentation
-
-      - name: Run Cucumber features
-        run: |-
-          docker-compose -f docker-compose-local.yml run --rm db-tasks \
-            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out results/features --format documentation
