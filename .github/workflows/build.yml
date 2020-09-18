@@ -8,47 +8,45 @@ on:
     types: [ created ]
 
 env:
-  DOCKER_IMAGE: dfedigital/school-experience
-  CONTAINER: school-experience
+  DOCKER_ORGANISATION: localhost:5000/dfedigital
+  DOCKER_CONTAINER: school-experience
   CUCUMBER_PROFILE: continuous_integration
+  DOCKER_IMAGE: ${DOCKER_ORGANISATION}/${DOCKER_CONTAINER}
 
 jobs:
   build:
-    name: Build
+    name: Test
     runs-on: ubuntu-18.04
 
     steps:
-      - name: Checkout source
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
       - name: Lint Dockerfile
+        if: false
         uses: brpaz/hadolint-action@master
         with:
           dockerfile: "Dockerfile"
 
       - name: Build Docker Compose container
+        if: false
         run: |
           docker-compose -f docker-compose-local.yml build
 
       - name: Run Brakeman security scan
+        if: false
         run: |
           docker-compose -f docker-compose-local.yml run --rm db-tasks \
             brakeman --no-pager
 
       - name: Run GovUK Lint check
+        if: false
         run: |
           docker-compose -f docker-compose-local.yml run --rm db-tasks \
             rubocop app config lib features spec spec_external --format clang
 
       - name: Create Docker Compose stack
+        if: false
         run: |
           docker-compose -f docker-compose-local.yml up -d
             WAIT_COUNT=0
@@ -79,23 +77,35 @@ jobs:
           path: junit/*
 
   publish:
-    name: Publish
+    name: Build and Publish
     runs-on: ubuntu-18.04
     needs: build
 
+    local-registry:
+      runs-on: ubuntu-18.04
+      services:
+        registry:
+          image: registry:2
+          ports:
+            - 5000:5000
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
       - name: Prepare
         id: prep
         run: |
           VERSION=noop
+          DOCKER_IMAGE=${{env.DOCKER_IMAGE}}
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
           elif [[ $GITHUB_REF == refs/heads/* ]]; then
@@ -118,6 +128,19 @@ jobs:
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        if: false
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PERSONAL_ACCESS_TOKEN }}
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
@@ -125,10 +148,10 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/386
-          push: false && ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_PERSONAL_ACCESS_TOKEN }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}
             org.opencontainers.image.description=${{ github.event.repository.description }}
@@ -138,3 +161,11 @@ jobs:
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
+
+      - name: Update Docker Hub Description from README.md
+        uses: peter-evans/dockerhub-description@v2
+        if: false
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PERSONAL_ACCESS_TOKEN }}
+          DOCKERHUB_REPOSITORY: ${{ env.DOCKER_IMAGE }}
