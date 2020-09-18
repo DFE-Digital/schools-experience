@@ -5,7 +5,7 @@ on:
     types: [assigned, opened, synchronize, reopened]
 
 env:
-  DOCKERHUB_REPOSITORY: dfedigital/school-experience
+  DOCKER_IMAGE: dfedigital/school-experience
   CONTAINER: school-experience
   CUCUMBER_PROFILE: continuous_integration
 
@@ -22,14 +22,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - uses: actions/checkout@v2
-
-      - name: Get Short SHA
-        id: sha
-        run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
-
-      - name: Set DOCKER_IMAGE environment variable
-        run: echo ::set-env name=DOCKER_IMAGE::${{ env.DOCKERHUB_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -99,16 +100,63 @@ jobs:
     needs: build
 
     steps:
-      - name: Build Only
+      - uses: actions/checkout@v2
+
+      - name: Prepare
+        id: prep
+        run: |
+          VERSION=noop
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          elif [[ $GITHUB_REF == refs/heads/* ]]; then
+            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
+            if [ "${{ github.event.repository.default_branch }}" = "$VERSION" ]; then
+              VERSION=edge
+            fi
+          elif [[ $GITHUB_REF == refs/pull/* ]]; then
+            VERSION=pr-${{ github.event.number }}
+          fi
+          TAGS="${DOCKER_IMAGE}:${VERSION}"
+          if [[ $VERSION =~ ^v[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            MINOR=${VERSION%.*}
+            MAJOR=${MINOR%.*}
+            TAGS="$TAGS,${DOCKER_IMAGE}:${MINOR},${DOCKER_IMAGE}:${MAJOR},${DOCKER_IMAGE}:latest"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::8}"
+          fi
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+
+      - name: Prepare
+        id: prep
+        run: |
+          echo org.opencontainers.image.title=${{ github.event.repository.name }}
+          echo org.opencontainers.image.description=${{ github.event.repository.description }}
+          echo org.opencontainers.image.url=${{ github.event.repository.html_url }}
+          echo org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+          echo org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+          echo org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+          echo org.opencontainers.image.revision=${{ github.sha }}
+          echo org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
+
+      - name: Build and push
+        id: docker_build
         uses: docker/build-push-action@v2
-        if: false && github.ref != 'refs/heads/master'
         with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/386
+          push: false && ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.prep.outputs.tags }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
-          repository: ${{ env.APP_REPOSITORY }}
-          always_pull: true
-          add_git_labels: true
-          tag_with_ref: true
-          tag_with_sha: true
-          push: false
-          build_args: APP_SHA=${{ steps.sha.outputs.short }}
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}
+            org.opencontainers.image.description=${{ github.event.repository.description }}
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
