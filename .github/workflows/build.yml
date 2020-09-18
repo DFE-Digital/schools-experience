@@ -128,8 +128,7 @@ jobs:
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
-      - name: Prepare
-        id: prep
+      - name: Display Tags
         run: |
           echo org.opencontainers.image.title=${{ github.event.repository.name }}
           echo org.opencontainers.image.description=${{ github.event.repository.description }}
