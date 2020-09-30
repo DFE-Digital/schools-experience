@@ -99,8 +99,6 @@ enabled and configured via environment variables.
 
 `DEACTIVATE_CANDIDATES` - Deactivates candidate applications, including searching
 
-`CANDIDATE_NOTIFICATION` - Shows a notification below to the 'Start now >' button on the home page. Variable content is formatted as paragraphs, \n\n = new paragraph, blank = off
-
 `CANDIDATE_URN_WHITELIST` - Restrict candidate searches to a white list of schools, comma separated list of URNs, blank = off, -1 = on but no schools will match
 
 `FEATURE_FLAGS` - Comma separated list of features to enable, appended to features listed in environment file
