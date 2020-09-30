@@ -15,6 +15,7 @@ We also have markdown pages within the `doc` folder of this git repo
 - [Release process](doc/release-process.md)
 - [DfE Sign-in](doc/dfe-sigin.md)
 - [Gitis CRM](doc/gitis-crm.md)
+- [Candidate notifications](doc/candidate-notifications.md)
 
 ## Prerequisites
 
