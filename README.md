@@ -42,7 +42,7 @@ We also have markdown pages within the `doc` folder of this git repo
   3. bundler -v
   4. yarn -v
 2. Run `bundle install` to install ruby dependencies
-3. Run `yarn` to install node dependencies
+3. Run `npx yarn` to install node dependencies
 4. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
 5. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
 6. Create SSL certificates - `bundle exec rake dev:ssl:generate`
@@ -127,8 +127,16 @@ If you have plenty of cpu cores, it faster to run tests with parallel_tests
 3. Run RSpecs - `bundle exec rake parallel:spec`
 3. Run Cucumber features - `bundle exec rake parallel:spec`
 
-If you find your tests are failing with a notice about `application.css` not being declared to be precompiled in production, run the following command
+### Common issues running tests
+
+1. If you find your tests are failing with a notice about `application.css` not being declared to be precompiled in production, run the following command
 
 ```bash
 rake tmp:clear
+```
+
+2. IF you find your tests are failing with a notice about `Failure/Error: require File.expand_path('../config/environment', __dir__)` you will need to make sure you have an instance of Redis running a simple way to do this in a separate terminal is to run the following command
+
+```bash
+redis-server
 ```

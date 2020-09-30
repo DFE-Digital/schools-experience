@@ -28,7 +28,7 @@ yarn-debug.log*
 .yarn-integrity
 
 .env
-.env.*
+.env*.local
 
 .idea
 .rakeTasks

@@ -36,6 +36,8 @@ gem 'webpacker'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem 'dotenv-rails'
+
 gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
 gem 'notifications-ruby-client'
 
@@ -48,8 +50,6 @@ gem "redis", "~> 4.2"
 
 gem 'exception_notification'
 gem 'slack-notifier'
-
-gem 'dotenv-rails'
 
 gem 'kaminari'
 
