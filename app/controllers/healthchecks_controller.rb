@@ -22,4 +22,10 @@ class HealthchecksController < ApplicationController
 
     render json: @healthcheck.to_json, status: status
   end
+
+  def urn_whitelist
+    whitelist = ENV['CANDIDATE_URN_WHITELIST'].blank? ? [] : ENV['CANDIDATE_URN_WHITELIST'].to_s.strip.split(%r{[\s,]+}).map(&:to_i)
+
+    render json: whitelist
+  end
 end
