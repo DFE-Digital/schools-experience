@@ -10,28 +10,34 @@ describe "Redirecting to Canonical Domain", type: :request do
     end
 
     before do
-      allow_any_instance_of(HealthchecksController).to \
-        receive(:check_gitis_api).and_return(true)
+      allow_any_instance_of(Healthcheck).to \
+        receive(:test_gitis).and_return(true)
+      allow_any_instance_of(Healthcheck).to \
+        receive(:test_redis).and_return(true)
+      allow_any_instance_of(Healthcheck).to \
+        receive(:test_postgresql).and_return(true)
+      allow_any_instance_of(Healthcheck).to \
+        receive(:test_dfe_signin_api).and_return(true)
     end
 
     specify "will allow direct access to healthcheck.txt" do
       get healthcheck_path
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(response.body).to match('healthy')
     end
 
     specify "will allow direct access to deployment.txt" do
       get deployment_path, headers: { "Authorization" => encoded }
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(response.body).to match('not set')
     end
 
     specify "will allow direct access to all healthcheck paths" do
       get api_health_path, headers: { "Authorization" => encoded }
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(response.body).to match('healthy')
     end
   end
@@ -53,7 +59,7 @@ describe "Redirecting to Canonical Domain", type: :request do
     specify "will return a 200" do
       get "/candidates?foo=bar"
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
     end
 
     include_examples 'perform healthchecks'

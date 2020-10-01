@@ -4,107 +4,185 @@ describe HealthchecksController, type: :request do
   let(:username) { Rails.application.config.x.healthchecks.username }
   let(:password) { Rails.application.config.x.healthchecks.password }
   let(:encoded) do
-    ActionController::HttpAuthentication::Basic
-      .encode_credentials(username, password)
+    ActionController::HttpAuthentication::Basic.encode_credentials(username, password)
+  end
+
+  include_context "fake gitis"
+
+  before do
+    allow(fake_gitis).to \
+      receive(:fetch) { [Bookings::Gitis::Country.new] }
+
+    allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+      receive(:enabled?).and_return(true)
+
+    allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+      receive(:uuids).and_return([])
+
+    allow(ENV).to receive(:[]).and_call_original
+    allow(ENV).to receive(:[]).with("REDIS_URL").and_return \
+      "redis://localhost:6379/1"
+    allow(Redis).to \
+      receive(:current).and_return double(Redis, ping: "PONG")
+
+    allow(ApplicationRecord).to \
+      receive(:connected?).and_return(true)
   end
 
   describe '#show' do
-    context 'with functional redis and postgres' do
+    context 'with functional dependencies' do
       before { get healthcheck_path }
+
+      it { expect(response.body).to include_json(cache: true) }
+      it { expect(response.body).to include_json(db: true) }
+      it { expect(response.body).to include_json(auth: true) }
+      it { expect(response.body).to include_json(api: true) }
       it { expect(response).to have_http_status(:success) }
     end
 
-    context 'with non functional redis' do
+    context 'with unhealthy Cache' do
       before do
         allow(Redis.current).to receive(:ping) { raise Redis::TimeoutError }
+
+        get healthcheck_path
       end
 
-      it "will raise an exception" do
-        expect { get healthcheck_path }.to raise_exception(Redis::TimeoutError)
-      end
+      it { expect(response.body).to include_json(cache: false) }
+      it { expect(response).to have_http_status(:error) }
     end
 
-    context 'with non functional postgres' do
+    context 'with unhealthy Database' do
       before do
         allow(ApplicationRecord).to receive(:connected?).and_return(false)
+
+        get healthcheck_path
       end
 
-      it "will raise an exception" do
-        expect { get healthcheck_path }.to raise_exception(RuntimeError)
-      end
+      it { expect(response.body).to include_json(db: false) }
+      it { expect(response).to have_http_status(:error) }
     end
-  end
 
-  describe '#deployment' do
-    context "with auth" do
-      context "with DEPLOYMENT_ID set" do
-        before do
-          allow(ENV).to \
-            receive(:fetch).with('DEPLOYMENT_ID').and_return('1997-08-29')
+    context 'with unhealthy Auth Service' do
+      before do
+        allow_any_instance_of(Schools::DFESignInAPI::Client).to \
+          receive(:response).and_raise Faraday::TimeoutError
 
-          get deployment_path, headers: { "Authorization" => encoded }
-        end
-
-        it { expect(response).to have_http_status(:success) }
-        it { expect(response).to have_attributes body: '1997-08-29' }
+        get healthcheck_path
       end
 
-      context 'without DEPLOYMENT_ID set' do
-        before do
-          get deployment_path, headers: { "Authorization" => encoded }
-        end
-
-        it { expect(response).to have_http_status(:success) }
-        it { expect(response).to have_attributes body: 'not set' }
-      end
+      xit { expect(response.body).to include_json(auth: false) }
+      xit { expect(response).to have_http_status(:error) }
     end
 
-    context 'without auth' do
-      before { get deployment_path }
-      it { expect(response).to have_http_status(:unauthorized) }
-    end
-  end
-
-  describe '#api_health' do
-    include_context "fake gitis"
-    let(:check_api_health) { get api_health_path, headers: { "Authorization" => encoded } }
-
-    before do
-      allow(fake_gitis).to receive(:fetch) { [Bookings::Gitis::Country.new] }
-      allow_any_instance_of(Schools::DFESignInAPI::Client).to \
-        receive(:response).and_return([])
-      allow(Schools::DFESignInAPI::Client).to receive(:enabled?).and_return(true)
-    end
-
-    context 'with all APIs healthy' do
-      before { check_api_health }
-
-      it { expect(response).to have_http_status(:success) }
-      it { expect(response).to have_attributes body: 'healthy' }
-    end
-
-    context 'with unhealthy Gitis' do
+    context 'with unhealthy API' do
       before do
         allow(fake_gitis).to receive(:fetch).and_raise \
           Bookings::Gitis::API::BadResponseError.new \
             Struct.new(:status, :headers, :body, :env).new(500, {}, 'timeout')
+
+        get healthcheck_path
       end
 
-      it "will raise an error" do
-        expect { check_api_health }.to \
-          raise_exception Bookings::Gitis::API::BadResponseError
+      it { expect(response.body).to include_json(api: false) }
+      it { expect(response).to have_http_status(:error) }
+    end
+  end
+
+  describe '#deployment' do
+    context "with DEPLOYMENT_ID set" do
+      before do
+        allow(ENV).to receive(:fetch).with('DEPLOYMENT_ID').and_return('1997-08-29')
+
+        get deployment_path
       end
+
+      it { expect(response).to have_attributes body: '1997-08-29' }
     end
 
-    context 'with unhealthy DfE Sign In' do
+    context 'without DEPLOYMENT_ID set' do
+      before { get deployment_path }
+
+      it { expect(response).to have_attributes body: 'not set' }
+    end
+  end
+
+  describe '#api_health' do
+    context 'with healthy dependencies' do
+      before { get api_health_path }
+
+      it { expect(response).to have_attributes body: 'healthy' }
+      it { expect(response).to have_http_status(:success) }
+    end
+
+    context 'with no Auth Service' do
+      before do
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+          receive(:enabled?).and_return(false)
+
+        get api_health_path
+      end
+
+      it { expect(response).to have_attributes body: 'healthy' }
+      it { expect(response).to have_http_status(:success) }
+    end
+
+    context 'with unhealthy API' do
+      before do
+        allow(fake_gitis).to receive(:fetch).and_raise \
+          Bookings::Gitis::API::BadResponseError.new \
+            Struct.new(:status, :headers, :body, :env).new(500, {}, 'timeout')
+
+        get api_health_path
+      end
+
+      it { expect(response).to have_attributes body: 'unhealthy' }
+      it { expect(response).to have_http_status(:error) }
+    end
+
+    context 'with unhealthy Auth Service' do
+      before do
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+          receive(:uuids).and_raise Faraday::TimeoutError
+
+        get api_health_path
+      end
+
+      xit { expect(response).to have_attributes body: 'unhealthy' }
+      xit { expect(response).to have_http_status(:error) }
+    end
+
+    context 'with unhealthy Auth Service' do
       before do
         allow_any_instance_of(Schools::DFESignInAPI::Client).to \
           receive(:response).and_raise Faraday::TimeoutError
+
+        get api_health_path
       end
 
-      it "will raise an error" do
-        expect { check_api_health }.to raise_exception Faraday::Error
+      xit { expect(response).to have_attributes body: 'unhealthy' }
+      xit { expect(response).to have_http_status(:error) }
+    end
+
+    context 'with unhealthy Cache' do
+      before do
+        allow(Redis.current).to receive(:ping) { raise Redis::TimeoutError }
+
+        get api_health_path
       end
+
+      it { expect(response).to have_attributes body: 'unhealthy' }
+      it { expect(response).to have_http_status(:error) }
+    end
+
+    context 'with unhealthy DB' do
+      before do
+        allow(ApplicationRecord).to receive(:connected?).and_return(false)
+
+        get api_health_path
+      end
+
+      it { expect(response).to have_attributes body: 'unhealthy' }
+      it { expect(response).to have_http_status(:error) }
     end
   end
 end
