@@ -102,22 +102,14 @@ This can be controlled from various environment variables, see
 
 ## Monitoring health and deployment version
 
-There is a `/healthcheck.txt` endpoint which will verify both Postgres and
-Redis connectivity.
+There is a JSON `/healthcheck` endpoint which will verify connectivity to each of the 
+services dependencies to confirm whether the service is healthy.
 
-There is a `/deployment.txt` endpoint which will reflect the contents of
-`DEPLOYMENT_ID` back to allow checking when the deployed version has changed.
+The endpoint also includes the git commit SHA of the codebase deployed as well
+as a copy of the `DEPLOYMENT_ID` to allow checking when the deployed version has 
+changed. This is retrieved from the following environment variable.
 
-This is protected by HTTPS Basic Auth, and is configured by the following 3
-environment variables.
-
-`DEPLOYMENT_ID` - identifier for the current deployment
-`DEPLOYMENT_USERNAME` - username to protect the endpoint
-`DEPLOYMENT_PASSWORD` - password to protect the endpoint
-
-There is also an `/healthchecks/api.txt` which is password protected using the
-above credentials and will perform a check against each of the configured API
-endpoints.
+`DEPLOYMENT_ID` - identifier for the current deployment.
 
 ## Testing
 
