@@ -2,4 +2,4 @@
 #
 # eg. Dotenv.require_keys %w[DATABASE_URL RAILS_MAX_THREADS]
 
-Dotenv.require_keys %w[]
+# Dotenv.require_keys %w[]

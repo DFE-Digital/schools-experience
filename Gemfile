@@ -121,10 +121,9 @@ group :test do
 
   gem 'shoulda-matchers', '~> 4.3'
   gem 'rails-controller-testing'
+  gem "rspec-json_expectations", "~> 2.2"
 
   gem 'webmock'
   gem 'capybara-screenshot'
 end
 
-
-gem "rspec-json_expectations", "~> 2.2"
