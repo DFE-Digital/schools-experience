@@ -2,13 +2,6 @@ require 'rails_helper'
 
 describe "Redirecting to Canonical Domain", type: :request do
   shared_examples "perform healthchecks" do
-    let(:username) { Rails.application.config.x.healthchecks.username }
-    let(:password) { Rails.application.config.x.healthchecks.password }
-    let(:encoded) do
-      ActionController::HttpAuthentication::Basic
-        .encode_credentials(username, password)
-    end
-
     before do
       allow_any_instance_of(Healthcheck).to \
         receive(:test_gitis).and_return(true)
@@ -20,22 +13,22 @@ describe "Redirecting to Canonical Domain", type: :request do
         receive(:test_dfe_signin_api).and_return(true)
     end
 
-    specify "will allow direct access to healthcheck.txt" do
+    specify "will allow direct access to /healthcheck" do
       get healthcheck_path
 
       expect(response).to have_http_status(:success)
       expect(response.body).to match('healthy')
     end
 
-    specify "will allow direct access to deployment.txt" do
-      get deployment_path, headers: { "Authorization" => encoded }
+    specify "will allow direct access to /deployment" do
+      get deployment_path
 
       expect(response).to have_http_status(:success)
       expect(response.body).to match('not set')
     end
 
-    specify "will allow direct access to all healthcheck paths" do
-      get api_health_path, headers: { "Authorization" => encoded }
+    specify "will allow direct access to all /healthcheck/api.txt paths" do
+      get api_health_path
 
       expect(response).to have_http_status(:success)
       expect(response.body).to match('healthy')

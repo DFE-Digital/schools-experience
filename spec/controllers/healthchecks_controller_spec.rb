@@ -10,6 +10,8 @@ describe HealthchecksController, type: :request do
   include_context "fake gitis"
 
   before do
+    allow(ENV).to receive(:[]).and_call_original
+
     allow(fake_gitis).to \
       receive(:fetch) { [Bookings::Gitis::Country.new] }
 
@@ -19,7 +21,6 @@ describe HealthchecksController, type: :request do
     allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
       receive(:uuids).and_return([])
 
-    allow(ENV).to receive(:[]).and_call_original
     allow(ENV).to receive(:[]).with("REDIS_URL").and_return \
       "redis://localhost:6379/1"
     allow(Redis).to \
@@ -103,6 +104,32 @@ describe HealthchecksController, type: :request do
       before { get deployment_path }
 
       it { expect(response).to have_attributes body: 'not set' }
+    end
+  end
+
+  describe '#urn_whitelist' do
+    let(:whitelist) { '123456,456123,654321' }
+
+    context 'with no URN whitelist set' do
+      before do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('CANDIDATE_URN_WHITELIST').and_return('')
+
+        get urn_whitelist_path
+      end
+
+      it { expect(response).to have_attributes body: '[]' }
+    end
+
+    context 'with a URN whitelist set' do
+      before do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('CANDIDATE_URN_WHITELIST').and_return(whitelist)
+
+        get urn_whitelist_path
+      end
+
+      it { expect(response).to have_attributes body: "[#{whitelist}]" }
     end
   end
 
