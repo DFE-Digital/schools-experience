@@ -126,3 +126,5 @@ group :test do
   gem 'capybara-screenshot'
 end
 
+
+gem "rspec-json_expectations", "~> 2.2"
