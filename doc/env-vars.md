@@ -4,7 +4,7 @@ The school experience application supports various environment variables
 to control different aspects of the application.
 
 These can be configured as part of your shell or more easily by editing the
-`.env` file. Optionally `.env.development / `.env.test` files can be created for
+`.env` file. Optionally `.env.development` / `.env.test` files can be created for
 environment specific variables.
 
 Full documentation is at
@@ -99,10 +99,6 @@ enabled and configured via environment variables.
 
 `DEACTIVATE_CANDIDATES` - Deactivates candidate applications, including searching
 
-`CANDIDATE_NOTIFICATION` - Shows a notification below to the 'Start now >' button on the home page. Variable content is formatted as paragraphs, \n\n = new paragraph, blank = off
-
-`CANDIDATE_URN_WHITELIST` - Restrict candidate searches to a white list of schools, comma separated list of URNs, blank = off, -1 = on but no schools will match
-
 `FEATURE_FLAGS` - Comma separated list of features to enable, appended to features listed in environment file
 
 `PHASE` - Earlier iteration of feature flagging, currently used to disable candidate dashboard access.
@@ -136,7 +132,4 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 
 ## Deployment tools
 
-`DEPLOYMENT_ID` - String to be available at `/deployment.txt` - used to check the deployed version
-
-`DEPLOYMENT_USERNAME` - username for `deployment.txt` endpoint, defaults to a randomly generated value on start up
-DEPLOYMENT_PASSWORD - password for `deployment.txt` endpoint, defaults to a randomly generated value on start up
+`DEPLOYMENT_ID` - String to be available at `/healthcheck` - used to check the deployed version

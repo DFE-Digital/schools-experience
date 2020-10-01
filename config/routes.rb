@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
+  get '/healthcheck', to: 'healthchecks#show', as: :healthcheck_json
   get '/deployment.txt', to: 'healthchecks#deployment', as: :deployment
+  get '/deployment', to: 'healthchecks#deployment', as: :deployment_json
   get '/healthchecks/api.txt', to: 'healthchecks#api_health', as: :api_health
+  get '/whitelist', to: 'healthchecks#urn_whitelist', as: :urn_whitelist
 
   if Rails.application.config.x.maintenance_mode
     match '*path', to: 'pages#maintenance', via: :all
