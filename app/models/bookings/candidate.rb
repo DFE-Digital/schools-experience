@@ -110,9 +110,9 @@ class Bookings::Candidate < ApplicationRecord
       # contactid but the ContactFetcher returns a different contactid
 
       # if persisted?
-      update_column :gitis_uuid, contact.contactid
+      #   update_column :gitis_uuid, contact.contactid
       # else
-      #  self.gitis_uuid = contact.contactid
+      #   self.gitis_uuid = contact.contactid
       # end
     end
 

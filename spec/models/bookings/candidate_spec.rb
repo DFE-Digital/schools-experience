@@ -270,10 +270,16 @@ RSpec.describe Bookings::Candidate, type: :model do
   describe '#assign_gitis_contact' do
     let(:contact) { build(:gitis_contact, :persisted) }
     let(:candidate) { create(:candidate) }
+    let(:candidate_uuid) { candidate.gitis_uuid }
     before { candidate.assign_gitis_contact contact }
     subject { candidate.reload }
 
-    it { is_expected.to have_attributes gitis_uuid: contact.contactid }
+    it 'should update the gitis contact' do
+      expect(candidate).to have_attributes gitis_contact: contact
+    end
+    it 'should not update the gitis UUID' do
+      expect(candidate).to have_attributes gitis_uuid: candidate_uuid
+    end
   end
 
   describe '#generate_session_token!' do
