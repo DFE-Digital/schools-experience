@@ -99,7 +99,7 @@ jobs:
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
             org.opencontainers.image.version=${{ steps.build-params.outputs.version }}
             org.opencontainers.image.created=${{ steps.build-params.outputs.created }}
-            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.revision=${GITHUB_SHA::8}
           #org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
 
       - name: Inspect
