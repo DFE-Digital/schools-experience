@@ -32,3 +32,6 @@ yarn-debug.log*
 
 .idea
 .rakeTasks
+
+# example git event data for use with nektos/act
+pull-request.json

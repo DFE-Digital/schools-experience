@@ -1,129 +1,171 @@
 name: Pull Requests
 on:
-  repository_dispatch:
   pull_request:
-    types: [assigned, opened, synchronize, reopened]
+    types: [ assigned, opened, synchronize, reopened ]
+  push:
+    branches: [ master ]
+  release:
+    types: [ created ]
 
 env:
-  DOCKERHUB_REPOSITORY: dfedigital/school-experience
-  CONTAINER: school-experience
+  DOCKER_ORGANISATION: localhost:5000/dfedigital
+  DOCKER_CONTAINER: school-experience
   CUCUMBER_PROFILE: continuous_integration
+  SELENIUM_PROFILE: selenium
+  APP_URL: http://school-experience:3000
+  # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
 
 jobs:
+  local-registry:
+    runs-on: ubuntu-18.04
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+
   build:
     name: Build
-    runs-on: ubuntu-18.4
+    runs-on: ubuntu-18.04
 
     steps:
-      - uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      - uses: actions/checkout@v2
-
-      - name: Get Short SHA
-        id: sha
-        run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
-
-      - name: Set DOCKER_IMAGE environment variable
-        run: echo ::set-env name=DOCKER_IMAGE::${{ env.DOCKERHUB_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Lint Dockerfile
+        if: false
         uses: brpaz/hadolint-action@master
         with:
-             dockerfile: "Dockerfile"
+          dockerfile: "Dockerfile"
 
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.6.6'
-
-      - name: Install Bundler
-        run: |-
-          gem install bundler --version=2.1.4
-
-      - name: Bundle install
+      - name: Show build trigger
         run: |
-          bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java
-          bundle config set without development
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          echo $(git log --format=%B -n 1 ${{ github.event.after }})
 
-      - name: Run Brakeman security scan
-        run: |-
-          bundle exec \
-            brakeman --no-pager
+      - name: Prepare build parameters
+        id: build-params
+        run: |
+          IMAGE="${DOCKER_ORGANISATION}/${DOCKER_CONTAINER}"
+          VERSION=noop
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          elif [[ $GITHUB_REF == refs/heads/* ]]; then
+            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
+            if [ "${{ github.event.repository.default_branch }}" = "$VERSION" ]; then
+              VERSION=edge
+            fi
+          elif [[ $GITHUB_REF == refs/pull/* ]]; then
+            VERSION=pr-${{ github.event.number }}
+          fi
+          TAGS="${IMAGE}:${VERSION}"
+          if [[ $VERSION =~ ^v[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            MINOR=${VERSION%.*}
+            MAJOR=${MINOR%.*}
+            TAGS="$TAGS,${IMAGE}:${MINOR},${IMAGE}:${MAJOR},${IMAGE}:latest"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            TAGS="$TAGS,${IMAGE}:sha-${GITHUB_SHA::8}"
+          fi
+          CACHE_KEY=`cat Dockerfile .dockerignore Gemfile Gemfile.lock package.json yarn.lock | shasum | cut -d ' ' -f 1`
+          echo ::set-output name=cache_key::${CACHE_KEY}
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=image::${IMAGE}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
-      - name: Run GovUK Lint check
-        run: |-
-          bundle exec \
-            rubocop app config lib features spec spec_external --format clang
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-      - name: Setup SonarQube
-        uses: warchant/setup-sonar-scanner@v1
-
-      - name: Add ouput folders
-        run: mkdir ${PWD}/out && mkdir ${PWD}/out/specs && mkdir ${PWD}/out/coverage && mkdir ${PWD}/out/features
-
-      - name: Build Docker Compose container
-        run: |-
-          docker-compose -f docker-compose-local.yml build
-
-      - name: Create Docker Compose stack
-        run: |-
-          docker-compose -f docker-compose-local.yml up -d
-          WAIT_COUNT=0
-          until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ] ; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
-
-      - name: Run Specs
-        run: |-
-          docker-compose -f docker-compose-local.yml run --rm -v ${PWD}/out/specs:/app/out -v ${PWD}/out/coverage:/app/coverage db-tasks \
-            rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
-
-      - name: Upload Spec Results
-        uses: actions/upload-artifact@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
         with:
-          name: Spec_Results
-          path: ${PWD}/out/specs/*
+          driver-opts: network=host
 
-      - name: Fixup report file paths
-        run: sudo sed -i "s?\"/app/?\"${PWD}/?" ${PWD}/out/coverage/.resultset.json
-
-      - name: Upload Code Coverage Results
-        uses: actions/upload-artifact@v2
+      - name: Login to DockerHub
+        if: false
+        uses: docker/login-action@v1
         with:
-          name: Code_Coverage
-          path: ${PWD}/out/coverage/*
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PERSONAL_ACCESS_TOKEN }}
 
-      - name: Run Cucumber features
-        run: |-
-          docker-compose -f docker-compose-local.yml run --rm -v ${PWD}/out/features:/app/features -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
-            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /app/features --format pretty
-
-      - name: Upload Feature Results
-        uses: actions/upload-artifact@v2
+      - name: Build and push
+        id: build-and-push
+        uses: docker/build-push-action@v2
         with:
-          name: Feature_Results
-          path: ${PWD}/out/features/*
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/386
+          #push: true || ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/development') }}
+          tags: ${{ steps.build-params.outputs.tags }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}
+            org.opencontainers.image.description=${{ github.event.repository.description }}
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.version=${{ steps.build-params.outputs.version }}
+            org.opencontainers.image.created=${{ steps.build-params.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+#org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
 
-  publish:
-    name: Publish
-    runs-on: ubuntu-18.4
+      - name: Inspect
+        run: |
+          docker buildx imagetools inspect ${DOCKER_ORGANISATION}/${DOCKER_CONTAINER}:${GITHUB_SHA::8}
+
+      - name: Update Docker Hub Description from README.md
+        uses: peter-evans/dockerhub-description@v2
+        if: false
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PERSONAL_ACCESS_TOKEN }}
+          DOCKERHUB_REPOSITORY: ${DOCKER_ORGANISATION}/${DOCKER_CONTAINER}
+
+  test:
+    name: Non-browser testing
+    runs-on: ubuntu-18.04
     needs: build
 
     steps:
-      - name: Build Only
-        uses: docker/build-push-action@v2
-        if: false && github.ref != 'refs/heads/master'
+      - name: Build Docker Compose container
+        run: |
+          docker-compose -f docker-compose.yml build
+
+      - name: Run Brakeman security scan
+        run: |
+          docker-compose -f docker-compose.yml run --rm db-tasks \
+            brakeman --no-pager
+
+      - name: Run GovUK Lint check
+        run: |
+          docker-compose -f docker-compose.yml run --rm db-tasks \
+            rubocop app config lib features spec spec_external --format clang
+
+      - name: Create Docker Compose stack
+        run: |
+          docker-compose -f docker-compose-local.yml up -d
+            WAIT_COUNT=0
+            until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ] ; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+
+      - name: Run Specs
+        run: |
+          docker-compose -f docker-compose-local.yml run --rm db-tasks \
+            rspec --format documentation --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+
+      - name: Upload Spec Results
+        uses: actions/upload-artifact@v2
+        if: false
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
-          repository: ${{ env.APP_REPOSITORY }}
-          always_pull: true
-          add_git_labels: true
-          tag_with_ref: true
-          tag_with_sha: true
-          push: false
-          build_args: APP_SHA=${{ steps.sha.outputs.short }}
+          name: Spec_Results
+          path: rspec_results.xml
+
+      - name: Run Cucumber features
+        run: |
+          docker-compose -f docker-compose-local.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
+            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /ci_build/junit
+
+      - name: Upload Feature Results
+        uses: actions/upload-artifact@v2
+        if: false
+        with:
+          name: Feature_Results
+          path: junit/*
