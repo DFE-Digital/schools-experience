@@ -16,17 +16,17 @@ env:
   # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
 
 jobs:
+  local-registry:
+    runs-on: ubuntu-18.04
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+
   build:
     name: Build
     runs-on: ubuntu-18.04
-
-    local-registry:
-      runs-on: ubuntu-18.04
-      services:
-        registry:
-          image: registry:2
-          ports:
-            - 5000:5000
 
     steps:
       - name: Checkout
@@ -37,10 +37,6 @@ jobs:
         uses: brpaz/hadolint-action@master
         with:
           dockerfile: "Dockerfile"
-
-      - name: Show build trigger
-        run: |
-          echo $(git log --format=%B -n 1 ${{ github.event.after }})
 
       - name: Prepare build parameters
         id: build-params
