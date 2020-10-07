@@ -81,7 +81,7 @@ jobs:
           context: .
           file: ./Dockerfile
           #platforms: linux/amd64,linux/arm64,linux/386
-          #push: true || ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/development') }}
+          push: true
           tags: ${{ steps.build-params.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
