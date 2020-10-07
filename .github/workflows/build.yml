@@ -104,7 +104,7 @@ jobs:
 
       - name: Inspect
         run: |
-          docker buildx imagetools inspect http://${DOCKER_ORGANISATION}/${DOCKER_CONTAINER}:sha-${GITHUB_SHA::8}
+          docker buildx imagetools inspect "${{ steps.build-params.outputs.image }}:sha-${GITHUB_SHA::8}"
 
       - name: Update Docker Hub Description from README.md
         uses: peter-evans/dockerhub-description@v2
