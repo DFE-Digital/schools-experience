@@ -1,171 +1,129 @@
 name: Pull Requests
 on:
+  repository_dispatch:
   pull_request:
-    types: [ assigned, opened, synchronize, reopened ]
-  push:
-    branches: [ master ]
-  release:
-    types: [ created ]
+    types: [assigned, opened, synchronize, reopened]
 
 env:
-  DOCKER_ORGANISATION: localhost:5000/dfedigital
-  DOCKER_CONTAINER: school-experience
+  DOCKERHUB_REPOSITORY: dfedigital/school-experience
+  CONTAINER: school-experience
   CUCUMBER_PROFILE: continuous_integration
-  DOCKER_IMAGE: ${DOCKER_ORGANISATION}/${DOCKER_CONTAINER}
 
 jobs:
   build:
-    name: Test
-    runs-on: ubuntu-18.04
+    name: Build
+    runs-on: ubuntu-18.4
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - uses: actions/checkout@v2
+
+      - name: Get Short SHA
+        id: sha
+        run: echo ::set-output name=short::$(git rev-parse --short $GITHUB_SHA)
+
+      - name: Set DOCKER_IMAGE environment variable
+        run: echo ::set-env name=DOCKER_IMAGE::${{ env.DOCKERHUB_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}
 
       - name: Lint Dockerfile
-        if: false
         uses: brpaz/hadolint-action@master
         with:
-          dockerfile: "Dockerfile"
+             dockerfile: "Dockerfile"
 
-      - name: Build Docker Compose container
-        if: false
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6.6'
+
+      - name: Install Bundler
+        run: |-
+          gem install bundler --version=2.1.4
+
+      - name: Bundle install
         run: |
-          docker-compose -f docker-compose-local.yml build
+          bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java
+          bundle config set without development
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Run Brakeman security scan
-        if: false
-        run: |
-          docker-compose -f docker-compose-local.yml run --rm db-tasks \
+        run: |-
+          bundle exec \
             brakeman --no-pager
 
       - name: Run GovUK Lint check
-        if: false
-        run: |
-          docker-compose -f docker-compose-local.yml run --rm db-tasks \
+        run: |-
+          bundle exec \
             rubocop app config lib features spec spec_external --format clang
 
+      - name: Setup SonarQube
+        uses: warchant/setup-sonar-scanner@v1
+
+      - name: Add ouput folders
+        run: mkdir ${PWD}/out && mkdir ${PWD}/out/specs && mkdir ${PWD}/out/coverage && mkdir ${PWD}/out/features
+
+      - name: Build Docker Compose container
+        run: |-
+          docker-compose -f docker-compose-local.yml build
+
       - name: Create Docker Compose stack
-        if: false
-        run: |
+        run: |-
           docker-compose -f docker-compose-local.yml up -d
-            WAIT_COUNT=0
-            until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ] ; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+          WAIT_COUNT=0
+          until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ] ; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
 
       - name: Run Specs
-        if: false
-        run: |
-          docker-compose -f docker-compose-local.yml run --rm db-tasks \
-            rspec --format documentation --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+        run: |-
+          docker-compose -f docker-compose-local.yml run --rm -v ${PWD}/out/specs:/app/out -v ${PWD}/out/coverage:/app/coverage db-tasks \
+            rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
 
       - name: Upload Spec Results
         uses: actions/upload-artifact@v2
         with:
           name: Spec_Results
-          path: rspec_results.xml
+          path: ${PWD}/out/specs/*
+
+      - name: Fixup report file paths
+        run: sudo sed -i "s?\"/app/?\"${PWD}/?" ${PWD}/out/coverage/.resultset.json
+
+      - name: Upload Code Coverage Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Code_Coverage
+          path: ${PWD}/out/coverage/*
 
       - name: Run Cucumber features
-        if: false
-        run: |
-          docker-compose -f docker-compose-local.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
-            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /ci_build/junit
+        run: |-
+          docker-compose -f docker-compose-local.yml run --rm -v ${PWD}/out/features:/app/features -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true db-tasks \
+            cucumber --profile=${{ env.CUCUMBER_PROFILE }} --format junit --out /app/features --format pretty
 
       - name: Upload Feature Results
         uses: actions/upload-artifact@v2
         with:
           name: Feature_Results
-          path: junit/*
+          path: ${PWD}/out/features/*
 
   publish:
-    name: Build and Publish
-    runs-on: ubuntu-18.04
+    name: Publish
+    runs-on: ubuntu-18.4
     needs: build
 
-    local-registry:
-      runs-on: ubuntu-18.04
-      services:
-        registry:
-          image: registry:2
-          ports:
-            - 5000:5000
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Prepare
-        id: prep
-        run: |
-          VERSION=noop
-          DOCKER_IMAGE=${{env.DOCKER_IMAGE}}
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/}
-          elif [[ $GITHUB_REF == refs/heads/* ]]; then
-            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
-            if [ "${{ github.event.repository.default_branch }}" = "$VERSION" ]; then
-              VERSION=edge
-            fi
-          elif [[ $GITHUB_REF == refs/pull/* ]]; then
-            VERSION=pr-${{ github.event.number }}
-          fi
-          TAGS="${DOCKER_IMAGE}:${VERSION}"
-          if [[ $VERSION =~ ^v[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-            MINOR=${VERSION%.*}
-            MAJOR=${MINOR%.*}
-            TAGS="$TAGS,${DOCKER_IMAGE}:${MINOR},${DOCKER_IMAGE}:${MAJOR},${DOCKER_IMAGE}:latest"
-          elif [ "${{ github.event_name }}" = "push" ]; then
-            TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::8}"
-          fi
-          echo ::set-output name=version::${VERSION}
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Login to DockerHub
-        if: false
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_PERSONAL_ACCESS_TOKEN }}
-
-      - name: Build and push
-        id: docker_build
+      - name: Build Only
         uses: docker/build-push-action@v2
+        if: false && github.ref != 'refs/heads/master'
         with:
-          context: .
-          file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/386
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.prep.outputs.tags }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          labels: |
-            org.opencontainers.image.title=${{ github.event.repository.name }}
-            org.opencontainers.image.description=${{ github.event.repository.description }}
-            org.opencontainers.image.url=${{ github.event.repository.html_url }}
-            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
-            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
-            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-            org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
-
-      - name: Update Docker Hub Description from README.md
-        uses: peter-evans/dockerhub-description@v2
-        if: false
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PERSONAL_ACCESS_TOKEN }}
-          DOCKERHUB_REPOSITORY: ${{ env.DOCKER_IMAGE }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
+          repository: ${{ env.APP_REPOSITORY }}
+          always_pull: true
+          add_git_labels: true
+          tag_with_ref: true
+          tag_with_sha: true
+          push: false
+          build_args: APP_SHA=${{ steps.sha.outputs.short }}
