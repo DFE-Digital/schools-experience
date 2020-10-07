@@ -8,23 +8,16 @@ on:
     types: [ created ]
 
 env:
-  DOCKER_ORGANISATION: localhost:5000/dfedigital
+  DOCKER_ORGANISATION: mattonfoot
   DOCKER_CONTAINER: school-experience
   CUCUMBER_PROFILE: continuous_integration
   SELENIUM_PROFILE: selenium
-  APP_URL: http://school-experience:3000
   # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-18.04
-
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
 
     steps:
       - name: Checkout
@@ -118,12 +111,6 @@ jobs:
     name: Non-browser testing
     runs-on: ubuntu-18.04
     needs: build
-
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
 
     steps:
       - name: Build Docker Compose container
