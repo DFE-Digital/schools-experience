@@ -16,17 +16,15 @@ env:
   # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
 
 jobs:
-  local-registry:
+  build:
+    name: Build
     runs-on: ubuntu-18.04
+
     services:
       registry:
         image: registry:2
         ports:
           - 5000:5000
-
-  build:
-    name: Build
-    runs-on: ubuntu-18.04
 
     steps:
       - name: Checkout
@@ -120,6 +118,12 @@ jobs:
     name: Non-browser testing
     runs-on: ubuntu-18.04
     needs: build
+
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
 
     steps:
       - name: Build Docker Compose container
