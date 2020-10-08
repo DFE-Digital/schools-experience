@@ -58,6 +58,16 @@ jobs:
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
+      - name: Create docker compose override file
+        run: |
+          script/docker-override.sh ${{ steps.build-params.outputs.version }}
+
+      - name: Upload docker compose override file
+        uses: actions/upload-artifact@v2
+        with:
+          name: docker-compose-override
+          path: ./docker-compose-override.yml
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -110,9 +120,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Create docker compose override file
-        run: |
-          script/docker-override.sh ${{ steps.build-params.outputs.version }}
+      - name: Download docker compose override file
+        uses: actions/download-artifact@v2
+        with:
+          name: docker-compose-override
 
       - name: Run Brakeman security scan
         run: |
