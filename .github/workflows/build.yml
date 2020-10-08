@@ -68,7 +68,6 @@ jobs:
           driver-opts: network=host
 
       - name: Login to DockerHub
-        if: false
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
