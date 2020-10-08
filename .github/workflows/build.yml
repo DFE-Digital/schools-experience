@@ -24,7 +24,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Lint Dockerfile
-        if: false
         uses: brpaz/hadolint-action@master
         with:
           dockerfile: "Dockerfile"
@@ -91,12 +90,12 @@ jobs:
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
             org.opencontainers.image.version=${{ steps.build-params.outputs.version }}
             org.opencontainers.image.created=${{ steps.build-params.outputs.created }}
-            org.opencontainers.image.revision=${GITHUB_SHA::8}
+            org.opencontainers.image.revision=${GITHUB_SHA}
           #org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
 
       - name: Inspect
         run: |
-          docker buildx imagetools inspect "${{ steps.build-params.outputs.image }}:sha-${GITHUB_SHA::8}"
+          docker buildx imagetools inspect "${{ steps.build-params.outputs.image }}:${{ steps.build-params.outputs.version }}"
 
       - name: Update Docker Hub Description from README.md
         uses: peter-evans/dockerhub-description@v2
@@ -104,7 +103,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PERSONAL_ACCESS_TOKEN }}
-          DOCKERHUB_REPOSITORY: ${DOCKER_ORGANISATION}/${DOCKER_CONTAINER}
+          DOCKERHUB_REPOSITORY: ${{ steps.build-params.outputs.image }}
 
   test:
     name: Non-browser testing
@@ -112,10 +111,6 @@ jobs:
     needs: build
 
     steps:
-      - name: Build Docker Compose container
-        run: |
-          docker-compose -f docker-compose.yml build
-
       - name: Run Brakeman security scan
         run: |
           docker-compose -f docker-compose.yml run --rm db-tasks \
