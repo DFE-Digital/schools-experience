@@ -1,8 +1,7 @@
 #!/bin/bash
 version="$1";
 
-echo <<< EOL
-version: '3.3'
+echo "version: '3.3'
 
 services:
    school-experience:
@@ -12,6 +11,6 @@ services:
      image: school-experience:${version}
 
    db-tasks:
-     image: school-experience:${version}
-EOL >> docker-compose-override.yml;
+     image: school-experience:${version}" > docker-compose-override.yml;
+
 cat docker-compose-override.yml;
