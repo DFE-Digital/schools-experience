@@ -157,14 +157,12 @@ jobs:
 
       - name: Upload Spec Results
         uses: actions/upload-artifact@v2
-        if: false
         with:
-          name: Spec_Results
-          path: rspec_results.xml
+          name: spec-results
+          path: ./rspec_results.xml
 
       - name: Upload Feature Results
         uses: actions/upload-artifact@v2
-        if: false
         with:
-          name: Feature_Results
+          name: feature-results
           path: junit/*
