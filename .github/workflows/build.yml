@@ -147,7 +147,7 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml -f docker-compose-override.yml \
             run --rm db-tasks \
-            rspec --format documentation --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+            rspec --format documentation --format RspecSonarqubeFormatter --out /ci_build/rspec_results.xml
 
       - name: Run Cucumber features
         run: |
