@@ -58,16 +58,6 @@ jobs:
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
-      - name: Create docker compose override file
-        run: |
-          script/docker-override.sh ${{ steps.build-params.outputs.image }}:${{ steps.build-params.outputs.version }}
-
-      - name: Upload docker compose override file
-        uses: actions/upload-artifact@v2
-        with:
-          name: docker-compose-override
-          path: ./docker-compose-override.yml
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -111,6 +101,16 @@ jobs:
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PERSONAL_ACCESS_TOKEN }}
           DOCKERHUB_REPOSITORY: ${{ steps.build-params.outputs.image }}
 
+      - name: Create docker compose override file
+        run: |
+          script/docker-override.sh ${{ steps.build-params.outputs.image }}:${{ steps.build-params.outputs.version }}
+
+      - name: Upload docker compose override file
+        uses: actions/upload-artifact@v2
+        with:
+          name: docker-compose-override
+          path: ./docker-compose-override.yml
+
   test:
     name: Non-browser testing
     runs-on: ubuntu-18.04
@@ -122,6 +122,11 @@ jobs:
 
       - name: Download docker compose override file
         uses: actions/download-artifact@v2
+        with:
+          name: docker-compose-override
+
+      - name: Clean up docker compose override file
+        uses: geekyeggo/delete-artifact@v1
         with:
           name: docker-compose-override
 
