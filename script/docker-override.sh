@@ -1,16 +1,16 @@
 #!/bin/bash
-version="$1";
+image="$1";
 
 echo "version: '3.3'
 
 services:
    school-experience:
-     image: school-experience:${version}
+     image: ${image}
 
    delayed-jobs:
-     image: school-experience:${version}
+     image: ${image}
 
    db-tasks:
-     image: school-experience:${version}" > docker-compose-override.yml;
+     image: ${image}" > docker-compose-override.yml;
 
 cat docker-compose-override.yml;
