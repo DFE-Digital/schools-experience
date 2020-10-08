@@ -107,6 +107,13 @@ jobs:
     needs: build
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create docker compose override file
+        run: |
+          script/docker-override.sh ${{ steps.build-params.outputs.version }}
+
       - name: Run Brakeman security scan
         run: |
           docker-compose -f docker-compose.yml run --rm db-tasks \
