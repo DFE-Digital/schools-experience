@@ -93,10 +93,6 @@ jobs:
             org.opencontainers.image.revision=${GITHUB_SHA}
           #org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
 
-      - name: Inspect
-        run: |
-          docker buildx imagetools inspect "${{ steps.build-params.outputs.image }}:${{ steps.build-params.outputs.version }}"
-
       - name: Update Docker Hub Description from README.md
         uses: peter-evans/dockerhub-description@v2
         if: false
