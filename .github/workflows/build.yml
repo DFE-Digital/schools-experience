@@ -17,6 +17,7 @@ env:
 jobs:
   scan:
     name: Scan
+    runs-on: ubuntu-18.04
     container: ruby:2.6
 
     steps:
