@@ -15,18 +15,34 @@ env:
   # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
 
 jobs:
+  scan:
+    name: Scan
+    container: ruby:2.6
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: "Dockerfile"
+
+      - run: |
+          gem install bundler:2.1.4
+          bundle install --without development
+
+      - name: Run Brakeman security scan
+        run: bundle exec brakeman --no-pager
+
+      - name: Run GovUK Lint check
+        run: bundle exec rubocop app config lib features spec spec_external --format clang
+
   build:
     name: Build
     runs-on: ubuntu-18.04
+    needs: scan
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Lint Dockerfile
-        uses: brpaz/hadolint-action@master
-        with:
-          dockerfile: "Dockerfile"
+      - uses: actions/checkout@v2
 
       - name: Prepare build parameters
         id: build-params
@@ -117,8 +133,7 @@ jobs:
     needs: build
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Download docker compose override file
         uses: actions/download-artifact@v2
@@ -135,18 +150,6 @@ jobs:
           docker-compose -f docker-compose.yml -f docker-compose-override.yml up -d
             WAIT_COUNT=0
             until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ] ; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
-
-      - name: Run Brakeman security scan
-        run: |
-          docker-compose -f docker-compose.yml -f docker-compose-override.yml \
-            run --rm db-tasks \
-            brakeman --no-pager
-
-      - name: Run GovUK Lint check
-        run: |
-          docker-compose -f docker-compose.yml -f docker-compose-override.yml \
-            run --rm db-tasks \
-            rubocop app config lib features spec spec_external --format clang
 
       - name: Run Specs
         run: |
