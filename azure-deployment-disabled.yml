@@ -1,0 +1,3222 @@
+# name: S105-School-Experience-CD
+# releaseNameFormat: 'Release-$(rev:r)'
+
+name: Continuous Integration
+on:
+  push:
+    branches: [ master, debug ]
+
+env:
+  azureStorageAccount: s105d01devstorage
+  imageTag: v$(Build.BuildId)
+
+jobs:
+  dev:
+    runs-on: ubuntu-18.04
+    name: Deploy Application
+    outputs:
+
+    steps:
+      - name: Bash Script
+        run: |
+          echo "WORKING DIR IS $(System.DefaultWorkingDirectory)"
+
+      - name: Set Image Tag Variable Name and Agent Ip Address
+        filePath: $(System.DefaultWorkingDirectory)/sourcedevops/azure-pipelines-support/image_tags_and_ipaddress.sh
+        run: |
+          if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
+            echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
+            echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
+          else
+            echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}"
+            echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}-stable"
+          fi
+
+          echo "##vso[task.setvariable variable=agentIpAddress]$(curl -s https://api.ipify.org)"
+
+      - name: Check Cucumber is being run at the same commit point
+        env:
+          CUCUMBER_SOURCE_VERSION: $(Release.Artifacts._DFE-Digital_schools-experience.BuildId)
+          CI_SOURCE_VERSION: $(Build.SourceVersion)
+        run: |
+          echo "CI commit is $CI_SOURCE_VERSION"
+
+          echo "Cucumber code that will be run is at
+          $CUCUMBER_SOURCE_VERSION"
+
+
+          if [ "$CI_SOURCE_VERSION" != "$CUCUMBER_SOURCE_VERSION" ]; then
+            echo "TL;DR - the commit ids of the cucumber tests checkout and the CI source code don't match - do a fresh build"
+            echo ""
+            echo "The CD pipeline takes the CI build artifacts and then does a second checkout of the source code repo so that the cucumber tests can be run. There is limitation in the second checkout via Azure DevOps in that it is not possible to specify the commit id as that used within the CI build. The closest we can get is 'latest' on the default branch (master). This means that it is possible that the commit ids could be different, though this is unlikely."
+            exit 1
+          fi
+
+      - name: Create Docker Compose file
+        env:
+          REGISTRY_HOST: registry-1.docker.io
+          IMAGE_NAME: dfedigital/school-experience
+          IMAGE_TAG: $(schoolExperienceImageTag)
+        filePath: $(System.DefaultWorkingDirectory)/sourcedevops/compose-school-experience.sh
+        run: |
+          cat <<EOF >> compose-school-experience.yml
+          version: '3.3'
+
+          services:
+             school-experience:
+               image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+               ports:
+                 - "3000:3000"
+               restart: always
+               healthcheck:
+                 disable: true
+
+             delayed-jobs:
+               image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+               command: rake jobs:work
+               restart: always
+               healthcheck:
+                 disable: true
+          EOF
+          echo "Using the following compose file..."
+          cat compose-school-experience.yml
+
+      - name: Create parameters file
+        run: |
+          cat <<EOF >> parameters-dev.json
+          {
+              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+              "contentVersion": "1.0.0.0",
+              "parameters": {
+                    "databases_school_experience_name": {"value": "$(databaseName)"},
+                   "servers_db_name": {"value": "$(databaseServerName)"},
+                   "vaultName": {"value": "$(vaultName)"},
+                   "vaultResourceGroupName": {"value": "$(vaultResourceGroupName)"},
+                   "serverfarms_serviceplan_name": {"value": "$(serverfarms_serviceplan_name)"},
+                   "sites_school_experience_name": {"value": "$(webAppName)"},
+                   "redis_name": {"value": "$(redis_name)"},
+                   "servers_db_createMode": {"value": "Default"},
+                   "environmentName": {"value": "dev"},
+                   "redisStorageAccountName": {"value": "schexpstoragedev"},
+                   "appSecureUsername": {"value": ""},
+                   "appSecurePassword": {"value": ""},
+                   "notifyApiKey": {"value":""},
+                   "_artifactsLocation": {"value": "https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/"},
+                   "postgresUserLoginName": {"value":"railsappuser"},
+                   "websiteDeploymentName": {"value":"website"},
+                   "webAppSku": {
+                      "value": {
+                          "name": "B3"
+                      }
+                   },
+                   "applyRedisFirewall": {"value": false},
+                   "applyPostgresFirewall": {"value": false}
+              }
+          }
+          EOF
+          echo "Using the following dev parameters file..."
+          cat parameters-dev.json
+
+      - name: Add Version Tag
+        run: |
+          az resource tag --tags version=$(schoolExperienceImageTag) -g $(resourceGroupName) -n $(webAppName) --resource-type "Microsoft.Web/sites"
+
+      - name: Allow access from agent to key vault
+        run: |
+            az keyvault network-rule add --name $(vaultName) --ip-address 0.0.0.0/0
+
+      - name: 'Azure Key Vault: s105d01-dev-vault'
+        inputs:
+          KeyVaultName: s105d01-dev-vault
+          SecretsFilter: '*'
+
+      - name: Migrate Database
+        inputs:
+          containerregistrytype: Container Registry
+          dockerRegistryEndpoint: ''
+          azureSubscriptionEndpoint: faa3897d-18d7-45c9-8923-368d819b6e15
+          azureContainerRegistry: schoolexperienceregistry.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+          envVars: |
+            RAILS_ENV=servertest
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)
+            DB_USERNAME=$(databaseUser)
+            DB_PASSWORD=$(postgresUserPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+          containerCommand: 'rake db:migrate'
+
+      - name: Create or Update Resource Group Deployment
+        run: |
+          az group deployment create \
+            --name schoolExperienceDeployment \
+            --resource-group $(resourceGroupName) \
+            --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/template.json \
+            --parameters @parameters-dev.json \
+            dockerComposeFile=@compose-school-experience.yml
+
+  migrate:
+    name: Migrate multiple app database
+
+    if: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    steps:
+      - name: Set Image Tag Variable Name and Agent Ip Address
+        inputs:
+          filePath: $(System.DefaultWorkingDirectory)/sourcedevops/azure-pipelines-support/image_tags_and_ipaddress.sh
+          run: |
+            if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
+            else
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}-stable"
+            fi
+
+            echo "##vso[task.setvariable variable=agentIpAddress]$(curl -s https://api.ipify.org)"
+
+      - name: 'Azure Key Vault: s105d01-dev-vault'
+        inputs:
+          ConnectedServiceName: 8cc684b7-2a0b-4f1c-bf4a-32e3a5027ce3
+          KeyVaultName: s105d01-dev-vault
+          SecretsFilter: '*'
+
+      - name: Migrate Database for app 1
+        inputs:
+          containerregistrytype: Container Registry
+
+          azureSubscriptionEndpoint: faa3897d-18d7-45c9-8923-368d819b6e15
+          azureContainerRegistry: schoolexperienceregistry.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+
+          pushMultipleImages: 'false'
+          tagMultipleImages: 'false'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+          imageNamesPath: ''
+          qualifyImageName: 'true'
+          qualifySourceImageName: 'false'
+          includeSourceTags: 'false'
+          includeLatestTag: 'false'
+          addDefaultLabels: 'true'
+          useDefaultContext: 'true'
+          buildContext: ''
+          imageDigestFile: ''
+          containerName: ''
+          ports: ''
+          volumes: ''
+          envVars: |
+            RAILS_ENV=servertest
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)1
+            DB_USERNAME=railsappuser1@$(databaseServerName)
+            DB_PASSWORD=$(postgresUserPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+
+          entrypointOverride: ''
+          containerCommand: 'rake db:migrate'
+          runInBackground: 'false'
+          restartPolicy: 'no'
+          maxRestartRetries: ''
+          dockerHostEndpoint: ''
+          enforceDockerNamingConvention: 'true'
+          memoryLimit: ''
+
+      - name: Migrate Database for app 2
+        inputs:
+          containerregistrytype: Container Registry
+
+          azureSubscriptionEndpoint: faa3897d-18d7-45c9-8923-368d819b6e15
+          azureContainerRegistry: schoolexperienceregistry.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+
+          pushMultipleImages: 'false'
+          tagMultipleImages: 'false'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+          imageNamesPath: ''
+          qualifyImageName: 'true'
+          qualifySourceImageName: 'false'
+          includeSourceTags: 'false'
+          includeLatestTag: 'false'
+          addDefaultLabels: 'true'
+          useDefaultContext: 'true'
+          buildContext: ''
+          imageDigestFile: ''
+          containerName: ''
+          ports: ''
+          volumes: ''
+          envVars: |
+            RAILS_ENV=servertest
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)2
+            DB_USERNAME=railsappuser2@$(databaseServerName)
+            DB_PASSWORD=$(postgresUserPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+
+          entrypointOverride: ''
+          containerCommand: 'rake db:migrate'
+          runInBackground: 'false'
+          restartPolicy: 'no'
+          maxRestartRetries: ''
+          dockerHostEndpoint: ''
+          enforceDockerNamingConvention: 'true'
+          memoryLimit: ''
+
+      - name: Migrate Database for app 3
+        inputs:
+          containerregistrytype: Container Registry
+
+          azureSubscriptionEndpoint: faa3897d-18d7-45c9-8923-368d819b6e15
+          azureContainerRegistry: schoolexperienceregistry.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+
+          pushMultipleImages: 'false'
+          tagMultipleImages: 'false'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+          imageNamesPath: ''
+          qualifyImageName: 'true'
+          qualifySourceImageName: 'false'
+          includeSourceTags: 'false'
+          includeLatestTag: 'false'
+          addDefaultLabels: 'true'
+          useDefaultContext: 'true'
+          buildContext: ''
+          imageDigestFile: ''
+          containerName: ''
+          ports: ''
+          volumes: ''
+          envVars: |
+            RAILS_ENV=servertest
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)3
+            DB_USERNAME=railsappuser3@$(databaseServerName)
+            DB_PASSWORD=$(postgresUserPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+
+          entrypointOverride: ''
+          containerCommand: 'rake db:migrate'
+          runInBackground: 'false'
+          restartPolicy: 'no'
+          maxRestartRetries: ''
+          dockerHostEndpoint: ''
+          enforceDockerNamingConvention: 'true'
+          memoryLimit: ''
+
+      - name: Migrate Database for app 4
+        inputs:
+          containerregistrytype: Container Registry
+
+          azureSubscriptionEndpoint: faa3897d-18d7-45c9-8923-368d819b6e15
+          azureContainerRegistry: schoolexperienceregistry.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+
+          pushMultipleImages: 'false'
+          tagMultipleImages: 'false'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+          imageNamesPath: ''
+          qualifyImageName: 'true'
+          qualifySourceImageName: 'false'
+          includeSourceTags: 'false'
+          includeLatestTag: 'false'
+          addDefaultLabels: 'true'
+          useDefaultContext: 'true'
+          buildContext: ''
+          imageDigestFile: ''
+          containerName: ''
+          ports: ''
+          volumes: ''
+          envVars: |
+            RAILS_ENV=servertest
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)4
+            DB_USERNAME=railsappuser4@$(databaseServerName)
+            DB_PASSWORD=$(postgresUserPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+
+          entrypointOverride: ''
+          containerCommand: 'rake db:migrate'
+          runInBackground: 'false'
+          restartPolicy: 'no'
+          maxRestartRetries: ''
+          dockerHostEndpoint: ''
+          enforceDockerNamingConvention: 'true'
+          memoryLimit: ''
+
+      - name: Migrate Database for app 5
+        inputs:
+          containerregistrytype: Container Registry
+
+          azureSubscriptionEndpoint: faa3897d-18d7-45c9-8923-368d819b6e15
+          azureContainerRegistry: schoolexperienceregistry.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+
+          pushMultipleImages: 'false'
+          tagMultipleImages: 'false'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+          imageNamesPath: ''
+          qualifyImageName: 'true'
+          qualifySourceImageName: 'false'
+          includeSourceTags: 'false'
+          includeLatestTag: 'false'
+          addDefaultLabels: 'true'
+          useDefaultContext: 'true'
+          buildContext: ''
+          imageDigestFile: ''
+          containerName: ''
+          ports: ''
+          volumes: ''
+          envVars: |
+            RAILS_ENV=servertest
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)5
+            DB_USERNAME=railsappuser5@$(databaseServerName)
+            DB_PASSWORD=$(postgresUserPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+
+          entrypointOverride: ''
+          containerCommand: 'rake db:migrate'
+          runInBackground: 'false'
+          restartPolicy: 'no'
+          maxRestartRetries: ''
+          dockerHostEndpoint: ''
+          enforceDockerNamingConvention: 'true'
+          memoryLimit: ''
+
+  deploy-applications:
+    name: Deploy multiple application instances
+
+    parallelExecution:
+      maxNumberOfAgents: 5
+    if: |
+      and(succeeded(), or(eq(variables['Build.SourceBranch'],
+      'refs/heads/master'), eq(variables['Build.SourceBranch'],
+      'refs/heads/debug')))
+
+    steps:
+      - name: Set Image Tag Variable Name and Agent Ip Address
+        filePath: $(System.DefaultWorkingDirectory)/sourcedevops/azure-pipelines-support/image_tags_and_ipaddress.sh
+        run: |
+          if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
+            echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
+            echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
+          else
+            echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}"
+            echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}-stable"
+          fi
+
+          echo "##vso[task.setvariable variable=agentIpAddress]$(curl -s
+          https://api.ipify.org)"
+
+      - name: Create Docker Compose file
+        env:
+          REGISTRY_HOST: registry-1.docker.io
+          IMAGE_NAME: dfedigital/school-experience
+          IMAGE_TAG: $(schoolExperienceImageTag)
+        filePath: $(System.DefaultWorkingDirectory)/sourcedevops/compose-school-experience.sh
+        run: |
+          cat <<EOF >> compose-school-experience.yml
+          version: '3.3'
+
+          services:
+             school-experience:
+               image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+               ports:
+                 - "3000:3000"
+               restart: always
+               healthcheck:
+                 disable: true
+
+             delayed-jobs:
+               image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+               command: rake jobs:work
+               restart: always
+               healthcheck:
+                 disable: true
+          EOF
+          echo "Using the following compose file..."
+          cat compose-school-experience.yml
+
+      - name: 'Create parameters file '
+        run: |
+          cat <<EOF >> parameters-dev.json
+          {
+              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+              "contentVersion": "1.0.0.0",
+              "parameters": {
+                    "databases_school_experience_name": {"value": "$(databaseName)$(applicationInstanceIndex)"},
+                   "servers_db_name": {"value": "$(databaseServerName)"},
+                   "vaultName": {"value": "$(vaultName)"},
+                   "vaultResourceGroupName": {"value": "s105d01-dev-vault-resource-group"},
+                   "serverfarms_serviceplan_name": {"value": "$(serverfarms_serviceplan_name)"},
+                   "sites_school_experience_name": {"value": "$(webAppName)$(applicationInstanceIndex)"},
+                   "redis_database_index": {"value": "$(applicationInstanceIndex)"},
+                   "redis_name": {"value": "$(redis_name)"},
+                   "servers_db_createMode": {"value": "Default"},
+                   "environmentName": {"value": "dev"},
+                   "redisStorageAccountName": {"value": "schexpstoragedev"},
+                   "appSecureUsername": {"value": "$(secureUsername)"},
+                   "appSecurePassword": {"value": "$(securePassword)"},
+                   "notifyApiKey": {"value":""},
+                   "_artifactsLocation": {"value": "https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/"},
+                   "postgresUserLoginName": {"value":"railsappuser$(applicationInstanceIndex)"},
+                   "applyBackend": {"value": false},
+                   "applyServicePlan": {"value": false},
+                   "websiteDeploymentName": {"value":"website$(applicationInstanceIndex)"},
+                   "webAppSku": {
+                      "value": {
+                          "name": "B3"
+                      }
+                   },
+                  "applyRedisFirewall": {"value": false},
+                  "applyPostgresFirewall": {"value": false}
+              }
+          }
+          EOF
+          echo "Using the following dev parameters file..."
+          cat parameters-dev.json
+
+      - name: Create or Update Resource Group Deployment
+        run: |
+          az group deployment create --name
+          schoolExperienceDeployment$(applicationInstanceIndex)
+          --resource-group $(resourceGroupName) --template-uri
+          https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/template.json
+          --parameters @parameters-dev.json
+          dockerComposeFile=@compose-school-experience.yml
+
+      - name: Add Version Tag
+        run: |
+            az resource tag --tags version=$(schoolExperienceImageTag) -g
+            $(resourceGroupName) -n $(webAppName)$(applicationInstanceIndex)
+            --resource-type "Microsoft.Web/sites"
+
+  functional-tests:
+    name: Functional Test (via Docker)
+    parallelExecution:
+      maxNumberOfAgents: 5
+
+    if: |
+      and(succeeded(), or(eq(variables['Build.SourceBranch'],
+      'refs/heads/master'), eq(variables['Build.SourceBranch'],
+      'refs/heads/debug')))
+
+    steps:
+      - name: Set Image Tag and Agent IP Address Variable and create firefox - reports directory
+        filePath: $(System.DefaultWorkingDirectory)/sourcedevops/azure-pipelines-support/image_tags_and_ipaddress.sh
+        run: |
+          if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
+            echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
+            echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
+          else
+            echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}"
+            echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}-stable"
+          fi
+
+          echo "##vso[task.setvariable variable=agentIpAddress]$(curl -s https://api.ipify.org)"
+
+          mkdir -p reports/junit
+
+          mkdir -p reports/json
+
+      - name: Allow access from agent to app
+        run: |
+          token=$(az account get-access-token | jq -r .accessToken)
+
+          subscriptionId=$(az account show | jq -r .id)
+
+
+          curl -X GET --header "Authorization: Bearer $token"
+          "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$(resourceGroupName)/providers/Microsoft.Web/sites/$(webAppName)$(applicationInstanceIndex)/config/web?api-version=2018-02-01"
+          -o response.json
+
+          echo 'the initial response is ....'
+
+          cat response.json
+
+
+          jq '.properties.ipSecurityRestrictions = [{"ipAddress":
+          "'$(agentIpAddress)'/32","action": "Allow","tag":
+          "Default","priority": 100,"name": "allowed access"}]'
+          response.json > updatedResponse.json
+
+
+          echo 'the updated response is...'
+
+          cat updatedResponse.json
+
+
+          curl -X PUT -H "Content-Type: application/json" -d
+          @updatedResponse.json --header "Authorization: Bearer $token"
+          "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$(resourceGroupName)/providers/Microsoft.Web/sites/$(webAppName)$(applicationInstanceIndex)/config/web?api-version=2018-02-01"
+
+      - name: 'Azure Key Vault: s105d01-dev-vault'
+        inputs:
+          KeyVaultName: s105d01-dev-vault
+          SecretsFilter: '*'
+
+      - name: Allow access from agent to app
+        run: |
+            token=$(az account get-access-token | jq -r .accessToken)
+
+            subscriptionId=$(az account show | jq -r .id)
+
+
+            curl -X GET --header "Authorization: Bearer $token"
+            "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/schoolExperienceGroup/providers/Microsoft.Web/sites/school-experience-dev/config/web?api-version=2018-02-01"
+            -o response.json
+
+            echo 'the initial response is ....'
+
+            cat response.json
+
+
+            jq '.properties.ipSecurityRestrictions = [{"ipAddress":
+            "'$(agentIpAddress)'/32","action": "Allow","tag":
+            "Default","priority": 100,"name": "allowed access"}]'
+            response.json > updatedResponse.json
+
+
+            echo 'the updated response is...'
+
+            cat updatedResponse.json
+
+
+            curl -X PUT -H "Content-Type: application/json" -d
+            @updatedResponse.json --header "Authorization: Bearer $token"
+            "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/schoolExperienceGroup/providers/Microsoft.Web/sites/school-experience-dev/config/web?api-version=2018-02-01"
+
+      - name: Launch Selenium
+        run: |
+          docker run --name=selenium -d -v /dev/shm:/dev/shm
+          selenium/standalone-$(browser):3.141.59-xenon
+
+      - name: Run Cucumber Tests
+        run: >
+            echo $(pwd)
+
+            docker run --rm --link selenium:selenium -e RAILS_ENV=test -e
+            SELENIUM_HUB_HOSTNAME=selenium -e
+            DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e
+            APP_URL='https://$(secureUsername):$(securePassword)@school-experience-dev.azurewebsites.net'
+            -e CUC_DB_DATABASE=$(databaseName) -e
+            CUC_DB_HOST=$(databaseHost) -e CUC_DB_PASSWORD=$CUC_DB_PASSWORD
+            -e CUC_DB_USERNAME=$(adminDatabaseUser) -e SKIP_REDIS=true -e
+            CUC_DRIVER=$(browser) -e CUC_PAGE_DELAY=0 -v
+            /home/vsts/work/r1/a/reports/junit:/app/junit  -v
+            /home/vsts/work/r1/a/reports/json:/app/json
+            dfedigital/school-experience:$(schoolExperienceImageTag)
+            cucumber --format junit --out junit --format json --out
+            json/cucumber.json
+
+      - name: generate features variable
+        run: |
+          id=$(docker create
+          dfedigital/school-experience:$(schoolExperienceImageTag))
+
+          mkdir src
+
+          docker cp $id:/app/features src/features
+
+          docker rm -v $id
+
+
+          cd src
+
+
+          find . -type f -name "*.feature" > features.txt
+
+
+          split -n r/5 features.txt
+
+
+          ls -l
+
+          index=1
+
+          features=''
+
+          for filename in x*; do
+              data=$(
+              while read line
+              do
+                echo -n " ${line}"
+              done < $filename)
+              if [ $index -eq $(applicationInstanceIndex) ]
+              then
+                features="${data}"
+              fi
+              echo $index $data
+              ((index++))
+          done
+
+          echo $features
+
+          echo "##vso[task.setVariable variable=features]${features}"
+
+      - name: Run Cucumber Tests Parallel
+        run: |
+          #sleep for a 30 secs to accommodate start up time delay of
+          application
+
+          sleep 30
+
+
+          echo $(pwd)
+
+
+          docker run --rm --link selenium:selenium -e RAILS_ENV=test -e
+          SELENIUM_HUB_HOSTNAME=selenium -e
+          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e
+          APP_URL='https://$(secureUsername):$(securePassword)@$(webAppName)$(applicationInstanceIndex).azurewebsites.net'
+          -e CUC_DB_DATABASE=$(databaseName)$(applicationInstanceIndex) -e
+          CUC_DB_HOST=$(databaseHost) -e CUC_DB_PASSWORD=$CUC_DB_PASSWORD
+          -e CUC_DB_USERNAME=$(adminDatabaseUser) -e SKIP_REDIS=true -e
+          CUC_DRIVER=$(browser) -e CUC_PAGE_DELAY=0 -v
+          /home/vsts/work/r1/a/reports/junit:/app/junit -v
+          /home/vsts/work/r1/a/reports/json:/app/json
+          dfedigital/school-experience:$(schoolExperienceImageTag)
+          cucumber $(features) --profile=selenium --format junit --out
+          junit --format json --out json/cucumber.json
+
+      - name: Check Response Times
+        env:
+          arguments: reports/json/cucumber.json $(defaultMinimumResponseTime)
+
+        scriptPath: $(System.DefaultWorkingDirectory)/source_$(Build.SourceBranchName)/script/check_timings.py
+        run: |
+          import json
+          import sys
+
+          with open(sys.argv[1]) as data_file:
+              json_data = json.load(data_file)
+
+          failures = {}
+
+          max_duration = int(sys.argv[2])
+
+          for feature in json_data:
+            for scenario in feature['elements']:
+              if scenario['type'] == 'scenario':
+                for step in scenario['steps']:
+                  if step['result']['status'] == 'passed':
+                    if step['result']['duration'] > max_duration:
+                      failures[feature['id'] + ' ' + scenario['id'] + ' ' + step['name']] = step['result']['duration']
+
+          ninezeros = 1000000000
+
+          for key, value in failures.items():
+            sys.stderr.write("Duration {:.2f}s > {:.2f} {}".format( value/ninezeros, max_duration/ninezeros, key) + '\n')
+
+          if len(failures) > 0:
+            sys.stderr.write("ERROR: some responses were too slow.")
+            sys.exit(1)
+
+      - name: Publish Chrome Test Results
+        inputs:
+          testRunner: JUnit
+          testResultsFiles: /home/vsts/work/r1/a/reports/junit/TEST-*.xml
+          testRunTitle: $(browser)
+
+  tag-stable:
+    name: Tag Image as Stable
+
+    steps:
+      - name: Set Image Tag Variable Name
+        inputs:
+          filePath: |
+            $(System.DefaultWorkingDirectory)/sourcedevops/azure-pipelines-support/image_tags_and_ipaddress.sh
+          run: |
+            if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
+            else
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}-stable"
+            fi
+
+      - name: Pull Image
+        inputs:
+          containerregistrytype: Container Registry
+          azureContainerRegistry: schoolexperienceregistry.azurecr.io
+          command: pull
+          arguments: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+          imageName: '$(Build.Repository.Name):$(Build.BuildId)'
+
+      - name: login docker hub
+        inputs:
+          command: login
+          Dockerfile: '**/Dockerfile'
+          tags: $(Build.BuildId)
+
+      - name: Tag image dfedigital
+        inputs:
+          containerregistrytype: Container Registry
+          arguments: 'dfedigital/school-experience:$(schoolExperienceImageTagStable)'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+
+      - name: Push Image dfedigital
+        inputs:
+          repository: dfedigital/school-experience
+          command: push
+          Dockerfile: '**/Dockerfile'
+          tags: $(schoolExperienceImageTagStable)
+
+      - name: Remove access to key vault
+        workflowTasks:
+          - name: Remove access to key vault
+            inputs:
+              inlinerun: |
+                az keyvault network-rule remove --name $(vaultName) --ip-address
+                0.0.0.0/0
+
+  staging:
+    runs-on: ubuntu-18.04
+    name: Promote Image to Staging
+
+    outputs:
+
+    env:
+      actionGroupName: s105t01-staging-action-group
+      activityLogAlerts_name: s105t01-staging-service-health-alert
+      alertNamePrefix: s105t01-staging-
+      appSecurePassword: experienceStaging
+      appSecureUsername: schoolStaging
+      bingMapsKey: AthHO4HvFuolV21UnLMEmFLVRWP4XMHt1xE7KkS_Ihwk4dCgZ0M8Fdf3q__P0N3d
+      covidNotification: "In light of measures in place due to the response to coronavirus (COVID-19) school experience may be affected. Some schools are offering online alternatives which can be found in the schools detail\_page.\\n\\nMore detailed guidance on what this means for teaching training applications can be found here <a href=\\\"https://getintoteaching.education.gov.uk/impact-of-covid-19-on-teacher-training\\\">https://getintoteaching.education.gov.uk/impact-of-covid-19-on-teacher-training</a>"
+      covidUrnWhitelist: 100054,100861,101408,103188,109847,110048,116412,116458,120286,131547,133794,136156,136156,136281,136281,136304,136310,136342,136342,136451,136544,136587,136599,136667,136723,136878,136885,136898,137072,137072,137096,137096,137127,137131,138437,138437,138620,138686,138686,139152,139368,139791,140105,140105,140134,140605,140605,140984,141931,142315,143508,144431,144489,145018
+      crmAuthTenantId: fad277c9-c60a-4da1-b5f3-b3b8b34a82f9
+      crmCaching: 1
+      crmChannelCreation: 222750021
+      crmClientId: c55ecf07-7059-410a-8595-a65ea7948177
+      crmCountryId: 72f5c2e6-74f9-e811-a97a-000d3a2760f2
+      crmOwnerId: 976eb33e-d7b2-e911-a98a-000d3a233e06
+      crmServiceUrl: https://gitis-test.api.crm4.dynamics.com
+      deactivateCandidates: ''
+      dfeServicesListUrl: https://pp-services.signin.education.gov.uk/my-services
+      dfeSigninApiClient: schoolexperience
+      dfeSigninApiEnabled: 1
+      dfeSigninApiEndpoint: pp-api.signin.education.gov.uk
+      dfeSigninBaseUrl: https://schoolexperience-staging.education.gov.uk
+      dfeSigninClientId: schoolexperience
+      dfeSigninHost: pp-oidc.signin.education.gov.uk
+      dfeSigninRoleId: A9E3C9BF-E38A-47F4-84EB-5EAC469C779B
+      dfeSigninSchoolChangeApprovalUrl: https://pp-services.signin.education.gov.uk/request-organisation/search
+      dfeSigninSchoolChangeEnabled: 1
+      dfeSigninServiceId: 146FA38A-2B92-4993-A941-4D6A34053522
+      featureFlags: reminders,rolecheck
+      googleMapsKey: AIzaSyB2nPfZrCTL2UaHKJ2SnKL0CAOhjgWrmHQ
+      loopCount: 50
+      notifyApiKey: schoolexperiencelive-7b77be51-67dc-4cae-a886-40b5a45779f5-39521dab-bc8e-44a9-ae37-2e4110caf07d
+      numberOfThreads: 3
+      rampUpPeriod: 1
+      redis_name: s105t01-staging-redis
+      resourceGroupName: s105t01-staging-resource-group
+      secretKeyBase: fac41bf31fe6fe0f55720c16f2f4bbcd334ad1d9309f3f00c58ccca6039eb8f8aa3d936a9914aa4696d343d14b7da2cc02732f0bea56ea5a1f422aaaefd3ce99
+      serverfarms_serviceplan_name: s105t01-staging-service-plan
+      vaultName: s105t01-staging-vault
+      vaultResourceGroupName: s105t01-staging-vault-resource-group
+      webAppName: s105t01-staging-web-application
+
+    steps:
+      - name: "Start Azure App Service: s105t01-staging-web-application - staging-slot"
+        inputs:
+          Action: Start Azure App Service
+          WebAppName: s105t01-staging-web-application
+          SpecifySlot: 'true'
+          ResourceGroupName: s105t01-staging-resource-group
+          SwapWithProduction: 'true'
+          Slot: staging-slot
+
+      - name: Set Image Tag variables and agent IP address
+        inputs:
+          filePath: |
+            $(System.DefaultWorkingDirectory)/sourcedevops/azure-pipelines-support/image_tags_and_ipaddress.sh
+          run: |
+            if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
+            else
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}-stable"
+            fi
+
+            echo "##vso[task.setvariable variable=agentIpAddress]$(curl -s https://api.ipify.org)"
+
+      - name: Create Docker Compose file
+        env:
+          REGISTRY_HOST: registry-1.docker.io
+          IMAGE_NAME: dfedigital/school-experience
+          IMAGE_TAG: $(schoolExperienceImageTagStable)
+        inputs:
+          filePath: |
+            $(System.DefaultWorkingDirectory)/sourcedevops/compose-school-experience.sh
+          run: |
+            cat <<EOF >> compose-school-experience.yml
+            version: '3.3'
+
+            services:
+               school-experience:
+                 image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+                 ports:
+                   - "3000:3000"
+                 restart: always
+                 healthcheck:
+                   disable: true
+
+               delayed-jobs:
+                 image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+                 command: rake jobs:work
+                 restart: always
+                 healthcheck:
+                   disable: true
+            EOF
+            echo "Using the following compose file..."
+            cat compose-school-experience.yml
+
+
+
+
+      - name: Create  Parameters File
+        env:
+          REGISTRY_HOST: schoolexperienceregistrystage.azurecr.io
+          IMAGE_NAME: school-experience
+          IMAGE_TAG: v$(Build.BuildId)-stable
+        inputs:
+
+          filePath: |
+            $(System.DefaultWorkingDirectory)/School-Experience-CI/compose-file/compose-school-experience.sh
+
+          run: |
+            cat <<EOF >> parameters-staging1.json
+            {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                    "redisSku": {
+                        "value": {
+                            "name": "Standard",
+                            "family": "C",
+                            "capacity": 1
+                        }
+                     },
+                      "_artifactsLocation": {"value": "https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/"},
+                      "databases_school_experience_name": {"value": "$(databaseName)"},
+                     "servers_db_name": {"value": "$(databaseServerName)"},
+                     "vaultName": {"value": "$(vaultName)"},
+                     "vaultResourceGroupName": {"value": "$(vaultResourceGroupName)"},
+                     "serverfarms_serviceplan_name": {"value": "$(serverfarms_serviceplan_name)"},
+                     "sites_school_experience_name": {"value": "$(webAppName)"},
+                     "redis_name": {"value": "$(redis_name)"},
+                     "actionGroupName": {"value": "$(actionGroupName)"},
+                      "activityLogAlerts_name": {"value": "$(activityLogAlerts_name)"},
+                      "alertNamePrefix": {"value": "$(alertNamePrefix)"},
+                     "servers_db_createMode": { "value": "Default"},
+                     "environmentName": { "value": "staging"},
+                     "redisStorageAccountName": { "value": "schexpstoragestaging"},
+                     "appSecureUsername": { "value": "$(appSecureUsername)"},
+                     "appSecurePassword": { "value": "$(appSecurePassword)"},
+                     "deactivateCandidates": { "value": "$(deactivateCandidates)"},
+                     "candidateNotification": { "value": "$(covidNotification)"},
+                     "candidateUrnWhitelist": { "value": "$(covidUrnWhitelist)"},
+                     "dfeSigninBaseUrl": { "value": "$(dfeSigninBaseUrl)"},
+                     "dfeSigninClientId": { "value":  "$(dfeSigninClientId)"},
+                     "dfeSigninHost": { "value":  "$(dfeSigninHost)"},
+                     "dfeSigninApiClient": { "value": "$(dfeSigninApiClient)"},
+                     "dfeSigninApiEndpoint": { "value": "$(dfeSigninApiEndpoint)"},
+                     "dfeSigninApiEnabled": { "value": "$(dfeSigninApiEnabled)"},
+                     "dfeSigninServiceId": { "value": "$(dfeSigninServiceId)"},
+                     "dfeSigninRoleId": { "value": "$(dfeSigninRoleId)"},
+                     "dfeSigninSchoolChangeEnabled": { "value": "$(dfeSigninSchoolChangeEnabled)"},
+                     "dfeSigninSchoolChangeApprovalUrl": { "value": "$(dfeSigninSchoolChangeApprovalUrl)"},
+                     "crmClientId": { "value":  "$(crmClientId)"},
+                     "crmServiceUrl": { "value":  "$(crmServiceUrl)"},
+                     "crmAuthTenantId": { "value":  "$(crmAuthTenantId)"},
+                     "crmChannelCreation": { "value":  "$(crmChannelCreation)"},
+                     "crmOwnerId": {"value": "$(crmOwnerId)"},
+                     "crmCountryId": {"value": "$(crmCountryId)"},
+                     "crmCaching": {"value": "$(crmCaching)"},
+                     "applyAlerts": { "value":  true},
+                    "oldSepDomains": {"value": "test1.domain.com,test2.domain.com" },
+                    "enableAppInsightsJavascript": {"value": "true" },
+                    "dfeServicesListUrl": {"value": "$(dfeServicesListUrl)"},
+                    "featureFlags": {"value": "$(featureFlags)"},
+                    "secretKeyBase": {"value": "$(secretKeyBase)"},
+                    "notifyApiKey": {"value": "$(notifyApiKey)"},
+                    "bingMapsKey": {"value": "$(bingMapsKey)"},
+                    "googleMapsKey": {"value": "$(googleMapsKey)"},
+                    "applyPostgres": {"value": true},
+                    "slackEnvPrefix": {"value": "s105-"},
+                    "deployToSlot": {"value": true},
+                    "webAppSku": {
+                        "value": {
+                            "name": "P2v2",
+                            "tier": "PremiumV2",
+                            "size": "P2v2",
+                            "family": "Pv2",
+                            "capacity": 1
+                        }
+                    },
+                    "deploymentId": {"value": "$(Release.EnvironmentName)-$(Release.DeploymentId)"},
+                    "deploymentUsername": {"value": "deployer"},
+                    "public_host_name": {"value": "schoolexperience-staging.education.gov.uk"}
+                }
+            }
+            EOF
+            echo "Using the following staging parameters file..."
+            cat parameters-staging1.json
+
+
+
+
+      - env:
+          REGISTRY_HOST: schoolexperienceregistrystage.azurecr.io
+          IMAGE_NAME: school-experience
+          IMAGE_TAG: v$(Build.BuildId)-stable
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: 'Create  Parameters and Custom Domain Email '
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: |
+            $(System.DefaultWorkingDirectory)/School-Experience-CI/compose-file/compose-school-experience.sh
+
+          run: |
+            cat <<EOF >> parameters-staging2.json
+            {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                     "customDomainsWithCerts": {
+                              "value": [
+                                   {
+                                       "certificateName": "s105-staging-certificate-2020",
+                                       "customDomain": "schoolexperience-staging.education.gov.uk"
+                                   }
+                              ]
+                      },
+                    "sslCertificates": {
+                              "value": [
+                                   {
+                                       "certificateName": "s105-staging-certificate",
+                                       "certificateSecretName": "s105-staging-certificate"
+                                   },
+                                   {
+                                       "certificateName": "s105-staging-certificate-2020",
+                                       "certificateSecretName": "s105-staging-certificate-2020"
+                                   }
+                              ]
+                      },
+                    "supportEmailAddresses": {
+                         "value": [
+                              {
+                                  "name": "matt.smith",
+                                  "email": "matt.smith@digital.education.gov.uk"
+                              },
+                              {
+                                  "name": "jeremy.wilkins",
+                                  "email": "jeremy.wilkins@digital.education.gov.uk"
+                              }
+                         ]
+                    }
+                }
+            }
+            EOF
+            echo "Using the following staging parameters file..."
+            cat parameters-staging2.json
+
+
+
+
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Enable access from agent to Key Vault
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az keyvault network-rule add --name $(vaultName) --ip-address
+            $(agentIpAddress)/32
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
+
+        name: 'Azure Key Vault: s105t01-staging-vault'
+
+
+
+
+
+
+
+
+        inputs:
+          ConnectedServiceName: b8846496-d459-4116-a891-9c2cfdb4efdf
+          KeyVaultName: s105t01-staging-vault
+          SecretsFilter: '*'
+
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Remove access from agent to Key Vault
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az keyvault network-rule remove --name $(vaultName) --ip-address
+            $(agentIpAddress)/32
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Open Postgres Firewall to Agent
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az postgres server firewall-rule create -g $(resourceGroupName)
+            -s $(databaseServerName) -n allow-agent-access
+            --start-ip-address $(agentIpAddress) --end-ip-address
+            $(agentIpAddress)
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: e28912f1-0114-4464-802a-a3a35437fd16
+
+        name: Migrate Database
+
+
+
+
+
+
+
+
+        inputs:
+          containerregistrytype: Container Registry
+
+          azureSubscriptionEndpoint: da7eff10-718e-48f6-a424-16f485f3231b
+          azureContainerRegistry: schoolexperienceregistrystage.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+
+          pushMultipleImages: 'false'
+          tagMultipleImages: 'false'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTag)'
+          imageNamesPath: ''
+          qualifyImageName: 'true'
+          qualifySourceImageName: 'false'
+          includeSourceTags: 'false'
+          includeLatestTag: 'false'
+          addDefaultLabels: 'true'
+          useDefaultContext: 'true'
+          buildContext: ''
+          imageDigestFile: ''
+          containerName: ''
+          ports: ''
+          volumes: ''
+          envVars: |
+            RAILS_ENV=production
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)
+            DB_USERNAME=$(databaseUser)
+            DB_PASSWORD=$(postgresUserPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+
+          entrypointOverride: ''
+          containerCommand: 'rake db:migrate'
+          runInBackground: 'false'
+          restartPolicy: 'no'
+          maxRestartRetries: ''
+          dockerHostEndpoint: ''
+          enforceDockerNamingConvention: 'true'
+          memoryLimit: ''
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Deploy to staging slot
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az group deployment create --name schoolExperienceDeployment
+            --resource-group $(resourceGroupName) --template-uri
+            https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/template.json
+            --parameters @parameters-staging1.json @parameters-staging2.json
+            dockerComposeFile=@compose-school-experience.yml
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env:
+          DEPLOYMENT_PASSWORD: $(deploymentPassword)
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Confirm staging slot is healthy and running the new version
+
+
+
+
+        timeoutInMinutes: 10
+
+
+
+        inputs:
+
+          filePath: ''
+
+          run: |
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to be deployed'
+
+            until curl -s -u deployer:$DEPLOYMENT_PASSWORD
+            https://$(webAppName)-staging-slot.azurewebsites.net/deployment.txt
+            | grep -m 1 $(Release.EnvironmentName)-$(Release.DeploymentId);
+            do echo "Waiting 10 secs - $(( WAIT_COUNT++ ))" && sleep 10 ;
+            done
+
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to be health'
+
+            until curl -s -u $(appSecureUsername):$(appSecurePassword)
+            https://$(webAppName)-staging-slot.azurewebsites.net/healthcheck.txt
+            | grep -m 1 "healthy"; do echo "Waiting 10 secs - $((
+            WAIT_COUNT++ ))" && sleep 10 ; done
+
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to verify APIs'
+
+            until curl -s -u deployer:$DEPLOYMENT_PASSWORD
+            https://$(webAppName)-staging-slot.azurewebsites.net/healthchecks/api.txt
+            | grep -m 1 "healthy"; do echo "Waiting 10 secs - $((
+            WAIT_COUNT++ ))" && sleep 10 ; done
+
+
+
+
+      - env: {}
+        taskId: f045e430-8704-11e6-968f-e717e6411619
+        version: 0.*
+        name: 'Swap Slots: s105t01-staging-web-application'
+
+
+
+
+
+
+
+
+        inputs:
+          ConnectedServiceName: b8846496-d459-4116-a891-9c2cfdb4efdf
+          Action: Swap Slots
+          WebAppName: s105t01-staging-web-application
+          SpecifySlot: 'false'
+          ResourceGroupName: s105t01-staging-resource-group
+          SourceSlot: staging-slot
+          SwapWithProduction: 'true'
+          TargetSlot: ''
+          PreserveVnet: 'false'
+          Slot: production
+          ExtensionsList: ''
+          OutputVariable: ''
+          AppInsightsResourceGroupName: ''
+          ApplicationInsightsResourceName: ''
+          ApplicationInsightsWebTestName: ''
+      - env:
+          DEPLOYMENT_PASSWORD: $(deploymentPassword)
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: |
+          Confirm production slot is healthy and running the new version
+          copy
+
+
+
+
+        timeoutInMinutes: 10
+
+
+
+        inputs:
+
+          filePath: ''
+
+          script: >
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to be deployed'
+
+            until curl -s -u deployer:$DEPLOYMENT_PASSWORD
+            https://$(webAppName).azurewebsites.net/deployment.txt | grep -m
+            1 $(Release.EnvironmentName)-$(Release.DeploymentId); do echo
+            "Waiting 10 secs - $(( WAIT_COUNT++ ))" && sleep 10 ; done
+
+
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to be healthy'
+
+            until curl -s -u $(appSecureUsername):$(appSecurePassword)
+            https://$(webAppName).azurewebsites.net/healthcheck.txt | grep
+            -m 1 "healthy"; do echo "Waiting 10 secs - $(( WAIT_COUNT++ ))"
+            && sleep 10 ; done
+
+
+
+
+      - env: {}
+        taskId: f045e430-8704-11e6-968f-e717e6411619
+        version: 0.*
+        name: Rollback Slot Swap
+
+        enabled: false
+
+
+
+
+
+        condition: failed()
+        inputs:
+          ConnectedServiceName: b8846496-d459-4116-a891-9c2cfdb4efdf
+          Action: Swap Slots
+          WebAppName: s105t01-staging-web-application
+          SpecifySlot: 'false'
+          ResourceGroupName: s105t01-staging-resource-group
+          SourceSlot: staging-slot
+          SwapWithProduction: 'true'
+          TargetSlot: ''
+          PreserveVnet: 'false'
+          Slot: production
+          ExtensionsList: ''
+          OutputVariable: ''
+          AppInsightsResourceGroupName: ''
+          ApplicationInsightsResourceName: ''
+          ApplicationInsightsWebTestName: ''
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Add Version Tag
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az resource tag --tags version=$(schoolExperienceImageTag) -g
+            $(resourceGroupName) -n $(webAppName) --resource-type
+            "Microsoft.Web/sites"
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 7b5a6198-adf8-4b16-9939-7addf85708b2
+        version: 0.*
+        name: GitHub release (create)
+
+
+
+        continueOnError: true
+
+
+
+
+        inputs:
+          gitHubConnection: a8b14db4-2ee8-4e51-85a9-cedb4738faef
+          repositoryName: $(Build.Repository.Name)
+          action: create
+          target: $(Build.SourceVersion)
+          tagSource: manual
+          tagPattern: ''
+          tag: $(schoolExperienceImageTagStable)
+          title: ''
+          releaseNotesSource: file
+          releaseNotesFile: ''
+          releaseNotes: ''
+          assets: $(Build.ArtifactStagingDirectory)/*
+          assetUploadMode: delete
+          isDraft: 'false'
+          isPreRelease: 'true'
+          addChangeLog: 'true'
+          changeLogCompareToRelease: lastFullRelease
+          changeLogCompareToReleaseTag: ''
+          changeLogType: commitBased
+          changeLogLabels: |
+            [{ "label" : "bug", "displayName" : "Bugs", "state" : "closed"
+            }]
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Close Postgres Firewall to Agent
+
+
+
+
+
+
+
+        condition: always()
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az postgres server firewall-rule delete -g $(resourceGroupName)
+            -s $(databaseServerName) -n allow-agent-access --yes
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+  - deploymentInput:
+      parallelExecution:
+        parallelExecutionType: 0
+      agentSpecification: null
+      skipArtifactsDownload: false
+      artifactsDownloadInput:
+        downloadInputs:
+          - alias: School-Experience-CI
+            artifactType: Build
+            artifactDownloadMode: All
+            artifactItems: []
+          - alias: source_master
+            artifactType: GitHub
+            artifactDownloadMode: All
+            artifactItems: []
+      queueId: 52
+      demands: []
+      enableAccessToken: false
+      timeoutInMinutes: 0
+      jobCancelTimeoutInMinutes: 1
+      condition: succeeded()
+      overrideInputs: {}
+    rank: 2
+    phaseType: 1
+    name: Load Test Job
+    refName: null
+    workflowTasks:
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Azure CLI (download jmeter from DEV storage)
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: 8cc684b7-2a0b-4f1c-bf4a-32e3a5027ce3
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az storage blob download --account-name=$(azureStorageAccount)
+            --container-name jmeter --name apache-jmeter-5.1.1.tgz --file
+            ./apache-jmeter-5.1.1.tgz
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Bash Script
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: ''
+
+          run: |
+            tar xf apache-jmeter-5.1.1.tgz
+
+            chmod +x apache-jmeter-5.1.1/bin/jmeter.sh
+
+
+            cp source_$(Build.SourceBranchName)/jmeter/schoolexperience.jmx
+            .
+
+
+            mkdir jmeter-report
+
+
+            echo $NUMBEROFTHREADS
+
+            echo $RAMPUPPERIOD
+
+            echo $LOOPCOUNT
+
+
+            apache-jmeter-5.1.1/bin/jmeter.sh -n -t schoolexperience.jmx -l
+            schoolexperience.jtl --reportatendofloadtests
+            --reportoutputfolder jmeter-report -Jun=schoolStaging
+            -Jpw=experienceStaging
+            -Jhn=schoolexperience-staging.education.gov.uk
+            -Jnot=$NUMBEROFTHREADS -Jrup=$RAMPUPPERIOD -Jlc=$LOOPCOUNT
+
+
+
+
+      - env: {}
+        taskId: d8b84976-e99a-4b86-b885-4849694435b0
+        version: 2.*
+        name: Archive jmeter reports
+
+
+
+
+
+
+
+
+        inputs:
+          rootFolderOrFile: jmeter-report
+          includeRootFolder: 'true'
+          archiveType: zip
+          sevenZipCompression: '5'
+          tarCompression: gz
+          archiveFile: $(System.DefaultWorkingDirectory)/jmeter-report.zip
+          replaceExistingArchive: 'true'
+          verbose: 'false'
+          quiet: 'false'
+      - env: {}
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Bash Script
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: ''
+
+          run: |
+            echo
+            "##vso[task.uploadfile]$(System.DefaultWorkingDirectory)/jmeter-report.zip"
+
+
+
+
+      - env: {}
+        taskId: f045e430-8704-11e6-968f-e717e6411619
+        version: 0.*
+        name: |
+          Stop Azure App Service: s105t01-staging-web-application
+          staging-slot
+
+
+
+
+
+
+
+        condition: always()
+        inputs:
+          ConnectedServiceName: b8846496-d459-4116-a891-9c2cfdb4efdf
+          Action: Stop Azure App Service
+          WebAppName: s105t01-staging-web-application
+          SpecifySlot: 'true'
+          ResourceGroupName: s105t01-staging-resource-group
+          SourceSlot: ''
+          SwapWithProduction: 'true'
+          TargetSlot: ''
+          PreserveVnet: 'false'
+          Slot: staging-slot
+          ExtensionsList: ''
+          OutputVariable: ''
+          AppInsightsResourceGroupName: ''
+          ApplicationInsightsResourceName: ''
+          ApplicationInsightsWebTestName: ''
+environmentOptions:
+  emailNotificationType: OnlyOnFailure
+  emailRecipients: release.environment.owner;release.creator
+  skipArtifactsDownload: false
+  timeoutInMinutes: 0
+  enableAccessToken: false
+  publishDeploymentStatus: true
+  badgeEnabled: false
+  autoLinkWorkItems: false
+  pullRequestDeploymentEnabled: false
+demands: []
+conditions:
+  - name: Dev
+    conditionType: 2
+    value: '4'
+  - name: School-Experience-CI
+    conditionType: 4
+    value: |
+      {"sourceBranch":"master","tags":[],"useBuildDefinitionBranch":false,"createReleaseOnBuildTagging":false}
+executionPolicy:
+  concurrencyCount: 1
+  queueDepthCount: 1
+schedules: []
+currentRelease:
+  id: 3493
+  url: |
+    https://vsrm.dev.azure.com/dfe-ssp/2c6a26ca-55e0-422e-9644-d00d1d7e1b51/_apis/Release/releases/3493
+  _links: {}
+retentionPolicy:
+  daysToKeep: 30
+  releasesToKeep: 3
+  retainBuild: true
+processParameters: {}
+properties:
+  LinkBoardsWorkItems:
+    $type: System.String
+    $value: 'False'
+preDeploymentGates:
+  id: 0
+  gatesOptions: null
+  gates: []
+postDeploymentGates:
+  id: 0
+  gatesOptions: null
+  gates: []
+environmentTriggers: []
+badgeUrl: |
+  https://vsrm.dev.azure.com/dfe-ssp/_apis/public/Release/badge/2c6a26ca-55e0-422e-9644-d00d1d7e1b51/38/49
+- id: 50
+name: Research
+rank: 3
+owner:
+  displayName: peter.fry
+  url: |
+    https://spsprodweu2.vssps.visualstudio.com/Ae9f68a15-8168-42ec-88b5-17e41cb43473/_apis/Identities/ba760d04-a91b-644b-b868-1780bfdd8ca1
+  _links:
+    avatar:
+      href: |
+        https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+  id: ba760d04-a91b-644b-b868-1780bfdd8ca1
+  uniqueName: peter.fry@digital.education.gov.uk
+  imageUrl: |
+    https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+  descriptor: aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+variables:
+  backendResourceGroup:
+    value: s105t01-staging-resource-group
+  bingMapsKey:
+    value: AthHO4HvFuolV21UnLMEmFLVRWP4XMHt1xE7KkS_Ihwk4dCgZ0M8Fdf3q__P0N3d
+  crmAuthTenantId:
+    value: fad277c9-c60a-4da1-b5f3-b3b8b34a82f9
+  crmChannelCreation:
+    value: '222750021'
+  crmClientId:
+    value: c55ecf07-7059-410a-8595-a65ea7948177
+  crmCountryId:
+    value: 72f5c2e6-74f9-e811-a97a-000d3a2760f2
+  crmOwnerId:
+    value: 976eb33e-d7b2-e911-a98a-000d3a233e06
+  crmServiceUrl:
+    value: 'https://gitis-test.api.crm4.dynamics.com'
+  dfeServicesListUrl:
+    value: 'https://pp-services.signin.education.gov.uk/my-services'
+  dfeSigninApiClient:
+    value: schoolexperience
+  dfeSigninApiEndpoint:
+    value: pp-api.signin.education.gov.uk
+  dfeSigninBaseUrl:
+    value: 'https://school-experience-research.azurewebsites.net'
+  dfeSigninClientId:
+    value: schoolexperience
+  dfeSigninHost:
+    value: pp-oidc.signin.education.gov.uk
+  googleMapsKey:
+    value: AIzaSyB2nPfZrCTL2UaHKJ2SnKL0CAOhjgWrmHQ
+  notifyApiKey:
+    value: |
+      schoolexperiencelive-7b77be51-67dc-4cae-a886-40b5a45779f5-39521dab-bc8e-44a9-ae37-2e4110caf07d
+  redis_name:
+    value: s105t01-staging-redis
+  resourceGroupName:
+    value: s105t01-research-resource-group
+  secretKeyBase:
+    value: |
+      7c1665fa194b25cb6bbbd879c7e4e3660d2396870bba06d4d268dd0cd7506a45a6ce28987567b78464e3e3d6443b235a5c3daea5bec60c82dd8150c01b5e5e02
+  serverfarms_serviceplan_name:
+    value: s105t01-staging-service-plan
+  vaultName:
+    value: s105t01-staging-vault
+  vaultResourceGroupName:
+    value: s105t01-staging-vault-resource-group
+  webAppName:
+    value: s105t01-research-web-application
+variableGroups:
+  - 64
+preDeployApprovals:
+  approvals:
+    - rank: 1
+      isAutomated: false
+      isNotificationOn: false
+      approver:
+        displayName: peter.fry
+        url: |
+          https://spsprodweu2.vssps.visualstudio.com/Ae9f68a15-8168-42ec-88b5-17e41cb43473/_apis/Identities/ba760d04-a91b-644b-b868-1780bfdd8ca1
+        _links:
+          avatar:
+            href: |
+              https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+        id: ba760d04-a91b-644b-b868-1780bfdd8ca1
+        uniqueName: peter.fry@digital.education.gov.uk
+        imageUrl: |
+          https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+        descriptor: aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+      id: 163
+    - rank: 1
+      isAutomated: false
+      isNotificationOn: false
+      approver:
+        displayName: Jeremy Wilkins
+        url: |
+          https://spsprodweu2.vssps.visualstudio.com/Ae9f68a15-8168-42ec-88b5-17e41cb43473/_apis/Identities/dc273cc5-7027-6d07-9e83-59c8b4eda390
+        _links:
+          avatar:
+            href: |
+              https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.ZGMyNzNjYzUtNzAyNy03ZDA3LTllODMtNTljOGI0ZWRhMzkw
+        id: dc273cc5-7027-6d07-9e83-59c8b4eda390
+        uniqueName: jeremy.wilkins@transformuk.com
+        imageUrl: |
+          https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.ZGMyNzNjYzUtNzAyNy03ZDA3LTllODMtNTljOGI0ZWRhMzkw
+        descriptor: aad.ZGMyNzNjYzUtNzAyNy03ZDA3LTllODMtNTljOGI0ZWRhMzkw
+      id: 164
+    - rank: 1
+      isAutomated: false
+      isNotificationOn: false
+      approver:
+        displayName: Jeremy Wilkins
+        url: |
+          https://spsprodweu2.vssps.visualstudio.com/Ae9f68a15-8168-42ec-88b5-17e41cb43473/_apis/Identities/9c619cc5-579a-48e0-a598-900a59d27f12
+        _links:
+          avatar:
+            href: |
+              https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.ZGU3MGQ2YjAtYTExZi03ZjZiLTk5OTQtZDFiZTY4ZGI3NTA5
+        id: 9c619cc5-579a-48e0-a598-900a59d27f12
+        uniqueName: jeremy.wilkins@digital.education.gov.uk
+        imageUrl: |
+          https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.ZGU3MGQ2YjAtYTExZi03ZjZiLTk5OTQtZDFiZTY4ZGI3NTA5
+        descriptor: aad.ZGU3MGQ2YjAtYTExZi03ZjZiLTk5OTQtZDFiZTY4ZGI3NTA5
+      id: 165
+  approvalOptions:
+    requiredApproverCount: 1
+    releaseCreatorCanBeApprover: true
+    autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped: false
+    enforceIdentityRevalidation: false
+    timeoutInMinutes: 0
+    executionOrder: 1
+deployStep:
+  id: 172
+postDeployApprovals:
+  approvals:
+    - rank: 1
+      isAutomated: true
+      isNotificationOn: false
+      id: 175
+  approvalOptions:
+    requiredApproverCount: null
+    releaseCreatorCanBeApprover: false
+    autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped: false
+    enforceIdentityRevalidation: false
+    timeoutInMinutes: 0
+    executionOrder: 2
+steps:
+  - deploymentInput:
+      parallelExecution:
+        parallelExecutionType: 0
+      agentSpecification: null
+      skipArtifactsDownload: false
+      artifactsDownloadInput:
+        downloadInputs:
+          - alias: School-Experience-CI
+            artifactType: Build
+            artifactDownloadMode: All
+            artifactItems: []
+          - alias: source_debug
+            artifactType: GitHub
+            artifactDownloadMode: All
+            artifactItems: []
+          - alias: source_master
+            artifactType: GitHub
+            artifactDownloadMode: All
+            artifactItems: []
+      queueId: 52
+      demands: []
+      enableAccessToken: false
+      timeoutInMinutes: 0
+      jobCancelTimeoutInMinutes: 1
+      condition: succeeded()
+      overrideInputs: {}
+    rank: 1
+    phaseType: 1
+    name: Promote Image to Research Environment
+    refName: null
+    workflowTasks:
+      - env: {}
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Set image tag variables and agent IP address
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: |
+            $(System.DefaultWorkingDirectory)/sourcedevops/azure-pipelines-support/image_tags_and_ipaddress.sh
+
+          run: |
+            if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
+            else
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}-stable"
+            fi
+
+
+            echo "##vso[task.setvariable variable=agentIpAddress]$(curl -s
+            https://api.ipify.org)"
+
+
+
+
+      - env:
+          REGISTRY_HOST: registry-1.docker.io
+          IMAGE_NAME: dfedigital/school-experience
+          IMAGE_TAG: $(schoolExperienceImageTagStable)
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Create Docker Compose file
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: |
+            $(System.DefaultWorkingDirectory)/sourcedevops/compose-school-experience.sh
+
+          run: |
+            cat <<EOF >> compose-school-experience.yml
+            version: '3.3'
+
+            services:
+               school-experience:
+                 image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+                 ports:
+                   - "3000:3000"
+                 restart: always
+                 healthcheck:
+                   disable: true
+
+               delayed-jobs:
+                 image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+                 command: rake jobs:work
+                 restart: always
+                 healthcheck:
+                   disable: true
+            EOF
+            echo "Using the following compose file..."
+            cat compose-school-experience.yml
+
+
+
+
+      - env: {}
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Create parameters file
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: ''
+
+          run: |
+            cat <<EOF >> parameters-research.json
+            {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                     "applyBackend": {"value": false},
+                     "applyServicePlan": {"value": false},
+                      "postgresUserLoginName": {"value": "researchuser"},
+                     "postgresUserPasswordSecretName": {"value": "postgresResearchPassword"},
+                      "databases_school_experience_name": {"value": "$(databaseName)"},
+                     "servers_db_name": {"value": "$(databaseServerName)"},
+                     "vaultName": {"value": "$(vaultName)"},
+                     "vaultResourceGroupName": {"value": "$(vaultResourceGroupName)"},
+                     "serverfarms_serviceplan_name": {"value": "$(serverfarms_serviceplan_name)"},
+                     "sites_school_experience_name": {"value": "$(webAppName)"},
+                     "redis_name": {"value": "$(redis_name)"},
+                     "redis_database_index": {"value": "14"},
+                     "servers_db_createMode": { "value": "Default"},
+                     "environmentName": { "value": "research"},
+                     "appSecureUsername": { "value": "school"},
+                     "appSecurePassword": { "value": "experience"},
+                     "dfeSigninBaseUrl": { "value": "$(dfeSigninBaseUrl)"},
+                     "dfeSigninClientId": { "value":  "$(dfeSigninClientId)"},
+                     "dfeSigninHost": { "value":  "$(dfeSigninHost)"},
+                     "crmClientId": { "value":  "$(crmClientId)"},
+                     "crmServiceUrl": { "value":  "$(crmServiceUrl)"},
+                     "crmAuthTenantId": { "value":  "$(crmAuthTenantId)"},
+                     "crmChannelCreation": { "value":  "$(crmChannelCreation)"},
+                     "crmOwnerId": {"value": "$(crmOwnerId)"},
+                     "crmCountryId": {"value": "$(crmCountryId)"},
+                     "applyAlerts": { "value":  false},
+                    "enableAppInsightsJavascript": {"value": "true" },
+                    "phase": {"value": "4"},
+                    "dfeServicesListUrl": {"value": "$(dfeServicesListUrl)"},
+                    "secretKeyBase": {"value": "$(secretKeyBase)"},
+                    "notifyApiKey": {"value": "$(notifyApiKey)"},
+                    "bingMapsKey": {"value": "$(bingMapsKey)"},
+                    "googleMapsKey": {"value": "$(googleMapsKey)"},
+                    "backendResourceGroup": {"value": "$(backendResourceGroup)"},
+                    "slackEnvPrefix": {"value": "s105-"}
+                }
+            }
+            EOF
+            echo "Using the following staging parameters file..."
+            cat parameters-research.json
+
+
+
+
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Deploy via setting container
+
+        enabled: false
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: da7eff10-718e-48f6-a424-16f485f3231b
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az webapp config container set --resource-group
+            schoolExperienceResearch --name school-experience-research
+            --multicontainer-config-type compose
+            --multicontainer-config-file compose-school-experience.yml
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: add access to vault from agent
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az keyvault network-rule add --name $(vaultName) --ip-address
+            $(agentIpAddress)/32
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
+
+        name: 'Azure Key Vault: s105t01-staging-vault'
+
+
+
+
+
+
+
+
+        inputs:
+          ConnectedServiceName: b8846496-d459-4116-a891-9c2cfdb4efdf
+          KeyVaultName: s105t01-staging-vault
+          SecretsFilter: '*'
+
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: remove vault access from agent
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az keyvault network-rule remove --name $(vaultName) --ip-address
+            $(agentIpAddress)/32
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Open Postgres Firewall to Agent
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az postgres server firewall-rule create -g
+            $(backendResourceGroup) -s $(databaseServerName) -n
+            allow-agent-access --start-ip-address $(agentIpAddress)
+            --end-ip-address $(agentIpAddress)
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: e28912f1-0114-4464-802a-a3a35437fd16
+
+        name: Migrate Database
+
+
+
+
+
+
+
+
+        inputs:
+          containerregistrytype: Container Registry
+
+          azureSubscriptionEndpoint: faa3897d-18d7-45c9-8923-368d819b6e15
+          azureContainerRegistry: schoolexperienceregistry.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+
+          pushMultipleImages: 'false'
+          tagMultipleImages: 'false'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTagStable)'
+          imageNamesPath: ''
+          qualifyImageName: 'true'
+          qualifySourceImageName: 'false'
+          includeSourceTags: 'false'
+          includeLatestTag: 'false'
+          addDefaultLabels: 'true'
+          useDefaultContext: 'true'
+          buildContext: ''
+          imageDigestFile: ''
+          containerName: ''
+          ports: ''
+          volumes: ''
+          envVars: |
+            RAILS_ENV=production
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)
+            DB_USERNAME=$(databaseUser)
+            DB_PASSWORD=$(postgresResearchPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+
+          entrypointOverride: ''
+          containerCommand: 'rake db:migrate'
+          runInBackground: 'false'
+          restartPolicy: 'no'
+          maxRestartRetries: ''
+          dockerHostEndpoint: ''
+          enforceDockerNamingConvention: 'true'
+          memoryLimit: ''
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Deploy via template
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az group deployment create --name schoolExperienceDeployment
+            --resource-group $(resourceGroupName) --template-uri
+            https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/template.json
+            --parameters @parameters-research.json
+            dockerComposeFile=@compose-school-experience.yml
+            _artifactsLocation=https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Add Version Tag
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az resource tag --tags version=$(schoolExperienceImageTagStable)
+            -g $(resourceGroupName) -n $(webAppName) --resource-type
+            "Microsoft.Web/sites"
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Close Postgres Firewall to Agent
+
+
+
+
+
+
+
+        condition: always()
+        inputs:
+          connectedServiceNameARM: b8846496-d459-4116-a891-9c2cfdb4efdf
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az postgres server firewall-rule delete -g
+            $(backendResourceGroup) -s $(databaseServerName) -n
+            allow-agent-access --yes
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+environmentOptions:
+  emailNotificationType: OnlyOnFailure
+  emailRecipients: release.environment.owner;release.creator
+  skipArtifactsDownload: false
+  timeoutInMinutes: 0
+  enableAccessToken: false
+  publishDeploymentStatus: true
+  badgeEnabled: false
+  autoLinkWorkItems: false
+  pullRequestDeploymentEnabled: false
+demands: []
+conditions:
+  - name: Dev
+    conditionType: 2
+    value: '4'
+  - name: School-Experience-CI
+    conditionType: 4
+    value: |
+      {"sourceBranch":"master","tags":[],"useBuildDefinitionBranch":false,"createReleaseOnBuildTagging":false}
+executionPolicy:
+  concurrencyCount: 1
+  queueDepthCount: 1
+schedules: []
+currentRelease:
+  id: 1571
+  url: |
+    https://vsrm.dev.azure.com/dfe-ssp/2c6a26ca-55e0-422e-9644-d00d1d7e1b51/_apis/Release/releases/1571
+  _links: {}
+retentionPolicy:
+  daysToKeep: 30
+  releasesToKeep: 3
+  retainBuild: true
+processParameters: {}
+properties:
+  LinkBoardsWorkItems:
+    $type: System.String
+    $value: 'False'
+preDeploymentGates:
+  id: 0
+  gatesOptions: null
+  gates: []
+postDeploymentGates:
+  id: 0
+  gatesOptions: null
+  gates: []
+environmentTriggers: []
+badgeUrl: |
+  https://vsrm.dev.azure.com/dfe-ssp/_apis/public/Release/badge/2c6a26ca-55e0-422e-9644-d00d1d7e1b51/38/50
+- id: 51
+name: Prod
+rank: 4
+owner:
+  displayName: peter.fry
+  url: |
+    https://spsprodweu2.vssps.visualstudio.com/Ae9f68a15-8168-42ec-88b5-17e41cb43473/_apis/Identities/ba760d04-a91b-644b-b868-1780bfdd8ca1
+  _links:
+    avatar:
+      href: |
+        https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+  id: ba760d04-a91b-644b-b868-1780bfdd8ca1
+  uniqueName: peter.fry@digital.education.gov.uk
+  imageUrl: |
+    https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+  descriptor: aad.YmE3NjBkMDQtYTkxYi03NDRiLWI4NjgtMTc4MGJmZGQ4Y2Ex
+variables:
+  actionGroupName:
+    value: s105p01-prod-action-group
+  activityLogAlerts_name:
+    value: s105p01-prod-service-health-alert
+  alertNamePrefix:
+    value: s105p01-prod-
+  appSecurePassword:
+    value: ''
+  appSecureUsername:
+    value: ''
+  bingMapsKey:
+    value: AthHO4HvFuolV21UnLMEmFLVRWP4XMHt1xE7KkS_Ihwk4dCgZ0M8Fdf3q__P0N3d
+  covidNotification:
+    value: "In light of measures in place due to the response to coronavirus (COVID-19) school experience may be affected. Some schools are offering online alternatives which can be found in the schools detail\_page.\\n\\nMore detailed guidance on what this means for teaching training applications can be found here <a href=\\\"https://getintoteaching.education.gov.uk/impact-of-covid-19-on-teacher-training\\\">https://getintoteaching.education.gov.uk/impact-of-covid-19-on-teacher-training</a>"
+  covidUrnWhitelist:
+    value: |
+      100054,100861,101408,103188,109847,110048,116412,116458,120286,131547,133794,136156,136156,136281,136281,136304,136310,136342,136342,136451,136544,136587,136599,136667,136723,136878,136885,136898,137072,137072,137096,137096,137127,137131,138437,138437,138620,138686,138686,139152,139368,139791,140105,140105,140134,140605,140605,140984,141931,142315,143508,144431,144489,145018
+  crmAuthTenantId:
+    value: fad277c9-c60a-4da1-b5f3-b3b8b34a82f9
+  crmCaching:
+    value: '0'
+  crmChannelCreation:
+    value: '222750021'
+  crmClientId:
+    value: 7ef3a8cd-3fad-467d-a2da-57e63f160df6
+  crmCountryId:
+    value: 72f5c2e6-74f9-e811-a97a-000d3a2760f2
+  crmOwnerId:
+    value: 976eb33e-d7b2-e911-a98a-000d3a233e06
+  crmServiceUrl:
+    value: 'https://gitis.api.crm4.dynamics.com'
+  deactivateCandidates:
+    value: ''
+  dfeServicesListUrl:
+    value: 'https://services.signin.education.gov.uk/my-services'
+  dfeSigninApiClient:
+    value: schoolexperience
+  dfeSigninApiEnabled:
+    value: '1'
+  dfeSigninApiEndpoint:
+    value: api.signin.education.gov.uk
+  dfeSigninBaseUrl:
+    value: 'https://schoolexperience.education.gov.uk'
+  dfeSigninClientId:
+    value: schoolexperience
+  dfeSigninHost:
+    value: oidc.signin.education.gov.uk
+  dfeSigninRoleId:
+    value: 760F1521-7CB5-4B0D-AE0A-35251F1DF36A
+  dfeSigninSchoolChangeApprovalUrl:
+    value: ''
+  dfeSigninSchoolChangeEnabled:
+    value: ''
+  dfeSigninServiceId:
+    value: 146FA38A-2B92-4993-A941-4D6A34053522
+  featureFlags:
+    value: ''
+  googleMapsKey:
+    value: AIzaSyB2nPfZrCTL2UaHKJ2SnKL0CAOhjgWrmHQ
+  notifyApiKey:
+    value: |
+      schoolexperiencelive-7b77be51-67dc-4cae-a886-40b5a45779f5-39521dab-bc8e-44a9-ae37-2e4110caf07d
+  redis_name:
+    value: s105p01-prod-redis
+  resourceGroupName:
+    value: s105p01-prod-resource-group
+  secretKeyBase:
+    value: |
+      567d6e48f5e429b6c509540197a7f6c261b99720b0034059e46c0b2c7b820597e882cedaf5e7eb53fde0db4735a4d34bd1bb492f7dce4fc63a68b79b9f79f9ac
+  serverfarms_serviceplan_name:
+    value: s105p01-prod-service-plan
+  vaultName:
+    value: s105p01-prod-vault
+  vaultResourceGroupName:
+    value: s105p01-prod-vault-resource-group
+  webAppName:
+    value: s105p01-prod-web-application
+variableGroups:
+  - 68
+preDeployApprovals:
+  approvals:
+    - rank: 1
+      isAutomated: false
+      isNotificationOn: false
+      approver:
+        displayName: Jeremy Wilkins
+        url: |
+          https://spsprodweu2.vssps.visualstudio.com/Ae9f68a15-8168-42ec-88b5-17e41cb43473/_apis/Identities/dc273cc5-7027-6d07-9e83-59c8b4eda390
+        _links:
+          avatar:
+            href: |
+              https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.ZGMyNzNjYzUtNzAyNy03ZDA3LTllODMtNTljOGI0ZWRhMzkw
+        id: dc273cc5-7027-6d07-9e83-59c8b4eda390
+        uniqueName: jeremy.wilkins@transformuk.com
+        imageUrl: |
+          https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.ZGMyNzNjYzUtNzAyNy03ZDA3LTllODMtNTljOGI0ZWRhMzkw
+        descriptor: aad.ZGMyNzNjYzUtNzAyNy03ZDA3LTllODMtNTljOGI0ZWRhMzkw
+      id: 167
+    - rank: 1
+      isAutomated: false
+      isNotificationOn: false
+      approver:
+        displayName: Jeremy Wilkins
+        url: |
+          https://spsprodweu2.vssps.visualstudio.com/Ae9f68a15-8168-42ec-88b5-17e41cb43473/_apis/Identities/9c619cc5-579a-48e0-a598-900a59d27f12
+        _links:
+          avatar:
+            href: |
+              https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.ZGU3MGQ2YjAtYTExZi03ZjZiLTk5OTQtZDFiZTY4ZGI3NTA5
+        id: 9c619cc5-579a-48e0-a598-900a59d27f12
+        uniqueName: jeremy.wilkins@digital.education.gov.uk
+        imageUrl: |
+          https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.ZGU3MGQ2YjAtYTExZi03ZjZiLTk5OTQtZDFiZTY4ZGI3NTA5
+        descriptor: aad.ZGU3MGQ2YjAtYTExZi03ZjZiLTk5OTQtZDFiZTY4ZGI3NTA5
+      id: 168
+    - rank: 1
+      isAutomated: false
+      isNotificationOn: false
+      approver:
+        displayName: Matt Smith
+        url: |
+          https://spsprodweu2.vssps.visualstudio.com/Ae9f68a15-8168-42ec-88b5-17e41cb43473/_apis/Identities/3ab1daf2-cdcc-68fc-9418-053ada120900
+        _links:
+          avatar:
+            href: |
+              https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.M2FiMWRhZjItY2RjYy03OGZjLTk0MTgtMDUzYWRhMTIwOTAw
+        id: 3ab1daf2-cdcc-68fc-9418-053ada120900
+        uniqueName: matt.smith@digital.education.gov.uk
+        imageUrl: |
+          https://dev.azure.com/dfe-ssp/_apis/GraphProfile/MemberAvatars/aad.M2FiMWRhZjItY2RjYy03OGZjLTk0MTgtMDUzYWRhMTIwOTAw
+        descriptor: aad.M2FiMWRhZjItY2RjYy03OGZjLTk0MTgtMDUzYWRhMTIwOTAw
+      id: 271
+  approvalOptions:
+    requiredApproverCount: 1
+    releaseCreatorCanBeApprover: true
+    autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped: false
+    enforceIdentityRevalidation: false
+    timeoutInMinutes: 0
+    executionOrder: 1
+deployStep:
+  id: 171
+postDeployApprovals:
+  approvals:
+    - rank: 1
+      isAutomated: true
+      isNotificationOn: false
+      id: 176
+  approvalOptions:
+    requiredApproverCount: null
+    releaseCreatorCanBeApprover: false
+    autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped: false
+    enforceIdentityRevalidation: false
+    timeoutInMinutes: 0
+    executionOrder: 2
+steps:
+  - deploymentInput:
+      parallelExecution:
+        parallelExecutionType: 0
+      agentSpecification: null
+      skipArtifactsDownload: false
+      artifactsDownloadInput:
+        downloadInputs:
+          - alias: School-Experience-CI
+            artifactType: Build
+            artifactDownloadMode: All
+            artifactItems: []
+      queueId: 52
+      demands: []
+      enableAccessToken: false
+      timeoutInMinutes: 0
+      jobCancelTimeoutInMinutes: 1
+      condition: succeeded()
+      overrideInputs: {}
+    rank: 1
+    phaseType: 1
+    name: Promote Image to Prod
+    refName: null
+    workflowTasks:
+      - env: {}
+        taskId: f045e430-8704-11e6-968f-e717e6411619
+        version: 0.*
+        name: 'Start Azure App Service: s105p01-prod-web-application staging-slot'
+
+
+
+
+
+
+
+
+        inputs:
+          ConnectedServiceName: c154c507-27f3-4d4a-a16e-b93d78171947
+          Action: Start Azure App Service
+          WebAppName: s105p01-prod-web-application
+          SpecifySlot: 'true'
+          ResourceGroupName: s105p01-prod-resource-group
+          SourceSlot: ''
+          SwapWithProduction: 'true'
+          TargetSlot: ''
+          PreserveVnet: 'false'
+          Slot: staging-slot
+          ExtensionsList: ''
+          OutputVariable: ''
+          AppInsightsResourceGroupName: ''
+          ApplicationInsightsResourceName: ''
+          ApplicationInsightsWebTestName: ''
+      - env: {}
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Set image tag variables and agent IP address
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: |
+            $(System.DefaultWorkingDirectory)/sourcedevops/azure-pipelines-support/image_tags_and_ipaddress.sh
+
+          run: |
+            if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagGA]v${BUILD_BUILDID}-GA"
+            else
+              echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}"
+              echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-${BUILD_SOURCEBRANCHNAME}-stable"
+            fi
+
+
+            echo "##vso[task.setvariable variable=agentIpAddress]$(curl -s
+            https://api.ipify.org)"
+
+
+
+
+      - env:
+          REGISTRY_HOST: registry-1.docker.io
+          IMAGE_NAME: dfedigital/school-experience
+          IMAGE_TAG: $(schoolExperienceImageTagStable)
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Create Docker Compose file
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: |
+            $(System.DefaultWorkingDirectory)/sourcedevops/compose-school-experience.sh
+
+          run: |
+            cat <<EOF >> compose-school-experience.yml
+            version: '3.3'
+
+            services:
+               school-experience:
+                 image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+                 ports:
+                   - "3000:3000"
+                 restart: always
+                 healthcheck:
+                   disable: true
+
+               delayed-jobs:
+                 image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
+                 command: rake jobs:work
+                 restart: always
+                 healthcheck:
+                   disable: true
+            EOF
+            echo "Using the following compose file..."
+            cat compose-school-experience.yml
+
+
+
+
+      - env: {}
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Create Parameter File
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: ''
+
+          run: |
+            cat <<EOF >> parameters-production1.json
+            {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                    "redisSku": {
+                        "value": {
+                                "name": "Premium",
+                                "family": "P",
+                                "capacity": 1
+                        }
+                    },
+                    "postgresSku": {
+                        "value": {
+                            "name": "GP_Gen5_2",
+                            "tier": "GeneralPurpose",
+                            "family": "Gen5",
+                            "capacity": 2
+                        }
+                    },
+                   "webAppSku": {
+                        "value": {
+                            "name": "P2v2",
+                            "tier": "PremiumV2",
+                            "size": "P2v2",
+                            "family": "Pv2",
+                            "capacity": 1
+                        }
+                    },
+                    "postgresStorageProfile": {
+                        "value": {
+                                "storageMB": 102400,
+                                "backupRetentionDays": 14,
+                                "geoRedundantBackup": "Disabled"
+                         }
+                     },
+                      "_artifactsLocation": {"value": "https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/"},
+                      "databases_school_experience_name": {"value": "$(databaseName)"},
+                     "servers_db_name": {"value": "$(databaseServerName)"},
+                     "vaultName": {"value": "$(vaultName)"},
+                     "vaultResourceGroupName": {"value": "$(vaultResourceGroupName)"},
+                     "serverfarms_serviceplan_name": {"value": "$(serverfarms_serviceplan_name)"},
+                     "sites_school_experience_name": {"value": "$(webAppName)"},
+                     "redis_name": {"value": "$(redis_name)"},
+                     "actionGroupName": {"value": "$(actionGroupName)"},
+                      "activityLogAlerts_name": {"value": "$(activityLogAlerts_name)"},
+                      "alertNamePrefix": {"value": "$(alertNamePrefix)"},
+                     "servers_db_createMode": { "value": "Default"},
+                     "environmentName": { "value": "prod"},
+                     "redisStorageAccountName": { "value": "s105p01schexpstorage"},
+                     "appSecureUsername": { "value": "$(appSecureUsername)"},
+                     "appSecurePassword": { "value": "$(appSecurePassword)"},
+                     "deactivateCandidates": { "value": "$(deactivateCandidates)"},
+                     "candidateNotification": { "value": "$(covidNotification)"},
+                     "candidateUrnWhitelist": { "value": "$(covidUrnWhitelist)"},
+                     "googleAnalyticsTrackingId": {"value": "UA-136255210-1"},
+                     "dfeSigninBaseUrl": { "value": "$(dfeSigninBaseUrl)"},
+                     "dfeSigninClientId": { "value":  "$(dfeSigninClientId)"},
+                     "dfeSigninHost": { "value":  "$(dfeSigninHost)"},
+                     "dfeSigninApiClient": { "value": "$(dfeSigninApiClient)"},
+                     "dfeSigninApiEndpoint": { "value": "$(dfeSigninApiEndpoint)"},
+                     "dfeSigninApiEnabled": { "value": "$(dfeSigninApiEnabled)"},
+                     "dfeSigninServiceId": { "value": "$(dfeSigninServiceId)"},
+                     "dfeSigninRoleId": { "value": "$(dfeSigninRoleId)"},
+                     "dfeSigninSchoolChangeEnabled": { "value": "$(dfeSigninSchoolChangeEnabled)"},
+                     "dfeSigninSchoolChangeApprovalUrl": { "value": "$(dfeSigninSchoolChangeApprovalUrl)"},
+                     "crmClientId": { "value":  "$(crmClientId)"},
+                     "crmServiceUrl": { "value":  "$(crmServiceUrl)"},
+                     "crmAuthTenantId": { "value":  "$(crmAuthTenantId)"},
+                     "crmChannelCreation": { "value":  "$(crmChannelCreation)"},
+                     "crmOwnerId": {"value": "$(crmOwnerId)"},
+                     "crmCountryId": {"value": "$(crmCountryId)"},
+                     "crmCaching": {"value": "$(crmCaching)"},
+                     "applyAlerts": { "value":  true},
+                    "oldSepDomains": {"value": "schoolexperience-ta-recruit.education.gov.uk,sepbookings-ta-recruit.education.gov.uk" },
+                    "enableAppInsightsJavascript": {"value": "true" },
+                    "dfeServicesListUrl": {"value": "$(dfeServicesListUrl)"},
+                    "featureFlags": {"value": "$(featureFlags)"},
+                    "secretKeyBase": {"value": "$(secretKeyBase)"},
+                    "notifyApiKey": {"value": "$(notifyApiKey)"},
+                    "bingMapsKey": {"value": "$(bingMapsKey)"},
+                    "googleMapsKey": {"value": "$(googleMapsKey)"},
+                    "slackEnvPrefix": {"value": "s105-"},
+                    "deployToSlot": {"value": true},
+                    "deploymentId": {"value": "$(Release.EnvironmentName)-$(Release.DeploymentId)"},
+                    "deploymentUsername": {"value": "deployer"},
+                    "railsMaxThreads": {"value": "10"},
+                    "webTestEnabled": {"value": true},
+                    "addSupportWebhook": {"value": true},
+                    "public_host_name": {"value": "schoolexperience.education.gov.uk"}
+                }
+            }
+            EOF
+            echo "Using the following production parameters file..."
+            cat parameters-production1.json
+
+
+
+
+      - env: {}
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Create Parameter File Email and Custom Domains
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: ''
+
+          run: |
+            cat <<EOF >> parameters-production2.json
+            {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                     "customDomainsWithCerts": {
+                              "value": [
+                                   {
+                                       "certificateName": "schoolexperience-2020",
+                                       "customDomain": "schoolexperience.education.gov.uk"
+                                   },
+                                   {
+                                       "certificateName": "schoolexperience-ta-recruit-2020",
+                                       "customDomain": "schoolexperience-ta-recruit.education.gov.uk"
+                                   },
+                                   {
+                                       "certificateName": "sepbookings-ta-recruit-2020",
+                                       "customDomain": "sepbookings-ta-recruit.education.gov.uk"
+                                   }
+                              ]
+                      },
+                      "sslCertificates": {
+                              "value": [
+                                   {
+                                       "certificateSecretName": "website-certificate",
+                                       "certificateName": "schoolexperience-production"
+                                   },
+                                   {
+                                       "certificateSecretName": "schoolexperience-2020",
+                                       "certificateName": "schoolexperience-2020"
+                                   },
+                                   {
+                                       "certificateSecretName": "schoolexperience-ta-recruit",
+                                       "certificateName": "schoolexperience-ta-recruit"
+                                   },
+                                   {
+                                       "certificateSecretName": "schoolexperience-ta-recruit-2020",
+                                       "certificateName": "schoolexperience-ta-recruit-2020"
+                                   },
+                                   {
+                                       "certificateSecretName": "sepbookings-ta-recruit",
+                                       "certificateName": "sepbookings-ta-recruit"
+                                   },
+                                   {
+                                       "certificateSecretName": "sepbookings-ta-recruit-2020",
+                                       "certificateName": "sepbookings-ta-recruit-2020"
+                                   }
+                              ]
+                      },
+                    "supportEmailAddresses": {
+                         "value": [
+                              {
+                                  "name": "mattsmith",
+                                  "email": "matt.smith@digital.education.gov.uk"
+                              },
+                              {
+                                  "name": "jebw",
+                                  "email": "jeremy.wilkins@digital.education.gov.uk"
+                              }
+                         ]
+                    }
+                }
+            }
+            EOF
+            echo "Using the following production parameters file..."
+            cat parameters-production2.json
+
+
+
+
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Enable access from agent to key vault
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: c154c507-27f3-4d4a-a16e-b93d78171947
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az keyvault network-rule add --name $(vaultName) --ip-address
+            $(agentIpAddress)/32
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
+
+        name: 'Azure Key Vault: s105p01-prod-vault'
+
+
+
+
+
+
+
+
+        inputs:
+          ConnectedServiceName: c154c507-27f3-4d4a-a16e-b93d78171947
+          KeyVaultName: s105p01-prod-vault
+          SecretsFilter: '*'
+
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Remove access from agent to key vault
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: c154c507-27f3-4d4a-a16e-b93d78171947
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az keyvault network-rule remove --name $(vaultName) --ip-address
+            $(agentIpAddress)/32
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Open Postgres Firewall to Agent
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: c154c507-27f3-4d4a-a16e-b93d78171947
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az postgres server firewall-rule create -g $(resourceGroupName)
+            -s $(databaseServerName) -n allow-agent-access
+            --start-ip-address 0.0.0.0 --end-ip-address 255.255.255.255
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: e28912f1-0114-4464-802a-a3a35437fd16
+
+        name: Migrate Database
+
+        enabled: false
+
+
+
+
+
+
+        inputs:
+          containerregistrytype: Container Registry
+
+          azureSubscriptionEndpoint: 9960a4fb-8809-4d52-b328-a4017fff155b
+          azureContainerRegistry: schoolexperienceregistryprod.azurecr.io
+          command: Run an image
+          dockerFile: '**/Dockerfile'
+
+          pushMultipleImages: 'false'
+          tagMultipleImages: 'false'
+          imageName: 'dfedigital/school-experience:$(schoolExperienceImageTagStable)'
+          imageNamesPath: ''
+          qualifyImageName: 'true'
+          qualifySourceImageName: 'false'
+          includeSourceTags: 'false'
+          includeLatestTag: 'false'
+          addDefaultLabels: 'true'
+          useDefaultContext: 'true'
+          buildContext: ''
+          imageDigestFile: ''
+          containerName: ''
+          ports: ''
+          volumes: ''
+          envVars: |
+            RAILS_ENV=production
+            DB_HOST=$(databaseHost)
+            DB_DATABASE=$(databaseName)
+            DB_USERNAME=$(databaseUser)
+            DB_PASSWORD=$(postgresUserPassword)
+            SECRET_KEY_BASE=stubbed
+            SKIP_REDIS=true
+
+          entrypointOverride: ''
+          containerCommand: 'rake db:migrate'
+          runInBackground: 'false'
+          restartPolicy: 'no'
+          maxRestartRetries: ''
+          dockerHostEndpoint: ''
+          enforceDockerNamingConvention: 'true'
+          memoryLimit: ''
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Resource Group Deploy
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: c154c507-27f3-4d4a-a16e-b93d78171947
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az group deployment create --name schoolExperienceDeployment
+            --resource-group $(resourceGroupName) --template-uri
+            https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/$(Release.Artifacts.sourcedevops.BuildId)/template.json
+            --parameters @parameters-production1.json
+            @parameters-production2.json
+            dockerComposeFile=@compose-school-experience.yml
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env:
+          DEPLOYMENT_PASSWORD: $(deploymentPassword)
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: Confirm staging slot is healthy and running the new version
+
+
+
+
+
+
+
+
+        inputs:
+
+          filePath: ''
+
+          script: >
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to be deployed'
+
+            until curl -s -u deployer:$DEPLOYMENT_PASSWORD
+            https://$(webAppName)-staging-slot.azurewebsites.net/deployment.txt
+            | grep -m 1 $(Release.EnvironmentName)-$(Release.DeploymentId);
+            do echo "Waiting 10 secs - $(( WAIT_COUNT++ ))" && sleep 10 ;
+            done
+
+
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to be health'
+
+            until curl -s
+            https://$(webAppName)-staging-slot.azurewebsites.net/healthcheck.txt
+            | grep -m 1 "healthy"; do echo "Waiting 10 secs - $((
+            WAIT_COUNT++ ))" && sleep 10 ; done
+
+
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to verify APIs'
+
+            until curl -s -u deployer:$DEPLOYMENT_PASSWORD
+            https://$(webAppName)-staging-slot.azurewebsites.net/healthchecks/api.txt
+            | grep -m 1 "healthy"; do echo "Waiting 10 secs - $((
+            WAIT_COUNT++ ))" && sleep 10 ; done
+
+
+
+
+      - env: {}
+        taskId: f045e430-8704-11e6-968f-e717e6411619
+        version: 0.*
+        name: 'Swap Slots: s105p01-prod-web-application'
+
+
+
+
+
+
+
+
+        inputs:
+          ConnectedServiceName: c154c507-27f3-4d4a-a16e-b93d78171947
+          Action: Swap Slots
+          WebAppName: s105p01-prod-web-application
+          SpecifySlot: 'false'
+          ResourceGroupName: s105p01-prod-resource-group
+          SourceSlot: staging-slot
+          SwapWithProduction: 'true'
+          TargetSlot: ''
+          PreserveVnet: 'false'
+          Slot: production
+          ExtensionsList: ''
+          OutputVariable: ''
+          AppInsightsResourceGroupName: ''
+          ApplicationInsightsResourceName: ''
+          ApplicationInsightsWebTestName: ''
+      - env:
+          DEPLOYMENT_PASSWORD: $(deploymentPassword)
+        taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+
+        name: |
+          Confirm production slot is healthy and running the new version
+          copy
+
+
+
+
+        timeoutInMinutes: 10
+
+
+
+        inputs:
+
+          filePath: ''
+
+          script: >
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to be deployed'
+
+            until curl -s -u deployer:$DEPLOYMENT_PASSWORD
+            https://$(webAppName).azurewebsites.net/deployment.txt | grep -m
+            1 $(Release.EnvironmentName)-$(Release.DeploymentId); do echo
+            "Waiting 10 secs - $(( WAIT_COUNT++ ))" && sleep 10 ; done
+
+
+            WAIT_COUNT=0
+
+            echo 'Waiting for app to be healthy'
+
+            until curl -s
+            https://$(webAppName).azurewebsites.net/healthcheck.txt | grep
+            -m 1 "healthy"; do echo "Waiting 10 secs - $(( WAIT_COUNT++ ))"
+            && sleep 10 ; done
+
+
+
+
+      - env: {}
+        taskId: f045e430-8704-11e6-968f-e717e6411619
+        version: 0.*
+        name: Rollback Slot Swap
+
+        enabled: false
+
+
+
+
+
+        condition: failed()
+        inputs:
+          ConnectedServiceName: c154c507-27f3-4d4a-a16e-b93d78171947
+          Action: Swap Slots
+          WebAppName: s105p01-prod-web-application
+          SpecifySlot: 'false'
+          ResourceGroupName: s105p01-prod-resource-group
+          SourceSlot: staging-slot
+          SwapWithProduction: 'true'
+          TargetSlot: ''
+          PreserveVnet: 'false'
+          Slot: production
+          ExtensionsList: ''
+          OutputVariable: ''
+          AppInsightsResourceGroupName: ''
+          ApplicationInsightsResourceName: ''
+          ApplicationInsightsWebTestName: ''
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Add Version Tag
+
+
+
+
+
+
+
+
+        inputs:
+          connectedServiceNameARM: c154c507-27f3-4d4a-a16e-b93d78171947
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az resource tag --tags version=$(schoolExperienceImageTagStable)
+            -g $(resourceGroupName)  -n $(webAppName) --resource-type
+            "Microsoft.Web/sites"
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: 7b5a6198-adf8-4b16-9939-7addf85708b2
+        version: 0.*
+        name: GitHub release (create)
+
+
+
+        continueOnError: true
+
+
+
+
+        inputs:
+          gitHubConnection: a8b14db4-2ee8-4e51-85a9-cedb4738faef
+          repositoryName: $(Build.Repository.Name)
+          action: create
+          target: $(Build.SourceVersion)
+          tagSource: manual
+          tagPattern: ''
+          tag: $(schoolExperienceImageTag)-GA
+          title: ''
+          releaseNotesSource: file
+          releaseNotesFile: ''
+          releaseNotes: ''
+          assets: $(Build.ArtifactStagingDirectory)/*
+          assetUploadMode: delete
+          isDraft: 'false'
+          isPreRelease: 'false'
+          addChangeLog: 'true'
+          changeLogCompareToRelease: lastFullRelease
+          changeLogCompareToReleaseTag: ''
+          changeLogType: commitBased
+          changeLogLabels: |
+            [{ "label" : "bug", "displayName" : "Bugs", "state" : "closed"
+            }]
+      - env: {}
+        taskId: 46e4be58-730b-4389-8a2f-ea10b3e5e815
+
+        name: Close Postgres Firewall to Agent
+
+
+
+
+
+
+
+        condition: always()
+        inputs:
+          connectedServiceNameARM: c154c507-27f3-4d4a-a16e-b93d78171947
+          scriptLocation: inlineScript
+          scriptPath: ''
+          inlinerun: |
+            az postgres server firewall-rule delete -g $(resourceGroupName)
+            -s $(databaseServerName) -n allow-agent-access --yes
+          args: ''
+          addSpnToEnvironment: 'false'
+          useGlobalConfig: 'false'
+          cwd: ''
+          failOnStandardError: 'false'
+      - env: {}
+        taskId: f045e430-8704-11e6-968f-e717e6411619
+        version: 0.*
+        name: 'Stop Azure App Service: s105p01-prod-web-application staging slot'
+
+
+
+
+
+
+
+
+        inputs:
+          ConnectedServiceName: c154c507-27f3-4d4a-a16e-b93d78171947
+          Action: Stop Azure App Service
+          WebAppName: s105p01-prod-web-application
+          SpecifySlot: 'true'
+          ResourceGroupName: s105p01-prod-resource-group
+          SourceSlot: ''
+          SwapWithProduction: 'true'
+          TargetSlot: ''
+          PreserveVnet: 'false'
+          Slot: staging-slot
+          ExtensionsList: ''
+          OutputVariable: ''
+          AppInsightsResourceGroupName: ''
+          ApplicationInsightsResourceName: ''
+          ApplicationInsightsWebTestName: ''

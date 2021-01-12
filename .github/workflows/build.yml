@@ -1,9 +1,7 @@
-name: Pull Requests
+name: Build and Test
 on:
   pull_request:
     types: [ assigned, opened, synchronize, reopened ]
-  push:
-    branches: [ master ]
   release:
     types: [ created ]
 
@@ -11,8 +9,6 @@ env:
   DOCKER_ORGANISATION: mattonfoot
   DOCKER_CONTAINER: school-experience
   CUCUMBER_PROFILE: continuous_integration
-  SELENIUM_PROFILE: selenium
-  # define four more variables imageName, DOCKER_HUB_REPO in the build pipeline in UI
 
 jobs:
   scan:
