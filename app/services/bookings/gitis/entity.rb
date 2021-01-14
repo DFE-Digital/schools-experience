@@ -15,6 +15,7 @@ module Bookings::Gitis
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Dirty
+    include ActiveRecord::AttributeMethods::Write
 
     ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
     BIND_FORMAT = /\A[^\(]+\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)\z/.freeze
