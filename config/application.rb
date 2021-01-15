@@ -29,6 +29,6 @@ module SchoolExperience
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    #ActiveSupport::Deprecation.silenced = true
+    # ActiveSupport::Deprecation.silenced = true
   end
 end
