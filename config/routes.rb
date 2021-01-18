@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
   get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
   get '/healthcheck', to: 'healthchecks#show', as: :healthcheck_json
   get '/deployment.txt', to: 'healthchecks#deployment', as: :deployment
