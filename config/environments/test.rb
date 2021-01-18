@@ -26,7 +26,9 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-  config.cache_store = :null_store
+
+  # avoid second pass through SASS since thats incompatible with GovUK Frontend
+  config.assets.css_compressor = nil
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false

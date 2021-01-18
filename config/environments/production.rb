@@ -23,9 +23,18 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.headers = {
+    'X-Content-Type-Options' => 'nosniff'
+  }
+
+  # Compress JS using a preprocessor.
+  config.assets.js_compressor = nil
 
   # Compress CSS using a preprocessor.
-  # config.assets.css_compressor = :sass
+  # We're already using sass and that is set to compress at compile time
+  # so a second pass is not needed - the second pass was (maybe still is)
+  # causing problems with GovUK frontend use of variables
+  config.assets.css_compressor = nil
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
