@@ -1,3 +1,5 @@
+# require "active_support/core_ext/integer/time"
+
 require Rails.root.join('spec', 'support', 'notify_fake_client')
 
 # The test environment is used exclusively to run your application's
@@ -34,11 +36,21 @@ Rails.application.configure do
   # avoid second pass through SASS since thats incompatible with GovUK Frontend
   config.assets.css_compressor = nil
 
-  # set the cache to use RAM
-  config.cache_store = :null_store
+  # config.action_mailer.perform_caching = false
+
+  # Tell Action Mailer not to deliver emails to the real world.
+  # The :test delivery method accumulates sent emails in the
+  # ActionMailer::Base.deliveries array.
+  # config.action_mailer.delivery_method = :test
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  # Raise exceptions for disallowed deprecations.
+  # config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  # config.active_support.disallowed_deprecation_warnings = []
 
   # Use Redis for Session and cache
   config.cache_store = :redis_cache_store,
@@ -53,7 +65,10 @@ Rails.application.configure do
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
 
   # Raises error for missing translations.
-  # config.action_view.raise_on_missing_translations = true
+  # config.i18n.raise_on_missing_translations = true
+
+  # Annotate rendered view with file names.
+  # config.action_view.annotate_rendered_view_with_filenames = true
 
   # Use the test adapter for active jobs
   config.active_job.queue_adapter = :test
