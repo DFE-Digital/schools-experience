@@ -5,18 +5,18 @@
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
 Rails.application.config.content_security_policy do |policy|
-  policy.default_src :self
+  policy.default_src :self, :https
   policy.connect_src :self, "https://*.visualstudio.com", "https://www.google-analytics.com"
 
-  policy.font_src    :self, :data
-  policy.img_src :self, :data, "https://www.google-analytics.com"
+  policy.font_src    :self, :https, :data
+  policy.img_src :self, :https, :data, "https://www.google-analytics.com"
   policy.object_src :none
-  policy.script_src :self, "'unsafe-inline'",
+  policy.script_src :self, :https, "'unsafe-inline'",
     "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
     "https://az416426.vo.msecnd.net" # needed for App Insights
 
-  policy.style_src :self
+  policy.style_src :self, :https
 
   # Specify URI for violation reports
   # policy.report_uri "/csp-violation-report-endpoint"
