@@ -120,7 +120,7 @@ If you have plenty of cpu cores, it faster to run tests with parallel_tests
 1. Create the databases - `bundle exec rake parallel:create`
 2. Copy the schema over from the main database - `bundle exec rake parallel:prepare`
 3. Run RSpecs - `bundle exec rake parallel:spec`
-3. Run Cucumber features - `bundle exec rake parallel:features`
+3. Run Cucumber features - `bundle exec rake parallel:spec`
 
 ### Common issues running tests
 

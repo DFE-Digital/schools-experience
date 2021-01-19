@@ -62,11 +62,11 @@ if ENV['APP_URL'].present?
 end
 
 if ENV['ChromeWebDriver'].present?
-  Selenium::WebDriver::Chrome::Service.driver_path = "#{ENV['ChromeWebDriver']}/chromedriver.exe"
+  Selenium::WebDriver::Chrome.driver_path = "#{ENV['ChromeWebDriver']}/chromedriver.exe"
 end
 
 if ENV['GeckoWebDriver'].present?
-  Selenium::WebDriver::Firefox::Service.driver_path = "#{ENV['GeckoWebDriver']}/geckodriver.exe"
+  Selenium::WebDriver::Firefox.driver_path = "#{ENV['GeckoWebDriver']}/geckodriver.exe"
 end
 
 if ENV['IEWebDriver'].present?
