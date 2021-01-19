@@ -71,8 +71,6 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
-  config.sass.inline_source_maps = true
-
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
   config.cache_store = :redis_cache_store,
                        {
