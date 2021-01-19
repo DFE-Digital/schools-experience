@@ -1,4 +1,4 @@
-# require "active_support/core_ext/integer/time"
+require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
@@ -66,7 +66,7 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "school_experience_production"
 
-  # config.action_mailer.perform_caching = false
+  config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -80,10 +80,10 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
 
   # Log disallowed deprecations.
-  # config.active_support.disallowed_deprecation = :log
+  config.active_support.disallowed_deprecation = :log
 
   # Tell Active Support which deprecation messages to disallow.
-  # config.active_support.disallowed_deprecation_warnings = []
+  config.active_support.disallowed_deprecation_warnings = []
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new

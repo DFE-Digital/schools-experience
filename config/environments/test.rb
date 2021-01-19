@@ -1,4 +1,4 @@
-# require "active_support/core_ext/integer/time"
+require "active_support/core_ext/integer/time"
 
 require Rails.root.join('spec', 'support', 'notify_fake_client')
 
@@ -47,10 +47,10 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   # Raise exceptions for disallowed deprecations.
-  # config.active_support.disallowed_deprecation = :raise
+  config.active_support.disallowed_deprecation = :raise
 
   # Tell Active Support which deprecation messages to disallow.
-  # config.active_support.disallowed_deprecation_warnings = []
+  config.active_support.disallowed_deprecation_warnings = []
 
   # Use Redis for Session and cache
   config.cache_store = :redis_cache_store,
