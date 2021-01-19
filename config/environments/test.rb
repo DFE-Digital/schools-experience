@@ -1,5 +1,3 @@
-require "active_support/core_ext/integer/time"
-
 require Rails.root.join('spec', 'support', 'notify_fake_client')
 
 # The test environment is used exclusively to run your application's
@@ -26,7 +24,6 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-  config.cache_store = :null_store
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
@@ -34,21 +31,14 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
-  config.action_mailer.perform_caching = false
+  # avoid second pass through SASS since thats incompatible with GovUK Frontend
+  config.assets.css_compressor = nil
 
-  # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-  config.action_mailer.delivery_method = :test
+  # set the cache to use RAM
+  config.cache_store = :null_store
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
-
-  # Raise exceptions for disallowed deprecations.
-  config.active_support.disallowed_deprecation = :raise
-
-  # Tell Active Support which deprecation messages to disallow.
-  config.active_support.disallowed_deprecation_warnings = []
 
   # Use Redis for Session and cache
   config.cache_store = :redis_cache_store,
@@ -63,10 +53,7 @@ Rails.application.configure do
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
 
   # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
-
-  # Annotate rendered view with file names.
-  # config.action_view.annotate_rendered_view_with_filenames = true
+  # config.action_view.raise_on_missing_translations = true
 
   # Use the test adapter for active jobs
   config.active_job.queue_adapter = :test
