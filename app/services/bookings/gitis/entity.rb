@@ -15,7 +15,6 @@ module Bookings::Gitis
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Dirty
-    include ActiveRecord::AttributeMethods::Write
 
     ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
     BIND_FORMAT = /\A[^\(]+\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)\z/.freeze
@@ -110,6 +109,14 @@ module Bookings::Gitis
     end
 
     class InvalidEntityIdError < RuntimeError; end
+
+    def write_attribute(attr_name, value)
+      name = attr_name.to_s
+      name = self.class.attribute_aliases[name] || name
+
+      name = @primary_key if name == "id" && @primary_key
+      @attributes.write_from_user(name, value)
+    end
 
   private
 
