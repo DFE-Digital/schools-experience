@@ -116,7 +116,7 @@ module Bookings
         .merge(Cancellation.sent.order(sent_at: :desc))
     }
 
-    default_scope { where.not(candidate_id: nil) }
+    default_scope { joins(:candidate) }
 
     delegate :gitis_contact, :gitis_contact=, to: :candidate
 

@@ -16,4 +16,6 @@ class ApplicationJob < ActiveJob::Base
   A_DECENT_AMOUNT_LONGER = lambda do |executions|
     RETRYS[executions - 1] || MAX_RETRY
   end
+
+  self.log_arguments = false
 end

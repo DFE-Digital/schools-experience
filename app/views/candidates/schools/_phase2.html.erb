@@ -187,7 +187,7 @@
 
       <% if @presenter.supports_access_needs? %>
         <%= dlist_item 'Disability and access details', id: 'disability-and-access' do %>
-          <%= render partial: 'candidates/schools/access_needs_statement.html.erb',
+          <%= render partial: 'candidates/schools/access_needs_statement',
             locals: { presenter: @presenter } %>
         <% end %>
       <% end %>

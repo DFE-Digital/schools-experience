@@ -110,6 +110,14 @@ module Bookings::Gitis
 
     class InvalidEntityIdError < RuntimeError; end
 
+    def write_attribute(attr_name, value)
+      name = attr_name.to_s
+      name = self.class.attribute_aliases[name] || name
+
+      name = @primary_key if name == "id" && @primary_key
+      @attributes.write_from_user(name, value)
+    end
+
   private
 
     def sanitize_for_mass_assignment(*args)
