@@ -3,6 +3,8 @@ class Bookings::School < ApplicationRecord
   include FullTextSearch
   include GeographicSearch
 
+  EXPERIENCE_TYPES = %w[virtual inschool both].freeze
+
   before_validation :nilify_availability_info
 
   validates :name,
@@ -27,6 +29,10 @@ class Bookings::School < ApplicationRecord
   validates :availability_info,
     presence: true,
     length: { minimum: 3 },
+    on: :configuring_availability
+
+  validates :experience_type,
+    inclusion: EXPERIENCE_TYPES,
     on: :configuring_availability
 
   validates :availability_preference_fixed,
@@ -77,6 +83,11 @@ class Bookings::School < ApplicationRecord
     foreign_key: :bookings_school_id,
     inverse_of: :bookings_school,
     dependent: :destroy
+
+  has_many :available_placement_dates,
+    -> { available },
+    class_name: 'Bookings::PlacementDate',
+    foreign_key: :bookings_school_id
 
   has_many :bookings,
     class_name: 'Bookings::Booking',
@@ -134,8 +145,7 @@ class Bookings::School < ApplicationRecord
     fixed.where(
       id: Bookings::School
         .default_scoped
-        .joins(:bookings_placement_dates)
-        .merge(Bookings::PlacementDate.available)
+        .joins(:available_placement_dates)
         .except(:select)
         .select(:id)
     )
@@ -201,6 +211,22 @@ class Bookings::School < ApplicationRecord
 
   def has_primary_and_secondary_phases?
     has_primary_phase? && has_secondary_phase?
+  end
+
+  def has_inschool_placements?
+    if availability_preference_fixed?
+      available_placement_dates.any?(&:inschool?)
+    else
+      experience_type != 'virtual'
+    end
+  end
+
+  def has_virtual_placements?
+    if availability_preference_fixed?
+      available_placement_dates.any?(&:virtual?)
+    else
+      experience_type != 'inschool'
+    end
   end
 
 private

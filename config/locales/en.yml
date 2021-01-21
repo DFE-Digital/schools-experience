@@ -434,6 +434,8 @@ en:
             availability_info:
               blank: Enter a description of your school's availability
               too_short: Availability description must be at least 3 characters
+            experience_type:
+              inclusion: Select the types of school experience you offer
         bookings/placement_date:
           attributes:
             duration:
@@ -443,6 +445,9 @@ en:
               on_or_after: Date must be in the future
             supports_subjects:
               inclusion: Select the phase for this date
+            virtual:
+              blank: Please choose either virtual or in school
+              inclusion: Please choose either virtual or in school
         bookings/booking:
           attributes:
             supports_subjects:
@@ -486,9 +491,11 @@ en:
       bookings_school:
         enabled: Turn requests on or off
         availability_preference_fixed: Choose how dates are displayed
+        experience_type: School experience type
       bookings_placement_date:
         date: Enter start date
         supports_subjects: Select school experience phase
+        virtual: Experience type
       bookings_placement_request_cancellation:
         rejection_category: Rejection reason
       phases: Education phases
@@ -577,9 +584,11 @@ en:
           Turning requests off will prevent your school from appearing in candidate searches.
           Requests that are already in-progress will continue as normal.
         availability_preference_fixed: Select how you'd like to present school experience dates to candidates.
+        experience_type: Do you offer school experiences in school, via the internet or both
       bookings_placement_date:
         date: For example, 01 09 2020.
         duration: Enter number of days.
+        virtual: Does this school experience take place in school or via the internet
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
@@ -633,6 +642,10 @@ en:
           true_html: Show specific dates
           false_html: Show a description of when you can host candidates
         availability_info: Describe your school experience availability
+        experience_type:
+          virtual: Virtual experience
+          inschool: In school experience
+          both: Both virtual and in school experiences
 
       bookings_placement_date:
         duration: How long will it last?
@@ -640,6 +653,9 @@ en:
         supports_subjects:
           yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
           no: Primary including early years, key stage 1 and key stage 2
+        virtual:
+          true: Virtual experience
+          false: In school experience
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
         rejection_category:

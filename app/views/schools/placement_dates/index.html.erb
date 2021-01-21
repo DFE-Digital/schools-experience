@@ -21,6 +21,7 @@
             <th class="govuk-table__header" scope="col">Duration</th>
             <th class="govuk-table__header" scope="col">Subjects</th>
             <th class="govuk-table__header" scope="col">Status</th>
+            <th class="govuk-table__header" scope="col">Experience type</th>
             <th class="govuk-table__header" scope="col"></th>
           </tr>
         </thead>
@@ -31,17 +32,25 @@
             <th class="govuk-table__header" scope="row">
               <%= placement_date.date.to_formatted_s(:govuk) %>
             </th>
+
             <td class="govuk-table__cell">
               <%= pluralize(placement_date.duration, 'day') %>
             </td>
+
             <td class="govuk-table__cell">
               <%= placement_date_subject_description(placement_date) %>
             </td>
+
             <td class="govuk-table__cell status">
               <strong class="govuk-tag <%= placement_date_display_class(placement_date.active) %>">
                 <%= placement_date_display_status(placement_date.active) %>
               </strong>
             </td>
+
+            <td class="govuk-table__cell">
+              <%= placement_date_experience_type_tag placement_date.virtual %>
+            </td>
+
             <td class="govuk-table__cell">
               <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
                 Change
