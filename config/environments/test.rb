@@ -16,14 +16,15 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.cache_classes = true
 
-  # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
+  # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both threaded web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
 
-  # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+  # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -35,7 +36,7 @@ Rails.application.configure do
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    # 'X-Content-Type-Options' => 'nosniff',
+    'X-Content-Type-Options' => 'nosniff',
     'Cache-Control' => "public, max-age=#{1.hour.to_i}"
   }
 
@@ -49,7 +50,7 @@ Rails.application.configure do
   config.assets.css_compressor = nil
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  # config.assets.compile = false
+  config.assets.compile = true
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = 'http://assets.example.com'
@@ -63,10 +64,10 @@ Rails.application.configure do
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
-  # config.log_level = :info
+  config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  # config.log_tags = [:request_id, ->(_) { "PID:#{Process.pid}" }]
+  config.log_tags = [:request_id, ->(_) { "PID:#{Process.pid}" }]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -88,10 +89,10 @@ Rails.application.configure do
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
-  # config.i18n.fallbacks = true
+  config.i18n.fallbacks = true
 
   # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
@@ -106,7 +107,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  # config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = ::Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"
@@ -160,7 +161,7 @@ Rails.application.configure do
   # Use the test adapter for active jobs
   config.active_job.queue_adapter = :test
 
-  # config.force_ssl = true
+  config.force_ssl = false
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
@@ -169,7 +170,7 @@ Rails.application.configure do
 
   config.x.default_phase = 4
   config.x.phase = 10_000
-  # config.x.candidates.deactivate_applications = false
+  config.x.candidates.deactivate_applications = false
   config.x.candidates.disable_applications = false
   config.x.candidates.alert_notification = nil
   config.x.google_maps_key = nil
@@ -179,14 +180,21 @@ Rails.application.configure do
   config.x.oidc_client_secret = 'abc123'
   config.x.oidc_host = 'some-oidc-host.education.gov.uk'
   config.x.oidc_services_list_url = 'https://some-oidc.provider.com/my-services'
+
   config.x.dfe_sign_in_api_host = 'some-signin-host.signin.education.gov.uk'
-  config.x.dfe_sign_in_admin_service_id = '66666666-5555-aaaa-bbbb-cccccccccccc'
-  config.x.dfe_sign_in_admin_role_id = '66666666-5555-4444-3333-222222222222'
+
   config.x.dfe_sign_in_api_enabled = false
   config.x.dfe_sign_in_api_role_check_enabled = false
   config.x.dfe_sign_in_api_school_change_enabled = false
+  config.x.dfe_sign_in_admin_service_id = '66666666-5555-aaaa-bbbb-cccccccccccc'
+  config.x.dfe_sign_in_admin_role_id = '66666666-5555-4444-3333-222222222222'
+  config.x.dfe_sign_in_request_organisation_url = nil
 
   config.x.gitis.fake_crm = true
+  config.x.gitis.auth_client_id = nil
+  config.x.gitis.auth_secret = nil
+  config.x.gitis.auth_tenant_id = nil
+  config.x.gitis.service_url = nil
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
   config.x.gitis.privacy_policy_id = SecureRandom.uuid
