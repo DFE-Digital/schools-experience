@@ -38,6 +38,7 @@ Feature: School Profile
         | Some school                                                         | /schools/dashboard |
         | Check your answers before setting up your school experience profile | None               |
 
+  @smoke_test
   Scenario: Viewing the profile
     Given I am on the 'Profile' page
     Then the page should have the following summary list information:
@@ -68,35 +69,36 @@ Feature: School Profile
       | Email address                              | g.chalmers@springfield.edu                                                                                                                                                                                                                                  |
       | Secondary email address                    | s.skinner@springfield.edu                                                                                                                                                                                                                                   |
 
-    Scenario: Publishing without accepting the privacy policy
-        Given I click the 'Continue' button
-        When I click the 'Accept and set up profile' button
-        Then I should see an error
+  Scenario: Publishing without accepting the privacy policy
+      Given I click the 'Continue' button
+      When I click the 'Accept and set up profile' button
+      Then I should see an error
 
-    Scenario: Publishing with accepting the privacy policy
-        Given I click the 'Continue' button
-        And I check the 'By checking this box and setting up your school experience profile' checkbox
-        When I click the 'Accept and set up profile' button
-        Then the page title should be "You've successfully set up your school experience profile"
+  Scenario: Publishing with accepting the privacy policy
+      Given I click the 'Continue' button
+      And I check the 'By checking this box and setting up your school experience profile' checkbox
+      When I click the 'Accept and set up profile' button
+      Then the page title should be "You've successfully set up your school experience profile"
 
-    Scenario: Publishing with accepting the privacy policy
-        Given I click the 'Continue' button
-        And I check the 'By checking this box and setting up your school experience profile' checkbox
-        And I click the 'Accept and set up profile' button
-        When I am on the profile page for the school
-        Then I should see the following summary rows:
-            | Heading                      | Value                                            |
-            | Individual requirements      | They must live within 7 miles of the school      |
-            | Experience details           | A really good one                                |
-            | School subjects              | Maths                                            |
-            | School phases                | Secondary (11 to 16)                             |
-            | School phases                | 16 to 18                                         |
-            | School Address               | 22 something                                     |
-            | School availability info     | No information supplied                          |
-            | DBS check info               | Yes\nAlways require DBS check                    |
-            | Other fee info               | £300.00 Daily, Gold sovereigns\nFalconry lessons |
-            | Dress code                   | Business dress\nMust have nice hat               |
-            | Start and finish times       | 8:15 am to 4:30 pm                               |
-            | Parking                      | Not available on site\nCarpark next door         |
-            | School teacher training info | We run our own training\nMore information        |
-       And I should see the accessability information I have entered
+  @smoke_test
+  Scenario: Publishing with accepting the privacy policy
+      Given I click the 'Continue' button
+      And I check the 'By checking this box and setting up your school experience profile' checkbox
+      And I click the 'Accept and set up profile' button
+      When I am on the profile page for the school
+      Then I should see the following summary rows:
+          | Heading                      | Value                                            |
+          | Individual requirements      | They must live within 7 miles of the school      |
+          | Experience details           | A really good one                                |
+          | School subjects              | Maths                                            |
+          | School phases                | Secondary (11 to 16)                             |
+          | School phases                | 16 to 18                                         |
+          | School Address               | 22 something                                     |
+          | School availability info     | No information supplied                          |
+          | DBS check info               | Yes\nAlways require DBS check                    |
+          | Other fee info               | £300.00 Daily, Gold sovereigns\nFalconry lessons |
+          | Dress code                   | Business dress\nMust have nice hat               |
+          | Start and finish times       | 8:15 am to 4:30 pm                               |
+          | Parking                      | Not available on site\nCarpark next door         |
+          | School teacher training info | We run our own training\nMore information        |
+     And I should see the accessability information I have entered

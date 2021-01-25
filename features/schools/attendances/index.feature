@@ -19,6 +19,7 @@ Feature: Viewing historical attendances
             | Confirm attendance | /schools/confirm_attendance |
             | Attendances        | None                        |
 
+    @smoke_test
     Scenario: Table headings
         Given there are some bookings with attendance recorded
         When I am on the 'attendances' page

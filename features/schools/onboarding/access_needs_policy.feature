@@ -39,7 +39,7 @@ Feature: Access needs policy
     When I submit the form
     Then I should be on the 'Experience outline' page
 
-  Scenario: Submitting the form successfully choosing yes
+  Scenario: Submitting the form successfully choosing no
     Given I am on the 'Access needs policy' page
     And I choose 'No' from the 'Do you have any online information which covers your disability and access needs policy?' radio buttons
     When I submit the form

@@ -18,26 +18,28 @@ Feature: Listing placement dates
         | Some school  | /schools/dashboard |
         | Manage dates | None               |
 
-    Scenario: List contents
-        Given my school has 5 placement dates
-        When I am on the 'placement dates' page
-        Then I should see a list with 5 entries
+  @smoke_test
+  Scenario: List contents
+      Given my school has 5 placement dates
+      When I am on the 'placement dates' page
+      Then I should see a list with 5 entries
 
-    Scenario: List contents
-        Given my school has a placement date
-        When I am on the 'placement dates' page
-        Then I should my placement date listed
-        And it should include a 'Change' link to the edit page
+  @smoke_test
+  Scenario: List contents
+      Given my school has a placement date
+      When I am on the 'placement dates' page
+      Then I should my placement date listed
+      And it should include a 'Change' link to the edit page
 
-    Scenario: The add a new placement date button
-        Given I am on the 'placement dates' page
-        Then there should be a 'Add a date' link to the new placement date page
+  Scenario: The add a new placement date button
+      Given I am on the 'placement dates' page
+      Then there should be a 'Add a date' link to the new placement date page
 
-    Scenario: Warning displayed when there are no dates
-        Given my school has no placement dates
-        When I am on the 'placement dates' page
-        Then there should be a "You haven't entered any dates, your school will not appear in candidate searches" warning
+  Scenario: Warning displayed when there are no dates
+      Given my school has no placement dates
+      When I am on the 'placement dates' page
+      Then there should be a "You haven't entered any dates, your school will not appear in candidate searches" warning
 
-    Scenario: The return to dashboard button
-        Given I am on the 'placement dates' page
-        Then there should be a 'Return to dashboard' link to the 'schools dashboard'
+  Scenario: The return to dashboard button
+      Given I am on the 'placement dates' page
+      Then there should be a 'Return to dashboard' link to the 'schools dashboard'

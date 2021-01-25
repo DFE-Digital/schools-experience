@@ -32,7 +32,7 @@ Feature: DBS Fee
     When I submit the form
     Then I should see a validation error message
 
-  Scenario: Completing the DBS costs step with error
+  Scenario: Completing the DBS costs step without error
     Given I have entered the following details into the form:
       | Enter the number of pounds  | 200               |
       | Add extra details           | Background checks |

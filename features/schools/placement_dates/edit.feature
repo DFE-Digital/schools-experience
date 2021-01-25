@@ -35,6 +35,7 @@ Feature: Editing placement dates
         Given I am on the 'placement dates' page
         Then my newly-created placement date should be listed
 
+    @smoke_test
     Scenario: Activating a placement date
         Given I am on the edit page for my 'inactive' placement
         When I check the 'Make this date available to candidates?' checkbox

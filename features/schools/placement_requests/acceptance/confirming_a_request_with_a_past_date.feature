@@ -20,6 +20,7 @@ Feature: Confirming a request with a future date
             | Telephone number | tel    |                         |
             | Email address    | email  |                         |
 
+    @smoke_test
     Scenario: Updating and submitting a new booking
         Given I am on the 'make changes' page for the placement request
         And I enter a future date in the 'Booking date' date field

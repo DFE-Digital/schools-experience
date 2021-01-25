@@ -23,6 +23,7 @@ Feature: Viewing a rejected request
             | Rejected requests  | /schools/rejected_requests  |
             | Request            | None                         |
 
+    @smoke_test
     Scenario: Rejection details
         Given there is at least one rejected request
         When I am viewing the rejected request
@@ -30,11 +31,13 @@ Feature: Viewing a rejected request
             | Heading      | Value      |
             | Reason       | MyText     |
 
+    @smoke_test
     Scenario: Rejection category
         Given a request has been rejected because of 'date_not_available'
         When I am viewing the rejected request
         Then I should see a rejected request with the rejection reason displayed in full
 
+    @smoke_test
     Scenario: Personal details
         Given there is at least one rejected request
         When I am viewing the rejected request
@@ -43,7 +46,8 @@ Feature: Viewing a rejected request
             | Address             | First Line, Second Line, Third Line, Manchester, Manchester, TE57 1NG |
             | UK telephone number | 07123 456789                                                          |
             | Email address       | second@thisaddress.com                                                |
-    
+
+    @smoke_test
     Scenario: Request details
         Given there is at least one rejected request
         When I am viewing the rejected request
@@ -53,6 +57,7 @@ Feature: Viewing a rejected request
             | DBS certificate  | Yes              |
             | Request received | \d+ [a-z]+ \d{4} |
 
+    @smoke_test
     Scenario: Candidate details
         Given there is at least one rejected request
         When I am viewing the rejected request
