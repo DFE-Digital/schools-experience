@@ -26,6 +26,7 @@ Feature: Editing placement dates
             | Show a description of when you can host candidates |
         And the submit button should contain text 'Continue'
 
+    @smoke_test
     Scenario: Submitting the form
         Given I am on the 'availability preferences' page
         When I choose "Show a description of when you can host candidates" from the "Choose how dates are displayed" radio buttons

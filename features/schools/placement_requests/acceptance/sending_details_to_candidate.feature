@@ -17,6 +17,7 @@ Feature: Previewing candidate emails
             | School experience details  |
             | Help and support           |
 
+    @smoke_test
     Scenario: Actually confirming a placement request
         Given I am have progressed to the 'preview confirmation email' page for the placement request
         And I enter 'Come to the main reception' into the 'Extra instructions for the candidate' text area

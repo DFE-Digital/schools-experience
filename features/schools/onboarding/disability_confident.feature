@@ -28,7 +28,7 @@ Feature: Disability Confident
     When I submit the form
     Then the page title should be 'Disability Confident'
 
-  Scenario: Submitting the form successfully
+  Scenario: Submitting the form successfully choosing yes
     Given I am on the 'Disability Confident' page
     And I choose 'Yes' from the 'Are you signed up to the Disability Confident employer scheme?' radio buttons
     When I submit the form

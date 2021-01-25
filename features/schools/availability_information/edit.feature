@@ -24,6 +24,7 @@ Feature: Editing availability info
         Then there should be a 'Describe your school experience availability' text area
         And the submit button should contain text 'Save availability description'
 
+    @smoke_test
     Scenario: Submitting the form
         Given I am on the 'availability information' page
         When I enter 'Every third Tuesday' into the 'Describe your school experience availability' text area
