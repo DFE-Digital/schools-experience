@@ -119,7 +119,7 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
 
-  gem 'shoulda-matchers', '~> 4.3'
+  gem 'shoulda-matchers', '~> 4.5'
   gem 'rails-controller-testing'
   gem "rspec-json_expectations", "~> 2.2"
 
