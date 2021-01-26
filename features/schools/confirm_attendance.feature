@@ -34,6 +34,7 @@ Feature: Confirming candidate attendance
             | Attended |
         And the correct data should be present in each row
 
+    @smoke_test
     Scenario: Setting a booking as attended
         Given there are some bookings that were scheduled last week
         And I am on the 'confirm attendance' page
@@ -42,6 +43,7 @@ Feature: Confirming candidate attendance
         Then I should be on the 'schools dashboard' page
         And the booking should be marked as attended
 
+    @smoke_test
     Scenario: Setting a booking as not attended
         Given there are some bookings that were scheduled last week
         And I am on the 'confirm attendance' page

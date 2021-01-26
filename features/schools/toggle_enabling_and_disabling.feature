@@ -17,6 +17,7 @@ Feature: Toggling being enabled and disabled
             | Allow requests        |
             | Do not allow requests |
 
+    @smoke_test
     Scenario: Disabling an enabled school
         Given my school is enabled
         And I am on the 'toggle requests' page
@@ -25,6 +26,7 @@ Feature: Toggling being enabled and disabled
         Then I should be on the 'schools dashboard' page
         And my school should be disabled
 
+    @smoke_test
     Scenario: Enabling a disabled school
         Given my school is disabled
         And I am on the 'toggle requests' page
