@@ -8,94 +8,49 @@ require Rails.root.join('spec', 'support', 'notify_fake_client')
 # and recreated between test runs. Don't rely on the data there!
 
 Rails.application.configure do
-  # Verifies that versions and hashed value of the package contents in the project's package.json
-  config.webpacker.check_yarn_integrity = false
-
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Code is not reloaded between requests.
-  config.cache_classes = true
+  config.cache_classes = false
+  config.action_view.cache_template_loading = true
 
-  # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both threaded web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
-
-  # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
-
-  # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
-
-  # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
-  # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
-  # config.require_master_key = true
+  # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    'X-Content-Type-Options' => 'nosniff',
     'Cache-Control' => "public, max-age=#{1.hour.to_i}"
   }
 
-  # Compress JS using a preprocessor.
-  config.assets.js_compressor = nil
+  # Show full error reports and disable caching.
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
 
-  # Compress CSS using a preprocessor.
-  # We're already using sass and that is set to compress at compile time
-  # so a second pass is not needed - the second pass was (maybe still is)
-  # causing problems with GovUK frontend use of variables
-  config.assets.css_compressor = nil
+  # Use Redis for Session and cache
+  config.cache_store = :redis_cache_store,
+                       {
+                         url: ENV['REDIS_URL'].presence,
+                         db: ENV['TEST_ENV_NUMBER'].presence, # Note DB overrides db in URL if both specified
+                         namespace: 'test-cache'
+                       }
 
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = true
+  # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
 
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.asset_host = 'http://assets.example.com'
+  # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
 
-  # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
+  # Store uploaded files on the local file system in a temporary directory.
+  config.active_storage.service = :test
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
-
-  # Include generic and useful information about system operation, but avoid logging too much
-  # information to avoid inadvertent exposure of personally identifiable information (PII).
-  config.log_level = :info
-
-  # Prepend all log lines with the following tags.
-  config.log_tags = [:request_id, ->(_) { "PID:#{Process.pid}" }]
-
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
-
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "school_experience_test"
-
-  # config.action_mailer.perform_caching = false
-
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.perform_caching = false
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
-  # config.action_mailer.delivery_method = :test
-
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation cannot be found).
-  config.i18n.fallbacks = true
-
-  # Raises error for missing translations.
-  config.i18n.raise_on_missing_translations = true
-
-  # Annotate rendered view with file names.
-  # config.action_view.annotate_rendered_view_with_filenames = true
+  config.action_mailer.delivery_method = :test
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
@@ -106,57 +61,24 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  # Raises error for missing translations.
+  # config.i18n.raise_on_missing_translations = true
 
-  # Use a different logger for distributed setups.
-  # require "syslog/logger"
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
+  # Annotate rendered view with file names.
+  # config.action_view.annotate_rendered_view_with_filenames = true
 
-  # if ENV["RAILS_LOG_TO_STDOUT"].present?
-  #  logger           = ActiveSupport::Logger.new(STDOUT)
-  #  logger.formatter = config.log_formatter
-  #  config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  # end
+  # Compress CSS using a preprocessor.
+  # We're already using sass and that is set to compress at compile time
+  # so a second pass is not needed - the second pass was (maybe still is)
+  # causing problems with GovUK frontend use of variables
+  config.assets.css_compressor = nil
 
-  # Do not dump schema after migrations.
-  # config.active_record.dump_schema_after_migration = false
-
-  # Inserts middleware to perform automatic connection switching.
-  # The `database_selector` hash is used to pass options to the DatabaseSelector
-  # middleware. The `delay` is used to determine how long to wait after a write
-  # to send a subsequent read to the primary.
-  #
-  # The `database_resolver` class is used by the middleware to determine which
-  # database is appropriate to use based on the time delay.
-  #
-  # The `database_resolver_context` class is used by the middleware to set
-  # timestamps for the last write to the primary. The resolver uses the context
-  # class timestamps to determine how long to wait before reading from the
-  # replica.
-  #
-  # By default Rails will store a last write timestamp in the session. The
-  # DatabaseSelector middleware is designed as such you can define your own
-  # strategy for connection switching and pass that into the middleware through
-  # these configuration options.
-  # config.active_record.database_selector = { delay: 2.seconds }
-  # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
-  # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
-
-  # Use Redis for Session and cache
-  config.cache_store = :redis_cache_store,
-                       {
-                         url: ENV['REDIS_URL'].presence,
-                         db: ENV['TEST_ENV_NUMBER'].presence, # Note DB overrides db in URL if both specified
-                         namespace: 'test-cache'
-                       }
+  # Fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = true
 
   config.session_store :cache_store,
     key: 'schoolex-test-session',
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
-
-  # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
 
   # Use the test adapter for active jobs
   config.active_job.queue_adapter = :test

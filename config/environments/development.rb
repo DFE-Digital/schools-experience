@@ -1,8 +1,6 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # Verifies that versions and hashed value of the package contents in the project's package.json
-  config.webpacker.check_yarn_integrity = true
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
@@ -22,7 +20,10 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
-    config.cache_store = :memory_store
+    config.cache_store = :redis_cache_store,
+                         {
+                           url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
+                         }
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
@@ -32,10 +33,13 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # Don't care if the mailer can't send.
-  # config.action_mailer.raise_delivery_errors = false
+  # Store uploaded files on the local file system (see config/storage.yml for options).
+  config.active_storage.service = :local
 
-  # config.action_mailer.perform_caching = false
+  # Don't care if the mailer can't send.
+  config.action_mailer.raise_delivery_errors = false
+
+  config.action_mailer.perform_caching = false
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -75,21 +79,9 @@ Rails.application.configure do
 
   config.sass.inline_source_maps = true
 
-  # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
-  config.cache_store = :redis_cache_store,
-                       {
-                         url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
-                       }
-
   config.session_store :cache_store,
     key: 'schoolex-session',
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
-
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.raise = true
-    Bullet.rails_logger = true
-  end
 
   config.x.phase = Integer(ENV.fetch('PHASE') { 10_000 })
   config.x.features = %i[
@@ -136,4 +128,10 @@ Rails.application.configure do
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 
   config.x.maintenance_mode = %w[1 yes true].include?(ENV['MAINTENANCE_MODE'].to_s)
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.raise = true
+    Bullet.rails_logger = true
+  end
 end

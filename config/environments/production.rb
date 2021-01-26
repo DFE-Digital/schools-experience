@@ -1,9 +1,6 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # Verifies that versions and hashed value of the package contents in the project's package.json
-  config.webpacker.check_yarn_integrity = false
-
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -30,9 +27,6 @@ Rails.application.configure do
     'X-Content-Type-Options' => 'nosniff'
   }
 
-  # Compress JS using a preprocessor.
-  config.assets.js_compressor = nil
-
   # Compress CSS using a preprocessor.
   # We're already using sass and that is set to compress at compile time
   # so a second pass is not needed - the second pass was (maybe still is)
@@ -49,8 +43,16 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
+  # Store uploaded files on the local file system (see config/storage.yml for options).
+  config.active_storage.service = :local
+
+  # Mount Action Cable outside main process or domain.
+  # config.action_cable.mount_path = nil
+  # config.action_cable.url = 'wss://example.com/cable'
+  # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
+
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
@@ -59,14 +61,29 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id, ->(_) { "PID:#{Process.pid}" }]
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
+  config.cache_store = :redis_cache_store,
+                       {
+                         url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
+                         reconnect_attempts: 1,
+                         tcp_keepalive: 60,
+                         error_handler: lambda do |_method:, returning:, exception:|
+                                          ExceptionNotifier.notify_exception(
+                                            exception,
+                                            data: {
+                                              returning: returning.inspect
+                                            }
+                                          )
+
+                                          Raven.capture_exception(exception)
+                                        end
+                       }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter     = :resque
+  # config.active_job.queue_adapter     = :delayed_job
   # config.active_job.queue_name_prefix = "school_experience_production"
 
-  # config.action_mailer.perform_caching = false
+  config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -122,31 +139,9 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
-  # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
-  config.cache_store = :redis_cache_store,
-                       {
-                         url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
-                         reconnect_attempts: 1,
-                         tcp_keepalive: 60,
-                         error_handler: lambda do |_method:, returning:, exception:|
-                                          ExceptionNotifier.notify_exception(
-                                            exception,
-                                            data: {
-                                              returning: returning.inspect
-                                            }
-                                          )
-
-                                          Raven.capture_exception(exception)
-                                        end
-                       }
-
   config.session_store :cache_store,
     key: 'schoolex-session',
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
-
-  config.active_job.queue_adapter = :delayed_job
-
-  config.force_ssl = true
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
