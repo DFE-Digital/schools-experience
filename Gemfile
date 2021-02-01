@@ -20,7 +20,7 @@ gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.2'
 
 # Use SCSS for stylesheets
 gem 'sassc-rails'
