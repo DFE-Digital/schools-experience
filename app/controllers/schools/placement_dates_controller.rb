@@ -68,7 +68,7 @@ private
   end
 
   def new_placement_date_params
-    params.require(:bookings_placement_date).permit(:date, :duration, :active, :supports_subjects)
+    params.require(:bookings_placement_date).permit(:date, :duration, :active, :virtual, :supports_subjects)
   end
 
   def edit_placement_date_params

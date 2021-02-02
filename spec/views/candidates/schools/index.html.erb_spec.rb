@@ -52,7 +52,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     it "shows results" do
       expect(rendered).to have_css '.school-result'
       expect(rendered).to have_css '.school-result h2', text: @school.name
-      expect(rendered).to have_css '.school-result .govuk-summary-list__key', count: 3
+      expect(rendered).to have_css '.school-result .govuk-summary-list__key', count: 4
     end
   end
 end

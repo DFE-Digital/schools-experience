@@ -116,6 +116,12 @@
           <dd class="govuk-summary-list__value">
             <%= format_school_availability(@presenter.availability_info) %>
           </dd>
+          <dt class="govuk-summary-list__key">
+            School experience type
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= format_school_experience_type @presenter.school.experience_type %>
+          </dd>
         <%- end -%>
       </div>
 
