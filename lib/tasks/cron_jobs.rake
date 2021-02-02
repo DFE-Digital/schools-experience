@@ -9,7 +9,7 @@ end
 
 # in production only, invoke schedule_jobs automatically after every migration
 # and schema load.
-if Rails.env.production?
+if Rails.env.production? || Rails.env.staging?
   %w[db:migrate db:schema:load].each do |task|
     Rake::Task[task].enhance do
       Rake::Task['db:schedule_jobs'].invoke

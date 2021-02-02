@@ -60,7 +60,7 @@ module Schools
     end
 
     def gitis_retrieval_error(exception)
-      if Rails.env.production?
+      if Rails.env.production? || Rails.env.staging?
         ExceptionNotifier.notify_exception exception
         Raven.capture_exception exception
       end
