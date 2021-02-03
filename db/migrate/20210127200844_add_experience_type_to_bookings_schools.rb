@@ -4,6 +4,6 @@ class AddExperienceTypeToBookingsSchools < ActiveRecord::Migration[6.0]
   end
 
   def down
-    drop_column :bookings_schools, :experience_type
+    remove_column :bookings_schools, :experience_type
   end
 end
