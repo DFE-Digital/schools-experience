@@ -26,16 +26,4 @@ module Schools::PlacementDatesHelper
       'Primary'
     end
   end
-
-  def placement_date_experience_type_tag(virtual)
-    virtual ? placement_date_virtual_tag : placement_date_inschool_tag
-  end
-
-  def placement_date_virtual_tag
-    tag.strong "Virtual", class: "govuk-tag govuk-tag--green"
-  end
-
-  def placement_date_inschool_tag
-    tag.strong "In school", class: "govuk-tag govuk-tag--yellow"
-  end
 end

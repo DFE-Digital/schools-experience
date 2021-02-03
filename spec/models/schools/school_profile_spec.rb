@@ -13,11 +13,6 @@ describe Schools::SchoolProfile, type: :model do
 
     it do
       is_expected.to \
-        have_db_column(:dbs_requirement_dbs_policy_conditions).of_type :string
-    end
-
-    it do
-      is_expected.to \
         have_db_column(:dbs_requirement_dbs_policy_details).of_type :text
     end
 
@@ -274,7 +269,7 @@ describe Schools::SchoolProfile, type: :model do
       end
 
       {
-        dbs_requirement_dbs_policy_conditions: :dbs_policy_conditions,
+        dbs_requirement_requires_check: :requires_check,
         dbs_requirement_dbs_policy_details: :dbs_policy_details,
         dbs_requirement_no_dbs_policy_details: :no_dbs_policy_details
       }.each_pair do |column, model_attribute|

@@ -23,18 +23,14 @@
     </p>
 
     <%= form_for dbs_requirement, url: url, method: method do |f| %>
-      <%= f.radio_button_fieldset :dbs_policy_conditions do |fieldset| %>
+      <%= f.radio_button_fieldset :requires_check do |fieldset| %>
         <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
-        <%= fieldset.radio_input 'required' do  %>
+        <%= fieldset.radio_input true do  %>
           <%= f.text_area_with_maxwords :dbs_policy_details, maxwords: { count: 50 } %>
         <% end %>
 
-        <%= fieldset.radio_input 'inschool' do  %>
-          <%= f.text_area_with_maxwords :dbs_policy_details_inschool, maxwords: { count: 50 } %>
-        <% end %>
-
-        <%= fieldset.radio_input 'notrequired' %>
+        <%= fieldset.radio_input false %>
       <% end %>
 
       <%= f.submit 'Continue' %>

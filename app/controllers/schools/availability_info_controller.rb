@@ -16,6 +16,6 @@ private
   def placement_date_params
     params
       .require(:bookings_school)
-      .permit(:availability_info, :experience_type)
+      .permit(:availability_info)
   end
 end

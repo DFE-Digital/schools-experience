@@ -17,7 +17,6 @@ describe Schools::PlacementDatesController, type: :request do
           date: 2.weeks.from_now.strftime('%Y-%m-%d'),
           duration: 1,
           active: true,
-          virtual: false,
         }
       }
     end
