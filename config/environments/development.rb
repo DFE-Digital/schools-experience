@@ -89,6 +89,7 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.raise = true
     Bullet.rails_logger = true
+    Bullet.unused_eager_loading_enable = false
   end
 
   config.x.phase = Integer(ENV.fetch('PHASE') { 10_000 })

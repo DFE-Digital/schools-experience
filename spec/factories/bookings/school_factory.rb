@@ -9,6 +9,7 @@ FactoryBot.define do
     association :school_type, factory: :bookings_school_type
     sequence(:contact_email) { |n| "admin#{n}@school.org" }
     availability_info { 'We can offer placements throughout June and July for the remainder of this academic year (up to the 21st July).' }
+    experience_type { 'both' }
     availability_preference_fixed { false }
     enabled { true }
 
