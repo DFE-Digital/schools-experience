@@ -118,8 +118,8 @@ Rails.application.configure do
   config.x.dfe_sign_in_api_school_change_enabled = ENV['DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_request_organisation_url = ENV['DFE_SIGNIN_REQUEST_ORGANISATION_URL'].presence
 
-  if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
-    Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
+  if ENV['NOTIFY_CLIENT'].present?
+    Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT']
   end
 
   config.x.gitis.fake_crm = truthy_strings.include?(String(ENV.fetch('FAKE_CRM') { true }))
