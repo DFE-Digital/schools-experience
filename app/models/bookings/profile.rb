@@ -1,7 +1,6 @@
 class Bookings::Profile < ApplicationRecord
   AVAILABLE_INTERVALS = %w[Daily One-off].freeze
   EMAIL_FORMAT = /\A.*@.*\..*\z/.freeze
-  DBS_POLICY_CONDITIONS = %w[required inschool notrequired].freeze
 
   FIELDS_TO_NILIFY = %i[teacher_training_info teacher_training_url].freeze
 
@@ -18,8 +17,8 @@ class Bookings::Profile < ApplicationRecord
   belongs_to :school, class_name: 'Bookings::School'
   validates :school_id, uniqueness: true
 
-  validates :dbs_policy_conditions, inclusion: DBS_POLICY_CONDITIONS
-  validates :dbs_policy_details, presence: true, if: :dbs_requires_check?
+  validates :dbs_requires_check, inclusion: [true, false]
+  validates :dbs_policy_details, presence: true, if: :dbs_requires_check
 
   validates :individual_requirements, length: { minimum: 1 }, if: :individual_requirements
 
@@ -99,7 +98,7 @@ class Bookings::Profile < ApplicationRecord
   end
 
   def has_legacy_dbs_requirement?
-    dbs_policy_conditions.nil?
+    dbs_requires_check.nil?
   end
 
 private
@@ -138,9 +137,5 @@ private
 
   def other_fee_assigned
     other_fee_amount_pounds && other_fee_amount_pounds.to_f.positive?
-  end
-
-  def dbs_requires_check?
-    dbs_policy_conditions != 'notrequired'
   end
 end

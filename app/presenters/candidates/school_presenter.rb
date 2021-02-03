@@ -97,13 +97,10 @@ module Candidates
   private
 
     def dbs_requirement
-      case profile.dbs_policy_conditions
-      when "required"
-        "Yes"
-      when "inschool"
-        "Yes - when in school"
-      when "notrequired"
-        'No - Candidates will be accompanied at all times when in school'
+      if profile.dbs_requires_check?
+        'Yes'
+      else
+        'No - Candidates will be accompanied at all times'
       end
     end
 

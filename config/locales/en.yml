@@ -236,12 +236,10 @@ en:
 
         schools/on_boarding/dbs_requirement:
           attributes:
-            dbs_policy_conditions:
+            requires_check:
               inclusion: 'Select whether you require candidates to have a DBS check'
             dbs_policy_details:
               blank: 'Provide details of your DBS check requirements'
-            dbs_policy_details_inschool:
-              blank: Provide details of your DBS check requirements
             no_dbs_policy_details:
               blank: 'Provide details'
         schools/on_boarding/candidate_requirements_choice:
@@ -436,8 +434,6 @@ en:
             availability_info:
               blank: Enter a description of your school's availability
               too_short: Availability description must be at least 3 characters
-            experience_type:
-              inclusion: Select the types of school experience you offer
         bookings/placement_date:
           attributes:
             duration:
@@ -447,9 +443,6 @@ en:
               on_or_after: Date must be in the future
             supports_subjects:
               inclusion: Select the phase for this date
-            virtual:
-              blank: Please choose either virtual or in school
-              inclusion: Please choose either virtual or in school
         bookings/booking:
           attributes:
             supports_subjects:
@@ -493,11 +486,9 @@ en:
       bookings_school:
         enabled: Turn requests on or off
         availability_preference_fixed: Choose how dates are displayed
-        experience_type: School experience type
       bookings_placement_date:
         date: Enter start date
         supports_subjects: Select school experience phase
-        virtual: Experience type
       bookings_placement_request_cancellation:
         rejection_category: Rejection reason
       phases: Education phases
@@ -517,7 +508,7 @@ en:
       schools_on_boarding_candidate_requirements_choice:
         has_requirements: "Do you have any candidate requirements?"
       schools_on_boarding_dbs_requirement:
-        dbs_policy_conditions: 'Do you require candidates to have or get a DBS check?'
+        requires_check: 'Do you require candidates to have or get a DBS check?'
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
@@ -586,11 +577,9 @@ en:
           Turning requests off will prevent your school from appearing in candidate searches.
           Requests that are already in-progress will continue as normal.
         availability_preference_fixed: Select how you'd like to present school experience dates to candidates.
-        experience_type: Do you offer school experiences in school, via the internet or both
       bookings_placement_date:
         date: For example, 01 09 2020.
         duration: Enter number of days.
-        virtual: Does this school experience take place in school or via the internet
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
@@ -615,7 +604,7 @@ en:
       schools_on_boarding_candidate_requirements_choice:
         has_requirements_html: "<br> For example, they must want to apply for teacher training at your school or have a degree"
       schools_on_boarding_dbs_requirement:
-        dbs_policy_conditions_html: '<br>Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
+        requires_check_html: '<br>Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
       schools_on_boarding_experience_outline:
@@ -644,10 +633,6 @@ en:
           true_html: Show specific dates
           false_html: Show a description of when you can host candidates
         availability_info: Describe your school experience availability
-        experience_type:
-          virtual: Virtual experience
-          inschool: In school experience
-          both: Both virtual and in school experiences
 
       bookings_placement_date:
         duration: How long will it last?
@@ -655,9 +640,6 @@ en:
         supports_subjects:
           yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
           no: Primary including early years, key stage 1 and key stage 2
-        virtual:
-          true: Virtual experience
-          false: In school experience
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
         rejection_category:
@@ -722,12 +704,10 @@ en:
       distance: Select search area
       schools_on_boarding_dbs_requirement:
         dbs_policy_details: 'Provide details in 50 words or less.'
-        dbs_policy_details_inschool: 'Provide the details in 50 words or less.'
         no_dbs_policy_details: 'Provide any extra details in 50 words or less.'
-        dbs_policy_conditions:
-          required: 'Yes - Outline your DBS requirements'
-          inschool: 'Yes - only when in school - outline your DBS requirements'
-          notrequired: 'No - Candidates will be accompanied at all times when in school'
+        requires_check:
+          true: 'Yes - Outline your DBS requirements'
+          false: 'No - Candidates will be accompanied at all times'
       schools_on_boarding_candidate_requirements_choice:
         has_requirements:
           true: 'Yes'

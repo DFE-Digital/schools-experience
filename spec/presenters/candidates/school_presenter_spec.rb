@@ -94,7 +94,7 @@ RSpec.describe Candidates::SchoolPresenter do
   describe '#dbs_required' do
     context 'when legacy profile' do
       let :legacy_profile do
-        build :bookings_profile, dbs_policy_conditions: nil, dbs_policy_details: nil
+        build :bookings_profile, dbs_requires_check: nil, dbs_policy_details: nil
       end
 
       subject { described_class.new(school, legacy_profile).dbs_required }
@@ -118,22 +118,16 @@ RSpec.describe Candidates::SchoolPresenter do
     context 'when new profile' do
       subject { described_class.new(school, profile).dbs_required }
 
-      context 'when required' do
-        before { profile.dbs_policy_conditions = "required" }
+      context 'when true' do
+        before { profile.dbs_requires_check = true }
 
         it { is_expected.to eql 'Yes' }
       end
 
-      context 'when inschool' do
-        before { profile.dbs_policy_conditions = "inschool" }
+      context 'when false' do
+        before { profile.dbs_requires_check = false }
 
-        it { is_expected.to eql 'Yes - when in school' }
-      end
-
-      context 'when notrequired' do
-        before { profile.dbs_policy_conditions = "notrequired" }
-
-        it { is_expected.to eql 'No - Candidates will be accompanied at all times when in school' }
+        it { is_expected.to eql 'No - Candidates will be accompanied at all times' }
       end
     end
   end
@@ -142,7 +136,7 @@ RSpec.describe Candidates::SchoolPresenter do
     context 'when legacy profile' do
       let :legacy_profile do
         build :bookings_profile,
-          dbs_policy_conditions: nil,
+          dbs_requires_check: nil,
           dbs_policy_details: nil,
           dbs_policy: 'Our DBS policy'
       end

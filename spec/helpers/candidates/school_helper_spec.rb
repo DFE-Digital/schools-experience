@@ -317,33 +317,4 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       end
     end
   end
-
-  describe "#format_school_placement_locations" do
-    subject { format_school_placement_locations school }
-
-    context "for school with virtual placements" do
-      let(:school) { create(:bookings_placement_date, virtual: true).bookings_school }
-
-      it { is_expected.to have_css ".govuk-tag", text: "Virtual" }
-      it { is_expected.not_to have_css ".govuk-tag", text: "In school" }
-    end
-
-    context "for school with inschool placements" do
-      let(:school) { create(:bookings_placement_date, virtual: false).bookings_school }
-
-      it { is_expected.not_to have_css ".govuk-tag", text: "Virtual" }
-      it { is_expected.to have_css ".govuk-tag", text: "In school" }
-    end
-
-    context "for school with both virtual and inschool placements" do
-      let :school do
-        create(:bookings_placement_date, virtual: true).bookings_school.tap do |school|
-          create :bookings_placement_date, virtual: false, bookings_school: school
-        end
-      end
-
-      it { is_expected.to have_css ".govuk-tag", text: "Virtual" }
-      it { is_expected.to have_css ".govuk-tag", text: "In school" }
-    end
-  end
 end

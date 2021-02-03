@@ -216,6 +216,5 @@ Rails.application.configure do
   config.after_initialize do
     Bullet.enable = true
     Bullet.raise = true
-    Bullet.unused_eager_loading_enable = false
   end
 end

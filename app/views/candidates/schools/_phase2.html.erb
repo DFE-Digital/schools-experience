@@ -108,25 +108,16 @@
         <%= format_school_address @presenter.school, tag(:br) %>
       <% end %>
 
-      <%- unless @presenter.school.availability_preference_fixed? -%>
       <div id="school-availability-info" class="govuk-summary-list__row">
+        <%- unless @presenter.school.availability_preference_fixed? -%>
           <dt class="govuk-summary-list__key">
             Placement availability
           </dt>
           <dd class="govuk-summary-list__value">
             <%= format_school_availability(@presenter.availability_info) %>
           </dd>
+        <%- end -%>
       </div>
-
-      <div id="school-experience-type" class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            School experience type
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <%= format_school_experience_type @presenter.school.experience_type %>
-          </dd>
-      </div>
-      <%- end -%>
 
       <%= dlist_item 'DBS check required', id: 'dbs-check-info' do %>
         <p>

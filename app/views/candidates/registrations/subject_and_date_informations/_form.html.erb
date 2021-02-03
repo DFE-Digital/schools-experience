@@ -23,9 +23,9 @@
             <h3 class="govuk-heading-m">Primary school dates</h3>
 
             <%= f.radio_button_fieldset :date_and_subject_ids,
-              choices: format_primary_date_options(@subject_and_date_information.primary_placement_dates),
-              value_method: :first,
-              text_method: :last -%>
+              choices: @subject_and_date_information.primary_placement_dates,
+              value_method: :id,
+              text_method: :name_with_duration -%>
           </section>
         <%- end -%>
 
@@ -37,8 +37,7 @@
 
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
-                <span><%= date.to_formatted_s(:govuk) %></span>
-                <%= placement_date_experience_type_tag secondary_placement_dates.first.virtual %>
+                <%= date.to_formatted_s(:govuk) %>
               </dt>
 
               <dd class="govuk-summary-list__value date-selector date-selector-secondary">

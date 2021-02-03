@@ -61,10 +61,9 @@ module Schools
       :dbs_requirement,
       class_name: 'Schools::OnBoarding::DbsRequirement',
       mapping: [
-        %w[dbs_requirement_dbs_policy_conditions dbs_policy_conditions],
+        %w[dbs_requirement_requires_check requires_check],
         %w[dbs_requirement_dbs_policy_details dbs_policy_details],
-        %w[dbs_requirement_no_dbs_policy_details no_dbs_policy_details],
-        %w[dbs_requirement_dbs_policy_details_inschool dbs_policy_details_inschool]
+        %w[dbs_requirement_no_dbs_policy_details no_dbs_policy_details]
       ],
       constructor: :compose
 
