@@ -14,4 +14,12 @@
       display: none;
     }
   }
+
+  fieldset label, .govuk-summary-list__row dt {
+    span {
+      margin-right: 0.4em ;
+    }
+  }
+
+
 }

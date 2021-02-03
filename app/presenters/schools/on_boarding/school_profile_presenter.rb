@@ -58,18 +58,26 @@ module Schools
       end
 
       def dbs_check
-        unless [true, false].include? @school_profile.dbs_requirement.requires_check
+        unless @school_profile.dbs_requirement.dbs_policy_conditions.in? \
+          Bookings::Profile::DBS_POLICY_CONDITIONS
+
           raise "DBS requirement not set #{@school_profile.inspect}"
         end
 
-        if @school_profile.dbs_requirement.requires_check
+        case @school_profile.dbs_requirement.dbs_policy_conditions
+        when 'required'
           [
             'Yes',
             @school_profile.dbs_requirement.dbs_policy_details
           ].compact.join(' - ')
-        else
+        when 'inschool'
           [
-            'No - Candidates will be accompanied at all times',
+            'Yes - when in school',
+            @school_profile.dbs_requirement.dbs_policy_details_inschool
+          ].compact.join(' - ')
+        when 'notrequired'
+          [
+            'No - Candidates will be accompanied at all times when in school',
             @school_profile.dbs_requirement.no_dbs_policy_details.presence
           ].compact.join(' - ')
         end

@@ -42,6 +42,8 @@ module Bookings
       if: -> { date.present? },
       on: :create
 
+    validates :virtual, inclusion: [true, false]
+
     # users manually selecting this only happens when schools are both primary
     # and secondary, otherwise it's automatically set in the controller
     validates :supports_subjects,
@@ -94,6 +96,10 @@ module Bookings
 
     def published?
       published_at.present?
+    end
+
+    def inschool?
+      !virtual?
     end
   end
 end

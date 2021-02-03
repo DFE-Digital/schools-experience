@@ -166,6 +166,14 @@ describe Bookings::School, type: :model do
 
     specify do
       is_expected.to(
+        have_many(:available_placement_dates)
+          .with_foreign_key(:bookings_school_id)
+          .class_name('Bookings::PlacementDate')
+      )
+    end
+
+    specify do
+      is_expected.to(
         have_many(:bookings)
           .with_foreign_key(:bookings_school_id)
           .class_name('Bookings::Booking')
@@ -339,6 +347,7 @@ describe Bookings::School, type: :model do
 
       specify { expect(described_class.new).to have_db_column(:availability_info).of_type(:text) }
       specify { expect(described_class.new).to have_db_column(:availability_preference_fixed).of_type(:boolean).with_options(default: false) }
+      specify { expect(described_class.new).to have_db_column(:experience_type).of_type(:string) }
 
       let!(:flexible_with_description) { create(:bookings_school) }
       let!(:flexible_without_description) { create(:bookings_school, availability_info: nil) }
@@ -597,6 +606,126 @@ describe Bookings::School, type: :model do
           end
 
           specify { expect(subject).to be_has_primary_and_secondary_phases }
+        end
+      end
+    end
+
+    describe "#has_inschool_placements?" do
+      context "with flexible dates" do
+        subject { create :bookings_school, experience_type: etype }
+
+        context "with experience_type not set" do
+          let(:etype) { nil }
+
+          it { is_expected.to be_has_inschool_placements }
+        end
+
+        context "with experience_type set to both" do
+          let(:etype) { "both" }
+
+          it { is_expected.to be_has_inschool_placements }
+        end
+
+        context "with experience_type set to virtual" do
+          let(:etype) { "virtual" }
+
+          it { is_expected.not_to be_has_inschool_placements }
+        end
+
+        context "with experience_type set to inschool" do
+          let(:etype) { "inschool" }
+
+          it { is_expected.to be_has_inschool_placements }
+        end
+      end
+
+      context "with fixed dates" do
+        context "when virtual placements" do
+          subject { create(:bookings_placement_date, virtual: true).bookings_school }
+
+          it { is_expected.not_to be_has_inschool_placements }
+        end
+
+        context "with inschool placements" do
+          subject { create(:bookings_placement_date, virtual: false).bookings_school }
+
+          it { is_expected.to be_has_inschool_placements }
+        end
+
+        context "with both placement types" do
+          subject do
+            create(:bookings_placement_date, virtual: true).bookings_school.tap do |school|
+              create :bookings_placement_date, virtual: false, bookings_school: school
+            end
+          end
+
+          it { is_expected.to be_has_inschool_placements }
+        end
+
+        context "with no placements" do
+          subject { create :bookings_school, :with_fixed_availability_preference }
+
+          it { is_expected.not_to be_has_inschool_placements }
+        end
+      end
+    end
+
+    describe "#has_virtual_placements?" do
+      context "with flexible dates" do
+        subject { create :bookings_school, experience_type: etype }
+
+        context "with experience_type not set" do
+          let(:etype) { nil }
+
+          it { is_expected.to be_has_virtual_placements }
+        end
+
+        context "with experience_type set to both" do
+          let(:etype) { "both" }
+
+          it { is_expected.to be_has_virtual_placements }
+        end
+
+        context "with experience_type set to virtual" do
+          let(:etype) { "virtual" }
+
+          it { is_expected.to be_has_virtual_placements }
+        end
+
+        context "with experience_type set to inschool" do
+          let(:etype) { "inschool" }
+
+          it { is_expected.not_to be_has_virtual_placements }
+        end
+      end
+
+      context "with fixed dates" do
+        context "when virtual placements" do
+          subject { create(:bookings_placement_date, virtual: true).bookings_school }
+
+          it { is_expected.to be_has_virtual_placements }
+        end
+
+        context "with inschool placements" do
+          subject { create(:bookings_placement_date, virtual: false).bookings_school }
+
+          it { is_expected.not_to be_has_virtual_placements }
+        end
+
+        context "with both placement types" do
+          subject do
+            create(:bookings_placement_date, virtual: true).bookings_school.tap do |school|
+              create :bookings_placement_date, virtual: false, bookings_school: school
+            end
+          end
+
+          it { is_expected.to be_has_virtual_placements }
+        end
+
+        context "with no placements" do
+          subject { create :bookings_school, :with_fixed_availability_preference }
+
+          it { is_expected.not_to be_has_virtual_placements }
         end
       end
     end
