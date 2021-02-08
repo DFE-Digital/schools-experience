@@ -6,7 +6,7 @@
     "@stimulus/polyfills": "^2.0.0",
     "core-js": "^3.8.3",
     "custom-event-polyfill": "^1.0.7",
-    "govuk-frontend": "^3.10.2",
+    "govuk-frontend": "^3.11.0",
     "js-cookie": "^2.2.1",
     "stimulus": "^2.0"
   },
