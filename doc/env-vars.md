@@ -3,17 +3,17 @@
 The school experience application supports various environment variables
 to control different aspects of the application.
 
-These can be configured as part of your shell or more easily by editing the 
-`.env` file. Optionally `.env.development / `.env.test` files can be created for
-environment specific variables. 
+These can be configured as part of your shell or more easily by editing the
+`.env` file. Optionally `.env.development` / `.env.test` files can be created for
+environment specific variables.
 
-Full documentation is at 
+Full documentation is at
 [https://github.com/bkeepers/dotenv/blob/master/README.md](https://github.com/bkeepers/dotenv/blob/master/README.md)
 
 ## HTTP Basic Auth access control
 
 If its required to password protect then entire application then you can set two
-environment variables when booting the app. This can either be part of the 
+environment variables when booting the app. This can either be part of the
 deployment configuration.
 
 `SECURE_USERNAME` username for http auth
@@ -22,7 +22,7 @@ deployment configuration.
 
 ## Exception notification
 
-If required Exceptions Notifications can be sent to a Slack channel. This is 
+If required Exceptions Notifications can be sent to a Slack channel. This is
 enabled and configured via environment variables.
 
 `SLACK_WEBHOOK` Webhook to use to post to Slack
@@ -87,7 +87,7 @@ enabled and configured via environment variables.
 
 `NOTIFY_API_KEY` - API key used to send emails via Notify
 
-`BING_MAPS_KEY` - API key used to query bing maps
+`GOOGLE_MAPS_KEY` - API key used to query Google Maps
 
 `GA_TRACKING_ID` - Google Analytics API key
 
@@ -98,10 +98,6 @@ enabled and configured via environment variables.
 `DFE_SIGNIN_DEACTIVATED` - Disable sign-in, useful if their is a Sign-in outage - 1 = on, blank = off
 
 `DEACTIVATE_CANDIDATES` - Deactivates candidate applications, including searching
-
-`CANDIDATE_NOTIFICATION` - Shows a notification below to the 'Start now >' button on the home page. Variable content is formatted as paragraphs, \n\n = new paragraph, blank = off
-
-`CANDIDATE_URN_WHITELIST` - Restrict candidate searches to a white list of schools, comma separated list of URNs, blank = off, -1 = on but no schools will match
 
 `FEATURE_FLAGS` - Comma separated list of features to enable, appended to features listed in environment file
 
@@ -136,8 +132,4 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 
 ## Deployment tools
 
-`DEPLOYMENT_ID` - String to be available at `/deployment.txt` - used to check the deployed version
-
-`DEPLOYMENT_USERNAME` - username for `deployment.txt` endpoint, defaults to a randomly generated value on start up
-DEPLOYMENT_PASSWORD - password for `deployment.txt` endpoint, defaults to a randomly generated value on start up
-
+`DEPLOYMENT_ID` - String to be available at `/healthcheck` - used to check the deployed version

@@ -93,10 +93,7 @@ module Schools
 
     def check_state(session_state, params_state)
       if params_state != session_state
-        message = "params state (%<params_state>s) doesn't match session state %<session_state>s" % {
-          params_state: params_state,
-          session_state: session_state
-        }
+        message = sprintf("params state (%<params_state>s) doesn't match session state %<session_state>s", params_state: params_state, session_state: session_state)
 
         Rails.logger.error(message)
 

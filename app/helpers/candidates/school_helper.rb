@@ -1,4 +1,6 @@
 module Candidates::SchoolHelper
+  include Schools::PlacementDatesHelper
+
   def format_school_address(school, separator = ", ")
     safe_join([
       school.address_1.presence,
@@ -29,13 +31,41 @@ module Candidates::SchoolHelper
   end
 
   def format_school_phases(school)
-    content_tag(:ul, class: 'govuk-list') do
+    tag.ul(class: 'govuk-list') do
       safe_join(school.phases.map { |p| tag.li(p.name) })
+    end
+  end
+
+  def format_school_placement_locations(school)
+    if !school.has_virtual_placements?
+      placement_date_inschool_tag
+    elsif school.has_inschool_placements?
+      safe_join [
+        "Both",
+        placement_date_virtual_tag,
+        "and",
+        placement_date_inschool_tag
+      ], " "
+    else
+      placement_date_virtual_tag
     end
   end
 
   def format_school_availability(availability_info)
     availability_info.present? ? safe_format(availability_info) : 'No information supplied'
+  end
+
+  def format_school_experience_type(type)
+    case type
+    when 'virtual' then placement_date_virtual_tag
+    when 'inschool' then placement_date_virtual_tag
+    else
+      safe_join [
+        placement_date_virtual_tag,
+        " and ",
+        placement_date_inschool_tag
+      ]
+    end
   end
 
   def format_phases(school)
@@ -61,7 +91,7 @@ module Candidates::SchoolHelper
       school.coordinates.latitude,
       school.coordinates.longitude,
       zoom: zoom,
-      mapsize: "628,420",
+      mapsize: [628, 420],
       title: school.name,
       description: format_school_address(school, tag(:br)),
       described_by: described_by
@@ -85,7 +115,7 @@ module Candidates::SchoolHelper
 
     t(
       'helpers.candidates.school_search.phases_filter_html',
-      phase_names: to_sentence(search.phase_names.map { |name| content_tag(:strong, name) })
+      phase_names: to_sentence(search.phase_names.map { |name| tag.strong(name) })
     )
   end
 
@@ -94,14 +124,14 @@ module Candidates::SchoolHelper
 
     t(
       'helpers.candidates.school_search.subjects_filter_html',
-      subject_names: to_sentence(search.subject_names.map { |name| content_tag(:strong, name) })
+      subject_names: to_sentence(search.subject_names.map { |name| tag.strong(name) })
     )
   end
 
   def cleanup_school_url(url)
     if url.blank?
       '#'
-    elsif url.match? %{:}
+    elsif url.match? %(:)
       url
     elsif url.match? %r{.*@.*}
       "mailto:#{url}"
@@ -117,9 +147,9 @@ module Candidates::SchoolHelper
   def dlist_item(key, attrs = {}, &block)
     classes = ['govuk-summary-list__row', attrs[:class]].flatten.compact.join(' ')
 
-    content_tag :div, attrs.merge(class: classes) do
-      content_tag(:dt, key, class: 'govuk-summary-list__key') +
-        content_tag(:dd, class: 'govuk-summary-list__value', &block)
+    tag.div attrs.merge(class: classes) do
+      tag.dt(key, class: 'govuk-summary-list__key') +
+        tag.dd(class: 'govuk-summary-list__value', &block)
     end
   end
 
@@ -127,7 +157,7 @@ module Candidates::SchoolHelper
     if block_given?
       msg = yield
     elsif msg
-      msg = content_tag(:em, msg)
+      msg = tag.em(msg)
     end
 
     content.presence || msg
@@ -148,7 +178,7 @@ module Candidates::SchoolHelper
 
     return nil if items.blank?
 
-    content_tag('ul', class: 'govuk-list govuk-list--bullet') do
+    tag.ul(class: 'govuk-list govuk-list--bullet') do
       safe_join(items.map { |req| tag.li(req) })
     end
   end

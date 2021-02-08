@@ -1,5 +1,5 @@
 class Schools::PlacementDatesController < Schools::BaseController
-  before_action :set_placement_date, only: %w(edit update)
+  before_action :set_placement_date, only: %w[edit update]
 
   def index
     @placement_dates = current_school
@@ -25,7 +25,7 @@ class Schools::PlacementDatesController < Schools::BaseController
     # it here based on their available phases
 
     if @placement_date.valid?
-      unless new_placement_date_params.has_key?(:supports_subjects)
+      unless new_placement_date_params.key?(:supports_subjects)
         @placement_date.assign_attributes(supports_subjects: school_supports_subjects?)
       end
 
@@ -68,7 +68,7 @@ private
   end
 
   def new_placement_date_params
-    params.require(:bookings_placement_date).permit(:date, :duration, :active, :supports_subjects)
+    params.require(:bookings_placement_date).permit(:date, :duration, :active, :virtual, :supports_subjects)
   end
 
   def edit_placement_date_params

@@ -1,5 +1,5 @@
 Given "there is a school called {string}" do |name|
-  @school = FactoryBot.create(:bookings_school, :full_address, name: name, urn: 123456)
+  @school = FactoryBot.create(:bookings_school, :full_address, name: name, urn: 123_456)
   expect(@school).to be_persisted
 end
 
@@ -44,6 +44,6 @@ Given("my/the school is a {string} school") do |phase|
     @school.phases << FactoryBot.create(:bookings_phase, :primary)
     @school.phases << FactoryBot.create(:bookings_phase, :secondary)
   else
-    fail "unsupported phase #{phase}"
+    raise "unsupported phase #{phase}"
   end
 end

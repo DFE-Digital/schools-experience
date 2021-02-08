@@ -42,6 +42,8 @@ module Bookings
       if: -> { date.present? },
       on: :create
 
+    validates :virtual, inclusion: [true, false]
+
     # users manually selecting this only happens when schools are both primary
     # and secondary, otherwise it's automatically set in the controller
     validates :supports_subjects,
@@ -50,13 +52,13 @@ module Bookings
 
     with_options if: :published? do
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
-      validates :subjects, presence: true, if: %i(subject_specific? published?)
+      validates :subjects, presence: true, if: %i[subject_specific? published?]
       validates :subjects, absence: true, unless: :subject_specific?
     end
 
-    scope :bookable_date, -> do
+    scope :bookable_date, lambda {
       where arel_table[:date].gteq Bookings::Booking::MIN_BOOKING_DELAY.from_now.to_date
-    end
+    }
 
     scope :in_date_order, -> { order(date: 'asc') }
     scope :active, -> { where(active: true) }
@@ -77,11 +79,7 @@ module Bookings
     scope :secondary, -> { available.supporting_subjects.published }
 
     def to_s
-      "%<date>s (%<duration>d %<unit>s)" % {
-        date: date.to_formatted_s(:govuk),
-        duration: duration,
-        unit: "day".pluralize(duration)
-      }
+      sprintf("%<date>s (%<duration>d %<unit>s)", date: date.to_formatted_s(:govuk), duration: duration, unit: "day".pluralize(duration))
     end
 
     def bookable?
@@ -98,6 +96,10 @@ module Bookings
 
     def published?
       published_at.present?
+    end
+
+    def inschool?
+      !virtual?
     end
   end
 end

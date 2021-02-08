@@ -7,7 +7,7 @@ describe 'Conversions' do
         {
           1 => 1609,
           5 => 8046,
-          10 => 16093,
+          10 => 16_093,
         }.each do |miles, metres|
           expect(subject.convert(miles)).to be_within(1).of(metres)
         end

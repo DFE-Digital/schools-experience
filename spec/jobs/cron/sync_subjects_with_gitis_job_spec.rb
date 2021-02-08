@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe Cron::SyncSubjectsWithGitisJob, type: :job do
-#  specify 'should have a schedule of daily at 03:30' do
-#    expect(described_class.cron_expression).to eql('30 3 * * *')
-#  end
+  #  specify 'should have a schedule of daily at 03:30' do
+  #    expect(described_class.cron_expression).to eql('30 3 * * *')
+  #  end
 
   describe '#perform' do
     before do

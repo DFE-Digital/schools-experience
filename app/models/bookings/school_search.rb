@@ -5,8 +5,8 @@ class Bookings::SchoolSearch < ApplicationRecord
   validates :location, length: { minimum: 3 }, allow_nil: true
 
   AVAILABLE_ORDERS = [
-    %w{distance Distance},
-    %w{name Name}
+    %w[distance Distance],
+    %w[name Name]
   ].freeze
 
   REGION = 'England'.freeze
@@ -21,7 +21,7 @@ class Bookings::SchoolSearch < ApplicationRecord
     def whitelisted_urns
       return [] if ENV['CANDIDATE_URN_WHITELIST'].blank?
 
-      ENV['CANDIDATE_URN_WHITELIST'].to_s.strip.split(%r([\s,]+)).map(&:to_i)
+      ENV['CANDIDATE_URN_WHITELIST'].to_s.strip.split(%r{[\s,]+}).map(&:to_i)
     end
 
     def whitelisted_urns?
@@ -43,9 +43,9 @@ class Bookings::SchoolSearch < ApplicationRecord
 
   def results
     base_query
-      .includes(%i{phases})
+      .includes(%i[phases])
       .reorder(order_by(requested_order))
-      .page(self.page)
+      .page(page)
       .per(PER_PAGE)
   end
 
@@ -72,11 +72,11 @@ class Bookings::SchoolSearch < ApplicationRecord
   end
 
   def radius=(dist)
-    if whitelisted_urns?
-      write_attribute(:radius, 1000) # include all whitelisted schools but still order by distance
-    else
-      write_attribute(:radius, dist)
-    end
+    self[:radius] = if whitelisted_urns?
+                      1000 # include all whitelisted schools but still order by distance
+                    else
+                      dist
+                    end
   end
 
 private
@@ -98,6 +98,7 @@ private
       .enabled
       .with_availability
       .distinct
+      .includes([:available_placement_dates])
   end
 
   def whitelisted_base_query
@@ -119,15 +120,15 @@ private
   def extract_coords(coords)
     coords = coords.symbolize_keys
 
-    if coords.has_key?(:latitude) && coords.has_key?(:longitude)
+    if coords.key?(:latitude) && coords.key?(:longitude)
       Bookings::School::GEOFACTORY.point(
         coords[:longitude],
         coords[:latitude]
       )
-    elsif coords.has_key?(:lat)
-      if coords.has_key?(:lng)
+    elsif coords.key?(:lat)
+      if coords.key?(:lng)
         Bookings::School::GEOFACTORY.point(coords[:lng], coords[:lat])
-      elsif coords.has_key?(:lon)
+      elsif coords.key?(:lon)
         Bookings::School::GEOFACTORY.point(coords[:lon], coords[:lat])
       end
     end
@@ -144,10 +145,14 @@ private
       return
     end
 
-    fail InvalidGeocoderResultError unless valid_geocoder_result?(result)
+    raise InvalidGeocoderResultError unless valid_geocoder_result?(result)
 
-    @location_name = result.name
-    extract_coords(latitude: result.latitude, longitude: result.longitude)
+    # this better work
+    @location_name = result.try(:name) || result.address_components.first.fetch('long_name', location)
+    extract_coords(
+      latitude: result.latitude,
+      longitude: result.longitude
+    )
   end
 
   def empty_geocoder_result?(result)

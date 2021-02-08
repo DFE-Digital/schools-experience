@@ -184,8 +184,8 @@ RSpec.describe "The GITIS CRM Api" do
 
     resp = crm_post(
       '/dfe_candidateprivacypolicies',
-      'dfe_consentreceivedby' => 222750001,
-      'dfe_meanofconsent' => 222750001,
+      'dfe_consentreceivedby' => 222_750_001,
+      'dfe_meanofconsent' => 222_750_001,
       'dfe_name' => "Online consent as part of school experience registration",
       'dfe_timeofconsent' => Time.now.utc.iso8601,
       'dfe_Candidate@odata.bind' => "contacts(#{contact_id})",

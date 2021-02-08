@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationAsPlacementRequest do
-  let(:urn) { 11048 }
+  let(:urn) { 11_048 }
   subject { described_class.new session }
 
   PII = {
@@ -14,7 +14,6 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
     "postcode" => "TE57 1NG",
     "phone" => "01234567890"
   }.freeze
-
 
   context '#attributes' do
     context 'when flexible dates' do

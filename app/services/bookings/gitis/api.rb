@@ -5,7 +5,7 @@ module Bookings::Gitis
     RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
     RETRY_OPTIONS = {
       max: 2,
-      methods: %i{get},
+      methods: %i[get],
       exceptions: (
         ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS + RETRY_EXCEPTIONS
       ).freeze
@@ -32,7 +32,7 @@ module Bookings::Gitis
 
       parse_response response
     rescue Faraday::ConnectionFailed
-      raise ConnectionFailed.new(url)
+      raise ConnectionFailed, url
     end
 
     def post(url, params, headers = {})
@@ -111,7 +111,7 @@ module Bookings::Gitis
     # don't allow absolute paths since they don't combine with the endpoint
     def validate_url!(url)
       if url.to_s.starts_with? '/'
-        fail UnsupportedAbsoluteUrlError
+        raise UnsupportedAbsoluteUrlError
       end
 
       true
@@ -130,11 +130,11 @@ module Bookings::Gitis
       when 204
         parse_entity_id(resp.headers['odata-entityid']) || true
       when 401
-        raise AccessDeniedError.new(resp)
+        raise AccessDeniedError, resp
       when 404
-        raise UnknownUrlError.new(resp)
+        raise UnknownUrlError, resp
       else
-        raise BadResponseError.new(resp)
+        raise BadResponseError, resp
       end
     end
 

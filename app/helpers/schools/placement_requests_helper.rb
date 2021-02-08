@@ -1,5 +1,5 @@
 module Schools::PlacementRequestsHelper
-  HIDDEN_STATUSES = %w(Viewed Booked).freeze
+  HIDDEN_STATUSES = %w[Viewed Booked].freeze
 
   def placement_request_status(placement_request)
     status = placement_request.status
@@ -22,7 +22,7 @@ module Schools::PlacementRequestsHelper
     elsif cancellation.cancelled_by_school?
       'Rejection'
     else
-      fail 'cancellation not sent'
+      raise 'cancellation not sent'
     end
   end
 

@@ -57,9 +57,9 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       context 'when invalid' do
         let :attributes do
           {
-             max_bookings_count: nil,
-             has_limited_availability: true,
-             available_for_all_subjects: true
+            max_bookings_count: nil,
+            has_limited_availability: true,
+            available_for_all_subjects: true
           }
         end
 
@@ -156,9 +156,9 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       context 'when invalid' do
         let :attributes do
           {
-             max_bookings_count: nil,
-             has_limited_availability: true,
-             available_for_all_subjects: true
+            max_bookings_count: nil,
+            has_limited_availability: true,
+            available_for_all_subjects: true
           }
         end
 

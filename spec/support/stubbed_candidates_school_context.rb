@@ -1,6 +1,6 @@
 shared_context 'Stubbed candidates school' do |fixed|
   let :school_urn do
-    11048
+    11_048
   end
 
   let :school do

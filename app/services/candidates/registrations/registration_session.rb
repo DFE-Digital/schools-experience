@@ -41,10 +41,8 @@ module Candidates
         @data['status'] == COMPLETED_STATUS
       end
 
-      # TODO add spec
-      def email
-        personal_information.email
-      end
+      # TODO: add spec
+      delegate :email, to: :personal_information
 
       def urn
         @data.fetch 'urn'
@@ -54,9 +52,7 @@ module Candidates
         @school ||= Candidates::School.find urn if urn.present?
       end
 
-      def school_name
-        school.name
-      end
+      delegate :name, to: :school, prefix: true
 
       def background_check
         fetch BackgroundCheck
@@ -66,12 +62,12 @@ module Candidates
         fetch_attributes BackgroundCheck
       end
 
-      # TODO SE-1877 remove this
+      # TODO: SE-1877 remove this
       def legacy_session?
         fetch_attributes(PlacementPreference).key? 'bookings_placement_date_id'
       end
 
-      # TODO SE-1877 remove this
+      # TODO: SE-1877 remove this
       def subject_and_date_information
         if legacy_session?
           attributes = fetch_attributes PlacementPreference
@@ -86,7 +82,7 @@ module Candidates
         fetch_attributes SubjectAndDateInformation
       end
 
-      # TODO add specs for these
+      # TODO: add specs for these
       def contact_information
         fetch ContactInformation
       end
@@ -128,7 +124,7 @@ module Candidates
       end
 
       def fetch(klass)
-        klass.new(@data.fetch(klass.model_name.param_key)).tap { |model| model.urn = self.urn }
+        klass.new(@data.fetch(klass.model_name.param_key)).tap { |model| model.urn = urn }
       rescue KeyError => e
         raise StepNotFound, e.key
       end
@@ -147,7 +143,7 @@ module Candidates
 
       def ==(other)
         # Ensure dates are compared correctly
-        other.to_json == self.to_json
+        other.to_json == to_json
       end
 
     private

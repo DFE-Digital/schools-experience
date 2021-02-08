@@ -39,7 +39,7 @@ module Candidates
     private
 
       def set_school
-        # FIXME modify to use current_registration.school
+        # FIXME: modify to use current_registration.school
         @school = Candidates::School.find(params[:school_id])
       end
 

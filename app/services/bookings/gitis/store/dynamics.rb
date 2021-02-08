@@ -39,7 +39,7 @@ module Bookings
         end
 
         def write(entity)
-          fail ArgumentError, "entity must include Entity" unless entity.class < Entity
+          raise ArgumentError, "entity must include Entity" unless entity.class < Entity
           return false unless entity.valid?
 
           if entity.id.blank?
@@ -53,7 +53,7 @@ module Bookings
         end
 
         def write!(entity)
-          write(entity) || fail(Bookings::Gitis::InvalidEntity.new(entity))
+          write(entity) || raise(Bookings::Gitis::InvalidEntity, entity)
         end
 
       private
@@ -88,7 +88,7 @@ module Bookings
         end
 
         def validate_id!(uuid)
-          Entity.valid_id?(uuid) || fail(ArgumentError, "Invalid Entity Id")
+          Entity.valid_id?(uuid) || raise(ArgumentError, "Invalid Entity Id")
         end
 
         def parse_find_options(includes: nil)

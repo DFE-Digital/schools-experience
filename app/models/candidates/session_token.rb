@@ -9,14 +9,14 @@ class Candidates::SessionToken < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :unconfirmed, -> { where(confirmed_at: nil) }
 
-  scope :unexpired, -> do
-    where(arel_table[:expired_at].gt(Time.zone.now)).
-      or(where(expired_at: nil))
-  end
+  scope :unexpired, lambda {
+    where(arel_table[:expired_at].gt(Time.zone.now))
+      .or(where(expired_at: nil))
+  }
 
-  scope :valid, -> do
+  scope :valid, lambda {
     unconfirmed.unexpired.where(arel_table[:created_at].gt(AUTO_EXPIRE.ago))
-  end
+  }
 
   class << self
     def expire_all!
@@ -40,9 +40,9 @@ class Candidates::SessionToken < ApplicationRecord
   end
 
   def invalidate_other_tokens!
-    candidate.session_tokens.
-      unconfirmed.unexpired.
-      update_all(expired_at: Time.zone.now)
+    candidate.session_tokens
+      .unconfirmed.unexpired
+      .update_all(expired_at: Time.zone.now)
   end
 
   def to_param

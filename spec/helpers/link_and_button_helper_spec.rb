@@ -34,7 +34,7 @@ describe LinkAndButtonHelper do
     end
 
     context 'extra classes' do
-      let(:extra_classes) { %w(pink stripy) }
+      let(:extra_classes) { %w[pink stripy] }
       subject { helper.send(method, link_text, path, class: extra_classes) }
 
       specify 'should create a button link with extra provided classes' do

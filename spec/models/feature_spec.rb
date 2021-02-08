@@ -128,7 +128,7 @@ describe Feature do
     before do
       allow(ENV).to receive(:[]).with('FEATURE_FLAGS') { feature_flags }
       allow(Rails.application.config.x).to \
-        receive(:features) { %i(config1 config2) }
+        receive(:features) { %i[config1 config2] }
 
       allow_any_instance_of(described_class).to receive(:use_env_var?) { true }
     end

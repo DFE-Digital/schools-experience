@@ -1,10 +1,12 @@
+require "active_support/core_ext/integer/time"
+
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
   config.webpacker.check_yarn_integrity = true
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # In the development environment your application's code is reloaded on
-  # every request. This slows down response time but is perfect for development
+  # In the development environment your application's code is reloaded any time
+  # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
@@ -30,8 +32,19 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  # Don't care if the mailer can't send.
+  # config.action_mailer.raise_delivery_errors = false
+
+  # config.action_mailer.perform_caching = false
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
+
+  # Raise exceptions for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
@@ -48,18 +61,25 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # Raises error for missing translations.
-  # config.action_view.raise_on_missing_translations = true
+  # config.i18n.raise_on_missing_translations = true
+
+  # Annotate rendered view with file names.
+  # config.action_view.annotate_rendered_view_with_filenames = true
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # Uncomment if you wish to allow Action Cable access from any origin.
+  # config.action_cable.disable_request_forgery_protection = true
+
   config.sass.inline_source_maps = true
 
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
-  config.cache_store = :redis_cache_store, {
-    url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
-  }
+  config.cache_store = :redis_cache_store,
+                       {
+                         url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL']
+                       }
 
   config.session_store :cache_store,
     key: 'schoolex-session',
@@ -69,16 +89,16 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.raise = true
     Bullet.rails_logger = true
+    Bullet.unused_eager_loading_enable = false
   end
 
-  config.x.phase = Integer(ENV.fetch('PHASE') { 10000 })
-  config.x.features = %i(
+  config.x.phase = Integer(ENV.fetch('PHASE') { 10_000 })
+  config.x.features = %i[
     subject_specific_dates
     capped_bookings
-  )
+  ]
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
-  config.x.candidates.alert_notification = ENV['CANDIDATE_NOTIFICATION'].presence
-  config.x.bing_maps_key = ENV['BING_MAPS_KEY'].presence || Rails.application.credentials.dig(:bing_maps_key)
+  config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials.dig(:google_maps_key)
 
   # dfe signin redirects back to https, so force it
   config.force_ssl = true
@@ -91,15 +111,15 @@ Rails.application.configure do
   config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
 
-  truthy_strings = %w(true 1 yes)
+  truthy_strings = %w[true 1 yes]
 
   config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_school_change_enabled = ENV['DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_request_organisation_url = ENV['DFE_SIGNIN_REQUEST_ORGANISATION_URL'].presence
 
-  if ENV['NOTIFY_CLIENT'] && ENV['NOTIFY_CLIENT'] != ''
-    Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT'].constantize
+  if ENV['NOTIFY_CLIENT'].present?
+    Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT']
   end
 
   config.x.gitis.fake_crm = truthy_strings.include?(String(ENV.fetch('FAKE_CRM') { true }))
@@ -116,5 +136,5 @@ Rails.application.configure do
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 
-  config.x.maintenance_mode = %w{1 yes true}.include?(ENV['MAINTENANCE_MODE'].to_s)
+  config.x.maintenance_mode = %w[1 yes true].include?(ENV['MAINTENANCE_MODE'].to_s)
 end

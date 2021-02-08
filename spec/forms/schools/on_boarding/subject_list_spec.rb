@@ -11,7 +11,7 @@ describe Schools::OnBoarding::SubjectList, type: :model do
     end
 
     it 'converts strings to integers' do
-      expect(described_class.new(subject_ids: %w(2)).subject_ids).to eq [2]
+      expect(described_class.new(subject_ids: %w[2]).subject_ids).to eq [2]
     end
   end
 

@@ -22,7 +22,7 @@ describe Candidates::Registrations::RegistrationStore do
     end
 
     it 'stores the key with the correct ttl' do
-      expect(redis.ttl("test:registrations:sekret")).to eq 86400
+      expect(redis.ttl("test:registrations:sekret")).to eq 86_400
     end
   end
 

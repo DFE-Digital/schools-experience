@@ -1,4 +1,4 @@
-dj_enabled = %w(yes true 1).include?(ENV['DELAYED_JOB_ADMIN_ENABLED'])
+dj_enabled = %w[yes true 1].include?(ENV['DELAYED_JOB_ADMIN_ENABLED'])
 dj_username = ENV['DELAYED_JOB_ADMIN_USERNAME']
 dj_password = ENV['DELAYED_JOB_ADMIN_PASSWORD']
 

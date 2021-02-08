@@ -31,7 +31,7 @@ describe Bookings::Data::SchoolUpdater do
         address_2: "North Kensington",
         town: "London",
         postcode: "W10 5EF",
-        record: create(:bookings_school, urn: 100492)
+        record: create(:bookings_school, urn: 100_492)
       )
     end
     let(:school_100459) do
@@ -41,7 +41,7 @@ describe Bookings::Data::SchoolUpdater do
         addresS_2: "Highgate",
         town: "London",
         postcode: "N6 5LY",
-        record: create(:bookings_school, urn: 100459)
+        record: create(:bookings_school, urn: 100_459)
       )
     end
 
@@ -52,14 +52,14 @@ describe Bookings::Data::SchoolUpdater do
         addresS_2: "Notting Hill",
         town: "London",
         postcode: "W11 4BJ",
-        record: create(:bookings_school, urn: 100494)
+        record: create(:bookings_school, urn: 100_494)
       )
     end
     let!(:schools) { [school_100492, school_100459, school_100494] }
 
     # missing school not actuall tested, just ensure update doesn't crash
     # because it's missing
-    let!(:missing_school_urn) { 100171 }
+    let!(:missing_school_urn) { 100_171 }
 
     context 'performing updates correctly' do
       before { described_class.new(edubase_data).update }

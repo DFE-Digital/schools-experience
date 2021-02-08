@@ -11,11 +11,11 @@ module Bookings
 
     has_secure_token
 
-    validates_presence_of :candidate, unless: :pre_phase3_record?
+    validates :candidate, presence: { unless: :pre_phase3_record? }
 
     validates :subject, presence: true,
-      if: -> { placement_date&.subject_specific? },
-      unless: :creating_placement_request_from_registration_session?
+                        if: -> { placement_date&.subject_specific? },
+                        unless: :creating_placement_request_from_registration_session?
 
     belongs_to :school,
       class_name: 'Bookings::School',
@@ -60,68 +60,68 @@ module Bookings
       inverse_of: :placement_request,
       dependent: :destroy
 
-    scope :unprocessed, -> do
+    scope :unprocessed, lambda {
       not_cancelled.merge unbooked
-    end
+    }
 
-    scope :unbooked, -> do
+    scope :unbooked, lambda {
       without_booking.or booking_not_sent
-    end
+    }
 
-    scope :booking_not_sent, -> do
+    scope :booking_not_sent, lambda {
       left_joins(:booking).where(bookings_bookings: { accepted_at: nil })
-    end
+    }
 
-    scope :without_booking, -> do
+    scope :without_booking, lambda {
       left_joins(:booking)
         .where(bookings_bookings: { bookings_placement_request_id: nil })
-    end
+    }
 
-    scope :cancelled, -> do
+    scope :cancelled, lambda {
       left_joins(:candidate_cancellation, :school_cancellation)
         .where <<~SQL
           bookings_placement_request_cancellations.sent_at IS NOT NULL
           OR school_cancellations_bookings_placement_requests.sent_at IS NOT NULL
         SQL
-    end
+    }
 
-    scope :not_cancelled, -> do
+    scope :not_cancelled, lambda {
       left_joins(:candidate_cancellation, :school_cancellation)
         .where(bookings_placement_request_cancellations: { sent_at: nil })
         .where(school_cancellations_bookings_placement_requests: { sent_at: nil })
-    end
+    }
 
-    scope :requiring_attention, -> do
+    scope :requiring_attention, lambda {
       without_booking
         .left_joins(:candidate_cancellation)
         .merge(Cancellation.unviewed)
         .merge(Cancellation.sent.or(Cancellation.where(id: nil)))
         .left_joins(:school_cancellation)
         .where(school_cancellations_bookings_placement_requests: { id: nil })
-    end
+    }
 
-    scope :withdrawn, -> do
+    scope :withdrawn, lambda {
       without_booking
         .joins(:candidate_cancellation)
         .merge(Cancellation.sent.order(sent_at: :desc))
-    end
+    }
 
-    scope :withdrawn_but_unviewed, -> do
+    scope :withdrawn_but_unviewed, lambda {
       withdrawn.merge Cancellation.unviewed
-    end
+    }
 
-    scope :rejected, -> do
+    scope :rejected, lambda {
       without_booking
         .joins(:school_cancellation)
         .merge(Cancellation.sent.order(sent_at: :desc))
-    end
+    }
 
-    default_scope { where.not(candidate_id: nil) }
+    default_scope { joins(:candidate) }
 
     delegate :gitis_contact, :gitis_contact=, to: :candidate
 
     def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
-      self.new(
+      new(
         Candidates::Registrations::RegistrationAsPlacementRequest
           .new(registration_session)
           .attributes
@@ -188,17 +188,11 @@ module Bookings
       school.notification_emails
     end
 
-    def school_name
-      school.name
-    end
+    delegate :name, to: :school, prefix: true
 
-    def school_urn
-      school.urn
-    end
+    delegate :urn, to: :school, prefix: true
 
-    def candidate_email
-      candidate.email
-    end
+    delegate :email, to: :candidate, prefix: true
 
     def candidate_name
       candidate.full_name
@@ -227,7 +221,7 @@ module Bookings
   private
 
     def completed?
-      # FIXME SE-1096 determine from booking
+      # FIXME: SE-1096 determine from booking
       false
     end
 

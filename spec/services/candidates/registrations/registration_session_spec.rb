@@ -191,8 +191,8 @@ describe Candidates::Registrations::RegistrationSession do
 
   context '#flag_as_pending_email_confirmation!' do
     context 'when registration is not complete' do
-      let(:urn) { 11048 }
-      let!(:school) { create(:bookings_school, urn: 11048) }
+      let(:urn) { 11_048 }
+      let!(:school) { create(:bookings_school, urn: 11_048) }
       subject do
         described_class.new("urn" => urn)
       end
@@ -282,7 +282,7 @@ describe Candidates::Registrations::RegistrationSession do
     end
   end
 
-  # TODO SE-1877 remove this
+  # TODO: SE-1877 remove this
   context 'with legacy session data' do
     context 'the school has fixed dates' do
       let :school do

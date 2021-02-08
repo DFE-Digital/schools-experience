@@ -14,16 +14,14 @@ module Schools
 
       bookings_params.each do |booking_id, attended|
         fetch(booking_id).tap do |booking|
-          begin
-            booking.attended = ActiveModel::Type::Boolean.new.cast(attended)
-            booking.save!(context: :attendance)
-            @updated_bookings << booking.id
-          rescue ActiveRecord::RecordInvalid => e
-            errors.add :bookings_params,
-              "Unable to set attendance for #{booking.date.to_formatted_s(:govuk)}"
+          booking.attended = ActiveModel::Type::Boolean.new.cast(attended)
+          booking.save!(context: :attendance)
+          @updated_bookings << booking.id
+        rescue ActiveRecord::RecordInvalid => e
+          errors.add :bookings_params,
+            "Unable to set attendance for #{booking.date.to_formatted_s(:govuk)}"
 
-            update_error e
-          end
+          update_error e
         end
       end
 
@@ -42,7 +40,7 @@ module Schools
   private
 
     def indexed_bookings
-      @indexed_bookings ||= self.bookings.index_by(&:id)
+      @indexed_bookings ||= bookings.index_by(&:id)
     end
 
     def fetch(id)

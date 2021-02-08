@@ -17,7 +17,7 @@ module ApplicationHelper
     title = heading_txt || capture(&block)
 
     self.page_title = title
-    content_tag(:h1, title, **options)
+    tag.h1(title, **options)
   end
 
   def breadcrumbs
@@ -27,11 +27,11 @@ module ApplicationHelper
   def breadcrumbs=(data = {})
     if data.any?
       content_for(:breadcrumbs) do
-        content_tag(:nav, class: 'govuk-breadcrumbs') do
-          content_tag(:ol, class: 'govuk-breadcrumbs__list') do
+        tag.nav(class: 'govuk-breadcrumbs') do
+          tag.ol(class: 'govuk-breadcrumbs__list') do
             safe_join(
               data.map do |text, path|
-                content_tag(:li, class: 'govuk-breadcrumbs__list-item') do
+                tag.li(class: 'govuk-breadcrumbs__list-item') do
                   if path.present?
                     link_to(text, path, class: 'govuk-breadcrumbs__list--link')
                   else
@@ -100,14 +100,14 @@ module ApplicationHelper
   end
 
   def pagination_bar(query)
-    content_tag :div, class: 'pagination-info higher' do
-      content_tag(:div, page_entries_info(query), class: 'pagination-slice') +
+    tag.div class: 'pagination-info higher' do
+      tag.div(page_entries_info(query), class: 'pagination-slice') +
         paginate(query)
     end
   end
 
   def pagination_lower(query)
-    content_tag :div, class: 'pagination-info lower' do
+    tag.div class: 'pagination-info lower' do
       paginate query
     end
   end

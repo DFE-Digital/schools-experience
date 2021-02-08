@@ -1,7 +1,9 @@
 class Bookings::School < ApplicationRecord
-  self.ignored_columns += %w(dfe_signin_organisation_uuid)
+  self.ignored_columns += %w[dfe_signin_organisation_uuid]
   include FullTextSearch
   include GeographicSearch
+
+  EXPERIENCE_TYPES = %w[virtual inschool both].freeze
 
   before_validation :nilify_availability_info
 
@@ -27,6 +29,10 @@ class Bookings::School < ApplicationRecord
   validates :availability_info,
     presence: true,
     length: { minimum: 3 },
+    on: :configuring_availability
+
+  validates :experience_type,
+    inclusion: EXPERIENCE_TYPES,
     on: :configuring_availability
 
   validates :availability_preference_fixed,
@@ -78,6 +84,11 @@ class Bookings::School < ApplicationRecord
     inverse_of: :bookings_school,
     dependent: :destroy
 
+  has_many :available_placement_dates,
+    -> { available },
+    class_name: 'Bookings::PlacementDate',
+    foreign_key: :bookings_school_id
+
   has_many :bookings,
     class_name: 'Bookings::Booking',
     foreign_key: :bookings_school_id,
@@ -98,31 +109,31 @@ class Bookings::School < ApplicationRecord
   scope :enabled, -> { where(enabled: true) }
   scope :ordered_by_name, -> { order(name: 'asc') }
 
-  scope :that_provide, ->(subject_ids) do
+  scope :that_provide, lambda { |subject_ids|
     if subject_ids.present?
       left_outer_joins(:bookings_schools_subjects)
         .where(bookings_schools_subjects: { bookings_subject_id: subject_ids })
     else
       all
     end
-  end
+  }
 
-  scope :at_phases, ->(phase_ids) do
+  scope :at_phases, lambda { |phase_ids|
     if phase_ids.present?
       left_outer_joins(:bookings_schools_phases)
         .where(bookings_schools_phases: { bookings_phase_id: phase_ids })
     else
       all
     end
-  end
+  }
 
-  scope :costing_upto, ->(limit) do
+  scope :costing_upto, lambda { |limit|
     if limit.present?
       where(arel_table[:fee].lteq(limit))
     else
       all
     end
-  end
+  }
 
   scope :flexible, -> { where(availability_preference_fixed: false) }
 
@@ -130,12 +141,11 @@ class Bookings::School < ApplicationRecord
 
   scope :fixed, -> { where(availability_preference_fixed: true) }
 
-  scope :fixed_with_available_dates, -> {
+  scope :fixed_with_available_dates, lambda {
     fixed.where(
       id: Bookings::School
         .default_scoped
-        .joins(:bookings_placement_dates)
-        .merge(Bookings::PlacementDate.available)
+        .joins(:available_placement_dates)
         .except(:select)
         .select(:id)
     )
@@ -201,6 +211,22 @@ class Bookings::School < ApplicationRecord
 
   def has_primary_and_secondary_phases?
     has_primary_phase? && has_secondary_phase?
+  end
+
+  def has_inschool_placements?
+    if availability_preference_fixed?
+      available_placement_dates.any?(&:inschool?)
+    else
+      experience_type != 'virtual'
+    end
+  end
+
+  def has_virtual_placements?
+    if availability_preference_fixed?
+      available_placement_dates.any?(&:virtual?)
+    else
+      experience_type != 'inschool'
+    end
   end
 
 private

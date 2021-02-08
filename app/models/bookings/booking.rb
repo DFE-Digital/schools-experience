@@ -38,11 +38,11 @@ module Bookings
     validates :attended, inclusion: [nil], if: -> { bookings_placement_request&.cancelled? }
     validates :attended, inclusion: [true, false], on: :attendance
 
-    validates :contact_name, presence: true, on: %i(create acceptance)
-    validates :contact_number, presence: true, on: %i(create acceptance)
-    validates :contact_number, phone: true, on: %i(create acceptance), if: -> { contact_number.present? }
-    validates :contact_email, presence: true, on: %i(create acceptance)
-    validates :contact_email, email_format: true, on: %i(create acceptance), if: -> { contact_email.present? }
+    validates :contact_name, presence: true, on: %i[create acceptance]
+    validates :contact_number, presence: true, on: %i[create acceptance]
+    validates :contact_number, phone: true, on: %i[create acceptance], if: -> { contact_number.present? }
+    validates :contact_email, presence: true, on: %i[create acceptance]
+    validates :contact_email, email_format: true, on: %i[create acceptance], if: -> { contact_email.present? }
 
     validates :candidate_instructions, presence: true, on: :acceptance_email_preview
 
@@ -79,26 +79,26 @@ module Bookings
     scope :attendance_unlogged, -> { where(attended: nil) }
     scope :attendance_logged, -> { where.not(attended: nil) }
 
-    scope :with_unviewed_candidate_cancellation, -> do
+    scope :with_unviewed_candidate_cancellation, lambda {
       joins(bookings_placement_request: :candidate_cancellation)
         .where(bookings_placement_request_cancellations: { viewed_at: nil })
-    end
+    }
 
-    scope :to_manage, -> do
+    scope :to_manage, lambda {
       not_cancelled
       .attendance_unlogged
       .accepted
       .future
-    end
+    }
 
-    scope :requiring_attention, -> do
+    scope :requiring_attention, lambda {
       where(id: with_unviewed_candidate_cancellation.select('id')).or \
         where(id: to_manage.select('id'))
-    end
+    }
 
-    scope :historical, -> do
+    scope :historical, lambda {
       previous.accepted
-    end
+    }
 
     scope :for_days_in_the_future, ->(days_away) { where(date: days_away.from_now.to_date) }
     scope :for_tomorrow,           -> { for_days_in_the_future(1.day) }
@@ -140,9 +140,7 @@ module Bookings
       true
     end
 
-    def status
-      bookings_placement_request.status
-    end
+    delegate :status, to: :bookings_placement_request
 
     def placement_start_date_with_duration
       if bookings_placement_request&.placement_date&.present?

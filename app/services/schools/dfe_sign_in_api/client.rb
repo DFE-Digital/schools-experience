@@ -7,7 +7,7 @@ module Schools
       RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
       RETRY_OPTIONS = {
         max: 2,
-        methods: %i{get},
+        methods: %i[get],
         exceptions:
           ::Faraday::Request::Retry::DEFAULT_EXCEPTIONS + RETRY_EXCEPTIONS
       }.freeze

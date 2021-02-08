@@ -4,7 +4,7 @@ module Schools
       @bookings = current_school
         .bookings
         .requiring_attention
-        .eager_load(:bookings_subject, bookings_placement_request: %i(candidate candidate_cancellation school_cancellation))
+        .eager_load(:bookings_subject, bookings_placement_request: %i[candidate candidate_cancellation school_cancellation])
         .order(date: :asc)
         .page(params[:page])
 

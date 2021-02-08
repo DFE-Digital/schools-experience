@@ -1,6 +1,9 @@
+require "active_support/core_ext/integer/time"
+
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
   config.webpacker.check_yarn_integrity = false
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -27,9 +30,10 @@ Rails.application.configure do
     'X-Content-Type-Options' => 'nosniff'
   }
 
-  # Compress CSS using a preprocessor.
+  # Compress JS using a preprocessor.
   config.assets.js_compressor = nil
 
+  # Compress CSS using a preprocessor.
   # We're already using sass and that is set to compress at compile time
   # so a second pass is not needed - the second pass was (maybe still is)
   # causing problems with GovUK frontend use of variables
@@ -39,7 +43,7 @@ Rails.application.configure do
   config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = 'http://assets.example.com'
+  # config.asset_host = 'http://assets.example.com'
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
@@ -48,12 +52,12 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
+  # Include generic and useful information about system operation, but avoid logging too much
+  # information to avoid inadvertent exposure of personally identifiable information (PII).
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [:request_id, lambda { |_| "PID:#{Process.pid}" }]
+  config.log_tags = [:request_id, ->(_) { "PID:#{Process.pid}" }]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -62,6 +66,12 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "school_experience_production"
 
+  # config.action_mailer.perform_caching = false
+
+  # Ignore bad email addresses and do not raise email delivery errors.
+  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # config.action_mailer.raise_delivery_errors = false
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
@@ -69,11 +79,17 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
+  # Log disallowed deprecations.
+  config.active_support.disallowed_deprecation = :log
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
+
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
   # Use a different logger for distributed setups.
-  # require 'syslog/logger'
+  # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
@@ -107,21 +123,22 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
-  config.cache_store = :redis_cache_store, {
-    url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
-    reconnect_attempts: 1,
-    tcp_keepalive: 60,
-    error_handler: ->(_method:, returning:, exception:) do
-      ExceptionNotifier.notify_exception(
-        exception,
-        data: {
-          returning: returning.inspect
-        }
-      )
+  config.cache_store = :redis_cache_store,
+                       {
+                         url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
+                         reconnect_attempts: 1,
+                         tcp_keepalive: 60,
+                         error_handler: lambda do |_method:, returning:, exception:|
+                                          ExceptionNotifier.notify_exception(
+                                            exception,
+                                            data: {
+                                              returning: returning.inspect
+                                            }
+                                          )
 
-      Raven.capture_exception(exception)
-    end
-  }
+                                          Raven.capture_exception(exception)
+                                        end
+                       }
 
   config.session_store :cache_store,
     key: 'schoolex-session',
@@ -136,14 +153,13 @@ Rails.application.configure do
   config.x.default_phase = 4
   config.x.phase = Integer(ENV['PHASE'].presence || config.x.default_phase)
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
-  config.x.candidates.alert_notification = ENV['CANDIDATE_NOTIFICATION'].presence
-  config.x.bing_maps_key = ENV['BING_MAPS_KEY'].presence
+  config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials.dig(:google_maps_key)
 
   config.x.base_url = ENV.fetch('DFE_SIGNIN_BASE_URL') { 'https://schoolexperience.education.gov.uk' }
   config.x.oidc_client_id = ENV.fetch('DFE_SIGNIN_CLIENT_ID') { 'schoolexperience' }
   config.x.oidc_client_secret = ENV.fetch('DFE_SIGNIN_SECRET') do
     msg = "DFE_SIGNIN_SECRET has not been set"
-    config.logger ? config.logger.warn(msg) : puts(msg)
+    config.logger ? config.logger.warn(msg) : Rails.logger.warn(msg)
     ''
   end
   config.x.oidc_host = ENV.fetch('DFE_SIGNIN_HOST') { 'pp-oidc.signin.education.gov.uk' }
@@ -155,7 +171,7 @@ Rails.application.configure do
     'api.signin.education.gov.uk'
   end
 
-  truthy_strings = %w(true 1 yes)
+  truthy_strings = %w[true 1 yes]
 
   config.x.dfe_sign_in_api_enabled = ENV['DFE_SIGNIN_API_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
@@ -175,11 +191,11 @@ Rails.application.configure do
     config.x.gitis.caching = truthy_strings.include?(ENV['CRM_CACHING'].to_s)
   end
 
-  config.x.features = %i(subject_specific_dates)
+  config.x.features = %i[subject_specific_dates]
 
   config.sass[:style] = :compressed if config.sass
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
 
-  config.x.maintenance_mode = %w{1 yes true}.include?(ENV['MAINTENANCE_MODE'].to_s)
+  config.x.maintenance_mode = %w[1 yes true].include?(ENV['MAINTENANCE_MODE'].to_s)
 end

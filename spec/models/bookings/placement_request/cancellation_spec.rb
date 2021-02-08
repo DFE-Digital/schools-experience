@@ -7,8 +7,8 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
 
   describe 'Validation' do
     it { is_expected.not_to validate_presence_of :extra_details }
-    it { is_expected.to validate_inclusion_of(:cancelled_by).in_array %w(candidate school) }
-    it { is_expected.to validate_presence_of(:reason).on(%i(school_cancellation candidate_cancellation)) }
+    it { is_expected.to validate_inclusion_of(:cancelled_by).in_array %w[candidate school] }
+    it { is_expected.to validate_presence_of(:reason).on(%i[school_cancellation candidate_cancellation]) }
 
     it do
       is_expected.to validate_inclusion_of(:rejection_category).in_array(

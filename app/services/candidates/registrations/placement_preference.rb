@@ -6,7 +6,7 @@ module Candidates
       attribute :availability, :string
       attribute :objectives, :string
 
-      # TODO SE-1877 remove this
+      # TODO: SE-1877 remove this
       attr_accessor :bookings_placement_date_id
     end
   end

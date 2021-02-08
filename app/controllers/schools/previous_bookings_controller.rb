@@ -3,7 +3,7 @@ module Schools
     def index
       @bookings = scope
         .includes(:bookings_subject, bookings_placement_request:
-          %i(candidate candidate_cancellation school_cancellation))
+          %i[candidate candidate_cancellation school_cancellation])
         .order(date: :desc)
         .page(params[:page])
 

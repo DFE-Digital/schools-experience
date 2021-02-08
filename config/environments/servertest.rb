@@ -7,20 +7,20 @@ Rails.application.configure do
   # Override production environment settings here
 
   # Don't actually attempt to delivery emails in Staging environment
-  config.x.notify_client = NotifyFakeClient
+  config.x.notify_client = 'NotifyFakeClient'
 
   # default to true but allow overriding in CI
   config.force_ssl = ENV['SKIP_FORCE_SSL'].blank?
 
-  config.x.phase = 10000
-  config.x.features = %i(
+  config.x.phase = 10_000
+  config.x.features = %i[
     subject_specific_dates
     capped_bookings
     reminders
-  )
+  ]
   config.x.candidates.disable_applications = false
   config.x.candidates.alert_notification = nil
-  config.x.bing_maps_key = nil
+  config.x.google_maps_key = nil
 
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = "https://localhost:#{ENV.fetch('PORT') { 3000 }}"

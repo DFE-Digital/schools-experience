@@ -99,8 +99,8 @@ describe Candidates::Registrations::GitisRegistrationSession do
     describe "#personal_information_attributes" do
       context 'with overridden personal data' do
         subject do
-          described_class.new({ key => data }, contact).
-            personal_information_attributes
+          described_class.new({ key => data }, contact)
+            .personal_information_attributes
         end
 
         it { is_expected.to include('first_name' => contact.firstname) }

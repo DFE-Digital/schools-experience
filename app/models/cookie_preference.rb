@@ -2,7 +2,7 @@ class CookiePreference
   EXPIRES_IN = 1.year.freeze
   VERSION = 'v1'.freeze
   COOKIES = {
-    analytics: %w(_ga _gat _gid ai_session ai_user analytics_tracking_uuid)
+    analytics: %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
   }.freeze
 
   include ActiveModel::Model
@@ -50,10 +50,10 @@ class CookiePreference
   end
 
   def all=(accept_all_cookies)
-    return unless accept_all_cookies.to_s.in? %w(true 1)
+    return unless accept_all_cookies.to_s.in? %w[true 1]
 
     attributes.keys.map do |key|
-      self.send :"#{key}=", true
+      send :"#{key}=", true
     end
   end
 
@@ -78,7 +78,7 @@ class CookiePreference
   # allowed = 'not explicitly rejected, and maybe explicitly accepted'
   # accepted = 'explicitly accepted'
   def allowed?(cookie_category_or_name)
-    value = if attributes.has_key? cookie_category_or_name.to_s
+    value = if attributes.key? cookie_category_or_name.to_s
               attributes[cookie_category_or_name.to_s]
             else
               attributes[category(cookie_category_or_name).to_s]

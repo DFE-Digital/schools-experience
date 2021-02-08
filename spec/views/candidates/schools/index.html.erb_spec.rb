@@ -21,9 +21,9 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       @school = build(:bookings_school)
       @search = Candidates::SchoolSearch.new(
         query: 'Manchester',
-        phases: %w{3},
+        phases: %w[3],
         max_fee: '60',
-        subjects: %w{1 3}
+        subjects: %w[1 3]
       )
       allow(@search).to receive(:results).and_return(Kaminari.paginate_array([@school]).page(1))
 
@@ -52,7 +52,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     it "shows results" do
       expect(rendered).to have_css '.school-result'
       expect(rendered).to have_css '.school-result h2', text: @school.name
-      expect(rendered).to have_css '.school-result .govuk-summary-list__key', count: 3
+      expect(rendered).to have_css '.school-result .govuk-summary-list__key', count: 4
     end
   end
 end

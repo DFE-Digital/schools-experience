@@ -23,6 +23,7 @@ Feature: Viewing a withdrawn request
             | Withdrawn requests | /schools/withdrawn_requests  |
             | Request            | None                         |
 
+    @smoke_test
     Scenario: Cancellation details
         Given there is at least one withdrawn request
         When I am viewing the withdrawn request
@@ -30,6 +31,7 @@ Feature: Viewing a withdrawn request
             | Heading      | Value      |
             | Reason       | MyText     |
 
+    @smoke_test
     Scenario: Personal details
         Given there is at least one withdrawn request
         When I am viewing the withdrawn request
@@ -38,7 +40,8 @@ Feature: Viewing a withdrawn request
             | Address             | First Line, Second Line, Third Line, Manchester, Manchester, TE57 1NG |
             | UK telephone number | 07123 456789                                                          |
             | Email address       | second@thisaddress.com                                                |
-    
+
+    @smoke_test
     Scenario: Request details
         Given there is at least one withdrawn request
         When I am viewing the withdrawn request
@@ -48,6 +51,7 @@ Feature: Viewing a withdrawn request
             | DBS certificate  | Yes              |
             | Request received | \d+ [a-z]+ \d{4} |
 
+    @smoke_test
     Scenario: Candidate details
         Given there is at least one withdrawn request
         When I am viewing the withdrawn request

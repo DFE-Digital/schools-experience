@@ -16,13 +16,13 @@ module Conversions
           if precision.nil?
             metres.to_f / METRES_IN_MILE
           elsif precision.zero?
-            (metres.to_f / METRES_IN_MILE).
-              to_s(:rounded, precision: 0).
-              to_i
+            (metres.to_f / METRES_IN_MILE)
+              .to_s(:rounded, precision: 0)
+              .to_i
           else
-            (metres.to_f / METRES_IN_MILE).
-              to_s(:rounded, precision: precision).
-              to_f
+            (metres.to_f / METRES_IN_MILE)
+              .to_s(:rounded, precision: precision)
+              .to_f
           end
         end
       end

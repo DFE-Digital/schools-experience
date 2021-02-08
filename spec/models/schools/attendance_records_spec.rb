@@ -9,7 +9,7 @@ describe Schools::AttendanceRecords, type: :model do
 
     context 'with matching urn' do
       context 'but different candidate' do
-        let(:records) { described_class.new 10000000, school_urns }
+        let(:records) { described_class.new 10_000_000, school_urns }
         it { is_expected.not_to include booking }
       end
 
@@ -33,7 +33,7 @@ describe Schools::AttendanceRecords, type: :model do
     end
 
     context 'for URN not in list' do
-      let(:records) { described_class.new candidate_id, [999999999, 999999990] }
+      let(:records) { described_class.new candidate_id, [999_999_999, 999_999_990] }
       it { is_expected.not_to include booking }
     end
   end

@@ -1,44 +1,31 @@
 class HealthchecksController < ApplicationController
-  include GitisAccess
-
-  http_basic_authenticate_with \
-    name: Rails.application.config.x.healthchecks.username,
-    password: Rails.application.config.x.healthchecks.password,
-    except: :show
-
-  def show
-    unless Redis.current.ping == 'PONG'
-      raise "No Redis Connection"
-    end
-
-    ApplicationRecord.connection
-    unless ApplicationRecord.connected?
-      raise "No Database Connection"
-    end
-
-    render plain: 'healthy'
-  end
-
   def deployment
-    render plain: ENV.fetch('DEPLOYMENT_ID') { 'not set' }
+    @healthcheck = Healthcheck.new
+    status = @healthcheck.to_h[:healthy] ? :ok : :internal_server_error
+
+    render plain: @healthcheck.deployment, status: status
   end
 
   def api_health
-    check_gitis_api
-    check_dfe_signin_api
+    @healthcheck = Healthcheck.new
 
-    render plain: 'healthy'
+    if @healthcheck.to_h[:healthy]
+      render plain: 'healthy', status: :ok
+    else
+      render plain: 'unhealthy', status: :internal_server_error
+    end
   end
 
-private
+  def show
+    @healthcheck = Healthcheck.new
+    status = @healthcheck.to_h[:healthy] ? :ok : :internal_server_error
 
-  def check_gitis_api
-    gitis_crm.fetch(Bookings::Gitis::Country, limit: 1)
+    render json: @healthcheck.to_json, status: status
   end
 
-  def check_dfe_signin_api
-    return true unless Schools::DFESignInAPI::Organisations.enabled?
+  def urn_whitelist
+    whitelist = ENV['CANDIDATE_URN_WHITELIST'].blank? ? [] : ENV['CANDIDATE_URN_WHITELIST'].to_s.strip.split(%r{[\s,]+}).map(&:to_i)
 
-    Schools::DFESignInAPI::Organisations.new(SecureRandom.uuid).uuids
+    render json: whitelist
   end
 end

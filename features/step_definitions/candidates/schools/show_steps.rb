@@ -174,7 +174,7 @@ Given("my school of choice has {string} dates") do |option|
             elsif option == 'flexible'
               FactoryBot.create(:bookings_school)
             else
-              fail 'invalid flexibility option'
+              raise 'invalid flexibility option'
             end
 end
 

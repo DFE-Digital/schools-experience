@@ -33,7 +33,7 @@ Feature: Administration Fee
     When I submit the form
     Then I should see a validation error message
 
-  Scenario: Completing the Administration costs step with error
+  Scenario: Completing the Administration costs step without error
     Given I have entered the following details into the form:
       | Enter the number of pounds   | 100                        |
       | Explain what the fee covers. | Nondescript administration |

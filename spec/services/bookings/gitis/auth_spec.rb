@@ -54,8 +54,8 @@ RSpec.describe Bookings::Gitis::Auth do
 
     context 'with a timeout that gets retried' do
       before do
-        stub_request(:post, "https://login.microsoftonline.com/#{api.auth_tenant_id}/oauth2/token").
-          with(
+        stub_request(:post, "https://login.microsoftonline.com/#{api.auth_tenant_id}/oauth2/token")
+          .with(
             headers: { 'Accept' => 'application/json' },
             body: {
               "grant_type" => "client_credentials",
@@ -64,9 +64,9 @@ RSpec.describe Bookings::Gitis::Auth do
               "client_secret" => api.client_secret,
               "resource" => api.service_url,
             }.to_query
-          ).
-          to_timeout.then.
-          to_return(
+          )
+          .to_timeout.then
+          .to_return(
             status: 200,
             headers: { 'Content-Type' => 'application/json' },
             body: {

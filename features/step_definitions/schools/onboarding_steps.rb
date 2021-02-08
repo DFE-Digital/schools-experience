@@ -238,7 +238,7 @@ Given "there are some subjects available" do
 end
 
 Given "A school is returned from DFE sign in" do
-  @school = Bookings::School.find_by(urn: 123456) || FactoryBot.create(:bookings_school, urn: 123456)
+  @school = Bookings::School.find_by(urn: 123_456) || FactoryBot.create(:bookings_school, urn: 123_456)
 end
 
 Given "I have completed the following steps:" do |table|

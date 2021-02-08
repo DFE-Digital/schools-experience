@@ -10,7 +10,10 @@ describe DFEAuthentication do
     let(:auth_host) { Rails.application.config.x.oidc_host }
 
     describe 'login redirect' do
-      subject { get :show; response }
+      subject do
+        get :show
+        response
+      end
 
       before do
         allow(Schools::ChangeSchool).to \
@@ -21,11 +24,11 @@ describe DFEAuthentication do
         let(:allow_change_school) { false }
 
         it 'will redirect to DfE Sign in' do
-          is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
+          is_expected.to redirect_to %r{#{Regexp.quote(auth_host)}}
         end
 
         it 'will request organisation from DfE Sign-in' do
-          is_expected.to redirect_to %r(\&scope=profile\+organisation\+openid)
+          is_expected.to redirect_to %r{\&scope=profile%20organisation%20openid}
         end
       end
 
@@ -33,11 +36,11 @@ describe DFEAuthentication do
         let(:allow_change_school) { true }
 
         it 'will redirect to DfE Sign in' do
-          is_expected.to redirect_to %r(#{Regexp.quote(auth_host)})
+          is_expected.to redirect_to %r{#{Regexp.quote(auth_host)}}
         end
 
         it 'will not request organisation from DfE Sign-in' do
-          is_expected.to redirect_to %r(\&scope=profile\+openid)
+          is_expected.to redirect_to %r{\&scope=profile%20openid}
         end
       end
     end

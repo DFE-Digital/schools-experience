@@ -27,14 +27,14 @@ describe Bookings::Gitis::API do
 
     context "for valid url" do
       before do
-        stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1").
-          with(headers: {
+        stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1")
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 200,
             headers: {
               'content-type' => 'application/json; odata.metadata=minimal',
@@ -57,8 +57,8 @@ describe Bookings::Gitis::API do
 
     context 'with a timeout that gets retried' do
       before do
-        stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1").
-          with(headers: {
+        stub_request(:get, "#{service_url}#{endpoint}/contacts?$top=1")
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             "OData-MaxVersion" => "4.0",
@@ -90,14 +90,14 @@ describe Bookings::Gitis::API do
       let(:url) { "#{service_url}#{endpoint}/contacts" }
 
       before do
-        stub_request(:get, url).
-          with(headers: {
+        stub_request(:get, url)
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 401,
             headers: {
               'odata-version' => '4.0'
@@ -120,14 +120,14 @@ describe Bookings::Gitis::API do
       let(:url) { "#{service_url}#{endpoint}/contacts" }
 
       before do
-        stub_request(:get, url).
-          with(headers: {
+        stub_request(:get, url)
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 500,
             headers: {
               'odata-version' => '4.0'
@@ -158,14 +158,14 @@ describe Bookings::Gitis::API do
       let(:url) { "#{service_url}#{endpoint}/ontacts" }
 
       before do
-        stub_request(:get, url).
-          with(headers: {
+        stub_request(:get, url)
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 404,
             headers: {
               'content-type' => 'application/json; odata.metadata=minimal',
@@ -198,15 +198,15 @@ describe Bookings::Gitis::API do
 
     context "for valid url" do
       before do
-        stub_request(:post, "#{service_url}#{endpoint}/contacts").
-          with(headers: {
+        stub_request(:post, "#{service_url}#{endpoint}/contacts")
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             'Content-Type' => 'application/json',
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 204,
             headers: {
               'odata-version' => '4.0',
@@ -223,15 +223,15 @@ describe Bookings::Gitis::API do
 
     context "for invalid url" do
       before do
-        stub_request(:post, "#{service_url}#{endpoint}/contacts").
-          with(headers: {
+        stub_request(:post, "#{service_url}#{endpoint}/contacts")
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             'Content-Type' => 'application/json',
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 500,
             headers: { 'odata-version' => '4.0' },
             body: ''
@@ -256,15 +256,15 @@ describe Bookings::Gitis::API do
     context 'for unknown url' do
       let(:url) { "#{service_url}#{endpoint}/ontacts" }
       before do
-        stub_request(:post, url).
-          with(headers: {
+        stub_request(:post, url)
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             'Content-Type' => 'application/json',
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 404,
             headers: {
               'content-type' => 'application/json; odata.metadata=minimal',
@@ -297,15 +297,15 @@ describe Bookings::Gitis::API do
 
     context "for valid url" do
       before do
-        stub_request(:patch, "#{service_url}#{endpoint}/contacts(#{uuid})").
-          with(headers: {
+        stub_request(:patch, "#{service_url}#{endpoint}/contacts(#{uuid})")
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             'Content-Type' => 'application/json',
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 204,
             headers: {
               'odata-version' => '4.0',
@@ -322,15 +322,15 @@ describe Bookings::Gitis::API do
 
     context "for invalid url" do
       before do
-        stub_request(:patch, "#{service_url}#{endpoint}/contacts(#{uuid})").
-          with(headers: {
+        stub_request(:patch, "#{service_url}#{endpoint}/contacts(#{uuid})")
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             'Content-Type' => 'application/json',
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 500,
             headers: { 'odata-version' => '4.0' },
             body: ''
@@ -354,15 +354,15 @@ describe Bookings::Gitis::API do
 
     context 'for unknown url' do
       before do
-        stub_request(:patch, "#{service_url}#{endpoint}/ontacts(#{uuid})").
-          with(headers: {
+        stub_request(:patch, "#{service_url}#{endpoint}/ontacts(#{uuid})")
+          .with(headers: {
             'Accept' => 'application/json',
             'Authorization' => /\ABearer #{token}/,
             'Content-Type' => 'application/json',
             "OData-MaxVersion" => "4.0",
             "OData-Version" => "4.0",
-          }).
-          to_return(
+          })
+          .to_return(
             status: 404,
             headers: {
               'content-type' => 'application/json; odata.metadata=minimal',

@@ -21,13 +21,13 @@ module Bookings
         new_schools = edubase_data.reject { |urn, _| urn.in?(existing_urns) }
 
         Bookings::School.transaction do
-          puts "importing schools..."
+          Rails.logger.info "importing schools..."
           Bookings::School.import(new_schools.map { |_, row| build_school(row) }.compact)
 
-          puts "setting up phases..."
+          Rails.logger.info "setting up phases..."
           new_schools.each.with_index do |(urn, row), i|
             if (i % 1000).zero?
-              print '.'
+              Rails.logger.info '.'
             end
 
             school = Bookings::School.find_by(urn: urn)
@@ -37,7 +37,7 @@ module Bookings
             assign_phases(school, row['PhaseOfEducation (code)'])
           end
 
-          puts "done..."
+          Rails.logger.info "done..."
         end
       end
 
@@ -52,7 +52,7 @@ module Bookings
       end
 
       def map_phase(edubase_id)
-        # 0: Not applicable              -> ¯\_(ツ)_/¯
+        # 0: Not applicable              -> Unknown
         # 1: Nursery                     -> Early years
         # 2: Primary                     -> Primary (4 to 11)
         # 3: Middle deemed primary       -> Primary (4 to 11)
@@ -88,9 +88,9 @@ module Bookings
       def cleanup_website(urn, url)
         return nil if url.blank?
 
-        fail "invalid hostname for #{urn}, #{url}" unless url.split(".").size > 1
+        raise "invalid hostname for #{urn}, #{url}" unless url.split(".").size > 1
 
-                          # do nothing if starting with a valid protocol
+        # do nothing if starting with a valid protocol
         url_with_prefix = if url.starts_with?("http:", "https:")
                             url
 
@@ -114,7 +114,7 @@ module Bookings
 
         # skip urls that don't look sensible
         unless url_with_prefix.match?(/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,10}(:[0-9]{1,5})?(\/.*)?$/ix)
-          puts "invalid website for #{urn}, #{url}"
+          Rails.logger.info "invalid website for #{urn}, #{url}"
           return nil
         end
 
@@ -123,32 +123,32 @@ module Bookings
 
       def build_school(edubase_row)
         attributes = {
-          urn:                     nilify(edubase_row['URN']),
-          name:                    nilify(edubase_row['EstablishmentName']),
-          website:                 cleanup_website(edubase_row['URN'], edubase_row['SchoolWebsite']),
-          contact_email:           email_override.presence,
-          address_1:               nilify(edubase_row['Street']),
-          address_2:               nilify(edubase_row['Locality']),
-          address_3:               nilify(edubase_row['Address3']),
-          town:                    nilify(edubase_row['Town']),
-          county:                  nilify(edubase_row['County (name)']),
-          postcode:                nilify(edubase_row['Postcode']),
-          coordinates:             convert_to_point(edubase_row),
+          urn: nilify(edubase_row['URN']),
+          name: nilify(edubase_row['EstablishmentName']),
+          website: cleanup_website(edubase_row['URN'], edubase_row['SchoolWebsite']),
+          contact_email: email_override.presence,
+          address_1: nilify(edubase_row['Street']),
+          address_2: nilify(edubase_row['Locality']),
+          address_3: nilify(edubase_row['Address3']),
+          town: nilify(edubase_row['Town']),
+          county: nilify(edubase_row['County (name)']),
+          postcode: nilify(edubase_row['Postcode']),
+          coordinates: convert_to_point(edubase_row),
           bookings_school_type_id: school_types[edubase_row['TypeOfEstablishment (code)'].to_i].id
         }
 
         if attributes[:postcode].blank?
-          puts "#{attributes[:urn]}: cannot import #{attributes[:name]}, missing postcode"
+          Rails.logger.info "#{attributes[:urn]}: cannot import #{attributes[:name]}, missing postcode"
           return nil
         end
 
         if attributes[:address_1].blank?
-          puts "#{attributes[:urn]}: cannot import #{attributes[:name]}, missing address_1"
+          Rails.logger.info "#{attributes[:urn]}: cannot import #{attributes[:name]}, missing address_1"
           return nil
         end
 
         if attributes[:coordinates].blank?
-          puts "#{attributes[:urn]}: cannot import #{attributes[:name]}, missing coordinates"
+          Rails.logger.info "#{attributes[:urn]}: cannot import #{attributes[:name]}, missing coordinates"
           return nil
         end
 

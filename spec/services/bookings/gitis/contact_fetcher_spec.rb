@@ -46,8 +46,8 @@ describe Bookings::Gitis::ContactFetcher do
     let(:merged) do
       build :gitis_contact, :persisted, :merged, _masterid_value: first.contactid
     end
-    let(:third) do
-      build :gitis_contact, :persisted, :merged, _masterid_value: merged.contactid, firstname: 'third'
+    let(:chained) do
+      build :gitis_contact, :persisted, :merged, _masterid_value: merged.contactid, firstname: 'chained'
     end
 
     context 'for single record' do
@@ -59,22 +59,31 @@ describe Bookings::Gitis::ContactFetcher do
         allow(fake_gitis).to receive(:find).with(first.contactid).and_return first
         allow(fake_gitis).to receive(:find).with(second.contactid).and_return second
         allow(fake_gitis).to receive(:find).with(merged.contactid).and_return merged
-        allow(fake_gitis).to receive(:find).with(third.contactid).and_return third
+        allow(fake_gitis).to receive(:find).with(chained.contactid).and_return chained
       end
 
-      it { is_expected.to have_attributes gitis_contact: first }
-      it { is_expected.to have_attributes gitis_uuid: first.contactid }
+      it 'should locate the master contact record' do
+        is_expected.to have_attributes gitis_contact: first
+      end
+      it 'should not update the gitis UUID to match the master contact record' do
+        is_expected.to have_attributes gitis_uuid: merged.contactid
+      end
       it { is_expected.to have_attributes changes: {} }
 
       context 'with chained records' do
-        let(:candidate) { create :candidate, gitis_uuid: third.contactid }
-        it { is_expected.to have_attributes gitis_contact: first }
-        it { is_expected.to have_attributes gitis_uuid: first.contactid }
+        let(:candidate) { create :candidate, gitis_uuid: chained.contactid }
+
+        it 'should locate the master contact record' do
+          is_expected.to have_attributes gitis_contact: first
+        end
+        it 'should not update the gitis UUID to match the master contact record' do
+          is_expected.to have_attributes gitis_uuid: chained.contactid
+        end
         it { is_expected.to have_attributes changes: {} }
       end
 
       context 'with max chained records' do
-        let(:fourth) { build :gitis_contact, :persisted, :merged, _masterid_value: third.contactid }
+        let(:fourth) { build :gitis_contact, :persisted, :merged, _masterid_value: chained.contactid }
         let(:fifth) { build :gitis_contact, :persisted, :merged, _masterid_value: fourth.contactid }
         let(:sixth) { build :gitis_contact, :persisted, :merged, _masterid_value: fifth.contactid }
 
@@ -86,19 +95,23 @@ describe Bookings::Gitis::ContactFetcher do
 
         let(:candidate) { create :candidate, gitis_uuid: sixth.contactid }
 
-        it { is_expected.to have_attributes gitis_contact: merged }
-        it { is_expected.to have_attributes gitis_uuid: merged.contactid }
+        it 'should locate the master contact record' do
+          is_expected.to have_attributes gitis_contact: merged
+        end
+        it 'should not update the gitis UUID to match the master contact record' do
+          is_expected.to have_attributes gitis_uuid: sixth.contactid
+        end
         it { is_expected.to have_attributes changes: {} }
       end
     end
 
     context 'with multiple records' do
-      let(:candidate) { create :candidate, gitis_uuid: third.contactid }
+      let(:candidate) { create :candidate, gitis_uuid: chained.contactid }
       let(:second_candidate) { create :candidate, gitis_uuid: second.contactid }
 
       before do
-        allow(fake_gitis).to receive(:find).
-          with([third.contactid, second.contactid]).and_return [third, second]
+        allow(fake_gitis).to receive(:find)
+          .with([chained.contactid, second.contactid]).and_return [chained, second]
 
         allow(fake_gitis).to receive(:find).with([merged.contactid]).and_return [merged]
         allow(fake_gitis).to receive(:find).with([first.contactid]).and_return [first]
@@ -107,7 +120,7 @@ describe Bookings::Gitis::ContactFetcher do
       context 'retrieving multiple records' do
         subject { fetcher.fetch_for_models [candidate, second_candidate] }
 
-        it { is_expected.to include third.contactid => first }
+        it { is_expected.to include chained.contactid => first }
         it { is_expected.to include second.contactid => second }
       end
 
@@ -116,7 +129,7 @@ describe Bookings::Gitis::ContactFetcher do
 
         it "will update contact ids" do
           expect(subject.map(&:reload).map(&:gitis_uuid)).to \
-            eq [first.contactid, second.contactid]
+            eq [chained.contactid, second.contactid]
         end
 
         it "will return expected contacts" do

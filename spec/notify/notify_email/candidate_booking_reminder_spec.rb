@@ -69,8 +69,12 @@ describe NotifyEmail::CandidateBookingReminder do
 
       specify 'school_address is correctly-assigned' do
         expect(subject.school_address).to eql(
-          [school.address_1, school.address_2, school.address_3,
-           school.town, school.county, school.postcode].reject(&:blank?).join(", ")
+          [school.address_1,
+           school.address_2,
+           school.address_3,
+           school.town,
+           school.county,
+           school.postcode].reject(&:blank?).join(", ")
         )
       end
 

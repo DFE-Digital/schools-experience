@@ -1,6 +1,6 @@
 class Candidates::SchoolsController < ApplicationController
   include AnalyticsTracking
-  include BingMapsContentSecurityPolicy
+  include MapsContentSecurityPolicy
   EXPANDED_SEARCH_RADIUS = 50
 
   before_action :redirect_if_deactivated

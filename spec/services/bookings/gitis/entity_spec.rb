@@ -4,7 +4,7 @@ RSpec.describe Bookings::Gitis::Entity do
   include_context 'test entity'
 
   let(:uuid) { SecureRandom.uuid }
-  let(:expected_attrs) { %w{testentityid firstname lastname notcreate notupdate} }
+  let(:expected_attrs) { %w[testentityid firstname lastname notcreate notupdate] }
   subject { TestEntity.new('firstname' => 'test', 'lastname' => 'user') }
 
   it { is_expected.to have_attributes entity_path: 'testentities' }
@@ -23,7 +23,7 @@ RSpec.describe Bookings::Gitis::Entity do
         'testentityid' => nil,
         'firstname' => 'test',
         'lastname' => 'user',
-        'notcreate' =>  nil,
+        'notcreate' => nil,
         'notupdate' => nil
       )
     end
@@ -59,13 +59,13 @@ RSpec.describe Bookings::Gitis::Entity do
   describe "dirty tracking" do
     context 'for unpersisted object' do
       it "will use dirty tracking to return modified attributes since last reset" do
-        expect(subject.changed).to eq(%w{firstname lastname})
+        expect(subject.changed).to eq(%w[firstname lastname])
 
         subject.reset
         expect(subject.changed).to be_empty
 
         subject.lastname = 'changed'
-        expect(subject.changed).to eq(%w{lastname})
+        expect(subject.changed).to eq(%w[lastname])
       end
     end
 
@@ -86,7 +86,7 @@ RSpec.describe Bookings::Gitis::Entity do
         before { subject.firstname = 'Changed' }
 
         it "will include name" do
-          expect(subject.changed).to eq(%w{firstname})
+          expect(subject.changed).to eq(%w[firstname])
         end
       end
     end

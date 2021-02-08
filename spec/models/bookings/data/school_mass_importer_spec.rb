@@ -59,7 +59,7 @@ describe Bookings::Data::SchoolMassImporter do
 
       specify 'the new records should have the correct attributes' do
         {
-          100492 => {
+          100_492 => {
             name: "St Thomas' CofE Primary School",
             website: "http://www.st.rbkc.sch.uk",
             address_1: "Appleford Road",
@@ -70,7 +70,7 @@ describe Bookings::Data::SchoolMassImporter do
             postcode: "W10 5EF",
             contact_email: nil
           },
-          100494 => {
+          100_494 => {
             name: "Saint Francis of Assisi Catholic Primary School",
             website: "http://www.stfrancisofassisi.org.uk",
             address_1: "Treadgold Street",
@@ -93,7 +93,7 @@ describe Bookings::Data::SchoolMassImporter do
 
       context 'Cleaning up websites' do
         specify 'invalid websites should raise errors' do
-          expect { subject.send(:cleanup_website, 101010, "invalidcom") }.to raise_error(
+          expect { subject.send(:cleanup_website, 101_010, "invalidcom") }.to raise_error(
             RuntimeError, "invalid hostname for 101010, invalidcom"
           )
         end
@@ -101,8 +101,8 @@ describe Bookings::Data::SchoolMassImporter do
 
       specify 'the new records should have the corret phases' do
         {
-          100492 => ['Primary (4 to 11)'],
-          100171 => ['Early years', 'Primary (4 to 11)', 'Secondary (11 to 16)', '16 to 18']
+          100_492 => ['Primary (4 to 11)'],
+          100_171 => ['Early years', 'Primary (4 to 11)', 'Secondary (11 to 16)', '16 to 18']
         }.each do |urn, phase_names|
           Bookings::School.find_by(urn: urn).tap do |school|
             expect(school.phases.map(&:name)).to match_array(phase_names)

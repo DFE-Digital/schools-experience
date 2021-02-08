@@ -10,13 +10,13 @@ describe Schools::PlacementRequests::PastAttendanceController, type: :request do
   describe '#index' do
     let(:booking) do
       create :bookings_booking, :accepted, :attended, bookings_school: school,
-        bookings_placement_request:
+                                                      bookings_placement_request:
           create(:bookings_placement_request, school: school)
     end
 
     let(:pr) do
       create :bookings_placement_request, school: school,
-        candidate: booking.bookings_placement_request.candidate
+                                          candidate: booking.bookings_placement_request.candidate
     end
 
     subject do

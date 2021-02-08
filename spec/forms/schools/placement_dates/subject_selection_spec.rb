@@ -48,7 +48,7 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
   context '#subject_ids=' do
     it 'removes any blank values' do
       subject.subject_ids = ["", "1", "2", "3"]
-      expect(subject.subject_ids).to eq %w(1 2 3)
+      expect(subject.subject_ids).to eq %w[1 2 3]
     end
   end
 

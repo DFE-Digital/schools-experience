@@ -1,7 +1,7 @@
 module Schools
   module OnBoarding
     class PreviewsController < OnBoardingsController
-      include BingMapsContentSecurityPolicy
+      include MapsContentSecurityPolicy
 
       before_action do
         unless current_school_profile.completed?

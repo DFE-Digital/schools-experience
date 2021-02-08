@@ -36,9 +36,7 @@ describe 'schools/change_schools/show.html.erb', type: :view do
 
     specify 'the current school should already be selected' do
       expect(rendered).to have_css(
-        "input[type='radio'][value='%<school_urn>d'][checked='checked']" % {
-          school_urn: school.urn
-        }
+        sprintf("input[type='radio'][value='%<school_urn>d'][checked='checked']", school_urn: school.urn)
       )
     end
 

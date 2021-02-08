@@ -56,8 +56,8 @@ describe Bookings::Gitis::AcceptPrivacyPolicy do
     context 'without existing acceptance' do
       before do
         allow(fake_gitis.fake_store).to \
-          receive(:create_entity).
-          and_return("#{cpp_entity_path}(#{candidate_pp_id})")
+          receive(:create_entity)
+          .and_return("#{cpp_entity_path}(#{candidate_pp_id})")
 
         freeze_time
       end
@@ -95,9 +95,9 @@ describe Bookings::Gitis::AcceptPrivacyPolicy do
 
       before do
         allow(fake_gitis).to \
-          receive(:find).
-          with(contact.id, includes: :dfe_contact_dfe_candidateprivacypolicy_Candidate).
-          and_return(contact)
+          receive(:find)
+          .with(contact.id, includes: :dfe_contact_dfe_candidateprivacypolicy_Candidate)
+          .and_return(contact)
 
         allow(fake_gitis.fake_store).to receive(:create_entity).and_call_original
 

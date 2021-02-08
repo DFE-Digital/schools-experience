@@ -82,13 +82,9 @@ module Candidates
       @max_fee = FEES.map(&:first).include?(max_f) ? max_f : ''
     end
 
-    def results
-      school_search.results
-    end
+    delegate :results, to: :school_search
 
-    def total_count
-      school_search.total_count
-    end
+    delegate :total_count, to: :school_search
 
     def valid_search?
       query.present? ||

@@ -32,14 +32,17 @@ RSpec.describe Bookings::SubjectSync do
     let!(:nomatch) { create(:bookings_subject, name: 'nomatch') }
     let(:response) do
       [
-        gitis_subject_1, gitis_subject_2, gitis_subject_3,
-        gitis_subject_4, gitis_subject_5
+        gitis_subject_1,
+        gitis_subject_2,
+        gitis_subject_3,
+        gitis_subject_4,
+        gitis_subject_5
       ]
     end
 
     before do
-      expect(fake_gitis.fake_store).to receive(:fetch).
-        with(
+      expect(fake_gitis.fake_store).to receive(:fetch)
+        .with(
           Bookings::Gitis::TeachingSubject,
           limit: described_class::LIMIT
         ).and_return(response)

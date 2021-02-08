@@ -2,19 +2,19 @@ require 'rails_helper'
 
 RSpec.describe Candidates::SchoolsController, type: :request do
   context "GET #index with search params" do
-    let(:query_params) {
+    let(:query_params) do
       {
         query: 'Something',
         location: 'Manchester',
         latitude: '53.481',
         longitude: '-2.241',
         distance: '10',
-        phases: %w{1},
-        subjects: %w{2 3},
+        phases: %w[1],
+        subjects: %w[2 3],
         max_fee: '30',
         order: 'Name'
       }
-    }
+    end
 
     before { get candidates_schools_path(query_params) }
 
@@ -41,8 +41,8 @@ RSpec.describe Candidates::SchoolsController, type: :request do
           latitude: '',
           longitude: '',
           distance: '10',
-          phases: %w{1},
-          subjects: %w{2 3},
+          phases: %w[1],
+          subjects: %w[2 3],
           max_fee: '30',
           order: 'Name'
         }
@@ -133,12 +133,18 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     let(:school) { create :bookings_school }
 
     describe '#index' do
-      subject { get candidates_schools_path; response }
+      subject do
+        get candidates_schools_path
+        response
+      end
       it { is_expected.to redirect_to candidates_root_path }
     end
 
     describe '#show' do
-      subject { get candidates_school_path(school); response }
+      subject do
+        get candidates_school_path(school)
+        response
+      end
       it { is_expected.to redirect_to candidates_root_path }
     end
   end
@@ -154,13 +160,19 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     describe '#show' do
       context 'when in whitelist' do
         let(:whitelist) { school.urn.to_s }
-        subject { get candidates_school_path(school); response }
+        subject do
+          get candidates_school_path(school)
+          response
+        end
         it { is_expected.to have_rendered 'show' }
       end
 
       context 'when not in whitelist' do
         let(:whitelist) { '-1' }
-        subject { get candidates_school_path(school); response }
+        subject do
+          get candidates_school_path(school)
+          response
+        end
         it { is_expected.to redirect_to candidates_root_path }
       end
     end

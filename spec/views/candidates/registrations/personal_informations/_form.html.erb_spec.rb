@@ -19,8 +19,8 @@ RSpec.describe "candidates/registrations/personal_informations/_form.html.erb", 
 
   before do
     allow(view).to \
-      receive(:candidates_school_registrations_personal_information_path).
-      and_return('/stubbed')
+      receive(:candidates_school_registrations_personal_information_path)
+      .and_return('/stubbed')
   end
 
   context 'when email address is editable' do

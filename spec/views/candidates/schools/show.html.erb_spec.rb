@@ -28,7 +28,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
     end
 
     it "has two start request buttons with appropriate responsive classes" do
-      %w(school-start-request-button__tablet_plus school-start-request-button__mobile).each do |css_class|
+      %w[school-start-request-button__tablet_plus school-start-request-button__mobile].each do |css_class|
         expect(rendered).to have_css("div.#{css_class} > a", text: 'Start request')
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
     end
 
     it "has two start request buttons with appropriate responsive classes" do
-      %w(school-start-request-button__tablet_plus school-start-request-button__mobile).each do |css_class|
+      %w[school-start-request-button__tablet_plus school-start-request-button__mobile].each do |css_class|
         expect(rendered).to have_css("div.#{css_class} > a", text: 'Start request')
       end
     end

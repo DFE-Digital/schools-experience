@@ -9,7 +9,7 @@ module Bookings
     def attributes
       reset_output
 
-      convert_dbs_required
+      convert_dbs_profile
       convert_individual_requirements
       convert_dress_code
       convert_teacher_training
@@ -46,14 +46,16 @@ module Bookings
 
   private
 
-    def convert_dbs_required
-      if input[:dbs_requirement_requires_check]
-        output[:dbs_requires_check] = true
-        output[:dbs_policy_details] = input[:dbs_requirement_dbs_policy_details].presence
-      else
-        output[:dbs_requires_check] = false
-        output[:dbs_policy_details] = input[:dbs_requirement_no_dbs_policy_details].presence
-      end
+    def convert_dbs_profile
+      output[:dbs_policy_conditions] = input[:dbs_requirement_dbs_policy_conditions]
+
+      output[:dbs_policy_details] = if input[:dbs_requirement_dbs_policy_conditions] == 'notrequired'
+                                      input[:dbs_requirement_no_dbs_policy_details].presence
+                                    elsif input[:dbs_requirement_dbs_policy_conditions] == 'inschool'
+                                      input[:dbs_requirement_dbs_policy_details_inschool].presence
+                                    else
+                                      input[:dbs_requirement_dbs_policy_details].presence
+                                    end
     end
 
     def convert_individual_requirements
@@ -62,10 +64,10 @@ module Bookings
     end
 
     def convert_dress_code
-      output[:dress_code_business] = !!input[:candidate_experience_detail_business_dress]
-      output[:dress_code_cover_tattoos] = !!input[:candidate_experience_detail_cover_up_tattoos]
-      output[:dress_code_remove_piercings] = !!input[:candidate_experience_detail_remove_piercings]
-      output[:dress_code_smart_casual] = !!input[:candidate_experience_detail_smart_casual]
+      output[:dress_code_business] = input[:candidate_experience_detail_business_dress].present?
+      output[:dress_code_cover_tattoos] = input[:candidate_experience_detail_cover_up_tattoos].present?
+      output[:dress_code_remove_piercings] = input[:candidate_experience_detail_remove_piercings].present?
+      output[:dress_code_smart_casual] = input[:candidate_experience_detail_smart_casual].present?
 
       output[:dress_code_other_details] = \
         conditional_assign(:candidate_experience_detail_other_dress_requirements,
@@ -85,9 +87,9 @@ module Bookings
     end
 
     def copy_phases
-      output[:primary_phase]    = !!input[:phases_list_primary]
-      output[:secondary_phase]  = !!input[:phases_list_secondary] || !!input[:phases_list_secondary_and_college]
-      output[:college_phase]    = !!input[:phases_list_college] || !!input[:phases_list_secondary_and_college]
+      output[:primary_phase]    = input[:phases_list_primary].present?
+      output[:secondary_phase]  = input[:phases_list_secondary].present? || input[:phases_list_secondary_and_college].present?
+      output[:college_phase]    = input[:phases_list_college].present? || input[:phases_list_secondary_and_college].present?
     end
 
     def copy_key_stages
@@ -100,7 +102,7 @@ module Bookings
       output[:start_time]             = input[:candidate_experience_detail_start_time]
       output[:end_time]               = input[:candidate_experience_detail_end_time]
       output[:experience_details]     = input[:experience_outline_candidate_experience].presence
-      output[:flexible_on_times]      = !!input[:candidate_experience_detail_times_flexible]
+      output[:flexible_on_times]      = input[:candidate_experience_detail_times_flexible].present?
       output[:flexible_on_times_details] = conditional_assign(
         :candidate_experience_detail_times_flexible,
         :candidate_experience_detail_times_flexible_details

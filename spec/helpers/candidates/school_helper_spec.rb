@@ -155,18 +155,18 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     include Candidates::MapsHelper
 
     before do
-      allow(Rails.application.config.x).to receive(:bing_maps_key) { '12345' }
+      allow(Rails.application.config.x).to receive(:google_maps_key) { '12345' }
       @latitude = "53.4782"
       @longitude = "-2.2299"
       @school = OpenStruct.new(
         name: 'Stub School',
         coordinates: OpenStruct.new(latitude: @latitude, longitude: @longitude)
-        )
+      )
     end
 
     subject { school_location_map @school }
 
-    it('should return a correct Bing Maps for schools location') do
+    it('should return a correct Google Maps for schools location') do
       expect(subject).to match(/<img /)
       expect(subject).to match("#{@latitude}%2C#{@longitude}")
     end
@@ -187,7 +187,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     context 'with subject filters' do
       subject do
         double('Bookings::SchoolSearch',
-          phases: [1, 3], phase_names: %w{first third})
+          phases: [1, 3], phase_names: %w[first third])
       end
 
       it("should return a nil") do
@@ -212,7 +212,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     context 'with subject filters' do
       subject do
         double('Bookings::SchoolSearch',
-          subjects: [1, 3], subject_names: %w{first third})
+          subjects: [1, 3], subject_names: %w[first third])
       end
 
       it("should return a nil") do
@@ -315,6 +315,35 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       specify 'should create a list with the correct number of entries' do
         is_expected.to have_css('ul.govuk-list--bullet > li', count: 2)
       end
+    end
+  end
+
+  describe "#format_school_placement_locations" do
+    subject { format_school_placement_locations school }
+
+    context "for school with virtual placements" do
+      let(:school) { create(:bookings_placement_date, virtual: true).bookings_school }
+
+      it { is_expected.to have_css ".govuk-tag", text: "Virtual" }
+      it { is_expected.not_to have_css ".govuk-tag", text: "In school" }
+    end
+
+    context "for school with inschool placements" do
+      let(:school) { create(:bookings_placement_date, virtual: false).bookings_school }
+
+      it { is_expected.not_to have_css ".govuk-tag", text: "Virtual" }
+      it { is_expected.to have_css ".govuk-tag", text: "In school" }
+    end
+
+    context "for school with both virtual and inschool placements" do
+      let :school do
+        create(:bookings_placement_date, virtual: true).bookings_school.tap do |school|
+          create :bookings_placement_date, virtual: false, bookings_school: school
+        end
+      end
+
+      it { is_expected.to have_css ".govuk-tag", text: "Virtual" }
+      it { is_expected.to have_css ".govuk-tag", text: "In school" }
     end
   end
 end

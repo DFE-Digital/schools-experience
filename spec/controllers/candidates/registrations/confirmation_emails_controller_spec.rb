@@ -6,15 +6,15 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
 
   let :registration_session do
     FactoryBot.build :registration_session, urn: school.urn,
-      with: %i(
-        personal_information
-        contact_information
-        education
-        teaching_preference
-        placement_preference
-        background_check
-        subject_and_date_information
-      )
+                                            with: %i[
+                                              personal_information
+                                              contact_information
+                                              education
+                                              teaching_preference
+                                              placement_preference
+                                              background_check
+                                              subject_and_date_information
+                                            ]
   end
 
   let :registration_store do

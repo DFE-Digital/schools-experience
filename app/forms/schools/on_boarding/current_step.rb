@@ -2,7 +2,7 @@
 module Schools
   module OnBoarding
     class CurrentStep
-      STEPS = %i(
+      STEPS = %i[
         dbs_requirement
         candidate_requirements_choice
         candidate_requirements_selection
@@ -21,7 +21,7 @@ module Schools
         access_needs_policy
         experience_outline
         admin_contact
-      ).freeze
+      ].freeze
 
       def self.for(school_profile)
         new(school_profile).call

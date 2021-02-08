@@ -38,9 +38,9 @@ private
 
   def oidc_auth_scope
     if Schools::ChangeSchool.allow_school_change_in_app?
-      %i(profile)
+      %i[profile]
     else
-      %i(profile organisation)
+      %i[profile organisation]
     end
   end
 

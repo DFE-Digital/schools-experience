@@ -275,7 +275,7 @@ feature 'Candidate Registrations', type: :feature do
   end
 
   def complete_application_preview_step(name: 'testy mctest', email: nil,
-    date_of_birth: Date.parse('2000-01-01'), button_text: 'Accept and send')
+                                        date_of_birth: Date.parse('2000-01-01'), button_text: 'Accept and send')
 
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/application_preview"

@@ -1,4 +1,4 @@
-FROM ruby:2.6.5
+FROM ruby:2.6.6-alpine3.13
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -14,15 +14,8 @@ EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
 
-# Install node, leaving as few artifacts as possible
-RUN apt-get update && apt-get install apt-transport-https && \
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-    apt-get update && \
-    apt-get install -y -o Dpkg::Options::="--force-confold" --no-install-recommends yarn nodejs && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/dpkg.log
+RUN apk add --no-cache build-base git tzdata libxml2 libxml2-dev \
+                        postgresql-libs postgresql-dev nodejs yarn
 
 # install NPM packages removign artifacts
 COPY package.json yarn.lock ./
@@ -31,7 +24,9 @@ RUN yarn install && yarn cache clean
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
 RUN gem install bundler --version='~> 2.1.4' && \
-    bundle install --without development --jobs=$(nproc --all) && \
+    bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
+    bundle config set without 'development' && \
+    bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
 

@@ -62,7 +62,7 @@ module Bookings::Gitis
 
     # Will get overwritten if entity_id_attribute is defined
     def id
-      fail MissingPrimaryKey
+      raise MissingPrimaryKey
     end
     alias_method :id=, :id
 
@@ -73,7 +73,7 @@ module Bookings::Gitis
       if id_match && id_match[1]
         self.id = id_match[1]
       else
-        fail InvalidEntityId
+        raise InvalidEntityId
       end
     end
 
@@ -97,7 +97,7 @@ module Bookings::Gitis
     def ==(other)
       return false unless other.is_a? self.class
 
-      other.id == self.id
+      other.id == id
     end
 
     def cache_key
@@ -110,6 +110,14 @@ module Bookings::Gitis
 
     class InvalidEntityIdError < RuntimeError; end
 
+    def write_attribute(attr_name, value)
+      name = attr_name.to_s
+      name = self.class.attribute_aliases[name] || name
+
+      name = @primary_key if name == "id" && @primary_key
+      @attributes.write_from_user(name, value)
+    end
+
   private
 
     def sanitize_for_mass_assignment(*args)
@@ -121,9 +129,9 @@ module Bookings::Gitis
       if value.blank?
         return
       elsif !value.to_s.match?(ID_FORMAT)
-        fail InvalidEntityId
+        raise InvalidEntityId
       elsif id.present? && id != value
-        fail IdChangedUnexpectedly
+        raise IdChangedUnexpectedly
       end
 
       write_attribute self.class.primary_key, value
@@ -131,7 +139,7 @@ module Bookings::Gitis
 
     module ClassMethods
       def attributes_to_select
-        self.select_attribute_names.to_a.join(',')
+        select_attribute_names.to_a.join(',')
       end
 
       def all_attribute_names
@@ -155,7 +163,7 @@ module Bookings::Gitis
       def entity_id_attribute(attr_name)
         self.primary_key = attr_name.to_s
 
-        entity_attribute :"#{attr_name}", except: %i{create update}
+        entity_attribute :"#{attr_name}", except: %i[create update]
         alias_attribute :id, :"#{attr_name}"
 
         define_method :"#{attr_name}=" do |value|
@@ -164,7 +172,7 @@ module Bookings::Gitis
       end
 
       def entity_attribute(attr_name, type = ActiveModel::Type::Value.new,
-        internal: false, except: nil, **options)
+                           internal: false, except: nil, **options)
 
         except = Array.wrap(except).map(&:to_sym)
 
@@ -193,7 +201,7 @@ module Bookings::Gitis
       end
 
       def entity_attributes(*attr_names, type: ActiveModel::Type::Value.new,
-        internal: false, except: nil, **options)
+                            internal: false, except: nil, **options)
 
         Array.wrap(attr_names).flatten.each do |attr_name|
           entity_attribute attr_name, type,

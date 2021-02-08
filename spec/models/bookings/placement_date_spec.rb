@@ -10,6 +10,7 @@ describe Bookings::PlacementDate, type: :model do
     it { is_expected.to have_db_column(:date).of_type(:date) }
     it { is_expected.to have_db_column(:duration).of_type(:integer) }
     it { is_expected.to have_db_column(:active).of_type(:boolean) }
+    it { is_expected.to have_db_column(:virtual).of_type(:boolean) }
     it { is_expected.to have_db_column(:max_bookings_count).of_type(:integer) }
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:subject_specific).of_type(:boolean).with_options(default: false, null: false) }
@@ -80,9 +81,15 @@ describe Bookings::PlacementDate, type: :model do
           validate_numericality_of(:duration)
             .is_greater_than_or_equal_to(1)
             .is_less_than(100)
-          )
+        )
       end
       it { expect(subject).to validate_presence_of(:duration) }
+    end
+
+    context '#virtual' do
+      it { is_expected.to allow_values(true).for :virtual }
+      it { is_expected.to allow_values(false).for :virtual }
+      it { is_expected.not_to allow_values(nil).for :virtual }
     end
 
     context '#max_bookings_count' do

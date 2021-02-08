@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.2.1'
+gem 'rails', '~> 6.1.1'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -15,17 +15,17 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '~> 6.0'
+gem 'activerecord-postgis-adapter', '~> 7.0'
 gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.2'
 
 # Use SCSS for stylesheets
 gem 'sassc-rails'
 gem "autoprefixer-rails"
-gem "sprockets", "< 4.0.0"
+gem "sprockets", "< 5.0.0"
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker'
@@ -36,6 +36,8 @@ gem 'webpacker'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem 'dotenv-rails'
+
 gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
 gem 'notifications-ruby-client'
 
@@ -44,12 +46,10 @@ gem 'delayed_job_active_record'
 gem 'delayed_cron_job'
 gem 'delayed_job_web'
 
-gem "redis", "~> 4.1"
+gem "redis", "~> 4.2"
 
 gem 'exception_notification'
 gem 'slack-notifier'
-
-gem 'dotenv-rails'
 
 gem 'kaminari'
 
@@ -83,7 +83,7 @@ group :development, :test do
   gem 'pry-byebug'
 
   # Testing framework
-  gem 'rspec-rails', '~> 3.9'
+  gem 'rspec-rails', '~> 4.0'
   gem 'rspec_junit_formatter'
   gem 'factory_bot_rails'
 
@@ -119,8 +119,9 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
 
-  gem 'shoulda-matchers', '~> 4.3'
+  gem 'shoulda-matchers', '~> 4.5'
   gem 'rails-controller-testing'
+  gem "rspec-json_expectations", "~> 2.2"
 
   gem 'webmock'
   gem 'capybara-screenshot'

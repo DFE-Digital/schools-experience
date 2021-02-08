@@ -9,7 +9,9 @@ class ServiceUpdate
   attribute :html_content, :string
 
   class << self
-    def dates; ids; end
+    def dates
+      ids
+    end
 
     def latest(limit = nil)
       if limit
@@ -25,7 +27,7 @@ class ServiceUpdate
     end
 
     def from_param(date)
-      safe_date = date.gsub(%r([^\d-]), '')
+      safe_date = date.gsub(%r{[^\d-]}, '')
       find Date.parse(safe_date).strftime KEY_FORMAT
     end
 

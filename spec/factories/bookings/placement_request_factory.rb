@@ -5,7 +5,7 @@ FactoryBot.define do
       :with_profile,
       :with_subjects,
       factory: :bookings_school,
-      urn: 11048,
+      urn: 11_048,
       subject_count: 2
 
     association :candidate
@@ -24,7 +24,7 @@ FactoryBot.define do
     degree_subject { "Not applicable" }
     teaching_stage { "I’m very sure and think I’ll apply" }
 
-    # FIXME change this to cancelled_by_candidate
+    # FIXME: change this to cancelled_by_candidate
     trait :cancelled do
       before :create do |placement_request|
         placement_request.candidate_cancellation = \
@@ -81,7 +81,7 @@ FactoryBot.define do
         :with_subjects,
         :with_fixed_availability_preference,
         factory: :bookings_school,
-        urn: 11048,
+        urn: 11_048,
         subject_count: 2
 
       availability { nil }

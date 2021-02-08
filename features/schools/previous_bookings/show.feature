@@ -23,6 +23,7 @@ Feature: Viewing a previous booking
             | Previous bookings | /schools/previous_bookings  |
             | Booking           | None                        |
 
+    @smoke_test
     Scenario: Personal details
         Given there is at least one previous booking
         When I am viewing my chosen previous booking
@@ -32,6 +33,7 @@ Feature: Viewing a previous booking
             | UK telephone number | 07123 456789                                                          |
             | Email address       | second@thisaddress.com                                                |
 
+    @smoke_test
     Scenario: Booking details
         Given there is at least one previous booking
         When I am viewing my chosen previous booking
@@ -42,6 +44,7 @@ Feature: Viewing a previous booking
             | Request received | 08 February 2019                                                       |
         And the future booking date should be listed
 
+    @smoke_test
     Scenario: Candidate details
         Given there is at least one previous booking
         When I am viewing my chosen previous booking
@@ -59,6 +62,7 @@ Feature: Viewing a previous booking
         When I am viewing my chosen previous booking
         Then I should not see a 'Cancellation details' section
 
+    @smoke_test
     Scenario: Cancellation details
         Given there is a cancelled previous booking
         When I am viewing my chosen previous booking

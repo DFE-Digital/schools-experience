@@ -30,7 +30,7 @@ describe NotifyEmail::CandidateBookingConfirmation do
 
     specify { expect(described_class).to respond_to(:from_booking) }
 
-    let!(:school) { create(:bookings_school, urn: 11048) }
+    let!(:school) { create(:bookings_school, urn: 11_048) }
     let!(:profile) { create(:bookings_profile, school: school) }
     let(:to) { "morris.szyslak@moes.net" }
     let(:candidate_name) { "morris.szyslak" }
@@ -57,8 +57,12 @@ describe NotifyEmail::CandidateBookingConfirmation do
 
       specify 'school_address is correctly-assigned' do
         expect(subject.school_address).to eql(
-          [school.address_1, school.address_2, school.address_3,
-           school.town, school.county, school.postcode].reject(&:blank?).join(", ")
+          [school.address_1,
+           school.address_2,
+           school.address_3,
+           school.town,
+           school.county,
+           school.postcode].reject(&:blank?).join(", ")
         )
       end
 

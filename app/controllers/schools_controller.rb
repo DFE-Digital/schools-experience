@@ -8,9 +8,9 @@ class SchoolsController < ApplicationController
 private
 
   def parse_env_var
-    if env_var.in? %w(1 true yes)
+    if env_var.in? %w[1 true yes]
       true
-    elsif env_var.in? %w(0 false no)
+    elsif env_var.in? %w[0 false no]
       false
     elsif env_var.present?
       [true, env_var]

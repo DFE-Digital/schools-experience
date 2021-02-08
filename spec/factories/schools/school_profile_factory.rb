@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :school_profile, class: 'Schools::SchoolProfile' do
     before(:create) do |sp|
-      sp.bookings_school = Bookings::School.find_by(urn: 123456) || create(:bookings_school, urn: 123456)
+      sp.bookings_school = Bookings::School.find_by(urn: 123_456) || create(:bookings_school, urn: 123_456)
     end
 
     trait :with_dbs_requirement do

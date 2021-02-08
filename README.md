@@ -15,13 +15,14 @@ We also have markdown pages within the `doc` folder of this git repo
 - [Release process](doc/release-process.md)
 - [DfE Sign-in](doc/dfe-sigin.md)
 - [Gitis CRM](doc/gitis-crm.md)
+- [Candidate notifications](doc/candidate-notifications.md)
 
 ## Prerequisites
 
-- Ruby 2.6.5 - easiest with rbenv and ruby-build
+- Ruby 2.6.6 - easiest with rbenv and ruby-build
   - `brew install rbenv`
   - `brew install ruby-build`
-  - `rbenv install 2.6.5`
+  - `rbenv install 2.6.6`
 - Bundler 2.1.4 - `gem install bundler --version 2.1.4`
 - PostgreSQL with PostGIS extension
   - `brew install postgis`
@@ -41,15 +42,27 @@ We also have markdown pages within the `doc` folder of this git repo
   2. node -v
   3. bundler -v
   4. yarn -v
-2. Run `bundle intall` to install ruby dependencies
-3. Run `yarn` to install node dependencies
+2. Run `bundle install` to install ruby dependencies
+3. Run `npx yarn` to install node dependencies
 4. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
 5. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
 6. Create SSL certificates - `bundle exec rake dev:ssl:generate`
 7. Add the `config/master.key` file - this is available from other team members
-8. Run `bundle exec rails s` to launch the app on https://localhost:3000.
-9. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
-   1. running `bundle exec rake jobs:work` will start a DelayedJob Worker
+8. Run `bundle exec rake spec` to run the spec tests.
+9. Run `bundle exec rake cucumber` to run the cucumber tests.
+10. Run `bundle exec rails s` to launch the app on https://localhost:3000.
+11. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
+   a. running `bundle exec rake jobs:work` will start a DelayedJob Worker
+   
+### If Chrome give a certificates error and will not let you proceed
+
+1. Double click on `./config/ssl/localhost.crt`
+2. Right click and select "Get Info"
+3. Open "Trust" Panel
+4. Change "When using this certificate" to "Always Trust"
+5. Reload the webpage
+6. Open the "Advanced" pane at the bottom
+7. Click "Proceed to website"
 
 ## Whats included in this App?
 
@@ -66,11 +79,11 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Getting started
 
-1. The Get school experience service (the candidate facing part), is publicly 
-available but you'll need to setup School profiles to search for school. 
+1. The Get school experience service (the candidate facing part), is publicly
+available but you'll need to setup School profiles to search for school.
    1. That can be done from the [Manage school experience](https://localhost:3000/schools) service
-2. The Manage school experience service requires a DfE Sign In account attached 
-to a School. You can sign up for an account from the login page, but you'll 
+2. The Manage school experience service requires a DfE Sign In account attached
+to a School. You can sign up for an account from the login page, but you'll
 need to get the DfE Sign-in team to approve you for a school.
 
 ## Linting
@@ -78,7 +91,7 @@ need to get the DfE Sign-in team to approve you for a school.
 It's best to lint just your app directories and not those belonging to the framework, e.g.
 
 ```bash
-bundle exec govuk-lint-ruby app lib spec
+bundle exec rubocop app config lib features spec spec_external
 ```
 
 You can copy the `script/pre-commit` to `.git/hooks/pre-commit` and `git` will
@@ -86,29 +99,21 @@ then lint check your commits prior to committing.
 
 ## Configuring the application
 
-This can be controlled from various environment variables, see 
+This can be controlled from various environment variables, see
 [Env Vars](doc/env-vars.md) for more information.
 
 ## Monitoring health and deployment version
 
-There is a `/healthcheck.txt` endpoint which will verify both Postgres and 
-Redis connectivity.
+There is a JSON `/healthcheck` endpoint which will verify connectivity to each of the 
+services dependencies to confirm whether the service is healthy.
 
-There is a `/deployment.txt` endpoint which will reflect the contents of 
-`DEPLOYMENT_ID` back to allow checking when the deployed version has changed.
+The endpoint also includes the git commit SHA of the codebase deployed as well
+as a copy of the `DEPLOYMENT_ID` to allow checking when the deployed version has 
+changed. This is retrieved from the following environment variable.
 
-This is protected by HTTPS Basic Auth, and is configured by the following 3 
-environment variables.
+`DEPLOYMENT_ID` - identifier for the current deployment.
 
-`DEPLOYMENT_ID` - identifier for the current deployment
-`DEPLOYMENT_USERNAME` - username to protect the endpoint
-`DEPLOYMENT_PASSWORD` - password to protect the endpoint
-
-There is also an `/healthchecks/api.txt` which is password protected using the
-above credentials and will perform a check against each of the configured API 
-endpoints.
-
-## Parallel testing
+## Testing
 
 If you have plenty of cpu cores, it faster to run tests with parallel_tests
 
@@ -116,3 +121,23 @@ If you have plenty of cpu cores, it faster to run tests with parallel_tests
 2. Copy the schema over from the main database - `bundle exec rake parallel:prepare`
 3. Run RSpecs - `bundle exec rake parallel:spec`
 3. Run Cucumber features - `bundle exec rake parallel:features`
+
+### Common issues running tests
+
+1. If you find your tests are failing with a notice about `application.css` not being declared to be precompiled in production, run the following command
+
+```bash
+rake tmp:clear
+```
+
+2. IF you find your tests are failing with a notice about `Failure/Error: require File.expand_path('../config/environment', __dir__)` you will need to make sure you have an instance of Redis running a simple way to do this in a separate terminal is to run the following command
+
+```bash
+brew services start redis
+```
+
+or
+
+```bash
+redis-server
+```

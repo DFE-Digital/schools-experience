@@ -4,15 +4,15 @@
 module Candidates
   module Registrations
     class RegistrationAsPlacementRequest
-      NON_PII_MODELS = %i(
+      NON_PII_MODELS = %i[
         background_check
         placement_preference
         education
         teaching_preference
         subject_and_date_information
-      ).freeze
+      ].freeze
 
-      IGNORED_ATTRS = %w(created_at updated_at).freeze
+      IGNORED_ATTRS = %w[created_at updated_at].freeze
 
       def initialize(registration_session)
         @registration_session = registration_session

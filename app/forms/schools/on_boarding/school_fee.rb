@@ -1,7 +1,7 @@
 module Schools
   module OnBoarding
     class SchoolFee < Step
-      AVAILABLE_INTERVALS = %w(Daily One-off).freeze
+      AVAILABLE_INTERVALS = %w[Daily One-off].freeze
 
       attribute :amount_pounds, :decimal, scale: 2, precision: 4
       attribute :description, :string
@@ -9,7 +9,7 @@ module Schools
       attribute :payment_method, :string
 
       validates :amount_pounds, presence: true
-      validates :amount_pounds, numericality: { greater_than: 0, less_than: 10000 }, if: -> { amount_pounds.present? }
+      validates :amount_pounds, numericality: { greater_than: 0, less_than: 10_000 }, if: -> { amount_pounds.present? }
       validates :description, presence: true
       validates :interval, presence: true
       validates :interval, inclusion: { in: AVAILABLE_INTERVALS }, if: -> { interval.present? }

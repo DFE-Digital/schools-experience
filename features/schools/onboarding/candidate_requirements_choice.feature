@@ -17,7 +17,7 @@ Feature: Candidates requirements choice
     When I submit the form
     Then I should be on the 'candidate requirements selection' page
 
-  Scenario: Completing the step choosing yes
+  Scenario: Completing the step choosing no
     Given I choose 'No' from the 'Do you have any candidate requirements?' radio buttons
     When I submit the form
     Then I should be on the 'fees charged' page

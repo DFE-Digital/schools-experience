@@ -29,9 +29,9 @@ module Bookings
       def prioritise(contacts)
         contact_ids = contacts.map(&:contactid).compact
 
-        candidates = Bookings::Candidate.
-          where(gitis_uuid: contact_ids).
-          pluck(:gitis_uuid)
+        candidates = Bookings::Candidate
+          .where(gitis_uuid: contact_ids)
+          .pluck(:gitis_uuid)
 
         contacts.partition { |c| candidates.include? c.contactid }
       end

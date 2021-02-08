@@ -131,11 +131,9 @@ Then("there should be the following buttons:") do |table|
   # if we don't find a regular link/button check for that too
   table.transpose.raw.flatten.each do |button_text|
     within('.accept-or-reject') do
-      begin
-        expect(page).to have_css('.govuk-button', text: button_text)
-      rescue RSpec::Expectations::ExpectationNotMetError
-        expect(page).to have_css("input.govuk-button[value='#{button_text}']")
-      end
+      expect(page).to have_css('.govuk-button', text: button_text)
+    rescue RSpec::Expectations::ExpectationNotMetError
+      expect(page).to have_css("input.govuk-button[value='#{button_text}']")
     end
   end
 end

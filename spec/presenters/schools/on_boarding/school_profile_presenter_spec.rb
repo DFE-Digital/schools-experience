@@ -4,7 +4,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   subject { described_class.new profile }
 
   let! :school do
-    FactoryBot.create :bookings_school, :full_address, urn: 123456
+    FactoryBot.create :bookings_school, :full_address, urn: 123_456
   end
 
   context '#school_name' do
@@ -105,27 +105,37 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
     end
 
+    context 'when inschool' do
+      let :dbs_requirement do
+        build :dbs_requirement, dbs_policy_conditions: 'inschool', dbs_policy_details_inschool: 'requires recent dbs check'
+      end
+
+      it 'returns the correct details' do
+        expect(subject.dbs_check).to eq 'Yes - when in school - requires recent dbs check'
+      end
+    end
+
     context 'when not required' do
       context 'when additional details provide' do
         let :dbs_requirement do
           build :dbs_requirement,
-            requires_check: false, no_dbs_policy_details: 'Some details'
+            dbs_policy_conditions: 'notrequired', no_dbs_policy_details: 'Some details'
         end
 
         it 'returns the correct details' do
           expect(subject.dbs_check).to eq \
-            'No - Candidates will be accompanied at all times - Some details'
+            'No - Candidates will be accompanied at all times when in school - Some details'
         end
       end
 
       context 'when additional details not provide' do
         let :dbs_requirement do
-          build :dbs_requirement, requires_check: false
+          build :dbs_requirement, dbs_policy_conditions: 'notrequired'
         end
 
         it 'returns the correct details' do
           expect(subject.dbs_check).to eq \
-            'No - Candidates will be accompanied at all times'
+            'No - Candidates will be accompanied at all times when in school'
         end
       end
     end
