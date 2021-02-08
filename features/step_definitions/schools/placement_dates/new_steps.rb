@@ -3,6 +3,7 @@ Given("I fill in the form with a future date and duration of {int}") do |int|
   @duration = int
   step "I fill in the date field 'Enter start date' with #{@date.strftime('%d-%m-%Y')}"
   fill_in "How long will it last?", with: @duration
+  choose "In school experience"
 end
 
 Given("I fill in the form with a duration of {int}") do |int|

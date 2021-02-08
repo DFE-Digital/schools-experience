@@ -574,7 +574,7 @@ DEPENDENCIES
   phonelib
   pry-byebug
   pry-rails
-  puma (~> 5.0)
+  puma (~> 5.2)
   rack-rewrite
   rack-timeout
   rails (~> 6.1.1)

@@ -13,7 +13,10 @@
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <%= form.text_area :availability_info, rows: 7, label_options: { overwrite_defaults!: true, class: 'govuk-heading-l' } do %>
-            <p>Outline when you offer school experience at your school.</p>
+            <p>
+              Outline when you offer in school or virtual school experiences at
+              your school.
+            </p>
 
             <p>
               For example, on certain days of the week or around exams,
@@ -26,7 +29,10 @@
             </p>
           <%- end -%>
         </fieldset>
+
       </div>
+
+      <%= form.radio_button_fieldset :experience_type, choices: form.object.class::EXPERIENCE_TYPES %>
 
       <%= form.submit 'Save availability description' %>
     <%- end -%>
