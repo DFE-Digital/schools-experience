@@ -45,18 +45,28 @@ RSpec.describe Bookings::Profile, type: :model do
       it { is_expected.to validate_uniqueness_of :school_id }
     end
 
-    describe "dbs_requires_check" do
-      it { is_expected.not_to allow_value(nil).for :dbs_requires_check }
+    describe "dbs_policy_conditions" do
+      described_class::DBS_POLICY_CONDITIONS.each do |condition|
+        it { is_expected.to allow_value(condition).for :dbs_policy_conditions }
+      end
+      it { is_expected.not_to allow_value("random").for :dbs_policy_conditions }
+      it { is_expected.not_to allow_value("").for :dbs_policy_conditions }
+      it { is_expected.not_to allow_value(nil).for :dbs_policy_conditions }
     end
 
     describe "dbs_policy_details" do
-      context 'when dbs_requires_check' do
-        before { subject.dbs_requires_check = true }
+      context 'when dbs_policy_conditions is required' do
+        before { subject.dbs_policy_conditions = 'required' }
         it { is_expected.to validate_presence_of :dbs_policy_details }
       end
 
-      context 'when not dbs_requires_check' do
-        before { subject.dbs_requires_check = false }
+      context 'when dbs_policy_conditions is inschool' do
+        before { subject.dbs_policy_conditions = 'inschool' }
+        it { is_expected.to validate_presence_of :dbs_policy_details }
+      end
+
+      context 'when dbs_policy_conditions is notrequired' do
+        before { subject.dbs_policy_conditions = 'notrequired' }
         it { is_expected.not_to validate_presence_of :dbs_policy_details }
       end
     end

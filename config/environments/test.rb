@@ -166,7 +166,7 @@ Rails.application.configure do
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
   # Don't actually attempt to delivery emails during tests
-  config.x.notify_client = NotifyFakeClient
+  config.x.notify_client = 'NotifyFakeClient'
 
   config.x.default_phase = 4
   config.x.phase = 10_000
@@ -216,5 +216,6 @@ Rails.application.configure do
   config.after_initialize do
     Bullet.enable = true
     Bullet.raise = true
+    Bullet.unused_eager_loading_enable = false
   end
 end

@@ -13,7 +13,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         described_class.new(completed_attrs).attributes
       end
 
-      it { is_expected.to include(dbs_requires_check: true) }
+      it { is_expected.to include(dbs_policy_conditions: 'required') }
       it { is_expected.to include(dbs_policy_details: 'Must have recent dbs check') }
 
       it { is_expected.to include(individual_requirements: /Must be applying to or have applied to our, or a partner school/) }
@@ -68,7 +68,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
     context 'with completed profile with blank fields' do
       let(:model_attrs) do
         model = build(:school_profile, :completed)
-        model.dbs_requirement_requires_check = false
+        model.dbs_requirement_dbs_policy_conditions = 'notrequired'
         model.dbs_requirement_dbs_policy_details = ''
         model.dbs_requirement_no_dbs_policy_details = ''
         model.candidate_requirement_dbs_requirement = 'never'
@@ -102,7 +102,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         described_class.new(model_attrs).attributes
       end
 
-      it { is_expected.to include(dbs_requires_check: false) }
+      it { is_expected.to include(dbs_policy_conditions: 'notrequired') }
       it { is_expected.to include(dbs_policy_details: nil) }
       it { is_expected.to include(individual_requirements: 'None') }
       it { is_expected.to include(description_details: nil) }
