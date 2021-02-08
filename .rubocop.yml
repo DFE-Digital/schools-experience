@@ -66,6 +66,7 @@ Rails/UnknownEnv:
     - development
     - test
     - servertest
+    - staging
     - production
 
 # These are considered safe to autofix but are not actually redundant
