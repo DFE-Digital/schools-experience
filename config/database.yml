@@ -109,3 +109,6 @@ production: &production
 
 servertest:
   <<: *production
+
+staging:
+  <<: *production
