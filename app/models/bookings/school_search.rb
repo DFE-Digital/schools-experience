@@ -98,6 +98,7 @@ private
       .enabled
       .with_availability
       .distinct
+      .includes([:available_placement_dates])
   end
 
   def whitelisted_base_query

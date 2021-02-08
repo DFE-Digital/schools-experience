@@ -48,9 +48,11 @@ We also have markdown pages within the `doc` folder of this git repo
 5. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
 6. Create SSL certificates - `bundle exec rake dev:ssl:generate`
 7. Add the `config/master.key` file - this is available from other team members
-8. Run `bundle exec rails s` to launch the app on https://localhost:3000.
-9. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
-   1. running `bundle exec rake jobs:work` will start a DelayedJob Worker
+8. Run `bundle exec rake spec` to run the spec tests.
+9. Run `bundle exec rake cucumber` to run the cucumber tests.
+10. Run `bundle exec rails s` to launch the app on https://localhost:3000.
+11. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
+   a. running `bundle exec rake jobs:work` will start a DelayedJob Worker
    
 ### If Chrome give a certificates error and will not let you proceed
 
@@ -118,7 +120,7 @@ If you have plenty of cpu cores, it faster to run tests with parallel_tests
 1. Create the databases - `bundle exec rake parallel:create`
 2. Copy the schema over from the main database - `bundle exec rake parallel:prepare`
 3. Run RSpecs - `bundle exec rake parallel:spec`
-3. Run Cucumber features - `bundle exec rake parallel:spec`
+3. Run Cucumber features - `bundle exec rake parallel:features`
 
 ### Common issues running tests
 
@@ -129,6 +131,12 @@ rake tmp:clear
 ```
 
 2. IF you find your tests are failing with a notice about `Failure/Error: require File.expand_path('../config/environment', __dir__)` you will need to make sure you have an instance of Redis running a simple way to do this in a separate terminal is to run the following command
+
+```bash
+brew services start redis
+```
+
+or
 
 ```bash
 redis-server

@@ -1,4 +1,6 @@
 module Candidates::SchoolHelper
+  include Schools::PlacementDatesHelper
+
   def format_school_address(school, separator = ", ")
     safe_join([
       school.address_1.presence,
@@ -34,8 +36,36 @@ module Candidates::SchoolHelper
     end
   end
 
+  def format_school_placement_locations(school)
+    if !school.has_virtual_placements?
+      placement_date_inschool_tag
+    elsif school.has_inschool_placements?
+      safe_join [
+        "Both",
+        placement_date_virtual_tag,
+        "and",
+        placement_date_inschool_tag
+      ], " "
+    else
+      placement_date_virtual_tag
+    end
+  end
+
   def format_school_availability(availability_info)
     availability_info.present? ? safe_format(availability_info) : 'No information supplied'
+  end
+
+  def format_school_experience_type(type)
+    case type
+    when 'virtual' then placement_date_virtual_tag
+    when 'inschool' then placement_date_virtual_tag
+    else
+      safe_join [
+        placement_date_virtual_tag,
+        " and ",
+        placement_date_inschool_tag
+      ]
+    end
   end
 
   def format_phases(school)

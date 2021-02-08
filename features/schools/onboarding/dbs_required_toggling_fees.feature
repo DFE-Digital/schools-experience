@@ -7,14 +7,14 @@ Feature: Dbs required toggling available fees
     And there are some subjects available
     And A school is returned from DFE sign in
 
-  Scenario: New DBS requirement chosing Yes
+  Scenario: New DBS requirement choosing Yes
     Given I have completed the DBS Requirements step
     When I am on the 'fees charged' page
     Then I should see radio buttons for 'DBS check costs' with the following options:
       | Yes |
       | No  |
 
-  Scenario: New DBS requirement chosing No
+  Scenario: New DBS requirement choosing No
     Given I have completed the DBS Requirements step, choosing No
     When I am on the 'fees charged' page
     Then I should not see 'DBS check costs'
@@ -42,7 +42,7 @@ Feature: Dbs required toggling available fees
     When I submit the form
     Then I should be on the 'profile' page
 
-  Scenario: Edit DBS requirement from Yes to No
+  Scenario: Edit DBS requirement from No to Yes
     Given I have completed the following steps:
         | Step name                        | Extra                     |
         | DBS Requirements                 | choosing No               |

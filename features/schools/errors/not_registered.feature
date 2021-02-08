@@ -18,6 +18,7 @@ Feature: The school not registered error page
         Given I am on the 'not registered error' page
         Then I should see a 'Change school' link to the 'change school' page
 
+    @smoke_test
     Scenario: Context
         Given I am on the 'not registered error' page
         Then I should see my current school's name

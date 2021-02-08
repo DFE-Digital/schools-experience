@@ -36,7 +36,7 @@ Feature: Candidate experience details
     When I submit the form
     Then I should see a validation error message
 
-  Scenario: Completing the step
+  Scenario: Completing the step without error
     Given I am on the 'Candidate experience details' page
     And I complete the candidate experience form with valid data
     When I submit the form

@@ -39,6 +39,12 @@ jobs:
     displayName: Build Docker Image without Cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
+  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
+    displayName: Run the Brakeman security scan
+
+  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) rubocop app config lib features spec spec_external
+    displayName: Run the GovUK Lint check
+
   - script: docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(buildCacheTag)
     displayName: Tag build cache image
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/development')))
@@ -91,12 +97,6 @@ jobs:
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
     displayName: 'Tag Docker image (built from debug)'
 
-  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
-    displayName: Run the Brakeman security scan
-
-  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) rubocop app config lib features spec spec_external
-    displayName: Run the GovUK Lint check
-
   - task: Docker@2
     displayName: 'Push tagged image to DockerHub'
     inputs:
@@ -133,7 +133,7 @@ jobs:
 - job: FunctionalTesting
   dependsOn: BuildAndNonBrowserTesting
   strategy:
-    maxParallel: 10
+    maxParallel: 5
     matrix: $[ dependencies.BuildAndNonBrowserTesting.outputs['mtrx.legs'] ]
 
   steps:
@@ -145,7 +145,7 @@ jobs:
       WAIT_COUNT=0
       until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
       echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
-      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber --profile=$(SELENIUM_PROFILE) --format junit --out /ci_build/junit $(features)
+      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber -t @smoke_test --profile=$(SELENIUM_PROFILE) --format junit --out /ci_build/junit $(features)
     displayName: Run Cucumber Tests
 
   - task: PublishTestResults@2

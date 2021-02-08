@@ -51,6 +51,7 @@ Feature: Rejecting placement requests
         And there should be a 'Extra details' text area
         And the submit button should contain text 'Preview rejection email'
 
+    @smoke_test
     Scenario: Rejecting the requests
         Given there is at least one placement request
         And I am on the reject placement request page

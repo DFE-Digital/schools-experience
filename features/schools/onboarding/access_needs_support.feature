@@ -27,7 +27,7 @@ Feature: Access needs support
     When I submit the form
     Then the page title should be 'Access needs support'
 
-  Scenario: Submitting the form successfully
+  Scenario: Submitting the form successfully choosing yes
     Given I am on the 'Access needs support' page
     And I choose 'Yes' from the 'Do you want to add details about how you can support candidates with disabilities and access needs?' radio buttons
     When I submit the form

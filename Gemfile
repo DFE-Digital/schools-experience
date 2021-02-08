@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.3'
+gem 'rails', '~> 6.1.1'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -15,12 +15,12 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '~> 6.0'
+gem 'activerecord-postgis-adapter', '~> 7.0'
 gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.2'
 
 # Use SCSS for stylesheets
 gem 'sassc-rails'
@@ -119,7 +119,7 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
 
-  gem 'shoulda-matchers', '~> 4.3'
+  gem 'shoulda-matchers', '~> 4.5'
   gem 'rails-controller-testing'
   gem "rspec-json_expectations", "~> 2.2"
 
