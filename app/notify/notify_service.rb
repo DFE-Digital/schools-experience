@@ -6,7 +6,9 @@ class NotifyService
   attr_accessor :notification_class
 
   def initialize
-    self.notification_class = Rails.application.config.x.notify_client.presence || Notifications::Client
+    self.notification_class =
+      Rails.application.config.x.notify_client.presence&.constantize ||
+      Notifications::Client
   end
 
   def send_email(email_address:, template_id:, personalisation:)
