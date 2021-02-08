@@ -108,6 +108,7 @@
             <%= summary_row 'Address', format_school_address(school), nil, show_action: false %>
             <%= summary_row 'Education phases', format_school_phases(school), nil, show_action: false %>
             <%= summary_row 'Subjects', format_school_subjects(school), nil, show_action: false %>
+            <%= summary_row 'Experience type', format_school_placement_locations(school), nil, show_action: false %>
           </dl>
 
           <%= govuk_link_to 'View school details',

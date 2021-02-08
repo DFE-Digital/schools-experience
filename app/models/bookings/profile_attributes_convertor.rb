@@ -9,7 +9,7 @@ module Bookings
     def attributes
       reset_output
 
-      convert_dbs_required
+      convert_dbs_profile
       convert_individual_requirements
       convert_dress_code
       convert_teacher_training
@@ -46,14 +46,16 @@ module Bookings
 
   private
 
-    def convert_dbs_required
-      if input[:dbs_requirement_requires_check]
-        output[:dbs_requires_check] = true
-        output[:dbs_policy_details] = input[:dbs_requirement_dbs_policy_details].presence
-      else
-        output[:dbs_requires_check] = false
-        output[:dbs_policy_details] = input[:dbs_requirement_no_dbs_policy_details].presence
-      end
+    def convert_dbs_profile
+      output[:dbs_policy_conditions] = input[:dbs_requirement_dbs_policy_conditions]
+
+      output[:dbs_policy_details] = if input[:dbs_requirement_dbs_policy_conditions] == 'notrequired'
+                                      input[:dbs_requirement_no_dbs_policy_details].presence
+                                    elsif input[:dbs_requirement_dbs_policy_conditions] == 'inschool'
+                                      input[:dbs_requirement_dbs_policy_details_inschool].presence
+                                    else
+                                      input[:dbs_requirement_dbs_policy_details].presence
+                                    end
     end
 
     def convert_individual_requirements

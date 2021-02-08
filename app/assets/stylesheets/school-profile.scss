@@ -17,4 +17,20 @@
     width: 12rem;
     min-width: 12rem;
   }
+
+  @include govuk-media-query($until: tablet) {
+    dt {
+      width: 100%;
+    }
+
+    span {
+      margin-right: 0.6rem;
+    }
+  }
+}
+
+.primary-placement-dates {
+  li span {
+    margin-right: 0.6rem;
+  }
 }

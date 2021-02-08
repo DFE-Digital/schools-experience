@@ -56,7 +56,8 @@ module Candidates
               placement_date.id,
               placement_date.date.to_formatted_s(:govuk),
               placement_date.duration,
-              placement_date.date
+              placement_date.date,
+              placement_date.virtual
             )
           end
       end
