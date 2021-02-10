@@ -3,8 +3,7 @@ FactoryBot.define do
     association :bookings_subject, factory: :bookings_subject
 
     association :bookings_placement_request,
-      factory: :bookings_placement_request,
-      created_at: Time.new(2019, 2, 8, 15, 37).in_time_zone
+      factory: :bookings_placement_request
 
     bookings_school { bookings_placement_request.school }
     contact_name { 'William MacDougal' }
