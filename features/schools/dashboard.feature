@@ -74,9 +74,12 @@ Feature: The School Dashboard
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
         Then I should see the following 'medium-priority' links:
-            | Text                   | Hint                                                      | Path                         |
-            | Update school profile  | Add, edit and remove school profile details               | /schools/on_boarding/profile |
-            | Turn requests on / off | Choose to stop / start receiving requests from candidates | /schools/toggle_enabled/edit |
+            | Text                           | Hint                                                                    | Path                         |
+            | View rejected requests         | View request dates, subjects, candidate names and reasons for rejection | /schools/rejected_requests   |
+            | View previous bookings         | View booking dates, subjects and candidate names and attendance         | /schools/previous_bookings   |
+            | Download requests and bookings | Download all requests and bookings as a CSV file                        | /schools/csv_export          |
+            | Update school profile          | Add, edit and remove school profile details                             | /schools/on_boarding/profile |
+            | Turn requests on / off         | Choose to stop / start receiving requests from candidates               | /schools/toggle_enabled/edit |
 
     Scenario: Low priority headings
         Given my school has fully-onboarded

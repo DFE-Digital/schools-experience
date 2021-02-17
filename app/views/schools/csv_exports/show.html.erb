@@ -1,0 +1,32 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Download requests and bookings' => nil
+  }
+%>
+
+<div id="csv-download" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= page_heading "Download requests and bookings" %>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+
+        Please note by using this feature you are exporting personally
+        identifiable information. Please ensure the data is stored securely in
+        line with GDPR regulations.
+      </strong>
+    </div>
+
+    <p>
+      Download a CSV export of all requests and bookings for the current
+      academic year.
+    </p>
+
+    <%= govuk_button_to "Download CSV", schools_csv_export_path, data: {
+          "prevent-double-click" =>"true"
+        } %>
+  </div>
+</div>

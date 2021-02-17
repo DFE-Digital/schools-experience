@@ -47,3 +47,12 @@ Given("my/the school is a {string} school") do |phase|
     raise "unsupported phase #{phase}"
   end
 end
+
+Given "I should see a warning" do
+  expect(page).to have_css ".govuk-warning-text"
+end
+
+Given "I should receive a CSV" do
+  expect(page.response_headers).to include("Content-Type" => "text/csv; charset=utf-8")
+  expect(page.response_headers).to include("Content-Disposition" => start_with("attachment;"))
+end

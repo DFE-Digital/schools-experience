@@ -69,6 +69,17 @@ shared_context "logged in DfE user" do
   end
 end
 
+shared_context "logged in DfE user for school with profile" do
+  include_context "logged in DfE user"
+
+  let! :school do
+    @current_user_school.tap do |s|
+      s.subjects << FactoryBot.create_list(:bookings_subject, 2)
+      create :bookings_profile, school: s
+    end
+  end
+end
+
 shared_examples "a protected page" do
   let(:protocol) { "https://" }
   let(:host) { Rails.configuration.x.oidc_host }
