@@ -162,9 +162,9 @@ module Bookings
     end
 
     def status
-      return 'Candidate cancellation' if booking && candidate_cancellation&.sent?
-      return 'School cancellation'    if booking && school_cancellation&.sent?
-      return 'Booked'                 if booking
+      return 'Candidate cancellation' if booking&.accepted? && candidate_cancellation&.sent?
+      return 'School cancellation'    if booking&.accepted? && school_cancellation&.sent?
+      return 'Booked'                 if booking&.accepted?
       return 'Withdrawn'              if candidate_cancellation&.sent?
       return 'Rejected'               if school_cancellation&.sent?
       return 'Viewed'                 if viewed?

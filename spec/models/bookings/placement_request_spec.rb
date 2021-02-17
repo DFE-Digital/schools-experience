@@ -739,6 +739,12 @@ describe Bookings::PlacementRequest, type: :model do
       it { is_expected.to eq 'Viewed' }
     end
 
+    context 'with incomplete booking' do
+      subject { create(:placement_request, :with_incomplete_booking).status }
+
+      it { is_expected.to eq 'New' }
+    end
+
     context 'when booked' do
       subject { create(:placement_request, :booked).status }
 
