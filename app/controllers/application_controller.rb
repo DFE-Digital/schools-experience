@@ -34,7 +34,7 @@ protected
   helper_method :cookie_preferences
 
   def show_candidate_alert_notification?
-    true
+    false
   end
   helper_method :show_candidate_alert_notification?
 end
