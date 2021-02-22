@@ -56,15 +56,15 @@ private
     )
   end
 
-  def school_urns(reload = false)
+  def school_urns(reload: false)
     if Schools::DFESignInAPI::Client.enabled?
-      school_uuids(reload).values
+      school_uuids(reload: reload).values
     else
       Array.wrap current_urn
     end
   end
 
-  def school_uuids(reload = false)
+  def school_uuids(reload: false)
     session[:uuid_map] = nil if reload
 
     session[:uuid_map] ||= retrieve_school_uuids.freeze
@@ -86,10 +86,5 @@ private
     return true unless Schools::DFESignInAPI::Client.enabled?
 
     other_school_urns.any?
-  end
-
-  def current_school=(new_school)
-    session[:urn]         = new_school.urn
-    session[:school_name] = new_school.name
   end
 end

@@ -7,17 +7,17 @@ module Schools
 
     def show
       @change_school = Schools::ChangeSchool.new \
-        current_user, school_uuids, urn: current_urn
+        current_user, school_uuids(reload: true), change_to_urn: current_urn
 
       @schools = @change_school.available_schools
     end
 
     def create
       @change_school = Schools::ChangeSchool.new \
-        current_user, school_uuids, change_school_params
+        current_user, school_uuids(reload: true), change_school_params
 
       if @change_school.valid?
-        self.current_school = @change_school.retrieve_valid_school!
+        assign_current_school! @change_school.retrieve_valid_school!
         redirect_to schools_dashboard_path
       else
         @schools = @change_school.available_schools
@@ -32,11 +32,16 @@ module Schools
     end
 
     def change_school_params
-      params.fetch(:schools_change_school, {}).permit(:urn)
+      params.fetch(:schools_change_school, {}).permit(:change_to_urn)
     end
 
     def access_denied
       redirect_to schools_errors_inaccessible_school_path
+    end
+
+    def assign_current_school!(new_school)
+      session[:urn]         = new_school.urn
+      session[:school_name] = new_school.name
     end
   end
 end
