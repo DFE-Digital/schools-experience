@@ -41,7 +41,7 @@ Feature: Viewing a previous booking
             | Heading          | Value                                                                  |
             | Subject          | Biology                                                                |
             | DBS certificate  | Yes - Candidate says they have DBS certificate \(not verified by DfE\) |
-            | Request received | 08 February 2019                                                       |
+            | Request received | \d{2}\s\w+\s\d{4}                                                      |
         And the future booking date should be listed
 
     @smoke_test
