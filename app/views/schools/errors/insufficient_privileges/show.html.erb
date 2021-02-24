@@ -5,27 +5,58 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <section>
-      <h1 class="govuk-heading-l">Contact your school’s ‘DfE Sign-in approver’</h1>
+      <h1 class="govuk-heading-l">Request school experience access</h1>
 
-      <p>You do not currently have permission to sign in to manage school experience.</p>
+      <p>You do not currently have permission to to manage school experience.</p>
 
-      <p>
-        You'll need to ask your organisation's ‘DfE Sign-in approver' (often
-        your head or deputy head) and within your DfE Sign-in account they’ll
-        need to:
-      </p>
+      <div>
+        <h2 class="govuk-heading-m">
+          Request access to an organisation via DfE Sign-in
+        </h2>
 
-      <ul class="govuk-list govuk-list--bullet">
-        <li>provide you with access to ‘School Experience’</li>
-        <li>set you up as a ‘School Experience Administrator’</li>
-      </ul>
+        <p>
+          You can request access to another organisation from your
+          ‘DfE Sign-in approver’ via DfE Sign-in.
+        </p>
 
-      <p>If you do not know who’s your ‘DfE Sign-in approver’ either:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>You will need to search for your desired organisation</li>
 
-      <ul class="govuk-list govuk-list--bullet">
-        <li>email us with your URN at <%= mail_to('organise.school-experience@education.gov.uk') %></li>
-        <li>submit a <%= link_to('DfE Sign-in support request', 'https://help.signin.education.gov.uk/contact/submit?type=create-account') %></li>
-      </ul>
+          <li>
+            Then request access to the ‘School Experience‘ service
+          </li>
+
+          <li>
+            Followed by the ‘School Experience Administrator‘ role
+          </li>
+        </ul>
+
+        <%= govuk_link_to 'Request organisation access', @organisation_access_url %>
+      </div>
+
+      <div>
+        <h2>
+          Contact your school’s ‘DfE Sign-in approver’
+        </h2>
+
+        <p>
+          You'll need to ask your organisation's ‘DfE Sign-in approver' (often
+          your head or deputy head) and within your DfE Sign-in account they’ll
+          need to:
+        </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>provide you with access to the ‘School Experience’ service</li>
+          <li>set you up with the ‘School Experience Administrator’ role</li>
+        </ul>
+
+        <p>If you do not know who’s your ‘DfE Sign-in approver’ either:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>email us with your URN at <%= mail_to('organise.school-experience@education.gov.uk') %></li>
+          <li>submit a <%= link_to('DfE Sign-in support request', 'https://help.signin.education.gov.uk/contact/submit?type=create-account') %></li>
+        </ul>
+      </div>
     </section>
   </div>
 </div>
