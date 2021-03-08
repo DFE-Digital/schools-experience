@@ -83,7 +83,7 @@ group :development, :test do
   gem 'pry-byebug'
 
   # Testing framework
-  gem 'rspec-rails', '~> 4.0'
+  gem 'rspec-rails', '~> 4.1'
   gem 'rspec_junit_formatter'
   gem 'factory_bot_rails'
 
