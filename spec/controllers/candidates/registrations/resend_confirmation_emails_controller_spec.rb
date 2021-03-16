@@ -62,7 +62,7 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
 
     context 'session not found' do
       before do
-        allow(ExceptionNotifier).to receive :notify_exception
+        allow(Sentry).to receive :capture_exception
 
         Candidates::Registrations::RegistrationStore.instance.store! \
           registration_session
@@ -74,14 +74,9 @@ describe Candidates::Registrations::ResendConfirmationEmailsController, type: :r
           registration_session.school
       end
 
-      it 'notifys exception monitoring' do
-        expect(ExceptionNotifier).to have_received(:notify_exception).with(
-          Candidates::Registrations::RegistrationStore::SessionNotFound,
-          data: {
-            action: 'ResendConfirmationEmailsController#create',
-            uuid: registration_session.uuid
-          }
-        )
+      it 'notifies exception monitoring' do
+        expect(Sentry).to have_received(:capture_exception).with \
+          kind_of(Candidates::Registrations::RegistrationStore::SessionNotFound)
       end
 
       it 'renders the shared/session_expired?' do

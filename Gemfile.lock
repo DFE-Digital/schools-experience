@@ -180,9 +180,6 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     erubi (1.10.0)
-    exception_notification (4.4.3)
-      actionmailer (>= 4.0, < 7)
-      activesupport (>= 4.0, < 7)
     execjs (2.7.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
@@ -468,7 +465,6 @@ GEM
       rack (~> 2.2)
       rack-protection (= 2.1.0)
       tilt (~> 2.0)
-    slack-notifier (2.3.2)
     spoon (0.0.6)
       ffi
     spring (2.1.1)
@@ -567,7 +563,6 @@ DEPENDENCIES
   delayed_job_active_record
   delayed_job_web
   dotenv-rails
-  exception_notification
   factory_bot_rails
   faraday
   foreman
@@ -601,7 +596,6 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   shoulda-matchers (~> 4.5)
-  slack-notifier
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)

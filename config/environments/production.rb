@@ -129,13 +129,6 @@ Rails.application.configure do
                          reconnect_attempts: 1,
                          tcp_keepalive: 60,
                          error_handler: lambda do |_method:, returning:, exception:|
-                                          ExceptionNotifier.notify_exception(
-                                            exception,
-                                            data: {
-                                              returning: returning.inspect
-                                            }
-                                          )
-
                                           Sentry.capture_exception(exception)
                                         end
                        }
