@@ -62,7 +62,7 @@ module Schools
     def gitis_retrieval_error(exception)
       if Rails.env.production? || Rails.env.staging?
         ExceptionNotifier.notify_exception exception
-        Raven.capture_exception exception
+        Sentry.capture_exception exception
       end
 
       render 'shared/failed_gitis_connection', status: :service_unavailable
@@ -73,7 +73,7 @@ module Schools
         redirect_to schools_change_path
       else
         ExceptionNotifier.notify_exception exception
-        Raven.capture_exception exception
+        Sentry.capture_exception exception
 
         redirect_to schools_errors_insufficient_privileges_path
       end

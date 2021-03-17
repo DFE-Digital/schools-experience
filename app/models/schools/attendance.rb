@@ -49,7 +49,7 @@ module Schools
 
     def update_error(exception)
       ExceptionNotifier.notify_exception(exception)
-      Raven.capture_exception(exception)
+      Sentry.capture_exception(exception)
     end
   end
 end

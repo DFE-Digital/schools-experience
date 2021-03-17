@@ -19,7 +19,7 @@ module Candidates
           uuid: current_registration.uuid
         })
 
-        Raven.capture_exception(e)
+        Sentry.capture_exception(e)
 
         render 'shared/session_expired'
       end
