@@ -26,6 +26,7 @@
 /node_modules
 yarn-debug.log*
 .yarn-integrity
+package-lock.json
 
 .env*.local
 
