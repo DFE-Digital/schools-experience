@@ -29,6 +29,9 @@ module Schools
         .count
 
       set_latest_service_update
+
+      @dfe_sign_in_request_organisation_url =
+        Rails.application.config.x.dfe_sign_in_request_organisation_url.presence
     end
 
   private
