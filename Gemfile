@@ -54,7 +54,9 @@ gem 'slack-notifier'
 gem 'kaminari'
 
 gem 'phonelib'
-gem 'sentry-raven'
+gem 'sentry-rails'
+gem 'sentry-ruby'
+gem 'sentry-delayed_job'
 
 gem 'rack-rewrite'
 gem 'rack-timeout'

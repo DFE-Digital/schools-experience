@@ -136,7 +136,7 @@ Rails.application.configure do
                                             }
                                           )
 
-                                          Raven.capture_exception(exception)
+                                          Sentry.capture_exception(exception)
                                         end
                        }
 

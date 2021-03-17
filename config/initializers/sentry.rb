@@ -1,3 +1,3 @@
-Raven.configure do |config|
+Sentry.init do |config|
   config.excluded_exceptions -= ['ActionController::InvalidAuthenticityToken']
 end
