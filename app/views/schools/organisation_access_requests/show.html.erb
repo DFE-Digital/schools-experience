@@ -1,0 +1,69 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Request access to another organisation' => nil
+  }
+%>
+
+<div id="dsi-org-access-request" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <section>
+      <%= page_heading "Request access to another organisation" %>
+
+      <% if @dfe_sign_in_request_organisation_url %>
+
+        <div>
+          <h2 class="govuk-heading-m">
+            Request access to an organisation via DfE Sign-in
+          </h2>
+
+          <p>
+            You can request access to another organisation from your
+            ‘DfE Sign-in approver’ via DfE Sign-in.
+          </p>
+
+          <ul class="govuk-list govuk-list--bullet">
+            <li>You will need to search for your desired organisation</li>
+
+            <li>
+              Then request access to the ‘School Experience‘ service
+            </li>
+
+            <li>
+              Followed by the ‘School Experience Administrator‘ role
+            </li>
+          </ul>
+
+          <%= govuk_link_to 'Request organisation access', @dfe_sign_in_request_organisation_url %>
+        </div>
+
+      <% else %>
+
+        <div>
+          <h2>
+            Contact your school’s ‘DfE Sign-in approver’
+          </h2>
+
+          <p>
+            You'll need to ask your organisation's ‘DfE Sign-in approver' (often
+            your head or deputy head) and within your DfE Sign-in account they’ll
+            need to:
+          </p>
+
+          <ul class="govuk-list govuk-list--bullet">
+            <li>provide you with access to the ‘School Experience’ service</li>
+            <li>set you up with the ‘School Experience Administrator’ role</li>
+          </ul>
+
+          <p>If you do not know who is your ‘DfE Sign-in approver’ either:</p>
+
+          <ul class="govuk-list govuk-list--bullet">
+            <li>email us with your URN at <%= mail_to('organise.school-experience@education.gov.uk') %></li>
+            <li>submit a <%= link_to('DfE Sign-in support request', 'https://help.signin.education.gov.uk/contact/submit?type=create-account') %></li>
+          </ul>
+        </div>
+
+      <% end %>
+    </section>
+  </div>
+</div>

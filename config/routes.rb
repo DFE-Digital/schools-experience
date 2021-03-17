@@ -48,6 +48,8 @@ Rails.application.routes.draw do
     resource :contact_us, only: :show, controller: 'contact_us'
     resource :toggle_enabled, only: %i[edit update], as: 'enabled', controller: 'toggle_enabled'
 
+    resource :organisation_access_request, only: :show
+
     resources :placement_requests do
       resource :cancellation, only: %i[show new create edit update], controller: 'placement_requests/cancellations' do
         resource :notification_delivery, only: %i[show create], controller: 'placement_requests/cancellations/notification_deliveries'

@@ -48,4 +48,14 @@
       Requests are currently <strong><%= school_enabled_description(@current_school) %></strong>.
     </span>
   </div>
+
+  <div id="request-dsi-org-access" class="subsection">
+    <header class="dashboard-medium-priority">
+      <%= link_to "Request access to another organisation",
+                  schools_organisation_access_request_path %>
+    </header>
+    <span class="govuk-hint">
+      Request access to manage school experience for another organisation
+    </span>
+  </div>
 </section>
