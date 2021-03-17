@@ -128,7 +128,7 @@ Rails.application.configure do
                          url: ENV['REDIS_CACHE_URL'].presence || ENV['REDIS_URL'].presence,
                          reconnect_attempts: 1,
                          tcp_keepalive: 60,
-                         error_handler: lambda do |_method:, returning:, exception:|
+                         error_handler: lambda do |method:, returning:, exception:|
                                           Sentry.capture_exception(exception)
                                         end
                        }
