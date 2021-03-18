@@ -61,6 +61,7 @@ module Schools
 
     def gitis_retrieval_error(exception)
       if Rails.env.production? || Rails.env.staging?
+        ExceptionNotifier.notify_exception exception
         Sentry.capture_exception exception
       end
 
@@ -71,6 +72,7 @@ module Schools
       if Schools::ChangeSchool.allow_school_change_in_app?
         redirect_to schools_change_path
       else
+        ExceptionNotifier.notify_exception exception
         Sentry.capture_exception exception
 
         redirect_to schools_errors_insufficient_privileges_path

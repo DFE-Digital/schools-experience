@@ -14,6 +14,11 @@ module Candidates
           render 'shared/session_expired'
         end
       rescue RegistrationStore::SessionNotFound => e
+        ExceptionNotifier.notify_exception(e, data: {
+          action: 'ResendConfirmationEmailsController#create',
+          uuid: current_registration.uuid
+        })
+
         Sentry.capture_exception(e)
 
         render 'shared/session_expired'
