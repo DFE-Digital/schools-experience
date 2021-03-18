@@ -22,6 +22,7 @@ private
   end
 
   def alert_monitoring(exception)
+    ExceptionNotifier.notify_exception exception
     Sentry.capture_exception exception
   end
 end

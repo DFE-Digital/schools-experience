@@ -137,12 +137,14 @@ module Schools
     end
 
     def authentication_failure(exception)
+      ExceptionNotifier.notify_exception(exception)
       Sentry.capture_exception(exception)
 
       redirect_to schools_errors_auth_failed_path
     end
 
     def insufficient_privileges_failure(exception)
+      ExceptionNotifier.notify_exception(exception)
       Sentry.capture_exception(exception)
 
       redirect_to schools_errors_insufficient_privileges_path
@@ -155,6 +157,7 @@ module Schools
     end
 
     def no_organisation_failure(exception)
+      ExceptionNotifier.notify_exception(exception)
       Sentry.capture_exception(exception)
 
       redirect_to schools_errors_insufficient_privileges_path

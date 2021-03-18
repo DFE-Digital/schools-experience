@@ -21,6 +21,7 @@ protected
   end
 
   def session_expired(exception)
+    ExceptionNotifier.notify_exception(exception)
     Sentry.capture_exception(exception)
 
     render 'shared/session_expired'

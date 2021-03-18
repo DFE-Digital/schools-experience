@@ -48,6 +48,9 @@ gem 'delayed_job_web'
 
 gem "redis", "~> 4.2"
 
+gem 'exception_notification'
+gem 'slack-notifier'
+
 gem 'kaminari'
 
 gem 'phonelib'
