@@ -48,7 +48,6 @@ module Schools
     end
 
     def update_error(exception)
-      ExceptionNotifier.notify_exception(exception)
       Sentry.capture_exception(exception)
     end
   end
