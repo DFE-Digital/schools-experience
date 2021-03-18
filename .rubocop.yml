@@ -12,6 +12,12 @@ Metrics/BlockLength:
 Layout/ArgumentAlignment:
   Enabled: false
 
+# We have specific keywords we need to receive but not use in the error handler
+# for Redis connections
+Lint/UnusedBlockArgument:
+  Exclude:
+    - config/environments/*
+
 Style/HashEachMethods:
   Enabled: true
 
