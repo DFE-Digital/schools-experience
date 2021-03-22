@@ -59,7 +59,7 @@ describe Bookings::Gitis::Store::ReadWriteCache do
         before { allow(cache).to receive(:read_multi).with(cache_key) { {} } }
         subject! { store.find Person, uuid }
         it { is_expected.to be_frozen }
-        it { expect(dynamics).to have_received(:find).with(Person, uuid, {}) }
+        it { expect(dynamics).to have_received(:find).with(Person, uuid) }
         it { expect(cache).to have_received(:read_multi).with(cache_key) }
       end
 
@@ -100,14 +100,14 @@ describe Bookings::Gitis::Store::ReadWriteCache do
         subject! { store.find Person, uuids }
         it { is_expected.to all be_frozen }
         it { is_expected.to match_array [entity, p2] }
-        it { expect(dynamics).to have_received(:find).with(Person, uuids, {}) }
+        it { expect(dynamics).to have_received(:find).with(Person, uuids) }
         it { expect(cache).to have_received(:read_multi).with(*keys) }
       end
 
       context 'some in cache' do
         before do
           allow(dynamics).to \
-            receive(:find).with(Person, [entity.id], {}) { [entity] }
+            receive(:find).with(Person, [entity.id]) { [entity] }
 
           allow(cache).to receive(:read_multi).with(*keys) do
             { keys[1] => p2.to_cache }
@@ -116,7 +116,7 @@ describe Bookings::Gitis::Store::ReadWriteCache do
         subject! { store.find Person, uuids }
         it { is_expected.to all be_frozen }
         it { is_expected.to match_array [entity, p2] }
-        it { expect(dynamics).to have_received(:find).with(Person, [uuid], {}) }
+        it { expect(dynamics).to have_received(:find).with(Person, [uuid]) }
         it { expect(cache).to have_received(:read_multi).with(*keys) }
       end
 

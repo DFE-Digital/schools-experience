@@ -43,7 +43,7 @@ describe Bookings::Gitis::Store::WriteOnlyCache do
     context 'with single id' do
       context 'without any options' do
         before do
-          allow(dynamics).to receive(:find).with(Person, uuid, {}) { entity }
+          allow(dynamics).to receive(:find).with(Person, uuid) { entity }
         end
 
         subject! { store.find Person, uuid }

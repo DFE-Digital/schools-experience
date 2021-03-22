@@ -1,4 +1,4 @@
-FROM ruby:2.6.6-alpine3.13
+FROM ruby:2.7.2-alpine3.13
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -23,7 +23,7 @@ RUN yarn install && yarn cache clean
 
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
-RUN gem install bundler --version='~> 2.1.4' && \
+RUN gem install bundler --version='~> 2.2.10' && \
     bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
     bundle config set without 'development' && \
     bundle install --jobs=$(nproc --all) && \
