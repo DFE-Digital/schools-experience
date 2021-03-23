@@ -34,7 +34,6 @@ describe NotifyJob, type: :job do
 
     allow(NotifyService.instance).to receive(:notification_class) { notify_class }
     allow(described_class.queue_adapter).to receive :enqueue_at
-    allow(ExceptionNotifier).to receive :notify_exception
     allow(Sentry).to receive :capture_exception
 
     allow(ActiveJob::Base.logger).to receive :info do |&block|
@@ -63,8 +62,6 @@ describe NotifyJob, type: :job do
 
         it 'alerts monitoring' do
           expect(Sentry).to have_received(:capture_exception).exactly(4).times
-          expect(ExceptionNotifier).to \
-            have_received(:notify_exception).exactly(4).times
         end
       end
 
