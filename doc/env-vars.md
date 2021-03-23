@@ -22,16 +22,9 @@ deployment configuration.
 
 ## Exception notification
 
-If required Exceptions Notifications can be sent to a Slack channel. This is
-enabled and configured via environment variables.
+If required Exceptions Notifications can be sent to Sentry.
 
-`SLACK_WEBHOOK` Webhook to use to post to Slack
-
-`SLACK_CHANNEL` _(optional)_ Channel to post to, should be left blank if hook defaults to a specifi channel
-
-`SLACK_ENV` _(optional)_ Identifier for deployment environment - eg Staging or Production
-
-`SENTRY_DSN` Send exception reports to sentry, config value supplied by Sentry.
+`SENTRY_DSN` - Send exception reports to sentry, config value supplied by Sentry.
 
 ## Monitoring
 
