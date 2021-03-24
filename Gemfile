@@ -3,8 +3,15 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby File.read(".ruby-version").chomp
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.3'
+gem "activesupport", "~> 6.1.3"
+gem "actionpack",    "~> 6.1.3"
+gem "actionview",    "~> 6.1.3"
+gem "activemodel",   "~> 6.1.3"
+gem "activerecord",  "~> 6.1.3"
+gem "activejob",     "~> 6.1.3"
+gem "railties",      "~> 6.1.3"
+gem "bundler",       ">= 1.15.0"
+gem "sprockets-rails", ">= 2.0.0"
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
