@@ -33,11 +33,11 @@ jobs:
       docker pull $(DOCKER_HUB_REPO):$(buildCacheTag) || true
       docker build -f Dockerfile --cache-from=$(DOCKER_HUB_REPO):$(buildCacheTag) -t $(DOCKER_HUB_REPO):$(imageTag) .
     displayName: Build Docker Image using Cache
-    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+    # condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - script: docker build -f Dockerfile -t $(DOCKER_HUB_REPO):$(imageTag) .
-    displayName: Build Docker Image without Cache
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  # - script: docker build -f Dockerfile -t $(DOCKER_HUB_REPO):$(imageTag) .
+  #   displayName: Build Docker Image without Cache
+  #   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
