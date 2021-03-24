@@ -14,7 +14,7 @@ variables:
   APP_URL: http://school-experience:3000
 
 jobs:
-- job: BuildAndNonBrowserTesting
+- job: BuildAndTesting
 
   steps:
 
@@ -90,6 +90,27 @@ jobs:
       testRunTitle: Cucumber results
 
   - script: |
+      docker-compose -f docker-compose.yml -f docker-compose-chrome.yml up -d
+      WAIT_COUNT=0
+      until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+      docker-compose -f docker-compose.yml -f docker-compose-chrome.yml run --rm \
+        -e RAILS_ENV=test \
+        -e SELENIUM_HUB_HOSTNAME=selenium-chrome \
+        -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true \
+        -e APP_URL \
+        -e CUC_DRIVER=chrome \
+        --no-deps \
+        school-experience cucumber -t @javascript --profile=$(SELENIUM_PROFILE) --format junit --out /ci_build/junit
+    displayName: Run Javascript Cucumber Tests with Chrome
+
+  - task: PublishTestResults@2
+    displayName: Upload Javascript Cucumber results
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit/TEST-*.xml'
+      testRunTitle: Javascript Cucumber results
+
+  - script: |
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):latest
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Tag Docker image (built from master)'
@@ -101,6 +122,7 @@ jobs:
 
   - task: Docker@2
     displayName: 'Push tagged image to DockerHub'
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/debug')))
     inputs:
       containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
       repository: $(DOCKER_HUB_REPO)
@@ -124,36 +146,3 @@ jobs:
       repository: $(DOCKER_HUB_REPO)
       command: push
       tags: $(imageTag)-debug
-
-  - task: Bash@3
-    name: mtrx
-    displayName: 'set up functional test matrix variable'
-    inputs:
-      targetType: filePath
-      filePath: ./script/generate_matrix.sh
-
-- job: FunctionalTesting
-  dependsOn: BuildAndNonBrowserTesting
-  strategy:
-    maxParallel: 5
-    matrix: $[ dependencies.BuildAndNonBrowserTesting.outputs['mtrx.legs'] ]
-
-  steps:
-
-  - script: |
-      docker pull $(DOCKER_HUB_REPO):$(imageTag)
-      docker tag $(DOCKER_HUB_REPO):$(imageTag) school-experience:latest
-      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml up -d
-      WAIT_COUNT=0
-      until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
-      echo SELENIUM_HUB_HOSTNAME=selenium-$(browser) CUC_DRIVER=$(browser) with features... $(features)
-      docker-compose -f docker-compose.yml -f docker-compose-$(browser).yml run --rm -e RAILS_ENV=test -e SELENIUM_HUB_HOSTNAME=selenium-$(browser) -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true -e APP_URL -e CUC_DRIVER=$(browser) --no-deps school-experience cucumber -t @smoke_test --profile=$(SELENIUM_PROFILE) --format junit --out /ci_build/junit $(features)
-    displayName: Run Cucumber Tests
-
-  - task: PublishTestResults@2
-    # condition: failed()
-    displayName: Upload Cucumber results
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit/TEST-*.xml'
-      testRunTitle: Cucumber results
