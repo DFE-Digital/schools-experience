@@ -65,7 +65,7 @@ GEM
       activesupport (= 6.1.3)
     activerecord-import (1.0.8)
       activerecord (>= 3.2)
-    activerecord-postgis-adapter (7.0.1)
+    activerecord-postgis-adapter (7.1.0)
       activerecord (~> 6.1)
       rgeo-activerecord (~> 7.0.0)
     activestorage (6.1.3)
@@ -376,7 +376,7 @@ GEM
     regexp_parser (2.0.3)
     rexml (3.2.4)
     rgeo (2.2.0)
-    rgeo-activerecord (7.0.0)
+    rgeo-activerecord (7.0.1)
       activerecord (>= 5.0)
       rgeo (>= 1.0.0)
     rspec-core (3.10.1)
@@ -547,7 +547,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
-  activerecord-postgis-adapter (~> 7.0)
+  activerecord-postgis-adapter (~> 7.1)
   acts_as_list
   addressable
   application_insights!
