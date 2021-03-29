@@ -35,9 +35,9 @@
         <%= govuk_link_to 'Request organisation access', @organisation_access_url %>
       </div>
 
-      <div>
+      <div class="govuk-!-margin-bottom-8">
         <h2>
-          Contact your school’s ‘DfE Sign-in approver’
+          Or you can contact your school’s ‘DfE Sign-in approver’
         </h2>
 
         <p>
@@ -57,6 +57,17 @@
           <li>email us with your URN at <%= mail_to('organise.school-experience@education.gov.uk') %></li>
           <li>submit a <%= link_to('DfE Sign-in support request', 'https://help.signin.education.gov.uk/contact/submit?type=create-account') %></li>
         </ul>
+      </div>
+
+      <div>
+        <h2>Or if you wish to sign in as a different user</h2>
+
+        <p>
+          If you have more then one account, you can sign out and then sign
+          back in with a different account.
+        </p>
+
+        <%= govuk_link_to "Sign out", logout_schools_session_path, class: "govuk-button--secondary" %>
       </div>
     </section>
   </div>
