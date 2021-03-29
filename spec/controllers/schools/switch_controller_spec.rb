@@ -24,7 +24,8 @@ describe Schools::SessionsController, type: :request do
       specify 'should clear the user from the session' do
         expect(session[:current_user]).to be_nil
         expect(session[:school_name]).to be_nil
-        expect(session[:other_urns]).to be_nil
+        expect(session[:uuid_map]).to be_nil
+        expect(session[:urn]).to be_nil
       end
 
       specify 'should redirect to the dashboard' do

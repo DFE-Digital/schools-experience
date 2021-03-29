@@ -111,7 +111,7 @@ describe DFEAuthentication do
 
       context 'with forced reload' do
         before { controller.session[:urns] = [1, 2, 3] }
-        it { expect(subject.send(:school_urns, true)).to eql [4, 5, 6] }
+        it { expect(subject.send(:school_urns, reload: true)).to eql [4, 5, 6] }
         it { expect(controller).not_to have_received(:retrieve_school_uuids) }
       end
 

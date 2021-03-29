@@ -5,9 +5,11 @@ module Schools
 
     attr_reader :current_user, :uuids_to_urns
 
-    attribute :urn, :integer
-    validates :urn, presence: true
-    validates :urn, inclusion: { in: :organisation_urns }, if: -> { urn.present? }
+    attribute :change_to_urn, :integer
+    validates :change_to_urn, presence: true
+    validates :change_to_urn,
+      inclusion: { in: :organisation_urns },
+      if: -> { change_to_urn.present? }
 
     class << self
       def allow_school_change_in_app?
@@ -31,7 +33,7 @@ module Schools
 
     def retrieve_valid_school!
       validate!
-      Bookings::School.find_by!(urn: urn)
+      Bookings::School.find_by!(urn: change_to_urn)
     end
 
     def available_schools
@@ -39,7 +41,7 @@ module Schools
     end
 
     def school_uuid
-      urns_to_uuids[urn]
+      urns_to_uuids[change_to_urn]
     end
 
     def user_uuid

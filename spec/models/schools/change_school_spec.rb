@@ -1,18 +1,25 @@
 require 'rails_helper'
 
 describe Schools::ChangeSchool, type: :model do
+  subject { change_school }
+
   let(:first_school) { create(:bookings_school) }
   let(:second_school) { create(:bookings_school) }
   let(:user_uuid) { SecureRandom.uuid }
   let(:user) { Struct.new(:sub).new(user_uuid) }
-  let(:current_urn) { nil }
+  let(:change_to_urn) { nil }
   let(:user_has_role) { true }
+
   let(:uuid_map) do
     {
       SecureRandom.uuid => first_school.urn,
       SecureRandom.uuid => second_school.urn,
       SecureRandom.uuid => 1_000_000
     }
+  end
+
+  let(:change_school) do
+    described_class.new user, uuid_map, change_to_urn: change_to_urn
   end
 
   before do
@@ -23,16 +30,13 @@ describe Schools::ChangeSchool, type: :model do
       receive(:has_school_experience_role?) { user_has_role }
   end
 
-  let(:change_school) { described_class.new(user, uuid_map, urn: current_urn) }
-  subject { change_school }
-
   describe 'attributes' do
-    it { is_expected.to respond_to :urn }
+    it { is_expected.to respond_to :change_to_urn }
   end
 
   describe 'validations' do
-    it { is_expected.to validate_presence_of :urn }
-    it { is_expected.to validate_inclusion_of(:urn).in_array uuid_map.values }
+    it { is_expected.to validate_presence_of :change_to_urn }
+    it { is_expected.to validate_inclusion_of(:change_to_urn).in_array uuid_map.values }
   end
 
   describe '#available_schools' do
@@ -43,7 +47,7 @@ describe Schools::ChangeSchool, type: :model do
   end
 
   describe '#school_uuid' do
-    let(:current_urn) { second_school.urn }
+    let(:change_to_urn) { second_school.urn }
     it { is_expected.to have_attributes school_uuid: uuid_map.keys[1] }
   end
 
@@ -52,23 +56,26 @@ describe Schools::ChangeSchool, type: :model do
   end
 
   describe '#retrieve_valid_school!' do
-    let(:current_urn) { second_school.urn }
+    subject { change_school.retrieve_valid_school! }
+
+    let(:change_to_urn) { second_school.urn }
 
     context 'with unknown urn' do
-      let(:current_urn) { 20_000 }
+      let(:change_to_urn) { 20_000 }
 
-      it 'will raise exception' do
-        expect { subject.retrieve_valid_school! }.to \
-          raise_exception(ActiveModel::ValidationError)
-      end
+      it { expect { subject }.to raise_exception ActiveModel::ValidationError }
     end
 
     context 'with valid urn' do
-      subject { change_school.retrieve_valid_school! }
-
       it 'should return school' do
         is_expected.to eql second_school
       end
+    end
+
+    context 'with urn not in allow schools list' do
+      let(:uuid_map) { { SecureRandom.uuid => first_school.urn } }
+
+      it { expect { subject }.to raise_exception ActiveModel::ValidationError }
     end
   end
 end

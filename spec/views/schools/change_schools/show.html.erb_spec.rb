@@ -22,7 +22,7 @@ describe 'schools/change_schools/show.html.erb', type: :view do
     before do
       assign :current_school, school
       assign :schools, all_schools
-      assign :change_school, Schools::ChangeSchool.new(nil, {}, urn: school&.urn)
+      assign :change_school, Schools::ChangeSchool.new(nil, {}, change_to_urn: school&.urn)
       without_partial_double_verification do
         allow(view).to receive(:current_urn).and_return school&.urn
       end
@@ -72,7 +72,7 @@ describe 'schools/change_schools/show.html.erb', type: :view do
   context 'when there is an request_organisation_url' do
     let(:change_school) do
       Schools::ChangeSchool.new \
-        SecureRandom.uuid, { SecureRandom.uuid => school.urn }, urn: school.urn
+        SecureRandom.uuid, { SecureRandom.uuid => school.urn }, change_to_urn: school.urn
     end
 
     before do

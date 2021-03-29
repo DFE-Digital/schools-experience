@@ -12,9 +12,7 @@ module Schools
     def new
       return redirect_to(schools_change_path) if Schools::ChangeSchool.allow_school_change_in_app?
 
-      session[:current_user] = nil
-      session[:school_name]  = nil
-      session[:other_urns]   = nil
+      session.clear
 
       redirect_to(schools_dashboard_path)
     end
