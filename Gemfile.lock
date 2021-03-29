@@ -92,7 +92,7 @@ GEM
       execjs
     bindata (2.4.8)
     bindex (0.8.1)
-    bootsnap (1.7.2)
+    bootsnap (1.7.3)
       msgpack (~> 1.0)
     brakeman (5.0.0)
     breasal (0.0.1)
