@@ -16,7 +16,7 @@ $govuk-grid-widths: (
   full: 100%
 );
 
-@import "../../../node_modules/govuk-frontend/govuk/all" ;
+@import "~govuk-frontend/govuk/all";
 @import "global-styles" ;
 @import "cookie-banner" ;
 @import "form-extensions" ;
@@ -26,7 +26,7 @@ $govuk-grid-widths: (
 @import "placement-preference" ;
 @import "subject-and-date-information" ;
 @import "subject-preference" ;
-@import "stimulus/*" ;
+@import "stimulus/all" ;
 @import "testing-fixes" ;
 @import "school-placement-requests" ;
 @import "school-bookings" ;
