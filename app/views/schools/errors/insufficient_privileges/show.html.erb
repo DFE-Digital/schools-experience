@@ -7,7 +7,7 @@
     <section>
       <h1 class="govuk-heading-l">Request school experience access</h1>
 
-      <p>You do not currently have permission to to manage school experience.</p>
+      <p>You do not currently have permission to manage school experience.</p>
 
       <div>
         <h2 class="govuk-heading-m">
@@ -15,8 +15,8 @@
         </h2>
 
         <p>
-          You can request access to another organisation from your
-          ‘DfE Sign-in approver’ via DfE Sign-in.
+          You can request access to another school or organisation via DfE
+          Sign-in.
         </p>
 
         <ul class="govuk-list govuk-list--bullet">
@@ -28,22 +28,22 @@
 
           <li>
             Clicking 'Confirm' will send your access request to the
-            organisations approver.
+            organisation's approver.
           </li>
         </ul>
 
         <%= govuk_link_to 'Request organisation access', @organisation_access_url %>
       </div>
 
-      <div>
+      <div class="govuk-!-margin-bottom-8">
         <h2>
-          Contact your school’s ‘DfE Sign-in approver’
+          Or you can contact your school’s ‘DfE Sign-in approver’
         </h2>
 
         <p>
-          You'll need to ask your organisation's ‘DfE Sign-in approver' (often
-          your head or deputy head) and within your DfE Sign-in account they’ll
-          need to:
+          You will need to ask your organisation's ‘DfE Sign-in approver' (this
+          maybe your head or deputy head) and within your DfE Sign-in account
+          they will need to:
         </p>
 
         <ul class="govuk-list govuk-list--bullet">
@@ -51,12 +51,23 @@
           <li>set you up with the ‘School Experience Administrator’ role</li>
         </ul>
 
-        <p>If you do not know who’s your ‘DfE Sign-in approver’ either:</p>
+        <p>If you do not know who your ‘DfE Sign-in approver’ is either:</p>
 
         <ul class="govuk-list govuk-list--bullet">
           <li>email us with your URN at <%= mail_to('organise.school-experience@education.gov.uk') %></li>
           <li>submit a <%= link_to('DfE Sign-in support request', 'https://help.signin.education.gov.uk/contact/submit?type=create-account') %></li>
         </ul>
+      </div>
+
+      <div>
+        <h2>If you wish to sign in as a different user</h2>
+
+        <p>
+          If you have more than one account, you can sign out and then sign
+          back in with a different account.
+        </p>
+
+        <%= govuk_link_to "Sign out", logout_schools_session_path, class: "govuk-button--secondary" %>
       </div>
     </section>
   </div>
