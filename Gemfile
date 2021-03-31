@@ -22,11 +22,6 @@ gem 'geocoder'
 # Use Puma as the app server
 gem 'puma', '~> 5.2'
 
-# Use SCSS for stylesheets
-gem 'sassc-rails'
-gem "autoprefixer-rails"
-gem "sprockets", "< 5.0.0"
-
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker'
 
