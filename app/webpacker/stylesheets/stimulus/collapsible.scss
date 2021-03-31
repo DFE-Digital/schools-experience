@@ -54,7 +54,7 @@ body.js-enabled [data-controller="collapsible"] {
         height: 30px;
         width: 30px;
         background-repeat: no-repeat;
-        // background-image: image-url('collapsible-toggle-sprite.png');
+        background-image: url('../images/collapsible-toggle-sprite.png');
         background-position: 0 -80px;
       }
     }

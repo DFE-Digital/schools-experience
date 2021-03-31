@@ -15,14 +15,3 @@ Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
-Rails.application.config.assets.precompile += %w[
-  favicon.ico
-  govuk-mask-icon.svg
-  govuk-apple-touch-icon-180x180.png
-  govuk-apple-touch-icon-167x167.png
-  govuk-apple-touch-icon-152x152.png
-  govuk-apple-touch-icon.png
-  govuk-opengraph-image.png
-  govuk-logotype-crown.png
-  govuk-crest-2x.png
-]
