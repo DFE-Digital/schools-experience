@@ -40,18 +40,6 @@ Rails.application.configure do
     'Cache-Control' => "public, max-age=#{1.hour.to_i}"
   }
 
-  # Compress JS using a preprocessor.
-  config.assets.js_compressor = nil
-
-  # Compress CSS using a preprocessor.
-  # We're already using sass and that is set to compress at compile time
-  # so a second pass is not needed - the second pass was (maybe still is)
-  # causing problems with GovUK frontend use of variables
-  config.assets.css_compressor = nil
-
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = true
-
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = 'http://assets.example.com'
 
@@ -206,8 +194,6 @@ Rails.application.configure do
     capped_bookings
     reminders
   ]
-
-  config.sass[:style] = :compressed if config.sass
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 

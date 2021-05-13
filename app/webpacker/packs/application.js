@@ -1,3 +1,8 @@
+require.context("govuk-frontend/govuk/assets");
+require.context('../images', true);
+
+import "../stylesheets/application.scss";
+
 import { initAll, Accordion } from "govuk-frontend";
 initAll();
 
