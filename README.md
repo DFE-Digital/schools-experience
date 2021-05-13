@@ -19,10 +19,10 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Prerequisites
 
-- Ruby 2.6.6 - easiest with rbenv and ruby-build
+- Ruby 2.7.3 - easiest with rbenv and ruby-build
   - `brew install rbenv`
   - `brew install ruby-build`
-  - `rbenv install 2.6.6`
+  - `rbenv install 2.7.3`
 - Bundler 2.1.4 - `gem install bundler --version 2.1.4`
 - PostgreSQL with PostGIS extension
   - `brew install postgis`
@@ -53,7 +53,7 @@ We also have markdown pages within the `doc` folder of this git repo
 10. Run `bundle exec rails s` to launch the app on https://localhost:3000.
 11. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
    a. running `bundle exec rake jobs:work` will start a DelayedJob Worker
-   
+
 ### If Chrome give a certificates error and will not let you proceed
 
 1. Double click on `./config/ssl/localhost.crt`
@@ -104,11 +104,11 @@ This can be controlled from various environment variables, see
 
 ## Monitoring health and deployment version
 
-There is a JSON `/healthcheck` endpoint which will verify connectivity to each of the 
+There is a JSON `/healthcheck` endpoint which will verify connectivity to each of the
 services dependencies to confirm whether the service is healthy.
 
 The endpoint also includes the git commit SHA of the codebase deployed as well
-as a copy of the `DEPLOYMENT_ID` to allow checking when the deployed version has 
+as a copy of the `DEPLOYMENT_ID` to allow checking when the deployed version has
 changed. This is retrieved from the following environment variable.
 
 `DEPLOYMENT_ID` - identifier for the current deployment.

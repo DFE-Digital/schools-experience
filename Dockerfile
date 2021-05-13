@@ -1,4 +1,4 @@
-FROM ruby:2.7.2-alpine3.13
+FROM ruby:2.7.3-alpine3.13
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -14,8 +14,8 @@ EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
 
-RUN apk add --no-cache build-base git tzdata shared-mime-info libxml2 \
-			libxml2-dev postgresql-libs postgresql-dev nodejs yarn
+RUN apk add --no-cache build-base git tzdata libxml2 libxml2-dev \
+			postgresql-libs postgresql-dev nodejs yarn
 
 # install NPM packages removign artifacts
 COPY package.json yarn.lock ./
