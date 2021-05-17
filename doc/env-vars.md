@@ -126,3 +126,7 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 ## Deployment tools
 
 `DEPLOYMENT_ID` - String to be available at `/healthcheck` - used to check the deployed version
+
+## Features
+
+`FLIPPER_PASSWORD` - password to access the Flipper UI
