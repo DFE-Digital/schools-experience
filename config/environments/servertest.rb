@@ -45,4 +45,7 @@ Rails.application.configure do
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 
   config.x.maintenance_mode = false
+
+  config.x.git_api_endpoint = "https://fake-git.api/api"
+  config.x.api_client_cache_store = ActiveSupport::Cache::MemoryStore.new
 end

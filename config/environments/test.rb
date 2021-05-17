@@ -199,6 +199,9 @@ Rails.application.configure do
 
   config.x.maintenance_mode = false
 
+  config.x.git_api_endpoint = "https://fake-git.api/api"
+  config.x.api_client_cache_store = ActiveSupport::Cache::MemoryStore.new
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.raise = true
