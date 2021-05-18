@@ -196,6 +196,15 @@ GEM
     ffi (1.15.0-java)
     ffi (1.15.0-x64-mingw32)
     ffi (1.15.0-x86-mingw32)
+    flipper (0.21.0)
+    flipper-redis (0.21.0)
+      flipper (~> 0.21.0)
+      redis (>= 2.2, < 5)
+    flipper-ui (0.21.0)
+      erubi (>= 1.0.0, < 2.0.0)
+      flipper (~> 0.21.0)
+      rack (>= 1.4, < 3)
+      rack-protection (>= 1.5.3, < 2.2.0)
     foreman (0.87.2)
     geocoder (1.6.7)
     globalid (0.4.2)
@@ -553,6 +562,9 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faraday
+  flipper
+  flipper-redis
+  flipper-ui
   foreman
   geocoder
   govuk_elements_form_builder!
@@ -595,7 +607,7 @@ DEPENDENCIES
   webpacker
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 2.7.3p183
 
 BUNDLED WITH
-   2.2.10
+   2.2.16

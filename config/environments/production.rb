@@ -173,6 +173,7 @@ Rails.application.configure do
   end
 
   config.x.features = %i[subject_specific_dates]
+  config.x.flipper_password = ENV['FLIPPER_PASSWORD']
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
 

@@ -122,6 +122,10 @@ If you have plenty of cpu cores, it faster to run tests with parallel_tests
 3. Run RSpecs - `bundle exec rake parallel:spec`
 3. Run Cucumber features - `bundle exec rake parallel:features`
 
+## Feature switches
+
+We are using [Flipper](https://github.com/jnunemaker/flipper) to manage feature switches within the application. Feature switches are persisted to Redis and you can manage the active feature switches using Flipper-UI, which is mounted at `/flipper` behind basic auth.
+
 ### Common issues running tests
 
 1. If you find your tests are failing with a notice about `application.css` not being declared to be precompiled in production, run the following command

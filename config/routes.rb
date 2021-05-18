@@ -15,6 +15,16 @@ Rails.application.routes.draw do
     root to: 'candidates/home#index'
   end
 
+  flipper_app = Flipper::UI.app(Flipper.instance) do |builder|
+    builder.use Rack::Auth::Basic do |_, password|
+      expected_password = Rails.application.config.x.flipper_password
+      correct_password = expected_password.present? && password == expected_password
+
+      Rails.env.development? || correct_password
+    end
+  end
+  mount flipper_app, at: "/flipper"
+
   get "/pages/:page", to: "pages#show"
 
   get '/privacy_policy', to: 'pages#privacy_policy'

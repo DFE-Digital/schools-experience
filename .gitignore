@@ -32,3 +32,4 @@ package-lock.json
 
 .idea
 .rakeTasks
+.DS_Store
