@@ -54,6 +54,8 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `CRM_OWNER_ID` - GUID for owner of new Contacts, not currently used - supplied by Gitis team
 
+`GIT_API_TOKEN` - API key for the GiT API
+
 ## DFE Sign-in configuration
 
 `DFE_SIGNIN_CLIENT_ID` - Client ID for OIDC integration with Sign-in

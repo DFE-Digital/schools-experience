@@ -66,6 +66,7 @@ gem 'activerecord-import'
 gem 'flipper'
 gem 'flipper-redis'
 gem 'flipper-ui'
+gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
