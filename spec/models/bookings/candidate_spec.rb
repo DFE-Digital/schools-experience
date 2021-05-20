@@ -61,7 +61,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
   end
 
-  describe '.find_by_gitis_contact!' do
+  describe '.find_by_gitis_contact' do
     let(:gitis_contact) { build(:gitis_contact, :persisted) }
 
     context 'with existing Candidate' do
@@ -80,6 +80,28 @@ RSpec.describe Bookings::Candidate, type: :model do
     context 'without existing Candidate' do
       subject { Bookings::Candidate.find_by_gitis_contact gitis_contact }
       it { is_expected.to be_nil }
+    end
+
+    context "when the contact is an instance of GetIntoTeachingApi::SchoolsExperienceSignUp" do
+      let(:gitis_contact) { build(:api_schools_experience_sign_up) }
+
+      context 'with existing Candidate' do
+        let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
+        subject { Bookings::Candidate.find_by_gitis_contact gitis_contact }
+
+        it "return existing candidate" do
+          is_expected.to eql candidate
+        end
+
+        it "will assign gitis_contact" do
+          is_expected.to have_attributes(gitis_contact: gitis_contact)
+        end
+      end
+
+      context 'without existing Candidate' do
+        subject { Bookings::Candidate.find_by_gitis_contact gitis_contact }
+        it { is_expected.to be_nil }
+      end
     end
   end
 
@@ -104,6 +126,31 @@ RSpec.describe Bookings::Candidate, type: :model do
         expect {
           Bookings::Candidate.find_by_gitis_contact! gitis_contact
         }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the contact is an instance of GetIntoTeachingApi::SchoolsExperienceSignUp" do
+      let(:gitis_contact) { build(:api_schools_experience_sign_up) }
+
+      context 'with existing Candidate' do
+        let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
+        subject { Bookings::Candidate.find_by_gitis_contact! gitis_contact }
+
+        it "return existing candidate" do
+          is_expected.to eql candidate
+        end
+
+        it "will assign gitis_contact" do
+          is_expected.to have_attributes(gitis_contact: gitis_contact)
+        end
+      end
+
+      context 'without existing Candidate' do
+        it "raise record not found" do
+          expect {
+            Bookings::Candidate.find_by_gitis_contact! gitis_contact
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
       end
     end
   end
@@ -137,6 +184,33 @@ RSpec.describe Bookings::Candidate, type: :model do
         is_expected.to have_attributes(gitis_contact: gitis_contact)
       end
     end
+
+    context "when the contact is an instance of GetIntoTeachingApi::SchoolsExperienceSignUp" do
+      let(:gitis_contact) { build(:api_schools_experience_sign_up) }
+
+      context 'with existing' do
+        let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
+
+        it "return existing candidate" do
+          is_expected.to eql candidate
+        end
+
+        it "will assign gitis_contact" do
+          is_expected.to have_attributes(gitis_contact: gitis_contact)
+        end
+      end
+
+      context 'without existing' do
+        it "will create candidate" do
+          is_expected.to be_kind_of Bookings::Candidate
+          is_expected.to be_persisted
+        end
+
+        it "will assign gitis_contact" do
+          is_expected.to have_attributes(gitis_contact: gitis_contact)
+        end
+      end
+    end
   end
 
   describe '.create_from_registration_session!' do
@@ -155,6 +229,37 @@ RSpec.describe Bookings::Candidate, type: :model do
       expect(subject.gitis_contact).to have_attributes \
         firstname: registration.personal_information.first_name,
         lastname: registration.personal_information.last_name
+    end
+
+    context "when the git_api feature is enabled" do
+      around do |example|
+        Flipper.enable(:git_api)
+        example.run
+        Flipper.disable(:git_api)
+      end
+
+      before do
+        allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
+          receive(:get_teaching_subjects) { [] }
+        allow_any_instance_of(GetIntoTeachingApiClient::PrivacyPoliciesApi).to \
+          receive(:get_latest_privacy_policy) { build(:api_privacy_policy) }
+        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          receive(:sign_up_schools_experience_candidate) do |_, sign_up|
+            sign_up.candidate_id = SecureRandom.uuid
+            sign_up
+          end
+      end
+
+      it { is_expected.to be_kind_of Bookings::Candidate }
+      it { is_expected.to be_persisted }
+      it { is_expected.to have_attributes(gitis_uuid: subject.gitis_contact.candidate_id) }
+      it { is_expected.to have_attributes(gitis_contact: instance_of(GetIntoTeachingApiClient::SchoolsExperienceSignUp)) }
+
+      it "will assign contact attributes" do
+        expect(subject.gitis_contact).to have_attributes \
+          first_name: registration.personal_information.first_name,
+          last_name: registration.personal_information.last_name
+      end
     end
   end
 
@@ -264,6 +369,29 @@ RSpec.describe Bookings::Candidate, type: :model do
       expect(subject.gitis_contact).to have_attributes \
         firstname: registration.personal_information.first_name,
         lastname: registration.personal_information.last_name
+    end
+
+    context "when the contact is an instance of GetIntoTeachingApi::SchoolsExperienceSignUp" do
+      let(:candidate) { build(:candidate, :with_api_contact) }
+
+      before do
+        allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
+          receive(:get_teaching_subjects) { [] }
+        allow_any_instance_of(GetIntoTeachingApiClient::PrivacyPoliciesApi).to \
+          receive(:get_latest_privacy_policy) { build(:api_privacy_policy) }
+        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          receive(:sign_up_schools_experience_candidate)
+      end
+
+      it { is_expected.to be_kind_of Bookings::Candidate }
+      it { is_expected.to have_attributes(gitis_uuid: subject.gitis_contact.candidate_id) }
+      it { is_expected.to have_attributes(gitis_contact: instance_of(GetIntoTeachingApiClient::SchoolsExperienceSignUp)) }
+
+      it "will assign contact attributes" do
+        expect(subject.gitis_contact).to have_attributes \
+          first_name: registration.personal_information.first_name,
+          last_name: registration.personal_information.last_name
+      end
     end
   end
 

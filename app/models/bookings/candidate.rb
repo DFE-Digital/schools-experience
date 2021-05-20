@@ -31,13 +31,15 @@ class Bookings::Candidate < ApplicationRecord
 
   class << self
     def find_or_create_from_gitis_contact!(contact)
-      find_or_create_by!(gitis_uuid: contact.id).tap do |c|
+      id = contact.try(:id) || contact.try(:candidate_id)
+      find_or_create_by!(gitis_uuid: id).tap do |c|
         c.gitis_contact = contact
       end
     end
 
     def find_by_gitis_contact(contact)
-      candidate = find_by(gitis_uuid: contact.id)
+      id = contact.try(:id) || contact.try(:candidate_id)
+      candidate = find_by(gitis_uuid: id)
       return nil unless candidate
 
       candidate.tap do |c|
@@ -46,7 +48,8 @@ class Bookings::Candidate < ApplicationRecord
     end
 
     def find_by_gitis_contact!(contact)
-      find_by!(gitis_uuid: contact.id).tap do |c|
+      id = contact.try(:id) || contact.try(:candidate_id)
+      find_by!(gitis_uuid: id).tap do |c|
         c.gitis_contact = contact
       end
     end
@@ -61,15 +64,33 @@ class Bookings::Candidate < ApplicationRecord
     end
 
     def create_from_registration_session!(crm, registration)
+      gitis_contact =
+        if Flipper.enabled?(:git_api)
+          GetIntoTeachingApiClient::SchoolsExperienceSignUp.new
+        else
+          Bookings::Gitis::Contact.new
+        end
+
       mapper = Bookings::RegistrationContactMapper.new \
-        registration, Bookings::Gitis::Contact.new
+        registration, gitis_contact
 
       contact = mapper.registration_to_contact
-      crm.write! contact
 
-      create!(gitis_uuid: contact.id, confirmed_at: Time.zone.now, created_in_gitis: true).tap do |candidate|
+      if Flipper.enabled?(:git_api)
+        contact = api_write_contact(contact)
+      else
+        crm.write! contact
+      end
+
+      id = contact.try(:id) || contact.try(:candidate_id)
+      create!(gitis_uuid: id, confirmed_at: Time.zone.now, created_in_gitis: true).tap do |candidate|
         candidate.gitis_contact = contact
       end
+    end
+
+    def api_write_contact(contact)
+      api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+      api.sign_up_schools_experience_candidate(contact)
     end
   end
 
@@ -94,7 +115,12 @@ class Bookings::Candidate < ApplicationRecord
       registration, gitis_contact
 
     mapper.registration_to_contact
-    crm.write gitis_contact
+
+    if gitis_contact.is_a?(GetIntoTeachingApiClient::SchoolsExperienceSignUp)
+      self.class.api_write_contact(gitis_contact)
+    else
+      crm.write gitis_contact
+    end
 
     self
   end
