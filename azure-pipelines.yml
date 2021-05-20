@@ -146,3 +146,11 @@ jobs:
       repository: $(DOCKER_HUB_REPO)
       command: push
       tags: $(imageTag)-debug
+
+  - script: |
+            $outArray = @()
+            $outArray +=  "{"
+            $outArray += "PullRequestId" :$(System.PullRequest.PullRequestId)"
+            $outArray += "}"
+            $outArray | Out-File build_info.json
+    displayName: Create Build Information Artifact
