@@ -84,7 +84,7 @@ describe Schools::ChangeSchool, type: :model do
 
   describe '#task_count_for_urn' do
     context 'with unexpected URN' do
-      subject { change_school.task_count_for_urn 987654 }
+      subject { change_school.task_count_for_urn 987_654 }
       it { is_expected.to be_nil }
     end
 
