@@ -23,14 +23,14 @@ We also have markdown pages within the `doc` folder of this git repo
   - `brew install rbenv`
   - `brew install ruby-build`
   - `rbenv install 2.7.3`
-- Bundler 2.1.4 - `gem install bundler --version 2.1.4`
+- Bundler 2.2.17 - `gem install bundler --version 2.2.17`
 - PostgreSQL with PostGIS extension
   - `brew install postgis`
   - `brew services start postgresql`
 - Redis
   - `brew install redis`
   - `brew services start redis`
-- NodeJS 10.x
+- NodeJS 14.x
 - Yarn
 - Chrome (for javascript tests in Cucumber)
 
@@ -66,7 +66,7 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Whats included in this App?
 
-- Rails 6.0 app with Webpacker
+- Rails 6.1 app with Webpacker
 - SassC (replacement for deprecated sass-rails)
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 - [GOV.UK Lint](https://github.com/alphagov/rubocop-govuk)
