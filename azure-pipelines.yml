@@ -150,12 +150,12 @@ jobs:
   - script: |
              echo "{" > build_info.json
              echo "PullRequest: $(System.PullRequest.PullRequestId)" >> build_info.json
-             echo "}" > build_info.json
+             echo "}" >> build_info.json
     displayName: 'Produce Build Information File'
   
   - task: PublishPipelineArtifact@1
     inputs:
-      targetPath: '$(Pipeline.Workspace)'
-      artifact: 'build_info.json'
+      targetPath: '$(Pipeline.Workspace)/build_info.json'
+      artifact: 'build_info'
       publishLocation: 'pipeline'
     displayName: 'Publish Build Information Artifact'
