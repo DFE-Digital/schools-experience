@@ -147,10 +147,11 @@ jobs:
       command: push
       tags: $(imageTag)-debug
 
+
   - script: |
-             echo "{" > build_info.json
-             echo "PullRequest: $(System.PullRequest.PullRequestId)" >> build_info.json
-             echo "}" >> build_info.json
+             echo '{' > $(PIPELINE_WORKSPACE)/build_info.json
+             echo 'PullRequest: $(SYSTEM_PULLREQUEST_PULLREQUESTID)' >> $(PIPELINE_WORKSPACE)/build_info.json
+             echo '}' >> $(PIPELINE_WORKSPACE)/build_info.json
     displayName: 'Produce Build Information File'
   
   - task: PublishPipelineArtifact@1
