@@ -1,12 +1,12 @@
 GIT
   remote: https://github.com/DFE-Digital/get-into-teaching-api-ruby-client.git
-  revision: 5356ed841675f8872a345ff8ee8f4e3ee8ccb72d
+  revision: 24118c17e132e11fbb638e397fc54b9bf85df522
   specs:
-    get_into_teaching_api_client (1.1.16)
+    get_into_teaching_api_client (1.1.17)
       addressable (~> 2.3, >= 2.3.0)
       json (~> 2.1, >= 2.1.0)
       typhoeus (~> 1.0, >= 1.0.1)
-    get_into_teaching_api_client_faraday (0.1.30)
+    get_into_teaching_api_client_faraday (0.1.31)
       activesupport
       faraday
       faraday-encoding
@@ -202,15 +202,19 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
-    faraday (1.3.0)
+    faraday (1.4.1)
+      faraday-excon (~> 1.1)
       faraday-net_http (~> 1.0)
+      faraday-net_http_persistent (~> 1.1)
       multipart-post (>= 1.2, < 3)
-      ruby2_keywords
+      ruby2_keywords (>= 0.0.4)
     faraday-encoding (0.0.5)
       faraday
+    faraday-excon (1.1.0)
     faraday-http-cache (2.2.0)
       faraday (>= 0.8)
     faraday-net_http (1.0.1)
+    faraday-net_http_persistent (1.1.0)
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     faraday_middleware-circuit_breaker (0.4.1)
@@ -221,6 +225,9 @@ GEM
     ffi (1.15.0-x64-mingw32)
     ffi (1.15.0-x86-mingw32)
     flipper (0.21.0)
+    flipper-active_support_cache_store (0.21.0)
+      activesupport (>= 5.0, < 7)
+      flipper (~> 0.21.0)
     flipper-redis (0.21.0)
       flipper (~> 0.21.0)
       redis (>= 2.2, < 5)
@@ -590,6 +597,7 @@ DEPENDENCIES
   factory_bot_rails
   faraday
   flipper
+  flipper-active_support_cache_store
   flipper-redis
   flipper-ui
   foreman

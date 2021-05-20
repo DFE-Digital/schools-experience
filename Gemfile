@@ -124,5 +124,6 @@ group :test do
 
   gem 'webmock'
   gem 'capybara-screenshot'
+  gem 'flipper-active_support_cache_store'
 end
 
