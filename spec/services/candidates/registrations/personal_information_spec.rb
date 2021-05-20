@@ -42,6 +42,37 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     end
   end
 
+  describe "#issue_verification_code" do
+    let(:pinfo) { build(:personal_information) }
+    let(:request) do
+      GetIntoTeachingApiClient::ExistingCandidateRequest.new(
+        email: pinfo.email,
+        firstName: pinfo.first_name,
+        lastName: pinfo.last_name,
+        dateOfBirth: pinfo.date_of_birth
+      )
+    end
+
+    subject { pinfo.issue_verification_code }
+
+    before do
+      allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
+        receive(:create_candidate_access_token).with(request)
+    end
+
+    it { is_expected.to be_truthy }
+
+    context "when the user cannot be matched back" do
+      before do
+        allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
+          receive(:create_candidate_access_token)
+            .with(request).and_raise(GetIntoTeachingApiClient::ApiError)
+      end
+
+      it { is_expected.to be_falsy }
+    end
+  end
+
   context '#full_name' do
     context 'when first_name last_name attributes are set' do
       subject { described_class.new first_name: 'Testy', last_name: 'McTest' }
