@@ -148,9 +148,14 @@ jobs:
       tags: $(imageTag)-debug
 
   - script: |
-            $outArray = @()
-            $outArray +=  "{"
-            $outArray += "PullRequestId" :$(System.PullRequest.PullRequestId)"
-            $outArray += "}"
-            $outArray | Out-File build_info.json
-    displayName: Create Build Information Artifact
+             echo "{" > build_info.json
+             echo "PullRequest: $(System.PullRequest.PullRequestId)" >> build_info.json
+             echo "}" > build_info.json
+    displayName: 'Produce Build Information File'
+  
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Pipeline.Workspace)'
+      artifact: 'build_info.json'
+      publishLocation: 'pipeline'
+    displayName: 'Publish Build Information Artifact'
