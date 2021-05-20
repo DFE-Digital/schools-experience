@@ -40,6 +40,75 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(dfe_hasdbscertificate: registration.background_check.has_dbs_check) }
     it { is_expected.to have_attributes(_dfe_preferredteachingsubject01_value: teachingsubjectid) }
     it { is_expected.to have_attributes(_dfe_preferredteachingsubject02_value: teachingsubjectid2) }
+
+    context "when contact is an instance of GetIntoTeachingApiClient::SchoolsExperienceSignUp" do
+      let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new }
+      let(:policy) { build(:api_privacy_policy) }
+
+      before do
+        teaching_subjects = [
+          build(:api_lookup_item, id: teachingsubjectid,
+                                  value: registration.teaching_preference.subject_first_choice),
+          build(:api_lookup_item, id: teachingsubjectid2,
+                                  value: registration.teaching_preference.subject_second_choice),
+        ]
+        allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
+          receive(:get_teaching_subjects) { teaching_subjects }
+
+        allow_any_instance_of(GetIntoTeachingApiClient::PrivacyPoliciesApi).to \
+          receive(:get_latest_privacy_policy) { policy }
+      end
+
+      it { is_expected.to have_attributes(first_name: registration.personal_information.first_name) }
+      it { is_expected.to have_attributes(last_name: registration.personal_information.last_name) }
+      it { is_expected.to have_attributes(email: registration.personal_information.email) }
+      it { is_expected.to have_attributes(secondary_email: registration.personal_information.email) }
+      it { is_expected.to have_attributes(date_of_birth: registration.personal_information.date_of_birth) }
+      it { is_expected.to have_attributes(secondary_telephone: registration.contact_information.phone) }
+      it { is_expected.to have_attributes(telephone: registration.contact_information.phone) }
+      it { is_expected.to have_attributes(address_telephone: registration.contact_information.phone) }
+      it { is_expected.to have_attributes(address_line1: registration.contact_information.building) }
+      it { is_expected.to have_attributes(address_line2: registration.contact_information.street) }
+      it { is_expected.to have_attributes(address_line3: "") }
+      it { is_expected.to have_attributes(address_city: registration.contact_information.town_or_city) }
+      it { is_expected.to have_attributes(address_state_or_province: registration.contact_information.county) }
+      it { is_expected.to have_attributes(address_postcode: registration.contact_information.postcode) }
+      it { is_expected.to have_attributes(has_dbs_certificate: registration.background_check.has_dbs_check) }
+      it { is_expected.to have_attributes(preferred_teaching_subject_id: teachingsubjectid) }
+      it { is_expected.to have_attributes(secondary_preferred_teaching_subject_id: teachingsubjectid2) }
+      it { is_expected.to have_attributes(accepted_policy_id: policy.id) }
+
+      context "when has_dbs_certificate is changing" do
+        let(:contact) do
+          GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(
+            hasDbsCertificate: !registration.background_check.has_dbs_check
+          )
+        end
+
+        it { is_expected.to have_attributes(dbs_certificate_issued_at: nil) }
+      end
+
+      context "when email is already present on the contact" do
+        let(:existing_email) { "existing@email.com" }
+        let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(email: existing_email) }
+
+        it { is_expected.to have_attributes(email: existing_email) }
+      end
+
+      context "when telephone is already present on the contact" do
+        let(:existing_telephone) { "123456789" }
+        let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(telephone: existing_telephone) }
+
+        it { is_expected.to have_attributes(telephone: existing_telephone) }
+      end
+
+      context "when address_telephone is already present on the contact" do
+        let(:existing_address_telephone) { "123456789" }
+        let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(addressTelephone: existing_address_telephone) }
+
+        it { is_expected.to have_attributes(address_telephone: existing_address_telephone) }
+      end
+    end
   end
 
   describe "#contact_to_personal_information" do
@@ -64,6 +133,23 @@ RSpec.describe Bookings::RegistrationContactMapper do
         is_expected.to include('email' => 'someone@education.gov.uk')
       end
     end
+
+    context "when contact is an instance of GetIntoTeachingApiClient::SchoolsExperienceSignUp" do
+      let(:contact) { build(:api_schools_experience_sign_up) }
+
+      it { is_expected.to include("first_name" => contact.first_name) }
+      it { is_expected.to include("last_name" => contact.last_name) }
+      it { is_expected.to include("email" => contact.email) }
+      it { is_expected.to include("date_of_birth" => contact.date_of_birth) }
+
+      context 'with whitespace in email address' do
+        let(:contact) { build(:api_schools_experience_sign_up, email: "  someone@education.gov.uk  ") }
+
+        it "will strip the whitespace" do
+          is_expected.to include("email" => "someone@education.gov.uk")
+        end
+      end
+    end
   end
 
   describe "#contact_to_contact_information" do
@@ -78,6 +164,29 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to include('town_or_city' => contact.town_or_city) }
     it { is_expected.to include('county' => contact.county) }
     it { is_expected.to include('postcode' => contact.postcode) }
+
+    context "when contact is an instance of GetIntoTeachingApiClient::SchoolsExperienceSignUp" do
+      let(:contact) { build(:api_schools_experience_sign_up) }
+
+      it { is_expected.to include("phone" => contact.secondary_telephone) }
+      it { is_expected.to include("building" => contact.address_line1) }
+      it { is_expected.to include("street" => "#{contact.address_line1}, #{contact.address_line2}") }
+      it { is_expected.to include("town_or_city" => contact.address_city) }
+      it { is_expected.to include("county" => contact.address_state_or_province) }
+      it { is_expected.to include("postcode" => contact.address_postcode) }
+
+      context "when secondary_telephone is not present" do
+        let(:contact) { build(:api_schools_experience_sign_up, secondary_telephone: nil) }
+
+        it { is_expected.to include("phone" => contact.telephone) }
+      end
+
+      context "when secondary_telephone and telephone are not present" do
+        let(:contact) { build(:api_schools_experience_sign_up, secondary_telephone: nil, telephone: nil) }
+
+        it { is_expected.to include("phone" => contact.mobile_telephone) }
+      end
+    end
   end
 
   describe "#contact_to_teaching_preference" do
@@ -94,5 +203,27 @@ RSpec.describe Bookings::RegistrationContactMapper do
 
     it { is_expected.to include('subject_first_choice' => maths.name) }
     it { is_expected.to include('subject_second_choice' => english.name) }
+
+    context "when contact is an instance of GetIntoTeachingApiClient::SchoolsExperienceSignUp" do
+      let(:contact) do
+        build(
+          :api_schools_experience_sign_up,
+          preferred_teaching_subject_id: maths.gitis_uuid,
+          secondary_preferred_teaching_subject_id: english.gitis_uuid,
+        )
+      end
+
+      before do
+        teaching_subjects = [
+          build(:api_lookup_item, id: maths.gitis_uuid, value: maths.name),
+          build(:api_lookup_item, id: english.gitis_uuid, value: english.name),
+        ]
+        allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
+          receive(:get_teaching_subjects) { teaching_subjects }
+      end
+
+      it { is_expected.to include('subject_first_choice' => maths.name) }
+      it { is_expected.to include('subject_second_choice' => english.name) }
+    end
   end
 end
