@@ -224,6 +224,12 @@ en:
             date_of_birth:
               blank: Enter your date of birth
 
+        candidates/verification_code:
+          attributes:
+            code:
+              invalid: Please enter the latest verification code sent to your email address
+              wrong_length: The verification code should be 6 digits
+
         cookie_preference:
           attributes:
             analytics:
@@ -714,6 +720,8 @@ en:
         firstname: First name
         lastname: Last name
         email: Email address
+      candidates_verification_code:
+        code: Verification code
       cookie_preference:
         analytics:
           true: "On"

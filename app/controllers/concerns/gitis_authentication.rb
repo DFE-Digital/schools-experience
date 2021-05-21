@@ -15,21 +15,34 @@ protected
   def current_contact
     return nil unless session[:gitis_contact]
 
-    @current_contact ||= Bookings::Gitis::Contact.new(session[:gitis_contact])
+    @current_contact ||=
+      if Flipper.enabled?(:git_api)
+        GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(session[:gitis_contact])
+      else
+        Bookings::Gitis::Contact.new(session[:gitis_contact])
+      end
   end
 
   def current_contact=(contact)
-    raise InvalidContact unless contact.is_a?(Bookings::Gitis::Contact)
+    valid_classes = [GetIntoTeachingApiClient::SchoolsExperienceSignUp, Bookings::Gitis::Contact]
+    raise InvalidContact unless valid_classes.any? { |klass| contact.is_a?(klass) }
 
-    if current_contact && current_contact.contactid != contact.contactid
-      Rails.logger.warn \
-        "Signed in Candidate overwritten - #{current_contact.contactid} to #{contact.contactid}"
+    current_id = current_contact.try(:contactid) || current_contact.try(:candidate_id)
+    new_id = contact.try(:contactid) || contact.try(:candidate_id)
+    candidate_changed = current_contact && current_id != new_id
 
+    if candidate_changed
+      Rails.logger.warn "Signed in Candidate overwritten - #{current_id} to #{new_id}"
       delete_registration_sessions!
     end
 
     contact.tap do |c|
-      session[:gitis_contact] = c.attributes
+      session[:gitis_contact] =
+        if c.is_a?(GetIntoTeachingApiClient::SchoolsExperienceSignUp)
+          c.to_hash
+        else
+          c.attributes
+        end
     end
   end
 
