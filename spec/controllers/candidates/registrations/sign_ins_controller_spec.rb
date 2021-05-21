@@ -119,18 +119,9 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
     context "when the git_api feature is enabled" do
       include_context "Stubbed current_registration"
+      include_context "api correct verification code"
 
-      let(:code) { "123456" }
       let(:params) { { candidates_verification_code: { code: code } } }
-      let(:request) do
-        GetIntoTeachingApiClient::ExistingCandidateRequest.new({
-          firstName: personal_info.first_name,
-          lastName: personal_info.last_name,
-          email: personal_info.email,
-          dateOfBirth: personal_info.date_of_birth,
-        })
-      end
-      let(:sign_up) { build(:api_schools_experience_sign_up) }
       let(:perform_request) { put candidates_registration_verify_code_path(school_id), params: params }
 
       around do |example|
@@ -140,12 +131,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       end
 
       context "with a valid code" do
-        before do
-          expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:exchange_access_token_for_schools_experience_sign_up).with(code, request) { sign_up }
-
-          perform_request
-        end
+        before { perform_request }
 
         it "will redirect_to ContactInformation step" do
           expect(response).to \
@@ -159,13 +145,9 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       end
 
       context "with an invalid code" do
-        before do
-          expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:exchange_access_token_for_schools_experience_sign_up)
-            .and_raise(GetIntoTeachingApiClient::ApiError)
+        include_context "api incorrect verification code"
 
-          perform_request
-        end
+        before { perform_request }
 
         it "will show error screen" do
           expect(response).to have_http_status(:success)
@@ -179,9 +161,6 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         before do
           expect_any_instance_of(described_class).to \
             receive(:delete_registration_sessions!)
-
-          expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:exchange_access_token_for_schools_experience_sign_up).with(code, request) { sign_up }
         end
 
         it "will redirect_to ContactInformation step" do
@@ -197,11 +176,6 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
 
         let(:sign_up) { build(:api_schools_experience_sign_up, candidate_id: gitis_contact_attrs[:contactid]) }
 
-        before do
-          expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:exchange_access_token_for_schools_experience_sign_up).with(code, request) { sign_up }
-        end
-
         it "will not create another Candidate and redirect_to ConfirmationInformation step" do
           expect { perform_request }.not_to(change { Bookings::Candidate.count })
 
@@ -213,12 +187,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       context "with valid token but invalid Gitis data" do
         let(:sign_up) { build(:api_schools_experience_sign_up, date_of_birth: nil) }
 
-        before do
-          expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:exchange_access_token_for_schools_experience_sign_up).with(code, request) { sign_up }
-
-          perform_request
-        end
+        before { perform_request }
 
         it "will redirect_to ContactInformation step" do
           expect(response).to \
@@ -271,6 +240,8 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     end
 
     context "when the git_api feature is enabled" do
+      include_context "api candidate matched back"
+
       around do |example|
         Flipper.enable(:git_api)
         example.run
@@ -278,9 +249,6 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       end
 
       it "will issue a verification code and redirect to the show page" do
-        expect_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-          receive(:create_candidate_access_token)
-
         perform_request
 
         expect(response).to \

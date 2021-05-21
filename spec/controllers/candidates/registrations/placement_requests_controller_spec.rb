@@ -72,6 +72,9 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       end
 
       context 'registration job not already enqueued' do
+        include_context "api latest privacy policy"
+        include_context "api teaching subjects"
+
         shared_examples 'a successful create' do
           before do
             allow(Bookings::LogToGitisJob).to \
@@ -79,12 +82,6 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
             allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
               receive(:perform_later).and_return(true)
-
-            allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
-              receive(:get_teaching_subjects) { [] }
-
-            allow_any_instance_of(GetIntoTeachingApiClient::PrivacyPoliciesApi).to \
-              receive(:get_latest_privacy_policy) { build(:api_privacy_policy) }
 
             allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
               receive(:sign_up_schools_experience_candidate) do |_, sign_up|

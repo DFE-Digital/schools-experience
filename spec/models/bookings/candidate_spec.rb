@@ -232,6 +232,9 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
 
     context "when the git_api feature is enabled" do
+      include_context "api latest privacy policy"
+      include_context "api teaching subjects"
+
       around do |example|
         Flipper.enable(:git_api)
         example.run
@@ -239,10 +242,6 @@ RSpec.describe Bookings::Candidate, type: :model do
       end
 
       before do
-        allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
-          receive(:get_teaching_subjects) { [] }
-        allow_any_instance_of(GetIntoTeachingApiClient::PrivacyPoliciesApi).to \
-          receive(:get_latest_privacy_policy) { build(:api_privacy_policy) }
         allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
           receive(:sign_up_schools_experience_candidate) do |_, sign_up|
             sign_up.candidate_id = SecureRandom.uuid
@@ -372,16 +371,11 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
 
     context "when the contact is an instance of GetIntoTeachingApi::SchoolsExperienceSignUp" do
-      let(:candidate) { build(:candidate, :with_api_contact) }
+      include_context "api latest privacy policy"
+      include_context "api teaching subjects"
+      include_context "api sign up"
 
-      before do
-        allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
-          receive(:get_teaching_subjects) { [] }
-        allow_any_instance_of(GetIntoTeachingApiClient::PrivacyPoliciesApi).to \
-          receive(:get_latest_privacy_policy) { build(:api_privacy_policy) }
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:sign_up_schools_experience_candidate)
-      end
+      let(:candidate) { build(:candidate, :with_api_contact) }
 
       it { is_expected.to be_kind_of Bookings::Candidate }
       it { is_expected.to have_attributes(gitis_uuid: subject.gitis_contact.candidate_id) }

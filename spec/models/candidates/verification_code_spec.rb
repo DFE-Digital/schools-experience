@@ -12,10 +12,10 @@ describe Candidates::VerificationCode do
   end
 
   describe "#exchange" do
-    let(:personal_information) { build(:personal_information) }
+    let(:personal_info) { build(:personal_information) }
     let(:instance) { described_class.new(code: code) }
 
-    subject(:exchange) { instance.exchange(personal_information) }
+    subject(:exchange) { instance.exchange(personal_info) }
 
     context "when the code is invalid" do
       let(:code) { "123" }
@@ -29,31 +29,12 @@ describe Candidates::VerificationCode do
     end
 
     context "when the code is valid" do
-      let(:code) { "123456" }
-      let(:response) { build(:api_schools_experience_sign_up) }
-      let(:request) do
-        GetIntoTeachingApiClient::ExistingCandidateRequest.new(
-          firstName: personal_information.first_name,
-          lastName: personal_information.last_name,
-          email: personal_information.email,
-          dateOfBirth: personal_information.date_of_birth
-        )
-      end
+      include_context "api correct verification code"
 
-      before do
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:exchange_access_token_for_schools_experience_sign_up)
-            .with(code, request) { response }
-      end
-
-      it { is_expected.to eq(response) }
+      it { is_expected.to eq(sign_up) }
 
       context "when the code is incorrect" do
-        before do
-          allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:exchange_access_token_for_schools_experience_sign_up)
-              .with(code, request).and_raise(GetIntoTeachingApiClient::ApiError.new)
-        end
+        include_context "api incorrect verification code"
 
         it { is_expected.to be_nil }
 

@@ -42,21 +42,19 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(_dfe_preferredteachingsubject02_value: teachingsubjectid2) }
 
     context "when contact is an instance of GetIntoTeachingApiClient::SchoolsExperienceSignUp" do
+      include_context "api latest privacy policy"
+      include_context "api teaching subjects"
+
       let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new }
-      let(:policy) { build(:api_privacy_policy) }
-
-      before do
-        teaching_subjects = [
-          build(:api_lookup_item, id: teachingsubjectid,
-                                  value: registration.teaching_preference.subject_first_choice),
-          build(:api_lookup_item, id: teachingsubjectid2,
-                                  value: registration.teaching_preference.subject_second_choice),
+      let(:teaching_subjects) do
+        [
+          build(:api_lookup_item,
+            id: teachingsubjectid,
+            value: registration.teaching_preference.subject_first_choice),
+          build(:api_lookup_item,
+             id: teachingsubjectid2,
+             value: registration.teaching_preference.subject_second_choice),
         ]
-        allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
-          receive(:get_teaching_subjects) { teaching_subjects }
-
-        allow_any_instance_of(GetIntoTeachingApiClient::PrivacyPoliciesApi).to \
-          receive(:get_latest_privacy_policy) { policy }
       end
 
       it { is_expected.to have_attributes(first_name: registration.personal_information.first_name) }
@@ -76,7 +74,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
       it { is_expected.to have_attributes(has_dbs_certificate: registration.background_check.has_dbs_check) }
       it { is_expected.to have_attributes(preferred_teaching_subject_id: teachingsubjectid) }
       it { is_expected.to have_attributes(secondary_preferred_teaching_subject_id: teachingsubjectid2) }
-      it { is_expected.to have_attributes(accepted_policy_id: policy.id) }
+      it { is_expected.to have_attributes(accepted_policy_id: latest_policy.id) }
 
       context "when has_dbs_certificate is changing" do
         let(:contact) do
@@ -205,6 +203,8 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to include('subject_second_choice' => english.name) }
 
     context "when contact is an instance of GetIntoTeachingApiClient::SchoolsExperienceSignUp" do
+      include_context "api teaching subjects"
+
       let(:contact) do
         build(
           :api_schools_experience_sign_up,
@@ -212,14 +212,11 @@ RSpec.describe Bookings::RegistrationContactMapper do
           secondary_preferred_teaching_subject_id: english.gitis_uuid,
         )
       end
-
-      before do
-        teaching_subjects = [
+      let(:teaching_subjects) do
+        [
           build(:api_lookup_item, id: maths.gitis_uuid, value: maths.name),
           build(:api_lookup_item, id: english.gitis_uuid, value: english.name),
         ]
-        allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi).to \
-          receive(:get_teaching_subjects) { teaching_subjects }
       end
 
       it { is_expected.to include('subject_first_choice' => maths.name) }

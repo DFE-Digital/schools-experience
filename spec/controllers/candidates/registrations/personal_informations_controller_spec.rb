@@ -166,6 +166,8 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
 
         context 'valid and known to gitis' do
+          include_context "api candidate matched back"
+
           let :personal_information do
             FactoryBot.build :personal_information
           end
@@ -173,9 +175,6 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
           let(:token) { create(:candidate_session_token) }
 
           before do
-            allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-              receive(:create_candidate_access_token)
-
             post \
               '/candidates/schools/10020/registrations/personal_information',
               params: personal_information_params
@@ -188,15 +187,13 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         end
 
         context 'valid but not known to gitis' do
+          include_context "api candidate not matched back"
+
           let :personal_information do
             FactoryBot.build :personal_information, email: 'unknown@mctest.com'
           end
 
           before do
-            allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
-              receive(:create_candidate_access_token)
-                .and_raise(GetIntoTeachingApiClient::ApiError)
-
             post \
               '/candidates/schools/10020/registrations/personal_information',
               params: personal_information_params
