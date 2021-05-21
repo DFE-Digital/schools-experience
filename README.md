@@ -23,14 +23,14 @@ We also have markdown pages within the `doc` folder of this git repo
   - `brew install rbenv`
   - `brew install ruby-build`
   - `rbenv install 2.7.3`
-- Bundler 2.1.4 - `gem install bundler --version 2.1.4`
+- Bundler 2.2.17 - `gem install bundler --version 2.2.17`
 - PostgreSQL with PostGIS extension
   - `brew install postgis`
   - `brew services start postgresql`
 - Redis
   - `brew install redis`
   - `brew services start redis`
-- NodeJS 10.x
+- NodeJS 14.x
 - Yarn
 - Chrome (for javascript tests in Cucumber)
 
@@ -56,17 +56,26 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ### If Chrome give a certificates error and will not let you proceed
 
-1. Double click on `./config/ssl/localhost.crt`
-2. Right click and select "Get Info"
-3. Open "Trust" Panel
-4. Change "When using this certificate" to "Always Trust"
-5. Reload the webpage
-6. Open the "Advanced" pane at the bottom
-7. Click "Proceed to website"
+1. Add the Root Certificate to macOS Keychain
+
+    ***Via the CLI***
+
+    Run `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/localhost.crt`
+
+    ***Via the UI***
+
+    1. Double click on `./config/ssl/localhost.crt`
+    2. Right click and select "Get Info"
+    3. Open "Trust" Panel
+    4. Change "When using this certificate" to "Always Trust"
+
+2. Reload the webpage
+3. Open the "Advanced" pane at the bottom
+4. Click "Proceed to website"
 
 ## Whats included in this App?
 
-- Rails 6.0 app with Webpacker
+- Rails 6.1 app with Webpacker
 - SassC (replacement for deprecated sass-rails)
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 - [GOV.UK Lint](https://github.com/alphagov/rubocop-govuk)
