@@ -27,12 +27,8 @@ protected
     valid_classes = [GetIntoTeachingApiClient::SchoolsExperienceSignUp, Bookings::Gitis::Contact]
     raise InvalidContact unless valid_classes.any? { |klass| contact.is_a?(klass) }
 
-    current_id = current_contact.try(:contactid) || current_contact.try(:candidate_id)
-    new_id = contact.try(:contactid) || contact.try(:candidate_id)
-    candidate_changed = current_contact && current_id != new_id
-
-    if candidate_changed
-      Rails.logger.warn "Signed in Candidate overwritten - #{current_id} to #{new_id}"
+    if current_contact && current_contact.candidate_id != contact.candidate_id
+      Rails.logger.warn "Signed in Candidate overwritten - #{current_contact.candidate_id} to #{contact.candidate_id}"
       delete_registration_sessions!
     end
 

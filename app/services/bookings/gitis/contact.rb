@@ -40,6 +40,7 @@ module Bookings
       alias_attribute :town_or_city, :address1_city
       alias_attribute :county, :address1_stateorprovince
       alias_attribute :postcode, :address1_postalcode
+      alias_attribute :candidate_id, :contactid
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
       validates :'dfe_Country@odata.bind', presence: true, format: BIND_FORMAT, allow_nil: true

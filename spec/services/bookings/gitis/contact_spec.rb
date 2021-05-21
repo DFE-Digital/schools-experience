@@ -31,6 +31,7 @@ describe Bookings::Gitis::Contact, type: :model do
 
       it "will assign id" do
         expect(@contact.id).to eq "d778d663-a022-4c4b-9962-e469ee179f4a"
+        expect(@contact.candidate_id).to eq @contact.id
       end
 
       it "will assign entity_id" do

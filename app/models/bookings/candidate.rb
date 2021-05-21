@@ -31,15 +31,13 @@ class Bookings::Candidate < ApplicationRecord
 
   class << self
     def find_or_create_from_gitis_contact!(contact)
-      id = contact.try(:id) || contact.try(:candidate_id)
-      find_or_create_by!(gitis_uuid: id).tap do |c|
+      find_or_create_by!(gitis_uuid: contact.candidate_id).tap do |c|
         c.gitis_contact = contact
       end
     end
 
     def find_by_gitis_contact(contact)
-      id = contact.try(:id) || contact.try(:candidate_id)
-      candidate = find_by(gitis_uuid: id)
+      candidate = find_by(gitis_uuid: contact.candidate_id)
       return nil unless candidate
 
       candidate.tap do |c|
@@ -48,8 +46,7 @@ class Bookings::Candidate < ApplicationRecord
     end
 
     def find_by_gitis_contact!(contact)
-      id = contact.try(:id) || contact.try(:candidate_id)
-      find_by!(gitis_uuid: id).tap do |c|
+      find_by!(gitis_uuid: contact.candidate_id).tap do |c|
         c.gitis_contact = contact
       end
     end
@@ -82,8 +79,7 @@ class Bookings::Candidate < ApplicationRecord
         crm.write! contact
       end
 
-      id = contact.try(:id) || contact.try(:candidate_id)
-      create!(gitis_uuid: id, confirmed_at: Time.zone.now, created_in_gitis: true).tap do |candidate|
+      create!(gitis_uuid: contact.candidate_id, confirmed_at: Time.zone.now, created_in_gitis: true).tap do |candidate|
         candidate.gitis_contact = contact
       end
     end
