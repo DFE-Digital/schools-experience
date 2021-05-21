@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   get '/healthchecks/api.txt', to: 'healthchecks#api_health', as: :api_health
   get '/whitelist', to: 'healthchecks#urn_whitelist', as: :urn_whitelist
 
+  get "/404", to: "errors#not_found", via: :all
+  get "/422", to: "errors#unprocessable_entity", via: :all
+  get "/500", to: "errors#internal_server_error", via: :all
+
   if Rails.application.config.x.maintenance_mode
     match '*path', to: 'pages#maintenance', via: :all
     root to: 'pages#maintenance'
