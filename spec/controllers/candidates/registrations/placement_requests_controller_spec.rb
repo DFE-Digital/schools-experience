@@ -72,6 +72,9 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       end
 
       context 'registration job not already enqueued' do
+        include_context "api latest privacy policy"
+        include_context "api teaching subjects"
+
         shared_examples 'a successful create' do
           before do
             allow(Bookings::LogToGitisJob).to \
@@ -79,6 +82,12 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
             allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
               receive(:perform_later).and_return(true)
+
+            allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+              receive(:sign_up_schools_experience_candidate) do |_, sign_up|
+                sign_up.candidate_id = SecureRandom.uuid
+                sign_up
+              end
           end
 
           include_context 'fake gitis with known uuid'
@@ -126,6 +135,19 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
               have_received(:perform_later).with \
                 fake_gitis_uuid,
                 Bookings::Gitis::PrivacyPolicy.default
+          end
+
+          context "when the git_api feature is enabled" do
+            around do |example|
+              Flipper.enable(:git_api)
+              example.run
+              Flipper.disable(:git_api)
+            end
+
+            it "does not enqueue an accept privacy policy job" do
+              expect(Candidates::Registrations::AcceptPrivacyPolicyJob).not_to \
+                have_received(:perform_later)
+            end
           end
 
           it 'enqueues a log to gitis job' do

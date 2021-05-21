@@ -149,6 +149,7 @@ Rails.application.routes.draw do
     resources :school_searches, only: %i[new]
 
     get 'verify/:school_id/:token/:uuid', to: 'registrations/sign_ins#update', as: :registration_verify
+    put 'verify/:school_id', to: 'registrations/sign_ins#update', as: :registration_verify_code
 
     resources :schools, only: %i[index show] do
       namespace :registrations do

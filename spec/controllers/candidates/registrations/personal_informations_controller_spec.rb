@@ -157,6 +157,54 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             '/candidates/schools/10020/registrations/contact_information/new'
         end
       end
+
+      context "when the git_api feature is enabled" do
+        around do |example|
+          Flipper.enable(:git_api)
+          example.run
+          Flipper.disable(:git_api)
+        end
+
+        context 'valid and known to gitis' do
+          include_context "api candidate matched back"
+
+          let :personal_information do
+            FactoryBot.build :personal_information
+          end
+
+          let(:token) { create(:candidate_session_token) }
+
+          before do
+            post \
+              '/candidates/schools/10020/registrations/personal_information',
+              params: personal_information_params
+          end
+
+          it 'redirects to the next step' do
+            expect(response).to redirect_to \
+              '/candidates/schools/10020/registrations/sign_in'
+          end
+        end
+
+        context 'valid but not known to gitis' do
+          include_context "api candidate not matched back"
+
+          let :personal_information do
+            FactoryBot.build :personal_information, email: 'unknown@mctest.com'
+          end
+
+          before do
+            post \
+              '/candidates/schools/10020/registrations/personal_information',
+              params: personal_information_params
+          end
+
+          it 'redirects to the contact information step' do
+            expect(response).to redirect_to \
+              '/candidates/schools/10020/registrations/contact_information/new'
+          end
+        end
+      end
     end
   end
 

@@ -10,5 +10,10 @@ FactoryBot.define do
       gitis_contact { build(:gitis_contact, :persisted) }
       gitis_uuid { gitis_contact.id }
     end
+
+    trait :with_api_contact do
+      gitis_contact { build(:api_schools_experience_sign_up) }
+      gitis_uuid { gitis_contact.candidate_id }
+    end
   end
 end

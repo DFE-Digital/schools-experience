@@ -25,7 +25,7 @@
     <h2>Verify your details</h2>
 
     <p>
-      You now need to <strong>select the link</strong> we've sent to
+      You now need to <strong><%= @git_api_enabled ? "enter the verification code" : "select the link" %></strong> we've sent to
       the following email address:
     </p>
 
@@ -33,9 +33,19 @@
       <li><%= @email_address %></li>
     </ul>
 
-    <p>
-      <strong>The link will expire within 1 hour.</strong>
-    </p>
+    <% if @git_api_enabled %>
+      <%= form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
+        <%= f.text_field :code %>
+        <%= f.submit "Submit" %>
+      <% end %>
+      <p>
+        <strong>The code will expire within 15 minutes.</strong>
+      </p>
+    <% else %>
+      <p>
+        <strong>The link will expire within 1 hour.</strong>
+      </p>
+    <% end %>
 
     <p>
       If you cannot find the message in your inbox:
@@ -50,6 +60,6 @@
       link to resend it:
     </p>
 
-    <%= govuk_button_to 'Resend link', @resend_link, secondary: true %>
+    <%= govuk_button_to @git_api_enabled ? "Resend verification code" : "Resend link", @resend_link, secondary: true %>
   </div>
 </div>

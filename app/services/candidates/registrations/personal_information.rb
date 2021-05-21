@@ -32,6 +32,14 @@ module Candidates
         [first_name, last_name].map(&:presence).join(' ')
       end
 
+      def issue_verification_code
+        request = GetIntoTeachingApiClient::ExistingCandidateRequest.new(matchback_attributes)
+        GetIntoTeachingApiClient::CandidatesApi.new.create_candidate_access_token(request)
+        true
+      rescue GetIntoTeachingApiClient::ApiError
+        false
+      end
+
       def create_signin_token(gitis_crm)
         build_candidate_session(gitis_crm).create_signin_token
       end
@@ -65,6 +73,15 @@ module Candidates
       end
 
     private
+
+      def matchback_attributes
+        {
+          email: email,
+          firstName: first_name,
+          lastName: last_name,
+          dateOfBirth: date_of_birth,
+        }
+      end
 
       def build_candidate_session(gitis_crm)
         Candidates::Session.new(
