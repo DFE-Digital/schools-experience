@@ -87,6 +87,26 @@ describe HealthchecksController, type: :request do
       it { expect(response.body).to include_json(api: false) }
       it { expect(response).to have_http_status(:error) }
     end
+
+    context "when the git_api feature is enabled" do
+      around do |example|
+        Flipper.enable(:git_api)
+        example.run
+        Flipper.disable(:git_api)
+      end
+
+      context "with unhealthy API" do
+        before do
+          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+            receive(:health_check).and_raise(GetIntoTeachingApiClient::ApiError)
+
+          get healthcheck_path
+        end
+
+        it { expect(response.body).to include_json(api: false) }
+        it { expect(response).to have_http_status(:error) }
+      end
+    end
   end
 
   describe '#deployment' do
