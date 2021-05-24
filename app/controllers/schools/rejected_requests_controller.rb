@@ -25,7 +25,15 @@ module Schools
     def assign_gitis_contacts(requests)
       return requests if requests.empty?
 
-      contacts = gitis_crm.find(requests.map(&:contact_uuid)).index_by(&:id)
+      contact_ids = requests.map(&:contact_uuid)
+
+      contacts =
+        if Flipper.enabled?(:git_api)
+          api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+          api.get_schools_experience_sign_ups(contact_ids).index_by(&:candidate_id)
+        else
+          gitis_crm.find(contact_ids).index_by(&:id)
+        end
 
       requests.each do |req|
         req.candidate.gitis_contact = contacts[req.contact_uuid]
