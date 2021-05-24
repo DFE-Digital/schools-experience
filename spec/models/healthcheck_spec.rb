@@ -46,6 +46,53 @@ RSpec.describe Healthcheck do
 
       it { is_expected.to be false }
     end
+
+    context "when the git_api feature is enabled" do
+      around do |example|
+        Flipper.enable(:git_api)
+        example.run
+        Flipper.disable(:git_api)
+      end
+
+      context "with a working connection" do
+        before do
+          response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "healthy", crm: "ok")
+          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+            receive(:health_check) { response }
+        end
+
+        it { is_expected.to be true }
+      end
+
+      context "with a broken connection" do
+        before do
+          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+            receive(:health_check).and_raise(GetIntoTeachingApiClient::ApiError)
+        end
+
+        it { is_expected.to be false }
+      end
+
+      context "with a degraded connection (CRM offline)" do
+        before do
+          response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "ok")
+          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+            receive(:health_check) { response }
+        end
+
+        it { is_expected.to be true }
+      end
+
+      context "with a degraded connection (CRM offline)" do
+        before do
+          response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "offline")
+          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+            receive(:health_check) { response }
+        end
+
+        it { is_expected.to be false }
+      end
+    end
   end
 
   describe "test_postgresql" do
