@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :api_schools_experience_sign_up, class: GetIntoTeachingApiClient::SchoolsExperienceSignUp do
     candidate_id { SecureRandom.uuid }
+    full_name { "First Last" }
     first_name { "First" }
     last_name { "Last" }
     email { "email@address.com" }
