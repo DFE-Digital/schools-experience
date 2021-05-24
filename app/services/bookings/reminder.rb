@@ -29,8 +29,16 @@ private
   def assign_gitis_contact(booking)
     return if booking.blank?
 
+    gitis_contact =
+      if Flipper.enabled?(:git_api)
+        api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+        api.get_schools_experience_sign_up(booking.contact_uuid)
+      else
+        gitis_crm.find(booking.contact_uuid)
+      end
+
     booking
       .bookings_placement_request
-      .candidate.gitis_contact = gitis_crm.find(booking.contact_uuid)
+      .candidate.gitis_contact = gitis_contact
   end
 end
