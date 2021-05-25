@@ -40,7 +40,10 @@ module Bookings
       alias_attribute :town_or_city, :address1_city
       alias_attribute :county, :address1_stateorprovince
       alias_attribute :postcode, :address1_postalcode
+
+      # Aliases to achieve parity with GetIntoTeachingApiClient::SchoolsExperienceSignUp
       alias_attribute :candidate_id, :contactid
+      alias_attribute :master_id, :_masterid_value
 
       validates :email, presence: true, format: /\A.+@.+\..+\z/
       validates :'dfe_Country@odata.bind', presence: true, format: BIND_FORMAT, allow_nil: true

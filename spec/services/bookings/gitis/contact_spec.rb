@@ -460,10 +460,12 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to respond_to :statecode }
       it { is_expected.to respond_to :_masterid_value }
       it { is_expected.to respond_to :masterid }
+      it { is_expected.to respond_to :master_id }
       it { is_expected.to respond_to :merged }
 
       it { is_expected.to have_attributes statecode: described_class::READONLY }
       it { is_expected.to have_attributes _masterid_value: masterid }
+      it { is_expected.to have_attributes master_id: masterid }
       it { is_expected.to have_attributes merged: true }
     end
 
