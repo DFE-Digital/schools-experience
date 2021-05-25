@@ -9,6 +9,10 @@ module Bookings
         end
 
         def find(entity_type, id_or_ids, **options)
+          if Flipper.enabled?(:git_api)
+            Sentry.capture_message("Call to Dynamics#find with git_api enabled!")
+          end
+
           params = parse_find_options(**options)
 
           if !id_or_ids.is_a?(Array)
@@ -23,6 +27,10 @@ module Bookings
         end
 
         def fetch(entity_type, filter: nil, limit: 10, order: nil)
+          if Flipper.enabled?(:git_api)
+            Sentry.capture_message("Call to Dynamics#fetch with git_api enabled!")
+          end
+
           params = {
             '$select' => entity_type.attributes_to_select,
             '$top' => limit
@@ -39,6 +47,10 @@ module Bookings
         end
 
         def write(entity)
+          if Flipper.enabled?(:git_api)
+            Sentry.capture_message("Call to Dynamics#write with git_api enabled!")
+          end
+
           raise ArgumentError, "entity must include Entity" unless entity.class < Entity
           return false unless entity.valid?
 
