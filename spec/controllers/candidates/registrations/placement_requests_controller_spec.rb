@@ -74,6 +74,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       context 'registration job not already enqueued' do
         include_context "api latest privacy policy"
         include_context "api teaching subjects"
+        include_context "api add classroom experience note"
 
         shared_examples 'a successful create' do
           before do

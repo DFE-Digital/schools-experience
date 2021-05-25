@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe Bookings::Gitis::EventLogger, type: :model do
   subject { described_class.entry log_type, log_subject }
-  let(:today) { Time.zone.today.to_formatted_s(:gitis) }
+  let(:today) { Time.zone.today }
+  let(:today_str) { today.to_formatted_s(:gitis) }
   let(:padded_urn) { sprintf('%-6s', school.urn) }
 
   context 'with a PlacementRequest' do
@@ -13,7 +14,7 @@ describe Bookings::Gitis::EventLogger, type: :model do
     context 'with flexible dates' do
       it "will generate an entry" do
         is_expected.to eql \
-          "#{today} REQUEST                           #{padded_urn} #{school.name}"
+          "#{today_str} REQUEST                           #{padded_urn} #{school.name}"
       end
     end
 
@@ -24,7 +25,24 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will generate an entry" do
         is_expected.to eql \
-          "#{today} REQUEST                #{formatted_date} #{padded_urn} #{school.name}"
+          "#{today_str} REQUEST                #{formatted_date} #{padded_urn} #{school.name}"
+      end
+    end
+
+    describe "#classroom_experience_note" do
+      subject { described_class.new(log_type, log_subject).classroom_experience_note }
+
+      it { is_expected.to include(recordedAt: today) }
+      it { is_expected.to include(action: "REQUEST") }
+      it { is_expected.to include(schoolUrn: school.urn) }
+      it { is_expected.to include(schoolName: school.name) }
+
+      context "with fixed dates" do
+        let(:date) { create(:bookings_placement_date, bookings_school: log_subject.school) }
+
+        before { log_subject.update!(placement_date: date) }
+
+        it { is_expected.to include(date: date.date) }
       end
     end
   end
@@ -37,13 +55,22 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
     it "will record confirmation of a booking" do
       is_expected.to eql \
-        "#{today} ACCEPTED               #{formatted_date} #{padded_urn} #{school.name}"
+        "#{today_str} ACCEPTED               #{formatted_date} #{padded_urn} #{school.name}"
+    end
+
+    describe "#classroom_experience_note" do
+      subject { described_class.new(log_type, log_subject).classroom_experience_note }
+
+      it { is_expected.to include(recordedAt: today) }
+      it { is_expected.to include(action: "ACCEPTED") }
+      it { is_expected.to include(date: log_subject.date) }
+      it { is_expected.to include(schoolUrn: school.urn) }
+      it { is_expected.to include(schoolName: school.name) }
     end
   end
 
   context 'with a Cancellation' do
     let(:log_type) { 'cancellation' }
-    let(:today) { Time.zone.today.to_formatted_s(:gitis) }
 
     context 'by the Candidate of a Request' do
       let(:request) { create(:placement_request, :cancelled) }
@@ -52,7 +79,16 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by Candidate" do
         is_expected.to eql \
-          "#{today} CANCELLED BY CANDIDATE            #{padded_urn} #{school.name}"
+          "#{today_str} CANCELLED BY CANDIDATE            #{padded_urn} #{school.name}"
+      end
+
+      describe "#classroom_experience_note" do
+        subject { described_class.new(log_type, log_subject).classroom_experience_note }
+
+        it { is_expected.to include(recordedAt: today) }
+        it { is_expected.to include(action: "CANCELLED BY CANDIDATE") }
+        it { is_expected.to include(schoolUrn: school.urn) }
+        it { is_expected.to include(schoolName: school.name) }
       end
     end
 
@@ -63,7 +99,16 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by School" do
         is_expected.to eql \
-          "#{today} CANCELLED BY SCHOOL               #{padded_urn} #{school.name}"
+          "#{today_str} CANCELLED BY SCHOOL               #{padded_urn} #{school.name}"
+      end
+
+      describe "#classroom_experience_note" do
+        subject { described_class.new(log_type, log_subject).classroom_experience_note }
+
+        it { is_expected.to include(recordedAt: today) }
+        it { is_expected.to include(action: "CANCELLED BY SCHOOL") }
+        it { is_expected.to include(schoolUrn: school.urn) }
+        it { is_expected.to include(schoolName: school.name) }
       end
     end
 
@@ -75,7 +120,17 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by Candidate" do
         is_expected.to eql \
-          "#{today} CANCELLED BY CANDIDATE #{date} #{padded_urn} #{school.name}"
+          "#{today_str} CANCELLED BY CANDIDATE #{date} #{padded_urn} #{school.name}"
+      end
+
+      describe "#classroom_experience_note" do
+        subject { described_class.new(log_type, log_subject).classroom_experience_note }
+
+        it { is_expected.to include(recordedAt: today) }
+        it { is_expected.to include(action: "CANCELLED BY CANDIDATE") }
+        it { is_expected.to include(date: booking.date) }
+        it { is_expected.to include(schoolUrn: school.urn) }
+        it { is_expected.to include(schoolName: school.name) }
       end
     end
 
@@ -87,7 +142,17 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record cancellation by School" do
         is_expected.to eql \
-          "#{today} CANCELLED BY SCHOOL    #{date} #{padded_urn} #{school.name}"
+          "#{today_str} CANCELLED BY SCHOOL    #{date} #{padded_urn} #{school.name}"
+      end
+
+      describe "#classroom_experience_note" do
+        subject { described_class.new(log_type, log_subject).classroom_experience_note }
+
+        it { is_expected.to include(recordedAt: today) }
+        it { is_expected.to include(action: "CANCELLED BY SCHOOL") }
+        it { is_expected.to include(date: booking.date) }
+        it { is_expected.to include(schoolUrn: school.urn) }
+        it { is_expected.to include(schoolName: school.name) }
       end
     end
   end
@@ -104,7 +169,17 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "will record they attended" do
         is_expected.to eql \
-          "#{today} ATTENDED               #{date} #{padded_urn} #{school.name}"
+          "#{today_str} ATTENDED               #{date} #{padded_urn} #{school.name}"
+      end
+
+      describe "#classroom_experience_note" do
+        subject { described_class.new(log_type, log_subject).classroom_experience_note }
+
+        it { is_expected.to include(recordedAt: today) }
+        it { is_expected.to include(action: "ATTENDED") }
+        it { is_expected.to include(date: booking.date) }
+        it { is_expected.to include(schoolUrn: school.urn) }
+        it { is_expected.to include(schoolName: school.name) }
       end
     end
 
@@ -114,7 +189,17 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
       it "record they did not attend" do
         is_expected.to eql \
-          "#{today} DID NOT ATTEND         #{date} #{padded_urn} #{school.name}"
+          "#{today_str} DID NOT ATTEND         #{date} #{padded_urn} #{school.name}"
+      end
+
+      describe "#classroom_experience_note" do
+        subject { described_class.new(log_type, log_subject).classroom_experience_note }
+
+        it { is_expected.to include(recordedAt: today) }
+        it { is_expected.to include(action: "DID NOT ATTEND") }
+        it { is_expected.to include(date: booking.date) }
+        it { is_expected.to include(schoolUrn: school.urn) }
+        it { is_expected.to include(schoolName: school.name) }
       end
     end
   end
@@ -133,13 +218,30 @@ describe Bookings::Gitis::EventLogger, type: :model do
 
     before do
       allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
-
-      described_class.write_later contactid, :request, placement_request
     end
 
     it "will schedule an update job" do
+      described_class.write_later contactid, :request, placement_request
+
       expect(Bookings::LogToGitisJob).to have_received(:perform_later).with \
         contactid, /REQUEST/
+    end
+
+    describe "when the git_api feature is enabled" do
+      around do |example|
+        Flipper.enable(:git_api)
+        example.run
+        Flipper.disable(:git_api)
+      end
+
+      it "sends the classroom experience note to the API" do
+        note = described_class.new(:request, placement_request).classroom_experience_note
+
+        expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          receive(:add_classroom_experience_note).with(contactid, note)
+
+        described_class.write_later contactid, :request, placement_request
+      end
     end
   end
 end

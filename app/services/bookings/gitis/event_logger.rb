@@ -12,8 +12,14 @@ module Bookings
         end
 
         def write_later(contactid, type, subject)
-          Bookings::LogToGitisJob.perform_later \
-            contactid, new(type, subject).entry
+          instance = new(type, subject)
+
+          if Flipper.enabled?(:git_api)
+            api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+            api.add_classroom_experience_note(contactid, instance.classroom_experience_note)
+          else
+            Bookings::LogToGitisJob.perform_later(contactid, instance.entry)
+          end
         end
       end
 
@@ -23,43 +29,64 @@ module Bookings
       end
 
       def entry
-        sprintf(LOG_LINE, recorded: @recorded, action: @action, date: @date, urn: @urn, name: @name)
+        sprintf(LOG_LINE, recorded: @recorded_str, action: @action, date: @date_str, urn: @urn, name: @name)
+      end
+
+      def classroom_experience_note
+        GetIntoTeachingApiClient::ClassroomExperienceNote.new(
+          recordedAt: @recorded_date,
+          action: @action,
+          date: @date,
+          schoolUrn: @urn,
+          schoolName: @name,
+        )
       end
 
     private
 
       def parse_request_entry
-        @recorded = subject.requested_on.to_formatted_s(:gitis)
-        @action   = 'REQUEST'
-        @date     = subject.placement_date&.date&.to_formatted_s(:gitis)
-        @urn      = subject.school.urn
-        @name     = subject.school.name
+        @recorded_date = subject.requested_on
+        @date = subject.placement_date&.date
+
+        @recorded_str = @recorded_date.to_formatted_s(:gitis)
+        @action       = 'REQUEST'
+        @date_str     = @date&.to_formatted_s(:gitis)
+        @urn          = subject.school.urn
+        @name         = subject.school.name
       end
 
       def parse_booking_entry
-        @recorded = subject.accepted_at.to_date.to_formatted_s(:gitis)
-        @action   = 'ACCEPTED'
-        @date     = subject.date.to_formatted_s(:gitis)
-        @urn      = subject.bookings_school.urn
-        @name     = subject.bookings_school.name
+        @recorded_date = subject.accepted_at.to_date
+        @date = subject.date
+
+        @recorded_str = @recorded_date.to_formatted_s(:gitis)
+        @action = 'ACCEPTED'
+        @date_str = @date.to_formatted_s(:gitis)
+        @urn = subject.bookings_school.urn
+        @name = subject.bookings_school.name
       end
 
       def parse_cancellation_entry
+        @recorded_date = subject.sent_at.to_date
         datesrc = (subject.booking || subject.placement_request.placement_date)
+        @date = datesrc&.date
 
-        @recorded = subject.sent_at.to_date.to_formatted_s(:gitis)
-        @action   = "CANCELLED BY #{subject.cancelled_by.upcase}"
-        @date     = datesrc&.date&.to_formatted_s(:gitis)
-        @urn      = subject.school_urn
-        @name     = subject.school_name
+        @recorded_str = @recorded_date.to_formatted_s(:gitis)
+        @action       = "CANCELLED BY #{subject.cancelled_by.upcase}"
+        @date_str     = @date&.to_formatted_s(:gitis)
+        @urn          = subject.school_urn
+        @name         = subject.school_name
       end
 
       def parse_attendance_entry
-        @recorded = subject.accepted_at.to_date.to_formatted_s(:gitis)
-        @action   = subject.attended? ? 'ATTENDED' : 'DID NOT ATTEND'
-        @date     = subject.date.to_formatted_s(:gitis)
-        @urn      = subject.bookings_school.urn
-        @name     = subject.bookings_school.name
+        @recorded_date = subject.accepted_at.to_date
+        @date = subject.date
+
+        @recorded_str = @recorded_date.to_formatted_s(:gitis)
+        @action       = subject.attended? ? 'ATTENDED' : 'DID NOT ATTEND'
+        @date_str     = @date.to_formatted_s(:gitis)
+        @urn          = subject.bookings_school.urn
+        @name         = subject.bookings_school.name
       end
     end
   end

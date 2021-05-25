@@ -65,3 +65,11 @@ shared_context "api sign up" do
         .with(an_instance_of(GetIntoTeachingApiClient::SchoolsExperienceSignUp))
   end
 end
+
+shared_context "api add classroom experience note" do
+  before do
+    allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+      receive(:add_classroom_experience_note)
+        .with(anything, an_instance_of(GetIntoTeachingApiClient::ClassroomExperienceNote))
+  end
+end
