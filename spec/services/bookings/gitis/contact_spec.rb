@@ -514,29 +514,5 @@ describe Bookings::Gitis::Contact, type: :model do
         it { is_expected.not_to include '_masterid_value' }
       end
     end
-
-    context 'been_merged' do
-      subject { contact.been_merged? }
-
-      context 'correct merged' do
-        let(:contact) { build(:gitis_contact, :merged) }
-        it { is_expected.to be true }
-      end
-
-      context 'correct unmerged' do
-        let(:contact) { build(:gitis_contact, :persisted) }
-        it { is_expected.to be false }
-      end
-
-      context 'merged without master' do
-        let(:contact) { build(:gitis_contact, :merged, _masterid_value: nil) }
-        it { expect { subject }.to raise_exception described_class::InconsistentState }
-      end
-
-      context 'master but not merged' do
-        let(:contact) { build(:gitis_contact, :merged, merged: false) }
-        it { expect { subject }.to raise_exception described_class::InconsistentState }
-      end
-    end
   end
 end

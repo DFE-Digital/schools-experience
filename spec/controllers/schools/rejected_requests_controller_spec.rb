@@ -30,15 +30,11 @@ describe Schools::RejectedRequestsController, type: :request do
     end
 
     describe "#index" do
+      include_context "api sign ups for requests"
+
+      let(:requests) { create_list(:placement_request, 2, :cancelled_by_school, school: school) }
+
       before do
-        requests = create_list(:placement_request, 2, :cancelled_by_school, school: school)
-        ids = requests.map(&:contact_uuid)
-        sign_ups = ids.map { |id| build(:api_schools_experience_sign_up, candidate_id: id) }
-
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:get_schools_experience_sign_ups)
-            .with(a_collection_containing_exactly(*ids)) { sign_ups }
-
         get schools_rejected_requests_path
       end
 

@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :api_schools_experience_sign_up, class: GetIntoTeachingApiClient::SchoolsExperienceSignUp do
     candidate_id { SecureRandom.uuid }
+    master_id { nil }
+    merged { false }
     full_name { "First Last" }
     first_name { "First" }
     last_name { "Last" }
@@ -21,6 +23,11 @@ FactoryBot.define do
     preferred_teaching_subject_id { SecureRandom.uuid }
     secondary_preferred_teaching_subject_id { SecureRandom.uuid }
     accepted_policy_id { SecureRandom.uuid }
+
+    trait :merged do
+      master_id { SecureRandom.uuid }
+      merged { true }
+    end
   end
 
   factory :api_lookup_item, class: GetIntoTeachingApiClient::LookupItem do

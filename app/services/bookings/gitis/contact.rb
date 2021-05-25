@@ -134,12 +134,6 @@ module Bookings
         self.dfe_notesforclassroomexperience = "#{dfe_notesforclassroomexperience}#{log_line}\r\n"
       end
 
-      def been_merged?
-        raise InconsistentState unless merged == _masterid_value.present?
-
-        merged
-      end
-
       class InconsistentState < RuntimeError; end
 
     private
