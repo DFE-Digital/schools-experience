@@ -124,7 +124,7 @@ class Bookings::Candidate < ApplicationRecord
   def assign_gitis_contact(contact)
     self.gitis_contact = contact
 
-    if gitis_uuid != contact.contactid
+    if gitis_uuid != contact.candidate_id
       # using update column to avoid accidentally persisting any other
       # changed state on the candidate
 

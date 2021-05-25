@@ -39,6 +39,12 @@ module Bookings
         model
       end
 
+      def been_merged?(contact)
+        raise Contact::InconsistentState unless contact.merged == contact.master_id.present?
+
+        contact.merged
+      end
+
       class NoGitisUuid < RuntimeError; end
 
     private
@@ -47,27 +53,27 @@ module Bookings
         contact = nil
 
         1.upto(MAX_NESTING) do
-          contact = crm.find contactid
-          break unless contact.been_merged?
+          contact = fetch_contact(contactid)
+          break unless been_merged?(contact)
 
-          contactid = contact._masterid_value
+          contactid = contact.master_id
         end
 
         contact
       end
 
       def fetch_multiple_master_contacts(contactids)
-        contacts = crm.find(contactids).index_by(&:contactid)
+        contacts = fetch_contact(contactids).index_by(&:candidate_id)
 
         2.upto(MAX_NESTING) do
-          merged = contacts.values.select(&:been_merged?)
+          merged = contacts.values.select { |c| been_merged?(c) }
           break if merged.empty?
 
-          masterids = merged.map(&:_masterid_value)
-          masters = crm.find(masterids).index_by(&:contactid)
+          masterids = merged.map(&:master_id)
+          masters = fetch_contact(masterids).index_by(&:candidate_id)
 
           contacts.transform_values! do |contact|
-            contact.been_merged? ? masters[contact._masterid_value] : contact
+            been_merged?(contact) ? masters[contact.master_id] : contact
           end
         end
 
@@ -76,6 +82,28 @@ module Bookings
 
       def missing_contact(candidate)
         Bookings::Gitis::MissingContact.new candidate.contact_uuid
+      end
+
+      def fetch_contact(id_or_ids)
+        if Flipper.enabled?(:git_api)
+          api_fetch(id_or_ids)
+        else
+          direct_fetch(id_or_ids)
+        end
+      end
+
+      def direct_fetch(id_or_ids)
+        crm.find(id_or_ids)
+      end
+
+      def api_fetch(id_or_ids)
+        api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+
+        if id_or_ids.is_a?(Array)
+          api.get_schools_experience_sign_ups(id_or_ids)
+        else
+          api.get_schools_experience_sign_up(id_or_ids)
+        end
       end
     end
   end

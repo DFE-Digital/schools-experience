@@ -460,10 +460,12 @@ describe Bookings::Gitis::Contact, type: :model do
       it { is_expected.to respond_to :statecode }
       it { is_expected.to respond_to :_masterid_value }
       it { is_expected.to respond_to :masterid }
+      it { is_expected.to respond_to :master_id }
       it { is_expected.to respond_to :merged }
 
       it { is_expected.to have_attributes statecode: described_class::READONLY }
       it { is_expected.to have_attributes _masterid_value: masterid }
+      it { is_expected.to have_attributes master_id: masterid }
       it { is_expected.to have_attributes merged: true }
     end
 
@@ -510,30 +512,6 @@ describe Bookings::Gitis::Contact, type: :model do
         it { is_expected.not_to include 'statecode' }
         it { is_expected.not_to include 'merged' }
         it { is_expected.not_to include '_masterid_value' }
-      end
-    end
-
-    context 'been_merged' do
-      subject { contact.been_merged? }
-
-      context 'correct merged' do
-        let(:contact) { build(:gitis_contact, :merged) }
-        it { is_expected.to be true }
-      end
-
-      context 'correct unmerged' do
-        let(:contact) { build(:gitis_contact, :persisted) }
-        it { is_expected.to be false }
-      end
-
-      context 'merged without master' do
-        let(:contact) { build(:gitis_contact, :merged, _masterid_value: nil) }
-        it { expect { subject }.to raise_exception described_class::InconsistentState }
-      end
-
-      context 'master but not merged' do
-        let(:contact) { build(:gitis_contact, :merged, merged: false) }
-        it { expect { subject }.to raise_exception described_class::InconsistentState }
       end
     end
   end

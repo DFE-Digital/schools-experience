@@ -232,14 +232,9 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
 
     context "when the git_api feature is enabled" do
+      include_context "enable git_api feature"
       include_context "api latest privacy policy"
       include_context "api teaching subjects"
-
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
 
       before do
         allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \

@@ -1,3 +1,11 @@
+shared_context "enable git_api feature" do
+  around do |example|
+    Flipper.enable(:git_api)
+    example.run
+    Flipper.disable(:git_api)
+  end
+end
+
 shared_context "api candidate matched back" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
@@ -71,5 +79,26 @@ shared_context "api add classroom experience note" do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:add_classroom_experience_note)
         .with(anything, an_instance_of(GetIntoTeachingApiClient::ClassroomExperienceNote))
+  end
+end
+
+shared_context "api sign ups for requests" do
+  before do
+    ids = requests.map(&:contact_uuid)
+    sign_ups = ids.map { |id| build(:api_schools_experience_sign_up, candidate_id: id) }
+
+    allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+      receive(:get_schools_experience_sign_ups)
+        .with(a_collection_containing_exactly(*ids)) { sign_ups }
+  end
+end
+
+shared_context "api sign up for first request" do
+  before do
+    id = requests.first.contact_uuid
+
+    allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+      receive(:get_schools_experience_sign_up)
+        .with(id) { build(:api_schools_experience_sign_up, candidate_id: id) }
   end
 end

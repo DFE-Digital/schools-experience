@@ -19,11 +19,7 @@ describe Bookings::Reminder do
     end
 
     context "when the git_api feature is enabled" do
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
+      include_context "enable git_api feature"
 
       it "delivers one job per provided booking" do
         sign_up = build(:api_schools_experience_sign_up)
