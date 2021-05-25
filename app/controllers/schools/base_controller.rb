@@ -18,6 +18,8 @@ module Schools
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
     rescue_from Bookings::Gitis::API::BadResponseError, with: :gitis_retrieval_error
     rescue_from Bookings::Gitis::API::ConnectionFailed, with: :gitis_retrieval_error
+    rescue_from Faraday::ConnectionFailed, with: :gitis_retrieval_error
+    rescue_from GetIntoTeachingApiClient::ApiError, with: :gitis_retrieval_error
 
     def current_school
       if current_urn.blank?
