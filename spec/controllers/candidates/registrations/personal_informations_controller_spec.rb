@@ -159,11 +159,7 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       end
 
       context "when the git_api feature is enabled" do
-        around do |example|
-          Flipper.enable(:git_api)
-          example.run
-          Flipper.disable(:git_api)
-        end
+        include_context "enable git_api feature"
 
         context 'valid and known to gitis' do
           include_context "api candidate matched back"

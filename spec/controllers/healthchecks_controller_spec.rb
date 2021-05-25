@@ -89,11 +89,7 @@ describe HealthchecksController, type: :request do
     end
 
     context "when the git_api feature is enabled" do
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
+      include_context "enable git_api feature"
 
       context "with unhealthy API" do
         before do

@@ -23,11 +23,7 @@ describe Schools::RejectedRequestsController, type: :request do
   end
 
   context "when the git_api feature is enabled" do
-    around do |example|
-      Flipper.enable(:git_api)
-      example.run
-      Flipper.disable(:git_api)
-    end
+    include_context "enable git_api feature"
 
     describe "#index" do
       include_context "api sign ups for requests"

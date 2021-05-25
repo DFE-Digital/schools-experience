@@ -48,11 +48,7 @@ describe Bookings::Gitis::ContactFetcher do
     end
 
     context "when the git_api feature is enabled" do
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
+      include_context "enable git_api feature"
 
       it "returns a hash with contactids as keys" do
         expect(subject.keys).to eql \
@@ -75,11 +71,7 @@ describe Bookings::Gitis::ContactFetcher do
     end
 
     context "when the git_api feature is enabled" do
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
+      include_context "enable git_api feature"
 
       it "assigns expected models" do
         expect(subject.map(&:gitis_contact).map(&:candidate_id)).to eql \
@@ -97,11 +89,7 @@ describe Bookings::Gitis::ContactFetcher do
     end
 
     context "when the git_api feature is enabled" do
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
+      include_context "enable git_api feature"
 
       it "assigns expected models" do
         expect(subject.gitis_contact.candidate_id).to eql \
@@ -210,11 +198,7 @@ describe Bookings::Gitis::ContactFetcher do
   end
 
   context "when the git_api feature is enabled" do
-    around do |example|
-      Flipper.enable(:git_api)
-      example.run
-      Flipper.disable(:git_api)
-    end
+    include_context "enable git_api feature"
 
     describe 'merged records' do
       let(:first) { build :api_schools_experience_sign_up }

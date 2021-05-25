@@ -1,3 +1,11 @@
+shared_context "enable git_api feature" do
+  around do |example|
+    Flipper.enable(:git_api)
+    example.run
+    Flipper.disable(:git_api)
+  end
+end
+
 shared_context "api candidate matched back" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \

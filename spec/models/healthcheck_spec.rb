@@ -48,11 +48,7 @@ RSpec.describe Healthcheck do
     end
 
     context "when the git_api feature is enabled" do
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
+      include_context "enable git_api feature"
 
       context "with a working connection" do
         before do

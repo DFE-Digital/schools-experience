@@ -139,11 +139,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           end
 
           context "when the git_api feature is enabled" do
-            around do |example|
-              Flipper.enable(:git_api)
-              example.run
-              Flipper.disable(:git_api)
-            end
+            include_context "enable git_api feature"
 
             it "does not enqueue an accept privacy policy job" do
               expect(Candidates::Registrations::AcceptPrivacyPolicyJob).not_to \

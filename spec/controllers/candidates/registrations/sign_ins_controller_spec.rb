@@ -118,17 +118,12 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     end
 
     context "when the git_api feature is enabled" do
+      include_context "enable git_api feature"
       include_context "Stubbed current_registration"
       include_context "api correct verification code"
 
       let(:params) { { candidates_verification_code: { code: code } } }
       let(:perform_request) { put candidates_registration_verify_code_path(school_id), params: params }
-
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
 
       context "with a valid code" do
         before { perform_request }
@@ -240,13 +235,8 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     end
 
     context "when the git_api feature is enabled" do
+      include_context "enable git_api feature"
       include_context "api candidate matched back"
-
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
 
       it "will issue a verification code and redirect to the show page" do
         perform_request
