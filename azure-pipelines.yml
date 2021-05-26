@@ -119,6 +119,11 @@ jobs:
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-debug
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
     displayName: 'Tag Docker image (built from debug)'
+  
+  - script: |
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-review
+    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Tag Docker image (built from Review)'
 
   - task: Docker@2
     displayName: 'Push tagged image to DockerHub'
@@ -137,6 +142,14 @@ jobs:
       repository: $(DOCKER_HUB_REPO)
       command: push
       tags: latest
+  - task: Docker@2
+    displayName: 'Push :Review to DockerHub'
+    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      containerRegistry: $(DOCKER_HUB_CONNECTION_NAME)
+      repository: $(DOCKER_HUB_REPO)
+      command: push
+      tags: $(imageTag)-review
 
   - task: Docker@2
     displayName: 'Push :debug to DockerHub'
@@ -146,7 +159,6 @@ jobs:
       repository: $(DOCKER_HUB_REPO)
       command: push
       tags: $(imageTag)-debug
-
 
   - script: |
              echo '{' > ${PIPELINE_WORKSPACE}/build_info.json
