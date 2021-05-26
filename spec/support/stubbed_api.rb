@@ -83,10 +83,12 @@ shared_context "api add classroom experience note" do
 end
 
 shared_context "api sign ups for requests" do
-  before do
-    ids = requests.map(&:contact_uuid)
-    sign_ups = ids.map { |id| build(:api_schools_experience_sign_up, candidate_id: id) }
+  let(:ids) { requests.map(&:contact_uuid) }
+  let(:sign_ups) do
+    ids.map { |id| build(:api_schools_experience_sign_up, candidate_id: id) }
+  end
 
+  before do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:get_schools_experience_sign_ups)
         .with(a_collection_containing_exactly(*ids)) { sign_ups }
