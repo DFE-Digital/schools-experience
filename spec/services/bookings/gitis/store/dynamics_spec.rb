@@ -25,6 +25,19 @@ describe Bookings::Gitis::Store::Dynamics do
   end
 
   describe '#find' do
+    context "when the git_api feature is enabled" do
+      include_context "enable git_api feature"
+
+      it "logs the usage to Sentry" do
+        allow(dynamics.api).to receive(:get) { {} }
+
+        expect(Sentry).to receive(:capture_message)
+          .with("Call to Dynamics#find with git_api enabled!")
+
+        dynamics.find(TestEntity, SecureRandom.uuid)
+      end
+    end
+
     context 'for single id' do
       let(:uuid) { SecureRandom.uuid }
 
@@ -184,6 +197,19 @@ describe Bookings::Gitis::Store::Dynamics do
     let(:t3) { { 'testentityid' => SecureRandom.uuid, 'firstname' => 'C', 'lastname' => '3' } }
     let(:response) { [TestEntity.new(t1), TestEntity.new(t2), TestEntity.new(t3)] }
 
+    context "when the git_api feature is enabled" do
+      include_context "enable git_api feature"
+
+      it "logs the usage to Sentry" do
+        allow(dynamics.api).to receive(:get) { { 'value' => [] } }
+
+        expect(Sentry).to receive(:capture_message)
+          .with("Call to Dynamics#fetch with git_api enabled!")
+
+        dynamics.fetch(TestEntity)
+      end
+    end
+
     context 'without entity' do
       it "will raise an error" do
         expect { subject.fetch }.to raise_exception(ArgumentError)
@@ -247,6 +273,21 @@ describe Bookings::Gitis::Store::Dynamics do
   describe '#write' do
     let(:uuid) { SecureRandom.uuid }
     subject { dynamics.write entity }
+
+    context "when the git_api feature is enabled" do
+      include_context "enable git_api feature"
+
+      let(:entity) { TestEntity.new }
+
+      it "logs the usage to Sentry" do
+        allow_any_instance_of(TestEntity).to receive(:valid?) { false }
+
+        expect(Sentry).to receive(:capture_message)
+          .with("Call to Dynamics#write with git_api enabled!")
+
+        subject
+      end
+    end
 
     context 'for invalid entity' do
       let(:entity) { TestEntity.new('firstname' => 'testuser') }
