@@ -33,7 +33,7 @@
           Address
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @gitis_contact.address %>
+          <%= gitis_contact_display_address(@gitis_contact) %>
         </dd>
       </div>
 
@@ -42,7 +42,7 @@
           UK telephone number
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= @gitis_contact.phone %>
+          <%= gitis_contact_display_phone(@gitis_contact) %>
         </dd>
       </div>
 

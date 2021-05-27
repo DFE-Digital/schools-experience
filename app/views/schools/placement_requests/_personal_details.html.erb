@@ -2,8 +2,8 @@
   <h2>Personal details</h2>
 
   <dl class="govuk-summary-list">
-    <%= summary_row 'Address', personal_details.address %>
-    <%= summary_row 'UK telephone number', personal_details.phone %>
+    <%= summary_row 'Address', gitis_contact_display_address(personal_details) %>
+    <%= summary_row 'UK telephone number', gitis_contact_display_phone(personal_details) %>
     <%= summary_row 'Email address', personal_details.email %>
   </dl>
 </section>
