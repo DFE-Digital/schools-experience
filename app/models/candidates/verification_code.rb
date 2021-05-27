@@ -2,8 +2,14 @@ class Candidates::VerificationCode
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Validations::Callbacks
+  include ActiveRecord::AttributeAssignment
 
-  attribute :code
+  attribute :code, :string
+  # Will be pre-validated by another model.
+  attribute :email, :string
+  attribute :firstname, :string
+  attribute :lastname, :string
+  attribute :date_of_birth, :date
 
   validates :code, length: { is: 6 }, format: { with: /\A[0-9]*\z/ }
 
@@ -11,14 +17,22 @@ class Candidates::VerificationCode
     self.code = code.to_s.strip
   end
 
-  def exchange(personal_information)
+  def issue_verification_code
+    request = GetIntoTeachingApiClient::ExistingCandidateRequest.new(matchback_attributes)
+    GetIntoTeachingApiClient::CandidatesApi.new.create_candidate_access_token(request)
+    true
+  rescue GetIntoTeachingApiClient::ApiError
+    false
+  end
+
+  def exchange
     return false unless valid?
 
     identity_data = {
-      firstName: personal_information.first_name,
-      lastName: personal_information.last_name,
-      email: personal_information.email,
-      dateOfBirth: personal_information.date_of_birth,
+      firstName: firstname,
+      lastName: lastname,
+      email: email,
+      dateOfBirth: date_of_birth,
     }
 
     request = GetIntoTeachingApiClient::ExistingCandidateRequest.new(identity_data)
@@ -27,5 +41,16 @@ class Candidates::VerificationCode
   rescue GetIntoTeachingApiClient::ApiError
     errors.add(:code, :invalid)
     nil
+  end
+
+private
+
+  def matchback_attributes
+    {
+      email: email,
+      firstName: firstname,
+      lastName: lastname,
+      dateOfBirth: date_of_birth,
+    }
   end
 end
