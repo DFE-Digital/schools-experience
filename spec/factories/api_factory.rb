@@ -39,4 +39,9 @@ FactoryBot.define do
     id { SecureRandom.uuid }
     text { "policy text" }
   end
+
+  factory :api_teaching_subject, class: GetIntoTeachingApiClient::LookupItem do
+    id { SecureRandom.uuid }
+    sequence(:value) { |i| "Gitis Subject #{i}" }
+  end
 end

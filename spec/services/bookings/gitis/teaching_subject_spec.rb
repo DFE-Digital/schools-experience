@@ -16,6 +16,8 @@ RSpec.describe Bookings::Gitis::TeachingSubject, type: :model do
   describe 'attributes' do
     it { is_expected.to respond_to :dfe_name }
     it { is_expected.to respond_to :dfe_teachingsubjectlistid }
+    it { is_expected.to respond_to :id }
+    it { is_expected.to respond_to :value }
   end
 
   describe '.new' do
@@ -27,7 +29,9 @@ RSpec.describe Bookings::Gitis::TeachingSubject, type: :model do
     end
 
     it { is_expected.to have_attributes(dfe_teachingsubjectlistid: uuid) }
+    it { is_expected.to have_attributes(id: uuid) }
     it { is_expected.to have_attributes(dfe_name: 'Test Subject') }
+    it { is_expected.to have_attributes(value: 'Test Subject') }
     it { is_expected.to have_attributes(changed_attributes: {}) }
   end
 end
