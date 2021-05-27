@@ -12,7 +12,7 @@ module Bookings
     end
 
     def synchronise
-      uuids = gitis_subjects.map(&:dfe_teachingsubjectlistid)
+      uuids = gitis_subjects.map(&:id)
       assigned = Bookings::Subject.unscoped.where(gitis_uuid: uuids).index_by(&:gitis_uuid)
       unassigned = Bookings::Subject.unscoped.where(gitis_uuid: nil).index_by do |s|
         s.name.to_s.strip.downcase
@@ -20,7 +20,7 @@ module Bookings
 
       Bookings::Subject.transaction do
         gitis_subjects.each do |gitis|
-          normalised_name = gitis.dfe_name.to_s.strip.downcase
+          normalised_name = gitis.value.to_s.strip.downcase
           create_or_update_from_gitis! assigned[gitis.id], unassigned[normalised_name], gitis
         end
       end
@@ -38,7 +38,12 @@ module Bookings
     end
 
     def fetch_gitis_subjects
-      @crm.fetch(Bookings::Gitis::TeachingSubject, limit: LIMIT)
+      if Flipper.enabled?(:git_api)
+        api = GetIntoTeachingApiClient::LookupItemsApi.new
+        api.get_teaching_subjects
+      else
+        @crm.fetch(Bookings::Gitis::TeachingSubject, limit: LIMIT)
+      end
     end
 
     def create_or_update_from_gitis!(internal, unassigned, gitis)
@@ -53,14 +58,14 @@ module Bookings
 
     def create_from_gitis!(gitis)
       Bookings::Subject.create! \
-        name: gitis.dfe_name,
+        name: gitis.value,
         gitis_uuid: gitis.id,
-        hidden: BLACKLIST.include?(gitis.dfe_name)
+        hidden: BLACKLIST.include?(gitis.value)
     end
 
     def update_from_gitis!(internal, gitis)
-      if internal.name != gitis.dfe_name
-        internal.update! name: gitis.dfe_name
+      if internal.name != gitis.value
+        internal.update! name: gitis.value
       end
     end
 
