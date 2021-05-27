@@ -24,7 +24,7 @@
           <section id="booking-details">
             <dl class="govuk-summary-list">
               <%= summary_row 'Subject', @booking.bookings_subject.name %>
-              <%= summary_row 'UK telephone number', @booking.gitis_contact.phone %>
+              <%= summary_row 'UK telephone number', gitis_contact_display_phone(@booking.gitis_contact) %>
               <%= summary_row 'Email address', @booking.gitis_contact.email %>
               <%= summary_row 'Request received', @booking.received_on.to_formatted_s(:govuk) %>
             </dl>
