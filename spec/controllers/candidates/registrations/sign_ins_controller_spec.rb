@@ -122,7 +122,17 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
       include_context "Stubbed current_registration"
       include_context "api correct verification code"
 
-      let(:params) { { candidates_verification_code: { code: code } } }
+      let(:params) do
+        {
+          candidates_verification_code: {
+            code: code,
+            firstname: "Testy",
+            lastname: "McTest",
+            email: "testy@mctest.com",
+            date_of_birth: "1980-01-01",
+          }
+        }
+      end
       let(:perform_request) { put candidates_registration_verify_code_path(school_id), params: params }
 
       context "with a valid code" do
