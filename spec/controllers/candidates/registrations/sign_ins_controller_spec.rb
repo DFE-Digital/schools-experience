@@ -120,7 +120,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     context "when the git_api feature is enabled" do
       include_context "enable git_api feature"
       include_context "Stubbed current_registration"
-      include_context "api correct verification code"
+      include_context "api correct verification code for personal info"
 
       let(:params) do
         {
