@@ -11,37 +11,79 @@ describe Candidates::VerificationCode do
     it { is_expected.not_to allow_value("12345").for :code }
   end
 
-  describe "#exchange" do
+  describe "API methods" do
     let(:personal_info) { build(:personal_information) }
-    let(:instance) { described_class.new(code: code) }
+    let(:instance) do
+      described_class.new(
+        code: code,
+        firstname: personal_info.first_name,
+        lastname: personal_info.last_name,
+        email: personal_info.email,
+        date_of_birth: personal_info.date_of_birth
+      )
+    end
 
-    subject(:exchange) { instance.exchange(personal_info) }
+    describe "#exchange" do
+      subject(:exchange) { instance.exchange }
 
-    context "when the code is invalid" do
-      let(:code) { "123" }
+      context "when the code is invalid" do
+        let(:code) { "123" }
 
-      it { is_expected.to be_falsy }
+        it { is_expected.to be_falsy }
 
-      it "does not call the API" do
-        expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).not_to \
-          receive(:exchange_access_token_for_schools_experience_sign_up)
+        it "does not call the API" do
+          expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).not_to \
+            receive(:exchange_access_token_for_schools_experience_sign_up)
+        end
+      end
+
+      context "when the code is valid" do
+        include_context "api correct verification code"
+
+        it { is_expected.to eq(sign_up) }
+
+        context "when the code is incorrect" do
+          include_context "api incorrect verification code"
+
+          it { is_expected.to be_nil }
+
+          it "adds an error to the model" do
+            exchange
+            expect(instance.errors).to be_added(:code, :invalid)
+          end
+        end
       end
     end
 
-    context "when the code is valid" do
-      include_context "api correct verification code"
+    describe "#issue_verification_code" do
+      let(:code) { nil }
 
-      it { is_expected.to eq(sign_up) }
+      let(:request) do
+        GetIntoTeachingApiClient::ExistingCandidateRequest.new(
+          email: personal_info.email,
+          firstName: personal_info.first_name,
+          lastName: personal_info.last_name,
+          dateOfBirth: personal_info.date_of_birth
+        )
+      end
 
-      context "when the code is incorrect" do
-        include_context "api incorrect verification code"
+      subject { instance.issue_verification_code }
 
-        it { is_expected.to be_nil }
+      before do
+        allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
+          receive(:create_candidate_access_token).with(request)
+      end
 
-        it "adds an error to the model" do
-          exchange
-          expect(instance.errors).to be_added(:code, :invalid)
+      it { is_expected.to be_truthy }
+
+      context "when the user cannot be matched back" do
+        before do
+          allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
+            receive(:create_candidate_access_token)
+              .with(request).and_raise(GetIntoTeachingApiClient::ApiError)
         end
+
+        it { is_expected.to be_falsy }
       end
     end
   end

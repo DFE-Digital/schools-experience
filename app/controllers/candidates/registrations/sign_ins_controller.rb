@@ -8,7 +8,12 @@ module Candidates
 
       def show
         set_sign_in_details
-        @verification_code = Candidates::VerificationCode.new
+        @verification_code = Candidates::VerificationCode.new({
+          email: current_registration.personal_information.email,
+          firstname: current_registration.personal_information.first_name,
+          lastname: current_registration.personal_information.last_name,
+          date_of_birth: current_registration.personal_information.date_of_birth,
+        })
       end
 
       def create
@@ -32,7 +37,7 @@ module Candidates
 
       def api_verify
         @verification_code = Candidates::VerificationCode.new(verification_code_params)
-        candidate_data = @verification_code.exchange(current_registration.personal_information)
+        candidate_data = @verification_code.exchange
 
         if candidate_data
           self.current_candidate = Bookings::Candidate.find_or_create_from_gitis_contact!(candidate_data).tap do |c|
@@ -81,7 +86,7 @@ module Candidates
       end
 
       def verification_code_params
-        params.require(:candidates_verification_code).permit(:code)
+        params.require(:candidates_verification_code).permit(:code, :email, :firstname, :lastname, :date_of_birth)
       end
     end
   end

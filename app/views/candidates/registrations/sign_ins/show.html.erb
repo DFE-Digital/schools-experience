@@ -35,7 +35,13 @@
 
     <% if @git_api_enabled %>
       <%= form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
+        <%= f.hidden_field :email %>
+        <%= f.hidden_field :firstname %>
+        <%= f.hidden_field :lastname %>
+        <%= f.hidden_field :date_of_birth %>
+
         <%= f.text_field :code %>
+
         <%= f.submit "Submit" %>
       <% end %>
       <p>

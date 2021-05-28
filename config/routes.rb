@@ -181,6 +181,7 @@ Rails.application.routes.draw do
       get 'signin', to: 'sessions#new'
       post 'signin', to: 'sessions#create'
       get 'signin/:authtoken', to: 'sessions#update', as: 'signin_confirmation'
+      put 'signin', to: 'sessions#update', as: :signin_code
 
       resource :dashboard, only: :show
     end
