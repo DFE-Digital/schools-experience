@@ -31,6 +31,17 @@ end
 
 shared_context "api correct verification code" do
   let(:code) { "123456" }
+  let(:sign_up) { build(:api_schools_experience_sign_up) }
+
+  before do
+    allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+      receive(:exchange_access_token_for_schools_experience_sign_up)
+      .with(code, an_instance_of(GetIntoTeachingApiClient::ExistingCandidateRequest)) { sign_up }
+  end
+end
+
+shared_context "api correct verification code for personal info" do
+  let(:code) { "123456" }
   let(:request) do
     GetIntoTeachingApiClient::ExistingCandidateRequest.new(
       firstName: personal_info.first_name,
@@ -70,7 +81,9 @@ shared_context "api sign up" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:sign_up_schools_experience_candidate)
-        .with(an_instance_of(GetIntoTeachingApiClient::SchoolsExperienceSignUp))
+        .with(an_instance_of(GetIntoTeachingApiClient::SchoolsExperienceSignUp)) do
+          build(:api_schools_experience_sign_up)
+        end
   end
 end
 

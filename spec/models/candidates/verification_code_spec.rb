@@ -38,7 +38,7 @@ describe Candidates::VerificationCode do
       end
 
       context "when the code is valid" do
-        include_context "api correct verification code"
+        include_context "api correct verification code for personal info"
 
         it { is_expected.to eq(sign_up) }
 

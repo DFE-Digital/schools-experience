@@ -3,9 +3,9 @@ FactoryBot.define do
     candidate_id { SecureRandom.uuid }
     master_id { nil }
     merged { false }
-    full_name { "First Last" }
-    first_name { "First" }
-    last_name { "Last" }
+    sequence(:first_name) { |i| "First#{i}" }
+    sequence(:last_name) { |i| "Last#{i}" }
+    full_name { "#{first_name} #{last_name}" }
     email { "email@address.com" }
     secondary_email { "email2@address.com" }
     date_of_birth { Date.new(1987, 3, 12) }
@@ -19,7 +19,7 @@ FactoryBot.define do
     address_city { "Carlisle" }
     address_state_or_province { "Cumbria" }
     address_postcode { "TE7 1NG" }
-    has_dbs_certificate { true }
+    has_dbs_certificate { nil }
     preferred_teaching_subject_id { SecureRandom.uuid }
     secondary_preferred_teaching_subject_id { SecureRandom.uuid }
     accepted_policy_id { SecureRandom.uuid }
