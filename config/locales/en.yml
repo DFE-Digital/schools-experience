@@ -721,7 +721,7 @@ en:
         lastname: Last name
         email: Email address
       candidates_verification_code:
-        code: Verification code
+        code: Enter your verification code here
       cookie_preference:
         analytics:
           true: "On"

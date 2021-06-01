@@ -165,7 +165,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   end
 
   def complete_sign_in_step
-    fill_in "Verification code", with: code
+    fill_in "Enter your verification code here", with: code
     click_button "Submit"
   end
 
