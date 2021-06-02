@@ -24,8 +24,6 @@ Docker:
   - Dockerfile 
   - docker-run.sh
 
-Rails:
-  - get-into-teaching-app/.env.*
 
 Assets:
   - public/assets/**/*
