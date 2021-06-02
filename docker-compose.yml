@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
    school-experience:
-     image: school-experience:latest
+     image: ${IMAGE}
      ports:
        - "3000:3000"
      restart: always
@@ -19,9 +19,11 @@ services:
        - db-tasks
      volumes:
        - .:/ci_build
+       - ${PWD}/out:/app/out
+       - ${PWD}/coverage:/app/coverage
 
    delayed-jobs:
-     image: school-experience:latest
+     image: ${IMAGE}
      command: rake jobs:work
      restart: always
      healthcheck:
@@ -37,7 +39,7 @@ services:
        - db-tasks
 
    db-tasks:
-     image: school-experience:latest
+     image: ${IMAGE}
      command: rake db:create db:schema:load
      restart: on-failure
      healthcheck:
@@ -51,6 +53,8 @@ services:
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
      volumes:
        - .:/ci_build
+       - ${PWD}/out:/app/out
+       - ${PWD}/coverage:/app/coverage
      depends_on:
        - postgres
        - redis

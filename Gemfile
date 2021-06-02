@@ -84,6 +84,7 @@ group :development, :test do
   # Testing framework
   gem 'rspec-rails', '~> 5.0'
   gem 'rspec_junit_formatter'
+  gem 'rspec-sonarqube-formatter'
   gem 'factory_bot_rails'
 
   gem 'brakeman', '>= 4.4.0'
