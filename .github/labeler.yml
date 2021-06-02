@@ -1,0 +1,37 @@
+---
+
+Style:
+  - app/**/*.scss
+  - app/**/*.css
+  
+Ruby:
+  - app/**/*.rb
+  - app/**/*.erb
+  - db/**/*.rb
+  - config/**/*.rb
+  - lib/**/*.rb
+  - lib/**/*.rake
+
+Test:
+  - spec/**/*
+  - tests/**/*
+
+DevOps:
+  - terraform/**/*
+  - .github/**/*.yml
+
+Docker:
+  - Dockerfile 
+  - docker-run.sh
+
+Rails:
+  - get-into-teaching-app/.env.*
+
+Assets:
+  - public/assets/**/*
+
+Content:
+  - app/views/content/**/*
+
+Config:
+  - config/**/*
