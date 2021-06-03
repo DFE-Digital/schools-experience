@@ -2,7 +2,6 @@ name: Build and Deploy
 on:
   workflow_dispatch:
   pull_request:
-    types: [assigned, opened, synchronize, reopened]
     branches: [ sfawcett123-patch-1 ]
   push:
     branches: [ sfawcett123-patch-1 ]
@@ -42,8 +41,7 @@ jobs:
 
       - name: Get Short SHA
         id: sha
-        run: |
-             echo ::set-output name=short::$(echo $GITHUB_SHA | cut -c -7)
+        run:  echo ::set-output name=short::$(echo $GITHUB_SHA | cut -c -7)
              
       - name: Set DOCKER_IMAGE environment variable
         id:   docker
@@ -51,36 +49,30 @@ jobs:
              if [ "${{github.ref}}" == "refs/heads/master" ]
              then
                 echo ::set-output name=DOCKER_IMAGE::${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}
+                echo ::set-output name=DOCKER_MASTER::${{ env.DOCKER_REPOSITORY }}:master
              else
                 echo ::set-output name=DOCKER_IMAGE::${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}
+                echo ::set-output name=DOCKER_MASTER::""
              fi
              
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-             ${{ runner.os }}-buildx-
-
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.9.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
-      - name: Build and push to Docker Hub
+      - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2.5.0
         with:
+          cache-from: ${{ env.DOCKER_REPOSITORY }}:master
           builder: ${{ steps.buildx.outputs.name }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
           tags: |
                  ${{ steps.docker.outputs.DOCKER_IMAGE }}
+                 ${{ steps.docker.outputs.DOCKER_MASTER }}
           push: true
-          build-args: |
-                      SHA=${{ steps.sha.outputs.short }}
+          build-args: 
+                 SHA=${{ steps.sha.outputs.short }}
                       
       - name: Slack Notification
         if: failure() && github.ref == 'refs/heads/master'
@@ -112,7 +104,7 @@ jobs:
            keyvault: ${{ secrets.KEY_VAULT}}
            secrets: 'ACTIONS-API-ACCESS-TOKEN , SLACK-WEBHOOK'
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.9.0
         with:
           registry: ghcr.io
@@ -120,14 +112,12 @@ jobs:
           password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Bring up Docker compose Stack
-        run: docker-compose up -d
+        run: docker-compose -f docker-compose-paas.yml up -d
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Lint Ruby
-        run: |-
-          docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}} \
-            rubocop app config lib features spec spec_external --format json --out=/app/out/rubocop-result.json
+        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop app config lib features spec spec_external --format json --out=/app/out/rubocop-result.json
 
       - name: Keep Rubocop output
         if: always()
@@ -137,8 +127,7 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run: |-
-          docker-compose run --rm db-tasks rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml 
+        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml 
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -150,8 +139,7 @@ jobs:
           path: ${{ github.workspace }}/out/*
 
       - name: Fixup report file paths
-        run: |- 
-            sudo sed -i "s?\"/app/?\"${PWD}/?" coverage/coverage.json || true
+        run:  sudo sed -i "s?\"/app/?\"${PWD}/?" coverage/coverage.json || true
 
       - name:  Keep Code Coverage Report
         if: always()
@@ -181,7 +169,7 @@ jobs:
            keyvault: ${{ secrets.KEY_VAULT}}
            secrets: 'ACTIONS-API-ACCESS-TOKEN , SLACK-WEBHOOK'
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.9.0
         with:
           registry: ghcr.io
@@ -203,8 +191,7 @@ jobs:
           sarif_file: results.sarif
 
       - name: Run Brakeman static security scanner
-        run: |-
-          docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman --no-pager
+        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman --no-pager
 
   cucumber_tests:
     name: Cucumber Tests
@@ -227,7 +214,7 @@ jobs:
            keyvault: ${{ secrets.KEY_VAULT}}
            secrets: 'ACTIONS-API-ACCESS-TOKEN , SLACK-WEBHOOK'
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.9.0
         with:
           registry: ghcr.io
@@ -235,13 +222,12 @@ jobs:
           password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Bring up Docker compose Stack
-        run: docker-compose up -d
+        run: docker-compose -f docker-compose-paas.yml up -d
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Run Cucumber Tests 
-        run: |-
-          docker-compose run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks cucumber --profile=${PROFILE} --format RspecSonarqubeFormatter --out /app/out/test-report.xml 
+        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks cucumber --profile=${PROFILE} --format RspecSonarqubeFormatter --out /app/out/test-report.xml 
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: continuous_integration
@@ -275,7 +261,7 @@ jobs:
            keyvault: ${{ secrets.KEY_VAULT}}
            secrets: 'ACTIONS-API-ACCESS-TOKEN , SLACK-WEBHOOK'
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.9.0
         with:
           registry: ghcr.io
@@ -283,13 +269,13 @@ jobs:
           password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Bring up Docker compose Stack
-        run: docker-compose -f docker-compose.yml -f docker-compose-chrome.yml up -d 
+        run: docker-compose -f docker-compose-paas.yml -f docker-compose-chrome.yml up -d 
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Run Cucumber Tests 
         run: |-
-          docker-compose -f docker-compose.yml -f docker-compose-chrome.yml run --rm \
+             docker-compose -f docker-compose-paas.yml -f docker-compose-chrome.yml run --rm \
                   -e RAILS_ENV \
                   -e SELENIUM_HUB_HOSTNAME \
                   -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
@@ -318,7 +304,7 @@ jobs:
     needs: [ selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
@@ -340,4 +326,62 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ steps.azSecret.outputs.SONAR-TOKEN }}
+
+  review:
+    name: Review Deployment Process
+    needs: [  sonarcloud  ]
+    if: github.ref != 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2.3.4
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: Azure/get-keyvault-secrets@v1.2
+        id:   azSecret
+        with:
+           keyvault: ${{ secrets.KEY_VAULT}}
+           secrets: 'ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK'
+
+      - name: Get reference Number
+        run: echo "Event Number - ${{github.event.number}}"
+
+#     - name: Trigger Review Deployment
+#       uses: benc-uk/workflow-dispatch@v1.1
+#       with:
+#         workflow: Deploy to PaaS
+#         token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+#         inputs: '{"environment": "Review", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}"  }'
+#         ref: ${{ github.event.pull_request.head.ref }}
+
+#     - name: Wait for Deployment to Review
+#       uses: fountainhead/action-wait-for-check@v1.0.0
+#       id: wait-for-review
+#       with:
+#         token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+#         checkName: Deploy Review
+#         ref: ${{ github.event.pull_request.head.ref }}
+
+#     - name: Check if Review Deployment has returned with a failure
+#       if: steps.wait-for-review.outputs.conclusion == 'failure'
+#       run: exit 1
+
+      - name: Post sticky pull request comment
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
+
+      - name: Add Review Label
+        if: contains(github.event.pull_request.user.login, 'dependabot') == false
+        uses: actions-ecosystem/action-add-labels@v1.1.2
+        with:
+          github_token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          labels: Review
 
