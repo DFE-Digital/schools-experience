@@ -14,6 +14,7 @@ EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
 CMD ["rails", "server" ]
 
+# hadolint ignore=DL3018
 RUN apk add --no-cache build-base git tzdata libxml2 libxml2-dev \
 			postgresql-libs postgresql-dev nodejs yarn
 
@@ -23,6 +24,7 @@ RUN yarn install && yarn cache clean
 
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
+# hadolint ignore=SC2046
 RUN gem install bundler --version='~> 2.2.17' && \
     bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
     bundle config set without 'development' && \

@@ -1,0 +1,70 @@
+version: '3.3'
+
+services:
+   school-experience:
+     image: ${IMAGE}
+     ports:
+       - "3000:3000"
+     restart: always
+     healthcheck:
+       disable: true
+     environment:
+       - RAILS_ENV=servertest
+       - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
+       - REDIS_URL=redis://redis:6379/1
+       - SECRET_KEY_BASE=stubbed
+       - SKIP_FORCE_SSL=true
+       - WEB_URL=postgis://postgres:secret@postgres/school_experience
+     depends_on:
+       - db-tasks
+     volumes:
+       - .:/ci_build
+       - ${PWD}/out:/app/out
+       - ${PWD}/coverage:/app/coverage
+
+   delayed-jobs:
+     image: ${IMAGE}
+     command: rake jobs:work
+     restart: always
+     healthcheck:
+       disable: true
+     environment:
+       - RAILS_ENV=servertest
+       - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
+       - REDIS_URL=redis://redis:6379/1
+       - SECRET_KEY_BASE=stubbed
+       - SKIP_FORCE_SSL=true
+       - WEB_URL=postgis://postgres:secret@postgres/school_experience
+     depends_on:
+       - db-tasks
+
+   db-tasks:
+     image: ${IMAGE}
+     command: rake db:create db:schema:load
+     restart: on-failure
+     healthcheck:
+       disable: true
+     environment:
+       - RAILS_ENV=test
+       - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
+       - REDIS_URL=redis://redis:6379/1
+       - SECRET_KEY_BASE=stubbed
+       - SKIP_FORCE_SSL=true
+       - WEB_URL=postgis://postgres:secret@postgres/school_experience
+     volumes:
+       - .:/ci_build
+       - ${PWD}/out:/app/out
+       - ${PWD}/coverage:/app/coverage
+     depends_on:
+       - postgres
+       - redis
+
+   postgres:
+     image: postgis/postgis:13-3.1-alpine
+     environment:
+       - POSTGRES_USER=postgres
+       - POSTGRES_PASSWORD=secret
+       - POSTGRES_DB=school_experience
+
+   redis:
+     image: redis:5-alpine
