@@ -2,9 +2,8 @@ name: Build and Deploy
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ sfawcett123-patch-1 ]
   push:
-    branches: [ sfawcett123-patch-1 ]
+    branches: [ master ]
 
 jobs:
   build:
