@@ -2,8 +2,9 @@ name: Build and Deploy
 on:
   workflow_dispatch:
   pull_request:
+    branches: [ paas/deploy/dev ]
   push:
-    branches: [ master ]
+    branches: [ paas/deploy/dev ]
 
 jobs:
   build:
@@ -351,25 +352,25 @@ jobs:
       - name: Get reference Number
         run: echo "Event Number - ${{github.event.number}}"
 
-#     - name: Trigger Review Deployment
-#       uses: benc-uk/workflow-dispatch@v1.1
-#       with:
-#         workflow: Deploy to PaaS
-#         token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-#         inputs: '{"environment": "Review", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}"  }'
-#         ref: ${{ github.event.pull_request.head.ref }}
+      - name: Trigger Review Deployment
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: Deploy to PaaS
+          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          inputs: '{"environment": "Review", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}"  }'
+          ref: ${{ github.event.pull_request.head.ref }}
 
-#     - name: Wait for Deployment to Review
-#       uses: fountainhead/action-wait-for-check@v1.0.0
-#       id: wait-for-review
-#       with:
-#         token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-#         checkName: Deploy Review
-#         ref: ${{ github.event.pull_request.head.ref }}
+      - name: Wait for Deployment to Review
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-review
+        with:
+          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          checkName: Deploy Review
+          ref: ${{ github.event.pull_request.head.ref }}
 
-#     - name: Check if Review Deployment has returned with a failure
-#       if: steps.wait-for-review.outputs.conclusion == 'failure'
-#       run: exit 1
+      - name: Check if Review Deployment has returned with a failure
+        if: steps.wait-for-review.outputs.conclusion == 'failure'
+        run: exit 1
 
       - name: Post sticky pull request comment
         if: github.event_name == 'pull_request'
