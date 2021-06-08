@@ -17,6 +17,14 @@ class ErrorsController < ApplicationController
     end
   end
 
+  def too_many_requests
+    respond_to do |format|
+      format.html { render status: :too_many_requests }
+      format.json { render json: { error: "Internal server error" }, status: :too_many_requests }
+      format.all { render status: :too_many_requests, body: nil }
+    end
+  end
+
   def unprocessable_entity
     respond_to do |format|
       format.html { render status: :unprocessable_entity }

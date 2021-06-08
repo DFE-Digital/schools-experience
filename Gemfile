@@ -50,6 +50,7 @@ gem 'sentry-delayed_job'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 
+gem 'rack-attack'
 gem 'rack-rewrite'
 gem 'rack-timeout'
 
