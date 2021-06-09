@@ -48,7 +48,7 @@ module Rack
   end
 
   # Redirect to custom response for throttled requests
-  Rack::Attack.throttled_response = lambda do |env|
-    [301, {"Location" => '/429'}, []]
+  Rack::Attack.throttled_response = lambda do |_env|
+    [301, { "Location" => '/429' }, []]
   end
 end
