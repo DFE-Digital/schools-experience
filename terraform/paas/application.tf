@@ -1,3 +1,13 @@
+locals {
+  environment_map = { RAILS_ENV       = "servertest" ,
+                      DATABASE_URL    = local.postgres-credentials.uri ,
+                      REDIS_URL       = local.redis-credentials.uri ,
+                      SECRET_KEY_BASE = "stubbed" ,
+                      SKIP_FORCE_SSL  = true ,
+                      WEB_URL         = local.postgres-credentials.uri
+                      }
+}
+
 resource "cloudfoundry_app" "application" {
   name         = var.paas_application_name
   space        = data.cloudfoundry_space.space.id
@@ -17,6 +27,15 @@ resource "cloudfoundry_app" "application" {
     route = cloudfoundry_route.route_internal.id
   }
 
+  # For Review Apps find existing Resources
+  dynamic "service_binding" {
+    for_each = concat( data.cloudfoundry_service_instance.redis , data.cloudfoundry_service_instance.redis ) 
+    content {
+      service_instance = service_binding.value["id"]
+    }
+  }
+
+  # For Dev/Test/Production Apps use created Resources
   dynamic "service_binding" {
     for_each = concat( cloudfoundry_service_instance.redis , cloudfoundry_service_instance.postgres , cloudfoundry_user_provided_service.logging ) 
     content {
@@ -24,7 +43,7 @@ resource "cloudfoundry_app" "application" {
     }
   }
 
-#  environment = merge(local.application_secrets, local.environment_map)
+  environment = merge(local.application_secrets, local.environment_map)
 
 }
 
