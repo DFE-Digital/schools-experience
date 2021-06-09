@@ -40,3 +40,4 @@ package-lock.json
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+fetch_config.rb

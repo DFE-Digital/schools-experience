@@ -69,6 +69,14 @@ variable "redis_1_plan" {
   default = "small-ha-5_x"
 }
 
+variable "redis_service_key" {
+  default = "redis_service_key"
+}
+
+variable "postgres_service_key" {
+  default = "postgres_service_key"
+}
+
 variable "paas_application_name" {
   default = "dfe-school-experience-app"
 }
