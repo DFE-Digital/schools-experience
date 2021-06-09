@@ -2,9 +2,8 @@ name: Build and Deploy
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ paas/deploy/dev ]
   push:
-    branches: [ paas/deploy/dev ]
+    branches: [ master ]
 
 jobs:
   build:
