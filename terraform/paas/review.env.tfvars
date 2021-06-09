@@ -1,7 +1,6 @@
 paas_space                = "get-into-teaching"
 paas_database_common_name = "school-experience-dev-pg-common-svc"
 paas_redis_1_name         = "school-experience-dev-redis-svc"
-paas_application_name     = "school-experience-review-dev"
 application_instances     = 1
 logging                   = 0
 databases                 = 0
