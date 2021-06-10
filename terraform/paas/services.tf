@@ -23,6 +23,7 @@ resource "cloudfoundry_service_instance" "postgres" {
 resource "cloudfoundry_service_key" "postgres-key1" {
   count            = var.databases
   name             = var.postgres_service_key
+
   service_instance = cloudfoundry_service_instance.postgres[0].id
 }
 
@@ -56,6 +57,7 @@ resource "cloudfoundry_service_instance" "redis" {
 resource "cloudfoundry_service_key" "redis1-key1" {
   count            = var.databases
   name             = var.redis_service_key
+
   service_instance = cloudfoundry_service_instance.redis[0].id
 }
 
@@ -74,4 +76,5 @@ data "cloudfoundry_service_key" "redis1-key1" {
 locals {
   redis-credentials    = var.databases == 1 ? cloudfoundry_service_key.redis1-key1[0].credentials : data.cloudfoundry_service_key.redis1-key1[0].credentials
   postgres-credentials = var.databases == 1 ? cloudfoundry_service_key.postgres-key1[0].credentials : data.cloudfoundry_service_key.postgres-key1[0].credentials
+
 }
