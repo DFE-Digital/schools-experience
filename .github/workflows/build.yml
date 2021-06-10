@@ -464,6 +464,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
       - uses: Azure/login@v1
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -472,17 +475,14 @@ jobs:
         id:   azSecret
         with:
            keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'HTTP-PASSWORD, HTTP-USERNAME, SLACK-WEBHOOK'
-
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
+           secrets: 'SLACK-WEBHOOK'
 
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{ steps.azSecret.outputs.HTTP-USERNAME }}:${{ steps.azSecret.outputs.HTTP-PASSWORD }}@${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
+          target: 'https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
 
