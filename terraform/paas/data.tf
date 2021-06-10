@@ -5,12 +5,11 @@ data "azurerm_key_vault" "vault" {
 
 data "azurerm_key_vault_secret" "application" {
   key_vault_id = data.azurerm_key_vault.vault.id
-  name         = "API-KEYS"
+  name         = "SE-SECRETS"
 }
 
 locals {
-#  application_secrets    = yamldecode(data.azurerm_key_vault_secret.application.value)
-   application_secrets    = {}
+  application_secrets = yamldecode(data.azurerm_key_vault_secret.application.value)
 }
 
 data "azurerm_key_vault_secret" "paas_username" {
@@ -23,12 +22,3 @@ data "azurerm_key_vault_secret" "paas_password" {
   name         = "PAAS-PASSWORD"
 }
 
-data "azurerm_key_vault_secret" "statuscake_username" {
-  key_vault_id = data.azurerm_key_vault.vault.id
-  name         = "SC-USERNAME"
-}
-
-data "azurerm_key_vault_secret" "statuscake_password" {
-  key_vault_id = data.azurerm_key_vault.vault.id
-  name         = "SC-PASSWORD"
-}

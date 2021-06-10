@@ -8,7 +8,7 @@ data "cloudfoundry_service" "redis" {
 
 
 locals {
-# logstash_endpoint = local.infrastructure_secrets["LOGSTASH_ENDPOINT"]
+  # logstash_endpoint = local.infrastructure_secrets["LOGSTASH_ENDPOINT"]
   logstash_endpoint = ""
 }
 
@@ -22,7 +22,8 @@ resource "cloudfoundry_service_instance" "postgres" {
 
 resource "cloudfoundry_service_key" "postgres-key1" {
   count            = var.databases
-  name             = var.postgres_service_key 
+  name             = var.postgres_service_key
+
   service_instance = cloudfoundry_service_instance.postgres[0].id
 }
 
@@ -35,7 +36,7 @@ data "cloudfoundry_service_instance" "postgres" {
 data "cloudfoundry_service_key" "postgres-key1" {
   count            = 1 - var.databases
   name             = var.postgres_service_key
-  service_instance = data.cloudfoundry_service_instance.postgres[0].id 
+  service_instance = data.cloudfoundry_service_instance.postgres[0].id
 }
 
 resource "cloudfoundry_user_provided_service" "logging" {
@@ -55,7 +56,8 @@ resource "cloudfoundry_service_instance" "redis" {
 
 resource "cloudfoundry_service_key" "redis1-key1" {
   count            = var.databases
-  name             = var.redis_service_key 
+  name             = var.redis_service_key
+
   service_instance = cloudfoundry_service_instance.redis[0].id
 }
 
@@ -67,11 +69,12 @@ data "cloudfoundry_service_instance" "redis" {
 
 data "cloudfoundry_service_key" "redis1-key1" {
   count            = 1 - var.databases
-  name             = var.redis_service_key 
-  service_instance = data.cloudfoundry_service_instance.redis[0].id 
+  name             = var.redis_service_key
+  service_instance = data.cloudfoundry_service_instance.redis[0].id
 }
 
 locals {
-   redis-credentials = var.databases == 1 ? cloudfoundry_service_key.redis1-key1[0].credentials : data.cloudfoundry_service_key.redis1-key1[0].credentials
-   postgres-credentials = var.databases == 1 ? cloudfoundry_service_key.postgres-key1[0].credentials : data.cloudfoundry_service_key.postgres-key1[0].credentials
+  redis-credentials    = var.databases == 1 ? cloudfoundry_service_key.redis1-key1[0].credentials : data.cloudfoundry_service_key.redis1-key1[0].credentials
+  postgres-credentials = var.databases == 1 ? cloudfoundry_service_key.postgres-key1[0].credentials : data.cloudfoundry_service_key.postgres-key1[0].credentials
+
 }

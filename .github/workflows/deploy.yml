@@ -31,7 +31,7 @@ jobs:
          with:
            KEY_VAULT: ${{ secrets.KEY_VAULT }}
            SECRETS: |
-             CONTENT-KEYS
+                SE-SECRETS 
 
   turnstyle:
     name: Wait for any previous deployments
@@ -123,7 +123,7 @@ jobs:
         id:   azSecret
         with:
            keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'HTTP-USERNAME, HTTP-PASSWORD, LOGIT-API'
+           secrets: 'LOGIT-API'
 
       - uses: hashicorp/setup-terraform@v1.3.2
         with:
@@ -161,9 +161,6 @@ jobs:
             then
                    tests/confidence/healthcheck.sh  "${{steps.variables.outputs.healthcheck}}"  "sha-${{ steps.sha.outputs.short }}"
             fi
-        env:
-          HTTPAUTH_PASSWORD: ${{ steps.azSecret.outputs.HTTP-PASSWORD }}
-          HTTPAUTH_USERNAME: ${{ steps.azSecret.outputs.HTTP-USERNAME }}
 
       - name: Update ${{ github.event.inputs.environment }} status
         if: always()
