@@ -21,4 +21,11 @@ RSpec.describe ErrorsController, type: :controller do
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
+
+  describe "GET #too_many_requests" do
+    it "returns too_many_requests" do
+      get :too_many_requests
+      expect(response).to have_http_status(:too_many_requests)
+    end
+  end
 end
