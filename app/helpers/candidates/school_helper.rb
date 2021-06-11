@@ -55,19 +55,6 @@ module Candidates::SchoolHelper
     availability_info.present? ? safe_format(availability_info) : 'No information supplied'
   end
 
-  def format_school_experience_type(type)
-    case type
-    when 'virtual' then placement_date_virtual_tag
-    when 'inschool' then placement_date_virtual_tag
-    else
-      safe_join [
-        placement_date_virtual_tag,
-        " and ",
-        placement_date_inschool_tag
-      ]
-    end
-  end
-
   def format_phases(school)
     school.phases.map(&:name).to_sentence
   end
