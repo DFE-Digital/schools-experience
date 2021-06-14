@@ -132,7 +132,7 @@ module Bookings
       {
         'phone' => gitis_contact.secondary_telephone.presence || gitis_contact.telephone.presence || gitis_contact.mobile_telephone,
         'building' => gitis_contact.address_line1,
-        'street' => [gitis_contact.address_line1, gitis_contact.address_line2].map(&:presence).compact.join(', '),
+        'street' => gitis_contact.address_line2,
         'town_or_city' => gitis_contact.address_city,
         'county' => gitis_contact.address_state_or_province,
         'postcode' => gitis_contact.address_postcode

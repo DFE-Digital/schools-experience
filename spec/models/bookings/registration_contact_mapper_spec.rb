@@ -168,7 +168,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
 
       it { is_expected.to include("phone" => contact.secondary_telephone) }
       it { is_expected.to include("building" => contact.address_line1) }
-      it { is_expected.to include("street" => "#{contact.address_line1}, #{contact.address_line2}") }
+      it { is_expected.to include("street" => contact.address_line2) }
       it { is_expected.to include("town_or_city" => contact.address_city) }
       it { is_expected.to include("county" => contact.address_state_or_province) }
       it { is_expected.to include("postcode" => contact.address_postcode) }
