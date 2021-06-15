@@ -59,12 +59,12 @@ shared_context "api correct verification code for personal info" do
   end
 end
 
-shared_context "api latest privacy policy" do
-  let(:latest_policy) { build(:api_privacy_policy) }
+shared_context "api current privacy policy" do
+  let(:current_policy) { build(:api_privacy_policy) }
 
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::PrivacyPoliciesApi).to \
-      receive(:get_latest_privacy_policy) { latest_policy }
+      receive(:get_privacy_policy) { current_policy }
   end
 end
 

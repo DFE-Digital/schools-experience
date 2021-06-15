@@ -1,5 +1,7 @@
 module Candidates
   class FeedbacksController < ApplicationController
+    invisible_captcha only: [:create], timestamp_threshold: 1.second
+
     def show; end
 
     def new

@@ -233,7 +233,7 @@ RSpec.describe Bookings::Candidate, type: :model do
 
     context "when the git_api feature is enabled" do
       include_context "enable git_api feature"
-      include_context "api latest privacy policy"
+      include_context "api current privacy policy"
       include_context "api teaching subjects"
 
       before do
@@ -366,7 +366,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
 
     context "when the contact is an instance of GetIntoTeachingApi::SchoolsExperienceSignUp" do
-      include_context "api latest privacy policy"
+      include_context "api current privacy policy"
       include_context "api teaching subjects"
       include_context "api sign up"
 

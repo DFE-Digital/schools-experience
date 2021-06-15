@@ -42,7 +42,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(_dfe_preferredteachingsubject02_value: teachingsubjectid2) }
 
     context "when contact is an instance of GetIntoTeachingApiClient::SchoolsExperienceSignUp" do
-      include_context "api latest privacy policy"
+      include_context "api current privacy policy"
       include_context "api teaching subjects"
 
       let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new }
@@ -74,7 +74,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
       it { is_expected.to have_attributes(has_dbs_certificate: registration.background_check.has_dbs_check) }
       it { is_expected.to have_attributes(preferred_teaching_subject_id: teachingsubjectid) }
       it { is_expected.to have_attributes(secondary_preferred_teaching_subject_id: teachingsubjectid2) }
-      it { is_expected.to have_attributes(accepted_policy_id: latest_policy.id) }
+      it { is_expected.to have_attributes(accepted_policy_id: current_policy.id) }
 
       context "when has_dbs_certificate is changing" do
         let(:contact) do
@@ -168,7 +168,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
 
       it { is_expected.to include("phone" => contact.secondary_telephone) }
       it { is_expected.to include("building" => contact.address_line1) }
-      it { is_expected.to include("street" => "#{contact.address_line1}, #{contact.address_line2}") }
+      it { is_expected.to include("street" => contact.address_line2) }
       it { is_expected.to include("town_or_city" => contact.address_city) }
       it { is_expected.to include("county" => contact.address_state_or_province) }
       it { is_expected.to include("postcode" => contact.address_postcode) }

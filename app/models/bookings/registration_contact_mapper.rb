@@ -105,7 +105,7 @@ module Bookings
       gitis_contact.preferred_teaching_subject_id = api_subject_id_from_gitis_value(teaching_preference.subject_first_choice)
       gitis_contact.secondary_preferred_teaching_subject_id = api_subject_id_from_gitis_value(teaching_preference.subject_second_choice)
 
-      gitis_contact.accepted_policy_id = latest_privacy_policy.id
+      gitis_contact.accepted_policy_id = current_privacy_policy.id
 
       gitis_contact
     end
@@ -132,7 +132,7 @@ module Bookings
       {
         'phone' => gitis_contact.secondary_telephone.presence || gitis_contact.telephone.presence || gitis_contact.mobile_telephone,
         'building' => gitis_contact.address_line1,
-        'street' => [gitis_contact.address_line1, gitis_contact.address_line2].map(&:presence).compact.join(', '),
+        'street' => gitis_contact.address_line2,
         'town_or_city' => gitis_contact.address_city,
         'county' => gitis_contact.address_state_or_province,
         'postcode' => gitis_contact.address_postcode
@@ -150,10 +150,12 @@ module Bookings
       }
     end
 
-    def latest_privacy_policy
-      @latest_privacy_policy ||= begin
+    def current_privacy_policy
+      policy_id = Rails.configuration.x.gitis.privacy_policy_id
+
+      @current_privacy_policy ||= begin
         api = GetIntoTeachingApiClient::PrivacyPoliciesApi.new
-        api.get_latest_privacy_policy
+        api.get_privacy_policy(policy_id)
       end
     end
 
