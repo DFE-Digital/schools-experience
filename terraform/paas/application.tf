@@ -1,10 +1,12 @@
 locals {
   environment_map = { REDIS_URL = local.redis-credentials.uri,
-    DB_DATABASE    = local.postgres-credentials.name 
-    DB_HOST        = local.postgres-credentials.host,
-    DB_USERNAME    = local.postgres-credentials.username,
-    DB_PASSWORD    = local.postgres-credentials.password,
-    SKIP_FORCE_SSL = true,
+    DB_DATABASE         = local.postgres-credentials.name 
+    DB_HOST             = local.postgres-credentials.host,
+    DB_USERNAME         = local.postgres-credentials.username,
+    DB_PASSWORD         = local.postgres-credentials.password,
+    SKIP_FORCE_SSL      = true,
+    SENTRY_CURRENT_ENV  = var.application_environment,
+    SLACK_ENV           = var.application_environment
   }
 }
 

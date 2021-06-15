@@ -77,6 +77,10 @@ variable "postgres_service_key" {
   default = "postgres_service_key"
 }
 
+variable "application_environment" {
+  default = "dfe-school-experience-development"
+}
+
 variable "paas_application_name" {
   default = "dfe-school-experience-app"
 }
