@@ -1,7 +1,7 @@
 class CookiePreferencesController < ApplicationController
-  REFERER_BLACKLIST = %r{/(cookie_preference|cookies_policy)}.freeze
+  REFERER_BLACKLIST = %r{/(cookie_preference)}.freeze
   skip_before_action :verify_authenticity_token, only: %i[update]
-  before_action :save_refererer
+  before_action :save_referer
 
   def show
     redirect_to edit_cookie_preference_path
@@ -42,10 +42,19 @@ private
     end
   end
 
-  def save_refererer
-    if request.referer.present? && request.referer !~ REFERER_BLACKLIST
-      session[:cookie_preference_referer] = request.referer
-    end
+  def save_referer
+    session[:cookie_preference_referer] =
+      if non_get_referer?
+        root_url
+      elsif request.referer.present? && request.referer !~ REFERER_BLACKLIST
+        request.referer
+      end
+  end
+
+  def non_get_referer?
+    Rails.application.routes.recognize_path(request.referer).blank?
+  rescue ActionController::RoutingError
+    true
   end
 
   def return_url
