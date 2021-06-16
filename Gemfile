@@ -41,7 +41,7 @@ gem 'delayed_cron_job'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 
-gem "redis", "~> 4.2"
+gem "redis", "~> 4.3"
 
 gem 'kaminari'
 
