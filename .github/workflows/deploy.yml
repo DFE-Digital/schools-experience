@@ -98,15 +98,6 @@ jobs:
                  echo ::set-output name=docker_image::${{env.DOCKER_REPOSITORY}}:sha-${{ steps.sha.outputs.short}}
              fi
 
-             if [ "${{github.event.inputs.environment }}" == "UR" ]
-             then
-                 echo ::set-output name=RUN_TEST::"true"
-                 echo ::set-output name=control::$(echo "ur" )
-                 echo ::set-output name=healthcheck::$(echo "${{env.PAAS_APPLICATION_NAME}}-UR" )
-                 echo ::set-output name=key::"schools-experience.ur.terraform"
-                 echo ::set-output name=docker_image::${{env.DOCKER_REPOSITORY}}:sha-${{ steps.sha.outputs.short}}
-             fi
-
              if [ "${{github.event.inputs.environment }}" == "Production" ]
              then
                  echo ::set-output name=control::$(echo "production" )

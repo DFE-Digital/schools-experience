@@ -494,3 +494,53 @@ jobs:
            SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
            SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
            SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
+  staging:
+    name: Staging Deployment
+    needs: [ development ]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2.3.4
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: Azure/get-keyvault-secrets@v1.2
+        id:   azSecret
+        with:
+           keyvault: ${{ secrets.KEY_VAULT}}
+           secrets: 'SLACK-WEBHOOK, ACTIONS-API-ACCESS-TOKEN'
+
+      - name: Trigger Deployment to Staging
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: Deploy to PaaS
+          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          inputs: '{"environment": "Test", "sha": "${{ github.sha }}" }'
+          ref: ${{github.ref}}
+
+      - name: Wait for Deployment to Staging
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-deploy
+        with:
+          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          checkName: Deploy Test
+          ref: ${{github.ref}}
+
+      - name: Check if Staging Deployment has returned with a failure
+        if: steps.wait-for-deploy.outputs.conclusion == 'failure'
+        run: exit 1
+
+      - name: Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_ERROR}}
+          SLACK_TITLE: Failure in Post-Development Deploy
+          SLACK_MESSAGE: Failure with initialising Staging deployment for ${{env.APPLICATION}}
+          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }

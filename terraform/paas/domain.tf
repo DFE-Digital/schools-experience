@@ -5,3 +5,4 @@ data "cloudfoundry_domain" "cloudapps" {
 data "cloudfoundry_domain" "internal" {
   name = "apps.internal"
 }
+
