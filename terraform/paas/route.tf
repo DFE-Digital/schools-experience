@@ -20,5 +20,3 @@ resource "cloudfoundry_route" "route_internal" {
 locals {
   app_endpoint = "${cloudfoundry_route.route_cloud.hostname}.${data.cloudfoundry_domain.cloudapps.name}"
 }
-
-

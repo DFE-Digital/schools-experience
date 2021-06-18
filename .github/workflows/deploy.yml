@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: The environment to deploy to Development/Test/Production/Review etc
+        description: The environment to deploy to Development/Staging/Production/Review etc
         required: true
       sha:
         description: Commit sha to be deployed
@@ -90,11 +90,11 @@ jobs:
                  echo ::set-output name=docker_image::${{env.DOCKER_REPOSITORY}}:sha-${{ steps.sha.outputs.short}}
              fi
 
-             if [ "${{github.event.inputs.environment }}" == "Test" ]
+             if [ "${{github.event.inputs.environment }}" == "Staging" ]
              then
-                 echo ::set-output name=control::$(echo "test" )
-                 echo ::set-output name=healthcheck::$(echo "${{env.PAAS_APPLICATION_NAME}}-test" )
-                 echo ::set-output name=key::"schools-experience.test.terraform"
+                 echo ::set-output name=control::$(echo "staging" )
+                 echo ::set-output name=healthcheck::$(echo "${{env.PAAS_APPLICATION_NAME}}-staging" )
+                 echo ::set-output name=key::"schools-experience.staging.terraform"
                  echo ::set-output name=docker_image::${{env.DOCKER_REPOSITORY}}:sha-${{ steps.sha.outputs.short}}
              fi
 

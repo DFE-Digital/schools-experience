@@ -521,7 +521,7 @@ jobs:
         with:
           workflow: Deploy to PaaS
           token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          inputs: '{"environment": "Test", "sha": "${{ github.sha }}" }'
+          inputs: '{"environment": "Staging", "sha": "${{ github.sha }}" }'
           ref: ${{github.ref}}
 
       - name: Wait for Deployment to Staging
