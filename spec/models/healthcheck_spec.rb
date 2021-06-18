@@ -129,11 +129,12 @@ RSpec.describe Healthcheck do
     end
 
     context "with broken connection" do
-      before do
-        allow(Redis).to receive(:current).and_raise Redis::CannotConnectError
+      it "returns false" do
+        [Errno::ETIMEDOUT, Redis::CannotConnectError].each do |error|
+          allow(Redis).to receive(:current).and_raise error
+          expect(subject).to be false
+        end
       end
-
-      it { is_expected.to be false }
     end
 
     context 'with non functional redis' do
