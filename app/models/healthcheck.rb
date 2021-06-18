@@ -18,7 +18,7 @@ class Healthcheck
     return nil unless ENV["REDIS_URL"]
 
     Redis.current.ping == "PONG"
-  rescue RuntimeError
+  rescue RuntimeError, Errno::ETIMEDOUT
     false
   end
 
