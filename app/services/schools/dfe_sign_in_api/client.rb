@@ -4,7 +4,10 @@ module Schools
 
     class Client
       TIMEOUT_SECS = 15
-      RETRY_EXCEPTIONS = [::Faraday::ConnectionFailed].freeze
+      RETRY_EXCEPTIONS = [
+        ::Faraday::ConnectionFailed,
+        Rack::Timeout::RequestTimeoutException
+      ].freeze
       RETRY_OPTIONS = {
         max: 2,
         methods: %i[get],

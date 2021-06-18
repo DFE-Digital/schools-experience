@@ -41,7 +41,7 @@ class Healthcheck
     return true unless Schools::DFESignInAPI::Organisations.enabled?
 
     Schools::DFESignInAPI::Organisations.new(SecureRandom.uuid).uuids
-  rescue RuntimeError
+  rescue RuntimeError, Rack::Timeout::RequestTimeoutException
     false
   end
 

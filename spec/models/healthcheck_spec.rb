@@ -155,25 +155,27 @@ RSpec.describe Healthcheck do
 
   describe "#test_dfe_signin_api" do
     before do
-      allow_any_instance_of(Schools::DFESignInAPI::Organisations).to receive(:enabled?).and_return(false)
+      allow(Schools::DFESignInAPI::Organisations).to receive(:enabled?).and_return(true)
     end
 
     subject { described_class.new.test_dfe_signin_api }
 
     context "with working connection" do
       before do
-        allow(Schools::DFESignInAPI::Organisations).to receive(:uuids).and_return([])
+        allow_any_instance_of(Schools::DFESignInAPI::Organisations).to receive(:uuids).and_return({})
       end
 
-      xit { is_expected.to be true }
+      it { is_expected.to be_a Hash }
     end
 
     context "with non functional connection" do
-      before do
-        allow(Schools::DFESignInAPI::Client).to receive(:response).and_raise Faraday::TimeoutError
-      end
+      it "returns false" do
+        [RuntimeError, Redis::CannotConnectError].each do |error|
+          allow_any_instance_of(Schools::DFESignInAPI::Organisations).to receive(:response).and_raise error
 
-      xit { is_expected.to be false }
+          is_expected.to be false
+        end
+      end
     end
 
     context "with no configured connection" do
