@@ -17,6 +17,10 @@ variable "databases" {
   default = 1
 }
 
+variable "paas_internet_hostnames" {
+  default = []
+}
+
 variable "strategy" {
   default = "blue-green-v2"
 }

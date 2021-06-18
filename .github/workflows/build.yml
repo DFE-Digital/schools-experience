@@ -543,4 +543,4 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_ERROR}}
           SLACK_TITLE: Failure in Post-Development Deploy
           SLACK_MESSAGE: Failure with initialising Staging deployment for ${{env.APPLICATION}}
-          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }
+          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
