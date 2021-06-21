@@ -17,6 +17,10 @@ variable "databases" {
   default = 1
 }
 
+variable "paas_internet_hostnames" {
+  default = []
+}
+
 variable "strategy" {
   default = "blue-green-v2"
 }
@@ -88,4 +92,5 @@ variable "paas_application_name" {
 variable "paas_docker_image" {
   default = "ghcr.io/dfe-digital/schools-experience:master"
 }
+
 
