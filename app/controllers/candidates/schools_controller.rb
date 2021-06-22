@@ -40,7 +40,7 @@ private
 
   def location_present?
     search_params[:location].present? || (
-      search_params[:latitude].present? && search_params[:latitude].present?
+      search_params[:longitude].present? && search_params[:latitude].present?
     )
   end
 
