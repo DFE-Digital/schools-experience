@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_30_095443) do
+ActiveRecord::Schema.define(version: 2021_06_22_160115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_095443) do
     t.text "extra_details"
     t.datetime "viewed_at"
     t.string "rejection_category"
-    t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id"
+    t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id", unique: true
     t.index ["rejection_category"], name: "index_bookings_placement_request_cancellations_category"
   end
 
@@ -238,6 +238,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_095443) do
     t.integer "bookings_phase_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["bookings_school_id", "bookings_phase_id"], name: "index_bookings_schools_phases_school_id_and_phase_id", unique: true
   end
 
   create_table "bookings_schools_subjects", force: :cascade do |t|
@@ -319,6 +320,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_095443) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bookings_subject_id"], name: "index_profile_subjects_on_school_profile_i"
+    t.index ["schools_school_profile_id", "bookings_subject_id"], name: "index_profile_subjects_school_profile_id_and_subject_id", unique: true
     t.index ["schools_school_profile_id"], name: "index_profile_subjects_on_school_profile_id"
   end
 
