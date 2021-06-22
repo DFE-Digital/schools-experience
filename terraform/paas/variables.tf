@@ -93,4 +93,6 @@ variable "paas_docker_image" {
   default = "ghcr.io/dfe-digital/schools-experience:master"
 }
 
-
+variable "alerts" {
+  type = map(any)
+}

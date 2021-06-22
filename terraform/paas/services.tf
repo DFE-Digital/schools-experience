@@ -39,11 +39,10 @@ data "cloudfoundry_service_key" "postgres-key1" {
   service_instance = data.cloudfoundry_service_instance.postgres[0].id
 }
 
-resource "cloudfoundry_user_provided_service" "logging" {
-  count            = var.logging
-  name             = var.paas_logging_name
-  space            = data.cloudfoundry_space.space.id
-  syslog_drain_url = "syslog-tls://${local.logstash_endpoint}"
+data "cloudfoundry_user_provided_service" "logging" {
+  name  = var.paas_logging_name
+  space = data.cloudfoundry_space.space.id
+  count = var.logging
 }
 
 resource "cloudfoundry_service_instance" "redis" {
