@@ -40,7 +40,7 @@ private
   end
 
   def sync_disabled?
-    disabled = ENV.fetch('GIAS_SYNC_DISABLED') { false }
+    disabled = ENV.fetch('GIAS_SYNC_DISABLED', false)
     disabled.to_s.in?(%w[1 true yes])
   end
 

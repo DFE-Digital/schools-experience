@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-describe Feature do
-  class Tester
-    def self.hello
-      'world'
-    end
+class Tester
+  def self.hello
+    'world'
   end
+end
 
+describe Feature do
   before { Feature.instance.current_phase = 10 }
   after { Feature.instance.current_phase = nil }
   subject { Feature.instance }

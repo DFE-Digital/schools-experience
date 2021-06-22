@@ -14,7 +14,7 @@ module Bookings
         if Rails.application.config.x.gitis.fake_crm
           Bookings::Gitis::FakeCrm.new
         elsif Rails.application.config.x.gitis.caching
-          Bookings::Gitis::CRM.new caching_store(read_from_cache)
+          Bookings::Gitis::CRM.new caching_store(read_from_cache: read_from_cache)
         else
           Bookings::Gitis::CRM.new store
         end
@@ -42,7 +42,7 @@ module Bookings
           store, cache, namespace: NAMESPACE, ttl: TTL, version: VERSION
       end
 
-      def caching_store(read_from_cache = false)
+      def caching_store(read_from_cache: false)
         read_from_cache ? read_write_caching_store : write_only_caching_store
       end
 

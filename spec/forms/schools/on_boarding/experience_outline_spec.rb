@@ -16,14 +16,14 @@ describe Schools::OnBoarding::ExperienceOutline, type: :model do
       it { is_expected.to validate_presence_of :teacher_training_details }
 
       context 'when teacher_training_url is present' do
-        INVALID_URLS = ['javascript:alert("oh no!")//http://example.com'].freeze
-        VALID_URLS = ['https://www.example.com', 'http://example.com'].freeze
+        invalid_urls = ['javascript:alert("oh no!")//http://example.com'].freeze
+        valid_urls = ['https://www.example.com', 'http://example.com'].freeze
 
-        INVALID_URLS.each do |url|
+        invalid_urls.each do |url|
           it { is_expected.not_to allow_value(url).for :teacher_training_url }
         end
 
-        VALID_URLS.each do |url|
+        valid_urls.each do |url|
           it { is_expected.to allow_value(url).for :teacher_training_url }
         end
       end

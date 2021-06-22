@@ -28,7 +28,7 @@ describe DFEAuthentication do
         end
 
         it 'will request organisation from DfE Sign-in' do
-          is_expected.to redirect_to %r{\&scope=profile%20organisation%20openid}
+          is_expected.to redirect_to %r{&scope=profile%20organisation%20openid}
         end
       end
 
@@ -40,7 +40,7 @@ describe DFEAuthentication do
         end
 
         it 'will not request organisation from DfE Sign-in' do
-          is_expected.to redirect_to %r{\&scope=profile%20openid}
+          is_expected.to redirect_to %r{&scope=profile%20openid}
         end
       end
     end

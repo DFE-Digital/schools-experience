@@ -74,7 +74,7 @@ class CookiePreference
     all_cookies - accepted_cookies
   end
 
-  # Note: allowed is not the same as accepted
+  # NOTE: allowed is not the same as accepted
   # allowed = 'not explicitly rejected, and maybe explicitly accepted'
   # accepted = 'explicitly accepted'
   def allowed?(cookie_category_or_name)

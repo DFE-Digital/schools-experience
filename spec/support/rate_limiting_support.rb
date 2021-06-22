@@ -1,6 +1,6 @@
-include ActiveSupport::Testing::TimeHelpers
-
 shared_examples "an IP-based rate limited endpoint" do |desc, limit, period|
+  include ActiveSupport::Testing::TimeHelpers
+
   describe desc do
     let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
 

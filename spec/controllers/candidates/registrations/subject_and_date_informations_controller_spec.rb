@@ -21,7 +21,7 @@ describe Candidates::Registrations::SubjectAndDateInformationsController, type: 
         it('responds with 302') { expect(response.status).to eq 302 }
 
         it 'should redirect to the personal information page' do
-          expect(response.header.dig("Location")).to end_with('schools/11048/registrations/personal_information/new')
+          expect(response.header["Location"]).to end_with('schools/11048/registrations/personal_information/new')
         end
       end
     end

@@ -4,7 +4,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
   let(:urn) { 11_048 }
   subject { described_class.new session }
 
-  PII = {
+  pii = {
     "full_name" => 'Testy McTest',
     "email" => 'test@example.com',
     "building" => "Test building",
@@ -41,7 +41,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
 
       context 'PII' do
         # Redundant given the next spec, but going for clarity!
-        PII.each do |k, _|
+        pii.each do |k, _|
           it "removes #{k}" do
             expect(subject.attributes[k]).to eq nil
           end
@@ -90,7 +90,7 @@ describe Candidates::Registrations::RegistrationAsPlacementRequest do
 
       context 'PII' do
         # Redundant given the next spec, but going for clarity!
-        PII.each do |k, _|
+        pii.each do |k, _|
           it "removes #{k}" do
             expect(subject.attributes[k]).to eq nil
           end

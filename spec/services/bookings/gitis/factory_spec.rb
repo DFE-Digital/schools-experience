@@ -35,12 +35,12 @@ describe Bookings::Gitis::Factory do
     before { allow(factory).to receive(:token).and_return('a.fake.token') }
 
     context 'with read_from_cache' do
-      subject! { factory.caching_store(true) }
+      subject! { factory.caching_store(read_from_cache: true) }
       it { is_expected.to be_kind_of Bookings::Gitis::Store::ReadWriteCache }
     end
 
     context 'without read_from_cache' do
-      subject! { factory.caching_store(false) }
+      subject! { factory.caching_store(read_from_cache: false) }
       it { is_expected.to be_kind_of Bookings::Gitis::Store::WriteOnlyCache }
     end
   end

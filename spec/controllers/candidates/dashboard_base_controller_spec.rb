@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe Candidates::DashboardBaseController, type: :request do
-  class StubController < Candidates::DashboardBaseController
-    def index
-      render plain: 'Authorized'
-    end
+class StubController < Candidates::DashboardBaseController
+  def index
+    render plain: 'Authorized'
   end
+end
 
+RSpec.describe Candidates::DashboardBaseController, type: :request do
   describe "GET #index" do
     before do
       Rails.application.routes.send(:eval_block, lambda {

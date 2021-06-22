@@ -1,5 +1,5 @@
 module Schools::ConfirmAttendanceHelper
-  # note we can't use the form builder here because it wraps everything in
+  # NOTE: we can't use the form builder here because it wraps everything in
   # form-groups and fieldsets which affect how it's displayed in a table cell
   def confirm_attendance_radio(builder, booking_id, value, label_text)
     tag.div(class: "govuk-radios__item") do

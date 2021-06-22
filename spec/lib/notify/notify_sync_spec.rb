@@ -52,7 +52,7 @@ describe NotifySync do
       after { subject.compare }
 
       specify "should state that exact templates match" do
-        expect(STDOUT).to receive(:puts).with(
+        expect($stdout).to receive(:puts).with(
           [
             matching_template_id.ljust(18),
             matching_template_name.ljust(40),
@@ -79,7 +79,7 @@ describe NotifySync do
       after { subject.compare }
 
       specify "should state that local-only templates are missing from remote repository" do
-        expect(STDOUT).to receive(:puts).with(
+        expect($stdout).to receive(:puts).with(
           [
             local_only_template_id.ljust(18),
             "Unknown".ljust(40),
@@ -111,7 +111,7 @@ describe NotifySync do
       after { subject.compare }
 
       specify "should state that local-only templates are missing from local repository" do
-        expect(STDOUT).to receive(:puts).with(
+        expect($stdout).to receive(:puts).with(
           [
             remote_only_template_id.ljust(18),
             remote_only_template_name.ljust(40),

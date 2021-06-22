@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-describe Bookings::Gitis::Store::WriteOnlyCache do
-  class Person
-    include Bookings::Gitis::Entity
-    entity_id_attribute :personid
-    entity_attribute :fullname
-  end
+class Person
+  include Bookings::Gitis::Entity
+  entity_id_attribute :personid
+  entity_attribute :fullname
+end
 
+describe Bookings::Gitis::Store::WriteOnlyCache do
   let(:version) { 'v1' }
   let(:ttl) { 1.hour }
   let(:cache) { Rails.cache }

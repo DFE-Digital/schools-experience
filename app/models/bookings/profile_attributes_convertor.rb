@@ -49,9 +49,10 @@ module Bookings
     def convert_dbs_profile
       output[:dbs_policy_conditions] = input[:dbs_requirement_dbs_policy_conditions]
 
-      output[:dbs_policy_details] = if input[:dbs_requirement_dbs_policy_conditions] == 'notrequired'
+      output[:dbs_policy_details] = case input[:dbs_requirement_dbs_policy_conditions]
+                                    when 'notrequired'
                                       input[:dbs_requirement_no_dbs_policy_details].presence
-                                    elsif input[:dbs_requirement_dbs_policy_conditions] == 'inschool'
+                                    when 'inschool'
                                       input[:dbs_requirement_dbs_policy_details_inschool].presence
                                     else
                                       input[:dbs_requirement_dbs_policy_details].presence

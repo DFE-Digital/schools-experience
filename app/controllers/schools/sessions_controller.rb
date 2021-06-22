@@ -1,8 +1,12 @@
 module Schools
   class StateMismatchError < StandardError; end
+
   class AuthFailedError < StandardError; end
+
   class InsufficientPrivilegesError < StandardError; end
+
   class SessionExpiredError < StandardError; end
+
   class NoOrganisationError < StandardError; end
 
   class SessionsController < ApplicationController

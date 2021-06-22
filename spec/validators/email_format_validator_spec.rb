@@ -1,12 +1,13 @@
 require 'rails_helper'
 
-describe EmailFormatValidator do
-  class TestModel
-    include ActiveModel::Model
-    attr_accessor :email_address
-    validates :email_address, email_format: true
-  end
+class TestModel
+  include ActiveModel::Model
+  attr_accessor :email_address
 
+  validates :email_address, email_format: true
+end
+
+describe EmailFormatValidator do
   before { instance.valid? }
   subject { instance.errors.to_hash }
 

@@ -3,7 +3,9 @@ module GitisAuthentication
   include GitisAccess
 
   class UnauthorizedCandidate < RuntimeError; end
+
   class UnconfirmedCandidate < RuntimeError; end
+
   class InvalidContact < RuntimeError; end
 
   included do
