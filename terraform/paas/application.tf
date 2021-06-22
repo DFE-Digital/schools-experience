@@ -20,6 +20,13 @@ resource "cloudfoundry_app" "application" {
   disk_quota   = var.application_disk
   strategy     = var.strategy
 
+  dynamic "service_binding" {
+    for_each = data.cloudfoundry_user_provided_service.logging
+    content {
+      service_instance = service_binding.value["id"]
+    }
+  }
+
   routes {
     route = cloudfoundry_route.route_cloud.id
   }

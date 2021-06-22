@@ -8,18 +8,12 @@ data "azurerm_key_vault_secret" "application" {
   name         = "SE-SECRETS"
 }
 
+data "azurerm_key_vault_secret" "infrastructure" {
+  key_vault_id = data.azurerm_key_vault.vault.id
+  name         = "SE-INFRA-SECRETS"
+}
+
 locals {
   application_secrets = yamldecode(data.azurerm_key_vault_secret.application.value)
+  infrastructure_secrets = yamldecode(data.azurerm_key_vault_secret.infrastructure.value)
 }
-
-data "azurerm_key_vault_secret" "paas_username" {
-  key_vault_id = data.azurerm_key_vault.vault.id
-  name         = "PAAS-USERNAME"
-}
-
-data "azurerm_key_vault_secret" "paas_password" {
-  key_vault_id = data.azurerm_key_vault.vault.id
-  name         = "PAAS-PASSWORD"
-}
-
-
