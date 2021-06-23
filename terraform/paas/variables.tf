@@ -95,4 +95,5 @@ variable "paas_docker_image" {
 
 variable "alerts" {
   type = map(any)
+  default = {}
 }
