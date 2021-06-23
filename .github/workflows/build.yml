@@ -135,7 +135,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: unit_tests
-          path: ${{ github.workspace }}/out/*
+          path: ${{ github.workspace }}/out/test-report.xml
 
       - name: Fixup report file paths
         run:  sudo sed -i "s?\"/app/?\"${PWD}/?" coverage/coverage.json || true
@@ -145,7 +145,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Code_Coverage
-          path: ${{ github.workspace }}/coverage/*
+          path: ${{ github.workspace }}/coverage/coverage.json
 
   security_tests:
     name: Security Tests
@@ -237,7 +237,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: cucumber_tests
-          path: ${{ github.workspace }}/out/*
+          path: ${{ github.workspace }}/out/test-report.xml
 
   selenium_cucumber_tests:
     name: Chrome Cucumber Tests
@@ -295,7 +295,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: selenium_cucumber_tests
-          path: ${{ github.workspace }}/out/*
+          path: ${{ github.workspace }}/out/test-report.xml
 
   sonarcloud:
     name: SonarCloud
