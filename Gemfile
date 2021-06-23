@@ -132,4 +132,5 @@ group :test do
   gem 'capybara-screenshot'
   gem 'flipper-active_support_cache_store'
   gem 'webmock'
+  gem 'simplecov' , require: false
 end
