@@ -32,6 +32,7 @@ jobs:
            KEY_VAULT: ${{ secrets.KEY_VAULT }}
            SECRETS: |
                 SE-SECRETS 
+                SE-INFRA-SECRETS 
 
   turnstyle:
     name: Wait for any previous deployments
