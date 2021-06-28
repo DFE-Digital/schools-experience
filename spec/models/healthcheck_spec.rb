@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Healthcheck do
   let(:gitsha) { "d64e925a5c70b05246e493de7b60af73e1dfa9dd" }
-  shafile = "/etc/get-teacher-training-adviser-service-sha"
+  shafile = "/etc/school-experience-sha"
 
   describe "#app_sha" do
     subject { described_class.new.app_sha }
