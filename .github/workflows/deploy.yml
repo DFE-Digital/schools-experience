@@ -115,7 +115,7 @@ jobs:
         id:   azSecret
         with:
            keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'LOGIT-API'
+           secrets: 'LOGIT-API, HTTPAUTH-USERNAME, HTTPAUTH-PASSWORD'
 
       - uses: hashicorp/setup-terraform@v1.3.2
         with:
@@ -151,9 +151,12 @@ jobs:
         run: |
             if [ "${{steps.variables.outputs.RUN_TEST}}" == "true" ]
             then
-                   tests/confidence/healthcheck.sh  "${{steps.variables.outputs.healthcheck}}"  "sha-${{ steps.sha.outputs.short }}"
+                   tests/confidence/healthcheck.sh  "${{steps.variables.outputs.healthcheck}}"  "${{ steps.sha.outputs.short }}"
             fi
-
+        env:
+             HTTPAUTH_USERNAME: ${{steps.azSecret.outputs.HTTPAUTH-USERNAME}}
+             HTTPAUTH_PASSWORD: ${{steps.azSecret.outputs.HTTPAUTH-PASSWORD}}
+            
       - name: Update ${{ github.event.inputs.environment }} status
         if: always()
         uses: bobheadxi/deployments@v0.6.0

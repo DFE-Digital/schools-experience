@@ -11,7 +11,7 @@ class Healthcheck
   end
 
   def app_sha
-    read_file "/etc/get-teacher-training-adviser-service-sha"
+    read_file "/etc/school-experience-sha"
   end
 
   def test_redis
