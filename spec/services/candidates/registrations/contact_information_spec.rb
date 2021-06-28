@@ -53,12 +53,12 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       it { is_expected.to validate_length_of(:phone).is_at_most(50).with_message(too_long_msg) }
 
       context 'phone is present' do
-        VALID_NUMBERS = ['01434 634996', '+441434634996', '01234567890'].freeze
-        INVALID_NUMBERS = ['7', 'q', '+4414346349'].freeze
-        BLANK_NUMBERS = ['', ' ', '   '].freeze
+        valid_numbers = ['01434 634996', '+441434634996', '01234567890'].freeze
+        invalid_numbers = ['7', 'q', '+4414346349'].freeze
+        blank_numbers = ['', ' ', '   '].freeze
 
         context 'valid numbers' do
-          VALID_NUMBERS.each do |number|
+          valid_numbers.each do |number|
             subject { described_class.new phone: number }
             before { subject.validate }
 
@@ -69,7 +69,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         end
 
         context 'invalid numbers' do
-          INVALID_NUMBERS.each do |number|
+          invalid_numbers.each do |number|
             subject { described_class.new phone: number }
             before { subject.validate }
 
@@ -80,7 +80,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         end
 
         context 'blank number' do
-          BLANK_NUMBERS.each do |number|
+          blank_numbers.each do |number|
             subject { described_class.new phone: number }
             before { subject.validate }
 
@@ -96,7 +96,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       let(:too_long_msg) { 'Postcode must be 20 characters or fewer' }
       it { is_expected.to validate_length_of(:postcode).is_at_most(20).with_message(too_long_msg) }
 
-      VALID_POSTCODES = [
+      valid_postcodes = [
         'DN55 1PT',
         'CR2 6XH',
         'B33 8TH',
@@ -106,17 +106,17 @@ describe Candidates::Registrations::ContactInformation, type: :model do
         'ch63 7ns'
       ].freeze
 
-      INVALID_POSTCODES = [
+      invalid_postcodes = [
         'horses',
         'N0T AP057C0D3',
         'B3333 1BB',
         'CH3',
       ].freeze
 
-      BLANK_POSTCODES = ['', ' ', '  '].freeze
+      blank_postcodes = ['', ' ', '  '].freeze
 
       context 'valid postcodes' do
-        VALID_POSTCODES.each do |postcode|
+        valid_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
           before { subject.validate }
 
@@ -127,7 +127,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       end
 
       context 'invalid postcodes' do
-        INVALID_POSTCODES.each do |postcode|
+        invalid_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
           before { subject.validate }
 
@@ -138,7 +138,7 @@ describe Candidates::Registrations::ContactInformation, type: :model do
       end
 
       context 'blank postcodes' do
-        BLANK_POSTCODES.each do |postcode|
+        blank_postcodes.each do |postcode|
           subject { described_class.new postcode: postcode }
           before { subject.validate }
 

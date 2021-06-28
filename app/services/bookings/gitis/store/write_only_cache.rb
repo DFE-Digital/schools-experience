@@ -3,6 +3,7 @@ module Bookings
     module Store
       class WriteOnlyCache
         attr_reader :store, :cache, :namespace, :ttl, :version
+
         delegate :fetch, to: :store
 
         def initialize(store, cache, namespace: nil, ttl: 1.hour, version: 'v1')

@@ -97,22 +97,19 @@ module Candidates
   private
 
     def dbs_requirement
-      case profile.dbs_policy_conditions
-      when "required"
-        "Yes"
-      when "inschool"
-        "Yes - when in school"
-      when "notrequired"
-        'No - Candidates will be accompanied at all times when in school'
-      end
+      {
+        'required' => 'Yes',
+        'inschool' => 'Yes - when in school',
+        'notrequired' => 'No - Candidates will be accompanied at all times when in school'
+      }[profile.dbs_policy_conditions]
     end
 
     def legacy_dbs_requirement
-      case profile.dbs_required
-      when 'always' then 'Yes - Always'
-      when 'sometimes' then 'Yes - Sometimes'
-      when 'never' then 'No - Candidates will be accompanied at all times'
-      end
+      {
+        'always' => 'Yes - Always',
+        'sometimes' => 'Yes - Sometimes',
+        'never' => 'No - Candidates will be accompanied at all times'
+      }[profile.dbs_required]
     end
   end
 end

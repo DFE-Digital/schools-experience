@@ -18,11 +18,17 @@ Lint/UnusedBlockArgument:
   Exclude:
     - config/environments/*
 
+Lint/MissingSuper:
+  Enabled: false
+
 Style/HashEachMethods:
   Enabled: true
 
 Style/HashTransformKeys:
   Enabled: true
+
+Style/StringConcatenation:
+  Enabled: false
 
 Style/HashTransformValues:
   Enabled: true

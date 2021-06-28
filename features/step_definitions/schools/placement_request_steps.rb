@@ -127,7 +127,7 @@ Then("I should see a {string} section with the following values:") do |heading, 
 end
 
 Then("there should be the following buttons:") do |table|
-  # note that button_to inserts a form with a submit input so
+  # NOTE: that button_to inserts a form with a submit input so
   # if we don't find a regular link/button check for that too
   table.transpose.raw.flatten.each do |button_text|
     within('.accept-or-reject') do

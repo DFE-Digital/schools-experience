@@ -167,7 +167,7 @@ private
 
   def order_by(option)
     if (option == 'distance') && coordinates.present?
-      # note distance isn't actually an attribute of
+      # NOTE: distance isn't actually an attribute of
       # Bookings::School so we can't use hash syntax
       # as Rails will complain
       'distance asc'

@@ -16,7 +16,7 @@ if ENV['CANONICAL_DOMAIN'].present? || Rails.env.test? || Rails.env.servertest?
       if: proc { |rack_env|
         ENV['CANONICAL_DOMAIN'].present? &&
           rack_env['HTTP_HOST'] != ENV['CANONICAL_DOMAIN'] &&
-          !rack_env['PATH_INFO'].match?(%r{/(healthcheck|deployment|healthchecks\/[a-z]+)\.txt})
+          !rack_env['PATH_INFO'].match?(%r{/(healthcheck|deployment|healthchecks/[a-z]+)\.txt})
       }
   end
 end

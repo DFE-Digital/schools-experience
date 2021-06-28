@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-describe Bookings::Gitis::Store::ReadWriteCache do
-  class Person
-    include Bookings::Gitis::Entity
-    entity_id_attribute :personid
-    entity_attribute :fullname
-  end
+class Person
+  include Bookings::Gitis::Entity
+  entity_id_attribute :personid
+  entity_attribute :fullname
+end
 
+describe Bookings::Gitis::Store::ReadWriteCache do
   let(:version) { 'v1' }
   let(:dynamics) { Bookings::Gitis::Store::Dynamics.new 'a.fake.token' }
   let(:cache) { Rails.cache }

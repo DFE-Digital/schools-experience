@@ -3,7 +3,7 @@ require 'csv'
 
 describe Bookings::Data::SchoolMassImporter do
   before do
-    allow(STDOUT).to receive(:puts).and_return(true)
+    allow($stdout).to receive(:puts).and_return(true)
     allow_any_instance_of(Kernel).to receive(:print).and_return(nil)
   end
 
@@ -36,7 +36,7 @@ describe Bookings::Data::SchoolMassImporter do
       let(:school_type_id) { 2 }
 
       before do
-        # note these values are present in spec/sample_data/edubase.csv
+        # NOTE: these values are present in spec/sample_data/edubase.csv
         {
           1 => 'Early years',
           2 => 'Primary (4 to 11)',

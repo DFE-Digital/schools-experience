@@ -5,6 +5,7 @@ module Candidates
       include Singleton
 
       class SessionNotFound < StandardError; end
+
       class NoKey < StandardError; end
 
       def initialize

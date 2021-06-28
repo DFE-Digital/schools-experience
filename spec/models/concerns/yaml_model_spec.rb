@@ -1,13 +1,14 @@
 require 'rails_helper'
+
+class YamlTestModel
+  include YamlModel
+
+  id_attribute :dob, :date
+  attribute :firstname, :string
+  attribute :lastname, :string
+end
+
 describe YamlModel, type: :model do
-  class YamlTestModel
-    include YamlModel
-
-    id_attribute :dob, :date
-    attribute :firstname, :string
-    attribute :lastname, :string
-  end
-
   let(:described_class) { YamlTestModel }
 
   describe '.data_path' do

@@ -86,13 +86,13 @@ Rails.application.configure do
     Bullet.unused_eager_loading_enable = false
   end
 
-  config.x.phase = Integer(ENV.fetch('PHASE') { 10_000 })
+  config.x.phase = Integer(ENV.fetch('PHASE', 10_000))
   config.x.features = %i[
     subject_specific_dates
     capped_bookings
   ]
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
-  config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials.dig(:google_maps_key)
+  config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials[:google_maps_key]
 
   # dfe signin redirects back to https, so force it
   config.force_ssl = true
@@ -100,7 +100,7 @@ Rails.application.configure do
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = 'https://localhost:3000'
   config.x.oidc_client_id = 'schoolexperience'
-  config.x.oidc_client_secret = Rails.application.credentials.dig(:dfe_pp_signin_secret)
+  config.x.oidc_client_secret = Rails.application.credentials[:dfe_pp_signin_secret]
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
   config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
@@ -116,7 +116,7 @@ Rails.application.configure do
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT']
   end
 
-  config.x.gitis.fake_crm = truthy_strings.include?(String(ENV.fetch('FAKE_CRM') { true }))
+  config.x.gitis.fake_crm = truthy_strings.include?(String(ENV.fetch('FAKE_CRM', true)))
   config.x.gitis.fake_crm_uuid = ENV.fetch('FAKE_CRM_UUID', nil)
   config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID', 'notset')
   config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET', 'notset')

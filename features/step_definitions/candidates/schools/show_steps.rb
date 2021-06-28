@@ -169,9 +169,10 @@ Then("I should see the list of {string} in the sidebar") do |string|
 end
 
 Given("my school of choice has {string} dates") do |option|
-  @school = if option == 'fixed'
+  @school = case option
+            when 'fixed'
               FactoryBot.create(:bookings_school, :with_fixed_availability_preference)
-            elsif option == 'flexible'
+            when 'flexible'
               FactoryBot.create(:bookings_school)
             else
               raise 'invalid flexibility option'

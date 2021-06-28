@@ -2,6 +2,25 @@ require 'rails_helper'
 require Rails.root.join('spec', 'support', 'notify_fake_client')
 require Rails.root.join('spec', 'support', 'notify_retryable_erroring_client')
 
+class StubNotification < Notify
+  attr_accessor :name
+
+  def initialize(to:, name:)
+    self.name = name
+    super(to: to)
+  end
+
+private
+
+  def template_id
+    'ec830a0d-d032-4d4b-a107-xxxxyyyyzzzz'
+  end
+
+  def personalisation
+    { name: name }
+  end
+end
+
 describe Notify do
   include ActiveJob::TestHelper
   let(:to) { 'somename@somecompany.org' }
@@ -53,25 +72,6 @@ describe Notify do
   end
 
   describe 'custom notify_client' do
-    class StubNotification < Notify
-      attr_accessor :name
-
-      def initialize(to:, name:)
-        self.name = name
-        super(to: to)
-      end
-
-    private
-
-      def template_id
-        'ec830a0d-d032-4d4b-a107-xxxxyyyyzzzz'
-      end
-
-      def personalisation
-        { name: name }
-      end
-    end
-
     let :recipients do
       %w[test1@user.com test2@user.com]
     end

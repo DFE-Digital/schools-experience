@@ -1,5 +1,24 @@
 require 'rails_helper'
 
+class Associated
+  include Bookings::Gitis::Entity
+
+  entity_id_attribute :associatedid
+  entity_attribute :description
+  entity_association :testassoc, TestEntity
+end
+
+class TestInternal < TestEntity
+  entity_attribute :hidden, internal: true
+end
+
+class TeamEntity
+  include Bookings::Gitis::Entity
+
+  entity_attribute :name
+  entity_collection :players, TestEntity
+end
+
 RSpec.describe Bookings::Gitis::Entity do
   include_context 'test entity'
 
@@ -212,10 +231,6 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe "private attributes" do
-    class TestInternal < TestEntity
-      entity_attribute :hidden, internal: true
-    end
-
     it { expect(TestInternal.select_attribute_names).to include('hidden') }
     it { expect(TestInternal.respond_to?('hidden')).to be false }
     it { expect(TestInternal.respond_to?('hidden=')).to be false }
@@ -236,14 +251,6 @@ RSpec.describe Bookings::Gitis::Entity do
   describe '.entity_association' do
     let(:testentity) do
       TestEntity.new('testentityid' => SecureRandom.uuid, 'firstname' => 'test')
-    end
-
-    class Associated
-      include Bookings::Gitis::Entity
-
-      entity_id_attribute :associatedid
-      entity_attribute :description
-      entity_association :testassoc, TestEntity
     end
 
     context 'with new instance' do
@@ -380,13 +387,6 @@ RSpec.describe Bookings::Gitis::Entity do
   end
 
   describe '.entity_collection' do
-    class TeamEntity
-      include Bookings::Gitis::Entity
-
-      entity_attribute :name
-      entity_collection :players, TestEntity
-    end
-
     context 'initializing with data' do
       let(:player1) { SecureRandom.uuid }
       let(:player2) { SecureRandom.uuid }

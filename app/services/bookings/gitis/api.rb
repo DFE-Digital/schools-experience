@@ -60,6 +60,7 @@ module Bookings::Gitis
     end
 
     class UnsupportedAbsoluteUrlError < RuntimeError; end
+
     class ConnectionFailed < RuntimeError
       def initialize(url)
         super "Connection Failed: #{url}"
@@ -78,6 +79,7 @@ module Bookings::Gitis
     end
 
     class UnknownUrlError < BadResponseError; end
+
     class AccessDeniedError < BadResponseError; end
 
   private
@@ -139,7 +141,7 @@ module Bookings::Gitis
     end
 
     def parse_entity_id(entity_id)
-      entity_id&.gsub(%r{\A#{endpoint_url}\/}, '')
+      entity_id&.gsub(%r{\A#{endpoint_url}/}, '')
     end
   end
 end

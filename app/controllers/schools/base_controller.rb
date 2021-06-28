@@ -1,5 +1,6 @@
 module Schools
   class SchoolNotRegistered < StandardError; end
+
   class MissingURN < StandardError; end
 
   class BaseController < ApplicationController
@@ -23,7 +24,7 @@ module Schools
 
     def current_school
       if current_urn.blank?
-        sub = current_user.raw_attributes.dig("sub")
+        sub = current_user.raw_attributes["sub"]
         raise MissingURN, "school urn is missing, unable to match with school for - user #{sub}"
       end
 
@@ -44,7 +45,7 @@ module Schools
 
     def retrieve_school(urn)
       if urn.blank?
-        sub = current_user.raw_attributes.dig("sub")
+        sub = current_user.raw_attributes["sub"]
         raise MissingURN, "school urn is missing, unable to match with school for - user #{sub}"
       end
 

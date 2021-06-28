@@ -1,5 +1,19 @@
 require 'rails_helper'
 
+class TestAPI < Schools::DFESignInAPI::Client
+  def data
+    response
+  end
+
+private
+
+  def endpoint
+    URI::HTTPS.build \
+      host: "some-test-api-host.signin.education.gov.uk",
+      path: '/testapi'
+  end
+end
+
 describe Schools::DFESignInAPI::Client do
   describe '.enabled?' do
     context 'when setting is on and all required environment variables are present' do
@@ -93,20 +107,6 @@ describe Schools::DFESignInAPI::Client do
 
       allow(Schools::DFESignInAPI::Client).to \
         receive(:enabled?).and_return true
-    end
-
-    class TestAPI < Schools::DFESignInAPI::Client
-      def data
-        response
-      end
-
-    private
-
-      def endpoint
-        URI::HTTPS.build \
-          host: "some-test-api-host.signin.education.gov.uk",
-          path: '/testapi'
-      end
     end
 
     subject { TestAPI.new.data }

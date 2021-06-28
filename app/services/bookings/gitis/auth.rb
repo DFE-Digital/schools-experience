@@ -29,7 +29,7 @@ module Bookings
         Rails.application.config.x.gitis
       end
 
-      def token(force_reload = false)
+      def token(force_reload: false)
         if !force_reload && (cached_token = fetch_cached_token) && cached_token.present?
           cached_token
         elsif (new_token = retrieve_token)
