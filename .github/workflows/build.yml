@@ -475,16 +475,26 @@ jobs:
         id:   azSecret
         with:
            keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'SLACK-WEBHOOK'
+           secrets: 'SLACK-WEBHOOK, HTTPAUTH-USERNAME, HTTPAUTH-PASSWORD'
+
+      - name: Setup Authorization
+        run: |
+             BASE=$( echo "${{steps.azSecret.outputs.HTTPAUTH-USERNAME}}:${{steps.azSecret.outputs.HTTPAUTH-PASSWORD}}" | base64 )
+             echo "replacer.full_list(0).description=auth1"           >  ./options.prop
+             echo "replacer.full_list(0).enabled=true"                >> ./options.prop
+             echo "replacer.full_list(0).matchtype=REQ_HEADER"        >> ./options.prop
+             echo "replacer.full_list(0).matchstr=Authorization"      >> ./options.prop
+             echo "replacer.full_list(0).regex=false"                 >> ./options.prop
+             echo "replacer.full_list(0).replacement=Basic ${BASE}"   >> ./options.prop 
 
       - name: ZAP Scan
-        uses: zaproxy/action-full-scan@v0.2.0
+        uses: zaproxy/action-baseline@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
           target: 'https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
           rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-a'
+          cmd_options: '-z "-configFile /zap/wrk/options.prop" '
 
       - name: Slack Notification
         if: failure()
