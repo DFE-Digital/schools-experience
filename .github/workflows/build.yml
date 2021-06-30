@@ -130,15 +130,18 @@ jobs:
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
+      - name: Fixup report file paths
+        run: |
+             cd ..
+             echo ${PWD}
+             sudo sed -i "s?\/app?${PWD}?" ${{github.workspace}}/coverage/coverage.json
+
       - name:  Keep Unit Tests Results
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: unit_tests
           path: ${{ github.workspace }}/out/test-report.xml
-
-      - name: Fixup report file paths
-        run:  sudo sed -i "s?\"/app/?\"${PWD}/?" coverage/coverage.json || true
 
       - name:  Keep Code Coverage Report
         if: always()
@@ -319,6 +322,16 @@ jobs:
         with:
            keyvault: ${{ secrets.KEY_VAULT}}
            secrets: 'SONAR-TOKEN'
+
+      - name: Download Test Artifacts
+        uses: actions/download-artifact@v2
+        with:
+            path: ${{ github.workspace }}/out/ 
+
+      - name: Display structure of downloaded files
+        run: |
+              ls -R
+              echo "Working Directory" ${PWD}
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
