@@ -195,7 +195,7 @@ RSpec.describe Healthcheck do
     it { is_expected.to include :deployment_id }
     it { is_expected.to include :app_sha }
     it { is_expected.to include :dfe_auth }
-    it { is_expected.to include :api }
+    it { is_expected.to include :gitis_api }
     it { is_expected.to include :db }
     it { is_expected.to include :cache }
     it { is_expected.to include :healthy }
@@ -209,7 +209,7 @@ RSpec.describe Healthcheck do
     it { is_expected.to include "deployment_id" }
     it { is_expected.to include "app_sha" }
     it { is_expected.to include "dfe_auth" }
-    it { is_expected.to include "api" }
+    it { is_expected.to include "gitis_api" }
     it { is_expected.to include "db" }
     it { is_expected.to include "cache" }
     it { is_expected.to include "healthy" }

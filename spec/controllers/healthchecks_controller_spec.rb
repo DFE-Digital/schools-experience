@@ -37,7 +37,7 @@ describe HealthchecksController, type: :request do
       it { expect(response.body).to include_json(cache: true) }
       it { expect(response.body).to include_json(db: true) }
       it { expect(response.body).to include_json(dfe_auth: true) }
-      it { expect(response.body).to include_json(api: true) }
+      it { expect(response.body).to include_json(gitis_api: true) }
       it { expect(response).to have_http_status(:success) }
     end
 
@@ -84,7 +84,7 @@ describe HealthchecksController, type: :request do
         get healthcheck_path
       end
 
-      it { expect(response.body).to include_json(api: false) }
+      it { expect(response.body).to include_json(gitis_api: false) }
       it { expect(response).to have_http_status(:error) }
     end
 
@@ -99,7 +99,7 @@ describe HealthchecksController, type: :request do
           get healthcheck_path
         end
 
-        it { expect(response.body).to include_json(api: false) }
+        it { expect(response.body).to include_json(gitis_api: false) }
         it { expect(response).to have_http_status(:error) }
       end
     end

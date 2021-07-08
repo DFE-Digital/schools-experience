@@ -45,17 +45,17 @@ class Healthcheck
 
   def to_h
     dfe_auth = test_dfe_signin_api
-    api = test_gitis
+    gitis_api = test_gitis
     db = test_postgresql
     redis = test_redis
 
-    is_healthy = dfe_auth && api && db && redis
+    is_healthy = dfe_auth && gitis_api && db && redis
 
     {
       deployment_id: deployment,
       app_sha: app_sha,
       dfe_auth: dfe_auth,
-      api: api,
+      gitis_api: gitis_api,
       db: db,
       cache: redis,
       healthy: is_healthy,
