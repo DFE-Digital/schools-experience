@@ -36,7 +36,7 @@ describe HealthchecksController, type: :request do
 
       it { expect(response.body).to include_json(cache: true) }
       it { expect(response.body).to include_json(db: true) }
-      it { expect(response.body).to include_json(auth: true) }
+      it { expect(response.body).to include_json(dfe_auth: true) }
       it { expect(response.body).to include_json(api: true) }
       it { expect(response).to have_http_status(:success) }
     end

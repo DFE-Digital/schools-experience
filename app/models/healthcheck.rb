@@ -38,25 +38,23 @@ class Healthcheck
   end
 
   def test_dfe_signin_api
-    return true unless Schools::DFESignInAPI::Organisations.enabled?
-
-    Schools::DFESignInAPI::Organisations.new(SecureRandom.uuid).uuids
+    !Schools::DFESignInAPI::Organisations.new(SecureRandom.uuid).uuids.nil?
   rescue RuntimeError, Rack::Timeout::RequestTimeoutException
     false
   end
 
   def to_h
-    auth = test_dfe_signin_api
+    dfe_auth = test_dfe_signin_api
     api = test_gitis
     db = test_postgresql
     redis = test_redis
 
-    is_healthy = auth && api && db && redis
+    is_healthy = dfe_auth && api && db && redis
 
     {
       deployment_id: deployment,
       app_sha: app_sha,
-      auth: auth,
+      dfe_auth: dfe_auth,
       api: api,
       db: db,
       cache: redis,
