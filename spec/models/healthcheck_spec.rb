@@ -166,7 +166,7 @@ RSpec.describe Healthcheck do
         allow_any_instance_of(Schools::DFESignInAPI::Organisations).to receive(:uuids).and_return({})
       end
 
-      it { is_expected.to be_a Hash }
+      it { is_expected.to be true }
     end
 
     context "with non functional connection" do
@@ -184,7 +184,7 @@ RSpec.describe Healthcheck do
         allow(Schools::DFESignInAPI::Organisations).to receive(:enabled?).and_return(false)
       end
 
-      it { is_expected.to be true }
+      it { is_expected.to be false }
     end
   end
 
@@ -194,8 +194,8 @@ RSpec.describe Healthcheck do
     subject { described_class.new.to_h }
     it { is_expected.to include :deployment_id }
     it { is_expected.to include :app_sha }
-    it { is_expected.to include :auth }
-    it { is_expected.to include :api }
+    it { is_expected.to include :dfe_auth }
+    it { is_expected.to include :gitis_api }
     it { is_expected.to include :db }
     it { is_expected.to include :cache }
     it { is_expected.to include :healthy }
@@ -208,8 +208,8 @@ RSpec.describe Healthcheck do
     subject { JSON.parse described_class.new.to_json }
     it { is_expected.to include "deployment_id" }
     it { is_expected.to include "app_sha" }
-    it { is_expected.to include "auth" }
-    it { is_expected.to include "api" }
+    it { is_expected.to include "dfe_auth" }
+    it { is_expected.to include "gitis_api" }
     it { is_expected.to include "db" }
     it { is_expected.to include "cache" }
     it { is_expected.to include "healthy" }
