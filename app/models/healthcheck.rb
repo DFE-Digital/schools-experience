@@ -38,7 +38,9 @@ class Healthcheck
   end
 
   def test_dfe_signin_api
-    !Schools::DFESignInAPI::Organisations.new(SecureRandom.uuid).uuids.nil?
+    res = Schools::DFESignInAPI::Organisations.new(SecureRandom.uuid).uuids
+
+    ActiveModel::Type::Boolean.new.cast(res)
   rescue RuntimeError, Rack::Timeout::RequestTimeoutException
     false
   end
