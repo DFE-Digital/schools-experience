@@ -6,32 +6,23 @@
       Verify your school experience sign in
     </h1>
 
-    <% if @git_api_enabled %>
     <p>
       You now need to <strong>enter the verification code</strong> we've sent to the following email address:
     </p>
-    <% else %>
-    <p>
-      Click the link in the email we’ve sent to the following email address to
-      sign in to you school experience dashboard.
-    </p>
-    <% end %>
 
     <ul class="govuk-list govuk-list--bullet">
-      <li><%= @git_api_enabled ? @verification_code.email : @candidates_session.email %></li>
+      <li><%= @verification_code.email %></li>
     </ul>
 
-    <% if @git_api_enabled %>
-      <%= form_for @verification_code, url: candidates_signin_code_path, method: :put do |f| %>
-        <%= f.hidden_field :firstname %>
-        <%= f.hidden_field :lastname %>
-        <%= f.hidden_field :email %>
-        <%= f.hidden_field :date_of_birth %>
+    <%= form_for @verification_code, url: candidates_signin_code_path, method: :put do |f| %>
+      <%= f.hidden_field :firstname %>
+      <%= f.hidden_field :lastname %>
+      <%= f.hidden_field :email %>
+      <%= f.hidden_field :date_of_birth %>
 
-        <%= f.text_field :code %>
+      <%= f.text_field :code %>
 
-        <%= f.submit "Submit" %>
-      <% end %>
+      <%= f.submit "Submit" %>
     <% end %>
 
     <p>

@@ -1,16 +1,27 @@
 require 'rails_helper'
 
 RSpec.describe "candidates/registrations/sign_ins/show.html.erb", type: :view do
+  let(:verification_code) do
+    Candidates::VerificationCode.new(
+      email: 'test@testymctest.com',
+      firstname: 'testy',
+      lastname: 'mctest',
+      date_of_birth: 20.years.ago.to_date
+    )
+  end
+
   before do
-    assign(:email_address, 'test@testymctest.com')
+    assign(:verification_code, verification_code)
+    assign(:email_address, verification_code.email)
     assign(:resend_link, '/my/resend/link')
+    controller.request.path_parameters[:school_id] = "123"
     render
   end
 
   it "will notify the user their message has been sent" do
-    expect(rendered).to have_css('h1', text: /have your details/i)
+    expect(rendered).to have_css('h1', text: /already registered with us/i)
     expect(rendered).to have_css('li', text: 'test@testymctest.com')
     expect(rendered).to \
-      have_css("form[action=\"/my/resend/link\"] input[value=\"Resend link\"]")
+      have_css("form[action=\"/my/resend/link\"] input[value=\"Resend verification code\"]")
   end
 end
