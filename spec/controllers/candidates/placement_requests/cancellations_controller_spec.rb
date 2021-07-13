@@ -82,7 +82,7 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
     end
 
     before do
-      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
+      allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
 
       post \
         "/candidates/placement_requests/#{placement_request.token}/cancellation/",
@@ -116,8 +116,8 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
       end
 
       it 'does not enqueues a log to gitis job' do
-        expect(Bookings::LogToGitisJob).not_to \
-          have_received(:perform_later)
+        expect(Bookings::Gitis::EventLogger).not_to \
+          have_received(:write_later)
       end
 
       it 'redirects to the show action' do
@@ -152,8 +152,8 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
 
           it 'does not enqueues a log to gitis job' do
-            expect(Bookings::LogToGitisJob).not_to \
-              have_received(:perform_later)
+            expect(Bookings::Gitis::EventLogger).not_to \
+              have_received(:write_later)
           end
 
           it 'rerenders the new template' do
@@ -204,9 +204,9 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
 
           it 'enqueues a log to gitis job' do
-            expect(Bookings::LogToGitisJob).to \
-              have_received(:perform_later).with \
-                placement_request.contact_uuid, /CANCELLED BY CANDIDATE/
+            expect(Bookings::Gitis::EventLogger).to \
+              have_received(:write_later).with \
+                placement_request.contact_uuid, :cancellation, have_attributes(cancelled_by: "candidate")
           end
 
           it 'redirects to the show action' do
