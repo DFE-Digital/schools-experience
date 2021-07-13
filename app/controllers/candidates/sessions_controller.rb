@@ -1,8 +1,6 @@
 class Candidates::SessionsController < ApplicationController
   include GitisAuthentication
 
-  before_action :check_api_feature_enabled, only: %i[update create]
-
   def new
     @candidates_session = Candidates::Session.new(gitis_crm)
   end
@@ -12,26 +10,13 @@ class Candidates::SessionsController < ApplicationController
     @verification_code = Candidates::VerificationCode.new(retrieve_params)
 
     if @candidates_session.valid?
-      if @git_api_enabled
-        @verification_code.issue_verification_code
-      else
-        token = @candidates_session.create_signin_token
-        return unless token
-
-        deliver_signin_link(@candidates_session.email, token)
-      end
+      @verification_code.issue_verification_code
     else
       render 'new'
     end
   end
 
   def update
-    @git_api_enabled ? api_verify : direct_verify
-  end
-
-private
-
-  def api_verify
     @verification_code = Candidates::VerificationCode.new(retrieve_params)
     candidate_data = @verification_code.exchange
 
@@ -45,18 +30,7 @@ private
     end
   end
 
-  def direct_verify
-    candidate = Candidates::Session.signin!(params[:authtoken])
-
-    if candidate
-      self.current_candidate = candidate
-      redirect_to candidates_dashboard_path
-    end
-  end
-
-  def check_api_feature_enabled
-    @git_api_enabled = Flipper.enabled?(:git_api)
-  end
+private
 
   def retrieve_params
     if params.key?(:candidates_session)
