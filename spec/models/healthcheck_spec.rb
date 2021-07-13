@@ -25,69 +25,30 @@ RSpec.describe Healthcheck do
   end
 
   describe "test_gitis" do
-    include_context "fake gitis"
-
     subject { described_class.new.test_gitis }
 
-    context "with working connection" do
-      before do
-        allow(fake_gitis).to receive(:fetch) { [Bookings::Gitis::Country.new] }
-      end
+    context "with a working connection" do
+      include_context "api healthy"
 
       it { is_expected.to be true }
     end
 
-    context "with broken connection" do
-      before do
-        allow(fake_gitis).to receive(:fetch).and_raise \
-          Bookings::Gitis::API::BadResponseError.new \
-            Struct.new(:status, :headers, :body, :env).new(500, {}, 'timeout')
-      end
+    context "with a broken connection" do
+      include_context "api no connection"
 
       it { is_expected.to be false }
     end
 
-    context "when the git_api feature is enabled" do
-      include_context "enable git_api feature"
+    context "with a degraded connection (CRM online)" do
+      include_context "api degraded (CRM online)"
 
-      context "with a working connection" do
-        before do
-          response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "healthy", crm: "ok")
-          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
-            receive(:health_check) { response }
-        end
+      it { is_expected.to be true }
+    end
 
-        it { is_expected.to be true }
-      end
+    context "with a degraded connection (CRM offline)" do
+      include_context "api degraded (CRM offline)"
 
-      context "with a broken connection" do
-        before do
-          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
-            receive(:health_check).and_raise(GetIntoTeachingApiClient::ApiError)
-        end
-
-        it { is_expected.to be false }
-      end
-
-      context "with a degraded connection (CRM offline)" do
-        before do
-          response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "ok")
-          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
-            receive(:health_check) { response }
-        end
-
-        it { is_expected.to be true }
-      end
-
-      context "with a degraded connection (CRM offline)" do
-        before do
-          response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "offline")
-          allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
-            receive(:health_check) { response }
-        end
-
-        it { is_expected.to be false }
-      end
+      it { is_expected.to be false }
     end
   end
 
@@ -189,7 +150,7 @@ RSpec.describe Healthcheck do
   end
 
   describe "#to_h" do
-    include_context "fake gitis"
+    include_context "api healthy"
 
     subject { described_class.new.to_h }
     it { is_expected.to include :deployment_id }
@@ -203,7 +164,7 @@ RSpec.describe Healthcheck do
   end
 
   describe "#to_json" do
-    include_context "fake gitis"
+    include_context "api healthy"
 
     subject { JSON.parse described_class.new.to_json }
     it { is_expected.to include "deployment_id" }
