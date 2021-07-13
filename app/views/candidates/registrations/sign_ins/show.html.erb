@@ -2,19 +2,11 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @git_api_enabled %>
     <h1>You’re already registered with us</h1>
     <p>
       The details you have entered match our records.
       You could have given them to us when you:
     </p>
-    <% else %>
-    <h1>We already have your details</h1>
-      <p>
-      We have your details on record as you previously provided
-      them to us when you:
-    </p>
-    <% end %>
 
     <ul class="govuk-list govuk-list--bullet">
       <li>attended one of our teaching events</li>
@@ -29,60 +21,31 @@
 
     <h2>Verify your details to continue</h2>
 
-    <% if @git_api_enabled %>
     <p>We’ve emailed a verification code to:</p>
-    <% else %>
-    <p>
-      You now need to <strong>select the link</strong>
-      we've sent to the following email address:
-    </p>
-    <% end %>
 
     <ul class="govuk-list govuk-list--bullet">
       <li><%= @email_address %></li>
     </ul>
 
-    <% if @git_api_enabled %>
-      <%= form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
-        <%= f.hidden_field :email %>
-        <%= f.hidden_field :firstname %>
-        <%= f.hidden_field :lastname %>
-        <%= f.hidden_field :date_of_birth %>
+    <%= form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
+      <%= f.hidden_field :email %>
+      <%= f.hidden_field :firstname %>
+      <%= f.hidden_field :lastname %>
+      <%= f.hidden_field :date_of_birth %>
 
-        <%= f.text_field :code %>
+      <%= f.text_field :code %>
 
-        <%= f.submit "Submit" %>
-      <% end %>
-      <p>
-        <strong>The verification code will expire in 15 minutes</strong>
-      </p>
-    <% else %>
-      <p>
-        <strong>The link will expire within 1 hour.</strong>
-      </p>
+      <%= f.submit "Submit" %>
     <% end %>
 
-    <% if @git_api_enabled %>
+    <p>
+      <strong>The verification code will expire in 15 minutes</strong>
+    </p>
+
     <p>Check your spam or junk folder if you cannot find the email.</p>
-    <% else %>
-    <p>
-      If you cannot find the message in your inbox:
-    </p>
 
-    <ul class="govuk-list govuk-list--bullet">
-      <li>check your spam and any other mailbox folders</li>
-    </ul>
-    <% end %>
-
-    <% if @git_api_enabled %>
     <p>If you have not had an email from us, we can resend your verification code:</p>
-    <% else %>
-    <p>
-      If you cannot find or have not received the email use the following
-      link to resend it:
-    </p>
-    <% end %>
 
-    <%= govuk_button_to @git_api_enabled ? "Resend verification code" : "Resend link", @resend_link, secondary: true %>
+    <%= govuk_button_to "Resend verification code", @resend_link, secondary: true %>
   </div>
 </div>
