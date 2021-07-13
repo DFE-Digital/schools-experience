@@ -4,7 +4,6 @@ module Candidates
       include SignInEmails
 
       skip_before_action :ensure_step_permitted!, only: :update
-      before_action :check_api_feature_enabled, only: %i[show update create]
 
       def show
         set_sign_in_details
@@ -18,24 +17,12 @@ module Candidates
 
       def create
         @personal_information = current_registration.personal_information
-
-        if @git_api_enabled
-          @personal_information.issue_verification_code
-        else
-          token = @personal_information.create_signin_token(gitis_crm)
-          verification_email(token).despatch_later!
-        end
+        @personal_information.issue_verification_code
 
         redirect_to candidates_school_registrations_sign_in_path
       end
 
       def update
-        @git_api_enabled ? api_verify : direct_verify
-      end
-
-    private
-
-      def api_verify
         @verification_code = Candidates::VerificationCode.new(verification_code_params)
         candidate_data = @verification_code.exchange
 
@@ -51,19 +38,7 @@ module Candidates
         end
       end
 
-      def direct_verify
-        candidate = Candidates::Session.signin!(params[:token])
-
-        self.current_registration_session_uuid = params[:uuid]
-
-        if candidate
-          self.current_candidate = candidate
-          update_registration_data
-          redirect_to new_candidates_school_registrations_contact_information_path
-        elsif attributes_from_session.any?
-          @resend_link = candidates_school_registrations_sign_in_path
-        end
-      end
+    private
 
       def update_registration_data
         # Update the registration data in redis with the candidate
@@ -75,10 +50,6 @@ module Candidates
       def set_sign_in_details
         @email_address = current_registration.personal_information.email
         @resend_link = candidates_school_registrations_sign_in_path
-      end
-
-      def check_api_feature_enabled
-        @git_api_enabled = Flipper.enabled?(:git_api)
       end
 
       def attributes_from_session
