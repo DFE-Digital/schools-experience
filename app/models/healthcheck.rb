@@ -30,11 +30,12 @@ class Healthcheck
   end
 
   def test_gitis
-    if Flipper.enabled?(:git_api)
-      api_gitis_check
-    else
-      direct_gitis_check
-    end
+    health = GetIntoTeachingApiClient::OperationsApi.new.health_check
+
+    FUNCTIONAL_API_STATUS_CODES.any?(health.status) &&
+      health.crm == HEALTHY_CRM_STATUS_CODE
+  rescue Faraday::Error, GetIntoTeachingApiClient::ApiError
+    false
   end
 
   def test_dfe_signin_api
@@ -66,23 +67,6 @@ class Healthcheck
   end
 
 private
-
-  def api_gitis_check
-    health = GetIntoTeachingApiClient::OperationsApi.new.health_check
-
-    FUNCTIONAL_API_STATUS_CODES.any?(health.status) &&
-      health.crm == HEALTHY_CRM_STATUS_CODE
-  rescue Faraday::Error, GetIntoTeachingApiClient::ApiError
-    false
-  end
-
-  def direct_gitis_check
-    gitis_crm.fetch(Bookings::Gitis::Country, limit: 1)
-
-    true
-  rescue RuntimeError
-    false
-  end
 
   def read_file(file)
     File.read(file).strip
