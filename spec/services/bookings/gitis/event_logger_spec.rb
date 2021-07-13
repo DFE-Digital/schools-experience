@@ -216,32 +216,13 @@ describe Bookings::Gitis::EventLogger, type: :model do
     let(:contactid) { SecureRandom.uuid }
     let(:placement_request) { create(:placement_request) }
 
-    before do
-      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
-    end
+    it "sends the classroom experience note to the API" do
+      note = described_class.new(:request, placement_request).classroom_experience_note
 
-    it "will schedule an update job" do
+      expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        receive(:add_classroom_experience_note).with(contactid, note)
+
       described_class.write_later contactid, :request, placement_request
-
-      expect(Bookings::LogToGitisJob).to have_received(:perform_later).with \
-        contactid, /REQUEST/
-    end
-
-    describe "when the git_api feature is enabled" do
-      around do |example|
-        Flipper.enable(:git_api)
-        example.run
-        Flipper.disable(:git_api)
-      end
-
-      it "sends the classroom experience note to the API" do
-        note = described_class.new(:request, placement_request).classroom_experience_note
-
-        expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:add_classroom_experience_note).with(contactid, note)
-
-        described_class.write_later contactid, :request, placement_request
-      end
     end
   end
 end

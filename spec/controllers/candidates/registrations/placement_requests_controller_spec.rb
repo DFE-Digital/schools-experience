@@ -45,6 +45,8 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
     end
 
     context 'uuid found' do
+      include_context "api add classroom experience note"
+
       context 'registration job already enqueued' do
         before do
           get "/candidates/confirm/#{uuid}"
@@ -78,8 +80,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
 
         shared_examples 'a successful create' do
           before do
-            allow(Bookings::LogToGitisJob).to \
-              receive(:perform_later).and_return(true)
+            allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
 
             allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
               receive(:perform_later).and_return(true)
@@ -148,10 +149,8 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           end
 
           it 'enqueues a log to gitis job' do
-            expect(Bookings::LogToGitisJob).to \
-              have_received(:perform_later).with \
-                fake_gitis_uuid,
-                %r{#{Time.zone.today.to_formatted_s(:gitis)} REQUEST}
+            expect(Bookings::Gitis::EventLogger).to \
+              have_received(:write_later).with fake_gitis_uuid, :request, instance_of(Bookings::PlacementRequest)
           end
 
           it 'redirects to placement request show' do
