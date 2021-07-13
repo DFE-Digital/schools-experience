@@ -11,7 +11,7 @@ RUN mkdir /app
 WORKDIR /app
 
 EXPOSE 3000
-ENTRYPOINT ["bundle", "exec"]
+ENTRYPOINT ["bundle", "exec"  ]
 CMD ["rails", "server" ]
 
 # hadolint ignore=DL3018
