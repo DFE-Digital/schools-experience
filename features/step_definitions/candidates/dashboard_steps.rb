@@ -24,25 +24,6 @@ When("I click the '{string}' button") do |button_label|
   click_button button_label
 end
 
-When("I am on the Verify Link Sent page") do
-  expect(page.body).to match(/Confirm your email/)
-end
-
-When("I follow the sign in link from the email") do
-  token = Candidates::SessionToken.reorder(:id).last
-  visit candidates_signin_confirmation_path(token)
-end
-
-Then("I will see the Dashboard page") do
-  expect(page.current_path).to eql(candidates_dashboard_path)
-end
-
-Given("I use an expired signin link") do
-  @token = FactoryBot.create(:candidate_session_token, :auto_expired)
-  visit candidates_signin_confirmation_path(@token)
-end
-
-Then("I will see the link expired page") do
-  expect(page.current_path).to eql(candidates_signin_confirmation_path(@token))
-  expect(page.body).to match(/Sign in link has expired/)
+Then("I will see the Verification Code page") do
+  expect(page).to have_text("We’ve emailed a verification code to")
 end
