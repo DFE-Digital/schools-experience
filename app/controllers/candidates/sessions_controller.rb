@@ -2,11 +2,11 @@ class Candidates::SessionsController < ApplicationController
   include GitisAuthentication
 
   def new
-    @candidates_session = Candidates::Session.new(gitis_crm)
+    @candidates_session = Candidates::Session.new
   end
 
   def create
-    @candidates_session = Candidates::Session.new(gitis_crm, retrieve_params)
+    @candidates_session = Candidates::Session.new(retrieve_params)
     @verification_code = Candidates::VerificationCode.new(retrieve_params)
 
     if @candidates_session.valid?

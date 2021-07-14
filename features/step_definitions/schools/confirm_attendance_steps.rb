@@ -13,8 +13,8 @@ Then("I should see a table containing those bookings") do
 end
 
 Then("the correct data should be present in each row") do
-  gitis = Bookings::Gitis::Factory.crm
-  contact = gitis.find(@first_booking.contact_uuid)
+  api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+  contact = api.get_schools_experience_sign_up(@first_booking.contact_uuid)
 
   within("table > tbody > tr[data-booking-id='#{@first_booking.id}']") do
     expect(page).to have_content(contact.full_name)

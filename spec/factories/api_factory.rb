@@ -32,7 +32,7 @@ FactoryBot.define do
 
   factory :api_lookup_item, class: GetIntoTeachingApiClient::LookupItem do
     id { SecureRandom.uuid }
-    value { "value-#{sequence(:value)}" }
+    sequence(:value) { |i| "value-#{i}" }
   end
 
   factory :api_privacy_policy, class: GetIntoTeachingApiClient::PrivacyPolicy do

@@ -163,10 +163,10 @@ describe Candidates::Registrations::GitisRegistrationSession do
 
         context 'with some blank fields in gitis data' do
           let(:contact) do
-            build :gitis_contact, :persisted,
+            build :api_schools_experience_sign_up,
               date_of_birth: nil,
-              first_name: "",
-              last_name: ""
+              first_name: " ",
+              last_name: " "
           end
 
           it { is_expected.to be_valid }

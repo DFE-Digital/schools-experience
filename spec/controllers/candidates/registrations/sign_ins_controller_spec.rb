@@ -5,8 +5,6 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
   let(:school_id) { 11_048 }
   let!(:school) { create(:bookings_school, urn: school_id) }
 
-  include_context 'fake gitis with known uuid'
-
   let :registration_session do
     Candidates::Registrations::RegistrationSession.new(
       'urn' => school_id,
@@ -124,7 +122,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     include_context 'Stubbed current_registration'
     include_context "api candidate matched back"
 
-    let!(:candidate) { create(:candidate, gitis_uuid: fake_gitis_uuid) }
+    let!(:candidate) { create(:candidate, gitis_uuid: SecureRandom.uuid) }
 
     let(:perform_request) do
       perform_enqueued_jobs do

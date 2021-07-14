@@ -22,41 +22,4 @@ class Candidates::Session
 
     token.confirm!.candidate
   end
-
-  def initialize(gitis, *args)
-    @gitis = gitis
-    super(*args)
-  end
-
-  def create_signin_token
-    return false unless lookup_contact_in_gitis
-
-    find_or_create_candidate
-    generate_session_token
-  end
-
-private
-
-  def lookup_contact_in_gitis
-    contact = @gitis.find_contact_for_signin(
-      email: email,
-      firstname: firstname,
-      lastname: lastname,
-      date_of_birth: date_of_birth
-    )
-
-    if contact
-      @contact = contact
-    else
-      false
-    end
-  end
-
-  def find_or_create_candidate
-    @candidate = Bookings::Candidate.find_or_create_from_gitis_contact!(contact)
-  end
-
-  def generate_session_token
-    @token = @candidate.session_tokens.create!.token
-  end
 end

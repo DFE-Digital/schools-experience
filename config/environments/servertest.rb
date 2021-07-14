@@ -35,7 +35,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_request_organisation_url = ""
   config.x.dfe_sign_in_request_service_url = ""
 
-  config.x.gitis.fake_crm = true
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
   config.x.gitis.privacy_policy_id = SecureRandom.uuid

@@ -185,8 +185,6 @@ describe Schools::PlacementRequestsController, type: :request do
     end
 
     context 'with a 404 response from Gitis' do
-      include_context 'stubbed out Gitis'
-
       let :placement_request do
         FactoryBot.create :placement_request, school: school
       end
