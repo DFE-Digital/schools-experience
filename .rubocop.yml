@@ -7,7 +7,6 @@ Metrics/BlockLength:
   Exclude:
     - config/**/*
     - spec/**/*
-    - spec_external/**/*
 
 Layout/ArgumentAlignment:
   Enabled: false

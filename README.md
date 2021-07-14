@@ -100,7 +100,7 @@ need to get the DfE Sign-in team to approve you for a school.
 It's best to lint just your app directories and not those belonging to the framework, e.g.
 
 ```bash
-bundle exec rubocop app config lib features spec spec_external
+bundle exec rubocop app config lib features spec
 ```
 
 You can copy the `script/pre-commit` to `.git/hooks/pre-commit` and `git` will
