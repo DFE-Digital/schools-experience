@@ -51,17 +51,6 @@ module Candidates
         end
       end
 
-      def direct_matchback
-        token = @personal_information.create_signin_token(gitis_crm)
-
-        if token
-          verification_email(token).despatch_later!
-          redirect_to candidates_school_registrations_sign_in_path
-        else
-          redirect_to new_candidates_school_registrations_contact_information_path
-        end
-      end
-
       def personal_information_params
         if candidate_signed_in?
           params.fetch(:candidates_registrations_personal_information, {}).permit \

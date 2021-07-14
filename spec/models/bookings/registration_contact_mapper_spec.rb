@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Bookings::RegistrationContactMapper do
   describe ".new" do
     let(:registration) { build(:registration_session) }
-    let(:contact) { Bookings::Gitis::Contact.new }
+    let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new }
     subject { described_class.new(registration, contact) }
 
     it { is_expected.to have_attributes(registration_session: registration) }

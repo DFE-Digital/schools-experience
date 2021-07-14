@@ -1,12 +1,9 @@
 module Bookings
   module Gitis
     class ContactFetcher
-      MAX_NESTING = 5 # max depth we will follow the chain of merged contacts to
-      attr_reader :crm
+      class InconsistentContactState < RuntimeError; end
 
-      def initialize(crm)
-        @crm = crm
-      end
+      MAX_NESTING = 5 # max depth we will follow the chain of merged contacts to
 
       def fetch_for_models(models)
         return {} if models.empty?
@@ -40,7 +37,7 @@ module Bookings
       end
 
       def been_merged?(contact)
-        raise Contact::InconsistentState unless contact.merged == contact.master_id.present?
+        raise InconsistentContactState unless contact.merged == contact.master_id.present?
 
         contact.merged
       end

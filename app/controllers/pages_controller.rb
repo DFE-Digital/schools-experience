@@ -6,7 +6,7 @@ class PagesController < ApplicationController
   end
 
   def privacy_policy
-    @policy_id = Bookings::Gitis::PrivacyPolicy.default
+    @policy_id = Rails.application.config.x.gitis.privacy_policy_id
   end
 
   def schools_privacy_policy; end

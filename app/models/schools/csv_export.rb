@@ -77,12 +77,8 @@ module Schools
       AcademicYear.start_for_date Time.zone.now
     end
 
-    def gitis_crm
-      @gitis_crm ||= Bookings::Gitis::Factory.crm read_from_cache: true
-    end
-
     def contact_fetcher
-      @contact_fetcher ||= Bookings::Gitis::ContactFetcher.new(gitis_crm)
+      @contact_fetcher ||= Bookings::Gitis::ContactFetcher.new
     end
   end
 end

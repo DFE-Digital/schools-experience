@@ -1,24 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::SubjectSync do
-  include_context 'fake gitis'
-
   describe '.new' do
-    context 'with crm' do
-      subject { described_class.new(fake_gitis) }
+    context 'init' do
+      subject { described_class.new }
       it { is_expected.to be_kind_of described_class }
       it { is_expected.to respond_to :synchronise }
-    end
-
-    context 'without crm' do
-      it "will raise an ArgumentError" do
-        expect { described_class.new }.to raise_exception(ArgumentError)
-      end
     end
   end
 
   describe "#synchronise" do
-    let(:sync) { described_class.new(fake_gitis) }
+    let(:sync) { described_class.new }
 
     let(:gitis_subject_1) { build(:api_teaching_subject) }
     let(:gitis_subject_2) { build(:api_teaching_subject) }
@@ -93,7 +85,7 @@ RSpec.describe Bookings::SubjectSync do
     context 'with more than can be handled in a single batch' do
       let(:response) do
         (1..(described_class::LIMIT + 1)).map do
-          build(:gitis_subject)
+          build(:api_lookup_item)
         end
       end
 
