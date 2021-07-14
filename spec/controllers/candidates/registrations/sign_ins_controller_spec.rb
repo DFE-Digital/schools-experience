@@ -93,7 +93,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     context "when the Candidate already exists" do
       include_context "candidate signin"
 
-      let(:sign_up) { build(:api_schools_experience_sign_up, candidate_id: gitis_contact_attrs[:contactid]) }
+      let(:sign_up) { build(:api_schools_experience_sign_up, candidate_id: gitis_contact_attrs[:candidate_id]) }
 
       it "will not create another Candidate and redirect_to ConfirmationInformation step" do
         expect { perform_request }.not_to(change { Bookings::Candidate.count })

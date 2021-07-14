@@ -2,6 +2,9 @@ require 'rails_helper'
 
 describe Candidates::Registrations::PlacementRequestsController, type: :request do
   include_context 'Stubbed candidates school'
+  include_context "api current privacy policy"
+  include_context "api teaching subjects"
+  include_context "api add classroom experience note"
 
   let :registration_session do
     FactoryBot.build :registration_session, urn: school.urn
@@ -74,25 +77,10 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
       end
 
       context 'registration job not already enqueued' do
-        include_context "api current privacy policy"
-        include_context "api teaching subjects"
-        include_context "api add classroom experience note"
-
         shared_examples 'a successful create' do
           before do
             allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
-
-            allow(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
-              receive(:perform_later).and_return(true)
-
-            allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-              receive(:sign_up_schools_experience_candidate) do |_, sign_up|
-                sign_up.candidate_id = SecureRandom.uuid
-                sign_up
-              end
           end
-
-          include_context 'fake gitis with known uuid'
 
           before do
             get "/candidates/confirm/#{uuid}"
@@ -107,14 +95,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           end
 
           it "creates a candidate" do
-            created = Bookings::Candidate.find_by(gitis_uuid: fake_gitis_uuid)
-            expect(created).not_to be_nil
+            expect(Bookings::Candidate.count).to eq(1)
           end
 
           it "assigns contact attrs" do
             expect(session['gitis_contact']).to include \
-              'firstname' => stored_registration_session.personal_information.first_name,
-              'lastname' => stored_registration_session.personal_information.last_name
+              firstName: stored_registration_session.personal_information.first_name,
+              lastName: stored_registration_session.personal_information.last_name
           end
 
           it 'creates a bookings placement request' do
@@ -132,25 +119,11 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
                 schools_placement_request_url(Bookings::PlacementRequest.last)
           end
 
-          it 'enqueues an accept privacy policy job' do
-            expect(Candidates::Registrations::AcceptPrivacyPolicyJob).to \
-              have_received(:perform_later).with \
-                fake_gitis_uuid,
-                Bookings::Gitis::PrivacyPolicy.default
-          end
-
-          context "when the git_api feature is enabled" do
-            include_context "enable git_api feature"
-
-            it "does not enqueue an accept privacy policy job" do
-              expect(Candidates::Registrations::AcceptPrivacyPolicyJob).not_to \
-                have_received(:perform_later)
-            end
-          end
-
           it 'enqueues a log to gitis job' do
+            created = Bookings::Candidate.last
+
             expect(Bookings::Gitis::EventLogger).to \
-              have_received(:write_later).with fake_gitis_uuid, :request, instance_of(Bookings::PlacementRequest)
+              have_received(:write_later).with created.gitis_uuid, :request, instance_of(Bookings::PlacementRequest)
           end
 
           it 'redirects to placement request show' do

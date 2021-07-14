@@ -9,6 +9,16 @@ class GetIntoTeachingApiClient::CandidatesApi
   end
 end
 
+class GetIntoTeachingApiClient::PrivacyPoliciesApi
+  def get_latest_privacy_policy
+    GetIntoTeachingApiClient::PrivacyPolicy.new(id: SecureRandom.uuid, text: "policy")
+  end
+
+  def get_privacy_policy(id)
+    GetIntoTeachingApiClient::PrivacyPolicy.new(id: id, text: "policy")
+  end
+end
+
 class GetIntoTeachingApiClient::SchoolsExperienceApi
   KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
 
@@ -35,7 +45,12 @@ class GetIntoTeachingApiClient::SchoolsExperienceApi
     end
   end
 
-  private
+  def sign_up_schools_experience_candidate(sign_up)
+    sign_up.candidate_id = fake_candidate_id
+    sign_up
+  end
+
+private
 
   def fake_candidate_id
     fake_uuid = Rails.application.config.x.gitis.fake_crm_uuid

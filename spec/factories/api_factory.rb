@@ -20,8 +20,8 @@ FactoryBot.define do
     address_state_or_province { "Cumbria" }
     address_postcode { "TE7 1NG" }
     has_dbs_certificate { nil }
-    preferred_teaching_subject_id { SecureRandom.uuid }
-    secondary_preferred_teaching_subject_id { SecureRandom.uuid }
+    preferred_teaching_subject_id { '04fc5f49-887b-4ac6-82ea-4278e9f3a9c1' }
+    secondary_preferred_teaching_subject_id { '686ba354-2a91-430b-affa-68b4e1fdffc0' }
     accepted_policy_id { SecureRandom.uuid }
 
     trait :merged do

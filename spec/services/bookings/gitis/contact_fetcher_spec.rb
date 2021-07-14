@@ -14,22 +14,22 @@ describe Bookings::Gitis::ContactFetcher do
     subject { fetcher.been_merged?(contact) }
 
     context 'correct merged' do
-      let(:contact) { build(:gitis_contact, :merged) }
+      let(:contact) { build(:api_schools_experience_sign_up, :merged) }
       it { is_expected.to be true }
     end
 
     context 'correct unmerged' do
-      let(:contact) { build(:gitis_contact, :persisted) }
+      let(:contact) { build(:api_schools_experience_sign_up) }
       it { is_expected.to be false }
     end
 
     context 'merged without master' do
-      let(:contact) { build(:gitis_contact, :merged, _masterid_value: nil) }
+      let(:contact) { build(:api_schools_experience_sign_up, :merged, master_id: nil) }
       it { expect { subject }.to raise_exception Bookings::Gitis::Contact::InconsistentState }
     end
 
     context 'master but not merged' do
-      let(:contact) { build(:gitis_contact, :merged, merged: false) }
+      let(:contact) { build(:api_schools_experience_sign_up, :merged, merged: false) }
       it { expect { subject }.to raise_exception Bookings::Gitis::Contact::InconsistentState }
     end
   end
