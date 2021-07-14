@@ -1,5 +1,5 @@
 class GetIntoTeachingApiClient::SchoolsExperienceApi
-  def add_classroom_experience_note(id, note); end
+  def add_classroom_experience_note(_id, _note); end
 end
 
 class GetIntoTeachingApiClient::CandidatesApi

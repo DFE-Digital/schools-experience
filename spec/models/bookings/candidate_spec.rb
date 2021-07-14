@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Bookings::Candidate, type: :model do
-  include_context "fake gitis"
   include_context "api teaching subjects"
 
   describe 'database structure' do
@@ -146,7 +145,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     let(:registration) { build(:registration_session, :with_school) }
 
     subject do
-      described_class.create_from_registration_session! fake_gitis, registration
+      described_class.create_from_registration_session! registration
     end
 
     before do
@@ -178,7 +177,7 @@ RSpec.describe Bookings::Candidate, type: :model do
 
       subject do
         Bookings::Candidate.create_or_update_from_registration_session! \
-          fake_gitis, registration_session, contact
+          registration_session, contact
       end
 
       it "will return the existing candidate" do
@@ -201,7 +200,7 @@ RSpec.describe Bookings::Candidate, type: :model do
 
       subject do
         Bookings::Candidate.create_or_update_from_registration_session! \
-          fake_gitis, registration_session, contact
+          registration_session, contact
       end
 
       it "will create a Candidate" do
@@ -225,7 +224,7 @@ RSpec.describe Bookings::Candidate, type: :model do
 
       subject do
         Bookings::Candidate.create_or_update_from_registration_session! \
-          fake_gitis, registration_session, nil
+          registration_session, nil
       end
 
       it "will create a Candidate" do
@@ -253,7 +252,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     let(:candidate) { build(:candidate, :with_api_contact) }
 
     subject do
-      candidate.update_from_registration_session! fake_gitis, registration
+      candidate.update_from_registration_session! registration
     end
 
     it { is_expected.to be_kind_of Bookings::Candidate }
