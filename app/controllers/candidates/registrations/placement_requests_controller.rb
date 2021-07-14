@@ -20,14 +20,6 @@ module Candidates
             registration_session,
             cookies[:analytics_tracking_uuid]
 
-          api_contact = current_contact.is_a?(GetIntoTeachingApiClient::SchoolsExperienceSignUp)
-
-          unless Bookings::Gitis::PrivacyPolicy.default.nil? || api_contact
-            AcceptPrivacyPolicyJob.perform_later \
-              current_candidate.gitis_uuid,
-              Bookings::Gitis::PrivacyPolicy.default
-          end
-
           Bookings::Gitis::EventLogger.write_later \
             current_candidate.gitis_uuid, :request, placement_request
 

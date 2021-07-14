@@ -8,6 +8,16 @@ class GetIntoTeachingApiClient::CandidatesApi
   end
 end
 
+class GetIntoTeachingApiClient::PrivacyPoliciesApi
+  def get_latest_privacy_policy
+    GetIntoTeachingApiClient::PrivacyPolicy.new(id: SecureRandom.uuid, text: "policy")
+  end
+
+  def get_privacy_policy(id)
+    GetIntoTeachingApiClient::PrivacyPolicy.new(id: id, text: "policy")
+  end
+end
+
 class GetIntoTeachingApiClient::SchoolsExperienceApi
   KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
 
@@ -32,6 +42,11 @@ class GetIntoTeachingApiClient::SchoolsExperienceApi
     GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(fake_sign_up_data).tap do |sign_up|
       sign_up.candidate_id = id
     end
+  end
+
+  def sign_up_schools_experience_candidate(sign_up)
+    sign_up.candidate_id = fake_candidate_id
+    sign_up
   end
 
 private

@@ -114,10 +114,10 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
         it 'leaves the personal information with GiTiS details' do
           expect(registration_session.personal_information.first_name).to \
-            eq gitis_contact.firstname
+            eq gitis_contact.first_name
 
           expect(registration_session.personal_information.last_name).to \
-            eq gitis_contact.lastname
+            eq gitis_contact.last_name
 
           expect(registration_session.personal_information.date_of_birth).to \
             eq gitis_contact.date_of_birth
