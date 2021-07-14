@@ -25,7 +25,7 @@ module Schools
   private
 
     def name
-      request.candidate.gitis_contact&.full_name || "Unavailable"
+      request.candidate.full_name || "Unavailable"
     end
 
     def email

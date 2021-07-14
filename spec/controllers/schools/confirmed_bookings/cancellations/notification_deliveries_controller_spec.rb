@@ -52,8 +52,6 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
     end
 
     context 'when request not already closed' do
-      include_context 'fake gitis'
-
       let :placement_request do
         FactoryBot.create \
           :placement_request, :with_school_cancellation, school: school
@@ -68,14 +66,17 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       end
 
       let(:gitis_contact) do
-        fake_gitis.find placement_request.contact_uuid
+        api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+        api.get_schools_experience_sign_up(placement_request.contact_uuid)
       end
 
       it 'notifies the candidate' do
+        full_name = "#{gitis_contact.first_name} #{gitis_contact.last_name}"
+
         expect(NotifyEmail::CandidateBookingSchoolCancelsBooking).to have_received(:new).with \
           to: gitis_contact.email,
           school_name: cancellation.school_name,
-          candidate_name: gitis_contact.full_name,
+          candidate_name: full_name,
           rejection_reasons: cancellation.reason,
           extra_details: cancellation.extra_details,
           dates_requested: cancellation.dates_requested,

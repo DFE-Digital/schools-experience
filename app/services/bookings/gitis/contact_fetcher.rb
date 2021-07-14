@@ -85,18 +85,6 @@ module Bookings
       end
 
       def fetch_contact(id_or_ids)
-        if Flipper.enabled?(:git_api)
-          api_fetch(id_or_ids)
-        else
-          direct_fetch(id_or_ids)
-        end
-      end
-
-      def direct_fetch(id_or_ids)
-        crm.find(id_or_ids)
-      end
-
-      def api_fetch(id_or_ids)
         api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
 
         if id_or_ids.is_a?(Array)

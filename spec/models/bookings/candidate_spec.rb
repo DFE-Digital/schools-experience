@@ -454,8 +454,10 @@ RSpec.describe Bookings::Candidate, type: :model do
   describe "contact accessor attributes" do
     subject { build :candidate, :with_gitis_contact }
     it "will be delegated to gitis contact" do
+      full_name = "#{subject.gitis_contact.first_name} #{subject.gitis_contact.last_name}"
+
       is_expected.to have_attributes \
-        full_name: subject.gitis_contact.full_name,
+        full_name: full_name,
         email: subject.gitis_contact.email
     end
   end

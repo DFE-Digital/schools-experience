@@ -38,8 +38,8 @@ Feature: Viewing a withdrawn request
         Then I should see a 'Personal details' section with the following values:
             | Heading             | Value                                                                 |
             | Address             | First Line, Second Line, Third Line, Manchester, Manchester, TE57 1NG |
-            | UK telephone number | 07123 456789                                                          |
-            | Email address       | second@thisaddress.com                                                |
+            | UK telephone number | 01234 567890                                                          |
+            | Email address       | first@thisaddress.com                                                 |
 
     @smoke_test
     Scenario: Request details

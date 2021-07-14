@@ -6,7 +6,7 @@
 
      <%= GovukElementsErrorsHelper.error_summary @booking, 'There is a problem', '' %>
 
-    <h1>Change the booking date for <%= @booking.gitis_contact.full_name %></h1>
+    <h1>Change the booking date for <%= gitis_contact_full_name(@booking.gitis_contact) %></h1>
 
     <p>
       Before you change the date contact the candidate and make sure they can
