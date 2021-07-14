@@ -84,8 +84,6 @@ describe HealthchecksController, type: :request do
     end
 
     context "when the git_api feature is enabled" do
-      include_context "enable git_api feature"
-
       context "with unhealthy API" do
         before do
           allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \

@@ -64,7 +64,6 @@ RSpec.describe Candidates::SessionsController, type: :request do
   end
 
   describe "PUT #update" do
-    include_context "enable git_api feature"
     include_context "api correct verification code for personal info"
 
     let(:personal_info) { build(:personal_information) }

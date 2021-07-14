@@ -27,7 +27,7 @@ describe Schools::PlacementRequestsController, type: :request do
       it 'assigns the placement_requests belonging to the school' do
         expect(assigns(:placement_requests)).to match_array school.placement_requests
         expect(assigns(:placement_requests).map(&:gitis_contact)).to all \
-          be_kind_of Bookings::Gitis::Contact
+          be_kind_of GetIntoTeachingApiClient::SchoolsExperienceSignUp
       end
 
       it 'renders the index template' do
@@ -51,15 +51,13 @@ describe Schools::PlacementRequestsController, type: :request do
       end
     end
 
-    context 'with a timeout response from Gitis' do
-      include_context 'fake gitis'
-
-      let :gitis_exception do
-        Bookings::Gitis::API::BadResponseError.new OpenStruct.new(headers: {})
-      end
-
+    context "with a timeout response from the API" do
       before do
-        allow(fake_gitis).to receive(:find).and_raise gitis_exception
+        ids = placement_requests.map(&:contact_uuid)
+        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          receive(:get_schools_experience_sign_ups)
+            .with(a_collection_containing_exactly(*ids))
+            .and_raise(Faraday::ConnectionFailed.new("failed"))
         get "/schools/placement_requests"
       end
 
@@ -69,31 +67,12 @@ describe Schools::PlacementRequestsController, type: :request do
       end
     end
 
-    context "when the git_api feature is enabled" do
-      include_context "enable git_api feature"
-
-      context "with a timeout response from the API" do
-        before do
-          ids = placement_requests.map(&:contact_uuid)
-          allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:get_schools_experience_sign_ups)
-              .with(a_collection_containing_exactly(*ids))
-              .and_raise(Faraday::ConnectionFailed.new("failed"))
-          get "/schools/placement_requests"
-        end
-
-        it "renders the Gitis connection error page" do
-          expect(response).to have_http_status(:service_unavailable)
-          expect(response).to render_template('shared/failed_gitis_connection')
-        end
-      end
-    end
-
-    context 'with missing contacts from Gitis' do
-      include_context 'fake gitis'
-
+    context "with a missing contact from API" do
       before do
-        allow(fake_gitis).to receive(:find).and_return([])
+        ids = placement_requests.map(&:contact_uuid)
+        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          receive(:get_schools_experience_sign_ups)
+            .with(a_collection_containing_exactly(*ids)) { [] }
         get "/schools/placement_requests"
       end
 
@@ -101,26 +80,6 @@ describe Schools::PlacementRequestsController, type: :request do
         expect(response).to have_http_status(:success)
         expect(response).to render_template('index')
         expect(response.body).to match(/Unavailable/)
-      end
-    end
-
-    context "when the git_api feature is enabled" do
-      include_context "enable git_api feature"
-
-      context "with a missing contact from API" do
-        before do
-          ids = placement_requests.map(&:contact_uuid)
-          allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:get_schools_experience_sign_ups)
-              .with(a_collection_containing_exactly(*ids)) { [] }
-          get "/schools/placement_requests"
-        end
-
-        it "renders the Gitis connection error page" do
-          expect(response).to have_http_status(:success)
-          expect(response).to render_template('index')
-          expect(response.body).to match(/Unavailable/)
-        end
       end
     end
   end
@@ -206,14 +165,16 @@ describe Schools::PlacementRequestsController, type: :request do
     end
 
     context 'with a timeout response from Gitis' do
-      include_context 'stubbed out Gitis'
-
       let :placement_request do
         FactoryBot.create :placement_request, school: school
       end
 
       before do
-        gitis_stubs.stub_failed_contact_request placement_request.candidate.gitis_uuid
+        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          receive(:get_schools_experience_sign_up)
+            .with(placement_request.candidate.gitis_uuid)
+            .and_raise(Faraday::ConnectionFailed.new("timeout"))
+
         get "/schools/placement_requests/#{placement_request.id}"
       end
 
@@ -231,59 +192,17 @@ describe Schools::PlacementRequestsController, type: :request do
       end
 
       before do
-        gitis_stubs.stub_contact_request placement_request.candidate.gitis_uuid, {}, 404
+        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+          receive(:get_schools_experience_sign_up)
+            .with(placement_request.candidate.gitis_uuid)
+            .and_raise(GetIntoTeachingApiClient::ApiError.new(code: 404))
+
         get "/schools/placement_requests/#{placement_request.id}"
       end
 
       it "renders the Gitis connection error page" do
         expect(response).to have_http_status(:service_unavailable)
         expect(response).to render_template('shared/failed_gitis_connection')
-      end
-    end
-
-    context "when the git_api feature is enabled" do
-      include_context "enable git_api feature"
-
-      context 'with a timeout response from Gitis' do
-        let :placement_request do
-          FactoryBot.create :placement_request, school: school
-        end
-
-        before do
-          allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:get_schools_experience_sign_up)
-              .with(placement_request.candidate.gitis_uuid)
-              .and_raise(Faraday::ConnectionFailed.new("timeout"))
-
-          get "/schools/placement_requests/#{placement_request.id}"
-        end
-
-        it "renders the Gitis connection error page" do
-          expect(response).to have_http_status(:service_unavailable)
-          expect(response).to render_template('shared/failed_gitis_connection')
-        end
-      end
-
-      context 'with a 404 response from Gitis' do
-        include_context 'stubbed out Gitis'
-
-        let :placement_request do
-          FactoryBot.create :placement_request, school: school
-        end
-
-        before do
-          allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-            receive(:get_schools_experience_sign_up)
-              .with(placement_request.candidate.gitis_uuid)
-              .and_raise(GetIntoTeachingApiClient::ApiError.new(code: 404))
-
-          get "/schools/placement_requests/#{placement_request.id}"
-        end
-
-        it "renders the Gitis connection error page" do
-          expect(response).to have_http_status(:service_unavailable)
-          expect(response).to render_template('shared/failed_gitis_connection')
-        end
       end
     end
   end

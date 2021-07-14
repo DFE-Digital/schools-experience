@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe Candidates::PlacementRequests::CancellationsController, type: :request do
-  include_context 'fake gitis'
-
   let :notify_school_request_cancellation do
     double NotifyEmail::SchoolRequestCancellation, despatch_later!: true
   end
@@ -167,14 +165,17 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
 
           let :gitis_contact do
-            fake_gitis.find placement_request.contact_uuid
+            api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+            api.get_schools_experience_sign_up(placement_request.contact_uuid)
           end
 
           it 'notifies the school' do
+            full_name = "#{gitis_contact.first_name} #{gitis_contact.last_name}"
+
             expect(NotifyEmail::SchoolRequestCancellation).to have_received(:new).with \
               to: cancellation.school_email,
               school_name: cancellation.school_name,
-              candidate_name: gitis_contact.full_name,
+              candidate_name: full_name,
               cancellation_reasons: cancellation.reason,
               requested_on: cancellation.placement_request.requested_on.to_formatted_s(:govuk),
               placement_request_url: schools_placement_request_url(cancellation.placement_request)
@@ -251,14 +252,17 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
           end
 
           let :gitis_contact do
-            fake_gitis.find placement_request.contact_uuid
+            api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+            api.get_schools_experience_sign_up(placement_request.contact_uuid)
           end
 
           it 'notifies the school' do
+            full_name = "#{gitis_contact.first_name} #{gitis_contact.last_name}"
+
             expect(NotifyEmail::SchoolBookingCancellation).to have_received(:new).with \
               to: cancellation.school_email,
               school_name: cancellation.school_name,
-              candidate_name: gitis_contact.full_name,
+              candidate_name: full_name,
               placement_start_date_with_duration: cancellation.booking.placement_start_date_with_duration
 
             expect(notify_school_booking_cancellation).to \
