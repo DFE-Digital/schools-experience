@@ -1,6 +1,5 @@
 class GetIntoTeachingApiClient::SchoolsExperienceApi
-  def add_classroom_experience_note(id, note)
-  end
+  def add_classroom_experience_note(_id, _note); end
 end
 
 class GetIntoTeachingApiClient::CandidatesApi
@@ -22,7 +21,7 @@ end
 class GetIntoTeachingApiClient::SchoolsExperienceApi
   KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
 
-  def exchange_access_token_for_schools_experience_sign_up(code, request)
+  def exchange_access_token_for_schools_experience_sign_up(_code, request)
     GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(fake_sign_up_data).tap do |sign_up|
       sign_up.email = request.email
       sign_up.first_name = request.first_name

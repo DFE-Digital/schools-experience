@@ -51,16 +51,16 @@ class Bookings::Candidate < ApplicationRecord
       end
     end
 
-    def create_or_update_from_registration_session!(crm, registration, contact)
+    def create_or_update_from_registration_session!(registration, contact)
       if contact
         find_or_create_from_gitis_contact!(contact) \
-          .update_from_registration_session!(crm, registration)
+          .update_from_registration_session!(registration)
       else
-        create_from_registration_session!(crm, registration)
+        create_from_registration_session!(registration)
       end
     end
 
-    def create_from_registration_session!(crm, registration)
+    def create_from_registration_session!(registration)
       gitis_contact = GetIntoTeachingApiClient::SchoolsExperienceSignUp.new
 
       mapper = Bookings::RegistrationContactMapper.new \
@@ -100,7 +100,7 @@ class Bookings::Candidate < ApplicationRecord
     confirmed_at || session_tokens.confirmed.maximum(:confirmed_at)
   end
 
-  def update_from_registration_session!(crm, registration)
+  def update_from_registration_session!(registration)
     mapper = Bookings::RegistrationContactMapper.new \
       registration, gitis_contact
 

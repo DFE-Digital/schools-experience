@@ -12,7 +12,6 @@ module Candidates
 
         unless registration_session.completed?
           self.current_candidate = Bookings::Candidate.create_or_update_from_registration_session! \
-            gitis_crm,
             registration_session,
             current_contact
 
