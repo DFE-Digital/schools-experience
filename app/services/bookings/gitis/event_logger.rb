@@ -14,12 +14,8 @@ module Bookings
         def write_later(contactid, type, subject)
           instance = new(type, subject)
 
-          if Flipper.enabled?(:git_api)
-            api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
-            api.add_classroom_experience_note(contactid, instance.classroom_experience_note)
-          else
-            Bookings::LogToGitisJob.perform_later(contactid, instance.entry)
-          end
+          api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+          api.add_classroom_experience_note(contactid, instance.classroom_experience_note)
         end
       end
 

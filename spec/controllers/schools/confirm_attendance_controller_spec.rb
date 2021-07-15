@@ -15,7 +15,7 @@ describe Schools::ConfirmAttendanceController, type: :request do
   end
 
   describe '#update' do
-    before { allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true) }
+    before { allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true) }
 
     let!(:attended) do
       build(:bookings_booking, :accepted, bookings_school: school, date: 3.days.ago).tap do |bb|
@@ -52,15 +52,15 @@ describe Schools::ConfirmAttendanceController, type: :request do
     end
 
     specify 'should enqueue a gitis update for the attended record' do
-      expect(Bookings::LogToGitisJob).to \
-        have_received(:perform_later).with \
-          attended.contact_uuid, /ATTENDED/
+      expect(Bookings::Gitis::EventLogger).to \
+        have_received(:write_later).with \
+          attended.contact_uuid, :attendance, have_attributes(attended: true)
     end
 
     specify 'should enqueue a gitis update for the unattended record' do
-      expect(Bookings::LogToGitisJob).to \
-        have_received(:perform_later).with \
-          unattended.contact_uuid, /DID NOT ATTEND/
+      expect(Bookings::Gitis::EventLogger).to \
+        have_received(:write_later).with \
+          unattended.contact_uuid, :attendance, have_attributes(attended: false)
     end
   end
 end

@@ -29,6 +29,37 @@ shared_context "api incorrect verification code" do
   end
 end
 
+shared_context "api healthy" do
+  before do
+    response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "healthy", crm: "ok")
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check) { response }
+  end
+end
+
+shared_context "api no connection" do
+  before do
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check).and_raise(GetIntoTeachingApiClient::ApiError)
+  end
+end
+
+shared_context "api degraded (CRM online)" do
+  before do
+    response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "ok")
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check) { response }
+  end
+end
+
+shared_context "api degraded (CRM offline)" do
+  before do
+    response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "offline")
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check) { response }
+  end
+end
+
 shared_context "api correct verification code" do
   let(:code) { "123456" }
   let(:sign_up) { build(:api_schools_experience_sign_up) }

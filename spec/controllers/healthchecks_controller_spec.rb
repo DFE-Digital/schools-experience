@@ -7,13 +7,10 @@ describe HealthchecksController, type: :request do
     ActionController::HttpAuthentication::Basic.encode_credentials(username, password)
   end
 
-  include_context "fake gitis"
+  include_context "api healthy"
 
   before do
     allow(ENV).to receive(:[]).and_call_original
-
-    allow(fake_gitis).to \
-      receive(:fetch) { [Bookings::Gitis::Country.new] }
 
     allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
       receive(:enabled?).and_return(true)
@@ -76,11 +73,9 @@ describe HealthchecksController, type: :request do
     end
 
     context 'with unhealthy API' do
-      before do
-        allow(fake_gitis).to receive(:fetch).and_raise \
-          Bookings::Gitis::API::BadResponseError.new \
-            Struct.new(:status, :headers, :body, :env).new(500, {}, 'timeout')
+      include_context "api no connection"
 
+      before do
         get healthcheck_path
       end
 
@@ -170,11 +165,9 @@ describe HealthchecksController, type: :request do
     end
 
     context 'with unhealthy API' do
-      before do
-        allow(fake_gitis).to receive(:fetch).and_raise \
-          Bookings::Gitis::API::BadResponseError.new \
-            Struct.new(:status, :headers, :body, :env).new(500, {}, 'timeout')
+      include_context "api no connection"
 
+      before do
         get api_health_path
       end
 

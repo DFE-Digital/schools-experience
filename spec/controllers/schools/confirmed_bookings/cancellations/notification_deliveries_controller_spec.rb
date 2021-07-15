@@ -25,7 +25,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
 
   context '#create' do
     before do
-      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
+      allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
 
       post schools_booking_cancellation_notification_delivery_path \
         booking
@@ -41,7 +41,8 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       end
 
       it 'does not enqueue a log to gitis job' do
-        expect(Bookings::LogToGitisJob).not_to have_received(:perform_later)
+        expect(Bookings::Gitis::EventLogger).not_to \
+          have_received(:write_later)
       end
 
       it 'redirects to the placement_show path' do
@@ -89,9 +90,9 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       end
 
       it 'enqueues a log to gitis job' do
-        expect(Bookings::LogToGitisJob).to \
-          have_received(:perform_later).with \
-            placement_request.contact_uuid, /CANCELLED BY SCHOOL/
+        expect(Bookings::Gitis::EventLogger).to \
+          have_received(:write_later).with \
+            placement_request.contact_uuid, :cancellation, have_attributes(cancelled_by: "school")
       end
 
       it 'redirects to the show action' do
