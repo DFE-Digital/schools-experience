@@ -32,6 +32,22 @@ describe Schools::DashboardsHelper, type: 'helper' do
         "#{text} #{aria_label}"
       )
     end
+
+    context 'with 0' do
+      subject { numbered_circle 0, aria_label: 'test' }
+      it { is_expected.to be_nil }
+
+      context 'and show_if_zero set' do
+        let(:circle) { numbered_circle 0, aria_label: 'x', show_if_zero: true }
+        subject { Nokogiri.parse circle }
+        it { is_expected.to have_css 'div', text: '0' }
+      end
+    end
+
+    context 'with nil' do
+      subject { numbered_circle nil, aria_label: 'test' }
+      it { is_expected.to be_nil }
+    end
   end
 
   describe '#school_enabled_description' do

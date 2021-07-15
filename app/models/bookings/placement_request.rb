@@ -100,6 +100,16 @@ module Bookings
         .where(school_cancellations_bookings_placement_requests: { id: nil })
     }
 
+    scope :requiring_attention_including_attendance, lambda {
+      left_joins(:booking) \
+        .where("bookings_bookings.id IS NULL OR (bookings_bookings.accepted_at IS NOT NULL AND bookings_bookings.date < ? AND bookings_bookings.attended IS NULL)", Time.zone.today)
+        .left_joins(:candidate_cancellation)
+        .merge(Cancellation.unviewed)
+        .merge(Cancellation.sent.or(Cancellation.where(id: nil)))
+        .left_joins(:school_cancellation)
+        .where(school_cancellations_bookings_placement_requests: { id: nil })
+    }
+
     scope :withdrawn, lambda {
       without_booking
         .joins(:candidate_cancellation)

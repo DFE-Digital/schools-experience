@@ -9,6 +9,7 @@ module Schools::DashboardsHelper
 
   def numbered_circle(number, aria_label:, id: nil, show_if_zero: false)
     # Does string comparison in case its not a number
+    return if number.nil?
     return if number.to_s == '0' && !show_if_zero
 
     tag.div(class: 'alert-counter') do

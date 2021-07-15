@@ -1,0 +1,31 @@
+div.alert-counter {
+  display: inline-block;
+  margin-left: 0.5rem;
+
+  div.numbered-circle-container {
+    display: flex;
+    justify-content: center;
+
+    div.numbered-circle {
+      background-color: #A32526;
+      border-radius: 50%;
+      width: 1.2rem;
+      height: 1.2rem;
+      padding: 0.2rem;
+      display: flex;
+      justify-content: center;
+
+      div.number {
+        display: flex;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        padding: 0rem;
+        margin: 0rem;
+        font-size: 1rem;
+        line-height: 1.3;
+      }
+    }
+  }
+}
+

@@ -3,8 +3,22 @@
     <% if Schools::ChangeSchool.allow_school_change_in_app? %>
       <% if @schools.any? %>
         <%= form_for @change_school, url: schools_change_path, method: :post do |f| %>
-          <%= f.radio_button_fieldset :change_to_urn, choices: @schools, value_method: :urn, text_method: :name, page_heading: true%>
-          <%= f.submit "Choose school" %>
+          <%= f.radio_button_fieldset :change_to_urn, page_heading: true do %>
+            <% @schools.each do |school| %>
+              <div class="govuk-radios__item">
+                <%= f.radio_button :change_to_urn, school.urn, class: 'govuk-radios__input' %>
+
+                <%= f.label :change_to_urn, class: 'govuk-label govuk-radios__label', value: school.urn do %>
+                  <%= school.name %>
+
+                  <%= numbered_circle f.object.task_count_for_urn(school.urn),
+                        aria_label: "outstanding bookings and requests for #{school.name}" %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+
+          <%= f.submit "Change school" %>
         <% end %>
 
         <%- if Schools::ChangeSchool.request_approval_url -%>

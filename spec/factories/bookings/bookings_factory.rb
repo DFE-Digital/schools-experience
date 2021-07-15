@@ -32,7 +32,9 @@ FactoryBot.define do
 
     trait :with_existing_subject do
       before(:create) do |bb|
-        bb.bookings_subject = bb.bookings_school.subjects.first
+        bb.bookings_subject = \
+          Bookings::Subject.find_by! \
+            name: bb.bookings_placement_request.available_subject_choices.first
       end
     end
 

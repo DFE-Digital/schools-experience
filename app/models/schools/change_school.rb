@@ -48,6 +48,12 @@ module Schools
       current_user.sub
     end
 
+    def task_count_for_urn(urn)
+      return nil if organisation_urns.empty?
+
+      school_task_counts[urn]
+    end
+
     class InaccessibleSchoolError < StandardError; end
 
   private
@@ -58,6 +64,15 @@ module Schools
 
     def urns_to_uuids
       uuids_to_urns.invert
+    end
+
+    def school_task_counts
+      @school_task_counts ||= Bookings::PlacementRequest \
+        .joins(:school)
+        .where(bookings_schools: { urn: organisation_urns })
+        .requiring_attention_including_attendance
+        .group('bookings_schools.urn')
+        .count(:id)
     end
   end
 end
