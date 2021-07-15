@@ -11,11 +11,11 @@
 <%= govuk_back_link schools_placement_requests_path %>
 
 <% if @placement_request.candidate_cancellation&.sent? %>
-  <h1><%= @gitis_contact.full_name %> has withdrawn their request</h1>
+  <h1><%= gitis_contact_full_name(@gitis_contact) %> has withdrawn their request</h1>
 <% elsif @placement_request.school_cancellation&.sent? %>
-  <h1>This request from <%= @gitis_contact.full_name %> has been rejected</h1>
+  <h1>This request from <%= gitis_contact_full_name(@gitis_contact) %> has been rejected</h1>
 <% else %>
-  <h1>Request from <%= @gitis_contact.full_name %></h1>
+  <h1>Request from <%= gitis_contact_full_name(@gitis_contact) %></h1>
 <% end %>
 
 <div class="school-request">

@@ -38,12 +38,8 @@ module Bookings
     end
 
     def fetch_gitis_subjects
-      if Flipper.enabled?(:git_api)
-        api = GetIntoTeachingApiClient::LookupItemsApi.new
-        api.get_teaching_subjects
-      else
-        @crm.fetch(Bookings::Gitis::TeachingSubject, limit: LIMIT)
-      end
+      api = GetIntoTeachingApiClient::LookupItemsApi.new
+      api.get_teaching_subjects
     end
 
     def create_or_update_from_gitis!(internal, unassigned, gitis)

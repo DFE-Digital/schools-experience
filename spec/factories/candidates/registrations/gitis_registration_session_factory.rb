@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :gitis_registration_session, parent: :registration_session,
                                        class: Candidates::Registrations::GitisRegistrationSession do
-    gitis_contact { build(:gitis_contact, :persisted) }
+    gitis_contact { build(:api_schools_experience_sign_up) }
 
     initialize_with do
       new \

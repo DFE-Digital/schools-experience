@@ -1,6 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 require Rails.root.join('spec', 'support', 'notify_fake_client')
+require Rails.root.join('spec', 'support', 'fake_get_into_teaching_api_client')
 
 # The test environment is used exclusively to run your application's
 # test suite. You never need to work with it otherwise. Remember that

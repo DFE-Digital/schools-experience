@@ -25,7 +25,7 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
 
   context '#create' do
     before do
-      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
+      allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
 
       post schools_booking_cancellation_notification_delivery_path \
         booking
@@ -41,7 +41,8 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       end
 
       it 'does not enqueue a log to gitis job' do
-        expect(Bookings::LogToGitisJob).not_to have_received(:perform_later)
+        expect(Bookings::Gitis::EventLogger).not_to \
+          have_received(:write_later)
       end
 
       it 'redirects to the placement_show path' do
@@ -51,8 +52,6 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
     end
 
     context 'when request not already closed' do
-      include_context 'fake gitis'
-
       let :placement_request do
         FactoryBot.create \
           :placement_request, :with_school_cancellation, school: school
@@ -67,14 +66,17 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       end
 
       let(:gitis_contact) do
-        fake_gitis.find placement_request.contact_uuid
+        api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+        api.get_schools_experience_sign_up(placement_request.contact_uuid)
       end
 
       it 'notifies the candidate' do
+        full_name = "#{gitis_contact.first_name} #{gitis_contact.last_name}"
+
         expect(NotifyEmail::CandidateBookingSchoolCancelsBooking).to have_received(:new).with \
           to: gitis_contact.email,
           school_name: cancellation.school_name,
-          candidate_name: gitis_contact.full_name,
+          candidate_name: full_name,
           rejection_reasons: cancellation.reason,
           extra_details: cancellation.extra_details,
           dates_requested: cancellation.dates_requested,
@@ -89,9 +91,9 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       end
 
       it 'enqueues a log to gitis job' do
-        expect(Bookings::LogToGitisJob).to \
-          have_received(:perform_later).with \
-            placement_request.contact_uuid, /CANCELLED BY SCHOOL/
+        expect(Bookings::Gitis::EventLogger).to \
+          have_received(:write_later).with \
+            placement_request.contact_uuid, :cancellation, have_attributes(cancelled_by: "school")
       end
 
       it 'redirects to the show action' do
