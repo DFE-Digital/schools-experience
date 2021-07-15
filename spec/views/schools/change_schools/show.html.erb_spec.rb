@@ -40,6 +40,10 @@ describe 'schools/change_schools/show.html.erb', type: :view do
       )
     end
 
+    specify 'there should be a link to go back to dashboard' do
+      expect(rendered).to have_css("a[href='/schools/dashboard']", text: "Go back to #{school.name} dashboard")
+    end
+
     context 'no existing school chosen' do
       let(:school) { nil }
 

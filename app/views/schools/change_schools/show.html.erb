@@ -38,7 +38,7 @@
         </p>
       <% end %>
 
-      <%= link_to "Remain logged in as current school", schools_dashboard_path, class: 'govuk-link' if current_urn %>
+      <%= link_to "Go back to #{@current_school&.name} dashboard", schools_dashboard_path, class: 'govuk-link' if current_urn %>
     <% else %>
       <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
