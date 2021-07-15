@@ -41,7 +41,7 @@ jobs:
       - name: Get Short SHA
         id: sha
         run:  echo ::set-output name=short::$(echo $GITHUB_SHA | cut -c -7)
-             
+
       - name: Set DOCKER_IMAGE environment variable
         id:   docker
         run: |
@@ -53,7 +53,7 @@ jobs:
                 echo ::set-output name=DOCKER_IMAGE::${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}
                 echo ::set-output name=DOCKER_MASTER::""
              fi
-             
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.10.0
         with:
@@ -70,9 +70,9 @@ jobs:
                  ${{ steps.docker.outputs.DOCKER_IMAGE }}
                  ${{ steps.docker.outputs.DOCKER_MASTER }}
           push: true
-          build-args: 
+          build-args:
                  SHA=${{ steps.sha.outputs.short }}
-                      
+
       - name: Slack Notification
         if: failure() && github.ref == 'refs/heads/master'
         uses: rtCamp/action-slack-notify@master
@@ -81,7 +81,7 @@ jobs:
            SLACK_MESSAGE: 'There has been a failure building the application'
            SLACK_TITLE: 'Failure Building Application'
            SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
- 
+
   spec_tests:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -116,7 +116,7 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Lint Ruby
-        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop app config lib features spec spec_external --format json --out=/app/out/rubocop-result.json
+        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop app config lib features spec --format json --out=/app/out/rubocop-result.json
 
       - name: Keep Rubocop output
         if: always()
@@ -126,7 +126,7 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml 
+        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -225,8 +225,8 @@ jobs:
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
-      - name: Run Cucumber Tests 
-        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks cucumber --profile=${PROFILE} --format RspecSonarqubeFormatter --out /app/out/test-report.xml 
+      - name: Run Cucumber Tests
+        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks cucumber --profile=${PROFILE} --format RspecSonarqubeFormatter --out /app/out/test-report.xml
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: continuous_integration
@@ -268,11 +268,11 @@ jobs:
           password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Bring up Docker compose Stack
-        run: docker-compose -f docker-compose-paas.yml -f docker-compose-chrome.yml up -d 
+        run: docker-compose -f docker-compose-paas.yml -f docker-compose-chrome.yml up -d
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
-      - name: Run Cucumber Tests 
+      - name: Run Cucumber Tests
         run: |-
              docker-compose -f docker-compose-paas.yml -f docker-compose-chrome.yml run --rm \
                   -e RAILS_ENV \
@@ -280,7 +280,7 @@ jobs:
                   -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
                   -e CUC_DRIVER \
                   -e APP_URL \
-                  school-experience cucumber -t @javascript  --profile=${PROFILE} --format RspecSonarqubeFormatter --out /app/out/test-report.xml 
+                  school-experience cucumber -t @javascript  --profile=${PROFILE} --format RspecSonarqubeFormatter --out /app/out/test-report.xml
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: selenium
@@ -485,7 +485,7 @@ jobs:
              echo "replacer.full_list(0).matchtype=REQ_HEADER"        >> ./options.prop
              echo "replacer.full_list(0).matchstr=Authorization"      >> ./options.prop
              echo "replacer.full_list(0).regex=false"                 >> ./options.prop
-             echo "replacer.full_list(0).replacement=Basic ${BASE}"   >> ./options.prop 
+             echo "replacer.full_list(0).replacement=Basic ${BASE}"   >> ./options.prop
 
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.4.0

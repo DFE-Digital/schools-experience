@@ -24,7 +24,7 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
 
   context '#create' do
     before do
-      allow(Bookings::LogToGitisJob).to receive(:perform_later).and_return(true)
+      allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
 
       post schools_placement_request_cancellation_notification_delivery_path \
         placement_request
@@ -41,13 +41,12 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
       end
 
       it 'does not enqueue a log to gitis job' do
-        expect(Bookings::LogToGitisJob).not_to have_received(:perform_later)
+        expect(Bookings::Gitis::EventLogger).not_to \
+          have_received(:write_later)
       end
     end
 
     context 'when request not already closed' do
-      include_context 'fake gitis'
-
       let :placement_request do
         FactoryBot.create \
           :placement_request, :with_school_cancellation, school: school
@@ -58,7 +57,8 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
       end
 
       let :gitis_contact do
-        fake_gitis.find placement_request.contact_uuid
+        api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+        api.get_schools_experience_sign_up(placement_request.contact_uuid)
       end
 
       it 'notifies the candidate' do
@@ -79,9 +79,9 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
       end
 
       it 'enqueues a log to gitis job' do
-        expect(Bookings::LogToGitisJob).to \
-          have_received(:perform_later).with \
-            placement_request.contact_uuid, /CANCELLED BY SCHOOL/
+        expect(Bookings::Gitis::EventLogger).to \
+          have_received(:write_later).with \
+            placement_request.contact_uuid, :cancellation, have_attributes(cancelled_by: "school")
       end
 
       it 'redirects to the show action' do

@@ -40,10 +40,6 @@ module Candidates
         false
       end
 
-      def create_signin_token(gitis_crm)
-        build_candidate_session(gitis_crm).create_signin_token
-      end
-
       def first_name=(*args)
         read_only ? first_name : super
       end
@@ -81,16 +77,6 @@ module Candidates
           lastName: last_name,
           dateOfBirth: date_of_birth,
         }
-      end
-
-      def build_candidate_session(gitis_crm)
-        Candidates::Session.new(
-          gitis_crm,
-          firstname: first_name,
-          lastname: last_name,
-          email: email,
-          date_of_birth: date_of_birth
-        )
       end
     end
   end

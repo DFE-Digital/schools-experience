@@ -96,7 +96,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
       it 'populates the form with the values from gitis' do
         expect(assigns(:background_check)).to have_attributes \
-          has_dbs_check: gitis_contact.dfe_hasdbscertificate
+          has_dbs_check: gitis_contact.has_dbs_certificate
       end
 
       it 'renders the new template' do

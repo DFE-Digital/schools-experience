@@ -3,12 +3,8 @@ module Bookings
     LIMIT = 400
     BLACKLIST = YAML.load_file(Rails.root.join('db', 'data', 'gitis_subject_blacklist.yml')).freeze
 
-    def self.synchronise(crm)
-      new(crm).synchronise
-    end
-
-    def initialize(crm)
-      @crm = crm
+    def self.synchronise
+      new.synchronise
     end
 
     def synchronise
@@ -38,12 +34,8 @@ module Bookings
     end
 
     def fetch_gitis_subjects
-      if Flipper.enabled?(:git_api)
-        api = GetIntoTeachingApiClient::LookupItemsApi.new
-        api.get_teaching_subjects
-      else
-        @crm.fetch(Bookings::Gitis::TeachingSubject, limit: LIMIT)
-      end
+      api = GetIntoTeachingApiClient::LookupItemsApi.new
+      api.get_teaching_subjects
     end
 
     def create_or_update_from_gitis!(internal, unassigned, gitis)

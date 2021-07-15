@@ -163,7 +163,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_api_school_change_enabled = ENV['DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_request_organisation_url = "https://services.signin.education.gov.uk/request-organisation/search"
 
-  config.x.gitis.fake_crm = truthy_strings.include?(ENV['FAKE_CRM'].to_s)
   if ENV['CRM_CLIENT_ID'].present?
     config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID')
     config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET')

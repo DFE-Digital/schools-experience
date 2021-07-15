@@ -1,11 +1,3 @@
-shared_context "enable git_api feature" do
-  around do |example|
-    Flipper.enable(:git_api)
-    example.run
-    Flipper.disable(:git_api)
-  end
-end
-
 shared_context "api candidate matched back" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::CandidatesApi).to \
@@ -26,6 +18,37 @@ shared_context "api incorrect verification code" do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:exchange_access_token_for_schools_experience_sign_up)
       .and_raise(GetIntoTeachingApiClient::ApiError)
+  end
+end
+
+shared_context "api healthy" do
+  before do
+    response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "healthy", crm: "ok")
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check) { response }
+  end
+end
+
+shared_context "api no connection" do
+  before do
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check).and_raise(GetIntoTeachingApiClient::ApiError)
+  end
+end
+
+shared_context "api degraded (CRM online)" do
+  before do
+    response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "ok")
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check) { response }
+  end
+end
+
+shared_context "api degraded (CRM offline)" do
+  before do
+    response = GetIntoTeachingApiClient::HealthCheckResponse.new(status: "degraded", crm: "offline")
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check) { response }
   end
 end
 

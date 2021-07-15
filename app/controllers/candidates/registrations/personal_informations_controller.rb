@@ -18,7 +18,7 @@ module Candidates
         if candidate_signed_in?
           redirect_to new_candidates_school_registrations_contact_information_path
         else
-          Flipper.enabled?(:git_api) ? api_matchback : direct_matchback
+          perform_matchback
         end
       end
 
@@ -41,21 +41,10 @@ module Candidates
 
     private
 
-      def api_matchback
+      def perform_matchback
         success = @personal_information.issue_verification_code
 
         if success
-          redirect_to candidates_school_registrations_sign_in_path
-        else
-          redirect_to new_candidates_school_registrations_contact_information_path
-        end
-      end
-
-      def direct_matchback
-        token = @personal_information.create_signin_token(gitis_crm)
-
-        if token
-          verification_email(token).despatch_later!
           redirect_to candidates_school_registrations_sign_in_path
         else
           redirect_to new_candidates_school_registrations_contact_information_path

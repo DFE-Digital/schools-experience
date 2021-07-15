@@ -116,7 +116,6 @@ Rails.application.configure do
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT']
   end
 
-  config.x.gitis.fake_crm = truthy_strings.include?(String(ENV.fetch('FAKE_CRM', true)))
   config.x.gitis.fake_crm_uuid = ENV.fetch('FAKE_CRM_UUID', nil)
   config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID', 'notset')
   config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET', 'notset')

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'apimock/gitis_crm'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmedBookings::DateController, type: :request do
@@ -82,8 +81,6 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
     end
 
     context 'sending an email' do
-      include_context 'fake gitis'
-
       let :email do
         double(NotifyEmail::CandidateBookingDateChanged, despatch_later!: true)
       end
@@ -93,7 +90,8 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
       end
 
       before do
-        booking.gitis_contact = fake_gitis.find(booking.contact_uuid)
+        api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+        booking.gitis_contact = api.get_schools_experience_sign_up(booking.contact_uuid)
       end
 
       before { subject }

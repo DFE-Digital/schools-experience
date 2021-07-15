@@ -2,6 +2,8 @@ class Bookings::Candidate < ApplicationRecord
   attr_accessor :gitis_contact
   alias_method :contact, :gitis_contact
 
+  GITIS_ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
+
   # delete_all used since there may be a lot of tokens
   # and the tokens don't have any real logic
   has_many :session_tokens,
@@ -19,7 +21,7 @@ class Bookings::Candidate < ApplicationRecord
     foreign_key: :bookings_candidate_id,
     dependent: :destroy
 
-  validates :gitis_uuid, presence: true, format: { with: Bookings::Gitis::Entity::ID_FORMAT }
+  validates :gitis_uuid, presence: true, format: { with: GITIS_ID_FORMAT }
   validates :gitis_uuid, uniqueness: { case_sensitive: false }
 
   scope :confirmed, -> { where.not(confirmed_at: nil) }
@@ -27,7 +29,7 @@ class Bookings::Candidate < ApplicationRecord
 
   alias_attribute :contact_uuid, :gitis_uuid
 
-  delegate :full_name, :email, to: :gitis_contact
+  delegate :email, to: :gitis_contact
 
   class << self
     def find_or_create_from_gitis_contact!(contact)
@@ -51,33 +53,23 @@ class Bookings::Candidate < ApplicationRecord
       end
     end
 
-    def create_or_update_from_registration_session!(crm, registration, contact)
+    def create_or_update_from_registration_session!(registration, contact)
       if contact
         find_or_create_from_gitis_contact!(contact) \
-          .update_from_registration_session!(crm, registration)
+          .update_from_registration_session!(registration)
       else
-        create_from_registration_session!(crm, registration)
+        create_from_registration_session!(registration)
       end
     end
 
-    def create_from_registration_session!(crm, registration)
-      gitis_contact =
-        if Flipper.enabled?(:git_api)
-          GetIntoTeachingApiClient::SchoolsExperienceSignUp.new
-        else
-          Bookings::Gitis::Contact.new
-        end
+    def create_from_registration_session!(registration)
+      gitis_contact = GetIntoTeachingApiClient::SchoolsExperienceSignUp.new
 
       mapper = Bookings::RegistrationContactMapper.new \
         registration, gitis_contact
 
-      contact = mapper.registration_to_contact
-
-      if Flipper.enabled?(:git_api)
-        contact = api_write_contact(contact)
-      else
-        crm.write! contact
-      end
+      mapped_contact = mapper.registration_to_contact
+      contact = api_write_contact(mapped_contact)
 
       create!(gitis_uuid: contact.candidate_id, confirmed_at: Time.zone.now, created_in_gitis: true).tap do |candidate|
         candidate.gitis_contact = contact
@@ -98,6 +90,10 @@ class Bookings::Candidate < ApplicationRecord
     session_tokens.expire_all!
   end
 
+  def full_name
+    "#{gitis_contact.first_name} #{gitis_contact.last_name}"
+  end
+
   def confirmed?
     confirmed_at?
   end
@@ -106,17 +102,13 @@ class Bookings::Candidate < ApplicationRecord
     confirmed_at || session_tokens.confirmed.maximum(:confirmed_at)
   end
 
-  def update_from_registration_session!(crm, registration)
+  def update_from_registration_session!(registration)
     mapper = Bookings::RegistrationContactMapper.new \
       registration, gitis_contact
 
     mapper.registration_to_contact
 
-    if gitis_contact.is_a?(GetIntoTeachingApiClient::SchoolsExperienceSignUp)
-      self.class.api_write_contact(gitis_contact)
-    else
-      crm.write gitis_contact
-    end
+    self.class.api_write_contact(gitis_contact)
 
     self
   end

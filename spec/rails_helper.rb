@@ -98,9 +98,5 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-# Ensure load time injection of FakeCRM happens early enough
-require_dependency 'bookings/gitis/auth'
-require_dependency 'bookings/gitis/crm'
-
 require 'shoulda_matcher_duplicate_messages'
 Shoulda::Matchers::ActiveModel::Validator.prepend ShouldaMatcherDuplicateMessages

@@ -1,6 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 require Rails.root.join('spec', 'support', 'notify_fake_client')
+require Rails.root.join('spec', 'support', 'fake_get_into_teaching_api_client')
 
 # The test environment is used exclusively to run your application's
 # test suite. You never need to work with it otherwise. Remember that
@@ -178,7 +179,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_admin_role_id = '66666666-5555-4444-3333-222222222222'
   config.x.dfe_sign_in_request_organisation_url = nil
 
-  config.x.gitis.fake_crm = true
   config.x.gitis.auth_client_id = nil
   config.x.gitis.auth_secret = nil
   config.x.gitis.auth_tenant_id = nil

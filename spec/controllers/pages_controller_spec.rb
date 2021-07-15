@@ -4,8 +4,8 @@ describe PagesController, type: :request do
   describe '#privacy_policy' do
     context 'with known policy' do
       before do
-        allow(Bookings::Gitis::PrivacyPolicy).to \
-          receive(:default).and_return('d1adf2ad-e7c4-e911-a981-000d3a206976')
+        allow(Rails.application.config.x.gitis).to \
+          receive(:privacy_policy_id).and_return('d1adf2ad-e7c4-e911-a981-000d3a206976')
 
         get privacy_policy_path
       end
@@ -17,8 +17,8 @@ describe PagesController, type: :request do
 
     context 'with unknown policy' do
       before do
-        allow(Bookings::Gitis::PrivacyPolicy).to \
-          receive(:default).and_return(SecureRandom.uuid)
+        allow(Rails.application.config.x.gitis).to \
+          receive(:privacy_policy_id).and_return(SecureRandom.uuid)
       end
 
       it "will raise an exception" do
