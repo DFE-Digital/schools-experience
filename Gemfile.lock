@@ -253,9 +253,8 @@ GEM
       govuk_frontend_toolkit (>= 6.0.2)
       rails (>= 4.1.0)
       sass (>= 3.2.0)
-    govuk_frontend_toolkit (9.0.0)
+    govuk_frontend_toolkit (9.0.1)
       railties (>= 3.1.0)
-      sass (>= 3.2.0)
     hashdiff (1.0.1)
     htmlentities (4.3.4)
     httpclient (2.8.3)
@@ -296,7 +295,7 @@ GEM
     middleware (0.1.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2021.0225)
+    mime-types-data (3.2021.0704)
     mini_mime (1.1.0)
     mini_portile2 (2.5.3)
     minitest (5.14.4)
@@ -328,7 +327,7 @@ GEM
     parallel (1.20.1)
     parallel_tests (3.7.0)
       parallel
-    parser (3.0.1.1)
+    parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
     pg_search (2.3.5)
@@ -473,7 +472,7 @@ GEM
       rexml
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.4)
-    rubyzip (2.3.0)
+    rubyzip (2.3.2)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -483,16 +482,16 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    sentry-delayed_job (4.6.0)
+    sentry-delayed_job (4.6.1)
       sentry-ruby-core (~> 4.6.0)
     sentry-rails (4.6.1)
       railties (>= 5.0)
       sentry-ruby-core (~> 4.6.0)
-    sentry-ruby (4.6.0)
+    sentry-ruby (4.6.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       faraday (>= 1.0)
-      sentry-ruby-core (= 4.6.0)
-    sentry-ruby-core (4.6.0)
+      sentry-ruby-core (= 4.6.1)
+    sentry-ruby-core (4.6.1)
       concurrent-ruby
       faraday
     shoulda-matchers (4.5.1)
@@ -630,6 +629,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-erd
   redis (~> 4.3)
+  rexml (>= 3.2.5)
   rspec-json_expectations (~> 2.2)
   rspec-rails (~> 5.0)
   rspec-sonarqube-formatter
