@@ -47,4 +47,5 @@ We have an alternative integration, which only requests a user from DfE Sign-in
 and we then do the School selection within the School experience application.
 This is achieved via API calls to query the 
 [Sign-in public API](https://github.com/DFE-Digital/login.dfe.public-api)
+
   
