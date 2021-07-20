@@ -1,4 +1,5 @@
 Given("I am logged in as a DfE user") do
+  log insecure_auth_callback_url
   visit insecure_auth_callback_path
   @school ||= Bookings::School.find_by(urn: 123_456)
 end
