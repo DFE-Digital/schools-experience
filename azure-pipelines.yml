@@ -119,6 +119,11 @@ jobs:
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-debug
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
     displayName: 'Tag Docker image (built from debug)'
+
+ - script: |
+      docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-debug-azure-ci
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug-azure-ci'))
+    displayName: 'Tag Docker image (built from debug-azure-ci)'
   
   - script: |
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-review
