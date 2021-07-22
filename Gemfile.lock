@@ -83,7 +83,7 @@ GEM
     activerecord (6.1.4)
       activemodel (= 6.1.4)
       activesupport (= 6.1.4)
-    activerecord-import (1.1.0)
+    activerecord-import (1.2.0)
       activerecord (>= 3.2)
     activerecord-postgis-adapter (7.1.0)
       activerecord (~> 6.1)
