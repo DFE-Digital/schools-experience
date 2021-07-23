@@ -32,8 +32,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 ## Gitis configuration
 
-`FAKE_CRM` - use Fake CRM instead of a Dynamics instance, defaults to off in production, on in development. true = on, false = off, blank = default for environment
-
 `CRM_CLIENT_ID` - Authentication ID for Active Directory tenant controlling access to Dynamics instance
 
 `CRM_CLIENT_SECRET` - Authentication secret for Active Directory

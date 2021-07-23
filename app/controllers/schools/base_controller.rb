@@ -7,7 +7,6 @@ module Schools
     self.forgery_protection_origin_check = false
 
     include GitisAccess
-    self.use_gitis_cache = true
 
     include DFEAuthentication
     before_action :require_auth
@@ -17,8 +16,6 @@ module Schools
 
     rescue_from MissingURN, with: :no_school_selected
     rescue_from SchoolNotRegistered, with: -> { redirect_to schools_errors_not_registered_path }
-    rescue_from Bookings::Gitis::API::BadResponseError, with: :gitis_retrieval_error
-    rescue_from Bookings::Gitis::API::ConnectionFailed, with: :gitis_retrieval_error
     rescue_from Faraday::ConnectionFailed, with: :gitis_retrieval_error
     rescue_from GetIntoTeachingApiClient::ApiError, with: :gitis_retrieval_error
 

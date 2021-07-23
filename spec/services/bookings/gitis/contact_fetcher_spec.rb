@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 describe Bookings::Gitis::ContactFetcher do
-  include_context "fake gitis"
   include_context "api sign ups for requests"
   include_context "api sign up for first request"
 
-  let(:fetcher) { described_class.new fake_gitis }
+  let(:fetcher) { described_class.new }
   let(:school) { create :bookings_school }
   let(:requests) { create_list :bookings_placement_request, 2, school: school }
   let(:reloaded_requests) { Bookings::PlacementRequest.find requests.map(&:id) }
@@ -25,12 +24,12 @@ describe Bookings::Gitis::ContactFetcher do
 
     context 'merged without master' do
       let(:contact) { build(:api_schools_experience_sign_up, :merged, master_id: nil) }
-      it { expect { subject }.to raise_exception Bookings::Gitis::Contact::InconsistentState }
+      it { expect { subject }.to raise_exception described_class::InconsistentContactState }
     end
 
     context 'master but not merged' do
       let(:contact) { build(:api_schools_experience_sign_up, :merged, merged: false) }
-      it { expect { subject }.to raise_exception Bookings::Gitis::Contact::InconsistentState }
+      it { expect { subject }.to raise_exception described_class::InconsistentContactState }
     end
   end
 

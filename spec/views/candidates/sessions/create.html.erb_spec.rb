@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "candidates/sessions/create.html.erb", type: :view do
-  include_context "stubbed out Gitis"
-
   let(:verification_code) do
     Candidates::VerificationCode.new(
       email: 'testy@mctest.com',

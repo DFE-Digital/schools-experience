@@ -26,8 +26,9 @@ When("I am on the {string} page for my fixed placement request") do |identifier|
 end
 
 Then("the subheading should be {string} followed by the candidate's name") do |subheading|
-  gitis = Bookings::Gitis::Factory.crm
-  contact = gitis.find(@placement_request.contact_uuid)
+  api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+  contact = api.get_schools_experience_sign_up(@placement_request.contact_uuid)
+
   expect(page).to have_css('h3', text: "#{subheading} #{contact.full_name}.")
 end
 

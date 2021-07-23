@@ -42,7 +42,7 @@ jobs:
   - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) brakeman --no-pager
     displayName: Run the Brakeman security scan
 
-  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) rubocop app config lib features spec spec_external
+  - script: docker run --rm $(DOCKER_HUB_REPO):$(imageTag) rubocop app config lib features spec
     displayName: Run the GovUK Lint check
 
   - script: docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(buildCacheTag)
@@ -119,7 +119,7 @@ jobs:
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-debug
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/debug'))
     displayName: 'Tag Docker image (built from debug)'
-  
+
   - script: |
       docker tag $(DOCKER_HUB_REPO):$(imageTag) $(DOCKER_HUB_REPO):$(imageTag)-review
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -166,7 +166,7 @@ jobs:
              echo '"PullRequestNumber":' "\"${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}\" " >> ${PIPELINE_WORKSPACE}/build_info.json
              echo '}' >> ${PIPELINE_WORKSPACE}/build_info.json
     displayName: 'Produce Build Information File'
-  
+
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '$(Pipeline.Workspace)/build_info.json'

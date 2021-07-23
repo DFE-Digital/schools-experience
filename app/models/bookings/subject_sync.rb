@@ -3,12 +3,8 @@ module Bookings
     LIMIT = 400
     BLACKLIST = YAML.load_file(Rails.root.join('db', 'data', 'gitis_subject_blacklist.yml')).freeze
 
-    def self.synchronise(crm)
-      new(crm).synchronise
-    end
-
-    def initialize(crm)
-      @crm = crm
+    def self.synchronise
+      new.synchronise
     end
 
     def synchronise

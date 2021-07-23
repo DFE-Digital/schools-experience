@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'apimock/gitis_crm'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmedBookings::DateController, type: :request do
