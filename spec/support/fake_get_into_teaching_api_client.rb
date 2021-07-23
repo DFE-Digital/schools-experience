@@ -1,10 +1,20 @@
 class GetIntoTeachingApiClient::SchoolsExperienceApi
-  def add_classroom_experience_note(id, note); end
+  def add_classroom_experience_note(_id, _note); end
 end
 
 class GetIntoTeachingApiClient::CandidatesApi
   def create_candidate_access_token(request)
     raise GetIntoTeachingApiClient::ApiError if request.email =~ /unknown/
+  end
+end
+
+class GetIntoTeachingApiClient::PrivacyPoliciesApi
+  def get_latest_privacy_policy
+    GetIntoTeachingApiClient::PrivacyPolicy.new(id: SecureRandom.uuid, text: "policy")
+  end
+
+  def get_privacy_policy(id)
+    GetIntoTeachingApiClient::PrivacyPolicy.new(id: id, text: "policy")
   end
 end
 
@@ -32,6 +42,11 @@ class GetIntoTeachingApiClient::SchoolsExperienceApi
     GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(fake_sign_up_data).tap do |sign_up|
       sign_up.candidate_id = id
     end
+  end
+
+  def sign_up_schools_experience_candidate(sign_up)
+    sign_up.candidate_id = fake_candidate_id
+    sign_up
   end
 
 private

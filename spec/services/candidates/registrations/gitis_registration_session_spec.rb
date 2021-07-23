@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::GitisRegistrationSession do
-  let(:contact) { build(:gitis_contact, :persisted) }
+  let(:contact) { build(:api_schools_experience_sign_up) }
 
   let(:key) { model.model_name.param_key }
   let(:model_name) { model.model_name.element }
@@ -42,7 +42,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
   describe 'Contact Information' do
     let(:model) { Candidates::Registrations::ContactInformation }
     let(:data) { { 'phone' => '01111 222333' } }
-    let(:gitis_data) { { 'phone' => contact.phone } }
+    let(:gitis_data) { { 'phone' => contact.secondary_telephone } }
 
     describe '#contact_information_attributes' do
       include_examples "attributes with and without gitis data"
@@ -56,7 +56,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
   context 'Background Check' do
     let(:model) { Candidates::Registrations::BackgroundCheck }
     let(:data) { { 'has_dbs_check' => false } }
-    let(:gitis_data) { { 'has_dbs_check' => true } }
+    let(:gitis_data) { { 'has_dbs_check' => nil } }
 
     describe '#background_check_attributes' do
       include_examples "attributes with and without gitis data"
@@ -68,10 +68,22 @@ describe Candidates::Registrations::GitisRegistrationSession do
   end
 
   context 'Teaching Preference' do
+    include_context "api teaching subjects"
+
     let(:model) { Candidates::Registrations::TeachingPreference }
     let(:data) { { 'subject_first_choice' => 'Biology', 'subject_second_choice' => 'Physics' } }
     let(:gitis_data) { { 'subject_first_choice' => 'Maths', 'subject_second_choice' => 'English' } }
     let(:school) { Bookings::School.find_by(urn: '999') || FactoryBot.create(:bookings_school, urn: '999') }
+    let(:teaching_subjects) do
+      [
+        build(:api_lookup_item,
+          id: contact.preferred_teaching_subject_id,
+          value: "Maths"),
+        build(:api_lookup_item,
+           id: contact.secondary_preferred_teaching_subject_id,
+           value: "English"),
+      ]
+    end
 
     before { allow(registration).to receive(:school).and_return(school) }
 
@@ -103,18 +115,18 @@ describe Candidates::Registrations::GitisRegistrationSession do
             .personal_information_attributes
         end
 
-        it { is_expected.to include('first_name' => contact.firstname) }
-        it { is_expected.to include('last_name' => contact.lastname) }
+        it { is_expected.to include('first_name' => contact.first_name) }
+        it { is_expected.to include('last_name' => contact.last_name) }
         it { is_expected.to include('email' => contact.email) }
         it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
         it { is_expected.to include('read_only' => true) }
 
         context 'with some blank fields in gitis data' do
           let(:contact) do
-            build :gitis_contact, :persisted,
+            build :api_schools_experience_sign_up,
               date_of_birth: nil,
-              firstname: "",
-              lastname: ""
+              first_name: " ",
+              last_name: " "
           end
 
           it { is_expected.to include('first_name' => data['first_name']) }
@@ -130,8 +142,8 @@ describe Candidates::Registrations::GitisRegistrationSession do
           described_class.new({}, contact).personal_information_attributes
         end
 
-        it { is_expected.to include('first_name' => contact.firstname) }
-        it { is_expected.to include('last_name' => contact.lastname) }
+        it { is_expected.to include('first_name' => contact.first_name) }
+        it { is_expected.to include('last_name' => contact.last_name) }
         it { is_expected.to include('email' => contact.email) }
         it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
         it { is_expected.to include('read_only' => true) }
@@ -144,8 +156,8 @@ describe Candidates::Registrations::GitisRegistrationSession do
           described_class.new({ key => data }, contact).personal_information
         end
 
-        it { is_expected.to have_attributes(first_name: contact.firstname) }
-        it { is_expected.to have_attributes(last_name: contact.lastname) }
+        it { is_expected.to have_attributes(first_name: contact.first_name) }
+        it { is_expected.to have_attributes(last_name: contact.last_name) }
         it { is_expected.to have_attributes(email: contact.email) }
         it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
 
@@ -153,8 +165,8 @@ describe Candidates::Registrations::GitisRegistrationSession do
           let(:contact) do
             build :gitis_contact, :persisted,
               date_of_birth: nil,
-              firstname: "",
-              lastname: ""
+              first_name: "",
+              last_name: ""
           end
 
           it { is_expected.to be_valid }
@@ -170,8 +182,8 @@ describe Candidates::Registrations::GitisRegistrationSession do
           described_class.new({}, contact).personal_information
         end
 
-        it { is_expected.to have_attributes(first_name: contact.firstname) }
-        it { is_expected.to have_attributes(last_name: contact.lastname) }
+        it { is_expected.to have_attributes(first_name: contact.first_name) }
+        it { is_expected.to have_attributes(last_name: contact.last_name) }
         it { is_expected.to have_attributes(email: contact.email) }
         it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
       end

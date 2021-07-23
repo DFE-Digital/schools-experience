@@ -4,7 +4,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
   include_context 'Stubbed current_registration'
   let!(:school) { create(:bookings_school, urn: 11_048) }
 
-  let(:gitis_contact) { build(:gitis_contact, :persisted) }
+  let(:gitis_contact) { build(:api_schools_experience_sign_up) }
 
   context 'without existing contact information in the session' do
     let :registration_session do
@@ -82,8 +82,8 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
 
       it 'populates the form with the values from gitis' do
         expect(assigns(:contact_information)).to have_attributes \
-          phone: gitis_contact.phone,
-          postcode: gitis_contact.postcode
+          phone: gitis_contact.secondary_telephone,
+          postcode: gitis_contact.address_postcode
       end
 
       it 'renders the new template' do

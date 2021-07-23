@@ -112,11 +112,12 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       end
 
       context 'no skipped steps and already signed in' do
-        include_context 'fake gitis'
-
         let(:candidate) { create(:candidate, :confirmed) }
-        let(:contact) { fake_gitis.find candidate.gitis_uuid }
-        let(:contact_attributes) { contact.attributes }
+        let(:contact) do
+          api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+          api.get_schools_experience_sign_up(candidate.gitis_uuid)
+        end
+        let(:contact_attributes) { contact.to_hash }
 
         before do
           allow_any_instance_of(ActionDispatch::Request::Session).to \

@@ -41,4 +41,20 @@ describe GitisContactHelper, type: :helper do
       end
     end
   end
+
+  describe "#gitis_contact_full_name" do
+    it "returns the full name" do
+      contact = build(:api_schools_experience_sign_up)
+      full_name = helper.gitis_contact_full_name(contact)
+      expect(full_name).to eq("#{contact.first_name} #{contact.last_name}")
+    end
+
+    context "when given a Bookings::Gitis::MissingContact" do
+      it "returns 'Unavailable'" do
+        contact = Bookings::Gitis::MissingContact.new(firstname: "First", lastname: "Last")
+        full_name = helper.gitis_contact_full_name(contact)
+        expect(full_name).to eq("Unavailable")
+      end
+    end
+  end
 end

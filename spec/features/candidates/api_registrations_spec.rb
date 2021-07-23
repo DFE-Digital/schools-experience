@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 feature 'Candidate Registrations (via the API)', type: :feature do
-  include_context "enable git_api feature"
   include_context "api teaching subjects"
   include_context "api current privacy policy"
   include_context "api add classroom experience note"
