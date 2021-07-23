@@ -27,7 +27,7 @@ class Bookings::Candidate < ApplicationRecord
 
   alias_attribute :contact_uuid, :gitis_uuid
 
-  delegate :full_name, :email, to: :gitis_contact
+  delegate :email, to: :gitis_contact
 
   class << self
     def find_or_create_from_gitis_contact!(contact)
@@ -96,6 +96,10 @@ class Bookings::Candidate < ApplicationRecord
 
   def expire_session_tokens!
     session_tokens.expire_all!
+  end
+
+  def full_name
+    "#{gitis_contact.first_name} #{gitis_contact.last_name}"
   end
 
   def confirmed?

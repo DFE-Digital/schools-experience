@@ -2,8 +2,9 @@ require 'rails_helper'
 
 describe Candidates::Registrations::PersonalInformationsController, type: :request do
   include ActiveJob::TestHelper
+
   include_context 'Stubbed current_registration'
-  include_context 'fake gitis'
+
   let!(:other_school) { create(:bookings_school, urn: 10_020) }
   let!(:school) { create(:bookings_school, urn: 11_048) }
 
@@ -55,6 +56,8 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       end
 
       context 'valid and known to gitis' do
+        include_context "api candidate matched back"
+
         let :personal_information do
           FactoryBot.build :personal_information
         end
@@ -67,22 +70,6 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
             params: personal_information_params
         end
 
-        it 'updates the session with the new details' do
-          expect(registration_session.personal_information).to \
-            eq_model personal_information
-        end
-
-        it "sends a verification email" do
-          expect(NotifyFakeClient.deliveries.length).to eql(1)
-
-          delivery = NotifyFakeClient.deliveries.first
-          expect(delivery[:email_address]).to \
-            eql(registration_session.personal_information.email)
-
-          expect(delivery[:personalisation][:verification_link]).to \
-            match(%r{/candidates/verify/[0-9]+/[^/]{24}/#{registration_session.uuid}\z})
-        end
-
         it 'redirects to the next step' do
           expect(response).to redirect_to \
             '/candidates/schools/10020/registrations/sign_in'
@@ -90,6 +77,8 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
       end
 
       context 'valid but not known to gitis' do
+        include_context "api candidate not matched back"
+
         let :personal_information do
           FactoryBot.build :personal_information, email: 'unknown@mctest.com'
         end
@@ -98,15 +87,6 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
           post \
             '/candidates/schools/10020/registrations/personal_information',
             params: personal_information_params
-        end
-
-        it 'updates the session with the new details' do
-          expect(registration_session.personal_information).to \
-            eq_model personal_information
-        end
-
-        it "does not send a verification email" do
-          expect(NotifyFakeClient.deliveries.length).to eql(0)
         end
 
         it 'redirects to the contact information step' do
@@ -155,50 +135,6 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
         it 'redirects to the next step' do
           expect(response).to redirect_to \
             '/candidates/schools/10020/registrations/contact_information/new'
-        end
-      end
-
-      context "when the git_api feature is enabled" do
-        include_context "enable git_api feature"
-
-        context 'valid and known to gitis' do
-          include_context "api candidate matched back"
-
-          let :personal_information do
-            FactoryBot.build :personal_information
-          end
-
-          let(:token) { create(:candidate_session_token) }
-
-          before do
-            post \
-              '/candidates/schools/10020/registrations/personal_information',
-              params: personal_information_params
-          end
-
-          it 'redirects to the next step' do
-            expect(response).to redirect_to \
-              '/candidates/schools/10020/registrations/sign_in'
-          end
-        end
-
-        context 'valid but not known to gitis' do
-          include_context "api candidate not matched back"
-
-          let :personal_information do
-            FactoryBot.build :personal_information, email: 'unknown@mctest.com'
-          end
-
-          before do
-            post \
-              '/candidates/schools/10020/registrations/personal_information',
-              params: personal_information_params
-          end
-
-          it 'redirects to the contact information step' do
-            expect(response).to redirect_to \
-              '/candidates/schools/10020/registrations/contact_information/new'
-          end
         end
       end
     end
