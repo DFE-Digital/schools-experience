@@ -13,6 +13,8 @@ module Bookings
       end
       alias_method :firstname, :full_name
       alias_method :lastname, :full_name
+      alias_method :first_name, :full_name
+      alias_method :last_name, :full_name
 
       def emailaddress2
         nil
