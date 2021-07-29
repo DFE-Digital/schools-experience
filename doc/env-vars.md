@@ -40,8 +40,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `CRM_PRIVACY_CONSENT_ID` - GUID for the privacy policy consent id used by candidates - supplied by Gitis team
 
-`CRM_COUNTRY_ID` - GUID for country to attach new Candidates to, supplied by Gitis team
-
 `CRM_OWNER_ID` - GUID for owner of new Contacts, not currently used - supplied by Gitis team
 
 `GIT_API_TOKEN` - API key for the GiT API
