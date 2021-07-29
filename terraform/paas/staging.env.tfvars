@@ -5,6 +5,7 @@ paas_application_name     = "school-experience-app-staging"
 paas_internet_hostnames   = ["staging-schoolexperience"]
 application_instances     = 1
 environment               = "staging"
+application_environment   = "dfe-school-experience-staging"
 azure_key_vault           = "s105t01-kv"                        
 azure_resource_group      = "s105t01-staging-vault-resource-group"  
 alerts = {
