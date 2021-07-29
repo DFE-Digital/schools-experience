@@ -127,7 +127,7 @@ group :test do
 
   gem 'rails-controller-testing'
   gem "rspec-json_expectations", "~> 2.2"
-  gem 'shoulda-matchers', '~> 4.5'
+  gem 'shoulda-matchers', '~> 5.0'
 
   gem 'capybara-screenshot'
   gem 'flipper-active_support_cache_store'
