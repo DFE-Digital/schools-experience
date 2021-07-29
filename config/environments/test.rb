@@ -180,7 +180,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_request_organisation_url = nil
 
   config.x.gitis.auth_client_id = nil
-  config.x.gitis.auth_secret = nil
   config.x.gitis.service_url = nil
   config.x.gitis.country_id = SecureRandom.uuid
   config.x.gitis.privacy_policy_id = SecureRandom.uuid

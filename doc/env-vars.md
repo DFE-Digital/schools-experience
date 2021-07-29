@@ -34,8 +34,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `CRM_CLIENT_ID` - Authentication ID for Active Directory tenant controlling access to Dynamics instance
 
-`CRM_CLIENT_SECRET` - Authentication secret for Active Directory
-
 `CRM_SERVICE_URL` - URL for the Dynamics instance to be connected to
 
 `CRM_PRIVACY_POLICY_ID` - GUID for the privacy policy used by candidates - supplied by Gitis team
