@@ -124,7 +124,6 @@ Rails.application.configure do
   config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID', SecureRandom.uuid)
   config.x.gitis.privacy_policy_id = ENV['CRM_PRIVACY_POLICY_ID'].presence || '8da7ae80-82f2-ea11-a815-000d3a44afcc'
   config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
-  config.x.gitis.caching = truthy_strings.include?(ENV['CRM_CACHING'].to_s)
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 

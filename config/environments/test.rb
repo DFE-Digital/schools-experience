@@ -186,7 +186,6 @@ Rails.application.configure do
   config.x.gitis.country_id = SecureRandom.uuid
   config.x.gitis.privacy_policy_id = SecureRandom.uuid
   config.x.gitis.privacy_consent_id = '10'
-  config.x.gitis.caching = false
 
   config.x.features = %i[
     subject_specific_dates

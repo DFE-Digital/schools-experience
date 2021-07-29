@@ -42,8 +42,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `CRM_PRIVACY_CONSENT_ID` - GUID for the privacy policy consent id used by candidates - supplied by Gitis team
 
-`CRM_CACHING` - Turn on caching of Contact details, cached for 1 hour into Redis - 1 = on, blank = off
-
 `CRM_CHANNEL_CREATION` - GUID for the channel creation id, supplied by Gitis team
 
 `CRM_COUNTRY_ID` - GUID for country to attach new Candidates to, supplied by Gitis team
