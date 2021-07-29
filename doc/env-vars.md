@@ -32,25 +32,9 @@ If required Exceptions Notifications can be sent to Sentry.
 
 ## Gitis configuration
 
-`CRM_CLIENT_ID` - Authentication ID for Active Directory tenant controlling access to Dynamics instance
-
-`CRM_CLIENT_SECRET` - Authentication secret for Active Directory
-
-`CRM_AUTH_TENANT_ID` - GUID for the Active Directory tenant
-
-`CRM_SERVICE_URL` - URL for the Dynamics instance to be connected to
-
 `CRM_PRIVACY_POLICY_ID` - GUID for the privacy policy used by candidates - supplied by Gitis team
 
 `CRM_PRIVACY_CONSENT_ID` - GUID for the privacy policy consent id used by candidates - supplied by Gitis team
-
-`CRM_CACHING` - Turn on caching of Contact details, cached for 1 hour into Redis - 1 = on, blank = off
-
-`CRM_CHANNEL_CREATION` - GUID for the channel creation id, supplied by Gitis team
-
-`CRM_COUNTRY_ID` - GUID for country to attach new Candidates to, supplied by Gitis team
-
-`CRM_OWNER_ID` - GUID for owner of new Contacts, not currently used - supplied by Gitis team
 
 `GIT_API_TOKEN` - API key for the GiT API
 

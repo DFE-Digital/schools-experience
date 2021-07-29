@@ -35,11 +35,8 @@ Rails.application.configure do
   config.x.dfe_sign_in_request_organisation_url = ""
   config.x.dfe_sign_in_request_service_url = ""
 
-  config.x.gitis.channel_creation = '0'
-  config.x.gitis.country_id = SecureRandom.uuid
   config.x.gitis.privacy_policy_id = SecureRandom.uuid
   config.x.gitis.privacy_consent_id = '10'
-  config.x.gitis.caching = false
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 
