@@ -166,7 +166,6 @@ Rails.application.configure do
   if ENV['CRM_CLIENT_ID'].present?
     config.x.gitis.auth_client_id = ENV.fetch('CRM_CLIENT_ID')
     config.x.gitis.auth_secret = ENV.fetch('CRM_CLIENT_SECRET')
-    config.x.gitis.auth_tenant_id = ENV.fetch('CRM_AUTH_TENANT_ID')
     config.x.gitis.service_url = ENV.fetch('CRM_SERVICE_URL')
     config.x.gitis.channel_creation = ENV.fetch('CRM_CHANNEL_CREATION')
     config.x.gitis.country_id = ENV.fetch('CRM_COUNTRY_ID')

@@ -181,7 +181,6 @@ Rails.application.configure do
 
   config.x.gitis.auth_client_id = nil
   config.x.gitis.auth_secret = nil
-  config.x.gitis.auth_tenant_id = nil
   config.x.gitis.service_url = nil
   config.x.gitis.channel_creation = '0'
   config.x.gitis.country_id = SecureRandom.uuid
