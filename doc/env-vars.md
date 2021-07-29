@@ -32,8 +32,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 ## Gitis configuration
 
-`CRM_CLIENT_ID` - Authentication ID for Active Directory tenant controlling access to Dynamics instance
-
 `CRM_PRIVACY_POLICY_ID` - GUID for the privacy policy used by candidates - supplied by Gitis team
 
 `CRM_PRIVACY_CONSENT_ID` - GUID for the privacy policy consent id used by candidates - supplied by Gitis team
