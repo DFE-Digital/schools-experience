@@ -5,7 +5,7 @@ provider "cloudfoundry" {
 }
 
 provider "statuscake" {
-  username = local.infrastructure_secrets.SC-USERNAME 
+  username = local.infrastructure_secrets.SC-USERNAME
   apikey   = local.infrastructure_secrets.SC-PASSWORD
 }
 

@@ -14,6 +14,6 @@ data "azurerm_key_vault_secret" "infrastructure" {
 }
 
 locals {
-  application_secrets = yamldecode(data.azurerm_key_vault_secret.application.value)
+  application_secrets    = yamldecode(data.azurerm_key_vault_secret.application.value)
   infrastructure_secrets = yamldecode(data.azurerm_key_vault_secret.infrastructure.value)
 }
