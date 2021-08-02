@@ -73,6 +73,10 @@ variable "redis_1_plan" {
   default = "small-ha-5_x"
 }
 
+variable "delayed_jobs" {
+  default = 0
+}
+
 variable "redis_service_key" {
   default = "redis_service_key"
 }
@@ -94,6 +98,6 @@ variable "paas_docker_image" {
 }
 
 variable "alerts" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }
