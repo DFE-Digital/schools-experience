@@ -7,7 +7,7 @@
     "core-js": "^3.16.0",
     "custom-event-polyfill": "^1.0.7",
     "govuk-frontend": "^3.13.0",
-    "js-cookie": "^2.2.1",
+    "js-cookie": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
     "stimulus": "^2.0",
     "webpack": "^4.46.0"
