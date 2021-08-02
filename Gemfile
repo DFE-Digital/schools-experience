@@ -42,7 +42,7 @@ gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 gem 'daemons'
 
-gem "redis", "~> 4.3"
+gem "redis", "~> 4.4"
 
 gem 'kaminari'
 
