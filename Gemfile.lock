@@ -110,7 +110,7 @@ GEM
     attr_required (1.0.1)
     bindata (2.4.10)
     bindex (0.8.1)
-    bootsnap (1.7.6)
+    bootsnap (1.7.7)
       msgpack (~> 1.0)
     brakeman (5.1.1)
     breasal (0.0.1)
@@ -209,7 +209,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faraday (1.5.1)
+    faraday (1.6.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -217,6 +217,7 @@ GEM
       faraday-net_http (~> 1.0)
       faraday-net_http_persistent (~> 1.1)
       faraday-patron (~> 1.0)
+      faraday-rack (~> 1.0)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords (>= 0.0.4)
     faraday-em_http (1.0.0)
@@ -230,6 +231,7 @@ GEM
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
+    faraday-rack (1.0.0)
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     faraday_middleware-circuit_breaker (0.4.1)
@@ -335,7 +337,7 @@ GEM
     pg_search (2.3.5)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
-    phonelib (0.6.51)
+    phonelib (0.6.52)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -345,7 +347,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.3.2)
+    puma (5.4.0)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -485,11 +487,11 @@ GEM
     sentry-rails (4.6.3)
       railties (>= 5.0)
       sentry-ruby-core (~> 4.6.0)
-    sentry-ruby (4.6.3)
+    sentry-ruby (4.6.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       faraday (>= 1.0)
-      sentry-ruby-core (= 4.6.3)
-    sentry-ruby-core (4.6.3)
+      sentry-ruby-core (= 4.6.4)
+    sentry-ruby-core (4.6.4)
       concurrent-ruby
       faraday
     shoulda-matchers (5.0.0)
@@ -620,7 +622,7 @@ DEPENDENCIES
   phonelib
   pry-byebug
   pry-rails
-  puma (~> 5.3)
+  puma (~> 5.4)
   rack-attack
   rack-rewrite
   rack-timeout
