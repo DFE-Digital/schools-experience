@@ -229,7 +229,7 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Run Cucumber Tests
-        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks cucumber --profile=${PROFILE} --format RspecSonarqubeFormatter --out /app/out/test-report.xml
+        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks cucumber --profile=${PROFILE} --format junit --out /app/out
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: continuous_integration
@@ -240,7 +240,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: cucumber_tests
-          path: ${{ github.workspace }}/out/test-report.xml
+          path: ${{ github.workspace }}/out
 
   selenium_cucumber_tests:
     name: Chrome Cucumber Tests
@@ -283,7 +283,7 @@ jobs:
                   -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
                   -e CUC_DRIVER \
                   -e APP_URL \
-                  school-experience cucumber -t @javascript  --profile=${PROFILE} --format RspecSonarqubeFormatter --out /app/out/test-report.xml
+                  school-experience cucumber -t @javascript  --profile=${PROFILE} --format junit --out /app/out/
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: selenium
@@ -298,7 +298,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: selenium_cucumber_tests
-          path: ${{ github.workspace }}/out/test-report.xml
+          path: ${{ github.workspace }}/out
 
   sonarcloud:
     name: SonarCloud
