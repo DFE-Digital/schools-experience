@@ -11,8 +11,8 @@ FactoryBot.define do
     association :candidate
 
     after :build do |placement_request|
-      placement_request.subject_first_choice = placement_request.school.subjects.first.name
-      placement_request.subject_second_choice = placement_request.school.subjects.second&.name || "I don't have a second subject"
+      placement_request.subject_first_choice = placement_request.available_subject_choices.first
+      placement_request.subject_second_choice = placement_request.available_subject_choices&.second || "I don't have a second subject"
       placement_request.urn = placement_request.school.urn
     end
 
@@ -76,8 +76,8 @@ FactoryBot.define do
           :bookings_booking,
           :accepted,
           :with_existing_subject,
+          :accepted,
           bookings_school: placement_request.school,
-          bookings_subject: placement_request.school.subjects.first,
           bookings_placement_request: placement_request,
           bookings_placement_request_id: placement_request.id
       end

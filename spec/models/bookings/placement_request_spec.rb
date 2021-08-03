@@ -177,7 +177,7 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '.requiring_attention' do
+  context 'complex scopes' do
     let :school do
       create :bookings_school, :with_subjects
     end
@@ -207,14 +207,43 @@ describe Bookings::PlacementRequest, type: :model do
       create :placement_request, school: create(:bookings_school, :with_subjects)
     end
 
-    subject { school.placement_requests.requiring_attention }
+    context '.requiring_attention' do
+      subject { school.placement_requests.requiring_attention }
 
-    it { is_expected.to     include request_pending_decision }
-    it { is_expected.to     include request_with_unviewed_candidate_cancellation }
-    it { is_expected.not_to include request_with_viewed_candidate_cancellation }
-    it { is_expected.not_to include request_with_booking }
-    it { is_expected.not_to include request_with_school_cancellation }
-    it { is_expected.not_to include other_schools_request }
+      it { is_expected.to     include request_pending_decision }
+      it { is_expected.to     include request_with_unviewed_candidate_cancellation }
+      it { is_expected.not_to include request_with_viewed_candidate_cancellation }
+      it { is_expected.not_to include request_with_booking }
+      it { is_expected.not_to include request_with_school_cancellation }
+      it { is_expected.not_to include other_schools_request }
+    end
+
+    context '.requiring_attention_including_attendance' do
+      let! :request_with_past_booking_without_attendance do
+        create :placement_request, :booked, school: school do |pr|
+          pr.booking.update_columns date: Date.yesterday
+        end
+      end
+
+      let! :request_with_past_booking_with_attendance do
+        create :placement_request, :booked, school: school do |pr|
+          pr.booking.update_columns \
+            date: Date.yesterday,
+            attended: false
+        end
+      end
+
+      subject { school.placement_requests.requiring_attention_including_attendance }
+
+      it { is_expected.to     include request_pending_decision }
+      it { is_expected.to     include request_with_unviewed_candidate_cancellation }
+      it { is_expected.not_to include request_with_viewed_candidate_cancellation }
+      it { is_expected.not_to include request_with_booking }
+      it { is_expected.not_to include request_with_school_cancellation }
+      it { is_expected.not_to include other_schools_request }
+      it { is_expected.to     include request_with_past_booking_without_attendance }
+      it { is_expected.not_to include request_with_past_booking_with_attendance }
+    end
   end
 
   context '.create_from_registration_session' do
