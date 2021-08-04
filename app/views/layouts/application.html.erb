@@ -20,9 +20,9 @@
   </head>
 
   <body class="govuk-template__body <%= 'testing' if Rails.env.test? || Rails.env.servertest? %>">
-    <script>
+    <%= javascript_tag nonce: true do -%>
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
-    </script>
+    <% end -%>
 
     <%= render partial: 'shared/application/cookie_banner' %>
 

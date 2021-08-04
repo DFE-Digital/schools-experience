@@ -52,11 +52,11 @@
   </div>
 </div>
 
-<script>
+<%= javascript_tag nonce: true do -%>
   window.onload = function() {
     descriptionTracker.element.addEventListener(
       'toggle',
       this.descriptionTracker.event
     );
   };
-</script>
+<% end -%>

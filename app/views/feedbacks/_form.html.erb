@@ -40,7 +40,7 @@
         </p>
       <% end %>
 
-      <%= invisible_captcha %>
+      <%= invisible_captcha nonce: true %>
 
       <%= f.submit 'Submit feedback' %>
     <% end %>

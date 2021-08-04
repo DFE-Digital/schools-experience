@@ -11,7 +11,7 @@ module Candidates::MapsHelper
     content_for :head do
       javascript_include_tag \
         "https://maps.googleapis.com/maps/api/js?key=#{map_api_key}&callback=mapsLoadedCallback",
-        defer: true, async: true
+        defer: true, async: true, nonce: true
     end
   end
 

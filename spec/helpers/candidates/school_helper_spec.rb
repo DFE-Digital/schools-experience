@@ -153,6 +153,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
 
   context '.school_location_map' do
     include Candidates::MapsHelper
+    include ActionController::Base::HelperMethods
 
     before do
       allow(Rails.application.config.x).to receive(:google_maps_key) { '12345' }
