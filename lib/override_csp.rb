@@ -9,7 +9,7 @@ class OverrideCsp
     [status, headers.merge('Content-Security-Policy' => @csp), body]
   end
 
-  private
+private
 
   def policy
     {
