@@ -1,3 +1,5 @@
+require 'override_csp'
+
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
@@ -28,7 +30,7 @@ Rails.application.routes.draw do
       Rails.env.development? || correct_password
     end
   end
-  mount flipper_app, at: "/flipper"
+  mount OverrideCsp.new(flipper_app, :flipper), at: '/flipper'
 
   get "/pages/:page", to: "pages#show"
 
