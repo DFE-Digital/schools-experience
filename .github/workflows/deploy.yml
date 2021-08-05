@@ -102,7 +102,7 @@ jobs:
              if [ "${{github.event.inputs.environment }}" == "Production" ]
              then
                  echo ::set-output name=control::$(echo "production" )
-                 echo ::set-output name=healthcheck::$(echo "${{env.PAAS_APPLICATION_NAME}}-prod" )
+                 echo ::set-output name=healthcheck::$(echo "${{env.PAAS_APPLICATION_NAME}}-production" )
                  echo ::set-output name=key::"schools-experience.production.terraform"
                  echo ::set-output name=docker_image::${{env.DOCKER_REPOSITORY}}:sha-${{ steps.sha.outputs.short}}
              fi
