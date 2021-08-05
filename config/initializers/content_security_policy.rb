@@ -37,6 +37,11 @@ Rails.application.config.content_security_policy do |policy|
   policy.script_src :self,
     "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
-    "https://az416426.vo.msecnd.net" # needed for App Insights
-  policy.style_src :self
+    "https://az416426.vo.msecnd.net", # needed for App Insights
+    "https://code.jquery.com/jquery-3.2.1.slim.min.js", # needed for Flipper UI
+    "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", # needed for Flipper UI
+    "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" # needed for Flipper UI
+  policy.style_src :self,
+    "'unsafe-inline'", # needed for Flipper UI
+    "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" # needed for Flipper UI
 end
