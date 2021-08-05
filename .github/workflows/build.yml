@@ -332,78 +332,45 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ steps.azSecret.outputs.SONAR-TOKEN }}
 
-  review:
-    name: Review Deployment Process
-    needs: [  sonarcloud  ]
-    if: github.ref != 'refs/heads/master'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2.3.4
-
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
-
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
-        with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK'
-
-      - name: Get reference Number
-        run: echo "Event Number - ${{github.event.number}}"
-
-      - name: Trigger Review Deployment
-        uses: benc-uk/workflow-dispatch@v1.1
-        with:
-          workflow: Deploy to PaaS
-          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          inputs: '{"environment": "Review", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}"  }'
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Wait for Deployment to Review
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-review
-        with:
-          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          checkName: Deploy Review
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Check if Review Deployment has returned with a failure
-        if: steps.wait-for-review.outputs.conclusion == 'failure'
-        run: exit 1
-
-      - name: Post sticky pull request comment
-        if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          message: Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
-
-      - name: Add Review Label
-        if: contains(github.event.pull_request.user.login, 'dependabot') == false
-        uses: actions-ecosystem/action-add-labels@v1.1.2
-        with:
-          github_token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          labels: Review
-
-  development:
-    name: Development Deployment
-    needs: [  sonarcloud ]
-    if: github.ref == 'refs/heads/master'
+  prepare:
+    name: Configure Matrix Deployments
+    needs: [ sonarcloud ]
     runs-on: ubuntu-latest
     outputs:
-      release_tag: ${{steps.tag_version.outputs.pr_number}}
-      release_sha: ${{github.sha }}
+      matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
+    steps:
+      - name: Set matrix environments (Push to master)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Development\" , \"Staging\",\"Production\"]}" >> $GITHUB_ENV
+
+      - name: Set matrix environments ( Review)
+        if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
+        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Review\"]}" >> $GITHUB_ENV
+
+  deployments:
+    name: Deployments
+    strategy:
+      max-parallel: 1
+      matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
+    needs: [ prepare ]
+    runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2.3.4
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - name: Set environment variable
+        run: |
+           REFERENCE=${{github.ref}}   
+           echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
+
+      - name: Set Review specific variables
+        if: matrix.environment == 'Review' 
+        run: |
+           REFERENCE=${{github.event.pull_request.head.ref}}   
+           echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
 
       - uses: Azure/login@v1
         with:
@@ -415,35 +382,49 @@ jobs:
            keyvault: ${{ secrets.KEY_VAULT}}
            secrets: 'SLACK-WEBHOOK, ACTIONS-API-ACCESS-TOKEN'
 
-      - name: Trigger Development Deployment
+      - name: Trigger Deployment to ${{matrix.environment}}
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Deploy to PaaS
           token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          inputs: '{"environment": "Development", "sha": "${{ github.sha }}"}'
-          ref: ${{github.ref}}
+          inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}" }'
+          ref: ${{env.REFERENCE}}
 
-      - name: Wait for Deployment to Development
+      - name: Wait for Deployment to ${{matrix.environment}}
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: wait-for-deploy
         with:
           token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          checkName: Deploy Development
-          ref: ${{github.ref}}
+          checkName: Deploy Test
+          ref: ${{env.REFERENCE}}
 
-      - name: Check if Development Deployment has returned with a failure
+      - name: Check if ${{matrix.environment}} Deployment has returned with a failure
         if: steps.wait-for-deploy.outputs.conclusion == 'failure'
         run: exit 1
 
+      - name: Post sticky pull request comment
+        if: matrix.environment == 'Review' 
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
+
+      - name: Add Review Label
+        if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
+        uses: actions-ecosystem/action-add-labels@v1.1.2
+        with:
+          github_token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          labels: Review
+
       - name: Generate Tag from PR Number
+        if: matrix.environment == 'Development' 
         id: tag_version
         uses: DFE-Digital/github-actions/GenerateReleaseFromSHA@master
         with:
           sha: ${{github.sha}}
 
       - name: Create a GitHub Release
+        if: matrix.environment == 'Development' && steps.tag_version.outputs.pr_found == 1
         id: release
-        if: steps.tag_version.outputs.pr_found == 1
         uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -455,17 +436,27 @@ jobs:
           prerelease: false
 
       - name: Copy PR Info to Release
-        if: steps.release.outputs.id
+        if: matrix.environment  == 'Development' && steps.release.outputs.id
         uses: DFE-Digital/github-actions/CopyPRtoRelease@master
         with:
           PR_NUMBER:  ${{ steps.tag_version.outputs.pr_number }}
           RELEASE_ID: ${{ steps.release.outputs.id }}
           TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Slack Notification
+        if: failure() && matrix.environment == 'Production' 
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_ERROR}}
+          SLACK_TITLE: Failure in Post-Development Deploy
+          SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
+          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
+
   owasp:
     name: 'OWASP Test'
     runs-on: ubuntu-latest
-    needs: [  development  ]
-    environment: Development
+    needs: [  deployments  ]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
@@ -510,53 +501,5 @@ jobs:
            SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
            SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
            SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
-  staging:
-    name: Staging Deployment
-    needs: [ development ]
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2.3.4
 
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
 
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
-        with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'SLACK-WEBHOOK, ACTIONS-API-ACCESS-TOKEN'
-
-      - name: Trigger Deployment to Staging
-        uses: benc-uk/workflow-dispatch@v1.1
-        with:
-          workflow: Deploy to PaaS
-          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          inputs: '{"environment": "Staging", "sha": "${{ github.sha }}" }'
-          ref: ${{github.ref}}
-
-      - name: Wait for Deployment to Staging
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-deploy
-        with:
-          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          checkName: Deploy Test
-          ref: ${{github.ref}}
-
-      - name: Check if Staging Deployment has returned with a failure
-        if: steps.wait-for-deploy.outputs.conclusion == 'failure'
-        run: exit 1
-
-      - name: Slack Notification
-        if: failure()
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_ERROR}}
-          SLACK_TITLE: Failure in Post-Development Deploy
-          SLACK_MESSAGE: Failure with initialising Staging deployment for ${{env.APPLICATION}}
-          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
