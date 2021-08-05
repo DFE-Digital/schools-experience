@@ -29,6 +29,10 @@ variable "application_instances" {
   default = 1
 }
 
+variable "delayed_job_instances" {
+  default = 1
+}
+
 variable "application_stopped" {
   default = false
 }
@@ -70,7 +74,7 @@ variable "paas_redis_1_name" {
 }
 
 variable "redis_1_plan" {
-  default = "small-ha-5_x"
+  default = "micro-ha-5_x"
 }
 
 variable "delayed_jobs" {
