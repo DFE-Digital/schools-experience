@@ -56,7 +56,7 @@ resource "cloudfoundry_app" "delayed_jobs" {
   command           = "bundle exec rake jobs:work"
   docker_image      = var.paas_docker_image
   stopped           = var.application_stopped
-  instances         = var.application_instances
+  instances         = var.delayed_job_instances
   memory            = var.application_memory
   disk_quota        = var.application_disk
   strategy          = var.strategy
