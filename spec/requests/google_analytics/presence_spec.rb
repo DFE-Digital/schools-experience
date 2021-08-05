@@ -6,7 +6,7 @@ describe "candidates/home/index.html.erb", type: :request do
 
   let(:ga_identifiers) do
     [
-      "<script src=\"https://www.google-analytics.com/analytics.js\" nonce=\"noncevalue\" async=\"async\"></script>",
+      '<script src="https://www.google-analytics.com/analytics.js" nonce="noncevalue" async="async"></script>',
       "ga('create', '#{tracking_id}', 'auto');"
     ]
   end
