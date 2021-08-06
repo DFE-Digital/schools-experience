@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::PlacementRequestsController, type: :request do
   include_context 'Stubbed candidates school'
-  include_context "api current privacy policy"
+  include_context "api latest privacy policy"
   include_context "api teaching subjects"
   include_context "api add classroom experience note"
 

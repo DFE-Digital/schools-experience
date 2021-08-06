@@ -6,7 +6,7 @@ class PagesController < ApplicationController
   end
 
   def privacy_policy
-    @policy_id = Rails.application.config.x.gitis.privacy_policy_id
+    @privacy_policy = GetIntoTeachingApiClient::PrivacyPoliciesApi.new.get_latest_privacy_policy.text
   end
 
   def schools_privacy_policy; end

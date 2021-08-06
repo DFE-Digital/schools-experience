@@ -117,7 +117,6 @@ Rails.application.configure do
   end
 
   config.x.gitis.fake_crm_uuid = ENV.fetch('FAKE_CRM_UUID', nil)
-  config.x.gitis.privacy_policy_id = ENV['CRM_PRIVACY_POLICY_ID'].presence || '8da7ae80-82f2-ea11-a815-000d3a44afcc'
   config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)

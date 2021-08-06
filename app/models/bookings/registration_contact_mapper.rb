@@ -79,11 +79,9 @@ module Bookings
   private
 
     def current_privacy_policy
-      policy_id = Rails.configuration.x.gitis.privacy_policy_id
-
       @current_privacy_policy ||= begin
         api = GetIntoTeachingApiClient::PrivacyPoliciesApi.new
-        api.get_privacy_policy(policy_id)
+        api.get_latest_privacy_policy
       end
     end
 

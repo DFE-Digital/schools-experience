@@ -32,8 +32,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 ## Gitis configuration
 
-`CRM_PRIVACY_POLICY_ID` - GUID for the privacy policy used by candidates - supplied by Gitis team
-
 `CRM_PRIVACY_CONSENT_ID` - GUID for the privacy policy consent id used by candidates - supplied by Gitis team
 
 `GIT_API_TOKEN` - API key for the GiT API
