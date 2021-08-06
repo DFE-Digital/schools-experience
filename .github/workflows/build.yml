@@ -395,11 +395,13 @@ jobs:
         id: wait-for-deploy
         with:
           token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          checkName: Deploy Test
+          checkName: Deploy ${{ github.sha }} to ${{ matrix.environment  }}
           ref: ${{env.REFERENCE}}
+          timeoutSeconds: 1200
+          intervalSeconds: 14  
 
       - name: Check if ${{matrix.environment}} Deployment has returned with a failure
-        if: steps.wait-for-deploy.outputs.conclusion == 'failure'
+        if: steps.wait-for-deploy.outputs.conclusion != 'success'
         run: exit 1
 
       - name: Post sticky pull request comment
