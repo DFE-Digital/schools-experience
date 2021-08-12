@@ -42,7 +42,7 @@ Given "I have completed the Candidate Requirements selection step" do
     Given I am on the 'candidate requirements selection' page
     And I check "They must apply or have applied to your or a partner school's teacher training course"
     And I check "They must live locally"
-    And I enter '7' into the 'Tell us within how many miles of your school. For example, 20 miles.' text area
+    And I enter '7' into the 'Tell us within how many miles of your school. For example, 20.' text area
     And I check 'Other'
     And I enter 'Some details' into the 'Provide details.' text area
     When I submit the form
