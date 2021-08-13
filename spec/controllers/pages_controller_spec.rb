@@ -2,31 +2,12 @@ require 'rails_helper'
 
 describe PagesController, type: :request do
   describe '#privacy_policy' do
-    context 'with known policy' do
-      before do
-        allow(Rails.application.config.x.gitis).to \
-          receive(:privacy_policy_id).and_return('d1adf2ad-e7c4-e911-a981-000d3a206976')
-
-        get privacy_policy_path
-      end
-
-      it { expect(response).to have_http_status(:success) }
-      it { expect(response).to render_template 'privacy_policy' }
-      it { expect(response).to render_template '_d1adf2ad-e7c4-e911-a981-000d3a206976' }
+    before do
+      get privacy_policy_path
     end
 
-    context 'with unknown policy' do
-      before do
-        allow(Rails.application.config.x.gitis).to \
-          receive(:privacy_policy_id).and_return(SecureRandom.uuid)
-      end
-
-      it "will raise an exception" do
-        expect {
-          get privacy_policy_path
-        }.to raise_exception(ActionView::Template::Error)
-      end
-    end
+    it { expect(response).to have_http_status(:success) }
+    it { expect(response).to render_template 'privacy_policy' }
   end
 
   describe 'maintenance mode' do

@@ -179,7 +179,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_admin_role_id = '66666666-5555-4444-3333-222222222222'
   config.x.dfe_sign_in_request_organisation_url = nil
 
-  config.x.gitis.privacy_policy_id = SecureRandom.uuid
   config.x.gitis.privacy_consent_id = '10'
 
   config.x.features = %i[

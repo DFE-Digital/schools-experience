@@ -11,7 +11,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
   end
 
   describe "#registration_to_contact" do
-    include_context "api current privacy policy"
+    include_context "api latest privacy policy"
     include_context "api teaching subjects"
 
     let(:registration) { build(:registration_session, :with_school) }

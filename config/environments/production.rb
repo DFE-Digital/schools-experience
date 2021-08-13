@@ -163,7 +163,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_api_school_change_enabled = ENV['DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_request_organisation_url = "https://services.signin.education.gov.uk/request-organisation/search"
 
-  config.x.gitis.privacy_policy_id = ENV['CRM_PRIVACY_POLICY_ID'].presence || '8da7ae80-82f2-ea11-a815-000d3a44afcc'
   config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
 
   config.x.features = %i[subject_specific_dates]

@@ -140,7 +140,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '.create_from_registration_session!' do
-    include_context "api current privacy policy"
+    include_context "api latest privacy policy"
 
     let(:registration) { build(:registration_session, :with_school) }
 
@@ -245,7 +245,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '#update_from_registration_session!' do
-    include_context "api current privacy policy"
+    include_context "api latest privacy policy"
     include_context "api sign up"
 
     let(:registration) { build(:registration_session, :with_school) }
