@@ -21,6 +21,8 @@ RSpec.describe Candidates::MapsHelper, type: :helper do
   end
 
   context '.ajax_map' do
+    include ActionController::Base::HelperMethods
+
     subject { ajax_map(@latitude, @longitude, mapsize: [300, 200], zoom: @zoom) }
 
     it "should include wrapping div" do

@@ -37,10 +37,10 @@ gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_buil
 gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
+gem 'daemons'
 gem 'delayed_cron_job'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
-gem 'daemons'
 
 gem "redis", "~> 4.4"
 
@@ -132,6 +132,6 @@ group :test do
 
   gem 'capybara-screenshot'
   gem 'flipper-active_support_cache_store'
+  gem 'simplecov', require: false
   gem 'webmock'
-  gem 'simplecov' , require: false
 end

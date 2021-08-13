@@ -6,13 +6,14 @@ describe "candidates/home/index.html.erb", type: :request do
 
   let(:ga_identifiers) do
     [
-      "<script async src='https://www.google-analytics.com/analytics.js'></script>",
+      '<script src="https://www.google-analytics.com/analytics.js" nonce="noncevalue" async="async"></script>',
       "ga('create', '#{tracking_id}', 'auto');"
     ]
   end
 
   context 'When GA_TRACKING_ID is present in the environment' do
     before do
+      allow_any_instance_of(ActionController::Base::HelperMethods).to receive(:content_security_policy_nonce).and_return('noncevalue')
       @orig_tracking_id = ENV[tracking_id_key]
       ENV[tracking_id_key] = tracking_id
     end
