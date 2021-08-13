@@ -27,11 +27,16 @@ Rails.application.config.content_security_policy_nonce_directives = %w[script-sr
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only
 # Rails.application.config.content_security_policy_report_only = true
 
+# Allow connections to webpack-dev-server
+if Rails.env.development?
+  connect_src = ['https://localhost:3035', 'wss://localhost:3035']
+end
+
 Rails.application.config.content_security_policy do |policy|
   policy.default_src :self
 
   policy.base_uri :self
-  policy.connect_src :self, "https://dc.services.visualstudio.com", "https://www.google-analytics.com"
+  policy.connect_src :self, "https://dc.services.visualstudio.com", "https://www.google-analytics.com", *connect_src
   policy.img_src :self, "https://www.google-analytics.com"
   policy.object_src :none
   policy.script_src :self,
