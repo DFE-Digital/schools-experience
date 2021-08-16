@@ -108,4 +108,29 @@ describe ApplicationHelper, type: :helper do
       it { expect(page_title).to eql('Page Title | DfE School Experience') }
     end
   end
+
+  describe "#site_header_path" do
+    let(:request) { double('request') }
+    let(:path) { double('path') }
+
+    before do
+      allow(request).to receive(:path).and_return(path)
+    end
+
+    context 'when in schools namespace' do
+      it 'returns the schools dashboard path' do
+        allow(path).to receive(:start_with?).with('/schools').and_return(true)
+
+        expect(site_header_path).to eql(schools_dashboard_path)
+      end
+    end
+
+    context 'when not in schools namespace' do
+      it 'returns the root path' do
+        allow(path).to receive(:start_with?).with('/schools').and_return(false)
+
+        expect(site_header_path).to eql(root_path)
+      end
+    end
+  end
 end
