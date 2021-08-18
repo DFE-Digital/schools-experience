@@ -48,7 +48,7 @@ module ApplicationHelper
   end
 
   def in_schools_namespace?
-    request.path.start_with?('/schools')
+    request.path.start_with?('/schools/')
   end
 
   def summary_row(key, value, change_path = nil, change_text = 'Change', id: nil, show_action: true)
