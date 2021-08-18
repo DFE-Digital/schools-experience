@@ -81,6 +81,11 @@
               <li class="govuk-footer__inline-list-item">
                 <%= link_to 'Accessibility statement', accessibility_statement_path, class: 'govuk-footer__link' %>
               </li>
+              <% if in_schools_namespace? %>
+                <li class="govuk-footer__inline-list-item">
+                  <%= link_to 'Contact us', schools_contact_us_path, class: 'govuk-footer__link' %>
+                </li>
+              <% end %>
             </ul>
 
             <svg role="presentation" focusable="false" class="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 483.2 195.7" height="17" width="41">
