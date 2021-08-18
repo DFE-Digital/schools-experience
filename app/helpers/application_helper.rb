@@ -112,6 +112,14 @@ module ApplicationHelper
     end
   end
 
+  def site_header_path
+    if in_schools_namespace?
+      schools_dashboard_path
+    else
+      root_path
+    end
+  end
+
 private
 
   def valid_user?(user)
