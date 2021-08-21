@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.4'
+gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -73,7 +73,7 @@ gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teachi
 # Ignore cloudfront IPs when getting customer IP address
 gem 'actionpack-cloudfront'
 
-gem 'invisible_captcha'
+gem 'invisible_captcha', '>= 2.0.0'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
