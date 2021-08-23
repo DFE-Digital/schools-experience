@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.4'
+gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 5.4'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
+gem 'webpacker', '>= 5.4.0'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -31,7 +31,7 @@ gem 'webpacker'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'dotenv-rails'
+gem 'dotenv-rails', '>= 2.7.6'
 
 gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
 gem 'notifications-ruby-client'
@@ -48,7 +48,7 @@ gem 'kaminari'
 
 gem 'phonelib'
 gem 'sentry-delayed_job'
-gem 'sentry-rails'
+gem 'sentry-rails', '>= 4.6.5'
 gem 'sentry-ruby'
 
 gem 'rack-attack'
@@ -71,9 +71,9 @@ gem 'flipper-ui'
 gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
 # Ignore cloudfront IPs when getting customer IP address
-gem 'actionpack-cloudfront'
+gem 'actionpack-cloudfront', '>= 1.1.0'
 
-gem 'invisible_captcha'
+gem 'invisible_captcha', '>= 2.0.0'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
@@ -89,9 +89,9 @@ group :development, :test do
   gem 'pry-rails'
 
   # Testing framework
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '>= 6.2.0'
   gem 'rspec_junit_formatter'
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec-rails', '~> 5.0', '>= 5.0.2'
   gem 'rspec-sonarqube-formatter'
 
   gem 'brakeman', '>= 4.4.0'
@@ -104,7 +104,7 @@ end
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '>= 3.0.5'
-  gem 'web-console'
+  gem 'web-console', '>= 4.1.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -123,10 +123,10 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 
-  gem 'cucumber-rails', require: false
+  gem 'cucumber-rails', '>= 2.4.0', require: false
   gem 'database_cleaner'
 
-  gem 'rails-controller-testing'
+  gem 'rails-controller-testing', '>= 1.0.5'
   gem "rspec-json_expectations", "~> 2.2"
   gem 'shoulda-matchers', '~> 5.0'
 
