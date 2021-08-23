@@ -7,9 +7,16 @@ module Candidates
 
       def create
         @background_check = BackgroundCheck.new background_check_params
+# binding.pry
         if @background_check.valid?
-          persist @background_check
-          redirect_to next_step_path
+
+          school = Bookings::School.find_by!(urn: params[:school_id])
+          if school.profile&.dbs_requires_check? && @background_check.has_dbs_check == false
+            render :rejected
+          else
+            persist @background_check
+            redirect_to next_step_path
+          end
         else
           render :new
         end
@@ -24,8 +31,13 @@ module Candidates
         @background_check.assign_attributes background_check_params
 
         if @background_check.valid?
-          persist @background_check
-          redirect_to candidates_school_registrations_application_preview_path
+          school = Bookings::School.find_by!(urn: params[:school_id])
+          if school.profile&.dbs_requires_check? && @background_check.has_dbs_check == false
+            render :rejected
+          else
+            persist @background_check
+            redirect_to candidates_school_registrations_application_preview_path
+          end
         else
           render :edit
         end

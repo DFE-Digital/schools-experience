@@ -102,6 +102,10 @@ class Bookings::Profile < ApplicationRecord
     dbs_policy_conditions.nil?
   end
 
+  def dbs_requires_check?
+    dbs_policy_conditions != 'notrequired'
+  end
+
 private
 
   def at_least_one_phase
@@ -138,9 +142,5 @@ private
 
   def other_fee_assigned
     other_fee_amount_pounds && other_fee_amount_pounds.to_f.positive?
-  end
-
-  def dbs_requires_check?
-    dbs_policy_conditions != 'notrequired'
   end
 end
