@@ -14,11 +14,11 @@ Request school experience at other schools - ((school_search_url))
 
 # Arrange independent experience
 
-If you can’t find anything in your area you can arrange school experience independently by contacting schools direct - https://getintoteaching.education.gov.uk/school-experience/arranging-school-experience-independently
+If you can’t find anything in your area you can arrange school experience independently by contacting schools direct - https://getintoteaching.education.gov.uk/steps-to-become-a-teacher
 
 # Help and support
 
 Use our Get Into Teaching service by calling 0800 389 2500 (8am to 8pm, Mon to Fri) or by visiting https://getintoteaching.education.gov.uk/ to:
 
 * receive free one-to-one support and advice and get all your questions about teaching answered by our team of trained professionals
-* reserve your place on one of our free nationwide teaching events - https://getintoteaching.education.gov.uk/teaching-events
+* reserve your place on one of our free nationwide teaching events - https://getintoteaching.education.gov.uk/events
