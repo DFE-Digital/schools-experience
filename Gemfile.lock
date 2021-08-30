@@ -238,7 +238,7 @@ GEM
       faraday (>= 0.9, < 2.0)
       stoplight (~> 2.1)
     ffi (1.15.3)
-    flipper (0.22.0)
+    flipper (0.22.1)
     flipper-active_support_cache_store (0.22.0)
       activesupport (>= 4.2, < 7)
       flipper (~> 0.22.0)
