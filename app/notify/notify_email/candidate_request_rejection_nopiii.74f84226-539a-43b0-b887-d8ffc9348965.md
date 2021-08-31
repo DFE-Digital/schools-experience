@@ -14,7 +14,7 @@ Request school experience at other schools - ((school_search_url))
 
 # Arrange independent experience
 
-If you can’t find anything in your area you can arrange school experience independently by contacting schools direct - https://getintoteaching.education.gov.uk/steps-to-become-a-teacher
+If you can’t find anything in your area you can arrange school experience independently by contacting schools direct - https://getintoteaching.education.gov.uk/get-school-experience
 
 # Help and support
 
