@@ -154,6 +154,6 @@ end
 
 Then("there should be a link to Get into teaching") do
   within('#results li.expanded-search-radius') do
-    expect(page).to have_link("Get into teaching", href: 'https://getintoteaching.education.gov.uk/school-experience/arranging-school-experience-independently')
+    expect(page).to have_link("Get into teaching", href: 'https://getintoteaching.education.gov.uk/get-school-experience')
   end
 end
