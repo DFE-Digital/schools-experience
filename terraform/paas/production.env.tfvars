@@ -7,8 +7,8 @@ application_instances     = 2
 delayed_jobs              = 1
 environment               = "production"
 application_environment   = "dfe-school-experience-production"
-azure_key_vault           = "s105t01-kv"
-azure_resource_group      = "s105t01-staging-vault-resource-group"
+azure_key_vault           = "s105p01-kv"
+azure_resource_group      = "s105p01-prod-vault-resource-group"
 database_plan             = "small-ha-11"
 redis_1_plan              = "micro-ha-5_x"
 
