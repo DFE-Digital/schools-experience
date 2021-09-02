@@ -33,8 +33,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'dotenv-rails', '>= 2.7.6'
 
-gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
 gem 'govuk_design_system_formbuilder', '~> 2.7', '>= 2.7.2'
+gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
 gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
