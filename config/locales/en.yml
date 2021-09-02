@@ -133,6 +133,15 @@ en:
   activemodel:
     errors:
       models:
+        schools/csv_form:
+          attributes:
+            from_date:
+              blank: "You must specify a start date"
+              on_or_before: "From date must be the same or earlier than the To date"
+            to_date:
+              blank: "You must specify an end date"
+              on_or_after: "To date must be the same or later than the From date"
+
         candidates/registrations/subject_preference:
           <<: *subject_preference_errors
 
@@ -893,6 +902,10 @@ en:
         phases_filter_html: "Education phases: %{phase_names}"
         subjects_filter_html: "Placement subjects: %{subject_names}"
 
+    legend:
+      schools_csv_form:
+        from_date: "From date"
+        to_date: "To date"
   views:
     pagination:
       next: Next

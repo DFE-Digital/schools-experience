@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Schools::CsvExport do
+  let(:dates_range) { (Date.yesterday.beginning_of_day..Date.today.end_of_day) }
+
   describe ".column" do
     described_class::HEADER.each_with_index do |col, index|
       context "with #{col}" do
@@ -12,7 +14,7 @@ RSpec.describe Schools::CsvExport do
   end
 
   describe "#filename" do
-    subject { described_class.new(school).filename }
+    subject { described_class.new(school, dates_range).filename }
 
     let(:school) { create :bookings_school }
     let(:urn) { school.urn }
@@ -25,7 +27,7 @@ RSpec.describe Schools::CsvExport do
     subject { parsed_csv }
 
     let(:school) { create :bookings_school }
-    let(:generated_csv) { described_class.new(school).export }
+    let(:generated_csv) { described_class.new(school, dates_range).export }
     let(:parsed_csv) { CSV.new(generated_csv).read }
 
     describe "header rows" do
