@@ -1,5 +1,9 @@
 require 'rails_helper'
 
+class StubModel
+  include ActiveModel::Model
+end
+
 describe ApplicationHelper, type: :helper do
   let(:given_name) { 'Martin' }
   let(:family_name) { 'Prince' }
@@ -131,6 +135,15 @@ describe ApplicationHelper, type: :helper do
 
         expect(site_header_path).to eql(root_path)
       end
+    end
+  end
+
+  describe "#govuk_form_for" do
+    it "renders a form with GOV.UK form builder" do
+      expect(govuk_form_for(StubModel.new, url: "http://test.com") {}).to eq(
+        "<form class=\"new_stub_model\" id=\"new_stub_model\" novalidate=\"novalidate\" "\
+        "action=\"http://test.com\" accept-charset=\"UTF-8\" method=\"post\"></form>",
+      )
     end
   end
 end
