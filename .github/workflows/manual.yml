@@ -13,8 +13,6 @@ on:
 jobs:
   manual:
     name: Deploy to ${{github.event.inputs.environment}}
-    environment:
-       name: ${{github.event.inputs.environment}}
 
     runs-on: ubuntu-latest
     defaults:
