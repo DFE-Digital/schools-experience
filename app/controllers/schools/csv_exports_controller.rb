@@ -1,11 +1,11 @@
 module Schools
   class CsvExportsController < BaseController
     def show
-      @form = CsvForm.new
+      @form = CsvExportForm.new
     end
 
     def create
-      @form = CsvForm.new(export_params)
+      @form = CsvExportForm.new(export_params)
 
       if @form.valid?
         csv = CsvExport.new(current_school, @form.dates_range)
@@ -21,7 +21,7 @@ module Schools
   private
 
     def export_params
-      params.require(:schools_csv_form).permit(:from_date, :to_date)
+      params.require(:schools_csv_export_form).permit(:from_date, :to_date)
     end
   end
 end

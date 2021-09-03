@@ -22,7 +22,7 @@ describe Schools::CsvExportsController, type: :request do
 
     context "when a date rage is provided" do
       let(:params) do
-        { schools_csv_form: { from_date: Date.yesterday, to_date: Date.today } }
+        { schools_csv_export_form: { from_date: Date.yesterday, to_date: Date.today } }
       end
 
       it { is_expected.to have_http_status :success }
@@ -32,7 +32,7 @@ describe Schools::CsvExportsController, type: :request do
 
     context "when date rage is not provided" do
       let(:params) do
-        { schools_csv_form: { from_date: nil, to_date: nil } }
+        { schools_csv_export_form: { from_date: nil, to_date: nil } }
       end
 
       it { is_expected.to render_template "_form" }

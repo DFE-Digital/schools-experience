@@ -1,7 +1,6 @@
 require 'rails_helper'
 
-describe Schools::CsvForm, type: :model do
-
+describe Schools::CsvExportForm, type: :model do
   context "attributes" do
     it { is_expected.to respond_to :from_date }
     it { is_expected.to respond_to :to_date }
@@ -23,7 +22,7 @@ describe Schools::CsvForm, type: :model do
     subject { described_class.new(from_date: Date.yesterday, to_date: Date.today).dates_range }
 
     it "returns the range using beginning_of_day and end_of_day" do
-      expect(subject).to eq (Date.yesterday.beginning_of_day..Date.today.end_of_day)
+      expect(subject).to eq(Date.yesterday.beginning_of_day..Date.today.end_of_day)
     end
   end
 
@@ -36,8 +35,8 @@ describe Schools::CsvForm, type: :model do
 
     it "should have errors" do
       subject.valid?
-      expect(subject.errors.messages[:from_date]).to include "You must specify a start date"
-      expect(subject.errors.messages[:to_date]).to include "You must specify an end date"
+      expect(subject.errors.messages[:from_date]).to include "You must specify the From date"
+      expect(subject.errors.messages[:to_date]).to include "You must specify the To date"
     end
   end
 end

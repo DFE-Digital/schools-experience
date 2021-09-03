@@ -1,5 +1,5 @@
 module Schools
-  class CsvForm
+  class CsvExportForm
     include ActiveModel::Model
     include ActiveModel::Attributes
 
