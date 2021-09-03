@@ -1,0 +1,12 @@
+<%= govuk_form_for form, url: schools_csv_export_path do |f| %>
+  <%= f.govuk_error_summary %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <%= f.govuk_date_field :from_date %>
+    </div>
+    <div class="govuk-grid-column-one-half">
+      <%= f.govuk_date_field :to_date %>
+    </div>
+  </div>
+  <%= f.govuk_submit("Export CSV") %>
+<% end %>

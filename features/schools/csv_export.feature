@@ -18,5 +18,7 @@ Feature: CSV Export
         Given I am on the 'csv download' page
         Then the page's main header should be 'Download requests and bookings'
         And I should see a warning
-        And I click the 'Download CSV' button
+        And I fill in the govuk date field 'From date' with 02-01-2021
+        And I fill in the govuk date field 'To date' with 02-01-2021
+        And I click the 'Export CSV' button
         Then I should receive a CSV

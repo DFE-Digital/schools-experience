@@ -98,3 +98,6 @@ Style/DateTime:
 
 Rails/TimeZone:
   Enabled: false
+
+Rails/Date:
+  Enabled: false

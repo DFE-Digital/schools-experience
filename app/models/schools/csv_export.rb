@@ -23,8 +23,9 @@ module Schools
       HEADER.index(title)
     end
 
-    def initialize(school)
+    def initialize(school, dates_range)
       @school = school
+      @dates_range = dates_range
     end
 
     def export
@@ -59,7 +60,7 @@ module Schools
           :school_cancellation,
           :subject
         )
-        .where(created_at: start_of_academic_year..)
+        .where(created_at: @dates_range)
         .order(created_at: :desc)
     end
 
