@@ -176,7 +176,7 @@ GEM
       cucumber-core (~> 10.0, >= 10.0.1)
       cucumber-cucumber-expressions (~> 12.1, >= 12.1.1)
       cucumber-messages (~> 17.0, >= 17.0.1)
-    daemons (1.4.0)
+    daemons (1.4.1)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
