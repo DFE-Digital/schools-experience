@@ -255,7 +255,7 @@ GEM
     geocoder (1.6.7)
     globalid (0.5.2)
       activesupport (>= 5.0)
-    govuk_design_system_formbuilder (2.7.2)
+    govuk_design_system_formbuilder (2.7.3)
       actionview (>= 6.0)
       activemodel (>= 6.0)
       activesupport (>= 6.0)
@@ -315,12 +315,12 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.8)
-    nokogiri (1.12.3)
+    nokogiri (1.12.4)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    nokogiri (1.12.3-x86_64-darwin)
+    nokogiri (1.12.4-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.12.3-x86_64-linux)
+    nokogiri (1.12.4-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
@@ -400,7 +400,7 @@ GEM
       activesupport (>= 4.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.4.1)
+    rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
     railties (6.1.4.1)
       actionpack (= 6.1.4.1)
@@ -615,7 +615,7 @@ DEPENDENCIES
   foreman
   geocoder
   get_into_teaching_api_client_faraday!
-  govuk_design_system_formbuilder (~> 2.7, >= 2.7.2)
+  govuk_design_system_formbuilder (~> 2.7)
   govuk_elements_form_builder!
   invisible_captcha (>= 2.0.0)
   json (>= 2.3.0)
