@@ -7,11 +7,9 @@ module Candidates
 
       def create
         @background_check = BackgroundCheck.new background_check_params
-# binding.pry
-        if @background_check.valid?
 
-          school = Bookings::School.find_by!(urn: params[:school_id])
-          if school.profile&.dbs_requires_check? && @background_check.has_dbs_check == false
+        if @background_check.valid?
+          if auto_reject?
             render :rejected
           else
             persist @background_check
@@ -31,8 +29,7 @@ module Candidates
         @background_check.assign_attributes background_check_params
 
         if @background_check.valid?
-          school = Bookings::School.find_by!(urn: params[:school_id])
-          if school.profile&.dbs_requires_check? && @background_check.has_dbs_check == false
+          if auto_reject?
             render :rejected
           else
             persist @background_check
@@ -52,6 +49,12 @@ module Candidates
 
       def attributes_from_session
         current_registration.background_check_attributes.except 'created_at'
+      end
+
+      def auto_reject?
+        school = Bookings::School.find_by!(urn: params[:school_id])
+
+        RequestRejecter.new(school, @background_check, current_registration).rejected?
       end
     end
   end
