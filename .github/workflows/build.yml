@@ -181,12 +181,6 @@ jobs:
           image: ${{needs.build.outputs.DOCKER_IMAGE}}
           args: --severity-threshold=high --file=Dockerfile
 
-      - name: upload Anchore scan SARIF report
-        if: always()
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: snyk.sarif
-
       - name: Run Brakeman static security scanner
         run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman --no-pager
 
