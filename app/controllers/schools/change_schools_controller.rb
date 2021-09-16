@@ -13,6 +13,11 @@ module Schools
     end
 
     def create
+      if change_school_params[:change_to_urn] == "request access"
+        redirect_to schools_request_organisation_path
+        return
+      end
+
       @change_school = Schools::ChangeSchool.new \
         current_user, school_uuids(reload: true), change_school_params
 

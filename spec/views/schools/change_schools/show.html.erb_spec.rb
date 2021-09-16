@@ -97,9 +97,8 @@ describe 'schools/change_schools/show.html.erb', type: :view do
 
     before { render }
 
-    specify 'there should be an request access button' do
-      expect(rendered).to have_css "a.govuk-button.govuk-button--secondary",
-        text: 'Request access to a school'
+    specify 'there should be an request access option' do
+      expect(rendered).to have_css("input[type='radio'][value='request access']")
     end
   end
 end

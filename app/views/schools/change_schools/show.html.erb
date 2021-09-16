@@ -16,16 +16,20 @@
                 <% end %>
               </div>
             <% end %>
+            <% if Schools::ChangeSchool.request_approval_url %>
+              <div class= 'govuk-radios__divider'>or</div>
+              <div class="govuk-radios__item">
+                  <%= f.radio_button :change_to_urn, "request access", class: 'govuk-radios__input' %>
+
+                  <%= f.label :change_to_urn, class: 'govuk-label govuk-radios__label', value: "request access" do %>
+                    Request access to another school
+                  <% end %>
+              </div>
+            <% end %>
           <% end %>
 
-          <%= f.submit "Select school" %>
+          <%= f.submit "Continue" %>
         <% end %>
-
-        <%- if Schools::ChangeSchool.request_approval_url -%>
-          <p>
-            <%= govuk_link_to "Request access to a school", schools_request_organisation_path, secondary: true %>
-          </p>
-        <%- end -%>
       <% elsif Schools::ChangeSchool.request_approval_url %>
         <h1 class="govuk-heading-l">Manage school experience</h1>
 

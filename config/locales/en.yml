@@ -247,7 +247,7 @@ en:
         schools/change_school:
           attributes:
             change_to_urn:
-              blank: Select a school
+              blank: Select an option
               inclusion: Select a school from the list
 
         schools/on_boarding/dbs_requirement:
