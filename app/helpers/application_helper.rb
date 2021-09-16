@@ -88,7 +88,7 @@ module ApplicationHelper
   end
 
   def chat_service
-    link_to "online chat service", "https://ta-chat.education.gov.uk/chat/chatstart.aspx?domain=www.education.gov.uk&department=GetIntoTeaching%27,%27new_win%27,%27width=0,height=0%27);return&SID=0"
+    link_to "online chat service", "https://getintoteaching.education.gov.uk/#talk-to-us"
   end
 
   def feedback_path
