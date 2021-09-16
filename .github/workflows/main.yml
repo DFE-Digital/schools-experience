@@ -1,0 +1,14 @@
+name: DO NOT MERGE
+
+on:
+  pull_request:
+    types: [ labeled ]
+
+jobs:
+  build:
+    if: ${{ github.event.label.name == 'do not merge' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Raise an Error
+        run: exit 1
