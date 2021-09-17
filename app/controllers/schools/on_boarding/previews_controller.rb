@@ -11,7 +11,6 @@ module Schools
 
       def show
         @school = current_school_profile.bookings_school
-        @confirmation = Confirmation.new
         @presenter = PreviewPresenter.new current_school_profile
       end
     end

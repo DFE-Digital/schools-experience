@@ -14,8 +14,8 @@ module Schools
           redirect_to schools_on_boarding_confirmation_path
         else
           @school = current_school_profile.bookings_school
-          @presenter = PreviewPresenter.new current_school_profile
-          render 'schools/on_boarding/previews/show'
+          @profile = SchoolProfilePresenter.new(current_school_profile)
+          render 'schools/on_boarding/profiles/show'
         end
       end
 

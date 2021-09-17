@@ -28,7 +28,7 @@ Feature: Preview profile
             | Access needs policy              |                           |
             | Experience Outline               |                           |
             | Admin contact                    |                           |
-        When I click the 'Continue' button
+        When I click the 'Preview profile' button
 
     Scenario: Page contents
         Then I should see the correctly-formatted school placement information I entered in the wizard
