@@ -13,4 +13,26 @@
     <%= govuk_link_to "Request access to a school",
           Schools::ChangeSchool.request_approval_url %>
   </p>
+
+  <details class="govuk-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+    If you receive an error saying "You are already linked to this organisation"
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    This error means you have been associated with this school on DfE Sign In, but you need to have School Experience added to your account by an approver.
+
+    You can request this on DfE Sign In in the 'Services' section.
+
+    <p>
+    # Comment for Leo: I need this to link to the 'Add services to my account' part of DfE Sign in (link on Pre-prod is https://pp-services.signin.education.gov.uk/approvals/select-organisation?services=add)
+    Request access to School Experience.
+
+    </p>
+  </div>
+</details>
+
+
+
 </section>
