@@ -10,27 +10,27 @@
       <%= f.hidden_field :referrer %>
 
       <%= f.govuk_radio_buttons_fieldset :reason_for_using_service do %>
-        <% @feedback.reasons_for_using_service.each do |option| %>
+        <% @feedback.reasons_for_using_service.each_with_index do |option, i| %>
           <% if f.object.requires_explanation? option %>
-            <%= f.govuk_radio_button :reason_for_using_service, option, link_errors: true do %>
+            <%= f.govuk_radio_button :reason_for_using_service, option, link_errors: i.zero? do %>
               <%= f.govuk_text_area :reason_for_using_service_explanation %>
             <% end %>
           <% else %>
-            <%= f.govuk_radio_button :reason_for_using_service, option, link_errors: true %>
+            <%= f.govuk_radio_button :reason_for_using_service, option, link_errors: i.zero? %>
           <% end %>
         <% end %>
       <% end %>
 
       <%= f.govuk_radio_buttons_fieldset :successful_visit do %>
         <%= f.govuk_radio_button :successful_visit, 'true', link_errors: true %>
-        <%= f.govuk_radio_button :successful_visit, 'false', link_errors: true do %>
+        <%= f.govuk_radio_button :successful_visit, 'false' do %>
           <%= f.govuk_text_area :unsuccessful_visit_explanation %>
         <% end %>
       <% end %>
 
       <%= f.govuk_radio_buttons_fieldset :rating do %>
-        <% f.object.ratings.each do |option| %>
-          <%= f.govuk_radio_button :rating, option, link_errors: true %>
+        <% f.object.ratings.each_with_index do |option, i| %>
+          <%= f.govuk_radio_button :rating, option, link_errors: i.zero? %>
         <% end %>
       <% end %>
 
