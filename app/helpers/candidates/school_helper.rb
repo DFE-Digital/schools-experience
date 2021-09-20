@@ -80,7 +80,7 @@ module Candidates::SchoolHelper
       zoom: zoom,
       mapsize: [628, 420],
       title: school.name,
-      description: format_school_address(school, tag(:br)),
+      description: format_school_address(school, tag.br),
       described_by: described_by
     )
   end
