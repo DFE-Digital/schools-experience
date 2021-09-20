@@ -111,7 +111,7 @@ en:
       unsuccessful_visit_explanation:
         blank: 'Provide details'
 
-  feedback_fieldset: &feedback_fieldset
+  feedback_legend: &feedback_legend
     reason_for_using_service: What did you come to do on the service?
     rating: Overall, how did you feel about the service you received?
     successful_visit: 'Did you achieve what you wanted from your visit?'
@@ -120,10 +120,10 @@ en:
     improvements: How could we improve the service? (optional)
     reason_for_using_service_explanation: 'Tell us what you came here to do. Do not include any information that could identify you personally - such as your name'
     unsuccessful_visit_explanation: 'Give details'
-    successful_visit:
+    successful_visit_options:
       true: 'Yes'
       false: 'No'
-    rating:
+    rating_options:
       very_satisfied: 'Very satisfied'
       satisfied: 'Satisfied'
       neither_satisfied_or_dissatisfied: 'Neither satisfied or dissatisfied'
@@ -589,11 +589,6 @@ en:
       schools_placement_dates_subject_selection:
         subject_ids: Select school experience subjects
 
-      candidates_feedback:
-        <<: *feedback_fieldset
-      schools_feedback:
-        <<: *feedback_fieldset
-
     hint:
       schools_placement_requests_confirm_booking:
         placement_details: You can add extra experience details
@@ -875,14 +870,23 @@ en:
 
       candidates_feedback:
         <<: *feedback_label
-        reason_for_using_service:
+        reason_for_using_service_options:
           make_a_school_experience_request: 'Make a school experience request'
           withdraw_request_or_cancel_booking: 'Withdraw a request or cancel a booking'
           something_else: 'Something else'
+        successful_visit_options:
+          true: 'Yes'
+          false: 'No'
+        rating_options:
+          very_satisfied: 'Very satisfied'
+          satisfied: 'Satisfied'
+          neither_satisfied_or_dissatisfied: 'Neither satisfied or dissatisfied'
+          dissatisfied: 'Dissatisfied'
+          very_dissatisfied: 'Very dissatisfied'
 
       schools_feedback:
         <<: *feedback_label
-        reason_for_using_service:
+        reason_for_using_service_options:
           set_up_new_school: 'Set up a new school or schools on the service'
           manage_school_experience_requests_and_bookings: 'Manage your school experience requests and bookings'
           set_up_new_school_experience: 'Set up new School Experience Day(s)'
@@ -906,6 +910,11 @@ en:
       schools_csv_export_form:
         from_date: "From date"
         to_date: "To date"
+      candidates_feedback:
+        <<: *feedback_legend
+      schools_feedback:
+        <<: *feedback_legend
+
   views:
     pagination:
       next: Next
