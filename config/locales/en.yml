@@ -732,7 +732,7 @@ en:
       candidates_verification_code:
         code: Enter your verification code here
       cookie_preference:
-        analytics:
+        analytics_options:
           true: "On"
           false: "Off"
       query: Find what?
