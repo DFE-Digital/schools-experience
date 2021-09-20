@@ -353,7 +353,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.4.0)
+    puma (5.5.0)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -629,7 +629,7 @@ DEPENDENCIES
   phonelib
   pry-byebug
   pry-rails
-  puma (~> 5.4)
+  puma (~> 5.5)
   rack-attack
   rack-rewrite
   rack-timeout
