@@ -8,7 +8,6 @@ locals {
     SKIP_FORCE_SSL      = true,
     SENTRY_CURRENT_ENV  = var.application_environment,
     SLACK_ENV           = var.application_environment,
-    DFE_SIGNIN_BASE_URL = "https://${cloudfoundry_route.route_cloud.endpoint}"
   }
 }
 
