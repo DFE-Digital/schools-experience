@@ -481,7 +481,7 @@ jobs:
              echo "replacer.full_list(0).replacement=Basic ${BASE}"   >> ./options.prop
 
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.4.0
+        uses: zaproxy/action-baseline@v0.5.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
