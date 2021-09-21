@@ -8,6 +8,7 @@ module Schools
       end
 
       def show
+        @confirmation = Confirmation.new
         @profile = SchoolProfilePresenter.new(current_school_profile)
       end
     end

@@ -70,19 +70,17 @@ Feature: School Profile
       | Secondary email address                    | s.skinner@springfield.edu                                                                                                                                                                                                                                   |
 
   Scenario: Publishing without accepting the privacy policy
-      Given I click the 'Continue' button
-      When I click the 'Accept and set up profile' button
+      Given I click the 'Accept and set up profile' button
       Then I should see an error
 
   Scenario: Publishing with accepting the privacy policy
-      Given I click the 'Continue' button
-      And I check the 'By checking this box and setting up your school experience profile' checkbox
+      Given I check the 'By checking this box and setting up your school experience profile' checkbox
       When I click the 'Accept and set up profile' button
       Then the page title should be "You've successfully set up your school experience profile"
 
   @smoke_test
   Scenario: Publishing with accepting the privacy policy
-      Given I click the 'Continue' button
+      Given I click the 'Accept and set up profile' button
       And I check the 'By checking this box and setting up your school experience profile' checkbox
       And I click the 'Accept and set up profile' button
       When I am on the profile page for the school
