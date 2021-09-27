@@ -7,9 +7,14 @@ module Candidates
 
       def create
         @background_check = BackgroundCheck.new background_check_params
+
         if @background_check.valid?
-          persist @background_check
-          redirect_to next_step_path
+          if dbs_requirements_met?
+            persist @background_check
+            redirect_to next_step_path
+          else
+            render :unmet_requirements
+          end
         else
           render :new
         end
@@ -24,8 +29,12 @@ module Candidates
         @background_check.assign_attributes background_check_params
 
         if @background_check.valid?
-          persist @background_check
-          redirect_to candidates_school_registrations_application_preview_path
+          if dbs_requirements_met?
+            persist @background_check
+            redirect_to candidates_school_registrations_application_preview_path
+          else
+            render :unmet_requirements
+          end
         else
           render :edit
         end
@@ -40,6 +49,12 @@ module Candidates
 
       def attributes_from_session
         current_registration.background_check_attributes.except 'created_at'
+      end
+
+      def dbs_requirements_met?
+        school = Bookings::School.find_by!(urn: params[:school_id])
+
+        DbsRequirmentsChecker.new(school, @background_check, current_registration).requirements_met?
       end
     end
   end

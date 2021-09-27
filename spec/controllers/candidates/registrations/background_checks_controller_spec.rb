@@ -182,17 +182,34 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
 
       context 'valid' do
         let :background_check do
-          FactoryBot.build :background_check, has_dbs_check: false
+          FactoryBot.build :background_check, has_dbs_check: has_dbs_check
         end
 
-        it 'updates the session with the new details' do
-          expect(registration_session.background_check).to \
-            eq_model background_check
+        context 'with met dbs requirements' do
+          let(:has_dbs_check) { true }
+
+          it 'updates the session with the new details' do
+            expect(registration_session.background_check).to \
+              eq_model background_check
+          end
+
+          it 'redirects to the application preview' do
+            expect(response).to redirect_to \
+              '/candidates/schools/11048/registrations/application_preview'
+          end
         end
 
-        it 'redirects to the application preview' do
-          expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/application_preview'
+        context 'with unmet dbs requirements' do
+          let(:has_dbs_check) { false }
+
+          it 'updates the session with the new details' do
+            expect(registration_session.background_check).not_to \
+              eq_model background_check
+          end
+
+          it 'redirects to the application preview' do
+            expect(response).to render_template :unmet_requirements
+          end
         end
       end
     end
