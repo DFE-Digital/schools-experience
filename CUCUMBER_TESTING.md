@@ -71,3 +71,4 @@ Note that the command above has restricted the profiling to a single feature. Th
 
 ## To shut down the Selenium enabled environment
 `docker-compose -f docker-compose.yml -f docker-compose-chrome.yml -f docker-compose-firefox.yml down`
+
