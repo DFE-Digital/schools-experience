@@ -48,7 +48,7 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
-            | Change dates and how they're displayed | None | /schools/availability_preference/edit |
+            | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
 
     Scenario: Adding, removing and changing dates visible when fixed and dates present
         Given my school has fully-onboarded
@@ -57,7 +57,7 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
-            | Change dates and how they're displayed | None | /schools/availability_preference/edit |
+            | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
             | Add, remove and change dates           | None | /schools/placement_dates              |
 
     Scenario: Adding, removing and changing dates not visible when not fixed and dates not present
@@ -66,7 +66,7 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
-            | Change dates and how they're displayed | None | /schools/availability_preference/edit |
+            | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
             | Add, remove and change dates           | None | /schools/placement_dates              |
 
 
