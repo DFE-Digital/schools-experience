@@ -40,7 +40,7 @@ Feature: The School Dashboard
         Then I should see the following 'high-priority' links:
             | Text            | Hint                                           | Path                        |
             | Manage requests | Accept, reject or revisit outstanding requests | /schools/placement_requests |
-            | Manage bookings | View, change or cancel bookings                | /schools/bookings           |
+            | Manage upcoming bookings | View, change or cancel bookings                | /schools/bookings           |
 
     Scenario: Manage dates
         Given my school has fully-onboarded
