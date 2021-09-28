@@ -29,9 +29,9 @@
 
   <div id="withdrawn-requests" class="subsection">
     <header class="dashboard-high-priority">
-      <%= link_to "Withdrawn requests", schools_withdrawn_requests_path  %>
+      <%= link_to "View withdrawn requests", schools_withdrawn_requests_path  %>
       <%= numbered_circle(@withdrawn_requests, id: 'withdrawn-requests-counter', aria_label: 'requests withdrawn by candidate') %>
     </header>
-    <p class="govuk-hint">A candidate has cancelled their request</p>
+    <p class="govuk-hint">View details of withdrawn requests, including reasons for withdrawal</p>
   </div>
 </section>
