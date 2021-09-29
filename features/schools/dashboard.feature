@@ -76,7 +76,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                           | Hint                                                                    | Path                         |
             | View rejected requests         | View request dates, subjects, candidate names and reasons for rejection | /schools/rejected_requests   |
-            | View previous bookings         | View booking dates, subjects and candidate names and attendance         | /schools/previous_bookings   |
+            | View previous bookings         | View booking dates, subjects, candidate names and attendance         | /schools/previous_bookings   |
             | Download requests and bookings | Download all requests and bookings as a CSV file                        | /schools/csv_export          |
             | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
             | Switch profile on or off         | Choose to stop / start receiving requests from candidates               | /schools/toggle_enabled/edit |
