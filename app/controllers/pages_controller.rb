@@ -19,6 +19,11 @@ class PagesController < ApplicationController
 
   def help_and_support_access_needs; end
 
+  def schools_request_organisation
+    @dfe_sign_in_add_service_url =
+      Rails.application.config.x.dfe_sign_in_add_service_url.presence
+  end
+
   def maintenance
     render status: :service_unavailable
   end

@@ -24,11 +24,8 @@
     This error means you have been associated with this school on DfE Sign In, but you need to have School Experience added to your account by an approver.
 
     You can request this on DfE Sign In in the 'Services' section.
-
     <p>
-    # Comment for Leo: I need this to link to the 'Add services to my account' part of DfE Sign in (link on Pre-prod is https://pp-services.signin.education.gov.uk/approvals/select-organisation?services=add)
-    Request access to School Experience.
-
+      <%= link_to 'Request access to School Experience', @dfe_sign_in_add_service_url %>
     </p>
   </div>
 </details>
