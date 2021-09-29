@@ -13,7 +13,7 @@
 
   <div id="bookings" class="subsection">
     <header class="dashboard-high-priority">
-      <%= link_to "Manage bookings", schools_bookings_path  %>
+      <%= link_to "Manage upcoming bookings", schools_bookings_path  %>
       <%= numbered_circle(@bookings_requiring_attention, id: 'new-bookings-counter', aria_label: 'new upcoming bookings') %>
     </header>
     <p class="govuk-hint">View, change or cancel bookings</p>
@@ -29,9 +29,9 @@
 
   <div id="withdrawn-requests" class="subsection">
     <header class="dashboard-high-priority">
-      <%= link_to "Withdrawn requests", schools_withdrawn_requests_path  %>
+      <%= link_to "View withdrawn requests", schools_withdrawn_requests_path  %>
       <%= numbered_circle(@withdrawn_requests, id: 'withdrawn-requests-counter', aria_label: 'requests withdrawn by candidate') %>
     </header>
-    <p class="govuk-hint">A candidate has cancelled their request</p>
+    <p class="govuk-hint">View details of withdrawn requests, including reasons for withdrawal</p>
   </div>
 </section>

@@ -40,7 +40,7 @@ Feature: The School Dashboard
         Then I should see the following 'high-priority' links:
             | Text            | Hint                                           | Path                        |
             | Manage requests | Accept, reject or revisit outstanding requests | /schools/placement_requests |
-            | Manage bookings | View, change or cancel bookings                | /schools/bookings           |
+            | Manage upcoming bookings | View, change or cancel bookings                | /schools/bookings           |
 
     Scenario: Manage dates
         Given my school has fully-onboarded
@@ -58,7 +58,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
             | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Add, remove and change dates           | None | /schools/placement_dates              |
+            | Manage dates           | None | /schools/placement_dates              |
 
     Scenario: Adding, removing and changing dates not visible when not fixed and dates not present
         Given my school has fully-onboarded
@@ -67,7 +67,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
             | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Add, remove and change dates           | None | /schools/placement_dates              |
+            | Manage dates           | None | /schools/placement_dates              |
 
 
     Scenario: Account admin
@@ -78,8 +78,8 @@ Feature: The School Dashboard
             | View rejected requests         | View request dates, subjects, candidate names and reasons for rejection | /schools/rejected_requests   |
             | View previous bookings         | View booking dates, subjects and candidate names and attendance         | /schools/previous_bookings   |
             | Download requests and bookings | Download all requests and bookings as a CSV file                        | /schools/csv_export          |
-            | Update school profile          | Add, edit and remove school profile details                             | /schools/on_boarding/profile |
-            | Turn requests on / off         | Choose to stop / start receiving requests from candidates               | /schools/toggle_enabled/edit |
+            | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
+            | Switch profile on or off         | Choose to stop / start receiving requests from candidates               | /schools/toggle_enabled/edit |
 
     Scenario: Low priority headings
         Given my school has fully-onboarded
@@ -110,12 +110,12 @@ Feature: The School Dashboard
     Scenario: Hide the enable/disable link if schools not onboarded
         Given my school has not yet fully-onboarded
         When I am on the 'schools dashboard' page
-        Then there should be no 'Turn requests on / off' link
+        Then there should be no 'Switch profile on or off' link
 
     Scenario: Show the enable/disable link when schools are onboarded
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
-        Then I should see a 'Turn requests on / off' link to the 'toggle requests' page
+        Then I should see a 'Switch profile on or off' link to the 'toggle requests' page
 
     Scenario: Displaying a warning when fixed with no dates
         Given my school has fully-onboarded
