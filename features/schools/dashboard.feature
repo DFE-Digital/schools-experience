@@ -39,7 +39,7 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'high-priority' links:
             | Text            | Hint                                           | Path                        |
-            | Manage requests | Accept, reject or revisit outstanding requests | /schools/placement_requests |
+            | Manage requests | View, accept and decline requests | /schools/placement_requests |
             | Manage upcoming bookings | View, change or cancel bookings                | /schools/bookings           |
 
     Scenario: Manage dates
@@ -58,7 +58,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
             | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Manage dates           | None | /schools/placement_dates              |
+            | Manage dates           | Add, remove and change placement dates | /schools/placement_dates              |
 
     Scenario: Adding, removing and changing dates not visible when not fixed and dates not present
         Given my school has fully-onboarded
@@ -67,7 +67,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
             | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Manage dates           | None | /schools/placement_dates              |
+            | Manage dates           | Add, remove and change placement dates | /schools/placement_dates              |
 
 
     Scenario: Account admin
@@ -76,10 +76,10 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                           | Hint                                                                    | Path                         |
             | View rejected requests         | View request dates, subjects, candidate names and reasons for rejection | /schools/rejected_requests   |
-            | View previous bookings         | View booking dates, subjects and candidate names and attendance         | /schools/previous_bookings   |
+            | View previous bookings         | View booking dates, subjects, candidate names and attendance         | /schools/previous_bookings   |
             | Download requests and bookings | Download all requests and bookings as a CSV file                        | /schools/csv_export          |
             | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
-            | Switch profile on or off         | Choose to stop / start receiving requests from candidates               | /schools/toggle_enabled/edit |
+            | Switch profile on or off         | Choose to stop or start receiving requests from candidates               | /schools/toggle_enabled/edit |
 
     Scenario: Low priority headings
         Given my school has fully-onboarded
