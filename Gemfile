@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 5.5'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '>= 5.4.0'
+gem 'webpacker', '>= 5.4.2'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -33,7 +33,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'dotenv-rails', '>= 2.7.6'
 
-gem 'govuk_design_system_formbuilder', '~> 2.7'
+gem 'govuk_design_system_formbuilder', '~> 2.7', '>= 2.7.4'
 gem 'govuk_elements_form_builder', github: 'DFE-Digital/govuk_elements_form_builder'
 gem 'notifications-ruby-client'
 
@@ -45,11 +45,11 @@ gem 'delayed_job_web'
 
 gem "redis", "~> 4.4"
 
-gem 'kaminari'
+gem 'kaminari', '>= 1.2.1'
 
 gem 'phonelib'
 gem 'sentry-delayed_job'
-gem 'sentry-rails', '>= 4.6.5'
+gem 'sentry-rails', '>= 4.7.3'
 gem 'sentry-ruby'
 
 gem 'rack-attack'
@@ -119,10 +119,10 @@ end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
+  gem 'capybara', '>= 3.35.3'
 
   gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'webdrivers', '>= 4.6.1'
 
   gem 'cucumber-rails', '>= 2.4.0', require: false
   gem 'database_cleaner'
@@ -131,7 +131,7 @@ group :test do
   gem "rspec-json_expectations", "~> 2.2"
   gem 'shoulda-matchers', '~> 5.0'
 
-  gem 'capybara-screenshot'
+  gem 'capybara-screenshot', '>= 1.0.25'
   gem 'flipper-active_support_cache_store'
   gem 'simplecov', require: false
   gem 'webmock'
