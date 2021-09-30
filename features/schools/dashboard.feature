@@ -79,7 +79,7 @@ Feature: The School Dashboard
             | View previous bookings         | View booking dates, subjects, candidate names and attendance         | /schools/previous_bookings   |
             | Download requests and bookings | Download all requests and bookings as a CSV file                        | /schools/csv_export          |
             | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
-            | Turn profile on or off         | Choose to stop or start receiving requests from candidates               | /schools/toggle_enabled/edit |
+            | Turn profile on or off         | Choose to stop or start receiving requests               | /schools/toggle_enabled/edit |
 
     Scenario: Low priority headings
         Given my school has fully-onboarded
