@@ -55,15 +55,15 @@ describe Schools::DashboardsHelper, type: 'helper' do
 
     context 'when enabled' do
       let(:school) { build(:bookings_school) }
-      specify "should be 'enabled' when enabled is true" do
-        expect(subject).to eql('enabled')
+      specify "should be 'on' when enabled is true" do
+        expect(subject).to eql('on')
       end
     end
 
     context 'when disabled' do
       let(:school) { build(:bookings_school, :disabled) }
-      specify "should be 'disabled' when enabled is false" do
-        expect(subject).to eql('disabled')
+      specify "should be 'off' when enabled is false" do
+        expect(subject).to eql('off')
       end
     end
   end

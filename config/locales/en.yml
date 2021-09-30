@@ -507,7 +507,7 @@ en:
       bookings_booking:
         date: Booking date
       bookings_school:
-        enabled: Turn requests on or off
+        enabled: Turn profile on or off
         availability_preference_fixed: Choose how dates are displayed
         experience_type: School experience type
       bookings_placement_date:
@@ -594,8 +594,8 @@ en:
         placement_details: You can add extra experience details
       bookings_school:
         enabled: |
-          Turning requests off will prevent your school from appearing in candidate searches.
-          Requests that are already in-progress will continue as normal.
+          Turning your profile off will stop your school from appearing in searches.
+          Requests that are already in progress will continue as normal.
         availability_preference_fixed: Select how you'd like to present school experience dates to candidates.
         experience_type: Do you offer school experiences in school, via the internet or both
       bookings_placement_date:
