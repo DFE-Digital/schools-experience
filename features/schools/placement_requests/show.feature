@@ -71,3 +71,8 @@ Feature: Viewing a placement request
         And the request has been rejected
         When I am on the placement request page
         Then I should see the rejection details
+
+    Scenario: Viewing a flagged request
+        Given there are placement requests from candidate who already had attended bookings
+        When I am on the flagged placement request page
+        Then I should see the warning details

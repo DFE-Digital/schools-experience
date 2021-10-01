@@ -50,3 +50,8 @@ Feature: Viewing all placement requests
         Given there are some viewed placement requests
         When I am on the 'placement requests' page
         Then the viewed requests should have no status
+
+    Scenario: Placement requests from candidate who already had attended bookings
+        Given there are placement requests from candidate who already had attended bookings
+        When I am on the 'placement requests' page
+        Then these requests should have a status of Flagged

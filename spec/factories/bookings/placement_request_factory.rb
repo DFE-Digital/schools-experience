@@ -83,6 +83,18 @@ FactoryBot.define do
       end
     end
 
+    trait :with_attended_booking do
+      after :create do |placement_request|
+        FactoryBot.create \
+          :bookings_booking,
+          :with_existing_subject,
+          :attended,
+          bookings_school: placement_request.school,
+          bookings_placement_request: placement_request,
+          bookings_placement_request_id: placement_request.id
+      end
+    end
+
     trait :viewed do
       after :create, &:viewed!
     end

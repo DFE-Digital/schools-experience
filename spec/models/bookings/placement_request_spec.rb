@@ -791,6 +791,11 @@ describe Bookings::PlacementRequest, type: :model do
 
       it { is_expected.to eq 'School cancellation' }
     end
+
+    context 'when candidate has attended previous school experiences' do
+      subject { create(:placement_request, :with_attended_booking).status }
+      it { is_expected.to eq 'Flagged' }
+    end
   end
 
   context '#dbs' do

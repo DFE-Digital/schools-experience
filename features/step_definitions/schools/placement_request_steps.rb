@@ -2,6 +2,10 @@ Given("there are some upcoming requests") do
   step 'there are some placement requests'
 end
 
+Given("there are placement requests from candidate who already had attended bookings") do
+  @placement_requests = FactoryBot.create(:recurring_candidate, school: @school).placement_requests
+end
+
 Given("there are some placement requests") do
   @placement_requests = FactoryBot.create_list \
     :placement_request,
@@ -180,7 +184,7 @@ end
 
 Then("the cancelled requests should have a status of {string}") do |status|
   within('table#placement-requests') do
-    expect(page).to have_css('.govuk-tag-red', text: /#{status}/i, count: @cancelled_placement_requests_count)
+    expect(page).to have_css('.govuk-tag--red', text: /#{status}/i, count: @cancelled_placement_requests_count)
   end
 end
 
@@ -257,5 +261,24 @@ Then("I should see the withdrawn details with the following values:") do |table|
       expect(page).to have_css('dt', text: row['Heading'])
       expect(page).to have_css('dd', text: /#{row['Value']}/i)
     end
+  end
+end
+
+Then("these requests should have a status of Flagged") do
+  within('table#placement-requests') do
+    expect(page).to have_css('.govuk-tag--yellow', text: 'Flagged')
+  end
+end
+
+When("I am on the flagged placement request page") do
+  path = path_for('placement request', placement_request: @placement_requests.last)
+  visit(path)
+  expect(page.current_path).to eql(path)
+end
+
+Then("I should see the warning details") do
+  within '.govuk-warning-text' do
+    expect(page).to have_css 'span', text: 'Warning'
+    expect(page).to have_css 'strong', text: 'This candidate has already attended a school experience placement.'
   end
 end
