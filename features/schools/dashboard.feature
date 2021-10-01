@@ -79,7 +79,7 @@ Feature: The School Dashboard
             | View previous bookings         | View booking dates, subjects, candidate names and attendance         | /schools/previous_bookings   |
             | Download requests and bookings | Download all requests and bookings as a CSV file                        | /schools/csv_export          |
             | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
-            | Switch profile on or off         | Choose to stop or start receiving requests from candidates               | /schools/toggle_enabled/edit |
+            | Turn profile on or off         | Choose to stop or start receiving requests               | /schools/toggle_enabled/edit |
 
     Scenario: Low priority headings
         Given my school has fully-onboarded
@@ -110,12 +110,12 @@ Feature: The School Dashboard
     Scenario: Hide the enable/disable link if schools not onboarded
         Given my school has not yet fully-onboarded
         When I am on the 'schools dashboard' page
-        Then there should be no 'Switch profile on or off' link
+        Then there should be no 'Turn profile on or off' link
 
     Scenario: Show the enable/disable link when schools are onboarded
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
-        Then I should see a 'Switch profile on or off' link to the 'toggle requests' page
+        Then I should see a 'Turn profile on or off' link to the 'toggle requests' page
 
     Scenario: Displaying a warning when fixed with no dates
         Given my school has fully-onboarded
