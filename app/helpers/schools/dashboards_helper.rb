@@ -22,7 +22,7 @@ module Schools::DashboardsHelper
   end
 
   def school_enabled_description(school)
-    school.enabled? ? "enabled" : "disabled"
+    school.enabled? ? "on" : "off"
   end
 
   def show_no_placement_dates_warning?(school)
