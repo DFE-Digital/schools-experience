@@ -1,5 +1,5 @@
 <% self.page_title = 'Which of the following teaching stages are you at?' %>
-
+<%= govuk_back_link %>
 <div id="teaching-preference">
   <%= form_for teaching_preference, url: candidates_school_registrations_teaching_preference_path, data: { controller: 'subject-preference-form' } do |f| %>
     <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
