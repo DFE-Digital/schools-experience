@@ -61,7 +61,7 @@ describe Schools::DashboardsHelper, type: 'helper' do
     end
 
     context 'when off' do
-      let(:school) { build(:bookings_school, :off) }
+      let(:school) { build(:bookings_school, :disabled) }
       specify "should be 'off' when on is false" do
         expect(subject).to eql('off')
       end
