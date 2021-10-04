@@ -649,8 +649,8 @@ en:
         placement_details: Confirm experience details
       bookings_school:
         enabled:
-          true: Allow requests
-          false: Do not allow requests
+          true: Turn profile on to allow requests
+          false: Turn profile off
         availability_preference_fixed:
           true_html: Show specific dates
           false_html: Show a description of when you can host candidates
