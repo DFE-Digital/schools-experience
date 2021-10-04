@@ -28,7 +28,7 @@ Feature: Toggling being enabled and disabled
     Scenario: Enabling a disabled school
         Given my school is disabled
         And I am on the 'toggle requests' page
-        When I choose 'Allow requests' from the 'Turn profile on or off' radio buttons
+        When I choose 'Turn profile on to allow requests' from the 'Turn profile on or off' radio buttons
         And I submit the form
         Then I should be on the 'schools dashboard' page
         And my school should be enabled
