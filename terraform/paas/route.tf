@@ -24,6 +24,14 @@ resource "cloudfoundry_route" "route_delayed" {
   space    = data.cloudfoundry_space.space.id
 }
 
+resource "cloudfoundry_route" "static_route" {
+  count    = var.static_route == "" ? 0 :1 
+  domain   = data.cloudfoundry_domain.cloudapps.id
+  hostname = var.static_route
+  space    = data.cloudfoundry_space.space.id
+}
+
+
 locals {
   app_endpoint = "${cloudfoundry_route.route_cloud.hostname}.${data.cloudfoundry_domain.cloudapps.name}"
 }

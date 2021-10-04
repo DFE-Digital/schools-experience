@@ -11,6 +11,9 @@ on:
       pr:
         description: Pull Request Reference
         required: false
+      static:
+        description: Static Route
+        required: false
 
 jobs:
   validate:
@@ -80,6 +83,7 @@ jobs:
                  echo ::set-output name=healthcheck::${pr_name}
                  echo ::set-output name=key::${pr_name}
                  echo "TF_VAR_paas_application_name=${pr_name}" >> $GITHUB_ENV
+                 echo "TF_VAR_static_route=${{ github.event.inputs.static }}" >> $GITHUB_ENV
                  echo ::set-output name=docker_image::${{env.DOCKER_REPOSITORY}}:review-${{steps.sha.outputs.short}}
              fi
 

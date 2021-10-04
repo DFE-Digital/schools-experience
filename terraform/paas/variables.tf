@@ -97,6 +97,10 @@ variable "paas_application_name" {
   default = "dfe-school-experience-app"
 }
 
+variable "static_route" {
+  default = ""
+}
+
 variable "paas_docker_image" {
   default = "ghcr.io/dfe-digital/schools-experience:master"
 }
