@@ -1,11 +1,11 @@
 <section id="requests-and-bookings" class="managing-requests">
   <h2 class="govuk-heading-m">
-    To do list
+    Current requests and bookings
   </h2>
 
   <div id="requests" class="subsection">
     <header class="dashboard-high-priority">
-      <%= link_to "Manage requests", schools_placement_requests_path %>
+      <%= link_to "Manage outstanding requests", schools_placement_requests_path %>
       <%= numbered_circle(@requests_requiring_attention, id: 'new-requests-counter', aria_label: 'new placement requests') %>
     </header>
     <p class="govuk-hint">View, accept and decline requests</p>
@@ -21,17 +21,11 @@
 
   <div id="confirm-attendance" class="subsection">
     <header class="dashboard-high-priority">
-      <%= link_to "Confirm attendance", schools_confirm_attendance_path  %>
+      <%= link_to "Confirm booking attendance", schools_confirm_attendance_path  %>
       <%= numbered_circle(@candidate_attendances, id: 'confirm-attendance-counter', aria_label: 'attendances to confirm') %>
     </header>
     <p class="govuk-hint">Confirm if candidates have attended their school experience</p>
   </div>
 
-  <div id="withdrawn-requests" class="subsection">
-    <header class="dashboard-high-priority">
-      <%= link_to "View withdrawn requests", schools_withdrawn_requests_path  %>
-      <%= numbered_circle(@withdrawn_requests, id: 'withdrawn-requests-counter', aria_label: 'requests withdrawn by candidate') %>
-    </header>
-    <p class="govuk-hint">View details of withdrawn requests, including reasons for withdrawal</p>
-  </div>
+
 </section>

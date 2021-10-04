@@ -1,5 +1,14 @@
 <section class="manage-dates">
-  <h2 class="govuk-heading-m">Manage dates</h3>
+  <h2 class="govuk-heading-m">School profile/h3>
+
+  <div id="update-school-profile" class="subsection">
+    <header class="dashboard-medium-priority">
+      <%= link_to "Update school profile", schools_on_boarding_profile_path %>
+    </header>
+    <span class="govuk-hint">
+      Update school details, placement details and requirements
+    </span>
+  </div>
 
   <%- if @current_school.availability_preference_fixed? -%>
     <div id="add-remove-and-change-dates" class="subsection">
@@ -20,4 +29,15 @@
       Show specific dates, or a description of when you can host candidates
     </span> 
   </div>
+
+  <div id="manage-requests" class="subection">
+    <header class="dashboard-medium-priority">
+      <%= link_to "Turn profile on or off", edit_schools_enabled_path %>
+    </header>
+    <span class="govuk-hint">
+      Choose to stop or start receiving requests.
+      Your profile is currently <strong><%= school_enabled_description(@current_school) %></strong>.
+    </span>
+  </div>
+
 </section>

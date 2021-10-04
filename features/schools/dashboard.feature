@@ -39,7 +39,7 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'high-priority' links:
             | Text            | Hint                                           | Path                        |
-            | Manage requests | View, accept and decline requests | /schools/placement_requests |
+            | Manage outstanding requests | View, accept and decline requests | /schools/placement_requests |
             | Manage upcoming bookings | View, change or cancel bookings                | /schools/bookings           |
 
     Scenario: Manage dates
@@ -77,7 +77,6 @@ Feature: The School Dashboard
             | Text                           | Hint                                                                    | Path                         |
             | View rejected requests         | View request dates, subjects, candidate names and reasons for rejection | /schools/rejected_requests   |
             | View previous bookings         | View booking dates, subjects, candidate names and attendance         | /schools/previous_bookings   |
-            | Download requests and bookings | Download all requests and bookings as a CSV file                        | /schools/csv_export          |
             | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
             | Turn profile on or off         | Choose to stop or start receiving requests               | /schools/toggle_enabled/edit |
 
