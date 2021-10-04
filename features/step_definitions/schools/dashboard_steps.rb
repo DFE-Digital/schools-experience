@@ -80,7 +80,7 @@ Then("there should be no {string} link") do |link_text|
 end
 
 Then("I should see a warning that my school is disabled") do
-  expect(page).to have_css('.govuk-error-summary h2', text: 'Your school is currently disabled')
+  expect(page).to have_css('.govuk-error-summary h2', text: 'Your school profile is currently turned off')
 end
 
 Then("I shouldn't see any warnings") do
