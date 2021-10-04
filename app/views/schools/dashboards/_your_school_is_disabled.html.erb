@@ -1,15 +1,14 @@
 <div class="govuk-error-summary" role="alert" tabindex="-1" data-module="govuk-error-summary">
   <h2 class="govuk-error-summary__title" id="error-summary-title">
-    Your school is currently disabled
+    Your school profile is currently turned off
   </h2>
   <div class="govuk-error-summary__body">
     <p>
-      You need to enable your school for it to appear in candidate
-      search results.
+      You need to turn your school profile on for it to appear in candidate search results.
     </p>
     <ul class="govuk-list govuk-error-summary__list">
       <li>
-        <%= link_to "Enable #{@current_school.name}",
+        <%= link_to "Turn profile on",
           edit_schools_enabled_path,
           class: 'govuk-se-warning__link govuk-!-font-weight-bold'
         %>
