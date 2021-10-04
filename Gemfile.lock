@@ -330,7 +330,7 @@ GEM
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
-    openid_connect (1.2.0)
+    openid_connect (1.3.0)
       activemodel
       attr_required (>= 1.0.0)
       json-jwt (>= 1.5.0)
@@ -366,7 +366,7 @@ GEM
     rack (2.2.3)
     rack-attack (6.5.0)
       rack (>= 1.0, < 3)
-    rack-oauth2 (1.18.0)
+    rack-oauth2 (1.19.0)
       activesupport
       attr_required
       httpclient
@@ -534,7 +534,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stoplight (2.2.1)
-    swd (1.2.0)
+    swd (1.3.0)
       activesupport (>= 3)
       attr_required (>= 0.0.5)
       httpclient (>= 2.4)
@@ -567,7 +567,7 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (>= 3.0, < 4.0)
-    webfinger (1.1.0)
+    webfinger (1.2.0)
       activesupport
       httpclient (>= 2.4)
     webmock (3.14.0)
