@@ -14,13 +14,13 @@ Feature: Toggling being enabled and disabled
     Scenario: Page contents
         Given I am on the 'toggle requests' page
         Then I should see radio buttons for 'Turn profile on or off' with the following options:
-            | Allow requests        |
-            | Do not allow requests |
+            | Turn profile on to allow requests        |
+            | Turn profile off |
 
     Scenario: Disabling an enabled school
         Given my school is enabled
         And I am on the 'toggle requests' page
-        When I choose 'Do not allow requests' from the 'Turn profile on or off' radio buttons
+        When I choose 'Turn profile off' from the 'Turn profile on or off' radio buttons
         And I submit the form
         Then I should be on the 'schools dashboard' page
         And my school should be disabled
