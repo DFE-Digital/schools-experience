@@ -360,6 +360,14 @@ jobs:
            REFERENCE=${{github.ref}}   
            echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
 
+      - name: Install Cloud Foundry
+        if: matrix.environment == 'Review' 
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf7-cli  
+
       - name: Set Review specific variables
         if: matrix.environment == 'Review' 
         run: |
@@ -376,12 +384,29 @@ jobs:
            keyvault: ${{ secrets.KEY_VAULT}}
            secrets: 'SLACK-WEBHOOK, ACTIONS-API-ACCESS-TOKEN'
 
+      - uses: Azure/get-keyvault-secrets@v1.2
+        if: matrix.environment == 'Review' 
+        id:   azSecretPaaS
+        with:
+           keyvault: ${{ secrets.KEY_VAULT}}
+           secrets: 'PAAS-USERNAME, PAAS-PASSWORD'
+
+      - name: Login to Cloud Foundry
+        if: matrix.environment == 'Review' 
+        run: cf login -a api.london.cloud.service.gov.uk -u ${{steps.azSecretPaaS.outputs.PAAS-USERNAME}} -p ${{steps.azSecretPaaS.outputs.PAAS-PASSWORD}} -s get-into-teaching
+
+      - name: Get Static Route 
+        if: matrix.environment == 'Review' 
+        run: |
+              STATIC_ROUTE=$( ${GITHUB_WORKSPACE}/script/get_next_mapping.sh ${{env.REVIEW_APPLICATION}}-${{github.event.number}} )
+              echo "STATIC_ROUTE=${STATIC_ROUTE}" >> $GITHUB_ENV
+
       - name: Trigger Deployment to ${{matrix.environment}}
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Deploy to PaaS
           token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}" }'
+          inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}" , "static": "${{env.STATIC_ROUTE}}" }'
           ref: ${{env.REFERENCE}}
 
       - name: Wait for Deployment to ${{matrix.environment}}
@@ -402,7 +427,9 @@ jobs:
         if: matrix.environment == 'Review' 
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          message: Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
+          message: |
+                   Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
+                   Static DFE_SIGNIN Path used https://${{env.STATIC_ROUTE}}.london.cloudapps.digital
 
       - name: Add Review Label
         if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false

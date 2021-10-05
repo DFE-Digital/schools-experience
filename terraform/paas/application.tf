@@ -8,6 +8,7 @@ locals {
     SKIP_FORCE_SSL      = true,
     SENTRY_CURRENT_ENV  = var.application_environment,
     SLACK_ENV           = var.application_environment,
+    DFE_SIGNIN_BASE_URL = var.static_route == "" ? local.application_secrets.DFE_SIGNIN_BASE_URL :  "https://${var.static_route}.${data.cloudfoundry_domain.cloudapps.name}"
   }
 }
 
@@ -39,6 +40,13 @@ resource "cloudfoundry_app" "application" {
 
   dynamic "routes" {
     for_each = data.cloudfoundry_route.app_route_internet
+    content {
+      route = routes.value["id"]
+    }
+  }
+
+  dynamic "routes" {
+    for_each = cloudfoundry_route.static_route
     content {
       route = routes.value["id"]
     }
