@@ -39,7 +39,7 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'high-priority' links:
             | Text            | Hint                                           | Path                        |
-            | Manage outstanding requests | View, accept or decline requests | /schools/placement_requests |
+            | Manage requests | View, accept or decline requests | /schools/placement_requests |
             | Manage upcoming bookings | View, change or cancel bookings                | /schools/bookings           |
 
     Scenario: Manage dates
