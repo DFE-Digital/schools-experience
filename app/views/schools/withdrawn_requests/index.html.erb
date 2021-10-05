@@ -63,7 +63,9 @@
         There are no withdrawn requests.
       </p>
     <% end %>
-
+    <p>
+      If you wish to download your withdrawn requests, please visit our <%= link_to "CSV export page", schools_csv_export_path %>.
+    </p>
     <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
   </div>
 </div>
