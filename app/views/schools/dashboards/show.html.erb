@@ -50,6 +50,16 @@
         </div>
         <%- end -%>
 
+        <div id="request-dsi-org-access" class="subsection">
+        <header class="dashboard-low-priority">
+          <%= link_to "Request access to another organisation",
+                      schools_organisation_access_request_path %>
+        </header>
+        <span class="govuk-hint">
+          Request access to manage school experience for another organisation
+        </span>
+      </div>
+
         <div id="contact-us" class="subsection">
           <header class="dashboard-low-priority">
             <%= link_to 'Contact us', schools_contact_us_path %>
@@ -58,6 +68,7 @@
             Get in touch if you need help using the service
           </span>
         </div>
+
       </section>
     </article>
   </div>
