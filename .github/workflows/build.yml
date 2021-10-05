@@ -398,6 +398,7 @@ jobs:
       - name: Get Static Route 
         if: matrix.environment == 'Review' 
         run: |
+              cf delete-orphaned-routes -f
               STATIC_ROUTE=$( ${GITHUB_WORKSPACE}/script/get_next_mapping.sh ${{env.REVIEW_APPLICATION}}-${{github.event.number}} )
               echo "STATIC_ROUTE=${STATIC_ROUTE}" >> $GITHUB_ENV
 
