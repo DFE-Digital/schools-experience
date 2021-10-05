@@ -39,7 +39,7 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'high-priority' links:
             | Text            | Hint                                           | Path                        |
-            | Manage outstanding requests | View, accept and decline requests | /schools/placement_requests |
+            | Manage outstanding requests | View, accept or decline requests | /schools/placement_requests |
             | Manage upcoming bookings | View, change or cancel bookings                | /schools/bookings           |
 
     Scenario: Manage dates
@@ -58,7 +58,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
             | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Manage dates           | Add, remove and change placement dates | /schools/placement_dates              |
+            | Manage dates           | Add, remove or change placement dates | /schools/placement_dates              |
 
     Scenario: Adding, removing and changing dates not visible when not fixed and dates not present
         Given my school has fully-onboarded
@@ -67,7 +67,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
             | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Manage dates           | Add, remove and change placement dates | /schools/placement_dates              |
+            | Manage dates           | Add, remove or change placement dates | /schools/placement_dates              |
 
 
     Scenario: Account admin
