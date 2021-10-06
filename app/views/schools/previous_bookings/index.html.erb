@@ -22,7 +22,7 @@
       </p>
     <% end %>
     <p>
-      Visit the <%= link_to "CSV export page", schools_csv_export_path %> to download your bookings.
+      <%= link_to "Download your requests and bookings", schools_csv_export_path %> as a CSV file.
     </p>
     <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
   </div>
