@@ -79,14 +79,8 @@ Feature: The School Dashboard
             | View previous bookings         | View booking dates, subjects, candidate names and attendance         | /schools/previous_bookings   |
             | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
             | Turn profile on or off         | Choose to stop or start receiving requests               | /schools/toggle_enabled/edit |
-
-    Scenario: Low priority headings
-        Given my school has fully-onboarded
-        When I am on the 'schools dashboard' page
-        Then I should see the following 'low-priority' links:
-            | Text       | Hint                                            | Path                |
             | Contact us | Get in touch if you need help using the service | /schools/contact_us |
-
+    
     Scenario: Candidate requests counter
         Given my school has fully-onboarded
         And there are 5 new requests
