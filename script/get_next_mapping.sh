@@ -45,11 +45,11 @@ if [[ ${create} == 1 ]]; then
 	   for (( v=${STATIC_START} ; v<${STATIC_END}+1 ; v++ )) 
            do 
               USED[$v]=0
-              echo "${LIST_OF_ROUTES}" | jq -r -c  '.url ' | while read i; do
+              while read i; do
 		if [[ "${STATIC}${v}.${DOMAIN}" == ${i} ]]; then
                     USED[$v]=1
 		fi
-              done
+	      done <<< "$(echo "${LIST_OF_ROUTES}" | jq -r -c  '.url ')"
            done
 
 	   c=${STATIC_START}
@@ -59,9 +59,8 @@ if [[ ${create} == 1 ]]; then
 	              #echo cf map-route ${ADD_ROUTE}  ${DOMAIN} --hostname ${STATIC}${c} 
 	              #echo cf set-env ${ADD_ROUTE} DFE_SIGNIN_BASE_URL https://${STATIC}${c}.${DOMAIN}
 	              #echo cf restage  ${ADD_ROUTE}
-		      break
+                      break
 	           fi
 		   ((c+=1))
 	   done
-
 fi
