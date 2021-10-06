@@ -41,7 +41,7 @@
 
         <%- if @latest_service_update -%>
         <div id="service-updates-and-guidance" class="subsection">
-          <header class="dashboard-low-priority">
+          <header class="dashboard-medium-priority">
             <%= link_to "Service updates and guidance - #{@latest_service_update.date.to_formatted_s(:govuk)}", service_updates_path %>
           </header>
           <span class="govuk-hint">
@@ -51,7 +51,7 @@
         <%- end -%>
 
         <div id="request-dsi-org-access" class="subsection">
-        <header class="dashboard-low-priority">
+        <header class="dashboard-medium-priority">
           <%= link_to "Request access to another organisation",
                       schools_organisation_access_request_path %>
         </header>
@@ -61,7 +61,7 @@
       </div>
 
         <div id="contact-us" class="subsection">
-          <header class="dashboard-low-priority">
+          <header class="dashboard-medium-priority">
             <%= link_to 'Contact us', schools_contact_us_path %>
           </header>
           <span class="govuk-hint">
