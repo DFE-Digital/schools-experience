@@ -14,6 +14,8 @@ describe "candidates/home/index.html.erb", type: :request do
   context 'When GA_TRACKING_ID is present in the environment' do
     before do
       allow_any_instance_of(ActionController::Base::HelperMethods).to receive(:content_security_policy_nonce).and_return('noncevalue')
+      allow_any_instance_of(CookiePreference).to receive(:allowed?).with(:analytics).and_return(true)
+
       @orig_tracking_id = ENV[tracking_id_key]
       ENV[tracking_id_key] = tracking_id
     end

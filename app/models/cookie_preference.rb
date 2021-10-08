@@ -84,7 +84,7 @@ class CookiePreference
               attributes[category(cookie_category_or_name).to_s]
             end
 
-    value.nil? || value == true
+    value == true
   end
 
   class UnknownCookieError < RuntimeError; end
