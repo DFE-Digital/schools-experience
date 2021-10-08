@@ -130,3 +130,4 @@ Feature: The School Dashboard
         And my school has availability no information set
         When I am on the 'schools dashboard' page
         Then there should be a 'You have no availability information' warning
+
