@@ -75,9 +75,13 @@ RSpec.describe Candidates::SchoolsController, type: :request do
 
     context 'analytics tracking' do
       # set the uuid cookie, grab it then do a search
-      before { get new_candidates_school_search_path }
-      before { @uuid = cookies[:analytics_tracking_uuid] }
-      before { get candidates_schools_path(query_params) }
+      before do
+        allow_any_instance_of(CookiePreference).to receive(:allowed?).with(:analytics_tracking_uuid).and_return(true)
+
+        get new_candidates_school_search_path
+        @uuid = cookies[:analytics_tracking_uuid]
+        get candidates_schools_path(query_params)
+      end
 
       specify 'should persist the analytics_tracking_uuid if present' do
         expect(Bookings::SchoolSearch.last.analytics_tracking_uuid).to eql(@uuid)
