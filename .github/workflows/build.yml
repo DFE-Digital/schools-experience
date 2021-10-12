@@ -457,6 +457,7 @@ jobs:
         if: matrix.environment == 'Review' 
         uses: marocchino/sticky-pull-request-comment@v2
         with:
+          recreate: true
           message: |
                    Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
                    Static DFE_SIGNIN Path used https://${{env.STATIC_ROUTE}}.london.cloudapps.digital
