@@ -7,9 +7,11 @@ module Schools::PlacementRequestsHelper
     unless status.in? HIDDEN_STATUSES
 
       css_class = if placement_request.cancelled?
-                    'govuk-tag-red'
+                    'govuk-tag govuk-tag--red'
+                  elsif status == 'Flagged'
+                    'govuk-tag govuk-tag--yellow'
                   else
-                    'govuk-tag'
+                    'govuk-tag govuk-tag--green'
                   end
 
       tag.span status, class: css_class

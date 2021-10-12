@@ -178,6 +178,7 @@ module Bookings
       return 'Withdrawn'              if candidate_cancellation&.sent?
       return 'Rejected'               if school_cancellation&.sent?
       return 'Viewed'                 if viewed?
+      return 'Flagged'                if candidate.attended_bookings.any?
 
       'New'
     end
