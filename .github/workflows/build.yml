@@ -332,6 +332,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
+      release_tag: ${{steps.tag_version.outputs.pr_number}}
     steps:
       - name: Set matrix environments (Push to master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -340,6 +341,34 @@ jobs:
       - name: Set matrix environments ( Review)
         if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
         run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Review\"]}" >> $GITHUB_ENV
+
+      - name: Generate Tag from PR Number
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        id: tag_version
+        uses: DFE-Digital/github-actions/GenerateReleaseFromSHA@master
+        with:
+          sha: ${{github.sha}}
+
+      - name: Create a GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && steps.tag_version.outputs.pr_found == 1
+        id: release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.pr_number }}
+          body: ${{ steps.tag_version.outputs.pr_number }}
+          release_name: Release ${{ steps.tag_version.outputs.pr_number }}
+          commitish: ${{ github.sha}}
+          prerelease: false
+
+      - name: Copy PR Info to Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'  && steps.release.outputs.id
+        uses: DFE-Digital/github-actions/CopyPRtoRelease@master
+        with:
+          PR_NUMBER:  ${{ steps.tag_version.outputs.pr_number }}
+          RELEASE_ID: ${{ steps.release.outputs.id }}
+          TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   deployments:
     name: Deployments
@@ -382,7 +411,7 @@ jobs:
         id:   azSecret
         with:
            keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'SLACK-WEBHOOK, ACTIONS-API-ACCESS-TOKEN'
+           secrets: 'SLACK-RELEASE-NOTE-WEBHOOK, SLACK-WEBHOOK, ACTIONS-API-ACCESS-TOKEN'
 
       - uses: Azure/get-keyvault-secrets@v1.2
         if: matrix.environment == 'Review' 
@@ -439,33 +468,30 @@ jobs:
           github_token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
           labels: Review
 
-      - name: Generate Tag from PR Number
-        if: matrix.environment == 'Development' 
-        id: tag_version
-        uses: DFE-Digital/github-actions/GenerateReleaseFromSHA@master
+      - name: Get Release Id from Tag
+        id: tag_id
+        uses: DFE-Digital/github-actions/DraftReleaseByTag@master
         with:
-          sha: ${{github.sha}}
+          TAG: ${{needs.prepare.outputs.release_tag}}
+          TOKEN: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
-      - name: Create a GitHub Release
-        if: matrix.environment == 'Development' && steps.tag_version.outputs.pr_found == 1
-        id: release
-        uses: actions/create-release@v1.1.4
+      - name: Publish Release
+        if:  matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        uses: eregon/publish-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.tag_version.outputs.pr_number }}
-          body: ${{ steps.tag_version.outputs.pr_number }}
-          release_name: Release ${{ steps.tag_version.outputs.pr_number }}
-          commitish: ${{ github.sha}}
-          prerelease: false
+          release_id: ${{steps.tag_id.outputs.release_id}}
 
-      - name: Copy PR Info to Release
-        if: matrix.environment  == 'Development' && steps.release.outputs.id
-        uses: DFE-Digital/github-actions/CopyPRtoRelease@master
-        with:
-          PR_NUMBER:  ${{ steps.tag_version.outputs.pr_number }}
-          RELEASE_ID: ${{ steps.release.outputs.id }}
-          TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Slack Release Notification
+        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_SUCCESS}}
+          SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
+          SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
+          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
+          MSG_MINIMAL: true
 
       - name: Slack Notification
         if: failure() && matrix.environment == 'Production' 
