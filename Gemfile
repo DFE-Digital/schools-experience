@@ -28,6 +28,10 @@ gem 'webpacker', '>= 5.4.0'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
+# Install Semantic Logger, this is needed to make Logit.io work with PaaS
+gem 'amazing_print'
+gem 'rails_semantic_logger'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
