@@ -106,6 +106,7 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     aes_key_wrap (1.1.0)
+    amazing_print (1.4.0)
     ast (2.4.2)
     attr_required (1.0.1)
     bindata (2.4.10)
@@ -409,6 +410,10 @@ GEM
       ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
+    rails_semantic_logger (4.6.1)
+      rack
+      railties (>= 3.2)
+      semantic_logger (~> 4.8)
     railties (6.1.4.1)
       actionpack (= 6.1.4.1)
       activesupport (= 6.1.4.1)
@@ -493,6 +498,8 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
+    semantic_logger (4.8.2)
+      concurrent-ruby (~> 1.0)
     semantic_range (3.0.0)
     sentry-delayed_job (4.7.3)
       delayed_job (>= 4.0)
@@ -598,6 +605,7 @@ DEPENDENCIES
   activerecord-postgis-adapter (~> 7.1)
   acts_as_list
   addressable
+  amazing_print
   application_insights!
   bootsnap (>= 1.1.0)
   brakeman (>= 4.4.0)
@@ -643,6 +651,7 @@ DEPENDENCIES
   rails (~> 6.1.4, >= 6.1.4.1)
   rails-controller-testing (>= 1.0.5)
   rails-erd
+  rails_semantic_logger
   redis (~> 4.4)
   rspec-json_expectations (~> 2.2)
   rspec-rails (~> 5.0, >= 5.0.2)
