@@ -8,6 +8,22 @@
 </div>
 
 <div class="govuk-grid-row">
+  <section id="search-bar" class="govuk-grid-column-full">
+    <%= govuk_form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
+          <%= f.govuk_text_field :location, label: -> { nil }, width: 'full', placeholder: 'Location or postcode' %>
+
+          <%= f.govuk_select :distance, label: { text: 'Search radius' } do
+                options_from_collection_for_select(Candidates::SchoolSearch.distances, :first, :last, params[:distance])
+              end unless f.object.whitelisted_urns?
+          %>
+
+          <div class="govuk-form-group">
+            <%= f.govuk_submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
+          </div>
+      <% end %>
+    <hr />
+  </section>
+
   <aside class="govuk-grid-column-one-third filter-list" aria-label="Filter search results">
     <div data-controller="collapsible" id="search-filter">
       <button data-action="collapsible#toggle">
