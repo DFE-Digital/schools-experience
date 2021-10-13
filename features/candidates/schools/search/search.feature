@@ -31,5 +31,5 @@ Feature: Schools search page
         Then the location input should be populated with 'Rochdale'
 
     Scenario: Entering an invalid search
-        Given I have made an invalid search for schools near 'Ex'
-        Then I should see an error message stating 'Must be at least 3 characters'
+        Given I have made an invalid search for schools near 'E'
+        Then I should see an error message stating 'Must be at least 2 characters'
