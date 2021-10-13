@@ -23,7 +23,7 @@ Feature: Schools search page
 
     Scenario: Search form client-side validation
         Given I am on the 'find a school' page
-        Then the 'location' input should require at least '3' characters
+        Then the 'location' input should require at least '2' characters
 
     Scenario: Navigating back to the search form
         Given I search for schools near 'Rochdale'
