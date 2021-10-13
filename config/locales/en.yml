@@ -444,7 +444,7 @@ en:
         bookings/school_search:
           attributes:
             location:
-              too_short: Must be at least 3 characters
+              too_short: Must be at least 2 characters
         bookings/school:
           attributes:
             availability_preference_fixed:
