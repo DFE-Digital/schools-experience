@@ -2,7 +2,7 @@ class Bookings::SchoolSearch < ApplicationRecord
   attr_accessor :requested_order
   attr_reader :location_name
 
-  validates :location, length: { minimum: 3 }, allow_nil: true
+  validates :location, length: { minimum: 2 }, allow_nil: false
 
   AVAILABLE_ORDERS = [
     %w[distance Distance],
