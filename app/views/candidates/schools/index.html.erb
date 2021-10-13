@@ -10,7 +10,7 @@
 <div class="govuk-grid-row">
   <section id="search-bar" class="govuk-grid-column-full">
     <%= govuk_form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
-          <%= f.govuk_text_field :location, label: -> { text: "School location", classes: "visually-hidden" }, width: 'full', placeholder: 'Location or postcode' %>
+          <%= f.govuk_text_field :location, label: { text: "School location", classes: "visually-hidden" }, width: 'full', placeholder: 'Location or postcode' %>
 
           <%= f.govuk_select :distance, label: { text: 'Search radius' } do
                 options_from_collection_for_select(Candidates::SchoolSearch.distances, :first, :last, params[:distance])
