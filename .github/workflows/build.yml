@@ -507,7 +507,8 @@ jobs:
     name: 'OWASP Test'
     runs-on: ubuntu-latest
     needs: [  deployments  ]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
@@ -525,24 +526,14 @@ jobs:
            keyvault: ${{ secrets.KEY_VAULT}}
            secrets: 'SLACK-WEBHOOK, HTTPAUTH-USERNAME, HTTPAUTH-PASSWORD'
 
-      - name: Setup Authorization
-        run: |
-             BASE=$( echo "${{steps.azSecret.outputs.HTTPAUTH-USERNAME}}:${{steps.azSecret.outputs.HTTPAUTH-PASSWORD}}" | base64 )
-             echo "replacer.full_list(0).description=auth1"           >  ./options.prop
-             echo "replacer.full_list(0).enabled=true"                >> ./options.prop
-             echo "replacer.full_list(0).matchtype=REQ_HEADER"        >> ./options.prop
-             echo "replacer.full_list(0).matchstr=Authorization"      >> ./options.prop
-             echo "replacer.full_list(0).regex=false"                 >> ./options.prop
-             echo "replacer.full_list(0).replacement=Basic ${BASE}"   >> ./options.prop
-
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.6.1
+        uses: zaproxy/action-full-scan@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
+          target: 'https://${{ steps.azSecret.outputs.HTTP-USERNAME }}:${{ steps.azSecret.outputs.HTTP-PASSWORD }}@${{env.REVIEW_APPLICATION}}-${{github.event.number}}'
           rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-z "-configFile /zap/wrk/options.prop" '
+          cmd_options: '-a'
 
       - name: Slack Notification
         if: failure()
@@ -552,5 +543,3 @@ jobs:
            SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
            SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
            SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
-
-
