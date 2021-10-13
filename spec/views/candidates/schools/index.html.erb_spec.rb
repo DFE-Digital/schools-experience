@@ -37,6 +37,12 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       expect(rendered).to have_css '#search-results'
     end
 
+    it "shows the search bar" do
+      expect(rendered).to have_css '#search-bar'
+      expect(rendered).to have_css 'input#location-field'
+      expect(rendered).to have_css 'button[type="submit"]'
+    end
+
     it "shows filled in subject filter" do
       expect(rendered).to have_css '#search-filter'
       expect(rendered).to have_checked_field 'subjects[]', count: 2
