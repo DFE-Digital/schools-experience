@@ -59,7 +59,7 @@ describe Bookings::SchoolSearch do
         end
 
         specify 'should return an empty result' do
-          expect(Rails.logger).to receive(:info).with(/No Geocoder results/)
+          expect(Rails.logger).to receive(:info).with("No Geocoder results found in England for Mumbai, England (user entered: Mumbai)")
         end
       end
     end
