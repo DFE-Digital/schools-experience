@@ -507,8 +507,7 @@ jobs:
     name: 'OWASP Test'
     runs-on: ubuntu-latest
     needs: [  deployments  ]
-    # if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
@@ -531,7 +530,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{ steps.azSecret.outputs.HTTPAUTH-USERNAME }}:${{ steps.azSecret.outputs.HTTPAUTH-PASSWORD }}@${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}'
+          target: 'https://${{ steps.azSecret.outputs.HTTPAUTH-USERNAME }}:${{ steps.azSecret.outputs.HTTPAUTH-PASSWORD }}${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
 
