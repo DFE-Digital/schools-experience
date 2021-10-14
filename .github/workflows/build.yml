@@ -531,7 +531,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{ steps.azSecret.outputs.HTTP-USERNAME }}:${{ steps.azSecret.outputs.HTTP-PASSWORD }}@${{env.REVIEW_APPLICATION}}-${{github.event.number}}'
+          target: 'https://${{ steps.azSecret.outputs.HTTPAUTH-USERNAME }}:${{ steps.azSecret.outputs.HTTPAUTH-PASSWORD }}@${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
 
