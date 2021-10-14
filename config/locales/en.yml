@@ -606,13 +606,13 @@ en:
       max_fee: Schools may charge
       subjects: Select all that apply
       candidates_registrations_personal_information:
-        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
+        date_of_birth: This is used to identify you and will not be shared with any schools. For example, 12 11 1997
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
         bookings_placement_date_id: School experience is only available on the following days
       candidates_session:
-        date_of_birth: This will only be used to identify you and won’t be shared with any schools. For example, 12 11 1997
+        date_of_birth: This is used to identify you and will not be shared with any schools. For example, 12 11 1997
       cookie_preference:
         analytics_html: "We use Google Analytics to measure how you use the
           website so we can improve it based on user needs. Google Analytics sets
