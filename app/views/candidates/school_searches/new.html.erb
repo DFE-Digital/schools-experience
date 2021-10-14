@@ -20,7 +20,7 @@
         method: :get,
         html: { class: 'school-search-form' }) do |f| %>
 
-          <%= f.search_field :location, required: true, minlength: "3" %>
+          <%= f.search_field :location, required: true, minlength: "2" %>
 
           <%= f.collection_select :distance,
                 Candidates::SchoolSearch.distances, :first, :last unless f.object.whitelisted_urns? %>
