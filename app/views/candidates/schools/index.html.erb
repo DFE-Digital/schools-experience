@@ -45,6 +45,7 @@
           <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
 
           <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
+          <%= f.collection_check_boxes :dbs_policies, [[2 , nil]], :first, :last %>
           <%= f.hidden_field :order %>
 
           <%= f.submit 'Update schools list', name: nil %>
@@ -88,6 +89,9 @@
         <% end %>
         <% for subject_id in f.object.subjects %>
           <%= f.hidden_field :subjects, multiple: true, value: subject_id, id: nil %>
+        <% end %>
+        <% f.object.dbs_policies.each do |dbs_policy| %>
+          <%= f.hidden_field :dbs_policies, multiple: true, value: dbs_policy, id: nil %>
         <% end %>
         <%= f.hidden_field :max_fee %>
         <%= f.radio_button_fieldset :order,

@@ -55,6 +55,11 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       expect(rendered).to have_unchecked_field 'phases[]', count: 2
     end
 
+    it "shows the dbs filter" do
+      expect(rendered).to have_css('.govuk-label', text: 'DBS check')
+      expect(rendered).to have_css '#search-filter input[name="dbs_policies[]"]'
+    end
+
     it "shows results" do
       expect(rendered).to have_css '.school-result'
       expect(rendered).to have_css '.school-result h2', text: @school.name
