@@ -1,5 +1,6 @@
 class GeocodingRequest
   POSTCODE_REGEX = %r{([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})}i.freeze
+  QUALIFIER = "Address".freeze
 
   def initialize(search_request, region)
     @request = search_request.dup
@@ -8,13 +9,20 @@ class GeocodingRequest
 
   def format_address
     @request = format_postcode(@request)
-    @request = append_region
+    prepend_qualifier
+    append_region
+
+    @request
   end
 
 private
 
   def append_region
     @request = [@request, @region].join(", ")
+  end
+
+  def prepend_qualifier
+    @request = [QUALIFIER, @request].join(": ")
   end
 
   def format_postcode(request)

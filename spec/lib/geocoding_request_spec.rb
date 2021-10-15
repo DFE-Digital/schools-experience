@@ -23,7 +23,7 @@ RSpec.describe GeocodingRequest do
       let(:search_request) { "KT125EJ" }
 
       it "formats the postcode" do
-        expect(subject).to start_with("KT12 5EJ")
+        expect(subject).to include("KT12 5EJ")
       end
     end
 
@@ -31,12 +31,16 @@ RSpec.describe GeocodingRequest do
       let(:search_request) { "kt125ej" }
 
       it "formats the postcode" do
-        expect(subject).to start_with("KT12 5EJ")
+        expect(subject).to include("KT12 5EJ")
       end
     end
 
     it "appends the region to the request" do
-      expect(subject).to eq("School name, England")
+      expect(subject).to end_with("School name, England")
+    end
+
+    it "prepends 'Address: ' to the request" do
+      expect(subject).to start_with("Address: School name")
     end
 
     it "does not modify the original request" do
