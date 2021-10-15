@@ -6,6 +6,9 @@ module Schools
     rescue_from Schools::ChangeSchool::InaccessibleSchoolError, with: :access_denied
 
     def show
+      @dfe_sign_in_add_service_url =
+        Rails.application.config.x.dfe_sign_in_add_service_url.presence
+
       @change_school = Schools::ChangeSchool.new \
         current_user, school_uuids(reload: true), change_to_urn: current_urn
 
