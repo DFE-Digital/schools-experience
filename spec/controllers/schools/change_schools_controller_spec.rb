@@ -35,6 +35,19 @@ describe Schools::ChangeSchoolsController, type: :request do
       let(:current_urn) { nil }
       it { is_expected.to have_http_status :success }
       it { is_expected.to have_rendered :show }
+
+      context 'when add service url is set' do
+        let(:dfe_sign_in_url) { "www.dfe-sign-in.com/sign-in-service" }
+        before do
+          allow(Rails.application.config.x).to receive(:dfe_sign_in_add_service_url) do
+            dfe_sign_in_url
+          end
+        end
+
+        it 'renders the URL' do
+          expect(subject.body).to include(dfe_sign_in_url)
+        end
+      end
     end
   end
 
