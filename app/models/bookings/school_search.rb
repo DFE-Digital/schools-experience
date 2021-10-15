@@ -1,3 +1,5 @@
+require 'geocoding_request'
+
 class Bookings::SchoolSearch < ApplicationRecord
   attr_accessor :requested_order
   attr_reader :location_name
@@ -28,6 +30,7 @@ class Bookings::SchoolSearch < ApplicationRecord
       whitelisted_urns.any?
     end
   end
+
   delegate :whitelisted_urns, :whitelisted_urns?, to: :class
 
   def initialize(attributes = {})
@@ -135,13 +138,15 @@ private
   end
 
   def geolocate(location)
+    geocoding_request = GeocodingRequest.new(location, REGION)
+    formatted_request = geocoding_request.format_address
     result = Geocoder.search(
-      [location, REGION].join(", "),
+      formatted_request,
       params: GEOCODER_PARAMS
     )&.first
 
     if empty_geocoder_result?(result)
-      Rails.logger.info("No Geocoder results found in #{REGION} for #{location}")
+      Rails.logger.info("No Geocoder results found in #{REGION} for #{formatted_request} (user entered: #{location})")
       return
     end
 
