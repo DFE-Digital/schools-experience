@@ -1,3 +1,5 @@
+require 'geocoding_request'
+
 class Bookings::SchoolSearch < ApplicationRecord
   attr_accessor :requested_order
   attr_reader :location_name
@@ -136,8 +138,8 @@ private
   end
 
   def geolocate(location)
-    geocoding_request = Bookings::GeocodingRequest.new(location, REGION)
-    formatted_request = geocoding_request.formatted_request
+    geocoding_request = GeocodingRequest.new(location, REGION)
+    formatted_request = geocoding_request.format_address
     result = Geocoder.search(
       formatted_request,
       params: GEOCODER_PARAMS
