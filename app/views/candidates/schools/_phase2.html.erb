@@ -1,102 +1,5 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
-  <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
-    <%- if @presenter.description_details.present? -%>
-    <section id="school-placement-info">
-      <%= safe_format @presenter.description_details %>
-    </section>
-    <%- end -%>
-
-    <div>
-      <h2>
-        About our school experience
-      </h2>
-
-      <dl class="govuk-summary-list govuk-summary-list--no-border inline">
-        <%= dlist_item 'Individual requirements:', id: 'individual-requirements' do %>
-          <%= content_or_msg split_to_list(@presenter.individual_requirements), "No requirements specified" %>
-        <% end %>
-
-        <%= dlist_item 'Details:', id: 'experience-details' do %>
-          <%= conditional_format content_or_msg @presenter.experience_details, "No information supplied" %>
-        <% end %>
-
-        <%= dlist_item 'Subjects:', id: "school-subjects" do %>
-          <%= format_school_subjects @presenter.school %>
-        <% end %>
-      </dl>
-
-      <% if @presenter.school.availability_preference_fixed? %>
-        <%= render partial: 'candidates/schools/placement_dates', locals: { primary_dates: @presenter.primary_dates, secondary_dates_grouped_by_date: @presenter.secondary_dates_grouped_by_date } %>
-      <% end %>
-
-    </div>
-
-    <div>
-      <h2>Location</h2>
-
-      <%= school_location_map @presenter.school %>
-
-      <p class="directions-link">
-        <%= link_to 'Get directions', external_map_url(
-          latitude: @presenter.school.coordinates.latitude,
-          longitude: @presenter.school.coordinates.longitude,
-          name: @presenter.school.name),
-          'aria-label': "Get directions for #{@school.name}"
-        %>
-      </p>
-    </div>
-
-    <div>
-      <p>
-        <strong>
-          For more information about our school:
-        </strong>
-      </p>
-
-      <ul id="school-websites">
-        <%- if @presenter.website.present? -%>
-        <li id="school-website">
-          <%= link_to "#{@presenter.school.name} website", @presenter.website %>
-        </li>
-        <%- end -%>
-
-        <li>
-          <%= link_to "#{@presenter.school.name} Get Information About Schools",
-                      gias_school_url(@presenter.urn) %>
-        </li>
-
-        <li>
-          <%= link_to "Ofsted report: #{@presenter.school.name}",
-                      ofsted_report_url(@presenter.urn) %>
-        </li>
-
-        <li>
-          <%= link_to "Performance information: #{@presenter.school.name}",
-                      performance_report_url(@presenter.urn) %>
-        </li>
-
-        <%- if @presenter.teacher_training_url.present? -%>
-        <li>
-          <%= link_to "Teacher training: #{@presenter.name}",
-            cleanup_school_url(@presenter.teacher_training_url) %>
-        </li>
-        <%- end -%>
-      </ul>
-    </div>
-
-    <% if include_candidate_request_links %>
-      <div class="school-start-request-button__tablet_plus govuk-!-margin-top-8">
-        <%= render 'start_request', profile: @presenter %>
-
-      </div>
-
-      <p>
-        <%= link_to 'Back to search results', :back,
-                    data: {controller: 'back-link'} %>
-      </p>
-    <% end %>
-  </div>
-
+  
   <div class="candidate-profile-sidebar govuk-grid-column-one-third column-top-border">
     <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
 
@@ -211,10 +114,112 @@
       <% end if @presenter.teacher_training_info.present? %>
     </dl>
 
+  </div>
+  
+  <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
+    <%- if @presenter.description_details.present? -%>
+    <section id="school-placement-info">
+      <%= safe_format @presenter.description_details %>
+    </section>
+    <%- end -%>
+
+    <div>
+      <h2>
+        About our school experience
+      </h2>
+
+      <dl class="govuk-summary-list govuk-summary-list--no-border inline">
+        <%= dlist_item 'Individual requirements:', id: 'individual-requirements' do %>
+          <%= content_or_msg split_to_list(@presenter.individual_requirements), "No requirements specified" %>
+        <% end %>
+
+        <%= dlist_item 'Details:', id: 'experience-details' do %>
+          <%= conditional_format content_or_msg @presenter.experience_details, "No information supplied" %>
+        <% end %>
+
+        <%= dlist_item 'Subjects:', id: "school-subjects" do %>
+          <%= format_school_subjects @presenter.school %>
+        <% end %>
+      </dl>
+
+      <% if @presenter.school.availability_preference_fixed? %>
+        <%= render partial: 'candidates/schools/placement_dates', locals: { primary_dates: @presenter.primary_dates, secondary_dates_grouped_by_date: @presenter.secondary_dates_grouped_by_date } %>
+      <% end %>
+
+    </div>
+
+    <div>
+      <h2>Location</h2>
+
+      <%= school_location_map @presenter.school %>
+
+      <p class="directions-link">
+        <%= link_to 'Get directions', external_map_url(
+          latitude: @presenter.school.coordinates.latitude,
+          longitude: @presenter.school.coordinates.longitude,
+          name: @presenter.school.name),
+          'aria-label': "Get directions for #{@school.name}"
+        %>
+      </p>
+    </div>
+
+    <div>
+      <p>
+        <strong>
+          For more information about our school:
+        </strong>
+      </p>
+
+      <ul id="school-websites">
+        <%- if @presenter.website.present? -%>
+        <li id="school-website">
+          <%= link_to "#{@presenter.school.name} website", @presenter.website %>
+        </li>
+        <%- end -%>
+
+        <li>
+          <%= link_to "#{@presenter.school.name} Get Information About Schools",
+                      gias_school_url(@presenter.urn) %>
+        </li>
+
+        <li>
+          <%= link_to "Ofsted report: #{@presenter.school.name}",
+                      ofsted_report_url(@presenter.urn) %>
+        </li>
+
+        <li>
+          <%= link_to "Performance information: #{@presenter.school.name}",
+                      performance_report_url(@presenter.urn) %>
+        </li>
+
+        <%- if @presenter.teacher_training_url.present? -%>
+        <li>
+          <%= link_to "Teacher training: #{@presenter.name}",
+            cleanup_school_url(@presenter.teacher_training_url) %>
+        </li>
+        <%- end -%>
+      </ul>
+    </div>
+
+    <% if include_candidate_request_links %>
+      <div class="school-start-request-button__tablet_plus govuk-!-margin-top-8">
+        <%= render 'start_request', profile: @presenter %>
+
+      </div>
+
+      <p>
+        <%= link_to 'Back to search results', :back,
+                    data: {controller: 'back-link'} %>
+      </p>
+    <% end %>
+  </div>
+
+
+
     <% if include_candidate_request_links %>
       <div class="school-start-request-button__mobile">
         <%= render 'start_request', profile: @presenter %>
       </div>
     <% end %>
-  </div>
+
 </div>
