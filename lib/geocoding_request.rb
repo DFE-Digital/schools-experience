@@ -1,6 +1,6 @@
 class GeocodingRequest
   POSTCODE_REGEX = %r{([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})}i.freeze
-  QUALIFIER = "Address".freeze
+  QUALIFIER = "Street address".freeze
 
   def initialize(search_request, region)
     @request = search_request.dup

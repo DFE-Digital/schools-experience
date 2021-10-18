@@ -55,11 +55,11 @@ describe Bookings::SchoolSearch do
 
         specify "should append the region to the Geocoder query" do
           expect(Geocoder).to receive(:search)
-            .with('Mumbai, England', params: described_class::GEOCODER_PARAMS)
+            .with(a_string_including('Mumbai, England'), params: described_class::GEOCODER_PARAMS)
         end
 
         specify 'should return an empty result' do
-          expect(Rails.logger).to receive(:info).with("No Geocoder results for request 'Address: Mumbai, England' (user entered: 'Mumbai')")
+          expect(Rails.logger).to receive(:info).with("No Geocoder results found for request 'Street address: Mumbai, England' (user entered: 'Mumbai')")
         end
       end
     end

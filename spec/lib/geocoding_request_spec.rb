@@ -39,8 +39,8 @@ RSpec.describe GeocodingRequest do
       expect(subject).to end_with("School name, England")
     end
 
-    it "prepends 'Address: ' to the request" do
-      expect(subject).to start_with("Address: School name")
+    it "prepends 'Street address: ' to the request" do
+      expect(subject).to start_with("Street address: School name")
     end
 
     it "does not modify the original request" do
