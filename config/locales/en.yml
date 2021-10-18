@@ -646,7 +646,7 @@ en:
         <<: *schools_on_boarding_school_fee_hints
 
     label:
-      dbs_policies_2: Only show placements that do not require a DBS
+      dbs_policies_2: Only show placements that do not require a DBS certificate
       schools_placement_requests_confirm_booking:
         bookings_subject_id: Confirm subject
         placement_details: Confirm experience details
