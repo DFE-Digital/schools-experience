@@ -55,7 +55,7 @@
   </aside>
 
   <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
-    <%- if @search.subjects.any? || @search.phases.any? -%>
+    <%- if @search.subjects.any? || @search.phases.any? || @search.dbs_policies.any? -%>
     <div class="school-search-filter-info">
       <div>
         <%= school_search_phase_filter_description @search %>

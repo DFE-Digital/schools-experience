@@ -9,6 +9,11 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
   end
 
   context 'filtering existing search' do
+    let(:phases) { %w[3] }
+    let(:max_fee) { '60' }
+    let(:subjects) { %w[1 3] }
+    let(:dbs_policies) { %w[2] }
+
     before do
       allow(Candidates::School).to receive(:subjects).and_return(
         [[1, 'Computer science'], [2, 'Maths'], [3, 'English']]
@@ -21,9 +26,10 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       @school = build(:bookings_school)
       @search = Candidates::SchoolSearch.new(
         query: 'Manchester',
-        phases: %w[3],
-        max_fee: '60',
-        subjects: %w[1 3]
+        phases: phases,
+        max_fee: max_fee,
+        subjects: subjects,
+        dbs_policies: dbs_policies
       )
       allow(@search).to receive(:results).and_return(Kaminari.paginate_array([@school]).page(1))
 
@@ -64,6 +70,16 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       expect(rendered).to have_css '.school-result'
       expect(rendered).to have_css '.school-result h2', text: @school.name
       expect(rendered).to have_css '.school-result .govuk-summary-list__key', count: 4
+    end
+
+    context 'when filtered only by the dbs policy' do
+      let(:subjects) { [] }
+      let(:phases) { [] }
+      let(:max_fee) { '' }
+
+      it "shows the filter tag" do
+        expect(rendered).to have_css 'div', text: 'DBS check: Not required'
+      end
     end
   end
 end
