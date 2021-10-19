@@ -296,7 +296,7 @@ RSpec.describe Candidates::SchoolSearch do
     subject { described_class.new(dbs_policies: [1, 2]) }
 
     it "will return an array of phases" do
-      expect(subject.dbs_policies_names).to match_array(['In school','Not required'])
+      expect(subject.dbs_policies_names).to match_array(['In school', 'Not required'])
     end
   end
 end
