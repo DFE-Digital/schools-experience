@@ -80,6 +80,11 @@
   margin-bottom: govuk-spacing(4);
 }
 
+#_subjects_container .govuk-checkboxes {
+  height: 300px;
+  overflow-y: scroll;
+}
+
 .school-search-form {
   select {
     width: 100%;
