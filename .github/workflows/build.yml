@@ -51,7 +51,7 @@ jobs:
                 echo ::set-output name=DOCKER_MASTER::${{ env.DOCKER_REPOSITORY }}:master
              else
                 echo ::set-output name=DOCKER_IMAGE::${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}
-                echo ::set-output name=DOCKER_MASTER::""
+                echo ::set-output name=DOCKER_MASTER::${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}
              fi
 
       - name: Login to GitHub Container Registry
