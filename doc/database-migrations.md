@@ -1,9 +1,9 @@
 ## Automatic Migrations
 The endpoint has been written for the Dockerfile. This has three parameters
 
--m - Carry out migration
--f run in frontend mode
--b run in background jobs mode
+- -m - Carry out migration
+- -f run in frontend mode
+- -b run in background jobs mode
 ( -f -b are mutually exclusive )
 
 ## Migration Policy
