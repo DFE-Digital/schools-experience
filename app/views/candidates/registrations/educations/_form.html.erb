@@ -1,11 +1,10 @@
-<%= page_heading 'We need some more details' %>
 <%= govuk_back_link %>
+<%= page_heading 'We need some more details' %>
+
 <p>
   The following will be used to help schools offer you school experience.
 </p>
-<p>
-  You'll be given a chance to check and change the details you enter before sending off your request.
-</p>
+
 
 <%= form_for education, url: candidates_school_registrations_education_path, data: { controller: 'education-form' } do |f| %>
   <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
