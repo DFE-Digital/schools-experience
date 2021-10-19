@@ -908,6 +908,12 @@ en:
       school_search:
         phases_filter_html: "Education phases: %{phase_names}"
         subjects_filter_html: "Placement subjects: %{subject_names}"
+        dbs_policies_filter:
+          text_html: "DBS check: %{dbs_policies_options}"
+          options:
+            required: Required
+            inschool: In school
+            notrequired: Not required
 
     legend:
       schools_csv_export_form:

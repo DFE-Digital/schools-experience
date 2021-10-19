@@ -85,6 +85,13 @@ module Candidates
       }.compact
     end
 
+    def dbs_policies_names
+      dbs_policies.map { |option|
+        policy = Bookings::Profile::DBS_POLICY_CONDITIONS[option]
+        I18n.t("helpers.candidates.school_search.dbs_policies_filter.options.#{policy}")
+      }.compact
+    end
+
     def max_fee=(max_f)
       max_f = max_f.to_s.strip
       @max_fee = FEES.map(&:first).include?(max_f) ? max_f : ''
