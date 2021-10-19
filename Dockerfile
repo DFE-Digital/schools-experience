@@ -11,12 +11,19 @@ RUN mkdir /app
 WORKDIR /app
 
 EXPOSE 3000
-ENTRYPOINT ["bundle", "exec"]
-CMD ["rails", "server" ]
+ENTRYPOINT [ "/app/docker-entrypoint.sh"]
+CMD ["-m", "FRONTEND" ]
+
+ARG SHA
+RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
 # hadolint ignore=DL3018
-RUN apk add --no-cache build-base git tzdata libxml2 libxml2-dev \
+RUN apk add --no-cache bash build-base git tzdata libxml2 libxml2-dev \
 			postgresql-libs postgresql-dev nodejs yarn
+
+# Copy Entrypoint script
+COPY script/docker-entrypoint.sh .
+RUN chmod +x /app/docker-entrypoint.sh
 
 # install NPM packages removign artifacts
 COPY package.json yarn.lock ./
@@ -35,9 +42,6 @@ RUN gem install bundler --version='~> 2.2.17' && \
 # Add code and compile assets
 COPY . .
 RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
-
-ARG SHA
-RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
 # Create symlinks for CSS files without digest hashes for use in error pages
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true

@@ -3,6 +3,7 @@ version: '3.3'
 services:
    school-experience:
      image: ${IMAGE}
+     command: --frontend
      ports:
        - "3000:3000"
      restart: always
@@ -24,7 +25,7 @@ services:
 
    delayed-jobs:
      image: ${IMAGE}
-     command: rake jobs:work
+     command: --background
      restart: always
      healthcheck:
        disable: true
@@ -40,7 +41,7 @@ services:
 
    db-tasks:
      image: ${IMAGE}
-     command: rake db:create db:schema:load
+     command: --database
      restart: on-failure
      healthcheck:
        disable: true

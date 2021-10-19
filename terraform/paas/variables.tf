@@ -21,6 +21,14 @@ variable "paas_internet_hostnames" {
   default = []
 }
 
+variable "FRONTEND" {
+  default = "-m -f" 
+}
+
+variable "BACKGROUND" {
+  default = "-b" 
+}
+
 variable "strategy" {
   default = "blue-green-v2"
 }

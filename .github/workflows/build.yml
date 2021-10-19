@@ -116,7 +116,7 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Lint Ruby
-        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop app config lib features spec --format json --out=/app/out/rubocop-result.json
+        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  --rubocop
 
       - name: Keep Rubocop output
         if: always()
@@ -182,7 +182,7 @@ jobs:
           args: --severity-threshold=high --file=Dockerfile
 
       - name: Run Brakeman static security scanner
-        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman --no-pager
+        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  --brakeman 
 
   cucumber_tests:
     name: Cucumber Tests
