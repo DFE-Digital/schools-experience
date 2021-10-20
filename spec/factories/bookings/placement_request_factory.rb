@@ -99,6 +99,10 @@ FactoryBot.define do
       after :create, &:viewed!
     end
 
+    trait :under_consideration do
+      under_consideration_at { 5.minutes.ago }
+    end
+
     trait :with_a_fixed_date do
       association \
         :school,
