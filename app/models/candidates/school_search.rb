@@ -65,6 +65,14 @@ module Candidates
       @phases = Array.wrap(phase_ids).map(&:presence).compact.map(&:to_i)
     end
 
+    def dbs_policies
+      @dbs_policies ||= []
+    end
+
+    def dbs_policies=(dbs_policy_ids)
+      @dbs_policies = Array.wrap(dbs_policy_ids).map(&:presence).compact.map(&:to_i)
+    end
+
     def subject_names
       Candidates::School.subjects.map { |s|
         subjects.include?(s.first) ? s.last : nil
@@ -74,6 +82,13 @@ module Candidates
     def phase_names
       Candidates::School.phases.map { |p|
         phases.include?(p.first) ? p.last : nil
+      }.compact
+    end
+
+    def dbs_policies_names
+      dbs_policies.map { |option|
+        policy = Bookings::Profile::DBS_POLICY_CONDITIONS[option]
+        I18n.t("helpers.candidates.school_search.dbs_policies_filter.options.#{policy}")
       }.compact
     end
 
@@ -112,7 +127,8 @@ module Candidates
         max_fee: max_fee,
         requested_order: order,
         page: page,
-        analytics_tracking_uuid: analytics_tracking_uuid
+        analytics_tracking_uuid: analytics_tracking_uuid,
+        dbs_policies: dbs_policies
       )
     end
 

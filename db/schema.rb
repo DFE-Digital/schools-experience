@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_22_160115) do
+ActiveRecord::Schema.define(version: 2021_10_07_130633) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "address_standardizer"
   enable_extension "plpgsql"
   enable_extension "postgis"
 
@@ -191,6 +192,7 @@ ActiveRecord::Schema.define(version: 2021_06_22_160115) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "analytics_tracking_uuid"
+    t.integer "dbs_policies", array: true
   end
 
   create_table "bookings_school_types", force: :cascade do |t|

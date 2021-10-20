@@ -336,6 +336,41 @@ describe Bookings::School, type: :model do
           expect(subject.costing_upto(20)).not_to include(school_c)
         end
       end
+
+      context 'By dbs requirements' do
+        let!(:profile_a) { create(:bookings_profile, dbs_policy_conditions: 'required') }
+        let!(:profile_b) { create(:bookings_profile, dbs_policy_conditions: 'inschool') }
+        let!(:profile_c) { create(:bookings_profile, dbs_policy_conditions: 'notrequired') }
+
+        before do
+          school_a.profile = profile_a
+          school_b.profile = profile_b
+          school_c.profile = profile_c
+        end
+
+        context 'when no dbs policies are supplied' do
+          specify 'all schools should be returned' do
+            [nil, "", []].each do |empty|
+              expect(subject.with_dbs_policies(empty)).to include(school_a, school_b, school_c)
+            end
+          end
+        end
+
+        context 'when one or more dbs policies are supplied' do
+          specify 'all schools that match any provided dbs policies are returned' do
+            {
+              'required' => school_a,
+              'inschool' => school_b,
+              'notrequired' => school_c,
+              %w[required inschool] => [school_a, school_b],
+              %w[inschool notrequired] => [school_b, school_c],
+              %w[required inschool notrequired] => [school_a, school_b, school_c]
+            }.each do |policies, results|
+              expect(subject.with_dbs_policies(policies)).to match_array(results)
+            end
+          end
+        end
+      end
     end
 
     context 'Availability and placement dates' do

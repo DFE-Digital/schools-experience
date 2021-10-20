@@ -102,6 +102,7 @@ private
       .with_availability
       .distinct
       .includes([:available_placement_dates])
+      .with_dbs_policies(dbs_options)
   end
 
   def whitelisted_base_query
@@ -178,6 +179,12 @@ private
       'distance asc'
     else
       { name: 'asc' }
+    end
+  end
+
+  def dbs_options
+    if dbs_policies.present?
+      dbs_policies.map { |i| Bookings::Profile::DBS_POLICY_CONDITIONS[i.to_i] }.push('inschool')
     end
   end
 end
