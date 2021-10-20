@@ -8,7 +8,7 @@ module Schools::PlacementRequestsHelper
 
       css_class = if placement_request.cancelled?
                     'govuk-tag govuk-tag--red'
-                  elsif status == 'Flagged'
+                  elsif status == 'Flagged' || placement_request.expired?
                     'govuk-tag govuk-tag--yellow'
                   elsif status == 'Under consideration'
                     'govuk-tag govuk-tag--blue'

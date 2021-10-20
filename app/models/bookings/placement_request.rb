@@ -180,6 +180,7 @@ module Bookings
       return 'Under consideration'    if under_consideration?
       return 'Viewed'                 if viewed?
       return 'Flagged'                if candidate.attended_bookings.any?
+      return 'Expired'                if expired?
 
       'New'
     end
@@ -232,6 +233,9 @@ module Bookings
 
     def under_consideration?
       under_consideration_at.present?
+
+    def expired?
+      placement_date.present? && placement_date.date.before?(Date.today)
     end
 
   private

@@ -803,6 +803,16 @@ describe Bookings::PlacementRequest, type: :model do
       subject { create(:placement_request, :with_attended_booking).status }
       it { is_expected.to eq 'Flagged' }
     end
+
+    context 'when placement date has lapsed' do
+      it 'returns Expired' do
+        request = create(:placement_request, :with_a_fixed_date)
+
+        travel 1.year do
+          expect(request.status).to eq 'Expired'
+        end
+      end
+    end
   end
 
   context '#dbs' do
