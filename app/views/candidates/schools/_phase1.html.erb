@@ -42,12 +42,6 @@
       <%- end -%>
     </dl>
 
-    <%- if @school.has_availability? -%>
-    <div class="school-start-request-button__mobile">
-      <%= govuk_link_to "Start request",
-        new_candidates_school_registrations_personal_information_path(@school),
-        aria: { label: "Start request for school experience at #{@school.name}" },
-        data: { module: 'govuk-button' } %>
     </div>
   <%- end -%>
 
@@ -136,6 +130,13 @@
       </li>
       <%- end -%>
     </ul>
+
+  <%- if @school.has_availability? -%>
+    <div class="school-start-request-button__mobile">
+      <%= govuk_link_to "Start request",
+        new_candidates_school_registrations_personal_information_path(@school),
+        aria: { label: "Start request for school experience at #{@school.name}" },
+        data: { module: 'govuk-button' } %>
 
     <%- if @school.has_availability? -%>
     <div class="school-start-request-button__tablet_plus">
