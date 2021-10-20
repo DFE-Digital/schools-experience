@@ -6,14 +6,6 @@
 
     <h1>Manage requests</h1>
 
-    <p>
-      The following <strong>only lists requests</strong> made on or after <strong><%= phase_three_release_date %></strong>.
-    </p>
-
-    <p>
-      You'll need to refer to <strong>your own records</strong> for any requests received before this date.
-    </p>
-
     <% if @placement_requests.any? %>
       <%= pagination_bar @placement_requests %>
 
