@@ -525,10 +525,10 @@ en:
       candidates_registrations_education:
         degree_stage: What stage are you at with your degree?
       candidates_registrations_teaching_preference:
-        teaching_stage: Which of the following teaching stages are you at?
+        teaching_stage: Which of the following best describes how you feel about teaching?
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
-        teaching_stage: Which of the following teaching stages are you at?
+        teaching_stage: Which of the following best describes how you feel about teaching?
       cookie_preference:
         analytics: Cookies that measure website use
       schools_on_boarding_candidate_requirements_choice:
@@ -694,12 +694,12 @@ en:
       candidates_registrations_personal_information:
         email: 'Email address'
       candidates_registrations_teaching_preference:
-        teaching_stage: Which of the following teaching stages are you at?
+        teaching_stage: Which of the following best describes how you feel about teaching?
         subject_first_choice: "First choice"
         subject_second_choice: "Second choice"
       candidates_registrations_education:
         degree_subject: If you have or are studying for a degree, tell us about your degree subject
-        degree_stage_explaination: 'Degree stage explanation'
+        degree_stage_explaination: "Explain what stage you're at with your degree"
       candidates_registrations_subject_preference:
         degree_stage: What stage are you at with your degree?
         degree_stage_explaination: "Explain"
