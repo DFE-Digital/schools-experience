@@ -23,14 +23,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: ACTIONS-API-ACCESS-TOKEN                                         
         with:
           keyvault: ${{ secrets.KEY_VAULT}}                              
           yaml_secret: SE-INFRA-SECRETS                                
           secret: ACTIONS-API-ACCESS-TOKEN 
   
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: SLACK-WEBHOOK                                        
         with:
           keyvault: ${{ secrets.KEY_VAULT}}                              
@@ -105,7 +105,7 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: ACTIONS-API-ACCESS-TOKEN                                         
         with:
           keyvault: ${{ secrets.KEY_VAULT}}                              
@@ -169,14 +169,14 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: ACTIONS-API-ACCESS-TOKEN
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           yaml_secret: SE-INFRA-SECRETS
           secret: ACTIONS-API-ACCESS-TOKEN
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: SNYK-TOKEN
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
@@ -216,7 +216,7 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: ACTIONS-API-ACCESS-TOKEN
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
@@ -264,7 +264,7 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: ACTIONS-API-ACCESS-TOKEN
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
@@ -325,7 +325,7 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: SONAR-TOKEN
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
@@ -427,21 +427,21 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: SLACK-RELEASE-NOTE-WEBHOOK
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           yaml_secret: SE-INFRA-SECRETS
           secret: SLACK-RELEASE-NOTE-WEBHOOK
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: SLACK-WEBHOOK
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           yaml_secret: SE-INFRA-SECRETS
           secret: SLACK-WEBHOOK
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         if: matrix.environment == 'Review' 
         id: PAAS-USERNAME
         with:
@@ -449,7 +449,7 @@ jobs:
           yaml_secret: SE-INFRA-SECRETS
           secret: PAAS-USERNAME
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         if: matrix.environment == 'Review' 
         id: PAAS-PASSWORD
         with:
@@ -457,7 +457,7 @@ jobs:
           yaml_secret: SE-INFRA-SECRETS
           secret: PAAS-PASSWORD
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: ACTIONS-API-ACCESS-TOKEN
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
@@ -563,21 +563,21 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: SLACK-WEBHOOK
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           yaml_secret: SE-INFRA-SECRETS
           secret: SLACK-WEBHOOK
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: HTTPAUTH-USERNAME
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           yaml_secret: SE-SECRETS
           secret: SECURE_USERNAME
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: HTTPAUTH-PASSWORD
         with:
           keyvault: ${{ secrets.KEY_VAULT}}

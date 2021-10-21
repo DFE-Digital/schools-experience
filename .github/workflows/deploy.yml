@@ -115,21 +115,21 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: LOGIT-API
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           yaml_secret: SE-INFRA-SECRETS
           secret: LOGIT-API
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: HTTPAUTH-USERNAME
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           yaml_secret: SE-SECRETS
           secret: SECURE_USERNAME
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: HTTPAUTH-PASSWORD
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
