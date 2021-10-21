@@ -115,11 +115,26 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+        id: LOGIT-API
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'LOGIT-API, HTTPAUTH-USERNAME, HTTPAUTH-PASSWORD'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: LOGIT-API
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+        id: HTTPAUTH-USERNAME
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-SECRETS
+          secret: SECURE_USERNAME
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+        id: HTTPAUTH-PASSWORD
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-SECRETS
+          secret: SECURE_PASSWORD
 
       - uses: hashicorp/setup-terraform@v1.3.2
         with:
@@ -158,8 +173,8 @@ jobs:
                    tests/confidence/healthcheck.sh  "${{steps.variables.outputs.healthcheck}}"  "${{ steps.sha.outputs.short }}"
             fi
         env:
-             HTTPAUTH_USERNAME: ${{steps.azSecret.outputs.HTTPAUTH-USERNAME}}
-             HTTPAUTH_PASSWORD: ${{steps.azSecret.outputs.HTTPAUTH-PASSWORD}}
+             HTTPAUTH_USERNAME: ${{steps.HTTPAUTH-USERNAME.outputs.secret-value}}
+             HTTPAUTH_PASSWORD: ${{steps.HTTPAUTH-PASSWORD.outputs.secret-value}}
             
       - name: Update ${{ github.event.inputs.environment }} status
         if: always()
@@ -174,7 +189,7 @@ jobs:
         if: always()
         uses: DFE-Digital/github-actions/SendToLogit@master
         with:
-           LOGIT-API-KEY: ${{ steps.azSecret.outputs.LOGIT-API }}
+           LOGIT-API-KEY: ${{ steps.LOGIT-API.outputs.secret-value }}
            logtype: "github"
            JSON: |
                 '{"Application" : "${{env.PAAS_APPLICATION_NAME}}", 

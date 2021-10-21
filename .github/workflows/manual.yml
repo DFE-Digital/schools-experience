@@ -29,18 +29,33 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+        id: SLACK-WEBHOOK
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'SLACK-WEBHOOK, SLACK-RELEASE-NOTE-WEBHOOK, ACTIONS-API-ACCESS-TOKEN'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: SLACK-WEBHOOK
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+        id: SLACK-RELEASE-NOTE-WEBHOOK
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: SLACK-RELEASE-NOTE-WEBHOOK
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+        id: ACTIONS-API-ACCESS-TOKEN
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: ACTIONS-API-ACCESS-TOKEN
 
       - name: Get Release Id from Tag
         id: tag_id
         uses: DFE-Digital/github-actions/DraftReleaseByTag@master
         with:
           TAG: ${{ github.event.inputs.tag }}
-          TOKEN: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          TOKEN: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs,secret-value }}
 
       - name: Check if found
         if: steps.tag_id.outputs.release_id == ''
@@ -52,7 +67,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Deploy to PaaS
-          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs,secret-value }}
           inputs: '{"environment": "${{github.event.inputs.environment}}" , "sha": "${{steps.tag_id.outputs.release_sha}}"  }'
           ref: "${{github.ref}}"
 
@@ -60,7 +75,7 @@ jobs:
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: wait-for-deploy
         with:
-          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs,secret-value }}
           checkName: Deploy ${{github.event.inputs.environment}}
           ref: "${{github.ref}}"
 
@@ -79,7 +94,7 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_SUCCESS}}
           SLACK_TITLE: "Release Published to ${{github.event.inputs.environment}}: ${{steps.tag_id.outputs.release_name}}"
           SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
-          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
+          SLACK_WEBHOOK: ${{ steps.SLACK-RELEASE-NOTE-WEBHOOK.outputs.secret-value }}
           MSG_MINIMAL: true
 
       - name: Slack Notification
@@ -89,4 +104,4 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_FAILURE}}
           SLACK_TITLE: "Manual Release Failed: ${{steps.tag_id.outputs.release_name}}"
           SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}} release
-          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
+          SLACK_WEBHOOK: ${{ steps.SLACK-WEBHOOK.outputs.secret-value}}

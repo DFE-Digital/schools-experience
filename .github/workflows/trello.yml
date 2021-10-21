@@ -10,20 +10,31 @@ jobs:
     runs-on: ubuntu-latest  
     if: "!contains( 'dependabot[bot] snyk' , github.actor )"  
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
       - uses: Azure/login@v1
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+        id: TRELLO-KEY
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'TRELLO-KEY, TRELLO-TOKEN'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: TRELLO-KEY
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@yaml-secret
+        id: TRELLO-TOKEN
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: TRELLO-TOKEN
 
       - name: Add Trello Comment 
         uses: DFE-Digital/github-actions/AddTrelloComment@master
         with:
           MESSAGE:      ${{ github.event.pull_request.html_url }} 
           CARD:         "${{ github.event.pull_request.body }}"           
-          TRELLO-KEY:   ${{ steps.azSecret.outputs.TRELLO-KEY}}
-          TRELLO-TOKEN: ${{ steps.azSecret.outputs.TRELLO-TOKEN }}
+          TRELLO-KEY:   ${{ steps.TRELLO-KEY.outputs.secret-value}}
+          TRELLO-TOKEN: ${{ steps.TRELLO-TOKEN.outputs.secret-value}}
