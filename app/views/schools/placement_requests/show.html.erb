@@ -199,6 +199,9 @@
           <% else %>
             <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_make_changes_path(@placement_request) %>
           <% end %>
+          <% unless @placement_request.under_consideration? %>
+            <%= govuk_button_to "Place under consideration", schools_placement_request_schools_placement_requests_place_under_consideration_path(@placement_request), method: :put, form: { class: "under-consideration-button" } %>
+          <% end %>
         </div>
         <div class="govuk-se-button-container">
           <div>

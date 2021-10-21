@@ -188,6 +188,25 @@ Then("the cancelled requests should have a status of {string}") do |status|
   end
 end
 
+Then("the under consideration request should have a status of 'Under consideration'") do
+  within('table#placement-requests') do
+    expect(page).to have_css('.govuk-tag--blue', text: /Under consideration/)
+  end
+end
+
+Then("the request should have a status of 'Booked'") do
+  within('table#placement-requests') do
+    expect(page).to have_css('.govuk-tag--green', text: /Booked/)
+  end
+end
+
+Given("there is an under consideration placement request") do
+  @placement_request = FactoryBot.create \
+    :placement_request,
+    :under_consideration,
+    school: @school
+end
+
 Given("there are some unviewed placement requests") do
   @unviewed_placement_requests_count = 3
   @unviewed_placement_requests = FactoryBot.create_list \

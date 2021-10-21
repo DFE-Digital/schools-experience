@@ -10,6 +10,8 @@ module Schools::PlacementRequestsHelper
                     'govuk-tag govuk-tag--red'
                   elsif status == 'Flagged'
                     'govuk-tag govuk-tag--yellow'
+                  elsif status == 'Under consideration'
+                    'govuk-tag govuk-tag--blue'
                   else
                     'govuk-tag govuk-tag--green'
                   end
