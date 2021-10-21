@@ -12,7 +12,7 @@ WORKDIR /app
 
 EXPOSE 3000
 ENTRYPOINT [ "/app/docker-entrypoint.sh"]
-CMD ["-m", "FRONTEND" ]
+CMD ["-m", "--frontend" ]
 
 ARG SHA
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
