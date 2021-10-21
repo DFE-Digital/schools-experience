@@ -847,33 +847,6 @@ describe Bookings::PlacementRequest, type: :model do
     end
   end
 
-  context '#place_under_consideration?' do
-    include ActiveSupport::Testing::TimeHelpers
-
-    before do
-      freeze_time
-      placement_request.place_under_consideration
-    end
-
-    context 'when under_consideration_at is null' do
-      let(:placement_request) { create(:placement_request) }
-
-      it do
-        expect(placement_request.under_consideration?).to be(true)
-        expect(placement_request.under_consideration_at).to eq(Time.zone.now)
-      end
-    end
-
-    context 'when under_consideration_at has a value' do
-      let(:placement_request) { create(:placement_request, :under_consideration) }
-
-      it do
-        expect(placement_request.under_consideration?).to be(true)
-        expect(placement_request.under_consideration_at).to_not eq(Time.zone.now)
-      end
-    end
-  end
-
   describe '#viewed!' do
     subject { FactoryBot.create :placement_request }
 

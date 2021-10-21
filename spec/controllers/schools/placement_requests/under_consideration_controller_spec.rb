@@ -7,9 +7,6 @@ describe Schools::PlacementRequests::UnderConsiderationController, type: :reques
   describe '#place_under_consideration' do
     include_context "logged in DfE user"
 
-    let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
-    before { create(:bookings_profile, school: @current_user_school) }
-
     subject do
       put schools_placement_request_schools_placement_requests_place_under_consideration_path(placement_request_id)
       response

@@ -234,10 +234,6 @@ module Bookings
       under_consideration_at.present?
     end
 
-    def place_under_consideration
-      update(under_consideration_at: Time.zone.now) unless under_consideration?
-    end
-
   private
 
     def completed?
