@@ -49,6 +49,15 @@
         <% end %>
       <%- end -%>
 
+     <%= f.text_area_with_maxwords \
+          :objectives,
+          rows: 5,
+          maxwords: { count: 150 },
+          'aria-describedby': 'candidates_registrations_placement_preference_objectives_label',
+          label_options: { overwrite_defaults!: true, class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_objectives_label' } do %>
+          
+        <% end %>
+    
           <p>
             Provide a short explanation to help the school offer you the kind of
             experience you’re looking for. For example:
@@ -68,15 +77,6 @@
               I want to see how teachers teach my subject
             </li>
           </ul>
-
-      <%= f.text_area_with_maxwords \
-          :objectives,
-          rows: 5,
-          maxwords: { count: 150 },
-          'aria-describedby': 'candidates_registrations_placement_preference_objectives_label',
-          label_options: { overwrite_defaults!: true, class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_objectives_label' } do %>
-          
-        <% end %>
 
       <%= f.submit 'Continue' %>
     <% end %>
