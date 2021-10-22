@@ -233,6 +233,7 @@ module Bookings
 
     def under_consideration?
       under_consideration_at.present?
+    end
 
     def expired?
       placement_date.present? && placement_date.date.before?(Date.today)
