@@ -16,6 +16,7 @@ locals {
 resource "cloudfoundry_app" "application" {
   name         = var.paas_application_name
   space        = data.cloudfoundry_space.space.id
+  command      = var.FRONTEND
   docker_image = var.paas_docker_image
   stopped      = var.application_stopped
   instances    = var.application_instances
@@ -60,7 +61,7 @@ resource "cloudfoundry_app" "delayed_jobs" {
   count             = var.delayed_jobs
   name              = "${var.paas_application_name}-delayed_job"
   space             = data.cloudfoundry_space.space.id
-  command           = "bundle exec rake jobs:work"
+  command           = var.BACKGROUND
   docker_image      = var.paas_docker_image
   stopped           = var.application_stopped
   instances         = var.delayed_job_instances
@@ -86,26 +87,3 @@ resource "cloudfoundry_app" "delayed_jobs" {
   environment = merge(local.application_secrets, local.environment_map)
 
 }
-
-resource "cloudfoundry_app" "database_migration" {
-  name              = "${var.paas_application_name}-database_migration"
-  space             = data.cloudfoundry_space.space.id
-  command           = "bundle exec rails db:migrate"
-  docker_image      = var.paas_docker_image
-  stopped           = var.application_stopped
-  instances         = var.delayed_job_instances
-  memory            = var.application_memory
-  disk_quota        = var.application_disk
-  health_check_type = "none"
-
-  dynamic "service_binding" {
-    for_each = data.cloudfoundry_user_provided_service.logging
-    content {
-      service_instance = service_binding.value["id"]
-    }
-  }
-
-  environment = merge(local.application_secrets, local.environment_map)
-
-}
-
