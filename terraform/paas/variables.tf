@@ -22,11 +22,11 @@ variable "paas_internet_hostnames" {
 }
 
 variable "FRONTEND" {
-  default = "-m -f" 
+  default = "migrate frontend" 
 }
 
 variable "BACKGROUND" {
-  default = "-b" 
+  default = "background" 
 }
 
 variable "strategy" {

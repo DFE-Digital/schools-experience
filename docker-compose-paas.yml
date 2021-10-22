@@ -3,7 +3,7 @@ version: '3.3'
 services:
    school-experience:
      image: ${IMAGE}
-     command: --frontend
+     command: "frontend" 
      ports:
        - "3000:3000"
      restart: always
@@ -25,7 +25,7 @@ services:
 
    delayed-jobs:
      image: ${IMAGE}
-     command: --background
+     command: "background"
      restart: always
      healthcheck:
        disable: true
@@ -41,7 +41,7 @@ services:
 
    db-tasks:
      image: ${IMAGE}
-     command: --database
+     command: "database"
      restart: on-failure
      healthcheck:
        disable: true
