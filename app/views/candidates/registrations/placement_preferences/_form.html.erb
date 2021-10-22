@@ -56,7 +56,7 @@
           'aria-describedby': 'candidates_registrations_placement_preference_objectives_label',
           label_options: { overwrite_defaults!: true, class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_objectives_label' } do %>
           
-        <% end %>
+
     
           <p>
             Provide a short explanation to help the school offer you the kind of
@@ -78,6 +78,8 @@
             </li>
           </ul>
 
+            <% end %>
+    
       <%= f.submit 'Continue' %>
     <% end %>
   </div>
