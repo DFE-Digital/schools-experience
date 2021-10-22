@@ -177,6 +177,7 @@ module Bookings
       return 'Booked'                 if booking&.accepted?
       return 'Withdrawn'              if candidate_cancellation&.sent?
       return 'Rejected'               if school_cancellation&.sent?
+      return 'Under consideration'    if under_consideration?
       return 'Viewed'                 if viewed?
       return 'Flagged'                if candidate.attended_bookings.any?
 
@@ -227,6 +228,10 @@ module Bookings
 
     def fixed_date_is_bookable?
       !!placement_date&.bookable?
+    end
+
+    def under_consideration?
+      under_consideration_at.present?
     end
 
   private

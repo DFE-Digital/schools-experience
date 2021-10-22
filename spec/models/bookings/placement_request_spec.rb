@@ -19,6 +19,7 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
   it { is_expected.to have_db_column(:analytics_tracking_uuid).of_type(:uuid).with_options null: true }
   it { is_expected.to have_db_column(:candidate_id).of_type(:integer).with_options null: true }
+  it { is_expected.to have_db_column(:under_consideration_at).of_type(:datetime).with_options null: true }
 
   it { is_expected.to have_secure_token }
 
@@ -768,6 +769,12 @@ describe Bookings::PlacementRequest, type: :model do
       it { is_expected.to eq 'Viewed' }
     end
 
+    context 'when under consideration' do
+      subject { create(:placement_request, :under_consideration).status }
+
+      it { is_expected.to eq 'Under consideration' }
+    end
+
     context 'with incomplete booking' do
       subject { create(:placement_request, :with_incomplete_booking).status }
 
@@ -821,6 +828,22 @@ describe Bookings::PlacementRequest, type: :model do
 
     specify 'should be nil' do
       expect(subject.viewed_at).to be_nil
+    end
+  end
+
+  context '#under_consideration?' do
+    context 'when under_consideration_at has a date' do
+      let(:under_consideration_placement_request) { create(:placement_request, :under_consideration) }
+
+      subject { under_consideration_placement_request.under_consideration_at? }
+      it { is_expected.to be(true) }
+    end
+
+    context 'when under_consideration_at is null' do
+      let(:placement_request) { create(:placement_request) }
+
+      subject { placement_request.under_consideration_at? }
+      it { is_expected.to be(false) }
     end
   end
 
