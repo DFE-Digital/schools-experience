@@ -1,18 +1,40 @@
 #!/bin/bash
 
 MODE=NOTSET
-MODE_ERROR="Mode must be be one of (  -r (--rubocop), -f (--frontend), -b (--background), -c (--brakeman) , -x (--database) )"
+MODE_ERROR="Mode must be be one of (  -b (background), -c (brakeman), -f (frontend), -r (rubocop) , -x (database) , -y (cucumber) , -z (rspec) )"
 
 while [[ $# -gt 0 ]]; do
   key="$1"
 
   case $key in
-    -m|--migrate)
+    -m|migrate)
 	  echo Running Migration
           bundle exec rails db:migrate
 	  shift
       ;;
-    -x|--database)
+    -p|profile)
+	  echo Setting Profile ${2}
+          export PROFILE=${2}
+	  shift
+	  shift
+      ;;
+    -y|cucumber)
+	  if [[ ${MODE} != "NOTSET" ]] ; then
+		  echo ${MODE_ERROR}
+	  else
+	          MODE=CUCUMBER
+          fi
+	  shift
+      ;;
+    -z|rspec)
+	  if [[ ${MODE} != "NOTSET" ]] ; then
+		  echo ${MODE_ERROR}
+	  else
+	          MODE=RSPEC
+          fi
+	  shift
+      ;;
+    -x|database)
 	  if [[ ${MODE} != "NOTSET" ]] ; then
 		  echo ${MODE_ERROR}
 	  else
@@ -20,7 +42,7 @@ while [[ $# -gt 0 ]]; do
           fi
 	  shift
       ;;
-    -c|--brakeman)
+    -c|brakeman)
 	  if [[ ${MODE} != "NOTSET" ]] ; then
 		  echo ${MODE_ERROR}
 	  else
@@ -28,7 +50,7 @@ while [[ $# -gt 0 ]]; do
           fi
 	  shift
       ;;
-    -r|--rubocop)
+    -r|rubocop)
 	  if [[ ${MODE} != "NOTSET" ]] ; then
 		  echo ${MODE_ERROR}
 	  else
@@ -36,7 +58,7 @@ while [[ $# -gt 0 ]]; do
           fi
 	  shift
       ;;
-    -f|--frontend)
+    -f|frontend)
 	  if [[ ${MODE} != "NOTSET" ]] ; then
 		  echo ${MODE_ERROR}
 	  else
@@ -44,7 +66,7 @@ while [[ $# -gt 0 ]]; do
           fi
 	  shift
       ;;
-    -b|--background)
+    -b|background)
 	  if [[ ${MODE} != "NOTSET" ]] ; then
 		  echo ${MODE_ERROR}
 	  else
@@ -54,6 +76,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)    # unknown option
 	  echo Unknown Option
+	  shift
       ;;
   esac
 done
@@ -74,6 +97,12 @@ elif [[ ${MODE} == "BRAKEMAN" ]] ; then
 elif [[ ${MODE} == "DATABASE" ]] ; then
 	  echo Running database create 
   	  bundle exec rake db:create db:schema:load
+elif [[ ${MODE} == "RSPEC" ]] ; then
+	  echo Running rspec
+  	  bundle exec rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
+elif [[ ${MODE} == "CUCUMBER" ]] ; then
+	  echo Running cucumber using profile ${PROFILE}
+  	  bundle exec cucumber -t @javascript  --profile=${PROFILE} --format junit --out /app/out/
 else
  echo ${MODE_ERROR}
 fi

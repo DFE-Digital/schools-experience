@@ -16,7 +16,7 @@ locals {
 resource "cloudfoundry_app" "application" {
   name         = var.paas_application_name
   space        = data.cloudfoundry_space.space.id
-  command      = var.FRONTEND
+  command      = "/app/docker-entrypoint.sh ${var.FRONTEND}" 
   docker_image = var.paas_docker_image
   stopped      = var.application_stopped
   instances    = var.application_instances
@@ -61,7 +61,7 @@ resource "cloudfoundry_app" "delayed_jobs" {
   count             = var.delayed_jobs
   name              = "${var.paas_application_name}-delayed_job"
   space             = data.cloudfoundry_space.space.id
-  command           = var.BACKGROUND
+  command           = "/app/docker-entrypoint.sh ${var.BACKGROUND}"
   docker_image      = var.paas_docker_image
   stopped           = var.application_stopped
   instances         = var.delayed_job_instances

@@ -125,7 +125,7 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Lint Ruby
-        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  --rubocop
+        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
 
       - name: Keep Rubocop output
         if: always()
@@ -135,7 +135,7 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
+        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec 
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -199,7 +199,7 @@ jobs:
           args: --severity-threshold=high --file=Dockerfile
 
       - name: Run Brakeman static security scanner
-        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  --brakeman 
+        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman 
 
   cucumber_tests:
     name: Cucumber Tests
@@ -236,7 +236,7 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Run Cucumber Tests
-        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks cucumber --profile=${PROFILE} --format junit --out /app/out
+        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks -p ${PROFILE}  cucumber
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: continuous_integration
@@ -291,7 +291,7 @@ jobs:
                   -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
                   -e CUC_DRIVER \
                   -e APP_URL \
-                  school-experience cucumber -t @javascript  --profile=${PROFILE} --format junit --out /app/out/
+                  school-experience -p ${PROFILE}  cucumber
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: selenium
