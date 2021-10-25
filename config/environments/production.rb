@@ -44,9 +44,18 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
-  # Include generic and useful information about system operation, but avoid logging too much
-  # information to avoid inadvertent exposure of personally identifiable information (PII).
-  config.log_level = :info
+  # Logging
+  config.log_level = :error
+  config.rails_semantic_logger.format = :json
+  config.semantic_logger.backtrace_level = :error
+  config.rails_semantic_logger.add_file_appender = false
+  config.active_record.logger = nil # Don't log SQL in production
+  config.active_record.dump_schema_after_migration = false # Do not dump schema after migrations.
+  config.semantic_logger.add_appender(io: $stdout, level: config.log_level, formatter: config.rails_semantic_logger.format)
+
+  config.logger = ActiveSupport::Logger.new($stdout)
+
+  # Inserts middleware to perform automatic connection switching.
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id, ->(_) { "PID:#{Process.pid}" }]
@@ -77,23 +86,10 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
-
   # Use a different logger for distributed setups.
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new($stdout)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  end
-
-  # Do not dump schema after migrations.
-  config.active_record.dump_schema_after_migration = false
-
-  # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
   # middleware. The `delay` is used to determine how long to wait after a write
   # to send a subsequent read to the primary.

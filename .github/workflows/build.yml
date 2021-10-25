@@ -14,21 +14,29 @@ jobs:
 
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
 
       - uses: Azure/login@v1
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: ACTIONS-API-ACCESS-TOKEN                                         
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK'
-
+          keyvault: ${{ secrets.KEY_VAULT}}                              
+          yaml_secret: SE-INFRA-SECRETS                                
+          secret: ACTIONS-API-ACCESS-TOKEN 
+  
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: SLACK-WEBHOOK                                        
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}                              
+          yaml_secret: SE-INFRA-SECRETS                                
+          secret: SLACK-WEBHOOK 
+          
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
         with:
@@ -51,7 +59,7 @@ jobs:
                 echo ::set-output name=DOCKER_MASTER::${{ env.DOCKER_REPOSITORY }}:master
              else
                 echo ::set-output name=DOCKER_IMAGE::${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}
-                echo ::set-output name=DOCKER_MASTER::""
+                echo ::set-output name=DOCKER_MASTER::${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}
              fi
 
       - name: Login to GitHub Container Registry
@@ -59,7 +67,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
       - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2.7.0
@@ -80,7 +88,7 @@ jobs:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
            SLACK_MESSAGE: 'There has been a failure building the application'
            SLACK_TITLE: 'Failure Building Application'
-           SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
+           SLACK_WEBHOOK: ${{ steps.SLACK-WEBHOOK.outputs.secret-value }}
 
   spec_tests:
     name: Unit Tests
@@ -88,7 +96,7 @@ jobs:
     needs: [ build ]
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
@@ -97,18 +105,19 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: ACTIONS-API-ACCESS-TOKEN                                         
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'ACTIONS-API-ACCESS-TOKEN , SLACK-WEBHOOK'
-
+          keyvault: ${{ secrets.KEY_VAULT}}                              
+          yaml_secret: SE-INFRA-SECRETS                                
+          secret: ACTIONS-API-ACCESS-TOKEN 
+  
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.10.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
       - name: Bring up Docker compose Stack
         run: docker-compose -f docker-compose-paas.yml up -d
@@ -116,7 +125,7 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Lint Ruby
-        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop app config lib features spec --format json --out=/app/out/rubocop-result.json
+        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
 
       - name: Keep Rubocop output
         if: always()
@@ -126,7 +135,7 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
+        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec 
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -151,7 +160,7 @@ jobs:
     needs: [ build ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
@@ -160,29 +169,37 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: ACTIONS-API-ACCESS-TOKEN
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'ACTIONS-API-ACCESS-TOKEN , SLACK-WEBHOOK, SNYK-TOKEN'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: ACTIONS-API-ACCESS-TOKEN
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: SNYK-TOKEN
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: SNYK-TOKEN
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.10.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
-          SNYK_TOKEN: ${{ steps.azSecret.outputs.SNYK-TOKEN }}
+          SNYK_TOKEN: ${{ steps.SNYK-TOKEN.outputs.secret-value }}
         with:
           image: ${{needs.build.outputs.DOCKER_IMAGE}}
           args: --severity-threshold=high --file=Dockerfile
 
       - name: Run Brakeman static security scanner
-        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman --no-pager
+        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman 
 
   cucumber_tests:
     name: Cucumber Tests
@@ -190,7 +207,7 @@ jobs:
     needs: [ build ]
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
@@ -199,18 +216,19 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: ACTIONS-API-ACCESS-TOKEN
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'ACTIONS-API-ACCESS-TOKEN , SLACK-WEBHOOK'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: ACTIONS-API-ACCESS-TOKEN
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.10.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
       - name: Bring up Docker compose Stack
         run: docker-compose -f docker-compose-paas.yml up -d
@@ -218,7 +236,7 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Run Cucumber Tests
-        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks cucumber --profile=${PROFILE} --format junit --out /app/out
+        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks -p ${PROFILE}  cucumber
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: continuous_integration
@@ -237,7 +255,7 @@ jobs:
     needs: [ build ]
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
@@ -246,18 +264,19 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: ACTIONS-API-ACCESS-TOKEN
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'ACTIONS-API-ACCESS-TOKEN , SLACK-WEBHOOK'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: ACTIONS-API-ACCESS-TOKEN
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.10.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
       - name: Bring up Docker compose Stack
         run: docker-compose -f docker-compose-paas.yml -f docker-compose-chrome.yml up -d
@@ -272,7 +291,7 @@ jobs:
                   -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
                   -e CUC_DRIVER \
                   -e APP_URL \
-                  school-experience cucumber -t @javascript  --profile=${PROFILE} --format junit --out /app/out/
+                  school-experience -p ${PROFILE}  cucumber
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: selenium
@@ -295,7 +314,7 @@ jobs:
     needs: [ selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
     steps:
 
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
@@ -306,11 +325,12 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: SONAR-TOKEN
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'SONAR-TOKEN'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: SONAR-TOKEN
 
       - name: Download Test Artifacts
         uses: actions/download-artifact@v2
@@ -324,7 +344,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ steps.azSecret.outputs.SONAR-TOKEN }}
+          SONAR_TOKEN: ${{ steps.SONAR-TOKEN.outputs.secret-value }}
 
   prepare:
     name: Configure Matrix Deployments
@@ -332,6 +352,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
+      release_tag: ${{steps.tag_version.outputs.pr_number}}
     steps:
       - name: Set matrix environments (Push to master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -340,6 +361,34 @@ jobs:
       - name: Set matrix environments ( Review)
         if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
         run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Review\"]}" >> $GITHUB_ENV
+
+      - name: Generate Tag from PR Number
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        id: tag_version
+        uses: DFE-Digital/github-actions/GenerateReleaseFromSHA@master
+        with:
+          sha: ${{github.sha}}
+
+      - name: Create a GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && steps.tag_version.outputs.pr_found == 1
+        id: release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.pr_number }}
+          body: ${{ steps.tag_version.outputs.pr_number }}
+          release_name: Release ${{ steps.tag_version.outputs.pr_number }}
+          commitish: ${{ github.sha}}
+          prerelease: false
+
+      - name: Copy PR Info to Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'  && steps.release.outputs.id
+        uses: DFE-Digital/github-actions/CopyPRtoRelease@master
+        with:
+          PR_NUMBER:  ${{ steps.tag_version.outputs.pr_number }}
+          RELEASE_ID: ${{ steps.release.outputs.id }}
+          TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   deployments:
     name: Deployments
@@ -350,7 +399,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
@@ -359,6 +408,14 @@ jobs:
         run: |
            REFERENCE=${{github.ref}}   
            echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
+
+      - name: Install Cloud Foundry
+        if: matrix.environment == 'Review' 
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf7-cli  
 
       - name: Set Review specific variables
         if: matrix.environment == 'Review' 
@@ -370,25 +427,67 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: SLACK-RELEASE-NOTE-WEBHOOK
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'SLACK-WEBHOOK, ACTIONS-API-ACCESS-TOKEN'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: SLACK-RELEASE-NOTE-WEBHOOK
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: SLACK-WEBHOOK
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: SLACK-WEBHOOK
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        if: matrix.environment == 'Review' 
+        id: PAAS-USERNAME
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: PAAS-USERNAME
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        if: matrix.environment == 'Review' 
+        id: PAAS-PASSWORD
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: PAAS-PASSWORD
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: ACTIONS-API-ACCESS-TOKEN
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: ACTIONS-API-ACCESS-TOKEN
+
+      - name: Login to Cloud Foundry
+        if: matrix.environment == 'Review' 
+        run: cf login -a api.london.cloud.service.gov.uk -u ${{steps.PAAS-USERNAME.outputs.secret-value}} -p ${{steps.PAAS-PASSWORD.outputs.secret-value}} -s get-into-teaching
+
+      - name: Get Static Route 
+        if: matrix.environment == 'Review' 
+        run: |
+              cf delete-orphaned-routes -f
+              STATIC_ROUTE=$( ${GITHUB_WORKSPACE}/script/get_next_mapping.sh ${{env.REVIEW_APPLICATION}}-${{github.event.number}} )
+              echo "STATIC_ROUTE=${STATIC_ROUTE}" >> $GITHUB_ENV
 
       - name: Trigger Deployment to ${{matrix.environment}}
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Deploy to PaaS
-          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-          inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}" }'
+          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}" , "static": "${{env.STATIC_ROUTE}}" }'
           ref: ${{env.REFERENCE}}
 
       - name: Wait for Deployment to ${{matrix.environment}}
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: wait-for-deploy
         with:
-          token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
           checkName: Deploy ${{ github.sha }} to ${{ matrix.environment  }}
           ref: ${{env.REFERENCE}}
           timeoutSeconds: 1200
@@ -402,42 +501,42 @@ jobs:
         if: matrix.environment == 'Review' 
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          message: Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
+          recreate: true
+          message: |
+                   Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
+                   Static DFE_SIGNIN Path used https://${{env.STATIC_ROUTE}}.london.cloudapps.digital
 
       - name: Add Review Label
         if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
         uses: actions-ecosystem/action-add-labels@v1.1.3
         with:
-          github_token: ${{ steps.azSecret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          github_token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
           labels: Review
 
-      - name: Generate Tag from PR Number
-        if: matrix.environment == 'Development' 
-        id: tag_version
-        uses: DFE-Digital/github-actions/GenerateReleaseFromSHA@master
+      - name: Get Release Id from Tag
+        id: tag_id
+        uses: DFE-Digital/github-actions/DraftReleaseByTag@master
         with:
-          sha: ${{github.sha}}
+          TAG: ${{needs.prepare.outputs.release_tag}}
+          TOKEN: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
-      - name: Create a GitHub Release
-        if: matrix.environment == 'Development' && steps.tag_version.outputs.pr_found == 1
-        id: release
-        uses: actions/create-release@v1.1.4
+      - name: Publish Release
+        if:  matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        uses: eregon/publish-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.tag_version.outputs.pr_number }}
-          body: ${{ steps.tag_version.outputs.pr_number }}
-          release_name: Release ${{ steps.tag_version.outputs.pr_number }}
-          commitish: ${{ github.sha}}
-          prerelease: false
+          release_id: ${{steps.tag_id.outputs.release_id}}
 
-      - name: Copy PR Info to Release
-        if: matrix.environment  == 'Development' && steps.release.outputs.id
-        uses: DFE-Digital/github-actions/CopyPRtoRelease@master
-        with:
-          PR_NUMBER:  ${{ steps.tag_version.outputs.pr_number }}
-          RELEASE_ID: ${{ steps.release.outputs.id }}
-          TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Slack Release Notification
+        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_SUCCESS}}
+          SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
+          SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
+          SLACK_WEBHOOK: ${{ steps.SLACK-RELEASE-NOTE-WEBHOOK.outputs.secret-value }}
+          MSG_MINIMAL: true
 
       - name: Slack Notification
         if: failure() && matrix.environment == 'Production' 
@@ -446,7 +545,7 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_ERROR}}
           SLACK_TITLE: Failure in Post-Development Deploy
           SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
-          SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
+          SLACK_WEBHOOK: ${{ steps.SLACK-WEBHOOK.outputs.secret-value }}
 
   owasp:
     name: 'OWASP Test'
@@ -455,7 +554,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
@@ -464,30 +563,35 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/get-keyvault-secrets@v1.2
-        id:   azSecret
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: SLACK-WEBHOOK
         with:
-           keyvault: ${{ secrets.KEY_VAULT}}
-           secrets: 'SLACK-WEBHOOK, HTTPAUTH-USERNAME, HTTPAUTH-PASSWORD'
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: SLACK-WEBHOOK
 
-      - name: Setup Authorization
-        run: |
-             BASE=$( echo "${{steps.azSecret.outputs.HTTPAUTH-USERNAME}}:${{steps.azSecret.outputs.HTTPAUTH-PASSWORD}}" | base64 )
-             echo "replacer.full_list(0).description=auth1"           >  ./options.prop
-             echo "replacer.full_list(0).enabled=true"                >> ./options.prop
-             echo "replacer.full_list(0).matchtype=REQ_HEADER"        >> ./options.prop
-             echo "replacer.full_list(0).matchstr=Authorization"      >> ./options.prop
-             echo "replacer.full_list(0).regex=false"                 >> ./options.prop
-             echo "replacer.full_list(0).replacement=Basic ${BASE}"   >> ./options.prop
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: HTTPAUTH-USERNAME
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-SECRETS
+          secret: SECURE_USERNAME
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: HTTPAUTH-PASSWORD
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-SECRETS
+          secret: SECURE_PASSWORD
 
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.5.0
+        uses: zaproxy/action-full-scan@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
+          target: 'https://${{ steps.HTTPAUTH-USERNAME.outputs.secret-value }}:${{ steps.HTTPAUTH-PASSWORD.outputs.secret-value }}@${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}'
           rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-z "-configFile /zap/wrk/options.prop" '
+          cmd_options: '-a'
 
       - name: Slack Notification
         if: failure()
@@ -496,6 +600,4 @@ jobs:
            SLACK_COLOR: ${{env.SLACK_FAILURE}}
            SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
            SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
-           SLACK_WEBHOOK: ${{ steps.azSecret.outputs.SLACK-WEBHOOK }}
-
-
+           SLACK_WEBHOOK: ${{ steps.SLACK-WEBHOOK.outputs.secret-value }}

@@ -154,3 +154,8 @@ or
 ```bash
 redis-server
 ```
+
+## Deployment
+### Review Applications
+
+When deploying a review application a script is run to find the first available static route (review-school-experience[1-10] ) and attach that to the review, via terraform. This enables the DFE Sign In process to work.

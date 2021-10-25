@@ -86,6 +86,7 @@ Rails.application.routes.draw do
       resources :past_attendances,
         only: %i[index],
         controller: 'placement_requests/past_attendance'
+      put "/schools/placement_requests/place_under_consideration", to: "/schools/placement_requests/under_consideration#place_under_consideration"
     end
     resources :withdrawn_requests, only: %i[index show]
     resources :rejected_requests, only: %i[index show]

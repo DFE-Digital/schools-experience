@@ -16,7 +16,7 @@ describe Bookings::SchoolSearch do
 
   describe 'Validation' do
     subject { described_class.new({}) }
-    it { is_expected.to validate_length_of(:location).is_at_least(3).allow_nil }
+    it { is_expected.to validate_length_of(:location).is_at_least(2) }
   end
 
   describe '#geolocation' do
@@ -59,7 +59,7 @@ describe Bookings::SchoolSearch do
         end
 
         specify 'should return an empty result' do
-          expect(Rails.logger).to receive(:info).with(/No Geocoder results/)
+          expect(Rails.logger).to receive(:info).with("No Geocoder results found in England for Mumbai, England (user entered: Mumbai)")
         end
       end
     end
@@ -251,6 +251,10 @@ describe Bookings::SchoolSearch do
         # phases
         let(:college) { create(:bookings_phase, name: "College") }
         let(:secondary) { create(:bookings_phase, name: "Secondary") }
+        # DBS Policies
+        let!(:dbs_required) { create(:bookings_profile, dbs_policy_conditions: 'required') }
+        let!(:dbs_inschool) { create(:bookings_profile, dbs_policy_conditions: 'inschool') }
+        let!(:dbs_notrequired) { create(:bookings_profile, dbs_policy_conditions: 'notrequired') }
 
         context 'Filtering on subjects' do
           before do
@@ -294,6 +298,33 @@ describe Bookings::SchoolSearch do
           end
 
           specify 'should omit non-matching results' do
+            expect(subject).not_to include(non_matching_school)
+          end
+        end
+
+        context 'Filtering on dbs' do
+          let!(:another_matching_school) do
+            create(
+              :bookings_school,
+              name: "Moore Primary School",
+              coordinates: point_in_manchester,
+              fee: 10
+            )
+          end
+
+          before do
+            matching_school.profile = dbs_notrequired
+            another_matching_school.profile = dbs_inschool
+            non_matching_school.profile = dbs_required
+          end
+
+          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, dbs_policies: [2]).results }
+
+          specify 'should return both schools requiring DBS for in school or not requiring DBS at all' do
+            expect(subject).to include(matching_school, another_matching_school)
+          end
+
+          specify 'should omit schools requiring DBS' do
             expect(subject).not_to include(non_matching_school)
           end
         end

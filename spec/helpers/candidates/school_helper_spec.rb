@@ -223,6 +223,31 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
+  context '.school_search_dbs_policies_filter_description' do
+    context 'with no selections' do
+      subject do
+        double('Bookings::SchoolSearch',
+          dbs_policies: [], dbs_policies_names: [])
+      end
+
+      it("should return a nil") do
+        expect(school_search_dbs_policies_filter_description(subject)).to be_nil
+      end
+    end
+
+    context 'with dbs policies filters' do
+      subject do
+        double('Bookings::SchoolSearch',
+          dbs_policies: [2], dbs_policies_names: ['Not required'])
+      end
+
+      it("should return a nil") do
+        expect(school_search_dbs_policies_filter_description(subject)).to \
+          eq("DBS check: <strong>Not required</strong>")
+      end
+    end
+  end
+
   describe '#cleanup_school_url' do
     context 'with blank url' do
       subject { cleanup_school_url(' ') }

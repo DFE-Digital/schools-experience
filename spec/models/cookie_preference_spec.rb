@@ -136,7 +136,7 @@ describe CookiePreference, type: :model do
 
       context 'for neither accepted nor rejected' do
         let(:params) { {} }
-        it { is_expected.to be true }
+        it { is_expected.to be false }
       end
 
       context 'for accepted' do
@@ -155,7 +155,7 @@ describe CookiePreference, type: :model do
 
       context 'without neither accepted or rejected' do
         let(:params) { {} }
-        it { is_expected.to be true }
+        it { is_expected.to be false }
       end
 
       context 'with accepted' do

@@ -10,5 +10,26 @@ FactoryBot.define do
       gitis_contact { build(:api_schools_experience_sign_up) }
       gitis_uuid { gitis_contact.candidate_id }
     end
+
+    trait :with_attended_booking do
+      after :create do |candidate|
+        FactoryBot.create(:placement_request, :with_attended_booking, candidate: candidate)
+      end
+    end
+  end
+
+  factory :recurring_candidate, class: 'Bookings::Candidate' do
+    transient do
+      school { nil }
+    end
+
+    gitis_uuid { SecureRandom.uuid }
+
+    after :create do |candidate, evaluator|
+      school = evaluator.school || FactoryBot.create(:bookings_school)
+
+      FactoryBot.create(:placement_request, :with_attended_booking, candidate: candidate, school: school)
+      FactoryBot.create(:placement_request, candidate: candidate, school: school)
+    end
   end
 end

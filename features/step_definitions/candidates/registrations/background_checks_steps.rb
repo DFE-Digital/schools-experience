@@ -3,5 +3,5 @@ Then("I should see a paragraph informing me that some schools require a DBS chec
 end
 
 Given("there should be some text continaing a link to the DBS website") do
-  expect(page).to have_link "Find out more about 'DBS checks' and 'DBS certificates'", href: 'https://www.gov.uk/government/organisations/disclosure-and-barring-service/about'
+  expect(page).to have_link "Find out more", href: 'https://www.gov.uk/government/organisations/disclosure-and-barring-service/about'
 end

@@ -21,6 +21,14 @@ variable "paas_internet_hostnames" {
   default = []
 }
 
+variable "FRONTEND" {
+  default = "migrate frontend" 
+}
+
+variable "BACKGROUND" {
+  default = "background" 
+}
+
 variable "strategy" {
   default = "blue-green-v2"
 }
@@ -95,6 +103,10 @@ variable "application_environment" {
 
 variable "paas_application_name" {
   default = "dfe-school-experience-app"
+}
+
+variable "static_route" {
+  default = ""
 }
 
 variable "paas_docker_image" {

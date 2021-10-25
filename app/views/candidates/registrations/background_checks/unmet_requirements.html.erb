@@ -6,7 +6,14 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">You need a DBS certificate at this school</h1>
-    <p>This school requires you to have a DBS certificate. There are schools on the service that do not require a DBS certificate.</p>
+    <p>This school requires you to have a DBS certificate for the requested school experience type. 
+    There are schools that do not require a DBS certificate for all types of school experience.</p>
+        
+      <p>
+        <%= govuk_link_to 'Search again', new_candidates_school_search_path %>
+      </p>
+
+    
     <p>
       <strong>
         <%= link_to "Find out more about 'DBS checks' and 'DBS certificates'", 'https://www.gov.uk/government/organisations/disclosure-and-barring-service/about' %>

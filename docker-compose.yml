@@ -3,6 +3,7 @@ version: '3.3'
 services:
    school-experience:
      image: school-experience:latest
+     command: "frontend"
      ports:
        - "3000:3000"
      restart: always
@@ -22,7 +23,7 @@ services:
 
    delayed-jobs:
      image: school-experience:latest
-     command: rake jobs:work
+     command: "background"
      restart: always
      healthcheck:
        disable: true
@@ -38,7 +39,7 @@ services:
 
    db-tasks:
      image: school-experience:latest
-     command: rake db:create db:schema:load
+     command: "atabase"
      restart: on-failure
      healthcheck:
        disable: true

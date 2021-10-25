@@ -10,7 +10,11 @@
     </p>
 
     <p class="govuk-!-margin-top-6">
-      <%= govuk_link_to 'Return to requests and bookings', schools_dashboard_path %>
+      <% if @signed_in %>
+        <%= govuk_link_to 'Go to dashboard', schools_dashboard_path %>
+      <% else %>
+        <%= govuk_link_to 'Return to manage school experience', schools_path %>
+      <% end %>
     </p>
   <div>
 </div>

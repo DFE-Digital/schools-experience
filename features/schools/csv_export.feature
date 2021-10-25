@@ -8,11 +8,11 @@ Feature: CSV Export
         And the school has subjects
         And my school has fully-onboarded
 
-     Scenario: Navigating to the download screen
-        Given I am on the 'schools dashboard' page
-        Then there should be a section titled 'Account admin'
-        And I click 'Download requests and bookings'
-        Then the page's main header should be 'Download requests and bookings'
+    ## Scenario: Navigating to the download screen
+       ## Given I am on the 'schools dashboard' page
+        ## Then there should be a section titled 'Account admin'
+        ## And I click 'Download requests and bookings'
+        ## Then the page's main header should be 'Download requests and bookings'
 
     Scenario: Downloading the CSV
         Given I am on the 'csv download' page
