@@ -21,7 +21,9 @@
       <em>No service updates are currently available</em>
     </p>
     <%- end -%>
-
+    
+    <hr>
+    
     <%- if @recent_updates.any? -%>
     <h2 class="govuk-heading-m">
       Recent service updates
@@ -29,6 +31,8 @@
 
     <%= render @recent_updates %>
     <%- end -%>
+
+    <hr>
 
     <h2 class="govuk-heading-m">
       Help and support
