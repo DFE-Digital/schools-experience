@@ -9,4 +9,4 @@ Feature: The School Dashboard
     Scenario: Links
         Given I am on the 'contact us' page
         Then I should see a email link to 'organise.school-experience@education.gov.uk'
-        And I should see a 'Return to requests and bookings' link to the 'schools dashboard'
+        And I should see a 'Go to dashboard' link to the 'schools dashboard'

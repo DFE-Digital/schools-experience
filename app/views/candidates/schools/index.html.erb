@@ -8,6 +8,22 @@
 </div>
 
 <div class="govuk-grid-row">
+  <section id="search-bar" class="govuk-grid-column-full">
+    <%= govuk_form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
+          <%= f.govuk_text_field :location, label: { text: "School location", class: "govuk-visually-hidden" }, width: 'full', placeholder: 'Location or postcode' %>
+
+          <%= f.govuk_select :distance, label: { text: 'Search radius' } do
+                options_from_collection_for_select(Candidates::SchoolSearch.distances, :first, :last, params[:distance])
+              end unless f.object.whitelisted_urns?
+          %>
+
+          <div class="govuk-form-group">
+            <%= f.govuk_submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
+          </div>
+      <% end %>
+    <hr />
+  </section>
+
   <aside class="govuk-grid-column-one-third filter-list" aria-label="Filter search results">
     <div data-controller="collapsible" id="search-filter">
       <button data-action="collapsible#toggle">
@@ -29,6 +45,7 @@
           <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
 
           <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
+          <%= f.collection_check_boxes :dbs_policies, [[2 , nil]], :first, :last %>
           <%= f.hidden_field :order %>
 
           <%= f.submit 'Update schools list', name: nil %>
@@ -38,7 +55,7 @@
   </aside>
 
   <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
-    <%- if @search.subjects.any? || @search.phases.any? -%>
+    <%- if @search.subjects.any? || @search.phases.any? || @search.dbs_policies.any? -%>
     <div class="school-search-filter-info">
       <div>
         <%= school_search_phase_filter_description @search %>
@@ -46,6 +63,10 @@
 
       <div>
         <%= school_search_subject_filter_description @search %>
+      </div>
+
+      <div>
+        <%= school_search_dbs_policies_filter_description @search %>
       </div>
     </p>
     <%- end -%>
@@ -72,6 +93,9 @@
         <% end %>
         <% for subject_id in f.object.subjects %>
           <%= f.hidden_field :subjects, multiple: true, value: subject_id, id: nil %>
+        <% end %>
+        <% f.object.dbs_policies.each do |dbs_policy| %>
+          <%= f.hidden_field :dbs_policies, multiple: true, value: dbs_policy, id: nil %>
         <% end %>
         <%= f.hidden_field :max_fee %>
         <%= f.radio_button_fieldset :order,

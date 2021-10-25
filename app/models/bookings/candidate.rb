@@ -132,4 +132,8 @@ class Bookings::Candidate < ApplicationRecord
 
     gitis_contact
   end
+
+  def attended_bookings
+    bookings.includes(:bookings_placement_request).attendance_logged
+  end
 end

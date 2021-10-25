@@ -39,7 +39,7 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'high-priority' links:
             | Text            | Hint                                           | Path                        |
-            | Manage requests | View, accept and decline requests | /schools/placement_requests |
+            | Manage requests | View, accept or decline requests | /schools/placement_requests |
             | Manage upcoming bookings | View, change or cancel bookings                | /schools/bookings           |
 
     Scenario: Manage dates
@@ -58,7 +58,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
             | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Manage dates           | Add, remove and change placement dates | /schools/placement_dates              |
+            | Manage dates           | Add, remove or change placement dates | /schools/placement_dates              |
 
     Scenario: Adding, removing and changing dates not visible when not fixed and dates not present
         Given my school has fully-onboarded
@@ -67,7 +67,7 @@ Feature: The School Dashboard
         Then I should see the following 'medium-priority' links:
             | Text                                   | Hint | Path                                  |
             | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Manage dates           | Add, remove and change placement dates | /schools/placement_dates              |
+            | Manage dates           | Add, remove or change placement dates | /schools/placement_dates              |
 
 
     Scenario: Account admin
@@ -77,17 +77,10 @@ Feature: The School Dashboard
             | Text                           | Hint                                                                    | Path                         |
             | View rejected requests         | View request dates, subjects, candidate names and reasons for rejection | /schools/rejected_requests   |
             | View previous bookings         | View booking dates, subjects, candidate names and attendance         | /schools/previous_bookings   |
-            | Download requests and bookings | Download all requests and bookings as a CSV file                        | /schools/csv_export          |
             | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
             | Turn profile on or off         | Choose to stop or start receiving requests               | /schools/toggle_enabled/edit |
-
-    Scenario: Low priority headings
-        Given my school has fully-onboarded
-        When I am on the 'schools dashboard' page
-        Then I should see the following 'low-priority' links:
-            | Text       | Hint                                            | Path                |
             | Contact us | Get in touch if you need help using the service | /schools/contact_us |
-
+    
     Scenario: Candidate requests counter
         Given my school has fully-onboarded
         And there are 5 new requests
@@ -130,3 +123,4 @@ Feature: The School Dashboard
         And my school has availability no information set
         When I am on the 'schools dashboard' page
         Then there should be a 'You have no availability information' warning
+

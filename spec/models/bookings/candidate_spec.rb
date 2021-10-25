@@ -343,4 +343,26 @@ RSpec.describe Bookings::Candidate, type: :model do
         email: subject.gitis_contact.email
     end
   end
+
+  describe '#attended_bookings' do
+    context 'when attended bookings exist' do
+      subject { create(:recurring_candidate).attended_bookings }
+
+      it { is_expected.to all(be_a Bookings::Booking) }
+
+      it 'returns attended bookings only' do
+        subject.each do |booking|
+          expect(booking.attended).to be_truthy
+        end
+      end
+    end
+
+    context 'when there are no attended bookings' do
+      subject { create(:candidate).attended_bookings }
+
+      it 'returns an empty array' do
+        expect(subject).to eq([])
+      end
+    end
+  end
 end

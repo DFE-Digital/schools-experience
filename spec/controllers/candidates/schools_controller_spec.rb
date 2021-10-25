@@ -12,7 +12,8 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         phases: %w[1],
         subjects: %w[2 3],
         max_fee: '30',
-        order: 'Name'
+        order: 'Name',
+        dbs_policies: %w[1]
       }
     end
 
@@ -27,6 +28,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       expect(assigns(:search).subjects).to eq([2, 3])
       expect(assigns(:search).max_fee).to eq('30')
       expect(assigns(:search).order).to eq('Name')
+      expect(assigns(:search).dbs_policies).to eq([1])
 
       # note, this search will yield no results so the search radius will
       # automatically be expanded from 10 to the value at EXPANDED_SEARCH_RADIUS
@@ -44,7 +46,8 @@ RSpec.describe Candidates::SchoolsController, type: :request do
           phases: %w[1],
           subjects: %w[2 3],
           max_fee: '30',
-          order: 'Name'
+          order: 'Name',
+          dbs_policies: %w[1]
         }
       end
 
@@ -75,9 +78,13 @@ RSpec.describe Candidates::SchoolsController, type: :request do
 
     context 'analytics tracking' do
       # set the uuid cookie, grab it then do a search
-      before { get new_candidates_school_search_path }
-      before { @uuid = cookies[:analytics_tracking_uuid] }
-      before { get candidates_schools_path(query_params) }
+      before do
+        allow_any_instance_of(CookiePreference).to receive(:allowed?).with(:analytics_tracking_uuid).and_return(true)
+
+        get new_candidates_school_search_path
+        @uuid = cookies[:analytics_tracking_uuid]
+        get candidates_schools_path(query_params)
+      end
 
       specify 'should persist the analytics_tracking_uuid if present' do
         expect(Bookings::SchoolSearch.last.analytics_tracking_uuid).to eql(@uuid)

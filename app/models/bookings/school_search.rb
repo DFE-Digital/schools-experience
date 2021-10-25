@@ -1,8 +1,10 @@
+require 'geocoding_request'
+
 class Bookings::SchoolSearch < ApplicationRecord
   attr_accessor :requested_order
   attr_reader :location_name
 
-  validates :location, length: { minimum: 3 }, allow_nil: true
+  validates :location, length: { minimum: 2 }, allow_nil: false, if: -> { location.is_a?(String) }
 
   AVAILABLE_ORDERS = [
     %w[distance Distance],
@@ -28,6 +30,7 @@ class Bookings::SchoolSearch < ApplicationRecord
       whitelisted_urns.any?
     end
   end
+
   delegate :whitelisted_urns, :whitelisted_urns?, to: :class
 
   def initialize(attributes = {})
@@ -99,6 +102,7 @@ private
       .with_availability
       .distinct
       .includes([:available_placement_dates])
+      .with_dbs_policies(dbs_options)
   end
 
   def whitelisted_base_query
@@ -135,13 +139,15 @@ private
   end
 
   def geolocate(location)
+    geocoding_request = GeocodingRequest.new(location, REGION)
+    formatted_request = geocoding_request.format_address
     result = Geocoder.search(
-      [location, REGION].join(", "),
+      formatted_request,
       params: GEOCODER_PARAMS
     )&.first
 
     if empty_geocoder_result?(result)
-      Rails.logger.info("No Geocoder results found in #{REGION} for #{location}")
+      Rails.logger.info("No Geocoder results found in #{REGION} for #{formatted_request} (user entered: #{location})")
       return
     end
 
@@ -173,6 +179,12 @@ private
       'distance asc'
     else
       { name: 'asc' }
+    end
+  end
+
+  def dbs_options
+    if dbs_policies.present?
+      dbs_policies.map { |i| Bookings::Profile::DBS_POLICY_CONDITIONS[i.to_i] }.push('inschool')
     end
   end
 end

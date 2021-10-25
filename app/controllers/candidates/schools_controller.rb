@@ -46,8 +46,8 @@ private
 
   def search_params
     params.permit(
-      :query, :location, :latitude, :longitude, :page,
-      :distance, :max_fee, :order, phases: [], subjects: []
+      :query, :location, :latitude, :longitude, :page, :distance,
+      :max_fee, :order, phases: [], subjects: [], dbs_policies: []
     )
   end
 

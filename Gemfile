@@ -23,10 +23,14 @@ gem 'geocoder'
 gem 'puma', '~> 5.5'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '>= 5.4.0'
+gem 'webpacker', '~> 5.4'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
+
+# Install Semantic Logger, this is needed to make Logit.io work with PaaS
+gem 'amazing_print'
+gem 'rails_semantic_logger'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -43,7 +47,7 @@ gem 'delayed_cron_job'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 
-gem "redis", "~> 4.4"
+gem "redis", "~> 4.5"
 
 gem 'kaminari'
 

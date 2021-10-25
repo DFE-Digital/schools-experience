@@ -80,6 +80,11 @@
   margin-bottom: govuk-spacing(4);
 }
 
+#_subjects_container .govuk-checkboxes {
+  height: 300px;
+  overflow-y: scroll;
+}
+
 .school-search-form {
   select {
     width: 100%;
@@ -120,4 +125,33 @@
 
 #candidate-application-notification {
   margin-top: 0;
+}
+
+#search-bar {
+  hr {
+    @extend .govuk-section-break ;
+    @extend .govuk-section-break--m ;
+    @extend .govuk-section-break--visible ;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    #distance-field {
+      min-width: 12em;
+      width: 100%;
+    }
+
+    @include govuk-media-query($from: tablet) {
+      flex-direction: row;
+      .govuk-form-group {
+        margin-right: 2em;
+        margin-bottom: 0em !important;
+      }
+
+      #location-field, .govuk-button {
+        margin-top: 1.5em;
+      }
+    }
+  }
 }

@@ -115,6 +115,15 @@ module Candidates::SchoolHelper
     )
   end
 
+  def school_search_dbs_policies_filter_description(search)
+    return if search.dbs_policies.empty?
+
+    t(
+      'helpers.candidates.school_search.dbs_policies_filter.text_html',
+      dbs_policies_options: to_sentence(search.dbs_policies_names.map { |name| tag.strong(name) })
+    )
+  end
+
   def cleanup_school_url(url)
     if url.blank?
       '#'

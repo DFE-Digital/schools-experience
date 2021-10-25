@@ -9,7 +9,8 @@ RSpec.describe Candidates::SchoolSearch do
         distance: '3',
         max_fee: '30',
         phases: [1, 2, 3],
-        subjects: [4, 5, 6]
+        subjects: [4, 5, 6],
+        dbs_policies: [2]
       )
     end
 
@@ -20,6 +21,7 @@ RSpec.describe Candidates::SchoolSearch do
       expect(subject.max_fee).to eq('30')
       expect(subject.phases).to eq([1, 2, 3])
       expect(subject.subjects).to eq([4, 5, 6])
+      expect(subject.dbs_policies).to eq([2])
     end
   end
 
@@ -94,6 +96,40 @@ RSpec.describe Candidates::SchoolSearch do
 
       it 'should convert to integers' do
         expect(subject.phases).to eq [1, 2, 3]
+      end
+    end
+  end
+
+  context '.dbs_policies=' do
+    context 'with blank strings' do
+      before { subject.dbs_policies = [1, '', 3] }
+
+      it 'should remove blank strings' do
+        expect(subject.dbs_policies).to eq [1, 3]
+      end
+    end
+
+    context 'with nils' do
+      before { subject.dbs_policies = [1, 3, nil] }
+
+      it 'should remove nils' do
+        expect(subject.dbs_policies).to eq [1, 3]
+      end
+    end
+
+    context 'with single values' do
+      before { subject.dbs_policies = 1 }
+
+      it 'convert single values to arrays' do
+        expect(subject.dbs_policies).to eq [1]
+      end
+    end
+
+    context 'with string values' do
+      before { subject.dbs_policies = ['1', '2', 3] }
+
+      it 'should convert to integers' do
+        expect(subject.dbs_policies).to eq [1, 2, 3]
       end
     end
   end
@@ -253,6 +289,14 @@ RSpec.describe Candidates::SchoolSearch do
 
     it "will return an array of phases" do
       expect(subject.phase_names).to match_array([@first.name, @third.name])
+    end
+  end
+
+  context '.dbs_policies_names' do
+    subject { described_class.new(dbs_policies: [1, 2]) }
+
+    it "will return an array of phases" do
+      expect(subject.dbs_policies_names).to match_array(['In school', 'Not required'])
     end
   end
 end

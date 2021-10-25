@@ -33,6 +33,10 @@
 
     .accept-or-reject {
       padding-left: 0rem;
+
+      .under-consideration-button {
+        display: inline;
+      }
     }
   }
 }
