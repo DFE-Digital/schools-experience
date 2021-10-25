@@ -177,9 +177,10 @@ module Bookings
       return 'Booked'                 if booking&.accepted?
       return 'Withdrawn'              if candidate_cancellation&.sent?
       return 'Rejected'               if school_cancellation&.sent?
+      return 'Expired'                if expired?
       return 'Under consideration'    if under_consideration?
-      return 'Viewed'                 if viewed?
       return 'Flagged'                if candidate.attended_bookings.any?
+      return 'Viewed'                 if viewed?
 
       'New'
     end
@@ -232,6 +233,10 @@ module Bookings
 
     def under_consideration?
       under_consideration_at.present?
+    end
+
+    def expired?
+      placement_date.present? && placement_date.date.before?(Date.today)
     end
 
   private

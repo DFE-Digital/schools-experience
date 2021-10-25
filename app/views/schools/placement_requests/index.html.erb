@@ -6,13 +6,9 @@
 
     <h1>Manage requests</h1>
 
-    <p>
-      The following <strong>only lists requests</strong> made on or after <strong><%= phase_three_release_date %></strong>.
-    </p>
-
-    <p>
-      You'll need to refer to <strong>your own records</strong> for any requests received before this date.
-    </p>
+    <div class="govuk-inset-text">
+      If you have expired requests due to the COVID-19 school closures, <%= link_to 'contact our support team' , schools_contact_us_path, class: 'govuk-notification-banner__link' %> to delete them.
+    </div>
 
     <% if @placement_requests.any? %>
       <%= pagination_bar @placement_requests %>
