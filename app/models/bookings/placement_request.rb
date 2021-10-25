@@ -177,9 +177,9 @@ module Bookings
       return 'Booked'                 if booking&.accepted?
       return 'Withdrawn'              if candidate_cancellation&.sent?
       return 'Rejected'               if school_cancellation&.sent?
+      return 'Expired'                if expired?
       return 'Under consideration'    if under_consideration?
       return 'Flagged'                if candidate.attended_bookings.any?
-      return 'Expired'                if expired?
       return 'Viewed'                 if viewed?
 
       'New'
