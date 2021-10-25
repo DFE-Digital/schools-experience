@@ -1,7 +1,7 @@
 <%= govuk_back_link schools_dashboard_path %>
 
 <%= page_heading do %>
-  Service updates and guidance - <%= @latest&.date&.to_formatted_s(:govuk) %>
+  Service updates and guidance
 <% end %>
 
 <div id="service-update" class="govuk-grid-row">
@@ -21,14 +21,18 @@
       <em>No service updates are currently available</em>
     </p>
     <%- end -%>
-
+    
+    <hr>
+    
     <%- if @recent_updates.any? -%>
     <h2 class="govuk-heading-m">
-      Recent service updates
+      Previous service updates
     </h2>
 
     <%= render @recent_updates %>
     <%- end -%>
+
+    <hr>
 
     <h2 class="govuk-heading-m">
       Help and support
