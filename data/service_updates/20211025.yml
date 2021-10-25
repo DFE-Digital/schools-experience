@@ -1,5 +1,5 @@
 ---
-title: Upgraded user experience
+title: New features
 summary: You can now place a request ‘under consideration’ before you accept it or decline it.
 html_content: |-
   <p>
@@ -22,7 +22,7 @@ html_content: |-
   If you place a request ‘under consideration’, you’ll see this new tag next to it in ‘Manage requests’.
   </p>
 
-  <p><strong>Exporting requests and bookings by date range</strong></p>
+  <h3>Exporting requests and bookings by date range</h3>
 
   <p>You can now select a date range when exporting CSV files of requests.</p>
 
@@ -31,7 +31,7 @@ html_content: |-
   <p>If a candidate without a DBS certificate requests experience at a school that requires a DBS, the system will automatically decline their request.
   </p>
 
-  <p><strong>Flagging duplicate requests</strong></p>
+  <h3>Flagging duplicate requests</h3>
 
   <p>If a candidate who has already requested experience at your school tries to make another request, the system will recognise this as a duplicate request. 
 
