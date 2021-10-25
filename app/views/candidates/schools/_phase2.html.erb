@@ -114,6 +114,8 @@
       <% end if @presenter.teacher_training_info.present? %>
     </dl>
 
+  </div>
+
   <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
     <%- if @presenter.description_details.present? -%>
     <section id="school-placement-info">
@@ -217,5 +219,5 @@
         <%= render 'start_request', profile: @presenter %>
       </div>
     <% end %>
-  </div>
+
 </div>
