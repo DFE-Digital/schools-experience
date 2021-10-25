@@ -22,7 +22,7 @@ html_content: |-
   If you place a request ‘under consideration’, you’ll see this new tag next to it in ‘Manage requests’.
   </p>
 
-  <p><strong>Exporting CSV files by date range</strong></p>
+  <p><strong>Exporting requests and bookings by date range</strong></p>
 
   <p>You can now select a date range when exporting CSV files of requests.</p>
 
