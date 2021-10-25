@@ -1,4 +1,47 @@
 <div class="govuk-grid-row govuk-!-margin-top-4">
+    
+    <aside class="govuk-grid-column-one-third column-top-border">
+
+    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+      <div id="school-address" class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= format_school_address @school, tag(:br) %>
+        </dd>
+      </div>
+
+      <div id="school-availability-info" class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Placement availability
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= format_school_availability(@school.availability_info) %>
+        </dd>
+      </div>
+
+      <div id="school-experience-type" class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          School experience type
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= format_school_placement_locations @school %>
+        </dd>
+      </div>
+
+      <%- if @school.teacher_training_provider? -%>
+      <div id="school-teacher-training-info" class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Teacher training offered
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= safe_format(@school.teacher_training_info) %>
+        </dd>
+      </div>
+      <%- end -%>
+    </dl>
+
   <article class="govuk-grid-column-two-thirds" id="candidate-school-profile">
 
     <%- if @school.placement_info.present? -%>
@@ -93,47 +136,6 @@
 
   </article>
 
-  <aside class="govuk-grid-column-one-third column-top-border">
-
-    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
-      <div id="school-address" class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Address
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= format_school_address @school, tag(:br) %>
-        </dd>
-      </div>
-
-      <div id="school-availability-info" class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Placement availability
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= format_school_availability(@school.availability_info) %>
-        </dd>
-      </div>
-
-      <div id="school-experience-type" class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          School experience type
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= format_school_placement_locations @school %>
-        </dd>
-      </div>
-
-      <%- if @school.teacher_training_provider? -%>
-      <div id="school-teacher-training-info" class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Teacher training offered
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <%= safe_format(@school.teacher_training_info) %>
-        </dd>
-      </div>
-      <%- end -%>
-    </dl>
 
     <%- if @school.has_availability? -%>
     <div class="school-start-request-button__mobile">
