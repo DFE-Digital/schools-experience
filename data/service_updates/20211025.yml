@@ -11,30 +11,30 @@ html_content: |-
   <p>
   When you open up a request you’ll now have 3 actions to choose from: 
 
-<ul>
+  <ul class="govuk-list govuk-list--bullet">
   <li>‘Accept request’</li>
   <li>‘Decline request’</li>
   <li>‘Place under consideration’</li>
   </ul>
 
-If you place a request ‘under consideration’, you’ll see this new tag next to it in ‘Manage requests’.
-</p>
+  If you place a request ‘under consideration’, you’ll see this new tag next to it in ‘Manage requests’.
+  </p>
 
-<p><strong>Exporting CSV files by date range</strong></p>
+  <p><strong>Exporting CSV files by date range</strong></p>
 
-<p>You can now select a date range when exporting CSV files of requests.</p>
+  <p>You can now select a date range when exporting CSV files of requests.</p>
 
-<p><strong>Auto-declining requests from users that do not have a DBS check</strong></p>
+  <p><strong>Auto-declining requests from users that do not have a DBS check</strong></p>
 
-<p>If a candidate without a DBS certificate requests experience at a school that requires a DBS, the system will automatically decline their request.
-</p>
+  <p>If a candidate without a DBS certificate requests experience at a school that requires a DBS, the system will automatically decline their request.
+  </p>
 
-<p><strong>Flagging duplicate requests</strong></p>
+  <p><strong>Flagging duplicate requests</strong></p>
 
-<p>If a candidate who has already requested experience at your school tries to make another request, the system will recognise this as a duplicate request. 
+  <p>If a candidate who has already requested experience at your school tries to make another request, the system will recognise this as a duplicate request. 
 
-You’ll see the ‘flagged’ status tag next to these requests on the ‘Manage requests’ page. This will help you to decline requests from candidates you’ve already turned down.
-</p>
+  You’ll see the ‘flagged’ status tag next to these requests on the ‘Manage requests’ page. This will help you to decline requests from candidates you’ve already turned down.
+  </p>
 
 
   <p>
