@@ -1,0 +1,44 @@
+---
+title: Upgraded user experience
+summary: You can now place a request ‘under consideration’ before you accept it or decline it.
+html_content: |-
+  <p>
+    We’ve created a new status tag for requests that are under consideration. 
+  </p>
+  <p>
+  This allows you to contact a candidate for more information before you make a decision about their request.
+  </p>
+  <p>
+  When you open up a request you’ll now have 3 actions to choose from: 
+
+<ul>
+  <li>‘Accept request’</li>
+  <li>‘Decline request’</li>
+  <li>‘Place under consideration’</li>
+  </ul>
+
+If you place a request ‘under consideration’, you’ll see this new tag next to it in ‘Manage requests’.
+</p>
+
+<p><strong>Exporting CSV files by date range</strong></p>
+
+<p>You can now select a date range when exporting CSV files of requests.</p>
+
+<p><strong>Auto-declining requests from users that do not have a DBS check</strong></p>
+
+<p>If a candidate without a DBS certificate requests experience at a school that requires a DBS, the system will automatically decline their request.
+</p>
+
+<p><strong>Flagging duplicate requests</strong></p>
+
+<p>If a candidate who has already requested experience at your school tries to make another request, the system will recognise this as a duplicate request. 
+
+You’ll see the ‘flagged’ status tag next to these requests on the ‘Manage requests’ page. This will help you to decline requests from candidates you’ve already turned down.
+</p>
+
+
+  <p>
+    If you wish to offer school experience please get in touch with us via
+    <a href="mailto:organise.school-experience@education.gov.uk">organise.school-experience@education.gov.uk</a>
+    so we can make changes for your school(s) and reactivate your profile.
+  </p>
