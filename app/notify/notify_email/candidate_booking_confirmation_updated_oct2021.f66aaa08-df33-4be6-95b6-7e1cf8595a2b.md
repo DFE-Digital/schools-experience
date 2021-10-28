@@ -1,6 +1,6 @@
 Dear ((candidate_name)),
 
-It’s ((time_until_booking)) until your placement at ((school_name)).
+((school_name)) have confirmed your school experience booking.
 
 #Date and time
 * Date: ((placement_schedule))
@@ -19,20 +19,23 @@ Name: ((school_teacher_name))
 Email: ((school_teacher_email))
 Telephone number: ((school_teacher_telephone))
 
+They can also answer any questions you have about the experience.
+
 #Other instructions
 ((candidate_instructions))
 
 #About your school experience
-* Subject: ((subject_name))
+Subject: ((subject_name))
 
-You can find more information about your experience on the school profile page.
+((placement_details))
 
 #Cancelling your booking
 Use the following link to cancel your booking:
+
 ((cancellation_url))
 
 #Help and support
-If you have questions about your booking, contact the school experience administrator.
+If you have questions about your booking, contact the school experience administrator:
 
 Email: ((school_admin_email))
 Telephone number: ((school_admin_telephone))

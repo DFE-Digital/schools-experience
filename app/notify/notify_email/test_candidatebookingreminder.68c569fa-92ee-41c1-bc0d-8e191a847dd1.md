@@ -19,13 +19,14 @@ Name: ((school_teacher_name))
 Email: ((school_teacher_email))
 Telephone number: ((school_teacher_telephone))
 
+They can also answer any questions you have about the experience.
+
 #Other instructions
 ((candidate_instructions))
 
 #About your school experience
 * Subject: ((subject_name))
-
-You can find more information about your experience on the school profile page.
+* Details about the experience: ((placement_details))
 
 #Cancelling your booking
 Use the following link to cancel your booking:
