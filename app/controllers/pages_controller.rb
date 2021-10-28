@@ -28,6 +28,12 @@ class PagesController < ApplicationController
     render status: :service_unavailable
   end
 
+  def robots
+    @enabled_schools_urns = Bookings::School.enabled.pluck(:urn)
+
+    render "robots.txt", layout: false
+  end
+
 private
 
   def sanitise_page

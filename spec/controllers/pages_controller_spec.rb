@@ -31,4 +31,13 @@ describe PagesController, type: :request do
       expect(response).to have_attributes body: /service is unavailable/i
     end
   end
+
+  describe '#robots' do
+    before do
+      get '/robots.txt'
+    end
+
+    it { expect(response).to have_http_status(:success) }
+    it { expect(response).to render_template 'robots.txt' }
+  end
 end
