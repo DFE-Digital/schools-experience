@@ -11,7 +11,7 @@ module Candidates
         candidate_has_dbs? ||
           dbs_is_not_required? ||
           school_does_dbs_checks? ||
-          (dbs_only_for_inschool? && non_inschool_experience?)
+          (dbs_required_only_for_inschool? && !inschool_request?)
       end
 
     private
@@ -24,21 +24,19 @@ module Candidates
         @school.profile&.dbs_policy_conditions == "notrequired"
       end
 
-      def dbs_only_for_inschool?
+      def dbs_required_only_for_inschool?
         @school.profile&.dbs_policy_conditions == "inschool"
       end
 
       def candidate_has_dbs?
-        @bg_check.has_dbs_check == true
+        @bg_check.has_dbs_check?
       end
 
-      # checks if the candidate requests a virtual experience
-      # or if the school offers flexible "virtual" or "both" experiences
-      def non_inschool_experience?
+      def inschool_request?
         if @school.availability_preference_fixed
-          @current_registration.subject_and_date_information.placement_date.virtual?
+          @current_registration.subject_and_date_information.placement_date.virtual == false
         else
-          @school.experience_type != 'inschool'
+          @school.experience_type == 'inschool'
         end
       end
     end
