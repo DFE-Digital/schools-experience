@@ -101,8 +101,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
       {
         'first_name' => 'Person',
         'last_name' => 'A',
-        'email' => 'person@personl.com',
-        'date_of_birth' => Date.parse('1970-01-01')
+        'email' => 'person@personl.com'
       }
     end
 
@@ -118,13 +117,11 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to include('first_name' => contact.first_name) }
         it { is_expected.to include('last_name' => contact.last_name) }
         it { is_expected.to include('email' => contact.email) }
-        it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
         it { is_expected.to include('read_only' => true) }
 
         context 'with some blank fields in gitis data' do
           let(:contact) do
             build :api_schools_experience_sign_up,
-              date_of_birth: nil,
               first_name: " ",
               last_name: " "
           end
@@ -132,7 +129,6 @@ describe Candidates::Registrations::GitisRegistrationSession do
           it { is_expected.to include('first_name' => data['first_name']) }
           it { is_expected.to include('last_name' => data['last_name']) }
           it { is_expected.to include('email' => contact.email) }
-          it { is_expected.to include('date_of_birth' => data['date_of_birth']) }
           it { is_expected.to include('read_only' => true) }
         end
       end
@@ -145,7 +141,6 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to include('first_name' => contact.first_name) }
         it { is_expected.to include('last_name' => contact.last_name) }
         it { is_expected.to include('email' => contact.email) }
-        it { is_expected.to include('date_of_birth' => contact.date_of_birth) }
         it { is_expected.to include('read_only' => true) }
       end
     end
@@ -159,12 +154,10 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to have_attributes(first_name: contact.first_name) }
         it { is_expected.to have_attributes(last_name: contact.last_name) }
         it { is_expected.to have_attributes(email: contact.email) }
-        it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
 
         context 'with some blank fields in gitis data' do
           let(:contact) do
             build :api_schools_experience_sign_up,
-              date_of_birth: nil,
               first_name: " ",
               last_name: " "
           end
@@ -173,7 +166,6 @@ describe Candidates::Registrations::GitisRegistrationSession do
           it { is_expected.to have_attributes(first_name: data['first_name']) }
           it { is_expected.to have_attributes(last_name: data['last_name']) }
           it { is_expected.to have_attributes(email: contact.email) }
-          it { is_expected.to have_attributes(date_of_birth: data['date_of_birth']) }
         end
       end
 
@@ -185,7 +177,6 @@ describe Candidates::Registrations::GitisRegistrationSession do
         it { is_expected.to have_attributes(first_name: contact.first_name) }
         it { is_expected.to have_attributes(last_name: contact.last_name) }
         it { is_expected.to have_attributes(email: contact.email) }
-        it { is_expected.to have_attributes(date_of_birth: contact.date_of_birth) }
       end
     end
   end

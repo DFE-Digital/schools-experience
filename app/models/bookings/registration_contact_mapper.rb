@@ -15,7 +15,6 @@ module Bookings
       gitis_contact.last_name = personal_information.last_name
       gitis_contact.email ||= personal_information.email
       gitis_contact.secondary_email = personal_information.email
-      gitis_contact.date_of_birth = personal_information.date_of_birth
 
       gitis_contact.secondary_telephone = contact_information.phone
       gitis_contact.telephone ||= contact_information.phone
@@ -56,8 +55,7 @@ module Bookings
       {
         'first_name' => gitis_contact.first_name,
         'last_name' => gitis_contact.last_name,
-        'email' => gitis_contact.email&.strip,
-        'date_of_birth' => gitis_contact.date_of_birth
+        'email' => gitis_contact.email&.strip
       }
     end
 

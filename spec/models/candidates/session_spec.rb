@@ -6,7 +6,6 @@ RSpec.describe Candidates::Session, type: :model do
     {
       'firstname' => 'Test',
       'lastname' => 'User',
-      'birthdate' => '1980-10-01',
       'emailaddress1' => 'existing@candidate.com'
     }
   end
@@ -15,7 +14,6 @@ RSpec.describe Candidates::Session, type: :model do
     {
       firstname: 'Test',
       lastname: 'User',
-      date_of_birth: '1980-10-01',
       email: 'existing@candidate.com'
     }
   end
@@ -25,7 +23,6 @@ RSpec.describe Candidates::Session, type: :model do
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:firstname) }
     it { is_expected.to validate_presence_of(:lastname) }
-    it { is_expected.to validate_presence_of(:date_of_birth) }
     it { is_expected.to allow_value('test@testymctest.com').for(:email) }
     it { is_expected.not_to allow_value('testymctest.com').for(:email) }
     it { is_expected.not_to allow_value('test@testymctest').for(:email) }

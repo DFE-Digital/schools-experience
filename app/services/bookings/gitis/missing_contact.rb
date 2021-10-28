@@ -21,11 +21,6 @@ module Bookings
       end
       alias_method :emailaddress1, :emailaddress2
       alias_method :email, :emailaddress2
-
-      def birthdate
-        nil
-      end
-      alias_method :date_of_birth, :birthdate
     end
   end
 end
