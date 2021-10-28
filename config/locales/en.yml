@@ -708,6 +708,7 @@ en:
           "<p>By checking this box you're confirming:</p>
           <ul class=\"govuk-list govuk-list--bullet\">
             <li>the details you've provided are correct</li>
+            <li>you're aged 18 or over</li>
             <li>you've read our <a href=\"/privacy_policy\" class=\"govuk-link\">privacy policy</a></li>
             <li>you understand that the DfE's
             <a href=\"https://getintoteaching.education.gov.uk/\" class=\"govuk-link\">Get Into Teaching Information Service</a>
