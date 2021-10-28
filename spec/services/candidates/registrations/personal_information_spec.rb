@@ -16,7 +16,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
   context 'validations' do
     it { is_expected.to validate_presence_of :first_name }
     it { is_expected.to validate_presence_of :last_name }
-    it { is_expected.to validate_presence_of :date_of_birth }
 
     it do
       is_expected.to validate_length_of(:first_name).is_at_most(50)
@@ -38,7 +37,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       it { is_expected.not_to validate_presence_of :first_name }
       it { is_expected.not_to validate_presence_of :last_name }
       it { is_expected.to validate_presence_of :email }
-      it { is_expected.not_to validate_presence_of :date_of_birth }
     end
   end
 
@@ -48,8 +46,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       GetIntoTeachingApiClient::ExistingCandidateRequest.new(
         email: pinfo.email,
         firstName: pinfo.first_name,
-        lastName: pinfo.last_name,
-        dateOfBirth: pinfo.date_of_birth
+        lastName: pinfo.last_name
       )
     end
 
@@ -99,60 +96,6 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
         end
       end
     end
-
-    context '#date_of_birth' do
-      subject { described_class.new date_of_birth: date_of_birth }
-
-      before do
-        subject.validate
-      end
-
-      context 'too young' do
-        let :date_of_birth do
-          18.years.ago + 1.day
-        end
-
-        it 'is invalid' do
-          expect(subject.errors[:date_of_birth]).to eq [
-            'You must be at least 18 years old'
-          ]
-        end
-      end
-
-      context 'too old' do
-        let :date_of_birth do
-          100.years.ago
-        end
-
-        it 'is invalid' do
-          expect(subject.errors[:date_of_birth]).to eq [
-            'You must be younger than 100 years old'
-          ]
-        end
-      end
-
-      context 'out of range' do
-        let :date_of_birth do
-          { 3 => -1, 2 => -1, 1 => -2 }
-        end
-
-        it 'is invalid' do
-          expect(subject.errors[:date_of_birth]).to eq [
-            'Enter your date of birth'
-          ]
-        end
-      end
-
-      context 'valid' do
-        let :date_of_birth do
-          25.years.ago
-        end
-
-        it 'is valid' do
-          expect(subject.errors[:date_of_birth]).to be_empty
-        end
-      end
-    end
   end
 
   describe 'with read_only set to true' do
@@ -162,8 +105,7 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
       pinfo.assign_attributes \
         first_name: 'test',
         last_name: 'test',
-        email: 'test@test.com',
-        date_of_birth: Date.parse('1980-01-01')
+        email: 'test@test.com'
     end
 
     subject { pinfo }
@@ -171,6 +113,5 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     it { is_expected.to have_attributes first_name: nil }
     it { is_expected.to have_attributes last_name: nil }
     it { is_expected.to have_attributes email: nil }
-    it { is_expected.to have_attributes date_of_birth: nil }
   end
 end

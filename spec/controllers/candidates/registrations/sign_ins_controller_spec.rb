@@ -13,8 +13,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
         {
           'first_name' => 'Testy',
           'last_name' => 'McTest',
-          'email' => 'testy@mctest.com',
-          'date_of_birth' => Date.parse('1980-01-01')
+          'email' => 'testy@mctest.com'
         }
     )
   end
@@ -40,8 +39,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
           code: code,
           firstname: "Testy",
           lastname: "McTest",
-          email: "testy@mctest.com",
-          date_of_birth: "1980-01-01",
+          email: "testy@mctest.com"
         }
       }
     end
@@ -102,7 +100,7 @@ RSpec.describe Candidates::Registrations::SignInsController, type: :request do
     end
 
     context "with valid code but invalid Gitis data" do
-      let(:sign_up) { build(:api_schools_experience_sign_up, date_of_birth: nil) }
+      let(:sign_up) { build(:api_schools_experience_sign_up) }
 
       before { perform_request }
 
