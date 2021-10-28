@@ -705,7 +705,7 @@ en:
         objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
         acceptance_html:
-          "<p>By checking this box you're confirming:</p>
+          "<p>By checking this box you're confirming that:</p>
           <ul class=\"govuk-list govuk-list--bullet\">
             <li>the details you've provided are correct</li>
             <li>you're aged 18 or over</li>
