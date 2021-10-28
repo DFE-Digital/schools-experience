@@ -29,7 +29,7 @@ module Candidates
       end
 
       def candidate_has_dbs?
-        @bg_check.has_dbs_check?
+        @bg_check.has_dbs_check == true
       end
 
       def inschool_request?

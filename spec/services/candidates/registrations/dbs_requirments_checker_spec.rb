@@ -13,7 +13,7 @@ describe Candidates::Registrations::DbsRequirmentsChecker do
       allow(school).to receive_message_chain('profile.dbs_policy_conditions').and_return(dbs_policy)
       allow(school).to receive_message_chain('profile.dbs_fee_amount_pounds?').and_return(dbs_fees)
       allow(school).to receive(:availability_preference_fixed).and_return(fixed_dates)
-      allow(bg_check).to receive(:has_dbs_check?).and_return(has_dbs_check)
+      allow(bg_check).to receive(:has_dbs_check).and_return(has_dbs_check)
     end
 
     context 'with fixed placement dates' do
