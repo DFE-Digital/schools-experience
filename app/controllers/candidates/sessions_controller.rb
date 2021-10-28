@@ -41,11 +41,11 @@ private
   end
 
   def verification_code_params
-    params.require(:candidates_verification_code).permit(:code, :email, :firstname, :lastname)
+    params.require(:candidates_verification_code).permit(:code, :email, :firstname, :lastname, :date_of_birth)
   end
 
   def session_params
-    params.require(:candidates_session).permit(:email, :firstname, :lastname)
+    params.require(:candidates_session).permit(:email, :firstname, :lastname, :date_of_birth)
   end
 
   def deliver_signin_link(email_address, token)

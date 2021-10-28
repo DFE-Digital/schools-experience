@@ -26,6 +26,7 @@ class GetIntoTeachingApiClient::SchoolsExperienceApi
       sign_up.email = request.email
       sign_up.first_name = request.first_name
       sign_up.last_name = request.last_name
+      sign_up.date_of_birth = request.date_of_birth
     end
   end
 

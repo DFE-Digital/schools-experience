@@ -8,11 +8,13 @@ class Candidates::Session
   attribute :email, :string
   attribute :firstname, :string
   attribute :lastname, :string
+  attribute :date_of_birth, :date
 
   validates :email, presence: true
   validates :email, format: /\A[^@]+@[^@]+\.[^@]+\z/, allow_blank: true
   validates :firstname, presence: true
   validates :lastname, presence: true
+  validates :date_of_birth, presence: true
 
   def self.signin!(token_string)
     token = Candidates::SessionToken.valid.find_by(token: token_string)

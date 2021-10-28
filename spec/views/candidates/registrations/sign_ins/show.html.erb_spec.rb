@@ -5,7 +5,8 @@ RSpec.describe "candidates/registrations/sign_ins/show.html.erb", type: :view do
     Candidates::VerificationCode.new(
       email: 'test@testymctest.com',
       firstname: 'testy',
-      lastname: 'mctest'
+      lastname: 'mctest',
+      date_of_birth: 20.years.ago.to_date
     )
   end
 

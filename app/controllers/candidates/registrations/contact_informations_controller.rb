@@ -39,6 +39,7 @@ module Candidates
           :first_name,
           :last_name,
           :email,
+          :date_of_birth,
           :building,
           :street,
           :town_or_city,

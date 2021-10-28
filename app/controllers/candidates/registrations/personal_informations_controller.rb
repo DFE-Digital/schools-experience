@@ -55,12 +55,14 @@ module Candidates
         if candidate_signed_in?
           params.fetch(:candidates_registrations_personal_information, {}).permit \
             :first_name,
-            :last_name
+            :last_name,
+            :date_of_birth
         else
           params.fetch(:candidates_registrations_personal_information, {}).permit \
             :first_name,
             :last_name,
-            :email
+            :email,
+            :date_of_birth
         end
       end
 
