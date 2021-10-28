@@ -118,9 +118,6 @@ describe Candidates::Registrations::PersonalInformationsController, type: :reque
 
           expect(registration_session.personal_information.last_name).to \
             eq gitis_contact.last_name
-
-          expect(registration_session.personal_information.date_of_birth).to \
-            eq gitis_contact.date_of_birth
         end
 
         it "leaves the email address matching the GiTiS contact" do

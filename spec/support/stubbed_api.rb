@@ -69,8 +69,7 @@ shared_context "api correct verification code for personal info" do
     GetIntoTeachingApiClient::ExistingCandidateRequest.new(
       firstName: personal_info.first_name,
       lastName: personal_info.last_name,
-      email: personal_info.email,
-      dateOfBirth: personal_info.date_of_birth
+      email: personal_info.email
     )
   end
   let(:sign_up) { build(:api_schools_experience_sign_up) }

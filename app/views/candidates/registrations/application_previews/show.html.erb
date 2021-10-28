@@ -14,7 +14,6 @@
       <%- if @application_preview.read_only -%>
 
         <%= summary_row 'Full name', @application_preview.full_name %>
-        <%= summary_row 'Date of birth', @application_preview.date_of_birth %>
 
       <%- else -%>
 
@@ -25,12 +24,6 @@
             anchor: 'candidates_registrations_personal_information_first_name_container'
           ) %>
 
-        <%= summary_row \
-          'Date of birth',
-          @application_preview.date_of_birth,
-          edit_candidates_school_registrations_personal_information_path(
-            anchor: 'candidates_registrations_personal_information_date_of_birth_container'
-          ) %>
       <% end %>
 
       <%= summary_row \

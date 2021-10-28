@@ -52,7 +52,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
-        complete_application_preview_step(name: sign_up.full_name, date_of_birth: sign_up.date_of_birth)
+        complete_application_preview_step(name: sign_up.full_name)
         view_request_acknowledgement_step
       end
     end
@@ -72,7 +72,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
-        complete_application_preview_step(name: sign_up.full_name, date_of_birth: sign_up.date_of_birth)
+        complete_application_preview_step(name: sign_up.full_name,)
         view_request_acknowledgement_step
       end
     end
@@ -98,7 +98,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_teaching_preference_step
         complete_placement_preference_step
         complete_background_step
-        complete_application_preview_step(name: sign_up.full_name, date_of_birth: sign_up.date_of_birth)
+        complete_application_preview_step(name: sign_up.full_name)
         view_request_acknowledgement_step
       end
     end
@@ -114,8 +114,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         GetIntoTeachingApiClient::ExistingCandidateRequest.new(
           firstName: candidate2.gitis_contact.first_name,
           lastName: candidate2.gitis_contact.last_name,
-          email: candidate2.gitis_contact.email,
-          dateOfBirth: candidate2.gitis_contact.date_of_birth
+          email: candidate2.gitis_contact.email
         )
       end
 
@@ -155,9 +154,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
       fill_in 'First name', with: 'testy'
       fill_in 'Last name', with: 'mctest'
       fill_in 'Email address', with: email_address
-      fill_in 'Day', with: '01'
-      fill_in 'Month', with: '01'
-      fill_in 'Year', with: '2000'
     end
 
     click_button 'Continue'
@@ -245,9 +241,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
     click_button 'Continue'
   end
 
-  def complete_application_preview_step(name: 'testy mctest', email: nil,
-                                        date_of_birth: Date.parse('2000-01-01'), button_text: 'Accept and send')
-
+  def complete_application_preview_step(name: 'testy mctest', email: nil, button_text: 'Accept and send')
     expect(page.current_path).to eq \
       "/candidates/schools/#{school_urn}/registrations/application_preview"
 
@@ -257,7 +251,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
       'Address Test house, Test street, Test Town, Testshire, TE57 1NG'
     expect(page).to have_text 'UK telephone number 01234567890'
     expect(page).to have_text "Email address #{email || email_address}"
-    expect(page).to have_text "Date of birth #{date_of_birth.strftime '%d/%m/%Y'}"
     expect(page).to have_text "School or college #{school.name}"
     expect(page).to have_text "Experience availability\nOnly free from Epiphany to Whitsunday"
     expect(page).to have_text "What you want to get out of school experience I enjoy teaching"
@@ -297,9 +290,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
     fill_in 'Email address', with: sign_up.email
     fill_in 'First name', with: sign_up.first_name
     fill_in 'Last name', with: sign_up.last_name
-    fill_in 'Day', with: sign_up.date_of_birth.day
-    fill_in 'Month', with: sign_up.date_of_birth.month
-    fill_in 'Year', with: sign_up.date_of_birth.year
     click_button 'Sign in'
 
     expect(page.current_path).to eq "/candidates/signin"
