@@ -13,7 +13,8 @@ class NotifyEmail::CandidateBookingReminder < Notify
     :school_teacher_name,
     :school_teacher_email,
     :school_teacher_telephone,
-    :placement_details,
+    :candidate_instructions,
+    :subject_name,
     :cancellation_url
 
   def initialize(
@@ -32,7 +33,8 @@ class NotifyEmail::CandidateBookingReminder < Notify
     school_teacher_name:,
     school_teacher_email:,
     school_teacher_telephone:,
-    placement_details:,
+    candidate_instructions:,
+    subject_name:,
     cancellation_url:
   )
     self.school_name = school_name
@@ -49,7 +51,8 @@ class NotifyEmail::CandidateBookingReminder < Notify
     self.school_teacher_name = school_teacher_name
     self.school_teacher_email = school_teacher_email
     self.school_teacher_telephone = school_teacher_telephone
-    self.placement_details = placement_details
+    self.candidate_instructions = candidate_instructions
+    self.subject_name = subject_name
     self.cancellation_url = cancellation_url
 
     super(to: to)
@@ -88,7 +91,8 @@ class NotifyEmail::CandidateBookingReminder < Notify
       school_teacher_name: booking.contact_name,
       school_teacher_email: booking.contact_email,
       school_teacher_telephone: booking.contact_number,
-      placement_details: booking.placement_details.to_s,
+      candidate_instructions: booking.candidate_instructions,
+      subject_name: booking.bookings_subject.name,
       cancellation_url: candidates_cancel_url
     )
   end
@@ -113,7 +117,8 @@ class NotifyEmail::CandidateBookingReminder < Notify
       school_teacher_name: school_teacher_name,
       school_teacher_email: school_teacher_email,
       school_teacher_telephone: school_teacher_telephone,
-      placement_details: placement_details,
+      candidate_instructions: candidate_instructions,
+      subject_name: subject_name,
       cancellation_url: cancellation_url
     }
   end
