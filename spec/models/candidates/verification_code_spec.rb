@@ -18,7 +18,8 @@ describe Candidates::VerificationCode do
         code: code,
         firstname: personal_info.first_name,
         lastname: personal_info.last_name,
-        email: personal_info.email
+        email: personal_info.email,
+        date_of_birth: personal_info.date_of_birth
       )
     end
 
@@ -61,7 +62,8 @@ describe Candidates::VerificationCode do
         GetIntoTeachingApiClient::ExistingCandidateRequest.new(
           email: personal_info.email,
           firstName: personal_info.first_name,
-          lastName: personal_info.last_name
+          lastName: personal_info.last_name,
+          dateOfBirth: personal_info.date_of_birth
         )
       end
 

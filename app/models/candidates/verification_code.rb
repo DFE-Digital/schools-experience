@@ -9,6 +9,7 @@ class Candidates::VerificationCode
   attribute :email, :string
   attribute :firstname, :string
   attribute :lastname, :string
+  attribute :date_of_birth, :date
 
   validates :code, length: { is: 6 }, format: { with: /\A[0-9]*\z/ }
 
@@ -30,7 +31,8 @@ class Candidates::VerificationCode
     identity_data = {
       firstName: firstname,
       lastName: lastname,
-      email: email
+      email: email,
+      dateOfBirth: date_of_birth,
     }
 
     request = GetIntoTeachingApiClient::ExistingCandidateRequest.new(identity_data)
@@ -47,7 +49,8 @@ private
     {
       email: email,
       firstName: firstname,
-      lastName: lastname
+      lastName: lastname,
+      dateOfBirth: date_of_birth,
     }
   end
 end

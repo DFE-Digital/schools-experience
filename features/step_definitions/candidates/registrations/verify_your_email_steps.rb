@@ -3,6 +3,9 @@ Given("I have completed the Personal Information step for my school of choice") 
   fill_in 'First name', with: 'testy'
   fill_in 'Last name', with: 'mctest'
   fill_in 'Email address', with: 'test@example.com'
+  fill_in 'Day', with: '1'
+  fill_in 'Month', with: '1'
+  fill_in 'Year', with: '1980'
   click_button 'Continue'
 end
 

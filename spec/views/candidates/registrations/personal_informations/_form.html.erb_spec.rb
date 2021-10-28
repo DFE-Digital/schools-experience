@@ -13,6 +13,10 @@ RSpec.describe "candidates/registrations/personal_informations/_form.html.erb", 
     "input#candidates_registrations_personal_information_last_name"
   end
 
+  let(:dob_selector) do
+    "input#candidates_registrations_personal_information_date_of_birth_3i"
+  end
+
   before do
     allow(view).to \
       receive(:candidates_school_registrations_personal_information_path)
@@ -45,6 +49,8 @@ RSpec.describe "candidates/registrations/personal_informations/_form.html.erb", 
 
     it "will allow the address to be changed" do
       expect(rendered).to have_css(email_selector, count: 1)
+      expect(rendered).to have_css("#{dob_selector}[readonly]", count: 0)
+      expect(rendered).to have_css("#{dob_selector}[disabled]", count: 0)
     end
   end
 
@@ -54,7 +60,8 @@ RSpec.describe "candidates/registrations/personal_informations/_form.html.erb", 
         first_name: 'Foo',
         last_name: 'Bar',
         email: 'foo@bar.com',
-        read_only: true
+        read_only: true,
+        date_of_birth: Date.parse('1980-01-01')
       )
     end
 
@@ -83,6 +90,8 @@ RSpec.describe "candidates/registrations/personal_informations/_form.html.erb", 
 
     it "will not allow the address to be changed" do
       expect(rendered).to have_css(email_selector, count: 1)
+      expect(rendered).to have_css("#{dob_selector}[readonly]", count: 1)
+      expect(rendered).to have_css("#{dob_selector}[disabled]", count: 1)
     end
   end
 end

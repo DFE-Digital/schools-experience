@@ -8,6 +8,7 @@ FactoryBot.define do
     full_name { "#{first_name} #{last_name}" }
     email { "email@address.com" }
     secondary_email { "email2@address.com" }
+    date_of_birth { Date.new(1987, 3, 12) }
     telephone { "111111111" }
     secondary_telephone { "222222222" }
     address_telephone { "333333333" }

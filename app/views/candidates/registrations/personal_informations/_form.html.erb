@@ -15,7 +15,7 @@
         </p>
 
         <p>
-        If we do not have your details, we'll register them with the DfE's Get Into Teaching service.
+        If we do not have your details, we'll register them with the DfE's Get Into Teaching service. 
         Get Into Teaching offers help and advice about becoming a teacher.
         </p>
 
@@ -34,6 +34,10 @@
                 disabled: personal_information.read_only %>
 
           <%= f.email_field :email, autocomplete: 'on',
+                readonly: personal_information.read_only,
+                disabled: personal_information.read_only %>
+
+          <%= f.date_field :date_of_birth, heading: true, date_of_birth: true,
                 readonly: personal_information.read_only,
                 disabled: personal_information.read_only %>
 

@@ -11,6 +11,7 @@ module Candidates
           email: current_registration.personal_information.email,
           firstname: current_registration.personal_information.first_name,
           lastname: current_registration.personal_information.last_name,
+          date_of_birth: current_registration.personal_information.date_of_birth,
         })
       end
 
@@ -56,7 +57,7 @@ module Candidates
       end
 
       def verification_code_params
-        params.require(:candidates_verification_code).permit(:code, :email, :firstname, :lastname)
+        params.require(:candidates_verification_code).permit(:code, :email, :firstname, :lastname, :date_of_birth)
       end
     end
   end

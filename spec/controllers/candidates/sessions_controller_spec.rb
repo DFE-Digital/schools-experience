@@ -19,7 +19,8 @@ RSpec.describe Candidates::SessionsController, type: :request do
       {
         email: 'testy@mctest.com',
         firstname: 'testy',
-        lastname: 'mctest'
+        lastname: 'mctest',
+        date_of_birth: 20.years.ago.to_date
       }
     end
 
@@ -72,7 +73,8 @@ RSpec.describe Candidates::SessionsController, type: :request do
           code: code,
           firstname: personal_info.first_name,
           lastname: personal_info.last_name,
-          email: personal_info.email
+          email: personal_info.email,
+          date_of_birth: "2000-01-01",
         }
       }
     end

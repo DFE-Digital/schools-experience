@@ -15,6 +15,7 @@ FactoryBot.define do
           "first_name" => "Testy",
           "last_name" => "McTest",
           "email" => "test@example.com",
+          "date_of_birth" => "2000-01-01",
           "created_at" => timestamp,
           "updated_at" => timestamp
         },

@@ -10,6 +10,8 @@ describe Bookings::Gitis::MissingContact do
   it { is_expected.to have_attributes first_name: 'Unavailable' }
   it { is_expected.to have_attributes first_name: 'Unavailable' }
   it { is_expected.to have_attributes full_name: 'Unavailable' }
+  it { is_expected.to have_attributes birthdate: nil }
+  it { is_expected.to have_attributes date_of_birth: nil }
   it { is_expected.to have_attributes emailaddress1: nil }
   it { is_expected.to have_attributes emailaddress2: nil }
   it { is_expected.to have_attributes email: nil }

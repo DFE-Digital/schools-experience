@@ -205,6 +205,10 @@ en:
               too_long: "Last name must be 50 characters or fewer"
             full_name:
               blank: "Enter your full name"
+            date_of_birth:
+              blank: "Enter your date of birth"
+              on_or_before: "You must be at least 18 years old"
+              on_or_after: "You must be younger than 100 years old"
 
         candidates/registrations/placement_preference:
           <<: *placement_preference_errors
@@ -226,6 +230,8 @@ en:
               blank: Enter your first name
             lastname:
               blank: Enter your last name
+            date_of_birth:
+              blank: Enter your date of birth
 
         candidates/verification_code:
           attributes:
@@ -601,10 +607,14 @@ en:
       max_fee: Schools may charge
       subjects: Select all that apply
       dbs_policies: Disclosure and Barring Service
+      candidates_registrations_personal_information:
+        date_of_birth: This is used to identify you and will not be shared with any schools. For example, 12 11 1997
       candidates_registrations_subject_preference:
         degree_subject: Select the nearest or equivalent subject.
       candidates_registrations_placement_preference:
         bookings_placement_date_id: School experience is only available on the following days
+      candidates_session:
+        date_of_birth: This is used to identify you and will not be shared with any schools. For example, 12 11 1997
       cookie_preference:
         analytics_html: "We use Google Analytics to measure how you use the
           website so we can improve it based on user needs. Google Analytics sets
@@ -705,14 +715,13 @@ en:
         objectives: What do you want to get out of your school experience?
       candidates_registrations_privacy_policy:
         acceptance_html:
-          "<p>By checking this box you're confirming that:</p>
+          "<p>By checking this box you're confirming:</p>
           <ul class=\"govuk-list govuk-list--bullet\">
             <li>the details you've provided are correct</li>
-            <li>you're aged 18 or over</li>
             <li>you've read our <a href=\"/privacy_policy\" class=\"govuk-link\">privacy policy</a></li>
             <li>you understand that the DfE's
             <a href=\"https://getintoteaching.education.gov.uk/\" class=\"govuk-link\">Get Into Teaching Information Service</a>
-            will use your personal details to provide you with
+            will use your personal details to provide you with 
             tailored advice and information about teacher training and a career as a teacher</li>"
       candidates_session:
         firstname: First name
