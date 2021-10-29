@@ -20,5 +20,5 @@ If you can’t find anything in your area you can arrange school experience inde
 
 Use our Get Into Teaching service by calling 0800 389 2500 (8:30am to 5:30pm, Mon to Fri) or by visiting https://getintoteaching.education.gov.uk/ to:
 
-* receive free one-to-one support and advice and get all your questions about teaching answered by our team of trained professionals - https://adviser-getintoteaching.education.gov.uk 
-* reserve your place on one of our free nationwide teaching events - https://getintoteaching.education.gov.uk/events
+* receive free one-to-one support and advice and get all your questions about teaching answered by our team of trained professionals - https://adviser-getintoteaching.education.gov.uk
+* reserve your place on one of our free nationwide teaching events - https://getintoteaching.education.gov.uk/teaching-events

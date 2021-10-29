@@ -16,7 +16,8 @@ describe NotifyEmail::CandidateBookingReminder do
     school_teacher_name: "Edna Krabappel",
     school_teacher_email: "ednak@springfield.co.uk",
     school_teacher_telephone: "01234 234 1245",
-    placement_details: "You will shadow a teacher and assist with lesson planning",
+    candidate_instructions: "Please report to reception on arrival",
+    subject_name: 'Biology',
     cancellation_url: "#{Rails.configuration.x.base_url}/candiates/cancel/abc-123"
 
   describe ".from_booking" do
@@ -118,8 +119,12 @@ describe NotifyEmail::CandidateBookingReminder do
         expect(subject.school_teacher_telephone).to eql(booking.contact_number)
       end
 
-      specify 'placement_details is correctly-assigned' do
-        expect(subject.placement_details).to eql(booking.placement_details.to_s)
+      specify 'subject_name is correctly-assigned' do
+        expect(subject.subject_name).to eql(booking.bookings_subject.name)
+      end
+
+      specify 'candidate_instructions is correctly-assigned' do
+        expect(subject.candidate_instructions).to eql(booking.candidate_instructions)
       end
 
       specify 'cancellation_url is correctly-assigned' do

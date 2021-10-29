@@ -1,30 +1,38 @@
 Dear ((candidate_name)),
 
-It's ((time_until_booking)) until your placement at ((school_name)).
+It’s ((time_until_booking)) until your placement at ((school_name)).
 
-* Address: ((school_address))
-* Start date: ((placement_schedule))
+#Date and time
+* Date: ((placement_schedule))
 * Start and finish times: ((school_start_time)) to ((school_finish_time))
-* Dress code: ((school_dress_code))
+
+#Location
+* School or college: ((school_name))
+* Address: ((school_address))
 * Parking: ((school_parking))
 
-# School experience contacts
+#What to wear
+* Dress code: ((school_dress_code))
 
-If you have any questions about your booking:
-
-Email address: ((school_admin_email))
-UK telephone number: ((school_admin_telephone))
-
-On the day of your school experience, you'll need to report to:
-
+#Who to report to when you arrive
 Name: ((school_teacher_name))
-Email address: ((school_teacher_email))
-UK telephone number: ((school_teacher_telephone))
+Email: ((school_teacher_email))
+Telephone number: ((school_teacher_telephone))
 
-You can also contact them if you have any questions.
+#Other instructions
+((candidate_instructions))
 
-To cancel your school experience use the following link ((cancellation_url)).
+#About your school experience
+* Subject: ((subject_name))
 
-# School experience details
+You can find more information about your experience on the school profile page.
 
-((placement_details))
+#Cancelling your booking
+Use the following link to cancel your booking:
+((cancellation_url))
+
+#Help and support
+If you have questions about your booking, contact the school experience administrator.
+
+Email: ((school_admin_email))
+Telephone number: ((school_admin_telephone))

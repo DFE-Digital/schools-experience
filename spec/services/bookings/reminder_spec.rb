@@ -5,7 +5,7 @@ describe Bookings::Reminder do
 
   let(:time_until_booking) { '3 weeks' }
   let(:school) { create(:bookings_school, :onboarded) }
-  let(:booking) { create(:bookings_booking,  bookings_school: school, date: 3.weeks.from_now) }
+  let(:booking) { create(:bookings_booking, :accepted, bookings_school: school, date: 3.weeks.from_now) }
 
   subject { Bookings::Reminder.new(booking, time_until_booking) }
 
