@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /$
+Allow: /schools$
+<% @enabled_schools_urns.each do |urn| %>
+Allow: /candidates/schools/<%= urn %>
+<% end %>
+Disallow: /*
