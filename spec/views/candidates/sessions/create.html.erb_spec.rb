@@ -5,8 +5,7 @@ RSpec.describe "candidates/sessions/create.html.erb", type: :view do
     Candidates::VerificationCode.new(
       email: 'testy@mctest.com',
       firstname: 'testy',
-      lastname: 'mctest',
-      date_of_birth: 20.years.ago.to_date
+      lastname: 'mctest'
     )
   end
 

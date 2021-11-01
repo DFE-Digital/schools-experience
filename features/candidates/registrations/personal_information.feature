@@ -15,7 +15,6 @@ Feature: Personal Information
             | First name          | text  |
             | Last name           | text  |
             | Email address       | email |
-            | Date of birth       | date  |
 
     Scenario: Submitting my data with unknown Candidate
       Given I am on the 'Enter your personal details' page for my school of choice
@@ -23,9 +22,6 @@ Feature: Personal Information
             | First name          | Philip                 |
             | Last name           | Gilbert                |
             | Email address       | phil.unknown@gmail.com |
-            | Day                 | 01                     |
-            | Month               | 01                     |
-            | Year                | 2000                   |
 
         When I submit the form
         Then I should be on the 'enter your contact details' page for my school of choice
@@ -36,13 +32,6 @@ Feature: Personal Information
             | First name          | Philip                 |
             | Last name           | Gilbert                |
             | Email address       | phil.gilbert@gmail.com |
-            | Day                 | 01                     |
-            | Month               | 01                     |
-            | Year                | 2000                   |
 
         When I submit the form
         Then I should be on the 'verify your email' page for my school of choice
-
-    Scenario: Autocomplete attributes
-      Given I am on the 'Enter your personal details' page for my school of choice
-      Then the 'Date of birth' date field should have day, month and year birth date auto-completion enabled

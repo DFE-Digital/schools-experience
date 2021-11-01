@@ -44,7 +44,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(last_name: registration.personal_information.last_name) }
     it { is_expected.to have_attributes(email: registration.personal_information.email) }
     it { is_expected.to have_attributes(secondary_email: registration.personal_information.email) }
-    it { is_expected.to have_attributes(date_of_birth: registration.personal_information.date_of_birth) }
     it { is_expected.to have_attributes(secondary_telephone: registration.contact_information.phone) }
     it { is_expected.to have_attributes(telephone: registration.contact_information.phone) }
     it { is_expected.to have_attributes(address_telephone: registration.contact_information.phone) }
@@ -100,7 +99,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to include("first_name" => contact.first_name) }
     it { is_expected.to include("last_name" => contact.last_name) }
     it { is_expected.to include("email" => contact.email) }
-    it { is_expected.to include("date_of_birth" => contact.date_of_birth) }
 
     context 'with whitespace in email address' do
       let(:contact) { build(:api_schools_experience_sign_up, email: "  someone@education.gov.uk  ") }

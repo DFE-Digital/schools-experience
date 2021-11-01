@@ -18,13 +18,6 @@ module Candidates
       validates :last_name, presence: true, length: { maximum: 50 }, unless: :read_only
       validates :email, presence: true, length: { maximum: 100 }
       validates :email, email_format: true, if: -> { email.present? }
-      validates :date_of_birth, presence: true, unless: :read_only
-      validates :date_of_birth,
-        timeliness: {
-          on_or_before: MIN_AGE.years.ago,
-          on_or_after: MAX_AGE.years.ago
-        },
-        if: -> { date_of_birth.present? && !read_only }
 
       def full_name
         return nil unless first_name && last_name
@@ -58,24 +51,13 @@ module Candidates
         end
       end
 
-      # Rescue argument error thrown by
-      # validates_timeliness/extensions/multiparameter_handler.rb
-      # when the user enters a DOB like `-1, -1, -2`.
-      # date of birth will be unset and get caught by the presence validation
-      def date_of_birth=(*args)
-        read_only ? date_of_birth : super
-      rescue ArgumentError
-        nil
-      end
-
     private
 
       def matchback_attributes
         {
           email: email,
           firstName: first_name,
-          lastName: last_name,
-          dateOfBirth: date_of_birth,
+          lastName: last_name
         }
       end
     end
