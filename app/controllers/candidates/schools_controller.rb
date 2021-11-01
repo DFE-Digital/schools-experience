@@ -27,6 +27,8 @@ class Candidates::SchoolsController < ApplicationController
       return redirect_to candidates_root_path
     end
 
+    add_x_robots_tag(set_to_all: @school.enabled)
+
     @school.increment!(:views)
 
     if @school.private_beta?
