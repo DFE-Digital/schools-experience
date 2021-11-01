@@ -11,7 +11,6 @@ module Candidates
       attribute :first_name
       attribute :last_name
       attribute :email
-      attribute :date_of_birth, :date
       attribute :read_only, :boolean, default: false
 
       validates :first_name, presence: true, length: { maximum: 50 }, unless: :read_only
