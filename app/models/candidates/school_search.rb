@@ -19,7 +19,7 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location, :order, :latitude,
+    attr_accessor :query, :location, :latitude,
                   :longitude, :page, :analytics_tracking_uuid
     attr_reader :distance, :max_fee
 
@@ -27,8 +27,6 @@ module Candidates
     delegate :whitelisted_urns, :whitelisted_urns?, to: Bookings::SchoolSearch
 
     class << self
-      delegate :available_orders, to: Bookings::SchoolSearch
-
       def fees
         FEES
       end
@@ -40,7 +38,6 @@ module Candidates
 
     def initialize(*args)
       @distance = 10
-      @order = 'distance'
 
       super
     end
@@ -125,7 +122,6 @@ module Candidates
         subjects: subjects,
         phases: phases,
         max_fee: max_fee,
-        requested_order: order,
         page: page,
         analytics_tracking_uuid: analytics_tracking_uuid,
         dbs_policies: dbs_policies

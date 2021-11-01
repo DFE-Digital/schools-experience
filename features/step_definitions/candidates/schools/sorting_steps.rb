@@ -19,7 +19,7 @@ Given("there there are schools with the following attributes:") do |table|
   expect(Bookings::School.count).to eql(table.rows.length)
 end
 
-Given("I have provided {string} as my location") do |location|
+When("I have provided {string} as my location") do |location|
   path = candidates_schools_path(location: location, distance: 25)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
@@ -56,41 +56,4 @@ Then("the results should be sorted by distance, nearest to furthest") do
       .all('#search-results > ul > li')
       .map { |ele| ele['data-school-urn'].to_i }
   ).to eql(urns_in_distance_order)
-end
-
-Then("the results should be sorted by name, lowest to highest") do
-  # proximity from Man
-  urns_in_name_order = [
-    @schools.detect { |s| s.name == "Manningtree Primary School" },
-    @schools.detect { |s| s.name == "Mansfield School" },
-    @schools.detect { |s| s.name == "Manton School" }
-  ].map(&:urn)
-
-  expect(
-    page
-      .all('#search-results > ul > li')
-      .map { |ele| ele['data-school-urn'].to_i }
-  ).to eql(urns_in_name_order)
-end
-
-Given("I have changed the sort order to {string}") do |sort_by|
-  within find('fieldset', text: 'Sorted by') do
-    choose sort_by
-  end
-  delay_page_load
-end
-
-Given("the sort order has defaulted to {string}") do |string|
-  selected_radio = page.find :xpath, %(.//input[@value="#{string.downcase}"])
-  expect(selected_radio).to be_checked
-end
-
-Then("the distance should be ordered from low to high") do
-  distances = page
-    .all(".distance")
-    .map(&:text)
-    .map { |distance| distance.split(" ").first }
-    .map(&:to_f)
-
-  expect(distances).to eql(distances.sort)
 end

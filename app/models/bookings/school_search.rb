@@ -1,25 +1,15 @@
 require 'geocoding_request'
 
 class Bookings::SchoolSearch < ApplicationRecord
-  attr_accessor :requested_order
   attr_reader :location_name
 
   validates :location, length: { minimum: 2 }, allow_nil: false, if: -> { location.is_a?(String) }
-
-  AVAILABLE_ORDERS = [
-    %w[distance Distance],
-    %w[name Name]
-  ].freeze
 
   REGION = 'England'.freeze
   GEOCODER_PARAMS = { maxRes: 1 }.freeze
   PER_PAGE = 15
 
   class << self
-    def available_orders
-      AVAILABLE_ORDERS.map
-    end
-
     def whitelisted_urns
       return [] if ENV['CANDIDATE_URN_WHITELIST'].blank?
 
@@ -47,7 +37,7 @@ class Bookings::SchoolSearch < ApplicationRecord
   def results
     base_query
       .includes(%i[phases])
-      .reorder(order_by(requested_order))
+      .order(order_by_distance)
       .page(page)
       .per(PER_PAGE)
   end
@@ -171,15 +161,11 @@ private
       result.latitude.present?
   end
 
-  def order_by(option)
-    if (option == 'distance') && coordinates.present?
-      # NOTE: distance isn't actually an attribute of
-      # Bookings::School so we can't use hash syntax
-      # as Rails will complain
-      'distance asc'
-    else
-      { name: 'asc' }
-    end
+  def order_by_distance
+    # NOTE: distance isn't actually an attribute of
+    # Bookings::School so we can't use hash syntax
+    # as Rails will complain
+    'distance asc'
   end
 
   def dbs_options

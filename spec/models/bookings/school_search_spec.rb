@@ -376,25 +376,11 @@ describe Bookings::SchoolSearch do
         end
 
         subject do
-          Bookings::SchoolSearch.new(query: '', location: 'Cheetham Hill', radius: 500, requested_order: 'distance').results
+          Bookings::SchoolSearch.new(query: '', location: 'Cheetham Hill', radius: 500).results
         end
 
         specify 'schools should be ordered by distance, near to far' do
           expect(subject.map(&:name)).to eql([mcr_school, leeds_school, york_school, glasgow_school].map(&:name))
-        end
-      end
-
-      context 'Sorting by name' do
-        let!(:cardiff) { create(:bookings_school, name: "Cardiff Comprehensive", coordinates: point_in_manchester) }
-        let!(:bath) { create(:bookings_school, name: "Bath High School", coordinates: point_in_manchester) }
-        let!(:coventry) { create(:bookings_school, name: "Coventry Academy", coordinates: point_in_manchester) }
-
-        subject do
-          Bookings::SchoolSearch.new(location: coords_in_manchester, requested_order: 'name').results
-        end
-
-        specify 'schools should be ordered alphabetically by name' do
-          expect(subject.map(&:name)).to eql([bath, cardiff, coventry].map(&:name))
         end
       end
     end

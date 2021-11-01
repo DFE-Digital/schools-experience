@@ -27,7 +27,6 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       expect(assigns(:search).phases).to eq([1])
       expect(assigns(:search).subjects).to eq([2, 3])
       expect(assigns(:search).max_fee).to eq('30')
-      expect(assigns(:search).order).to eq('Name')
       expect(assigns(:search).dbs_policies).to eq([1])
 
       # note, this search will yield no results so the search radius will
