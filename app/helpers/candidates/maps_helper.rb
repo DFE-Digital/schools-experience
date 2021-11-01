@@ -64,7 +64,7 @@ module Candidates::MapsHelper
 
     tag.div class: "embedded-map", data: map_data, **aria_attributes do
       tag.div class: 'embedded-map__inner-container',
-              data: { target: 'map.container' } do
+              data: { map_target: 'container' } do
         image_tag static_url, class: "embedded-map__nojs-img", alt: "Map showing #{title}", **aria_attributes
       end
     end
