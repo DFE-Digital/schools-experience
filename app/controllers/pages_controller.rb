@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   before_action :set_manage_site_header
+  before_action :set_enabled_schools_urns, only: %i[robots sitemap]
 
   def show
     render template: sanitise_page
@@ -29,10 +30,10 @@ class PagesController < ApplicationController
   end
 
   def robots
-    @enabled_schools_urns = Bookings::School.enabled.pluck(:urn)
-
     render "robots.txt", layout: false
   end
+
+  def sitemap; end
 
 private
 
@@ -54,5 +55,9 @@ private
     if request.path.start_with? '/schools/'
       @site_header_text = "Manage school experience"
     end
+  end
+
+  def set_enabled_schools_urns
+    @enabled_schools_urns = Bookings::School.enabled.pluck(:urn)
   end
 end
