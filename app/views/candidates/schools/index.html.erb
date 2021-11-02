@@ -10,18 +10,18 @@
 <div class="govuk-grid-row">
   <section id="search-bar" class="govuk-grid-column-full">
     <%= govuk_form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
-          <%= f.govuk_text_field :location, label: { text: "School location", class: "govuk-visually-hidden" }, width: 'full', placeholder: 'Location or postcode' %>
+      <%= f.govuk_text_field :location, label: { text: "School location", class: "govuk-visually-hidden" }, width: 'full', placeholder: 'Location or postcode' %>
 
-          <%= f.govuk_select :distance, label: { text: 'Search radius' } do
-                options_from_collection_for_select(Candidates::SchoolSearch.distances, :first, :last, params[:distance])
-              end unless f.object.whitelisted_urns?
-          %>
+      <%= f.govuk_select :distance, label: { text: 'Search radius' } do
+        options_from_collection_for_select(Candidates::SchoolSearch.distances, :first, :last, params[:distance])
+      end unless f.object.whitelisted_urns?
+      %>
 
-          <div class="govuk-form-group">
-            <%= f.govuk_submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
-          </div>
-      <% end %>
-    <hr />
+      <div class="govuk-form-group">
+        <%= f.govuk_submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
+      </div>
+    <% end %>
+    <hr/>
   </section>
 
   <aside class="govuk-grid-column-one-third filter-list" aria-label="Filter search results">
@@ -33,8 +33,8 @@
       <div data-target="collapsible.panel">
         <%= link_to 'Skip to search results', '#search-results', class: 'govuk-skip-link', id: 'skip-to-results' %>
         <%= form_for @search, as: '',
-              method: :get,
-              html: {class: "collapsible__content"} do |f| %>
+                     method: :get,
+                     html: { class: "collapsible__content" } do |f| %>
 
           <%= f.hidden_field :query %>
           <%= f.hidden_field :location %>
@@ -45,8 +45,7 @@
           <%= f.collection_check_boxes :phases, Candidates::School.phases, :first, :last %>
 
           <%= f.collection_check_boxes :subjects, Candidates::School.subjects, :first, :last %>
-          <%= f.collection_check_boxes :dbs_policies, [[2 , nil]], :first, :last %>
-          <%= f.hidden_field :order %>
+          <%= f.collection_check_boxes :dbs_policies, [[2, nil]], :first, :last %>
 
           <%= f.submit 'Update schools list', name: nil %>
         <% end %>
@@ -56,19 +55,19 @@
 
   <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
     <%- if @search.subjects.any? || @search.phases.any? || @search.dbs_policies.any? -%>
-    <div class="school-search-filter-info">
-      <div>
-        <%= school_search_phase_filter_description @search %>
-      </div>
+      <div class="school-search-filter-info">
+        <div>
+          <%= school_search_phase_filter_description @search %>
+        </div>
 
-      <div>
-        <%= school_search_subject_filter_description @search %>
-      </div>
+        <div>
+          <%= school_search_subject_filter_description @search %>
+        </div>
 
-      <div>
-        <%= school_search_dbs_policies_filter_description @search %>
+        <div>
+          <%= school_search_dbs_policies_filter_description @search %>
+        </div>
       </div>
-    </p>
     <%- end -%>
 
     <div class="pagination-info higher">
@@ -79,76 +78,49 @@
       <%= paginate @search.results %>
     </div>
 
-    <hr />
+    <hr/>
 
-    <div class="sortby inline-fields">
-      <%= form_for @search, as: '', method: :get, data: {controller:'instant-filter'} do |f| %>
-        <%= f.hidden_field :query %>
-        <%= f.hidden_field :location %>
-        <%= f.hidden_field :distance %>
-        <%= f.hidden_field :latitude %>
-        <%= f.hidden_field :longitude %>
-        <% for phase_id in f.object.phases %>
-          <%= f.hidden_field :phases, multiple: true, value: phase_id, id: nil %>
-        <% end %>
-        <% for subject_id in f.object.subjects %>
-          <%= f.hidden_field :subjects, multiple: true, value: subject_id, id: nil %>
-        <% end %>
-        <% f.object.dbs_policies.each do |dbs_policy| %>
-          <%= f.hidden_field :dbs_policies, multiple: true, value: dbs_policy, id: nil %>
-        <% end %>
-        <%= f.hidden_field :max_fee %>
-        <%= f.radio_button_fieldset :order,
-          choices: f.object.class.available_orders,
-          value_method: :first,
-          text_method: :last,
-          fieldset_heading: false,
-          small: true,
-          inline: true
-        %>
-        <%= f.submit "Change sort order", name: nil %>
-      <% end %>
-    </div>
+    <p>Sorted by distance</p>
 
-    <hr />
+    <hr/>
 
     <ul id="results">
       <%= render 'expanded_search', search: @search if @expanded_search_radius %>
 
-      <% @search.results.each_with_index do |school, index| %>
-      <li data-school-urn="<%= school.urn %>">
-        <article class="school-result">
-          <h2 class="govuk-heading-l">
-            <%= school.name %>
-            <%- if school.respond_to? :distance -%>
+      <% @search.results.each_with_index do |school, _| %>
+        <li data-school-urn="<%= school.urn %>">
+          <article class="school-result">
+            <h2 class="govuk-heading-l">
+              <%= school.name %>
+              <%- if school.respond_to? :distance -%>
             <span class="govuk-caption-m distance">
               <%= pluralize Conversions::Distance::Metres::ToMiles.convert(school.distance), 'mile' %>
               away
             </span>
-            <%- end -%>
-          </h2>
+              <%- end -%>
+            </h2>
 
-          <dl class="govuk-summary-list">
-            <%= summary_row 'Address', format_school_address(school), nil, show_action: false %>
-            <%= summary_row 'Education phases', format_school_phases(school), nil, show_action: false %>
-            <%= summary_row 'Subjects', format_school_subjects(school), nil, show_action: false %>
-            <%= summary_row 'Experience type', format_school_placement_locations(school), nil, show_action: false %>
-          </dl>
+            <dl class="govuk-summary-list">
+              <%= summary_row 'Address', format_school_address(school), nil, show_action: false %>
+              <%= summary_row 'Education phases', format_school_phases(school), nil, show_action: false %>
+              <%= summary_row 'Subjects', format_school_subjects(school), nil, show_action: false %>
+              <%= summary_row 'Experience type', format_school_placement_locations(school), nil, show_action: false %>
+            </dl>
 
-          <%= govuk_link_to 'View school details',
-              candidates_school_path(school),
-              aria: { 'label': "View school details for #{school.name}" } %>
-        </article>
-      </li>
+            <%= govuk_link_to 'View school details',
+                              candidates_school_path(school),
+                              aria: { 'label': "View school details for #{school.name}" } %>
+          </article>
+        </li>
       <% end %>
 
       <%= render 'no_results', search: @search if @search.results.empty? && !@expanded_search_radius %>
     </ul>
 
     <%- if show_lower_navigation?(@search.results.length) %>
-    <div class="pagination-info lower">
-      <%= paginate @search.results %>
-    </div>
+      <div class="pagination-info lower">
+        <%= paginate @search.results %>
+      </div>
     <% end %>
   </section>
 </div>
