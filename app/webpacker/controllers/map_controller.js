@@ -2,6 +2,13 @@ import { Controller } from "stimulus"
 import { Loader } from "@googlemaps/js-api-loader"
 
 export default class extends Controller {
+  static values = {
+    apiKey: String,
+    latitude: String,
+    longitude: String,
+    title: String,
+    description: String
+  }
   static targets = ['container'] ;
   map = null ;
 
@@ -11,7 +18,7 @@ export default class extends Controller {
 
   initMap() {
     const loader = new Loader({
-      apiKey: this.data.get("apiKey")
+      apiKey: this.apiKeyValue
     });
 
     loader.load().then(() => {
@@ -23,8 +30,8 @@ export default class extends Controller {
     const $map = this.containerTarget;
 
     const latLng = new google.maps.LatLng(
-      this.data.get('latitude'),
-      this.data.get('longitude')
+      this.latitudeValue,
+      this.longitudeValue,
     );
 
     const Popup = this.createPopupClass();
@@ -63,12 +70,12 @@ export default class extends Controller {
     });
 
     const closedContent = document.createElement("div");
-    closedContent.innerHTML = this.data.get('title');
+    closedContent.innerHTML = this.titleValue;
 
     const openContent = document.createElement("div");
     openContent.insertAdjacentHTML(
       "beforeend",
-      `<p class="govuk-body">${this.data.get('description')}</p>`
+      `<p class="govuk-body">${this.descriptionValue}</p>`
     );
 
     const popup = new Popup(latLng, closedContent, openContent);

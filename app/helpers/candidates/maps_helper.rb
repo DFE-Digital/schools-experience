@@ -28,12 +28,12 @@ module Candidates::MapsHelper
     return if google_maps_api_key.blank?
 
     map_data = {
-      map_api_key: google_maps_api_key,
       controller: 'map',
-      map_latitude: latitude,
-      map_longitude: longitude,
-      map_title: title,
-      map_description: description
+      map_api_key_value: google_maps_api_key,
+      map_latitude_value: latitude,
+      map_longitude_value: longitude,
+      map_title_value: title,
+      map_description_value: description
     }
 
     static_url = static_map_url(
