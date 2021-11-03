@@ -3,7 +3,7 @@
 <div class="govuk-grid-row" id="application-preview">
   <%= form_for @privacy_policy,
         url: candidates_school_registrations_confirmation_email_path,
-        html: { onsubmit: 'preventDoubleClick(this)' } do |f| %>
+        data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>You'll receive an email with the following details once you've sent your school experience request.</p>
@@ -132,9 +132,9 @@
         <%= f.check_box_input :acceptance %>
       </div>
       <% if candidate_signed_in? %>
-        <%= f.submit 'Accept and send', class: 'govuk-button' %>
+        <%= f.submit 'Accept and send', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
       <% else %>
-        <%= f.submit 'Continue', class: 'govuk-button' %>
+        <%= f.submit 'Continue', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
       <% end %>
   </div>
   <% end %>

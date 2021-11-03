@@ -64,13 +64,3 @@ if (CookiePreferences.allowed('analytics')) {
     });
   });
 }
-
-global.preventDoubleClick = function(form) {
-  let buttons = form.querySelectorAll('input[type=submit],button[type=submit]') ;
-
-  for (let button of buttons) {
-    button.setAttribute('disabled', true) ;
-  }
-
-  return true ;
-};
