@@ -19,7 +19,7 @@
             <th class="govuk-table__header" scope="col">School experience date</th>
             <th class="govuk-table__header" scope="col">Subject</th>
             <th class="govuk-table__header" scope="col">Status</th>
-            <th class="govuk-table__header"></th>
+            <th class="govuk-table__header" scope="col">Action</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -39,7 +39,7 @@
                 <%- if withdrawn_request&.placement_date&.subject_specific && withdrawn_request.subject -%>
                   <%= withdrawn_request.subject.name %>
                 <%- else -%>
-                  <em>Not specified</em>
+                  Not specified
                 <%- end -%>
               </td>
               <td class="status govuk-table__cell">
