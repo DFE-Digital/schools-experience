@@ -38,6 +38,7 @@ describe PagesController, type: :request do
     end
 
     it { expect(response).to have_http_status(:success) }
+    it { expect(response.headers['X-Robots-Tag']).to eq('all') }
     it { expect(response).to render_template 'robots.txt' }
   end
 
@@ -47,6 +48,7 @@ describe PagesController, type: :request do
     end
 
     it { expect(response).to have_http_status(:success) }
+    it { expect(response.headers['X-Robots-Tag']).to eq('all') }
     it { expect(response).to render_template 'sitemap' }
   end
 end
