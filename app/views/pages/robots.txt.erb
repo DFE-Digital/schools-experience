@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /$
 Allow: /schools$
+Allow: /robots.txt
+Allow: /sitemap.xml
 <% @enabled_schools_urns.each do |urn| %>
 Allow: /candidates/schools/<%= urn %>
 <% end %>
