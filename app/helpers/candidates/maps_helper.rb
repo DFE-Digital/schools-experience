@@ -5,24 +5,14 @@ module Candidates::MapsHelper
   EXTERNAL_MAP_URL = "https://www.google.com/maps/dir/?api=1&destination={latitude},{longitude}".freeze
   STATIC_MAP_URL = "#{GOOGLE_BASE_URL}/maps/api/staticmap{?params*}".freeze
 
-  def include_maps_in_head
-    map_api_key = Rails.application.config.x.google_maps_key
-
-    content_for :head do
-      javascript_include_tag \
-        "https://maps.googleapis.com/maps/api/js?key=#{map_api_key}&callback=mapsLoadedCallback",
-        defer: true, async: true, nonce: true
-    end
-  end
-
   def static_map_url(latitude, longitude, mapsize:, zoom: 17, scale: 2)
-    return if Rails.application.config.x.google_maps_key.blank?
+    return if google_maps_api_key.blank?
 
     location = "#{latitude},#{longitude}"
 
     params = {
       center: location,
-      key: Rails.application.config.x.google_maps_key,
+      key: google_maps_api_key,
       markers: location,
       scale: scale,
       size: mapsize.join('x'),
@@ -34,15 +24,16 @@ module Candidates::MapsHelper
   end
 
   def ajax_map(latitude, longitude, mapsize:, title: nil, description: nil,
-               zoom: 17, described_by: nil, include_js_in_head: true)
-    return if Rails.application.config.x.google_maps_key.blank?
+               zoom: 17, described_by: nil)
+    return if google_maps_api_key.blank?
 
     map_data = {
       controller: 'map',
-      map_latitude: latitude,
-      map_longitude: longitude,
-      map_title: title,
-      map_description: description
+      map_api_key_value: google_maps_api_key,
+      map_latitude_value: latitude,
+      map_longitude_value: longitude,
+      map_title_value: title,
+      map_description_value: description
     }
 
     static_url = static_map_url(
@@ -51,8 +42,6 @@ module Candidates::MapsHelper
       mapsize: mapsize,
       zoom: zoom
     )
-
-    include_maps_in_head if include_js_in_head
 
     aria_attributes = {
       'aria-label': "Map showing #{title}"
@@ -73,5 +62,11 @@ module Candidates::MapsHelper
   def external_map_url(latitude:, longitude:, name:, zoom: 17)
     tmpl = Addressable::Template.new(EXTERNAL_MAP_URL)
     tmpl.expand(latitude: latitude, longitude: longitude, zoom: zoom, name: name).to_s
+  end
+
+private
+
+  def google_maps_api_key
+    Rails.application.config.x.google_maps_key
   end
 end
