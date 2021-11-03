@@ -20,16 +20,6 @@ const application = Application.start();
 const context = require.context("controllers", true, /.js$/);
 application.load(definitionsFromContext(context));
 
-global.mapsLoadedCallback = function() {
-  global.mapsLoaded = true ;
-
-  let maps = document.querySelectorAll('[data-controller="map"]') ;
-  for(let map of maps) {
-    let instance = application.getControllerForElementAndIdentifier(map, "map");
-    instance.initMap() ;
-  }
-};
-
 Accordion.prototype.originalSetExpanded = Accordion.prototype.setExpanded;
 Accordion.prototype.setExpanded = function (expanded, $section) {
   // the name of the accordion as it will be categorised in GA

@@ -1,4 +1,5 @@
 import { Controller } from "stimulus"
+import { Loader } from "@googlemaps/js-api-loader"
 
 export default class extends Controller {
   static targets = ['container'] ;
@@ -9,10 +10,13 @@ export default class extends Controller {
   }
 
   initMap() {
-    if (!global.mapsLoaded || this.map)
-      return ;
+    const loader = new Loader({
+      apiKey: this.data.get("apiKey")
+    });
 
-    this.drawMap() ;
+    loader.load().then(() => {
+      this.drawMap() ;
+    });
   }
 
   drawMap() {
