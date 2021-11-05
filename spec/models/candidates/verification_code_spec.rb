@@ -52,6 +52,18 @@ describe Candidates::VerificationCode do
           end
         end
       end
+
+      context "when gitis contact is missing the first or last name" do
+        include_context "api correct verification code for personal info without name"
+
+        it "updates the first name" do
+          expect(exchange.first_name).not_to be_empty
+        end
+
+        it "updates the last name" do
+          expect(exchange.last_name).not_to be_empty
+        end
+      end
     end
 
     describe "#issue_verification_code" do

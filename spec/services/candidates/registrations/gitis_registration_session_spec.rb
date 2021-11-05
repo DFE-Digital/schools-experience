@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Candidates::Registrations::GitisRegistrationSession do
-  let(:contact) { build(:api_schools_experience_sign_up) }
+  let(:contact) { build(:api_schools_experience_sign_up_with_name) }
 
   let(:key) { model.model_name.param_key }
   let(:model_name) { model.model_name.element }
@@ -121,7 +121,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
 
         context 'with some blank fields in gitis data' do
           let(:contact) do
-            build :api_schools_experience_sign_up,
+            build :api_schools_experience_sign_up_with_name,
               first_name: " ",
               last_name: " "
           end
@@ -157,7 +157,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
 
         context 'with some blank fields in gitis data' do
           let(:contact) do
-            build :api_schools_experience_sign_up,
+            build :api_schools_experience_sign_up_with_name,
               first_name: " ",
               last_name: " "
           end

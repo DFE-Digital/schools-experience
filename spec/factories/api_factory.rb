@@ -3,9 +3,6 @@ FactoryBot.define do
     candidate_id { SecureRandom.uuid }
     master_id { nil }
     merged { false }
-    sequence(:first_name) { |i| "First#{i}" }
-    sequence(:last_name) { |i| "Last#{i}" }
-    full_name { "#{first_name} #{last_name}" }
     email { "email@address.com" }
     secondary_email { "email2@address.com" }
     telephone { "111111111" }
@@ -26,6 +23,12 @@ FactoryBot.define do
     trait :merged do
       master_id { SecureRandom.uuid }
       merged { true }
+    end
+
+    factory :api_schools_experience_sign_up_with_name do
+      sequence(:first_name) { |i| "First#{i}" }
+      sequence(:last_name) { |i| "Last#{i}" }
+      full_name { "#{first_name} #{last_name}" }
     end
   end
 

@@ -13,22 +13,22 @@ describe Bookings::Gitis::ContactFetcher do
     subject { fetcher.been_merged?(contact) }
 
     context 'correct merged' do
-      let(:contact) { build(:api_schools_experience_sign_up, :merged) }
+      let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged) }
       it { is_expected.to be true }
     end
 
     context 'correct unmerged' do
-      let(:contact) { build(:api_schools_experience_sign_up) }
+      let(:contact) { build(:api_schools_experience_sign_up_with_name) }
       it { is_expected.to be false }
     end
 
     context 'merged without master' do
-      let(:contact) { build(:api_schools_experience_sign_up, :merged, master_id: nil) }
+      let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged, master_id: nil) }
       it { expect { subject }.to raise_exception described_class::InconsistentContactState }
     end
 
     context 'master but not merged' do
-      let(:contact) { build(:api_schools_experience_sign_up, :merged, merged: false) }
+      let(:contact) { build(:api_schools_experience_sign_up_with_name, :merged, merged: false) }
       it { expect { subject }.to raise_exception described_class::InconsistentContactState }
     end
   end
@@ -66,13 +66,13 @@ describe Bookings::Gitis::ContactFetcher do
   end
 
   describe 'merged records' do
-    let(:first) { build :api_schools_experience_sign_up }
-    let(:second) { build :api_schools_experience_sign_up }
+    let(:first) { build :api_schools_experience_sign_up_with_name }
+    let(:second) { build :api_schools_experience_sign_up_with_name }
     let(:merged) do
-      build :api_schools_experience_sign_up, :merged, master_id: first.candidate_id
+      build :api_schools_experience_sign_up_with_name, :merged, master_id: first.candidate_id
     end
     let(:chained) do
-      build :api_schools_experience_sign_up, :merged, master_id: merged.candidate_id, first_name: 'chained'
+      build :api_schools_experience_sign_up_with_name, :merged, master_id: merged.candidate_id, first_name: 'chained'
     end
 
     context 'for single record' do
@@ -111,9 +111,9 @@ describe Bookings::Gitis::ContactFetcher do
       end
 
       context 'with max chained records' do
-        let(:fourth) { build :api_schools_experience_sign_up, :merged, master_id: chained.candidate_id }
-        let(:fifth) { build :api_schools_experience_sign_up, :merged, master_id: fourth.candidate_id }
-        let(:sixth) { build :api_schools_experience_sign_up, :merged, master_id: fifth.candidate_id }
+        let(:fourth) { build :api_schools_experience_sign_up_with_name, :merged, master_id: chained.candidate_id }
+        let(:fifth) { build :api_schools_experience_sign_up_with_name, :merged, master_id: fourth.candidate_id }
+        let(:sixth) { build :api_schools_experience_sign_up_with_name, :merged, master_id: fifth.candidate_id }
 
         before do
           allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \

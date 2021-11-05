@@ -91,7 +91,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
   end
 
   describe "#contact_to_personal_information" do
-    let(:contact) { build(:api_schools_experience_sign_up) }
+    let(:contact) { build(:api_schools_experience_sign_up_with_name) }
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
     subject { mapper.contact_to_personal_information }
@@ -101,7 +101,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to include("email" => contact.email) }
 
     context 'with whitespace in email address' do
-      let(:contact) { build(:api_schools_experience_sign_up, email: "  someone@education.gov.uk  ") }
+      let(:contact) { build(:api_schools_experience_sign_up_with_name, email: "  someone@education.gov.uk  ") }
 
       it "will strip the whitespace" do
         is_expected.to include("email" => "someone@education.gov.uk")
@@ -110,7 +110,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
   end
 
   describe "#contact_to_contact_information" do
-    let(:contact) { build(:api_schools_experience_sign_up) }
+    let(:contact) { build(:api_schools_experience_sign_up_with_name) }
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
     subject { mapper.contact_to_contact_information }
@@ -123,13 +123,13 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to include("postcode" => contact.address_postcode) }
 
     context "when secondary_telephone is not present" do
-      let(:contact) { build(:api_schools_experience_sign_up, secondary_telephone: nil) }
+      let(:contact) { build(:api_schools_experience_sign_up_with_name, secondary_telephone: nil) }
 
       it { is_expected.to include("phone" => contact.telephone) }
     end
 
     context "when secondary_telephone and telephone are not present" do
-      let(:contact) { build(:api_schools_experience_sign_up, secondary_telephone: nil, telephone: nil) }
+      let(:contact) { build(:api_schools_experience_sign_up_with_name, secondary_telephone: nil, telephone: nil) }
 
       it { is_expected.to include("phone" => contact.mobile_telephone) }
     end
@@ -142,7 +142,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
     let(:english) { Bookings::Subject.find_by!(name: 'English') }
     let(:contact) do
       build(
-        :api_schools_experience_sign_up,
+        :api_schools_experience_sign_up_with_name,
         preferred_teaching_subject_id: maths.gitis_uuid,
         secondary_preferred_teaching_subject_id: english.gitis_uuid,
       )
