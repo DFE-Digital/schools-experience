@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Cron::SyncSchoolsJob, type: :job do
-  specify 'should have a schedule of daily at 04:30' do
-    expect(described_class.cron_expression).to eql('30 4 * * *')
+  specify 'should have a schedule of daily at 07:30' do
+    expect(described_class.cron_expression).to eql('30 7 * * *')
   end
 
   describe '#perform' do
