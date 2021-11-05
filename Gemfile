@@ -79,6 +79,7 @@ gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teachi
 gem 'actionpack-cloudfront', '>= 1.1.0'
 
 gem 'invisible_captcha', '>= 2.0.0'
+gem 'meta-tags', '~> 2.16'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

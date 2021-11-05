@@ -127,6 +127,10 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         expect(school.reload.views).to eql(count + 1)
       end
     end
+
+    it "renders a meta description tag" do
+      expect(response.body).to include("<meta name=\"description\" content=\"#{school.name} is offering")
+    end
   end
 
   context 'when candidate applications are deactivated' do
