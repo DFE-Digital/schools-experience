@@ -45,7 +45,7 @@ Rails.application.configure do
   # config.force_ssl = true
 
   # Logging
-  config.log_level = :error
+  config.log_level = :info
   config.rails_semantic_logger.format = :json
   config.semantic_logger.backtrace_level = :error
   config.rails_semantic_logger.add_file_appender = false
