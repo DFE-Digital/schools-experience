@@ -1,6 +1,6 @@
 shared_context 'candidate signin' do
-  let(:gitis_contact_attrs) { attributes_for(:api_schools_experience_sign_up) }
-  let(:gitis_contact) { build(:api_schools_experience_sign_up, gitis_contact_attrs) }
+  let(:gitis_contact_attrs) { attributes_for(:api_schools_experience_sign_up_with_name) }
+  let(:gitis_contact) { build(:api_schools_experience_sign_up_with_name, gitis_contact_attrs) }
   let(:current_candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
 
   before do

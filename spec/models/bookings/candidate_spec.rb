@@ -62,7 +62,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '.find_by_gitis_contact' do
-    let(:gitis_contact) { build(:api_schools_experience_sign_up) }
+    let(:gitis_contact) { build(:api_schools_experience_sign_up_with_name) }
 
     context 'with existing Candidate' do
       let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
@@ -84,7 +84,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '.find_by_gitis_contact!' do
-    let(:gitis_contact) { build(:api_schools_experience_sign_up) }
+    let(:gitis_contact) { build(:api_schools_experience_sign_up_with_name) }
 
     context 'with existing Candidate' do
       let!(:candidate) { create(:candidate, gitis_uuid: gitis_contact.candidate_id) }
@@ -109,7 +109,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '.find_or_create_from_gitis_contact!' do
-    let(:gitis_contact) { build(:api_schools_experience_sign_up) }
+    let(:gitis_contact) { build(:api_schools_experience_sign_up_with_name) }
 
     subject do
       Bookings::Candidate.find_or_create_from_gitis_contact! gitis_contact
@@ -196,7 +196,7 @@ RSpec.describe Bookings::Candidate, type: :model do
     end
 
     context 'with an existing contact but not candidate' do
-      let(:contact) { build(:api_schools_experience_sign_up) }
+      let(:contact) { build(:api_schools_experience_sign_up_with_name) }
 
       subject do
         Bookings::Candidate.create_or_update_from_registration_session! \
@@ -267,7 +267,7 @@ RSpec.describe Bookings::Candidate, type: :model do
   end
 
   describe '#assign_gitis_contact' do
-    let(:contact) { build(:api_schools_experience_sign_up) }
+    let(:contact) { build(:api_schools_experience_sign_up_with_name) }
     let(:candidate) { create(:candidate) }
     let(:candidate_uuid) { candidate.gitis_uuid }
     before { candidate.assign_gitis_contact contact }

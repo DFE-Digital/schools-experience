@@ -4,7 +4,7 @@ RSpec.describe Schools::CsvExportRow do
   describe "#row" do
     subject { Hash[Schools::CsvExport::HEADER.zip(row)] }
 
-    let(:contact) { build :api_schools_experience_sign_up }
+    let(:contact) { build :api_schools_experience_sign_up_with_name }
 
     let(:row) do
       pr.gitis_contact = contact

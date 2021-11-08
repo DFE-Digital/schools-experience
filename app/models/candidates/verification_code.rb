@@ -35,7 +35,12 @@ class Candidates::VerificationCode
 
     request = GetIntoTeachingApiClient::ExistingCandidateRequest.new(identity_data)
     api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
-    api.exchange_access_token_for_schools_experience_sign_up(code, request)
+    existing_sign_up = api.exchange_access_token_for_schools_experience_sign_up(code, request)
+
+    existing_sign_up.tap do |info|
+      info.first_name = firstname if info.first_name.blank? && firstname.present?
+      info.last_name = lastname if info.last_name.blank? && lastname.present?
+    end
   rescue GetIntoTeachingApiClient::ApiError
     errors.add(:code, :invalid)
     nil

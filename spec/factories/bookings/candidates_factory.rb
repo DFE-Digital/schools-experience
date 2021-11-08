@@ -7,7 +7,7 @@ FactoryBot.define do
     end
 
     trait :with_api_contact do
-      gitis_contact { build(:api_schools_experience_sign_up) }
+      gitis_contact { build(:api_schools_experience_sign_up_with_name) }
       gitis_uuid { gitis_contact.candidate_id }
     end
 

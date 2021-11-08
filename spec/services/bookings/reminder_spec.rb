@@ -11,7 +11,7 @@ describe Bookings::Reminder do
 
   describe '#deliver' do
     it "delivers one job per provided booking" do
-      sign_up = build(:api_schools_experience_sign_up)
+      sign_up = build(:api_schools_experience_sign_up_with_name)
 
       expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
         receive(:get_schools_experience_sign_up).with(booking.contact_uuid) { sign_up }

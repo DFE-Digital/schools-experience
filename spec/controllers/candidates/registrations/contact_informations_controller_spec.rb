@@ -4,7 +4,7 @@ describe Candidates::Registrations::ContactInformationsController, type: :reques
   include_context 'Stubbed current_registration'
   let!(:school) { create(:bookings_school, urn: 11_048) }
 
-  let(:gitis_contact) { build(:api_schools_experience_sign_up) }
+  let(:gitis_contact) { build(:api_schools_experience_sign_up_with_name) }
 
   context 'without existing contact information in the session' do
     let :registration_session do

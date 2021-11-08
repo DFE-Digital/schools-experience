@@ -54,7 +54,7 @@ end
 
 shared_context "api correct verification code" do
   let(:code) { "123456" }
-  let(:sign_up) { build(:api_schools_experience_sign_up) }
+  let(:sign_up) { build(:api_schools_experience_sign_up_with_name) }
 
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
@@ -64,6 +64,24 @@ shared_context "api correct verification code" do
 end
 
 shared_context "api correct verification code for personal info" do
+  let(:code) { "123456" }
+  let(:request) do
+    GetIntoTeachingApiClient::ExistingCandidateRequest.new(
+      firstName: personal_info.first_name,
+      lastName: personal_info.last_name,
+      email: personal_info.email
+    )
+  end
+  let(:sign_up) { build(:api_schools_experience_sign_up_with_name) }
+
+  before do
+    allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+      receive(:exchange_access_token_for_schools_experience_sign_up)
+      .with(code, request) { sign_up }
+  end
+end
+
+shared_context "api correct verification code for personal info without name" do
   let(:code) { "123456" }
   let(:request) do
     GetIntoTeachingApiClient::ExistingCandidateRequest.new(
@@ -104,7 +122,7 @@ shared_context "api sign up" do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:sign_up_schools_experience_candidate)
         .with(an_instance_of(GetIntoTeachingApiClient::SchoolsExperienceSignUp)) do
-          build(:api_schools_experience_sign_up)
+          build(:api_schools_experience_sign_up_with_name)
         end
   end
 end
@@ -120,7 +138,7 @@ end
 shared_context "api sign ups for requests" do
   let(:ids) { requests.map(&:contact_uuid) }
   let(:sign_ups) do
-    ids.map { |id| build(:api_schools_experience_sign_up, candidate_id: id) }
+    ids.map { |id| build(:api_schools_experience_sign_up_with_name, candidate_id: id) }
   end
 
   before do
@@ -136,6 +154,6 @@ shared_context "api sign up for first request" do
 
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
       receive(:get_schools_experience_sign_up)
-        .with(id) { build(:api_schools_experience_sign_up, candidate_id: id) }
+        .with(id) { build(:api_schools_experience_sign_up_with_name, candidate_id: id) }
   end
 end
