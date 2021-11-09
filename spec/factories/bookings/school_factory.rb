@@ -58,6 +58,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_unavailable_placement_dates do
+      after :create do |school|
+        FactoryBot.create(:bookings_placement_date, active: false, bookings_school: school)
+      end
+    end
+
     trait :with_teacher_training_info do
       teacher_training_info { 'We offer a PGCE in partnership with Chester University. We are a lead school for School Direct' }
     end
