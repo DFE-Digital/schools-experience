@@ -172,7 +172,7 @@ class Bookings::School < ApplicationRecord
   end
 
   def has_availability?
-    !availability_preference_fixed? || has_available_dates?
+    has_available_flex_dates? || has_available_fix_dates?
   end
 
   def notification_emails
@@ -237,8 +237,12 @@ class Bookings::School < ApplicationRecord
 
 private
 
-  def has_available_dates?
+  def has_available_fix_dates?
     bookings_placement_dates.available.any?
+  end
+
+  def has_available_flex_dates?
+    !availability_preference_fixed? && availability_info?
   end
 
   def nilify_availability_info

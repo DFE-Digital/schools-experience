@@ -135,7 +135,7 @@
       <%- end -%>
     </dl>
 
-    <%- if @school.has_availability? -%>
+    <%- if @school.enabled? && @school.has_availability? -%>
     <div class="school-start-request-button__mobile">
       <%= govuk_link_to "Start request",
         new_candidates_school_registrations_personal_information_path(@school),

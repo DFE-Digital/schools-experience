@@ -465,22 +465,32 @@ describe Bookings::School, type: :model do
   describe 'Methods' do
     describe '#has_availability?' do
       context 'when flexible' do
-        subject { build(:bookings_school) }
-        it { is_expected.to have_availability }
-      end
-
-      context 'when fixed with no dates' do
-        subject { build(:bookings_school, :with_fixed_availability_preference) }
-        it { is_expected.not_to have_availability }
-      end
-
-      context 'when fixed with no dates' do
-        subject { create(:bookings_school, :with_fixed_availability_preference) }
-        let!(:available_date) do
-          create(:bookings_placement_date, date: 1.week.from_now, bookings_school: subject)
+        context 'with availability_info' do
+          subject { build(:bookings_school) }
+          it { is_expected.to have_availability }
         end
 
-        it { is_expected.to have_availability }
+        context 'without availability_info' do
+          subject { build(:bookings_school, availability_info: nil) }
+          it { is_expected.not_to have_availability }
+        end
+      end
+
+      context 'when fixed' do
+        context 'with no dates' do
+          subject { build(:bookings_school, :with_fixed_availability_preference) }
+          it { is_expected.not_to have_availability }
+        end
+
+        context 'with unavailable dates' do
+          subject { create(:bookings_school, :with_fixed_availability_preference, :with_unavailable_placement_dates) }
+          it { is_expected.not_to have_availability }
+        end
+
+        context 'with available dates' do
+          subject { create(:bookings_school, :with_fixed_availability_preference, :with_placement_dates) }
+          it { is_expected.to have_availability }
+        end
       end
     end
 
