@@ -5,7 +5,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
   let(:school) { Candidates::School.find(urn) }
 
   context 'with profile' do
-    let(:profile) { build(:bookings_profile, school: school) }
+    let(:profile) { create(:bookings_profile, school: school) }
     let(:presenter) { Candidates::SchoolPresenter.new(school, profile) }
 
     before do
@@ -32,6 +32,23 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
         expect(rendered).to have_css("div.#{css_class} > a", text: 'Start request')
       end
     end
+
+    context 'with availability' do
+      it "has a banner to promote the search page" do
+        expect(rendered).not_to have_css("div.govuk-inset-text > a", text: 'Search for schools offering school experience')
+      end
+    end
+
+    context 'without availability' do
+      let(:urn) { create(:bookings_school, :without_availability).urn }
+
+      it "doesn't have the search page promote banner" do
+        allow(school).to receive(:has_availability?).and_return(false)
+
+        expect(rendered).to have_css("div.govuk-inset-text", text: 'This school does not currently have placement availability.')
+        expect(rendered).to have_css("div.govuk-inset-text > a", text: 'Search for schools offering school experience')
+      end
+    end
   end
 
   context 'without profile' do
@@ -53,6 +70,11 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
       %w[school-start-request-button__tablet_plus school-start-request-button__mobile].each do |css_class|
         expect(rendered).to have_css("div.#{css_class} > a", text: 'Start request')
       end
+    end
+
+    it "has a banner to promote the search page" do
+      expect(rendered).to have_css("div.govuk-inset-text", text: 'This school has not yet joined the Get School Experience service.')
+      expect(rendered).to have_css("div.govuk-inset-text > a", text: 'Search for schools offering school experience')
     end
   end
 end
