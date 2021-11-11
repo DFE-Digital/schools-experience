@@ -7,12 +7,12 @@ Find out more about a career in teaching, experience days and how to apply." %>
 <% if !@school.private_beta? %>
   <div class="govuk-inset-text">
     This school has not yet joined the Get School Experience service.
-    <%= link_to 'Search for schools offering school experience', new_candidates_school_search_path %>
+    <%= link_to 'Search for schools offering school experience', new_candidates_school_search_path %>.
   </div>
 <% elsif !@school.has_availability? %>
   <div class="govuk-inset-text">
     This school does not currently have placement availability.
-    <%= link_to 'Search for schools offering school experience', new_candidates_school_search_path %>
+    <%= link_to 'Search for schools offering school experience', new_candidates_school_search_path %>.
   </div>
 <% end %>
 
