@@ -76,5 +76,9 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
       expect(rendered).to have_css("div.govuk-inset-text", text: 'This school has not yet joined the Get School Experience service.')
       expect(rendered).to have_css("div.govuk-inset-text > a", text: 'Search for schools offering school experience')
     end
+
+    it "doesn't render the experience type section" do
+      expect(rendered).not_to have_css("div#school-experience-type")
+    end
   end
 end
