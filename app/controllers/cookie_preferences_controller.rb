@@ -14,7 +14,11 @@ class CookiePreferencesController < ApplicationController
 
     if cookie_preferences.valid?
       persist cookie_preferences
+      # TEMP: debugging cookies not removed in prod
+      Rails.logger.info("CookiePreferencesController#update before removing cookies:#{cookies.inspect}")
       remove_rejected_cookies cookie_preferences
+      # TEMP: debugging cookies not removed in prod
+      Rails.logger.info("CookiePreferencesController#update after removing cookies:#{cookies.inspect}")
       flash[:cookies] = 'updated'
       redirect_to return_url
     else
@@ -32,12 +36,16 @@ private
     cookies[CookiePreference.cookie_key] = {
       expires: preferences.expires,
       value: preferences.to_json,
-      httponly: false,
+      httponly: false
     }
   end
 
   def remove_rejected_cookies(preferences)
+    # TEMP: debugging cookies not removed in prod
+    Rails.logger.info("CookiePreferencesController#remove_rejected_cookies with preferences: #{preferences} from #{cookies.inspect}")
     preferences.rejected_cookies.each do |cookie_key|
+      # TEMP: debugging cookies not removed in prod
+      Rails.logger.info("CookiePreferencesController#remove_rejected_cookies delete: #{cookie_key}")
       cookies.delete cookie_key
     end
   end
