@@ -28,6 +28,11 @@ FactoryBot.define do
       sequence(:county) { |n| "#{n} Something county" }
     end
 
+    trait :without_availability do
+      availability_info { nil }
+      experience_type { nil }
+    end
+
     trait :with_fixed_availability_preference do
       availability_preference_fixed { true }
     end
