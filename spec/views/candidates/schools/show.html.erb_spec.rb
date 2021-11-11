@@ -34,7 +34,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
     end
 
     context 'with availability' do
-      it "has a banner to promote the search page" do
+      it "doesn't have a banner to promote the search page" do
         expect(rendered).not_to have_css("div.govuk-inset-text > a", text: 'Search for schools offering school experience')
       end
     end
@@ -42,7 +42,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
     context 'without availability' do
       let(:urn) { create(:bookings_school, :without_availability).urn }
 
-      it "doesn't have the search page promote banner" do
+      it "has a banner to promote the search page" do
         allow(school).to receive(:has_availability?).and_return(false)
 
         expect(rendered).to have_css("div.govuk-inset-text", text: 'This school does not currently have placement availability.')
