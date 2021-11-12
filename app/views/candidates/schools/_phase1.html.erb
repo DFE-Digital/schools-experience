@@ -105,6 +105,7 @@
         </dd>
       </div>
 
+      <%- if @school.private_beta? && !@school.availability_preference_fixed? -%>
       <div id="school-availability-info" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Placement availability
@@ -122,6 +123,7 @@
           <%= format_school_placement_locations @school %>
         </dd>
       </div>
+      <%- end -%>
 
       <%- if @school.teacher_training_provider? -%>
       <div id="school-teacher-training-info" class="govuk-summary-list__row">
