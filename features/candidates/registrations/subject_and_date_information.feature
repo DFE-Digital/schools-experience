@@ -9,7 +9,7 @@ Feature: Selecting a subject and date
 
     Scenario: Heading
         Given I am on the 'choose a subject and date' screen for my chosen school
-        Then the page's main heading should be 'Request a school experience date at'
+        Then the page's main heading should be 'Choose a date'
 
     Scenario: Back link
         Given I am on the 'choose a subject and date' screen for my chosen school
