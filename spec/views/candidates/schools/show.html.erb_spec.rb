@@ -73,7 +73,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
     end
 
     it "has a banner to promote the search page" do
-      expect(rendered).to have_css("div.govuk-inset-text", text: 'This school has not yet joined the Get School Experience service.')
+      expect(rendered).to have_css("div.govuk-inset-text", text: 'This school has not yet joined the Get school experience service.')
       expect(rendered).to have_css("div.govuk-inset-text > a", text: 'Search for schools offering school experience')
     end
   end
