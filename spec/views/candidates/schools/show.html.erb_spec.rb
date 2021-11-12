@@ -45,7 +45,7 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
       it "has a banner to promote the search page" do
         allow(school).to receive(:has_availability?).and_return(false)
 
-        expect(rendered).to have_css("div.govuk-inset-text", text: 'This school does not currently have placement availability.')
+        expect(rendered).to have_css("div.govuk-inset-text", text: 'This school does not have any placements available at the moment.')
         expect(rendered).to have_css("div.govuk-inset-text > a", text: 'Search for schools offering school experience')
       end
     end
