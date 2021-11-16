@@ -1,7 +1,7 @@
 <%- if cookie_preferences.allowed?(:analytics) -%>
   <%= javascript_tag nonce: true do -%>
     window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-    ga('create', '<%= google_analytics_tracking_id %>');
+    ga('create', '<%= google_analytics_tracking_id %>', document.location.hostname);
     ga('send', 'pageview');
   <% end -%>
 
