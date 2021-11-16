@@ -33,12 +33,13 @@ private
       expires: preferences.expires,
       value: preferences.to_json,
       httponly: false,
+      domain: CookiePreference.domain,
     }
   end
 
   def remove_rejected_cookies(preferences)
     preferences.rejected_cookies.each do |cookie_key|
-      cookies.delete cookie_key
+      cookies.delete cookie_key, domain: CookiePreference.domain
     end
   end
 

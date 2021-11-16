@@ -18,6 +18,12 @@ class CookiePreference
   delegate :to_json, to: :attributes
 
   class << self
+    def domain
+      # The domain name, as determined by Google Analytics, contains a leading
+      # dot. The domain here must match in order to correctly add and remove cookies
+      Rails.application.config.x.cookie_domain.presence
+    end
+
     def cookie_key
       "#{model_name.param_key}-#{VERSION}"
     end

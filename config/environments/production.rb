@@ -137,6 +137,7 @@ Rails.application.configure do
   config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials[:google_maps_key]
 
   config.x.base_url = ENV.fetch('DFE_SIGNIN_BASE_URL') { 'https://schoolexperience.education.gov.uk' }
+  config.x.cookie_domain = '.schoolexperience.education.gov.uk'
   config.x.oidc_client_id = ENV.fetch('DFE_SIGNIN_CLIENT_ID') { 'schoolexperience' }
   config.x.oidc_client_secret = ENV.fetch('DFE_SIGNIN_SECRET') do
     msg = "DFE_SIGNIN_SECRET has not been set"

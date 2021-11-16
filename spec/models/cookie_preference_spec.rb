@@ -22,7 +22,7 @@ describe CookiePreference, type: :model do
 
       it do
         is_expected.not_to allow_value(nil).for(:analytics)
-          .with_message('Choose On or Off for cookies which measure website use')
+                                           .with_message('Choose On or Off for cookies which measure website use')
       end
     end
   end
@@ -64,6 +64,26 @@ describe CookiePreference, type: :model do
     let(:json) { { analytics: true }.to_json }
     subject { described_class.from_json(json) }
     it { is_expected.to have_attributes analytics: true }
+  end
+
+  describe '.domain' do
+    subject { described_class.domain }
+
+    context "when in config" do
+      before do
+        allow(Rails.application.config.x).to receive(:cookie_domain) { ".schoolexperience.education.gov.uk" }
+      end
+
+      it { is_expected.to eq ".schoolexperience.education.gov.uk" }
+    end
+
+    context "when not in config" do
+      before do
+        allow(Rails.application.config.x).to receive(:cookie_domain) { nil }
+      end
+
+      it { is_expected.to be_nil }
+    end
   end
 
   describe '.from_cookie' do
