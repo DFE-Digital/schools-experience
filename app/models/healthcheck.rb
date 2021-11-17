@@ -4,7 +4,6 @@ class Healthcheck
   delegate :to_json, to: :to_h
 
   FUNCTIONAL_API_STATUS_CODES = %w[healthy degraded].freeze
-  HEALTHY_CRM_STATUS_CODE = "ok".freeze
 
   def deployment
     ENV.fetch('DEPLOYMENT_ID') { 'not set' }
@@ -32,8 +31,7 @@ class Healthcheck
   def test_gitis
     health = GetIntoTeachingApiClient::OperationsApi.new.health_check
 
-    FUNCTIONAL_API_STATUS_CODES.any?(health.status) &&
-      health.crm == HEALTHY_CRM_STATUS_CODE
+    FUNCTIONAL_API_STATUS_CODES.any?(health.status)
   rescue Faraday::Error, GetIntoTeachingApiClient::ApiError
     false
   end
