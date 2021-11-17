@@ -44,12 +44,6 @@ RSpec.describe Healthcheck do
 
       it { is_expected.to be true }
     end
-
-    context "with a degraded connection (CRM offline)" do
-      include_context "api degraded (CRM offline)"
-
-      it { is_expected.to be false }
-    end
   end
 
   describe "test_postgresql" do
