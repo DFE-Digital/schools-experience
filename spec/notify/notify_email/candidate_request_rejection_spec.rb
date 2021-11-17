@@ -6,5 +6,6 @@ describe NotifyEmail::CandidateRequestRejection do
     rejection_reasons: "Failed security checks",
     extra_details: 'HawHaw',
     dates_requested: 'Whenever really',
-    school_search_url: 'https://example.com/'
+    school_search_url: 'https://example.com/',
+    candidate_name: 'Jane Doe'
 end

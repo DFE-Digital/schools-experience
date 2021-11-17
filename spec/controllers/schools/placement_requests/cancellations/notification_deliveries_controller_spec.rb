@@ -68,8 +68,8 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
           rejection_reasons: cancellation.rejection_description,
           extra_details: cancellation.extra_details,
           dates_requested: cancellation.dates_requested,
-          school_search_url: new_candidates_school_search_url
-
+          school_search_url: new_candidates_school_search_url,
+          candidate_name: gitis_contact.full_name
         expect(candidate_request_rejection_notification).to \
           have_received :despatch_later!
       end
