@@ -46,7 +46,8 @@ module Schools
             rejection_reasons: cancellation.rejection_description,
             extra_details: cancellation.extra_details,
             dates_requested: cancellation.dates_requested,
-            school_search_url: new_candidates_school_search_url
+            school_search_url: new_candidates_school_search_url,
+            candidate_name: cancellation.candidate_name
           ).despatch_later!
         end
       end

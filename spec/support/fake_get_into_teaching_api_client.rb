@@ -65,6 +65,7 @@ private
       candidateId: fake_candidate_id,
       firstName: 'Matthew',
       lastName: 'Richards',
+      fullName: 'Matthew Richards',
       mobileTelephone: '07123 456789',
       telephone: '01234 567890',
       email: 'first@thisaddress.com',
