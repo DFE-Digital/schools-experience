@@ -116,5 +116,15 @@ FactoryBot.define do
       availability { nil }
       association :placement_date, factory: :bookings_placement_date
     end
+
+    trait :with_a_fixed_date_in_the_recent_past do
+      availability { nil }
+      association :placement_date, :in_the_recent_past, factory: :bookings_placement_date
+    end
+
+    trait :with_a_fixed_date_in_the_past do
+      availability { nil }
+      association :placement_date, :in_the_past, factory: :bookings_placement_date
+    end
   end
 end

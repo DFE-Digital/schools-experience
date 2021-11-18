@@ -92,7 +92,8 @@ module Bookings
     }
 
     scope :requiring_attention, lambda {
-      without_booking
+      excluding_old_expired_requests
+        .without_booking
         .left_joins(:candidate_cancellation)
         .merge(Cancellation.unviewed)
         .merge(Cancellation.sent.or(Cancellation.where(id: nil)))
@@ -101,7 +102,8 @@ module Bookings
     }
 
     scope :requiring_attention_including_attendance, lambda {
-      left_joins(:booking) \
+      excluding_old_expired_requests
+        .left_joins(:booking)
         .where("bookings_bookings.id IS NULL OR (bookings_bookings.accepted_at IS NOT NULL AND bookings_bookings.date < ? AND bookings_bookings.attended IS NULL)", Time.zone.today)
         .left_joins(:candidate_cancellation)
         .merge(Cancellation.unviewed)
@@ -124,6 +126,20 @@ module Bookings
       without_booking
         .joins(:school_cancellation)
         .merge(Cancellation.sent.order(sent_at: :desc))
+    }
+
+    # 'old_expired_requests' are requests for fixed dates
+    # that are older than a month ago
+    scope :old_expired_requests, lambda {
+      joins(:placement_date)
+      .where('bookings_placement_dates.date < ?', 1.month.ago)
+    }
+
+    # 'excluding_old_expired_requests' are all requests except
+    # for fixed placement dates that are older than a month ago
+    scope :excluding_old_expired_requests, lambda {
+      left_joins(:placement_date)
+      .where('bookings_placement_dates.date >= ? OR bookings_placement_dates.date IS NULL', 1.month.ago)
     }
 
     default_scope { joins(:candidate) }

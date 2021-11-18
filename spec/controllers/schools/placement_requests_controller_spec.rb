@@ -2,6 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementRequestsController, type: :request do
+  include ActiveSupport::Testing::TimeHelpers
   include_context "logged in DfE user"
 
   let :school do
@@ -19,6 +20,27 @@ describe Schools::PlacementRequestsController, type: :request do
   context '#index' do
     let!(:placement_requests) do
       FactoryBot.create_list :placement_request, 2, school: school
+    end
+
+    context 'with expired placement requests' do
+      before do
+        school.update(availability_preference_fixed: true)
+        create(:placement_request, :with_a_fixed_date_in_the_recent_past, school: school)
+
+        get '/schools/placement_requests'
+      end
+
+      let!(:old_expired_request) do
+        create(:placement_request, :with_a_fixed_date_in_the_past, school: school)
+      end
+
+      it 'displays only placement requests that expired within a month' do
+        expect(assigns(:placement_requests).count).to eq(3)
+      end
+
+      it 'does not display expired request that are older than a month' do
+        expect(assigns(:placement_requests)).to match_array(school.placement_requests - [old_expired_request])
+      end
     end
 
     context 'for unaccepted placement requests' do

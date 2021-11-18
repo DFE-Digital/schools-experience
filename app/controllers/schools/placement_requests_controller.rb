@@ -37,6 +37,7 @@ module Schools
       current_school
         .placement_requests
         .unbooked
+        .excluding_old_expired_requests
         .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date, :booking, :subject)
         .order(created_at: 'desc')
         .page(params[:page])
