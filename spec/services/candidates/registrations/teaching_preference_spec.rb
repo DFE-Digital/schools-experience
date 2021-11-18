@@ -34,6 +34,18 @@ describe Candidates::Registrations::TeachingPreference, type: :model do
       is_expected.to validate_inclusion_of(:subject_second_choice).in_array \
         second_subject_choices
     end
+
+    context "when first subject choice has a value" do
+      before { subject.subject_first_choice = "Biology" }
+
+      it "allows second choice to be a different value" do
+        is_expected.to allow_value("Chemistry").for :subject_second_choice
+      end
+
+      it "returns a validation error when second subject has the same value" do
+        is_expected.to_not allow_value("Biology").for :subject_second_choice
+      end
+    end
   end
 
   context '#available_subject_choices' do

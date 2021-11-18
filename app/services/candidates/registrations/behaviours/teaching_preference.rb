@@ -13,6 +13,7 @@ module Candidates
           validates :subject_first_choice, inclusion: { in: :available_subject_choices }, if: -> { subject_first_choice.present? }
           validates :subject_second_choice, presence: true
           validates :subject_second_choice, inclusion: { in: :second_subject_choices }, if: -> { subject_second_choice.present? }
+          validate :second_choice_different_than_first_choice, if: -> { subject_second_choice.present? }
         end
 
         def available_teaching_stages
@@ -40,6 +41,12 @@ module Candidates
 
         def all_available_subject_choices
           Candidates::School.subjects.map(&:last)
+        end
+
+        def second_choice_different_than_first_choice
+          if subject_second_choice == subject_first_choice
+            errors.add(:subject_second_choice, "Second choice must be different than first choice")
+          end
         end
       end
     end
