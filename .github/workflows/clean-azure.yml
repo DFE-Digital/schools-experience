@@ -27,14 +27,14 @@ jobs:
         id: PAAS-USERNAME
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: INFRA-KEYS
+          yaml_secret: SE-INFRA-SECRETS
           secret: PAAS-USERNAME
 
       - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
         id: PAAS-PASSWORD
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: INFRA-KEYS
+          yaml_secret: SE-INFRA-SECRETS
           secret: PAAS-PASSWORD
 
       - name: Login to Cloud Foundry
