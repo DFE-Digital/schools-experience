@@ -1,14 +1,10 @@
-<% self.page_title = "All placement requests" %>
+<% self.page_title = "Archived placement requests" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= govuk_back_link schools_dashboard_path %>
+    <%= govuk_back_link schools_placement_requests_path %>
 
-    <h1>Manage requests</h1>
-
-    <div class="govuk-inset-text">
-      We now hide expired requests after 30 days. If you need to view them and accept or decline them, view the <%= link_to 'archived requests' , schools_archived_placement_requests_path, class: 'govuk-notification-banner__link' %> page
-    </div>
+    <h1>Archived requests</h1>
 
     <% if @placement_requests.any? %>
       <%= pagination_bar @placement_requests %>
@@ -23,10 +19,6 @@
         There are no requests.
       </p>
     <% end %>
-
-    <p>
-      <%= link_to "Download your requests and bookings", schools_csv_export_path %> as a CSV export.
-    </p>
 
     <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
   </div>

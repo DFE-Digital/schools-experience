@@ -90,6 +90,7 @@ Rails.application.routes.draw do
         controller: 'placement_requests/past_attendance'
       put "/schools/placement_requests/place_under_consideration", to: "/schools/placement_requests/under_consideration#place_under_consideration"
     end
+    resources :archived_placement_requests, only: %i[index]
     resources :withdrawn_requests, only: %i[index show]
     resources :rejected_requests, only: %i[index show]
     resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i[index show] do

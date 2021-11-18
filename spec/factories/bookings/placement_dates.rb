@@ -11,6 +11,11 @@ FactoryBot.define do
       to_create { |instance| instance.save(validate: false) }
     end
 
+    trait :in_the_recent_past do
+      date { 1.week.ago }
+      to_create { |instance| instance.save(validate: false) }
+    end
+
     trait :active do
       active { true }
     end
