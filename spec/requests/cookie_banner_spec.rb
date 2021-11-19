@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "Displaying the cookie banner", type: :request do
   let(:cookie_name) { 'seen_cookie_message' }
-  let(:banner_contents) { /School experience uses cookies/ }
+  let(:banner_contents) { /Cookies on School experience/ }
 
   context 'on the first visit (when the seen_cookie_message cookie is absent)' do
     specify "the cookie should not be set to 'yes'" do
