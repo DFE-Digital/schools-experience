@@ -569,7 +569,7 @@ GEM
       public_suffix
     validates_timeliness (6.0.0.alpha1)
       timeliness (>= 0.3.10, < 1)
-    web-console (4.1.0)
+    web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
