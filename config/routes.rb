@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     root to: 'candidates/home#index'
   end
 
+  get "/candidates/what_to_expect", to: 'candidates/home#what_to_expect'
+
   flipper_app = Flipper::UI.app(Flipper.instance) do |builder|
     builder.use Rack::Auth::Basic do |_, password|
       expected_password = Rails.application.config.x.flipper_password

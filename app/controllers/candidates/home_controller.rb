@@ -3,4 +3,6 @@ class Candidates::HomeController < ApplicationController
     @applications_deactivated = \
       Rails.application.config.x.candidates.deactivate_applications
   end
+
+  def what_to_expect; end
 end
