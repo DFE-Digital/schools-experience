@@ -1,22 +1,28 @@
 <% if show_cookie_message? %>
-  <div id="cookie-banner" aria-label="cookie banner" role="region">
-    <div id="cookie-banner-message" class="govuk-width-container">
-      <p>
-        School experience uses cookies which are essential for the site to work.
-        We also use non-essential cookies to help us improve the school
-        experience service. By continuing to use this site, you agree to our use
-        of cookies.
-      </p>
+  <div class="govuk-cookie-banner " data-nosnippet role="region" aria-label="Cookies on the Get school experience service">
+    <div class="govuk-cookie-banner__message govuk-width-container">
 
-      <p>
-        <%= link_to("Find out more about cookies", cookies_policy_path) %>
-      </p>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <h2 class="govuk-cookie-banner__heading govuk-heading-m">Cookies on the Get school experience service</h2>
 
-      <%= govuk_button_to 'Accept cookies',
-          cookie_preference_path(cookie_preference: {all: 'true'}),
-          method: :patch %>
+          <div class="govuk-cookie-banner__content">
+            <p class="govuk-body">We use some essential cookies to make this service work.</p>
+            <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service
+              and make improvements.</p>
+          </div>
+        </div>
+      </div>
 
-      <%= govuk_link_to 'Cookie settings', edit_cookie_preference_path %>
+      <div class="govuk-button-group">
+        <%= govuk_button_to "Accept analytics cookies",
+                            cookie_preference_path(cookie_preference: { all: true }),
+                            method: :put %>
+        <%= govuk_button_to "Reject analytics cookies",
+                            cookie_preference_path(cookie_preference: { analytics: false }),
+                            method: :put %>
+        <%= link_to("View cookies", cookies_policy_path, class: "govuk-link") %>
+      </div>
     </div>
   </div>
 <% elsif flash[:cookies].present? %>
