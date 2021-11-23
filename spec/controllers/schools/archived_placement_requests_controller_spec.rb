@@ -18,45 +18,89 @@ describe Schools::ArchivedPlacementRequestsController, type: :request do
     it { is_expected.to render_template 'index' }
 
     before do
-      school.update(availability_preference_fixed: true)
-      create(:placement_request, :with_a_fixed_date_in_the_past, school: school)
-
       get schools_archived_placement_requests_path
     end
 
-    it 'displays only placement requests that expired longer than a month ago' do
-      expect(assigns(:placement_requests).count).to eq(1)
-    end
+    context 'when flex dates' do
+      before { create :placement_request, created_at: 3.months.ago, school: school }
 
-    context 'with long expired and processed requests' do
-      it 'does not displays them' do
-        create(:placement_request, :with_a_fixed_date_in_the_past, :cancelled_by_school, school: school)
-
+      it 'displays only placement requests that expired longer than a month ago' do
         expect(assigns(:placement_requests).count).to eq(1)
+      end
+
+      context 'with long expired and processed requests' do
+        it 'does not displays them' do
+          create :placement_request, :cancelled_by_school, created_at: 3.months.ago, school: school
+
+          expect(assigns(:placement_requests).count).to eq(1)
+        end
+      end
+
+      context 'with processed requests' do
+        it 'does not displays them' do
+          create :placement_request, :cancelled_by_school, school: school
+
+          expect(assigns(:placement_requests).count).to eq(1)
+        end
+      end
+
+      context 'with unprocessed requests' do
+        it 'does not displays them' do
+          create :placement_request, school: school
+
+          expect(assigns(:placement_requests).count).to eq(1)
+        end
+      end
+
+      context 'with recently expired requests' do
+        it 'does not displays them' do
+          create :placement_request, created_at: 3.days.ago, school: school
+
+          expect(assigns(:placement_requests).count).to eq(1)
+        end
       end
     end
 
-    context 'with processed requests' do
-      it 'does not displays them' do
-        create(:placement_request, :with_a_fixed_date, :cancelled_by_school, school: school)
+    context 'when fixed dates' do
+      before do
+        school.update(availability_preference_fixed: true)
+        create :placement_request, :with_a_fixed_date_in_the_past, school: school
+      end
 
+      it 'displays only placement requests that expired longer than a month ago' do
         expect(assigns(:placement_requests).count).to eq(1)
       end
-    end
 
-    context 'with unprocessed requests' do
-      it 'does not displays them' do
-        create_list :placement_request, 2, :with_a_fixed_date, school: school
+      context 'with long expired and processed requests' do
+        it 'does not displays them' do
+          create :placement_request, :with_a_fixed_date_in_the_past, :cancelled_by_school, school: school
 
-        expect(assigns(:placement_requests).count).to eq(1)
+          expect(assigns(:placement_requests).count).to eq(1)
+        end
       end
-    end
 
-    context 'with recently expired requests' do
-      it 'does not displays them' do
-        create(:placement_request, :with_a_fixed_date_in_the_recent_past, school: school)
+      context 'with processed requests' do
+        it 'does not displays them' do
+          create :placement_request, :with_a_fixed_date, :cancelled_by_school, school: school
 
-        expect(assigns(:placement_requests).count).to eq(1)
+          expect(assigns(:placement_requests).count).to eq(1)
+        end
+      end
+
+      context 'with unprocessed requests' do
+        it 'does not displays them' do
+          create :placement_request, :with_a_fixed_date, school: school
+
+          expect(assigns(:placement_requests).count).to eq(1)
+        end
+      end
+
+      context 'with recently expired requests' do
+        it 'does not displays them' do
+          create :placement_request, :with_a_fixed_date_in_the_recent_past, school: school
+
+          expect(assigns(:placement_requests).count).to eq(1)
+        end
       end
     end
   end
