@@ -24,22 +24,33 @@ describe Schools::PlacementRequestsController, type: :request do
 
     context 'with expired placement requests' do
       before do
+        @flex_recent_expired = create :placement_request, created_at: 2.days.ago, school: school
+        @flex_old_expired = create :placement_request, created_at: 2.months.ago, school: school
         school.update(availability_preference_fixed: true)
-        create(:placement_request, :with_a_fixed_date_in_the_recent_past, school: school)
+        @fixed_recent_expired = create(:placement_request, :with_a_fixed_date_in_the_recent_past, school: school)
+        @fixed_old_expired = create(:placement_request, :with_a_fixed_date_in_the_past, school: school)
 
         get '/schools/placement_requests'
       end
 
-      let!(:old_expired_request) do
-        create(:placement_request, :with_a_fixed_date_in_the_past, school: school)
+      it 'displays fixed placement requests that expired within a month' do
+        expect(assigns(:placement_requests)).to include @fixed_recent_expired
       end
 
-      it 'displays only placement requests that expired within a month' do
-        expect(assigns(:placement_requests).count).to eq(3)
+      it 'displays flex placement requests that expired within two months' do
+        expect(assigns(:placement_requests)).to include @flex_recent_expired
       end
 
       it 'does not display expired request that are older than a month' do
-        expect(assigns(:placement_requests)).to match_array(school.placement_requests - [old_expired_request])
+        expect(assigns(:placement_requests)).not_to include @fixed_old_expired
+      end
+
+      it 'does not display expired request that are older than a month' do
+        expect(assigns(:placement_requests)).not_to include @flex_old_expired
+      end
+
+      it 'displays both recently expired fixed and flex placement requests' do
+        expect(assigns(:placement_requests).count).to eq(4)
       end
     end
 

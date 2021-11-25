@@ -128,18 +128,22 @@ module Bookings
         .merge(Cancellation.sent.order(sent_at: :desc))
     }
 
-    # 'old_expired_requests' are requests for fixed dates
-    # that are older than a month ago
     scope :old_expired_requests, lambda {
-      joins(:placement_date)
-      .where('bookings_placement_dates.date < ?', 1.month.ago)
+      left_joins(:placement_date)
+      .where(
+        'bookings_placement_dates.date < ? OR
+        (bookings_placement_requests.created_at < ? AND bookings_placement_dates.date IS NULL)',
+        1.month.ago, 2.months.ago
+      )
     }
 
-    # 'excluding_old_expired_requests' are all requests except
-    # for fixed placement dates that are older than a month ago
     scope :excluding_old_expired_requests, lambda {
       left_joins(:placement_date)
-      .where('bookings_placement_dates.date >= ? OR bookings_placement_dates.date IS NULL', 1.month.ago)
+      .where(
+        'bookings_placement_dates.date >= ? OR
+        (bookings_placement_requests.created_at >= ? AND bookings_placement_dates.date IS NULL)',
+        1.month.ago, 2.months.ago
+      )
     }
 
     default_scope { joins(:candidate) }
@@ -252,10 +256,18 @@ module Bookings
     end
 
     def expired?
-      placement_date.present? && placement_date.date.before?(Date.today)
+      fixed_date_expired? || flex_date_expired?
     end
 
   private
+
+    def fixed_date_expired?
+      placement_date&.date&.before?(Date.today)
+    end
+
+    def flex_date_expired?
+      placement_date.nil? && created_at.before?(Date.today)
+    end
 
     def completed?
       # FIXME: SE-1096 determine from booking
