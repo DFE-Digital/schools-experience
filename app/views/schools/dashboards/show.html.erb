@@ -2,74 +2,43 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">Manage requests and bookings at <%= @current_school.name %></h1>
+    <div id="dashboard">
+      <span class="govuk-caption-xl">Account home </span>
+      <h1 class="govuk-heading-l"><%= @current_school.name %></h1>
 
-    <article id="dashboard">
 
       <% if has_other_schools? || (Schools::ChangeSchool.allow_school_change_in_app? && Schools::ChangeSchool.request_approval_url) %>
-        <section id="change-school">
+        <div id="change-school">
           <%= link_to "Change school", new_schools_switch_path %>
-        </section>
+        </div>
       <% end %>
 
-      <% if @current_school.private_beta? %>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
+      <% if @current_school.private_beta? %>
         <%= render partial: 'your_school_is_disabled' if @current_school.disabled? %>
 
-        <%- if show_no_placement_dates_warning?(@current_school) -%>
+        <% if show_no_placement_dates_warning?(@current_school) %>
           <%= render partial: 'schools/dashboards/no_placement_dates_warning' %>
-        <%- end -%>
+        <% end %>
 
-        <%- if show_no_availability_info_warning?(@current_school) -%>
+        <% if show_no_availability_info_warning?(@current_school) %>
           <%= render partial: 'schools/dashboards/no_availability_info_warning' %>
-        <%- end -%>
+        <% end %>
 
         <%= render 'service_update_notice' if @latest_service_update && !@viewed_latest_service_update %>
 
-        <%= render partial: 'new_requests_and_bookings' %>
-        <%= render partial: 'manage_dates' %>
-        <%= render partial: 'account_admin' %>
-
+        <%= render partial: 'requests_and_bookings' %>
+        <%= render partial: 'profile_and_dates' %>
+        <%= render partial: 'history_and_support' %>
       <% else %>
         <%= render partial: 'update_your_school_profile' %>
+
+        <div class="govuk-grid-row">
+          <%= render partial: 'help_and_support' %>
+        </div>
       <% end %>
+    </div>
 
-      <section id="help-and-support" class="medium-priority">
-        <h2 class="govuk-heading-m">
-          Help and support
-        </h2>
-
-        <%- if @latest_service_update -%>
-        <div id="service-updates-and-guidance" class="subsection">
-          <header class="dashboard-medium-priority">
-            <%= link_to "Service updates and guidance - #{@latest_service_update.date.to_formatted_s(:govuk)}", service_updates_path %>
-          </header>
-          <span class="govuk-hint">
-            Find out about the latest changes to the service and how it works
-          </span>
-        </div>
-        <%- end -%>
-
-        <div id="request-dsi-org-access" class="subsection">
-        <header class="dashboard-medium-priority">
-          <%= link_to "Request access to another organisation",
-                      schools_organisation_access_request_path %>
-        </header>
-        <span class="govuk-hint">
-          Request access to manage school experience for another organisation
-        </span>
-      </div>
-
-        <div id="contact-us" class="subsection">
-          <header class="dashboard-medium-priority">
-            <%= link_to 'Contact us', schools_contact_us_path %>
-          </header>
-          <span class="govuk-hint">
-            Get in touch if you need help using the service
-          </span>
-        </div>
-
-      </section>
-    </article>
   </div>
 </div>

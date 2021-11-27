@@ -17,13 +17,13 @@ Feature: School Chooser
         Then I choose 'School A' from the 'Select your school' radio buttons
         And I click the 'Continue' submit button
         Then I should be on the 'schools dashboard' page
-        Then the page's main heading should be 'Manage requests and bookings at School A'
+        Then the page's main heading should be 'School A'
     
     @mocks
     Scenario: Selecting school
         Given I am signed in as School A
         And I am on the 'schools dashboard' page
-        Then the page's main heading should be 'Manage requests and bookings at School A'
+        Then the page's main heading should be 'School A'
         And I click 'Change school'
         Then I should be on the 'school chooser' page
         Then I should see radio buttons for 'Select your school' with the following options:
@@ -33,5 +33,5 @@ Feature: School Chooser
         Then I choose 'School B' from the 'Select your school' radio buttons
         And I click the 'Continue' submit button
         Then I should be on the 'schools dashboard' page
-        Then the page's main heading should be 'Manage requests and bookings at School B'
+        Then the page's main heading should be 'School B'
         

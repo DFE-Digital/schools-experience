@@ -1,11 +1,8 @@
 Then("I should see the following {string} links:") do |string, table|
   within('#dashboard') do
-    table.hashes.each do |row|
-      link = page.find_link(row['Text'], href: row['Path'])
-      container = link.ancestor('section')
-
-      within(container) do
-        expect(page).to have_css(".dashboard-#{string}")
+    within("##{string}") do
+      table.hashes.each do |row|
+        expect(page).to have_link(row['Text'], href: row['Path'])
 
         if (hint = row['Hint']) && hint != 'None'
           expect(page).to have_css('.govuk-hint', text: Regexp.new(hint))
@@ -71,8 +68,8 @@ Given("my school has fully-onboarded") do
   FactoryBot.create(:bookings_profile, school: @school)
 end
 
-Then("I should see the managing requests section") do
-  expect(page).to have_css('.managing-requests')
+Then("I should see the managing requests panel") do
+  expect(page).to have_css('#requests')
 end
 
 Then("there should be no {string} link") do |link_text|
