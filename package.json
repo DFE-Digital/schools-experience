@@ -2,7 +2,7 @@
   "name": "school_experience",
   "private": true,
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.12.9",
+    "@googlemaps/js-api-loader": "^1.12.10",
     "@rails/webpacker": "^5.4.3",
     "@stimulus/polyfills": "^2.0.0",
     "core-js": "^3.19.1",
