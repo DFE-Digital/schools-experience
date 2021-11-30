@@ -5,7 +5,7 @@ Feature: Confirming candidate attendance
 
     Background:
         Given I am logged in as a DfE user
-        And the school offers 'Biology, Chemistry'
+        And the school offers 'Biology, Maths'
         And my school is fully-onboarded
 
     Scenario: When there are no bookings

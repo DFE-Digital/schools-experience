@@ -11,9 +11,6 @@ Given("there is at least one booking") do
 end
 
 Given("there is a booking cancelled by the candidate") do
-  unless @school.subjects.where(name: 'Biology').any?
-    @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
-  end
   @booking = FactoryBot.create :bookings_booking,
     :cancelled_by_candidate,
     bookings_school: @school,
@@ -24,9 +21,6 @@ Given("there is a booking cancelled by the candidate") do
 end
 
 Given("there is a booking cancelled by the school") do
-  unless @school.subjects.where(name: 'Biology').any?
-    @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
-  end
   @booking = FactoryBot.create :bookings_booking,
     :cancelled_by_school,
     bookings_school: @school,
@@ -43,9 +37,6 @@ Given("I am viewing my chosen booking") do
 end
 
 And("there is/are {int} booking/bookings") do |count|
-  unless @school.subjects.where(name: 'Biology').any?
-    @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
-  end
   @bookings = (1..count).map do |index|
     FactoryBot.create(
       :bookings_booking,

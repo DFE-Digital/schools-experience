@@ -6,6 +6,7 @@ Feature: Viewing previous bookings
     Background:
         Given I am logged in as a DfE user
         And my school is fully-onboarded
+        And the school has subjects
     
     Scenario: Page title
         Given I am on the 'previous bookings' page

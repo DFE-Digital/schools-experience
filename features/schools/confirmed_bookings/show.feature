@@ -6,6 +6,7 @@ Feature: Viewing a booking
     Background:
         Given I am logged in as a DfE user
         And my school is fully-onboarded
+        And the school has subjects
         And the scheduled booking date is in the future
 
     Scenario: Page title
@@ -55,7 +56,7 @@ Feature: Viewing a booking
             | Degree subject                          | Bioscience                        |
             | Teaching stage                          | I want to be a teacher            |
             | Teaching subject                        | First choice: Biology             |
-            | Teaching subject                        | Second choice: Biology            |
+            | Teaching subject                        | Second choice: Maths              |
 
     Scenario: Without a candidate cancellation
         Given there is at least one booking

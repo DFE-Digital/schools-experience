@@ -1,5 +1,5 @@
 Given("there are some bookings with attendance recorded") do
-  biology = FactoryBot.create :bookings_subject, name: 'Biology'
+  biology = @school.subjects.find_by(name: 'Biology')
 
   FactoryBot.create :bookings_booking, :accepted, :previous, :attended,
     bookings_school: @school,
@@ -11,7 +11,6 @@ Given("there are some bookings with attendance recorded") do
 end
 
 Given("there are no bookings with attendance recorded") do
-  FactoryBot.create :bookings_subject, name: 'Biology'
   FactoryBot.create :bookings_booking, :accepted, :previous,
     bookings_school: @school
 end
