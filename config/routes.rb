@@ -20,8 +20,6 @@ Rails.application.routes.draw do
     root to: 'candidates/home#index'
   end
 
-  get "/candidates/what_to_expect", to: 'candidates/home#what_to_expect'
-
   flipper_app = Flipper::UI.app(Flipper.instance) do |builder|
     builder.use Rack::Auth::Basic do |_, password|
       expected_password = Rails.application.config.x.flipper_password
@@ -45,6 +43,7 @@ Rails.application.routes.draw do
   get '/dfe_signin_help', to: 'pages#dfe_signin_help'
   get '/robots', to: 'pages#robots', constraints: ->(req) { req.format == :text }
   get '/sitemap', to: 'pages#sitemap', constraints: ->(req) { req.format == :xml }
+  get "/candidates/guide_for_candidates", to: 'candidates/home#guide_for_candidates'
 
   resource :cookie_preference, only: %i[show edit update]
 

@@ -14,4 +14,13 @@ RSpec.describe Candidates::HomeController, type: :request do
       expect(response.body).to include('<meta name="description" content="The Department for Education')
     end
   end
+
+  describe "GET #guide_for_candidates" do
+    before do
+      get candidates_guide_for_candidates_path
+    end
+
+    it { expect(response).to have_http_status(:success) }
+    it { expect(response).to render_template 'guide_for_candidates' }
+  end
 end

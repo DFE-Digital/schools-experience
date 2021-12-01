@@ -4,5 +4,5 @@ class Candidates::HomeController < ApplicationController
       Rails.application.config.x.candidates.deactivate_applications
   end
 
-  def what_to_expect; end
+  def guide_for_candidates; end
 end
