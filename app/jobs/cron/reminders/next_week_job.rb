@@ -8,7 +8,19 @@ module Cron
 
         bookings.all? do |booking|
           Bookings::ReminderJob.perform_later(booking, time_until_booking)
+
+          despatch_sms_reminder(booking)
         end
+      end
+
+      def despatch_sms_reminder(booking)
+        # The SMS message doesn't need to query the CRM for any personal data
+        # so it can be despatched here rather than from the Bookings::ReminderJob
+        NotifySms::CandidateBookingReminder.new(
+          to: booking.contact_number,
+          school_name: booking.bookings_school,
+          time_until_booking: time_until_booking
+        ).despatch_later!
       end
 
       def bookings

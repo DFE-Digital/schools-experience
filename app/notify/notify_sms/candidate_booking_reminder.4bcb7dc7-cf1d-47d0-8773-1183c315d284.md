@@ -1,0 +1,1 @@
+School Experience Service: Hello, it's ((time_until_booking)) until your school experience placement at ((school_name)).
