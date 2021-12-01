@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateRequestCancellation < Notify
+class NotifyEmail::CandidateRequestCancellation < NotifyDespatchers::NotifyEmail
   attr_accessor :school_name, :requested_availability, :school_search_url
 
   def initialize(to:, school_name:, requested_availability:, school_search_url:)

@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateBookingDateChanged < Notify
+class NotifyEmail::CandidateBookingDateChanged < NotifyDespatchers::NotifyEmail
   attr_accessor :school_name,
     :candidate_name,
     :placement_schedule,

@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateMagicLink < Notify
+class NotifyEmail::CandidateMagicLink < NotifyDespatchers::NotifyEmail
   attr_accessor :school_name, :confirmation_link
 
   def self.template_id

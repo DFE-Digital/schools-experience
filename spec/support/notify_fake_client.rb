@@ -27,4 +27,17 @@ class NotifyFakeClient
 
     msg
   end
+
+  def send_sms(template_id:, phone_number:, personalisation:)
+    msg = {
+      delivered_at: Time.zone.now,
+      template_id: template_id,
+      phone_number: phone_number,
+      personalisation: personalisation
+    }
+
+    deliveries << msg
+
+    msg
+  end
 end

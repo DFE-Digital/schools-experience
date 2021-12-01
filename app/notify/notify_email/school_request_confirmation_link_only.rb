@@ -1,4 +1,4 @@
-class NotifyEmail::SchoolRequestConfirmationLinkOnly < Notify
+class NotifyEmail::SchoolRequestConfirmationLinkOnly < NotifyDespatchers::NotifyEmail
   attr_accessor :school_name, :placement_request_url
 
   def initialize(to:, school_name:, placement_request_url:)

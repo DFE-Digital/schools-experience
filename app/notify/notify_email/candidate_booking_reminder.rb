@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateBookingReminder < Notify
+class NotifyEmail::CandidateBookingReminder < NotifyDespatchers::NotifyEmail
   attr_accessor :school_name,
     :time_until_booking,
     :candidate_name,
