@@ -1,0 +1,1 @@
+Hello. You’ve requested school experience at ((school_name)). They will aim to contact you about your request within 10 days.

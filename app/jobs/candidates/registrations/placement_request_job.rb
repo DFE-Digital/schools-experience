@@ -7,6 +7,11 @@ module Candidates
         registration_session = RegistrationStore.instance.retrieve! uuid
         application_preview  = ApplicationPreview.new registration_session
 
+        NotifySms::CandidateRequestConfirmationNoPii.new(
+          to: registration_session.contact_information.phone,
+          school_name: registration_session.school_name
+        ).despatch_later!
+
         NotifyEmail::SchoolRequestConfirmationLinkOnly.new(
           to: registration_session.school.notification_emails,
           school_name: registration_session.school_name,

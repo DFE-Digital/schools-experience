@@ -17,13 +17,17 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
     FactoryBot.build :placement_request, school: school
   end
 
+  let :candidate_request_confirmation_sms do
+    double NotifySms::CandidateRequestConfirmationNoPii, despatch_later!: true
+  end
+
   let :school_request_confirmation_notification_link_only do
     double NotifyEmail::SchoolRequestConfirmationLinkOnly, despatch_later!: true
   end
 
   let :candidate_request_confirmation_notification_with_confirmation_link do
     double NotifyEmail::CandidateRequestConfirmationNoPii,
-      despatch_later!: true
+           despatch_later!: true
   end
 
   let :cancellation_url do
@@ -39,6 +43,9 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
   end
 
   before do
+    allow(NotifySms::CandidateRequestConfirmationNoPii).to \
+      receive(:new) { candidate_request_confirmation_sms }
+
     allow(NotifyEmail::SchoolRequestConfirmationLinkOnly).to \
       receive(:new) { school_request_confirmation_notification_link_only }
 
@@ -77,6 +84,15 @@ describe Candidates::Registrations::PlacementRequestJob, type: :job do
         expect(
           candidate_request_confirmation_notification_with_confirmation_link
         ).to have_received :despatch_later!
+
+        expect(
+          NotifySms::CandidateRequestConfirmationNoPii
+        ).to have_received(:new).with \
+          to: registration_session.contact_information.phone,
+          school_name: registration_session.school_name
+
+        expect(candidate_request_confirmation_sms).to \
+          have_received :despatch_later!
       end
 
       it 'deletes the registration session from redis' do
