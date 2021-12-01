@@ -16,9 +16,6 @@ And("there is/are {int} previous booking/bookings") do |count|
   now = Time.zone.today
 
   travel_to 1.year.ago do
-    unless @school.subjects.where(name: 'Biology').any?
-      @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
-    end
     @bookings = (1..count).map do |index|
       FactoryBot.create(
         :bookings_booking,
@@ -56,10 +53,6 @@ Given("the scheduled booking date is in the past") do
 end
 
 Given("there is a cancelled previous booking") do
-  unless @school.subjects.where(name: 'Biology').any?
-    @school.subjects << FactoryBot.create(:bookings_subject, name: 'Biology')
-  end
-
   last_week = 1.week.ago.to_date
 
   travel_to 1.month.ago do
