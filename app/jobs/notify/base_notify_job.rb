@@ -1,9 +1,13 @@
-class Notify::NotifyJob < ApplicationJob
+class Notify::BaseNotifyJob < ApplicationJob
   class RetryableError < ArgumentError; end
 
   retry_on RetryableError, wait: A_DECENT_AMOUNT_LONGER, attempts: 7
 
   queue_as :default
+
+  def perform
+    raise NotImplementedError, 'You must implement the perform method'
+  end
 
 private
 

@@ -1,4 +1,4 @@
-class Notify::NotifyByEmailJob < Notify::NotifyJob
+class Notify::NotifyByEmailJob < Notify::BaseNotifyJob
   def perform(to:, template_id:, personalisation_json:)
     NotifyService.instance.send_email \
       template_id: template_id,

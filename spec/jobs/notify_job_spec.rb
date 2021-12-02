@@ -86,6 +86,14 @@ shared_examples "notify_job" do
   end
 end
 
+describe Notify::BaseNotifyJob, type: :job do
+  context "#perform" do
+    it "should fail with NotImplementedError'" do
+      expect { subject.perform }.to raise_error(NotImplementedError, 'You must implement the perform method')
+    end
+  end
+end
+
 describe Notify::NotifyByEmailJob, type: :job do
   let(:recipient) { 'test@example.com' }
   let(:stub_client) { double Notifications::Client, send_email: true }

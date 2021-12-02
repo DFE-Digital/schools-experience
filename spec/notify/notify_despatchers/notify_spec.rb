@@ -34,7 +34,7 @@ shared_examples "notify_client" do
 
         it "should raise an error whilst trying to enqueue" do
           expect { notification.despatch_later! }.to \
-            raise_exception NotifyDespatchers::Notify::InvalidPersonalisationError
+            raise_exception NotifyDespatchers::BaseNotifyDespatcher::InvalidPersonalisationError
         end
       end
 
@@ -96,7 +96,7 @@ private
   end
 end
 
-describe NotifyDespatchers::Notify do
+describe NotifyDespatchers::BaseNotifyDespatcher do
   include ActiveJob::TestHelper
   let(:to) { 'somename@somecompany.org' }
 
@@ -105,7 +105,7 @@ describe NotifyDespatchers::Notify do
     allow(NotifyService.instance).to receive(:send_sms)
   end
 
-  subject { NotifyDespatchers::Notify.new(to: to) }
+  subject { NotifyDespatchers::BaseNotifyDespatcher.new(to: to) }
 
   describe 'Attributes' do
     it { is_expected.to respond_to(:to) }
@@ -127,8 +127,8 @@ describe NotifyDespatchers::Notify do
 
   describe 'Methods' do
     describe '#despatch_later!' do
-      it "should fail with 'Not implemented'" do
-        expect { subject.despatch_later! }.to raise_error('Not implemented')
+      it "should fail with NotImplementedError'" do
+        expect { subject.despatch_later! }.to raise_error(NotImplementedError, 'You must implement the despatch_later! method')
       end
     end
 

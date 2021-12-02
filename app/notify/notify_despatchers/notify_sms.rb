@@ -1,6 +1,6 @@
-class NotifyDespatchers::NotifySms < NotifyDespatchers::Notify
+class NotifyDespatchers::NotifySms < NotifyDespatchers::BaseNotifyDespatcher
   def despatch_later!
-    super
+    validate_personalisation!
 
     to.each do |phone_number|
       Notify::NotifyBySmsJob.perform_later \

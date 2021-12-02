@@ -1,6 +1,6 @@
-class NotifyDespatchers::NotifyEmail < NotifyDespatchers::Notify
+class NotifyDespatchers::NotifyEmail < NotifyDespatchers::BaseNotifyDespatcher
   def despatch_later!
-    super
+    validate_personalisation!
 
     to.each do |address|
       Notify::NotifyByEmailJob.perform_later \

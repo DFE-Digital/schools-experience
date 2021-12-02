@@ -31,8 +31,8 @@ shared_examples_for "notify template" do |template_id, personalisation|
     allow(NotifyService.instance).to receive(:notification_class) { NotifyFakeClient }
   end
 
-  specify 'should inherit from Notify' do
-    expect(subject).to be_a(NotifyDespatchers::Notify)
+  specify 'should inherit from the BaseNotifyDespatcher' do
+    expect(subject).to be_a(NotifyDespatchers::BaseNotifyDespatcher)
   end
 
   describe '#template_id' do
@@ -62,14 +62,14 @@ shared_examples_for "notify template" do |template_id, personalisation|
   describe 'Methods' do
     describe '#despatch_later!' do
       before do
-        allow(Notify::NotifyJob).to receive(:perform_later).and_return(true)
+        allow(Notify::BaseNotifyJob).to receive(:perform_later).and_return(true)
       end
 
       before { subject.despatch_later! }
 
       specify 'it enqueues the email delivery job' do
         subject.to.each do |address|
-          expect(Notify::NotifyJob).to have_received(:perform_later).with(
+          expect(Notify::BaseNotifyJob).to have_received(:perform_later).with(
             to: address,
             template_id: subject.send(:template_id),
             personalisation_json: subject.send(:personalisation).to_json

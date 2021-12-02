@@ -1,4 +1,4 @@
-class NotifyDespatchers::Notify
+class NotifyDespatchers::BaseNotifyDespatcher
   attr_accessor :to
   attr_reader :invalid_fields
 
@@ -7,7 +7,7 @@ class NotifyDespatchers::Notify
   end
 
   def despatch_later!
-    validate_personalisation!
+    raise NotImplementedError, 'You must implement the despatch_later! method'
   end
 
   class InvalidPersonalisationError < RuntimeError
