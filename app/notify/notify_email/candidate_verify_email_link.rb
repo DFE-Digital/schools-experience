@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateVerifyEmailLink < Notify
+class NotifyEmail::CandidateVerifyEmailLink < NotifyDespatchers::NotifyEmail
   attr_accessor :verification_link
 
   def initialize(to:, verification_link:)

@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateRequestConfirmationNoPii < Notify
+class NotifyEmail::CandidateRequestConfirmationNoPii < NotifyDespatchers::NotifyEmail
   attr_accessor \
     :candidate_dbs_check_document,
     :candidate_degree_stage,

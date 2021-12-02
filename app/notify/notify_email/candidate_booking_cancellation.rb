@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateBookingCancellation < Notify
+class NotifyEmail::CandidateBookingCancellation < NotifyDespatchers::NotifyEmail
   attr_accessor :school_name, :placement_start_date_with_duration, :school_search_url
 
   def initialize(to:, school_name:, placement_start_date_with_duration:, school_search_url:)
