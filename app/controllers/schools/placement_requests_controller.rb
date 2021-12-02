@@ -36,7 +36,7 @@ module Schools
     def placement_requests
       current_school
         .placement_requests
-        .unbooked
+        .unprocessed
         .excluding_old_expired_requests
         .eager_load(:candidate, :candidate_cancellation, :school_cancellation, :placement_date, :booking, :subject)
         .order(created_at: 'desc')

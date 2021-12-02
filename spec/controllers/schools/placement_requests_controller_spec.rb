@@ -84,6 +84,20 @@ describe Schools::PlacementRequestsController, type: :request do
       end
     end
 
+    context 'after placement requests have been rejected' do
+      let(:rejected) { placement_requests.last }
+      before do
+        create :cancellation, :cancelled_by_school,
+          placement_request: rejected
+
+        get '/schools/placement_requests'
+      end
+
+      specify 'they should be omitted' do
+        expect(assigns(:placement_requests)).not_to include(rejected)
+      end
+    end
+
     context "with a timeout response from the API" do
       before do
         ids = placement_requests.map(&:contact_uuid)

@@ -36,11 +36,6 @@ Feature: Viewing all placement requests
         When I am on the 'placement requests' page
         Then every request should contain a link to view more details
 
-    Scenario: Cancelled placement requests
-        Given there are some cancelled placement requests
-        When I am on the 'placement requests' page
-        Then the cancelled requests should have a status of 'Withdrawn'
-
     Scenario: Unviewed placement requests
         Given there are some unviewed placement requests
         When I am on the 'placement requests' page
