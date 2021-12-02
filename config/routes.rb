@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   get '/dfe_signin_help', to: 'pages#dfe_signin_help'
   get '/robots', to: 'pages#robots', constraints: ->(req) { req.format == :text }
   get '/sitemap', to: 'pages#sitemap', constraints: ->(req) { req.format == :xml }
+  get "/candidates/guide_for_candidates", to: 'candidates/home#guide_for_candidates'
 
   resource :cookie_preference, only: %i[show edit update]
 

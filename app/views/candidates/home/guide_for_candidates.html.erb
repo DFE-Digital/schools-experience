@@ -1,0 +1,123 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_back_link %>
+
+    <h1 class="govuk-heading-xl">School experience: guide for candidates</h1>
+
+        <p>
+         School experience allows you to learn more about teaching by visiting schools. 
+        </p>
+
+         <p>
+         It can help you:
+          <ul class="govuk-list govuk-list--bullet">
+            <li>decide if you want to train to be a teacher</li>
+            <li>discover which setting you’d prefer to teach in (primary or secondary)</li>
+            <li>build a relationship with a school you might want to work with later</li>
+        </ul>
+    </p>
+  
+  <h2 class="govuk-heading-m">When to get your school experience</h2>
+
+        <p>
+         If you’re considering going into teaching, you may want to do school experience before you apply for teacher training.
+        </p>
+  
+  <h2 class="govuk-heading-m">Eligibility</h2>
+  
+   <p>
+         You can request school experience if you:
+          <ul class="govuk-list govuk-list--bullet">
+            <li>are aged 18 or over</li>
+            <li>have a degree (or are studying for one)</li>
+            <li>have the right to work in the UK</li>
+        </ul>
+    </p>
+
+    <h2 class="govuk-heading-m">What to expect</h2>
+
+       <p>
+        School experience is usually one or 2 days long, but can sometimes be as long as 3 weeks. 
+       </p>
+  
+       <p>
+        You can choose to do virtual or in-school experience, depending on what schools offer.
+      </p>
+  
+         <p>
+           During your experience, you'll get to do things like:
+            <ul class="govuk-list govuk-list--bullet">
+              <li>observe lessons</li>
+              <li>see how teachers manage a classroom</li>
+              <li>find out how specific subjects are taught</li>
+              <li>speak to teachers and interact with pupils</li>
+              <li>learn more about teacher training - including the application and interview process</li>
+          </ul>
+      </p>
+  
+        <p>
+         Some schools will offer a mixture of classroom observation and a presentation.
+        </p>
+
+        <p>
+         Virtual experience can involve a presentation or Q&A session. Sometimes it can be a pre-recorded video of a lesson.
+        </p>
+
+<h2 class="govuk-heading-m">How schools are managing the risk of COVID-19</h2>
+
+        <p>
+         Each school will have their own COVID-19 safety measures and these can change often. Schools will provide you with these details when you request experience with them.
+        </p>
+
+ <h2 class="govuk-heading-m">Find school experience</h2>
+
+      <p>
+        Use this service to:
+        <ul class="govuk-list govuk-list--bullet">
+            <li>find schools that are offering experience</li>
+            <li>submit a request to the school you want to visit</li>
+        </ul>
+    </p>
+<p>
+      <%= govuk_link_to 'Search for school experience', new_candidates_school_search_path %>
+    </p>
+   </div>
+<div class="govuk-grid-column-one-third column-top-border">
+    <aside class="app-related-items" role="complementary">
+      <nav role="navigation" aria-labelledby="subsection-title">
+        <h2 class="govuk-heading-m" id="subsection-title">
+          Helpful information
+        </h2>
+
+        <ul class="govuk-list govuk-!-font-size-16 govuk-se-spaced-list">
+          <li>
+           <%= link_to new_candidates_school_search_path, class: "govuk-!-font-weight-bold" do %>
+              Search for school experience
+            <% end %>
+          </li>
+          <li>
+            <a href="https://getintoteaching.education.gov.uk/" class="govuk-!-font-weight-bold">
+              Get Into Teaching
+            </a>
+          </li>
+          <li>
+            <a href="https://www.gov.uk/find-postgraduate-teacher-training-courses " class="govuk-!-font-weight-bold">
+              Find postgraduate teacher training courses
+            </a>
+          </li>
+        </ul>
+
+        <h2 class="govuk-heading-m" id="subsection-title">
+          If you're a school
+        </h2>
+
+        <ul class="govuk-list govuk-!-font-size-16 govuk-se-spaced-list">
+          <li>
+            <%= link_to schools_path, class: "govuk-!-font-weight-bold" do %>
+              Manage school experience
+            <% end %>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </div>
