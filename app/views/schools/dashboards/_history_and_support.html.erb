@@ -1,0 +1,22 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <div id="history" class="panel govuk-!-margin-bottom-5">
+      <h2 class="govuk-heading-m">History</h2>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      <ul class="govuk-list">
+        <li>
+          <%= link_to "Withdrawn requests", schools_withdrawn_requests_path  %>
+          <%= numbered_circle(@withdrawn_requests, id: 'withdrawn-requests-counter', aria_label: 'requests withdrawn by candidate') %>
+        </li>
+        <li>
+          <%= link_to "Rejected requests", schools_rejected_requests_path %>
+        </li>
+        <li>
+          <%= link_to "Previous bookings", schools_previous_bookings_path %>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <%= render partial: 'help_and_support' %>
+</div>

@@ -1,0 +1,33 @@
+<div class="govuk-grid-row double-panel govuk-!-margin-bottom-5">
+  <div id="profile" class="left-side govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m"><%= @current_school.name %></h2>
+    <ul class="govuk-list">
+      <li>
+        <%= link_to "Update school profile", schools_on_boarding_profile_path %>
+      </li>
+    </ul>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <p>Your profile is currently <strong><%= school_enabled_description @current_school %></strong>.</p>
+    <ul class="govuk-list">
+      <li>
+        <%= link_to "Turn profile on/off", edit_schools_enabled_path %>
+      </li>
+    </ul>
+  </div>
+
+  <div id="dates" class="right-side govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">Experience dates</h2>
+    <p>Manage your school's availability for experience</p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <ul class="govuk-list">
+      <% if @current_school.availability_preference_fixed? %>
+      <li>
+        <%= link_to "Manage dates", schools_placement_dates_path %>
+      </li>
+      <% end %>
+      <li>
+        <%= link_to "Change how available dates are displayed", edit_schools_availability_preference_path %>
+      </li>
+    </ul>
+  </div>
+</div>

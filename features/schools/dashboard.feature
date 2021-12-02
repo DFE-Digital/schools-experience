@@ -29,57 +29,77 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I shouldn't see any warnings
 
-    Scenario: Displaying the managing requests section when schools have onboarded
+    Scenario: Displaying the managing requests panel when schools have onboarded
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
-        Then I should see the managing requests section
+        Then I should see the managing requests panel
 
-    Scenario: To-do list
+    Scenario: Active requests
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
-        Then I should see the following 'high-priority' links:
-            | Text            | Hint                                           | Path                        |
-            | Manage requests | View, accept or decline requests | /schools/placement_requests |
-            | Manage upcoming bookings | View, change or cancel bookings                | /schools/bookings           |
+        Then I should see the following 'requests' links:
+            | Text            | Hint | Path                        |
+            | Manage requests | None | /schools/placement_requests |
 
-    Scenario: Manage dates
+    Scenario: Upcoming Bookings panel
         Given my school has fully-onboarded
         And it has 'fixed' availability
         When I am on the 'schools dashboard' page
-        Then I should see the following 'medium-priority' links:
-            | Text                                   | Hint | Path                                  |
-            | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
+        Then I should see the following 'bookings' links:
+            | Text                       | Hint                                                        | Path                        |
+            | Manage upcoming bookings   | None                                                        | /schools/bookings           |
+            | Confirm booking attendance | Confirm if candidates have attended their school experience | /schools/confirm_attendance |
+
+    Scenario: School profile panel
+        Given my school has fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see the following 'profile' links:
+            | Text                  | Hint | Path                         |
+            | Update school profile | None | /schools/on_boarding/profile |
+            | Turn profile on/off   | None | /schools/toggle_enabled/edit |
 
     Scenario: Adding, removing and changing dates visible when fixed and dates present
         Given my school has fully-onboarded
         And my school has 3 placement dates
         And it has 'fixed' availability
         When I am on the 'schools dashboard' page
-        Then I should see the following 'medium-priority' links:
-            | Text                                   | Hint | Path                                  |
-            | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Manage dates           | Add, remove or change placement dates | /schools/placement_dates              |
+        Then I should see the following 'dates' links:
+            | Text                                     | Hint | Path                                  |
+            | Manage dates                             | None | /schools/placement_dates              |
+            | Change how available dates are displayed | None | /schools/availability_preference/edit |
 
     Scenario: Adding, removing and changing dates not visible when not fixed and dates not present
         Given my school has fully-onboarded
         And it has 'fixed' availability
         When I am on the 'schools dashboard' page
-        Then I should see the following 'medium-priority' links:
-            | Text                                   | Hint | Path                                  |
-            | Change how dates are displayed | Show specific dates, or a description of when you can host candidates | /schools/availability_preference/edit |
-            | Manage dates           | Add, remove or change placement dates | /schools/placement_dates              |
+        Then I should see the following 'dates' links:
+            | Text                                     | Hint | Path                                  |
+            | Manage dates                             | None | /schools/placement_dates              |
+            | Change how available dates are displayed | None | /schools/availability_preference/edit |
 
-
-    Scenario: Account admin
+    Scenario: History panel
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
-        Then I should see the following 'medium-priority' links:
-            | Text                           | Hint                                                                    | Path                         |
-            | View rejected requests         | View request dates, subjects, candidate names and reasons for rejection | /schools/rejected_requests   |
-            | View previous bookings         | View booking dates, subjects, candidate names and attendance         | /schools/previous_bookings   |
-            | Update school profile          | Update school details, placement details and requirements                             | /schools/on_boarding/profile |
-            | Turn profile on or off         | Choose to stop or start receiving requests               | /schools/toggle_enabled/edit |
-            | Contact us | Get in touch if you need help using the service | /schools/contact_us |
+        Then I should see the following 'history' links:
+            | Text               | Hint | Path                        |
+            | Withdrawn requests | None | /schools/withdrawn_requests |
+            | Rejected requests  | None | /schools/rejected_requests  |
+            | Previous bookings  | None | /schools/previous_bookings  |
+
+    Scenario: Show the Help and support panel if schools is onboarded
+        Given my school has fully-onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see the following 'help-and-support' links:
+            | Text                                   | Hint                                                                | Path                                 |
+            | Request access to another organisation | Request access to manage school experience for another organisation | /schools/organisation_access_request |
+            | Contact us                             | Get in touch if you need help using the service                     | /schools/contact_us                  |
+
+    Scenario: Show the Help and support panel if schools is not onboarded
+        When I am on the 'schools dashboard' page
+        Then I should see the following 'help-and-support' links:
+            | Text                                   | Hint                                                                | Path                                 |
+            | Request access to another organisation | Request access to manage school experience for another organisation | /schools/organisation_access_request |
+            | Contact us                             | Get in touch if you need help using the service                     | /schools/contact_us                  |
     
     Scenario: Candidate requests counter
         Given my school has fully-onboarded
@@ -103,12 +123,12 @@ Feature: The School Dashboard
     Scenario: Hide the enable/disable link if schools not onboarded
         Given my school has not yet fully-onboarded
         When I am on the 'schools dashboard' page
-        Then there should be no 'Turn profile on or off' link
+        Then there should be no 'Turn profile on/off' link
 
     Scenario: Show the enable/disable link when schools are onboarded
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
-        Then I should see a 'Turn profile on or off' link to the 'toggle requests' page
+        Then I should see a 'Turn profile on/off' link to the 'toggle requests' page
 
     Scenario: Displaying a warning when fixed with no dates
         Given my school has fully-onboarded
@@ -123,4 +143,3 @@ Feature: The School Dashboard
         And my school has availability no information set
         When I am on the 'schools dashboard' page
         Then there should be a 'You have no availability information' warning
-

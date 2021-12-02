@@ -1,57 +1,26 @@
-article#dashboard {
+div#dashboard {
+  .panel {
+    border: 3px solid #F3F2F1;
+    padding: 1.5rem;
+  }
+
+  .double-panel {
+    border: 3px solid #F3F2F1;
+    margin: 0px;
+
+    .left-side {
+      background-color: #F3F2F1;
+      padding: 1.5rem;
+    }
+
+    .right-side {
+      padding: 1.5rem;
+    }
+  }
+
+
   #change-school {
-    padding-top: 0;
-  }
-
-  section {
-    padding: 2rem 0rem;
-    margin: 0rem 0rem;
-
-    &:not(:last-child) {
-      border-bottom: 1px solid $govuk-border-colour;
-    }
-
-    header {
-      margin: 0rem 0rem 0.4rem;
-      padding: 0rem;
-
-      &.dashboard-high-priority {
-        @include govuk-font($size: 24, $weight: bold);
-      }
-
-      &.dashboard-medium-priority {
-        @include govuk-font($size: 19, $weight: bold);
-      }
-
-      &.dashboard-low-priority {
-        @include govuk-font($size: 16, $weight: bold);
-      }
-    }
-
-    ul.other-tasks {
-      li.dashboard-low-priority > a {
-        @include govuk-font($size: 16, $weight: bold);
-      }
-    }
-
-    p.govuk-hint {
-      margin: 0rem 0rem 0.4rem;
-      padding: 0rem;
-    }
-
-    .subsection {
-      padding: 1rem 0rem;
-    }
-
-    #requests {
-      padding-top: 0;
-    }
-  }
-
-  section.medium-priority {
-    .subsection {
-      padding: 0;
-    }
+    margin: 1em 0;
   }
 }
 
