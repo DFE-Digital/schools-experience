@@ -1,9 +1,9 @@
-<%- self.page_title = 'Select candidate requirements' -%>
+<%- self.page_title = 'What requirements do you have?' -%>
 
 <%
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
-    'Select candidate requirements' => nil
+    'What requirements do you have?' => nil
   }
 %>
 
@@ -12,7 +12,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      Select candidate requirements
+      What requirements do you have?
     </h1>
 
     <%= form_for candidate_requirements_selection, url: schools_on_boarding_candidate_requirements_selection_path, method: method do |f| %>
