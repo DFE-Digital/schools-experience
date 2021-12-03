@@ -11,7 +11,7 @@ describe Schools::OnBoarding::PhasesList, type: :model do
   context '#validations' do
     it 'validates at_least_one_phase_offered' do
       expect(described_class.new.tap(&:validate).errors[:base]).to \
-        eq ['Select at least one phase']
+        eq ['Select at least one school phase']
     end
   end
 

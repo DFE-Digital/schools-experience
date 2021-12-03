@@ -79,16 +79,16 @@ en:
   schools_on_boarding_school_fee_errors: &schools_on_boarding_school_fee_errors
     attributes:
       amount_pounds:
-        blank: 'The fee amount is required'
+        blank: 'Enter the fee amount'
         greater_than: 'Must be greater than %{count}'
         less_than: 'The number of pounds must be less than %{count}'
       description:
-        blank: 'Explanation of what the fee covers is required'
+        blank: 'Enter details of what the fee covers'
       interval:
-        blank: 'Select whether this is a daily or one-off fee'
+        blank: 'Select if this is a daily or one-off fee'
         inclusion: 'Select an option'
       payment_method:
-        blank: 'Explanation of how the fee is paid is required'
+        blank: 'Enter details of how candidates should pay this fee'
 
   schools_on_boarding_school_fee_helpers: &schools_on_boarding_school_fee_helpers
     interval: 'Is this a daily or one-off fee?'
@@ -298,7 +298,7 @@ en:
         schools/on_boarding/phases_list:
           attributes:
             base:
-              no_phase_offered: 'Select at least one phase'
+              no_phase_offered: 'Select at least one school phase'
         schools/on_boarding/key_stage_list:
           attributes:
             base:
@@ -543,9 +543,9 @@ en:
         dbs_fees: DBS check costs
         other_fees: Other costs
       schools_on_boarding_phases_list:
-        title: Select school experience phases
+        title: Which school phases do you offer experience with?
       schools_on_boarding_key_stage_list:
-        title: Select school experience key stages
+        title: Which key stages do you offer experience with?
       schools_on_boarding_subject_list:
         title: Select school experience subjects
       schools_on_boarding_specialism:
