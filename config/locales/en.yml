@@ -81,7 +81,7 @@ en:
       amount_pounds:
         blank: 'The fee amount is required'
         greater_than: 'Must be greater than %{count}'
-        less_than: 'Must be less than %{count}'
+        less_than: 'The number of pounds must be less than %{count}'
       description:
         blank: 'Explanation of what the fee covers is required'
       interval:
