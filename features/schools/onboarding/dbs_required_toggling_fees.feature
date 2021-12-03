@@ -38,7 +38,7 @@ Feature: Dbs required toggling available fees
         | Experience Outline               |                           |
         | Admin contact                    |                           |
     And I am on the 'edit DBS requirements' page
-    And I choose 'No - Candidates will be accompanied at all times' from the 'Do you require candidates to have or get a DBS check?' radio buttons
+    And I choose 'No - Candidates will be accompanied at all times' from the 'Do candidates need to have or get a DBS check?' radio buttons
     When I submit the form
     Then I should be on the 'profile' page
 
@@ -61,7 +61,7 @@ Feature: Dbs required toggling available fees
         | Experience Outline               |                           |
         | Admin contact                    |                           |
     And I am on the 'edit DBS requirements' page
-    And I choose 'Yes - Outline your DBS requirements' from the 'Do you require candidates to have or get a DBS check?' radio buttons
+    And I choose 'Yes - Outline your DBS requirements' from the 'Do candidates need to have or get a DBS check?' radio buttons
     And I enter 'Always require DBS check' into the 'Provide details in 50 words or less.' text area
     And I submit the form
     And I choose 'Yes' from the 'DBS check costs' radio buttons
