@@ -312,7 +312,7 @@ Then "I should see the teacher trainning info I entered in the wizard" do
     expect(page).to have_content \
       @school.school_profile.experience_outline.teacher_training_details
 
-    expect(page).to have_link "More information",
+    expect(page).to have_link "Find out more about our teacher training",
       href: @school.school_profile.experience_outline.teacher_training_url
   end
 end
