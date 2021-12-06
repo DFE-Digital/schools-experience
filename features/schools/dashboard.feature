@@ -15,7 +15,7 @@ Feature: The School Dashboard
         Given my school has not yet fully-onboarded
         When I am on the 'schools dashboard' page
         Then I should see a warning informing me that I need to complete my profile before continuing
-        And I should see a 'Update your school profile' link to the 'profile' page
+        And I should see a 'Complete your school profile' link to the 'profile' page
 
     Scenario: Displaying a warning when the school is disabled
         Given my school has fully-onboarded
