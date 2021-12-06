@@ -24,7 +24,7 @@ shared_examples 'a school fee' do
 
         it 'adds an error' do
           expect(subject.errors[:amount_pounds]).to \
-            eq ["The number of pounds must be less than 10000"]
+            eq ["The number of pounds must be less than 10000."]
         end
       end
 
