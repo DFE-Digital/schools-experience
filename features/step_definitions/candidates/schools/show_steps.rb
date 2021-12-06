@@ -110,7 +110,7 @@ Given("the chosen school offers teacher training and has the following info") do
   expect(@profile.teacher_training_info).to eql(string)
 end
 
-Then("I should see teacher training information information in the sidebar") do
+Then("I should see Find out more about our teacher training. information in the sidebar") do
   within("#school-teacher-training-info") do
     @teacher_training_info.lines.reject(&:blank?).each do |line|
       expect(page).to have_css('p', text: line.strip)
