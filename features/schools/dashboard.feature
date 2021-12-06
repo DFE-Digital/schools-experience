@@ -81,10 +81,11 @@ Feature: The School Dashboard
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
         Then I should see the following 'history' links:
-            | Text               | Hint | Path                        |
-            | Withdrawn requests | None | /schools/withdrawn_requests |
-            | Rejected requests  | None | /schools/rejected_requests  |
-            | Previous bookings  | None | /schools/previous_bookings  |
+            | Text                | Hint | Path                         |
+            | Withdrawn requests  | None | /schools/withdrawn_requests  |
+            | Rejected requests   | None | /schools/rejected_requests   |
+            | Previous bookings   | None | /schools/previous_bookings   |
+            | Cancelled bookings  | None | /schools/cancelled_bookings  |
 
     Scenario: Show the Help and support panel if schools is onboarded
         Given my school has fully-onboarded

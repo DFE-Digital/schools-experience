@@ -1,0 +1,29 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Cancelled bookings' => nil
+  }
+%>
+
+<div id="cancelled-bookings-index" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= page_heading 'Cancelled bookings' %>
+
+    <% if @bookings.any? %>
+      <%= pagination_bar @bookings %>
+
+      <%= render 'table', bookings: @bookings %>
+
+      <%= pagination_lower @bookings %>
+
+    <% else %>
+      <p>
+        There are no cancelled bookings.
+      </p>
+    <% end %>
+    <p>
+      <%= link_to "Download your requests and bookings", schools_csv_export_path %> as a CSV export.
+    </p>
+    <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
+  </div>
+</div>

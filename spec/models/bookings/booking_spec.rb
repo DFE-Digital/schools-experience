@@ -171,6 +171,24 @@ describe Bookings::Booking do
   end
 
   describe 'Scopes' do
+    describe '.cancelled' do
+      let! :not_cancelled do
+        FactoryBot.create :bookings_booking
+      end
+
+      let! :booking_cancelled_by_school do
+        FactoryBot.create :bookings_booking, :cancelled_by_school
+      end
+
+      let! :booking_cancelled_by_candidate do
+        FactoryBot.create :bookings_booking, :cancelled_by_candidate
+      end
+
+      subject { described_class.cancelled }
+
+      it { is_expected.to match_array [booking_cancelled_by_school, booking_cancelled_by_candidate] }
+    end
+
     describe '.not_cancelled' do
       let! :not_cancelled do
         FactoryBot.create :bookings_booking

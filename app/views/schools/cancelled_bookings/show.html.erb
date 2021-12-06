@@ -1,0 +1,17 @@
+<%- self.page_title = "Booking details ref #{@booking.reference}" %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    "Cancelled bookings" => schools_cancelled_bookings_path,
+    "Booking #{@booking.id}" => nil
+  }
+%>
+
+<h1>Booking by <%= @booking.candidate_name %></h1>
+
+<%= render 'schools/confirmed_bookings/booking', booking: @booking %>
+
+<div>
+  <%= govuk_link_to 'Return to cancelled bookings', request.referer || schools_cancelled_bookings_path, secondary: true %>
+</div>
