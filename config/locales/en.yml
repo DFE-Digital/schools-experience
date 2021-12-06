@@ -80,8 +80,8 @@ en:
     attributes:
       amount_pounds:
         blank: 'Enter the fee amount'
-        greater_than: 'Must be greater than %{count}'
-        less_than: 'The number of pounds must be less than %{count}'
+        greater_than: 'The number of pounds must be greater than %{count}.'
+        less_than: 'The number of pounds must be less than %{count}.'
       description:
         blank: 'Enter details of what the fee covers'
       interval:
