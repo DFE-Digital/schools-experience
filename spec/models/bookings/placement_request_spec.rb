@@ -804,12 +804,38 @@ describe Bookings::PlacementRequest, type: :model do
       it { is_expected.to eq 'Flagged' }
     end
 
-    context 'when placement date has lapsed' do
-      it 'returns Expired' do
-        request = create(:placement_request, :with_a_fixed_date)
+    context 'when expired request' do
+      context 'when fixed placement request' do
+        it 'returns Expired when the placement date has lapsed' do
+          request = create(:placement_request, :with_a_fixed_date)
 
-        travel 1.year do
-          expect(request.status).to eq 'Expired'
+          travel 1.year do
+            expect(request.status).to eq 'Expired'
+          end
+        end
+
+        it 'does not returns Expired when the placement date has not lapsed' do
+          request = create(:placement_request, :with_a_fixed_date)
+
+          expect(request.status).not_to eq 'Expired'
+        end
+      end
+
+      context 'when flex placement request' do
+        it 'returns Expired when it is older than two months' do
+          request = create(:placement_request)
+
+          travel 3.months do
+            expect(request.status).to eq 'Expired'
+          end
+        end
+
+        it 'does not returns Expired when it is not older than two months' do
+          request = create(:placement_request)
+
+          travel 2.months do
+            expect(request.status).not_to eq 'Expired'
+          end
         end
       end
     end

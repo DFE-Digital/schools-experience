@@ -266,7 +266,7 @@ module Bookings
     end
 
     def flex_date_expired?
-      placement_date.nil? && created_at.before?(Date.today)
+      placement_date.nil? && created_at.before?(2.months.ago)
     end
 
     def completed?
