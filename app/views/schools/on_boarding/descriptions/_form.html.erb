@@ -1,9 +1,9 @@
-<%- self.page_title = 'Write a short description of your school' -%>
+<%- self.page_title = 'Enter a short description of your school' -%>
 
 <%
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
-    'Write a short description of your school' => nil
+    'Enter a short description of your school' => nil
   }
 %>
 
@@ -13,7 +13,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_for description, url: schools_on_boarding_description_path, method: method do |f| %>
       <h1 class="govuk-heading-l">
-        Write a short description of your school
+        Enter a short description of your school
       </h1>
 
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
