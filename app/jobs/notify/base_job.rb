@@ -1,4 +1,4 @@
-class Notify::BaseNotifyJob < ApplicationJob
+class Notify::BaseJob < ApplicationJob
   class RetryableError < ArgumentError; end
 
   retry_on RetryableError, wait: A_DECENT_AMOUNT_LONGER, attempts: 7

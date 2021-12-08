@@ -86,7 +86,7 @@ shared_examples "notify_job" do
   end
 end
 
-describe Notify::BaseNotifyJob, type: :job do
+describe Notify::BaseJob, type: :job do
   context "#perform" do
     it "should fail with NotImplementedError'" do
       expect { subject.perform }.to raise_error(NotImplementedError, 'You must implement the perform method')
@@ -94,7 +94,7 @@ describe Notify::BaseNotifyJob, type: :job do
   end
 end
 
-describe Notify::NotifyByEmailJob, type: :job do
+describe Notify::EmailJob, type: :job do
   let(:recipient) { 'test@example.com' }
   let(:stub_client) { double Notifications::Client, send_email: true }
   let(:notify_method) { :send_email }
@@ -109,7 +109,7 @@ describe Notify::NotifyByEmailJob, type: :job do
   it_behaves_like "notify_job"
 end
 
-describe Notify::NotifyBySmsJob, type: :job do
+describe Notify::SmsJob, type: :job do
   let(:recipient) { "07777777777" }
   let(:stub_client) { double Notifications::Client, send_sms: true }
   let(:notify_method) { :send_sms }

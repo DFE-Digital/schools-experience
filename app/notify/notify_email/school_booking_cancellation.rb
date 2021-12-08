@@ -1,4 +1,4 @@
-class NotifyEmail::SchoolBookingCancellation < NotifyDespatchers::NotifyEmail
+class NotifyEmail::SchoolBookingCancellation < NotifyDespatchers::Email
   attr_accessor :school_name,
     :candidate_name,
     :placement_start_date_with_duration

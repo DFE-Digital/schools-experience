@@ -34,7 +34,7 @@ shared_examples "notify_client" do
 
         it "should raise an error whilst trying to enqueue" do
           expect { notification.despatch_later! }.to \
-            raise_exception NotifyDespatchers::BaseNotifyDespatcher::InvalidPersonalisationError
+            raise_exception NotifyDespatchers::Base::InvalidPersonalisationError
         end
       end
 
@@ -58,7 +58,7 @@ shared_examples "notify_client" do
   end
 end
 
-class StubEmailNotification < NotifyDespatchers::NotifyEmail
+class StubEmailNotification < NotifyDespatchers::Email
   attr_accessor :name
 
   def initialize(to:, name:)
@@ -77,7 +77,7 @@ private
   end
 end
 
-class StubSmsNotification < NotifyDespatchers::NotifySms
+class StubSmsNotification < NotifyDespatchers::Sms
   attr_accessor :name
 
   def initialize(to:, name:)
@@ -96,7 +96,7 @@ private
   end
 end
 
-describe NotifyDespatchers::BaseNotifyDespatcher do
+describe NotifyDespatchers::Base do
   include ActiveJob::TestHelper
   let(:to) { 'somename@somecompany.org' }
 
@@ -105,7 +105,7 @@ describe NotifyDespatchers::BaseNotifyDespatcher do
     allow(NotifyService.instance).to receive(:send_sms)
   end
 
-  subject { NotifyDespatchers::BaseNotifyDespatcher.new(to: to) }
+  subject { NotifyDespatchers::Base.new(to: to) }
 
   describe 'Attributes' do
     it { is_expected.to respond_to(:to) }
@@ -148,7 +148,7 @@ describe NotifyDespatchers::BaseNotifyDespatcher do
   end
 end
 
-describe NotifyDespatchers::NotifyEmail do
+describe NotifyDespatchers::Email do
   include ActiveJob::TestHelper
   let(:to) { 'somename@somecompany.org' }
   let :recipients do
@@ -169,7 +169,7 @@ describe NotifyDespatchers::NotifyEmail do
   include_examples "notify_client"
 end
 
-describe NotifyDespatchers::NotifySms do
+describe NotifyDespatchers::Sms do
   include ActiveJob::TestHelper
   let(:to) { '07777777777' }
   let :recipients do

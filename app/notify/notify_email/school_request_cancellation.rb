@@ -1,4 +1,4 @@
-class NotifyEmail::SchoolRequestCancellation < NotifyDespatchers::NotifyEmail
+class NotifyEmail::SchoolRequestCancellation < NotifyDespatchers::Email
   attr_accessor :school_name,
     :candidate_name,
     :cancellation_reasons,

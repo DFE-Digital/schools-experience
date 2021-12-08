@@ -1,4 +1,4 @@
-class NotifyEmail::SchoolRegistrationConfirmation < NotifyDespatchers::NotifyEmail
+class NotifyEmail::SchoolRegistrationConfirmation < NotifyDespatchers::Email
   attr_accessor :school_name,
     :school_experience_profile_link,
     :school_experience_dashboard_link

@@ -1,4 +1,4 @@
-class NotifyDespatchers::BaseNotifyDespatcher
+class NotifyDespatchers::Base
   attr_accessor :to
   attr_reader :invalid_fields
 
