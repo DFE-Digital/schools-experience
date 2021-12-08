@@ -72,9 +72,7 @@ module ApplicationHelper
                  "Welcome #{current_user_full_name user}"
                end
 
-    switch_service = link_to("switch service", Rails.configuration.x.oidc_services_list_url)
-
-    safe_join([greeting, logout_link, "or", switch_service].compact, " ")
+    safe_join([greeting, logout_link].compact, " ")
   end
 
   def current_user_full_name(user)

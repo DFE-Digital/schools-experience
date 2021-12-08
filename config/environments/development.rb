@@ -105,7 +105,6 @@ Rails.application.configure do
   config.x.oidc_client_id = 'schoolexperience'
   config.x.oidc_client_secret = Rails.application.credentials[:dfe_pp_signin_secret]
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
-  config.x.oidc_services_list_url = 'https://pp-services.signin.education.gov.uk/my-services'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
 
   truthy_strings = %w[true 1 yes]

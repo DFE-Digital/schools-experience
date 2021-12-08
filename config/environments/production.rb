@@ -144,9 +144,6 @@ Rails.application.configure do
     ''
   end
   config.x.oidc_host = ENV.fetch('DFE_SIGNIN_HOST') { 'pp-oidc.signin.education.gov.uk' }
-  config.x.oidc_services_list_url = ENV.fetch('DFE_SERVICES_LIST_URL') do
-    'https://services.signin.education.gov.uk/my-services'
-  end
 
   config.x.dfe_sign_in_api_host = ENV.fetch('DFE_SIGNIN_API_ENDPOINT') do
     'api.signin.education.gov.uk'
