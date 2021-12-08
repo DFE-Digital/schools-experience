@@ -1,4 +1,4 @@
-class Notify
+class NotifyDespatchers::Base
   attr_accessor :to
   attr_reader :invalid_fields
 
@@ -7,14 +7,7 @@ class Notify
   end
 
   def despatch_later!
-    validate_personalisation!
-
-    to.each do |address|
-      NotifyJob.perform_later \
-        to: address,
-        template_id: template_id,
-        personalisation_json: personalisation_json
-    end
+    raise NotImplementedError, 'You must implement the despatch_later! method'
   end
 
   class InvalidPersonalisationError < RuntimeError

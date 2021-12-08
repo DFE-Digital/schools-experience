@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe NotifyJob, type: :job do
+shared_examples "notify_job" do
   include ActiveJob::TestHelper
   include ActiveSupport::Testing::TimeHelpers
 
@@ -16,13 +16,9 @@ describe NotifyJob, type: :job do
     '11111111-aaaa-1111-aaaa-111111111111'
   end
 
-  let :email_address do
-    'test@example.com'
-  end
-
   let :job do
     described_class.new \
-      to: email_address,
+      to: recipient,
       template_id: template_id,
       personalisation_json: personalisation.to_json
   end
@@ -80,16 +76,50 @@ describe NotifyJob, type: :job do
     end
 
     context 'on success' do
-      let(:stub_client) { double Notifications::Client, send_email: true }
       let(:notify_class) { double Class, new: stub_client }
       let(:executions) { 1 }
 
       it 'sends the email' do
-        expect(stub_client).to have_received(:send_email).with \
-          template_id: template_id,
-          email_address: email_address,
-          personalisation: personalisation
+        expect(stub_client).to have_received(notify_method).with notify_method_params
       end
     end
   end
+end
+
+describe Notify::BaseJob, type: :job do
+  context "#perform" do
+    it "should fail with NotImplementedError'" do
+      expect { subject.perform }.to raise_error(NotImplementedError, 'You must implement the perform method')
+    end
+  end
+end
+
+describe Notify::EmailJob, type: :job do
+  let(:recipient) { 'test@example.com' }
+  let(:stub_client) { double Notifications::Client, send_email: true }
+  let(:notify_method) { :send_email }
+  let(:notify_method_params) do
+    {
+      template_id: template_id,
+      email_address: recipient,
+      personalisation: personalisation
+    }
+  end
+
+  it_behaves_like "notify_job"
+end
+
+describe Notify::SmsJob, type: :job do
+  let(:recipient) { "07777777777" }
+  let(:stub_client) { double Notifications::Client, send_sms: true }
+  let(:notify_method) { :send_sms }
+  let(:notify_method_params) do
+    {
+      template_id: template_id,
+      phone_number: recipient,
+      personalisation: personalisation
+    }
+  end
+
+  it_behaves_like "notify_job"
 end

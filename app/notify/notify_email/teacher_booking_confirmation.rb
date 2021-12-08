@@ -1,4 +1,4 @@
-class NotifyEmail::TeacherBookingConfirmation < Notify
+class NotifyEmail::TeacherBookingConfirmation < NotifyDespatchers::Email
   attr_accessor :candidate_name,
     :placement_start_date,
     :placement_finish_date,

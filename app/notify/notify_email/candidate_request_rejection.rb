@@ -1,4 +1,4 @@
-class NotifyEmail::CandidateRequestRejection < Notify
+class NotifyEmail::CandidateRequestRejection < NotifyDespatchers::Email
   attr_accessor \
     :school_name,
     :rejection_reasons,

@@ -18,6 +18,13 @@ class NotifyService
       personalisation: personalisation
   end
 
+  def send_sms(phone_number:, template_id:, personalisation:)
+    notify_client.send_sms \
+      template_id: template_id,
+      phone_number: phone_number,
+      personalisation: personalisation
+  end
+
 private
 
   def notify_client
