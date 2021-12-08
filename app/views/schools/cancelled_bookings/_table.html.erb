@@ -1,0 +1,37 @@
+<table id="bookings" class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col">Name</th>
+      <th class="govuk-table__header" scope="col">Subject</th>
+      <th class="govuk-table__header" scope="col">Booking Date</th>
+      <th class="govuk-table__header" scope="col">Cancelled Date</th>
+      <th class="govuk-table__header" scope="col">Cancelled by</th>
+      <th class="govuk-table__header" scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <%- bookings.each do |booking| -%>
+      <tr class="booking govuk-table__row" data-booking="<%= booking.id %>">
+        <td class="name govuk-table__cell">
+          <%= booking.candidate_name %>
+        </td>
+        <td class="subject govuk-table__cell">
+          <%= booking.bookings_subject.name %>
+        </td>
+        <td class="date govuk-table__cell">
+          <%= booking.date.to_formatted_s(:govuk) %>
+        </td>
+        <td class="date govuk-table__cell">
+          <%= booking.cancellation.sent_at.to_date.to_formatted_s(:govuk) %>
+        </td>
+        <td class="date govuk-table__cell">
+          <%= booking.cancellation.cancelled_by.upcase_first %>
+        </td>
+        <td class="govuk-table__cell">
+          <%= link_to "View", schools_cancelled_booking_path(booking),
+            'aria-label': "View booking for #{booking.candidate_name}, #{booking.date.to_formatted_s(:govuk)}" %>
+        </td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>

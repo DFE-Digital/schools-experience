@@ -103,6 +103,7 @@ Rails.application.routes.draw do
     resource :confirm_attendance, only: %i[show update], controller: 'confirm_attendance'
     resources :attendances, only: %i[index]
     resources :previous_bookings, only: %i[index show]
+    resources :cancelled_bookings, only: %i[index show]
     resource :csv_export, only: %i[show create]
 
     resource :availability_preference, only: %i[edit update]

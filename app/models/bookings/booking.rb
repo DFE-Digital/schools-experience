@@ -70,6 +70,7 @@ module Bookings
       :cancellation,
       to: :bookings_placement_request
 
+    scope :cancelled, -> { joins(:bookings_placement_request).merge(PlacementRequest.cancelled) }
     scope :not_cancelled, -> { joins(:bookings_placement_request).merge(PlacementRequest.not_cancelled) }
     scope :upcoming, -> { not_cancelled.accepted.future }
 
