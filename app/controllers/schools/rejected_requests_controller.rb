@@ -2,7 +2,7 @@ module Schools
   class RejectedRequestsController < Schools::BaseController
     def index
       @requests = scope
-        .includes(:candidate, :school_cancellation, placement_date: :subjects)
+        .includes(:candidate, :school_cancellation, :subject, placement_date: :subjects)
         .page(params[:page])
         .per(50)
 
