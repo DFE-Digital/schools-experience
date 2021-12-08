@@ -14,7 +14,3 @@ end
 Given("I am not logged in") do
   # do nothing
 end
-
-Then("there should be a {string} link to the DfE services list page") do |link|
-  expect(page).to have_link(link, href: Rails.configuration.x.oidc_services_list_url)
-end
