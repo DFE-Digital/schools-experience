@@ -19,10 +19,10 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Prerequisites
 
-- Ruby 2.7.4 - easiest with rbenv and ruby-build
+- Ruby 2.7.5 - easiest with rbenv and ruby-build
   - `brew install rbenv`
   - `brew install ruby-build`
-  - `rbenv install 2.7.4`
+  - `rbenv install 2.7.5`
 - Bundler 2.2.26 - `gem install bundler --version 2.2.26`
 - PostgreSQL with PostGIS extension
   - `brew install postgis`
