@@ -93,6 +93,7 @@ private
       .distinct
       .includes([:available_placement_dates])
       .with_dbs_policies(dbs_options)
+      .disability_confident(disability_confident)
   end
 
   def whitelisted_base_query

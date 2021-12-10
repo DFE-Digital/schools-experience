@@ -512,6 +512,7 @@ en:
         rejection_category: Rejection reason
       phases: Education phases
       dbs_policies: DBS check
+      disability_confident: Disability and access needs
       fees: Fees
       subjects: Subjects
       candidates_registrations_background_check:
@@ -637,6 +638,7 @@ en:
 
     label:
       dbs_policies_2: Only show placements that do not require a DBS check
+      disability_confident: Only show Disability Confident schools
       schools_placement_requests_confirm_booking:
         bookings_subject_id: Confirm subject
         placement_details: Confirm experience details
@@ -899,6 +901,8 @@ en:
       school_search:
         phases_filter_html: "Education phases: %{phase_names}"
         subjects_filter_html: "Placement subjects: %{subject_names}"
+        disability_confident_filter:
+          text_html: "Disability Confident schools: <strong>Yes</strong>"
         dbs_policies_filter:
           text_html: "DBS check: %{dbs_policies_options}"
           options:

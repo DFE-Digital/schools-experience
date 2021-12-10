@@ -19,7 +19,7 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location, :latitude,
+    attr_accessor :query, :location, :latitude, :disability_confident,
                   :longitude, :page, :analytics_tracking_uuid
     attr_reader :distance, :max_fee
 
@@ -69,6 +69,12 @@ module Candidates
     def dbs_policies=(dbs_policy_ids)
       @dbs_policies = Array.wrap(dbs_policy_ids).map(&:presence).compact.map(&:to_i)
     end
+
+    # def disability_confident=(value)
+    #   if value == '1'
+    #     @disability_confident = value
+    #   end
+    # end
 
     def subject_names
       Candidates::School.subjects.map { |s|
@@ -124,7 +130,8 @@ module Candidates
         max_fee: max_fee,
         page: page,
         analytics_tracking_uuid: analytics_tracking_uuid,
-        dbs_policies: dbs_policies
+        dbs_policies: dbs_policies,
+        disability_confident: disability_confident
       )
     end
 

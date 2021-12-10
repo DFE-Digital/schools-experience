@@ -124,6 +124,12 @@ module Candidates::SchoolHelper
     )
   end
 
+  def school_search_disability_confident_filter_description(search)
+    return if search.disability_confident.nil?
+
+    t('helpers.candidates.school_search.disability_confident_filter.text_html')
+  end
+
   def cleanup_school_url(url)
     if url.blank?
       '#'

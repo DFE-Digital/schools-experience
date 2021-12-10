@@ -10,7 +10,8 @@ RSpec.describe Candidates::SchoolSearch do
         max_fee: '30',
         phases: [1, 2, 3],
         subjects: [4, 5, 6],
-        dbs_policies: [2]
+        dbs_policies: [2],
+        disability_confident: '1'
       )
     end
 
@@ -22,6 +23,7 @@ RSpec.describe Candidates::SchoolSearch do
       expect(subject.phases).to eq([1, 2, 3])
       expect(subject.subjects).to eq([4, 5, 6])
       expect(subject.dbs_policies).to eq([2])
+      expect(subject.disability_confident).to eq('1')
     end
   end
 
