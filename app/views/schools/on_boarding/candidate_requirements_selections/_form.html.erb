@@ -19,7 +19,7 @@
       <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
 
       <p>
-        Tell us what you require from candidates. Select all that apply.
+        Select all that apply.
       </p>
       <%= f.check_box_fieldset :candidate_requirements, %i(on_teacher_training_course not_on_another_training_course has_or_working_towards_degree live_locally other), legend_options: { class: 'govuk-visually-hidden' } do |fieldset| %>
         <%= fieldset.check_box_input :on_teacher_training_course %>
