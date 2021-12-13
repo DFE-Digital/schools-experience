@@ -88,7 +88,7 @@ en:
         blank: 'Select if this is a daily or one-off fee'
         inclusion: 'Select an option'
       payment_method:
-        blank: 'Enter details of how candidates should pay this fee'
+        blank: 'Enter details of how candidates should pay the fee'
 
   schools_on_boarding_school_fee_helpers: &schools_on_boarding_school_fee_helpers
     interval: 'Is this a daily or one-off fee?'
