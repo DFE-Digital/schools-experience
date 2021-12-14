@@ -1,8 +1,8 @@
-<%- self.page_title = 'Select school experience phases' %>
+<%- self.page_title = 'Which school phases do you offer experience with?' %>
 <%
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
-    'Select school experience phases' => nil
+    'Which school phases do you offer experience with?' => nil
   }
 %>
 
@@ -13,7 +13,7 @@
     <%= form_for phases_list, url: url, method: method do |f| %>
       <%= f.check_box_fieldset :title, %i(), { page_heading: true } do |fieldset| %>
         <p>
-          Tell us which phases you offer. This will help candidates select a school experience.
+          Select all that apply.
         </p>
         <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
         <%= fieldset.check_box_input :primary %>

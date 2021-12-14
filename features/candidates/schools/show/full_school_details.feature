@@ -119,7 +119,7 @@ Feature: School show page (enhanced data)
             Paragraph two
             """
         When I am on the profile page for the chosen school
-        Then I should see teacher training information information in the sidebar
+        Then I should see Find out more about our teacher training information in the sidebar
         And the teacher training website should be listed with the other hyperlinks
 
     Scenario: Request placement button

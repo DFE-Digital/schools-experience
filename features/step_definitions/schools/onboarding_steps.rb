@@ -40,8 +40,8 @@ end
 Given "I have completed the Candidate Requirements selection step" do
   steps %(
     Given I am on the 'candidate requirements selection' page
-    And I check "They must apply or have applied to your or a partner school's teacher training course"
-    And I check "They must live locally"
+    And I check "Candidates must apply to our (or a partner school's) teacher training course"
+    And I check "Candidates must live locally"
     And I enter '7' into the 'Tell us within how many miles of your school. For example, 20.' text area
     And I check 'Other'
     And I enter 'Some details' into the 'Provide details.' text area
@@ -312,7 +312,7 @@ Then "I should see the teacher trainning info I entered in the wizard" do
     expect(page).to have_content \
       @school.school_profile.experience_outline.teacher_training_details
 
-    expect(page).to have_link "More information",
+    expect(page).to have_link "Find out more about our teacher training",
       href: @school.school_profile.experience_outline.teacher_training_url
   end
 end
