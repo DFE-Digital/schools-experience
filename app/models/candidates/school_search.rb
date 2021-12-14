@@ -70,12 +70,6 @@ module Candidates
       @dbs_policies = Array.wrap(dbs_policy_ids).map(&:presence).compact.map(&:to_i)
     end
 
-    # def disability_confident=(value)
-    #   if value == '1'
-    #     @disability_confident = value
-    #   end
-    # end
-
     def subject_names
       Candidates::School.subjects.map { |s|
         subjects.include?(s.first) ? s.last : nil
