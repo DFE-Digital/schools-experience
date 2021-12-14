@@ -159,6 +159,15 @@ class Bookings::School < ApplicationRecord
     end
   }
 
+  scope :disability_confident, lambda { |option|
+    if option.present?
+      joins(:profile)
+        .where('bookings_profiles.disability_confident IS ?', option)
+    else
+      all
+    end
+  }
+
   def to_param
     urn.to_s.presence
   end

@@ -328,6 +328,23 @@ describe Bookings::SchoolSearch do
             expect(subject).not_to include(non_matching_school)
           end
         end
+
+        context 'Filtering on disability confident' do
+          before do
+            create(:bookings_profile, school: matching_school)
+            create(:bookings_profile, :without_supports_access_needs, school: non_matching_school)
+          end
+
+          subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, disability_confident: '1').results }
+
+          specify 'should return matching results' do
+            expect(subject).to include(matching_school)
+          end
+
+          specify 'should omit non-matching results' do
+            expect(subject).not_to include(non_matching_school)
+          end
+        end
       end
 
       context 'Chaining' do

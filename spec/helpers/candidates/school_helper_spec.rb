@@ -248,6 +248,29 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
+  context '.school_search_disability_confident_filter_description' do
+    context 'when the disability confident filter is not selected' do
+      subject do
+        double('Bookings::SchoolSearch', disability_confident: nil)
+      end
+
+      it("should return a nil") do
+        expect(school_search_disability_confident_filter_description(subject)).to be_nil
+      end
+    end
+
+    context 'when the disability confident filter is selected' do
+      subject do
+        double('Bookings::SchoolSearch', disability_confident: '1')
+      end
+
+      it("should return yes") do
+        expect(school_search_disability_confident_filter_description(subject)).to \
+          eq("Disability Confident schools: <strong>Yes</strong>")
+      end
+    end
+  end
+
   describe '#cleanup_school_url' do
     context 'with blank url' do
       subject { cleanup_school_url(' ') }

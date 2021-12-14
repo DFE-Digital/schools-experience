@@ -13,6 +13,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     let(:max_fee) { '60' }
     let(:subjects) { %w[1 3] }
     let(:dbs_policies) { %w[2] }
+    let(:disability_confident) { '1' }
 
     before do
       allow(Candidates::School).to receive(:subjects).and_return(
@@ -64,6 +65,11 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     it "shows the dbs filter" do
       expect(rendered).to have_css('.govuk-label', text: 'DBS check')
       expect(rendered).to have_css '#search-filter input[name="dbs_policies[]"]'
+    end
+
+    it "shows the disability confident filter" do
+      expect(rendered).to have_css('.govuk-fieldset__heading', text: 'Disability and access needs')
+      expect(rendered).to have_css '#search-filter input[name="disability_confident"]'
     end
 
     it "shows results" do

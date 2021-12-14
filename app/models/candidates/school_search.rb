@@ -19,7 +19,7 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location, :latitude,
+    attr_accessor :query, :location, :latitude, :disability_confident,
                   :longitude, :page, :analytics_tracking_uuid
     attr_reader :distance, :max_fee
 
@@ -124,7 +124,8 @@ module Candidates
         max_fee: max_fee,
         page: page,
         analytics_tracking_uuid: analytics_tracking_uuid,
-        dbs_policies: dbs_policies
+        dbs_policies: dbs_policies,
+        disability_confident: disability_confident
       )
     end
 

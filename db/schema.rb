@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_20_103656) do
+ActiveRecord::Schema.define(version: 2021_12_10_132724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 2021_10_20_103656) do
     t.integer "duration", default: 1, null: false
     t.datetime "accepted_at"
     t.boolean "attended"
-    t.datetime "under_consideration_at"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
     t.index ["bookings_subject_id"], name: "index_bookings_bookings_on_bookings_subject_id"
@@ -195,6 +194,7 @@ ActiveRecord::Schema.define(version: 2021_10_20_103656) do
     t.datetime "updated_at", null: false
     t.uuid "analytics_tracking_uuid"
     t.integer "dbs_policies", array: true
+    t.boolean "disability_confident"
   end
 
   create_table "bookings_school_types", force: :cascade do |t|

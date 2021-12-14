@@ -371,6 +371,30 @@ describe Bookings::School, type: :model do
           end
         end
       end
+
+      context 'by disability confident' do
+        before do
+          create(:bookings_profile, school: school_a)
+          create(:bookings_profile, school: school_b)
+          create(:bookings_profile, :without_supports_access_needs, school: school_c)
+        end
+
+        context 'when no options suplied' do
+          specify 'should return all schools' do
+            expect(subject.disability_confident(nil)).to include(school_a, school_b, school_c)
+          end
+        end
+
+        context 'when true' do
+          specify 'should return all disability confident schools' do
+            expect(subject.disability_confident(true)).to include(school_a, school_b)
+          end
+
+          specify 'should not return school that are not disability confident' do
+            expect(subject.disability_confident(true)).not_to include(school_c)
+          end
+        end
+      end
     end
 
     context 'Availability and placement dates' do
