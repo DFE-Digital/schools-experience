@@ -31,6 +31,19 @@ Feature: Confirming a request with a future date
             | Admin details     |
         And there should be an 'Continue' button and a 'Make changes' link
 
+    Scenario: Page content: when the school offers fixed placement dates
+        Given I am on the 'make changes' page for my fixed placement request
+        Then I should see a form with the following fields:
+            | Label                  | Type   |
+            | Booking date           | date   |
+            | How long will it last? | number |
+
+    Scenario: Page content: when the school offers flex placement dates
+        Given I am on the 'make changes' page for my fixed placement request
+        Then I should see a form with the following fields:
+            | Label                  | Type   |
+            | Booking date           | date   |
+
     Scenario: Confirming a booking
         Given the school has a prior booking
         And I am on the 'confirm booking' page for the placement request

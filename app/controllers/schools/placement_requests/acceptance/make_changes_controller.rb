@@ -33,6 +33,7 @@ module Schools
         def booking_params
           params.require(:bookings_booking).permit(
             :date,
+            :duration,
             :bookings_subject_id,
             :contact_name,
             :contact_number,

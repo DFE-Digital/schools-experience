@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 describe Bookings::Booking do
+  describe 'Constants' do
+    describe 'DEFAULT_DURATION' do
+      it 'returns 1' do
+        expect(described_class::DEFAULT_DURATION).to eq 1
+      end
+    end
+  end
+
   describe 'Columns' do
     it do
       is_expected.to have_db_column(:bookings_subject_id)
@@ -486,8 +494,16 @@ describe Bookings::Booking do
     let(:placement_request) { create(:bookings_placement_request, placement_date: placement_date) }
     subject { described_class.from_placement_request(placement_request) }
 
+    context 'when there is no placement date' do
+      let(:placement_request) { create(:bookings_placement_request) }
+
+      specify 'should have the default duration' do
+        expect(subject.duration).to eql(described_class::DEFAULT_DURATION)
+      end
+    end
+
     context 'when the placement date is in the future' do
-      let(:placement_date) { create(:bookings_placement_date) }
+      let(:placement_date) { create(:bookings_placement_date, duration: 5) }
 
       specify 'should set the date' do
         expect(subject.date).to be_present
@@ -498,6 +514,10 @@ describe Bookings::Booking do
         expect(subject.bookings_placement_request).to eql(placement_request)
         expect(subject.bookings_subject_id).to eql(placement_request.requested_subject.id)
         expect(subject.placement_details).to eql(placement_request.school.placement_info)
+      end
+
+      specify 'should inherit the the placement date duration' do
+        expect(subject.duration).to eql(placement_date.duration)
       end
     end
 

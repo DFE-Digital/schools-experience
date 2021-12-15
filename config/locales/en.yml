@@ -468,6 +468,10 @@ en:
               blank: Enter a booking date
               on_or_after: Date must be in the future
               not_changed: Date has not been changed
+            duration:
+              blank: Enter the duration
+              not_a_number: Must be a number
+              greater_than: Must be greater than zero
             contact_name:
               blank: You must provide a contact name to the candidate
             contact_email:
@@ -594,6 +598,8 @@ en:
           Requests that are already in progress will continue as normal.
         availability_preference_fixed: Select how you'd like to present school experience dates to candidates.
         experience_type: Do you offer school experiences in school, via the internet or both
+      bookings_booking:
+        duration: Enter number of days.
       bookings_placement_date:
         date: For example, 01 09 2020.
         duration: Enter number of days.
@@ -675,6 +681,7 @@ en:
           candidate_not_local: We are looking for candidates that live locally to the school
           duplicate: This is a duplicate request
       bookings_booking:
+        duration: How long will it last?
         contact_name: Name
         contact_number: Telephone number
         contact_email: Email address
