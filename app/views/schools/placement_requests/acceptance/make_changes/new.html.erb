@@ -45,6 +45,9 @@
         <%- end -%>
 
         <%= f.date_field :date, heading: true %>
+        <% if @placement_request.placement_date %>
+          <%= f.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true } %>
+        <% end %>
         <%= f.collection_select :bookings_subject_id, @subjects, :id, :name, {}, label_options: { class: 'govuk-heading-m' } %>
       </div>
 

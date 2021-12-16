@@ -1,6 +1,7 @@
 module Bookings
   class Booking < ApplicationRecord
     MIN_BOOKING_DELAY = 1.day.freeze
+    DEFAULT_DURATION = 1
 
     belongs_to :bookings_placement_request,
       class_name: 'Bookings::PlacementRequest',
@@ -110,13 +111,15 @@ module Bookings
       date = if placement_request&.fixed_date_is_bookable?
                placement_request.fixed_date
              end
+      duration = placement_request.placement_date&.duration || DEFAULT_DURATION
 
       new(
         bookings_school: placement_request.school,
         bookings_placement_request: placement_request,
         date: date,
         bookings_subject_id: placement_request.requested_subject.id,
-        placement_details: placement_request.school.placement_info
+        placement_details: placement_request.school.placement_info,
+        duration: duration
       )
     end
 
