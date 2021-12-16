@@ -98,5 +98,5 @@ Feature: School Profile
           | Dress code                   | Business dress\nMust have nice hat               |
           | Start and finish times       | 8:15 am to 4:30 pm                               |
           | Parking                      | Not available on site\nCarpark next door         |
-          | School teacher training info | We run our own training\nMore information        |
+          | School teacher training info | We run our own training\nFind out more about     |
      And I should see the accessability information I have entered
