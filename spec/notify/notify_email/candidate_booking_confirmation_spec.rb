@@ -106,6 +106,14 @@ describe NotifyEmail::CandidateBookingConfirmation do
         expect(subject.school_teacher_telephone).to eql(booking.contact_number)
       end
 
+      context 'when the profile experience details is missing' do
+        let!(:profile) { create(:bookings_profile, experience_details: nil, school: school) }
+
+        specify 'placement_details is assigned to empty string' do
+          expect(subject.placement_details).to eql ''
+        end
+      end
+
       specify 'placement_details is correctly-assigned' do
         expect(subject.placement_details).to eql(school.profile.experience_details)
       end
