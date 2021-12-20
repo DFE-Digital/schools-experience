@@ -63,7 +63,7 @@ jobs:
              fi
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1.10.0
+        uses: docker/login-action@v1.11.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -113,7 +113,7 @@ jobs:
           secret: ACTIONS-API-ACCESS-TOKEN 
   
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1.10.0
+        uses: docker/login-action@v1.11.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -184,7 +184,7 @@ jobs:
           secret: SNYK-TOKEN
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1.10.0
+        uses: docker/login-action@v1.11.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -224,7 +224,7 @@ jobs:
           secret: ACTIONS-API-ACCESS-TOKEN
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1.10.0
+        uses: docker/login-action@v1.11.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -272,7 +272,7 @@ jobs:
           secret: ACTIONS-API-ACCESS-TOKEN
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1.10.0
+        uses: docker/login-action@v1.11.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
