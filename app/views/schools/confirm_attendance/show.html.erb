@@ -48,7 +48,7 @@
     <%= pagination_bar @bookings %>
 
     <div>
-      <%= f.submit 'Save and return to requests and bookings' %>
+      <%= f.submit 'Save and return to dashboard' %>
     </div>
 
   <% end %>
@@ -59,7 +59,7 @@
   </p>
 
   <p>
-    <%= govuk_link_to "Return to requests and bookings", schools_dashboard_path, secondary: true %>
+    <%= govuk_link_to "Return to dashboard", schools_dashboard_path, secondary: true %>
   </p>
 <% end %>
 

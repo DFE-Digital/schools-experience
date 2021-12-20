@@ -42,7 +42,7 @@ Given("I have set a booking to be attended") do
     Given there are some bookings that were scheduled last week
     And I am on the 'confirm attendance' page
     When I select 'No' for the first booking
-    And I click the 'Save and return to requests and bookings' submit button
+    And I click the 'Save and return to dashboard' submit button
     Then I should be on the 'schools dashboard' page
     And the booking should be marked as not attended
   )
