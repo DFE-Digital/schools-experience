@@ -91,7 +91,7 @@ class NotifyEmail::CandidateBookingConfirmation < NotifyDespatchers::Email
       school_teacher_name: booking.contact_name,
       school_teacher_email: booking.contact_email,
       school_teacher_telephone: booking.contact_number,
-      placement_details: profile.experience_details,
+      placement_details: profile.experience_details.to_s,
       candidate_instructions: booking.candidate_instructions,
       subject_name: booking.bookings_subject.name,
       cancellation_url: cancellation_url
@@ -119,7 +119,7 @@ private
       school_teacher_name: school_teacher_name,
       school_teacher_email: school_teacher_email,
       school_teacher_telephone: school_teacher_telephone,
-      placement_details: placement_details,
+      placement_details: placement_details.to_s,
       candidate_instructions: candidate_instructions,
       subject_name: subject_name,
       cancellation_url: cancellation_url
