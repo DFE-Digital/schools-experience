@@ -33,10 +33,15 @@ Feature: School Profile
 
   Scenario: Breadcrumbs
     Given I am on the 'Profile' page
+    Then I should not see any breadcrumbs
+
+  Scenario: Breadcrumbs when school is onboarded
+    Given the school is fully-onboarded
+    And I am on the 'Profile' page
     Then I should see the following breadcrumbs:
-        | Text                                                                | Link               |
-        | Some school                                                         | /schools/dashboard |
-        | Check your answers before setting up your school experience profile | None               |
+        | Text           | Link               |
+        | Some school    | /schools/dashboard |
+        | School profile | None               |
 
   @smoke_test
   Scenario: Viewing the profile

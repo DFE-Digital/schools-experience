@@ -3,8 +3,8 @@
 <%
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
-    'Check your answers before setting up your school experience profile' => nil
-  }
+    'School profile' => nil
+  } if @current_school.private_beta?
 %>
 
 <div class="govuk-grid-row" id="school-onboarding-profile">

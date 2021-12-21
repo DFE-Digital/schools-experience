@@ -1,4 +1,11 @@
-<%- self.page_title = "Confirm attendance" -%>
+<%
+  self.page_title = "Confirm attendance"
+
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Confirm attendance' => nil
+  }
+%>
 
 <%= govuk_back_link schools_dashboard_path %>
 

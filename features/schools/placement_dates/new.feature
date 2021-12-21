@@ -11,14 +11,6 @@ Feature: Creating new placement dates
         Given I am on the 'new placement date' page
         Then the page title should be 'Add a date'
 
-    Scenario: Breadcrumbs
-        Given I am on the 'new placement date' page
-        Then I should see the following breadcrumbs:
-            | Text                    | Link                     |
-            | Some school             | /schools/dashboard       |
-            | Placement dates         | /schools/placement_dates |
-            | Create a placement date | None                     |
-
     Scenario: Placement date form
         Given I am on the 'new placement date' page
         Then I should see a form with the following fields:

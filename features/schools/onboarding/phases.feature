@@ -19,13 +19,6 @@ Feature: Phases
     Given I am on the 'phases' page
     Then the page title should be 'Which school phases do you offer experience with?'
 
-  Scenario: Breadcrumbs
-    Given I am on the 'phases' page
-    Then I should see the following breadcrumbs:
-        | Text                            | Link               |
-        | Some school                     | /schools/dashboard |
-        | Which school phases do you offer experience with? | None               |
-
   Scenario: Completing step choosing Primary phase only
     Given I am already on the 'phases' page
     And I check 'Primary'

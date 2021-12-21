@@ -12,13 +12,6 @@ Feature: Editing availability info
         Given I am on the 'availability information' page
         Then the page title should be 'Describe when you’ll host school experience candidates'
 
-    Scenario: Breadcrumbs
-        Given I am on the 'availability information' page
-        Then I should see the following breadcrumbs:
-            | Text                                                   | Link               |
-            | Some school                                            | /schools/dashboard |
-            | Describe when you’ll host school experience candidates | None               |
-
     Scenario: Page contents
         Given I am on the 'availability information' page
         Then there should be a 'Describe your school experience availability' text area

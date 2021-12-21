@@ -1,4 +1,11 @@
-<% self.page_title = "Past attendance" %>
+<%
+  self.page_title = "Past attendance"
+
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Past attendance' => nil
+  }
+%>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">

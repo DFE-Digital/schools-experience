@@ -17,7 +17,7 @@ Feature: Viewing all bookings
         Then I should see the following breadcrumbs:
             | Text            | Link               |
             | Some school     | /schools/dashboard |
-            | Manage bookings | None               |
+            | Bookings        | None               |
 
     Scenario: List presence
         Given there are some bookings

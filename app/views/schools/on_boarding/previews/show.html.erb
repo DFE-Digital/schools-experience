@@ -1,4 +1,12 @@
-<% self.page_title = @school.name %>
+<%
+  self.page_title = @school.name
+
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'School profile' => schools_on_boarding_profile_path,
+    'Preview' => nil
+  } if @current_school.private_beta?
+%>
 
 <%= govuk_back_link schools_on_boarding_profile_path, javascript: true %>
 

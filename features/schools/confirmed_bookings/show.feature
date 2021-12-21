@@ -21,7 +21,7 @@ Feature: Viewing a booking
         Then I should see the following breadcrumbs:
             | Text           | Link               |
             | Some school    | /schools/dashboard |
-            | All bookings   | /schools/bookings  |
+            | Bookings       | /schools/bookings  |
             | Booking        | None               |
 
     @smoke_test

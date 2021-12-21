@@ -87,6 +87,10 @@ Then("I should see the following breadcrumbs:") do |table|
   end
 end
 
+Then("I should not see any breadcrumbs") do
+  expect(page).not_to have_css('nav.govuk-breadcrumbs')
+end
+
 Then("I should see a email link to {string}") do |string|
   expect(page).to have_link(string, href: "mailto:#{string}")
 end

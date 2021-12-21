@@ -11,14 +11,6 @@ Feature: Editing placement dates
         Given I am on the edit page for my placement
         Then the page title should be 'Modify placement details'
 
-    Scenario: Breadcrumbs
-        Given I am on the edit page for my placement
-        Then I should see the following breadcrumbs:
-            | Text                     | Link                     |
-            | Some school              | /schools/dashboard       |
-            | Placement dates          | /schools/placement_dates |
-            | Modify placement details | None                     |
-
     Scenario: Placement date form
         Given I am on the edit page for my placement
         Then I should see a form with the following fields:
