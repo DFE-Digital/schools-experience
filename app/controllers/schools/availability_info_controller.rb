@@ -5,6 +5,7 @@ class Schools::AvailabilityInfoController < Schools::BaseController
     @current_school.assign_attributes(placement_date_params)
 
     if @current_school.save(context: :configuring_availability)
+      auto_enable_school
       redirect_to schools_dashboard_path
     else
       render :edit

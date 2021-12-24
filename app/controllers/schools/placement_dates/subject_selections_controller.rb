@@ -11,6 +11,7 @@ module Schools
         @subject_selection = SubjectSelection.new subject_selection_params
 
         if @subject_selection.save @placement_date
+          auto_enable_school
           redirect_to schools_placement_dates_path
         else
           render :new

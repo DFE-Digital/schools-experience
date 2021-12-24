@@ -57,6 +57,7 @@ private
       redirect_to new_schools_placement_date_configuration_path(placement_date)
     else
       placement_date.update! published_at: DateTime.now
+      auto_enable_school
       redirect_to schools_placement_dates_path
     end
   end
