@@ -100,3 +100,9 @@ Feature: School Profile
           | Parking                      | Not available on site\nCarpark next door         |
           | School teacher training info | We run our own training\nFind out more about     |
      And I should see the accessability information I have entered
+
+  Scenario: Confirmation acceptance for onboarded school
+      Given my school is fully-onboarded
+      And I am on the 'Profile' page
+      Then I should not see the confirmation acceptance container
+      And I should see a 'Publish changes' link

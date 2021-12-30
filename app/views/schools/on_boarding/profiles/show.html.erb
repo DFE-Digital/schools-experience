@@ -69,11 +69,16 @@
         <% end %>
       </dl>
 
-      <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
-        <%= f.check_box_input :acceptance %>
-      </div>
+      <% unless @current_school.private_beta? %>
+        <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
+          <%= f.check_box_input :acceptance %>
+        </div>
 
-      <%= f.submit 'Accept and set up profile' %>
+        <%= f.submit 'Accept and set up profile' %>
+      <% else %>
+        <%= govuk_link_to 'Publish changes', schools_on_boarding_profile_publish_path, method: :put %>
+      <% end %>
+
       <div>
         <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, class: 'govuk-button--secondary' %>
       </div>
