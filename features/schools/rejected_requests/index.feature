@@ -25,7 +25,7 @@ Feature: Viewing rejected requests
         Then I should see the rejected requests listed
 
     Scenario: Rejection category
-        Given a request has been rejected because of 'date_not_available'
+        Given a request has been rejected because of 'cancelation_requested'
         When I am on the 'rejected requests' page
         Then I should see a rejected request with the rejection reason displayed
 

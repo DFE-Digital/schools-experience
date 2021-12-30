@@ -17,7 +17,7 @@ end
 
 Then("I should see a preview of what I have entered") do
   within '#rejection-details' do
-    expect(page).to have_content 'We cannot support the date you have requested'
+    expect(page).to have_content 'You asked us to cancel your request'
   end
 
   within '#extra-details' do

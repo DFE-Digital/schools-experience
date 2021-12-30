@@ -674,12 +674,16 @@ en:
         reason: Cancellation reasons
         rejection_category:
           fully_booked: The date you requested is fully booked
-          accepted_on_ttc: We cannot offer you school experience because you have already been accepted on a Teacher Training Course
-          date_not_available: We cannot support the date you have requested
-          no_relevant_degree: We do not believe you have a relevant degree for the school experience you are applying for
-          no_phase_availability: We are unable to offer you school experience for the teaching phase you are interested in
-          candidate_not_local: We are looking for candidates that live locally to the school
+          accepted_on_ttc: We cannot offer you school experience because you've already been accepted on a teacher training course
+          date_not_available: We can no longer offer the date you've requested
+          no_relevant_degree: We do not believe you have a relevant degree for the school experience you're applying for
+          no_phase_availability: We're unable to offer you school experience for the teaching phase you're interested in
+          candidate_not_local: We're looking for candidates that live locally to the school
           duplicate: This is a duplicate request
+          info_not_provided: We did not hear back from you after contacting you for more information
+          cancelation_requested: You asked us to cancel your request
+          wrong_choice_secondary: You've told us you want to get primary school experience, but you've chosen a secondary school placement
+          wrong_choice_primary: You've told us you want to get secondary school experience, but you've chosen a primary school placement
       bookings_booking:
         duration: How long will it last?
         contact_name: Name

@@ -41,12 +41,16 @@ Feature: Rejecting placement requests
         When I am on the reject placement request page
         Then I should see radio buttons for 'Rejection reason' with the following options:
             | The date you requested is fully booked                                                                    |
-            | We cannot offer you school experience because you have already been accepted on a Teacher Training Course |
-            | We cannot support the date you have requested                                                             |
-            | We do not believe you have a relevant degree for the school experience you are applying for               |
-            | We are unable to offer you school experience for the teaching phase you are interested in                 |
-            | We are looking for candidates that live locally to the school                                             |
+            | We cannot offer you school experience because you've already been accepted on a teacher training course   |
+            | We can no longer offer the date you've requested                                                          |
+            | We do not believe you have a relevant degree for the school experience you're applying for                |
+            | We're unable to offer you school experience for the teaching phase you're interested in                   |
+            | We're looking for candidates that live locally to the school                                              |
             | This is a duplicate request                                                                               |
+            | We did not hear back from you after contacting you for more information                                   |
+            | You asked us to cancel your request                                                                       |
+            | You've told us you want to get primary school experience, but you've chosen a secondary school placement  |
+            | You've told us you want to get secondary school experience, but you've chosen a primary school placement  |
             | Other                                                                                                     |
         And there should be a 'Extra details' text area
         And the submit button should contain text 'Preview rejection email'
@@ -55,7 +59,7 @@ Feature: Rejecting placement requests
     Scenario: Rejecting the requests
         Given there is at least one placement request
         And I am on the reject placement request page
-        And I choose 'We cannot support the date you have requested' from the 'Rejection reason' radio buttons
+        And I choose 'You asked us to cancel your request' from the 'Rejection reason' radio buttons
         And I have entered a extra details in the extra details text area
         When I click the 'Preview rejection email' button
         Then I should see a preview of what I have entered

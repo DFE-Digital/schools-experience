@@ -33,7 +33,7 @@ Feature: Viewing a rejected request
 
     @smoke_test
     Scenario: Rejection category
-        Given a request has been rejected because of 'date_not_available'
+        Given a request has been rejected because of 'cancelation_requested'
         When I am viewing the rejected request
         Then I should see a rejected request with the rejection reason displayed in full
 

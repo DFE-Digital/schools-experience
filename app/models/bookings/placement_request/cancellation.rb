@@ -9,6 +9,10 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     no_phase_availability
     candidate_not_local
     duplicate
+    info_not_provided
+    cancelation_requested
+    wrong_choice_secondary
+    wrong_choice_primary
     other
   ].freeze
 

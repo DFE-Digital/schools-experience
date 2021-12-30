@@ -90,9 +90,9 @@ Given("a request has been rejected because of {string}") do |rejection_category|
 end
 
 Then("I should see a rejected request with the rejection reason displayed") do
-  expect(page).to have_css('td', text: 'We cannot support the date you have requested', count: 1)
+  expect(page).to have_css('td', text: 'You asked us to cancel your request', count: 1)
 end
 
 Then("I should see a rejected request with the rejection reason displayed in full") do
-  expect(page).to have_css('dd', text: 'We cannot support the date you have requested', count: 1)
+  expect(page).to have_css('dd', text: 'You asked us to cancel your request', count: 1)
 end
