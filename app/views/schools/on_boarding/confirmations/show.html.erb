@@ -5,28 +5,37 @@
   }
 %>
 
-<% self.page_title = "You've successfully set up your school experience profile" %>
+<% self.page_title = "You've completed step one of onboarding" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-panel govuk-panel--confirmation">
       <h1 class="govuk-panel__title">
-        You've set up your profile
+        You've completed step one of onboarding
       </h1>
     </div>
 
     <p>
-      You can now receive school experience requests from candidates.
+      Next you need to add placement dates to your profile.
     </p>
 
     <p>
-      <strong>
-        Try and respond to requests within 10 working days during term time.
-      </strong>
+      You can choose to add specific dates, or a description of when you can
+      offer school experience.
     </p>
 
     <p>
-      <%= govuk_link_to 'Your requests and bookings', schools_dashboard_path %>
+      Your profile will not be live until you've added dates.
     </p>
+    <p>
+      If you want to add dates later, return to your dashboard.
+    </p>
+
+    <div>
+      <%= govuk_link_to 'Add placement dates', edit_schools_availability_preference_path %>
+    </div>
+    <div>
+      <%= govuk_link_to 'Return to dashboard', schools_dashboard_path, secondary: true %>
+    </div>
   </div>
 </div>
