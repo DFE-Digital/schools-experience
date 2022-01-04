@@ -37,7 +37,7 @@ jobs:
             APPS=$(cf apps | cut -d ' ' -f1 | grep ${REVIEW_PREFIX} )
             for CHECK in $( echo $APPS ); do
                 PR="${CHECK/${REVIEW_PREFIX}-/}"
-                STATE=$(curl --header "Authorization: token ${secret.GITHUB_TOKEN}"  -s -X GET "https://api.github.com/repos/${REPOSITORY}/pulls/${PR}" | jq -r '.state ')
+                STATE=$(curl --header "Authorization: token ${GITHUB_TOKEN}"  -s -X GET "https://api.github.com/repos/${REPOSITORY}/pulls/${PR}" | jq -r '.state ')
                 echo "${REPOSITORY} Checking for PR - ${PR} ${STATE}"
                 if [[ ${STATE} == "closed" ]]; then
                    echo cf delete -f -r  ${CHECK}
@@ -46,7 +46,8 @@ jobs:
         env:
            REVIEW_PREFIX: review-school-experience
            REPOSITORY:    'DFE-Digital/schools-experience'
-            
+           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+           
       - name: Clean up Orphaned Routes
         run:  cf delete-orphaned-routes -f
 
