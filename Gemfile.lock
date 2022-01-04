@@ -634,7 +634,7 @@ DEPENDENCIES
   flipper
   flipper-active_support_cache_store
   flipper-redis
-  flipper-ui
+  flipper-ui (>= 0.23.0)
   foreman
   geocoder
   get_into_teaching_api_client_faraday!
