@@ -5,7 +5,7 @@
     "@googlemaps/js-api-loader": "^1.12.12",
     "@rails/webpacker": "^5.4.3",
     "@stimulus/polyfills": "^2.0.0",
-    "core-js": "^3.19.3",
+    "core-js": "^3.20.2",
     "custom-event-polyfill": "^1.0.7",
     "govuk-frontend": "^3.14.0",
     "js-cookie": "^3.0.1",
