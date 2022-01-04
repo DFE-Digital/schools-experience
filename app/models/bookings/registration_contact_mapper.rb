@@ -13,12 +13,8 @@ module Bookings
     def registration_to_contact
       gitis_contact.first_name = personal_information.first_name
       gitis_contact.last_name = personal_information.last_name
-      gitis_contact.email ||= personal_information.email
-      gitis_contact.secondary_email = personal_information.email
-
-      gitis_contact.secondary_telephone = contact_information.phone
-      gitis_contact.telephone ||= contact_information.phone
-      gitis_contact.address_telephone ||= contact_information.phone
+      gitis_contact.email = personal_information.email
+      gitis_contact.telephone = contact_information.phone
       gitis_contact.address_line1 = contact_information.building
       gitis_contact.address_line2 = contact_information.street
       gitis_contact.address_line3 = ""
@@ -42,7 +38,7 @@ module Bookings
 
     def contact_to_contact_information
       {
-        'phone' => gitis_contact.secondary_telephone.presence || gitis_contact.telephone.presence || gitis_contact.mobile_telephone,
+        'phone' => gitis_contact.telephone,
         'building' => gitis_contact.address_line1,
         'street' => gitis_contact.address_line2,
         'town_or_city' => gitis_contact.address_city,

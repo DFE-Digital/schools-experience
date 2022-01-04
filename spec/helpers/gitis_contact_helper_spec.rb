@@ -1,19 +1,6 @@
 require 'rails_helper'
 
 describe GitisContactHelper, type: :helper do
-  describe "#gitis_contact_display_phone" do
-    it "returns first non-nil of secondary_telephone, telephone then mobile_telephone" do
-      contact = build(:api_schools_experience_sign_up_with_name, telephone: nil, secondary_telephone: nil)
-      expect(helper.gitis_contact_display_phone(contact)).to eq(contact.mobile_telephone)
-
-      contact.telephone = "11111111"
-      expect(helper.gitis_contact_display_phone(contact)).to eq(contact.telephone)
-
-      contact.secondary_telephone = "22222222"
-      expect(helper.gitis_contact_display_phone(contact)).to eq(contact.secondary_telephone)
-    end
-  end
-
   describe "#gitis_contact_display_address" do
     it "returns the formatted address" do
       contact = build(:api_schools_experience_sign_up_with_name)

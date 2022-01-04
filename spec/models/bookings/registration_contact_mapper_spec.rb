@@ -43,10 +43,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(first_name: registration.personal_information.first_name) }
     it { is_expected.to have_attributes(last_name: registration.personal_information.last_name) }
     it { is_expected.to have_attributes(email: registration.personal_information.email) }
-    it { is_expected.to have_attributes(secondary_email: registration.personal_information.email) }
-    it { is_expected.to have_attributes(secondary_telephone: registration.contact_information.phone) }
     it { is_expected.to have_attributes(telephone: registration.contact_information.phone) }
-    it { is_expected.to have_attributes(address_telephone: registration.contact_information.phone) }
     it { is_expected.to have_attributes(address_line1: registration.contact_information.building) }
     it { is_expected.to have_attributes(address_line2: registration.contact_information.street) }
     it { is_expected.to have_attributes(address_line3: "") }
@@ -66,27 +63,6 @@ RSpec.describe Bookings::RegistrationContactMapper do
       end
 
       it { is_expected.to have_attributes(dbs_certificate_issued_at: nil) }
-    end
-
-    context "when email is already present on the contact" do
-      let(:existing_email) { "existing@email.com" }
-      let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(email: existing_email) }
-
-      it { is_expected.to have_attributes(email: existing_email) }
-    end
-
-    context "when telephone is already present on the contact" do
-      let(:existing_telephone) { "123456789" }
-      let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(telephone: existing_telephone) }
-
-      it { is_expected.to have_attributes(telephone: existing_telephone) }
-    end
-
-    context "when address_telephone is already present on the contact" do
-      let(:existing_address_telephone) { "123456789" }
-      let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(addressTelephone: existing_address_telephone) }
-
-      it { is_expected.to have_attributes(address_telephone: existing_address_telephone) }
     end
   end
 
@@ -115,24 +91,12 @@ RSpec.describe Bookings::RegistrationContactMapper do
     let(:mapper) { described_class.new(registration, contact) }
     subject { mapper.contact_to_contact_information }
 
-    it { is_expected.to include("phone" => contact.secondary_telephone) }
+    it { is_expected.to include("phone" => contact.telephone) }
     it { is_expected.to include("building" => contact.address_line1) }
     it { is_expected.to include("street" => contact.address_line2) }
     it { is_expected.to include("town_or_city" => contact.address_city) }
     it { is_expected.to include("county" => contact.address_state_or_province) }
     it { is_expected.to include("postcode" => contact.address_postcode) }
-
-    context "when secondary_telephone is not present" do
-      let(:contact) { build(:api_schools_experience_sign_up_with_name, secondary_telephone: nil) }
-
-      it { is_expected.to include("phone" => contact.telephone) }
-    end
-
-    context "when secondary_telephone and telephone are not present" do
-      let(:contact) { build(:api_schools_experience_sign_up_with_name, secondary_telephone: nil, telephone: nil) }
-
-      it { is_expected.to include("phone" => contact.mobile_telephone) }
-    end
   end
 
   describe "#contact_to_teaching_preference" do
