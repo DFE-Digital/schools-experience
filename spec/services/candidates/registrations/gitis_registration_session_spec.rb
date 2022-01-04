@@ -42,7 +42,7 @@ describe Candidates::Registrations::GitisRegistrationSession do
   describe 'Contact Information' do
     let(:model) { Candidates::Registrations::ContactInformation }
     let(:data) { { 'phone' => '01111 222333' } }
-    let(:gitis_data) { { 'phone' => contact.secondary_telephone } }
+    let(:gitis_data) { { 'phone' => contact.telephone } }
 
     describe '#contact_information_attributes' do
       include_examples "attributes with and without gitis data"

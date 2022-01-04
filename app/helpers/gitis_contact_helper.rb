@@ -1,9 +1,4 @@
 module GitisContactHelper
-  def gitis_contact_display_phone(contact)
-    contact.secondary_telephone.presence ||
-      contact.telephone.presence || contact.mobile_telephone
-  end
-
   def gitis_contact_display_address(contact)
     [
       contact.address_line1,
