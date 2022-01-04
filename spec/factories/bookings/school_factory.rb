@@ -104,5 +104,9 @@ FactoryBot.define do
     trait :with_profile do
       association :profile, factory: :bookings_profile
     end
+
+    trait :with_school_profile do
+      association :school_profile, factory: %i[school_profile completed]
+    end
   end
 end
