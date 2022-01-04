@@ -1,0 +1,52 @@
+name: Clean Closed Review Applications
+
+on:
+  workflow_dispatch:
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+            
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: PAAS-USERNAME
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-KEYS
+          secret: PAAS-USERNAME
+
+      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
+        id: PAAS-PASSWORD
+        with:
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-KEYS
+          secret: PAAS-PASSWORD
+          
+      - uses: DFE-Digital/github-actions/setup-cf-cli@master
+        with:
+          CF_USERNAME: ${{ steps.PAAS-USERNAME.outputs.secret-value }}
+          CF_PASSWORD: ${{ steps.PAAS-PASSWORD.outputs.secret-value  }}
+          CF_SPACE_NAME: get-into-teaching
+
+      - name: Delete Closed Review Applications 
+        run: |
+            APPS=$(cf apps | cut -d ' ' -f1 | grep ${ENV.REVIEW_PREFIX} )
+            for CHECK in $( echo $APPS ); do
+                PR="${CHECK/${ENV.REVIEW_PREFIX}-/}"
+                STATE=$(curl --header "Authorization: token ${secret.GITHUB_TOKEN}"  -s -X GET "https://api.github.com/repos/${ENV.REPOSITORY}/pulls/${PR}" | jq -r '.state ')
+                echo "${ENV.REPOSITORY} Checking for PR - ${PR} ${STATE}"
+                if [[ ${STATE} == "closed" ]]; then
+                   echo cf delete -f -r  ${CHECK}
+                fi
+            done
+        env:
+           REVIEW_PREFIX: review-school-experience
+           REPOSITORY:    'DFE-Digital/schools-experience'
+            
+      - name: Clean up Orphaned Routes
+        run:  cf delete-orphaned-routes -f
+
