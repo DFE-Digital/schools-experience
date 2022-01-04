@@ -45,8 +45,8 @@ describe Candidates::Registrations::PersonalInformation, type: :model do
     let(:request) do
       GetIntoTeachingApiClient::ExistingCandidateRequest.new(
         email: pinfo.email,
-        firstName: pinfo.first_name,
-        lastName: pinfo.last_name
+        first_name: pinfo.first_name,
+        last_name: pinfo.last_name
       )
     end
 

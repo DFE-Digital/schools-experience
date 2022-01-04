@@ -30,11 +30,11 @@ module Bookings
 
       def classroom_experience_note
         GetIntoTeachingApiClient::ClassroomExperienceNote.new(
-          recordedAt: @recorded_date,
+          recorded_at: @recorded_date,
           action: @action,
           date: @date,
-          schoolUrn: @urn,
-          schoolName: @name,
+          school_urn: @urn,
+          school_name: @name,
         )
       end
 

@@ -62,22 +62,21 @@ private
 
   def fake_sign_up_data
     {
-      candidateId: fake_candidate_id,
-      firstName: 'Matthew',
-      lastName: 'Richards',
-      fullName: 'Matthew Richards',
-      mobileTelephone: '07123 456789',
+      candidate_id: fake_candidate_id,
+      first_name: 'Matthew',
+      last_name: 'Richards',
+      full_name: 'Matthew Richards',
+      mobile_telephone: '07123 456789',
       telephone: '01234 567890',
       email: 'first@thisaddress.com',
-      secondaryEmail: 'second@thisaddress.com',
-      addressLine1: 'First Line',
-      addressLine2: 'Second Line',
-      addressLine3: 'Third Line',
-      addressCity: 'Manchester',
-      addressStateOrProvince: 'Manchester',
-      addressPostcode: 'TE57 1NG',
-      addressTelephone: '01234 567890',
-      dateOfBirth: '1980-01-01',
+      secondary_email: 'second@thisaddress.com',
+      address_line1: 'First Line',
+      address_line2: 'Second Line',
+      address_line3: 'Third Line',
+      address_city: 'Manchester',
+      address_state_or_province: 'Manchester',
+      address_postcode: 'TE57 1NG',
+      address_telephone: '01234 567890',
       merged: false
     }
   end

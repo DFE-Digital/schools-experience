@@ -59,8 +59,8 @@ shared_context "api correct verification code for personal info" do
   let(:code) { "123456" }
   let(:request) do
     GetIntoTeachingApiClient::ExistingCandidateRequest.new(
-      firstName: personal_info.first_name,
-      lastName: personal_info.last_name,
+      first_name: personal_info.first_name,
+      last_name: personal_info.last_name,
       email: personal_info.email
     )
   end
@@ -77,8 +77,8 @@ shared_context "api correct verification code for personal info without name" do
   let(:code) { "123456" }
   let(:request) do
     GetIntoTeachingApiClient::ExistingCandidateRequest.new(
-      firstName: personal_info.first_name,
-      lastName: personal_info.last_name,
+      first_name: personal_info.first_name,
+      last_name: personal_info.last_name,
       email: personal_info.email
     )
   end

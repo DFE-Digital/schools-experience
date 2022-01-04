@@ -112,8 +112,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
       let(:candidate2) { create(:candidate, :confirmed, :with_api_contact) }
       let(:request2) do
         GetIntoTeachingApiClient::ExistingCandidateRequest.new(
-          firstName: candidate2.gitis_contact.first_name,
-          lastName: candidate2.gitis_contact.last_name,
+          first_name: candidate2.gitis_contact.first_name,
+          last_name: candidate2.gitis_contact.last_name,
           email: candidate2.gitis_contact.email
         )
       end

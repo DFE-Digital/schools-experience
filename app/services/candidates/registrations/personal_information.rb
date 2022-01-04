@@ -55,8 +55,8 @@ module Candidates
       def matchback_attributes
         {
           email: email,
-          firstName: first_name,
-          lastName: last_name
+          first_name: first_name,
+          last_name: last_name
         }
       end
     end

@@ -17,7 +17,7 @@ protected
   def current_contact
     return nil unless session[:gitis_contact]
 
-    GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(session[:gitis_contact])
+    GetIntoTeachingApiClient::SchoolsExperienceSignUp.build_from_hash(session[:gitis_contact])
   end
 
   def current_contact=(contact)

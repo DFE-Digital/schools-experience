@@ -72,8 +72,8 @@ describe Candidates::VerificationCode do
       let(:request) do
         GetIntoTeachingApiClient::ExistingCandidateRequest.new(
           email: personal_info.email,
-          firstName: personal_info.first_name,
-          lastName: personal_info.last_name
+          first_name: personal_info.first_name,
+          last_name: personal_info.last_name
         )
       end
 

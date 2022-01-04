@@ -27,13 +27,7 @@ class Candidates::VerificationCode
   def exchange
     return false unless valid?
 
-    identity_data = {
-      firstName: firstname,
-      lastName: lastname,
-      email: email
-    }
-
-    request = GetIntoTeachingApiClient::ExistingCandidateRequest.new(identity_data)
+    request = GetIntoTeachingApiClient::ExistingCandidateRequest.new(matchback_attributes)
     api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
     existing_sign_up = api.exchange_access_token_for_schools_experience_sign_up(code, request)
 
@@ -51,8 +45,8 @@ private
   def matchback_attributes
     {
       email: email,
-      firstName: firstname,
-      lastName: lastname
+      first_name: firstname,
+      last_name: lastname
     }
   end
 end
