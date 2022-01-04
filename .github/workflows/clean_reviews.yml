@@ -34,11 +34,11 @@ jobs:
 
       - name: Delete Closed Review Applications 
         run: |
-            APPS=$(cf apps | cut -d ' ' -f1 | grep ${ENV.REVIEW_PREFIX} )
+            APPS=$(cf apps | cut -d ' ' -f1 | grep ${REVIEW_PREFIX} )
             for CHECK in $( echo $APPS ); do
-                PR="${CHECK/${ENV.REVIEW_PREFIX}-/}"
-                STATE=$(curl --header "Authorization: token ${secret.GITHUB_TOKEN}"  -s -X GET "https://api.github.com/repos/${ENV.REPOSITORY}/pulls/${PR}" | jq -r '.state ')
-                echo "${ENV.REPOSITORY} Checking for PR - ${PR} ${STATE}"
+                PR="${CHECK/${REVIEW_PREFIX}-/}"
+                STATE=$(curl --header "Authorization: token ${secret.GITHUB_TOKEN}"  -s -X GET "https://api.github.com/repos/${REPOSITORY}/pulls/${PR}" | jq -r '.state ')
+                echo "${REPOSITORY} Checking for PR - ${PR} ${STATE}"
                 if [[ ${STATE} == "closed" ]]; then
                    echo cf delete -f -r  ${CHECK}
                 fi
