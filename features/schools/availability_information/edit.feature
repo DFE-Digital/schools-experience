@@ -36,3 +36,11 @@ Feature: Editing availability info
         And I click the 'Save availability description' submit button
         Then I should be on the 'schools dashboard' page
         And my school's availabiltiy info should have been updated
+
+    Scenario: Auto-enabling school
+        Given my school is disabled
+        And I am on the 'availability information' page
+        When I enter 'Every third Tuesday' into the 'Describe your school experience availability' text area
+        And I choose 'Virtual experience' from the "School experience type" radio buttons
+        And I click the 'Save availability description' submit button
+        Then my school should be enabled

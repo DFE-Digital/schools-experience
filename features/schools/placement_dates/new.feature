@@ -31,6 +31,7 @@ Feature: Creating new placement dates
         And I fill in the 'Enter start date' date field with an invalid date of 31st September next year
         When I submit the form
         Then I should see an error message stating 'Enter a start date'
+        And my school should be disabled
 
     Scenario: Filling in and submitting the form
         Given my school is a 'primary' school
@@ -38,6 +39,7 @@ Feature: Creating new placement dates
         When I fill in the form with a future date and duration of 3
         And I submit the form
         Then I should be on the 'placement dates' page
+        And my school should be enabled
 
     Scenario: Primary and secondary schools: extra option
         Given my school is a 'primary and secondary' school
@@ -53,6 +55,7 @@ Feature: Creating new placement dates
         And I choose 'Primary including early years, key stage 1 and key stage 2' from the 'Select school experience phase' radio buttons
         And I submit the form
         Then I should be on the 'placement dates' page
+        And my school should be enabled
 
     Scenario: Primary and secondary schools: selecting secondary
         Given my school is a 'primary and secondary' school

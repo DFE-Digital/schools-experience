@@ -24,6 +24,7 @@ module Schools
         if @configuration.subject_specific?
           new_schools_placement_date_subject_selection_path @placement_date
         else
+          auto_enable_school
           schools_placement_dates_path
         end
       end

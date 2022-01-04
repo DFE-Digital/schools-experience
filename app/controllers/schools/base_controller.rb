@@ -80,5 +80,9 @@ module Schools
     def show_candidate_alert_notification?
       false
     end
+
+    def auto_enable_school
+      current_school.update(enabled: true) unless current_school.enabled?
+    end
   end
 end
