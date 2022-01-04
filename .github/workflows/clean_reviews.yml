@@ -40,7 +40,7 @@ jobs:
                 STATE=$(curl --header "Authorization: token ${GITHUB_TOKEN}"  -s -X GET "https://api.github.com/repos/${REPOSITORY}/pulls/${PR}" | jq -r '.state ')
                 echo "${REPOSITORY} Checking for PR - ${PR} ${STATE}"
                 if [[ ${STATE} == "closed" ]]; then
-                   echo cf delete -f -r  ${CHECK}
+                   cf delete -f -r  ${CHECK}
                 fi
             done
         env:
