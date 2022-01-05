@@ -2,15 +2,15 @@ require 'rails_helper'
 
 RSpec.describe "candidates/registrations/personal_informations/_form.html.erb", type: :view do
   let(:email_selector) do
-    "input#candidates_registrations_personal_information_email"
+    "input#candidates-registrations-personal-information-email-field"
   end
 
   let(:fname_selector) do
-    "input#candidates_registrations_personal_information_first_name"
+    "input#candidates-registrations-personal-information-first-name-field"
   end
 
   let(:lname_selector) do
-    "input#candidates_registrations_personal_information_last_name"
+    "input#candidates-registrations-personal-information-last-name-field"
   end
 
   before do

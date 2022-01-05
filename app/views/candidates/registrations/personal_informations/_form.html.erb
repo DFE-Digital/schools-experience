@@ -19,25 +19,25 @@
         Get Into Teaching offers help and advice about becoming a teacher.
         </p>
 
-        <%= form_for personal_information,
+        <%= govuk_form_for personal_information,
               url: candidates_school_registrations_personal_information_path,
               data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
 
-          <%= GovukElementsErrorsHelper.error_summary personal_information, 'There is a problem', '' %>
+          <%= f.govuk_error_summary %>
 
-          <%= f.text_field :first_name, autocomplete: 'given-name',
+          <%= f.govuk_text_field :first_name, autocomplete: 'given-name',
                 readonly: personal_information.read_only,
                 disabled: personal_information.read_only %>
 
-          <%= f.text_field :last_name, autocomplete: 'family-name',
+          <%= f.govuk_text_field :last_name, autocomplete: 'family-name',
                 readonly: personal_information.read_only,
                 disabled: personal_information.read_only %>
 
-          <%= f.email_field :email, autocomplete: 'on',
+          <%= f.govuk_email_field :email, autocomplete: 'on',
                 readonly: personal_information.read_only,
                 disabled: personal_information.read_only %>
 
-          <%= f.submit 'Continue', data: { prevent_double_click_target: "submitButton" } %>
+          <%= f.govuk_submit 'Continue', data: { prevent_double_click_target: "submitButton" } %>
         <% end %>
       </div>
     </div>

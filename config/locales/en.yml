@@ -695,6 +695,8 @@ en:
         building: "Building and street"
         phone: "UK telephone number"
       candidates_registrations_personal_information:
+        first_name: First name
+        last_name: Last name
         email: 'Email address'
       candidates_registrations_teaching_preference:
         teaching_stage: Which of the following best describes how you feel about teaching?
