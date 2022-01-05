@@ -63,8 +63,8 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
           expect(profile.description_details).to eq('new description')
         end
 
-        it 'redirects the to the confirmation show path' do
-          expect(response).to redirect_to schools_on_boarding_confirmation_path
+        it 'redirects the to the publish confirmation page' do
+          expect(response).to redirect_to schools_on_boarding_profile_publish_confirmation_path
         end
       end
 
@@ -84,7 +84,7 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
         end
 
         it 'redirects the to the confirmation show path' do
-          expect(response).to redirect_to schools_on_boarding_confirmation_path
+          expect(response).to redirect_to schools_on_boarding_profile_publish_confirmation_path
         end
       end
     end

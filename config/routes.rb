@@ -147,6 +147,7 @@ Rails.application.routes.draw do
       resource :confirmation, only: %i[create show]
 
       get "profile/publish", to: "profiles#publish"
+      get "profile/publish_confirmation", to: "profiles#publish_confirmation"
     end
 
     resources :feedbacks, only: %i[new create show]
