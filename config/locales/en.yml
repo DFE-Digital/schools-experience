@@ -505,7 +505,6 @@ en:
       bookings_booking:
         date: Booking date
       bookings_school:
-        enabled: Turn profile on or off
         availability_preference_fixed: Choose how dates are displayed
         experience_type: School experience type
       bookings_placement_date:
@@ -644,10 +643,6 @@ en:
       schools_placement_requests_confirm_booking:
         bookings_subject_id: Confirm subject
         placement_details: Confirm experience details
-      bookings_school:
-        enabled:
-          true: Turn profile on to allow requests
-          false: Turn profile off
         availability_preference_fixed:
           true_html: Show specific dates
           false_html: Show a description of when you can host candidates
@@ -920,6 +915,8 @@ en:
         has_dbs_check: Do you have a DBS certificate?
       candidates_registrations_privacy_policy:
         acceptance: Send your school experience request
+      bookings_school:
+        enabled: Turn profile on or off
 
   views:
     pagination:
