@@ -146,7 +146,7 @@ Rails.application.routes.draw do
       resource :preview, only: :show
       resource :confirmation, only: %i[create show]
 
-      put "profile/publish", to: "profiles#publish"
+      get "profile/publish", to: "profiles#publish"
     end
 
     resources :feedbacks, only: %i[new create show]
