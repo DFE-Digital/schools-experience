@@ -1,13 +1,13 @@
 <% self.page_title = 'Check your answers' %>
 <%= govuk_back_link %>
 <div class="govuk-grid-row" id="application-preview">
-  <%= form_for @privacy_policy,
+  <%= govuk_form_for @privacy_policy,
         url: candidates_school_registrations_confirmation_email_path,
         data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>You'll receive an email with the following details once you've sent your school experience request.</p>
-    <%= GovukElementsErrorsHelper.error_summary @privacy_policy, 'There is a problem', '' %>
+    <%= f.govuk_error_summary %>
 
     <h2 class="govuk-heading-m">Personal details</h2>
     <dl class="govuk-summary-list">
@@ -127,14 +127,26 @@
     </dl>
   </div>
   <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-m">Send your school experience request</h2>
-      <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
-        <%= f.check_box_input :acceptance %>
+      <div class="govuk-form-group">
+        <%= f.govuk_check_boxes_fieldset :acceptance, multiple: false do %>
+          <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "By checking this box you're confirming that:" } %>
+          <p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>the details you've provided are correct</li>
+              <li>you're aged 18 or over</li>
+              <li>you've read our <a href="/privacy_policy" class="govuk-link">privacy policy</a></li>
+              <li>you understand that the DfE's
+              <a href="https://getintoteaching.education.gov.uk/" class="govuk-link">Get Into Teaching Information Service</a>
+              will use your personal details to provide you with
+              tailored advice and information about teacher training and a career as a teacher</li>
+            </ul>
+          </p>
+        <% end %>
       </div>
       <% if candidate_signed_in? %>
-        <%= f.submit 'Accept and send', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
+        <%= f.govuk_submit 'Accept and send', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
       <% else %>
-        <%= f.submit 'Continue', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
+        <%= f.govuk_submit 'Continue', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
       <% end %>
   </div>
   <% end %>
