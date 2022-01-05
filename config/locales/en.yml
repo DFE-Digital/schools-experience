@@ -519,8 +519,6 @@ en:
       disability_confident: Disability and access needs
       fees: Fees
       subjects: Subjects
-      candidates_registrations_background_check:
-        has_dbs_check: Do you have a DBS certificate?
       candidates_registrations_teaching_preference:
         teaching_stage: Which of the following best describes how you feel about teaching?
       candidates_registrations_subject_preference:
@@ -709,10 +707,6 @@ en:
         degree_subject: If you have or are studying for a degree, tell us about your degree subject
         subject_first_choice: "First choice"
         subject_second_choice: "Second choice"
-      candidates_registrations_background_check:
-        has_dbs_check:
-          true: "Yes"
-          false: "No"
       candidates_registrations_placement_preference:
         availability: Tell us about your availability
         objectives: What do you want to get out of your school experience?
@@ -933,6 +927,8 @@ en:
         degree_stage: What stage are you at with your degree?
       candidates_registrations_teaching_preference:
         teaching_stage: Which of the following best describes how you feel about teaching?
+      candidates_registrations_background_check:
+        has_dbs_check: Do you have a DBS certificate?
 
   views:
     pagination:
