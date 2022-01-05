@@ -101,8 +101,8 @@ Feature: School Profile
           | School teacher training info | We run our own training\nFind out more about     |
      And I should see the accessability information I have entered
 
-  Scenario: Confirmation acceptance for onboarded school
+  Scenario: Publish profile for onboarded school
       Given my school is fully-onboarded
       And I am on the 'Profile' page
-      Then I should not see the confirmation acceptance container
-      And I should see a 'Publish changes' link
+      And I click the 'Publish changes' button
+      Then the page title should be "You've successfully set up your school experience profile"

@@ -54,7 +54,7 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
           school_profile.bookings_school.profile = bookings_profile
           school_profile.update(description_details: 'new description')
 
-          put schools_on_boarding_profile_publish_path
+          get schools_on_boarding_profile_publish_path
         end
 
         it 'publishes the changes' do
@@ -76,7 +76,7 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
         before do
           school_profile.update(description_details: 'new description')
 
-          put schools_on_boarding_profile_publish_path
+          get schools_on_boarding_profile_publish_path
         end
 
         it 'does not publishes the profile' do
