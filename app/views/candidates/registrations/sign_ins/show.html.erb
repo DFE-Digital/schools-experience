@@ -27,14 +27,16 @@
       <li><%= @email_address %></li>
     </ul>
 
-    <%= form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
+    <%= govuk_form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
+      <%= f.govuk_error_summary %>
+
       <%= f.hidden_field :email %>
       <%= f.hidden_field :firstname %>
       <%= f.hidden_field :lastname %>
 
-      <%= f.text_field :code %>
+      <%= f.govuk_text_field :code %>
 
-      <%= f.submit "Submit" %>
+      <%= f.govuk_submit "Submit" %>
     <% end %>
 
     <p>
