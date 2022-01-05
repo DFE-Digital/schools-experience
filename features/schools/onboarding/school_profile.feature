@@ -101,8 +101,8 @@ Feature: School Profile
           | School teacher training info | We run our own training\nFind out more about     |
      And I should see the accessability information I have entered
 
-  Scenario: Publish profile for onboarded school
+  Scenario: Publishing profile for onboarded school
       Given my school is fully-onboarded
       And I am on the 'Profile' page
       And I click the 'Publish changes' button
-      Then the page title should be "You've successfully set up your school experience profile"
+      Then the page title should be "You've updated your profile"

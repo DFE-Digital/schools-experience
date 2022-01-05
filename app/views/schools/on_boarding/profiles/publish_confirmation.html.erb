@@ -1,0 +1,26 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    "You've updated your profile" => nil
+  }
+%>
+
+<% self.page_title = "You've updated your profile" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        You've updated your profile
+      </h1>
+    </div>
+
+    <p>
+      You have published your recent changes. Your school profile is now up to date.
+    </p>
+
+    <p>
+      <%= govuk_link_to 'Return to dashboard', schools_dashboard_path %>
+    </p>
+  </div>
+</div>

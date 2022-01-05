@@ -17,8 +17,10 @@ module Schools
           Bookings::ProfilePublisher.new(current_school, current_school_profile).update!
         end
 
-        redirect_to schools_on_boarding_confirmation_path
+        redirect_to schools_on_boarding_profile_publish_confirmation_path
       end
+
+      def publish_confirmation; end
     end
   end
 end
