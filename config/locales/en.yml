@@ -654,7 +654,8 @@ en:
 
       bookings_placement_date:
         duration: How long will it last?
-        active: Make this date available to candidates?
+        active_options:
+          1: Make this date available to candidates?
         supports_subjects:
           yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
           no: Primary including early years, key stage 1 and key stage 2
