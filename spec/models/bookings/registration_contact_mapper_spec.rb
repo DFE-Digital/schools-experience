@@ -58,7 +58,7 @@ RSpec.describe Bookings::RegistrationContactMapper do
     context "when has_dbs_certificate is changing" do
       let(:contact) do
         GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(
-          hasDbsCertificate: !registration.background_check.has_dbs_check
+          has_dbs_certificate: !registration.background_check.has_dbs_check
         )
       end
 

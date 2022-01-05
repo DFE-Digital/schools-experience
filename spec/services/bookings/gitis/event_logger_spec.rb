@@ -32,17 +32,21 @@ describe Bookings::Gitis::EventLogger, type: :model do
     describe "#classroom_experience_note" do
       subject { described_class.new(log_type, log_subject).classroom_experience_note }
 
-      it { is_expected.to include(recordedAt: today) }
-      it { is_expected.to include(action: "REQUEST") }
-      it { is_expected.to include(schoolUrn: school.urn) }
-      it { is_expected.to include(schoolName: school.name) }
+      it "has expected attributes" do
+        is_expected.to have_attributes(
+          recorded_at: today,
+          action: "REQUEST",
+          school_urn: school.urn,
+          school_name: school.name
+        )
+      end
 
       context "with fixed dates" do
         let(:date) { create(:bookings_placement_date, bookings_school: log_subject.school) }
 
         before { log_subject.update!(placement_date: date) }
 
-        it { is_expected.to include(date: date.date) }
+        it { is_expected.to have_attributes(date: date.date) }
       end
     end
   end
@@ -61,11 +65,15 @@ describe Bookings::Gitis::EventLogger, type: :model do
     describe "#classroom_experience_note" do
       subject { described_class.new(log_type, log_subject).classroom_experience_note }
 
-      it { is_expected.to include(recordedAt: today) }
-      it { is_expected.to include(action: "ACCEPTED") }
-      it { is_expected.to include(date: log_subject.date) }
-      it { is_expected.to include(schoolUrn: school.urn) }
-      it { is_expected.to include(schoolName: school.name) }
+      it "has expected attributes" do
+        is_expected.to have_attributes(
+          recorded_at: today,
+          action: "ACCEPTED",
+          date: log_subject.date,
+          school_urn: school.urn,
+          school_name: school.name
+        )
+      end
     end
   end
 
@@ -85,10 +93,14 @@ describe Bookings::Gitis::EventLogger, type: :model do
       describe "#classroom_experience_note" do
         subject { described_class.new(log_type, log_subject).classroom_experience_note }
 
-        it { is_expected.to include(recordedAt: today) }
-        it { is_expected.to include(action: "CANCELLED BY CANDIDATE") }
-        it { is_expected.to include(schoolUrn: school.urn) }
-        it { is_expected.to include(schoolName: school.name) }
+        it "has expected attributes" do
+          is_expected.to have_attributes(
+            recorded_at: today,
+            action: "CANCELLED BY CANDIDATE",
+            school_urn: school.urn,
+            school_name: school.name
+          )
+        end
       end
     end
 
@@ -105,10 +117,14 @@ describe Bookings::Gitis::EventLogger, type: :model do
       describe "#classroom_experience_note" do
         subject { described_class.new(log_type, log_subject).classroom_experience_note }
 
-        it { is_expected.to include(recordedAt: today) }
-        it { is_expected.to include(action: "CANCELLED BY SCHOOL") }
-        it { is_expected.to include(schoolUrn: school.urn) }
-        it { is_expected.to include(schoolName: school.name) }
+        it "has expected attributes" do
+          is_expected.to have_attributes(
+            recorded_at: today,
+            action: "CANCELLED BY SCHOOL",
+            school_urn: school.urn,
+            school_name: school.name
+          )
+        end
       end
     end
 
@@ -126,11 +142,15 @@ describe Bookings::Gitis::EventLogger, type: :model do
       describe "#classroom_experience_note" do
         subject { described_class.new(log_type, log_subject).classroom_experience_note }
 
-        it { is_expected.to include(recordedAt: today) }
-        it { is_expected.to include(action: "CANCELLED BY CANDIDATE") }
-        it { is_expected.to include(date: booking.date) }
-        it { is_expected.to include(schoolUrn: school.urn) }
-        it { is_expected.to include(schoolName: school.name) }
+        it "has expected attributes" do
+          is_expected.to have_attributes(
+            recorded_at: today,
+            date: booking.date,
+            action: "CANCELLED BY CANDIDATE",
+            school_urn: school.urn,
+            school_name: school.name
+          )
+        end
       end
     end
 
@@ -148,11 +168,15 @@ describe Bookings::Gitis::EventLogger, type: :model do
       describe "#classroom_experience_note" do
         subject { described_class.new(log_type, log_subject).classroom_experience_note }
 
-        it { is_expected.to include(recordedAt: today) }
-        it { is_expected.to include(action: "CANCELLED BY SCHOOL") }
-        it { is_expected.to include(date: booking.date) }
-        it { is_expected.to include(schoolUrn: school.urn) }
-        it { is_expected.to include(schoolName: school.name) }
+        it "has expected attributes" do
+          is_expected.to have_attributes(
+            recorded_at: today,
+            date: booking.date,
+            action: "CANCELLED BY SCHOOL",
+            school_urn: school.urn,
+            school_name: school.name
+          )
+        end
       end
     end
   end
@@ -175,11 +199,15 @@ describe Bookings::Gitis::EventLogger, type: :model do
       describe "#classroom_experience_note" do
         subject { described_class.new(log_type, log_subject).classroom_experience_note }
 
-        it { is_expected.to include(recordedAt: today) }
-        it { is_expected.to include(action: "ATTENDED") }
-        it { is_expected.to include(date: booking.date) }
-        it { is_expected.to include(schoolUrn: school.urn) }
-        it { is_expected.to include(schoolName: school.name) }
+        it "has expected attributes" do
+          is_expected.to have_attributes(
+            recorded_at: today,
+            date: booking.date,
+            action: "ATTENDED",
+            school_urn: school.urn,
+            school_name: school.name
+          )
+        end
       end
     end
 
@@ -195,11 +223,15 @@ describe Bookings::Gitis::EventLogger, type: :model do
       describe "#classroom_experience_note" do
         subject { described_class.new(log_type, log_subject).classroom_experience_note }
 
-        it { is_expected.to include(recordedAt: today) }
-        it { is_expected.to include(action: "DID NOT ATTEND") }
-        it { is_expected.to include(date: booking.date) }
-        it { is_expected.to include(schoolUrn: school.urn) }
-        it { is_expected.to include(schoolName: school.name) }
+        it "has expected attributes" do
+          is_expected.to have_attributes(
+            recorded_at: today,
+            date: booking.date,
+            action: "DID NOT ATTEND",
+            school_urn: school.urn,
+            school_name: school.name
+          )
+        end
       end
     end
   end
