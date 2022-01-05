@@ -698,7 +698,6 @@ en:
         last_name: Last name
         email: 'Email address'
       candidates_registrations_teaching_preference:
-        teaching_stage: Which of the following best describes how you feel about teaching?
         subject_first_choice: "First choice"
         subject_second_choice: "Second choice"
       candidates_registrations_education:
@@ -932,6 +931,8 @@ en:
         <<: *feedback_legend
       candidates_registrations_education:
         degree_stage: What stage are you at with your degree?
+      candidates_registrations_teaching_preference:
+        teaching_stage: Which of the following best describes how you feel about teaching?
 
   views:
     pagination:

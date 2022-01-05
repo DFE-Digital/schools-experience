@@ -1,14 +1,10 @@
 <% self.page_title = 'Which of the following best describes how you feel about teaching?' %>
 <%= govuk_back_link %>
 <div id="teaching-preference">
-  <%= form_for teaching_preference, url: candidates_school_registrations_teaching_preference_path, data: { controller: 'subject-preference-form' } do |f| %>
-    <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+  <%= govuk_form_for teaching_preference, url: candidates_school_registrations_teaching_preference_path, data: { controller: 'subject-preference-form' } do |f| %>
+    <%= f.govuk_error_summary %>
 
-    <%= f.radio_button_fieldset :teaching_stage do |fieldset| %>
-      <% f.object.available_teaching_stages.each do |teaching_stage| %>
-        <%= fieldset.radio_input teaching_stage, text_method: :to_s %>
-      <% end %>
-    <% end %>
+    <%= f.govuk_collection_radio_buttons :teaching_stage, f.object.available_teaching_stages, :to_s, :to_s %>
 
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -18,26 +14,25 @@
         Select the nearest or equivalent subject and at least 1 subject.
       </p>
       <div class="govuk-form-group">
-        <%= f.collection_select \
+        <%= f.govuk_collection_select \
           :subject_first_choice,
           f.object.available_subject_choices.sort,
           :to_s,
           :to_s,
-          { prompt: 'Select' },
-          { class: 'govuk-select govuk-!-width-one-half' } %>
+          options: { prompt: "Select" },
+          class: 'govuk-select govuk-!-width-one-half' %>
       </div>
 
       <div class="govuk-form-group">
-        <%= f.collection_select \
+        <%= f.govuk_collection_select \
           :subject_second_choice,
           f.object.second_subject_choices,
           :to_s,
           :to_s,
-          {},
-          { class: 'govuk-select govuk-!-width-one-half' } %>
+          class: 'govuk-select govuk-!-width-one-half' %>
       </div>
     </fieldset>
 
-    <%= f.submit 'Continue' %>
+    <%= f.govuk_submit 'Continue' %>
   <% end %>
 </div>
