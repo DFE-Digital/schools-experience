@@ -521,8 +521,6 @@ en:
       subjects: Subjects
       candidates_registrations_background_check:
         has_dbs_check: Do you have a DBS certificate?
-      candidates_registrations_education:
-        degree_stage: What stage are you at with your degree?
       candidates_registrations_teaching_preference:
         teaching_stage: Which of the following best describes how you feel about teaching?
       candidates_registrations_subject_preference:
@@ -932,6 +930,8 @@ en:
         <<: *feedback_legend
       schools_feedback:
         <<: *feedback_legend
+      candidates_registrations_education:
+        degree_stage: What stage are you at with your degree?
 
   views:
     pagination:
