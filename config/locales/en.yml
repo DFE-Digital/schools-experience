@@ -507,10 +507,6 @@ en:
       bookings_school:
         availability_preference_fixed: Choose how dates are displayed
         experience_type: School experience type
-      bookings_placement_date:
-        date: Enter start date
-        supports_subjects: Select school experience phase
-        virtual: Experience type
       bookings_placement_request_cancellation:
         rejection_category: Rejection reason
       phases: Education phases
@@ -656,10 +652,10 @@ en:
         duration: How long will it last?
         active_options:
           1: Make this date available to candidates?
-        supports_subjects:
-          yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
-          no: Primary including early years, key stage 1 and key stage 2
-        virtual:
+        supports_subjects_options:
+          true: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
+          false: Primary including early years, key stage 1 and key stage 2
+        virtual_options:
           true: Virtual experience
           false: In school experience
       bookings_placement_request_cancellation:
@@ -918,6 +914,10 @@ en:
         acceptance: Send your school experience request
       bookings_school:
         enabled: Turn profile on or off
+      bookings_placement_date:
+        date: Enter start date
+        supports_subjects: Select school experience phase
+        virtual: Experience type
 
   views:
     pagination:
