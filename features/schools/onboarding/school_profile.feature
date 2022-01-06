@@ -76,7 +76,7 @@ Feature: School Profile
   Scenario: Publishing with accepting the privacy policy
       Given I check the 'By checking this box and setting up your school experience profile' checkbox
       When I click the 'Accept and set up profile' button
-      Then the page title should be "You've successfully set up your school experience profile"
+      Then the page title should be "You've completed step one of onboarding"
 
   @smoke_test
   Scenario: Publishing with accepting the privacy policy
