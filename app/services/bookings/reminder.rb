@@ -1,4 +1,4 @@
-# Bookings::Reminder is responsible for sending an email to a candidate
+# Bookings::Reminder is responsible for sending an email and SMS to a candidate
 # informing them that they have an upcoming school experience
 class Bookings::Reminder
   include GitisAccess
@@ -13,6 +13,13 @@ class Bookings::Reminder
   end
 
   def deliver
+    despatch_reminder_email
+    despatch_reminder_sms
+  end
+
+private
+
+  def despatch_reminder_email
     NotifyEmail::CandidateBookingReminder.from_booking(
       @booking.candidate_email,
       @time_until_booking,
@@ -21,7 +28,14 @@ class Bookings::Reminder
     ).despatch_later!
   end
 
-private
+  def despatch_reminder_sms
+    NotifySms::CandidateBookingReminder.new(
+      to: @booking.gitis_contact.telephone,
+      time_until_booking_descriptive: @time_until_booking_descriptive,
+      dates_requested: @booking.date.to_formatted_s(:govuk),
+      cancellation_url: candidates_cancel_url(@booking.token)
+    ).despatch_later!
+  end
 
   def default_url_options
     { host: Rails.configuration.x.base_url }

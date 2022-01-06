@@ -11,13 +11,13 @@ describe Bookings::Reminder, type: :request do
   subject { Bookings::Reminder.new(booking, time_until_booking, time_until_booking_descriptive) }
 
   describe '#deliver' do
-    it "delivers one job per provided booking" do
+    it "queues an email and sms per provided booking" do
       sign_up = build(:api_schools_experience_sign_up_with_name)
 
       expect_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
         receive(:get_schools_experience_sign_up).with(booking.contact_uuid) { sign_up }
 
-      expect { subject.deliver }.to change { enqueued_jobs.size }.by(1)
+      expect { subject.deliver }.to change { enqueued_jobs.size }.by(2)
     end
   end
 end
