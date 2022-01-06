@@ -44,6 +44,12 @@ module Schools
             dates_requested: cancellation.dates_requested,
             school_search_url: new_candidates_school_search_url
           ).despatch_later!
+
+          NotifySms::CandidateBookingSchoolCancelsBooking.new(
+            to: cancellation.gitis_contact.telephone,
+            school_name: cancellation.school_name,
+            dates_requested: cancellation.dates_requested,
+          ).despatch_later!
         end
       end
     end
