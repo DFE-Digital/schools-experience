@@ -30,14 +30,6 @@
         <%= govuk_button_to 'Send rejection email',
           schools_placement_request_cancellation_notification_delivery_path(@cancellation.placement_request) %>
       </p>
-
-      <p>
-        <%= link_to 'Amend the rejection email', edit_schools_placement_request_cancellation_path(@cancellation.placement_request) %>
-      </p>
-
-      <p>
-        <%= link_to 'Back to request', schools_placement_request_path(@cancellation.placement_request) %>
-      </p>
     </section>
   </div>
 </div>
