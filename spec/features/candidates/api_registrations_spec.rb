@@ -268,7 +268,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
       "We've sent a link to the following email address:\ntest@example.com"
 
     # Submit email confirmation form successfully
-    check "candidates_registrations_privacy_policy_acceptance"
+    check "candidates_registrations_privacy_policy[acceptance]"
     click_button button_text
   end
 

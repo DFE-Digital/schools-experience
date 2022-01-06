@@ -519,10 +519,6 @@ en:
       disability_confident: Disability and access needs
       fees: Fees
       subjects: Subjects
-      candidates_registrations_background_check:
-        has_dbs_check: Do you have a DBS certificate?
-      candidates_registrations_education:
-        degree_stage: What stage are you at with your degree?
       candidates_registrations_teaching_preference:
         teaching_stage: Which of the following best describes how you feel about teaching?
       candidates_registrations_subject_preference:
@@ -694,10 +690,12 @@ en:
       candidates_registrations_contact_information:
         building: "Building and street"
         phone: "UK telephone number"
+        town_or_city: "Town or city"
       candidates_registrations_personal_information:
+        first_name: First name
+        last_name: Last name
         email: 'Email address'
       candidates_registrations_teaching_preference:
-        teaching_stage: Which of the following best describes how you feel about teaching?
         subject_first_choice: "First choice"
         subject_second_choice: "Second choice"
       candidates_registrations_education:
@@ -709,24 +707,9 @@ en:
         degree_subject: If you have or are studying for a degree, tell us about your degree subject
         subject_first_choice: "First choice"
         subject_second_choice: "Second choice"
-      candidates_registrations_background_check:
-        has_dbs_check:
-          true: "Yes"
-          false: "No"
       candidates_registrations_placement_preference:
         availability: Tell us about your availability
         objectives: What do you want to get out of your school experience?
-      candidates_registrations_privacy_policy:
-        acceptance_html:
-          "<p>By checking this box you're confirming that:</p>
-          <ul class=\"govuk-list govuk-list--bullet\">
-            <li>the details you've provided are correct</li>
-            <li>you're aged 18 or over</li>
-            <li>you've read our <a href=\"/privacy_policy\" class=\"govuk-link\">privacy policy</a></li>
-            <li>you understand that the DfE's
-            <a href=\"https://getintoteaching.education.gov.uk/\" class=\"govuk-link\">Get Into Teaching Information Service</a>
-            will use your personal details to provide you with
-            tailored advice and information about teacher training and a career as a teacher</li>"
       candidates_session:
         firstname: First name
         lastname: Last name
@@ -929,6 +912,14 @@ en:
         <<: *feedback_legend
       schools_feedback:
         <<: *feedback_legend
+      candidates_registrations_education:
+        degree_stage: What stage are you at with your degree?
+      candidates_registrations_teaching_preference:
+        teaching_stage: Which of the following best describes how you feel about teaching?
+      candidates_registrations_background_check:
+        has_dbs_check: Do you have a DBS certificate?
+      candidates_registrations_privacy_policy:
+        acceptance: Send your school experience request
 
   views:
     pagination:

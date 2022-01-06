@@ -20,19 +20,19 @@
       </strong>
     </p>
 
-    <%= form_for background_check, url: candidates_school_registrations_background_check_path do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary background_check, 'There is a problem', '' %>
+    <%= govuk_form_for background_check, url: candidates_school_registrations_background_check_path do |f| %>
+      <%= f.govuk_error_summary %>
 
       <% # force the params to submit if the user has not selected an option %>
       <%= f.hidden_field :has_dbs_check, value: nil %>
 
-      <%= f.radio_button_fieldset :has_dbs_check do |fieldset| %>
-        <%= fieldset.radio_input true %>
-        <%= fieldset.radio_input false %>
+      <%= f.govuk_radio_buttons_fieldset :has_dbs_check do %>
+        <%= f.govuk_radio_button :has_dbs_check, true, label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :has_dbs_check, false, label: { text: "No" } %>
       <% end %>
 
       <fieldset class="govuk-fieldset">
-        <%= f.submit 'Continue' %>
+        <%= f.govuk_submit 'Continue' %>
       </fieldset>
     <% end %>
   </div>

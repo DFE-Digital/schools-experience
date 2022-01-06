@@ -4,8 +4,8 @@
 <div class="govuk-grid-row" id="placement-preference">
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Choose a date</h1>
-    <%= form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary subject_and_date_information, 'There is a problem', '' %>
+    <%= govuk_form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
+      <%= f.govuk_error_summary %>
 
       <%= f.hidden_field :date_and_subject_ids %>
 
@@ -21,10 +21,10 @@
           <section class="date-selector date-selector-primary">
             <h3 class="govuk-heading-m">Primary school dates</h3>
 
-            <%= f.radio_button_fieldset :date_and_subject_ids,
-              choices: format_primary_date_options(@subject_and_date_information.primary_placement_dates),
-              value_method: :first,
-              text_method: :last -%>
+            <%= f.govuk_collection_radio_buttons :date_and_subject_ids,
+              format_primary_date_options(@subject_and_date_information.primary_placement_dates),
+              :first, :last, include_hidden: false %>
+
           </section>
         <%- end -%>
 
@@ -41,11 +41,9 @@
               </dt>
 
               <dd class="govuk-summary-list__value date-selector date-selector-secondary">
-                <%= f.radio_button_fieldset :date_and_subject_ids,
-                  choices: secondary_placement_dates.sort,
-                  value_method: :id,
-                  text_method: :name_with_duration
-                -%>
+                <%= f.govuk_collection_radio_buttons :date_and_subject_ids,
+                  secondary_placement_dates.sort,
+                  :id, :name_with_duration, include_hidden: false %>
               </dd>
             </div>
           <% end %>
@@ -55,7 +53,7 @@
 
       </section>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
 
   </div>
