@@ -577,9 +577,6 @@ en:
         has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
         available_for_all_subjects: Select type of experience
 
-      schools_placement_dates_subject_selection:
-        subject_ids: Select school experience subjects
-
     hint:
       schools_placement_requests_confirm_booking:
         placement_details: You can add extra experience details
@@ -918,6 +915,8 @@ en:
         date: Enter start date
         supports_subjects: Select school experience phase
         virtual: Experience type
+      schools_placement_dates_subject_selection:
+        subject_ids: Select school experience subjects
 
   views:
     pagination:
