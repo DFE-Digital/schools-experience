@@ -1,0 +1,1 @@
+School Experience Service: ((school_name)) has confirmed your school experience on ((dates_requested)). Check your inbox or spam for details. To cancel, visit: ((cancellation_url))
