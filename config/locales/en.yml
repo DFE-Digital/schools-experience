@@ -524,12 +524,6 @@ en:
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
-      schools_on_boarding_administration_fee:
-        <<: *schools_on_boarding_school_fee_helpers
-      schools_on_boarding_dbs_fee:
-        <<: *schools_on_boarding_school_fee_helpers
-      schools_on_boarding_other_fee:
-        <<: *schools_on_boarding_school_fee_helpers
       schools_on_boarding_phases_list:
         title: Which school phases do you offer experience with?
       schools_on_boarding_key_stage_list:
@@ -922,6 +916,12 @@ en:
         administration_fees: Administration costs
         dbs_fees: DBS check costs
         other_fees: Other costs
+      schools_on_boarding_administration_fee:
+        <<: *schools_on_boarding_school_fee_helpers
+      schools_on_boarding_dbs_fee:
+        <<: *schools_on_boarding_school_fee_helpers
+      schools_on_boarding_other_fee:
+        <<: *schools_on_boarding_school_fee_helpers
 
   views:
     pagination:

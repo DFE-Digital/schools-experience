@@ -15,31 +15,25 @@
       <%= title %>
     </h1>
 
-    <%= form_for model, url: submission_path do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary model, 'There is a problem', '' %>
+    <%= govuk_form_for model, url: submission_path do |f| %>
+      <%= f.govuk_error_summary %>
 
-      <%= f.pounds_field :amount_pounds,
-          label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' },
-          width: 5,
-          step: 0.01,
-          min: 0,
-          max: 9999.99 %>
+      <%= f.govuk_number_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.9, label: { class: 'govuk-heading-m' }, prefix_text: '£' %>
 
-      <%= f.text_area :description, rows: 7 %>
+      <%= f.govuk_text_area :description, rows: 7 %>
 
-      <%= f.radio_button_fieldset :interval do |fieldset| %>
+      <%= f.govuk_radio_buttons_fieldset :interval do %>
         <% f.object.available_intervals.each do |interval| %>
-          <%= fieldset.radio_input interval %>
+          <%= f.govuk_radio_button :interval, interval, label: { text: interval } %>
         <% end %>
       <% end %>
 
-      <%= f.text_area :payment_method, rows: 7,
-        label_options: {
-          overwrite_defaults!: true,
+      <%= f.govuk_text_area :payment_method, rows: 7,
+        label: {
           class: 'govuk-heading-m'
         } %>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>
