@@ -21,6 +21,10 @@ Feature: Editing availability info
             | Both virtual and in school experiences |
         And the submit button should contain text 'Save availability description'
 
+    Scenario: Back link
+        Given I am on the 'availability information' page
+        Then I should see a 'Back' link to the 'availability preferences'
+
     @smoke_test
     Scenario: Submitting the form
         Given I am on the 'availability information' page

@@ -12,7 +12,7 @@ Feature: Rejecting placement requests
         Given there is at least one placement request
         And there are some upcoming requests
         When I am on the reject placement request page
-        Then I should see a 'Back' link to the 'placement requests' page
+        Then there should be a 'Back' link to the 'placement request' page
 
     Scenario: Page heading
         Given there is at least one placement request

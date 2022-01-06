@@ -59,6 +59,10 @@ Then('I should see a {string} link/button') do |link_text|
   expect(page).to have_link(link_text)
 end
 
+Then("I should see a {string} link to the booking") do |link_text|
+  expect(page).to have_link(link_text, href: path_for('booking', booking_id: @booking_id))
+end
+
 Then("the page title should be {string}") do |title|
   title_suffix = "DfE School Experience"
   expect(title).to be_present
