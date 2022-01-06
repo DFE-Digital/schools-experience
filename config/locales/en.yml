@@ -521,8 +521,6 @@ en:
         teaching_stage: Which of the following best describes how you feel about teaching?
       cookie_preference:
         analytics: Cookies that measure website use
-      schools_on_boarding_candidate_requirements_choice:
-        has_requirements: "Do you have any candidate requirements?"
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
@@ -916,6 +914,8 @@ en:
         available_for_all_subjects: Select type of experience
       schools_on_boarding_dbs_requirement:
         dbs_policy_conditions: 'Do you require candidates to have or get a DBS check?'
+      schools_on_boarding_candidate_requirements_choice:
+        has_requirements: "Do you have any candidate requirements?"
 
   views:
     pagination:
