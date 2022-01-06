@@ -69,13 +69,8 @@ Then("I should see a select box containing school subjects labelled {string}") d
 end
 
 Then("I fill in the date field {string} with {int}-{int}-{int}") do |field, day, month, year|
-  # Some of the designs call for the field name to be styled as a heading
-  date_field_set = \
-    begin
-      page.find '.govuk-label', text: field
-    rescue Capybara::ElementNotFound
-      page.find '.govuk-fieldset__heading', text: field
-    end
+  # Some of the designs call for the field name to be styled as a heading/legend
+  date_field_set = page.find '.govuk-label, .govuk-fieldset__heading, .govuk-fieldset__legend', text: field
 
   within(date_field_set.ancestor('.govuk-form-group')) do
     fill_in 'Day',   with: day

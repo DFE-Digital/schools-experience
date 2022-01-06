@@ -4,11 +4,12 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for @subject_selection, method: :post, url: schools_placement_date_subject_selection_path(@placement_date) do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+    <%= govuk_form_for @subject_selection, method: :post, url: schools_placement_date_subject_selection_path(@placement_date) do |f| %>
+      <%= f.govuk_error_summary %>
 
-      <%= f.collection_check_boxes :subject_ids, @placement_date.bookings_school.subjects, :id, :name, { page_heading: true} %>
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_collection_check_boxes :subject_ids, @placement_date.bookings_school.subjects, :id, :name, legend: { tag: "h1", size: "l" } %>
+
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>
