@@ -523,8 +523,6 @@ en:
         analytics: Cookies that measure website use
       schools_on_boarding_candidate_requirements_choice:
         has_requirements: "Do you have any candidate requirements?"
-      schools_on_boarding_dbs_requirement:
-        dbs_policy_conditions: 'Do you require candidates to have or get a DBS check?'
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
@@ -712,7 +710,7 @@ en:
         dbs_policy_details: 'Provide details in 50 words or less.'
         dbs_policy_details_inschool: 'Provide the details in 50 words or less.'
         no_dbs_policy_details: 'Provide any extra details in 50 words or less.'
-        dbs_policy_conditions:
+        dbs_policy_conditions_options:
           required: 'Yes - Outline your DBS requirements'
           inschool: 'Yes - only when in school - outline your DBS requirements'
           notrequired: 'No - Candidates will be accompanied at all times when in school'
@@ -916,6 +914,8 @@ en:
       schools_placement_dates_configuration_form:
         has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
         available_for_all_subjects: Select type of experience
+      schools_on_boarding_dbs_requirement:
+        dbs_policy_conditions: 'Do you require candidates to have or get a DBS check?'
 
   views:
     pagination:
