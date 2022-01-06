@@ -4,8 +4,9 @@ class Bookings::Reminder
   include GitisAccess
   include Rails.application.routes.url_helpers
 
-  def initialize(booking, time_until_booking)
+  def initialize(booking, time_until_booking, time_until_booking_descriptive)
     @time_until_booking = time_until_booking
+    @time_until_booking_descriptive = time_until_booking_descriptive
 
     @booking = booking
     assign_gitis_contact(@booking)

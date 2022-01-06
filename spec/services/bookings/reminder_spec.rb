@@ -1,13 +1,14 @@
 require 'rails_helper'
 
-describe Bookings::Reminder do
+describe Bookings::Reminder, type: :request do
   include ActiveJob::TestHelper
 
   let(:time_until_booking) { '3 weeks' }
+  let(:time_until_booking_descriptive) { 'in 3 weeks' }
   let(:school) { create(:bookings_school, :onboarded) }
   let(:booking) { create(:bookings_booking, :accepted, bookings_school: school, date: 3.weeks.from_now) }
 
-  subject { Bookings::Reminder.new(booking, time_until_booking) }
+  subject { Bookings::Reminder.new(booking, time_until_booking, time_until_booking_descriptive) }
 
   describe '#deliver' do
     it "delivers one job per provided booking" do
