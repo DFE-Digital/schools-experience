@@ -717,14 +717,20 @@ en:
           true: 'Yes'
           false: 'No'
       schools_on_boarding_candidate_requirements_selection:
-        on_teacher_training_course: "Candidates must apply to our (or a partner school's) teacher training course"
-        not_on_another_training_course: "Candidates must not have a place on another teacher training course"
-        has_or_working_towards_degree: "Candidates must have, or be working towards, a degree"
-        live_locally: "Candidates must live locally"
+        on_teacher_training_course_options:
+          1: "Candidates must apply to our (or a partner school's) teacher training course"
+        not_on_another_training_course_options:
+          1: "Candidates must not have a place on another teacher training course"
+        has_or_working_towards_degree_options:
+          1: "Candidates must have, or be working towards, a degree"
+        live_locally_options:
+          1: "Candidates must live locally"
         maximum_distance_from_school: "Tell us within how many miles of your school. For example, 20."
-        provide_photo_identification: "Candidates must provide photo ID"
+        provide_photo_identification_options:
+          1: "Candidates must provide photo ID"
         photo_identification_details: "Provide details. For example, passport or driving licence."
-        other: "Other"
+        other_options:
+          1: "Other"
         other_details: "Provide details."
       schools_on_boarding_candidate_requirement:
         dbs_requirement:
