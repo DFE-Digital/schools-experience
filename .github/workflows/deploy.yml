@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate
 
-    concurrency: ${{github.event.inputs.environment}}
+    concurrency: ${{github.event.inputs.environment}}_${{github.event.inputs.pr}}
 
     defaults:
       run:
