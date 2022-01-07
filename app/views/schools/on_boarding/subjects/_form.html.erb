@@ -10,27 +10,26 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for subject_list, url: schools_on_boarding_subjects_path, method: method do |f| %>
-      <%= f.check_box_fieldset :title, %i(), { page_heading: true } do |fieldset| %>
-        <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
-        <p>
-          Tell us which subjects you offer for secondary school experience and
-          select continue.
-        </p>
-        <p class="govuk-hint">
-          This will help candidates select a secondary school experience.
-        </p>
+    <h1 class="govuk-heading-l">
+      Select school experience subjects
+    </h1>
+    <%= govuk_form_for subject_list, url: schools_on_boarding_subjects_path, method: method do |f| %>
+      <%= f.govuk_error_summary %>
+      <p>
+        Tell us which subjects you offer for secondary school experience and
+        select continue.
+      </p>
+      <p class="govuk-hint">
+        This will help candidates select a secondary school experience.
+      </p>
 
-        <%= f.collection_check_boxes \
-          :subject_ids,
-          f.object.available_subjects,
-          :id,
-          :name,
-          legend_options: { class: 'govuk-visually-hidden' }
-        %>
-      <% end %>
+      <%= f.govuk_collection_check_boxes :subject_ids,
+        f.object.available_subjects,
+        :id,
+        :name,
+        legend: { class: 'govuk-visually-hidden' } %>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

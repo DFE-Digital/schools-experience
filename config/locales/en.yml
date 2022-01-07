@@ -524,8 +524,6 @@ en:
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
-      schools_on_boarding_subject_list:
-        title: Select school experience subjects
       schools_on_boarding_specialism:
         has_specialism_html: >
           <p>
