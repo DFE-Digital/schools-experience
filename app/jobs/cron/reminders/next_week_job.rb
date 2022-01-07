@@ -1,7 +1,7 @@
 module Cron
   module Reminders
     class NextWeekJob < CronJob
-      self.cron_expression = '35 2 * * *'
+      self.cron_expression = '35 9 * * *'
 
       def perform
         return true unless Feature.active? :reminders
