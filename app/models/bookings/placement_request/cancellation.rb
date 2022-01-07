@@ -97,7 +97,7 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
         helpers
         label
         bookings_placement_request_cancellation
-        rejection_category
+        rejection_category_options
       ].push(rejection_category).join('.')
     )
   end

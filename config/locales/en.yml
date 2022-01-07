@@ -626,7 +626,7 @@ en:
           false: In school experience
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
-        rejection_category:
+        rejection_category_options:
           fully_booked: The date you requested is fully booked.
           accepted_on_ttc: We cannot offer you school experience because you've already been accepted on a teacher training course.
           date_not_available: We can no longer offer the date you've requested.
@@ -638,6 +638,7 @@ en:
           cancelation_requested: You asked us to cancel your request.
           wrong_choice_secondary: You've told us you want to get primary school experience, but you've chosen a secondary school placement.
           wrong_choice_primary: You've told us you want to get secondary school experience, but you've chosen a primary school placement.
+          other: Other
       bookings_booking:
         duration: How long will it last?
         contact_name: Name

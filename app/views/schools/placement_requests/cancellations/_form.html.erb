@@ -2,14 +2,14 @@
 
 <%= govuk_back_link schools_placement_requests_path %>
 
-<%= form_for cancellation, url: schools_placement_request_cancellation_path do |f| %>
+<%= govuk_form_for cancellation, url: schools_placement_request_cancellation_path do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">
         Review and send rejection email to candidate
       </h1>
 
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <%= f.govuk_error_summary %>
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -21,38 +21,37 @@
             cancellation: cancellation,
             reason: capture do
               content_tag('div', class: 'editable') do
-                f.radio_button_fieldset(
+                f.govuk_radio_buttons_fieldset(
                   :rejection_category,
-                  heading: true,
                   small: true,
-                  legend_options: { class: 'govuk-visually-hidden' }
+                  legend: { class: 'govuk-visually-hidden' }
                 ) do
                   safe_join(
                     [
                       Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS
                         .reject { |reason| reason == 'other' }
-                        .map do |option|
-                          f.radio_input option
+                        .each_with_index.map do |option, index|
+                          f.govuk_radio_button :rejection_category, option, link_errors: index.zero?
                         end,
-                      f.radio_input(:other) do
-                        f.text_area(:reason)
-                      end
+                      (f.govuk_radio_button :rejection_category, :other do
+                        f.govuk_text_area :reason
+                      end)
                     ]
                   )
                 end
               end
             end,
             extra_details: capture do
-              f.text_area :extra_details,
+              f.govuk_text_area :extra_details,
                 rows: 7,
                 placeholder: "Add any extra details. For example, you may have availability on a different date or you can offer school experience in another subject",
-                label_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
+                label: { class: 'govuk-visually-hidden' }
             end
           } %>
 
           <section>
             <p>
-              <%= f.submit 'Preview rejection email' %>
+              <%= f.govuk_submit 'Preview rejection email' %>
             </p>
 
             <p>
