@@ -9,7 +9,7 @@ jobs:
     environment:
        name: Review
     runs-on: ubuntu-latest
-    concurency: Review_${{github.event.number}}
+    concurrency: Review_${{github.event.number}}
 
     defaults:
       run:
