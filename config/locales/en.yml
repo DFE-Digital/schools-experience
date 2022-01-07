@@ -524,8 +524,6 @@ en:
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
-      schools_on_boarding_phases_list:
-        title: Which school phases do you offer experience with?
       schools_on_boarding_key_stage_list:
         title: Which key stages do you offer experience with?
       schools_on_boarding_subject_list:
@@ -751,10 +749,14 @@ en:
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:
-        college: '16 to 18 years'
-        primary: 'Primary (4 to 11 years)'
-        secondary: 'Secondary (11 to 16 years)'
-        secondary_and_college: 'Secondary with 16 to 18 years'
+        college_options:
+          1: '16 to 18 years'
+        primary_options:
+          1: 'Primary (4 to 11 years)'
+        secondary_options:
+          1: 'Secondary (11 to 16 years)'
+        secondary_and_college_options:
+          1: 'Secondary with 16 to 18 years'
       schools_on_boarding_description:
         details: 'Tell us about your school. Provide a summary to help candidates select your school experience.'
       schools_on_boarding_candidate_experience_detail:
