@@ -476,11 +476,21 @@ jobs:
               echo "STATIC_ROUTE=${STATIC_ROUTE}" >> $GITHUB_ENV
 
       - name: Trigger Deployment to ${{matrix.environment}}
+        if: matrix.environment == 'Review' 
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Deploy to PaaS
           token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
           inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}" , "static": "${{env.STATIC_ROUTE}}" }'
+          ref: ${{env.REFERENCE}}
+
+      - name: Trigger Deployment to ${{matrix.environment}}
+        if: matrix.environment != 'Review' 
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: Deploy to PaaS
+          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}"}'
           ref: ${{env.REFERENCE}}
 
       - name: Wait for Deployment to ${{matrix.environment}}
