@@ -18,26 +18,43 @@
       These details will help candidates select a school experience.
     </p>
 
-    <%= form_for candidate_experience_detail, url: url, method: method do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+    <%= govuk_form_for candidate_experience_detail, url: url, method: method do |f| %>
+      <%= f.govuk_error_summary %>
 
-      <%= f.check_box_fieldset :dress_code, %i(business_dress cover_up_tattoos remove_piercings smart_casual ) do |fieldset| %>
-        <p>Select all that apply or leave blank if you have no dress code.</p>
-        <%= fieldset.check_box_input :business_dress %>
-        <%= fieldset.check_box_input :cover_up_tattoos %>
-        <%= fieldset.check_box_input :remove_piercings %>
-        <%= fieldset.check_box_input :smart_casual %>
-        <%= fieldset.check_box_input :other_dress_requirements do %>
-          <%= f.text_field :other_dress_requirements_detail %>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Do you have a dress code for candidates?</h2>
+      </legend>
+
+      <p>Select all that apply or leave blank if you have no dress code.</p>
+
+      <%= f.govuk_check_boxes_fieldset :business_dress, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :business_dress, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :cover_up_tattoos, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :cover_up_tattoos, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :remove_piercings, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :remove_piercings, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :smart_casual, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :smart_casual, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :other_dress_requirements, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :other_dress_requirements, 1, 0, multiple: false do %>
+          <%= f.govuk_text_field :other_dress_requirements_detail %>
         <% end %>
       <% end %>
 
-      <%= f.radio_button_fieldset :parking_provided do |fieldset| %>
-        <%= f.radio_input true do %>
-          <%= f.text_area :parking_details, rows: 7 %>
+      <%= f.govuk_radio_buttons_fieldset :parking_provided do %>
+        <%= f.govuk_radio_button :parking_provided, "true" do %>
+          <%= f.govuk_text_area :parking_details, rows: 7 %>
         <% end %>
-        <%= f.radio_input false do %>
-          <%= f.text_area :nearby_parking_details, rows: 7 %>
+        <%= f.govuk_radio_button :parking_provided, "false" do %>
+          <%= f.govuk_text_area :nearby_parking_details, rows: 7 %>
         <% end %>
       <% end %>
 
@@ -48,24 +65,24 @@
           </h1>
         </legend>
         <fieldset class="govuk-fieldset">
-          <%= f.text_field :start_time, class: 'govuk-!-width-one-quarter' %>
-          <%= f.text_field :end_time, class: 'govuk-!-width-one-quarter' %>
+          <%= f.govuk_text_field :start_time, class: 'govuk-!-width-one-quarter' %>
+          <%= f.govuk_text_field :end_time, class: 'govuk-!-width-one-quarter' %>
         </fieldset>
       </div>
 
-      <%= f.radio_button_fieldset :times_flexible do |fieldset| %>
+      <%= f.govuk_radio_buttons_fieldset :times_flexible do %>
         <p>
           Can candidates start later or finish earlier depending on their
           individual needs. For example, around child care or any other
           responsibilities.
         </p>
-        <%= f.radio_input true do %>
-          <%= f.text_area :times_flexible_details, rows: 7 %>
+        <%= f.govuk_radio_button :times_flexible, "true" do %>
+          <%= f.govuk_text_area :times_flexible_details, rows: 7 %>
         <% end %>
-        <%= f.radio_input false %>
+        <%= f.govuk_radio_button :times_flexible, "false" %>
       <% end %>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>
