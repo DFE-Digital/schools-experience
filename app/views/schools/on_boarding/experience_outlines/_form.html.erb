@@ -18,9 +18,9 @@
       These details will help candidates select your school experience.
     </p>
 
-    <%= form_for experience_outline, url: url, method: method do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
-      <%= f.text_area :candidate_experience, rows: 4, label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
+    <%= govuk_form_for experience_outline, url: url, method: method do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_text_area :candidate_experience, rows: 4, label: { class: 'govuk-heading-m' } do %>
         <p>
           Tell us about what candidates can expect to do while they’re at your school.
           For example, explain whether candidates will observe lessons or get the chance
@@ -28,15 +28,15 @@
         </p>
       <% end %>
 
-      <%= f.radio_button_fieldset :provides_teacher_training do |fieldset| %>
-        <%= fieldset.radio_input true do %>
-          <%= f.text_area :teacher_training_details, rows: 7 %>
-          <%= f.url_field :teacher_training_url, placeholder: 'https://example.org' %>
+      <%= f.govuk_radio_buttons_fieldset :provides_teacher_training do %>
+        <%= f.govuk_radio_button :provides_teacher_training, "true" do %>
+          <%= f.govuk_text_area :teacher_training_details, rows: 7 %>
+          <%= f.govuk_url_field :teacher_training_url, placeholder: 'https://example.org' %>
         <% end %>
-        <%= fieldset.radio_input false %>
+        <%= f.govuk_radio_button :provides_teacher_training, "false" %>
       <% end %>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

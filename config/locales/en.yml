@@ -541,8 +541,6 @@ en:
         change_to_urn: Select your school
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'Do you provide facilities or support for candidates with disabilities or access needs?'
-      schools_on_boarding_experience_outline:
-        provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
 
     hint:
       schools_placement_requests_confirm_booking:
@@ -790,7 +788,7 @@ en:
         url: 'Enter web address.'
       schools_on_boarding_experience_outline:
         candidate_experience: 'What kind of school experience do you offer candidates?'
-        provides_teacher_training:
+        provides_teacher_training_options:
           true: 'Yes'
           false: 'No'
         teacher_training_details: 'Provide details.'
@@ -930,6 +928,8 @@ en:
         is_disability_confident: 'Are you signed up to the Disability Confident employer scheme?'
       schools_on_boarding_access_needs_policy:
         has_access_needs_policy: 'Do you have any online information which covers your disability and access needs policy?'
+      schools_on_boarding_experience_outline:
+        provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
 
   views:
     pagination:
