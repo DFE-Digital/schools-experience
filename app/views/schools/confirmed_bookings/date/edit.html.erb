@@ -4,8 +4,6 @@
   <div class="govuk-grid-column-two-thirds">
      <%= govuk_back_link schools_booking_path(@booking) %>
 
-     <%= GovukElementsErrorsHelper.error_summary @booking, 'There is a problem', '' %>
-
     <h1>Change the booking date for <%= gitis_contact_full_name(@booking.gitis_contact) %></h1>
 
     <p>
@@ -18,8 +16,10 @@
       booking date.
     </p>
 
-    <%= form_for @booking, url: schools_booking_date_path(@booking), method: 'patch' do |f| %>
-      <%= f.date_field :date, heading: true %>
+    <%= govuk_form_for @booking, url: schools_booking_date_path(@booking), method: 'patch' do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_date_field :date, heading: true %>
         <div id="school-booking-show" class="booking">
           <section id="booking-details">
             <dl class="govuk-summary-list">
@@ -31,7 +31,7 @@
           </section>
         </div>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

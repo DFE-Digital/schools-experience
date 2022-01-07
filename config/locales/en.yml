@@ -502,8 +502,6 @@ en:
   helpers:
     fieldset:
       order: Sorted by
-      bookings_booking:
-        date: Booking date
       bookings_school:
         availability_preference_fixed: Choose how dates are displayed
         experience_type: School experience type
@@ -931,6 +929,8 @@ en:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
       schools_change_school:
         change_to_urn: Select your school
+      bookings_booking:
+        date: Booking date
 
   views:
     pagination:
