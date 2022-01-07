@@ -613,6 +613,11 @@ en:
         availability_preference_fixed_options:
           true: Show specific dates
           false: Show a description of when you can host candidates
+        availability_info: Availability info
+        experience_type_options:
+          virtual: Virtual experience
+          inschool: In school experience
+          both: Both virtual and in school experiences
       bookings_placement_date:
         duration: How long will it last?
         active_options:
@@ -890,6 +895,8 @@ en:
         acceptance: Send your school experience request
       bookings_school:
         enabled: Turn profile on or off
+        availability_preference_fixed: Choose how dates are displayed
+        experience_type: School experience type
       bookings_placement_date:
         date: Enter start date
         supports_subjects: Select school experience phase
@@ -924,8 +931,7 @@ en:
         has_access_needs_policy: 'Do you have any online information which covers your disability and access needs policy?'
       schools_on_boarding_experience_outline:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
-      bookings_school:
-        availability_preference_fixed: Choose how dates are displayed
+
   views:
     pagination:
       next: Next
