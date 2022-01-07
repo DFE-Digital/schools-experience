@@ -11,19 +11,19 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for access_needs_policy, url: schools_on_boarding_access_needs_policy_path, method: method do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
-      <%= f.radio_button_fieldset :has_access_needs_policy, page_heading: true do |fieldset| %>
+    <%= govuk_form_for access_needs_policy, url: schools_on_boarding_access_needs_policy_path, method: method do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_radio_buttons_fieldset :has_access_needs_policy, legend: { tag: "h1", size: "l" } do %>
         <p class="govuk-hint">
           For example, a link to a relevant document or page on your school
           website
         </p>
-        <%= fieldset.radio_input true do %>
-          <%= f.text_field :url %>
+        <%= f.govuk_radio_button :has_access_needs_policy, "true" do %>
+          <%= f.govuk_text_field :url %>
         <% end %>
-        <%= fieldset.radio_input false %>
+        <%= f.govuk_radio_button :has_access_needs_policy, "false" %>
       <% end %>
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

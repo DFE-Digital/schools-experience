@@ -539,8 +539,6 @@ en:
         fixed: 'Enter school experience availability or fixed dates'
       schools_change_school:
         change_to_urn: Select your school
-      schools_on_boarding_access_needs_policy:
-        has_access_needs_policy: 'Do you have any online information which covers your disability and access needs policy?'
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'Do you provide facilities or support for candidates with disabilities or access needs?'
       schools_on_boarding_experience_outline:
@@ -786,7 +784,7 @@ en:
           true: 'Yes'
           false: 'No'
       schools_on_boarding_access_needs_policy:
-        has_access_needs_policy:
+        has_access_needs_policy_options:
           true: 'Yes'
           false: 'No'
         url: 'Enter web address.'
@@ -930,6 +928,8 @@ en:
         supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
       schools_on_boarding_disability_confident:
         is_disability_confident: 'Are you signed up to the Disability Confident employer scheme?'
+      schools_on_boarding_access_needs_policy:
+        has_access_needs_policy: 'Do you have any online information which covers your disability and access needs policy?'
 
   views:
     pagination:
