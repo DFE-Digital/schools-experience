@@ -159,7 +159,7 @@ Rails.application.configure do
 
   config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
 
-  config.x.features = %i[subject_specific_dates]
+  config.x.features = %i[subject_specific_dates reminders]
   config.x.flipper_password = ENV['FLIPPER_PASSWORD']
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
