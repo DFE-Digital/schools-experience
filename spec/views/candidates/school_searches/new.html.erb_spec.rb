@@ -18,8 +18,8 @@ RSpec.describe "candidates/school_searches/new.html.erb", type: :view do
     expect(rendered).to have_css('label', text: 'Enter location or postcode')
     expect(rendered).to have_css('label', text: 'Select search area')
 
-    expect(rendered).to have_css("input#location[required='required']")
-    expect(rendered).to have_css('select#distance')
+    expect(rendered).to have_css("input#location-field[required='required']")
+    expect(rendered).to have_css('select#distance-field')
 
     expect(rendered).to have_button('Search')
   end
@@ -31,8 +31,8 @@ RSpec.describe "candidates/school_searches/new.html.erb", type: :view do
       expect(rendered).to have_css('label', text: 'Enter location or postcode')
       expect(rendered).not_to have_css('label', text: 'Select search area')
 
-      expect(rendered).to have_css("input#location[required='required']")
-      expect(rendered).not_to have_css('select#distance')
+      expect(rendered).to have_css("input#location-field[required='required']")
+      expect(rendered).not_to have_css('select#distance-field')
     end
   end
 end
