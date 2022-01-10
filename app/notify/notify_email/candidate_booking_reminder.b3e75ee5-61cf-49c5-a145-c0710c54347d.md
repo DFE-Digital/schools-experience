@@ -1,6 +1,6 @@
 Dear ((candidate_name)),
 
-It’s ((time_until_booking)) until your placement at ((school_name)).
+Your school experience placement at ((school_name)) is ((time_until_booking)).
 
 #Date and time
 * Date: ((placement_schedule))

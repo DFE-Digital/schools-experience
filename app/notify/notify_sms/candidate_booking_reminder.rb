@@ -1,17 +1,17 @@
 class NotifySms::CandidateBookingReminder < NotifyDespatchers::Sms
   attr_accessor \
-    :time_until_booking_descriptive,
+    :time_until_booking,
     :dates_requested,
     :cancellation_url
 
   def initialize(
     to:,
-    time_until_booking_descriptive:,
+    time_until_booking:,
     dates_requested:,
     cancellation_url:
   )
 
-    self.time_until_booking_descriptive = time_until_booking_descriptive
+    self.time_until_booking = time_until_booking
     self.dates_requested = dates_requested
     self.cancellation_url = cancellation_url
 
@@ -26,7 +26,7 @@ private
 
   def personalisation
     {
-      time_until_booking_descriptive: time_until_booking_descriptive,
+      time_until_booking: time_until_booking,
       dates_requested: dates_requested,
       cancellation_url: cancellation_url
     }

@@ -6,8 +6,8 @@ module Bookings
   class ReminderJob < ApplicationJob
     queue_as :default
 
-    def perform(booking, time_until_booking, time_until_booking_descriptive)
-      Bookings::Reminder.new(booking, time_until_booking, time_until_booking_descriptive).deliver
+    def perform(booking, time_until_booking)
+      Bookings::Reminder.new(booking, time_until_booking).deliver
     end
   end
 end
