@@ -502,16 +502,9 @@ en:
   helpers:
     fieldset:
       order: Sorted by
-      bookings_booking:
-        date: Booking date
       bookings_school:
-        enabled: Turn profile on or off
         availability_preference_fixed: Choose how dates are displayed
         experience_type: School experience type
-      bookings_placement_date:
-        date: Enter start date
-        supports_subjects: Select school experience phase
-        virtual: Experience type
       bookings_placement_request_cancellation:
         rejection_category: Rejection reason
       phases: Education phases
@@ -526,29 +519,9 @@ en:
         teaching_stage: Which of the following best describes how you feel about teaching?
       cookie_preference:
         analytics: Cookies that measure website use
-      schools_on_boarding_candidate_requirements_choice:
-        has_requirements: "Do you have any candidate requirements?"
-      schools_on_boarding_dbs_requirement:
-        dbs_policy_conditions: 'Do you require candidates to have or get a DBS check?'
       schools_on_boarding_candidate_requirement:
         dbs_requirement: 'Do you require candidates to be DBS-checked?'
         requirements: 'Do you have any requirements for school experience candidates?'
-      schools_on_boarding_administration_fee:
-        <<: *schools_on_boarding_school_fee_helpers
-      schools_on_boarding_dbs_fee:
-        <<: *schools_on_boarding_school_fee_helpers
-      schools_on_boarding_other_fee:
-        <<: *schools_on_boarding_school_fee_helpers
-      schools_on_boarding_fees:
-        administration_fees: Administration costs
-        dbs_fees: DBS check costs
-        other_fees: Other costs
-      schools_on_boarding_phases_list:
-        title: Which school phases do you offer experience with?
-      schools_on_boarding_key_stage_list:
-        title: Which key stages do you offer experience with?
-      schools_on_boarding_subject_list:
-        title: Select school experience subjects
       schools_on_boarding_specialism:
         has_specialism_html: >
           <p>
@@ -562,28 +535,8 @@ en:
           </p>
       schools_on_boarding_availability_preference:
         fixed: 'Enter school experience availability or fixed dates'
-      schools_change_school:
-        change_to_urn: Select your school
-      schools_on_boarding_access_needs_support:
-        supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
-      schools_on_boarding_disability_confident:
-        is_disability_confident: 'Are you signed up to the Disability Confident employer scheme?'
-      schools_on_boarding_access_needs_policy:
-        has_access_needs_policy: 'Do you have any online information which covers your disability and access needs policy?'
       schools_on_boarding_candidate_experience_detail:
-        dress_code: 'Do you have a dress code for candidates?'
-        parking_provided: 'Do you provide parking for candidates?'
         disabled_facilities: 'Do you provide facilities or support for candidates with disabilities or access needs?'
-        times_flexible: 'Are your start and finish times flexible? '
-      schools_on_boarding_experience_outline:
-        provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
-
-      schools_placement_dates_configuration_form:
-        has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
-        available_for_all_subjects: Select type of experience
-
-      schools_placement_dates_subject_selection:
-        subject_ids: Select school experience subjects
 
     hint:
       schools_placement_requests_confirm_booking:
@@ -644,10 +597,6 @@ en:
       schools_placement_requests_confirm_booking:
         bookings_subject_id: Confirm subject
         placement_details: Confirm experience details
-      bookings_school:
-        enabled:
-          true: Turn profile on to allow requests
-          false: Turn profile off
         availability_preference_fixed:
           true_html: Show specific dates
           false_html: Show a description of when you can host candidates
@@ -656,14 +605,23 @@ en:
           virtual: Virtual experience
           inschool: In school experience
           both: Both virtual and in school experiences
-
+      bookings_school:
+        availability_preference_fixed_options:
+          true: Show specific dates
+          false: Show a description of when you can host candidates
+        availability_info: Availability info
+        experience_type_options:
+          virtual: Virtual experience
+          inschool: In school experience
+          both: Both virtual and in school experiences
       bookings_placement_date:
         duration: How long will it last?
-        active: Make this date available to candidates?
-        supports_subjects:
-          yes: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
-          no: Primary including early years, key stage 1 and key stage 2
-        virtual:
+        active_options:
+          1: Make this date available to candidates?
+        supports_subjects_options:
+          true: Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years
+          false: Primary including early years, key stage 1 and key stage 2
+        virtual_options:
           true: Virtual experience
           false: In school experience
       bookings_placement_request_cancellation:
@@ -727,7 +685,7 @@ en:
         dbs_policy_details: 'Provide details in 50 words or less.'
         dbs_policy_details_inschool: 'Provide the details in 50 words or less.'
         no_dbs_policy_details: 'Provide any extra details in 50 words or less.'
-        dbs_policy_conditions:
+        dbs_policy_conditions_options:
           required: 'Yes - Outline your DBS requirements'
           inschool: 'Yes - only when in school - outline your DBS requirements'
           notrequired: 'No - Candidates will be accompanied at all times when in school'
@@ -736,14 +694,20 @@ en:
           true: 'Yes'
           false: 'No'
       schools_on_boarding_candidate_requirements_selection:
-        on_teacher_training_course: "Candidates must apply to our (or a partner school's) teacher training course"
-        not_on_another_training_course: "Candidates must not have a place on another teacher training course"
-        has_or_working_towards_degree: "Candidates must have, or be working towards, a degree"
-        live_locally: "Candidates must live locally"
+        on_teacher_training_course_options:
+          1: "Candidates must apply to our (or a partner school's) teacher training course"
+        not_on_another_training_course_options:
+          1: "Candidates must not have a place on another teacher training course"
+        has_or_working_towards_degree_options:
+          1: "Candidates must have, or be working towards, a degree"
+        live_locally_options:
+          1: "Candidates must live locally"
         maximum_distance_from_school: "Tell us within how many miles of your school. For example, 20."
-        provide_photo_identification: "Candidates must provide photo ID"
+        provide_photo_identification_options:
+          1: "Candidates must provide photo ID"
         photo_identification_details: "Provide details. For example, passport or driving licence."
-        other: "Other"
+        other_options:
+          1: "Other"
         other_details: "Provide details."
       schools_on_boarding_candidate_requirement:
         dbs_requirement:
@@ -756,13 +720,13 @@ en:
           false: 'No'
         requirements_details: 'Provide details.'
       schools_on_boarding_fees:
-        administration_fees:
+        administration_fees_options:
           true: 'Yes'
           false: 'No'
-        dbs_fees:
+        dbs_fees_options:
           true: 'Yes'
           false: 'No'
-        other_fees:
+        other_fees_options:
           true: 'Yes'
           false: 'No'
       schools_on_boarding_administration_fee:
@@ -774,20 +738,29 @@ en:
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_labels
       schools_on_boarding_phases_list:
-        college: '16 to 18 years'
-        primary: 'Primary (4 to 11 years)'
-        secondary: 'Secondary (11 to 16 years)'
-        secondary_and_college: 'Secondary with 16 to 18 years'
+        college_options:
+          1: '16 to 18 years'
+        primary_options:
+          1: 'Primary (4 to 11 years)'
+        secondary_options:
+          1: 'Secondary (11 to 16 years)'
+        secondary_and_college_options:
+          1: 'Secondary with 16 to 18 years'
       schools_on_boarding_description:
         details: 'Tell us about your school. Provide a summary to help candidates select your school experience.'
       schools_on_boarding_candidate_experience_detail:
-        business_dress: 'Business dress'
-        cover_up_tattoos: 'Cover up tattoos'
-        remove_piercings: 'Remove piercings'
-        smart_casual: 'Smart casual'
-        other_dress_requirements: 'Other'
+        business_dress_options:
+          1: 'Business dress'
+        cover_up_tattoos_options:
+          1: 'Cover up tattoos'
+        remove_piercings_options:
+          1: 'Remove piercings'
+        smart_casual_options:
+          1: 'Smart casual'
+        other_dress_requirements_options:
+          1: 'Other'
         other_dress_requirements_detail: 'For example no denim, jeans, shorts, short skirts, trainers'
-        parking_provided:
+        parking_provided_options:
           true: 'Yes'
           false: 'No'
         parking_details: 'Provide details.'
@@ -798,28 +771,28 @@ en:
         disabled_facilities_details: 'Provide details.'
         start_time: 'Start time. For example, 8:15am.'
         end_time: 'Finish time. For example, 4:30pm.'
-        times_flexible:
+        times_flexible_options:
           true: 'Yes'
           false: 'No'
         times_flexible_details: 'Provide details.'
       schools_on_boarding_access_needs_detail:
         description: "Enter disability and access needs details for candidates"
       schools_on_boarding_access_needs_support:
-        supports_access_needs:
+        supports_access_needs_options:
           true: 'Yes'
           false: 'No'
       schools_on_boarding_disability_confident:
-        is_disability_confident:
+        is_disability_confident_options:
           true: 'Yes'
           false: 'No'
       schools_on_boarding_access_needs_policy:
-        has_access_needs_policy:
+        has_access_needs_policy_options:
           true: 'Yes'
           false: 'No'
         url: 'Enter web address.'
       schools_on_boarding_experience_outline:
         candidate_experience: 'What kind of school experience do you offer candidates?'
-        provides_teacher_training:
+        provides_teacher_training_options:
           true: 'Yes'
           false: 'No'
         teacher_training_details: 'Provide details.'
@@ -835,23 +808,19 @@ en:
           false_html: "If you're <strong>flexible</strong> on dates, describe your school experience availability.<span id='more-detail-hint' class='govuk-hint'>For example, on specific days of the week and open days or around exams, holidays and term times.</span>"
       schools_on_boarding_availability_description:
         description: 'Outline when you offer school experience at your school.'
-      schools_on_boarding_confirmation:
-        acceptance_html: >-
-          By checking this box and setting up your school experience profile
-          you’re confirming, to the best of your knowledge:
-            <ul class="govuk-list govuk-list--bullet govuk-!-padding-top-2">
-              <li>the details you’re providing are correct</li>
-              <li>you agree to manage the data you receive in line with current GDPR regulations</li>
-              <li>you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a></li>
-            </ul>
       schools_on_boarding_key_stage_list:
-        early_years: 'Early years foundation stage (EYFS)'
+        early_years_options:
+          1: Early years foundation stage (EYFS)
+        key_stage_1_options:
+          1: Key stage 1
+        key_stage_2_options:
+          1: Key stage 2
 
       schools_placement_dates_configuration_form:
-        has_limited_availability:
+        has_limited_availability_options:
           true: 'Yes'
           false: 'No'
-        available_for_all_subjects:
+        available_for_all_subjects_options:
           true: 'General experience'
           false: 'Specific to a subject'
         max_bookings_count: 'Enter maximum number of bookings.'
@@ -920,6 +889,48 @@ en:
         has_dbs_check: Do you have a DBS certificate?
       candidates_registrations_privacy_policy:
         acceptance: Send your school experience request
+      bookings_school:
+        enabled: Turn profile on or off
+        availability_preference_fixed: Choose how dates are displayed
+        experience_type: School experience type
+      bookings_placement_date:
+        date: Enter start date
+        supports_subjects: Select school experience phase
+        virtual: Experience type
+      schools_placement_dates_subject_selection:
+        subject_ids: Select school experience subjects
+      schools_placement_dates_configuration_form:
+        has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
+        available_for_all_subjects: Select type of experience
+      schools_on_boarding_dbs_requirement:
+        dbs_policy_conditions: 'Do you require candidates to have or get a DBS check?'
+      schools_on_boarding_candidate_requirements_choice:
+        has_requirements: "Do you have any candidate requirements?"
+      schools_on_boarding_fees:
+        administration_fees: Administration costs
+        dbs_fees: DBS check costs
+        other_fees: Other costs
+      schools_on_boarding_administration_fee:
+        <<: *schools_on_boarding_school_fee_helpers
+      schools_on_boarding_dbs_fee:
+        <<: *schools_on_boarding_school_fee_helpers
+      schools_on_boarding_other_fee:
+        <<: *schools_on_boarding_school_fee_helpers
+      schools_on_boarding_candidate_experience_detail:
+        parking_provided: 'Do you provide parking for candidates?'
+        times_flexible: 'Are your start and finish times flexible?'
+      schools_on_boarding_access_needs_support:
+        supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
+      schools_on_boarding_disability_confident:
+        is_disability_confident: 'Are you signed up to the Disability Confident employer scheme?'
+      schools_on_boarding_access_needs_policy:
+        has_access_needs_policy: 'Do you have any online information which covers your disability and access needs policy?'
+      schools_on_boarding_experience_outline:
+        provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
+      schools_change_school:
+        change_to_urn: Select your school
+      bookings_booking:
+        date: Booking date
 
   views:
     pagination:

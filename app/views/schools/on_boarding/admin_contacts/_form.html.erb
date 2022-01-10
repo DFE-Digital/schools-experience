@@ -7,8 +7,8 @@
     <h1 class="govuk-heading-l">
       Enter school experience admin contact details
     </h1>
-    <%= form_for admin_contact, url: url, method: method do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+    <%= govuk_form_for admin_contact, url: url, method: method do |f| %>
+      <%= f.govuk_error_summary %>
 
       <p>
         Tell us the contact details of the person who manages school experience for your school.
@@ -40,10 +40,10 @@
         Provide admin contact details
       </h2>
 
-      <%= f.text_field :phone %>
-      <%= f.text_field :email %>
-      <%= f.text_field :email_secondary %>
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_text_field :phone %>
+      <%= f.govuk_text_field :email %>
+      <%= f.govuk_text_field :email_secondary %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

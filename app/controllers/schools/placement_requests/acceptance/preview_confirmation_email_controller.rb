@@ -16,7 +16,9 @@ module Schools
           @booking = @placement_request.booking
           @booking.assign_attributes(booking_params)
 
-          if @booking.valid?(:acceptance_email_preview) && @booking.accept! && candidate_booking_notification(@booking).despatch_later!
+          if @booking.valid?(:acceptance_email_preview) && @booking.accept!
+            candidate_booking_notifications(@booking)
+
             Bookings::Gitis::EventLogger.write_later \
               @booking.contact_uuid, :booking, @booking
 
@@ -32,9 +34,16 @@ module Schools
           params.require(:bookings_booking).permit(:candidate_instructions)
         end
 
-        def candidate_booking_notification(booking)
+        def candidate_booking_notifications(booking)
           NotifyEmail::CandidateBookingConfirmation
-            .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token))
+            .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token)).despatch_later!
+
+          NotifySms::CandidateBookingConfirmation.new(
+            to: booking.gitis_contact.telephone,
+            school_name: booking.bookings_school.name,
+            dates_requested: booking.date.to_formatted_s(:govuk),
+            cancellation_url: candidates_cancel_url(booking.token),
+          ).despatch_later!
         end
       end
     end

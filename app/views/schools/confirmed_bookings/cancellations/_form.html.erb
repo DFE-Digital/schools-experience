@@ -1,14 +1,14 @@
 <%- self.page_title = "Review and send cancellation email to candidate" %>
 <%= govuk_back_link schools_booking_path(@booking) %>
 
-<%= form_for cancellation, url: schools_booking_cancellation_path do |f| %>
+<%= govuk_form_for cancellation, url: schools_booking_cancellation_path do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">
         Review and send cancellation email to candidate
       </h1>
 
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+      <%= f.govuk_error_summary %>
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -19,22 +19,22 @@
           <%= render partial: "letter", locals: {
             cancellation: cancellation,
             reason: capture do
-              f.text_area :reason,
+              f.govuk_text_area :reason,
                 rows: 7,
                 placeholder: "Explain why the booking was cancelled. For example, the school is fully booked or there's no longer school experience available on the requested date",
-                label_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
+                label: { class: 'govuk-visually-hidden' }
             end,
             extra_details: capture do
-              f.text_area :extra_details,
+              f.govuk_text_area :extra_details,
                 rows: 7,
                 placeholder: "Add any extra details. For example, you may have availability on a different date or you can offer school experience in another subject",
-                label_options: { overwrite_defaults!: true, class: 'govuk-visually-hidden' }
+                label: { class: 'govuk-visually-hidden' }
             end
           } %>
 
           <section>
             <p>
-              <%= f.submit 'Preview cancellation email' %>
+              <%= f.govuk_submit 'Preview cancellation email' %>
             </p>
           </section>
         </div>

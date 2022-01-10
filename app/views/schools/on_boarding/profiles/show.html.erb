@@ -21,8 +21,8 @@
       </strong>
     </div>
 
-    <%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+    <%= govuk_form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
+      <%= f.govuk_error_summary %>
 
       <h2 class="govuk-heading-m">School details</h2>
       <dl class="govuk-summary-list">
@@ -70,18 +70,27 @@
       </dl>
 
       <% unless @current_school.private_beta? %>
-        <div class="govuk-form-group" id="<%= f.form_group_id(:acceptance) %>">
-          <%= f.check_box_input :acceptance %>
+        <div class="govuk-form-group">
+          <%= f.govuk_check_boxes_fieldset :acceptance, multiple: false do %>
+            <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge:" } %>
+            <p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>the details you’re providing are correct</li>
+                <li>you agree to manage the data you receive in line with current GDPR regulations</li>
+                <li>you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a></li>
+              </ul>
+            </p>
+          <% end %>
         </div>
 
         <div class="govuk-button-group">
-          <%= f.submit 'Accept and set up profile' %>
-          <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, class: 'govuk-button--secondary' %>
+          <%= f.govuk_submit 'Accept and set up profile' %>
+          <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, secondary: true %>
         </div>
       <% else %>
 	     <div class="govuk-button-group">
           <%= govuk_link_to 'Publish changes', schools_on_boarding_profile_publish_path %>
-	        <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, class: 'govuk-button--secondary' %>
+	        <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, secondary: true %>
         </div>
       <% end %>
 

@@ -4,18 +4,34 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for phases_list, url: url, method: method do |f| %>
-      <%= f.check_box_fieldset :title, %i(), { page_heading: true } do |fieldset| %>
-        <p>
-          Select all that apply.
-        </p>
-        <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
-        <%= fieldset.check_box_input :primary %>
-        <%= fieldset.check_box_input :secondary %>
-        <%= fieldset.check_box_input :secondary_and_college %>
-        <%= fieldset.check_box_input :college %>
+    <h1 class="govuk-heading-l">
+      Which school phases do you offer experience with?
+    </h1>
+
+    <%= govuk_form_for phases_list, url: url, method: method do |f| %>
+      <%= f.govuk_error_summary link_base_errors_to: :primary_1 %>
+
+      <p>
+        Select all that apply.
+      </p>
+
+      <%= f.govuk_check_boxes_fieldset :primary, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :primary, 1, 0, multiple: false %>
       <% end %>
-      <%= f.submit 'Continue' %>
+
+      <%= f.govuk_check_boxes_fieldset :secondary, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :secondary, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :secondary_and_college, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :secondary_and_college, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :college, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :college, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>

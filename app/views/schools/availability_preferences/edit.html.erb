@@ -2,13 +2,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for @current_school, url: schools_availability_preference_path, method: 'patch' do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
-      <%= f.radio_button_fieldset :availability_preference_fixed, choices: %w(true false) do |fieldset| %>
+    <%= govuk_form_for @current_school, url: schools_availability_preference_path, method: 'patch' do |f| %>
+      <%= f.govuk_error_summary f.object %>
+      <%= f.govuk_radio_buttons_fieldset :availability_preference_fixed do %>
 
         <%= f.hidden_field :availability_preference_fixed %>
 
-        <%= fieldset.radio_input true, 'aria-describedby': 'bookings-school-availability-preference-fixed-true-hint' %>
+        <%= f.govuk_radio_button :availability_preference_fixed, "true", 'aria-describedby': 'bookings-school-availability-preference-fixed-true-hint', link_errors: true %>
 
         <div id="bookings-school-availability-preference-fixed-true-hint" class="govuk-hint govuk-radios__hint preference-info">
           <p>
@@ -34,7 +34,7 @@
           </details>
         </div>
 
-        <%= fieldset.radio_input false, 'aria-describedby': 'bookings-school-availability-preference-fixed-false-hint'  %>
+        <%= f.govuk_radio_button :availability_preference_fixed, "false", 'aria-describedby': 'bookings-school-availability-preference-fixed-false-hint'  %>
 
         <div id="bookings-school-availability-preference-fixed-false-hint" class="govuk-hint govuk-radios__hint preference-info">
           <p>
@@ -57,7 +57,7 @@
         </div>
 
       <% end %>
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

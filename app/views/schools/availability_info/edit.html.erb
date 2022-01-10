@@ -4,10 +4,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for @current_school, url: schools_availability_info_path, method: :patch do |form| %>
+    <%= govuk_form_for @current_school, url: schools_availability_info_path, method: :patch do |f| %>
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
-          <%= form.text_area :availability_info, rows: 7, label_options: { overwrite_defaults!: true, class: 'govuk-heading-l' } do %>
+          <%= f.govuk_text_area :availability_info, rows: 7, label: { class: 'govuk-heading-l' } do %>
             <p>
               Outline when you offer in school or virtual school experiences at
               your school.
@@ -27,9 +27,9 @@
 
       </div>
 
-      <%= form.radio_button_fieldset :experience_type, choices: form.object.class::EXPERIENCE_TYPES %>
+      <%= f.govuk_collection_radio_buttons :experience_type, f.object.class::EXPERIENCE_TYPES, :to_s %>
 
-      <%= form.submit 'Save availability description' %>
+      <%= f.govuk_submit 'Save availability description' %>
     <%- end -%>
   </div>
 </div>

@@ -11,14 +11,23 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
     end
   end
 
-  let :candidate_request_rejection_notification do
+  let :candidate_request_rejection_notification_email do
     double NotifyEmail::CandidateBookingSchoolCancelsBooking,
+      despatch_later!: true
+  end
+
+  let :candidate_request_rejection_notification_sms do
+    double NotifySms::CandidateBookingSchoolCancelsBooking,
       despatch_later!: true
   end
 
   before do
     allow(NotifyEmail::CandidateBookingSchoolCancelsBooking).to receive(:new) do
-      candidate_request_rejection_notification
+      candidate_request_rejection_notification_email
+    end
+
+    allow(NotifySms::CandidateBookingSchoolCancelsBooking).to receive(:new) do
+      candidate_request_rejection_notification_sms
     end
   end
 
@@ -81,7 +90,15 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
           dates_requested: cancellation.dates_requested,
           school_search_url: new_candidates_school_search_url
 
-        expect(candidate_request_rejection_notification).to \
+        expect(NotifySms::CandidateBookingSchoolCancelsBooking).to have_received(:new).with \
+          to: gitis_contact.telephone,
+          school_name: cancellation.school_name,
+          dates_requested: cancellation.dates_requested
+
+        expect(candidate_request_rejection_notification_email).to \
+          have_received :despatch_later!
+
+        expect(candidate_request_rejection_notification_sms).to \
           have_received :despatch_later!
       end
 

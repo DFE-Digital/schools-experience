@@ -10,7 +10,7 @@
 </p>
 
 
-<%= form_for @placement_date, url: schools_placement_date_path(@placement_date), method: :put do |form| %>
+<%= govuk_form_for @placement_date, url: schools_placement_date_path(@placement_date), method: :put do |f| %>
 
   <div>
     <h2 class="govuk-heading-m">Start date</h2>
@@ -19,15 +19,17 @@
     </p>
   </div>
 
-  <%= form.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true }  %>
+  <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m govuk-!-margin-0' }  %>
 
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset">
-      <%= form.check_box_input :active %>
+      <%= f.govuk_check_boxes_fieldset :active, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :active, 1, 0, multiple: false, link_errors: true %>
+      <% end %>
     </fieldset>
   </div>
 
-  <%= form.submit 'Continue' %>
+  <%= f.govuk_submit 'Continue' %>
 <%- end -%>
 
 <% unless Feature.instance.active? :subject_specific_dates %>

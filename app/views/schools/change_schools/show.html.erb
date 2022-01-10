@@ -2,33 +2,22 @@
   <div class="govuk-grid-column-two-thirds">
     <% if Schools::ChangeSchool.allow_school_change_in_app? %>
       <% if @schools.any? %>
-        <%= form_for @change_school, url: schools_change_path, method: :post do |f| %>
-          <%= f.radio_button_fieldset :change_to_urn, page_heading: true do %>
+        <%= govuk_form_for @change_school, url: schools_change_path, method: :post do |f| %>
+          <%= f.govuk_radio_buttons_fieldset :change_to_urn, legend: { tag: "h1", size: "l" } do %>
             <% @schools.each do |school| %>
-              <div class="govuk-radios__item">
-                <%= f.radio_button :change_to_urn, school.urn, class: 'govuk-radios__input' %>
-
-                <%= f.label :change_to_urn, class: 'govuk-label govuk-radios__label', value: school.urn do %>
-                  <%= school.name %>
-
-                  <%= numbered_circle f.object.task_count_for_urn(school.urn),
-                        aria_label: "outstanding bookings and requests for #{school.name}" %>
-                <% end %>
-              </div>
+              <%= f.govuk_radio_button :change_to_urn, school.urn, label: -> do %>
+                <%= school.name %>
+                <%= numbered_circle f.object.task_count_for_urn(school.urn),
+                  aria_label: "outstanding bookings and requests for #{school.name}" %>
+              <% end %>
             <% end %>
             <% if Schools::ChangeSchool.request_approval_url %>
               <div class= 'govuk-radios__divider'>or</div>
-              <div class="govuk-radios__item">
-                  <%= f.radio_button :change_to_urn, "request access", class: 'govuk-radios__input' %>
-
-                  <%= f.label :change_to_urn, class: 'govuk-label govuk-radios__label', value: "request access" do %>
-                    Request access to another school
-                  <% end %>
-              </div>
+              <%= f.govuk_radio_button :change_to_urn, "request access", label: { text: "Request access to another school" } %>
             <% end %>
           <% end %>
 
-          <%= f.submit "Continue" %>
+          <%= f.govuk_submit "Continue" %>
         <% end %>
       <% elsif @dfe_sign_in_add_service_url %>
         <h1 class="govuk-heading-l">Manage school experience</h1>

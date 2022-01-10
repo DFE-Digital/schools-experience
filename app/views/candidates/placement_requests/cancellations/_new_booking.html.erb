@@ -2,7 +2,9 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Cancel booking</h1>
-      <%= form_for cancellation, url: candidates_placement_request_cancellation_path(cancellation.placement_request.token) do |f| %>
+      <%= govuk_form_for cancellation, url: candidates_placement_request_cancellation_path(cancellation.placement_request.token) do |f| %>
+        <%= f.govuk_error_summary %>
+
         <p>
           You've chosen to cancel your school experience booking for <%= cancellation.school_name %>.
         </p>
@@ -19,7 +21,7 @@
           </strong>
         </div>
 
-        <%= f.text_area :reason,
+        <%= f.govuk_text_area :reason,
             rows: 5,
             label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } do %>
 
@@ -28,7 +30,7 @@
             </p>
         <% end %>
 
-        <%= f.submit 'Cancel booking' %>
+        <%= f.govuk_submit 'Cancel booking' %>
 
         <% # TODO add link to 'Contact school' booking show path %>
         <% # TODO add link to 'Your requests and bookings' booking index path %>

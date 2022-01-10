@@ -11,16 +11,22 @@
   at your school.
 </p>
 
-<%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |form| %>
-  <%= GovukElementsErrorsHelper.error_summary form.object, 'There is a problem', '' %>
-  <%= form.date_field :date, heading: true %>
-  <%= form.number_field :duration, width: 3, required: true, label_options: { class: 'govuk-heading-m', overwrite_defaults!: true } %>
-  <%= form.radio_button_fieldset :virtual, choices: [true, false] %>
+<%= govuk_form_for @placement_date, url: schools_placement_dates_path, method: :post do |f| %>
+  <%= f.govuk_error_summary %>
+  <%= f.govuk_date_field :date, heading: true %>
+  <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m' } %>
+  <%= f.govuk_radio_buttons_fieldset :virtual do %>
+    <%= f.govuk_radio_button :virtual, true, link_errors: true %>
+    <%= f.govuk_radio_button :virtual, false, label: { text: t("helpers.label.bookings_placement_date.virtual_options.false") }, hint: nil %>
+  <% end %>
 
   <% if show_subject_support_option(@current_school) %>
-    <%= form.radio_button_fieldset :supports_subjects, choices: [false, true] %>
+    <%= f.govuk_radio_buttons_fieldset :supports_subjects do %>
+      <%= f.govuk_radio_button :supports_subjects, false, label: { text: t("helpers.label.bookings_placement_date.supports_subjects_options.false") }, link_errors: true %>
+      <%= f.govuk_radio_button :supports_subjects, true %>
+    <% end %>
   <% end %>
-  <%= form.submit 'Continue' %>
+  <%= f.govuk_submit 'Continue' %>
 <%- end -%>
 
 <% unless Feature.instance.active? :subject_specific_dates %>

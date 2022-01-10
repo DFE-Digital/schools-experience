@@ -4,17 +4,29 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for key_stage_list, url: url, method: method do |f| %>
-      <%= f.check_box_fieldset :title, %i(), { page_heading: true } do |fieldset| %>
-        <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
-        <p>
-          Select all that apply.
-        </p>
-        <%= fieldset.check_box_input :early_years %>
-        <%= fieldset.check_box_input :key_stage_1 %>
-        <%= fieldset.check_box_input :key_stage_2 %>
+    <h1 class="govuk-heading-l">
+      Which key stages do you offer experience with?
+    </h1>
+    <%= govuk_form_for key_stage_list, url: url, method: method do |f| %>
+      <%= f.govuk_error_summary link_base_errors_to: :early_years_1 %>
+
+      <p>
+        Select all that apply.
+      </p>
+
+      <%= f.govuk_check_boxes_fieldset :early_years, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :early_years, 1, 0, multiple: false %>
       <% end %>
-      <%= f.submit 'Continue' %>
+
+      <%= f.govuk_check_boxes_fieldset :key_stage_1, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :key_stage_1, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :key_stage_2, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :key_stage_2, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>
