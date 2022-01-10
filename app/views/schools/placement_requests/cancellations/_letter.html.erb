@@ -15,7 +15,7 @@
 
   <section id="rejection-details">
     <h3 class="govuk-heading-s">
-      Your request was turned down for the following reasons:
+      Reason your request was declined:
     </h3>
     <p>
       <%= reason %>
@@ -39,8 +39,25 @@
     </h3>
 
     <p>
-      Apply for school experience at other schools -
-      <%= link_to "Find school experience.", new_candidates_school_search_path %>
+      Request school experience at other schools on the
+      <%= link_to "Get school experience", new_candidates_school_search_path %>
+      website.
+    </p>
+  </section>
+
+  <section id="contact-school">
+    <h3 class="govuk-heading-s">
+      Contact schools directly
+    </h3>
+
+    <p>
+      If you cannot find anything in your area, you can arrange school experience
+      by contacting schools directly.
+    </p>
+    <p>
+      Find more information on how to approach schools yourself on the
+      <%= link_to 'Get Into Teaching', 'https://getintoteaching.education.gov.uk/get-school-experience' %>
+      website.
     </p>
   </section>
 
@@ -50,10 +67,20 @@
     </h3>
 
     <p>
-      If you need any further help and support getting school experience or
-      becoming a teacher visit the
-      <%= link_to "Get Into Teaching", 'https://getintoteaching.education.gov.uk/get-school-experience' %>
+      If you need help and support, contact the Get Into Teaching service
+      by calling 0800 389 2500 (8:30am to 5:30pm, Monday to Friday) or visiting the
+      <%= link_to 'Get Into Teaching', 'https://getintoteaching.education.gov.uk/get-school-experience' %>
       website.
+    </p>
+
+    <p>
+      Get free one-to-one <%= link_to 'support and advice', 'https://adviser-getintoteaching.education.gov.uk' %>
+      from a team of trained professionals.
+    </p>
+
+    <p>
+      Reserve your place on one of our free nationwide
+      <%= link_to 'teaching events', 'https://getintoteaching.education.gov.uk/events' %>.
     </p>
   </section>
 </section>
