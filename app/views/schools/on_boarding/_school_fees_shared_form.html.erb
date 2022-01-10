@@ -23,8 +23,8 @@
       <%= f.govuk_text_area :description, rows: 7 %>
 
       <%= f.govuk_radio_buttons_fieldset :interval do %>
-        <% f.object.available_intervals.each do |interval| %>
-          <%= f.govuk_radio_button :interval, interval, label: { text: interval } %>
+        <% f.object.available_intervals.each_with_index do |interval, index| %>
+          <%= f.govuk_radio_button :interval, interval, label: { text: interval }, link_errors: index.zero? %>
         <% end %>
       <% end %>
 

@@ -50,7 +50,7 @@
       <% end %>
 
       <%= f.govuk_radio_buttons_fieldset :parking_provided do %>
-        <%= f.govuk_radio_button :parking_provided, "true" do %>
+        <%= f.govuk_radio_button :parking_provided, "true", link_errors: true do %>
           <%= f.govuk_text_area :parking_details, rows: 7 %>
         <% end %>
         <%= f.govuk_radio_button :parking_provided, "false" do %>
@@ -76,7 +76,7 @@
           individual needs. For example, around child care or any other
           responsibilities.
         </p>
-        <%= f.govuk_radio_button :times_flexible, "true" do %>
+        <%= f.govuk_radio_button :times_flexible, "true", link_errors: true do %>
           <%= f.govuk_text_area :times_flexible_details, rows: 7 %>
         <% end %>
         <%= f.govuk_radio_button :times_flexible, "false" %>

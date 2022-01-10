@@ -14,9 +14,9 @@
       <%= f.govuk_error_summary %>
       <%= f.hidden_field :supports_access_needs, value: nil %>
 
-      <%= f.govuk_radio_buttons_fieldset :supports_access_needs,inline: true, legend: { tag: "h1", size: "l" } do %>
+      <%= f.govuk_radio_buttons_fieldset :supports_access_needs, inline: true, legend: { tag: "h1", size: "l" } do %>
         <p>These details will be added to your school profile.</p>
-        <%= f.govuk_radio_button :supports_access_needs, "true" %>
+        <%= f.govuk_radio_button :supports_access_needs, "true", link_errors: true %>
         <%= f.govuk_radio_button :supports_access_needs, "false" %>
       <% end %>
 

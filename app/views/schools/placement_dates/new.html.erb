@@ -24,13 +24,13 @@
   <%= f.govuk_date_field :date, heading: true %>
   <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m' } %>
   <%= f.govuk_radio_buttons_fieldset :virtual do %>
-    <%= f.govuk_radio_button :virtual, true %>
+    <%= f.govuk_radio_button :virtual, true, link_errors: true %>
     <%= f.govuk_radio_button :virtual, false, label: { text: t("helpers.label.bookings_placement_date.virtual_options.false") }, hint: nil %>
   <% end %>
 
   <% if show_subject_support_option(@current_school) %>
     <%= f.govuk_radio_buttons_fieldset :supports_subjects do %>
-      <%= f.govuk_radio_button :supports_subjects, false, label: { text: t("helpers.label.bookings_placement_date.supports_subjects_options.false") } %>
+      <%= f.govuk_radio_button :supports_subjects, false, label: { text: t("helpers.label.bookings_placement_date.supports_subjects_options.false") }, link_errors: true %>
       <%= f.govuk_radio_button :supports_subjects, true %>
     <% end %>
   <% end %>

@@ -26,7 +26,7 @@
       <%= f.govuk_radio_buttons_fieldset :dbs_policy_conditions do %>
         <%= f.govuk_error_summary %>
 
-        <%= f.govuk_radio_button :dbs_policy_conditions, 'required' do %>
+        <%= f.govuk_radio_button :dbs_policy_conditions, 'required', link_errors: true do %>
           <%= f.govuk_text_area :dbs_policy_details, max_words: 50 %>
         <% end %>
 

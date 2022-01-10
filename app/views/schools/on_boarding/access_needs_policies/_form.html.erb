@@ -18,7 +18,7 @@
           For example, a link to a relevant document or page on your school
           website
         </p>
-        <%= f.govuk_radio_button :has_access_needs_policy, "true" do %>
+        <%= f.govuk_radio_button :has_access_needs_policy, "true", link_errors: true do %>
           <%= f.govuk_text_field :url %>
         <% end %>
         <%= f.govuk_radio_button :has_access_needs_policy, "false" %>
