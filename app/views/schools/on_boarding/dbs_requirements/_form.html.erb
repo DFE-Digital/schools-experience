@@ -22,22 +22,22 @@
       You'll be given a chance to check and change the details you enter.
     </p>
 
-    <%= form_for dbs_requirement, url: url, method: method do |f| %>
-      <%= f.radio_button_fieldset :dbs_policy_conditions do |fieldset| %>
-        <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+    <%= govuk_form_for dbs_requirement, url: url, method: method do |f| %>
+      <%= f.govuk_radio_buttons_fieldset :dbs_policy_conditions do %>
+        <%= f.govuk_error_summary %>
 
-        <%= fieldset.radio_input 'required' do  %>
-          <%= f.text_area_with_maxwords :dbs_policy_details, maxwords: { count: 50 } %>
+        <%= f.govuk_radio_button :dbs_policy_conditions, 'required', link_errors: true do %>
+          <%= f.govuk_text_area :dbs_policy_details, max_words: 50 %>
         <% end %>
 
-        <%= fieldset.radio_input 'inschool' do  %>
-          <%= f.text_area_with_maxwords :dbs_policy_details_inschool, maxwords: { count: 50 } %>
+        <%= f.govuk_radio_button :dbs_policy_conditions, 'inschool' do %>
+          <%= f.govuk_text_area :dbs_policy_details_inschool, max_words: 50 %>
         <% end %>
 
-        <%= fieldset.radio_input 'notrequired' %>
+        <%= f.govuk_radio_button :dbs_policy_conditions, 'notrequired' %>
       <% end %>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

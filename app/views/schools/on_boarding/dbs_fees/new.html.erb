@@ -15,13 +15,14 @@
       DBS check costs
     </h1>
 
-    <%= form_for @dbs_fee, url: schools_on_boarding_dbs_fee_path do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
-      <%= f.pounds_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.99, label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } %>
+    <%= govuk_form_for @dbs_fee, url: schools_on_boarding_dbs_fee_path do |f| %>
+      <%= f.govuk_error_summary %>
 
-      <%= f.text_area :description, rows: 4, width: 'full', label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } %>
-      <%= f.text_area :payment_method, rows: 4, width: 'full', label_options: { overwrite_defaults!: true, class: 'govuk-heading-m' } %>
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_number_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.9, label: { class: 'govuk-heading-m' }, prefix_text: '£' %>
+
+      <%= f.govuk_text_area :description, rows: 4, width: 'full', label: { class: 'govuk-heading-m' } %>
+      <%= f.govuk_text_area :payment_method, rows: 4, width: 'full', label: { class: 'govuk-heading-m' } %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

@@ -27,7 +27,7 @@
       <%= f.hidden_field :has_dbs_check, value: nil %>
 
       <%= f.govuk_radio_buttons_fieldset :has_dbs_check do %>
-        <%= f.govuk_radio_button :has_dbs_check, true, label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :has_dbs_check, true, label: { text: "Yes" }, link_errors: true %>
         <%= f.govuk_radio_button :has_dbs_check, false, label: { text: "No" } %>
       <% end %>
 

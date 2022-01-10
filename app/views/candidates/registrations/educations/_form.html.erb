@@ -12,14 +12,14 @@
     <%= f.govuk_radio_buttons_fieldset :degree_stage do %>
       <% f.object.available_degree_stages.each_with_index do |degree_stage, index| %>
         <% if f.object.requires_explanation_for_degree_stage? degree_stage %>
-          <%= f.govuk_radio_button :degree_stage, degree_stage, link_errors: index == 0, label: { text: degree_stage }, data: {
+          <%= f.govuk_radio_button :degree_stage, degree_stage, link_errors: index.zero?, label: { text: degree_stage }, data: {
             action: 'click->education-form#degreeStageSelected',
             requires_subject: f.object.requires_subject_for_degree_stage?(degree_stage)
           } do %>
             <%= f.govuk_text_area :degree_stage_explaination %>
           <% end %>
         <% else %>
-          <%= f.govuk_radio_button :degree_stage, degree_stage, link_errors: index == 0, label: { text: degree_stage }, data: {
+          <%= f.govuk_radio_button :degree_stage, degree_stage, link_errors: index.zero?, label: { text: degree_stage }, data: {
             action: 'click->education-form#degreeStageSelected',
             requires_subject: f.object.requires_subject_for_degree_stage?(degree_stage)
           } %>

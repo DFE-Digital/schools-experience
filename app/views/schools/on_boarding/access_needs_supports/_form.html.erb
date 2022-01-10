@@ -10,17 +10,17 @@
 <%= govuk_back_link javascript: true %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for access_needs_support, url: schools_on_boarding_access_needs_support_path, method: method do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+    <%= govuk_form_for access_needs_support, url: schools_on_boarding_access_needs_support_path, method: method do |f| %>
+      <%= f.govuk_error_summary %>
       <%= f.hidden_field :supports_access_needs, value: nil %>
 
-      <%= f.radio_button_fieldset :supports_access_needs, page_heading: true, inline: true do |fieldset| %>
+      <%= f.govuk_radio_buttons_fieldset :supports_access_needs, inline: true, legend: { tag: "h1", size: "l" } do %>
         <p>These details will be added to your school profile.</p>
-        <%= fieldset.radio_input true %>
-        <%= fieldset.radio_input false %>
+        <%= f.govuk_radio_button :supports_access_needs, "true", link_errors: true %>
+        <%= f.govuk_radio_button :supports_access_needs, "false" %>
       <% end %>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
 
     <p class="govuk-inset-text">

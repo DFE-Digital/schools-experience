@@ -11,10 +11,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for disability_confident, url: schools_on_boarding_disability_confident_path, method: method do |f| %>
-      <%= GovukElementsErrorsHelper.error_summary f.object, 'There is a problem', '' %>
+    <%= govuk_form_for disability_confident, url: schools_on_boarding_disability_confident_path, method: method do |f| %>
+      <%= f.govuk_error_summary %>
       <%= f.hidden_field :is_disability_confident, value: nil %>
-      <%= f.radio_button_fieldset :is_disability_confident, page_heading: true do |fieldset| %>
+      <%= f.govuk_radio_buttons_fieldset :is_disability_confident, legend: { tag: "h1", size: "l" } do %>
 
         <div>
           <%= image_pack_tag 'disability-confident-small.png', alt: 'Disability confident logo' %>
@@ -23,8 +23,8 @@
           </span>
         </div>
 
-        <%= fieldset.radio_input true %>
-        <%= fieldset.radio_input false %>
+        <%= f.govuk_radio_button :is_disability_confident, "true", link_errors: true %>
+        <%= f.govuk_radio_button :is_disability_confident, "false" %>
       <% end %>
 
       <p>
@@ -39,7 +39,7 @@
           'https://disabilityconfident.campaign.gov.uk/' %>
       </p>
 
-      <%= f.submit 'Continue' %>
+      <%= f.govuk_submit 'Continue' %>
     <% end %>
   </div>
 </div>

@@ -15,7 +15,7 @@
             Once you’ve accepted the maximum number of bookings this date will not be shown to candidates.
           </p>
 
-          <%= f.govuk_radio_button :has_limited_availability, true do %>
+          <%= f.govuk_radio_button :has_limited_availability, true, link_errors: true do %>
             <%= f.govuk_number_field :max_bookings_count, class: 'govuk-!-width-one-half' %>
           <% end %>
           <%= f.govuk_radio_button :has_limited_availability, false, label: { text: t("helpers.label.schools_placement_dates_configuration_form.has_limited_availability_options.false") } %>
@@ -30,7 +30,7 @@
             Tell us if this is a general experience <strong>or</strong> is
             specific to a subject.
           </p>
-          <%= f.govuk_radio_button :available_for_all_subjects, true %>
+          <%= f.govuk_radio_button :available_for_all_subjects, true, link_errors: true %>
           <%= f.govuk_radio_button :available_for_all_subjects, false, label: { text: t("helpers.label.schools_placement_dates_configuration_form.available_for_all_subjects_options.false") } %>
         <% end %>
       <% end %>
