@@ -19,7 +19,7 @@
     </p>
 
     <%= govuk_form_for candidate_experience_detail, url: url, method: method do |f| %>
-      <%= f.govuk_error_summary %>
+      <%= f.govuk_error_summary link_base_errors_to: :business_dress_1 %>
 
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">Do you have a dress code for candidates?</h2>

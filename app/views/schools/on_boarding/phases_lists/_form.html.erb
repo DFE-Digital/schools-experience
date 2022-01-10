@@ -15,7 +15,7 @@
     </h1>
 
     <%= govuk_form_for phases_list, url: url, method: method do |f| %>
-      <%= f.govuk_error_summary %>
+      <%= f.govuk_error_summary link_base_errors_to: :primary_1 %>
 
       <p>
         Select all that apply.
