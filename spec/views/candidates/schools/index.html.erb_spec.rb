@@ -68,7 +68,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     end
 
     it "shows the disability confident filter" do
-      expect(rendered).to have_css('.govuk-fieldset__heading', text: 'Disability and access needs')
+      expect(rendered).to have_css('.govuk-fieldset__legend', text: 'Disability and access needs')
       expect(rendered).to have_css '#search-filter input[name="disability_confident"]'
     end
 

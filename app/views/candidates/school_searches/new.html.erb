@@ -14,23 +14,21 @@
   <div class="govuk-grid-column-one-half">
     <div id="search-form">
 
-      <%= form_for(@search,
+      <%= govuk_form_for(@search,
         as: '',
         url: candidates_schools_path,
         method: :get,
         html: { class: 'school-search-form' }) do |f| %>
+          <%= f.govuk_text_field :location, required: true, minlength: "2", label: { text: t('helpers.label.location') } %>
 
-          <%= f.search_field :location, required: true, minlength: "2" %>
-
-          <%= f.collection_select :distance,
-                Candidates::SchoolSearch.distances, :first, :last unless f.object.whitelisted_urns? %>
+          <%= f.govuk_collection_select :distance,
+                Candidates::SchoolSearch.distances, :first, :last, label: { text: t('helpers.label.distance')  } unless f.object.whitelisted_urns? %>
 
           <div class="school-search-form__submit">
             <div class="govuk-form-group">
-              <%= f.submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
+              <%= f.govuk_submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
             </div>
           </div>
-
       <% end %>
     </div>
   </div>
