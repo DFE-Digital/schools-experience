@@ -122,7 +122,7 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
 
       before do
         allow(I18n).to(receive(:t).with(
-          "helpers.label.bookings_placement_request_cancellation.rejection_category.#{category}"
+          "helpers.label.bookings_placement_request_cancellation.rejection_category_options.#{category}"
         ).and_return(translated_string))
       end
 

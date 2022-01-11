@@ -97,11 +97,11 @@
     <div>
       <% if @placement_request.fixed_date_is_bookable? && @last_booking_found %>
         <%# contact details are present and school has fixed dates, allow for move on to the email preview%>
-        <%= form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>
+        <%= govuk_form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>
           <%= f.hidden_field :contact_name %>
           <%= f.hidden_field :contact_number %>
           <%= f.hidden_field :contact_email %>
-          <%= f.submit 'Continue' %>
+          <%= f.govuk_submit 'Continue' %>
         <% end %>
         <%= govuk_link_to 'Make changes', new_schools_placement_request_acceptance_make_changes_path(@placement_request), secondary: true, data: { module: "govuk-button" } %>
       <% else %>
