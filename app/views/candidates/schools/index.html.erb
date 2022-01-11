@@ -55,6 +55,10 @@
             <%= f.govuk_check_box :disability_confident, "1", multiple: false, link_errors: true, include_hidden: false, label: { text: t("helpers.label.disability_confident") } %>
           <% end %>
 
+          <%= f.govuk_check_boxes_fieldset :parking, multiple: false, legend: { text: t("helpers.fieldset.parking") } do %>
+            <%= f.govuk_check_box :parking, "1", multiple: false, link_errors: true, include_hidden: false, label: { text: t("helpers.label.parking") } %>
+          <% end %>
+
           <%= f.govuk_submit 'Update schools list', name: nil %>
         <% end %>
       </div>
@@ -62,7 +66,7 @@
   </aside>
 
   <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
-    <%- if @search.subjects.any? || @search.phases.any? || @search.dbs_policies.any? || @search.disability_confident.present? -%>
+    <% if @search.subjects.any? || @search.phases.any? || @search.dbs_policies.any? || @search.disability_confident.present? || @search.parking.present?%>
       <div class="school-search-filter-info">
         <div>
           <%= school_search_phase_filter_description @search %>
@@ -75,8 +79,13 @@
         <div>
           <%= school_search_dbs_policies_filter_description @search %>
         </div>
+
         <div>
           <%= school_search_disability_confident_filter_description(@search) %>
+        </div>
+
+        <div>
+          <%= school_search_parking_filter_description(@search) %>
         </div>
       </div>
     <%- end -%>

@@ -168,6 +168,15 @@ class Bookings::School < ApplicationRecord
     end
   }
 
+  scope :with_parking, lambda { |option|
+    if option.present?
+      joins(:profile)
+        .where('bookings_profiles.parking_provided IS ?', option)
+    else
+      all
+    end
+  }
+
   def to_param
     urn.to_s.presence
   end

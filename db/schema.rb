@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_10_132724) do
+ActiveRecord::Schema.define(version: 2022_01_11_121054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
@@ -195,6 +195,7 @@ ActiveRecord::Schema.define(version: 2021_12_10_132724) do
     t.uuid "analytics_tracking_uuid"
     t.integer "dbs_policies", array: true
     t.boolean "disability_confident"
+    t.boolean "parking"
   end
 
   create_table "bookings_school_types", force: :cascade do |t|

@@ -395,6 +395,30 @@ describe Bookings::School, type: :model do
           end
         end
       end
+
+      context 'By parking' do
+        before do
+          create(:bookings_profile, parking_provided: true, school: school_a)
+          create(:bookings_profile, parking_provided: true, school: school_b)
+          create(:bookings_profile, school: school_c)
+        end
+
+        context 'when no options suplied' do
+          specify 'should return all schools' do
+            expect(subject.with_parking(nil)).to include(school_a, school_b, school_c)
+          end
+        end
+
+        context 'when true' do
+          specify 'should return all disability confident schools' do
+            expect(subject.with_parking(true)).to include(school_a, school_b)
+          end
+
+          specify 'should not return school that are not disability confident' do
+            expect(subject.with_parking(true)).not_to include(school_c)
+          end
+        end
+      end
     end
 
     context 'Availability and placement dates' do
