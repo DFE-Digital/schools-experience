@@ -56,7 +56,7 @@ end
 
 Then("it should have the hint text {string}") do |hint|
   within('#search-filter') do
-    expect(page).to have_css('legend > span.govuk-hint', text: hint)
+    expect(page).to have_css('fieldset > span.govuk-hint', text: hint)
   end
 end
 
@@ -79,7 +79,7 @@ end
 Then("it should have checkboxes for all subjects") do
   within('#search-filter') do
     form_group = page
-      .find('.govuk-label', text: 'Subjects')
+      .find('legend', text: 'Subjects')
       .ancestor('div.govuk-form-group')
 
     ensure_check_boxes_exist(form_group, @subjects.map(&:name))
@@ -111,7 +111,7 @@ When("I click back on the results screen") do
 end
 
 Then("the location input should be populated with {string}") do |string|
-  expect(page.find('input#location').value).to eql(string)
+  expect(page.find("input[name]").value).to eql(string)
 end
 
 Given("there are no schools near my search location") do
