@@ -11,9 +11,11 @@
 
 <%- if @bookings.any? %>
 
-  <%= form_with url: schools_confirm_attendance_path, method: 'put' do |f| %>
-    <%= GovukElementsErrorsHelper.error_summary @updated_attendance, 'There is a problem', '' %>
+  <%= govuk_form_for @updated_attendance, url: nil do |f| %>
+    <%= f.govuk_error_summary %>
+  <% end %>
 
+  <%= govuk_form_with url: schools_confirm_attendance_path, method: 'put' do |f| %>
     <%= pagination_bar @bookings %>
 
     <table class="govuk-table">
@@ -53,7 +55,7 @@
     <%= pagination_bar @bookings %>
 
     <div>
-      <%= f.submit 'Save and return to dashboard' %>
+      <%= f.govuk_submit 'Save and return to dashboard' %>
     </div>
 
   <% end %>
