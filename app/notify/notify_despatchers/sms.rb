@@ -1,5 +1,7 @@
 class NotifyDespatchers::Sms < NotifyDespatchers::Base
   def despatch_later!
+    return unless Feature.active? :sms
+
     validate_personalisation!
 
     to.each do |phone_number|

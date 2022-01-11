@@ -186,6 +186,16 @@ describe NotifyDespatchers::Sms do
     end
   end
 
+  before { allow(Feature).to receive(:active?).with(:sms) { true } }
+
   subject { StubSmsNotification }
   include_examples "notify_client"
+
+  context "when in non-production environments" do
+    before { allow(Feature).to receive(:active?).with(:sms) { false } }
+
+    it "does not despatch SMS" do
+      expect(NotifyService.instance).not_to have_received(notify_method)
+    end
+  end
 end
