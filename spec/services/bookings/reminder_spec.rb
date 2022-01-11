@@ -10,6 +10,8 @@ describe Bookings::Reminder, type: :request do
 
   subject { Bookings::Reminder.new(booking, time_until_booking, time_until_booking_descriptive) }
 
+  before { allow(Feature).to receive(:active?).with(:sms) { true } }
+
   describe '#deliver' do
     it "queues an email and sms per provided booking" do
       sign_up = build(:api_schools_experience_sign_up_with_name)
