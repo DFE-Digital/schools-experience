@@ -1,1 +1,1 @@
-Your school experience is ((time_until_booking)) (((dates_requested))). Check your inbox or spam for details. To cancel, visit: ((cancellation_url))
+Your school experience is ((time_until_booking_descriptive)) (((dates_requested))). Check your inbox or spam for details. To cancel, visit: ((cancellation_url))

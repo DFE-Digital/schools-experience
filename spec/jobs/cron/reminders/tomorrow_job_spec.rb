@@ -6,7 +6,7 @@ describe Cron::Reminders::TomorrowJob, type: :job do
   end
 
   describe '#time_until_booking' do
-    specify { expect(subject.time_until_booking).to eql('tomorrow') }
+    specify { expect(subject.time_until_booking).to eql('one day') }
   end
 
   describe '#perform' do
