@@ -59,6 +59,10 @@ Then('I should see a {string} link/button') do |link_text|
   expect(page).to have_link(link_text)
 end
 
+Then("I should see a {string} link to the booking") do |link_text|
+  expect(page).to have_link(link_text, href: path_for('booking', booking_id: @booking_id))
+end
+
 Then("the page title should be {string}") do |title|
   title_suffix = "DfE School Experience"
   expect(title).to be_present
@@ -85,6 +89,10 @@ Then("I should see the following breadcrumbs:") do |table|
       end
     end
   end
+end
+
+Then("I should not see any breadcrumbs") do
+  expect(page).not_to have_css('nav.govuk-breadcrumbs')
 end
 
 Then("I should see a email link to {string}") do |string|

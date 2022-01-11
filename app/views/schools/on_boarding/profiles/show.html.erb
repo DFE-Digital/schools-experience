@@ -3,8 +3,8 @@
 <%
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
-    'Check your answers before setting up your school experience profile' => nil
-  }
+    'School profile' => nil
+  } if @current_school.private_beta?
 %>
 
 <div class="govuk-grid-row" id="school-onboarding-profile">
@@ -83,13 +83,19 @@
           <% end %>
         </div>
 
-        <%= f.govuk_submit 'Accept and set up profile' %>
+        <div class="govuk-button-group">
+          <%= f.govuk_submit 'Accept and set up profile' %>
+          <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, secondary: true %>
+        </div>
       <% else %>
-        <%= govuk_link_to 'Publish changes', schools_on_boarding_profile_publish_path %>
+	     <div class="govuk-button-group">
+          <%= govuk_link_to 'Publish changes', schools_on_boarding_profile_publish_path %>
+	        <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, secondary: true %>
+        </div>
       <% end %>
 
       <div>
-        <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, class: 'govuk-button--secondary' %>
+	      <%= govuk_link_to 'Return to dashboard', schools_dashboard_path, secondary: true %>
       </div>
     <% end %>
   </div>

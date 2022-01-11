@@ -45,3 +45,15 @@ Feature: Preview profile
         And the DBS Check information in the sidebar should match the information entered in the wizard
         And I should see the fee information I entered in the wizard
         And I should see the dress code policy information I entered in the wizard
+
+    Scenario: Breadcrumbs
+        Then I should not see any breadcrumbs
+
+    Scenario: Breadcrumbs when school is onboarded
+        Given the school is fully-onboarded
+        And I am on the 'Profile preview' page
+        Then I should see the following breadcrumbs:
+            | Text           | Link                         |
+            | Some school    | /schools/dashboard           |
+            | School profile | /schools/on_boarding/profile |
+            | Preview        | None                         |

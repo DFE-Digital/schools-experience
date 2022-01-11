@@ -1,5 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%= govuk_back_link edit_schools_placement_request_cancellation_path(@cancellation.placement_request) %>
+
     <h1 class="govuk-heading-l">
       Send rejection email to candidate
     </h1>
@@ -27,14 +29,6 @@
       <p>
         <%= govuk_button_to 'Send rejection email',
           schools_placement_request_cancellation_notification_delivery_path(@cancellation.placement_request) %>
-      </p>
-
-      <p>
-        <%= link_to 'Amend the rejection email', edit_schools_placement_request_cancellation_path(@cancellation.placement_request) %>
-      </p>
-
-      <p>
-        <%= link_to 'Back to request', schools_placement_request_path(@cancellation.placement_request) %>
       </p>
     </section>
   </div>

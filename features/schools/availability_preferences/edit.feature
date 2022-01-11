@@ -12,13 +12,6 @@ Feature: Editing placement dates
         Given I am on the 'availability preferences' page
         Then the page title should be 'Choose how dates are displayed'
 
-    Scenario: Breadcrumbs
-        Given I am on the 'availability preferences' page
-        Then I should see the following breadcrumbs:
-            | Text                           | Link               |
-            | Some school                    | /schools/dashboard |
-            | Choose how dates are displayed | None               |
-
     Scenario: Page contents
         Given I am on the 'availability preferences' page
         Then I should see radio buttons for 'Choose how dates are displayed' with the following options:

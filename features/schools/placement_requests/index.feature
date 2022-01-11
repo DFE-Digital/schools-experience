@@ -12,11 +12,6 @@ Feature: Viewing all placement requests
         Given I am on the 'placement requests' page
         Then the page title should be 'All placement requests'
 
-    Scenario: Back link
-        Given there are some placement requests
-        When I am on the 'placement requests' page
-        Then I should see a 'Back' link to the 'schools dashboard'
-
     Scenario: List presence
         Given there are some placement requests
         When I am on the 'placement requests' page

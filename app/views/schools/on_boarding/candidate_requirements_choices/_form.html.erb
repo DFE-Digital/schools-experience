@@ -1,16 +1,12 @@
 <%- self.page_title = 'Do you have any candidate requirements?'-%>
 
-<%
-  self.breadcrumbs = {
-    @current_school.name => schools_dashboard_path,
-    'Do you have any candidate requirements?' => nil
-  }
-%>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%= govuk_back_link javascript: true %>
+
     <%= govuk_form_for candidate_requirements_choice, url: schools_on_boarding_candidate_requirements_choice_path, method: method do |f|%>
       <%= f.govuk_error_summary %>
+
       <%= f.hidden_field :has_requirements, value: nil %>
       <%= f.govuk_radio_buttons_fieldset :has_requirements, inline: true, legend: { tag: "h1", size: "l" } do %>
         <%= f.govuk_radio_button :has_requirements, true, label: { text: "Yes" }, link_errors: true %>

@@ -21,13 +21,6 @@ Feature: Subjects
     Given I am on the 'Subjects' page
     Then the page title should be 'Select school experience subjects'
 
-  Scenario: Breadcrumbs
-    Given I am already on the 'Subjects' page
-    Then I should see the following breadcrumbs:
-        | Text                              | Link               |
-        | Some school                       | /schools/dashboard |
-        | Select school experience subjects | None               |
-
   Scenario: Completing the step choosing no subjects
     Given I am on the 'Subjects' page
     When I submit the form

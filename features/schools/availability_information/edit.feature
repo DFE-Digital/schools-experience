@@ -12,13 +12,6 @@ Feature: Editing availability info
         Given I am on the 'availability information' page
         Then the page title should be 'Describe when you’ll host school experience candidates'
 
-    Scenario: Breadcrumbs
-        Given I am on the 'availability information' page
-        Then I should see the following breadcrumbs:
-            | Text                                                   | Link               |
-            | Some school                                            | /schools/dashboard |
-            | Describe when you’ll host school experience candidates | None               |
-
     Scenario: Page contents
         Given I am on the 'availability information' page
         Then there should be a 'Describe your school experience availability' text area
@@ -27,6 +20,10 @@ Feature: Editing availability info
             | In school experience                   |
             | Both virtual and in school experiences |
         And the submit button should contain text 'Save availability description'
+
+    Scenario: Back link
+        Given I am on the 'availability information' page
+        Then I should see a 'Back' link to the 'availability preferences'
 
     @smoke_test
     Scenario: Submitting the form

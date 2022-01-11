@@ -4,11 +4,9 @@
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
     'Requests' => schools_placement_requests_path,
-    "Request" => nil
+    "Request #{@placement_request.id}" => nil
   }
 %>
-
-<%= govuk_back_link schools_placement_requests_path %>
 
 <% if @placement_request.candidate.attended_bookings.any? %>
   <div class="govuk-warning-text">

@@ -1,9 +1,15 @@
-<% self.page_title = "Archived placement requests" %>
+<%
+  self.page_title = "Archived placement requests"
+
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Requests' => schools_placement_requests_path,
+    'Archived requests' => nil
+  }
+%>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= govuk_back_link schools_placement_requests_path %>
-
     <h1>Archived requests</h1>
 
     <% if @placement_requests.any? %>

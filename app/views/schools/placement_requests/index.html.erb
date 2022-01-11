@@ -1,9 +1,14 @@
-<% self.page_title = "All placement requests" %>
+<%
+  self.page_title = "All placement requests"
+
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Requests' => nil
+  }
+%>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= govuk_back_link schools_dashboard_path %>
-
     <h1>Manage requests</h1>
 
     <div class="govuk-inset-text">

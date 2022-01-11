@@ -1,9 +1,14 @@
-<% self.page_title = "Past attendance" %>
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Requests' => schools_placement_requests_path,
+    "Request #{@placement_request.id}" => schools_placement_request_path(@placement_request),
+    'Past attendance' => nil
+  }
+%>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= govuk_back_link schools_placement_request_path @placement_request %>
-
     <h1>Past attendance for <%= @candidate.full_name %></h1>
 
     <% if @attendance.any? %>
@@ -41,6 +46,6 @@
       </p>
     <% end %>
 
-    <%= govuk_back_link schools_placement_request_path @placement_request %>
+    <%= govuk_link_to 'Return to request', schools_placement_request_path(@placement_request), secondary: true %>
   </div>
 </div>

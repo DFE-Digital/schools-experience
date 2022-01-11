@@ -54,3 +54,8 @@ Feature: Cancelling bookings
         When I click the 'Send cancellation email' submit button
         Then I should see a 'Your cancellation email has been sent' confirmation
         And the page title should be 'Your cancellation email has been sent'
+
+    Scenario: Back link
+        Given there is at least one booking
+        And I am on the cancel booking page
+        Then I should see a 'Back' link to the booking

@@ -1,11 +1,6 @@
 <%- self.page_title = "Describe when you’ll host school experience candidates" %>
 
-<%
-  self.breadcrumbs = {
-    @current_school.name => schools_dashboard_path,
-    'Describe when you’ll host school experience candidates' => nil
-  }
-%>
+<%= govuk_back_link edit_schools_availability_preference_path %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
