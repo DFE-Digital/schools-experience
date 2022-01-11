@@ -169,7 +169,7 @@ end
 def ensure_date_field_exists(form_group)
   %w[Day Month Year].each do |date_part|
     form_group.find('label', text: date_part).tap do |inner_label|
-      expect(form_group).to have_field(inner_label.text, type: 'number')
+      expect(form_group).to have_field(inner_label.text)
     end
   end
 end

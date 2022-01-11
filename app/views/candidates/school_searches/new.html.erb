@@ -19,7 +19,7 @@
         url: candidates_schools_path,
         method: :get,
         html: { class: 'school-search-form' }) do |f| %>
-          <%= f.govuk_text_field :location, required: true, minlength: "2", label: { text: t('helpers.label.location') } %>
+          <%= f.govuk_text_field :location, required: true, minlength: "2", label: { text: t('helpers.label.location') }, type: "search" %>
 
           <%= f.govuk_collection_select :distance,
                 Candidates::SchoolSearch.distances, :first, :last, label: { text: t('helpers.label.distance')  } unless f.object.whitelisted_urns? %>
