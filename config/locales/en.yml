@@ -505,8 +505,6 @@ en:
       bookings_school:
         availability_preference_fixed: Choose how dates are displayed
         experience_type: School experience type
-      bookings_placement_request_cancellation:
-        rejection_category: Rejection reason
       phases: Education phases
       dbs_policies: DBS check
       disability_confident: Disability and access needs
