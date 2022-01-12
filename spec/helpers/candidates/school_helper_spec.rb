@@ -271,6 +271,29 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
+  context '.school_search_parking_filter_description' do
+    context 'when the parking filter is not selected' do
+      subject do
+        double('Bookings::SchoolSearch', parking: nil)
+      end
+
+      it("should return a nil") do
+        expect(school_search_parking_filter_description(subject)).to be_nil
+      end
+    end
+
+    context 'when the parking filter is selected' do
+      subject do
+        double('Bookings::SchoolSearch', parking: '1')
+      end
+
+      it("should return yes") do
+        expect(school_search_parking_filter_description(subject)).to \
+          eq("Schools with parking: <strong>Yes</strong>")
+      end
+    end
+  end
+
   describe '#cleanup_school_url' do
     context 'with blank url' do
       subject { cleanup_school_url(' ') }

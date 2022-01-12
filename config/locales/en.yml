@@ -510,6 +510,7 @@ en:
       phases: Education phases
       dbs_policies: DBS check
       disability_confident: Disability and access needs
+      parking: Parking
       fees: Fees
       subjects: Subjects
       candidates_registrations_teaching_preference:
@@ -594,6 +595,7 @@ en:
     label:
       dbs_policies_2: Only show placements that do not require a DBS check
       disability_confident: Only show Disability Confident schools
+      parking: Only show schools with parking
       schools_placement_requests_confirm_booking:
         bookings_subject_id: Confirm subject
         placement_details: Confirm experience details
@@ -867,6 +869,8 @@ en:
         subjects_filter_html: "Placement subjects: %{subject_names}"
         disability_confident_filter:
           text_html: "Disability Confident schools: <strong>Yes</strong>"
+        parking_filter:
+          text_html: "Schools with parking: <strong>Yes</strong>"
         dbs_policies_filter:
           text_html: "DBS check: %{dbs_policies_options}"
           options:

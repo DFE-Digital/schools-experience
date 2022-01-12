@@ -11,7 +11,8 @@ RSpec.describe Candidates::SchoolSearch do
         phases: [1, 2, 3],
         subjects: [4, 5, 6],
         dbs_policies: [2],
-        disability_confident: '1'
+        disability_confident: '1',
+        parking: '1'
       )
     end
 
@@ -24,6 +25,7 @@ RSpec.describe Candidates::SchoolSearch do
       expect(subject.subjects).to eq([4, 5, 6])
       expect(subject.dbs_policies).to eq([2])
       expect(subject.disability_confident).to eq('1')
+      expect(subject.parking).to eq('1')
     end
   end
 

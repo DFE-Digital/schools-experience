@@ -14,6 +14,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     let(:subjects) { %w[1 3] }
     let(:dbs_policies) { %w[2] }
     let(:disability_confident) { '1' }
+    let(:parking) { '1' }
 
     before do
       allow(Candidates::School).to receive(:subjects).and_return(
@@ -70,6 +71,11 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
     it "shows the disability confident filter" do
       expect(rendered).to have_css('.govuk-fieldset__legend', text: 'Disability and access needs')
       expect(rendered).to have_css '#search-filter input[name="disability_confident"]'
+    end
+
+    it "shows the parking filter" do
+      expect(rendered).to have_css('.govuk-fieldset__legend', text: 'Parking')
+      expect(rendered).to have_css '#search-filter input[name="parking"]'
     end
 
     it "shows results" do

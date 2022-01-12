@@ -49,7 +49,7 @@ private
   def search_params
     params.permit(
       :query, :location, :latitude, :longitude, :page, :distance, :disability_confident,
-      :max_fee, phases: [], subjects: [], dbs_policies: []
+      :max_fee, :parking, phases: [], subjects: [], dbs_policies: []
     )
   end
 

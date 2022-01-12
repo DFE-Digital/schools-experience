@@ -14,7 +14,8 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         max_fee: '30',
         order: 'Name',
         dbs_policies: %w[1],
-        disability_confident: '1'
+        disability_confident: '1',
+        parking: '1'
       }
     end
 
@@ -30,6 +31,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       expect(assigns(:search).max_fee).to eq('30')
       expect(assigns(:search).dbs_policies).to eq([1])
       expect(assigns(:search).disability_confident).to eq('1')
+      expect(assigns(:search).parking).to eq('1')
 
       # note, this search will yield no results so the search radius will
       # automatically be expanded from 10 to the value at EXPANDED_SEARCH_RADIUS

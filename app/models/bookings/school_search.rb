@@ -94,6 +94,7 @@ private
       .includes([:available_placement_dates])
       .with_dbs_policies(dbs_options)
       .disability_confident(disability_confident)
+      .with_parking(parking)
   end
 
   def whitelisted_base_query

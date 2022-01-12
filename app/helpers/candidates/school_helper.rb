@@ -130,6 +130,12 @@ module Candidates::SchoolHelper
     t('helpers.candidates.school_search.disability_confident_filter.text_html')
   end
 
+  def school_search_parking_filter_description(search)
+    return if search.parking.nil?
+
+    t('helpers.candidates.school_search.parking_filter.text_html')
+  end
+
   def cleanup_school_url(url)
     if url.blank?
       '#'
