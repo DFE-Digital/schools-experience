@@ -59,13 +59,6 @@ module Bookings
         end
       end
 
-      def with_notes(notes)
-        @notes = notes
-        raise InvalidArgumentsError if invalid?
-
-        self
-      end
-
       def write_to_gitis_contact(contact_id)
         api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
         api.add_school_experience(contact_id, gitis_school_experience)
@@ -91,7 +84,6 @@ module Bookings
           date_of_school_experience: @date,
           status: GITIS_STATUS[@status],
           teaching_subject_id: Bookings::Gitis::SubjectFetcher.api_subject_id_from_gitis_value(@teaching_subject_name),
-          notes: @notes,
           school_name: @school_name
         )
       end

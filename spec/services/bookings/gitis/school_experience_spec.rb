@@ -22,11 +22,12 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
     end
 
     describe "#duration" do
-      it "is too long" do
-        model.booking.duration = 101
-        expect { subject }.to raise_exception described_class::InvalidArgumentsError
+      let(:placement_date) { create(:bookings_placement_date) }
+
+      before do
+        placement_date.duration = 101
+        model.placement_date = placement_date
       end
-    end
 
       it "is invalid when too long" do
         expect { subject }.to raise_exception ActiveModel::ValidationError, "Validation failed: Duration must be less than or equal to 100"
@@ -70,15 +71,6 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       it "posts to gitis" do
         subject.write_to_gitis_contact(gitis_id)
       end
-
-      context "with notes" do
-        let(:notes) { "Some useful notes for testing." }
-        before { expected_school_experience.notes = notes }
-
-        it "includes notes" do
-          subject.with_notes(notes).write_to_gitis_contact(gitis_id)
-        end
-      end
     end
   end
 
@@ -90,8 +82,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       GetIntoTeachingApiClient::CandidateSchoolExperience.new(
         school_urn: placement_request.school.urn.to_s,
         status: 1,
-        school_name: placement_request.school.name,
-        duration_of_placement_in_days: 1,
+        school_name: placement_request.school.name
       )
     end
 
@@ -106,6 +97,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
       let(:date) { placement_date.date }
       before do
         expected_school_experience.date_of_school_experience = date
+        expected_school_experience.duration_of_placement_in_days = 1
         placement_request.update!(placement_date: placement_date)
       end
 
