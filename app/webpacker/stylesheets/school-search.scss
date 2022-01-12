@@ -78,6 +78,22 @@
 
 .filter-list {
   margin-bottom: govuk-spacing(4);
+  background-color: govuk-colour("light-grey");
+
+  .filter {
+    border-bottom: 1px solid govuk-colour("mid-grey");
+    padding: 10px;
+    margin: 10px 0px;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  button[type=submit] {
+    margin-left: 10px;
+  }
+
 }
 
 .search-subjects-checkboxes {
