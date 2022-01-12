@@ -27,7 +27,9 @@
       </p>
 
       <p>
-        <%= govuk_button_to 'Send cancellation email', schools_booking_cancellation_notification_delivery_path(@booking) %>
+        <%= govuk_button_to schools_booking_cancellation_notification_delivery_path(@booking) do %>
+          Send cancellation email
+        <% end %>
       </p>
     </section>
   </div>
