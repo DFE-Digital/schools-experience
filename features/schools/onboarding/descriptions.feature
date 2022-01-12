@@ -20,10 +20,10 @@ Feature: Description
 
   Scenario: Page title
     Given I am on the 'description' page
-    Then the page title should be 'Enter a short description of your school'
+    Then the page title should be 'School description'
 
   Scenario: Completing the step with description
     Given I am on the 'Description' page
-    And I enter 'We have a race track' into the 'Tell us about your school. Provide a summary to help candidates select your school experience.' text area
+    And I enter 'We have a race track' into the 'Enter a description of your school' text area
     When I submit the form
     Then I should be on the 'Candidate experience details' page

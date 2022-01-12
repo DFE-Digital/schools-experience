@@ -1,4 +1,4 @@
-<%- self.page_title = 'Enter a short description of your school' -%>
+<%- self.page_title = 'School description' -%>
 
 <%= govuk_back_link javascript: true %>
 
@@ -6,38 +6,30 @@
   <div class="govuk-grid-column-two-thirds">
     <%= govuk_form_for description, url: schools_on_boarding_description_path, method: method do |f| %>
       <h1 class="govuk-heading-l">
-        Enter a short description of your school
+        School description
       </h1>
 
+      <p>
+        Use this section to tell candidates about your school.
+      </p>
+
+      <p class="govuk-!-margin-top-4">
+        Include details like:
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>if the school includes primary, secondary or both</li>
+          <li>the school's ethos and values</li>
+          <li>what kind of place it's like to work in</li>
+        </ul>
+      </p>
+
+      <p>
+        Do not write about the kind of school experience you offer, you'll be
+        able to add those details later.
+      </p>
+
       <%= f.govuk_error_summary %>
-      <%= f.govuk_text_area :details, rows: 10 do %>
-
-        <details id="description-example" class="govuk-details" role="group" data-module="govuk-details">
-          <summary class="govuk-details__summary" role="button" aria-label="View an example school description that could be entered to complete this step">
-            <span class="govuk-details__summary-text">View description example</span>
-          </summary>
-          <div class="govuk-details__text">
-            <p>
-              We’re a thriving community school serving a cosmopolitan community with more than 1,700 pupils.
-            </p>
-            <p>
-              Our GCSE scores are above the national average and, with multiple languages spoken at our school, we’re highly-skilled in meeting the needs of bilingual children.
-            </p>
-            <p>
-              We’re a barrier-free school and cater for pupils with movement difficulties while our work with hearing-impaired children is supported by the local authority and other agencies.
-            </p>
-            <p>
-              We also specialise in art and drama and have strong sporting connections with local community organisations.
-            </p>
-          </div>
-        </details>
-
-        <p class="govuk-hint">
-          You can skip this section by selecting continue. You can then enter
-          your description later by selecting 'Update school profile' on your
-          'Manage requests and bookings' page
-        </p>
-      <% end %>
+      <%= f.govuk_text_area :details, rows: 10, label: -> { tag.h2('Enter a description of your school') } %>
 
       <%= f.govuk_submit 'Continue' %>
       <%= f.govuk_submit 'Skip', class: 'govuk-button govuk-button--secondary' %>
