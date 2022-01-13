@@ -96,13 +96,13 @@ Given("I choose {string} from the {string} radio buttons") do |option, field|
 end
 
 Given("I choose {string} from the {string} radio buttons if available") do |option, field|
-  if page.has_css? "h2.govuk-fieldset__heading", text: field
+  if page.has_css? ".govuk-fieldset__legend", text: field
     step "I choose '#{option}' from the '#{field}' radio buttons"
   end
 end
 
 Then("the {string} input should require at least {string} characters") do |field, length|
-  input = page.find("input##{field}")
+  input = page.find("input[name=#{field}]")
   expect(input['minlength']).to eql(length)
 end
 
@@ -134,7 +134,7 @@ When("I enter {string} into the {string} text area") do |value, label|
 end
 
 When("I click the {string} submit button") do |string|
-  page.find("input[value='#{string}']").click
+  page.find("button", text: string).click
 end
 
 Then("there should not be a {string} checkbox") do |label_text|
@@ -169,7 +169,7 @@ end
 def ensure_date_field_exists(form_group)
   %w[Day Month Year].each do |date_part|
     form_group.find('label', text: date_part).tap do |inner_label|
-      expect(form_group).to have_field(inner_label.text, type: 'number')
+      expect(form_group).to have_field(inner_label.text)
     end
   end
 end

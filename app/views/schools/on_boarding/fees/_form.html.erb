@@ -33,7 +33,7 @@
           <%= f.govuk_radio_button :dbs_fees, "false", 'aria-label': 'No, we do not charge a fee to cover DBS check costs' %>
         <% end %>
       <% else %>
-        <%= f.hidden_field :dbs_fees, value: false %>
+        <%= f.hidden_field :dbs_fees, value: "false" %>
       <% end %>
 
       <%= f.govuk_radio_buttons_fieldset :other_fees do %>

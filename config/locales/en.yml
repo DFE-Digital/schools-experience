@@ -505,8 +505,6 @@ en:
       bookings_school:
         availability_preference_fixed: Choose how dates are displayed
         experience_type: School experience type
-      bookings_placement_request_cancellation:
-        rejection_category: Rejection reason
       phases: Education phases
       dbs_policies: DBS check
       disability_confident: Disability and access needs
@@ -611,7 +609,7 @@ en:
         availability_preference_fixed_options:
           true: Show specific dates
           false: Show a description of when you can host candidates
-        availability_info: Availability info
+        availability_info: Describe your school experience availability
         experience_type_options:
           virtual: Virtual experience
           inschool: In school experience
@@ -628,6 +626,7 @@ en:
           false: In school experience
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
+        extra_details: Extra details
         rejection_category_options:
           fully_booked: The date you requested is fully booked.
           accepted_on_ttc: We cannot offer you school experience because you've already been accepted on a teacher training course.
