@@ -30,7 +30,7 @@
         able to add those details later.
       </p>
 
-      <%= f.govuk_text_area :details, rows: 10, label: -> { tag.h2('Enter a description of your school') } %>
+      <%= f.govuk_text_area :details, max_words: 200, rows: 10, label: -> { tag.h2('Enter a description of your school') } %>
 
       <%= f.govuk_submit 'Continue' %>
       <%= f.govuk_submit 'Skip', class: 'govuk-button govuk-button--secondary' %>
