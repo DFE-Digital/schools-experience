@@ -88,10 +88,10 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
 
     let(:expected_school_experience) do
       GetIntoTeachingApiClient::CandidateSchoolExperience.new(
-        schoolUrn: placement_request.school.urn.to_s,
+        school_urn: placement_request.school.urn.to_s,
         status: 1,
-        schoolName: placement_request.school.name,
-        durationOfPlacementInDays: 1,
+        school_name: placement_request.school.name,
+        duration_of_placement_in_days: 1,
       )
     end
 
@@ -119,11 +119,11 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
 
     let(:expected_school_experience) do
       GetIntoTeachingApiClient::CandidateSchoolExperience.new(
-        schoolUrn: booking.bookings_school.urn.to_s,
+        school_urn: booking.bookings_school.urn.to_s,
         status: 222_750_000,
-        schoolName: booking.bookings_school.name,
-        durationOfPlacementInDays: 1,
-        dateOfSchoolExperience: booking.date
+        school_name: booking.bookings_school.name,
+        duration_of_placement_in_days: 1,
+        date_of_school_experience: booking.date
       )
     end
 

@@ -19,8 +19,8 @@ module Candidates
             registration_session,
             cookies[:analytics_tracking_uuid]
 
-          Bookings::Gitis::EventLogger.write_later \
-            current_candidate.gitis_uuid, :request, placement_request
+          Bookings::Gitis::SchoolExperience.from_placement_request(placement_request, :requested)
+            .write_to_gitis_contact(current_candidate.gitis_uuid)
 
           registration_session.flag_as_completed!
 

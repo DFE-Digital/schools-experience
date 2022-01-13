@@ -19,8 +19,8 @@ module Schools
           if @booking.valid?(:acceptance_email_preview) && @booking.accept!
             candidate_booking_notifications(@booking)
 
-            Bookings::Gitis::EventLogger.write_later \
-              @booking.contact_uuid, :booking, @booking
+            Bookings::Gitis::SchoolExperience.from_booking(@booking, :confirmed)
+              .write_to_gitis_contact(@booking.contact_uuid)
 
             redirect_to schools_placement_request_acceptance_email_sent_path(@placement_request.id)
           else

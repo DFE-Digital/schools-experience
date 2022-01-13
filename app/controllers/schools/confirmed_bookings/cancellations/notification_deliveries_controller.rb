@@ -16,8 +16,8 @@ module Schools
           if @cancellation.sent!
             notify_candidate @cancellation
 
-            Bookings::Gitis::EventLogger.write_later \
-              @cancellation.contact_uuid, :cancellation, @cancellation
+            Bookings::Gitis::SchoolExperience.from_cancellation(@cancellation, :cancelled_by_school)
+              .write_to_gitis_contact(@cancellation.contact_uuid)
           end
 
           redirect_to \

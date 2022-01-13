@@ -20,6 +20,10 @@ describe Schools::Attendance do
     )
   end
 
+  let :school_experience do
+    instance_double(Bookings::Gitis::SchoolExperience)
+  end
+
   subject { attendance }
 
   describe '#initialize' do
@@ -87,7 +91,12 @@ describe Schools::Attendance do
 
   describe '#update_gitis' do
     before do
-      allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return("cattlee")
+      allow(Bookings::Gitis::SchoolExperience).to \
+        receive(:from_booking) { school_experience }
+
+      allow(school_experience).to \
+        receive(:write_to_gitis_contact)
+
       subject.save
       subject.update_gitis
     end
@@ -96,9 +105,12 @@ describe Schools::Attendance do
       bookings_params.each do |id, _status|
         booking = Bookings::Booking.find(id)
 
-        expect(Bookings::Gitis::EventLogger).to \
-          have_received(:write_later).with \
-            booking.contact_uuid, :attendance, have_attributes(attended: booking.attended)
+        expect(Bookings::Gitis::SchoolExperience).to \
+          have_received(:from_booking).with(instance_of(Bookings::Booking), :completed).exactly(2).times
+        expect(Bookings::Gitis::SchoolExperience).to \
+          have_received(:from_booking).with(instance_of(Bookings::Booking), :withdrawn).exactly(1).time
+        expect(school_experience).to \
+          have_received(:write_to_gitis_contact).with(booking.contact_uuid)
       end
     end
   end

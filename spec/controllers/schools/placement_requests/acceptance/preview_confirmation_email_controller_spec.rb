@@ -4,6 +4,9 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailController, type: :request do
   include_context "logged in DfE user"
 
+  let :school_experience do
+    instance_double(Bookings::Gitis::SchoolExperience)
+  end
   let!(:booking_profile) { create(:bookings_profile, school: @current_user_school) }
   let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
   let!(:booking) do
@@ -43,7 +46,11 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
   context '#create' do
     before do
-      allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
+      allow(Bookings::Gitis::SchoolExperience).to \
+        receive(:from_booking) { school_experience }
+
+      allow(school_experience).to \
+        receive(:write_to_gitis_contact)
 
       allow(NotifyEmail::CandidateBookingConfirmation).to(
         receive(:from_booking)
@@ -78,9 +85,11 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
       expect(booking.reload.accepted_at).not_to be_nil
     end
 
-    specify 'should enqueue a log to gitis job' do
-      expect(Bookings::Gitis::EventLogger).to \
-        have_received(:write_later).with pr.contact_uuid, :booking, instance_of(Bookings::Booking)
+    specify 'creates a school experience and sends it to the API' do
+      expect(Bookings::Gitis::SchoolExperience).to \
+        have_received(:from_booking).with(instance_of(Bookings::Booking), :confirmed)
+      expect(school_experience).to \
+        have_received(:write_to_gitis_contact).with(pr.booking.contact_uuid)
     end
 
     specify 'should be redirected to the placement requests index' do

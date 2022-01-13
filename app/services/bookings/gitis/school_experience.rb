@@ -31,7 +31,7 @@ module Bookings
             urn: request.school.urn,
             school_name: request.school.name,
             teaching_subject_name: request.subject_first_choice,
-            duration: request.booking&.duration,
+            duration: request.placement_date&.duration,
             status: status
           )
         end
@@ -86,13 +86,13 @@ module Bookings
 
       def gitis_school_experience
         GetIntoTeachingApiClient::CandidateSchoolExperience.new(
-          schoolUrn: @urn,
-          durationOfPlacementInDays: @duration,
-          dateOfSchoolExperience: @date,
+          school_urn: @urn,
+          duration_of_placement_in_days: @duration,
+          date_of_school_experience: @date,
           status: GITIS_STATUS[@status],
-          teachingSubjectId: Bookings::Gitis::SubjectFetcher.api_subject_id_from_gitis_value(@teaching_subject_name),
+          teaching_subject_id: Bookings::Gitis::SubjectFetcher.api_subject_id_from_gitis_value(@teaching_subject_name),
           notes: @notes,
-          schoolName: @school_name
+          school_name: @school_name
         )
       end
     end
