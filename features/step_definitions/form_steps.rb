@@ -71,7 +71,6 @@ end
 Then("I fill in the date field {string} with {int}-{int}-{int}") do |field, day, month, year|
   # Some of the designs call for the field name to be styled as a heading/legend
   date_field_set = page.find '.govuk-label, .govuk-fieldset__heading, .govuk-fieldset__legend', text: field
-
   within(date_field_set.ancestor('.govuk-form-group')) do
     fill_in 'Day',   with: day
     fill_in 'Month', with: month
