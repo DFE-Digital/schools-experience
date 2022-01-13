@@ -17,15 +17,14 @@ module Bookings
     has_one :school_cancellation, through: :bookings_placement_request
 
     validates :date,
-      presence: true
-
-    validates :date,
       if: -> { date_changed? },
       timeliness: {
         on_or_after: -> { MIN_BOOKING_DELAY.from_now.to_date },
         before: -> { 2.years.from_now },
-        type: :date
+        type: :date,
       }
+
+    validates :date, presence: true
 
     validate on: :updating_date do
       errors.add :date, :not_changed unless date_changed?
