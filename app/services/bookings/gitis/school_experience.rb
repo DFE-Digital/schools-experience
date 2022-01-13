@@ -90,7 +90,7 @@ module Bookings
           durationOfPlacementInDays: @duration,
           dateOfSchoolExperience: @date,
           status: GITIS_STATUS[@status],
-          teachingSubjectId: Bookings::Gitis::SubjectFetcher.new.api_subject_id_from_gitis_value(@teaching_subject_name),
+          teachingSubjectId: Bookings::Gitis::SubjectFetcher.api_subject_id_from_gitis_value(@teaching_subject_name),
           notes: @notes,
           schoolName: @school_name
         )
