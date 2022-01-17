@@ -552,8 +552,26 @@ describe Schools::SchoolProfile, type: :model do
         model.experience_outline = form_model
       end
 
+      it "sets candidate_experience correctly" do
+        expect(model.experience_outline_candidate_experience).to \
+          eq form_model.candidate_experience
+      end
+
+      it 'returns the form model' do
+        expect(model.experience_outline).to eq form_model
+      end
+    end
+
+    context '#teacher_training' do
+      let :form_model do
+        FactoryBot.build :teacher_training
+      end
+
+      before do
+        model.teacher_training = form_model
+      end
+
       %i[
-        candidate_experience
         provides_teacher_training
         teacher_training_details
         teacher_training_url
@@ -565,7 +583,7 @@ describe Schools::SchoolProfile, type: :model do
       end
 
       it 'returns the form model' do
-        expect(model.experience_outline).to eq form_model
+        expect(model.teacher_training).to eq form_model
       end
     end
 

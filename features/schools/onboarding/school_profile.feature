@@ -25,6 +25,7 @@ Feature: School Profile
         | Disability confident             |                           |
         | Access needs policy              |                           |
         | Experience Outline               |                           |
+        | Teacher training                 |                           |
         | Admin contact                    |                           |
 
   Scenario: Page title

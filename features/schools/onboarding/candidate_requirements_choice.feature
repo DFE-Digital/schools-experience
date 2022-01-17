@@ -38,6 +38,7 @@ Feature: Candidates requirements choice
         | Disability confident             |                           |
         | Access needs policy              |                           |
         | Experience Outline               |                           |
+        | Teacher training                 |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page
     And I choose 'Yes' from the 'Do you have any candidate requirements?' radio buttons
@@ -61,6 +62,7 @@ Feature: Candidates requirements choice
         | Disability confident             |                           |
         | Access needs policy              |                           |
         | Experience Outline               |                           |
+        | Teacher training                 |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page
     And I choose 'No' from the 'Do you have any candidate requirements?' radio buttons
@@ -84,6 +86,7 @@ Feature: Candidates requirements choice
         | Disability confident             |                           |
         | Access needs policy              |                           |
         | Experience Outline               |                           |
+        | Teacher training                 |                           |
         | Admin contact                    |                           |
     And I am on the 'edit Candidate requirements choice' page
     And I choose 'Yes' from the 'Do you have any candidate requirements?' radio buttons

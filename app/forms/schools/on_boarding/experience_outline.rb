@@ -2,26 +2,15 @@ module Schools
   module OnBoarding
     class ExperienceOutline < Step
       attribute :candidate_experience, :string
-      attribute :provides_teacher_training, :boolean
-      attribute :teacher_training_details, :string
-      attribute :teacher_training_url, :string
 
-      validates :provides_teacher_training, inclusion: [true, false]
-      validates :teacher_training_details, presence: true, if: :provides_teacher_training
-      validates :teacher_training_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), if: -> { teacher_training_url.present? }
-      validates :teacher_training_url, format: /\Ahttps?:\/\/.*/, if: -> { teacher_training_url.present? }
+      # We want to allow blank values so school admins aren't forced to complete
+      # the step, but we need a validation so steps aren't valid when initialised
+      # as CurrentStep uses valid? to determine if a step has been completed.
+      validates :candidate_experience, \
+        length: { minimum: 0, allow_nil: false, message: "can't be nil" }
 
-      def self.compose(
-        candidate_experience,
-        provides_teacher_training,
-        teacher_training_details,
-        teacher_training_url
-      )
-        new \
-          candidate_experience: candidate_experience,
-          provides_teacher_training: provides_teacher_training,
-          teacher_training_details: teacher_training_details,
-          teacher_training_url: teacher_training_url
+      def self.compose(candidate_experience)
+        new candidate_experience: candidate_experience
       end
     end
   end

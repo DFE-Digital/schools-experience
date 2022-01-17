@@ -1,7 +1,7 @@
 require 'rails_helper'
 require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
-describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
+describe Schools::OnBoarding::TeacherTrainingsController, type: :request do
   include_context "logged in DfE user"
 
   context '#new' do
@@ -22,16 +22,17 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_access_needs_support,
         :with_access_needs_detail,
         :with_disability_confident,
-        :with_access_needs_policy
+        :with_access_needs_policy,
+        :with_experience_outline
     end
 
     before do
-      get '/schools/on_boarding/experience_outline/new'
+      get '/schools/on_boarding/teacher_training/new'
     end
 
     it 'assigns the model' do
-      expect(assigns(:experience_outline)).to \
-        eq Schools::OnBoarding::ExperienceOutline.new
+      expect(assigns(:teacher_training)).to \
+        eq Schools::OnBoarding::TeacherTraining.new
     end
 
     it 'renders the new template' do
@@ -57,32 +58,48 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
         :with_access_needs_support,
         :with_access_needs_detail,
         :with_disability_confident,
-        :with_access_needs_policy
+        :with_access_needs_policy,
+        :with_experience_outline
     end
 
     let :params do
       {
-        schools_on_boarding_experience_outline: experience_outline.attributes
+        schools_on_boarding_teacher_training: teacher_training.attributes
       }
     end
 
     before do
-      post '/schools/on_boarding/experience_outline', params: params
+      post '/schools/on_boarding/teacher_training', params: params
+    end
+
+    context 'invalid' do
+      let :teacher_training do
+        Schools::OnBoarding::TeacherTraining.new
+      end
+
+      it "doesn't update the school_profile" do
+        expect(school_profile.reload.teacher_training.attributes).to \
+          eq teacher_training.attributes
+      end
+
+      it 'rerenders the new template' do
+        expect(response).to render_template :new
+      end
     end
 
     context 'valid' do
-      let :experience_outline do
-        FactoryBot.build :experience_outline
+      let :teacher_training do
+        FactoryBot.build :teacher_training
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.experience_outline).to \
-          eq experience_outline
+        expect(school_profile.reload.teacher_training).to \
+          eq teacher_training
       end
 
       it 'redirects to the next_step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_teacher_training_path
+          new_schools_on_boarding_admin_contact_path
       end
     end
   end
@@ -93,11 +110,11 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
     end
 
     before do
-      get '/schools/on_boarding/experience_outline/edit'
+      get '/schools/on_boarding/teacher_training/edit'
     end
 
     it 'assigns the model' do
-      expect(assigns(:experience_outline)).to eq school_profile.experience_outline
+      expect(assigns(:teacher_training)).to eq school_profile.teacher_training
     end
 
     it 'renders the edit template' do
@@ -112,21 +129,35 @@ describe Schools::OnBoarding::ExperienceOutlinesController, type: :request do
 
     let :params do
       {
-        schools_on_boarding_experience_outline: experience_outline.attributes
+        schools_on_boarding_teacher_training: teacher_training.attributes
       }
     end
 
     before do
-      patch '/schools/on_boarding/experience_outline', params: params
+      patch '/schools/on_boarding/teacher_training', params: params
+    end
+
+    context 'invalid' do
+      let :teacher_training do
+        Schools::OnBoarding::TeacherTraining.new
+      end
+
+      it "doesn't update the school_profile" do
+        expect(school_profile.reload.teacher_training).not_to eq teacher_training
+      end
+
+      it 'rerenders the edit template' do
+        expect(response).to render_template :edit
+      end
     end
 
     context 'valid' do
-      let :experience_outline do
-        FactoryBot.build :experience_outline
+      let :teacher_training do
+        FactoryBot.build :teacher_training, provides_teacher_training: false
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.experience_outline).to eq experience_outline
+        expect(school_profile.reload.teacher_training).to eq teacher_training
       end
 
       it 'redirects to the school_profile' do

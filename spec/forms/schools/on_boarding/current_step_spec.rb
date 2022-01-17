@@ -461,7 +461,8 @@ describe Schools::OnBoarding::CurrentStep do
           :with_access_needs_detail,
           :with_disability_confident,
           :with_access_needs_policy,
-          :with_experience_outline
+          :with_experience_outline,
+          :with_teacher_training
       end
 
       it 'returns :admin_contact' do
@@ -489,6 +490,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_disability_confident,
           :with_access_needs_policy,
           :with_experience_outline,
+          :with_teacher_training,
           :with_admin_contact
       end
 

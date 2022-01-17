@@ -141,6 +141,7 @@ Rails.application.routes.draw do
       resource :disability_confident, only: %i[new create edit update]
       resource :access_needs_policy, only: %i[new create edit update]
       resource :experience_outline, only: %i[new create edit update]
+      resource :teacher_training, only: %i[new create edit update]
       resource :admin_contact, only: %i[new create edit update]
       resource :profile, only: :show
       resource :preview, only: :show

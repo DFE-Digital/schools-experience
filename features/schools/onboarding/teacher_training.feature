@@ -1,4 +1,4 @@
-Feature: Experience Outline
+Feature: Teacher training
   So candidates know what to expect
   As a school administrator
   I want to be able to outline what to expect from the experience
@@ -23,13 +23,22 @@ Feature: Experience Outline
         | Disability confident             |                           |
         | Access needs policy              |                           |
         | Candidate experience details     |                           |
+        | Experience Outline               |                           |
 
   Scenario: Page title
-    Given I am on the 'Experience Outline' page
-    Then the page title should be 'School experience details'
+    Given I am on the 'Teacher training' page
+    Then the page title should be 'Teacher training details'
+
+  Scenario: Completing the step with error
+    Given I am on the 'Teacher training' page
+    And I choose 'Yes' from the 'Do you run your own teacher training or have any links to teacher training organisations and providers?' radio buttons
+    When I submit the form
+    Then I should see a validation error message
 
   Scenario: Completing the step
-    Given I am on the 'Experience Outline' page
-    And I enter 'A really good one' into the 'What kind of school experience do you offer candidates?' text area
+    Given I am on the 'Teacher training' page
+    And I choose 'Yes' from the 'Do you run your own teacher training or have any links to teacher training organisations and providers?' radio buttons
+    And I enter 'We run our own training' into the 'Provide details.' text area
+    And I enter 'http://example.com' into the 'Enter a web address.' text area
     When I submit the form
-    Then I should be on the 'Teacher training' page
+    Then I should be on the 'Admin contact' page

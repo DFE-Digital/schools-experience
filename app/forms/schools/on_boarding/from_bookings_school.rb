@@ -24,7 +24,12 @@ module Schools
 
       def attributes_for_experience_outline
         {
-          candidate_experience: @bookings_school.placement_info,
+          candidate_experience: @bookings_school.placement_info
+        }
+      end
+
+      def attributes_for_teacher_training
+        {
           provides_teacher_training: @bookings_school.teacher_training_provider.presence,
           teacher_training_details: @bookings_school.teacher_training_info,
           teacher_training_url: @bookings_school.teacher_training_website

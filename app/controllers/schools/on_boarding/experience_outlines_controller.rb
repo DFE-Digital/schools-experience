@@ -36,10 +36,7 @@ module Schools
 
       def experience_outline_params
         params.require(:schools_on_boarding_experience_outline).permit \
-          :candidate_experience,
-          :provides_teacher_training,
-          :teacher_training_details,
-          :teacher_training_url
+          :candidate_experience
       end
     end
   end

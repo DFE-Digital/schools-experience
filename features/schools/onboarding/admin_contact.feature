@@ -25,6 +25,7 @@ Feature: Admin contact
         | Access needs policy              |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
+        | Teacher training                 |                           |
 
   Scenario: Page title
     Given I am on the 'Admin contact' page
