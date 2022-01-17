@@ -194,6 +194,19 @@ describe NotifyDespatchers::Sms do
   context "when in non-production environments" do
     before { allow(Feature).to receive(:active?).with(:sms) { false } }
 
+    let :notification do
+      subject.new to: recipients, name: 'Test User'
+    end
+
+    it "does not despatch SMS" do
+      perform_enqueued_jobs do
+        notification.despatch_later!
+      end
+
+      expect(NotifyService.instance).not_to have_received(notify_method)
+    end
+  end
+
     it "does not despatch SMS" do
       expect(NotifyService.instance).not_to have_received(notify_method)
     end
