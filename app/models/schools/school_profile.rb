@@ -229,9 +229,9 @@ module Schools
       :teacher_training,
       class_name: 'Schools::OnBoarding::TeacherTraining',
       mapping: [
-        %w[experience_outline_provides_teacher_training provides_teacher_training],
-        %w[experience_outline_teacher_training_details teacher_training_details],
-        %w[experience_outline_teacher_training_url teacher_training_url]
+        %w[teacher_training_provides_teacher_training provides_teacher_training],
+        %w[teacher_training_teacher_training_details teacher_training_details],
+        %w[teacher_training_teacher_training_url teacher_training_url]
       ],
       constructor: :compose
 

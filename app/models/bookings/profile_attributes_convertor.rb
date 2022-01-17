@@ -121,9 +121,9 @@ module Bookings
     end
 
     def convert_teacher_training
-      if input[:experience_outline_provides_teacher_training]
-        output[:teacher_training_info]  = input[:experience_outline_teacher_training_details]
-        output[:teacher_training_url]   = input[:experience_outline_teacher_training_url].presence
+      if input[:teacher_training_provides_teacher_training]
+        output[:teacher_training_info]  = input[:teacher_training_teacher_training_details]
+        output[:teacher_training_url]   = input[:teacher_training_teacher_training_url].presence
       else
         output[:teacher_training_info] = output[:teacher_training_url] = nil
       end

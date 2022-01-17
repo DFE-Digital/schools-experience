@@ -160,17 +160,17 @@ describe Schools::SchoolProfile, type: :model do
 
     it do
       is_expected.to \
-        have_db_column(:experience_outline_provides_teacher_training).of_type :boolean
+        have_db_column(:teacher_training_provides_teacher_training).of_type :boolean
     end
 
     it do
       is_expected.to \
-        have_db_column(:experience_outline_teacher_training_details).of_type :text
+        have_db_column(:teacher_training_teacher_training_details).of_type :text
     end
 
     it do
       is_expected.to \
-        have_db_column(:experience_outline_teacher_training_url).of_type :string
+        have_db_column(:teacher_training_teacher_training_url).of_type :string
     end
 
     it do
@@ -577,7 +577,7 @@ describe Schools::SchoolProfile, type: :model do
         teacher_training_url
       ].each do |attribute|
         it "sets #{attribute} correctly" do
-          expect(model.send("experience_outline_#{attribute}")).to \
+          expect(model.send("teacher_training_#{attribute}")).to \
             eq form_model.send attribute
         end
       end
