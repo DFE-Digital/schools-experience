@@ -4,7 +4,7 @@ FactoryBot.define do
     master_id { nil }
     merged { false }
     email { "email@address.com" }
-    telephone { "111111111" }
+    telephone { "07777777777" }
     address_line1 { "3 Main Street" }
     address_line2 { "Botchergate" }
     address_line3 { "" }
