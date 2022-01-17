@@ -190,7 +190,7 @@ end
 Given "I have completed the Experience Outline step" do
   steps %(
     Given I am on the 'Experience Outline' page
-    And I enter 'A really good one' into the 'What kind of school experience do you offer candidates?' text area
+    And I enter 'A really good one' into the 'What kind of school experience do you offer?' text area
     When I submit the form
   )
 end

@@ -792,8 +792,6 @@ en:
           true: 'Yes'
           false: 'No'
         url: 'Enter web address.'
-      schools_on_boarding_experience_outline:
-        candidate_experience: 'What kind of school experience do you offer candidates?'
       schools_on_boarding_teacher_training:
         provides_teacher_training_options:
           true: 'Yes'
