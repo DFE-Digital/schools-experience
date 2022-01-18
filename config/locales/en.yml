@@ -359,6 +359,8 @@ en:
           attributes:
             candidate_experience:
               blank: 'Provide details'
+        schools/on_boarding/teacher_training:
+          attributes:
             provides_teacher_training:
               inclusion: 'Select whether you run your own teacher training or have any links to teacher training organisations'
             teacher_training_details:
@@ -576,7 +578,7 @@ en:
         dbs_policy_conditions_html: '<br>Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
-      schools_on_boarding_experience_outline:
+      schools_on_boarding_teacher_training:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
       schools_placement_requests_add_more_details:
         location: Describe where the candidate should report to on the day of the experience
@@ -790,8 +792,7 @@ en:
           true: 'Yes'
           false: 'No'
         url: 'Enter web address.'
-      schools_on_boarding_experience_outline:
-        candidate_experience: 'What kind of school experience do you offer candidates?'
+      schools_on_boarding_teacher_training:
         provides_teacher_training_options:
           true: 'Yes'
           false: 'No'
@@ -927,7 +928,7 @@ en:
         is_disability_confident: 'Are you signed up to the Disability Confident employer scheme?'
       schools_on_boarding_access_needs_policy:
         has_access_needs_policy: 'Do you have any online information which covers your disability and access needs policy?'
-      schools_on_boarding_experience_outline:
+      schools_on_boarding_teacher_training:
         provides_teacher_training: 'Do you run your own teacher training or have any links to teacher training organisations and providers?'
       schools_change_school:
         change_to_urn: Select your school

@@ -190,7 +190,14 @@ end
 Given "I have completed the Experience Outline step" do
   steps %(
     Given I am on the 'Experience Outline' page
-    And I enter 'A really good one' into the 'What kind of school experience do you offer candidates?' text area
+    And I enter 'A really good one' into the 'What kind of school experience do you offer?' text area
+    When I submit the form
+  )
+end
+
+Given "I have completed the Teacher training step" do
+  steps %(
+    Given I am on the 'Teacher training' page
     And I choose 'Yes' from the 'Do you run your own teacher training or have any links to teacher training organisations and providers?' radio buttons
     And I enter 'We run our own training' into the 'Provide details.' text area
     And I enter 'http://example.com' into the 'Enter a web address.' text area
@@ -307,13 +314,13 @@ Then "all of the subjects I entered should be listed" do
   end
 end
 
-Then "I should see the teacher trainning info I entered in the wizard" do
+Then "I should see the teacher training info I entered in the wizard" do
   within '#school-teacher-training-info' do
     expect(page).to have_content \
-      @school.school_profile.experience_outline.teacher_training_details
+      @school.school_profile.teacher_training.teacher_training_details
 
     expect(page).to have_link "Find out more about our teacher training",
-      href: @school.school_profile.experience_outline.teacher_training_url
+      href: @school.school_profile.teacher_training.teacher_training_url
   end
 end
 

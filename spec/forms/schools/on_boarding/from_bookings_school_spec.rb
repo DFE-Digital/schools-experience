@@ -40,6 +40,18 @@ describe Schools::OnBoarding::FromBookingsSchool do
     context 'experience_outline' do
       let :school do
         FactoryBot.build :bookings_school,
+          :with_placement_info
+      end
+
+      it 'returns the correct attributes' do
+        expect(subject['experience_outline']).to eq \
+          candidate_experience: school.placement_info
+      end
+    end
+
+    context 'teacher_training' do
+      let :school do
+        FactoryBot.build :bookings_school,
           :with_placement_info,
           :with_teacher_training_info,
           :with_teacher_training_website,
@@ -47,36 +59,33 @@ describe Schools::OnBoarding::FromBookingsSchool do
       end
 
       it 'returns the correct attributes' do
-        expect(subject['experience_outline']).to eq \
-          candidate_experience: school.placement_info,
+        expect(subject['teacher_training']).to eq \
           provides_teacher_training: school.teacher_training_provider.presence,
           teacher_training_details: school.teacher_training_info,
           teacher_training_url: school.teacher_training_website
       end
 
-      context 'provides_teacher_training' do
-        context 'when the school provides teacher training' do
-          let :school do
-            FactoryBot.build :bookings_school, teacher_training_provider: true
-          end
-
-          it 'returns the correct attributes' do
-            expect(
-              subject['experience_outline'][:provides_teacher_training]
-            ).to eq true
-          end
+      context 'when the school provides teacher training' do
+        let :school do
+          FactoryBot.build :bookings_school, teacher_training_provider: true
         end
 
-        context 'when the school does not provide teacher training' do
-          let :school do
-            FactoryBot.build :bookings_school, teacher_training_provider: false
-          end
+        it 'returns the correct attributes' do
+          expect(
+            subject['teacher_training'][:provides_teacher_training]
+          ).to eq true
+        end
+      end
 
-          it 'returns the correct attributes' do
-            expect(
-              subject['experience_outline'][:provides_teacher_training]
-            ).to eq nil
-          end
+      context 'when the school does not provide teacher training' do
+        let :school do
+          FactoryBot.build :bookings_school, teacher_training_provider: false
+        end
+
+        it 'returns the correct attributes' do
+          expect(
+            subject['experience_outline'][:provides_teacher_training]
+          ).to eq nil
         end
       end
     end

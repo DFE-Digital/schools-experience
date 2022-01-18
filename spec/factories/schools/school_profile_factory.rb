@@ -151,6 +151,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_teacher_training do
+      after :build do |profile|
+        profile.teacher_training = FactoryBot.build :teacher_training
+      end
+    end
+
     trait :with_admin_contact do
       after :build do |profile|
         profile.admin_contact = FactoryBot.build :admin_contact
@@ -176,6 +182,7 @@ FactoryBot.define do
       with_disability_confident
       with_access_needs_policy
       with_experience_outline
+      with_teacher_training
       with_admin_contact
     end
   end

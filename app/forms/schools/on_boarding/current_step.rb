@@ -20,6 +20,7 @@ module Schools
         disability_confident
         access_needs_policy
         experience_outline
+        teacher_training
         admin_contact
       ].freeze
 
@@ -136,6 +137,10 @@ module Schools
 
       def experience_outline_required?
         @school_profile.experience_outline.dup.invalid?
+      end
+
+      def teacher_training_required?
+        @school_profile.teacher_training.dup.invalid?
       end
 
       def admin_contact_required?

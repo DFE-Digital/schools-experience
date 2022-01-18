@@ -160,17 +160,17 @@ describe Schools::SchoolProfile, type: :model do
 
     it do
       is_expected.to \
-        have_db_column(:experience_outline_provides_teacher_training).of_type :boolean
+        have_db_column(:teacher_training_provides_teacher_training).of_type :boolean
     end
 
     it do
       is_expected.to \
-        have_db_column(:experience_outline_teacher_training_details).of_type :text
+        have_db_column(:teacher_training_teacher_training_details).of_type :text
     end
 
     it do
       is_expected.to \
-        have_db_column(:experience_outline_teacher_training_url).of_type :string
+        have_db_column(:teacher_training_teacher_training_url).of_type :string
     end
 
     it do
@@ -552,20 +552,38 @@ describe Schools::SchoolProfile, type: :model do
         model.experience_outline = form_model
       end
 
+      it "sets candidate_experience correctly" do
+        expect(model.experience_outline_candidate_experience).to \
+          eq form_model.candidate_experience
+      end
+
+      it 'returns the form model' do
+        expect(model.experience_outline).to eq form_model
+      end
+    end
+
+    context '#teacher_training' do
+      let :form_model do
+        FactoryBot.build :teacher_training
+      end
+
+      before do
+        model.teacher_training = form_model
+      end
+
       %i[
-        candidate_experience
         provides_teacher_training
         teacher_training_details
         teacher_training_url
       ].each do |attribute|
         it "sets #{attribute} correctly" do
-          expect(model.send("experience_outline_#{attribute}")).to \
+          expect(model.send("teacher_training_#{attribute}")).to \
             eq form_model.send attribute
         end
       end
 
       it 'returns the form model' do
-        expect(model.experience_outline).to eq form_model
+        expect(model.teacher_training).to eq form_model
       end
     end
 

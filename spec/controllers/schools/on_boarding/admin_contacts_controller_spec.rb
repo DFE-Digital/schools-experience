@@ -23,7 +23,8 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_access_needs_detail,
         :with_disability_confident,
         :with_access_needs_policy,
-        :with_experience_outline
+        :with_experience_outline,
+        :with_teacher_training
     end
 
     before do
@@ -59,7 +60,8 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_access_needs_detail,
         :with_disability_confident,
         :with_access_needs_policy,
-        :with_experience_outline
+        :with_experience_outline,
+        :with_teacher_training
     end
 
     let :params do

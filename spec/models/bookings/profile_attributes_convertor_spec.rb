@@ -89,7 +89,7 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.phases_list_secondary_and_college = true
         model.candidate_experience_detail_parking_provided = false
         model.candidate_experience_detail_nearby_parking_details = 'somewhere further away'
-        model.experience_outline_provides_teacher_training = false
+        model.teacher_training_provides_teacher_training = false
         model.fees_administration_fees = false
         model.fees_dbs_fees = false
         model.fees_other_fees = false

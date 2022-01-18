@@ -27,6 +27,7 @@ Feature: Preview profile
             | Disability confident             |                           |
             | Access needs policy              |                           |
             | Experience Outline               |                           |
+            | Teacher training                 |                           |
             | Admin contact                    |                           |
         When I click the 'Preview profile' button
 
@@ -34,7 +35,7 @@ Feature: Preview profile
         Then I should see the correctly-formatted school placement information I entered in the wizard
         And the age range should match what I entered in the wizard
         And all of the subjects I entered should be listed
-        And I should see the teacher trainning info I entered in the wizard
+        And I should see the teacher training info I entered in the wizard
         And I should see the following websites listed:
             | description                   | url                                                                                        |
             | Get Information About Schools | https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/123456 |

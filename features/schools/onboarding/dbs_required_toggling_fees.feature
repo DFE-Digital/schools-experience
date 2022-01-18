@@ -36,6 +36,7 @@ Feature: Dbs required toggling available fees
         | Access needs policy              |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
+        | Teacher training                 |                           |
         | Admin contact                    |                           |
     And I am on the 'edit DBS requirements' page
     And I choose 'No - Candidates will be accompanied at all times' from the 'Do you require candidates to have or get a DBS check?' radio buttons
@@ -59,6 +60,7 @@ Feature: Dbs required toggling available fees
         | Access needs policy              |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
+        | Teacher training                 |                           |
         | Admin contact                    |                           |
     And I am on the 'edit DBS requirements' page
     And I choose 'Yes - Outline your DBS requirements' from the 'Do you require candidates to have or get a DBS check?' radio buttons

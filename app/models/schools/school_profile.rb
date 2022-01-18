@@ -221,10 +221,17 @@ module Schools
       :experience_outline,
       class_name: 'Schools::OnBoarding::ExperienceOutline',
       mapping: [
-        %w[experience_outline_candidate_experience candidate_experience],
-        %w[experience_outline_provides_teacher_training provides_teacher_training],
-        %w[experience_outline_teacher_training_details teacher_training_details],
-        %w[experience_outline_teacher_training_url teacher_training_url]
+        %w[experience_outline_candidate_experience candidate_experience]
+      ],
+      constructor: :compose
+
+    composed_of \
+      :teacher_training,
+      class_name: 'Schools::OnBoarding::TeacherTraining',
+      mapping: [
+        %w[teacher_training_provides_teacher_training provides_teacher_training],
+        %w[teacher_training_teacher_training_details teacher_training_details],
+        %w[teacher_training_teacher_training_url teacher_training_url]
       ],
       constructor: :compose
 
