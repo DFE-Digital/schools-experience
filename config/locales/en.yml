@@ -645,7 +645,7 @@ en:
         contact_name: Name
         contact_number: Telephone number
         contact_email: Email address
-        candidate_instructions: Extra instructions for the candidate
+        candidate_instructions: Other instructions
         bookings_subject_id: Subject
       candidates_registrations_contact_information:
         building: "Building and street"

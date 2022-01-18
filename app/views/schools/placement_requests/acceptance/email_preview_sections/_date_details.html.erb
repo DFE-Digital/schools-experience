@@ -1,0 +1,14 @@
+<section id="date-details">
+  <h3>Date and time</h3>
+
+  <ul class="govuk-list govuk-list--bullet">
+    <li class="govuk-list__item">
+      Date: <%= @placement_request.booking.placement_start_date_with_duration %>
+    </li>
+    <li class="govuk-list__item">
+      Start and finish times:
+      <%= @placement_request.school.profile.start_time %> to
+      <%= @placement_request.school.profile.end_time %>
+    </li>
+  </ul>
+</section>
