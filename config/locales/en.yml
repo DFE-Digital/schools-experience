@@ -133,6 +133,9 @@ en:
   activemodel:
     errors:
       models:
+        bookings/gitis/school_experience:
+          format:
+            "%{attribute} %{message}"
         schools/csv_export_form:
           attributes:
             from_date:
