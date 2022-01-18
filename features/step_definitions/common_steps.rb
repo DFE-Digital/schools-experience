@@ -40,11 +40,11 @@ Then("the page should have a heading called {string}") do |string|
 end
 
 Then("I should see an error message stating {string}") do |string|
-  expect(page).to have_css('span.govuk-error-message', text: string)
+  expect(page).to have_css('p.govuk-error-message', text: string)
 end
 
 Then("I should see an error") do
-  expect(page).to have_css('span.govuk-error-message')
+  expect(page).to have_css('p.govuk-error-message')
 end
 
 Then("I should see a {string} link to the {string}") do |link_text, path|

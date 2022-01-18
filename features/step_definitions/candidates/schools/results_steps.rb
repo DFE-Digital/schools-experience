@@ -56,7 +56,7 @@ end
 
 Then("it should have the hint text {string}") do |hint|
   within('#search-filter') do
-    expect(page).to have_css('fieldset > span.govuk-hint', text: hint)
+    expect(page).to have_css('fieldset > div.govuk-hint', text: hint)
   end
 end
 
