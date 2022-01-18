@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <% if Schools::ChangeSchool.allow_school_change_in_app? %>
       <% if @schools.any? %>
-        <%= govuk_form_for @change_school, url: schools_change_path, method: :post do |f| %>
+        <%= form_for @change_school, url: schools_change_path, method: :post do |f| %>
           <%= f.govuk_radio_buttons_fieldset :change_to_urn, legend: { tag: "h1", size: "l" } do %>
             <% @schools.each do |school| %>
               <%= f.govuk_radio_button :change_to_urn, school.urn, label: -> do %>

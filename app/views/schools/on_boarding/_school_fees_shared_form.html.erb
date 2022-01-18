@@ -8,7 +8,7 @@
       <%= title %>
     </h1>
 
-    <%= govuk_form_for model, url: submission_path do |f| %>
+    <%= form_for model, url: submission_path do |f| %>
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_number_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.9, label: { class: 'govuk-heading-m' }, prefix_text: '£' %>

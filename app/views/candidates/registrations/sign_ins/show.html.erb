@@ -27,7 +27,7 @@
       <li><%= @email_address %></li>
     </ul>
 
-    <%= govuk_form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
+    <%= form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
       <%= f.govuk_error_summary %>
 
       <%= f.hidden_field :email %>

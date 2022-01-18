@@ -16,7 +16,7 @@
       You'll be given a chance to check and change the details you enter.
     </p>
 
-    <%= govuk_form_for dbs_requirement, url: url, method: method do |f| %>
+    <%= form_for dbs_requirement, url: url, method: method do |f| %>
       <%= f.govuk_radio_buttons_fieldset :dbs_policy_conditions do %>
         <%= f.govuk_error_summary %>
 

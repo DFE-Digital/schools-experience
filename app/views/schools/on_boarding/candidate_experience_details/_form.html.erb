@@ -11,7 +11,7 @@
       These details will help candidates select a school experience.
     </p>
 
-    <%= govuk_form_for candidate_experience_detail, url: url, method: method do |f| %>
+    <%= form_for candidate_experience_detail, url: url, method: method do |f| %>
       <%= f.govuk_error_summary link_base_errors_to: :business_dress_1 %>
 
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

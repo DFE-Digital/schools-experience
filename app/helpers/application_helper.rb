@@ -118,24 +118,6 @@ module ApplicationHelper
     end
   end
 
-  def govuk_form_for(*args, **options, &block)
-    merged = options.dup
-    merged[:builder] = GOVUKDesignSystemFormBuilder::FormBuilder
-    merged[:html] ||= {}
-    merged[:html][:novalidate] = true
-
-    form_for(*args, **merged, &block)
-  end
-
-  def govuk_form_with(*args, **options, &block)
-    merged = options.dup
-    merged[:builder] = GOVUKDesignSystemFormBuilder::FormBuilder
-    merged[:html] ||= {}
-    merged[:html][:novalidate] = true
-
-    form_with(*args, **merged, &block)
-  end
-
 private
 
   def valid_user?(user)

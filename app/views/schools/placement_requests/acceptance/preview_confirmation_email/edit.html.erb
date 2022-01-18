@@ -12,7 +12,7 @@
       to confirm their booking.
     </p>
 
-    <%= govuk_form_for @booking, url: schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id) do |f| %>
+    <%= form_for @booking, url: schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id) do |f| %>
       <%= f.govuk_error_summary %>
       <div class="email-preview">
         <p>Dear <%= @placement_request.candidate_name %>,</p>

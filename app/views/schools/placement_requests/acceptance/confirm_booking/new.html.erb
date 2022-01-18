@@ -97,7 +97,7 @@
     <div>
       <% if @placement_request.fixed_date_is_bookable? && @last_booking_found %>
         <%# contact details are present and school has fixed dates, allow for move on to the email preview%>
-        <%= govuk_form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>
+        <%= form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>
           <%= f.hidden_field :contact_name %>
           <%= f.hidden_field :contact_number %>
           <%= f.hidden_field :contact_email %>

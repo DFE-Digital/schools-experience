@@ -11,11 +11,11 @@
 
 <%- if @bookings.any? %>
 
-  <%= govuk_form_for @updated_attendance, url: nil do |f| %>
+  <%= form_for @updated_attendance, url: nil do |f| %>
     <%= f.govuk_error_summary %>
   <% end %>
 
-  <%= govuk_form_with url: schools_confirm_attendance_path, method: 'put' do |f| %>
+  <%= form_with url: schools_confirm_attendance_path, method: 'put' do |f| %>
     <%= pagination_bar @bookings %>
 
     <table class="govuk-table">

@@ -137,22 +137,4 @@ describe ApplicationHelper, type: :helper do
       end
     end
   end
-
-  describe "#govuk_form_for" do
-    it "renders a form with GOV.UK form builder" do
-      expect(govuk_form_for(StubModel.new, url: "http://test.com") {}).to eq(
-        "<form class=\"new_stub_model\" id=\"new_stub_model\" novalidate=\"novalidate\" "\
-        "action=\"http://test.com\" accept-charset=\"UTF-8\" method=\"post\"></form>",
-      )
-    end
-  end
-
-  describe "#govuk_form_with" do
-    it "renders a form with GOV.UK form builder" do
-      expect(govuk_form_with(url: "http://test.com", method: "put") {}).to eq(
-        "<form novalidate=\"novalidate\" action=\"http://test.com\" accept-charset=\"UTF-8\" "\
-          "data-remote=\"true\" method=\"post\"><input type=\"hidden\" name=\"_method\" value=\"put\" /></form>",
-      )
-    end
-  end
 end

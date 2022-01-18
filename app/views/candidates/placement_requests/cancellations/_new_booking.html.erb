@@ -2,7 +2,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Cancel booking</h1>
-      <%= govuk_form_for cancellation, url: candidates_placement_request_cancellation_path(cancellation.placement_request.token) do |f| %>
+      <%= form_for cancellation, url: candidates_placement_request_cancellation_path(cancellation.placement_request.token) do |f| %>
         <%= f.govuk_error_summary %>
 
         <p>
