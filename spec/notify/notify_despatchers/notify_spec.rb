@@ -10,10 +10,6 @@ shared_examples "notify_client" do
   describe 'custom notify_client' do
     describe '#despatch_later!' do
       context 'with valid personalisation' do
-        let :notification do
-          subject.new to: recipients, name: 'Test User'
-        end
-
         before do
           perform_enqueued_jobs do
             notification.despatch_later!
@@ -164,6 +160,7 @@ describe NotifyDespatchers::Email do
       }
     end
   end
+  let(:notification) { subject.new to: recipients, name: 'Test User' }
 
   subject { StubEmailNotification }
   include_examples "notify_client"
@@ -185,17 +182,56 @@ describe NotifyDespatchers::Sms do
       }
     end
   end
+  let(:notification) { subject.new to: recipients, name: 'Test User' }
 
   before { allow(Feature).to receive(:active?).with(:sms) { true } }
 
   subject { StubSmsNotification }
+
   include_examples "notify_client"
 
   context "when in non-production environments" do
     before { allow(Feature).to receive(:active?).with(:sms) { false } }
 
     it "does not despatch SMS" do
+      perform_enqueued_jobs do
+        notification.despatch_later!
+      end
+
       expect(NotifyService.instance).not_to have_received(notify_method)
+    end
+  end
+
+  context "when there are non-mobile numbers" do
+    let(:valid_recipients) { %w[07777777778 07777777779] }
+    let(:invalid_recipients) { %w[12345678910] }
+    let(:valid_landline) { %w[03700002288] }
+    let(:recipients) { valid_recipients + invalid_recipients + valid_landline }
+
+    it "only despatches to valid mobile numbers" do
+      perform_enqueued_jobs do
+        notification.despatch_later!
+      end
+
+      expect(NotifyService.instance).to have_received(notify_method).twice
+    end
+  end
+
+  context "when there is a number that can be sanitised" do
+    let(:valid_recipients) { %w[07777777778 07777777779] }
+    let(:invalid_recipients) { %w[07777777774.] }
+    let(:recipients) { valid_recipients + invalid_recipients }
+
+    let(:expected_recipients) { %w[07777777778 07777777779 07777777774] }
+
+    it "sanitizes invalid numbers" do
+      perform_enqueued_jobs do
+        notification.despatch_later!
+      end
+
+      expected_recipients.each do |phone_number|
+        expect(NotifyService.instance).to have_received(notify_method).with(a_hash_including(phone_number: phone_number))
+      end
     end
   end
 end
