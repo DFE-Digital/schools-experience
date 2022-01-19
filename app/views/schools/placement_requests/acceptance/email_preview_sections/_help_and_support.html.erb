@@ -1,10 +1,10 @@
 <section id="help-and-support">
   <h3>Help and support</h3>
 
-  <p>If you have any questions about your booking contact:</p>
+  <p>If you have any questions about your booking, contact the school experience administrator:</p>
 
   <ul class="govuk-list govuk-list--bullet">
-    <li class="govuk-list__item">Email address: <%= @placement_request.school&.profile&.admin_contact_email %></li>
-    <li class="govuk-list__item">UK telephone number: <%= @placement_request.school&.profile&.admin_contact_phone %></li>
+    <li class="govuk-list__item">Email: <%= @placement_request.school&.profile&.admin_contact_email %></li>
+    <li class="govuk-list__item">Telephone number: <%= @placement_request.school&.profile&.admin_contact_phone %></li>
   </ul>
 </section>

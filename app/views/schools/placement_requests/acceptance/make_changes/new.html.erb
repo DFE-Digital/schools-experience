@@ -1,11 +1,11 @@
 <%= govuk_back_link javascript: true %>
 
-<%- self.page_title = "Confirm booking" %>
+<%- self.page_title = "Edit booking details" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
     <h1>
-      Confirm the booking for <%= @placement_request.candidate_name %> at <%= @placement_request.school.name %>
+      Edit booking details for <%= @placement_request.candidate_name %>
     </h1>
 
     <%= form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>

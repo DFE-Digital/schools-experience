@@ -12,15 +12,18 @@ Feature: Previewing candidate emails
     Scenario: Page contents
         Given I am have progressed to the 'preview confirmation email' page for the placement request
         Then I should see an email preview that has the following sections:
-            | School details             |
-            | School experience contacts |
-            | School experience details  |
-            | Help and support           |
+            | Date and time                     |
+            | Location                          |
+            | What to wear                      |
+            | Who to report to when you arrive  |
+            | About your school experience      |
+            | Cancelling your booking           |
+            | Help and support                  |
 
     @smoke_test
     Scenario: Actually confirming a placement request
         Given I am have progressed to the 'preview confirmation email' page for the placement request
-        And I enter 'Come to the main reception' into the 'Extra instructions for the candidate' text area
+        And I enter 'Come to the main reception' into the 'Other instructions' text area
         When I click the 'Send confirmation email' button
         Then I should be on the 'email sent' page for the placement request
         And the placement request should be accepted

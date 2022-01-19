@@ -1,25 +1,11 @@
 <section id="school-experience-details">
-  <h3>School experience details</h3>
+  <h3>About your school experience</h3>
 
-  <ul class="govuk-list govuk-list--bullet">
-    <li class="govuk-list__item">
-      Start date:
-      <%= @placement_request.booking.placement_start_date_with_duration %>
-    </li>
-
-    <li class="govuk-list__item">
-      Start and finish times:
-      <%= @placement_request.school.profile.start_time %> to
-      <%= @placement_request.school.profile.end_time %>
-    </li>
-
-    <li class="govuk-list__item">
+  <ul class="govuk-list govuk-list--no-bullet">
+    <li>
       Subject: <%= @placement_request.booking.bookings_subject.name %>
     </li>
-
-    <li class="govuk-list__item">
-      Experience details:
-      <%= safe_format @placement_request.school.profile.experience_details %>
-    </li>
   </ul>
+
+  <p>You can find more information about your school experience on the school's profile page.</p>
 </section>

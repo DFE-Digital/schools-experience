@@ -1,5 +1,5 @@
-<section id='school-details'>
-  <h3>School details</h3>
+<section id="location">
+  <h3>Location</h3>
 
   <ul class="govuk-list govuk-list--bullet">
     <li class="govuk-list__item">
@@ -7,9 +7,6 @@
     </li>
     <li class="govuk-list__item">
       Address: <%= format_school_address(@placement_request.school) %>
-    </li>
-    <li class="govuk-list__item">
-      Dress code: <%= @placement_request.school&.profile&.dress_code %>
     </li>
     <li class="govuk-list__item">
       Parking: <%= @placement_request.school&.profile&.parking_details %>
