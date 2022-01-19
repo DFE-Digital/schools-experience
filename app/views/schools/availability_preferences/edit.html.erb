@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= govuk_form_for @current_school, url: schools_availability_preference_path, method: 'patch' do |f| %>
+    <%= form_for @current_school, url: schools_availability_preference_path, method: 'patch' do |f| %>
       <%= f.govuk_error_summary f.object %>
       <%= f.govuk_radio_buttons_fieldset :availability_preference_fixed do %>
 

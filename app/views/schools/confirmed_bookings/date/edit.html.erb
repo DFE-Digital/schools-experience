@@ -16,7 +16,7 @@
       booking date.
     </p>
 
-    <%= govuk_form_for @booking, url: schools_booking_date_path(@booking), method: 'patch' do |f| %>
+    <%= form_for @booking, url: schools_booking_date_path(@booking), method: 'patch' do |f| %>
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_date_field :date, heading: true %>

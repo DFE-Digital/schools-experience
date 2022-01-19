@@ -21,7 +21,7 @@
       </strong>
     </div>
 
-    <%= govuk_form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
+    <%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
       <%= f.govuk_error_summary %>
 
       <h2 class="govuk-heading-m">School details</h2>

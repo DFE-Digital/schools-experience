@@ -11,7 +11,7 @@
   at your school.
 </p>
 
-<%= govuk_form_for @placement_date, url: schools_placement_dates_path, method: :post do |f| %>
+<%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |f| %>
   <%= f.govuk_error_summary %>
   <%= f.govuk_date_field :date, heading: true %>
   <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m' } %>

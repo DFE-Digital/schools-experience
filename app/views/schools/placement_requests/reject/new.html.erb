@@ -16,7 +16,7 @@
       know why their request has been turned down.
     </p>
 
-    <%= govuk_form_for @reject_reason, url: schools_placement_request_reject_path, method: :post do |f| %>
+    <%= form_for @reject_reason, url: schools_placement_request_reject_path, method: :post do |f| %>
       <%= f.govuk_text_area :reason, 'Reasons for rejecting the request' %>
       <%= f.govuk_submit "Reject request" %>
     <% end %>

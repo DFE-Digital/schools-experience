@@ -5,7 +5,7 @@
   The following will be used to help schools offer you school experience.
 </p>
 
-<%= govuk_form_for education, url: candidates_school_registrations_education_path, data: { controller: 'education-form' } do |f| %>
+<%= form_for education, url: candidates_school_registrations_education_path, data: { controller: 'education-form' } do |f| %>
   <%= f.govuk_error_summary %>
 
   <section id="education-degree-stage-container" data-education-form-target="degreeStagesContainer">

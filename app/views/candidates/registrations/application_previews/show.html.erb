@@ -1,7 +1,7 @@
 <% self.page_title = 'Check your answers' %>
 <%= govuk_back_link %>
 <div class="govuk-grid-row" id="application-preview">
-  <%= govuk_form_for @privacy_policy,
+  <%= form_for @privacy_policy,
         url: candidates_school_registrations_confirmation_email_path,
         data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
   <div class="govuk-grid-column-full">

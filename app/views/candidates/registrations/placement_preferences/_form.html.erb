@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Request school experience</h1>
 
-    <%= govuk_form_for placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>
+    <%= form_for placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>
       <%= f.govuk_error_summary %>
 
       <%- unless @school.availability_preference_fixed? %>

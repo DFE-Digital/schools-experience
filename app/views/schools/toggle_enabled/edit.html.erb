@@ -1,6 +1,6 @@
 <% self.page_title = "Toggle requests" %>
 
-<%= govuk_form_for @current_school, url: schools_enabled_path, method: 'patch' do |f| %>
+<%= form_for @current_school, url: schools_enabled_path, method: 'patch' do |f| %>
   <%= f.govuk_radio_buttons_fieldset(:enabled) do %>
     <%= f.govuk_radio_button :enabled, true, link_errors: true, label: { text: "Turn profile on to allow requests" } %>
     <%= f.govuk_radio_button :enabled, false, label: { text: "Turn profile off" }, hint: nil %>

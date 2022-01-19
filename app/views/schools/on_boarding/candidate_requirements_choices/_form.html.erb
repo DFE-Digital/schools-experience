@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= govuk_back_link javascript: true %>
 
-    <%= govuk_form_for candidate_requirements_choice, url: schools_on_boarding_candidate_requirements_choice_path, method: method do |f|%>
+    <%= form_for candidate_requirements_choice, url: schools_on_boarding_candidate_requirements_choice_path, method: method do |f|%>
       <%= f.govuk_error_summary %>
 
       <%= f.hidden_field :has_requirements, value: nil %>

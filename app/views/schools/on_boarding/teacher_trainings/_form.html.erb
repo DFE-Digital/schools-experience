@@ -8,7 +8,7 @@
       Teacher training details
     </h1>
 
-    <%= govuk_form_for teacher_training, url: url, method: method do |f| %>
+    <%= form_for teacher_training, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_radio_buttons_fieldset :provides_teacher_training do %>

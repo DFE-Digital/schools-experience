@@ -8,7 +8,7 @@
       Confirm the booking for <%= @placement_request.candidate_name %> at <%= @placement_request.school.name %>
     </h1>
 
-    <%= govuk_form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>
+    <%= form_for @booking, url: schools_placement_request_acceptance_make_changes_path, method: 'post' do |f| %>
       <%= f.govuk_error_summary %>
       <div>
 

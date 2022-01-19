@@ -4,7 +4,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= govuk_form_for @current_school, url: schools_availability_info_path, method: :patch do |f| %>
+    <%= form_for @current_school, url: schools_availability_info_path, method: :patch do |f| %>
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <%= f.govuk_text_area :availability_info, rows: 7, label: { class: 'govuk-heading-l' } do %>

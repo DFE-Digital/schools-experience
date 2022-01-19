@@ -19,7 +19,7 @@
         Get Into Teaching offers help and advice about becoming a teacher.
         </p>
 
-        <%= govuk_form_for personal_information,
+        <%= form_for personal_information,
               url: candidates_school_registrations_personal_information_path,
               data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
 

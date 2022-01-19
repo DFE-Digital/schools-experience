@@ -4,7 +4,7 @@
 <div class="govuk-grid-row" id="placement-preference">
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Choose a date</h1>
-    <%= govuk_form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
+    <%= form_for subject_and_date_information, url: candidates_school_registrations_subject_and_date_information_path do |f| %>
       <%= f.govuk_error_summary %>
 
       <%= f.hidden_field :date_and_subject_ids %>
