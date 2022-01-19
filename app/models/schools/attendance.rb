@@ -29,10 +29,11 @@ module Schools
     end
 
     def update_gitis
-      bookings_params.slice(*updated_bookings).each do |booking_id, _attended|
+      bookings_params.slice(*updated_bookings).each do |booking_id, attended|
         fetch(booking_id).tap do |booking|
-          Bookings::Gitis::EventLogger.write_later \
-            booking.contact_uuid, :attendance, booking
+          status = ActiveModel::Type::Boolean.new.cast(attended) ? :completed : :withdrawn
+          Bookings::Gitis::SchoolExperience.from_booking(booking, status)
+            .write_to_gitis_contact(booking.contact_uuid)
         end
       end
     end

@@ -23,8 +23,8 @@ module Candidates
           notify_candidate @cancellation
           @cancellation.sent!
 
-          Bookings::Gitis::EventLogger.write_later \
-            @cancellation.contact_uuid, :cancellation, @cancellation
+          Bookings::Gitis::SchoolExperience.from_cancellation(@cancellation, :cancelled_by_candidate)
+            .write_to_gitis_contact(@cancellation.contact_uuid)
 
           redirect_to candidates_placement_request_cancellation_path \
             placement_request.token

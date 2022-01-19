@@ -28,8 +28,8 @@ module Bookings
 
       gitis_contact.has_dbs_certificate = background_check.has_dbs_check
 
-      gitis_contact.preferred_teaching_subject_id = api_subject_id_from_gitis_value(teaching_preference.subject_first_choice)
-      gitis_contact.secondary_preferred_teaching_subject_id = api_subject_id_from_gitis_value(teaching_preference.subject_second_choice)
+      gitis_contact.preferred_teaching_subject_id = subject_fetcher.api_subject_id_from_gitis_value(teaching_preference.subject_first_choice)
+      gitis_contact.secondary_preferred_teaching_subject_id = subject_fetcher.api_subject_id_from_gitis_value(teaching_preference.subject_second_choice)
 
       gitis_contact.accepted_policy_id = current_privacy_policy.id
 
@@ -64,13 +64,17 @@ module Bookings
     def contact_to_teaching_preference
       {
         'subject_first_choice' =>
-          api_subject_from_gitis_uuid(gitis_contact.preferred_teaching_subject_id),
+          subject_fetcher.api_subject_from_gitis_uuid(gitis_contact.preferred_teaching_subject_id),
         'subject_second_choice' =>
-          api_subject_from_gitis_uuid(gitis_contact.secondary_preferred_teaching_subject_id)
+          subject_fetcher.api_subject_from_gitis_uuid(gitis_contact.secondary_preferred_teaching_subject_id)
       }
     end
 
   private
+
+    def subject_fetcher
+      Bookings::Gitis::SubjectFetcher
+    end
 
     def current_privacy_policy
       @current_privacy_policy ||= begin
@@ -92,25 +96,6 @@ module Bookings
           'dfe_teachingsubject02' =>
             subjects[teaching_preference.subject_second_choice]&.gitis_uuid
         }
-      end
-    end
-
-    def api_subject_id_from_gitis_value(value)
-      return nil if value.blank?
-
-      teaching_subjects.find { |s| s.value == value }&.id
-    end
-
-    def api_subject_from_gitis_uuid(uuid)
-      return nil if uuid.blank?
-
-      teaching_subjects.find { |s| s.id == uuid }&.value
-    end
-
-    def teaching_subjects
-      @teaching_subjects ||= begin
-        api = GetIntoTeachingApiClient::LookupItemsApi.new
-        api.get_teaching_subjects
       end
     end
   end

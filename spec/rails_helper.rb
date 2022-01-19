@@ -73,6 +73,9 @@ RSpec.configure do |config|
     allow(Geocoder).to receive(:search).and_return([
       Geocoder::Result::Test.new(name: 'Bury', latitude: 53.4794892, longitude: -2.2451148)
     ])
+
+    # Clean up memoized subjects so they can be mocked per test
+    Bookings::Gitis::SubjectFetcher.instance_variable_set(:@teaching_subjects, nil)
   end
 
   config.before :each do

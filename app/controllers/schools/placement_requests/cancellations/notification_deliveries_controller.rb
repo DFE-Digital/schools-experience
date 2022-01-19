@@ -15,8 +15,8 @@ module Schools
           notify_candidate @cancellation
           @cancellation.sent!
 
-          Bookings::Gitis::EventLogger.write_later \
-            @cancellation.contact_uuid, :cancellation, @cancellation
+          Bookings::Gitis::SchoolExperience.from_cancellation(@cancellation, :cancelled_by_school)
+            .write_to_gitis_contact(@cancellation.contact_uuid)
 
           redirect_to \
             schools_placement_request_cancellation_notification_delivery_path @placement_request

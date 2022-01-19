@@ -16,16 +16,24 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
       despatch_later!: true
   end
 
+  let :school_experience do
+    instance_double(Bookings::Gitis::SchoolExperience)
+  end
+
   before do
     allow(NotifyEmail::CandidateRequestRejection).to receive(:new) do
       candidate_request_rejection_notification
     end
+
+    allow(Bookings::Gitis::SchoolExperience).to \
+      receive(:from_cancellation) { school_experience }
+
+    allow(school_experience).to \
+      receive(:write_to_gitis_contact)
   end
 
   context '#create' do
     before do
-      allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
-
       post schools_placement_request_cancellation_notification_delivery_path \
         placement_request
     end
@@ -40,9 +48,9 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
           schools_placement_requests_path(placement_request)
       end
 
-      it 'does not enqueue a log to gitis job' do
-        expect(Bookings::Gitis::EventLogger).not_to \
-          have_received(:write_later)
+      it 'does not send a school experience to the API' do
+        expect(school_experience).not_to \
+          have_received(:write_to_gitis_contact)
       end
     end
 
@@ -78,10 +86,12 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
         expect(placement_request.reload).to be_closed
       end
 
-      it 'enqueues a log to gitis job' do
-        expect(Bookings::Gitis::EventLogger).to \
-          have_received(:write_later).with \
-            placement_request.contact_uuid, :cancellation, have_attributes(cancelled_by: "school")
+      it 'creates a school experience and sends it to the API' do
+        expect(Bookings::Gitis::SchoolExperience).to \
+          have_received(:from_cancellation).with(instance_of(Bookings::PlacementRequest::Cancellation), :cancelled_by_school)
+
+        expect(school_experience).to \
+          have_received(:write_to_gitis_contact).with(placement_request.contact_uuid)
       end
 
       it 'redirects to the show action' do

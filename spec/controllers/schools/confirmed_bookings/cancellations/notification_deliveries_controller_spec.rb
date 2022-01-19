@@ -16,6 +16,10 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       despatch_later!: true
   end
 
+  let :school_experience do
+    instance_double(Bookings::Gitis::SchoolExperience)
+  end
+
   let :candidate_request_rejection_notification_sms do
     double NotifySms::CandidateBookingSchoolCancelsBooking,
       despatch_later!: true
@@ -26,6 +30,12 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
       candidate_request_rejection_notification_email
     end
 
+    allow(Bookings::Gitis::SchoolExperience).to \
+      receive(:from_cancellation) { school_experience }
+
+    allow(school_experience).to \
+      receive(:write_to_gitis_contact)
+
     allow(NotifySms::CandidateBookingSchoolCancelsBooking).to receive(:new) do
       candidate_request_rejection_notification_sms
     end
@@ -33,8 +43,6 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
 
   context '#create' do
     before do
-      allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
-
       post schools_booking_cancellation_notification_delivery_path \
         booking
     end
@@ -48,9 +56,9 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
         create(:bookings_booking, bookings_placement_request: placement_request, bookings_school: school)
       end
 
-      it 'does not enqueue a log to gitis job' do
-        expect(Bookings::Gitis::EventLogger).not_to \
-          have_received(:write_later)
+      it 'does not send a school experience to the API' do
+        expect(school_experience).not_to \
+          have_received(:write_to_gitis_contact)
       end
 
       it 'redirects to the placement_show path' do
@@ -106,10 +114,12 @@ describe Schools::ConfirmedBookings::Cancellations::NotificationDeliveriesContro
         expect(placement_request.reload).to be_closed
       end
 
-      it 'enqueues a log to gitis job' do
-        expect(Bookings::Gitis::EventLogger).to \
-          have_received(:write_later).with \
-            placement_request.contact_uuid, :cancellation, have_attributes(cancelled_by: "school")
+      it 'creates a school experience and sends it to the API' do
+        expect(Bookings::Gitis::SchoolExperience).to \
+          have_received(:from_cancellation).with(instance_of(Bookings::PlacementRequest::Cancellation), :cancelled_by_school)
+
+        expect(school_experience).to \
+          have_received(:write_to_gitis_contact).with(placement_request.contact_uuid)
       end
 
       it 'redirects to the show action' do

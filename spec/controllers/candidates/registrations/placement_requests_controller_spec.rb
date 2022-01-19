@@ -4,7 +4,6 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
   include_context 'Stubbed candidates school'
   include_context "api latest privacy policy"
   include_context "api teaching subjects"
-  include_context "api add classroom experience note"
 
   let :registration_session do
     FactoryBot.build :registration_session, urn: school.urn
@@ -14,12 +13,22 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
     registration_session.uuid
   end
 
+  let :school_experience do
+    instance_double(Bookings::Gitis::SchoolExperience)
+  end
+
   before do
     Candidates::Registrations::RegistrationStore.instance.store! \
       registration_session
 
     allow(Candidates::Registrations::PlacementRequestJob).to \
       receive(:perform_later) { true }
+
+    allow(Bookings::Gitis::SchoolExperience).to \
+      receive(:from_placement_request) { school_experience }
+
+    allow(school_experience).to \
+      receive(:write_to_gitis_contact)
   end
 
   context '#create' do
@@ -48,8 +57,6 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
     end
 
     context 'uuid found' do
-      include_context "api add classroom experience note"
-
       context 'registration job already enqueued' do
         before do
           get "/candidates/confirm/#{uuid}"
@@ -71,17 +78,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
           expect(response).to redirect_to \
             candidates_school_registrations_placement_request_path(
               school,
-              uuid: uuid
+                                                        uuid: uuid
             )
         end
       end
 
       context 'registration job not already enqueued' do
         shared_examples 'a successful create' do
-          before do
-            allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true)
-          end
-
           before do
             get "/candidates/confirm/#{uuid}"
           end
@@ -119,11 +122,13 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
                 schools_placement_request_url(Bookings::PlacementRequest.last)
           end
 
-          it 'enqueues a log to gitis job' do
+          it 'creates a school experience and sends it to the API' do
             created = Bookings::Candidate.last
 
-            expect(Bookings::Gitis::EventLogger).to \
-              have_received(:write_later).with created.gitis_uuid, :request, instance_of(Bookings::PlacementRequest)
+            expect(Bookings::Gitis::SchoolExperience).to \
+              have_received(:from_placement_request).with(instance_of(Bookings::PlacementRequest), :requested)
+            expect(school_experience).to \
+              have_received(:write_to_gitis_contact).with(created.gitis_uuid)
           end
 
           it 'redirects to placement request show' do
@@ -154,7 +159,7 @@ describe Candidates::Registrations::PlacementRequestsController, type: :request 
         context 'with an invalid session' do
           let :incomplete_registration_session do
             FactoryBot.build :registration_session,
-              urn: '333333', uuid: 'aaa', with: [:personal_information]
+                             urn: '333333', uuid: 'aaa', with: [:personal_information]
           end
 
           before do

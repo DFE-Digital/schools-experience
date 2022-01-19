@@ -119,11 +119,11 @@ shared_context "api sign up" do
   end
 end
 
-shared_context "api add classroom experience note" do
+shared_context "api add school experience" do
   before do
     allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-      receive(:add_classroom_experience_note)
-        .with(anything, an_instance_of(GetIntoTeachingApiClient::ClassroomExperienceNote))
+      receive(:add_school_experience)
+       .with(anything, an_instance_of(GetIntoTeachingApiClient::CandidateSchoolExperience))
   end
 end
 

@@ -6,6 +6,9 @@ describe Schools::ConfirmAttendanceController, type: :request do
 
   let(:school) { Bookings::School.find_by(urn: urn) }
   let!(:profile) { create(:bookings_profile, school: school) }
+  let :school_experience do
+    instance_double(Bookings::Gitis::SchoolExperience)
+  end
 
   describe '#show' do
     subject { get(schools_confirm_attendance_path) }
@@ -15,7 +18,13 @@ describe Schools::ConfirmAttendanceController, type: :request do
   end
 
   describe '#update' do
-    before { allow(Bookings::Gitis::EventLogger).to receive(:write_later).and_return(true) }
+    before do
+      allow(Bookings::Gitis::SchoolExperience).to \
+        receive(:from_booking) { school_experience }
+
+      allow(school_experience).to \
+        receive(:write_to_gitis_contact)
+    end
 
     let!(:attended) do
       build(:bookings_booking, :accepted, bookings_school: school, date: 3.days.ago).tap do |bb|
@@ -51,16 +60,22 @@ describe Schools::ConfirmAttendanceController, type: :request do
       expect(subject).to redirect_to(schools_dashboard_path)
     end
 
-    specify 'should enqueue a gitis update for the attended record' do
-      expect(Bookings::Gitis::EventLogger).to \
-        have_received(:write_later).with \
-          attended.contact_uuid, :attendance, have_attributes(attended: true)
+    context "when attended" do
+      it 'creates a school experience and sends it to the API' do
+        expect(Bookings::Gitis::SchoolExperience).to \
+          have_received(:from_booking).with(instance_of(Bookings::Booking), :completed)
+        expect(school_experience).to \
+          have_received(:write_to_gitis_contact).with(attended.contact_uuid)
+      end
     end
 
-    specify 'should enqueue a gitis update for the unattended record' do
-      expect(Bookings::Gitis::EventLogger).to \
-        have_received(:write_later).with \
-          unattended.contact_uuid, :attendance, have_attributes(attended: false)
+    context "when did not attend" do
+      it 'creates a school experience and sends it to the API' do
+        expect(Bookings::Gitis::SchoolExperience).to \
+          have_received(:from_booking).with(instance_of(Bookings::Booking), :withdrawn)
+        expect(school_experience).to \
+          have_received(:write_to_gitis_contact).with(attended.contact_uuid)
+      end
     end
   end
 end
