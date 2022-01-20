@@ -34,4 +34,12 @@ module Schools::DashboardsHelper
     !school.availability_preference_fixed? &&
       school.availability_info.blank?
   end
+
+  def status_column_size(status)
+    {
+      disabled: 'govuk-grid-column-one-third',
+      enabled_without_dates: 'govuk-grid-column-two-thirds',
+      enabled_without_availability: 'govuk-grid-column-two-thirds',
+    }[status]
+  end
 end
