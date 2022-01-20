@@ -27,3 +27,15 @@ end
 Then("I will see the Verification Code page") do
   expect(page).to have_text("We’ve emailed a verification code to")
 end
+
+Then('there should be a status notification for missing dates') do
+  within('#profile-status') do
+    expect(page).to have_content('Your profile is currently on, but your school will not appear in candidate searches')
+  end
+end
+
+Then('there should be a status notification for missing availability') do
+  within('#profile-status') do
+    expect(page).to have_content('You have no upcoming placement dates or information about availability. Your profile will not appear in candidate searches.')
+  end
+end

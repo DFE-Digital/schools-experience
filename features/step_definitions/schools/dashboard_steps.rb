@@ -59,7 +59,7 @@ Given("my school has not yet fully-onboarded") do
 end
 
 Then("I should see a warning informing me that I need to complete my profile before continuing") do
-  within('.govuk-error-summary') do
+  within('.govuk-notification-banner') do
     expect(page).to have_content('Before you can receive requests, you need to complete your school profile.')
   end
 end
@@ -77,7 +77,7 @@ Then("there should be no {string} link") do |link_text|
 end
 
 Then("I should see a warning that my school is disabled") do
-  expect(page).to have_css('.govuk-error-summary h2', text: 'Your school profile is currently turned off')
+  expect(page).to have_css('#profile-status', text: 'Your profile is currently off')
 end
 
 Then("I shouldn't see any warnings") do

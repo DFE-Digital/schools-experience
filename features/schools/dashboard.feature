@@ -133,14 +133,18 @@ Feature: The School Dashboard
 
     Scenario: Displaying a warning when fixed with no dates
         Given my school has fully-onboarded
+        And my school is enabled
         And it has 'fixed' availability
         And my school has no placement dates
         When I am on the 'schools dashboard' page
-        Then there should be a "You haven't entered any dates" warning
+        Then there should be a status notification for missing dates
+        And there should be a 'add experience dates' link to the 'placement dates'
 
     Scenario: Displaying a warning when flexible with no description
         Given my school has fully-onboarded
+        And my school is enabled
         And it has 'flexible' availability
         And my school has availability no information set
         When I am on the 'schools dashboard' page
-        Then there should be a 'You have no availability information' warning
+        Then there should be a status notification for missing availability
+        And there should be a 'Add dates or availability' link to the 'availability preferences'

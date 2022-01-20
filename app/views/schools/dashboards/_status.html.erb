@@ -1,0 +1,31 @@
+<div id="profile-status" class="govuk-grid-row">
+  <div class="<%= status_column_size(type) %>">
+    <% if type == :disabled %>
+      <p>Your profile is currently <strong>off</strong>.</p>
+    <% elsif type == :enabled_without_dates %>
+      <p>
+        Your profile is currently <strong>on</strong>, but your school will
+        not appear in candidate searches until you
+        <%= link_to 'add experience dates',
+          schools_placement_dates_path, class: 'govuk-link' %>.
+      </p>
+    <% elsif type == :enabled_without_availability %>
+      <p>
+        You have no upcoming placement dates or information about availability.
+        Your profile will not appear in candidate searches.
+        <%= link_to 'Add dates or availability',
+          edit_schools_availability_preference_path, class: 'govuk-link' %>.
+      </p>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <p>
+      <%= link_to 'Turn profile on/off',
+          edit_schools_enabled_path,
+          class: 'govuk-link'
+        %>
+    </p>
+  </div>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

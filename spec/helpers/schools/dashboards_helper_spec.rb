@@ -142,4 +142,16 @@ describe Schools::DashboardsHelper, type: 'helper' do
       end
     end
   end
+
+  describe '#status_column_size' do
+    it 'returns one third' do
+      expect(status_column_size(:disabled)).to eq('govuk-grid-column-one-third')
+    end
+
+    %i[enabled_without_dates enabled_without_availability].each do |type|
+      it 'returns two thirds' do
+        expect(status_column_size(type)).to eq('govuk-grid-column-two-thirds')
+      end
+    end
+  end
 end
