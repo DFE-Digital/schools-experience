@@ -14,12 +14,13 @@ class Schools::OutstandingTasks
     ].reduce(&:deep_merge!)
   end
 
-  private
+private
 
   def requests_requiring_attention
     query = schools
       .joins(:placement_requests)
       .merge(Bookings::PlacementRequest.requiring_attention)
+      .merge(Bookings::PlacementRequest.unprocessed)
 
     keyed_total(query, :requests_requiring_attention)
   end
@@ -29,7 +30,7 @@ class Schools::OutstandingTasks
       .joins(:placement_requests)
       .merge(Bookings::PlacementRequest.withdrawn_but_unviewed.reorder(nil))
 
-      keyed_total(query, :unviewed_withdrawn_requests)
+    keyed_total(query, :unviewed_withdrawn_requests)
   end
 
   def upcoming_bookings
@@ -37,7 +38,7 @@ class Schools::OutstandingTasks
       .joins(:bookings)
       .merge(Bookings::Booking.with_unviewed_candidate_cancellation)
 
-      keyed_total(query, :upcoming_bookings)
+    keyed_total(query, :upcoming_bookings)
   end
 
   def bookings_pending_attendance_confirmation
@@ -48,7 +49,7 @@ class Schools::OutstandingTasks
       .merge(Bookings::Booking.accepted)
       .merge(Bookings::Booking.attendance_unlogged)
 
-      keyed_total(query, :bookings_pending_attendance_confirmation)
+    keyed_total(query, :bookings_pending_attendance_confirmation)
   end
 
   def schools
@@ -64,7 +65,7 @@ class Schools::OutstandingTasks
       end
   end
 
-  def zero_hash(key)
+  def zero_hash(_key)
     school_urns.reduce({}) do |hash, urn|
       hash.tap { |h| h[urn] = Hash.new(0) }
     end

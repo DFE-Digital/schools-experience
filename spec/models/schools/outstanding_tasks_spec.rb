@@ -15,23 +15,23 @@ describe Schools::OutstandingTasks do
       context "when there are requests requiring attention" do
         before do
           create(:placement_request, school: school)
-          create(:placement_request, :cancelled, school: school)
         end
 
-        it { is_expected.to eq({ school.urn => 2, other_school.urn => 0 }) }
+        it { is_expected.to eq({ school.urn => 1, other_school.urn => 0 }) }
 
         context "when there are also requests not requiring attention" do
           before do
             create(:placement_request, :booked, school: school)
+            create(:placement_request, :cancelled, school: school)
           end
 
-          it { is_expected.to eq({ school.urn => 2, other_school.urn => 0 }) }
+          it { is_expected.to eq({ school.urn => 1, other_school.urn => 0 }) }
         end
 
         context "when there are also other school requests requiring attention" do
           before { create(:placement_request, school: other_school) }
 
-          it { is_expected.to eq({ school.urn => 2, other_school.urn => 1 }) }
+          it { is_expected.to eq({ school.urn => 1, other_school.urn => 1 }) }
         end
       end
     end
