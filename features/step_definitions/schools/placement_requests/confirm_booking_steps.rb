@@ -60,7 +60,7 @@ Then("the original date should be listed on the page") do
   # this makes sense so the user can refer back to it if they've made changes
   expect(page).to have_css(
     'dd.availability-requested-date',
-    text: @placement_date.date.strftime("%d %B %Y")
+    text: @placement_date.date.to_formatted_s(:govuk)
   )
 end
 

@@ -28,7 +28,7 @@ end
 Given("I have filled in my subject and date information successfully") do
   within(
     page
-      .find('dt', text: @wanted_bookings_placement_date.date.strftime("%d %B %Y"))
+      .find('dt', text: @wanted_bookings_placement_date.date.to_formatted_s(:govuk))
       .sibling('dd')
   ) do
     choose("All subjects (1 day)")

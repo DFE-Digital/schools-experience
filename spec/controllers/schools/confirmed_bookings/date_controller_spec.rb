@@ -102,7 +102,7 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
           booking.candidate_name,
           booking,
           candidates_cancel_url(booking.token),
-          old_date.strftime("%d %B %Y")
+          old_date.to_formatted_s(:govuk)
         )
       end
     end

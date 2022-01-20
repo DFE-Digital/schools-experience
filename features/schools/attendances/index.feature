@@ -25,11 +25,11 @@ Feature: Viewing historical attendances
         Given there are some bookings with attendance recorded
         When I am on the 'attendances' page
         Then the 'attendances' table should have the following values:
-			| Heading    | Value             |
-            | Name       | Matthew Richards  |
-            | Subject    | Biology           |
-            | Date       | \d{2}\s\w+\s\d{4} |
-            | Attended   | Did not attend    |
+			| Heading    | Value                |
+            | Name       | Matthew Richards     |
+            | Subject    | Biology              |
+            | Date       | \d{1,2}\s\w+\s\d{4}  |
+            | Attended   | Did not attend       |
 
     Scenario: No attendance records
         Given there are no bookings with attendance recorded

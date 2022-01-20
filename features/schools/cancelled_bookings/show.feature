@@ -41,7 +41,7 @@ Feature: Viewing a cancelled booking
             | Heading          | Value                                                                  |
             | Subject          | Biology                                                                |
             | DBS certificate  | Yes - Candidate says they have DBS certificate \(not verified by DfE\) |
-            | Request received | \d{2}\s\w+\s\d{4}                                                      |
+            | Request received | \d{1,2}\s\w+\s\d{4}                                                      |
         And the future booking date should be listed
 
     @smoke_test
@@ -67,6 +67,6 @@ Feature: Viewing a cancelled booking
         Given there is a cancelled booking
         When I am viewing my chosen cancelled booking
         Then I should see a 'Cancellation details' section with the following values:
-            | Heading              | Value             |
-            | Cancellation reason  | MyText            |
-            | Cancellation sent at | \d{2}\s\w+\s\d{4} |
+            | Heading              | Value                  |
+            | Cancellation reason  | MyText                 |
+            | Cancellation sent at | \d{1,2}\s\w+\s\d{4}    |
