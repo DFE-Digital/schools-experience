@@ -277,7 +277,7 @@ end
 
 Then("I should see the following list of available dates and subjects:") do |table|
   table.hashes.each do |row|
-    formatted_date = row['Weeks from now'].to_i.weeks.from_now.strftime('%d %B %Y')
+    formatted_date = row['Weeks from now'].to_i.weeks.from_now.to_date.to_formatted_s(:govuk)
 
     list_item = page.find('dt', text: formatted_date).ancestor('.govuk-summary-list__row').find('dd')
 

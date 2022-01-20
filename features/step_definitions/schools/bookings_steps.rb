@@ -1,5 +1,5 @@
 Given("the scheduled booking date is in the future") do
-  @scheduled_booking_date = 1.week.from_now.strftime("%d %B %Y")
+  @scheduled_booking_date = 1.week.from_now.to_formatted_s(:govuk)
 end
 
 Given("there are some bookings") do
@@ -15,7 +15,7 @@ Given("there is a booking cancelled by the candidate") do
     :cancelled_by_candidate,
     bookings_school: @school,
     bookings_subject: @school.subjects.last,
-    date: 1.week.from_now.strftime("%d %B %Y")
+    date: 1.week.from_now.to_formatted_s(:govuk)
 
   @booking_id = @booking.id
 end
@@ -25,7 +25,7 @@ Given("there is a booking cancelled by the school") do
     :cancelled_by_school,
     bookings_school: @school,
     bookings_subject: @school.subjects.last,
-    date: 1.week.from_now.strftime("%d %B %Y")
+    date: 1.week.from_now.to_formatted_s(:govuk)
 
   @booking_id = @booking.id
 end
@@ -43,7 +43,7 @@ And("there is/are {int} booking/bookings") do |count|
       :with_existing_subject,
       :accepted,
       bookings_school: @school,
-      date: index.week.from_now.strftime("%d %B %Y")
+      date: index.week.from_now.to_formatted_s(:govuk)
     )
   end
   @booking = @bookings.first

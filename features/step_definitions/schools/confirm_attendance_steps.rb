@@ -18,7 +18,7 @@ Then("the correct data should be present in each row") do
 
   within("table > tbody > tr[data-booking-id='#{@first_booking.id}']") do
     expect(page).to have_content(contact.full_name)
-    expect(page).to have_content(@first_booking.date.strftime('%d %B %Y'))
+    expect(page).to have_content(@first_booking.date.to_formatted_s(:govuk))
     expect(page).to have_content(@first_booking.bookings_subject.name)
   end
 end

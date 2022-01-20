@@ -49,7 +49,7 @@ When("I am viewing my chosen previous booking") do
 end
 
 Given("the scheduled booking date is in the past") do
-  @scheduled_booking_date = 1.week.ago.strftime("%d %B %Y")
+  @scheduled_booking_date = 1.week.ago.to_formatted_s(:govuk)
 end
 
 Given("there is a cancelled previous booking") do
