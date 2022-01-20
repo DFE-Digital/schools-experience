@@ -67,12 +67,9 @@ module Schools
     end
 
     def school_task_counts
-      @school_task_counts ||= Bookings::PlacementRequest \
-        .joins(:school)
-        .where(bookings_schools: { urn: organisation_urns })
-        .requiring_attention_including_attendance
-        .group('bookings_schools.urn')
-        .count(:id)
+      @school_task_counts = Schools::OutstandingTasks.new(organisation_urns)
+        .summarize
+        .transform_values { |h| h.values.sum }
     end
   end
 end

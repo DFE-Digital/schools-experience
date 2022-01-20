@@ -7,7 +7,7 @@
       <ul class="govuk-list">
         <li>
           <%= link_to "Manage requests", schools_placement_requests_path %>
-          <%= numbered_circle(@requests_requiring_attention, id: 'new-requests-counter', aria_label: 'new placement requests') %>
+          <%= numbered_circle(@outstanding_tasks[:requests_requiring_attention], id: 'new-requests-counter', aria_label: 'new placement requests') %>
         </li>
       </ul>
     </div>
@@ -21,11 +21,11 @@
       <ul class="govuk-list">
         <li>
           <%= link_to "Manage upcoming bookings", schools_bookings_path  %>
-          <%= numbered_circle(@bookings_requiring_attention, id: 'new-bookings-counter', aria_label: 'new upcoming bookings') %>
+          <%= numbered_circle(@outstanding_tasks[:upcoming_bookings], id: 'new-bookings-counter', aria_label: 'new upcoming bookings') %>
         </li>
         <li>
           <%= link_to "Confirm booking attendance", schools_confirm_attendance_path  %>
-          <%= numbered_circle(@candidate_attendances, id: 'confirm-attendance-counter', aria_label: 'attendances to confirm') %>
+          <%= numbered_circle(@outstanding_tasks[:bookings_pending_attendance_confirmation], id: 'confirm-attendance-counter', aria_label: 'attendances to confirm') %>
           <p class="govuk-hint">Confirm if candidates have attended their school experience</p>
         </li>
       </ul>

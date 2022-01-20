@@ -5,28 +5,8 @@ module Schools
     def show
       @school = current_school
 
-      @requests_requiring_attention = current_school
-        .placement_requests
-        .requiring_attention
-        .count
-
-      @bookings_requiring_attention = current_school
-        .bookings
-        .with_unviewed_candidate_cancellation
-        .count
-
-      @candidate_attendances = current_school
-        .bookings
-        .previous
-        .not_cancelled
-        .accepted
-        .attendance_unlogged
-        .count
-
-      @withdrawn_requests = current_school
-        .placement_requests
-        .withdrawn_but_unviewed
-        .count
+      summary = OutstandingTasks.new([current_school.urn]).summarize
+      @outstanding_tasks = summary[current_school.urn]
 
       set_latest_service_update
 

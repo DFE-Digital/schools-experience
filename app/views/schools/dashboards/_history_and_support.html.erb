@@ -6,7 +6,7 @@
       <ul class="govuk-list">
         <li>
           <%= link_to "Withdrawn requests", schools_withdrawn_requests_path  %>
-          <%= numbered_circle(@withdrawn_requests, id: 'withdrawn-requests-counter', aria_label: 'requests withdrawn by candidate') %>
+          <%= numbered_circle(@outstanding_tasks[:unviewed_withdrawn_requests], id: 'withdrawn-requests-counter', aria_label: 'requests withdrawn by candidate') %>
         </li>
         <li>
           <%= link_to "Rejected requests", schools_rejected_requests_path %>
