@@ -21,6 +21,7 @@ RSpec.describe Schools::CsvExportRow do
         it { is_expected.to include "Date" => pr.placement_date.date.to_formatted_s(:govuk) }
         it { is_expected.to include "Duration" => pr.placement_date.duration }
         it { is_expected.to include "Subject" => pr.subject_first_choice }
+        it { is_expected.to include "Second Subject" => pr.subject_second_choice }
         it { is_expected.to include "Status" => "New" }
         it { is_expected.to include "Attendance" => nil }
 
@@ -46,6 +47,7 @@ RSpec.describe Schools::CsvExportRow do
         it { is_expected.to include "Date" => nil }
         it { is_expected.to include "Duration" => nil }
         it { is_expected.to include "Subject" => pr.subject_first_choice }
+        it { is_expected.to include "Second Subject" => pr.subject_second_choice }
         it { is_expected.to include "Status" => "New" }
         it { is_expected.to include "Attendance" => nil }
       end
@@ -60,6 +62,7 @@ RSpec.describe Schools::CsvExportRow do
       it { is_expected.to include "Date" => pr.booking.date.to_formatted_s(:govuk) }
       it { is_expected.to include "Duration" => pr.booking.duration }
       it { is_expected.to include "Subject" => pr.booking.bookings_subject.name }
+      it { is_expected.to include "Second Subject" => pr.subject_second_choice }
       it { is_expected.to include "Status" => "Booked" }
       it { is_expected.to include "Attendance" => nil }
 

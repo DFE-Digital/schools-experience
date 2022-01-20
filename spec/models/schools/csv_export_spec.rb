@@ -35,7 +35,7 @@ RSpec.describe Schools::CsvExport do
 
       it "should contain a header row" do
         is_expected.to eql \
-          %w[Id Name Email Date Duration Subject Status Attendance]
+          ["Id", "Name", "Email", "Date", "Duration", "Subject", "Second Subject", "Status", "Attendance"]
       end
     end
 

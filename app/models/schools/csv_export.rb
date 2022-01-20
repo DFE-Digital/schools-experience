@@ -6,15 +6,16 @@ module Schools
     MAX_IDS_IN_CRM_REQ = 50
     BATCH_SIZE = 300
 
-    HEADER = %w[
-      Id
-      Name
-      Email
-      Date
-      Duration
-      Subject
-      Status
-      Attendance
+    HEADER = [
+      "Id",
+      "Name",
+      "Email",
+      "Date",
+      "Duration",
+      "Subject",
+      "Second Subject",
+      "Status",
+      "Attendance"
     ].freeze
 
     attr_reader :school

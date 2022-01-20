@@ -17,6 +17,7 @@ module Schools
         date,
         duration,
         subject,
+        second_subject,
         status,
         attendance
       ]
@@ -46,6 +47,10 @@ module Schools
       else
         request.subject&.name || request.subject_first_choice
       end
+    end
+
+    def second_subject
+      request.subject_second_choice
     end
 
     def attendance
