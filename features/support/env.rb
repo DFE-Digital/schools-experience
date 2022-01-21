@@ -5,7 +5,6 @@
 # files.
 
 require 'cucumber/rails'
-require 'selenium/webdriver'
 require 'capybara-screenshot/cucumber'
 require 'cucumber/rspec/doubles'
 
@@ -52,92 +51,19 @@ ActionController::Base.allow_rescue = false
 
 # Browser configuration
 
+driver = :selenium_chrome_headless
+
 Capybara.server = :puma, { Silent: true }
 
-if ENV['APP_URL'].present?
-  Capybara.app_host = ENV['APP_URL'].to_s
-  Capybara.run_server = false
+Capybara.register_driver driver do |app|
+  options = ::Selenium::WebDriver::Chrome::Options.new
+
+  options.add_argument("--headless")
+  options.add_argument("--no-sandbox")
+  options.add_argument("--disable-dev-shm-usage")
+  options.add_argument("--window-size=1400,1400")
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
-if ENV['ChromeWebDriver'].present?
-  Selenium::WebDriver::Chrome::Service.driver_path = "#{ENV['ChromeWebDriver']}/chromedriver.exe"
-end
-
-if ENV['GeckoWebDriver'].present?
-  Selenium::WebDriver::Firefox::Service.driver_path = "#{ENV['GeckoWebDriver']}/geckodriver.exe"
-end
-
-if ENV['IEWebDriver'].present?
-  Selenium::WebDriver::IE.driver_path = "#{ENV['IEWebDriver']}/IEDriverServer.exe"
-end
-
-Capybara.register_driver :chrome do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: %w[disable-gpu] }
-  )
-
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :chrome,
-    desired_capabilities: capabilities
-  )
-end
-
-Capybara.register_driver :chrome_headless do |app|
-  options = Selenium::WebDriver::Chrome::Options.new
-  options.headless!
-
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :chrome,
-    options: options
-  )
-end
-
-Capybara.register_driver :firefox do |app|
-  Capybara::Selenium::Driver.new(app, browser: :firefox)
-end
-
-Capybara.register_driver :firefox_headless do |app|
-  options = Selenium::WebDriver::Firefox::Options.new(args: %w[--headless])
-
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :firefox,
-    options: options
-  )
-end
-
-Capybara.register_driver :ie do |app|
-  options = Selenium::WebDriver::IE::Options.new
-  options.require_window_focus = true
-  options.ignore_protected_mode_settings = true
-  Capybara::Selenium::Driver.new(app, browser: :internet_explorer, options: options)
-end
-
-Capybara.register_driver :safari do |app|
-  Capybara::Selenium::Driver.new(app, browser: :safari)
-end
-
-if (driver = ENV['CUC_DRIVER']) && driver.present?
-  Capybara.default_driver = driver.to_sym
-else
-  Capybara.use_default_driver
-end
-
-js_driver = ENV['CUC_JAVASCRIPT_DRIVER']
-Capybara.javascript_driver = js_driver.present? ? js_driver.to_sym : :chrome_headless
-
-if ENV['SELENIUM_HUB_HOSTNAME'].present?
-  capabilities = ENV.fetch('CUC_DRIVER') { 'chrome' }
-
-  Capybara.run_server = false
-  Capybara.register_driver :selenium_remote do |app|
-    Capybara::Selenium::Driver.new(app,
-        browser: :remote,
-        url: "http://#{ENV['SELENIUM_HUB_HOSTNAME']}:4444/wd/hub",
-        desired_capabilities: capabilities.to_sym)
-  end
-  Capybara.javascript_driver = :selenium_remote
-  Capybara.default_driver = :selenium_remote
-end
+Capybara.javascript_driver = driver

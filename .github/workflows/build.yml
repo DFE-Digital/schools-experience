@@ -205,6 +205,10 @@ jobs:
     name: Cucumber Tests
     runs-on: ubuntu-latest
     needs: [ build ]
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [1, 2]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2.4.0
@@ -230,19 +234,20 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
-      - name: Bring up Docker compose Stack
-        run: docker-compose -f docker-compose-paas.yml up -d
-        env:
-          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
-
       - name: Run Cucumber Tests
-        run: docker-compose -f docker-compose-paas.yml run --rm -e NODE -e NODE_COUNT -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks -p ${PROFILE}  cucumber
+        run: |-
+          docker-compose -f docker-compose-paas.yml run --rm \
+            -e RAILS_ENV \
+            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
+            -e NODE \
+            -e NODE_COUNT \
+            db-tasks -p ${PROFILE} cucumber
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: continuous_integration
           DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
-          NODE: 1
-          NODE_COUNT: 1
+          NODE: ${{ matrix.node }}
+          NODE_COUNT: 2
 
       - name:  Keep Unit Tests Results
         if: always()
@@ -252,13 +257,13 @@ jobs:
           path: ${{ github.workspace }}/out
 
   selenium_cucumber_tests:
-    name: Chrome Cucumber Tests - ${{ matrix.node }}
+    name: Chrome Cucumber Tests
     runs-on: ubuntu-latest
     needs: [ build ]
     strategy:
       fail-fast: false
       matrix:
-        node: [1, 2, 3, 4, 5]
+        node: [1, 2]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2.4.0
@@ -284,32 +289,21 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
-      - name: Bring up Docker compose Stack
-        run: docker-compose -f docker-compose-paas.yml -f docker-compose-chrome.yml up -d
-        env:
-          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
-
       - name: Run Cucumber Tests
         run: |-
-             docker-compose -f docker-compose-paas.yml -f docker-compose-chrome.yml run --rm \
-                  -e RAILS_ENV \
-                  -e SELENIUM_HUB_HOSTNAME \
-                  -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
-                  -e CUC_DRIVER \
-                  -e APP_URL \
-                  -e NODE \
-                  -e NODE_COUNT \
-                  school-experience -p ${PROFILE}  cucumber
+          docker-compose -f docker-compose-paas.yml run --rm \
+            -e RAILS_ENV \
+            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
+            -e NODE \
+            -e NODE_COUNT \
+            school-experience -p ${PROFILE} cucumber
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: selenium
           RAILS_ENV: test
-          SELENIUM_HUB_HOSTNAME: selenium-chrome
           DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
-          CUC_DRIVER: chrome
-          APP_URL: http://school-experience:3000
           NODE: ${{ matrix.node }}
-          NODE_COUNT: 5
+          NODE_COUNT: 2
 
       - name:  Keep Unit Tests Results
         if: always()
