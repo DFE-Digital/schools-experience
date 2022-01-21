@@ -113,7 +113,23 @@ elif [[ ${MODE} == "SHELL" ]] ; then
   	  bash
 elif [[ ${MODE} == "CUCUMBER" ]] ; then
 	  echo Running cucumber using profile ${PROFILE}
-  	  bundle exec cucumber --profile=${PROFILE} --format junit --out /app/out/
+
+      # List all features to txt file.
+      find . -type f -name "*.feature" > features.txt
+
+      # Read features from text file.
+      readarray -t FEATURES < features.txt
+
+      # Determine portion of features to run.
+      FEATURES_COUNT=("${#FEATURES[@]}")
+      FEATURES_PER_NODE=($((FEATURES_COUNT / NODE_COUNT)))
+      START_INDEX=($(((NODE - 1) * FEATURES_PER_NODE)))
+      END_INDEX=($((START_INDEX + FEATURES_PER_NODE)))
+
+      FEATURES_SUBSET=("${FEATURES[@]:START_INDEX:END_INDEX}")
+
+      # Run subset of features.
+      bundle exec cucumber "${FEATURES_SUBSET[@]}" --profile=${PROFILE} --format junit --out /app/out/
 else
  echo ${MODE_ERROR}
 fi

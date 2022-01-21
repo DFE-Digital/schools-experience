@@ -24,19 +24,19 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: ACTIONS-API-ACCESS-TOKEN                                         
+        id: ACTIONS-API-ACCESS-TOKEN
         with:
-          keyvault: ${{ secrets.KEY_VAULT}}                              
-          yaml_secret: SE-INFRA-SECRETS                                
-          secret: ACTIONS-API-ACCESS-TOKEN 
-  
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: ACTIONS-API-ACCESS-TOKEN
+
       - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: SLACK-WEBHOOK                                        
+        id: SLACK-WEBHOOK
         with:
-          keyvault: ${{ secrets.KEY_VAULT}}                              
-          yaml_secret: SE-INFRA-SECRETS                                
-          secret: SLACK-WEBHOOK 
-          
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: SLACK-WEBHOOK
+
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
         with:
@@ -106,12 +106,12 @@ jobs:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: ACTIONS-API-ACCESS-TOKEN                                         
+        id: ACTIONS-API-ACCESS-TOKEN
         with:
-          keyvault: ${{ secrets.KEY_VAULT}}                              
-          yaml_secret: SE-INFRA-SECRETS                                
-          secret: ACTIONS-API-ACCESS-TOKEN 
-  
+          keyvault: ${{ secrets.KEY_VAULT}}
+          yaml_secret: SE-INFRA-SECRETS
+          secret: ACTIONS-API-ACCESS-TOKEN
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.12.0
         with:
@@ -135,7 +135,7 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec 
+        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -199,7 +199,7 @@ jobs:
           args: --severity-threshold=high --file=Dockerfile
 
       - name: Run Brakeman static security scanner
-        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman 
+        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
 
   cucumber_tests:
     name: Cucumber Tests
@@ -236,11 +236,13 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Run Cucumber Tests
-        run: docker-compose -f docker-compose-paas.yml run --rm -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks -p ${PROFILE}  cucumber
+        run: docker-compose -f docker-compose-paas.yml run --rm -e NODE -e NODE_COUNT -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL db-tasks -p ${PROFILE}  cucumber
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
           PROFILE: continuous_integration
           DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
+          NODE: 1
+          NODE_COUNT: 1
 
       - name:  Keep Unit Tests Results
         if: always()
@@ -250,9 +252,13 @@ jobs:
           path: ${{ github.workspace }}/out
 
   selenium_cucumber_tests:
-    name: Chrome Cucumber Tests
+    name: Chrome Cucumber Tests - ${{ matrix.node }}
     runs-on: ubuntu-latest
     needs: [ build ]
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [1, 2, 3, 4, 5]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2.4.0
@@ -291,6 +297,8 @@ jobs:
                   -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
                   -e CUC_DRIVER \
                   -e APP_URL \
+                  -e NODE \
+                  -e NODE_COUNT \
                   school-experience -p ${PROFILE}  cucumber
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
@@ -300,6 +308,8 @@ jobs:
           DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
           CUC_DRIVER: chrome
           APP_URL: http://school-experience:3000
+          NODE: ${{ matrix.node }}
+          NODE_COUNT: 5
 
       - name:  Keep Unit Tests Results
         if: always()
@@ -335,7 +345,7 @@ jobs:
       - name: Download Test Artifacts
         uses: actions/download-artifact@v2
         with:
-            path: ${{ github.workspace }}/out/ 
+            path: ${{ github.workspace }}/out/
 
       - name: Fixup report file paths
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
@@ -406,21 +416,21 @@ jobs:
 
       - name: Set environment variable
         run: |
-           REFERENCE=${{github.ref}}   
+           REFERENCE=${{github.ref}}
            echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
 
       - name: Install Cloud Foundry
-        if: matrix.environment == 'Review' 
+        if: matrix.environment == 'Review'
         run: |
           wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
           echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
           sudo apt-get update
-          sudo apt-get install cf7-cli  
+          sudo apt-get install cf7-cli
 
       - name: Set Review specific variables
-        if: matrix.environment == 'Review' 
+        if: matrix.environment == 'Review'
         run: |
-           REFERENCE=${{github.event.pull_request.head.ref}}   
+           REFERENCE=${{github.event.pull_request.head.ref}}
            echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
 
       - uses: Azure/login@v1
@@ -442,7 +452,7 @@ jobs:
           secret: SLACK-WEBHOOK
 
       - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        if: matrix.environment == 'Review' 
+        if: matrix.environment == 'Review'
         id: PAAS-USERNAME
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
@@ -450,7 +460,7 @@ jobs:
           secret: PAAS-USERNAME
 
       - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        if: matrix.environment == 'Review' 
+        if: matrix.environment == 'Review'
         id: PAAS-PASSWORD
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
@@ -465,18 +475,18 @@ jobs:
           secret: ACTIONS-API-ACCESS-TOKEN
 
       - name: Login to Cloud Foundry
-        if: matrix.environment == 'Review' 
+        if: matrix.environment == 'Review'
         run: cf login -a api.london.cloud.service.gov.uk -u ${{steps.PAAS-USERNAME.outputs.secret-value}} -p ${{steps.PAAS-PASSWORD.outputs.secret-value}} -s get-into-teaching
 
-      - name: Get Static Route 
-        if: matrix.environment == 'Review' 
+      - name: Get Static Route
+        if: matrix.environment == 'Review'
         run: |
               cf delete-orphaned-routes -f
               STATIC_ROUTE=$( ${GITHUB_WORKSPACE}/script/get_next_mapping.sh ${{env.REVIEW_APPLICATION}}-${{github.event.number}} )
               echo "STATIC_ROUTE=${STATIC_ROUTE}" >> $GITHUB_ENV
 
       - name: Trigger Deployment to ${{matrix.environment}}
-        if: matrix.environment == 'Review' 
+        if: matrix.environment == 'Review'
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Deploy to PaaS
@@ -485,7 +495,7 @@ jobs:
           ref: ${{env.REFERENCE}}
 
       - name: Trigger Deployment to ${{matrix.environment}}
-        if: matrix.environment != 'Review' 
+        if: matrix.environment != 'Review'
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Deploy to PaaS
@@ -501,14 +511,14 @@ jobs:
           checkName: Deploy ${{ github.sha }} to ${{ matrix.environment  }}
           ref: ${{env.REFERENCE}}
           timeoutSeconds: 1200
-          intervalSeconds: 14  
+          intervalSeconds: 14
 
       - name: Check if ${{matrix.environment}} Deployment has returned with a failure
         if: steps.wait-for-deploy.outputs.conclusion != 'success'
         run: exit 1
 
       - name: Post sticky pull request comment
-        if: matrix.environment == 'Review' 
+        if: matrix.environment == 'Review'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
@@ -549,7 +559,7 @@ jobs:
           MSG_MINIMAL: true
 
       - name: Slack Notification
-        if: failure() && matrix.environment == 'Production' 
+        if: failure() && matrix.environment == 'Production'
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_COLOR: ${{env.SLACK_ERROR}}
