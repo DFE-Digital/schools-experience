@@ -417,4 +417,48 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       expect(subject.admin_contact_phone).to eq '+441234567890'
     end
   end
+
+  context '#page_heading' do
+    let :profile do
+      FactoryBot.create :school_profile, bookings_school: school
+    end
+
+    context 'when school is onboarded' do
+      let(:school) do
+        FactoryBot.create :bookings_school, :onboarded, :full_address, urn: 123_456
+      end
+
+      it 'returns School profile' do
+        expect(subject.page_heading).to eq 'School profile'
+      end
+    end
+
+    context 'when school is not onboarded' do
+      it 'returns School profile' do
+        expect(subject.page_heading).to eq 'Check your answers before setting up your profile'
+      end
+    end
+  end
+
+  context '#publish_warning' do
+    let :profile do
+      FactoryBot.create :school_profile, bookings_school: school
+    end
+
+    context 'when school is onboarded' do
+      let(:school) do
+        FactoryBot.create :bookings_school, :onboarded, :full_address, urn: 123_456
+      end
+
+      it 'returns School profile' do
+        expect(subject.publish_warning).to eq "To save your changes, select 'Publish changes' at the bottom of the page."
+      end
+    end
+
+    context 'when school is not onboarded' do
+      it 'returns School profile' do
+        expect(subject.publish_warning).to eq "To set up your profile, select the checkbox at the bottom of the page and select 'Accept and set up profile'."
+      end
+    end
+  end
 end
