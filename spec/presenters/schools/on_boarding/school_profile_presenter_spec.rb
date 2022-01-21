@@ -428,13 +428,13 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
         FactoryBot.create :bookings_school, :onboarded, :full_address, urn: 123_456
       end
 
-      it 'returns School profile' do
+      it 'returns "School profile"' do
         expect(subject.page_heading).to eq 'School profile'
       end
     end
 
     context 'when school is not onboarded' do
-      it 'returns School profile' do
+      it 'returns "Check your answers"' do
         expect(subject.page_heading).to eq 'Check your answers before setting up your profile'
       end
     end
@@ -450,13 +450,13 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
         FactoryBot.create :bookings_school, :onboarded, :full_address, urn: 123_456
       end
 
-      it 'returns School profile' do
+      it 'returns "Publish changes"' do
         expect(subject.publish_warning).to eq "To save your changes, select 'Publish changes' at the bottom of the page."
       end
     end
 
     context 'when school is not onboarded' do
-      it 'returns School profile' do
+      it 'returns "Accept and set up profile"' do
         expect(subject.publish_warning).to eq "To set up your profile, select the checkbox at the bottom of the page and select 'Accept and set up profile'."
       end
     end
