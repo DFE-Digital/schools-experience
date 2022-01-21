@@ -25,15 +25,13 @@ Feature: Entering candidate education details
         When I submit the form
         Then I should be on the 'teaching preference' page for my school of choice
 
-    # Works locally but fails in CI
-    @javascript @wip
+    @javascript
     Scenario: Hiding degree subject choice when candidate has no degree
         Given I am on the 'education' page for my school of choice
         When I choose 'I don\'t have a degree and am not studying for one' as my degree stage
         Then I should not see any subject choices
 
-    # Works locally but fails in CI
-    @javascript @wip
+    @javascript
     Scenario: Showing degree subject choice when candidate has a degree
         Given I am on the 'education' page for my school of choice
         When I choose 'Final year' as my degree stage
