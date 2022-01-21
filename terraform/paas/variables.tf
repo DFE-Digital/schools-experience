@@ -117,3 +117,7 @@ variable "alerts" {
   type    = map(any)
   default = {}
 }
+
+variable "timeout" {
+  default = 180
+}

@@ -23,6 +23,8 @@ resource "cloudfoundry_app" "application" {
   memory       = var.application_memory
   disk_quota   = var.application_disk
   strategy     = var.strategy
+  timeout      = var.timeout
+
 
   dynamic "service_binding" {
     for_each = data.cloudfoundry_user_provided_service.logging
@@ -69,6 +71,7 @@ resource "cloudfoundry_app" "delayed_jobs" {
   disk_quota        = var.application_disk
   strategy          = var.strategy
   health_check_type = "process"
+  timeout           = var.timeout
 
   dynamic "service_binding" {
     for_each = data.cloudfoundry_user_provided_service.logging
