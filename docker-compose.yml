@@ -39,7 +39,7 @@ services:
 
    db-tasks:
      image: school-experience:latest
-     command: "atabase"
+     command: "database"
      restart: on-failure
      healthcheck:
        disable: true

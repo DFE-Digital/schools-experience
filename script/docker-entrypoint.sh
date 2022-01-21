@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MODE=NOTSET
-MODE_ERROR="Mode must be be one of (  -b (background), -c (brakeman), -f (frontend), -r (rubocop) , -x (database) , -y (cucumber) , -z (rspec) )"
+MODE_ERROR="Mode must be one of (  -b (background), -c (brakeman), -f (frontend), -r (rubocop) , -x (database) , -y (cucumber) , -z (rspec), -s (shell) )"
 
 while [[ $# -gt 0 ]]; do
   key="$1"
@@ -39,6 +39,14 @@ while [[ $# -gt 0 ]]; do
 		  echo ${MODE_ERROR}
 	  else
 	          MODE=DATABASE
+          fi
+	  shift
+      ;;
+    -x|shell)
+	  if [[ ${MODE} != "NOTSET" ]] ; then
+		  echo ${MODE_ERROR}
+	  else
+	          MODE=SHELL
           fi
 	  shift
       ;;
@@ -86,23 +94,26 @@ if [[ ${MODE} == "FRONTEND" ]] ; then
 	  echo Running Frontend
           bundle exec rails server
 elif [[ ${MODE} == "BACKGROUND" ]] ; then
-	  echo Running Background Jobs 
+	  echo Running Background Jobs
           bundle exec rake jobs:work
 elif [[ ${MODE} == "RUBOCOP" ]] ; then
-	  echo Running Rubocop 
+	  echo Running Rubocop
 	  bundle exec rubocop app config lib features spec --format json --out=/app/out/rubocop-result.json
 elif [[ ${MODE} == "BRAKEMAN" ]] ; then
-	  echo Running Bakeman 
+	  echo Running Bakeman
 	  bundle exec brakeman --no-pager
 elif [[ ${MODE} == "DATABASE" ]] ; then
-	  echo Running database create 
+	  echo Running database create
   	  bundle exec rake db:create db:schema:load
 elif [[ ${MODE} == "RSPEC" ]] ; then
 	  echo Running rspec
   	  bundle exec rspec --format documentation --format RspecSonarqubeFormatter --out /app/out/test-report.xml
+elif [[ ${MODE} == "SHELL" ]] ; then
+	  echo Running shell
+  	  bash
 elif [[ ${MODE} == "CUCUMBER" ]] ; then
 	  echo Running cucumber using profile ${PROFILE}
-  	  bundle exec cucumber -t @javascript  --profile=${PROFILE} --format junit --out /app/out/
+  	  bundle exec cucumber --profile=${PROFILE} --format junit --out /app/out/
 else
  echo ${MODE_ERROR}
 fi
