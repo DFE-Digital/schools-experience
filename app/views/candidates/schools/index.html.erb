@@ -76,30 +76,6 @@
   </aside>
 
   <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
-    <% if @search.subjects.any? || @search.phases.any? || @search.dbs_policies.any? || @search.disability_confident.present? || @search.parking.present?%>
-      <div class="school-search-filter-info">
-        <div>
-          <%= school_search_phase_filter_description @search %>
-        </div>
-
-        <div>
-          <%= school_search_subject_filter_description @search %>
-        </div>
-
-        <div>
-          <%= school_search_dbs_policies_filter_description @search %>
-        </div>
-
-        <div>
-          <%= school_search_disability_confident_filter_description(@search) %>
-        </div>
-
-        <div>
-          <%= school_search_parking_filter_description(@search) %>
-        </div>
-      </div>
-    <%- end -%>
-
     <div class="pagination-info higher">
       <div class="pagination-slice">
         <%= school_results_info @search %>

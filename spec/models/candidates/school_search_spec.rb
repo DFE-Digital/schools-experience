@@ -267,40 +267,4 @@ RSpec.describe Candidates::SchoolSearch do
       end
     end
   end
-
-  context '.subject_names' do
-    before do
-      @first = create(:bookings_subject)
-      @second = create(:bookings_subject)
-      @third = create(:bookings_subject)
-    end
-
-    subject { described_class.new(subjects: [@first.id, @third.id]) }
-
-    it "will return an array of subjects" do
-      expect(subject.subject_names).to match_array([@first.name, @third.name])
-    end
-  end
-
-  context '.phase_names' do
-    before do
-      @first = create(:bookings_phase)
-      @second = create(:bookings_phase)
-      @third = create(:bookings_phase)
-    end
-
-    subject { described_class.new(phases: [@first.id, @third.id]) }
-
-    it "will return an array of phases" do
-      expect(subject.phase_names).to match_array([@first.name, @third.name])
-    end
-  end
-
-  context '.dbs_policies_names' do
-    subject { described_class.new(dbs_policies: [1, 2]) }
-
-    it "will return an array of phases" do
-      expect(subject.dbs_policies_names).to match_array(['In school', 'Not required'])
-    end
-  end
 end

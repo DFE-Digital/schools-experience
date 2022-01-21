@@ -97,45 +97,6 @@ module Candidates::SchoolHelper
     "https://www.compare-school-performance.service.gov.uk/school/#{urn}"
   end
 
-  def school_search_phase_filter_description(search)
-    return if search.phases.empty?
-
-    t(
-      'helpers.candidates.school_search.phases_filter_html',
-      phase_names: to_sentence(search.phase_names.map { |name| tag.strong(name) })
-    )
-  end
-
-  def school_search_subject_filter_description(search)
-    return if search.subjects.empty?
-
-    t(
-      'helpers.candidates.school_search.subjects_filter_html',
-      subject_names: to_sentence(search.subject_names.map { |name| tag.strong(name) })
-    )
-  end
-
-  def school_search_dbs_policies_filter_description(search)
-    return if search.dbs_policies.empty?
-
-    t(
-      'helpers.candidates.school_search.dbs_policies_filter.text_html',
-      dbs_policies_options: to_sentence(search.dbs_policies_names.map { |name| tag.strong(name) })
-    )
-  end
-
-  def school_search_disability_confident_filter_description(search)
-    return if search.disability_confident.nil?
-
-    t('helpers.candidates.school_search.disability_confident_filter.text_html')
-  end
-
-  def school_search_parking_filter_description(search)
-    return if search.parking.nil?
-
-    t('helpers.candidates.school_search.parking_filter.text_html')
-  end
-
   def cleanup_school_url(url)
     if url.blank?
       '#'
