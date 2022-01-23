@@ -19,7 +19,8 @@ RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache bash build-base git tzdata libxml2 libxml2-dev \
-			postgresql-libs postgresql-dev nodejs yarn chromium chromium-chromedriver
+			postgresql-libs postgresql-dev nodejs yarn \
+            chromium=86.0.4240.111-r0 chromium-chromedriver=86.0.4240.111-r0
 
 # Copy Entrypoint script
 COPY script/docker-entrypoint.sh .
