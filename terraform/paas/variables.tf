@@ -50,7 +50,7 @@ variable "application_memory" {
 }
 
 variable "application_disk" {
-  default = "1024"
+  default = "1536"
 }
 
 variable "paas_space" {
