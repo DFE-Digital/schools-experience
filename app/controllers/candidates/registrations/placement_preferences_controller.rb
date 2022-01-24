@@ -1,8 +1,6 @@
 module Candidates
   module Registrations
     class PlacementPreferencesController < RegistrationsController
-      before_action :set_school, :set_placement_dates
-
       def new
         @placement_preference = PlacementPreference.new \
           attributes_from_session.merge(urn: current_urn)
@@ -38,23 +36,8 @@ module Candidates
 
     private
 
-      def set_school
-        # FIXME: modify to use current_registration.school
-        @school = Candidates::School.find(params[:school_id])
-      end
-
-      def set_placement_dates
-        if @school.availability_preference_fixed?
-          @placement_dates = @school
-            .bookings_placement_dates
-            .published
-            .available
-        end
-      end
-
       def placement_preference_params
         params.require(:candidates_registrations_placement_preference).permit(
-          :availability,
           :objectives,
           :bookings_placement_date_id
         ).merge(urn: current_urn)

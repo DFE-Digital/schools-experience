@@ -6,6 +6,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
   let :registration_session do
     FactoryBot.build :registration_session, with: %i[
+      subject_and_date_information
       personal_information
       contact_information
       education
@@ -68,7 +69,7 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
 
         it 'redirects to the next step' do
           expect(response).to redirect_to \
-            '/candidates/schools/11048/registrations/background_check/new'
+            '/candidates/schools/11048/registrations/availability_preference/new'
         end
       end
     end
@@ -145,7 +146,6 @@ describe Candidates::Registrations::PlacementPreferencesController, type: :reque
         let :placement_preference do
           FactoryBot.build :placement_preference,
             urn: school.urn,
-            availability: 'Every second Friday',
             objectives: 'I would like to become a teacher'
         end
 

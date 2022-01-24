@@ -11,6 +11,7 @@ Feature: Background checks
        And I have completed the education form
        And I have completed the teaching preference form
        And I have completed the placement preference form
+       And I have completed the availability preference form
 
     Scenario: Page contents
         Given I am on the 'background checks' page for my school of choice

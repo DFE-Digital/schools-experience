@@ -28,6 +28,7 @@ describe Candidates::Registrations::RegistrationState do
           education
           teaching_preference
           placement_preference
+          availability_preference
           background_check
         ]
       end
@@ -134,6 +135,22 @@ describe Candidates::Registrations::RegistrationState do
       ]
     end
 
+    it { expect(subject.next_step).to eq :availability_preference }
+    it { is_expected.not_to be_completed }
+  end
+
+  context 'with availability_preference' do
+    let :registration_session do
+      build :registration_session, urn: school.urn, with: %i[
+        personal_information
+        contact_information
+        education
+        teaching_preference
+        placement_preference
+        availability_preference
+      ]
+    end
+
     it { expect(subject.next_step).to eq :background_check }
     it { is_expected.not_to be_completed }
   end
@@ -146,6 +163,7 @@ describe Candidates::Registrations::RegistrationState do
         education
         teaching_preference
         placement_preference
+        availability_preference
         background_check
       ]
     end

@@ -4,6 +4,7 @@ module Bookings
   class PlacementRequest < ApplicationRecord
     include ViewTrackable
     include Candidates::Registrations::Behaviours::PlacementPreference
+    include Candidates::Registrations::Behaviours::AvailabilityPreference
     include Candidates::Registrations::Behaviours::Education
     include Candidates::Registrations::Behaviours::TeachingPreference
     include Candidates::Registrations::Behaviours::BackgroundCheck

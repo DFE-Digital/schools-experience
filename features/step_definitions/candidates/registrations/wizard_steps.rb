@@ -5,9 +5,14 @@ Given("I'm applying for a school") do
 end
 
 Given("I have completed the placement preference form") do
-  visit path_for 'request school experience placement', school: @school
-  fill_in 'Tell us about your availability', with: 'From Epiphany to Whitsunday'
-  fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+  visit path_for 'placement preference', school: @school
+  fill_in 'Enter what you want to get out of your placement', with: 'I enjoy teaching'
+  click_button 'Continue'
+end
+
+Given("I have completed the availability preference form") do
+  visit path_for 'availability preference', school: @school
+  fill_in 'Enter your availability', with: 'From Epiphany to Whitsunday'
   click_button 'Continue'
 end
 
@@ -56,15 +61,19 @@ Given("I have navigated away from the wizard") do
 end
 
 When("I come back to the wizard") do
-  visit path_for 'request school experience placement', school: @school
+  visit path_for 'placement preference', school: @school
+end
+
+Then("the availability preference form should populated with the details I've entered so far") do
+  visit path_for 'placement preference', school: @school
+  expect(find_field('Enter what you want to get out of your placement').value).to eq 'I enjoy teaching'
 end
 
 Then("the placement preference form should populated with the details I've entered so far") do
-  visit path_for 'request school experience placement', school: @school
+  visit path_for 'availability preference', school: @school
   expect(find_field(
-    'Tell us about your availability'
+    'Enter your availability'
   ).value).to eq 'From Epiphany to Whitsunday'
-  expect(find_field('What do you want to get out of your school experience?').value).to eq 'I enjoy teaching'
 end
 
 Then("the personal information form should populated with the details I've entered so far") do

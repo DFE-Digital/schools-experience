@@ -5,6 +5,7 @@ Given("I have completed the wizard") do
   step "I have filled in my education details successfully"
   step "I have filled in my teaching preferences successfully"
   step "I have filled in my placement preferences successfully"
+  step "I have filled in my availability preferences successfully"
   step "I have filled in my background checks successfully"
 end
 
@@ -21,7 +22,7 @@ Given("I have completed the wizard for a fixed date school") do
   step "I have filled in my contact information successfully"
   step "I have filled in my education details successfully"
   step "I have filled in my teaching preferences successfully"
-  step "I have filled in my placement preferences successfully"
+  step "I have filled in my placement preferences for fixed dates successfully"
   step "I have filled in my background checks successfully"
 end
 
@@ -80,12 +81,25 @@ Given("I have filled in my teaching preferences successfully") do
     "/candidates/schools/#{@school.urn}/registrations/placement_preference/new"
 end
 
-Given("I have filled in my placement preferences successfully") do
-  unless @fixed_dates
-    fill_in 'Tell us about your availability', with: 'Only free from Epiphany to Whitsunday'
-  end
+Given("I have filled in my placement preferences for fixed dates successfully") do
+  fill_in 'Enter what you want to get out of your placement', with: 'I enjoy teaching'
+  click_button 'Continue'
 
-  fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+  expect(page.current_path).to eq \
+    "/candidates/schools/#{@school.urn}/registrations/background_check/new"
+end
+
+Given("I have filled in my placement preferences successfully") do
+  fill_in 'Enter what you want to get out of your placement', with: 'I enjoy teaching'
+  click_button 'Continue'
+
+  expect(page.current_path).to eq \
+    "/candidates/schools/#{@school.urn}/registrations/availability_preference/new"
+end
+
+Given("I have filled in my availability preferences successfully") do
+  fill_in 'Enter your availability', with: 'Only from Epiphany to Whitsunday'
+
   click_button 'Continue'
 
   expect(page.current_path).to eq \

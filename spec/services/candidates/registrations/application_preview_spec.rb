@@ -28,7 +28,11 @@ describe Candidates::Registrations::ApplicationPreview do
 
   let :placement_preference do
     build :placement_preference,
-      objectives: "test the software",
+      objectives: "test the software"
+  end
+
+  let :availability_preference do
+    build :availability_preference,
       availability: 'From Epiphany to Whitsunday'
   end
 
@@ -58,6 +62,7 @@ describe Candidates::Registrations::ApplicationPreview do
       'candidates_registrations_personal_information' => personal_information.attributes,
       'candidates_registrations_contact_information' => contact_information.attributes,
       'candidates_registrations_placement_preference' => placement_preference.attributes,
+      'candidates_registrations_availability_preference' => availability_preference.attributes,
       'candidates_registrations_education' => education.attributes,
       'candidates_registrations_teaching_preference' => teaching_preference.attributes,
       'candidates_registrations_background_check' => background_check.attributes,
@@ -232,7 +237,7 @@ describe Candidates::Registrations::ApplicationPreview do
 
         it 'returns the availablility the candidate entered' do
           expect(subject.placement_availability).to \
-            eq placement_preference.availability
+            eq availability_preference.availability
         end
       end
 
@@ -280,7 +285,7 @@ describe Candidates::Registrations::ApplicationPreview do
 
         it 'returns the placement_availability' do
           expect(subject.placement_availability_description).to eq \
-            placement_preference.availability
+            availability_preference.availability
         end
       end
 

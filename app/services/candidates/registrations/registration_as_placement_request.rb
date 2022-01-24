@@ -7,6 +7,7 @@ module Candidates
       NON_PII_MODELS = %i[
         background_check
         placement_preference
+        availability_preference
         education
         teaching_preference
         subject_and_date_information

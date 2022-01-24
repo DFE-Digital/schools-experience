@@ -100,6 +100,14 @@ module Candidates
         fetch_attributes PersonalInformation
       end
 
+      def availability_preference
+        fetch AvailabilityPreference
+      end
+
+      def availability_preference_attributes
+        fetch_attributes AvailabilityPreference
+      end
+
       def placement_preference
         fetch PlacementPreference
       end
