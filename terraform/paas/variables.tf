@@ -50,7 +50,7 @@ variable "application_memory" {
 }
 
 variable "application_disk" {
-  default = "1024"
+  default = "1536"
 }
 
 variable "paas_space" {
@@ -116,4 +116,8 @@ variable "paas_docker_image" {
 variable "alerts" {
   type    = map(any)
   default = {}
+}
+
+variable "timeout" {
+  default = 180
 }

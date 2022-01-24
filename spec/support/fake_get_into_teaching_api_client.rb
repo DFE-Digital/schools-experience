@@ -1,7 +1,3 @@
-class GetIntoTeachingApiClient::SchoolsExperienceApi
-  def add_classroom_experience_note(_id, _note); end
-end
-
 class GetIntoTeachingApiClient::CandidatesApi
   def create_candidate_access_token(request)
     raise GetIntoTeachingApiClient::ApiError if request.email =~ /unknown/
@@ -18,8 +14,18 @@ class GetIntoTeachingApiClient::PrivacyPoliciesApi
   end
 end
 
+class GetIntoTeachingApiClient::LookupItemsApi
+  def get_teaching_subjects
+    [
+      GetIntoTeachingApiClient::LookupItem.new(id: SecureRandom.uuid, value: "Maths")
+    ]
+  end
+end
+
 class GetIntoTeachingApiClient::SchoolsExperienceApi
   KNOWN_UUID = "b8dd28e3-7bed-4cc2-9602-f6ee725344d2".freeze
+
+  def add_school_experience(_id, _candidate_school_experience); end
 
   def exchange_access_token_for_schools_experience_sign_up(_code, request)
     GetIntoTeachingApiClient::SchoolsExperienceSignUp.new(fake_sign_up_data).tap do |sign_up|
