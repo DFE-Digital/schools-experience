@@ -76,6 +76,8 @@
   </aside>
 
   <section class="govuk-grid-column-two-thirds" id="search-results" aria-label="Search results">
+    <%= render(partial: "shared/facet_tags", locals: { applied_filters: @facet_tags.applied_filters }) %>
+
     <div class="pagination-info higher">
       <div class="pagination-slice">
         <%= school_results_info @search %>
