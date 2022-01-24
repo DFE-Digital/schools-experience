@@ -10,14 +10,14 @@
 <div class="govuk-grid-row" id="school-onboarding-profile">
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">
-      Check your answers before setting up your school experience profile
+      <%= @profile.page_heading %>
     </h1>
 
     <div class="govuk-warning-text">
       <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
       <strong class="govuk-warning-text__text">
         <span class="govuk-warning-text__assistive">Warning</span>
-        Any changes are not yet published. To publish changes, press 'Accept and set up profile' at the bottom of the page.
+        <%= @profile.publish_warning %>
       </strong>
     </div>
 

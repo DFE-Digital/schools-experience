@@ -9,14 +9,14 @@
 %>
 
 <h1 class="govuk-heading-l govuk-!-margin-top-4">
-  Preview your school experience profile
+  School profile preview
 </h1>
 
 <div class="govuk-warning-text">
   <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
   <strong class="govuk-warning-text__text">
     <span class="govuk-warning-text__assistive">Warning</span>
-    Any changes are not yet published. To publish your changes, go back and press 'Accept and set up profile'
+    <%= @presenter.warning %>
   </strong>
 </div>
 
