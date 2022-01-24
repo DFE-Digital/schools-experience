@@ -75,6 +75,22 @@ module Candidates
       @max_fee = FEES.map(&:first).include?(max_f) ? max_f : ''
     end
 
+    def applied_filters
+      {
+        I18n.t("helpers.fieldset.phases") => {
+          phases: phase_filters,
+        },
+        I18n.t("helpers.fieldset.subjects") => {
+          subjects: subject_filters,
+        },
+        I18n.t("helpers.fieldset.requirements") => {
+          dbs_policies: dbs_policy_filters,
+          disability_confident: disability_confident_filters,
+          parking: parking_filters,
+        }
+      }
+    end
+
     delegate :results, to: :school_search
 
     delegate :total_count, to: :school_search
@@ -94,6 +110,49 @@ module Candidates
     end
 
   private
+
+    def subject_filters
+      Candidates::School.subjects
+        .select { |s| s.first.in?(subjects) }
+        .map { |s| { value: s.first, text: s.last } }
+    end
+
+    def phase_filters
+      Candidates::School.phases
+        .select { |p| p.first.in?(phases) }
+        .map { |p| { value: p.first, text: p.last } }
+    end
+
+    def dbs_policy_filters
+      dbs_policies.map do |option|
+        policy = Bookings::Profile::DBS_POLICY_CONDITIONS[option]
+        policy_text = I18n.t("helpers.candidates.school_search.dbs_policies_filter.options.#{policy}")
+        label = I18n.t(
+          'helpers.candidates.school_search.dbs_policies_filter.text',
+          dbs_policy: policy_text
+        )
+
+        { value: option, text: label }
+      end
+    end
+
+    def disability_confident_filters
+      return [] if disability_confident.blank?
+
+      [{
+        value: disability_confident,
+        text: I18n.t("helpers.candidates.school_search.disability_confident_filter.text")
+      }]
+    end
+
+    def parking_filters
+      return [] if parking.blank?
+
+      [{
+        value: parking,
+        text: I18n.t("helpers.candidates.school_search.parking_filter.text")
+      }]
+    end
 
     def school_search
       @school_search ||= Bookings::SchoolSearch.new(

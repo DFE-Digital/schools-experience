@@ -267,4 +267,39 @@ RSpec.describe Candidates::SchoolSearch do
       end
     end
   end
+
+  describe "#applied_filters" do
+    let!(:subject_1) { Bookings::Subject.find_by(name: "English") }
+    let!(:subject_2) { Bookings::Subject.find_by(name: "Maths") }
+    let!(:phase_3) { create(:bookings_phase, :primary) }
+    let!(:phase_4) { create(:bookings_phase, :secondary) }
+
+    let(:instance) do
+      described_class.new(
+        subjects: [subject_1.id, subject_2.id],
+        phases: [phase_3.id, phase_4.id],
+        dbs_policies: [2],
+        disability_confident: "1",
+        parking: "1"
+      )
+    end
+
+    subject { instance.applied_filters }
+
+    it do
+      is_expected.to eq({
+        "Subjects" => {
+          subjects: [{ value: subject_1.id, text: "English" }, { value: subject_2.id, text: "Maths" }]
+        },
+        "Education phases" => {
+          phases: [{ value: phase_3.id, text: "Primary (4 to 11)" }, { value: phase_4.id, text: "Secondary (11 to 16)" }]
+        },
+        "Requirements" => {
+          dbs_policies: [{ value: 2, text: "DBS check: Not required" }],
+          disability_confident: [{ value: "1", text: "Disability Confident schools" }],
+          parking: [{ value: "1", text: "Schools with parking" }]
+        }
+      })
+    end
+  end
 end
