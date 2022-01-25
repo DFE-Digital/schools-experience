@@ -22,11 +22,16 @@ describe('SearchController', () => {
   const responseForm = generateForm('response form', false)
 
   const mockFetch = () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
+    global.fetch = jest.fn(() => {
+      // Ensure it shows the loading message; there's no easy/clean
+      // way of having this as a separate test.
+      const loading = document.getElementById('loading')
+      expect(loading.classList).toContain('active')
+
+      return Promise.resolve({
         text: () => Promise.resolve(`${responseForm}${responseSearchResults}`),
       })
-    )
+    })
   }
 
   const mockHistory = () => {
@@ -40,6 +45,8 @@ describe('SearchController', () => {
         ${generateForm()}
 
         <div id="search-results"></div>
+
+        <div id="loading" data-search-target="loading">Loading</div>
 
         <div class="facet-tags">
           <div id="group-1" class="facet-tags__group">
@@ -87,6 +94,11 @@ describe('SearchController', () => {
 
     it('performs a search', () => {
       expect(fetch).toHaveBeenCalledWith('/path?checkbox1=1&checkbox2=2&checkbox3=3')
+    })
+
+    it('hides the loading message', () => {
+      const loading = document.getElementById('loading')
+      expect(loading.classList).not.toContain('active')
     })
 
     it('updates the search results', () => {

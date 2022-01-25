@@ -1,7 +1,7 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
-  static targets = ['form']
+  static targets = ['form', 'loading']
   static values = {
     resultsId: String,
     formId: String
@@ -72,6 +72,8 @@ export default class extends Controller {
   }
 
   executeSearch(url) {
+    this.loadingTarget.classList.add('active')
+
     fetch(url)
       .then(response => response.text())
       .then(text => {
@@ -82,6 +84,8 @@ export default class extends Controller {
 
         document.getElementById(this.resultsIdValue).replaceWith(results)
         document.getElementById(this.formIdValue).replaceWith(form)
+
+        this.loadingTarget.classList.remove('active')
       })
   }
 

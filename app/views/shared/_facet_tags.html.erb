@@ -1,4 +1,4 @@
-<% if applied_filters %>
+<% if applied_filters.present? %>
   <div class="facet-tags">
     <% applied_filters.each do |group, filters| %>
       <div class="facet-tags__group">
@@ -23,3 +23,7 @@
   </div>
   <hr>
 <% end %>
+
+<div data-search-target="loading" class="govuk-caption-l loading">
+  Loading...
+</div>

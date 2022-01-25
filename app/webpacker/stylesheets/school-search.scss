@@ -33,6 +33,15 @@
     @extend .govuk-section-break--visible ;
   }
 
+  .loading {
+    margin-bottom: 1em;
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+
   .school-result {
     padding: 0 govuk-spacing(4) 0 govuk-spacing(6);
     margin: govuk-spacing(4) 0;
