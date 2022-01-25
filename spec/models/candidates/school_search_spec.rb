@@ -269,8 +269,8 @@ RSpec.describe Candidates::SchoolSearch do
   end
 
   describe "#applied_filters" do
-    let!(:subject_1) { Bookings::Subject.find_by(name: "English") }
-    let!(:subject_2) { Bookings::Subject.find_by(name: "Maths") }
+    let!(:subject_1) { create(:bookings_subject, name: "Subject 1") }
+    let!(:subject_2) { create(:bookings_subject, name: "Subject 2") }
     let!(:phase_3) { create(:bookings_phase, :primary) }
     let!(:phase_4) { create(:bookings_phase, :secondary) }
 
@@ -289,7 +289,7 @@ RSpec.describe Candidates::SchoolSearch do
     it do
       is_expected.to eq({
         "Subjects" => {
-          subjects: [{ value: subject_1.id, text: "English" }, { value: subject_2.id, text: "Maths" }]
+          subjects: [{ value: subject_1.id, text: "Subject 1" }, { value: subject_2.id, text: "Subject 2" }]
         },
         "Education phases" => {
           phases: [{ value: phase_3.id, text: "Primary (4 to 11)" }, { value: phase_4.id, text: "Secondary (11 to 16)" }]
