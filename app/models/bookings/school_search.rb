@@ -141,7 +141,7 @@ private
     )&.first
 
     if empty_geocoder_result?(result)
-      Rails.logger.info("No Geocoder results found in #{REGION} for #{formatted_request} (user entered: #{location})")
+      Rails.logger.info("No Geocoder results found for #{formatted_request} (user entered: #{location})")
       return
     end
 
