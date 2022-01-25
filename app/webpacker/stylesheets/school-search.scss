@@ -96,6 +96,14 @@
 
 }
 
+.js-enabled {
+  #search-filter {
+    button[type='submit'] {
+      display: none;
+    }
+  }
+}
+
 .search-subjects-checkboxes {
   height: 300px;
   overflow-y: scroll;

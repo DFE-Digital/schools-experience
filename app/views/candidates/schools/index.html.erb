@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<div class="govuk-grid-row">
+<div class="govuk-grid-row" data-controller="search" data-search-results-id-value="search-results" data-search-form-id-value="search-form">
   <section id="search-bar" class="govuk-grid-column-full">
     <%= form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
       <%= f.govuk_text_field :location, label: { text: "School location", class: "govuk-visually-hidden" }, width: 'full', placeholder: 'Location or postcode' %>
@@ -34,7 +34,8 @@
         <%= link_to 'Skip to search results', '#search-results', class: 'govuk-skip-link', id: 'skip-to-results' %>
         <%= form_for @search, as: '',
                      method: :get,
-                     html: { class: "collapsible__content" } do |f| %>
+                     html: { id: "search-form", class: "collapsible__content" },
+                     data: { "search-target": "form", "action": "change->search#performSearch" } do |f| %>
 
           <%= f.hidden_field :query %>
           <%= f.hidden_field :location %>

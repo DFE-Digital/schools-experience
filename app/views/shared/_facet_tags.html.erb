@@ -5,14 +5,15 @@
         <strong><%= group %></strong>
         <% filters.each_with_index do |filter, index| %>
           <div class="facet-tags__wrapper">
-            <% unless index.zero? %>
-              <span class="facet-tags__preposition"><%= filter[:preposition] %></span>
-            <% end %>
+            <span class="facet-tags__preposition"><%= filter[:preposition] %></span>
             <span class="facet-tag">
               <span class="facet-tag__text"><%= filter[:text] %></span>
               <button type="button"
                 class="facet-tag__remove"
                 aria-label="Remove filter <%= filter[:text] %>"
+                data-action="search#removeTag"
+                data-key=<%= filter[:key] %>
+                data-value=<%= filter[:value] %>
               >&#x2715;</button>
             </span>
           </div>
