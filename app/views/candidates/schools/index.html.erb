@@ -40,7 +40,7 @@
           <%= f.hidden_field :location %>
           <%= f.hidden_field :distance %>
           <%= f.hidden_field :latitude %>
-          <%= f.hidden_field :longitude %>
+          <%= f.hidden_field :longitude  %>
 
           <div class="filter">
             <%= f.govuk_collection_check_boxes :phases, Candidates::School.phases, :first, :last,
