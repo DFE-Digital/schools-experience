@@ -105,11 +105,10 @@
 
 }
 
-.js-enabled {
-  #search-filter {
-    button[type='submit'] {
-      display: none;
-    }
+
+#search-filter {
+  button[type='submit'].hidden {
+    display: none;
   }
 }
 

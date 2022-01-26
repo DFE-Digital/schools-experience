@@ -6,7 +6,7 @@
         <% filters.each_with_index do |filter, index| %>
           <div class="facet-tags__wrapper">
             <span class="facet-tags__preposition"><%= filter[:preposition] %></span>
-            <span class="facet-tag">
+            <span class="facet-tag" data-search-target="tag">
               <span class="facet-tag__text"><%= filter[:text] %></span>
               <button type="button"
                 class="facet-tag__remove"

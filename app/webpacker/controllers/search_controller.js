@@ -1,19 +1,16 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
-  static targets = ['form', 'loading']
+  static targets = ['form', 'loading', 'submit', 'tag']
   static values = {
     resultsId: String,
     formId: String
   }
 
   connect() {
-    this.popstateHandler = this.handlePopstate.bind(this)
-    window.addEventListener('popstate', this.popstateHandler)
-  }
-
-  disconnect() {
-    window.removeEventListener('popstate', this.popstateHandler)
+    if (this.supported) {
+      this.updateInterface()
+    }
   }
 
   removeTag(e) {
@@ -56,19 +53,16 @@ export default class extends Controller {
   }
 
   performSearch() {
+    if (!this.supported) {
+      return
+    }
+
     const params = new URLSearchParams(new FormData(this.formTarget))
     const url = `${this.formAction}?${params.toString()}`
 
     this.executeSearch(url)
 
-    history.pushState({}, document.title, url)
-  }
-
-  handlePopstate() {
-    if (window.location.pathname === this.formAction) {
-      const url = `${this.formAction}${window.location.search}`
-      this.executeSearch(url)
-    }
+    history.replaceState({}, document.title, url)
   }
 
   executeSearch(url) {
@@ -82,14 +76,25 @@ export default class extends Controller {
         const results = response.getElementById(this.resultsIdValue)
         const form = response.getElementById(this.formIdValue)
 
-        document.getElementById(this.resultsIdValue).replaceWith(results)
-        document.getElementById(this.formIdValue).replaceWith(form)
+        document.getElementById(this.resultsIdValue).innerHTML = results.innerHTML
+        document.getElementById(this.formIdValue).innerHTML = form.innerHTML
+
+        this.updateInterface()
 
         this.loadingTarget.classList.remove('active')
       })
   }
 
+  updateInterface() {
+    this.submitTarget.classList.add('hidden')
+    this.tagTargets.forEach(tag => tag.classList.add('interactive'))
+  }
+
   get formAction() {
     return this.formTarget.getAttribute('action')
+  }
+
+  get supported() {
+    return 'URLSearchParams' in window && 'fetch' in window && 'closest' in Element.prototype
   }
 }

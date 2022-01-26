@@ -1,17 +1,3 @@
-.js-enabled {
-  .facet-tags {
-    &__wrapper {
-      .facet-tag {
-        padding-left: 23px;
-
-        &__remove {
-          display: inline-block;
-        }
-      }
-    }
-  }
-}
-
 .facet-tags {
   &__group {
     padding: 5px;
@@ -34,6 +20,14 @@
       border-radius: 5px;
       background-color: #f3f2f1;
       padding: 8px 7px;
+
+      &.interactive {
+        padding-left: 23px;
+
+        .facet-tag__remove {
+          display: inline-block;
+        }
+      }
 
       &__text {
         margin-left: 5px;
