@@ -107,4 +107,29 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       end
     end
   end
+
+  context "sorted by distance tag" do
+    before do
+      @search = Candidates::SchoolSearch.new
+      allow(@search).to receive(:results).and_return(Kaminari.paginate_array(schools).page(1))
+
+      render
+    end
+
+    context "when more than one result is returned" do
+      let(:schools) { [build(:bookings_school), build(:bookings_school)] }
+
+      it "shows when more than one result" do
+        expect(rendered).to have_css 'p', text: 'Sorted by distance'
+      end
+    end
+
+    context "when less than two results are returned" do
+      let(:schools) { [build(:bookings_school)] }
+
+      it "shows when more than one result" do
+        expect(rendered).to_not have_css 'p', text: 'Sorted by distance'
+      end
+    end
+  end
 end
