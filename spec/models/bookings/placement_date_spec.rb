@@ -95,7 +95,7 @@ describe Bookings::PlacementDate, type: :model do
         expect(subject).to(
           validate_numericality_of(:start_availability_offset)
             .is_greater_than_or_equal_to(1)
-            .is_less_than(100)
+            .is_less_than(181)
         )
       end
       it { expect(subject).to validate_presence_of(:start_availability_offset) }
@@ -112,7 +112,7 @@ describe Bookings::PlacementDate, type: :model do
         expect(subject).to(
           validate_numericality_of(:end_availability_offset)
             .is_greater_than_or_equal_to(0)
-            .is_less_than(100)
+            .is_less_than(101)
         )
       end
       it { expect(subject).to validate_presence_of(:end_availability_offset) }

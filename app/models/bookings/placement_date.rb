@@ -36,14 +36,14 @@ module Bookings
               presence: true,
               numericality: {
                 greater_than_or_equal_to: 1,
-                less_than: 100,
+                less_than: 181,
               }
 
     validates :end_availability_offset,
               presence: true,
               numericality: {
                 greater_than_or_equal_to: 0,
-                less_than: 100
+                less_than: 101
               }
 
     validates :date, presence: true
