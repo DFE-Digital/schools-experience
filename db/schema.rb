@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_19_115856) do
+ActiveRecord::Schema.define(version: 2022_01_25_180747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
