@@ -5,7 +5,9 @@ class Bookings::SchoolSearch < ApplicationRecord
 
   validates :location, length: { minimum: 2 }, allow_nil: false, if: -> { location.is_a?(String) }
 
-  REGION = 'England'.freeze
+  # Despite this being an England-only service, we want to search the whole of the UK
+  # so that we can return results to users who are near the border.
+  REGION = 'United Kingdom'.freeze
   GEOCODER_PARAMS = { maxRes: 1 }.freeze
   PER_PAGE = 15
 

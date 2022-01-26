@@ -33,19 +33,19 @@ describe Bookings::SchoolSearch do
       end
     end
 
-    context 'Limiting to England' do
-      specify 'region should be England' do
-        expect(described_class::REGION).to eql('England')
+    context 'Limiting to United Kingdom' do
+      specify 'region should be United Kingdom' do
+        expect(described_class::REGION).to eql('United Kingdom')
       end
 
-      context "when a result with name 'England' is returned" do
+      context "when a result with name 'United Kingdom' is returned" do
         before do
           allow(Geocoder).to receive(:search).and_return(
             [
               Geocoder::Result::Test.new(
                 "latitude" => 53.488,
                 "longitude" => -2.242,
-                name: 'England'
+                name: 'United Kingdom'
               )
             ]
           )
@@ -55,11 +55,11 @@ describe Bookings::SchoolSearch do
 
         specify "should append the region to the Geocoder query" do
           expect(Geocoder).to receive(:search)
-            .with('Mumbai, England', params: described_class::GEOCODER_PARAMS)
+            .with('Mumbai, United Kingdom', params: described_class::GEOCODER_PARAMS)
         end
 
         specify 'should return an empty result' do
-          expect(Rails.logger).to receive(:info).with("No Geocoder results found in England for Mumbai, England (user entered: Mumbai)")
+          expect(Rails.logger).to receive(:info).with("No Geocoder results found in United Kingdom for Mumbai, United Kingdom (user entered: Mumbai)")
         end
       end
     end
