@@ -148,7 +148,7 @@ module Bookings
       return if start_availability_offset.nil? || end_availability_offset.nil?
 
       if start_availability_offset <= end_availability_offset
-        errors.add(:start_availability_offset, "Must be greater than the number of days before the event that the event closes to candidates")
+        errors.add(:start_availability_offset, "The publish date must be before the closing date")
       end
     end
   end

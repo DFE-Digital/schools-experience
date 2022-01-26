@@ -468,11 +468,11 @@ en:
             end_availability_offset:
               blank: Enter a number of days
               greater_than_or_equal_to: Must not be a negative number
-              less_than: Must be 100 days or less
+              less_than: Must be 100 days or fewer
             start_availability_offset:
               blank: Enter a number of days
               greater_than_or_equal_to: Must be at least 1 day
-              less_than: Must be 180 days or less
+              less_than: Must be 180 days or fewer
         bookings/booking:
           attributes:
             supports_subjects:
