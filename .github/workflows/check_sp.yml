@@ -14,9 +14,9 @@ jobs:
       - name: Select Tests
         id: select-tests
         run: |
-          d="{'environment' :'Development'  , 'principle': 's105d01-keyvault-readonlyaccess'}"
-          t="{'environment' :'Test'         , 'principle': 's105t01-keyvault-readonlyaccess'}"
-          p="{'environment' :'Production'   , 'principle': 's105p01-keyvault-readonlyaccess'}"
+          d="{'environment' :'Development'  , 'principle': 's105d01-keyvault-readonly-access'}"
+          t="{'environment' :'Test'         , 'principle': 's105t01-keyvault-readonly-access'}"
+          p="{'environment' :'Production'   , 'principle': 's105p01-keyvault-readonly-access'}"
           tests="{ 'data':[ ${d} ,  ${t} ,  ${p} ]}"
           echo "::set-output name=tests::${tests}"
 
