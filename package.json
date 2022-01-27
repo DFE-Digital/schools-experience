@@ -14,6 +14,27 @@
     "webpack": "^4.46.0"
   },
   "devDependencies": {
+    "babel-plugin-dynamic-import-node": "^2.3.3",
+    "jest": "^27.4.7",
     "webpack-dev-server": "^3.11.3"
+  },
+  "jest": {
+    "testRegex": ".*_spec.js",
+    "roots": [
+      "spec/javascript"
+    ],
+    "testEnvironment": "jsdom",
+    "moduleDirectories": [
+      "node_modules",
+      "app/webpacker/controllers",
+      "app/webpacker/javascript",
+      "app/webpacker/packs"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/?!(stimulus)"
+    ]
+  },
+  "scripts": {
+    "spec": "jest"
   }
 }

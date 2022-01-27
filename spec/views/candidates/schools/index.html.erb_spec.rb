@@ -37,6 +37,9 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
 
       assign :search, @search
 
+      @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
+      assign :facet_tags, @facet_tags
+
       render
     end
 
@@ -84,6 +87,11 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       expect(rendered).to have_css '.school-result .govuk-summary-list__key', count: 4
     end
 
+    it "shows facet tags" do
+      expect(rendered).to have_css '.facet-tags'
+      expect(rendered).to have_css '.facet-tags .facet-tags__wrapper', count: 4
+    end
+
     context 'when filtered only by the dbs policy' do
       let(:subjects) { [] }
       let(:phases) { [] }
@@ -91,6 +99,11 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
 
       it "shows the filter tag" do
         expect(rendered).to have_css 'div', text: 'DBS check: Not required'
+      end
+
+      it "shows facet tag" do
+        expect(rendered).to have_css '.facet-tags'
+        expect(rendered).to have_css '.facet-tags .facet-tags__wrapper', count: 1
       end
     end
   end

@@ -50,8 +50,9 @@ We also have markdown pages within the `doc` folder of this git repo
 7. Add the `config/master.key` file - this is available from other team members
 8. Run `bundle exec rake spec` to run the spec tests.
 9. Run `bundle exec rake cucumber` to run the cucumber tests.
-10. Run `bundle exec rails s` to launch the app on https://localhost:3000.
-11. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
+10. Run `yarn spec` to run the Javascript tests.
+11. Run `bundle exec rails s` to launch the app on https://localhost:3000.
+12. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
    a. running `bundle exec rake jobs:work` will start a DelayedJob Worker
 
 ### If Chrome give a certificates error and will not let you proceed

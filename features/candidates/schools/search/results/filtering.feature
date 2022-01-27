@@ -21,8 +21,7 @@ Feature: Filtering school search results
         And it should have the hint text 'Select all that apply'
         And it should have checkboxes for all subjects
 
-    @javascript
-    Scenario: Filtering while searching by current location
+    Scenario: Filtering while searching by current location (JS disabled)
         Given there there are schools with the following attributes:
             | Name              | Phase     | Location   |
             | Manchester School | Secondary | Manchester |
@@ -33,3 +32,19 @@ Feature: Filtering school search results
         And I check the 'Secondary' filter box
         When I click the 'Update schools list' button
         Then only 'Secondary' schools should remain in the results
+
+    @javascript
+    Scenario: Filtering while searching by current location (JS enabled)
+        Given there there are schools with the following attributes:
+            | Name              | Phase     | Location   |
+            | Manchester School | Secondary | Manchester |
+            | Rochdale School   | Secondary | Rochdale   |
+            | Burnley School    | Primary   | Burnley    |
+        And I have provided a point in 'Bury' as my location
+        And there are both 'Primary' and 'Secondary' schools in the results
+        And I check the 'Secondary' filter box
+        When the results have finished loading
+        Then only 'Secondary' schools should remain in the results
+        When I click the 'Secondary' tag
+        And the results have finished loading
+        Then there are both 'Primary' and 'Secondary' schools in the results

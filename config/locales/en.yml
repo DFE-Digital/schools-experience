@@ -512,6 +512,7 @@ en:
         experience_type: School experience type
       phases: Education phases
       dbs_policies: DBS check
+      requirements: Requirements
       disability_confident: Disability and access needs
       parking: Parking
       fees: Fees
@@ -866,14 +867,12 @@ en:
 
     candidates:
       school_search:
-        phases_filter_html: "Education phases: %{phase_names}"
-        subjects_filter_html: "Placement subjects: %{subject_names}"
         disability_confident_filter:
-          text_html: "Disability Confident schools: <strong>Yes</strong>"
+          text: "Disability Confident schools"
         parking_filter:
-          text_html: "Schools with parking: <strong>Yes</strong>"
+          text: "Schools with parking"
         dbs_policies_filter:
-          text_html: "DBS check: %{dbs_policies_options}"
+          text: "DBS check: %{dbs_policy}"
           options:
             required: Required
             inschool: In school

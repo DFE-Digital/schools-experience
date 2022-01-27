@@ -1,0 +1,29 @@
+<% if applied_filters.present? %>
+  <div class="facet-tags">
+    <% applied_filters.each do |group, filters| %>
+      <div class="facet-tags__group">
+        <strong><%= group %></strong>
+        <% filters.each_with_index do |filter, index| %>
+          <div class="facet-tags__wrapper">
+            <span class="facet-tags__preposition"><%= filter[:preposition] %></span>
+            <span class="facet-tag" data-search-target="tag">
+              <span class="facet-tag__text"><%= filter[:text] %></span>
+              <button type="button"
+                class="facet-tag__remove"
+                aria-label="Remove filter <%= filter[:text] %>"
+                data-action="search#removeTag"
+                data-key=<%= filter[:key] %>
+                data-value=<%= filter[:value] %>
+              >&#x2715;</button>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <hr>
+<% end %>
+
+<div data-search-target="loading" class="govuk-caption-l loading">
+  Loading...
+</div>

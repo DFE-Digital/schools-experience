@@ -268,39 +268,38 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
-  context '.subject_names' do
-    before do
-      @first = create(:bookings_subject)
-      @second = create(:bookings_subject)
-      @third = create(:bookings_subject)
+  describe "#applied_filters" do
+    let!(:subject_1) { create(:bookings_subject, name: "Subject 1") }
+    let!(:subject_2) { create(:bookings_subject, name: "Subject 2") }
+    let!(:phase_3) { create(:bookings_phase, :primary) }
+    let!(:phase_4) { create(:bookings_phase, :secondary) }
+
+    let(:instance) do
+      described_class.new(
+        subjects: [subject_1.id, subject_2.id],
+        phases: [phase_3.id, phase_4.id],
+        dbs_policies: [2],
+        disability_confident: "1",
+        parking: "1"
+      )
     end
 
-    subject { described_class.new(subjects: [@first.id, @third.id]) }
+    subject { instance.applied_filters }
 
-    it "will return an array of subjects" do
-      expect(subject.subject_names).to match_array([@first.name, @third.name])
-    end
-  end
-
-  context '.phase_names' do
-    before do
-      @first = create(:bookings_phase)
-      @second = create(:bookings_phase)
-      @third = create(:bookings_phase)
-    end
-
-    subject { described_class.new(phases: [@first.id, @third.id]) }
-
-    it "will return an array of phases" do
-      expect(subject.phase_names).to match_array([@first.name, @third.name])
-    end
-  end
-
-  context '.dbs_policies_names' do
-    subject { described_class.new(dbs_policies: [1, 2]) }
-
-    it "will return an array of phases" do
-      expect(subject.dbs_policies_names).to match_array(['In school', 'Not required'])
+    it do
+      is_expected.to eq({
+        "Subjects" => {
+          subjects: [{ value: subject_1.id, text: "Subject 1" }, { value: subject_2.id, text: "Subject 2" }]
+        },
+        "Education phases" => {
+          phases: [{ value: phase_3.id, text: "Primary (4 to 11)" }, { value: phase_4.id, text: "Secondary (11 to 16)" }]
+        },
+        "Requirements" => {
+          dbs_policies: [{ value: 2, text: "DBS check: Not required" }],
+          disability_confident: [{ value: "1", text: "Disability Confident schools" }],
+          parking: [{ value: "1", text: "Schools with parking" }]
+        }
+      })
     end
   end
 end

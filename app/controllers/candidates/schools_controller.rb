@@ -9,6 +9,7 @@ class Candidates::SchoolsController < ApplicationController
     return redirect_to new_candidates_school_search_path unless location_present?
 
     @search = Candidates::SchoolSearch.new(search_params_with_analytics_tracking)
+    @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
 
     return render 'candidates/school_searches/new' unless @search.valid?
 
