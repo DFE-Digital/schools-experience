@@ -78,32 +78,6 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         specify { expect(response).to have_http_status(:success) }
       end
     end
-
-    context 'analytics tracking' do
-      # set the uuid cookie, grab it then do a search
-      before do
-        allow_any_instance_of(CookiePreference).to receive(:allowed?).with(:analytics_tracking_uuid).and_return(true)
-
-        get new_candidates_school_search_path
-        @uuid = cookies[:analytics_tracking_uuid]
-        get candidates_schools_path(query_params)
-      end
-
-      specify 'should persist the analytics_tracking_uuid if present' do
-        expect(Bookings::SchoolSearch.last.analytics_tracking_uuid).to eql(@uuid)
-      end
-
-      specify 'make sure it looks like a UUID' do
-        @uuid.split('-').tap do |parts|
-          expect(parts.map(&:length)).to eql([8, 4, 4, 4, 12])
-          expect(parts).to all(match(/[0-9a-f]/))
-        end
-      end
-
-      specify 'should be HTTP-only' do
-        expect(cookies.get_cookie("analytics_tracking_uuid")).to be_http_only
-      end
-    end
   end
 
   context "GET #show" do

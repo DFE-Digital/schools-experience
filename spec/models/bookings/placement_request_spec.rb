@@ -17,7 +17,6 @@ describe Bookings::PlacementRequest, type: :model do
   it { is_expected.to have_db_column(:has_dbs_check).of_type(:boolean).with_options null: false }
   it { is_expected.to have_db_column(:availability).of_type(:text).with_options null: true }
   it { is_expected.to have_db_column(:bookings_placement_date_id).of_type(:integer).with_options null: true }
-  it { is_expected.to have_db_column(:analytics_tracking_uuid).of_type(:uuid).with_options null: true }
   it { is_expected.to have_db_column(:candidate_id).of_type(:integer).with_options null: true }
   it { is_expected.to have_db_column(:under_consideration_at).of_type(:datetime).with_options null: true }
 
@@ -254,25 +253,6 @@ describe Bookings::PlacementRequest, type: :model do
           candidate.placement_requests.create_from_registration_session! \
             registration_session
         }.to change { described_class.count }.by 1
-      end
-    end
-
-    context 'with analytics_tracking_uuid' do
-      let! :analytics_tracking_uuid do
-        SecureRandom.uuid
-      end
-
-      let :registration_session do
-        FactoryBot.build :registration_session
-      end
-
-      subject do
-        candidate.placement_requests.create_from_registration_session! \
-          registration_session, analytics_tracking_uuid
-      end
-
-      specify 'it stores the analytics_tracking_uuid correctly if supplied' do
-        expect(subject.analytics_tracking_uuid).to eql(analytics_tracking_uuid)
       end
     end
 

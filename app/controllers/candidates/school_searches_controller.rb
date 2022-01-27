@@ -1,5 +1,4 @@
 class Candidates::SchoolSearchesController < ApplicationController
-  include AnalyticsTracking
   before_action :redirect_if_deactivated
 
   def new

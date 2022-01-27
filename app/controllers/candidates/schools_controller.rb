@@ -1,5 +1,4 @@
 class Candidates::SchoolsController < ApplicationController
-  include AnalyticsTracking
   include MapsContentSecurityPolicy
   EXPANDED_SEARCH_RADIUS = 50
 
@@ -8,16 +7,14 @@ class Candidates::SchoolsController < ApplicationController
   def index
     return redirect_to new_candidates_school_search_path unless location_present?
 
-    @search = Candidates::SchoolSearch.new(search_params_with_analytics_tracking)
+    @search = Candidates::SchoolSearch.new(search_params)
     @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
 
     return render 'candidates/school_searches/new' unless @search.valid?
 
     if @search.results.empty? && !@search.whitelisted_urns?
       @expanded_search_radius = true
-      @search = Candidates::SchoolSearch.new(
-        search_params_with_analytics_tracking.merge(distance: EXPANDED_SEARCH_RADIUS)
-      )
+      @search = Candidates::SchoolSearch.new(search_params.merge(distance: EXPANDED_SEARCH_RADIUS))
     end
   end
 
@@ -52,10 +49,6 @@ private
       :query, :location, :latitude, :longitude, :page, :distance, :disability_confident,
       :max_fee, :parking, phases: [], subjects: [], dbs_policies: []
     )
-  end
-
-  def search_params_with_analytics_tracking
-    search_params.merge(analytics_tracking_uuid: cookies[:analytics_tracking_uuid])
   end
 
   def redirect_if_deactivated
