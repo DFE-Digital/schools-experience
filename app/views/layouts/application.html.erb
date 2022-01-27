@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
   <head>
+    <%= render 'shared/application/javascript_cookie_preferences' %>
+    <%= javascript_pack_tag 'gtm', data: { "gtm-id": gtm_id, "gtm-nonce": content_security_policy_nonce } if gtm_enabled? %>
     <%= render partial: 'google_analytics' if google_analytics_enabled? %>
     <title><%= page_title %></title>
     <%= csrf_meta_tags %>
@@ -16,11 +18,12 @@
     <%= favicon_link_tag asset_pack_path('media/images/govuk-apple-touch-icon-167x167.png'), rel: 'apple-touch-icon', type: 'image/png', size: '167x167' %>
     <%= favicon_link_tag asset_pack_path('media/images/govuk-apple-touch-icon-180x180.png'), rel: 'apple-touch-icon', type: 'image/png', size: '180x180' %>
     <%= stylesheet_pack_tag 'application', media: 'all' %>
-    <%= render 'shared/application/javascript_cookie_preferences' %>
     <%= yield :head %>
   </head>
 
   <body class="govuk-template__body <%= 'testing' if Rails.env.test? || Rails.env.servertest? %>">
+    <%= render(partial: "gtm_fallback") if gtm_enabled? %>
+
     <%= javascript_tag nonce: true do -%>
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     <% end -%>
