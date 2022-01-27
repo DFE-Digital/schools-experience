@@ -2,6 +2,7 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementDates::ConfigurationsController, type: :request do
+  include ActiveSupport::Testing::TimeHelpers
   include_context "logged in DfE user"
 
   let! :school do
@@ -40,6 +41,8 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
     end
 
     before do
+      freeze_time
+
       post "/schools/placement_dates/#{placement_date.id}/configuration",
         params: params
     end
@@ -111,6 +114,11 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
 
         it 'redirects to the dashboard' do
           expect(response).to redirect_to schools_placement_dates_path
+        end
+
+        it 'publishes the date' do
+          expect(placement_date.reload.active).to be true
+          expect(placement_date.reload.published_at).to eq DateTime.now
         end
       end
     end

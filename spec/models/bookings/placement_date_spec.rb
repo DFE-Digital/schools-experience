@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Bookings::PlacementDate, type: :model do
+  include ActiveSupport::Testing::TimeHelpers
+
   let! :school do
     create :bookings_school, :with_subjects, subject_count: 3
   end
@@ -15,6 +17,8 @@ describe Bookings::PlacementDate, type: :model do
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:subject_specific).of_type(:boolean).with_options(default: false, null: false) }
     it { is_expected.to have_db_column(:supports_subjects).of_type(:boolean) }
+    it { is_expected.to have_db_column(:start_availability_offset).of_type(:integer).with_options(default: 60, null: false) }
+    it { is_expected.to have_db_column(:end_availability_offset).of_type(:integer).with_options(default: 0, null: false) }
   end
 
   describe 'Validation' do
@@ -84,6 +88,34 @@ describe Bookings::PlacementDate, type: :model do
         )
       end
       it { expect(subject).to validate_presence_of(:duration) }
+    end
+
+    context '#start_availability_offset' do
+      specify do
+        expect(subject).to(
+          validate_numericality_of(:start_availability_offset)
+            .is_greater_than_or_equal_to(1)
+            .is_less_than(181)
+        )
+      end
+      it { expect(subject).to validate_presence_of(:start_availability_offset) }
+
+      it "is greater than #end_availability_offset" do
+        subject.end_availability_offset = 1
+        is_expected.to allow_value(2).for :start_availability_offset
+        is_expected.to_not allow_values(0, 1).for :start_availability_offset
+      end
+    end
+
+    context '#end_availability_offset' do
+      specify do
+        expect(subject).to(
+          validate_numericality_of(:end_availability_offset)
+            .is_greater_than_or_equal_to(0)
+            .is_less_than(101)
+        )
+      end
+      it { expect(subject).to validate_presence_of(:end_availability_offset) }
     end
 
     context '#virtual' do
@@ -175,35 +207,65 @@ describe Bookings::PlacementDate, type: :model do
     end
 
     context '.active' do
-      let!(:active) { create(:bookings_placement_date, active: true) }
-      let!(:inactive) { create(:bookings_placement_date, active: false) }
+      subject { date.active }
 
-      specify 'should return active placement dates' do
-        expect(described_class.active).to include(active)
+      context "when active is false" do
+        let!(:date) { create(:bookings_placement_date, active: false) }
+
+        it { is_expected.to be false }
       end
 
-      specify 'should not return inactive placement dates' do
-        expect(described_class.active).not_to include(inactive)
+      context "when active is true" do
+        let!(:date) { create(:bookings_placement_date, active: true) }
+
+        it { is_expected.to be true }
       end
     end
 
-    context '.inactive' do
-      let!(:active) { create(:bookings_placement_date, active: true) }
-      let!(:inactive) { create(:bookings_placement_date, active: false) }
+    context ".inside_availability_window" do
+      subject { described_class.inside_availability_window }
 
-      specify 'should return inactive placement dates' do
-        expect(described_class.inactive).to include(inactive)
+      it 'includes placements that have not yet closed' do
+        travel_to Date.new(2022, 1, 8)
+
+        is_expected.to include(create(:bookings_placement_date, date: Date.new(2022, 1, 10), end_availability_offset: 1))
       end
 
-      specify 'should not return active placement dates' do
-        expect(described_class.inactive).not_to include(active)
+      it 'does not include placements that closed today' do
+        travel_to Date.new(2022, 1, 9)
+
+        is_expected.to_not include(create(:bookings_placement_date, date: Date.new(2022, 1, 10), end_availability_offset: 1))
+      end
+
+      it 'does not include placements closed to candidates in the past' do
+        travel_to Date.new(2022, 1, 10)
+
+        is_expected.to_not include(create(:bookings_placement_date, date: Date.new(2022, 1, 20), end_availability_offset: 15))
+      end
+
+      it 'includes placements that opened today' do
+        travel_to Date.new(2022, 1, 8)
+
+        is_expected.to include(create(:bookings_placement_date, date: Date.new(2022, 1, 9), start_availability_offset: 1))
+      end
+
+      it 'does not include placements that open tomorrow' do
+        travel_to Date.new(2022, 1, 8)
+
+        is_expected.to_not include(create(:bookings_placement_date, date: Date.new(2022, 1, 10), start_availability_offset: 1))
+      end
+
+      it 'includes placements that opened in the past' do
+        travel_to Date.new(2022, 1, 10)
+
+        is_expected.to include(create(:bookings_placement_date, date: Date.new(2022, 1, 20), start_availability_offset: 20))
       end
     end
 
     context '.available' do
       after { described_class.available }
-      specify 'should combine the future, active, published, and in_date_order scopes' do
-        expect(described_class).to receive_message_chain(:published, :active, :bookable_date, :in_date_order)
+      specify 'should combine the future, active, published, open_to_candidates, and in_date_order scopes' do
+        expect(described_class).to receive_message_chain(:published, :active, :bookable_date, :inside_availability_window, :in_date_order)
       end
     end
 
@@ -214,6 +276,26 @@ describe Bookings::PlacementDate, type: :model do
       specify 'should return only the published placement_dates' do
         expect(described_class.published).to match_array [published]
       end
+    end
+  end
+
+  context 'publish' do
+    subject { create(:bookings_placement_date) }
+
+    before do
+      subject.active = false
+      subject.published_at = nil
+      freeze_time
+
+      subject.publish
+    end
+
+    it 'updates #active to true' do
+      expect(subject.active).to be true
+    end
+
+    it 'sets #published_at to the current time' do
+      expect(subject.published_at).to eq DateTime.now
     end
   end
 
@@ -249,6 +331,66 @@ describe Bookings::PlacementDate, type: :model do
 
       it 'returns false' do
         expect(subject.published?).to be false
+      end
+    end
+  end
+
+  context "available?" do
+    context "when not active" do
+      before { subject.active = false }
+
+      it 'returns false' do
+        expect(subject.available?).to be false
+      end
+    end
+
+    context "when active" do
+      it 'includes placements that have not yet closed' do
+        travel_to Date.new(2022, 1, 8)
+        subject.end_availability_offset = 1
+        subject.date = Date.new(2022, 1, 10)
+
+        expect(subject.available?).to be true
+      end
+
+      it 'does not include placements that closed today' do
+        travel_to Date.new(2022, 1, 9)
+        subject.end_availability_offset = 1
+        subject.date = Date.new(2022, 1, 10)
+
+        expect(subject.available?).to be false
+      end
+
+      it 'does not include placements closed to candidates in the past' do
+        travel_to Date.new(2022, 1, 10)
+        subject.end_availability_offset = 15
+        subject.date = Date.new(2022, 1, 20)
+
+        expect(subject.available?).to be false
+      end
+
+      it 'includes placements that opened today' do
+        travel_to Date.new(2022, 1, 8)
+        subject.start_availability_offset = 1
+        subject.date = Date.new(2022, 1, 9)
+
+        expect(subject.available?).to be true
+      end
+
+      it 'does not include placements that open tomorrow' do
+        travel_to Date.new(2022, 1, 8)
+        subject.start_availability_offset = 1
+        subject.date = Date.new(2022, 1, 10)
+
+        expect(subject.available?).to be false
+      end
+
+      it 'includes placements that opened in the past' do
+        travel_to Date.new(2022, 1, 8)
+        subject.start_availability_offset = 20
+        subject.date = Date.new(2022, 1, 20)
+
+        expect(subject.available?).to be true
       end
     end
   end

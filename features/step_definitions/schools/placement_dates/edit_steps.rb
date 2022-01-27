@@ -23,6 +23,10 @@ Given("I am on the edit page for my {string} placement") do |state|
   expect(page.current_path).to eql(path)
 end
 
+When("I click the 'Close placement date' link") do
+  page.find("a", text: "Close placement date").click
+end
+
 Then("my placement should have been {string}") do |operation|
   description = {
     'deactivated' => 'Closed',

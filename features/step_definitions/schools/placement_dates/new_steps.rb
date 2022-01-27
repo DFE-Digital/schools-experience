@@ -25,3 +25,7 @@ end
 Then "I should be on the new configuration page for this date" do
   expect(page.current_path).to eq path_for 'new configuration', placement_date_id: Bookings::PlacementDate.last.id
 end
+
+Then "I should be on the Are you sure you want to close this date page" do
+  expect(page.current_path).to eq schools_placement_date_close_path(placement_date_id: Bookings::PlacementDate.last.id)
+end

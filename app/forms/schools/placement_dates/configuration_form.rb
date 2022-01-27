@@ -58,7 +58,6 @@ module Schools
         else
           placement_date.subject_specific = false
           placement_date.subject_ids = []
-          placement_date.published_at = DateTime.now
         end
       end
     end

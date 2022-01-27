@@ -2,6 +2,8 @@ require 'rails_helper'
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
+  include ActiveSupport::Testing::TimeHelpers
+
   let! :school do
     create \
       :bookings_school,
@@ -42,6 +44,8 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
     end
 
     before do
+      freeze_time
+
       post "/schools/placement_dates/#{placement_date.id}/subject_selection",
         params: params
 
@@ -66,6 +70,11 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
       it 'sets the subjects' do
         expect(placement_date).to be_subject_specific
         expect(placement_date.subjects).to match_array school.subjects.first(2)
+      end
+
+      it 'publishes the date' do
+        expect(placement_date.active).to be true
+        expect(placement_date.published_at).to eq DateTime.now
       end
 
       it 'redirects to placement dates index' do

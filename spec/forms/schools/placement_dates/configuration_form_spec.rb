@@ -5,12 +5,6 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
     create :bookings_school, :with_subjects, subject_count: 3
   end
 
-  let! :stubbed_time do
-    DateTime.now
-  end
-
-  before { allow(DateTime).to receive(:now) { stubbed_time } }
-
   context '.new_from_date' do
     subject { described_class.new_from_date placement_date }
 
@@ -86,10 +80,6 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
           it 'sets subject_specific' do
             expect(placement_date).not_to be_subject_specific
           end
-
-          it 'sets published_at' do
-            expect(placement_date.published_at).to eq stubbed_time
-          end
         end
 
         context 'when doesnt support subjects' do
@@ -111,10 +101,6 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
 
           it 'empties subject_ids' do
             expect(placement_date.subjects).to be_empty
-          end
-
-          it 'sets published_at' do
-            expect(placement_date).to be_published
           end
         end
 

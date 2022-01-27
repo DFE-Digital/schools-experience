@@ -17,6 +17,8 @@ Feature: Creating new placement dates
             | Label                  | Type   |
             | Enter start date       | date   |
             | How long will it last? | number |
+            | When do you want to close this date to candidates? | number |
+            | When do you want to publish this date? | number |
 
     Scenario: Preventing invalid dates from being added
         Given I am on the 'new placement date' page

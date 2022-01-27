@@ -22,7 +22,6 @@ module Schools
         placement_date.tap do |pd|
           pd.subject_specific = true
           pd.subject_ids = subject_ids
-          pd.published_at = DateTime.now
 
           pd.save!
         end
