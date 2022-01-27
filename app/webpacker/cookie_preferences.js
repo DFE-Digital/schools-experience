@@ -1,30 +1,32 @@
-const Cookies = require('js-cookie') ;
+const Cookies = require('js-cookie')
 
 export class CookiePreferences {
-  settings = null ;
+  settings = null
 
   constructor() {
-    this.settings = this.readSettings() ;
+    this.settings = this.readSettings()
   }
 
   get categories() {
-    return global.cookie_categories ;
+    return global.cookie_categories
   }
 
   get cookieName() {
-    return global.cookie_preference_key ;
+    return global.cookie_preference_key
   }
 
   readSettings() {
-    const cookie = Cookies.get(this.cookieName);
-    if (typeof(cookie) == 'undefined' || !cookie)
-      return false ;
+    const cookie = Cookies.get(this.cookieName)
 
-    return JSON.parse(cookie) ;
+    if (typeof(cookie) == 'undefined' || !cookie) {
+      return {}
+    }
+
+    return JSON.parse(cookie)
   }
 
   allowed(category) {
-    return this.settings[category] !== false ;
+    return this.settings[category] === true
   }
 
   static allowed(category) {
