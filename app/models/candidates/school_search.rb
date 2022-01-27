@@ -20,7 +20,7 @@ module Candidates
     ].freeze
 
     attr_accessor :query, :location, :latitude, :disability_confident,
-                  :longitude, :page, :analytics_tracking_uuid, :parking
+                  :longitude, :page, :parking
     attr_reader :distance, :max_fee
 
     delegate :location_name, :has_coordinates?, :valid?, :errors, to: :school_search
@@ -163,7 +163,6 @@ module Candidates
         phases: phases,
         max_fee: max_fee,
         page: page,
-        analytics_tracking_uuid: analytics_tracking_uuid,
         dbs_policies: dbs_policies,
         disability_confident: disability_confident,
         parking: parking

@@ -139,12 +139,11 @@ module Bookings
 
     delegate :gitis_contact, :gitis_contact=, to: :candidate
 
-    def self.create_from_registration_session!(registration_session, analytics_tracking_uuid = nil)
+    def self.create_from_registration_session!(registration_session)
       new(
         Candidates::Registrations::RegistrationAsPlacementRequest
           .new(registration_session)
           .attributes
-          .merge(analytics_tracking_uuid: analytics_tracking_uuid)
       ).tap { |r| r.save!(context: :creating_placement_request_from_registration_session) }
     end
 

@@ -16,8 +16,7 @@ module Candidates
             current_contact
 
           placement_request = current_candidate.placement_requests.create_from_registration_session! \
-            registration_session,
-            cookies[:analytics_tracking_uuid]
+            registration_session
 
           Bookings::Gitis::SchoolExperience.from_placement_request(placement_request, :requested)
             .write_to_gitis_contact(current_candidate.gitis_uuid)
