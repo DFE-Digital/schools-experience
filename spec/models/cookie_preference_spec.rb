@@ -85,7 +85,7 @@ describe CookiePreference, type: :model do
 
     it do
       is_expected.to eql \
-        %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
+        %w[_ga _gat _gid ai_session ai_user]
     end
   end
 
@@ -97,7 +97,7 @@ describe CookiePreference, type: :model do
 
       it do
         is_expected.to eql \
-          %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
+          %w[_ga _gat _gid ai_session ai_user]
       end
     end
 
@@ -120,7 +120,7 @@ describe CookiePreference, type: :model do
 
       it do
         is_expected.to eql \
-          %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
+          %w[_ga _gat _gid ai_session ai_user]
       end
     end
   end
