@@ -1,0 +1,49 @@
+---
+title: 27 January 2022 - Choose when to publish and close dates to candidates (and other features)
+summary: We've created a new feature that allows you to choose when you want to publish and close a school experience date.
+html_content: |-
+
+  <p>When you add a date, you’ll be asked when you want to:</p>
+
+  <ul class="govuk-list govuk-list--bullet">
+  <li>publish it</li>
+  <li>close it to candidates</li>
+  </ul>
+
+  <p>For example, you might want to publish a date 2 weeks before the event and then close it 2 days before - to give you time to prepare for it.</p>
+
+  <h3>More reasons to choose from when declining a request</h3>
+
+
+  <p>We’ve added more reasons to choose from when you turn down a request. This should make it quicker and easier to decline requests.</p>
+
+  <p>Reasons you can choose from now include:</p>
+
+  <ul class="govuk-list govuk-list--bullet">
+  <li>‘You asked us to cancel your request’</li>
+  <li>‘You’ve told us you want to get primary school experience, but you’ve chosen a secondary school placement’</li>
+  <li>‘You’ve told us you want to get secondary school experience, but you’ve chosen a primary school placement’</li>
+  </ul>
+
+  <h3>SMS notifications</h3>
+
+  <p>
+  To help improve school experience attendance rates, we’ve set up SMS notifications for candidates.
+  </p>
+
+  <p>
+  Candidates will now receive an SMS message:
+
+  <ul class="govuk-list govuk-list--bullet">
+  <li>when their booking has been confirmed</li>
+  <li>one week before their school experience</li>
+  <li>one day before their school experience</li>
+  <li>if their booking has been cancelled</li>
+  </ul>
+  </p>
+
+  <h3>Archiving expired requests</h3>
+
+  <p>
+  We now archive expired requests after 30 days. If you need to view your archived requests, you can follow the link to them on the Manage requests page.
+  </p>
