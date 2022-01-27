@@ -1,26 +1,29 @@
 ---
-title: 25 January 2022 - Choosing when to close dates to candidates and other features
-summary: We've created a new feature that allows you to choose when to close a school experience date.
+title: 27 January 2022 - Choose when to publish and close dates to candidates (and other features)
+summary: We've created a new feature that allows you to choose when you want to publish and close a school experience date.
 html_content: |-
-  <p>
-    When you add a date, you'll now be able to choose when to close that date to candidates. For example, you might want to close a date 2 days before the event, to give you time to prepare for it.
-  </p>
+
+  <p>When you add a date, you’ll be asked when you want to:</p>
+
+  <ul class="govuk-list govuk-list--bullet">
+  <li>publish it</li>
+  <li>close it to candidates</li>
+  </ul>
+
+  <p>For example, you might want to publish a date 2 weeks before the event and then close it 2 days before - to give you time to prepare for it.</p>
 
   <h3>More reasons to choose from when declining a request</h3>
 
-  <p>
-  We’ve added more reasons to choose from when you turn down a request. This should make it quicker and easier to decline requests.
-  </p>
 
-  <p>
-  Reasons you can choose from now include:
+  <p>We’ve added more reasons to choose from when you turn down a request. This should make it quicker and easier to decline requests.</p>
+
+  <p>Reasons you can choose from now include:</p>
 
   <ul class="govuk-list govuk-list--bullet">
   <li>‘You asked us to cancel your request’</li>
   <li>‘You’ve told us you want to get primary school experience, but you’ve chosen a secondary school placement’</li>
   <li>‘You’ve told us you want to get secondary school experience, but you’ve chosen a primary school placement’</li>
   </ul>
-  </p>
 
   <h3>SMS notifications</h3>
 
