@@ -21,16 +21,14 @@
 
   <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m govuk-!-margin-0' }  %>
 
-  <div class="govuk-form-group">
-    <fieldset class="govuk-fieldset">
-      <%= f.govuk_check_boxes_fieldset :active, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :active, 1, 0, multiple: false, link_errors: true %>
-      <% end %>
-    </fieldset>
-  </div>
+  <%= f.govuk_number_field :end_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: 'days before the event' %>
+  <%= f.govuk_number_field :start_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: 'days before the event' %>
 
   <%= f.govuk_submit 'Continue' %>
 <%- end -%>
+
+
+<%= link_to "Close placement date", schools_placement_date_close_path(@placement_date.id) if @placement_date.available? %>
 
 <% unless Feature.instance.active? :subject_specific_dates %>
 <p class="govuk-inset-text">

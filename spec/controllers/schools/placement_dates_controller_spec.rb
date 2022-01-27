@@ -117,4 +117,30 @@ describe Schools::PlacementDatesController, type: :request do
       end
     end
   end
+
+  context '#close' do
+    let(:placement_date) { create :bookings_placement_date, :active, bookings_school: school }
+
+    context 'when confirmed' do
+      let(:params) { { schools_placement_dates_close_confirmation_form: { confirmed: true } } }
+
+      it 'closes the date and redirects to the index page' do
+        post schools_placement_date_close_path(placement_date.id), params: params
+
+        expect(placement_date.reload.active).to be false
+        expect(response).to redirect_to schools_placement_dates_path
+      end
+    end
+
+    context 'when not confirmed' do
+      let(:params) { { schools_placement_dates_close_confirmation_form: { confirmed: false } } }
+
+      it 'does not close the date and redirects to the index page' do
+        post schools_placement_date_close_path(placement_date.id), params: params
+
+        expect(placement_date.reload.active).to be true
+        expect(response).to redirect_to schools_placement_dates_path
+      end
+    end
+  end
 end

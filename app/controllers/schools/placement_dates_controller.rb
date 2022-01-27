@@ -46,6 +46,22 @@ class Schools::PlacementDatesController < Schools::BaseController
     end
   end
 
+  def close
+    confirmed = ActiveModel::Type::Boolean.new.cast(
+      params["schools_placement_dates_close_confirmation_form"]["confirmed"]
+    )
+
+    current_school.bookings_placement_dates.find(params[:placement_date_id]).update!(active: false) if confirmed
+
+    redirect_to schools_placement_dates_path
+  end
+
+  def close_confirmation
+    @placement_date = current_school.bookings_placement_dates.find(params[:placement_date_id])
+
+    @confirmation = Schools::PlacementDates::CloseConfirmationForm.new
+  end
+
 private
 
   def school_supports_subjects?
@@ -56,7 +72,7 @@ private
     if Feature.instance.active?(:subject_specific_dates) && placement_date.supports_subjects?
       redirect_to new_schools_placement_date_configuration_path(placement_date)
     else
-      placement_date.update! published_at: DateTime.now
+      placement_date.publish
       auto_enable_school
       redirect_to schools_placement_dates_path
     end
@@ -69,10 +85,10 @@ private
   end
 
   def new_placement_date_params
-    params.require(:bookings_placement_date).permit(:date, :duration, :active, :virtual, :supports_subjects)
+    params.require(:bookings_placement_date).permit(:date, :duration, :virtual, :supports_subjects, :start_availability_offset, :end_availability_offset)
   end
 
   def edit_placement_date_params
-    params.require(:bookings_placement_date).permit(:duration, :active)
+    params.require(:bookings_placement_date).permit(:duration, :start_availability_offset, :end_availability_offset)
   end
 end

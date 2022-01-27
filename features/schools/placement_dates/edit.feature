@@ -16,7 +16,8 @@ Feature: Editing placement dates
         Then I should see a form with the following fields:
             | Label                  | Type   |
             | How long will it last? | number |
-        And there should be a 'Make this date available to candidates?' checkbox
+            | When do you want to close this date to candidates? | number |
+            | When do you want to publish this date? | number |
         And the current start date should be present
 
     Scenario: Filling in and submitting the form
@@ -30,16 +31,17 @@ Feature: Editing placement dates
     @smoke_test
     Scenario: Activating a placement date
         Given I am on the edit page for my 'inactive' placement
-        When I check the 'Make this date available to candidates?' checkbox
         And I submit the form
         Then I should be on the new configuration page for this date
+        And I submit the form
         Given I am on the 'placement dates' page
         Then my placement should have been 'activated'
 
     Scenario: Deactivating a placement date
         Given I am on the edit page for my 'active' placement
-        When I uncheck the 'Make this date available to candidates?' checkbox
-        And I submit the form
-        Then I should be on the new configuration page for this date
+        And I click the 'Close placement date' link
+        Then I should be on the Are you sure you want to close this date page
+        Then 'Yes' radio button should be selected
+        When I submit the form
         Given I am on the 'placement dates' page
         Then my placement should have been 'deactivated'

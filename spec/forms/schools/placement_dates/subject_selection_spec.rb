@@ -5,12 +5,6 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
     create :bookings_school, :with_subjects, subject_count: 3
   end
 
-  let! :stubbed_time do
-    DateTime.now
-  end
-
-  before { allow(DateTime).to receive(:now) { stubbed_time } }
-
   context 'validations' do
     it { is_expected.to validate_presence_of :subject_ids }
   end
@@ -86,10 +80,6 @@ describe Schools::PlacementDates::SubjectSelection, type: :model do
 
       it 'updates the placement_date subjects to the selected_subjects' do
         expect(placement_date.subjects).to eq subjects
-      end
-
-      it 'updates published_at' do
-        expect(placement_date.published_at).to eq stubbed_time
       end
     end
   end

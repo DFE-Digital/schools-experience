@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_17_152044) do
+ActiveRecord::Schema.define(version: 2022_01_19_115856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 2022_01_17_152044) do
     t.boolean "subject_specific", default: false, null: false
     t.boolean "supports_subjects"
     t.boolean "virtual", null: false
+    t.integer "end_availability_offset", default: 0, null: false
+    t.integer "start_availability_offset", default: 60, null: false
     t.index ["bookings_school_id"], name: "index_bookings_placement_dates_on_bookings_school_id"
   end
 

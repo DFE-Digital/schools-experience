@@ -465,6 +465,14 @@ en:
             virtual:
               blank: Please choose either virtual or in school
               inclusion: Please choose either virtual or in school
+            end_availability_offset:
+              blank: Enter a number of days
+              greater_than_or_equal_to: Must not be a negative number
+              less_than: Must be 100 days or less
+            start_availability_offset:
+              blank: Enter a number of days
+              greater_than_or_equal_to: Must be at least 1 day
+              less_than: Must be less than 100
         bookings/booking:
           attributes:
             supports_subjects:
@@ -555,6 +563,8 @@ en:
       bookings_booking:
         duration: Enter number of days.
       bookings_placement_date:
+        end_availability_offset: You'll need enough time to process requests before the placement starts
+        start_availability_offset: We recommend publishing dates no more than 60 days in advance.
         date: For example, 01 09 2020.
         duration: Enter number of days.
         virtual: Does this school experience take place in school or via the internet
@@ -622,6 +632,8 @@ en:
           both: Both virtual and in school experiences
       bookings_placement_date:
         duration: How long will it last?
+        end_availability_offset: When do you want to close this date to candidates?
+        start_availability_offset: When do you want to publish this date?
         active_options:
           1: Make this date available to candidates?
         supports_subjects_options:

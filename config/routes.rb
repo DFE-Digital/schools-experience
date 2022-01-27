@@ -113,6 +113,8 @@ Rails.application.routes.draw do
         resource :configuration, only: %i[new create], controller: 'placement_dates/configurations'
         resource :subject_selection, only: %i[new create], controller: 'placement_dates/subject_selections'
       end
+      post "/close", action: "close"
+      get "/close", action: "close_confirmation"
     end
 
     namespace :errors do
