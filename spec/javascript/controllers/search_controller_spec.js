@@ -35,6 +35,10 @@ describe('SearchController', () => {
     global.history.replaceState = jest.fn()
   }
 
+  const mockGtag = () => {
+    window.gtag = jest.fn();
+  };
+
   const setBody = () => {
     document.body.innerHTML = `
       <div data-controller="search" data-search-results-id-value="search-results" data-search-form-id-value="form">
@@ -87,6 +91,7 @@ describe('SearchController', () => {
       mockFetch()
       mockHistory()
       setBody()
+      mockGtag()
     })
 
     it('hides the search button', () => {
@@ -126,6 +131,11 @@ describe('SearchController', () => {
 
       it('updates the page history', () => {
         expect(history.replaceState).toHaveBeenCalledWith({}, document.title, '/path?checkbox1=1&checkbox2=2&checkbox3=3')
+      })
+
+      it('sends a page view to gtag', () => {
+        expect(window.gtag).toHaveBeenCalledWith('set', 'page_path', '/path?checkbox1=1&checkbox2=2&checkbox3=3');
+        expect(window.gtag).toHaveBeenCalledWith('event', 'page_view');
       })
     })
 
