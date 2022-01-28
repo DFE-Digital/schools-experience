@@ -56,7 +56,7 @@ jobs:
         uses: DFE-Digital/github-actions/DraftReleaseByTag@master
         with:
           TAG: ${{ github.event.inputs.tag }}
-          TOKEN: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs,secret-value }}
+          TOKEN: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
 
       - name: Check if found
         if: steps.tag_id.outputs.release_id == ''
