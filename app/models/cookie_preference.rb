@@ -1,9 +1,6 @@
 class CookiePreference
   EXPIRES_IN = 1.year.freeze
   VERSION = 'v1'.freeze
-  COOKIES = {
-    analytics: %w[_ga _gat _gid ai_session ai_user]
-  }.freeze
 
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -31,17 +28,26 @@ class CookiePreference
     end
 
     def all_cookies
-      COOKIES.values.flatten
+      cookies.values.flatten
     end
 
     def category(cookie_name)
-      COOKIES.each do |category, names|
+      cookies.each do |category, names|
         if names.include?(cookie_name.to_s)
           return category
         end
       end
 
       raise UnknownCookieError
+    end
+
+    def cookies
+      {
+        analytics: %w[_ga _gid ai_session ai_user]
+      }.tap do |c|
+        c[:analytics] << "_gat" if ENV["GA_TRACKING_ID"].present?
+        c[:analytics] << "_gat_#{ENV['GTM_UA_ID']}" if ENV["GTM_UA_ID"].present?
+      end
     end
   end
 
@@ -67,7 +73,7 @@ class CookiePreference
 
   def accepted_cookies
     cookie_types = attributes.select { |_k, v| v }.keys.map(&:to_sym)
-    COOKIES.slice(*cookie_types).values.flatten
+    self.class.cookies.slice(*cookie_types).values.flatten
   end
 
   def rejected_cookies
