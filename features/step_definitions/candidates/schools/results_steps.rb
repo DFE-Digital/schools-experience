@@ -115,7 +115,12 @@ Then("the location input should be populated with {string}") do |string|
 end
 
 Given("there are no schools near my search location") do
-  # do nothing, my location is Bury, Greater Manchester
+  # Do nothing
+end
+
+Given("my search is outside of England") do
+  geocoder_result = [Geocoder::Result::Test.new('latitude' => 53.596, 'longitude' => -2.29, 'name' => 'Cardiff, UK', "address_components" => ["long_name" => "Wales"])]
+  allow(Geocoder).to receive(:search).and_return(geocoder_result)
 end
 
 Given("there are some schools just outside it") do
@@ -156,4 +161,9 @@ Then("there should be a link to Get into teaching") do
   within('#results li.expanded-search-radius') do
     expect(page).to have_link("Get into teaching", href: 'https://getintoteaching.education.gov.uk/get-school-experience')
   end
+end
+
+Then("there should be a message and link to get more information about teacher training") do
+  expect(page).to have_css('h2', text: 'This service is for schools in England')
+  expect(page).to have_link("Learn more about teacher training in Wales", href: 'https://educators.wales/teachers')
 end

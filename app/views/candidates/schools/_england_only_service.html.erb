@@ -1,0 +1,17 @@
+<h2 class="govuk-heading-m">
+  This service is for schools in England
+</h2>
+
+<% case @other_region when "Scotland" %>
+  <p class="govuk-body">
+    <%= link_to 'Learn more about teacher training in Scotland', 'https://teachinscotland.scot/' %>
+  </p>
+<% when "Wales" %>
+  <p class="govuk-body">
+    <%= link_to 'Learn more about teacher training in Wales', 'https://educators.wales/teachers' %>
+  </p>
+<% when "Northern Ireland" %>
+  <p class="govuk-body">
+    <%= link_to 'Learn more about teacher training in Northern Ireland', 'https://www.education-ni.gov.uk/articles/initial-teacher-education-courses-northern-ireland' %>
+  </p>
+<% end %>

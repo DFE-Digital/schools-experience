@@ -107,4 +107,75 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       end
     end
   end
+
+  context "sorted by distance tag" do
+    before do
+      @search = Candidates::SchoolSearch.new
+      @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
+      allow(@search).to receive(:results).and_return(Kaminari.paginate_array(schools).page(1))
+
+      render
+    end
+
+    context "when more than one result is returned" do
+      let(:schools) { [build(:bookings_school), build(:bookings_school)] }
+
+      it "shows when more than one result" do
+        expect(rendered).to have_css 'p', text: 'Sorted by distance'
+      end
+    end
+
+    context "when less than two results are returned" do
+      let(:schools) { [build(:bookings_school)] }
+
+      it "shows when more than one result" do
+        expect(rendered).to_not have_css 'p', text: 'Sorted by distance'
+      end
+    end
+  end
+
+  context "when no results and expanded search" do
+    shared_examples "a non-England search" do
+      before do
+        @search = Candidates::SchoolSearch.new
+        @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
+
+        assign(:other_region, region)
+        assign(:expanded_search_radius, true)
+
+        render
+      end
+
+      it "show a message and link to get more information about teacher training" do
+        expect(rendered).to have_css('h2', text: 'This service is for schools in England')
+        expect(rendered).to have_link(link_text, href: href)
+      end
+    end
+
+    context "when other region search" do
+      context "when search result is Wales" do
+        let(:region) { "Wales" }
+        let(:link_text) { 'Learn more about teacher training in Wales' }
+        let(:href) { 'https://educators.wales/teachers' }
+
+        it_behaves_like "a non-England search"
+      end
+
+      context "when search result is Scotland" do
+        let(:region) { "Scotland" }
+        let(:link_text) { 'Learn more about teacher training in Scotland' }
+        let(:href) { 'https://teachinscotland.scot/' }
+
+        it_behaves_like "a non-England search"
+      end
+
+      context "when search result is Northern Ireland" do
+        let(:region) { "Northern Ireland" }
+        let(:link_text) { 'Learn more about teacher training in Northern Ireland' }
+        let(:href) { 'https://www.education-ni.gov.uk/articles/initial-teacher-education-courses-northern-ireland' }
+
+        it_behaves_like "a non-England search"
+      end
+    end
+  end
 end

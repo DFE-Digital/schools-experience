@@ -9,8 +9,8 @@ describe Bookings::SchoolSearch do
 
   let(:geocoder_manchester_search_result) do
     [
-      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK'),
-      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK')
+      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK', address_components: [long_name: "England"]),
+      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK', address_components: [long_name: "England"])
     ]
   end
 
@@ -33,19 +33,20 @@ describe Bookings::SchoolSearch do
       end
     end
 
-    context 'Limiting to England' do
-      specify 'region should be England' do
-        expect(described_class::REGION).to eql('England')
+    context 'Limiting to United Kingdom' do
+      specify 'region should be United Kingdom' do
+        expect(described_class::REGION).to eql('United Kingdom')
       end
 
-      context "when a result with name 'England' is returned" do
+      context "when a result with name 'United Kingdom' is returned" do
         before do
           allow(Geocoder).to receive(:search).and_return(
             [
               Geocoder::Result::Test.new(
                 "latitude" => 53.488,
                 "longitude" => -2.242,
-                name: 'England'
+                name: 'United Kingdom',
+                "address_components" => ["long_name" => "England"]
               )
             ]
           )
@@ -55,11 +56,11 @@ describe Bookings::SchoolSearch do
 
         specify "should append the region to the Geocoder query" do
           expect(Geocoder).to receive(:search)
-            .with('Mumbai, England', params: described_class::GEOCODER_PARAMS)
+            .with('Mumbai, United Kingdom', params: described_class::GEOCODER_PARAMS)
         end
 
         specify 'should return an empty result' do
-          expect(Rails.logger).to receive(:info).with("No Geocoder results found in England for Mumbai, England (user entered: Mumbai)")
+          expect(Rails.logger).to receive(:info).with("No Geocoder results found for Mumbai, United Kingdom (user entered: Mumbai)")
         end
       end
     end
@@ -501,6 +502,50 @@ describe Bookings::SchoolSearch do
           expect(subject.max_fee).to eql(max_fee)
           expect(subject.location).to eql(location)
         end
+      end
+    end
+  end
+
+  describe "#other_region" do
+    subject { Bookings::SchoolSearch.new(location: "Test") }
+
+    let(:scotland_search_result) do
+      [
+        Geocoder::Result::Test.new("address_components" => [{ "long_name" => "Scotland", "short_name" => "Scotland", "types" => %w[administrative_area_level_1 political] }], "latitude" => 53.488, "longitude" => -2.242)
+      ]
+    end
+    let(:wales_search_result) do
+      [
+        Geocoder::Result::Test.new("address_components" => [{ "long_name" => "Wales", "short_name" => "Wales", "types" => %w[administrative_area_level_1 political] }], "latitude" => 53.488, "longitude" => -2.242)
+      ]
+    end
+    let(:northern_ireland_search_result) do
+      [
+        Geocoder::Result::Test.new("address_components" => [{ "long_name" => "Northern Ireland", "short_name" => "Northern Ireland", "types" => %w[administrative_area_level_1 political] }], "latitude" => 53.488, "longitude" => -2.242)
+      ]
+    end
+
+    context "when search result includes Scotland" do
+      before { allow(Geocoder).to receive(:search).and_return(scotland_search_result) }
+
+      it "returns Scotland" do
+        expect(subject.other_region).to eq "Scotland"
+      end
+    end
+
+    context "when search result includes Wales" do
+      before { allow(Geocoder).to receive(:search).and_return(wales_search_result) }
+
+      it "returns Scotland" do
+        expect(subject.other_region).to eq "Wales"
+      end
+    end
+
+    context "when search result includes Northern Ireland" do
+      before { allow(Geocoder).to receive(:search).and_return(northern_ireland_search_result) }
+
+      it "returns Scotland" do
+        expect(subject.other_region).to eq "Northern Ireland"
       end
     end
   end

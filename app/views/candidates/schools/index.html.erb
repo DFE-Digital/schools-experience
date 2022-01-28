@@ -87,14 +87,19 @@
       <%= paginate @search.results %>
     </div>
 
-    <hr/>
+    <% if @search.results.size > 1 %>
+      <hr/>
+      <p>Sorted by distance</p>
+      <hr/>
+    <% end %>
 
-    <p>Sorted by distance</p>
-
-    <hr/>
 
     <ul id="results">
-      <%= render 'expanded_search', search: @search if @expanded_search_radius %>
+      <% if @expanded_search_radius && @other_region.present? && @search.results.none? %>
+        <%= render 'england_only_service' %>
+      <% elsif @expanded_search_radius %>
+        <%= render 'expanded_search', search: @search %>
+      <% end %>
 
       <% @search.results.each_with_index do |school, _| %>
         <li data-school-urn="<%= school.urn %>">

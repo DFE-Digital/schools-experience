@@ -1,11 +1,14 @@
 require 'geocoding_request'
 
 class Bookings::SchoolSearch < ApplicationRecord
-  attr_reader :location_name
+  attr_reader :location_name, :other_region
 
   validates :location, length: { minimum: 2 }, allow_nil: false, if: -> { location.is_a?(String) }
 
-  REGION = 'England'.freeze
+  # Despite this being an England-only service, we want to search the whole of the UK
+  # so that we can return results to users who are near the border.
+  REGION = 'United Kingdom'.freeze
+  OTHER_UK_REGIONS = ['Northern Ireland', 'Scotland', 'Wales'].freeze
   GEOCODER_PARAMS = { maxRes: 1 }.freeze
   PER_PAGE = 15
 
@@ -139,7 +142,7 @@ private
     )&.first
 
     if empty_geocoder_result?(result)
-      Rails.logger.info("No Geocoder results found in #{REGION} for #{formatted_request} (user entered: #{location})")
+      Rails.logger.info("No Geocoder results found for #{formatted_request} (user entered: #{location})")
       return
     end
 
@@ -147,10 +150,18 @@ private
 
     # this better work
     @location_name = result.try(:name) || result.address_components.first.fetch('long_name', location)
+
+    @other_region = find_other_regions(result)
+
     extract_coords(
       latitude: result.latitude,
       longitude: result.longitude
     )
+  end
+
+  def find_other_regions(result)
+    address_components = result.address_components.map(&:values).flatten
+    OTHER_UK_REGIONS.find { |region| address_components.include?(region) }
   end
 
   def empty_geocoder_result?(result)
