@@ -9,8 +9,8 @@ describe Bookings::SchoolSearch do
 
   let(:geocoder_manchester_search_result) do
     [
-      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK'),
-      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK')
+      Geocoder::Result::Test.new("latitude" => 53.488, "longitude" => -2.242, name: 'Manchester, UK', address_components: [long_name: "England"]),
+      Geocoder::Result::Test.new("latitude" => 53.476, "longitude" => -2.229, name: 'Manchester, UK', address_components: [long_name: "England"])
     ]
   end
 
@@ -45,7 +45,8 @@ describe Bookings::SchoolSearch do
               Geocoder::Result::Test.new(
                 "latitude" => 53.488,
                 "longitude" => -2.242,
-                name: 'United Kingdom'
+                name: 'United Kingdom',
+                "address_components" => ["long_name" => "England"]
               )
             ]
           )
@@ -501,6 +502,50 @@ describe Bookings::SchoolSearch do
           expect(subject.max_fee).to eql(max_fee)
           expect(subject.location).to eql(location)
         end
+      end
+    end
+  end
+
+  describe "#other_region" do
+    subject { Bookings::SchoolSearch.new(location: "Test") }
+
+    let(:scotland_search_result) do
+      [
+        Geocoder::Result::Test.new("address_components" => [{ "long_name" => "Scotland", "short_name" => "Scotland", "types" => %w[administrative_area_level_1 political] }], "latitude" => 53.488, "longitude" => -2.242)
+      ]
+    end
+    let(:wales_search_result) do
+      [
+        Geocoder::Result::Test.new("address_components" => [{ "long_name" => "Wales", "short_name" => "Wales", "types" => %w[administrative_area_level_1 political] }], "latitude" => 53.488, "longitude" => -2.242)
+      ]
+    end
+    let(:northern_ireland_search_result) do
+      [
+        Geocoder::Result::Test.new("address_components" => [{ "long_name" => "Northern Ireland", "short_name" => "Northern Ireland", "types" => %w[administrative_area_level_1 political] }], "latitude" => 53.488, "longitude" => -2.242)
+      ]
+    end
+
+    context "when search result includes Scotland" do
+      before { allow(Geocoder).to receive(:search).and_return(scotland_search_result) }
+
+      it "returns Scotland" do
+        expect(subject.other_region).to eq "Scotland"
+      end
+    end
+
+    context "when search result includes Wales" do
+      before { allow(Geocoder).to receive(:search).and_return(wales_search_result) }
+
+      it "returns Scotland" do
+        expect(subject.other_region).to eq "Wales"
+      end
+    end
+
+    context "when search result includes Northern Ireland" do
+      before { allow(Geocoder).to receive(:search).and_return(northern_ireland_search_result) }
+
+      it "returns Scotland" do
+        expect(subject.other_region).to eq "Northern Ireland"
       end
     end
   end

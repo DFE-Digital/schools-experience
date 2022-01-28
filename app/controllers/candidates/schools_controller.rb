@@ -12,6 +12,8 @@ class Candidates::SchoolsController < ApplicationController
 
     return render 'candidates/school_searches/new' unless @search.valid?
 
+    @other_region = @search.other_region
+
     if @search.results.empty? && !@search.whitelisted_urns?
       @expanded_search_radius = true
       @search = Candidates::SchoolSearch.new(search_params.merge(distance: EXPANDED_SEARCH_RADIUS))
