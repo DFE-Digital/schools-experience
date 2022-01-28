@@ -84,6 +84,8 @@
                 24 hours
               </td>
             </tr>
+
+            <% if google_analytics_enabled? %>
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
                 <strong>_gat</strong>
@@ -92,9 +94,24 @@
                 Used to manage the rate at which page view requests are made
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                10 minutes
+                1 minute
               </td>
             </tr>
+            <% end %>
+
+            <% if gtm_enabled? %>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <strong>_dc_gtm_*</strong>
+              </td>
+              <td class="govuk-table__cell">
+                Used to manage the rate at which page view requests are made
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                1 minute
+              </td>
+            </tr>
+            <% end %>
           </tbody>
         </table>
         <p>
