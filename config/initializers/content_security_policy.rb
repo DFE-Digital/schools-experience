@@ -37,6 +37,7 @@ Rails.application.config.content_security_policy do |policy|
 
   policy.base_uri :self
   policy.connect_src :self, "https://dc.services.visualstudio.com", "https://www.google-analytics.com", *connect_src
+  policy.frame_src :self, "https://www.googletagmanager.com/" # GTM fallback
   policy.img_src :self, "https://www.google-analytics.com"
   policy.object_src :none
   policy.script_src :self,

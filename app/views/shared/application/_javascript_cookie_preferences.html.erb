@@ -1,4 +1,4 @@
 <%= javascript_tag nonce: true do %>
-  window.cookie_categories = <%= raw CookiePreference::COOKIES.to_json %> ;
+  window.cookie_categories = <%= raw CookiePreference.cookies.to_json %> ;
   window.cookie_preference_key = <%= raw CookiePreference.cookie_key.to_json %> ;
 <% end %>

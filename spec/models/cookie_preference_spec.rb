@@ -85,7 +85,25 @@ describe CookiePreference, type: :model do
 
     it do
       is_expected.to eql \
-        %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
+        %w[_ga _gid ai_session ai_user]
+    end
+  end
+
+  describe '.cookies' do
+    before { allow(ENV).to receive(:[]).and_call_original }
+
+    subject { described_class.cookies }
+
+    context "when GA_TRACKING_ID is present" do
+      before { allow(ENV).to receive(:[]).with("GA_TRACKING_ID") { "abc123" } }
+
+      it { is_expected.to include({ analytics: %w[_ga _gid ai_session ai_user _gat] }) }
+    end
+
+    context "when GTM_UA_ID is present" do
+      before { allow(ENV).to receive(:[]).with("GTM_UA_ID") { "abc123" } }
+
+      it { is_expected.to include({ analytics: %w[_ga _gid ai_session ai_user _gat_abc123] }) }
     end
   end
 
@@ -97,7 +115,7 @@ describe CookiePreference, type: :model do
 
       it do
         is_expected.to eql \
-          %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
+          %w[_ga _gid ai_session ai_user]
       end
     end
 
@@ -120,7 +138,7 @@ describe CookiePreference, type: :model do
 
       it do
         is_expected.to eql \
-          %w[_ga _gat _gid ai_session ai_user analytics_tracking_uuid]
+          %w[_ga _gid ai_session ai_user]
       end
     end
   end

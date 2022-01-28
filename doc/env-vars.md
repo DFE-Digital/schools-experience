@@ -66,6 +66,10 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `GA_TRACKING_ID` - Google Analytics API key
 
+`GTM_ID` - Google Tag Manager account id
+
+`GTM_UA_ID` - Universal Analytics ID (required for clearning the cookie)
+
 ## Deactivating the service
 
 `MAINTENANCE_MODE` - Put entire service into maintenance mode, 1 = on, blank = off
