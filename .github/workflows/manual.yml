@@ -68,7 +68,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Deploy to PaaS
-          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs,secret-value }}
+          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
           inputs: '{"environment": "${{github.event.inputs.environment}}" , "sha": "${{steps.tag_id.outputs.release_sha}}"  }'
           ref: "${{github.ref}}"
 
@@ -76,7 +76,7 @@ jobs:
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: wait-for-deploy
         with:
-          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs,secret-value }}
+          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
           checkName: Deploy ${{github.event.inputs.environment}}
           ref: "${{github.ref}}"
 
