@@ -19,20 +19,11 @@
 
         <p><%= @placement_request.school.name %> have confirmed your school experience booking.</p>
 
-        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/date_details' %>
-        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/location' %>
-        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/dress_code' %>
-        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_contacts' %>
-
-
-        <section id="extra-details-from-the-school">
-          <p><%= f.govuk_text_area :candidate_instructions, rows: 6, label: { class: 'govuk-heading-s' } %></p>
-        </section>
-
-        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/school_experience_details' %>
-        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/cancellation_details' %>
-
-        <%= render partial: 'schools/placement_requests/acceptance/email_preview_sections/help_and_support' %>
+        <% if @is_virtual_experience %>
+          <%= render partial: 'virtual_sections', locals: { form: f } %>
+        <% else %>
+          <%= render partial: 'in_school_sections', locals: { form: f } %>
+        <% end %>
       </div>
 
       <p>
