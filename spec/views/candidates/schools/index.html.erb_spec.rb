@@ -140,7 +140,9 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
         @search = Candidates::SchoolSearch.new
         @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
 
-        assign(:other_region, region)
+        geocoding_response = Geocoder::Result::Test.new(address_components: [long_name: country])
+        country = GeocodingResponseCountry.new(geocoding_response)
+        assign(:country, country)
         assign(:expanded_search_radius, true)
 
         render
@@ -154,7 +156,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
 
     context "when other region search" do
       context "when search result is Wales" do
-        let(:region) { "Wales" }
+        let(:country) { "Wales" }
         let(:link_text) { 'Learn more about teacher training in Wales' }
         let(:href) { 'https://educators.wales/teachers' }
 
@@ -162,7 +164,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       end
 
       context "when search result is Scotland" do
-        let(:region) { "Scotland" }
+        let(:country) { "Scotland" }
         let(:link_text) { 'Learn more about teacher training in Scotland' }
         let(:href) { 'https://teachinscotland.scot/' }
 
@@ -170,11 +172,29 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       end
 
       context "when search result is Northern Ireland" do
-        let(:region) { "Northern Ireland" }
+        let(:country) { "Northern Ireland" }
         let(:link_text) { 'Learn more about teacher training in Northern Ireland' }
         let(:href) { 'https://www.education-ni.gov.uk/articles/initial-teacher-education-courses-northern-ireland' }
 
         it_behaves_like "a non-England search"
+      end
+
+      context "when search result is unknown" do
+        let(:country) { "Canada" }
+
+        it "shows a message" do
+          @search = Candidates::SchoolSearch.new
+          @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
+
+          geocoding_response = Geocoder::Result::Test.new(address_components: [long_name: country])
+          country = GeocodingResponseCountry.new(geocoding_response)
+          assign(:country, country)
+          assign(:expanded_search_radius, true)
+
+          render
+
+          expect(rendered).to have_css('h2', text: 'This service is for schools in England')
+        end
       end
     end
   end

@@ -12,7 +12,7 @@ class Candidates::SchoolsController < ApplicationController
 
     return render 'candidates/school_searches/new' unless @search.valid?
 
-    @other_region = @search.other_region
+    @country = @search.country
 
     if @search.results.empty? && !@search.whitelisted_urns?
       @expanded_search_radius = true

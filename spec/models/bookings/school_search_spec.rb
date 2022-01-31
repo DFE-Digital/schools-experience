@@ -506,7 +506,7 @@ describe Bookings::SchoolSearch do
     end
   end
 
-  describe "#other_region" do
+  describe "#country" do
     subject { Bookings::SchoolSearch.new(location: "Test") }
 
     let(:scotland_search_result) do
@@ -529,7 +529,7 @@ describe Bookings::SchoolSearch do
       before { allow(Geocoder).to receive(:search).and_return(scotland_search_result) }
 
       it "returns Scotland" do
-        expect(subject.other_region).to eq "Scotland"
+        expect(subject.country.name).to eq "Scotland"
       end
     end
 
@@ -537,7 +537,7 @@ describe Bookings::SchoolSearch do
       before { allow(Geocoder).to receive(:search).and_return(wales_search_result) }
 
       it "returns Scotland" do
-        expect(subject.other_region).to eq "Wales"
+        expect(subject.country.name).to eq "Wales"
       end
     end
 
@@ -545,7 +545,7 @@ describe Bookings::SchoolSearch do
       before { allow(Geocoder).to receive(:search).and_return(northern_ireland_search_result) }
 
       it "returns Scotland" do
-        expect(subject.other_region).to eq "Northern Ireland"
+        expect(subject.country.name).to eq "Northern Ireland"
       end
     end
   end

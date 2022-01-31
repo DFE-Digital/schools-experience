@@ -2,7 +2,7 @@
   This service is for schools in England
 </h2>
 
-<% case @other_region when "Scotland" %>
+<% case @country.name when "Scotland" %>
   <p class="govuk-body">
     <%= link_to 'Learn more about teacher training in Scotland', 'https://teachinscotland.scot/' %>
   </p>

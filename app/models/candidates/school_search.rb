@@ -23,7 +23,7 @@ module Candidates
                   :longitude, :page, :parking
     attr_reader :distance, :max_fee
 
-    delegate :location_name, :other_region, :has_coordinates?, :valid?, :errors, to: :school_search
+    delegate :location_name, :country, :has_coordinates?, :valid?, :errors, to: :school_search
     delegate :whitelisted_urns, :whitelisted_urns?, to: Bookings::SchoolSearch
 
     class << self
