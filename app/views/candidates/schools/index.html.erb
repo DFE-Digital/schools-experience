@@ -93,9 +93,8 @@
       <hr/>
     <% end %>
 
-
     <ul id="results">
-      <% if @expanded_search_radius && @other_region.present? && @search.results.none? %>
+      <% if @expanded_search_radius && @country&.not_serviced? && @search.results.none? %>
         <%= render 'england_only_service' %>
       <% elsif @expanded_search_radius %>
         <%= render 'expanded_search', search: @search %>
