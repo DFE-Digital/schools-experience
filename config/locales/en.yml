@@ -407,6 +407,11 @@ en:
             subjects:
               blank: 'Select which subjects are available for this date'
 
+        schools/placement_dates/subject_selection:
+          attributes:
+            subject_ids:
+              blank: Select which subjects are available for this date
+
         schools/placement_requests/add_more_details:
           attributes:
             contact_name:
@@ -554,6 +559,8 @@ en:
     hint:
       schools_placement_requests_confirm_booking:
         placement_details: You can add extra experience details
+      schools_placement_dates_subject_selection:
+        subject_ids_html: This list is based on the <a href="/schools/on_boarding/subjects/new" target="_blank">subjects selected on your profile</a>, uncheck all that do not apply
       bookings_school:
         enabled: |
           Turning your profile off will stop your school from appearing in searches.

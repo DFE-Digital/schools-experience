@@ -14,12 +14,17 @@ Feature: Selecting subjects for a placement date
     Scenario: Page title
         Then the page's main heading should be 'Select school experience subjects'
 
-    Scenario: Selecting nothing
+    Scenario: De-selecting all subjects
+        Given I uncheck the 'Maths' checkbox
+        And I uncheck the 'Physics' checkbox
+        And I uncheck the 'Biology' checkbox
         When I submit the form
         Then I should see a validation error message
 
     Scenario: Selecting some subjects
         Given I check 'Maths'
+        And I uncheck the 'Physics' checkbox
+        And I uncheck the 'Biology' checkbox
         When I submit the form
         Then I should be on the 'placement dates' page
         And my date should be listed
@@ -28,3 +33,5 @@ Feature: Selecting subjects for a placement date
         Given I have previously selected 'Biology'
         When I try to edit the subjects for my newly-created placement date
         Then the 'Biology' checkbox should be checked
+        And the 'Maths' checkbox should not be checked
+        And the 'Physics' checkbox should not be checked
