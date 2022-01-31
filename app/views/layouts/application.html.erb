@@ -3,7 +3,6 @@
   <head>
     <%= render 'shared/application/javascript_cookie_preferences' %>
     <%= javascript_pack_tag 'gtm', data: { "gtm-id": gtm_id, "gtm-nonce": content_security_policy_nonce } if gtm_enabled? %>
-    <%= render partial: 'google_analytics' if google_analytics_enabled? %>
     <title><%= page_title %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>

@@ -64,8 +64,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `GOOGLE_MAPS_KEY` - API key used to query Google Maps
 
-`GA_TRACKING_ID` - Google Analytics API key
-
 `GTM_ID` - Google Tag Manager account id
 
 `GTM_UA_ID` - Universal Analytics ID (required for clearning the cookie)
