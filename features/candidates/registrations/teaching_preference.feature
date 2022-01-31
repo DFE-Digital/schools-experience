@@ -23,7 +23,7 @@ Feature: Entering teaching preference details
         And I am on the 'teaching preference' page for my school of choice
         And I make my teaching preference selection
         When I submit the form
-        Then I should be on the 'request school experience placement' page for my school of choice
+        Then I should be on the 'placement preference' page for my school of choice
 
     Scenario: Editing choices
         Given I have completed the wizard

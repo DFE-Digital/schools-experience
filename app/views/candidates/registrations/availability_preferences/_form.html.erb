@@ -1,0 +1,43 @@
+<% self.page_title = 'When are you available for school experience?' %>
+<%= govuk_back_link %>
+<div class="govuk-grid-row" id="availability-preference">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_for availability_preference, url: candidates_school_registrations_availability_preference_path do |f| %>
+      <%= f.govuk_error_summary %>
+
+        <h1 class="govuk-heading-l">When are you available for school experience?</h1>
+
+        <p>
+          Depending on availability and the time of year, the school
+          may not offer the exact date you’re looking for. They may
+          contact you directly to discuss the most suitable dates.
+        </p>
+
+        <% if @school.availability_info.present? %>
+          <section class="govuk-se-warning">
+
+            <div class="govuk-warning-text">
+              <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+              <strong class="govuk-warning-text__text">
+                <span class="govuk-warning-text__assistive">Warning</span>
+                The school has provided the following details about when school experience is available:
+              </strong>
+            </div>
+
+            <%= format_school_availability(@school.availability_info) %>
+          </section>
+        <% end %>
+
+        <%= f.govuk_text_area \
+            :availability,
+            rows: 5,
+            max_words: 150,
+            'aria-describedby': 'candidates_registrations_availability_preference_availability_label',
+            label: { class: 'govuk-heading-m', id: 'candidates_registrations_availability_preference_availability_label' },
+            hint: { text: "For example, 'I can be available for any date, depending on the week' or 'I'm available on Fridays'." } %>
+
+      <%= f.govuk_submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

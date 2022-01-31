@@ -176,6 +176,7 @@ Rails.application.routes.draw do
         resource :education, only: %i[new create edit update]
         resource :teaching_preference, only: %i[new create edit update]
         resource :placement_preference, only: %i[new create edit update]
+        resource :availability_preference, only: %i[new create edit update]
         resource :background_check, only: %i[new create edit update]
         resource :subject_and_date_information, only: %i[new create edit update]
         resource :application_preview, only: %i[show]

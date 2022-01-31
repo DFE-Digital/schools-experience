@@ -1,71 +1,25 @@
-<% self.page_title = 'Request school experience' %>
+<% self.page_title = 'What do you want to get out of your school experience?' %>
 <%= govuk_back_link %>
 <div class="govuk-grid-row" id="placement-preference">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Request school experience</h1>
-
     <%= form_for placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%- unless @school.availability_preference_fixed? %>
-        <%= f.govuk_text_area \
-            :availability,
-            rows: 5,
-            max_words: 150,
-            'aria-describedby': 'candidates_registrations_placement_preference_availability_label',
-            label: { class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_availability_label' } do %>
+      <h1 class="govuk-heading-l">What do you want to get out of your school experience?</h1>
 
-            <p>For example, if you're:</p>
-
-            <ul class="govuk-list govuk-list--bullet">
-              <li>
-                available for any specific experience dates offered by schools
-              </li>
-              <li>
-                only available or unavailable on particular days, dates or for certain periods of time
-              </li>
-            </ul>
-
-            <p>
-              Depending on availability and time of year, the school may not
-              offer the exact date you’re looking for. They may contact you
-              directly to discuss the most suitable dates.
-            </p>
-
-            <%- if @school.availability_info.present? -%>
-              <section class="govuk-se-warning">
-
-                <div class="govuk-warning-text">
-                  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                  <strong class="govuk-warning-text__text">
-                    <span class="govuk-warning-text__assistive">Warning</span>
-                    The school has provided the following details about when school experience is available:
-                  </strong>
-                </div>
-
-                <%= format_school_availability(@school.availability_info) %>
-              </section>
-            <%- end -%>
-        <% end %>
-      <%- end -%>
+      <p>
+        Provide a short explanation to help the school offer you
+        the kind of experience you’re looking for. For example,
+        you may want to find out if teaching is the right career
+        for you, or to observe how teachers teach your subject.
+      </p>
 
      <%= f.govuk_text_area \
           :objectives,
           rows: 5,
           max_words: 150,
           'aria-describedby': 'candidates_registrations_placement_preference_objectives_label',
-          label: { class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_objectives_label' } do %>
-
-
-
-          <p>
-            Provide a short explanation to help the school offer you
-            the kind of experience you’re looking for. For example,
-            you may want to find out if teaching is the right career for you,
-            or to observe how teachers teach your subject.
-          </p>
-
-            <% end %>
+          label: { class: 'govuk-heading-m', id: 'candidates_registrations_placement_preference_objectives_label' } %>
 
       <%= f.govuk_submit 'Continue' %>
     <% end %>

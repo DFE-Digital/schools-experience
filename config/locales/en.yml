@@ -50,19 +50,22 @@ en:
       placement_date_subject:
         blank: "Choose a subject"
 
-  placement_preference_errors: &placement_preference_errors
-    attributes:
-      availability:
-        blank: "Enter your availability"
+  placement_preference_errors:
+    attributes: &placement_preference_error_attributes
       objectives:
-        blank: "Enter what you want to get out of a placement"
+        blank: "Enter what you want to get out of your placement"
       bookings_placement_date_id:
         blank: "Choose a placement date"
       date:
         after: 'Date must be in the future'
 
-  subject_preference_errors: &subject_preference_errors
-    attributes:
+  availability_preference_errors:
+    attributes: &availability_preference_error_attributes
+      availability:
+        blank: "Enter your availability"
+
+  subject_preference_errors:
+    attributes: &subject_preference_error_attributes
       degree_stage:
         blank: "Select a degree stage"
       degree_stage_explaination:
@@ -146,7 +149,8 @@ en:
               on_or_after: "To date must be the same or later than the From date"
 
         candidates/registrations/subject_preference:
-          <<: *subject_preference_errors
+          attributes:
+            <<: *subject_preference_error_attributes
 
         candidates/registrations/background_check:
           attributes:
@@ -210,7 +214,12 @@ en:
               blank: "Enter your full name"
 
         candidates/registrations/placement_preference:
-          <<: *placement_preference_errors
+          attributes:
+            <<: *placement_preference_error_attributes
+
+        candidates/registrations/availability_preference:
+          attributes:
+            <<: *availability_preference_error_attributes
 
         candidates/registrations/subject_and_date_information:
           <<: *subject_and_date_information_errors
@@ -433,7 +442,8 @@ en:
     errors:
       models:
         bookings/placement_request:
-          <<: [ *placement_preference_errors, *subject_preference_errors ]
+          attributes:
+            <<: [ *placement_preference_error_attributes, *subject_preference_error_attributes, *availability_preference_error_attributes ]
         bookings/placement_request/cancellation:
           attributes:
             reason:
@@ -686,8 +696,9 @@ en:
         subject_first_choice: "First choice"
         subject_second_choice: "Second choice"
       candidates_registrations_placement_preference:
-        availability: Tell us about your availability
-        objectives: What do you want to get out of your school experience?
+        objectives: Enter what you want to get out of your placement
+      candidates_registrations_availability_preference:
+        availability: Enter your availability
       candidates_session:
         firstname: First name
         lastname: Last name

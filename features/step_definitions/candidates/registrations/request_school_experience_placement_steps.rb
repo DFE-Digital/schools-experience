@@ -25,8 +25,7 @@ Then("a text area labelled {string} should have appeared") do |string|
 end
 
 Given("I have filled in the form with accurate data") do
-  fill_in "Tell us about your availability", with: "Anytime!"
-  fill_in "What do you want to get out of your school experience?", with: "I love teaching"
+  fill_in "Enter what you want to get out of your placement", with: "I love teaching"
 end
 
 Given("my school has availability information set") do
@@ -42,7 +41,7 @@ Then("I should see a warning containing the availability information") do
   end
 end
 
-Given("my school has availability no information set") do
+Given("my school has no availability information set") do
   @school ||= FactoryBot.create(:bookings_school)
   @school.update! availability_info: nil
 end

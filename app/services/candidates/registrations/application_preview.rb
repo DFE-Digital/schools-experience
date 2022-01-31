@@ -5,7 +5,6 @@ module Candidates
       # FIXME: delegate other methods to placement_preference once remove dates
       # pr is merged
       attr_reader :placement_preference
-
       attr_reader :registration_session
 
       delegate \
@@ -36,14 +35,15 @@ module Candidates
         to: :@teaching_preference
 
       delegate :has_dbs_check, to: :@background_check
-
       delegate :school, to: :@registration_session
+      delegate :availability, to: :@availability_preference
 
       def initialize(registration_session)
         @registration_session = registration_session
         @personal_information = registration_session.personal_information
         @contact_information = registration_session.contact_information
         @placement_preference = registration_session.placement_preference
+        @availability_preference = registration_session.availability_preference unless has_subject_and_date_information?
         @background_check = registration_session.background_check
         @education = registration_session.education
         @teaching_preference = registration_session.teaching_preference
@@ -103,7 +103,7 @@ module Candidates
       def placement_availability
         raise NotImplementedForThisDateType if has_subject_and_date_information?
 
-        placement_preference.availability
+        availability
       end
 
       def placement_availability_description

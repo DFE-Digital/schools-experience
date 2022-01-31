@@ -15,6 +15,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
         education
         teaching_preference
         placement_preference
+        availability_preference
       ]
     end
 
@@ -86,6 +87,7 @@ describe Candidates::Registrations::BackgroundChecksController, type: :request d
           education
           teaching_preference
           placement_preference
+          availability_preference
         ]
     end
 

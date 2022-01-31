@@ -12,13 +12,14 @@ FactoryBot.define do
 
       with do
         %i[
+          subject_and_date_information
           personal_information
           contact_information
-          background_check
-          placement_preference
           education
           teaching_preference
-          subject_and_date_information
+          placement_preference
+          availability_preference
+          background_check
         ]
       end
 
@@ -56,8 +57,16 @@ FactoryBot.define do
       candidates_registrations_placement_preference do
         {
           "urn" => urn,
-          "availability" => "Every third Tuesday",
           "objectives" => "test the software",
+          "created_at" => current_time,
+          "updated_at" => current_time
+        }
+      end
+
+      candidates_registrations_availability_preference do
+        {
+          "urn" => urn,
+          "availability" => "Every third Tuesday",
           "created_at" => current_time,
           "updated_at" => current_time
         }
@@ -102,7 +111,8 @@ FactoryBot.define do
           "candidates_registrations_background_check" => candidates_registrations_background_check,
           "candidates_registrations_education" => candidates_registrations_education,
           "candidates_registrations_teaching_preference" => candidates_registrations_teaching_preference,
-          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference.merge("availability" => nil),
+          "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
+          "candidates_registrations_availability_preference" => {},
           "candidates_registrations_subject_and_date_information" => candidates_registrations_subject_and_date_information
       end
     end
@@ -118,6 +128,7 @@ FactoryBot.define do
           "candidates_registrations_education" => candidates_registrations_education,
           "candidates_registrations_teaching_preference" => candidates_registrations_teaching_preference,
           "candidates_registrations_placement_preference" => candidates_registrations_placement_preference,
+          "candidates_registrations_availability_preference" => candidates_registrations_availability_preference,
           "candidates_registrations_subject_and_date_information" => {}
       end
     end
@@ -154,7 +165,7 @@ FactoryBot.define do
         school = Bookings::School.find_by(urn: reg.urn) || FactoryBot.create(:bookings_school, urn: reg.urn)
 
         if school.availability_preference_fixed?
-          reg.save FactoryBot.build :placement_preference, availability: nil, urn: school.urn
+          reg.save FactoryBot.build :placement_preference, urn: school.urn
         end
       end
     end

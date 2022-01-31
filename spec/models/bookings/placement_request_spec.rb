@@ -228,6 +228,7 @@ describe Bookings::PlacementRequest, type: :model do
           "candidates_registrations_background_check" => {},
           "candidates_registrations_contact_information" => {},
           "candidates_registrations_placement_preference" => {},
+          "candidates_registrations_availability_preference" => {},
           "candidates_registrations_education" => {},
           "candidates_registrations_teaching_preference" => {},
           "urn" => 123_456
@@ -328,7 +329,11 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       let! :placement_preference do
-        build :placement_preference, availability: nil
+        build :placement_preference
+      end
+
+      let! :availability_preference do
+        build :availability_preference
       end
 
       let! :teaching_preference do
@@ -343,6 +348,7 @@ describe Bookings::PlacementRequest, type: :model do
           # So we have a registration for a fixed date school with subjects.
           rs.save subject_and_date_information
           rs.save placement_preference
+          rs.save availability_preference
           rs.save teaching_preference
         end
       end
@@ -553,70 +559,77 @@ describe Bookings::PlacementRequest, type: :model do
 
   context 'validations for placement preferences' do
     before :each do
-      placement_preference.validate
-    end
-
-    context 'when the school allows flexible dates' do
-      let(:placement_preference) { described_class.new(bookings_school_id: school.id) }
-      context 'when availability are not present' do
-        let :placement_preference do
-          described_class.new
-        end
-
-        it 'adds an error to availability' do
-          expect(placement_preference.errors[:availability]).to eq \
-            ["Enter your availability"]
-        end
-      end
-
-      context 'when availability are too long' do
-        let :placement_preference do
-          described_class.new \
-            availability: 151.times.map { 'word' }.join(' ')
-        end
-
-        it 'adds an error to availability' do
-          expect(placement_preference.errors[:availability]).to eq \
-            ["Use 150 words or fewer"]
-        end
-      end
+      placement_request.validate
     end
 
     context 'when the school mandates fixed dates' do
       before do
-        allow(placement_preference).to receive(:school_offers_fixed_dates?).and_return(true)
+        allow(placement_request).to receive(:school_offers_fixed_dates?).and_return(true)
       end
 
-      let(:placement_preference) { described_class.new(bookings_school_id: school.id) }
+      let(:placement_request) { described_class.new(bookings_school_id: school.id) }
 
-      before(:each) { placement_preference.validate }
+      before(:each) { placement_request.validate }
 
       it 'adds an error to bookings_placement_date_id' do
-        expect(placement_preference.errors[:bookings_placement_date_id]).to include \
+        expect(placement_request.errors[:bookings_placement_date_id]).to include \
           "Choose a placement date"
       end
     end
 
     context 'when objectives are not present' do
-      let :placement_preference do
+      let :placement_request do
         described_class.new
       end
 
       it 'adds an error to objectives' do
-        expect(placement_preference.errors[:objectives]).to eq \
-          ["Enter what you want to get out of a placement"]
+        expect(placement_request.errors[:objectives]).to eq \
+          ["Enter what you want to get out of your placement"]
       end
     end
 
     context 'when objectives are too long' do
-      let :placement_preference do
+      let :placement_request do
         described_class.new \
           objectives: 151.times.map { 'word' }.join(' ')
       end
 
       it 'adds an error to objectives' do
-        expect(placement_preference.errors[:objectives]).to eq \
+        expect(placement_request.errors[:objectives]).to eq \
           ["Use 150 words or fewer"]
+      end
+    end
+  end
+
+  context 'validations for availability preference' do
+    before :each do
+      placement_request.validate
+    end
+
+    let! :school do
+      create :bookings_school,
+        availability_preference_fixed: false
+    end
+
+    context 'when the school allows flexible dates' do
+      let(:placement_request) { described_class.new(bookings_school_id: school.id) }
+      context 'when availability is not present' do
+        it 'adds an error to availability' do
+          expect(placement_request.errors[:availability]).to eq \
+            ["Enter your availability"]
+        end
+      end
+
+      context 'when availability is too long' do
+        let :placement_request do
+          described_class.new \
+            availability: 151.times.map { 'word' }.join(' ')
+        end
+
+        it 'adds an error to availability' do
+          expect(placement_request.errors[:availability]).to eq \
+            ["Use 150 words or fewer"]
+        end
       end
     end
   end

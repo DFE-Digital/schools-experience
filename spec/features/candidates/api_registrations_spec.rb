@@ -31,6 +31,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_education_step
         complete_teaching_preference_step
         complete_placement_preference_step
+        complete_availability_preference_step
         complete_background_step
         complete_application_preview_step button_text: 'Continue'
         complete_email_confirmation_step
@@ -51,6 +52,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_education_step
         complete_teaching_preference_step
         complete_placement_preference_step
+        complete_availability_preference_step
         complete_background_step
         complete_application_preview_step(name: sign_up.full_name)
         view_request_acknowledgement_step
@@ -71,6 +73,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_education_step
         complete_teaching_preference_step
         complete_placement_preference_step
+        complete_availability_preference_step
         complete_background_step
         complete_application_preview_step(name: sign_up.full_name,)
         view_request_acknowledgement_step
@@ -97,6 +100,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_education_step
         complete_teaching_preference_step
         complete_placement_preference_step
+        complete_availability_preference_step
         complete_background_step
         complete_application_preview_step(name: sign_up.full_name)
         view_request_acknowledgement_step
@@ -218,13 +222,26 @@ feature 'Candidate Registrations (via the API)', type: :feature do
       "/candidates/schools/#{school_urn}/registrations/placement_preference/new"
 
     # Submit registrations/placement_preference form with errors
-    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+    fill_in 'Enter what you want to get out of your placement', with: ''
     click_button 'Continue'
     expect(page).to have_text 'There is a problem'
 
     # Submit registrations/placement_preference form successfully
-    fill_in 'Tell us about your availability', with: 'Only free from Epiphany to Whitsunday'
-    fill_in 'What do you want to get out of your school experience?', with: 'I enjoy teaching'
+    fill_in 'Enter what you want to get out of your placement', with: 'I enjoy teaching'
+    click_button 'Continue'
+  end
+
+  def complete_availability_preference_step
+    expect(page.current_path).to eq \
+      "/candidates/schools/#{school_urn}/registrations/availability_preference/new"
+
+    # Submit registrations/availability_preference form with errors
+    fill_in 'Enter your availability', with: ''
+    click_button 'Continue'
+    expect(page).to have_text 'There is a problem'
+
+    # Submit registrations/availability_preference form successfully
+    fill_in 'Enter your availability', with: 'Only free from Epiphany to Whitsunday'
     click_button 'Continue'
   end
 

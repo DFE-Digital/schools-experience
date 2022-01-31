@@ -13,6 +13,7 @@ Feature: Persisting registration information on navigating away
     And I have completed the education form
     And I have completed the teaching preference form
     And I have completed the placement preference form
+    And I have completed the availability preference form
     And I have completed the background check form
     And I have navigated away from the wizard
     When I come back to the wizard
@@ -21,4 +22,5 @@ Feature: Persisting registration information on navigating away
     And  the education form should populated with the details I've entered so far
     And  the teaching preference form should populated with the details I've entered so far
     And  the placement preference form should populated with the details I've entered so far
+    And  the availability preference form should populated with the details I've entered so far
     And  the background check form should populated with the details I've entered so far

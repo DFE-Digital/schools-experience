@@ -1,6 +1,7 @@
 module Candidates
   module Registrations
     class RegistrationState
+      # Steps sequence of the candidate placement request flow.
       STEPS = %i[
         subject_and_date_information
         personal_information
@@ -8,6 +9,7 @@ module Candidates
         education
         teaching_preference
         placement_preference
+        availability_preference
         background_check
       ].freeze
 
@@ -50,6 +52,10 @@ module Candidates
 
       def subject_and_date_information_in_journey?
         @registration_session.school.availability_preference_fixed?
+      end
+
+      def availability_preference_in_journey?
+        !subject_and_date_information_in_journey?
       end
     end
   end

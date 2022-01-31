@@ -49,7 +49,6 @@ FactoryBot.define do
         },
         "candidates_registrations_placement_preference" => {
           "urn" => urn,
-          "availability" => nil,
           "objectives" => "test the software",
           "created_at" => timestamp,
           "updated_at" => timestamp,
