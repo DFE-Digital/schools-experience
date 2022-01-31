@@ -63,6 +63,8 @@ export default class extends Controller {
     this.executeSearch(url)
 
     history.replaceState({}, document.title, url)
+
+    this.sendPageView(url)
   }
 
   executeSearch(url) {
@@ -83,6 +85,13 @@ export default class extends Controller {
 
         this.loadingTarget.classList.remove('active')
       })
+  }
+
+  sendPageView(url) {
+    if (window.gtag) {
+      window.gtag('set', 'page_path', url);
+      window.gtag('event', 'page_view');
+    }
   }
 
   updateInterface() {
