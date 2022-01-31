@@ -5,6 +5,10 @@ module Schools
 
       def new
         @subject_selection = SubjectSelection.new_from_date @placement_date
+
+        if @subject_selection.subject_ids.empty?
+          @subject_selection.subject_ids = current_school.subjects.pluck(:id)
+        end
       end
 
       def create

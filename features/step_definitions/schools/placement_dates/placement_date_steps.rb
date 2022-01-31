@@ -26,7 +26,8 @@ Given "the placement date is subject specific" do
 end
 
 Given "I have previously selected {string}" do |subject_name|
-  # pick biology from the subjects list and continue
+  all("input[type='checkbox']").each { |checkbox| checkbox.set(false) }
+
   check(subject_name)
   click_button('Continue')
 
@@ -42,6 +43,10 @@ end
 
 Then("the {string} checkbox should be checked") do |subject_name|
   expect(get_input(page, subject_name)).to be_checked
+end
+
+Then("the {string} checkbox should not be checked") do |subject_name|
+  expect(get_input(page, subject_name)).not_to be_checked
 end
 
 Then "the page's main heading should be the date I just entered" do
