@@ -70,6 +70,22 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
       expect(NotifyEmail::CandidateBookingConfirmation).to have_received(:from_booking)
     end
 
+    context 'when virtual experience' do
+      let!(:virtual_experience) { create(:bookings_placement_date, virtual: true) }
+      let!(:pr) { create(:bookings_placement_request, school: @current_user_school, placement_date: virtual_experience) }
+
+      specify 'should send a candidate booking confirmation notification virtual experience email' do
+        allow(NotifyEmail::CandidateBookingConfirmationVirtualExperience).to(
+          receive(:from_booking)
+            .and_return(double(NotifyEmail::CandidateBookingConfirmationVirtualExperience, despatch_later!: true))
+        )
+
+        patch schools_placement_request_acceptance_preview_confirmation_email_path(pr.id, params)
+
+        expect(NotifyEmail::CandidateBookingConfirmationVirtualExperience).to have_received(:from_booking)
+      end
+    end
+
     specify 'sends a candidate booking confirmation sms' do
       expect(NotifySms::CandidateBookingConfirmation).to have_received(:new).with \
         to: gitis_contact.telephone,
