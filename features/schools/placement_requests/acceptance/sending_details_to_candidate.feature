@@ -9,7 +9,7 @@ Feature: Previewing candidate emails
         And the school has subjects
         And there is a new placement request with a future date
 
-    Scenario: Page contents
+    Scenario: Page contents for in-school experience
         Given I have progressed to the 'preview confirmation email' page for the placement request
         Then I should see an email preview that has the following sections:
             | Date and time                     |
@@ -19,6 +19,16 @@ Feature: Previewing candidate emails
             | About your school experience      |
             | Cancelling your booking           |
             | Help and support                  |
+
+    Scenario: Page contents for virtual experience
+        Given there is a new virtual placement request with a future date
+        And I have progressed to the 'preview confirmation email' page for the placement request
+        Then I should see an email preview that has the following sections:
+            | Date and time                     |
+            | Location                          |
+            | Subject                           |
+            | Who to contact                    |
+            | Cancelling your booking           |
 
     @smoke_test
     Scenario: Actually confirming a placement request
