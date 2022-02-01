@@ -55,7 +55,7 @@ module Schools
         end
 
         def send_virtual_confirmation(booking)
-          NotifyEmail::CandidateBookingConfirmationVirtualExperience
+          NotifyEmail::CandidateVirtualExperienceBookingConfirmation
             .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token)).despatch_later!
         end
 
