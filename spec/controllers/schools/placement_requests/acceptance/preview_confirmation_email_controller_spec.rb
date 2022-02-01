@@ -32,7 +32,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
     api.get_schools_experience_sign_up(pr.contact_uuid)
   end
 
-  context '#new' do
+  context '#edit' do
     before do
       get edit_schools_placement_request_acceptance_preview_confirmation_email_path(pr.id)
     end
@@ -44,7 +44,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
     end
   end
 
-  context '#create' do
+  context '#update' do
     before do
       allow(Bookings::Gitis::SchoolExperience).to \
         receive(:from_booking) { school_experience }
