@@ -13,7 +13,7 @@ Then("the placement request should be accepted") do
   expect(@placement_request.reload.booking.accepted_at).not_to be_nil
 end
 
-Given("I am have progressed to the {string} page for the placement request") do |string|
+Given("I have progressed to the {string} page for the placement request") do |string|
   @booking = FactoryBot.create(:bookings_booking, bookings_placement_request: @placement_request)
   path = path_for(string, placement_request: @placement_request)
   visit(path)
