@@ -144,7 +144,7 @@ Feature: The School Dashboard
         Given my school has fully-onboarded
         And my school is enabled
         And it has 'flexible' availability
-        And my school has availability no information set
+        And my school has no availability information set
         When I am on the 'schools dashboard' page
         Then there should be a status notification for missing availability
         And there should be a 'Add dates or availability' link to the 'availability preferences'
