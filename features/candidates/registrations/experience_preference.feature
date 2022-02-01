@@ -9,7 +9,7 @@ Feature: Experience preference
         And I have completed the personal information form
         And I have completed the contact information form
         And I have completed the education form
-        And I have comapleted the teaching preference form
+        And I have completed the teaching preference form
 
     Scenario: Page title and description
         Given I am on the 'Experience preference' page for my school of choice
