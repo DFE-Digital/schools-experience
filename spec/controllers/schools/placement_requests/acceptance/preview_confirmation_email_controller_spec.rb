@@ -32,7 +32,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
     api.get_schools_experience_sign_up(pr.contact_uuid)
   end
 
-  context '#new' do
+  context '#edit' do
     before do
       get edit_schools_placement_request_acceptance_preview_confirmation_email_path(pr.id)
     end
@@ -44,7 +44,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
     end
   end
 
-  context '#create' do
+  context '#update' do
     before do
       allow(Bookings::Gitis::SchoolExperience).to \
         receive(:from_booking) { school_experience }
@@ -68,6 +68,22 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
     specify 'should send a candidate booking confirmation notification email' do
       expect(NotifyEmail::CandidateBookingConfirmation).to have_received(:from_booking)
+    end
+
+    context 'when virtual experience' do
+      let!(:virtual_experience) { create(:bookings_placement_date, virtual: true) }
+      let!(:pr) { create(:bookings_placement_request, school: @current_user_school, placement_date: virtual_experience) }
+
+      specify 'should send a candidate booking confirmation notification virtual experience email' do
+        allow(NotifyEmail::CandidateVirtualExperienceBookingConfirmation).to(
+          receive(:from_booking)
+            .and_return(double(NotifyEmail::CandidateVirtualExperienceBookingConfirmation, despatch_later!: true))
+        )
+
+        patch schools_placement_request_acceptance_preview_confirmation_email_path(pr.id, params)
+
+        expect(NotifyEmail::CandidateVirtualExperienceBookingConfirmation).to have_received(:from_booking)
+      end
     end
 
     specify 'sends a candidate booking confirmation sms' do

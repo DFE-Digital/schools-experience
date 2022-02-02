@@ -1,0 +1,16 @@
+<section id="contact-details">
+  <h3>Who to contact</h3>
+
+  <p>For questions about your experience, use the following contact details:</p>
+  <ul class="govuk-list govuk-list--no-bullet">
+    <li class="govuk-list__item govuk-list">Name: <%= @placement_request.booking.contact_name %></li>
+    <li class="govuk-list__item govuk-list">Email: <%= @placement_request.booking.contact_email %></li>
+    <li class="govuk-list__item govuk-list">Telephone number: <%= @placement_request.booking.contact_number %></li>
+  </ul>
+
+  <p>To change your booking, contact the school experience administrator:</p>
+  <ul class="govuk-list govuk-list--no-bullet">
+    <li class="govuk-list__item">Email: <%= @placement_request.school&.profile&.admin_contact_email %></li>
+    <li class="govuk-list__item">Telephone number: <%= @placement_request.school&.profile&.admin_contact_phone %></li>
+  </ul>
+</section>

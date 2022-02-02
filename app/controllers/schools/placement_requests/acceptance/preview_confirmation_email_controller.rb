@@ -4,15 +4,14 @@ module Schools
       class PreviewConfirmationEmailController < Schools::BaseController
         include Acceptance
 
-        def edit
-          set_placement_request_and_fetch_gitis_contact
+        before_action :set_placement_request_and_fetch_gitis_contact
+        before_action :set_is_virtual_experience
 
+        def edit
           @booking = @placement_request.booking
         end
 
         def update
-          set_placement_request_and_fetch_gitis_contact
-
           @booking = @placement_request.booking
           @booking.assign_attributes(booking_params)
 
@@ -35,8 +34,11 @@ module Schools
         end
 
         def candidate_booking_notifications(booking)
-          NotifyEmail::CandidateBookingConfirmation
-            .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token)).despatch_later!
+          if @is_virtual_experience
+            send_virtual_confirmation(booking)
+          else
+            send_inschool_confirmation(booking)
+          end
 
           NotifySms::CandidateBookingConfirmation.new(
             to: booking.gitis_contact.telephone,
@@ -44,6 +46,22 @@ module Schools
             dates_requested: booking.date.to_formatted_s(:govuk),
             cancellation_url: candidates_cancel_url(booking.token),
           ).despatch_later!
+        end
+
+        def set_is_virtual_experience
+          @is_virtual_experience =
+            current_school.experience_type == 'virtual' ||
+            @placement_request.placement_date&.virtual?
+        end
+
+        def send_virtual_confirmation(booking)
+          NotifyEmail::CandidateVirtualExperienceBookingConfirmation
+            .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token)).despatch_later!
+        end
+
+        def send_inschool_confirmation(booking)
+          NotifyEmail::CandidateBookingConfirmation
+            .from_booking(booking.candidate_email, booking.candidate_name, booking, candidates_cancel_url(booking.token)).despatch_later!
         end
       end
     end

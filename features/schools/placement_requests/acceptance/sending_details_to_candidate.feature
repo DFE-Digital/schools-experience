@@ -9,8 +9,8 @@ Feature: Previewing candidate emails
         And the school has subjects
         And there is a new placement request with a future date
 
-    Scenario: Page contents
-        Given I am have progressed to the 'preview confirmation email' page for the placement request
+    Scenario: Page contents for in-school experience
+        Given I have progressed to the 'preview confirmation email' page for the placement request
         Then I should see an email preview that has the following sections:
             | Date and time                     |
             | Location                          |
@@ -20,9 +20,19 @@ Feature: Previewing candidate emails
             | Cancelling your booking           |
             | Help and support                  |
 
+    Scenario: Page contents for virtual experience
+        Given there is a new virtual placement request with a future date
+        And I have progressed to the 'preview confirmation email' page for the placement request
+        Then I should see an email preview that has the following sections:
+            | Date and time                     |
+            | Location                          |
+            | Subject                           |
+            | Who to contact                    |
+            | Cancelling your booking           |
+
     @smoke_test
     Scenario: Actually confirming a placement request
-        Given I am have progressed to the 'preview confirmation email' page for the placement request
+        Given I have progressed to the 'preview confirmation email' page for the placement request
         And I enter 'Come to the main reception' into the 'Other instructions' text area
         When I click the 'Send confirmation email' button
         Then I should be on the 'email sent' page for the placement request
@@ -30,7 +40,7 @@ Feature: Previewing candidate emails
         And I should be on the 'email sent' page for the placement request
 
     Scenario: Failing to send a placement request
-        Given I am have progressed to the 'preview confirmation email' page for the placement request
+        Given I have progressed to the 'preview confirmation email' page for the placement request
         And I enter nothing into the 'Extra instructions for the candidate' text area
         When I click the 'Send confirmation email' button
         Then I should see an error
