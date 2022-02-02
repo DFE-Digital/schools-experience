@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_25_180747) do
+ActiveRecord::Schema.define(version: 2022_02_02_103752) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "address_standardizer"
   enable_extension "plpgsql"
   enable_extension "postgis"
 
@@ -268,6 +267,18 @@ ActiveRecord::Schema.define(version: 2022_01_25_180747) do
     t.index ["name"], name: "index_bookings_subjects_on_name", unique: true
   end
 
+  create_table "candidates_booking_feedbacks", force: :cascade do |t|
+    t.bigint "bookings_booking_id"
+    t.boolean "gave_realistic_impression"
+    t.boolean "covered_subject_of_interest"
+    t.boolean "influenced_decision"
+    t.boolean "intends_to_apply"
+    t.integer "effect_on_decision"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bookings_booking_id"], name: "index_candidates_booking_feedbacks_on_bookings_booking_id", unique: true
+  end
+
   create_table "candidates_session_tokens", force: :cascade do |t|
     t.string "token", null: false
     t.bigint "candidate_id", null: false
@@ -431,6 +442,7 @@ ActiveRecord::Schema.define(version: 2022_01_25_180747) do
   add_foreign_key "bookings_schools_phases", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_schools"
   add_foreign_key "bookings_schools_subjects", "bookings_subjects"
+  add_foreign_key "candidates_booking_feedbacks", "bookings_bookings"
   add_foreign_key "candidates_session_tokens", "bookings_candidates", column: "candidate_id"
   add_foreign_key "events", "bookings_candidates"
   add_foreign_key "events", "bookings_schools"

@@ -510,6 +510,18 @@ en:
               invalid: Enter a valid contact telephone number
             candidate_instructions:
               blank: Enter some instructions for the candidate
+        candidates/booking_feedback:
+          attributes:
+            gave_realistic_impression:
+              inclusion: Select yes if you gained a realistic impression of school life
+            covered_subject_of_interest:
+              inclusion: Select yes if you got to see how schools teach your subject of interest
+            influenced_decision:
+              inclusion: Select yes if the experience helped you decide to apply for teacher training
+            intends_to_apply:
+              inclusion: Select yes if you intend to apply for teacher training
+            effect_on_decision:
+              blank: Select how your experience has affected your decision to apply for teacher training
         candidates/feedback:
           <<: *feedback_errors
         schools/feedback:
@@ -712,6 +724,23 @@ en:
         email: Email address
       candidates_verification_code:
         code: Enter your verification code here
+      candidates_booking_feedback:
+        gave_realistic_impression_options:
+          true: "Yes"
+          false: "No"
+        covered_subject_of_interest_options:
+          true: "Yes"
+          false: "No"
+        influenced_decision_options:
+          true: "Yes"
+          false: "No"
+        intends_to_apply_options:
+          true: "Yes"
+          false: "No"
+        effect_on_decision_options:
+          negatively: Negatively
+          positively: Positively
+          unaffected: It has not affected my decision
       cookie_preference:
         analytics_options:
           true: "On"
@@ -924,6 +953,12 @@ en:
         has_dbs_check: Do you have a DBS certificate?
       candidates_registrations_privacy_policy:
         acceptance: Send your school experience request
+      candidates_booking_feedback:
+        gave_realistic_impression: Do you feel you gained a realistic impression of school life?
+        covered_subject_of_interest: Did you get to see how schools teach your subject of interest?
+        influenced_decision: Has your experience helped you decide whether or not to apply for teacher training?
+        intends_to_apply: Do you want to apply for teacher training?
+        effect_on_decision: How has your experience affected your decision to apply for teacher training?
       bookings_school:
         enabled: Turn profile on or off
         availability_preference_fixed: Choose how dates are displayed
