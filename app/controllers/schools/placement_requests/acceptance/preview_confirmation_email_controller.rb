@@ -50,8 +50,11 @@ module Schools
 
         def set_is_virtual_experience
           @is_virtual_experience =
-            current_school.experience_type == 'virtual' ||
-            @placement_request.placement_date&.virtual?
+            if @placement_request.placement_date
+              @placement_request.placement_date&.virtual?
+            else
+              current_school.experience_type == 'virtual'
+            end
         end
 
         def send_virtual_confirmation(booking)
