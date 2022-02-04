@@ -1,0 +1,40 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Give feedback on your experience</h1>
+    <%= form_for(feedback, url: candidates_booking_feedback_path(params[:booking_token])) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <p>
+        Help us improve the school experience service.
+      </p>
+
+      <%= f.govuk_radio_buttons_fieldset :gave_realistic_impression do %>
+        <%= f.govuk_radio_button :gave_realistic_impression, "true", link_errors: true %>
+        <%= f.govuk_radio_button :gave_realistic_impression, "false" %>
+      <% end %>
+
+      <%= f.govuk_radio_buttons_fieldset :covered_subject_of_interest do %>
+        <%= f.govuk_radio_button :covered_subject_of_interest, "true", link_errors: true %>
+        <%= f.govuk_radio_button :covered_subject_of_interest, "false" %>
+      <% end %>
+
+      <%= f.govuk_radio_buttons_fieldset :influenced_decision do %>
+        <%= f.govuk_radio_button :influenced_decision, "true", link_errors: true %>
+        <%= f.govuk_radio_button :influenced_decision, "false" %>
+      <% end %>
+
+      <%= f.govuk_collection_radio_buttons :effect_on_decision,
+        f.object.class.effect_on_decisions,
+        :first,
+        nil
+      %>
+
+      <%= f.govuk_radio_buttons_fieldset :intends_to_apply do %>
+        <%= f.govuk_radio_button :intends_to_apply, "true", link_errors: true %>
+        <%= f.govuk_radio_button :intends_to_apply, "false" %>
+      <% end %>
+
+      <%= f.govuk_submit "Submit feedback" %>
+    <% end %>
+  </div>
+</div>
