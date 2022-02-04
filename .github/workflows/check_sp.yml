@@ -58,7 +58,7 @@ jobs:
         id: SLACK-WEBHOOK
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: INFRA-KEYS
+          yaml_secret: SE-INFRA-SECRETS
           secret: SLACK-WEBHOOK
 
       - name: Slack Notification
