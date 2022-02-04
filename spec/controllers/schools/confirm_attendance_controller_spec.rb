@@ -24,6 +24,18 @@ describe Schools::ConfirmAttendanceController, type: :request do
 
       allow(school_experience).to \
         receive(:write_to_gitis_contact)
+
+      ids = [
+        unattended.candidate.gitis_uuid,
+        attended.candidate.gitis_uuid,
+      ]
+      allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
+        receive(:get_schools_experience_sign_ups).with(ids) do
+          [
+            build(:api_schools_experience_sign_up),
+            build(:api_schools_experience_sign_up)
+          ]
+        end
     end
 
     let!(:attended) do

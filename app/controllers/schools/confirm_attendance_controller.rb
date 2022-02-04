@@ -40,9 +40,9 @@ module Schools
         .not_cancelled
         .accepted
         .eager_load(
-          :bookings_placement_request,
+          { bookings_placement_request: :placement_date },
           :bookings_subject,
-          :bookings_school
+          :bookings_school,
         )
         .order(date: 'desc')
     end
@@ -60,6 +60,8 @@ module Schools
     def build_updated_attendance
       bookings = unlogged_bookings.where(id: bookings_params.keys) \
         .includes(bookings_placement_request: %i[candidate candidate_cancellation school_cancellation])
+
+      assign_gitis_contacts(bookings)
 
       @updated_attendance = Schools::Attendance.new(bookings: bookings, bookings_params: bookings_params)
     end

@@ -24,6 +24,15 @@ describe Schools::Attendance do
     instance_double(Bookings::Gitis::SchoolExperience)
   end
 
+  let(:feedback_request_double) do
+    instance_double(NotifyEmail::CandidateBookingFeedbackRequest, despatch_later!: true)
+  end
+
+  before do
+    allow(NotifyEmail::CandidateBookingFeedbackRequest).to \
+      receive(:from_booking) { feedback_request_double }
+  end
+
   subject { attendance }
 
   describe '#initialize' do
@@ -51,6 +60,20 @@ describe Schools::Attendance do
 
       specify 'should not update cancelled bookings' do
         expect(booking_1.reload.attended).to be nil
+      end
+
+      specify 'sends feedback emails for attended (and not cancelled) bookings' do
+        expect(NotifyEmail::CandidateBookingFeedbackRequest).to \
+          have_received(:from_booking).with(booking_2).once
+      end
+
+      specify 'does not send feedback emails for unattended (or cancelled) bookings' do
+        # Cancelled
+        expect(NotifyEmail::CandidateBookingFeedbackRequest).not_to \
+          have_received(:from_booking).with(booking_1)
+        # Unattended
+        expect(NotifyEmail::CandidateBookingFeedbackRequest).not_to \
+          have_received(:from_booking).with(booking_3)
       end
 
       specify 'save should return false' do
