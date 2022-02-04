@@ -35,7 +35,7 @@ jobs:
         with:
             AzureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
             ServicePrincipal: ${{ matrix.data.principle }}
-            ExpiresWithinDays: 888
+            ExpiresWithinDays: 30
 
       - name: Processing ${{fromJson(steps.pwsh_check_expire.outputs.json_data).data.Name}}
         run:  echo Expires in ${{fromJson(steps.pwsh_check_expire.outputs.json_data).data.ExpiresDays}} days
