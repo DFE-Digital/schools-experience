@@ -37,6 +37,25 @@ Then("the booking should be marked as not attended") do
   expect(@bookings.first.reload.attended).to be(false)
 end
 
+Given("I can receive feedback request emails") do
+  @feedback_request_double = instance_double(
+    NotifyEmail::CandidateBookingFeedbackRequest, despatch_later!: true
+  )
+
+  allow(NotifyEmail::CandidateBookingFeedbackRequest).to \
+    receive(:from_booking) { @feedback_request_double }
+end
+
+Then("a feedback request email should have been sent to the candidate") do
+  expect(NotifyEmail::CandidateBookingFeedbackRequest).to \
+    have_received(:from_booking).with(@bookings.first)
+end
+
+Then("no feedback request emails have been sent") do
+  expect(NotifyEmail::CandidateBookingFeedbackRequest).not_to \
+    have_received(:from_booking)
+end
+
 Given("I have set a booking to be attended") do
   steps %(
     Given there are some bookings that were scheduled last week

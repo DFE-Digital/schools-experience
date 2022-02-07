@@ -3,6 +3,7 @@ require 'database_cleaner/prevent_disabling_referential_integrity'
 truncation_options = { except: %w[schema_migrations spatial_ref_sys] }
 deletion_options = {
   only: %w[
+    candidates_booking_feedbacks
     events
     schools_school_profiles
     bookings_placement_request_cancellations

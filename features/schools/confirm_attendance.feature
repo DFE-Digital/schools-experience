@@ -7,6 +7,7 @@ Feature: Confirming candidate attendance
         Given I am logged in as a DfE user
         And the school offers 'Biology, Maths'
         And my school is fully-onboarded
+        And I can receive feedback request emails
 
     Scenario: When there are no bookings
         Given there are no bookings
@@ -41,6 +42,7 @@ Feature: Confirming candidate attendance
         And I click the 'Save and return to dashboard' submit button
         Then I should be on the 'schools dashboard' page
         And the booking should be marked as attended
+        And a feedback request email should have been sent to the candidate
 
     Scenario: Setting a booking as not attended
         Given there are some bookings that were scheduled last week
@@ -49,6 +51,7 @@ Feature: Confirming candidate attendance
         And I click the 'Save and return to dashboard' submit button
         Then I should be on the 'schools dashboard' page
         And the booking should be marked as not attended
+        And no feedback request emails have been sent
 
     Scenario: Only selected records are updated
         Given I have set a booking to be attended

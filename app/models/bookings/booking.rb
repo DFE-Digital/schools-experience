@@ -16,6 +16,12 @@ module Bookings
     has_one :candidate_cancellation, through: :bookings_placement_request
     has_one :school_cancellation, through: :bookings_placement_request
 
+    has_one :candidate_feedback,
+      class_name: "Candidates::BookingFeedback",
+      foreign_key: :bookings_booking_id,
+      inverse_of: :booking,
+      dependent: :destroy
+
     validates :date,
       if: -> { date_changed? },
       timeliness: {

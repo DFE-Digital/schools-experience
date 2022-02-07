@@ -16,6 +16,7 @@ module Schools
         fetch(booking_id).tap do |booking|
           booking.attended = ActiveModel::Type::Boolean.new.cast(attended)
           booking.save!(context: :attendance)
+          send_candidate_feedback_email(booking)
           @updated_bookings << booking.id
         rescue ActiveRecord::RecordInvalid => e
           errors.add :bookings_params,
@@ -39,6 +40,14 @@ module Schools
     end
 
   private
+
+    def send_candidate_feedback_email(booking)
+      return unless booking.attended?
+
+      NotifyEmail::CandidateBookingFeedbackRequest
+        .from_booking(booking)
+        .despatch_later!
+    end
 
     def indexed_bookings
       @indexed_bookings ||= bookings.index_by(&:id)

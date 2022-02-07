@@ -191,6 +191,10 @@ Rails.application.routes.draw do
       resource :cancellation, only: %i[new create show], controller: 'placement_requests/cancellations'
     end
 
+    resources :bookings, only: [], param: :token do
+      resource :feedback, only: %i[new create show], controller: "booking_feedbacks"
+    end
+
     if Rails.application.config.x.phase >= 5
       get 'signin', to: 'sessions#new'
       post 'signin', to: 'sessions#create'

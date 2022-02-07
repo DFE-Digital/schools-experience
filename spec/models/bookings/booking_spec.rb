@@ -160,6 +160,13 @@ describe Bookings::Booking do
     it { is_expected.to belong_to(:bookings_school) }
     it { is_expected.to have_one(:candidate_cancellation).through(:bookings_placement_request) }
     it { is_expected.to have_one(:school_cancellation).through(:bookings_placement_request) }
+    it do
+      is_expected.to have_one(:candidate_feedback)
+        .class_name("Candidates::BookingFeedback")
+        .with_foreign_key(:bookings_booking_id)
+        .inverse_of(:booking)
+        .dependent(:destroy)
+    end
   end
 
   describe 'Delegation' do
