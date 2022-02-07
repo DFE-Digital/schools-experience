@@ -8,7 +8,7 @@ module Candidates
 
     def create
       @feedback = Candidates::BookingFeedback.new(
-        feedback_params.merge(booking: placement_request.booking)
+        feedback_params.merge(booking: booking)
       )
 
       if @feedback.save
