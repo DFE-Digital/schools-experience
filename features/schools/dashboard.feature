@@ -148,3 +148,9 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then there should be a status notification for missing availability
         And there should be a 'Add dates or availability' link to the 'availability preferences'
+
+    Scenario: Display CTA when in a school group
+        Given my school is part of a group of schools
+        When I am on the 'schools dashboard' page
+        Then I should see the text 'There may be more schools you can add to the service'
+        And there should be a link to the DFE sign in request organisation URL

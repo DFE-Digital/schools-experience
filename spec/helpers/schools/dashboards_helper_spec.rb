@@ -154,4 +154,15 @@ describe Schools::DashboardsHelper, type: 'helper' do
       end
     end
   end
+
+  describe "#in_school_group?" do
+    let(:sample) { SchoolGroup::SCHOOL_URNS_IN_GROUP.sample }
+
+    subject { helper }
+
+    it { is_expected.to be_in_school_group(sample) }
+    it { is_expected.to be_in_school_group(sample.to_s) }
+    it { is_expected.not_to be_in_school_group(123_456) }
+    it { is_expected.not_to be_in_school_group("000000") }
+  end
 end
