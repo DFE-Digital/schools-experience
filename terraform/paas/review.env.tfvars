@@ -8,4 +8,3 @@ databases                 = 0
 environment               = "dev"
 azure_key_vault           = "s105d01-kv"
 azure_resource_group      = "s105d01-dev-vault-resource-group"
- FRONTEND                  = "frontend"
