@@ -16,9 +16,7 @@ In the following environments the two applications are set as
 |Staging      |	Migrates|	Does Not Migrate|
 |Production   |	Migrates|	Does Not Migrate|
 
-Development and Review run in the same space and share databases, if review were to migrate it would cause changes to the database that may prevent 
-other branches from working. Therefore only when a migration has been accepted to master will it be automatically carried out. 
-If necessary it is possible to manually migrate the database.
+Development and Review run in the same space and share databases.
 
 ## Manual Migration
 To manually migrate a database you need access to Cloud Foundry and the ability to ssh on to the application. Makesure the application is deployed
