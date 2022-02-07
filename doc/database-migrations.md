@@ -16,7 +16,7 @@ In the following environments the two applications are set as
 |Staging      |	Migrates|	Does Not Migrate|
 |Production   |	Migrates|	Does Not Migrate|
 
-Development and Review run in the same space and share databases.
+Development and Review run in the same space and share databases. We must take care not to remove or change existing objects unless on the master branch as this could impact older 'review' instances. Adding new objects should not normally be a problem, unless they are made mandatory and have no 'Defaults'
 
 ## Manual Migration
 To manually migrate a database you need access to Cloud Foundry and the ability to ssh on to the application. Makesure the application is deployed
