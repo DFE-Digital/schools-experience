@@ -11,8 +11,8 @@ In the following environments the two applications are set as
 
 |Environment	|Frontend	|Background Jobs|
 |-------------|---------|---------------|
-|Development	|Migrates|	Not running|
-|Review	      |Does Not Migrate| 	Not running|
+|Development	|Migrates|	Does Not Migrate|
+|Review	      |Migrates| 	Does Not Migrate|
 |Staging      |	Migrates|	Does Not Migrate|
 |Production   |	Migrates|	Does Not Migrate|
 
