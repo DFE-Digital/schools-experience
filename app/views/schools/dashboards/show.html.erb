@@ -7,15 +7,29 @@
         <%= render partial: 'update_your_school_profile' %>
       <% end %>
 
-      <span class="govuk-caption-xl">School dashboard</span>
-      <h1 class="govuk-heading-l"><%= @current_school.name %></h1>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
+	        <span class="govuk-caption-xl">School dashboard</span>
+          <h1 class="govuk-heading-l"><%= @current_school.name %></h1>
 
-      <% if has_other_schools? || (Schools::ChangeSchool.allow_school_change_in_app? && Schools::ChangeSchool.request_approval_url) %>
-        <div id="change-school">
-          <%= link_to "Change school", new_schools_switch_path %>
+          <% if has_other_schools? || (Schools::ChangeSchool.allow_school_change_in_app? && Schools::ChangeSchool.request_approval_url) %>
+            <div id="change-school">
+              <%= link_to "Change school", new_schools_switch_path %>
+            </div>
+          <% end %>
         </div>
-      <% end %>
+
+        <div class="govuk-grid-column-one-third">
+          <% if in_school_group?(@current_school.urn) %>
+          <div class="school-group-cta">
+            <h2 class="govuk-heading-s">There may be more schools you can add to the service</h2>
+
+            <p><%= link_to("Add more schools", @dfe_sign_in_request_organisation_url) %></p>
+          </div>
+          <% end %>
+        </div>
+      </div>
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 

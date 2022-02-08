@@ -1,3 +1,5 @@
+require "school_group"
+
 module Schools::DashboardsHelper
   def not_onboarded_warning(school)
     if school.placement_requests.any?
@@ -41,5 +43,9 @@ module Schools::DashboardsHelper
       enabled_without_dates: 'govuk-grid-column-two-thirds',
       enabled_without_availability: 'govuk-grid-column-two-thirds',
     }[status]
+  end
+
+  def in_school_group?(urn)
+    SchoolGroup.in_group?(urn)
   end
 end

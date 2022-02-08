@@ -91,3 +91,12 @@ end
 Then("I should not see the latest service update notification") do
   expect(page).not_to have_css('#service-update-notice')
 end
+
+Given("my school is part of a group of schools") do
+  allow(Rails.application.config.x).to receive(:dfe_sign_in_request_organisation_url) { "https://dfe-sign.in/organisation" }
+  allow(SchoolGroup).to receive(:in_group?) { true }
+end
+
+Then("there should be a link to the DFE sign in request organisation URL") do
+  expect(page).to have_link("Add more schools", href: Rails.application.config.x.dfe_sign_in_request_organisation_url)
+end
