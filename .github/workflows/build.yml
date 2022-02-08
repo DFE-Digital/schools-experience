@@ -23,19 +23,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: ACTIONS-API-ACCESS-TOKEN
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: ACTIONS-API-ACCESS-TOKEN
-
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: SLACK-WEBHOOK
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: SLACK-WEBHOOK
+          secret: SE-INFRA-SECRETS
+          key: ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -67,7 +62,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2.9.0
@@ -88,7 +83,7 @@ jobs:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
            SLACK_MESSAGE: 'There has been a failure building the application'
            SLACK_TITLE: 'Failure Building Application'
-           SLACK_WEBHOOK: ${{ steps.SLACK-WEBHOOK.outputs.secret-value }}
+           SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
 
   spec_tests:
     name: Unit Tests
@@ -105,19 +100,21 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: ACTIONS-API-ACCESS-TOKEN
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: ACTIONS-API-ACCESS-TOKEN
+          secret: SE-INFRA-SECRETS
+          key: ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.12.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Bring up Docker compose Stack
         run: docker-compose -f docker-compose-paas.yml up -d
@@ -169,31 +166,26 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: ACTIONS-API-ACCESS-TOKEN
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: ACTIONS-API-ACCESS-TOKEN
-
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: SNYK-TOKEN
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: SNYK-TOKEN
+          secret: SE-INFRA-SECRETS
+          key: ACTIONS-API-ACCESS-TOKEN, SNYK-TOKEN
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.12.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
-          SNYK_TOKEN: ${{ steps.SNYK-TOKEN.outputs.secret-value }}
+          SNYK_TOKEN: ${{ steps.keyvault-yaml-secret.outputs.SNYK-TOKEN }}
         with:
           image: ${{needs.build.outputs.DOCKER_IMAGE}}
           args: --severity-threshold=high --file=Dockerfile
@@ -220,19 +212,21 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: ACTIONS-API-ACCESS-TOKEN
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: ACTIONS-API-ACCESS-TOKEN
+          secret: SE-INFRA-SECRETS
+          key: ACTIONS-API-ACCESS-TOKEN
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.12.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Run Cucumber Tests
         run: |-
@@ -275,19 +269,21 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: ACTIONS-API-ACCESS-TOKEN
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: ACTIONS-API-ACCESS-TOKEN
+          secret: SE-INFRA-SECRETS
+          key: ACTIONS-API-ACCESS-TOKEN
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.12.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Run Cucumber Tests
         run: |-
@@ -329,12 +325,14 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: SONAR-TOKEN
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: SONAR-TOKEN
+          secret: SE-INFRA-SECRETS
+          key: SONAR-TOKEN
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Download Test Artifacts
         uses: actions/download-artifact@v2
@@ -348,7 +346,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ steps.SONAR-TOKEN.outputs.secret-value }}
+          SONAR_TOKEN: ${{ steps.keyvault-yaml-secret.outputs.SONAR-TOKEN }}
 
   prepare:
     name: Configure Matrix Deployments
@@ -399,6 +397,9 @@ jobs:
     strategy:
       max-parallel: 1
       matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
+    environment:
+       name: ${{matrix.environment}}
+    concurrency: ${{matrix.environment}}_${{github.event.number}}
     needs: [ prepare ]
     runs-on: ubuntu-latest
     steps:
@@ -431,46 +432,18 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: SLACK-RELEASE-NOTE-WEBHOOK
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: SLACK-RELEASE-NOTE-WEBHOOK
-
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: SLACK-WEBHOOK
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: SLACK-WEBHOOK
-
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        if: matrix.environment == 'Review'
-        id: PAAS-USERNAME
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: PAAS-USERNAME
-
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        if: matrix.environment == 'Review'
-        id: PAAS-PASSWORD
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: PAAS-PASSWORD
-
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: ACTIONS-API-ACCESS-TOKEN
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: ACTIONS-API-ACCESS-TOKEN
+          secret: SE-INFRA-SECRETS
+          key: ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK , SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Login to Cloud Foundry
         if: matrix.environment == 'Review'
-        run: cf login -a api.london.cloud.service.gov.uk -u ${{steps.PAAS-USERNAME.outputs.secret-value}} -p ${{steps.PAAS-PASSWORD.outputs.secret-value}} -s get-into-teaching
+        run: cf login -a api.london.cloud.service.gov.uk -u ${{steps.keyvault-yaml-secret.outputs.PAAS-USERNAME}} -p ${{steps.keyvault-yaml-secret.outputs.PAAS-PASSWORD}} -s get-into-teaching
 
       - name: Get Static Route
         if: matrix.environment == 'Review'
@@ -481,35 +454,27 @@ jobs:
 
       - name: Trigger Deployment to ${{matrix.environment}}
         if: matrix.environment == 'Review'
-        uses: benc-uk/workflow-dispatch@v1.1
+        uses: ./.github/workflows/actions/deploy
         with:
-          workflow: Deploy to PaaS
-          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
-          inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}" , "pr": "${{github.event.number}}" , "static": "${{env.STATIC_ROUTE}}" }'
-          ref: ${{env.REFERENCE}}
+          environment: ${{matrix.environment}}
+          sha:  ${{ github.sha }}
+          pr:   ${{github.event.number}}
+          static:  ${{env.STATIC_ROUTE}}
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+          KEY_VAULT:         ${{ secrets.KEY_VAULT }}
+          ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }} 
 
       - name: Trigger Deployment to ${{matrix.environment}}
         if: matrix.environment != 'Review'
-        uses: benc-uk/workflow-dispatch@v1.1
+        uses: ./.github/workflows/actions/deploy
         with:
-          workflow: Deploy to PaaS
-          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
-          inputs: '{"environment": "${{matrix.environment}}", "sha": "${{ github.sha }}"}'
-          ref: ${{env.REFERENCE}}
-
-      - name: Wait for Deployment to ${{matrix.environment}}
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-deploy
-        with:
-          token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
-          checkName: Deploy ${{ github.sha }} to ${{ matrix.environment  }}
-          ref: ${{env.REFERENCE}}
-          timeoutSeconds: 1200
-          intervalSeconds: 14
-
-      - name: Check if ${{matrix.environment}} Deployment has returned with a failure
-        if: steps.wait-for-deploy.outputs.conclusion != 'success'
-        run: exit 1
+          environment: ${{matrix.environment}}
+          sha:  ${{ github.sha }}
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+          KEY_VAULT:         ${{ secrets.KEY_VAULT }}
+          ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }} 
 
       - name: Post sticky pull request comment
         if: matrix.environment == 'Review'
@@ -524,7 +489,7 @@ jobs:
         if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
         uses: actions-ecosystem/action-add-labels@v1.1.3
         with:
-          github_token: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          github_token: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
           labels: Review
 
       - name: Get Release Id from Tag
@@ -532,7 +497,7 @@ jobs:
         uses: DFE-Digital/github-actions/DraftReleaseByTag@master
         with:
           TAG: ${{needs.prepare.outputs.release_tag}}
-          TOKEN: ${{ steps.ACTIONS-API-ACCESS-TOKEN.outputs.secret-value }}
+          TOKEN: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
 
       - name: Publish Release
         if:  matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
@@ -549,7 +514,7 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_SUCCESS}}
           SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
           SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
-          SLACK_WEBHOOK: ${{ steps.SLACK-RELEASE-NOTE-WEBHOOK.outputs.secret-value }}
+          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
           MSG_MINIMAL: true
 
       - name: Slack Notification
@@ -559,7 +524,7 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_ERROR}}
           SLACK_TITLE: Failure in Post-Development Deploy
           SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
-          SLACK_WEBHOOK: ${{ steps.SLACK-WEBHOOK.outputs.secret-value }}
+          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
 
   owasp:
     name: 'OWASP Test'
@@ -577,33 +542,30 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: SLACK-WEBHOOK
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-infra-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-INFRA-SECRETS
-          secret: SLACK-WEBHOOK
+          secret: SE-INFRA-SECRETS
+          key: SLACK-WEBHOOK 
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: HTTPAUTH-USERNAME
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-SECRETS
-          secret: SECURE_USERNAME
-
-      - uses: DFE-Digital/github-actions/keyvault-yaml-secret@master
-        id: HTTPAUTH-PASSWORD
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          yaml_secret: SE-SECRETS
-          secret: SECURE_PASSWORD
+          secret: SE-SECRETS
+          key: SECURE_USERNAME , SECURE_PASSWORD
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{ steps.HTTPAUTH-USERNAME.outputs.secret-value }}:${{ steps.HTTPAUTH-PASSWORD.outputs.secret-value }}@${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}'
+          target: 'https://${{ steps.keyvault-yaml-secret.outputs.SECURE_USERNAME }}:${{ steps.keyvault-yaml-secret.outputs.SECURE_PASSWORD }}@${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
 
@@ -614,4 +576,4 @@ jobs:
            SLACK_COLOR: ${{env.SLACK_FAILURE}}
            SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
            SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
-           SLACK_WEBHOOK: ${{ steps.SLACK-WEBHOOK.outputs.secret-value }}
+           SLACK_WEBHOOK: ${{ steps.keyvault-infra-secret.outputs.SLACK-WEBHOOK }}
