@@ -6,7 +6,7 @@ variable "api_url" {
 }
 
 variable "AZURE_CREDENTIALS" {
-default = ""
+default = "{}"
 }
 
 variable "azure_key_vault" {}
