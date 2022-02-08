@@ -10,16 +10,16 @@ provider "statuscake" {
 }
 
 locals {
-  azure_credentials = jsondecode(var.AZURE_CREDENTIALS)
+  azure_credentials = var.AZURE_CREDENTIALS == "" ? "" :  jsondecode(var.AZURE_CREDENTIALS) 
 }
 
 provider "azurerm" {
   skip_provider_registration = true
   features {}
-  subscription_id = local.azure_credentials.subscriptionId
-  client_id       = local.azure_credentials.clientId
-  client_secret   = local.azure_credentials.clientSecret
-  tenant_id       = local.azure_credentials.tenantId
+  subscription_id = local.azure_credentials == "" ? "" : local.azure_credentials.subscriptionId
+  client_id       = local.azure_credentials == "" ? "" : local.azure_credentials.clientId
+  client_secret   = local.azure_credentials == "" ? "" : local.azure_credentials.clientSecret
+  tenant_id       = local.azure_credentials == "" ? "" : local.azure_credentials.tenantId
 }
 
 terraform {
