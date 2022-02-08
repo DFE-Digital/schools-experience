@@ -747,6 +747,7 @@ en:
           false: "Off"
       query: Find what?
       location: Enter location or postcode
+      location_short: Location or postcode
       distance: Select search area
       schools_on_boarding_dbs_requirement:
         dbs_policy_details: 'Provide details in 50 words or less.'
