@@ -57,8 +57,10 @@ services:
        - ${PWD}/out:/app/out
        - ${PWD}/coverage:/app/coverage
      depends_on:
-       - postgres
-       - redis
+       postgres:
+          condition: service_healthy
+       redis:
+          condition: service_healthy
 
    postgres:
      image: postgis/postgis:13-3.1-alpine
@@ -66,6 +68,16 @@ services:
        - POSTGRES_USER=postgres
        - POSTGRES_PASSWORD=secret
        - POSTGRES_DB=school_experience
+     healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
    redis:
      image: redis:5-alpine
+     healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
