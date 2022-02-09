@@ -28,8 +28,8 @@
               <tr class="placement-date govuk-table__row">
                 <th class="govuk-table__header" scope="row"><%= date.date.to_formatted_s(:govuk) %></th>
                 <td class="govuk-table__cell">
+                  <p><%= placement_date_phase(date) %></p>
                   <% if date.supports_subjects? %>
-                    <p>Secondary</p>
                     <p>
                       <% if date.subjects.present? %>
                         <%= to_sentence(date.subjects.map(&:name)) %>
@@ -37,13 +37,11 @@
                         All subjects
                       <% end %>
                     </p>
-                  <% else %>
-                    <p>Primary</p>
                   <% end %>
                 </td>
                 <td class="govuk-table__cell"><%= placement_date_experience_type_tag(date.virtual) %></td>
                 <td class="govuk-table__cell">
-                  <%= link_to("Start request", start_request_link(school)) %>
+                  <%= link_to("Start request", start_request_link(school, anchor: placement_date_anchor(date))) %>
                 </td>
               </tr>
             <% end %>

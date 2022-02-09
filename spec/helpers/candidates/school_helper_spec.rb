@@ -344,4 +344,20 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
       it { is_expected.to have_css "p", text: "Both In school and Virtual" }
     end
   end
+
+  describe ".start_request_link" do
+    subject { start_request_link(school, anchor: "test") }
+
+    context "when fixed availability preference" do
+      let(:school) { create(:bookings_school, :with_fixed_availability_preference) }
+
+      it { is_expected.to eq(new_candidates_school_registrations_subject_and_date_information_path(school, anchor: "test")) }
+    end
+
+    context "when flexible availability preference" do
+      let(:school) { create(:bookings_school) }
+
+      it { is_expected.to eq(new_candidates_school_registrations_personal_information_path(school, anchor: "test")) }
+    end
+  end
 end

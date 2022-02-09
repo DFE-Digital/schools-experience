@@ -57,4 +57,36 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
       it { is_expected.to have_css "p", text: "In school" }
     end
   end
+
+  describe "#placement_date_phase" do
+    subject { placement_date_phase(placement_date) }
+
+    context "when supports_subjects is true" do
+      let(:placement_date) { double(Bookings::PlacementDate, supports_subjects: true) }
+
+      it { is_expected.to eq("Secondary") }
+    end
+
+    context "when supports_subjects is false" do
+      let(:placement_date) { double(Bookings::PlacementDate, supports_subjects: false) }
+
+      it { is_expected.to eq("Primary") }
+    end
+  end
+
+  describe "#placement_date_anchor" do
+    subject { placement_date_anchor(placement_date) }
+
+    context "when supports_subjects is true" do
+      let(:placement_date) { double(Bookings::PlacementDate, supports_subjects: true, date: Date.new(2021, 1, 2)) }
+
+      it { is_expected.to eq("secondary-placement-date-2021-01-02") }
+    end
+
+    context "when supports_subjects is false" do
+      let(:placement_date) { double(Bookings::PlacementDate, supports_subjects: false, date: Date.new(2021, 3, 4)) }
+
+      it { is_expected.to eq("primary-placement-date-2021-03-04") }
+    end
+  end
 end

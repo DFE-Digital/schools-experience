@@ -6,7 +6,7 @@ describe Candidates::Registrations::SubjectAndDateInformationHelper do
   describe "#format_primary_date_options" do
     let(:output) { format_primary_date_options([option]) }
     let(:option) do
-      Candidates::PlacementDateOption.new 3, "01 February 2022", 2, Date.parse("2022-02-01"), true
+      Candidates::PlacementDateOption.new 3, "01 February 2022", 2, Date.parse("2022-02-01"), true, false
     end
 
     subject { output }

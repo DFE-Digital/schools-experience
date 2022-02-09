@@ -276,7 +276,8 @@ end
 
 Then("I should see the following list of available dates, subjects and phases:") do |table|
   table.hashes.each do |row|
-    formatted_month = row['Months from now'].to_i.months.from_now.to_date.to_formatted_s(:govuk_month)
+    date = row['Months from now'].to_i.months.from_now.to_date
+    formatted_month = date.to_formatted_s(:govuk_month)
 
     html_table = page.find('button', text: formatted_month)
       .ancestor('.govuk-accordion__section')
@@ -285,6 +286,10 @@ Then("I should see the following list of available dates, subjects and phases:")
     extract_subjects_from_table(row['Subjects']).each do |named_subject|
       expect(html_table).to have_content(named_subject)
     end
+
+    anchor = "#{row['Phase']}-placement-date-#{date}".downcase
+    href = new_candidates_school_registrations_subject_and_date_information_path(@school, anchor: anchor)
+    expect(html_table).to have_link("Start request", href: href)
   end
 end
 
