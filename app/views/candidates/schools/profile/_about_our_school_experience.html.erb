@@ -1,0 +1,59 @@
+<h2 id="about-our-school-experience">About our school experience</h2>
+
+<dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+  <%= dlist_item "Details", id: "experience-details" do %>
+    <%= conditional_format content_or_msg presenter.experience_details, "No information supplied" %>
+  <% end %>
+
+  <%= dlist_item "Start and finish times", id: "start-and-finish-times" do %>
+    <%= presenter.start_time %> to <%= presenter.end_time %>
+
+    <% if presenter.flexible_on_times %>
+      - Flexible
+    <% end %>
+
+    <% if presenter.flexible_on_times_details.present? %>
+      <%= safe_format presenter.flexible_on_times_details %>
+    <% end %>
+  <% end %>
+
+  <%= dlist_item "Dress code", id: "dress-code" do %>
+    <%= content_or_msg presenter.formatted_dress_code, "No dress code supplied" %>
+  <% end %>
+
+  <%= dlist_item "Teacher training", id: "teacher-training" do %>
+    <%= safe_format presenter.teacher_training_info %>
+
+    <p>
+      <%= link_to "Find out more about our teacher training", presenter.teacher_training_url %>
+    </p>
+  <% end if presenter.teacher_training_info.present? %>
+</dl>
+
+<p><strong>Links to more information about our school</strong></p>
+
+<ul id="school-websites" class="govuk-list govuk-!-margin-bottom-8">
+  <% if presenter.website.present? %>
+    <li id="school-website">
+      <%= link_to "#{presenter.school.name} website", presenter.website %>
+    </li>
+  <% end %>
+
+  <li>
+    <%= link_to "#{presenter.school.name} Get Information About Schools", gias_school_url(presenter.urn) %>
+  </li>
+
+  <li>
+    <%= link_to "Ofsted report: #{presenter.school.name}", ofsted_report_url(presenter.urn) %>
+  </li>
+
+  <li>
+    <%= link_to "Performance information: #{presenter.school.name}", performance_report_url(presenter.urn) %>
+  </li>
+
+  <% if presenter.teacher_training_url.present? %>
+  <li>
+    <%= link_to "Teacher training: #{presenter.name}", cleanup_school_url(presenter.teacher_training_url) %>
+  </li>
+  <% end %>
+</ul>

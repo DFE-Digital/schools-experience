@@ -1,0 +1,6 @@
+    <% if presenter.school.enabled? && presenter.school.has_availability? && include_candidate_request_links %>
+      <%= render "start_request", profile: presenter %>
+      <p>
+        <%= link_to "Back to search results", :back, data: { controller: "back-link" }  %>
+      </p>
+    <% end %>

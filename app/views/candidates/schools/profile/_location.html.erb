@@ -1,0 +1,34 @@
+<h2 id="location">Location</h2>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-quarter">
+    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+      <%= dlist_item "Address", id: "school-address" do %>
+        <%= format_school_address presenter.school %>
+      <% end %>
+    </dl>
+  </div>
+
+  <div class="govuk-grid-column-three-quarters">
+    <%= school_location_map presenter.school %>
+  </div>
+</div>
+
+<dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+  <%= dlist_item "Parking", id: "parking" do %>
+    <% if presenter.parking_provided %>
+      <p>Yes - on site parking provided</p>
+    <% else %>
+      <p>Not available on site</p>
+    <% end %>
+
+    <%= safe_format presenter.parking_details %>
+  <% end %>
+
+  <% if presenter.supports_access_needs? %>
+    <%= dlist_item "Disability and access details", id: "disability-and-access" do %>
+      <%= render partial: "candidates/schools/access_needs_statement",
+        locals: { presenter: presenter } %>
+    <% end %>
+  <% end %>
+</dl>

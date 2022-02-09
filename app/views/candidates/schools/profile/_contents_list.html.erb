@@ -1,0 +1,14 @@
+<nav class="gem-c-contents-list govuk-!-margin-bottom-8">
+  <h2 class="gem-c-contents-list__title">Contents</h2>
+  <ol class="gem-c-contents-list__list">
+    <%= contents_list_item("About our school experience", "#about-our-school-experience") %>
+    <%= contents_list_item("Entry requirements", "#entry-requirements") %>
+    <% if @presenter.school.availability_preference_fixed? %>
+      <%= contents_list_item("Placement dates", "#placement-dates") %>
+    <% else %>
+      <%= contents_list_item("Placement availability", "#placement-availability") %>
+    <% end %>
+    <%= contents_list_item("Fees", "#fees") if @presenter.has_fees? %>
+    <%= contents_list_item("Location", "#location") %>
+  </ol>
+</nav>
