@@ -40,10 +40,10 @@ module Schools::PlacementDatesHelper
   end
 
   def placement_date_virtual_tag
-    tag.p "Virtual"
+    tag.strong "Virtual", class: "govuk-tag govuk-tag--green"
   end
 
   def placement_date_inschool_tag
-    tag.p "In school"
+    tag.strong "In school", class: "govuk-tag govuk-tag--yellow"
   end
 end

@@ -33,13 +33,13 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
   describe "#placement_date_virtual_tag" do
     subject { placement_date_virtual_tag }
 
-    it { is_expected.to have_css "p", text: "Virtual" }
+    it { is_expected.to have_css "strong", text: "Virtual" }
   end
 
   describe "#placement_date_inschool_tag" do
     subject { placement_date_inschool_tag }
 
-    it { is_expected.to have_css "p", text: "In school" }
+    it { is_expected.to have_css "strong", text: "In school" }
   end
 
   describe "#placement_date_experience_type_tag" do
@@ -48,13 +48,13 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
     context "with a virtual date" do
       let(:virtual) { true }
 
-      it { is_expected.to have_css "p", text: "Virtual" }
+      it { is_expected.to have_css "strong", text: "Virtual" }
     end
 
     context "with an in school date" do
       let(:virtual) { false }
 
-      it { is_expected.to have_css "p", text: "In school" }
+      it { is_expected.to have_css "strong", text: "In school" }
     end
   end
 

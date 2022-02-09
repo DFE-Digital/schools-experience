@@ -323,15 +323,15 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     context "for school with virtual placements" do
       let(:school) { create(:bookings_placement_date, virtual: true).bookings_school }
 
-      it { is_expected.to have_css "p", text: "Virtual" }
-      it { is_expected.not_to have_css "p", text: "In school" }
+      it { is_expected.to have_css "strong", text: "Virtual" }
+      it { is_expected.not_to have_css "strong", text: "In school" }
     end
 
     context "for school with inschool placements" do
       let(:school) { create(:bookings_placement_date, virtual: false).bookings_school }
 
-      it { is_expected.not_to have_css "p", text: "Virtual" }
-      it { is_expected.to have_css "p", text: "In school" }
+      it { is_expected.not_to have_css "strong", text: "Virtual" }
+      it { is_expected.to have_css "strong", text: "In school" }
     end
 
     context "for school with both virtual and inschool placements" do
@@ -341,7 +341,8 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         end
       end
 
-      it { is_expected.to have_css "p", text: "Both In school and Virtual" }
+      it { is_expected.to have_css "strong", text: "Virtual" }
+      it { is_expected.to have_css "strong", text: "In school" }
     end
   end
 

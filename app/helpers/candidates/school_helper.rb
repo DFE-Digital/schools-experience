@@ -60,7 +60,12 @@ module Candidates::SchoolHelper
     if !school.has_virtual_placements?
       placement_date_inschool_tag
     elsif school.has_inschool_placements?
-      tag.p("Both In school and Virtual")
+      safe_join [
+        "Both",
+        placement_date_virtual_tag,
+        "and",
+        placement_date_inschool_tag
+      ], " "
     else
       placement_date_virtual_tag
     end
