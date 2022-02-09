@@ -1,61 +1,56 @@
-<div id="date-and-subject-summary">
-  <%- if primary_dates.any? -%>
-
-    <%- if secondary_dates_grouped_by_date.any? -%>
-      <h4 class="govuk-heading-m">Primary school dates</h4>
-    <%- else -%>
-      <h4 class="govuk-heading-m">Dates</h4>
-    <%- end -%>
-
-    <ul class="govuk-list primary-placement-dates">
-      <%- primary_dates.each do |primary_date| -%>
-        <li>
-          <span>
-            <%= primary_date.date.to_formatted_s(:govuk) %>
-            (<%= pluralize primary_date.duration, 'day' %>)
-          </span>
-          <%= placement_date_experience_type_tag primary_date.virtual %>
-        </li>
-      <%- end -%>
-    </ul>
-
-  <%- end -%>
-
-  <%- if secondary_dates_grouped_by_date.any? -%>
-
-    <%- if primary_dates.any? -%>
-      <h4 class="govuk-heading-m">Secondary school dates</h4>
-    <%- else -%>
-      <h4 class="govuk-heading-m">Dates</h4>
-    <%- end -%>
-
-    <dl class="secondary-placement-dates govuk-summary-list govuk-summary-list--no-border">
-      <%- secondary_dates_grouped_by_date.each do |date, subjects| -%>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            <span><%= date.to_formatted_s(:govuk) %></span>
-            <%= placement_date_experience_type_tag subjects.first.virtual %>
-          </dt>
-
-          <dd class="govuk-summary-list__value">
-            <ul class="govuk-list">
-              <% subjects.each do |subject| %>
-                <li><%= subject.name_with_duration %></li>
-              <% end %>
-            </ul>
-          </dd>
-
-        </div>
-
-      <%- end -%>
-    </dl>
-
-  <%- end -%>
-
-  <%- if primary_dates.none? and secondary_dates_grouped_by_date.none? -%>
-    <div class="govuk-inset-text">
-      There are no upcoming dates
-    </div>
-  <%- end -%>
+<% if available_dates_by_month.empty? %>
+<div class="govuk-inset-text">
+  There are no upcoming dates
 </div>
+<% else %>
+<div class="govuk-accordion govuk-!-margin-bottom-8 placement-dates" data-module="govuk-accordion">
+  <% available_dates_by_month.sort.each do |month, dates| %>
+    <div class="govuk-accordion__section">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <button type="button" id="accordion-default-heading-<%= month %>" aria-controls="accordion-default-content-<%= month %>" class="govuk-accordion__section-button" aria-expanded="false">
+            <%= month.to_formatted_s(:govuk_month) %>
+          </button>
+        </h2>
+      </div>
+      <div id="accordion-default-content-<%= month %>" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-<%= month %>">
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">Date</th>
+              <th class="govuk-table__header govuk-!-width-one-third" scope="col">School phase</th>
+              <th class="govuk-table__header" scope="col">Experience type</th>
+              <th class="govuk-table__header" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <% dates.each do |date| %>
+              <tr class="placement-date govuk-table__row">
+                <th class="govuk-table__header" scope="row"><%= date.date.to_formatted_s(:govuk) %></th>
+                <td class="govuk-table__cell">
+                  <% if date.supports_subjects? %>
+                    <p>Secondary</p>
+                    <p>
+                      <% if date.subjects.present? %>
+                        <%= to_sentence(date.subjects.map(&:name)) %>
+                      <% else %>
+                        All subjects
+                      <% end %>
+                    </p>
+                  <% else %>
+                    <p>Primary</p>
+                  <% end %>
+                </td>
+                <td class="govuk-table__cell"><%= placement_date_experience_type_tag(date.virtual) %></td>
+                <td class="govuk-table__cell">
+                  <%= link_to("Start request", start_request_link(school)) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+</div>
+<% end %>
