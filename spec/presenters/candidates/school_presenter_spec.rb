@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolPresenter do
+  include ActiveSupport::Testing::TimeHelpers
+
   let(:profile) { build(:bookings_profile) }
   let(:school) { profile.school }
   subject { described_class.new(school, profile) }
@@ -38,6 +40,7 @@ RSpec.describe Candidates::SchoolPresenter do
     it { expect(subject.end_time).to eql(profile.end_time) }
     it { expect(subject.flexible_on_times).to eql(profile.flexible_on_times) }
     it { expect(subject.dress_code_other_details).to eql(profile.dress_code_other_details) }
+    it { expect(subject.has_fees?).to eql(profile.has_fees?) }
   end
 
   describe '#dress_code' do
@@ -159,122 +162,51 @@ RSpec.describe Candidates::SchoolPresenter do
     end
   end
 
-  describe '#primary_dates' do
+  describe "available date methods" do
+    let(:instance) { described_class.new(school, profile) }
     let(:placement_date_defaults) { { bookings_school: school } }
-    let(:unavailable_date) { FactoryBot.create :bookings_placement_date, :inactive, :not_supporting_subjects, **placement_date_defaults }
-    let(:available_date) { FactoryBot.create :bookings_placement_date, :not_supporting_subjects, **placement_date_defaults }
-    let(:secondary_date) { FactoryBot.create :bookings_placement_date, **placement_date_defaults }
-    let(:past_date) { FactoryBot.create :bookings_placement_date, :in_the_past, :not_supporting_subjects, **placement_date_defaults }
 
-    before do
-      school.save!
-      school.bookings_placement_dates << unavailable_date
-      school.bookings_placement_dates << available_date
-      school.bookings_placement_dates << secondary_date
-      school.bookings_placement_dates << past_date
-    end
-
-    subject { described_class.new(school, profile).primary_dates }
-
-    specify "should include the available primary date" do
-      expect(subject).to include(available_date)
-    end
-
-    specify "should not include the past and unavailable primary dates or secondary dates" do
-      expect(subject).not_to include(unavailable_date, past_date, secondary_date)
-    end
-  end
-
-  describe '#secondary_dates' do
-    let(:placement_date_defaults) { { bookings_school: school } }
-    let(:unavailable_date) { FactoryBot.create :bookings_placement_date, :inactive, **placement_date_defaults }
-    let(:available_date) { FactoryBot.create :bookings_placement_date, **placement_date_defaults }
-    let(:past_date) { FactoryBot.create :bookings_placement_date, :in_the_past, **placement_date_defaults }
-    let(:primary_date) { FactoryBot.create :bookings_placement_date, :not_supporting_subjects, **placement_date_defaults }
-
-    before do
-      school.save!
-      school.bookings_placement_dates << unavailable_date
-      school.bookings_placement_dates << available_date
-      school.bookings_placement_dates << primary_date
-      school.bookings_placement_dates << past_date
-    end
-
-    subject { described_class.new(school, profile).secondary_dates }
-
-    specify "should include the available secondary date" do
-      expect(subject).to include(available_date)
-    end
-
-    specify "should not include the past and unavailable secondary dates or primary dates" do
-      expect(subject).not_to include(unavailable_date, past_date, primary_date)
-    end
-  end
-
-  describe '#secondary_dates_grouped_by_date' do
     let(:early_date) { 1.week.from_now.to_date }
     let(:late_date) { 1.month.from_now.to_date }
-    let(:all_subjects) { Array.wrap('All subjects (1 day)') }
 
-    let(:placement_date_early_with_maths) do
-      build(:bookings_placement_date, date: early_date, subject_specific: true).tap do |pd|
-        pd.subjects << Bookings::Subject.find_by(name: 'Maths')
-        pd.subject_specific = true
-        pd.save
-      end
+    let(:inactive_date) { create :bookings_placement_date, :inactive, :not_supporting_subjects, **placement_date_defaults }
+    let(:past_date) { create :bookings_placement_date, :in_the_past, :not_supporting_subjects, **placement_date_defaults }
+    let(:outside_availability_window) { create :bookings_placement_date, date: Date.new(2021, 6, 25), **placement_date_defaults }
+
+    let(:primary_early_date) { create :bookings_placement_date, :not_supporting_subjects, date: Date.new(2021, 4, 1), **placement_date_defaults }
+    let(:primary_late_date) { create :bookings_placement_date, :not_supporting_subjects, date: Date.new(2021, 5, 16), **placement_date_defaults }
+    let(:secondary_early_date) { create :bookings_placement_date, date: Date.new(2021, 4, 5), **placement_date_defaults }
+    let(:secondary_late_date) { create :bookings_placement_date, date: Date.new(2021, 5, 4), **placement_date_defaults }
+
+    let(:unavailable_dates) do
+      [inactive_date, past_date, outside_availability_window]
+    end
+    let(:available_dates) do
+      [secondary_early_date, secondary_late_date, primary_early_date, primary_late_date]
     end
 
-    let(:placement_date_early) do
-      create(:bookings_placement_date, date: early_date)
-    end
-
-    let(:placement_date_late) do
-      create(:bookings_placement_date, date: late_date)
-    end
-
-    let(:placement_dates) do
-      [placement_date_early, placement_date_late, placement_date_early_with_maths]
+    around do |example|
+      travel_to(Date.new(2021, 3, 30)) { example.run }
     end
 
     before do
-      allow(subject).to receive(:secondary_dates).and_return(placement_dates)
+      school.save!
+      school.bookings_placement_dates += unavailable_dates
+      school.bookings_placement_dates += available_dates
     end
 
-    specify 'should correctly itemise by date' do
-      expect(subject.secondary_dates_grouped_by_date.keys).to match_array([early_date.to_date, late_date.to_date])
+    describe "#total_available_dates" do
+      subject { instance.total_available_dates }
+
+      it { is_expected.to eq(available_dates.count) }
     end
 
-    specify 'dates with subject specific and non-specific dates should list both' do
-      expect(subject.secondary_dates_grouped_by_date[early_date].map(&:name_with_duration)).to match_array(all_subjects.concat(["Maths (1 day)"]))
-    end
+    describe "#available_dates_by_month" do
+      subject(:hash) { instance.available_dates_by_month }
 
-    specify "non-specific dates should be described as 'All subjects'" do
-      expect(subject.secondary_dates_grouped_by_date[late_date].map(&:name_with_duration)).to match_array(all_subjects)
-    end
-
-    context 'sorting' do
-      let(:date) { 1.day.from_now.to_date }
-
-      let(:physics) { Bookings::Subject.find_by(name: 'Physics') }
-      let(:maths) { Bookings::Subject.find_by(name: 'Maths') }
-      let(:biology) { Bookings::Subject.find_by(name: 'Biology') }
-
-      let(:pd_subjects) { [physics, maths, biology] }
-
-      let(:placement_date_with_multiple_subjects) do
-        build(:bookings_placement_date, date: date, subject_specific: true).tap do |pd|
-          pd.subjects << pd_subjects
-          pd.save
-        end
-      end
-
-      before do
-        allow(subject).to receive(:secondary_dates).and_return(Array.wrap(placement_date_with_multiple_subjects))
-      end
-
-      specify 'subjects should be sorted alphabetically' do
-        expect(subject.secondary_dates_grouped_by_date[date].map(&:name_with_duration)).to eql(pd_subjects.map(&:name).map { |s| "#{s} (1 day)" }.sort)
-      end
+      it { expect(hash.keys).to eq([Date.new(2021, 4, 1), Date.new(2021, 5, 1)]) }
+      it { expect(hash[Date.new(2021, 4, 1)]).to eq([primary_early_date, secondary_early_date]) }
+      it { expect(hash[Date.new(2021, 5, 1)]).to eq([secondary_late_date, primary_late_date]) }
     end
   end
 end

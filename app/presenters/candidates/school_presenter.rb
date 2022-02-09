@@ -17,7 +17,7 @@ module Candidates
     delegate :availability_info, to: :school
 
     delegate :administration_fee_amount_pounds, :administration_fee_interval, \
-      :administration_fee_description, :administration_fee_payment_method, to: :profile
+      :administration_fee_description, :administration_fee_payment_method, :has_fees?, to: :profile
 
     delegate :dbs_fee_amount_pounds, :dbs_fee_interval, \
       :dbs_fee_description, :dbs_fee_payment_method, to: :profile
@@ -74,24 +74,17 @@ module Candidates
       end
     end
 
-    def primary_dates
-      school.bookings_placement_dates.primary
+    def total_available_dates
+      available_dates_by_month.values.flatten.count
     end
 
-    def secondary_dates
-      school
+    def available_dates_by_month
+      @available_dates_by_month ||= school
         .bookings_placement_dates
-        .secondary
         .eager_load(:subjects, placement_date_subjects: :bookings_subject)
         .available
-    end
-
-    def secondary_dates_grouped_by_date
-      secondary_dates
-        .map(&PlacementDateOption.method(:for_secondary_date))
-        .flatten
-        .group_by(&:date)
-        .each_value(&:sort!)
+        .group_by { |d| d.date.at_beginning_of_month }
+        .transform_values { |v| v.sort_by(&:date) }
     end
 
   private
