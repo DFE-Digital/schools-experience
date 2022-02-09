@@ -80,7 +80,7 @@ Then("I should see the entire school address in the sidebar") do
     @school.postcode
   ].compact.each do |address_part|
     within(".govuk-grid-column-one-third") do
-      within("#school-address") do
+      within("#school-address-sidebar") do
         expect(page).to have_content(address_part)
       end
     end
@@ -93,8 +93,8 @@ Given("the chosen school has the following availability information") do |string
   expect(@school.availability_info).to eql(string)
 end
 
-Then("I should see availability information in the sidebar") do
-  within("#school-availability-info") do
+Then("I should see availability information") do
+  within("#placement-availability") do
     @raw_availability_info.lines.reject(&:blank?).each do |line|
       expect(page).to have_css('p', text: line.strip)
     end
@@ -110,8 +110,8 @@ Given("the chosen school offers teacher training and has the following info") do
   expect(@profile.teacher_training_info).to eql(string)
 end
 
-Then("I should see Find out more about our teacher training information in the sidebar") do
-  within("#school-teacher-training-info") do
+Then("I should see teacher training information") do
+  within("#teacher-training") do
     @teacher_training_info.lines.reject(&:blank?).each do |line|
       expect(page).to have_css('p', text: line.strip)
     end
@@ -153,18 +153,9 @@ Given("the chosen school has no availability information") do
   expect(@school.availability_info).to be_nil
 end
 
-Then("the availability information in the sidebar should read {string}") do |string|
-  within("#school-availability-info") do
-    expect(page).to have_css('dd', text: string)
-  end
-end
-
-Then("I should see the list of {string} in the sidebar") do |string|
-  within('#school-availability-info') do
-    expect(page).to have_css('dt', text: string)
-    @placement_dates.each do |pd|
-      expect(page).to have_css('li', text: pd.to_s)
-    end
+Then("the availability information should read {string}") do |string|
+  within("#placement-availability") do
+    expect(page).to have_css('p', text: string)
   end
 end
 
@@ -190,10 +181,17 @@ Given("there are some available dates in the future") do
 end
 
 Then("the DBS Check information in the sidebar should show the correct details") do
+  within("#dbs-check-info-sidebar") do
+    within 'dd' do
+      expect(page).to have_css 'p', text: 'Yes. Must have recent dbs check'
+    end
+  end
+end
+
+Then("the DBS Check information should show the correct details") do
   within("#dbs-check-info") do
     within 'dd' do
-      expect(page).to have_css 'p', text: 'Yes'
-      expect(page).to have_css 'p', text: 'Must have recent dbs check'
+      expect(page).to have_css 'p', text: 'Yes. Must have recent dbs check'
     end
   end
 end
@@ -247,7 +245,7 @@ Then("there should be no breakdown of dates at all") do
 end
 
 Then("I should see a breakdown of upcoming dates and subjects") do
-  expect(page).to have_css("#date-and-subject-summary")
+  expect(page).to have_css(".govuk-accordion table td")
 end
 
 Given("the following dates have been added:") do |table|
@@ -265,24 +263,27 @@ Given("the following dates have been added:") do |table|
     placement_date = FactoryBot.build(
       :bookings_placement_date,
       bookings_school: @school,
-      subject_specific: named_subjects.any?,
-      date: row['Weeks from now'].to_i.weeks.from_now.to_date
+      supports_subjects: row['Phase'] == "Secondary",
+      subject_specific: named_subjects.present?,
+      date: row['Months from now'].to_i.months.from_now.to_date
     )
 
     named_subjects.each { |subject_name| placement_date.subjects << @subjects[subject_name] }
 
-    placement_date.save
+    placement_date.save!
   end
 end
 
-Then("I should see the following list of available dates and subjects:") do |table|
+Then("I should see the following list of available dates, subjects and phases:") do |table|
   table.hashes.each do |row|
-    formatted_date = row['Weeks from now'].to_i.weeks.from_now.to_date.to_formatted_s(:govuk)
+    formatted_month = row['Months from now'].to_i.months.from_now.to_date.to_formatted_s(:govuk_month)
 
-    list_item = page.find('dt', text: formatted_date).ancestor('.govuk-summary-list__row').find('dd')
+    html_table = page.find('button', text: formatted_month)
+      .ancestor('.govuk-accordion__section')
+      .find('table')
 
     extract_subjects_from_table(row['Subjects']).each do |named_subject|
-      expect(list_item).to have_content(named_subject)
+      expect(html_table).to have_content(named_subject)
     end
   end
 end

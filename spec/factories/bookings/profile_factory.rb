@@ -37,5 +37,10 @@ FactoryBot.define do
       has_access_needs_policy { nil }
       access_needs_policy_url { nil }
     end
+
+    trait :with_admin_fee do
+      administration_fee_description { "Teas and coffees" }
+      administration_fee_amount_pounds { 10 }
+    end
   end
 end

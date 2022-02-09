@@ -20,14 +20,13 @@ Feature: Displaying a school's upcoming dates
         Given my school of choice has 'fixed' dates
         And the school is fully-onboarded
         And the following dates have been added:
-            | Weeks from now | Subjects                |
-            | 1              | None                    |
-            | 1              | English, Maths          |
-            | 2              | English, Maths, Biology |
-            | 3              | None                    |
+            | Months from now | Subjects                | Phase     |
+            | 1               | None                    | Primary   |
+            | 1               | English, Maths, Biology | Secondary |
+            | 2               | None                    | Secondary |
         When I am on the profile page for the chosen school
-        Then I should see the following list of available dates and subjects:
-            | Weeks from now | Subjects                     |
-            | 1              | All subjects, English, Maths |
-            | 2              | English, Maths, Biology      |
-            | 3              | All subjects                 |
+        Then I should see the following list of available dates, subjects and phases:
+            | Months from now | Subjects                | Phase     |
+            | 1               | None                    | Primary   |
+            | 1               | English, Maths, Biology | Secondary |
+            | 2               | All subjects            | Secondary |

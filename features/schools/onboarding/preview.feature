@@ -42,7 +42,7 @@ Feature: Preview profile
             | Ofsted report                 | http://www.ofsted.gov.uk/oxedu_providers/full/(urn)/123456                                 |
             | Performance information       | https://www.compare-school-performance.service.gov.uk/school/123456                        |
         And I should see the entire school address in the sidebar
-        And I should see the schools availability information in the sidebar
+        And I should see the schools availability information
         And the DBS Check information in the sidebar should match the information entered in the wizard
         And I should see the fee information I entered in the wizard
         And I should see the dress code policy information I entered in the wizard

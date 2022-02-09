@@ -27,10 +27,8 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
       expect(rendered).to have_css("#dress-code")
     end
 
-    it "has two start request buttons with appropriate responsive classes" do
-      %w[school-start-request-button__tablet_plus school-start-request-button__mobile].each do |css_class|
-        expect(rendered).to have_css("div.#{css_class} > a", text: 'Start request')
-      end
+    it "has a start request button" do
+      expect(rendered).to have_css("a.govuk-button", text: 'Start request')
     end
 
     context 'with availability' do
@@ -78,8 +76,8 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
     end
 
     it "doesn't render the imported flex dates" do
-      expect(rendered).not_to have_css("div#school-availability-info")
-      expect(rendered).not_to have_css("div#school-experience-type")
+      expect(rendered).not_to have_css("#placement-availability")
+      expect(rendered).not_to have_css("#school-experience-type")
     end
   end
 end

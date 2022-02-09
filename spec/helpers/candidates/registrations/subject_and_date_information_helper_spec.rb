@@ -23,7 +23,7 @@ describe Candidates::Registrations::SubjectAndDateInformationHelper do
       subject { output.first.last }
 
       it { is_expected.to have_css "span", text: "01 February 2022 (2 days)" }
-      it { is_expected.to have_css "strong.govuk-tag" }
+      it { is_expected.to have_css "p" }
     end
   end
 end
