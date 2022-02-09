@@ -30,9 +30,29 @@ module Candidates::SchoolHelper
     end
   end
 
+  def format_school_subjects_list(school)
+    subjects = school.subjects.ordered_by_name.map(&:name)
+
+    return nil if subjects.empty?
+
+    content_tag(:ul, class: "govuk-list govuk-list--bullet") do
+      safe_join(subjects.map { |subject| content_tag(:li, subject) })
+    end
+  end
+
   def format_school_phases(school)
     tag.ul(class: 'govuk-list') do
       safe_join(school.phases.map { |p| tag.li(p.name) })
+    end
+  end
+
+  def format_school_phases_compact(school)
+    school.phases.map(&:name).join(", ")
+  end
+
+  def contents_list_item(name, link)
+    content_tag(:li, class: "gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed") do
+      link_to(name, link, class: "gem-c-contents-list__link govuk-link--no-underline")
     end
   end
 
@@ -40,12 +60,7 @@ module Candidates::SchoolHelper
     if !school.has_virtual_placements?
       placement_date_inschool_tag
     elsif school.has_inschool_placements?
-      safe_join [
-        "Both",
-        placement_date_virtual_tag,
-        "and",
-        placement_date_inschool_tag
-      ], " "
+      tag.p("Both In school and Virtual")
     else
       placement_date_virtual_tag
     end

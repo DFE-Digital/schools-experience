@@ -13,6 +13,14 @@ describe TextFormattingHelper, type: :helper do
       let(:content) { "<strong>hello</strong> <em>world</em>" }
       it { is_expected.to eql "<p>hello world</p>" }
     end
+
+    context "with options" do
+      let(:content) { "hello world" }
+
+      subject { safe_format(content, wrapper_tag: "span") }
+
+      it { is_expected.to eq("<span>hello world</span>") }
+    end
   end
 
   describe '#conditional_format' do

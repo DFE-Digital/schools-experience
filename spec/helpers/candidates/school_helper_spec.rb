@@ -24,6 +24,38 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     end
   end
 
+  describe ".contents_list_item" do
+    subject(:parsed) { Nokogiri.parse(contents_list_item("Name", "#link")) }
+
+    it { is_expected.to have_css("li.gem-c-contents-list__list-item.gem-c-contents-list__list-item--dashed") }
+    it { is_expected.to have_css("li a.gem-c-contents-list__link.govuk-link--no-underline", text: "Name") }
+    it { expect(parsed.css("a").attribute("href").value).to eq("#link") }
+  end
+
+  describe ".format_school_subjects_list" do
+    let(:school) { create(:bookings_school, subjects: subjects) }
+
+    subject { format_school_subjects_list(school) }
+
+    context "when there are no subjects" do
+      let(:subjects) { [] }
+
+      it { is_expected.to be_nil }
+    end
+
+    context "when there are subjects" do
+      let(:subjects) do
+        [
+          create(:bookings_subject, name: "First"),
+          create(:bookings_subject, name: "Second"),
+        ]
+      end
+
+      it { is_expected.to be_html_safe }
+      it { is_expected.to eq("<ul class=\"govuk-list govuk-list--bullet\"><li>First</li><li>Second</li></ul>") }
+    end
+  end
+
   context '.format_school_subjects' do
     let(:school) { create(:bookings_school) }
     let(:output) { format_school_subjects(school) }
@@ -99,6 +131,22 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     it 'should turn them into a list' do
       expect(parsed.css('ul.govuk-list > li').map(&:text)).to eql(@school.phases.map(&:name))
     end
+  end
+
+  describe ".format_school_phases_compact" do
+    before do
+      @school = OpenStruct.new(
+        phases: [
+          OpenStruct.new(id: 1, name: "First"),
+          OpenStruct.new(id: 2, name: "Second"),
+          OpenStruct.new(id: 3, name: "Third")
+        ]
+      )
+    end
+
+    subject { format_school_phases_compact(@school) }
+
+    it { is_expected.to eq("First, Second, Third") }
   end
 
   context '.describe_current_search' do
@@ -275,15 +323,15 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
     context "for school with virtual placements" do
       let(:school) { create(:bookings_placement_date, virtual: true).bookings_school }
 
-      it { is_expected.to have_css ".govuk-tag", text: "Virtual" }
-      it { is_expected.not_to have_css ".govuk-tag", text: "In school" }
+      it { is_expected.to have_css "p", text: "Virtual" }
+      it { is_expected.not_to have_css "p", text: "In school" }
     end
 
     context "for school with inschool placements" do
       let(:school) { create(:bookings_placement_date, virtual: false).bookings_school }
 
-      it { is_expected.not_to have_css ".govuk-tag", text: "Virtual" }
-      it { is_expected.to have_css ".govuk-tag", text: "In school" }
+      it { is_expected.not_to have_css "p", text: "Virtual" }
+      it { is_expected.to have_css "p", text: "In school" }
     end
 
     context "for school with both virtual and inschool placements" do
@@ -293,8 +341,7 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
         end
       end
 
-      it { is_expected.to have_css ".govuk-tag", text: "Virtual" }
-      it { is_expected.to have_css ".govuk-tag", text: "In school" }
+      it { is_expected.to have_css "p", text: "Both In school and Virtual" }
     end
   end
 end
