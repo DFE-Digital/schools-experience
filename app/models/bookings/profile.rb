@@ -102,6 +102,10 @@ class Bookings::Profile < ApplicationRecord
     dbs_policy_conditions.nil?
   end
 
+  def has_fees?
+    administration_fee_assigned || dbs_fee_assigned || other_fee_assigned
+  end
+
 private
 
   def at_least_one_phase

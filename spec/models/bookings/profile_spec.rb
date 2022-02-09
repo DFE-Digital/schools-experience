@@ -445,5 +445,19 @@ RSpec.describe Bookings::Profile, type: :model do
         it { is_expected.to allow_value(nil).for :has_access_needs_policy }
       end
     end
+
+    describe "#has_fees?" do
+      context "when there are fees" do
+        subject { build(:bookings_profile, :with_admin_fee) }
+
+        it { is_expected.to be_has_fees }
+      end
+
+      context "when there are not any fees" do
+        subject { build(:bookings_profile) }
+
+        it { is_expected.not_to be_has_fees }
+      end
+    end
   end
 end
