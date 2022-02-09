@@ -165,7 +165,9 @@
   form {
     display: flex;
     flex-direction: column;
-    #distance-field {
+
+    input,
+    select {
       min-width: 12em;
       width: 100%;
     }
@@ -177,7 +179,7 @@
         margin-bottom: 0em !important;
       }
 
-      #location-field, .govuk-button {
+      .govuk-button {
         margin-top: 1.5em;
       }
     }

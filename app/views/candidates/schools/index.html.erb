@@ -7,11 +7,17 @@
   </div>
 </div>
 
-<div class="govuk-grid-row" data-controller="search" data-search-results-id-value="search-results" data-search-form-id-value="search-form">
+<div class="govuk-grid-row" data-controller="search autocomplete" data-autocomplete-target="wrapper" data-autocomplete-api-key-value="<%= Rails.application.config.x.google_maps_key %>"
+  data-search-results-id-value="search-results" data-search-form-id-value="search-form">
   <section id="search-bar" class="govuk-grid-column-full">
     <%= form_for @search, as: '', url: candidates_schools_path, method: :get do |f| %>
-      <%= f.govuk_text_field :location, label: { text: "School location", class: "govuk-visually-hidden" }, width: 'full', placeholder: 'Location or postcode' %>
+      <%= f.govuk_text_field :location, width: 'full', label: { text: t('helpers.label.location') },
+                             data: { "autocomplete-target": "nonJsInput" }%>
 
+      <div class="govuk-form-group">
+        <label for="location-field" data-autocomplete-target="autocompleteInputLabel" class="govuk-label govuk-visually-hidden"><%= t('helpers.label.location_short') %></label>
+        <div id="location-autocomplete" data-autocomplete-target="autocompleteWrapper"></div>
+      </div>
       <%= f.govuk_select :distance, label: { text: 'Search radius' } do
         options_from_collection_for_select(Candidates::SchoolSearch.distances, :first, :last, params[:distance])
       end unless f.object.whitelisted_urns?

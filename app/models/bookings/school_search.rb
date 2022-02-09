@@ -148,8 +148,7 @@ private
 
     raise InvalidGeocoderResultError unless valid_geocoder_result?(result)
 
-    # this better work
-    @location_name = result.try(:name) || result.address_components.first.fetch('long_name', location)
+    @location_name = result.try(:name)
 
     @country = GeocodingResponseCountry.new(result)
 

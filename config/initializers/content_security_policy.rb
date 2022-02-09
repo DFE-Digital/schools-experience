@@ -36,13 +36,18 @@ Rails.application.config.content_security_policy do |policy|
   policy.default_src :self
 
   policy.base_uri :self
-  policy.connect_src :self, "https://dc.services.visualstudio.com", "https://www.google-analytics.com", *connect_src
+  policy.connect_src :self,
+    "https://dc.services.visualstudio.com",
+    "https://www.google-analytics.com",
+    "https://maps.googleapis.com",
+    *connect_src
   policy.frame_src :self, "https://www.googletagmanager.com/" # GTM fallback
   policy.img_src :self, "https://www.google-analytics.com"
   policy.object_src :none
   policy.script_src :self,
     "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
+    "https://maps.googleapis.com",
     "https://az416426.vo.msecnd.net", # needed for App Insights
     "https://code.jquery.com/jquery-3.2.1.slim.min.js", # needed for Flipper UI
     "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", # needed for Flipper UI
