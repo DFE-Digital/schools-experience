@@ -1,3 +1,10 @@
+---
+title: Automatic Migrations 
+nav_order: 20
+parent: DevOps
+layout: page
+---
+
 ## Automatic Migrations
 The endpoint has been written for the Dockerfile. This has three parameters
 

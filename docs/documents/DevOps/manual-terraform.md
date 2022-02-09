@@ -1,3 +1,11 @@
+---
+title: Manual Deployments
+nav_order: 20
+parent: DevOps
+layout: page
+---
+
+
 # Manual Deployment
 
 These are instructions on how to manually deploy a Cloud Foundry application to **Development** using the terraform cli.
