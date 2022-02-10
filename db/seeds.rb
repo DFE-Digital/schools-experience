@@ -5,7 +5,7 @@ end
 
 # Phases
 YAML.load_file(Rails.root.join('db', 'data', 'phases.yml')).each do |edubase_id, name|
-  Bookings::Phase.create(name: name, edubase_id: edubase_id)
+  Bookings::Phase.create(name: name, edubase_id: edubase_id, supports_subjects: name != "Primary (4 to 11)")
 end
 
 # School types
