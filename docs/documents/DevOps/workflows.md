@@ -26,7 +26,7 @@ This is the heart of the deployment system, it has a number of phases
 4. **Cucumber Tests** - Various application specific [Cucumber](https://cucumber.io/) tests are executed.
 5. **Sonar Cloud** - The [Sonarqube](https://www.sonarqube.org/) scanner is executed and the results passed to the [Sonarcloud](https://sonarcloud.io/) quality gateway
 6. **Deployments**
-	7. **Review** - When a PR is created a review is required, and this deployment brings up the specific version of the application so it can be checked out by the reviewer. 
+	1. **Review** - When a PR is created a review is required, and this deployment brings up the specific version of the application so it can be checked out by the reviewer. 
 	7. **Development** - When the review is accepted and merged the application is first delivered to the Development area. This is to ensure any code that impacts the delivery workflow does not bring down the system.
 	8. **Quality Assurance** - Also known as the staging area, this is a near live test, ensuring all the components hang together, so there is a high degree of confidence the Production deployment will work.
 	9. **Production** - The final deployment to the live system   
