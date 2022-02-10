@@ -24,7 +24,6 @@ Docker:
   - Dockerfile 
   - docker-run.sh
 
-
 Assets:
   - public/assets/**/*
 
@@ -33,3 +32,7 @@ Content:
 
 Config:
   - config/**/*
+
+Documentation:
+  - doc/**/*
+  - docs/**/*

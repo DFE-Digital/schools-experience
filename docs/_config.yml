@@ -1,0 +1,15 @@
+plugins:
+  - jekyll-feed
+markdown: kramdown
+permalink: pretty
+
+title: DfE School Experience
+author: Steven Fawcett
+email: steve.fawcett@digital.education.gov.uk
+
+heading_anchors: true
+search_enabled: false  
+
+remote_theme: pmarsceill/just-the-docs
+
+footer_content: Department Of Education
