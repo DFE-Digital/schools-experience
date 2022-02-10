@@ -12,13 +12,15 @@
   School profile preview
 </h1>
 
-<div class="govuk-warning-text">
-  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-  <strong class="govuk-warning-text__text">
-    <span class="govuk-warning-text__assistive">Warning</span>
-    <%= @presenter.warning %>
-  </strong>
-</div>
+<% if @presenter.warning %>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-warning-text__assistive">Warning</span>
+      <%= @presenter.warning %>
+    </strong>
+  </div>
+<% end %>
 
 <p>
   This is how your school will appear to candidates:
