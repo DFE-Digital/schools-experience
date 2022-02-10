@@ -13,13 +13,15 @@
       <%= @profile.page_heading %>
     </h1>
 
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-        <%= @profile.publish_warning %>
-      </strong>
-    </div>
+    <% if @profile.publish_warning %>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          <%= @profile.publish_warning %>
+        </strong>
+      </div>
+    <% end %>
 
     <%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
       <%= f.govuk_error_summary %>

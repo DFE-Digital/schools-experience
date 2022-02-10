@@ -450,7 +450,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns "Publish changes"' do
-        expect(subject.publish_warning).to eq "To save your changes, select 'Publish changes' at the bottom of the page."
+        expect(subject.publish_warning).to be_nil
       end
     end
 
