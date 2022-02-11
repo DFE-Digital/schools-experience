@@ -123,6 +123,28 @@ changed. This is retrieved from the following environment variable.
 
 `DEPLOYMENT_ID` - identifier for the current deployment.
 
+## Feature flags
+
+We store feature flags in a JSON config (`./feature-flags.json`), so that flags are visible across all environments.
+
+To add a feature flag, add an object to the `features` array in the following format. The `name` key is used to enable the feature (e.g., `Feature.enabled? :sms`)
+
+```json
+{
+  "features": [
+    {
+      "name": "sms", 
+      "description": "Sends reminder text messages",
+      "enabled_for": {
+        "environments": ["production", "staging"]
+      }
+    } 
+  ]
+}
+```
+
+This config is read into a dashboard available at `/feature_flags`.
+
 ## Testing
 
 If you have plenty of cpu cores, it faster to run tests with parallel_tests
@@ -131,10 +153,6 @@ If you have plenty of cpu cores, it faster to run tests with parallel_tests
 2. Copy the schema over from the main database - `bundle exec rake parallel:prepare`
 3. Run RSpecs - `bundle exec rake parallel:spec`
 3. Run Cucumber features - `bundle exec rake parallel:features`
-
-## Feature switches
-
-We are using [Flipper](https://github.com/jnunemaker/flipper) to manage feature switches within the application. Feature switches are persisted to Redis and you can manage the active feature switches using Flipper-UI, which is mounted at `/flipper` behind basic auth.
 
 ### Common issues running tests
 

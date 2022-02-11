@@ -12,12 +12,6 @@ Rails.application.configure do
   # default to true but allow overriding in CI
   config.force_ssl = ENV['SKIP_FORCE_SSL'].blank?
 
-  config.x.phase = 10_000
-  config.x.features = %i[
-    subject_specific_dates
-    capped_bookings
-    reminders
-  ]
   config.x.candidates.disable_applications = false
   config.x.candidates.alert_notification = nil
   config.x.google_maps_key = nil

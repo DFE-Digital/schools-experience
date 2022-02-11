@@ -89,11 +89,6 @@ Rails.application.configure do
     Bullet.unused_eager_loading_enable = false
   end
 
-  config.x.phase = Integer(ENV.fetch('PHASE', 10_000))
-  config.x.features = %i[
-    subject_specific_dates
-    capped_bookings
-  ]
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
   config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials[:google_maps_key]
 

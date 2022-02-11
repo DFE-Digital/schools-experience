@@ -184,14 +184,14 @@ describe NotifyDespatchers::Sms do
   end
   let(:notification) { subject.new to: recipients, name: 'Test User' }
 
-  before { allow(Feature).to receive(:active?).with(:sms) { true } }
+  before { allow(Feature).to receive(:enabled?).with(:sms) { true } }
 
   subject { StubSmsNotification }
 
   include_examples "notify_client"
 
   context "when in non-production environments" do
-    before { allow(Feature).to receive(:active?).with(:sms) { false } }
+    before { allow(Feature).to receive(:enabled?).with(:sms) { false } }
 
     it "does not despatch SMS" do
       perform_enqueued_jobs do

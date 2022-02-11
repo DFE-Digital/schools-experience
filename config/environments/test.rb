@@ -157,8 +157,6 @@ Rails.application.configure do
   # Don't actually attempt to delivery emails during tests
   config.x.notify_client = 'NotifyFakeClient'
 
-  config.x.default_phase = 4
-  config.x.phase = 10_000
   config.x.candidates.deactivate_applications = false
   config.x.candidates.disable_applications = false
   config.x.candidates.alert_notification = nil
@@ -180,12 +178,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_add_service_url = nil
 
   config.x.gitis.privacy_consent_id = '10'
-
-  config.x.features = %i[
-    subject_specific_dates
-    capped_bookings
-    reminders
-  ]
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 

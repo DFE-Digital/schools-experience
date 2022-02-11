@@ -29,9 +29,3 @@
 
 
 <%= link_to "Close placement date", schools_placement_date_close_path(@placement_date.id) if @placement_date.available? %>
-
-<% unless Feature.instance.active? :subject_specific_dates %>
-<p class="govuk-inset-text">
-  You'll be able to add subject-specific dates soon.
-</p>
-<% end %>

@@ -131,8 +131,6 @@ Rails.application.configure do
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
-  config.x.default_phase = 4
-  config.x.phase = Integer(ENV['PHASE'].presence || config.x.default_phase)
   config.x.candidates.deactivate_applications = ENV['DEACTIVATE_CANDIDATES'].to_s.presence || false
   config.x.google_maps_key = ENV['GOOGLE_MAPS_KEY'].presence || Rails.application.credentials[:google_maps_key]
 
@@ -158,14 +156,6 @@ Rails.application.configure do
   config.x.dfe_sign_in_add_service_url = "https://services.signin.education.gov.uk/approvals/select-organisation?action=add-service"
 
   config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
-
-  config.x.features = %i[
-    subject_specific_dates
-    reminders
-    sms
-  ]
-
-  config.x.flipper_password = ENV['FLIPPER_PASSWORD']
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
 
