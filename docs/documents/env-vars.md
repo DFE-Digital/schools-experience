@@ -76,10 +76,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `DEACTIVATE_CANDIDATES` - Deactivates candidate applications, including searching
 
-`FEATURE_FLAGS` - Comma separated list of features to enable, appended to features listed in environment file
-
-`PHASE` - Earlier iteration of feature flagging, currently used to disable candidate dashboard access.
-
 ## Database configuration
 
 `DATABASE_URL` - normal rails variable
@@ -110,7 +106,3 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 ## Deployment tools
 
 `DEPLOYMENT_ID` - String to be available at `/healthcheck` - used to check the deployed version
-
-## Features
-
-`FLIPPER_PASSWORD` - password to access the Flipper UI

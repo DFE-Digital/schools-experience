@@ -50,7 +50,7 @@ describe Schools::DFESignInAPI::Client do
   end
 
   describe '.role_check_enabled?' do
-    before { allow(Feature).to receive(:active?).with(:rolecheck) { true } }
+    before { allow(Feature).to receive(:enabled?).with(:rolecheck) { true } }
 
     context 'when the client is disabled' do
       before { allow(subject).to receive(:enabled?).and_return(false) }
@@ -67,7 +67,7 @@ describe Schools::DFESignInAPI::Client do
       before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_role_check_enabled).and_return(true) }
 
       context 'when role check is disabled' do
-        before { allow(Feature).to receive(:active?).with(:rolecheck) { false } }
+        before { allow(Feature).to receive(:enabled?).with(:rolecheck) { false } }
 
         context 'when the DfE Sign-in role and service environment variables are absent' do
           before { allow(ENV).to receive(:fetch).and_return(nil) }

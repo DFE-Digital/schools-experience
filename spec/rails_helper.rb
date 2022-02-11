@@ -74,8 +74,9 @@ RSpec.configure do |config|
       Geocoder::Result::Test.new(name: 'Bury', latitude: 53.4794892, longitude: -2.2451148, address_components: [long_name: "England"])
     ])
 
-    # Clean up memoized subjects so they can be mocked per test
+    # Clean up memoized values so they can be mocked per test
     Bookings::Gitis::SubjectFetcher.instance_variable_set(:@teaching_subjects, nil)
+    Feature.instance_variable_set(:@config, nil)
   end
 
   config.before :each do

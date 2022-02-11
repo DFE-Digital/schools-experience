@@ -12,7 +12,7 @@ shared_examples_for "sms template" do |template_id, personalisation|
   let(:to) { "07777777777" }
   let(:template_folder) { "notify_sms" }
 
-  before { allow(Feature).to receive(:active?).with(:sms) { true } }
+  before { allow(Feature).to receive(:enabled?).with(:sms) { true } }
 
   include_examples "notify template", template_id, personalisation
 end

@@ -25,7 +25,7 @@ module Schools
       delegate :enabled?, to: :class
 
       def self.role_check_enabled?
-        enabled? && Feature.active?(:rolecheck) &&
+        enabled? && Feature.enabled?(:rolecheck) &&
           [
             ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID', nil),
             ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID', nil)

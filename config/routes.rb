@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/deployment', to: 'healthchecks#deployment', as: :deployment_json
   get '/healthchecks/api.txt', to: 'healthchecks#api_health', as: :api_health
   get '/whitelist', to: 'healthchecks#urn_whitelist', as: :urn_whitelist
+  get '/feature_flags', to: 'feature_flags#index'
 
   get "/404", to: "errors#not_found", via: :all
   get "/422", to: "errors#unprocessable_entity", via: :all
@@ -19,16 +20,6 @@ Rails.application.routes.draw do
   else
     root to: 'candidates/home#index'
   end
-
-  flipper_app = Flipper::UI.app(Flipper.instance) do |builder|
-    builder.use Rack::Auth::Basic do |_, password|
-      expected_password = Rails.application.config.x.flipper_password
-      correct_password = expected_password.present? && password == expected_password
-
-      Rails.env.development? || correct_password
-    end
-  end
-  mount flipper_app, at: "/flipper"
 
   get "/pages/:page", to: "pages#show"
 
@@ -109,10 +100,8 @@ Rails.application.routes.draw do
     resource :availability_preference, only: %i[edit update]
     resource :availability_info, only: %i[edit update], controller: 'availability_info'
     resources :placement_dates do
-      if Feature.instance.active? :subject_specific_dates
-        resource :configuration, only: %i[new create], controller: 'placement_dates/configurations'
-        resource :subject_selection, only: %i[new create], controller: 'placement_dates/subject_selections'
-      end
+      resource :configuration, only: %i[new create], controller: 'placement_dates/configurations'
+      resource :subject_selection, only: %i[new create], controller: 'placement_dates/subject_selections'
       post "/close", action: "close"
       get "/close", action: "close_confirmation"
     end
@@ -195,7 +184,7 @@ Rails.application.routes.draw do
       resource :feedback, only: %i[new create show], controller: "booking_feedbacks"
     end
 
-    if Rails.application.config.x.phase >= 5
+    if Feature.enabled?(:candidates_dashboard)
       get 'signin', to: 'sessions#new'
       post 'signin', to: 'sessions#create'
       put 'signin', to: 'sessions#update', as: :signin_code

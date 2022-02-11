@@ -1,0 +1,28 @@
+<table class="govuk-table feature-table">
+  <thead class="govuk-table__head">
+  <tr class="govuk-table__row">
+    <th class="govuk-table__header" scope="col">Name</th>
+    <th class="govuk-table__header" scope="col">Description</th>
+    <% @environments.each do |environment| %>
+      <th class="govuk-table__header centered" scope="col"><%= environment %></th>
+    <% end %>
+  </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+  <% @features.each do |feature| %>
+    <tr class="booking govuk-table__row">
+      <td class="name govuk-table__cell">
+        <%= feature.name %>
+      </td>
+      <td class="date govuk-table__cell">
+        <%= feature.description %>
+      </td>
+      <% @environments.each do |environment| %>
+        <td class="subject govuk-table__cell environment">
+          <div class="centered <%= feature.enabled_for?(environment) ? "check" : "cross" %>"></div>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -10,7 +10,7 @@ describe Bookings::Reminder, type: :request do
 
   subject { Bookings::Reminder.new(booking, time_until_booking, time_until_booking_descriptive) }
 
-  before { allow(Feature).to receive(:active?).with(:sms) { true } }
+  before { allow(Feature).to receive(:enabled?).with(:sms) { true } }
 
   describe '#deliver' do
     it "queues an email and sms per provided booking" do

@@ -1,0 +1,17 @@
+.feature-table {
+  .centered {
+    text-align: center;
+  }
+
+  .cross:before {
+    content: "\2717";
+    color: red;
+  }
+
+  .check:before {
+    content: "\2714";
+    color: green;
+  }
+}
+
+

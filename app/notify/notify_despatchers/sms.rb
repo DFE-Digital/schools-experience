@@ -1,6 +1,6 @@
 class NotifyDespatchers::Sms < NotifyDespatchers::Base
   def despatch_later!
-    return unless Feature.active? :sms
+    return unless Feature.enabled? :sms
 
     validate_personalisation!
 

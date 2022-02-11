@@ -40,9 +40,9 @@ RSpec.describe "candidates/home/index.html.erb", type: :view do
   describe 'Used the service before?' do
     let(:heading_text) { 'Used the service before?' }
 
-    context 'before phase 5' do
+    context 'when disabled' do
       before do
-        allow(Feature.instance).to receive(:current_phase).and_return(4)
+        allow(Feature).to receive(:enabled?).with(:candidates_dashboard) { false }
       end
 
       before { render }
@@ -53,7 +53,11 @@ RSpec.describe "candidates/home/index.html.erb", type: :view do
       end
     end
 
-    context 'phase 5 and above' do
+    context 'when enabled' do
+      before do
+        allow(Feature).to receive(:enabled?).with(:candidates_dashboard) { true }
+      end
+
       before { render }
 
       specify 'should allow the candidate to sign in' do

@@ -1,0 +1,39 @@
+{
+  "features": [
+    {
+      "name": "sms",
+      "description": "Sends reminder text messages",
+      "enabled_for": {
+        "environments": ["staging", "production"]
+      }
+    },
+    {
+      "name": "capped_bookings",
+      "description": "Allows schools to provide a maximum number of bookings per date",
+      "enabled_for": {
+        "environments": ["development", "test", "servertest"]
+      }
+    },
+    {
+      "name": "reminders",
+      "description": "Sends reminder emails and text messages",
+      "enabled_for": {
+        "environments": ["test", "servertest", "staging", "production"]
+      }
+    },
+    {
+      "name": "rolecheck",
+      "description": "Checks for School Experience administrator role",
+      "enabled_for": {
+        "environments": []
+      }
+    },
+    {
+      "name": "candidates_dashboard",
+      "description": "Allows candidates to sign in to a dashboard",
+      "enabled_for": {
+        "environments": ["development", "test", "servertest"]
+      }
+    }
+  ]
+}

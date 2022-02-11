@@ -1,66 +1,50 @@
 class Feature
-  include Singleton
+  class FeatureNotInConfigError < StandardError; end
+  class IncorrectEnvironmentError < StandardError; end
+
+  attr_reader :name, :description, :environments
 
   class << self
-    delegate :only_phase, :from_phase, :until_phase, to: :instance
-    delegate :only, :from, :until, to: :instance
-    delegate :active?, to: :instance
+    def enabled?(feature_name)
+      feature = all.find { |f| f.name == feature_name.to_s }
+
+      raise Feature::FeatureNotInConfigError if feature.nil?
+
+      feature.enabled_for?(Rails.env)
+    end
+
+    def all
+      config[:features].map do |f|
+        Feature.new(f[:name], f[:description], f[:enabled_for][:environments])
+      end
+    end
+
+    def all_environments
+      Dir.glob("./config/environments/*.rb").map { |filename| File.basename(filename, ".rb") }
+    end
+
+  private
+
+    def config
+      @config ||= JSON.parse(File.read(Rails.root.join('feature-flags.json'))).with_indifferent_access
+    end
   end
 
-  def only_phase(phase_to_test)
-    return false unless Integer(phase_to_test) == current_phase
+  def initialize(name, description, environments)
+    @name = name
+    @description = description
+    @environments = environments
 
-    block_given? ? yield : true
+    validate_environments
   end
-  alias_method :only, :only_phase
 
-  def until_phase(phase_to_test)
-    return false unless Integer(phase_to_test) >= current_phase
-
-    block_given? ? yield : true
-  end
-  alias_method :until, :until_phase
-
-  def from_phase(phase_to_test)
-    return false unless Integer(phase_to_test) <= current_phase
-
-    block_given? ? yield : true
-  end
-  alias_method :from, :from_phase
-
-  def current_phase
-    @current_phase ||= Integer(Rails.application.config.x.phase)
-  end
-  alias_method :current, :current_phase
-
-  def current_phase=(phase)
-    @current_phase = phase.nil? ? nil : Integer(phase)
-  end
-  alias_method :current=, :current_phase=
-
-  def active?(feature_key)
-    all_features.include? feature_key.to_sym
+  def enabled_for?(environment)
+    environments.include?(environment)
   end
 
 private
 
-  def env_features
-    tokenised_env_features.compact.map(&:to_sym)
-  end
-
-  def config_features
-    Array.wrap(Rails.application.config.x.features).compact.map(&:to_sym)
-  end
-
-  def all_features
-    use_env_var? ? config_features + env_features : config_features
-  end
-
-  def use_env_var?
-    !Rails.env.test? && !Rails.env.servertest?
-  end
-
-  def tokenised_env_features
-    ENV['FEATURE_FLAGS'].to_s.strip.split(%r{[\s,]+})
+  def validate_environments
+    raise IncorrectEnvironmentError if environments&.any? { |env| !env.in?(self.class.all_environments) }
   end
 end

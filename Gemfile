@@ -69,9 +69,6 @@ gem 'faraday'
 gem 'activerecord-import'
 gem 'validates_timeliness', '>= 5.0.0.beta1'
 
-gem 'flipper'
-gem 'flipper-redis'
-gem 'flipper-ui', '>= 0.23.0'
 gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
 # Ignore cloudfront IPs when getting customer IP address
@@ -135,7 +132,6 @@ group :test do
   gem 'shoulda-matchers', '~> 5.0'
 
   gem 'capybara-screenshot'
-  gem 'flipper-active_support_cache_store'
   gem 'simplecov', require: false
   gem 'webmock'
 end

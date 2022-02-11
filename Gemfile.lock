@@ -233,19 +233,6 @@ GEM
       faraday (>= 0.9, < 2.0)
       stoplight (~> 2.1)
     ffi (1.15.5)
-    flipper (0.23.1)
-    flipper-active_support_cache_store (0.23.0)
-      activesupport (>= 4.2, < 8)
-      flipper (~> 0.23.0)
-    flipper-redis (0.23.0)
-      flipper (~> 0.23.0)
-      redis (>= 2.2, < 5)
-    flipper-ui (0.23.1)
-      erubi (>= 1.0.0, < 2.0.0)
-      flipper (~> 0.23.1)
-      rack (>= 1.4, < 3)
-      rack-protection (>= 1.5.3, < 2.2.0)
-      sanitize (< 7)
     foreman (0.87.2)
     fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
@@ -477,9 +464,6 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sanitize (6.0.0)
-      crass (~> 1.0.2)
-      nokogiri (>= 1.12.0)
     selenium-webdriver (4.1.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -604,10 +588,6 @@ DEPENDENCIES
   dotenv-rails (>= 2.7.6)
   factory_bot_rails (>= 6.2.0)
   faraday
-  flipper
-  flipper-active_support_cache_store
-  flipper-redis
-  flipper-ui (>= 0.23.0)
   foreman
   geocoder
   get_into_teaching_api_client_faraday!

@@ -11,7 +11,7 @@
       View and request more school experience
     </h2>
     <p>
-      <% if Rails.application.config.x.phase >= 5  %>
+      <% if Feature.enabled?(:candidates_dashboard)  %>
         <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
       <% else %>
         <%= link_to 'Find more school experience', candidates_root_path %>
