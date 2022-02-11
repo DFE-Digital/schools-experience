@@ -21,16 +21,6 @@ Rails.application.routes.draw do
     root to: 'candidates/home#index'
   end
 
-  flipper_app = Flipper::UI.app(Flipper.instance) do |builder|
-    builder.use Rack::Auth::Basic do |_, password|
-      expected_password = Rails.application.config.x.flipper_password
-      correct_password = expected_password.present? && password == expected_password
-
-      Rails.env.development? || correct_password
-    end
-  end
-  mount flipper_app, at: "/flipper"
-
   get "/pages/:page", to: "pages#show"
 
   get '/privacy_policy', to: 'pages#privacy_policy'
@@ -110,10 +100,8 @@ Rails.application.routes.draw do
     resource :availability_preference, only: %i[edit update]
     resource :availability_info, only: %i[edit update], controller: 'availability_info'
     resources :placement_dates do
-      if Feature.instance.active? :subject_specific_dates
-        resource :configuration, only: %i[new create], controller: 'placement_dates/configurations'
-        resource :subject_selection, only: %i[new create], controller: 'placement_dates/subject_selections'
-      end
+      resource :configuration, only: %i[new create], controller: 'placement_dates/configurations'
+      resource :subject_selection, only: %i[new create], controller: 'placement_dates/subject_selections'
       post "/close", action: "close"
       get "/close", action: "close_confirmation"
     end
@@ -196,7 +184,7 @@ Rails.application.routes.draw do
       resource :feedback, only: %i[new create show], controller: "booking_feedbacks"
     end
 
-    if Rails.application.config.x.phase >= 5
+    if Feature.enabled?(:candidates_dashboard)
       get 'signin', to: 'sessions#new'
       post 'signin', to: 'sessions#create'
       put 'signin', to: 'sessions#update', as: :signin_code
