@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/deployment', to: 'healthchecks#deployment', as: :deployment_json
   get '/healthchecks/api.txt', to: 'healthchecks#api_health', as: :api_health
   get '/whitelist', to: 'healthchecks#urn_whitelist', as: :urn_whitelist
+  get '/feature_flags', to: 'feature_flags#index'
 
   get "/404", to: "errors#not_found", via: :all
   get "/422", to: "errors#unprocessable_entity", via: :all
