@@ -13,7 +13,7 @@ class AddExperienceTypeToRequestsAndBookingsTables < ActiveRecord::Migration[6.1
 
   def migrate_data
     Bookings::PlacementRequest.find_each(batch_size: 100) do |pr|
-      experience_type = pr.resolve_experience_type.downcase.delete(' ')
+      experience_type = pr.resolve_experience_type
 
       pr.update_attribute('experience_type', experience_type)
     end
