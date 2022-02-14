@@ -399,16 +399,16 @@ describe Bookings::PlacementDate, type: :model do
     context "when it's a Virtual date" do
       subject { create(:bookings_placement_date, :virtual) }
 
-      it "returns 'Virtual'" do
-        expect(subject.experience_type).to eq('Virtual')
+      it "returns 'virtual'" do
+        expect(subject.experience_type).to eq('virtual')
       end
     end
 
     context "when it's an Inschool date" do
       subject { create(:bookings_placement_date) }
 
-      it "returns 'In school'" do
-        expect(subject.experience_type).to eq('In school')
+      it "returns 'inschool'" do
+        expect(subject.experience_type).to eq('inschool')
       end
     end
   end
