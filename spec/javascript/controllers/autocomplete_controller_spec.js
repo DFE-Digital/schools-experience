@@ -2,23 +2,21 @@ import { Application } from "stimulus";
 import AutocompleteController from "autocomplete_controller.js";
 
 describe("SearchController", () => {
-  beforeEach(async () => {
-    setupGoogleMock();
-
+  beforeAll(() => {
     const application = Application.start();
     application.register("autocomplete", AutocompleteController);
+  });
 
+  beforeEach(() => {
     setBody();
     clearHead();
+
+    setupGoogleMock();
   });
 
   describe("connecting", () => {
-    it("hides then shows the section to reduce content shift", async () => {
+    it("shows the section (after hiding it, to reduce content shift)", () => {
       const wrapper = document.getElementsByTagName("form")[0];
-
-      expect(wrapper.style.visibility).toEqual("hidden");
-
-      await mockGoogleScriptLoading();
 
       expect(wrapper.style.visibility).toEqual("");
     });
@@ -40,35 +38,19 @@ describe("SearchController", () => {
       ).toHaveBeenCalledTimes(1);
     });
 
-    it("applies GOV.UK styling to the autocomplete input", async () => {
-      await mockGoogleScriptLoading();
-
+    it("applies GOV.UK styling to the autocomplete input", () => {
       expect(document.getElementsByTagName("input")[0].classList).toContain(
         "govuk-input"
       );
     });
 
-    it("removes the non-JavaScript input", async () => {
-      expect(
-        document.querySelector('[data-autocomplete-target="nonJsInput"]')
-      ).toBeTruthy();
-
-      await mockGoogleScriptLoading();
-
+    it("removes the non-JavaScript input", () => {
       expect(
         document.querySelector('[data-autocomplete-target="nonJsInput"]')
       ).toBeFalsy();
     });
 
-    it("shows the autocomplete label", async () => {
-      expect(
-        document.querySelector(
-          '[data-autocomplete-target="autocompleteInputLabel"]'
-        ).classList
-      ).toContain("govuk-visually-hidden");
-
-      await mockGoogleScriptLoading();
-
+    it("shows the autocomplete label", () => {
       expect(
         document.querySelector(
           '[data-autocomplete-target="autocompleteInputLabel"]'

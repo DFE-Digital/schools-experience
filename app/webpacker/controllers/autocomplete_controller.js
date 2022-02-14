@@ -19,19 +19,19 @@ export default class extends Controller {
   async connect() {
     this.#setWrapperVisibility(false);
 
-    await this.#loadScript();
-
-    this.#initialiseService();
     this.#initialiseAutoComplete();
     this.#applyGovStyling();
     this.#removeNonJsInput();
     this.#showAutoCompleteLabel();
 
     this.#setWrapperVisibility(true);
+
+    await this.#loadScript();
+    this.#initialiseService();
   }
 
   #findPredictions = (query, populateResults) => {
-    this.#autocompleteService.getPlacePredictions(
+    this.#autocompleteService?.getPlacePredictions(
       {
         input: query,
         sessionToken: this.#sessionToken,
