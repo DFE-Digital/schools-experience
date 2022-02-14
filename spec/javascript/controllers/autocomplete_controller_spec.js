@@ -38,12 +38,6 @@ describe("SearchController", () => {
       ).toHaveBeenCalledTimes(1);
     });
 
-    it("applies GOV.UK styling to the autocomplete input", () => {
-      expect(document.getElementsByTagName("input")[0].classList).toContain(
-        "govuk-input"
-      );
-    });
-
     it("removes the non-JavaScript input", () => {
       expect(
         document.querySelector('[data-autocomplete-target="nonJsInput"]')

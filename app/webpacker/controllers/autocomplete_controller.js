@@ -20,7 +20,6 @@ export default class extends Controller {
     this.#setWrapperVisibility(false);
 
     this.#initialiseAutoComplete();
-    this.#applyGovStyling();
     this.#removeNonJsInput();
     this.#showAutoCompleteLabel();
 
@@ -96,13 +95,5 @@ export default class extends Controller {
     // To reduce any shift as the page loads, hide the section on initialisation (which
     // maintains the space), then show it when loaded.
     this.wrapperTarget.style.visibility = visible ? "" : "hidden";
-  }
-
-  #applyGovStyling() {
-    const autocompleteInput =
-      this.autocompleteWrapperTarget.childNodes[0].getElementsByTagName(
-        "input"
-      )[0];
-    autocompleteInput.classList.add("govuk-input");
   }
 }
