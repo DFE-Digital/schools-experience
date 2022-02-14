@@ -39,6 +39,11 @@ describe Bookings::Booking do
         .of_type(:integer)
         .with_options(default: 1, null: false)
     end
+
+    it do
+      is_expected.to have_db_column(:experience_type)
+        .of_type(:string)
+    end
   end
 
   describe 'Validation' do
@@ -47,6 +52,7 @@ describe Bookings::Booking do
     it { is_expected.to validate_presence_of(:bookings_school) }
     it { is_expected.to validate_presence_of(:duration) }
     it { is_expected.to validate_numericality_of(:duration).is_greater_than 0 }
+    it { is_expected.to validate_presence_of(:experience_type) }
 
     it { is_expected.to validate_presence_of(:contact_name).on(:create) }
     it { is_expected.to validate_presence_of(:contact_number).on(:create) }
@@ -500,6 +506,23 @@ describe Bookings::Booking do
     specify { expect(described_class).to respond_to(:from_placement_request) }
     let(:placement_request) { create(:bookings_placement_request, placement_date: placement_date) }
     subject { described_class.from_placement_request(placement_request) }
+
+    context 'when experience type is vaguely specified' do
+      let(:placement_request) { create(:placement_request, experience_type: 'both') }
+
+      specify 'should not set the experience type' do
+        expect(subject.experience_type).to be_nil
+      end
+    end
+
+    context 'when experience type is clearly specified' do
+      let(:school) { build(:bookings_school, experience_type: 'inschool') }
+      let(:placement_request) { create(:placement_request, :inschool, school: school) }
+
+      specify 'should set the experience type' do
+        expect(subject.experience_type).to eql(placement_request.experience_type)
+      end
+    end
 
     context 'when there is no placement date' do
       let(:placement_request) { create(:bookings_placement_request) }

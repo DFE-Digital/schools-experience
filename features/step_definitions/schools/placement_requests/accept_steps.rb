@@ -23,9 +23,15 @@ Given("there is a new placement request with a future date") do
   @placement_request = FactoryBot.create(:bookings_placement_request, school: @school, placement_date: placement_date)
 end
 
+Given("there is a new in-school placement request with a future date") do
+  @profile = FactoryBot.create(:bookings_profile, school: @school)
+  placement_date = FactoryBot.create(:bookings_placement_date, bookings_school: @school)
+  @placement_request = FactoryBot.create(:placement_request, :inschool, school: @school, placement_date: placement_date)
+end
+
 Given("there is a new virtual placement request with a future date") do
   placement_date = FactoryBot.create(:bookings_placement_date, bookings_school: @school, virtual: true)
-  @placement_request = FactoryBot.create(:bookings_placement_request, school: @school, placement_date: placement_date)
+  @placement_request = FactoryBot.create(:placement_request, :virtual, school: @school, placement_date: placement_date)
 end
 
 Given("there is a new placement request with a past date") do

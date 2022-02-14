@@ -37,7 +37,8 @@ module Schools
             :bookings_subject_id,
             :contact_name,
             :contact_number,
-            :contact_email
+            :contact_email,
+            :experience_type
           )
         end
       end

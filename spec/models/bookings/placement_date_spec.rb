@@ -394,4 +394,22 @@ describe Bookings::PlacementDate, type: :model do
       end
     end
   end
+
+  describe "#experience_type" do
+    context "when it's a Virtual date" do
+      subject { create(:bookings_placement_date, :virtual) }
+
+      it "returns 'Virtual'" do
+        expect(subject.experience_type).to eq('Virtual')
+      end
+    end
+
+    context "when it's an Inschool date" do
+      subject { create(:bookings_placement_date) }
+
+      it "returns 'In school'" do
+        expect(subject.experience_type).to eq('In school')
+      end
+    end
+  end
 end

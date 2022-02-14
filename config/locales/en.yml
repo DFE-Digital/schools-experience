@@ -510,6 +510,8 @@ en:
               invalid: Enter a valid contact telephone number
             candidate_instructions:
               blank: Enter some instructions for the candidate
+            experience_type:
+              blank: Select if it is an In school or Virtual experience
         candidates/booking_feedback:
           attributes:
             gave_realistic_impression:
@@ -694,6 +696,9 @@ en:
         contact_email: Email address
         candidate_instructions: Other instructions
         bookings_subject_id: Subject
+        experience_type_options:
+          inschool: In school
+          virtual: Virtual
       candidates_registrations_contact_information:
         building: "Building and street"
         phone: "UK telephone number"
@@ -1002,6 +1007,7 @@ en:
         change_to_urn: Select your school
       bookings_booking:
         date: Booking date
+        experience_type: Experience type
 
   views:
     pagination:
