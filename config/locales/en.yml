@@ -1003,6 +1003,10 @@ en:
       bookings_booking:
         date: Booking date
 
+    suffix:
+      schools_placement_dates:
+        days_before_the_event: days before the event
+
   views:
     pagination:
       next: Next
