@@ -559,4 +559,24 @@ describe Bookings::Booking do
       end
     end
   end
+
+  describe '#virtual_experience?' do
+    subject { described_class.new(experience_type: experience_type) }
+
+    context 'when experience type is virtual' do
+      let(:experience_type) { 'virtual' }
+
+      it 'returns true' do
+        expect(subject.virtual_experience?).to be true
+      end
+    end
+
+    context 'when experience type is not virtual' do
+      let(:experience_type) { 'inschool' }
+
+      it 'returns false' do
+        expect(subject.virtual_experience?).to be false
+      end
+    end
+  end
 end

@@ -5,7 +5,6 @@ module Schools
         include Acceptance
 
         before_action :set_placement_request_and_fetch_gitis_contact
-        before_action :set_is_virtual_experience
 
         def edit
           @booking = @placement_request.booking
@@ -34,7 +33,7 @@ module Schools
         end
 
         def candidate_booking_notifications(booking)
-          if @is_virtual_experience
+          if @booking.virtual_experience?
             send_virtual_confirmation(booking)
           else
             send_inschool_confirmation(booking)
@@ -46,15 +45,6 @@ module Schools
             dates_requested: booking.date.to_formatted_s(:govuk),
             cancellation_url: candidates_cancel_url(booking.token),
           ).despatch_later!
-        end
-
-        def set_is_virtual_experience
-          @is_virtual_experience =
-            if @placement_request.placement_date
-              @placement_request.placement_date&.virtual?
-            else
-              current_school.experience_type == 'virtual'
-            end
         end
 
         def send_virtual_confirmation(booking)

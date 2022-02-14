@@ -192,5 +192,9 @@ module Bookings
     def editable_date?
       in_future? && !cancelled?
     end
+
+    def virtual_experience?
+      experience_type == 'virtual'
+    end
   end
 end
