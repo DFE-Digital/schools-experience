@@ -19,7 +19,7 @@
     </p>
   </div>
 
-  <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m govuk-!-margin-0' }, suffix_text: t("helpers.suffix.schools_placement_dates.days")  %>
+  <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days")  %>
 
   <%= f.govuk_number_field :start_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
   <%= f.govuk_number_field :end_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
