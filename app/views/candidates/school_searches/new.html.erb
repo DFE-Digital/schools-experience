@@ -21,7 +21,7 @@
         html: { class: 'school-search-form' },
         data: { controller: :autocomplete, "autocomplete-target": "wrapper", "autocomplete-api-key-value": Rails.application.config.x.google_maps_key }) do |f| %>
 
-        <%= f.govuk_text_field :location, required: true, minlength: "2", label: { text: t('helpers.label.location') }, type: "search",
+        <%= f.govuk_text_field :location, label: { text: t('helpers.label.location') }, type: "search",
                                  data: { "autocomplete-target": "nonJsInput" } %>
 
         <label for="location-field" data-autocomplete-target="autocompleteInputLabel" class="govuk-label govuk-visually-hidden"><%= t('helpers.label.location') %></label>

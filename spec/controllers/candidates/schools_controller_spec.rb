@@ -19,43 +19,45 @@ RSpec.describe Candidates::SchoolsController, type: :request do
       }
     end
 
-    before { get candidates_schools_path(query_params) }
+    context "with search params" do
+      before { get candidates_schools_path(query_params) }
 
-    it "assigns params to search model" do
-      expect(assigns(:search).query).to eq('Something')
-      expect(assigns(:search).location).to eq('Manchester')
-      expect(assigns(:search).latitude).to eq('53.481')
-      expect(assigns(:search).longitude).to eq('-2.241')
-      expect(assigns(:search).phases).to eq([1])
-      expect(assigns(:search).subjects).to eq([2, 3])
-      expect(assigns(:search).max_fee).to eq('30')
-      expect(assigns(:search).dbs_policies).to eq([1])
-      expect(assigns(:search).disability_confident).to eq('1')
-      expect(assigns(:search).parking).to eq('1')
+      it "assigns params to search model" do
+        expect(assigns(:search).query).to eq('Something')
+        expect(assigns(:search).location).to eq('Manchester')
+        expect(assigns(:search).latitude).to eq('53.481')
+        expect(assigns(:search).longitude).to eq('-2.241')
+        expect(assigns(:search).phases).to eq([1])
+        expect(assigns(:search).subjects).to eq([2, 3])
+        expect(assigns(:search).max_fee).to eq('30')
+        expect(assigns(:search).dbs_policies).to eq([1])
+        expect(assigns(:search).disability_confident).to eq('1')
+        expect(assigns(:search).parking).to eq('1')
 
-      # note, this search will yield no results so the search radius will
-      # automatically be expanded from 10 to the value at EXPANDED_SEARCH_RADIUS
-      expect(assigns(:search).distance).to eq(Candidates::SchoolsController::EXPANDED_SEARCH_RADIUS)
-    end
-
-    context 'when location and coordinates are blank' do
-      let(:query_params) do
-        {
-          query: 'Something',
-          location: '',
-          latitude: '',
-          longitude: '',
-          distance: '10',
-          phases: %w[1],
-          subjects: %w[2 3],
-          max_fee: '30',
-          order: 'Name',
-          dbs_policies: %w[1]
-        }
+        # note, this search will yield no results so the search radius will
+        # automatically be expanded from 10 to the value at EXPANDED_SEARCH_RADIUS
+        expect(assigns(:search).distance).to eq(Candidates::SchoolsController::EXPANDED_SEARCH_RADIUS)
       end
 
-      it 'redirects to the search page' do
-        expect(subject).to redirect_to(new_candidates_school_search_path)
+      context 'when location and coordinates are blank' do
+        let(:query_params) do
+          {
+            query: 'Something',
+            location: '',
+            latitude: '',
+            longitude: '',
+            distance: '10',
+            phases: %w[1],
+            subjects: %w[2 3],
+            max_fee: '30',
+            order: 'Name',
+            dbs_policies: %w[1]
+          }
+        end
+
+        it 'renders the search page' do
+          expect(subject).to render_template :new
+        end
       end
 
       context 'when coordinates are blank and location is present' do
@@ -76,6 +78,16 @@ RSpec.describe Candidates::SchoolsController, type: :request do
         before { get candidates_schools_path(query_params_with_coordinates) }
 
         specify { expect(response).to have_http_status(:success) }
+      end
+    end
+
+    context "when search is invalid" do
+      before do
+        allow_any_instance_of(Candidates::SchoolSearch).to receive(:valid?).and_return false
+      end
+
+      it "renders the search page" do
+        expect(get(candidates_schools_path(query_params))).to render_template :new
       end
     end
   end
