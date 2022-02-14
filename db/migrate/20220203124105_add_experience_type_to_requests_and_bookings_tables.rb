@@ -15,7 +15,9 @@ class AddExperienceTypeToRequestsAndBookingsTables < ActiveRecord::Migration[6.1
     Bookings::PlacementRequest.find_each(batch_size: 100) do |pr|
       experience_type = pr.resolve_experience_type
 
+      # rubocop:disable Rails/SkipsModelValidations
       pr.update_attribute('experience_type', experience_type)
+      # rubocop:enable Rails/SkipsModelValidations
     end
 
     # Skip the half finished booking records, as the Schools

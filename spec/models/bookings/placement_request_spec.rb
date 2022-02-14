@@ -25,7 +25,7 @@ describe Bookings::PlacementRequest, type: :model do
   describe 'Constants' do
     describe 'EXPERIENCE_TYPES' do
       it 'returns an array of strings' do
-        expect(described_class::EXPERIENCE_TYPES).to eq ['inschool', 'virtual']
+        expect(described_class::EXPERIENCE_TYPES).to eq %w[inschool virtual]
       end
     end
   end
@@ -263,7 +263,7 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       it 'creates the placement request' do
-        expect {subject}.to change { described_class.count }.by 1
+        expect { subject }.to change { described_class.count }.by 1
       end
 
       it 'saves the experience type' do
