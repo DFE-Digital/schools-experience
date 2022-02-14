@@ -400,7 +400,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    redis (4.5.1)
+    redis (4.6.0)
     regexp_parser (2.2.0)
     rexml (3.2.5)
     rgeo (2.3.1)
@@ -611,7 +611,7 @@ DEPENDENCIES
   rails-controller-testing (>= 1.0.5)
   rails-erd
   rails_semantic_logger
-  redis (~> 4.5)
+  redis (~> 4.6)
   rspec-json_expectations (~> 2.2)
   rspec-rails (~> 5.1)
   rspec-sonarqube-formatter
