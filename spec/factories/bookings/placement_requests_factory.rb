@@ -11,7 +11,6 @@ FactoryBot.define do
     has_dbs_check { true }
     availability { "Every second Thursday" }
     association :school, factory: :bookings_school
-    experience_type { "both" }
     urn { 123_456 }
 
     trait(:with_a_fixed_date) do

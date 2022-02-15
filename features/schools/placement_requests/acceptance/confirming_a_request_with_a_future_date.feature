@@ -7,7 +7,7 @@ Feature: Confirming a request with a future date
         Given I am logged in as a DfE user
         And the school has subjects
         And the school has fixed dates
-        And there is a new in-school placement request with a future date
+        And there is a new placement request with a future date
 
     Scenario: Page content: when the school has no prior bookings
         Given I am on the 'confirm booking' page for the placement request
