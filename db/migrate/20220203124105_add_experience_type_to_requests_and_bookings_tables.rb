@@ -20,11 +20,15 @@ class AddExperienceTypeToRequestsAndBookingsTables < ActiveRecord::Migration[6.1
       # rubocop:enable Rails/SkipsModelValidations
     end
 
-    # Skip the half finished booking records, as the Schools
-    # will be asked to choose the experience type for these
-    # ones when completing the acceptance form.
-    Bookings::Booking.where('accepted_at IS NOT NULL').find_each(batch_size: 100) do |b|
-      b.update(experience_type: b.bookings_placement_request.experience_type)
+    # Skip the booking records that can't determine the experience
+    # type. The Schools will be asked to choose one when completing
+    # the acceptance form.
+    Bookings::Booking.find_each(batch_size: 100) do |b|
+      placement_request = b.bookings_placement_request
+
+      unless placement_request.unclear_experience_type?
+        b.update(experience_type: placement_request.experience_type)
+      end
     end
   end
 end
