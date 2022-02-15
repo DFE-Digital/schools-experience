@@ -459,6 +459,7 @@ en:
           attributes:
             location:
               too_short: Must be at least 2 characters
+              blank : Enter a location or postcode
         bookings/school:
           attributes:
             availability_preference_fixed:

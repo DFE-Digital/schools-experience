@@ -24,7 +24,7 @@
                            "autocomplete-api-key-value": Rails.application.config.x.google_maps_key,
                            "autocomplete-error-value": @search.errors[:location].first }) do |f| %>
 
-        <%= f.govuk_text_field :location, label: { text: t('helpers.label.location') }, type: "search",
+        <%= f.govuk_text_field :location, required: true, minlength: "2", label: { text: t('helpers.label.location') }, type: "search",
                                data: { "autocomplete-target": "nonJsInput" } %>
 
         <div class="govuk-form-group" data-autocomplete-target="locationFormGroup">
