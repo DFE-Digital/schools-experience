@@ -15,26 +15,31 @@
     <div id="search-form">
 
       <%= form_for(@search,
-        as: '',
-        url: candidates_schools_path,
-        method: :get,
-        html: { class: 'school-search-form' },
-        data: { controller: :autocomplete, "autocomplete-target": "wrapper", "autocomplete-api-key-value": Rails.application.config.x.google_maps_key }) do |f| %>
+                   as: '',
+                   url: candidates_schools_path,
+                   method: :get,
+                   html: { class: 'school-search-form' },
+                   data: { controller: :autocomplete,
+                           "autocomplete-target": "wrapper",
+                           "autocomplete-api-key-value": Rails.application.config.x.google_maps_key,
+                           "autocomplete-error-value": @search.errors[:location].first }) do |f| %>
 
         <%= f.govuk_text_field :location, label: { text: t('helpers.label.location') }, type: "search",
-                                 data: { "autocomplete-target": "nonJsInput" } %>
+                               data: { "autocomplete-target": "nonJsInput" } %>
 
-        <label for="location-field" data-autocomplete-target="autocompleteInputLabel" class="govuk-label govuk-visually-hidden"><%= t('helpers.label.location') %></label>
-        <div id="location-autocomplete" data-autocomplete-target="autocompleteWrapper" class="govuk-body"></div>
+        <div class="govuk-form-group" data-autocomplete-target="locationFormGroup">
+          <label for="location-field" data-autocomplete-target="autocompleteInputLabel" class="govuk-label govuk-visually-hidden"><%= t('helpers.label.location') %></label>
+          <div id="location-autocomplete" data-autocomplete-target="autocompleteWrapper" class="govuk-body"></div>
+        </div>
 
-          <%= f.govuk_collection_select :distance,
-                Candidates::SchoolSearch.distances, :first, :last, label: { text: t('helpers.label.distance')  } unless f.object.whitelisted_urns? %>
+        <%= f.govuk_collection_select :distance,
+                                      Candidates::SchoolSearch.distances, :first, :last, label: { text: t('helpers.label.distance') } unless f.object.whitelisted_urns? %>
 
-          <div class="school-search-form__submit">
-            <div class="govuk-form-group">
-              <%= f.govuk_submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
-            </div>
+        <div class="school-search-form__submit">
+          <div class="govuk-form-group">
+            <%= f.govuk_submit 'Search', name: nil, aria: { label: 'Search for schools offering school experience' } %>
           </div>
+        </div>
       <% end %>
     </div>
   </div>

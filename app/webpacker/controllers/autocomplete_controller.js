@@ -10,10 +10,12 @@ export default class extends Controller {
     "autocompleteWrapper",
     "autocompleteInputLabel",
     "wrapper",
+    "locationFormGroup",
   ];
 
   static values = {
     apiKey: String,
+    error: String,
   };
 
   async connect() {
@@ -22,11 +24,32 @@ export default class extends Controller {
     this.#initialiseAutoComplete();
     this.#removeNonJsInput();
     this.#showAutoCompleteLabel();
+    this.#showErrorMessage();
 
     this.#setWrapperVisibility(true);
 
     await this.#loadScript();
     this.#initialiseService();
+  }
+
+  #showErrorMessage() {
+    if (this.errorValue === "") return;
+
+    this.locationFormGroupTarget.classList.add("govuk-form-group--error");
+
+    const errorMessage = document.createElement("span");
+    errorMessage.textContent = this.errorValue;
+    errorMessage.classList.add("govuk-error-message");
+
+    const hiddenErrorMessage = document.createElement("span");
+    hiddenErrorMessage.textContent = "Error:";
+    hiddenErrorMessage.classList.add("govuk-visually-hidden");
+    errorMessage.prepend(hiddenErrorMessage);
+
+    this.locationFormGroupTarget.insertBefore(
+      errorMessage,
+      document.getElementById(this.autocompleteWrapperTarget.id)
+    );
   }
 
   #findPredictions = (query, populateResults) => {
