@@ -136,6 +136,12 @@ module Bookings
       save!
     end
 
+    def experience_type
+      return 'virtual' if virtual?
+
+      'inschool'
+    end
+
   private
 
     def inside_availability_window?

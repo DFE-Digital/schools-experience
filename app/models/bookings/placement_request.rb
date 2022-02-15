@@ -12,11 +12,15 @@ module Bookings
 
     has_secure_token
 
+    EXPERIENCE_TYPES = %w[inschool virtual].freeze
+
     validates :candidate, presence: { unless: :pre_phase3_record? }
 
     validates :subject, presence: true,
                         if: -> { placement_date&.subject_specific? },
                         unless: :creating_placement_request_from_registration_session?
+
+    validates :experience_type, presence: true
 
     belongs_to :school,
       class_name: 'Bookings::School',
@@ -145,7 +149,10 @@ module Bookings
         Candidates::Registrations::RegistrationAsPlacementRequest
           .new(registration_session)
           .attributes
-      ).tap { |r| r.save!(context: :creating_placement_request_from_registration_session) }
+      ).tap do |r|
+        r.experience_type = r.resolve_experience_type
+        r.save!(context: :creating_placement_request_from_registration_session)
+      end
     end
 
     def sent_at
@@ -246,6 +253,20 @@ module Bookings
 
     def expired?
       fixed_date_expired? || flex_date_expired?
+    end
+
+    def resolve_experience_type
+      return school.experience_type if flex_date?
+
+      placement_date.experience_type
+    end
+
+    def flex_date?
+      placement_date.nil?
+    end
+
+    def unclear_experience_type?
+      flex_date? && (EXPERIENCE_TYPES.exclude?(experience_type) || experience_type != school.experience_type)
     end
 
   private

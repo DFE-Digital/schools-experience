@@ -29,6 +29,7 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
     let(:contact_number) { "01234 456 678" }
     let(:contact_email) { "edna.krabappel@springfield.edu" }
     let(:location) { "Reception" }
+    let(:experience_type) { "inschool" }
 
     context 'with valid params' do
       let(:params) do
@@ -38,7 +39,8 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
             bookings_subject_id: bookings_subject.id,
             contact_name: contact_name,
             contact_number: contact_number,
-            contact_email: contact_email
+            contact_email: contact_email,
+            experience_type: experience_type
           }
         }
       end
@@ -51,6 +53,7 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
         expect(subject.contact_name).to eql(contact_name)
         expect(subject.contact_number).to eql(contact_number)
         expect(subject.contact_email).to eql(contact_email)
+        expect(subject.experience_type).to eql(experience_type)
       end
     end
 
@@ -63,7 +66,8 @@ describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :r
             bookings_subject_id: bookings_subject.id,
             contact_name: contact_name,
             contact_number: contact_number,
-            contact_email: contact_email
+            contact_email: contact_email,
+            experience_type: experience_type
           }
         }
       end
