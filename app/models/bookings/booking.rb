@@ -36,7 +36,9 @@ module Bookings
       errors.add :date, :not_changed unless date_changed?
     end
 
-    validates :experience_type, presence: true
+    validates :experience_type,
+      presence: true,
+      inclusion: { in: PlacementRequest::EXPERIENCE_TYPES }
 
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
