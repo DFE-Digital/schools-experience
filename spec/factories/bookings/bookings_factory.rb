@@ -9,13 +9,8 @@ FactoryBot.define do
     contact_name { 'William MacDougal' }
     contact_email { 'gcw@springfield.edu' }
     contact_number { '01234 456 245' }
-    experience_type { 'inschool' }
 
     date { 2.months.from_now }
-
-    trait :virtual_experience do
-      experience_type { 'virtual' }
-    end
 
     trait :accepted do
       candidate_instructions { 'Report to reception on arrival' }

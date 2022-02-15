@@ -72,22 +72,7 @@ describe Schools::PlacementRequests::Acceptance::PreviewConfirmationEmailControl
 
     context 'when virtual experience' do
       let!(:virtual_experience) { create(:bookings_placement_date, virtual: true) }
-      let!(:pr) { create(:placement_request, :virtual, school: @current_user_school, placement_date: virtual_experience) }
-      let!(:booking) do
-        create(
-          :bookings_booking,
-          bookings_school: @current_user_school,
-          experience_type: 'virtual',
-          bookings_placement_request: pr,
-          date: 3.weeks.from_now,
-          placement_details: "an amazing experience",
-          contact_name: 'Gary Chalmers',
-          contact_email: 'gary.chalmers@springfield.edu',
-          contact_number: '01234 456 678',
-          location: 'Near the assembly hall',
-          candidate_instructions: 'Please come to the main reception'
-        )
-      end
+      let!(:pr) { create(:bookings_placement_request, school: @current_user_school, placement_date: virtual_experience) }
 
       specify 'should send a candidate booking confirmation notification virtual experience email' do
         allow(NotifyEmail::CandidateVirtualExperienceBookingConfirmation).to(

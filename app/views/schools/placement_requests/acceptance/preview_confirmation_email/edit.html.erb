@@ -19,7 +19,7 @@
 
         <p><%= @placement_request.school.name %> have confirmed your school experience booking.</p>
 
-        <% if @booking.virtual_experience? %>
+        <% if @is_virtual_experience %>
           <%= render partial: 'virtual_sections', locals: { form: f } %>
         <% else %>
           <%= render partial: 'in_school_sections', locals: { form: f } %>

@@ -36,10 +36,6 @@ module Bookings
       errors.add :date, :not_changed unless date_changed?
     end
 
-    validates :experience_type,
-      presence: true,
-      inclusion: { in: PlacementRequest::EXPERIENCE_TYPES }
-
     validates :bookings_placement_request, presence: true
     validates :bookings_placement_request_id, presence: true
     validates :bookings_subject, presence: true
@@ -121,7 +117,6 @@ module Bookings
                placement_request.fixed_date
              end
       duration = placement_request.placement_date&.duration || DEFAULT_DURATION
-      experience_type = placement_request.experience_type unless placement_request.unclear_experience_type?
 
       new(
         bookings_school: placement_request.school,
@@ -129,8 +124,7 @@ module Bookings
         date: date,
         bookings_subject_id: placement_request.requested_subject.id,
         placement_details: placement_request.school.placement_info,
-        duration: duration,
-        experience_type: experience_type
+        duration: duration
       )
     end
 
@@ -193,10 +187,6 @@ module Bookings
 
     def editable_date?
       in_future? && !cancelled?
-    end
-
-    def virtual_experience?
-      experience_type == 'virtual'
     end
   end
 end

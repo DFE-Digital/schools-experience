@@ -22,14 +22,6 @@ describe Bookings::PlacementRequest, type: :model do
 
   it { is_expected.to have_secure_token }
 
-  describe 'Constants' do
-    describe 'EXPERIENCE_TYPES' do
-      it 'returns an array of strings' do
-        expect(described_class::EXPERIENCE_TYPES).to eq %w[inschool virtual]
-      end
-    end
-  end
-
   describe 'candidate requirement' do
     it { is_expected.to validate_presence_of :candidate }
 
@@ -257,17 +249,11 @@ describe Bookings::PlacementRequest, type: :model do
         FactoryBot.build :registration_session
       end
 
-      subject do
-        candidate.placement_requests.create_from_registration_session! \
-          registration_session
-      end
-
       it 'creates the placement request' do
-        expect { subject }.to change { described_class.count }.by 1
-      end
-
-      it 'saves the experience type' do
-        expect(subject.experience_type).not_to be_nil
+        expect {
+          candidate.placement_requests.create_from_registration_session! \
+            registration_session
+        }.to change { described_class.count }.by 1
       end
     end
 
@@ -956,86 +942,6 @@ describe Bookings::PlacementRequest, type: :model do
     context 'with flexible' do
       let(:pr) { build(:placement_request) }
       it { is_expected.to be false }
-    end
-  end
-
-  describe '#resolve_experience_type' do
-    context 'when it is a flex date' do
-      it 'returns the experience type of the school' do
-        expect(subject.resolve_experience_type).to eq subject.school.experience_type
-      end
-    end
-
-    context 'when it is a fixed date' do
-      subject { build :placement_request, :with_a_fixed_date }
-
-      it 'returns the experience type of the placement date' do
-        expect(subject.resolve_experience_type).to eq subject.placement_date.experience_type
-      end
-    end
-  end
-
-  describe '#flex_date?' do
-    context 'without a placement date' do
-      it "returns true" do
-        expect(subject.flex_date?).to be true
-      end
-    end
-
-    context 'with a placement date' do
-      subject { build :placement_request, :with_a_fixed_date }
-
-      it "returns false" do
-        expect(subject.flex_date?).to be false
-      end
-    end
-  end
-
-  describe '#unclear_experience_type?' do
-    context 'when it is a flex date' do
-      context 'when experience is virtual' do
-        let(:school) { build :bookings_school, :flex_virtual }
-        subject { build :placement_request, :virtual, school: school }
-
-        it 'returns false' do
-          expect(subject.unclear_experience_type?).to be false
-        end
-      end
-
-      context 'when experience is in school' do
-        let(:school) { build :bookings_school, :flex_inschool }
-        subject { build :placement_request, :inschool, school: school }
-
-        it 'returns false' do
-          expect(subject.unclear_experience_type?).to be false
-        end
-      end
-
-      context 'when the experience is both' do
-        let(:school) { build :bookings_school, :flex_both }
-        subject { build :placement_request, school: school }
-
-        it 'returns true' do
-          expect(subject.unclear_experience_type?).to be true
-        end
-      end
-
-      context 'when the school and placement request experience types are different' do
-        let(:school) { build :bookings_school, :flex_both }
-        subject { build :placement_request, :virtual, school: school }
-
-        it 'returns true' do
-          expect(subject.unclear_experience_type?).to be true
-        end
-      end
-    end
-
-    context 'when it is a fixed date' do
-      subject { build :placement_request, :with_a_fixed_date }
-
-      it 'returns false' do
-        expect(subject.unclear_experience_type?).to be false
-      end
     end
   end
 end
