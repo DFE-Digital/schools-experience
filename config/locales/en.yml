@@ -592,11 +592,11 @@ en:
       bookings_booking:
         duration: Enter number of days.
       bookings_placement_date:
-        end_availability_offset: You'll need enough time to process requests before the placement starts
+        end_availability_offset: You'll need enough time to process requests before the placement starts.
         start_availability_offset: We recommend publishing dates no more than 60 days in advance.
         date: For example, 01 09 2020.
-        duration: Enter number of days.
-        virtual: Does this school experience take place in school or via the internet
+        duration: You may want to run some placements for more than one day.
+        virtual: Does this school experience take place in school or via the internet.
       phases: Select all that apply
       max_fee: Schools may charge
       subjects: Select all that apply
@@ -1002,6 +1002,11 @@ en:
         change_to_urn: Select your school
       bookings_booking:
         date: Booking date
+
+    suffix:
+      schools_placement_dates:
+        days_before_the_event: days before the event
+        days: days
 
   views:
     pagination:
