@@ -511,7 +511,7 @@ en:
             candidate_instructions:
               blank: Enter some instructions for the candidate
             experience_type:
-              blank: Select if it is an In school or Virtual experience
+              blank: Select if it is an in school or virtual experience
         candidates/booking_feedback:
           attributes:
             gave_realistic_impression:

@@ -21,7 +21,7 @@ Feature: Confirming a flex request when experience type is  unclear
         Given I am on the 'make changes' page for the placement request
         And I enter a future date in the 'Booking date' date field
         When I submit the form
-        Then I should see the validation error 'Select if it is an In school or Virtual experience'
+        Then I should see the validation error 'Select if it is an in school or virtual experience'
 
     @smoke_test
     Scenario: Updating and submitting a flexible booking with experience type 'both'
