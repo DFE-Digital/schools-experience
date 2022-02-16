@@ -4,6 +4,7 @@ paas_redis_1_name         = "school-experience-prod-redis-svc"
 paas_application_name     = "school-experience-app-production"
 paas_internet_hostnames   = ["schoolexperience"]
 application_instances     = 2
+application_memory        = 2046
 delayed_jobs              = 1
 environment               = "production"
 application_environment   = "dfe-school-experience-production"
