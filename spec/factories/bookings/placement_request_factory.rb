@@ -23,6 +23,7 @@ FactoryBot.define do
     degree_stage_explaination { nil }
     degree_subject { "Not applicable" }
     teaching_stage { "I’m very sure and think I’ll apply" }
+    experience_type { 'both' }
 
     # FIXME: change this to cancelled_by_candidate
     trait :cancelled do
@@ -125,6 +126,14 @@ FactoryBot.define do
     trait :with_a_fixed_date_in_the_past do
       availability { nil }
       association :placement_date, :in_the_past, factory: :bookings_placement_date
+    end
+
+    trait :virtual do
+      experience_type { 'virtual' }
+    end
+
+    trait :inschool do
+      experience_type { 'inschool' }
     end
   end
 end

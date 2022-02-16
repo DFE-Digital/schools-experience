@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_02_103752) do
+ActiveRecord::Schema.define(version: 2022_02_16_101402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2022_02_02_103752) do
     t.integer "duration", default: 1, null: false
     t.datetime "accepted_at"
     t.boolean "attended"
+    t.string "experience_type"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
     t.index ["bookings_school_id"], name: "index_bookings_bookings_on_bookings_school_id"
     t.index ["bookings_subject_id"], name: "index_bookings_bookings_on_bookings_subject_id"
@@ -119,6 +120,7 @@ ActiveRecord::Schema.define(version: 2022_02_02_103752) do
     t.bigint "candidate_id"
     t.bigint "bookings_subject_id"
     t.datetime "under_consideration_at"
+    t.string "experience_type"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
     t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
     t.index ["bookings_subject_id"], name: "index_bookings_placement_requests_on_bookings_subject_id"
