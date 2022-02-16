@@ -108,5 +108,20 @@ FactoryBot.define do
     trait :with_school_profile do
       association :school_profile, factory: %i[school_profile completed]
     end
+
+    trait :flex_virtual do
+      experience_type { 'virtual' }
+      availability_preference_fixed { false }
+    end
+
+    trait :flex_inschool do
+      experience_type { 'inschool' }
+      availability_preference_fixed { false }
+    end
+
+    trait :flex_both do
+      experience_type { 'both' }
+      availability_preference_fixed { false }
+    end
   end
 end

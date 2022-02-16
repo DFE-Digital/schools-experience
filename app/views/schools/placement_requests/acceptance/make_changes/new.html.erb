@@ -49,6 +49,14 @@
           <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m' } %>
         <% end %>
         <%= f.govuk_collection_select :bookings_subject_id, @subjects, :id, :name, label: { class: 'govuk-heading-m' } %>
+
+        <% if @placement_request.unclear_experience_type? %>
+          <div class="govuk-radios govuk-radios--inline">
+            <%= f.govuk_collection_radio_buttons :experience_type, Bookings::PlacementRequest::EXPERIENCE_TYPES, :to_s %>
+          </div>
+        <% else %>
+          <%= f.hidden_field :experience_type, value: @placement_request.experience_type %>
+        <% end %>
       </div>
 
       <fieldset class="govuk-fieldset">
