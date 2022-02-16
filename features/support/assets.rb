@@ -1,3 +1,3 @@
-AfterConfiguration do
+BeforeAll do
   Webpacker.compile
 end
