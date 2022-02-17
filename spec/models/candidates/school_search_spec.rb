@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Candidates::SchoolSearch do
+  describe "validation" do
+    describe "#location" do
+      it { is_expected.not_to allow_values("", "a").for :location }
+      it { is_expected.to allow_value("aaa").for :location }
+    end
+  end
+
   context '.new' do
     subject do
       described_class.new(

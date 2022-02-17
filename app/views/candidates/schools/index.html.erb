@@ -14,7 +14,7 @@
       <%= f.govuk_text_field :location, width: 'full', label: { text: t('helpers.label.location') },
                              data: { "autocomplete-target": "nonJsInput" }%>
 
-      <div class="govuk-form-group">
+      <div class="govuk-form-group" data-autocomplete-target="locationFormGroup">
         <label for="location-field" data-autocomplete-target="autocompleteInputLabel" class="govuk-label govuk-visually-hidden"><%= t('helpers.label.location_short') %></label>
         <div id="location-autocomplete" data-autocomplete-target="autocompleteWrapper"></div>
       </div>

@@ -2,23 +2,23 @@ import { Application } from "stimulus";
 import AutocompleteController from "autocomplete_controller.js";
 
 describe("SearchController", () => {
-  beforeEach(async () => {
-    setupGoogleMock();
-
+  beforeAll(() => {
     const application = Application.start();
     application.register("autocomplete", AutocompleteController);
+  });
 
-    setBody();
+  beforeEach(() => {
     clearHead();
+    setupGoogleMock();
   });
 
   describe("connecting", () => {
-    it("hides then shows the section to reduce content shift", async () => {
+    beforeEach(() => {
+      setBody();
+    });
+
+    it("shows the section (after hiding it, to reduce content shift)", () => {
       const wrapper = document.getElementsByTagName("form")[0];
-
-      expect(wrapper.style.visibility).toEqual("hidden");
-
-      await mockGoogleScriptLoading();
 
       expect(wrapper.style.visibility).toEqual("");
     });
@@ -40,35 +40,13 @@ describe("SearchController", () => {
       ).toHaveBeenCalledTimes(1);
     });
 
-    it("applies GOV.UK styling to the autocomplete input", async () => {
-      await mockGoogleScriptLoading();
-
-      expect(document.getElementsByTagName("input")[0].classList).toContain(
-        "govuk-input"
-      );
-    });
-
-    it("removes the non-JavaScript input", async () => {
-      expect(
-        document.querySelector('[data-autocomplete-target="nonJsInput"]')
-      ).toBeTruthy();
-
-      await mockGoogleScriptLoading();
-
+    it("removes the non-JavaScript input", () => {
       expect(
         document.querySelector('[data-autocomplete-target="nonJsInput"]')
       ).toBeFalsy();
     });
 
-    it("shows the autocomplete label", async () => {
-      expect(
-        document.querySelector(
-          '[data-autocomplete-target="autocompleteInputLabel"]'
-        ).classList
-      ).toContain("govuk-visually-hidden");
-
-      await mockGoogleScriptLoading();
-
+    it("shows the autocomplete label", () => {
       expect(
         document.querySelector(
           '[data-autocomplete-target="autocompleteInputLabel"]'
@@ -77,7 +55,30 @@ describe("SearchController", () => {
     });
   });
 
-  const setBody = () => {
+  describe("errors", () => {
+    beforeEach(() => {
+      setBody(true);
+    });
+
+    it("shows an GOV.UK error message", () => {
+      const locationFormGroup = document.querySelector(
+        '[data-autocomplete-target="locationFormGroup"]'
+      );
+
+      expect(locationFormGroup.classList).toContain("govuk-form-group--error");
+
+      const errorMessage = locationFormGroup.getElementsByTagName("span")[0];
+      const hiddenErrorMessage = errorMessage.getElementsByTagName("span")[0];
+
+      expect(errorMessage.textContent).toEqual(
+        "Error:Must be at least 2 characters"
+      );
+      expect(errorMessage.classList).toContain("govuk-error-message");
+      expect(hiddenErrorMessage.classList).toContain("govuk-visually-hidden");
+    });
+  });
+
+  const setBody = (errors = false) => {
     document.body.innerHTML = `
       <form class="school-search-form" id="new_" novalidate="novalidate" data-controller="autocomplete" data-autocomplete-target="wrapper" data-autocomplete-api-key-value="KEY" action="/candidates/schools" accept-charset="UTF-8" method="get">
         <div class="govuk-form-group">
@@ -85,8 +86,10 @@ describe("SearchController", () => {
           <input id="location-field" class="govuk-input" required="required" minlength="2" type="search" data-autocomplete-target="nonJsInput" name="location">
         </div>
 
-        <label for="location-autocomplete" data-autocomplete-target="autocompleteInputLabel" class="govuk-label govuk-visually-hidden">Enter location or postcode</label>
-        <div id="location-autocomplete" data-autocomplete-target="autocompleteWrapper" class="govuk-body"></div>
+        <div class="govuk-form-group" data-autocomplete-target="locationFormGroup">
+          <label for="location-autocomplete" data-autocomplete-target="autocompleteInputLabel" class="govuk-label govuk-visually-hidden">Enter location or postcode</label>
+          <div id="location-autocomplete" data-autocomplete-target="autocompleteWrapper" class="govuk-body"></div>
+        </div>
 
         <div class="school-search-form__submit">
           <div class="govuk-form-group">
@@ -95,6 +98,14 @@ describe("SearchController", () => {
         </div>
       </form>
     `;
+
+    if (errors) {
+      const form = document.body.getElementsByTagName("form")[0];
+      form.setAttribute(
+        "data-autocomplete-error-value",
+        "Must be at least 2 characters"
+      );
+    }
   };
 
   const setupGoogleMock = () => {

@@ -5,12 +5,10 @@ class Candidates::SchoolsController < ApplicationController
   before_action :redirect_if_deactivated
 
   def index
-    return redirect_to new_candidates_school_search_path unless location_present?
-
     @search = Candidates::SchoolSearch.new(search_params)
-    @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
+    render 'candidates/school_searches/new' and return unless @search.valid? && location_present?
 
-    return render 'candidates/school_searches/new' unless @search.valid?
+    @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
 
     @country = @search.country
 
