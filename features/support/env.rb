@@ -51,11 +51,9 @@ ActionController::Base.allow_rescue = false
 
 # Browser configuration
 
-driver = :selenium_chrome_headless
-
 Capybara.server = :puma, { Silent: true }
 
-Capybara.register_driver driver do |app|
+Capybara.register_driver :headless_chrome do |app|
   options = ::Selenium::WebDriver::Chrome::Options.new
 
   options.add_argument("--headless")
@@ -63,7 +61,16 @@ Capybara.register_driver driver do |app|
   options.add_argument("--disable-dev-shm-usage")
   options.add_argument("--window-size=1400,1400")
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  Capybara::Selenium::Driver.new(app, browser: :chrome, capabilities: [options])
 end
 
-Capybara.javascript_driver = driver
+if ENV['SELENIUM_CHROME_DRIVER']
+  Capybara.configure do |config|
+    config.default_driver = :selenium_chrome
+    config.javascript_driver = :selenium_chrome
+  end
+else
+  Capybara.configure do |config|
+    config.javascript_driver = :headless_chrome
+  end
+end

@@ -152,7 +152,15 @@ If you have plenty of cpu cores, it faster to run tests with parallel_tests
 1. Create the databases - `bundle exec rake parallel:create`
 2. Copy the schema over from the main database - `bundle exec rake parallel:prepare`
 3. Run RSpecs - `bundle exec rake parallel:spec`
-3. Run Cucumber features - `bundle exec rake parallel:features`
+4. Run Cucumber features - `bundle exec rake parallel:features`
+
+### Feature tests in headed mode
+
+To run feature tests in a headed configuration for easier troubleshooting, add an `.env.test.local` file to the root of the project with the following environment variable:
+
+```
+SELENIUM_CHROME_DRIVER=true
+```
 
 ### Common issues running tests
 
