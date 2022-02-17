@@ -7,6 +7,13 @@ module Bookings
 
       private_class_method :new
 
+      # requested: placement requested by candidate
+      # confirmed: placement request accepted by school
+      # withdrawn: candidate didn't attend placement
+      # rejected: request rejected by school
+      # cancelled_by_school: cancelled by school
+      # cancelled_by_candidate: cancelled by candidate
+      # completed: candidate attended placement
       GITIS_STATUS = {
         requested: 1,
         confirmed: 222_750_000,
