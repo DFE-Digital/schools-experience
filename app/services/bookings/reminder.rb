@@ -20,7 +20,24 @@ class Bookings::Reminder
 private
 
   def despatch_reminder_email
+    if @booking.virtual_experience?
+      virtual_reminder
+    else
+      in_school_reminder
+    end
+  end
+
+  def in_school_reminder
     NotifyEmail::CandidateBookingReminder.from_booking(
+      @booking.candidate_email,
+      @time_until_booking,
+      @booking,
+      candidates_cancel_url(@booking.token)
+    ).despatch_later!
+  end
+
+  def virtual_reminder
+    NotifyEmail::CandidateVirtualExperienceBookingReminder.from_booking(
       @booking.candidate_email,
       @time_until_booking,
       @booking,
