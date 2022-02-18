@@ -106,8 +106,20 @@ Feature: School Profile
           | School teacher training info | We run our own training\nFind out more about     |
      And I should see the accessability information I have entered
 
-  Scenario: Publishing profile for onboarded school
+  Scenario: Publishing profile changes for an onboarded school
       Given my school is fully-onboarded
       And I am on the 'Profile' page
-      And I click the 'Publish changes' button
-      Then the page title should be "You've updated your profile"
+      When I click the 'Change' button for the 'Fees' row
+      And I choose 'Yes' from the 'Administration costs' radio buttons
+      When I submit the form
+      When I have entered the following details into the form:
+        | Enter the number of pounds   | 100                        |
+        | Explain what the fee covers. | Nondescript administration |
+        | Explain how the fee is paid  | Travelers cheques          |
+      And I choose 'Daily' from the 'Is this a daily or one-off fee?' radio buttons
+      When I submit the form
+      # Other costs have already been setup for the school
+      Then the page title should be "Other costs"
+      When I submit the form
+      Then I should see the text 'Your profile has been saved and published.'
+      Then the page title should be "School profile"

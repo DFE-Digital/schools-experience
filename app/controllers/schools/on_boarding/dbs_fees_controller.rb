@@ -13,7 +13,7 @@ module Schools
             dbs_fee: @dbs_fee,
             dbs_fee_step_completed: true
 
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :new
         end
