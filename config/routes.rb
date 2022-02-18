@@ -60,6 +60,8 @@ Rails.application.routes.draw do
     resource :organisation_access_request, only: :show
 
     resources :placement_requests do
+      resource :transfer, only: %i[new create], controller: 'placement_requests/transfers'
+
       resource :cancellation, only: %i[show new create edit update], controller: 'placement_requests/cancellations' do
         resource :notification_delivery, only: %i[show create], controller: 'placement_requests/cancellations/notification_deliveries'
       end

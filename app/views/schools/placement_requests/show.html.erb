@@ -204,6 +204,9 @@
                                 secondary: true,
                                 form: { class: "under-consideration-button" } %>
           <% end %>
+          <% if has_other_schools? %>
+            <%= govuk_link_to "Transfer Request", new_schools_placement_request_transfer_path(@placement_request), secondary: true %>
+          <% end %>
           <%= govuk_link_to "Reject request", new_schools_placement_request_cancellation_path(@placement_request), secondary: true %>
         </div>
       </div>

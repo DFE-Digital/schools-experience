@@ -455,6 +455,10 @@ en:
               blank: 'Cancellation reason is required'
             rejection_category:
               inclusion: Chooose a reason for rejecting this candidate
+        bookings/placement_request/transfer:
+          attributes:
+            transfer_to_urn:
+              inclusion: Select a school from the list
         bookings/school_search:
           attributes:
             location:
@@ -974,6 +978,8 @@ en:
         date: Enter start date
         supports_subjects: Select school experience phase
         virtual: Experience type
+      bookings_placement_request_transfer:
+        transfer_to_urn: Select a school to transfer to
       schools_placement_dates_subject_selection:
         subject_ids: Select school experience subjects
       schools_placement_dates_configuration_form:

@@ -1,0 +1,41 @@
+<%- self.page_title = "Transfer request to another school" %>
+
+<%= govuk_back_link schools_placement_request_path(transfer.placement_request) %>
+
+<% if transfer.available_schools.empty? %>
+  <h1>No availability at other schools</h1>
+<% else %>
+  <%= form_for transfer, url: schools_placement_request_transfer_path do |f| %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l">
+          Transfer request to another school
+        </h1>
+
+        <%= f.govuk_error_summary %>
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <p>
+              You can transfer this placement request to another school that you have access to.
+            </p>
+
+            <%= f.govuk_radio_buttons_fieldset :transfer_to_urn, legend: { tag: "h1", size: "l" } do %>
+              <% transfer.available_schools.each do |school| %>
+                <%= f.govuk_radio_button :transfer_to_urn, school.urn, label: -> do %>
+                  <%= school.name %>
+                <% end %>
+              <% end %>
+            <% end %>
+
+            <section>
+              <p>
+                <%= f.govuk_submit 'Transfer' %>
+              </p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
