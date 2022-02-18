@@ -8,7 +8,6 @@ Feature: Fees
     And the secondary school phase is availble
     And the college phase is availble
     And I have completed the DBS Requirements step
-    And I have completed the Candidate Requirements choice step
     And I have completed the Candidate Requirements selection step
 
   Scenario: Page title

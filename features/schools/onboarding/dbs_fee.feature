@@ -10,7 +10,6 @@ Feature: DBS Fee
     And I have completed the following steps:
         | Step name                        | Extra                   |
         | DBS Requirements                 |                         |
-        | Candidate Requirements choice    |                         |
         | Candidate Requirements selection |                         |
         | Fees                             | choosing only DBS costs |
 

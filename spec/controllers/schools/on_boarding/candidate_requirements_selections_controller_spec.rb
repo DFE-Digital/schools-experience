@@ -6,8 +6,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
 
   let! :school_profile do
     FactoryBot.create :school_profile,
-      :with_dbs_requirement,
-      :with_candidate_requirements_choice
+      :with_dbs_requirement
   end
 
   context '#new' do
@@ -72,8 +71,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
   context '#edit' do
     let! :school_profile do
       FactoryBot.create :school_profile, \
-        :completed, :with_candidate_requirements_selection,
-        :with_candidate_requirements_choice
+        :completed, :with_candidate_requirements_selection
     end
 
     before do
@@ -93,8 +91,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
   context '#update' do
     let! :school_profile do
       FactoryBot.create :school_profile, \
-        :completed, :with_candidate_requirements_selection,
-        :with_candidate_requirements_choice
+        :completed, :with_candidate_requirements_selection
     end
 
     let :params do

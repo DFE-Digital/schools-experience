@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_16_101402) do
+ActiveRecord::Schema.define(version: 2022_02_16_163730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
@@ -413,7 +413,6 @@ ActiveRecord::Schema.define(version: 2022_02_16_101402) do
     t.boolean "candidate_requirements_selection_other"
     t.text "candidate_requirements_selection_other_details"
     t.boolean "access_needs_support_supports_access_needs"
-    t.boolean "candidate_requirements_choice_has_requirements"
     t.boolean "candidate_requirements_selection_step_completed", default: false
     t.boolean "candidate_requirements_selection_not_on_another_training_course"
     t.boolean "candidate_requirements_selection_has_or_working_towards_degree"

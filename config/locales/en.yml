@@ -266,10 +266,6 @@ en:
               blank: Provide details of your DBS check requirements
             no_dbs_policy_details:
               blank: 'Provide details'
-        schools/on_boarding/candidate_requirements_choice:
-          attributes:
-            has_requirements:
-              inclusion: "Select if you have any candidate requirements"
 
         schools/on_boarding/candidate_requirements_selection:
           attributes:
@@ -618,8 +614,6 @@ en:
             <li>what you click on while you're visiting the site</li>
           </ul>
           We do not allow Google to use or share the data about how you use this site."
-      schools_on_boarding_candidate_requirements_choice:
-        has_requirements_html: "<br> For example, they must want to apply for teacher training at your school or have a degree"
       schools_on_boarding_dbs_requirement:
         dbs_policy_conditions_html: '<br>Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
       schools_on_boarding_candidate_experience_detail:
@@ -763,10 +757,6 @@ en:
           required: 'Yes - Outline your DBS requirements'
           inschool: 'Yes - only when in school - outline your DBS requirements'
           notrequired: 'No - Candidates will be accompanied at all times when in school'
-      schools_on_boarding_candidate_requirements_choice:
-        has_requirements:
-          true: 'Yes'
-          false: 'No'
       schools_on_boarding_candidate_requirements_selection:
         on_teacher_training_course_options:
           1: "Candidates must apply to our (or a partner school's) teacher training course"
@@ -981,8 +971,6 @@ en:
         available_for_all_subjects: Select type of experience
       schools_on_boarding_dbs_requirement:
         dbs_policy_conditions: 'Do you require candidates to have or get a DBS check?'
-      schools_on_boarding_candidate_requirements_choice:
-        has_requirements: "Do you have any candidate requirements?"
       schools_on_boarding_fees:
         administration_fees: Administration costs
         dbs_fees: DBS check costs
