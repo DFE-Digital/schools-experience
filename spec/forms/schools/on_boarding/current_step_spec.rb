@@ -29,30 +29,8 @@ describe Schools::OnBoarding::CurrentStep do
         FactoryBot.build :school_profile, :with_dbs_requirement
       end
 
-      it 'returns :candidate_requirements_choice' do
-        expect(returned_step).to eq :candidate_requirements_choice
-      end
-    end
-
-    context 'candidate_requirements_choice required' do
-      let :school_profile do
-        FactoryBot.build :school_profile, :with_dbs_requirement
-      end
-
-      it 'returns :candidate_requirements_choice' do
-        expect(returned_step).to eq :candidate_requirements_choice
-      end
-    end
-
-    context 'candidate_requirements_selection not required' do
-      let :school_profile do
-        FactoryBot.build :school_profile,
-          :with_dbs_requirement,
-          :without_candidate_requirements_choice
-      end
-
-      it 'returns :fees' do
-        expect(returned_step).to eq :fees
+      it 'returns :candidate_requirements_selection' do
+        expect(returned_step).to eq :candidate_requirements_selection
       end
     end
 
@@ -60,8 +38,7 @@ describe Schools::OnBoarding::CurrentStep do
       context 'step not completed' do
         let :school_profile do
           FactoryBot.build :school_profile,
-            :with_dbs_requirement,
-            :with_candidate_requirements_choice
+            :with_dbs_requirement
         end
 
         it 'returns :candidate_requirements_selection' do
@@ -73,7 +50,6 @@ describe Schools::OnBoarding::CurrentStep do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
-            :with_candidate_requirements_choice,
             :with_candidate_requirements_selection
         end
 
@@ -87,7 +63,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.build :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection
       end
 
@@ -101,7 +76,6 @@ describe Schools::OnBoarding::CurrentStep do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
-            :with_candidate_requirements_choice,
             :with_candidate_requirements_selection,
             fees_administration_fees: true,
             fees_dbs_fees: false,
@@ -117,7 +91,6 @@ describe Schools::OnBoarding::CurrentStep do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
-            :with_candidate_requirements_choice,
             :with_candidate_requirements_selection,
             :with_administration_fee,
             fees_administration_fees: true,
@@ -137,7 +110,6 @@ describe Schools::OnBoarding::CurrentStep do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
-            :with_candidate_requirements_choice,
             :with_candidate_requirements_selection,
             fees_administration_fees: false,
             fees_dbs_fees: true,
@@ -153,7 +125,6 @@ describe Schools::OnBoarding::CurrentStep do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
-            :with_candidate_requirements_choice,
             :with_candidate_requirements_selection,
             :with_dbs_fee,
             fees_administration_fees: false,
@@ -173,7 +144,6 @@ describe Schools::OnBoarding::CurrentStep do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
-            :with_candidate_requirements_choice,
             :with_candidate_requirements_selection,
             fees_administration_fees: false,
             fees_dbs_fees: false,
@@ -189,7 +159,6 @@ describe Schools::OnBoarding::CurrentStep do
         let :school_profile do
           FactoryBot.build :school_profile,
             :with_dbs_requirement,
-            :with_candidate_requirements_choice,
             :with_candidate_requirements_selection,
             :with_other_fee,
             fees_administration_fees: false,
@@ -208,7 +177,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.build :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           fees_administration_fees: false,
           fees_dbs_fees: false,
@@ -224,7 +192,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.build :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -242,7 +209,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.build :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -261,7 +227,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -281,7 +246,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -302,7 +266,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -324,7 +287,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -348,7 +310,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -371,7 +332,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -395,7 +355,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -420,7 +379,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -446,7 +404,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,
@@ -474,7 +431,6 @@ describe Schools::OnBoarding::CurrentStep do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
-          :with_candidate_requirements_choice,
           :with_candidate_requirements_selection,
           :with_fees,
           :with_administration_fee,

@@ -10,7 +10,6 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
-        :with_candidate_requirements_choice,
         :with_candidate_requirements_selection,
         :with_fees,
         :with_administration_fee,
@@ -38,7 +37,6 @@ describe Schools::OnBoarding::DescriptionsController, type: :request do
       FactoryBot.create \
         :school_profile,
         :with_dbs_requirement,
-        :with_candidate_requirements_choice,
         :with_candidate_requirements_selection,
         :with_fees,
         :with_administration_fee,

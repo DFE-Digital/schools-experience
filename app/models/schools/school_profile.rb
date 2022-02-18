@@ -26,9 +26,6 @@ module Schools
       unless requires_subjects?
         subjects.destroy_all
       end
-      unless candidate_requirements_choice.has_requirements
-        self.candidate_requirements_selection = OnBoarding::CandidateRequirementsSelection.new
-      end
       unless access_needs_support.supports_access_needs?
         self.access_needs_detail = OnBoarding::AccessNeedsDetail.new
         self.disability_confident = OnBoarding::DisabilityConfident.new
@@ -65,14 +62,6 @@ module Schools
         %w[dbs_requirement_dbs_policy_details dbs_policy_details],
         %w[dbs_requirement_no_dbs_policy_details no_dbs_policy_details],
         %w[dbs_requirement_dbs_policy_details_inschool dbs_policy_details_inschool]
-      ],
-      constructor: :compose
-
-    composed_of \
-      :candidate_requirements_choice,
-      class_name: 'Schools::OnBoarding::CandidateRequirementsChoice',
-      mapping: [
-        %w[candidate_requirements_choice_has_requirements has_requirements]
       ],
       constructor: :compose
 
