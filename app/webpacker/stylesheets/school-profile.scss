@@ -38,6 +38,24 @@
     }
   }
 
+  table thead >tr > th {
+    &.placement-date {
+      width: 25%;
+    }
+
+    &.placement-phase {
+      width: 30%;
+    }
+
+    &.placement-type {
+      width: 27%;
+    }
+
+    &.placement-start {
+      width: 18%;
+    }
+  }
+
   table tbody tr:last-child {
     td, th {
       border-bottom: none;
