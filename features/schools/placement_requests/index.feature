@@ -10,7 +10,7 @@ Feature: Viewing all placement requests
 
     Scenario: Page title
         Given I am on the 'placement requests' page
-        Then the page title should be 'All placement requests'
+        Then the page title should be 'Manage requests'
 
     Scenario: List presence
         Given there are some placement requests

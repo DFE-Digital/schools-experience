@@ -10,7 +10,7 @@ Feature: Editing availability info
 
     Scenario: Page title
         Given I am on the 'availability information' page
-        Then the page title should be 'Describe when you’ll host school experience candidates'
+        Then the page title should be 'Describe your school experience availability'
 
     Scenario: Page contents
         Given I am on the 'availability information' page

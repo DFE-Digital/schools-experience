@@ -5,7 +5,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_for access_needs_detail, url: schools_on_boarding_access_needs_detail_path, method: method do |f| %>
       <%= f.govuk_error_summary %>
-      <%= f.govuk_text_area :description, rows: 9, label: { class: 'govuk-heading-l' } do %>
+      <%= f.govuk_text_area :description, rows: 9, label: { tag: "h1" } do %>
         <p>
           Edit and add to the following suggested wording so we can add it to your school profile.
         </p>
