@@ -35,6 +35,14 @@ gem 'rails_semantic_logger'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+# Metrics
+gem 'yabeda-rails'
+gem 'yabeda-delayed_job'
+gem 'yabeda-prometheus'
+gem 'yabeda-puma-plugin'
+gem 'yabeda-http_requests'
+gem 'yabeda-gc'
+
 gem 'dotenv-rails', '>= 2.7.6'
 
 gem 'govuk_design_system_formbuilder', '~> 3.0'
