@@ -11,7 +11,7 @@ module Schools
         if @dbs_requirement.valid?
           current_school_profile.update! dbs_requirement: @dbs_requirement
 
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :new
         end
@@ -36,7 +36,7 @@ module Schools
 
           current_school_profile.update! dbs_requirement: @dbs_requirement
 
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :edit
         end

@@ -267,9 +267,7 @@ module Schools
       end
 
       def publish_warning
-        if @school.private_beta?
-          "To save your changes, select 'Publish changes' at the bottom of the page."
-        else
+        unless @school.private_beta?
           "To set up your profile, select the checkbox at the bottom of the page and select 'Accept and set up profile'."
         end
       end

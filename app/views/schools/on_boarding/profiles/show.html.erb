@@ -1,4 +1,4 @@
-<%- self.page_title = 'Check your answers before setting up your school experience profile' -%>
+<%- self.page_title = @current_school.private_beta? ? 'School profile' : 'Check your answers before setting up your school experience profile' -%>
 
 <%
   self.breadcrumbs = {
@@ -13,13 +13,28 @@
       <%= @profile.page_heading %>
     </h1>
 
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-        <%= @profile.publish_warning %>
-      </strong>
-    </div>
+    <% if @profile.publish_warning %>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          <%= @profile.publish_warning %>
+        </strong>
+      </div>
+    <% end %>
+
+    <% if flash.notice.present? %>
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p><%= flash.notice %></p>
+        </div>
+      </div>
+    <% end %>
 
     <%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
       <%= f.govuk_error_summary %>
@@ -89,7 +104,6 @@
         </div>
       <% else %>
 	     <div class="govuk-button-group">
-          <%= govuk_link_to 'Publish changes', schools_on_boarding_profile_publish_path %>
 	        <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, secondary: true %>
         </div>
       <% end %>

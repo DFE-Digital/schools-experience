@@ -15,7 +15,7 @@ module Schools
             candidate_requirements_selection: @candidate_requirements_selection,
             candidate_requirements_selection_step_completed: true
 
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :new
         end
@@ -34,7 +34,7 @@ module Schools
           current_school_profile.update! \
             candidate_requirements_selection: @candidate_requirements_selection
 
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :edit
         end

@@ -15,9 +15,7 @@ module Schools
       end
 
       def warning
-        if school.private_beta?
-          "To save your changes, go back and select 'Publish changes'."
-        else
+        unless school.private_beta?
           "To set up your profile, go back and select 'Accept and set up profile'."
         end
       end

@@ -5,7 +5,7 @@ module Schools
 
       before_action do
         unless current_school_profile.completed?
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         end
       end
 

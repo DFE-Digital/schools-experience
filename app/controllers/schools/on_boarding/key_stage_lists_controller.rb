@@ -10,7 +10,7 @@ module Schools
 
         if @key_stage_list.valid?
           current_school_profile.update! key_stage_list: @key_stage_list
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :new
         end
@@ -25,7 +25,7 @@ module Schools
 
         if @key_stage_list.valid?
           current_school_profile.update! key_stage_list: @key_stage_list
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :edit
         end

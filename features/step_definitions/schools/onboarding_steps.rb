@@ -268,6 +268,12 @@ And "I complete the candidate experience form with valid data" do
   )
 end
 
+When "I click the {string} button for the {string} row" do |button, row|
+  within "##{row.parameterize}" do
+    click_on button
+  end
+end
+
 Then "I should see the correctly-formatted school placement information I entered in the wizard" do
   within "#school-placement-info" do
     @school.school_profile.description_details.lines.reject(&:blank?).each do |line|

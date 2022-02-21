@@ -20,6 +20,15 @@ module Schools
           public_send "new_schools_on_boarding_#{school_profile.current_step}_path"
         end
       end
+
+      def continue(school_profile)
+        if current_school.private_beta? && school_profile.completed?
+          Bookings::ProfilePublisher.new(current_school, school_profile).update!
+          flash.notice = "Your profile has been saved and published."
+        end
+
+        redirect_to next_step_path(current_school_profile)
+      end
     end
   end
 end

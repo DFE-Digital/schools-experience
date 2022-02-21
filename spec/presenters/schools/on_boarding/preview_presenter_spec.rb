@@ -17,9 +17,7 @@ describe Schools::OnBoarding::PreviewPresenter do
         create :bookings_school, :onboarded, :full_address, urn: 123_456
       end
 
-      it 'returns publish warning' do
-        expect(subject.warning).to eq "To save your changes, go back and select 'Publish changes'."
-      end
+      it { expect(subject.warning).to be_nil }
     end
 
     context 'when school is not onboarded' do

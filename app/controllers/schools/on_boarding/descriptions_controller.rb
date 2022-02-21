@@ -10,7 +10,7 @@ module Schools
 
         if @description.valid?
           current_school_profile.update! description: @description
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :new
         end
@@ -21,13 +21,13 @@ module Schools
       end
 
       def update
-        return redirect_to next_step_path(current_school_profile) if skipped?
+        return continue(current_school_profile) if skipped?
 
         @description = Description.new description_params
 
         if @description.valid?
           current_school_profile.update! description: @description
-          redirect_to next_step_path(current_school_profile)
+          continue(current_school_profile)
         else
           render :edit
         end
