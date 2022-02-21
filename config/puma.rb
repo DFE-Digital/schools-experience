@@ -54,3 +54,7 @@ if Rails.env.development?
 else
   port listen_port
 end
+
+# Metrics
+activate_control_app
+plugin :yabeda
