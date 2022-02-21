@@ -16,6 +16,7 @@ Find out more about a career in teaching, experience days and how to apply." %>
   </div>
 <% end %>
 
-<h1 class="govuk-heading-l govuk-!-margin-top-4"><%= @school.name %></h1>
+<span class="govuk-caption-xl govuk-!-margin-top-4">School profile</span>
+<h1 class="govuk-heading-l"><%= @school.name %></h1>
 
 <%= render (@presenter ? 'phase2' : 'phase1'), school: @school, include_candidate_request_links: true %>

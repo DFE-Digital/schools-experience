@@ -91,19 +91,17 @@ Feature: School Profile
       When I am on the profile page for the school
       Then I should see the following summary rows:
           | Heading                      | Value                                            |
-          | Individual requirements      | They must live within 7 miles of the school      |
           | Experience details           | A really good one                                |
           | School subjects              | Maths                                            |
           | School phases                | Secondary (11 to 16)                             |
           | School phases                | 16 to 18                                         |
           | School Address               | 22 something                                     |
-          | School availability info     | No information supplied                          |
-          | DBS check info               | Yes\nAlways require DBS check                    |
+          | DBS check info               | Yes. Always require DBS check                    |
           | Other fee info               | £300.00 Daily, Gold sovereigns\nFalconry lessons |
           | Dress code                   | Business dress\nMust have nice hat               |
           | Start and finish times       | 8:15 am to 4:30 pm                               |
           | Parking                      | Not available on site\nCarpark next door         |
-          | School teacher training info | We run our own training\nFind out more about     |
+          | Teacher training             | We run our own training\nFind out more about     |
      And I should see the accessability information I have entered
 
   Scenario: Publishing profile changes for an onboarded school

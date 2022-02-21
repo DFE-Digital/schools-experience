@@ -27,6 +27,14 @@ module Schools::PlacementDatesHelper
     end
   end
 
+  def placement_date_phase(placement_date)
+    placement_date.supports_subjects ? "Secondary" : "Primary"
+  end
+
+  def placement_date_anchor(placement_date)
+    "#{placement_date_phase(placement_date)}-placement-date-#{placement_date.date}".downcase
+  end
+
   def placement_date_experience_type_tag(virtual)
     virtual ? placement_date_virtual_tag : placement_date_inschool_tag
   end

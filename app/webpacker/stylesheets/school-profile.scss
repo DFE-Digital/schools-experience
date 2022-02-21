@@ -12,26 +12,58 @@
   }
 }
 
-.secondary-placement-dates {
-  dt {
-    width: 12rem;
-    min-width: 12rem;
-  }
-
-  @include govuk-media-query($until: tablet) {
-    dt {
-      width: 100%;
-    }
-
-    span {
-      margin-right: 0.6rem;
-    }
-  }
-}
-
 .primary-placement-dates {
   li span {
     margin-right: 0.6rem;
+  }
+}
+
+.school-profile {
+  .govuk-summary-list__key {
+    margin-bottom: 1em;
+  }
+
+  .panel-highlight {
+    background: #f3f2f1;
+    padding: 20px;
+
+    .govuk-summary-list__key {
+      margin-bottom: 0;
+    }
+  }
+
+  #school-subjects {
+    ul {
+      margin-top: 1em;
+    }
+  }
+
+  table thead >tr > th {
+    &.placement-date {
+      width: 25%;
+    }
+
+    &.placement-phase {
+      width: 30%;
+    }
+
+    &.placement-type {
+      width: 27%;
+    }
+
+    &.placement-start {
+      width: 18%;
+    }
+  }
+
+  table tbody tr:last-child {
+    td, th {
+      border-bottom: none;
+    }
+  }
+
+  .embedded-map {
+    width: 100%;
   }
 }
 

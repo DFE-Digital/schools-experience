@@ -1,0 +1,30 @@
+<dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+  <%= dlist_item "Address", id: "school-address-sidebar" do %>
+    <%= format_school_address(presenter.school) %>
+  <% end %>
+
+  <%= dlist_item "School phases", id: "school-phases" do %>
+    <%= format_school_phases_compact(presenter.school) %>
+  <% end %>
+
+  <%= dlist_item "Dates", id: "school-phases" do %>
+    <%= link_to("#{number_with_delimiter(presenter.total_available_dates)} dates available for this school", "#placement-dates") %>
+  <% end if presenter.school.availability_preference_fixed? %>
+
+  <%= dlist_item "DBS check required", id: "dbs-check-info-sidebar" do %>
+    <p>
+      <%= presenter.dbs_required %>.
+      <%= safe_format(presenter.dbs_policy, wrapper_tag: "span") if presenter.dbs_policy %>
+    </p>
+  <% end %>
+
+  <% if presenter.disability_confident? %>
+    <%= dlist_item "Disability access", id: "disability-and-access-sidebar" do %>
+      <p>Disability Confident</p>
+    <% end %>
+  <% end %>
+
+  <%= dlist_item "Subjects", id: "school-subjects" do %>
+    <%= format_school_subjects_list(presenter.school) %>
+  <% end if presenter.school.subjects.present? %>
+</dl>

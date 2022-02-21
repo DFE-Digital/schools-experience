@@ -30,9 +30,29 @@ module Candidates::SchoolHelper
     end
   end
 
+  def format_school_subjects_list(school)
+    subjects = school.subjects.ordered_by_name.map(&:name)
+
+    return nil if subjects.empty?
+
+    content_tag(:ul, class: "govuk-list govuk-list--bullet") do
+      safe_join(subjects.map { |subject| content_tag(:li, subject) })
+    end
+  end
+
   def format_school_phases(school)
     tag.ul(class: 'govuk-list') do
       safe_join(school.phases.map { |p| tag.li(p.name) })
+    end
+  end
+
+  def format_school_phases_compact(school)
+    school.phases.map(&:name).join(", ")
+  end
+
+  def contents_list_item(name, link)
+    content_tag(:li, class: "gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed") do
+      link_to(name, link, class: "gem-c-contents-list__link govuk-link--no-underline")
     end
   end
 
@@ -132,11 +152,11 @@ module Candidates::SchoolHelper
     content.presence || msg
   end
 
-  def start_request_link(school)
+  def start_request_link(school, opts = {})
     if school.availability_preference_fixed?
-      new_candidates_school_registrations_subject_and_date_information_path(school)
+      new_candidates_school_registrations_subject_and_date_information_path(school, opts)
     else
-      new_candidates_school_registrations_personal_information_path(school)
+      new_candidates_school_registrations_personal_information_path(school, opts)
     end
   end
 

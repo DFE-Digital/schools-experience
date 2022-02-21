@@ -1,0 +1,17 @@
+<% if presenter.school.availability_preference_fixed? %>
+  <h2 id="placement-dates">Placement dates</h2>
+
+  <%= render partial: "candidates/schools/profile/placement_dates", locals: { available_dates_by_month: presenter.available_dates_by_month, school: presenter.school } %>
+<% else %>
+  <div id="placement-availability">
+    <h2>Placement availability</h2>
+
+    <p><%= format_school_availability(presenter.availability_info) %></p>
+
+    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+      <%= dlist_item "School experience type", id: "school-experience-type" do %>
+        <%= format_school_placement_locations presenter.school %>
+      <% end %>
+    </dl>
+  </div>
+<% end %>

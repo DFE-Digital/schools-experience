@@ -19,7 +19,8 @@ Then("I should see the list of primary placement dates") do
   @primary_dates.each do |pd|
     expect(page).to have_css(
       'label',
-      text: "#{pd.date.to_formatted_s(:govuk)} (#{pd.duration} day)"
+      text: "#{pd.date.to_formatted_s(:govuk)} (#{pd.duration} day)",
+      id: "primary-placement-date-#{pd.date}"
     )
   end
 end
@@ -38,7 +39,7 @@ Then("I should see the list of secondary placement dates") do
     expect(page).to have_css('dt', text: sd.date.to_formatted_s(:govuk))
 
     sd.subjects.each do |subject|
-      expect(page).to have_css('label', text: subject.name)
+      expect(page).to have_css('label', text: subject.name, id: "secondary-placement-date-#{sd.date}")
     end
   end
 end

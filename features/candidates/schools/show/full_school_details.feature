@@ -57,7 +57,7 @@ Feature: School show page (enhanced data)
         Given I am on the profile page for the chosen school
         Then I should see the entire school address in the sidebar
 
-    Scenario: Placement availability (sidebar)
+    Scenario: Placement availability
         Given the chosen school has the following availability information
             """
             Paragraph one
@@ -65,53 +65,57 @@ Feature: School show page (enhanced data)
             Paragraph two
             """
         When I am on the profile page for the chosen school
-        Then I should see availability information in the sidebar
+        Then I should see availability information
 
-    Scenario: Placement availability (sidebar)
+    Scenario: Placement availability
         Given the chosen school has no availability information
         When I am on the profile page for the chosen school
-        Then the availability information in the sidebar should read 'No information supplied'
+        Then the availability information should read 'No information supplied'
     
+    Scenario: DBS Check info
+        Given I am on the profile page for the chosen school
+        Then the DBS Check information should show the correct details
+
     Scenario: DBS Check info (sidebar)
         Given I am on the profile page for the chosen school
         Then the DBS Check information in the sidebar should show the correct details
     
-    Scenario: Admin Fees information (sidebar)
+    Scenario: Admin Fees information
         Given the school charges a 'administration' fee of '10.00' for 'general overheads'
         When I am on the profile page for the chosen school
         Then I should see the fee information
     
-    Scenario: No Admin Fees information (sidebar)
+    Scenario: No Admin Fees information
         Given the school does not charge a 'administration' fee
         When I am on the profile page for the chosen school
         Then I should not see the fee information
 
-    Scenario: DBS Fees information (sidebar)
+    Scenario: DBS Fees information
         Given the school charges a 'dbs' fee of '10.00' for 'general overheads'
         When I am on the profile page for the chosen school
         Then I should see the fee information
     
-    Scenario: No DBS Fees information (sidebar)
+    Scenario: No DBS Fees information
         Given the school does not charge a 'dbs' fee
         When I am on the profile page for the chosen school
         Then I should not see the fee information
 
-    Scenario: Other Fees information (sidebar)
+    Scenario: Other Fees information
         Given the school charges a 'other' fee of '10.00' for 'general overheads'
         When I am on the profile page for the chosen school
         Then I should see the fee information
     
-    Scenario: No Other Fees information (sidebar)
+    Scenario: No Other Fees information
         Given the school does not charge a 'other' fee
         When I am on the profile page for the chosen school
         Then I should not see the fee information
 
-    Scenario: Dress code information (sidebar)
+    Scenario: Dress code information
         Given the school has a dress code policy
         When I am on the profile page for the chosen school
         Then I should see the dress code policy information
 
-    Scenario: Teacher training offered (sidebar)
+    Scenario: Teacher training offered
         Given the chosen school offers teacher training and has the following info
             """
             Paragraph one
@@ -119,7 +123,7 @@ Feature: School show page (enhanced data)
             Paragraph two
             """
         When I am on the profile page for the chosen school
-        Then I should see Find out more about our teacher training information in the sidebar
+        Then I should see teacher training information
         And the teacher training website should be listed with the other hyperlinks
 
     Scenario: Request placement button

@@ -21,10 +21,14 @@
           <section class="date-selector date-selector-primary">
             <h3 class="govuk-heading-m">Primary school dates</h3>
 
-            <%= f.govuk_collection_radio_buttons :date_and_subject_ids,
-              format_primary_date_options(@subject_and_date_information.primary_placement_dates),
-              :first, :last, include_hidden: false %>
-
+            <%= f.govuk_radio_buttons_fieldset(:date_and_subject_ids) do %>
+              <% format_primary_date_options(@subject_and_date_information.primary_placement_dates).each_with_index do |option, index| %>
+                <%= f.govuk_radio_button :date_and_subject_ids, option.first, label: {
+                  text: option.last,
+                  id: placement_date_anchor(@subject_and_date_information.primary_placement_dates[index])
+                }, link_errors: index.zero? %>
+              <% end %>
+            <% end %>
           </section>
         <%- end -%>
 
@@ -36,7 +40,7 @@
 
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
-                <span><%= date.to_formatted_s(:govuk) %></span>
+                <span id="<%= placement_date_anchor(secondary_placement_dates.first) %>"><%= date.to_formatted_s(:govuk) %></span>
                 <%= placement_date_experience_type_tag secondary_placement_dates.first.virtual %>
               </dt>
 

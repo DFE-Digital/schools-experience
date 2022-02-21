@@ -1,0 +1,54 @@
+<% if available_dates_by_month.empty? %>
+<div class="govuk-inset-text">
+  There are no upcoming dates
+</div>
+<% else %>
+<div class="govuk-accordion govuk-!-margin-bottom-8 placement-dates" data-module="govuk-accordion">
+  <% available_dates_by_month.sort.each do |month, dates| %>
+    <div class="govuk-accordion__section">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <button type="button" id="accordion-default-heading-<%= month %>" aria-controls="accordion-default-content-<%= month %>" class="govuk-accordion__section-button" aria-expanded="false">
+            <%= month.to_formatted_s(:govuk_month) %>
+          </button>
+        </h2>
+      </div>
+      <div id="accordion-default-content-<%= month %>" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-<%= month %>">
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="placement-date govuk-table__header" scope="col">Date</th>
+              <th class="placement-phase govuk-table__header" scope="col">School phase</th>
+              <th class="placement-type govuk-table__header" scope="col">Experience type</th>
+              <th class="placement-start govuk-table__header" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <% dates.each do |date| %>
+              <tr class="placement-date govuk-table__row">
+                <th class="govuk-table__header" scope="row"><%= date.date.to_formatted_s(:govuk) %></th>
+                <td class="govuk-table__cell">
+                  <p><%= placement_date_phase(date) %></p>
+                  <% if date.supports_subjects? %>
+                    <p>
+                      <% if date.subjects.present? %>
+                        <%= to_sentence(date.subjects.map(&:name)) %>
+                      <% else %>
+                        All subjects
+                      <% end %>
+                    </p>
+                  <% end %>
+                </td>
+                <td class="govuk-table__cell"><%= placement_date_experience_type_tag(date.virtual) %></td>
+                <td class="govuk-table__cell">
+                  <%= link_to("Start request", start_request_link(school, anchor: placement_date_anchor(date))) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+</div>
+<% end %>

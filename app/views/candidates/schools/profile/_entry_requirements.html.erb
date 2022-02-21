@@ -1,0 +1,17 @@
+<div id="entry-requirements">
+  <h2>Entry requirements</h2>
+
+  <p>You must:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <%= content_or_msg split_to_list(presenter.individual_requirements), "No requirements specified" %>
+  </ul>
+</div>
+
+<dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+  <%= dlist_item "DBS check required", id: "dbs-check-info" do %>
+    <p>
+      <%= presenter.dbs_required %>.
+      <%= safe_format(presenter.dbs_policy, wrapper_tag: "span") if presenter.dbs_policy %>
+    </p>
+  <% end %>
+</dl>

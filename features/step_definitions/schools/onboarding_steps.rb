@@ -303,7 +303,7 @@ Then "all of the subjects I entered should be listed" do
 end
 
 Then "I should see the teacher training info I entered in the wizard" do
-  within '#school-teacher-training-info' do
+  within '#teacher-training' do
     expect(page).to have_content \
       @school.school_profile.teacher_training.teacher_training_details
 
@@ -312,15 +312,15 @@ Then "I should see the teacher training info I entered in the wizard" do
   end
 end
 
-Then "I should see the schools availability information in the sidebar" do
-  within "#school-availability-info" do
+Then "I should see the schools availability information" do
+  within "#placement-availability" do
     expect(page).to have_css('p', text: @school.availability_info)
   end
 end
 
 Then "the DBS Check information in the sidebar should match the information entered in the wizard" do
-  within "#dbs-check-info" do
-    expect(page).to have_content "Yes\nAlways require DBS check"
+  within "#dbs-check-info-sidebar" do
+    expect(page).to have_content "Yes. Always require DBS check"
   end
 end
 

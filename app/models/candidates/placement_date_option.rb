@@ -8,7 +8,8 @@ class Candidates::PlacementDateOption
           placement_date_subject.bookings_subject.name,
           placement_date.duration,
           placement_date.date,
-          placement_date.virtual
+          placement_date.virtual,
+          placement_date.supports_subjects
         )
       end
     else
@@ -18,20 +19,22 @@ class Candidates::PlacementDateOption
           'All subjects',
           placement_date.duration,
           placement_date.date,
-          placement_date.virtual
+          placement_date.virtual,
+          placement_date.supports_subjects
         )
       )
     end
   end
 
-  attr_accessor :id, :name, :duration, :date, :virtual
+  attr_accessor :id, :name, :duration, :date, :virtual, :supports_subjects
 
-  def initialize(id, name, duration, date, virtual)
+  def initialize(id, name, duration, date, virtual, supports_subjects)
     @id = id
     @name = name
     @duration = duration
     @date = date
     @virtual = virtual
+    @supports_subjects = supports_subjects
   end
 
   def name_with_duration

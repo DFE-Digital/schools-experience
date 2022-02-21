@@ -1,220 +1,25 @@
-<div class="govuk-grid-row govuk-!-margin-top-4">
-  <div class="govuk-grid-column-two-thirds" id="candidate-school-profile">
-    <%- if @presenter.description_details.present? -%>
-    <section id="school-placement-info">
+<div class="govuk-grid-row school-profile">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @presenter.description_details.present? %>
+    <section id="school-placement-info" class="govuk-!-margin-bottom-8">
       <%= safe_format @presenter.description_details %>
     </section>
-    <%- end -%>
-
-    <div>
-      <h2>
-        About our school experience
-      </h2>
-
-      <dl class="govuk-summary-list govuk-summary-list--no-border inline">
-        <%= dlist_item 'Individual requirements:', id: 'individual-requirements' do %>
-          <%= content_or_msg split_to_list(@presenter.individual_requirements), "No requirements specified" %>
-        <% end %>
-
-        <%= dlist_item 'Details:', id: 'experience-details' do %>
-          <%= conditional_format content_or_msg @presenter.experience_details, "No information supplied" %>
-        <% end %>
-
-        <%= dlist_item 'Subjects:', id: "school-subjects" do %>
-          <%= format_school_subjects @presenter.school %>
-        <% end %>
-      </dl>
-
-      <% if @presenter.school.availability_preference_fixed? %>
-        <%= render partial: 'candidates/schools/placement_dates', locals: { primary_dates: @presenter.primary_dates, secondary_dates_grouped_by_date: @presenter.secondary_dates_grouped_by_date } %>
-      <% end %>
-
-    </div>
-
-    <div>
-      <h2>Location</h2>
-
-      <%= school_location_map @presenter.school %>
-
-      <p class="directions-link">
-        <%= link_to 'Get directions', external_map_url(
-          latitude: @presenter.school.coordinates.latitude,
-          longitude: @presenter.school.coordinates.longitude,
-          name: @presenter.school.name),
-          'aria-label': "Get directions for #{@school.name}"
-        %>
-      </p>
-    </div>
-
-    <div>
-      <p>
-        <strong>
-          For more information about our school:
-        </strong>
-      </p>
-
-      <ul id="school-websites">
-        <%- if @presenter.website.present? -%>
-        <li id="school-website">
-          <%= link_to "#{@presenter.school.name} website", @presenter.website %>
-        </li>
-        <%- end -%>
-
-        <li>
-          <%= link_to "#{@presenter.school.name} Get Information About Schools",
-                      gias_school_url(@presenter.urn) %>
-        </li>
-
-        <li>
-          <%= link_to "Ofsted report: #{@presenter.school.name}",
-                      ofsted_report_url(@presenter.urn) %>
-        </li>
-
-        <li>
-          <%= link_to "Performance information: #{@presenter.school.name}",
-                      performance_report_url(@presenter.urn) %>
-        </li>
-
-        <%- if @presenter.teacher_training_url.present? -%>
-        <li>
-          <%= link_to "Teacher training: #{@presenter.name}",
-            cleanup_school_url(@presenter.teacher_training_url) %>
-        </li>
-        <%- end -%>
-      </ul>
-    </div>
-
-    <% if @presenter.school.enabled? && @presenter.school.has_availability? && include_candidate_request_links %>
-      <div class="school-start-request-button__tablet_plus govuk-!-margin-top-8">
-        <%= render 'start_request', profile: @presenter %>
-
-      </div>
-
-      <p>
-        <%= link_to 'Back to search results', :back,
-                    data: {controller: 'back-link'} %>
-      </p>
     <% end %>
+
+    <%= render partial: "candidates/schools/profile/contents_list", locals: { presenter: @presenter } %>
+    <%= render partial: "candidates/schools/profile/about_our_school_experience", locals: { presenter: @presenter } %>
+    <%= render partial: "candidates/schools/profile/entry_requirements", locals: { presenter: @presenter } %>
+    <%= render partial: "candidates/schools/profile/placement_dates_availability", locals: { presenter: @presenter } %>
+    <%= render partial: "candidates/schools/profile/fees", locals: { presenter: @presenter } %>
+    <%= render partial: "candidates/schools/profile/location", locals: { presenter: @presenter } %>
+    <%= render partial: "candidates/schools/profile/start_request", locals: {
+      presenter: @presenter,
+      include_candidate_request_links: include_candidate_request_links
+    } %>
   </div>
-
-  <div class="candidate-profile-sidebar govuk-grid-column-one-third column-top-border">
-    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
-
-      <%= dlist_item 'School phases', id: 'school-phases' do %>
-        <%= format_school_phases(@presenter.school) %>
-      <% end %>
-
-      <%= dlist_item 'Address', id: 'school-address' do %>
-        <%= format_school_address @presenter.school, tag(:br) %>
-      <% end %>
-
-      <%- unless @presenter.school.availability_preference_fixed? -%>
-      <div id="school-availability-info" class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Placement availability
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <%= format_school_availability(@presenter.availability_info) %>
-          </dd>
-      </div>
-
-      <div id="school-experience-type" class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            School experience type
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <%= format_school_placement_locations @presenter.school %>
-          </dd>
-      </div>
-      <%- end -%>
-
-      <%= dlist_item 'DBS check required', id: 'dbs-check-info' do %>
-        <p>
-          <%= @presenter.dbs_required %>
-        </p>
-
-        <%= safe_format @presenter.dbs_policy if @presenter.dbs_policy %>
-      <% end %>
-
-      <%= dlist_item 'Administration fees', id: 'administration-fee-info' do %>
-        <p>
-          <%= number_to_currency @presenter.administration_fee_amount_pounds %>
-          <%= @presenter.administration_fee_interval %>,
-          <%= @presenter.administration_fee_payment_method %>
-        </p>
-
-        <%= safe_format @presenter.administration_fee_description %>
-      <% end if @presenter.administration_fee_amount_pounds %>
-
-      <%= dlist_item 'DBS check fees', id: 'dbs-fee-info' do %>
-        <p>
-          <%= number_to_currency @presenter.dbs_fee_amount_pounds %>
-          <%= @presenter.dbs_fee_interval %>,
-          <%= @presenter.dbs_fee_payment_method %>
-        </p>
-
-        <%= safe_format @presenter.dbs_fee_description %>
-      <% end if @presenter.dbs_fee_amount_pounds %>
-
-      <%= dlist_item 'Other fees', id: 'other-fee-info' do %>
-        <p>
-          <%= number_to_currency @presenter.other_fee_amount_pounds %>
-          <%= @presenter.other_fee_interval %>,
-          <%= @presenter.other_fee_payment_method %>
-        </p>
-
-        <%= safe_format @presenter.other_fee_description %>
-      <% end if @presenter.other_fee_amount_pounds %>
-
-      <%= dlist_item 'Dress code', id: 'dress-code' do %>
-        <%= content_or_msg @presenter.formatted_dress_code, "No dress code supplied" %>
-      <% end %>
-
-      <%= dlist_item 'Start and finish times', id: 'start-and-finish-times' do %>
-        <p>
-          <%= @presenter.start_time %> to <%= @presenter.end_time %>
-
-          <%- if @presenter.flexible_on_times -%>
-            - Flexible
-          <%- end -%>
-        </p>
-
-        <%- if @presenter.flexible_on_times_details.present? -%>
-        <%= safe_format @presenter.flexible_on_times_details %>
-        <%- end -%>
-      <% end %>
-
-      <%= dlist_item 'Parking', id: 'parking' do %>
-        <%- if @presenter.parking_provided -%>
-          <p>Yes - on site parking provided</p>
-        <%- else -%>
-          <p>Not available on site</p>
-        <%- end -%>
-
-        <%= safe_format @presenter.parking_details %>
-      <% end %>
-
-      <% if @presenter.supports_access_needs? %>
-        <%= dlist_item 'Disability and access details', id: 'disability-and-access' do %>
-          <%= render partial: 'candidates/schools/access_needs_statement',
-            locals: { presenter: @presenter } %>
-        <% end %>
-      <% end %>
-
-
-      <%= dlist_item 'Teacher training offered', id: 'school-teacher-training-info' do %>
-        <%= safe_format @presenter.teacher_training_info %>
-
-        <p>
-          <%= link_to 'Find out more about our teacher training', @presenter.teacher_training_url %>
-        </p>
-      <% end if @presenter.teacher_training_info.present? %>
-    </dl>
-
-    <% if @presenter.school.enabled? && @presenter.school.has_availability? && include_candidate_request_links %>
-      <div class="school-start-request-button__mobile">
-        <%= render 'start_request', profile: @presenter %>
-      </div>
-    <% end %>
+  <div class="govuk-grid-column-one-third">
+    <div class="panel-highlight">
+      <%= render partial: "candidates/schools/profile/sidebar", locals: { presenter: @presenter } %>
+		</div>
   </div>
 </div>
