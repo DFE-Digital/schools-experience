@@ -17,6 +17,12 @@ resource "cloudfoundry_route" "route_internal" {
   space    = data.cloudfoundry_space.space.id
 }
 
+resource "cloudfoundry_route" "route_delayed_internal" {
+  domain   = data.cloudfoundry_domain.internal.id
+  hostname = "${var.paas_application_name}-delayed-internal"
+  space    = data.cloudfoundry_space.space.id
+}
+
 resource "cloudfoundry_route" "route_delayed" {
   count    = var.delayed_jobs
   domain   = data.cloudfoundry_domain.internal.id

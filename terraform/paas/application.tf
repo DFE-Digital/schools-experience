@@ -80,6 +80,10 @@ resource "cloudfoundry_app" "delayed_jobs" {
     }
   }
 
+  routes {
+    route = cloudfoundry_route.route_delayed_internal.id
+  }
+
   dynamic "routes" {
     for_each = cloudfoundry_route.route_delayed
     content {
