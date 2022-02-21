@@ -978,10 +978,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
-"@googlemaps/js-api-loader@^1.13.5":
-  version "1.13.5"
-  resolved "https://registry.yarnpkg.com/@googlemaps/js-api-loader/-/js-api-loader-1.13.5.tgz#b0f6fb5d3f73d1fdaff66252f556bd78c5350fc6"
-  integrity sha512-lYWbTAueTx6mlFMybqtqCseiexghM+/1+cWMWHi2fqkOo1b0c5oWCJqre5MWeZiu6hEj9abpVKl/hG1oMtixbQ==
+"@googlemaps/js-api-loader@^1.13.6":
+  version "1.13.6"
+  resolved "https://registry.yarnpkg.com/@googlemaps/js-api-loader/-/js-api-loader-1.13.6.tgz#afacf330cae6f126c68548aa72265fb4e33a6793"
+  integrity sha512-wjsNABaYaHg9Y/7sry9r4mudugyWJzNDYNMNJBbaDACtS/XvASzzIcgGgjQ1euHExJA6rEUg5qGu/XR7zw+Xhw==
   dependencies:
     fast-deep-equal "^3.1.3"
 
