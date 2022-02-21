@@ -21,5 +21,25 @@ describe Bookings::Reminder, type: :request do
 
       expect { subject.deliver }.to change { enqueued_jobs.size }.by(2)
     end
+
+    context "when it's an in school experience" do
+      it "despatches the in school reminder email" do
+        expect_any_instance_of(NotifyEmail::CandidateBookingReminder).to \
+          receive(:despatch_later!)
+
+        subject.deliver
+      end
+    end
+
+    context "when it's a virtual experience" do
+      let(:booking) { create(:bookings_booking, :accepted, :virtual_experience, bookings_school: school, date: 3.weeks.from_now) }
+
+      it "despatches the virtual reminder email" do
+        expect_any_instance_of(NotifyEmail::CandidateVirtualExperienceBookingReminder).to \
+          receive(:despatch_later!)
+
+        subject.deliver
+      end
+    end
   end
 end
