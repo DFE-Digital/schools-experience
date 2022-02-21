@@ -85,25 +85,44 @@ describe Schools::ConfirmedBookings::DateController, type: :request do
         double(NotifyEmail::CandidateBookingDateChanged, despatch_later!: true)
       end
 
-      before do
-        allow(NotifyEmail::CandidateBookingDateChanged).to receive(:from_booking).and_return(email)
+      let :virtual_email do
+        double(NotifyEmail::CandidateVirtualExperienceBookingDateChanged, despatch_later!: true)
       end
 
       before do
+        allow(NotifyEmail::CandidateBookingDateChanged).to receive(:from_booking).and_return(email)
+        allow(NotifyEmail::CandidateVirtualExperienceBookingDateChanged).to receive(:from_booking).and_return(virtual_email)
+
         api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
         booking.gitis_contact = api.get_schools_experience_sign_up(booking.contact_uuid)
       end
 
       before { subject }
 
-      specify 'should send a candidate booking date changed email with the correct values' do
-        expect(NotifyEmail::CandidateBookingDateChanged).to have_received(:from_booking).with(
-          booking.candidate_email,
-          booking.candidate_name,
-          booking,
-          candidates_cancel_url(booking.token),
-          old_date.to_formatted_s(:govuk)
-        )
+      context "when it's an in school experience" do
+        specify 'should send a candidate booking date changed email with the correct values' do
+          expect(NotifyEmail::CandidateBookingDateChanged).to have_received(:from_booking).with(
+            booking.candidate_email,
+            booking.candidate_name,
+            booking,
+            candidates_cancel_url(booking.token),
+            old_date.to_formatted_s(:govuk)
+          )
+        end
+      end
+
+      context "when it's a virtual experience" do
+        let(:booking) { create(:bookings_booking, :virtual_experience, :accepted, bookings_school: @current_user_school) }
+
+        specify 'should send a candidate virtual experience booking date changed email with the correct values' do
+          expect(NotifyEmail::CandidateVirtualExperienceBookingDateChanged).to have_received(:from_booking).with(
+            booking.candidate_email,
+            booking.candidate_name,
+            booking,
+            candidates_cancel_url(booking.token),
+            old_date.to_formatted_s(:govuk)
+          )
+        end
       end
     end
 
