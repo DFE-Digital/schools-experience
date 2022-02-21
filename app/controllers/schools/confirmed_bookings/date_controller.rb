@@ -31,7 +31,25 @@ module Schools
     private
 
       def date_changed_email(booking, old_date)
+        if booking.virtual_experience?
+          virtual_email(booking, old_date)
+        else
+          in_school_email(booking, old_date)
+        end
+      end
+
+      def in_school_email(booking, old_date)
         NotifyEmail::CandidateBookingDateChanged.from_booking(
+          booking.candidate_email,
+          booking.candidate_name,
+          booking,
+          candidates_cancel_url(booking.token),
+          old_date.to_formatted_s(:govuk)
+        )
+      end
+
+      def virtual_email(booking, old_date)
+        NotifyEmail::CandidateVirtualExperienceBookingDateChanged.from_booking(
           booking.candidate_email,
           booking.candidate_name,
           booking,
