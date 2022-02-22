@@ -29,7 +29,7 @@ class Candidates::SchoolsController < ApplicationController
 
     @school.increment!(:views)
 
-    if @school.private_beta?
+    if @school.onboarded?
       @presenter = Candidates::SchoolPresenter.new(@school, @school.profile)
     else
       @available_dates = @school.bookings_placement_dates.available

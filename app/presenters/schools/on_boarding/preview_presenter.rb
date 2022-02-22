@@ -15,7 +15,7 @@ module Schools
       end
 
       def warning
-        unless school.private_beta?
+        unless school.onboarded?
           "To set up your profile, go back and select 'Accept and set up profile'."
         end
       end

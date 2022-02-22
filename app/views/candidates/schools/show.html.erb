@@ -4,7 +4,7 @@ Find out more about a career in teaching, experience days and how to apply." %>
 
 <%= govuk_back_link javascript: true %>
 
-<% if !@school.private_beta? %>
+<% if !@school.onboarded? %>
   <div class="govuk-inset-text">
     This school has not yet joined the Get school experience service.
     <%= link_to 'Search for schools offering school experience', new_candidates_school_search_path %>.

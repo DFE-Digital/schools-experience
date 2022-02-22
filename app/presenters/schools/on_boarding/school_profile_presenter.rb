@@ -259,7 +259,7 @@ module Schools
       end
 
       def page_heading
-        if @school.private_beta?
+        if @school.onboarded?
           'School profile'
         else
           'Check your answers before setting up your profile'
@@ -267,7 +267,7 @@ module Schools
       end
 
       def publish_warning
-        unless @school.private_beta?
+        unless @school.onboarded?
           "To set up your profile, select the checkbox at the bottom of the page and select 'Accept and set up profile'."
         end
       end

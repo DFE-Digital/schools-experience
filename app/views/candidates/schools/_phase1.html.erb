@@ -105,7 +105,7 @@
         </dd>
       </div>
 
-      <%- if @school.private_beta? && !@school.availability_preference_fixed? -%>
+      <%- if @school.onboarded? && !@school.availability_preference_fixed? -%>
       <div id="school-availability-info" class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Placement availability
