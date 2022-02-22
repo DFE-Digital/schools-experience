@@ -508,6 +508,21 @@ describe Bookings::School, type: :model do
         end
       end
     end
+
+    context 'Onboarded' do
+      let!(:onboarded_school) { create(:bookings_school, :onboarded) }
+      let!(:non_onboarded_school) { create(:bookings_school) }
+
+      it { is_expected.to respond_to(:onboarded) }
+
+      specify 'should return onboarded schools' do
+        expect(subject.onboarded).to include(onboarded_school)
+      end
+
+      specify 'should not return non-enabled schools' do
+        expect(subject.onboarded).not_to include(non_onboarded_school)
+      end
+    end
   end
 
   describe 'Methods' do

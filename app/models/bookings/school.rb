@@ -177,6 +177,8 @@ class Bookings::School < ApplicationRecord
     end
   }
 
+  scope :onboarded, -> { joins(:profile) }
+
   def to_param
     urn.to_s.presence
   end
