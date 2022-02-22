@@ -14,6 +14,7 @@ module Schools
         subjects
         description
         candidate_dress_code
+        candidate_parking_information
         candidate_experience_detail
         access_needs_support
         access_needs_detail
@@ -107,6 +108,10 @@ module Schools
         return true if @school_profile.candidate_dress_code.dup.invalid?
 
         !@school_profile.candidate_dress_code_step_completed?
+      end
+
+      def candidate_parking_information_required?
+        @school_profile.candidate_parking_information.dup.invalid?
       end
 
       def candidate_experience_detail_required?

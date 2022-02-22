@@ -42,9 +42,6 @@ module Schools
 
       def candidate_experience_detail_params
         params.require(:schools_on_boarding_candidate_experience_detail).permit \
-          :parking_provided,
-          :parking_details,
-          :nearby_parking_details,
           :start_time,
           :end_time,
           :times_flexible,

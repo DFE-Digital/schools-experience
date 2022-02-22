@@ -324,7 +324,7 @@ en:
           attributes:
             other_dress_requirements_detail:
               blank: 'Other dress code details are required'
-        schools/on_boarding/candidate_experience_detail:
+        schools/on_boarding/candidate_parking_information:
           attributes:
             parking_provided:
               inclusion: 'Select whether parking is provided'
@@ -332,6 +332,8 @@ en:
               blank: 'Details of where candidates can park at your school are required'
             nearby_parking_details:
               blank: 'Details of where candidates can park near your school are required'
+        schools/on_boarding/candidate_experience_detail:
+          attributes:
             disabled_facilities:
               inclusion: 'Select whether you provide facilities or support for candidates with disabilities or access needs'
             disabled_facilities_details:
@@ -824,12 +826,13 @@ en:
         other_dress_requirements_options:
           1: 'Other'
         other_dress_requirements_detail: 'For example no denim, jeans, shorts, short skirts or trainers.'
-      schools_on_boarding_candidate_experience_detail:
+      schools_on_boarding_candidate_parking_information:
         parking_provided_options:
           true: 'Yes'
           false: 'No'
         parking_details: 'Provide details.'
         nearby_parking_details: 'Provide details of where candidates can park near your school.'
+      schools_on_boarding_candidate_experience_detail:
         disabled_facilities:
           true: 'Yes'
           false: 'No'
@@ -985,8 +988,9 @@ en:
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_helpers
       schools_on_boarding_candidate_experience_detail:
-        parking_provided: 'Do you provide parking for candidates?'
         times_flexible: 'Are your start and finish times flexible?'
+      schools_on_boarding_candidate_parking_information:
+        parking_provided: 'Do you provide parking for candidates?'
       schools_on_boarding_access_needs_support:
         supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
       schools_on_boarding_disability_confident:

@@ -1,7 +1,8 @@
 require 'rails_helper'
-require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
-describe Schools::OnBoarding::AdminContactsController, type: :request do
+require Rails.root.join("spec", "controllers", "schools", "session_context")
+
+describe Schools::OnBoarding::CandidateParkingInformationsController, type: :request do
   include_context "logged in DfE user"
 
   context '#new' do
@@ -17,22 +18,16 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_description,
-        :with_candidate_experience_detail,
-        :with_access_needs_support,
-        :with_access_needs_detail,
-        :with_disability_confident,
-        :with_access_needs_policy,
-        :with_experience_outline,
-        :with_teacher_training
+        :with_candidate_dress_code
     end
 
     before do
-      get '/schools/on_boarding/admin_contact/new'
+      get new_schools_on_boarding_candidate_parking_information_path
     end
 
     it 'assigns the model' do
-      expect(assigns(:admin_contact)).to \
-        eq Schools::OnBoarding::AdminContact.new
+      expect(assigns(:candidate_parking_information)).to \
+        eq Schools::OnBoarding::CandidateParkingInformation.new
     end
 
     it 'renders the new template' do
@@ -53,52 +48,48 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_description,
-        :with_candidate_dress_code,
-        :with_candidate_parking_information,
-        :with_candidate_experience_detail,
-        :with_access_needs_support,
-        :with_access_needs_detail,
-        :with_disability_confident,
-        :with_access_needs_policy,
-        :with_experience_outline,
-        :with_teacher_training
+        :with_candidate_dress_code
     end
 
     let :params do
       {
-        schools_on_boarding_admin_contact: admin_contact.attributes
+        schools_on_boarding_candidate_parking_information: \
+          candidate_parking_information.attributes
       }
     end
 
     before do
-      post '/schools/on_boarding/admin_contact', params: params
+      post schools_on_boarding_candidate_parking_information_path, params: params
     end
 
     context 'invalid' do
-      let :admin_contact do
-        Schools::OnBoarding::AdminContact.new
+      let :candidate_parking_information do
+        Schools::OnBoarding::CandidateParkingInformation.new
       end
 
       it "doesn't update the school_profile" do
-        expect(school_profile.reload.admin_contact).to eq admin_contact
+        expect(school_profile.reload.candidate_parking_information.attributes).to \
+          eq candidate_parking_information.attributes
       end
 
-      it 'rerenders the new template' do
+      it 're-renders the new template' do
         expect(response).to render_template :new
       end
     end
 
     context 'valid' do
-      let :admin_contact do
-        FactoryBot.build :admin_contact
+      let :candidate_parking_information do
+        FactoryBot.build :candidate_parking_information
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.admin_contact).to eq admin_contact
+        expect(school_profile.reload.candidate_parking_information).to \
+          eq candidate_parking_information
       end
 
       it 'redirects to the next step' do
-        expect(response).to redirect_to schools_on_boarding_profile_path
+        expect(response).to redirect_to \
+          new_schools_on_boarding_candidate_experience_detail_path
       end
     end
   end
@@ -109,11 +100,12 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
     end
 
     before do
-      get '/schools/on_boarding/admin_contact/edit'
+      get edit_schools_on_boarding_candidate_parking_information_path
     end
 
     it 'assigns the model' do
-      expect(assigns(:admin_contact)).to eq school_profile.admin_contact
+      expect(assigns(:candidate_parking_information)).to \
+        eq school_profile.candidate_parking_information
     end
 
     it 'renders the edit template' do
@@ -128,35 +120,39 @@ describe Schools::OnBoarding::AdminContactsController, type: :request do
 
     let :params do
       {
-        schools_on_boarding_admin_contact: admin_contact.attributes
+        schools_on_boarding_candidate_parking_information: \
+          candidate_parking_information.attributes
       }
     end
 
     before do
-      patch '/schools/on_boarding/admin_contact', params: params
+      patch schools_on_boarding_candidate_parking_information_path, params: params
     end
 
     context 'invalid' do
-      let :admin_contact do
-        Schools::OnBoarding::AdminContact.new
+      let :candidate_parking_information do
+        Schools::OnBoarding::CandidateParkingInformation.new
       end
 
       it "doesn't update the school_profile" do
-        expect(school_profile.reload.admin_contact).not_to eq admin_contact
+        expect(school_profile.reload.candidate_parking_information).not_to \
+          eq candidate_parking_information
       end
 
-      it 'rerenders the edit template' do
+      it 're-renders the edit template' do
         expect(response).to render_template :edit
       end
     end
 
     context 'valid' do
-      let :admin_contact do
-        FactoryBot.build :admin_contact
+      let :candidate_parking_information do
+        FactoryBot.build \
+          :candidate_parking_information
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.admin_contact).to eq admin_contact
+        expect(school_profile.reload.candidate_parking_information).to \
+          eq candidate_parking_information
       end
 
       it 'redirects to the school_profile' do

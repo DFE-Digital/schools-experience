@@ -14,15 +14,6 @@
     <%= form_for candidate_experience_detail, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_radio_buttons_fieldset :parking_provided do %>
-        <%= f.govuk_radio_button :parking_provided, "true", link_errors: true do %>
-          <%= f.govuk_text_area :parking_details, rows: 7 %>
-        <% end %>
-        <%= f.govuk_radio_button :parking_provided, "false" do %>
-          <%= f.govuk_text_area :nearby_parking_details, rows: 7 %>
-        <% end %>
-      <% end %>
-
       <div class="govuk-form-group">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h1 class="govuk-fieldset__heading">

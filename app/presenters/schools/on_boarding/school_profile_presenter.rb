@@ -187,10 +187,10 @@ module Schools
       end
 
       def parking
-        if @school_profile.candidate_experience_detail.parking_provided
-          @school_profile.candidate_experience_detail.parking_details
+        if @school_profile.candidate_parking_information.parking_provided
+          @school_profile.candidate_parking_information.parking_details
         else
-          @school_profile.candidate_experience_detail.nearby_parking_details
+          @school_profile.candidate_parking_information.nearby_parking_details
         end
       end
 

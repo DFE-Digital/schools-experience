@@ -111,12 +111,12 @@ module Bookings
     end
 
     def copy_parking
-      if input[:candidate_experience_detail_parking_provided]
+      if input[:candidate_parking_information_parking_provided]
         output[:parking_provided] = true
-        output[:parking_details]  = input[:candidate_experience_detail_parking_details]
+        output[:parking_details]  = input[:candidate_parking_information_parking_details]
       else
         output[:parking_provided] = false
-        output[:parking_details]  = input[:candidate_experience_detail_nearby_parking_details]
+        output[:parking_details]  = input[:candidate_parking_information_nearby_parking_details]
       end
     end
 

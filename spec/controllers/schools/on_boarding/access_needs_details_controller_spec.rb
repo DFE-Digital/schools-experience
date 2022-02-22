@@ -17,6 +17,7 @@ describe Schools::OnBoarding::AccessNeedsDetailsController, type: :request do
       :with_key_stage_list,
       :with_description,
       :with_candidate_dress_code,
+      :with_candidate_parking_information,
       :with_candidate_experience_detail,
       :with_access_needs_support
   end

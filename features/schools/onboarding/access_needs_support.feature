@@ -16,6 +16,7 @@ Feature: Access needs support
         | Subjects                         |                           |
         | Description                      |                           |
         | Candidate dress code             |                           |
+        | Candidate parking information    |                           |
         | Candidate experience details     |                           |
 
   Scenario: Page title

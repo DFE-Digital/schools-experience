@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_21_164652) do
+ActiveRecord::Schema.define(version: 2022_02_22_100411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
@@ -380,9 +380,9 @@ ActiveRecord::Schema.define(version: 2022_02_21_164652) do
     t.boolean "candidate_dress_code_smart_casual", default: false
     t.boolean "candidate_dress_code_other_dress_requirements", default: false
     t.string "candidate_dress_code_other_dress_requirements_detail"
-    t.boolean "candidate_experience_detail_parking_provided"
-    t.string "candidate_experience_detail_parking_details"
-    t.string "candidate_experience_detail_nearby_parking_details"
+    t.boolean "candidate_parking_information_parking_provided"
+    t.string "candidate_parking_information_parking_details"
+    t.string "candidate_parking_information_nearby_parking_details"
     t.boolean "candidate_experience_detail_disabled_facilities"
     t.string "candidate_experience_detail_disabled_facilities_details"
     t.string "candidate_experience_detail_start_time"

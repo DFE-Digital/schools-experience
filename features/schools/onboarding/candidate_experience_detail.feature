@@ -18,6 +18,7 @@ Feature: Candidate experience details
         | Subjects                         |                           |
         | Description                      |                           |
         | Candidate dress code             |                           |
+        | Candidate parking information    |                           |
 
   Scenario: Page title
     Given I am already on the 'candidate experience details' page

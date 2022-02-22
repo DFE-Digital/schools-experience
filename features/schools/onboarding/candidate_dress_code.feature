@@ -32,4 +32,4 @@ Feature: Candidate dress code
     Given I am on the 'Candidate dress code' page
     And I complete the candidate dress code form with valid data
     When I submit the form
-    Then I should be on the 'Candidate experience details' page
+    Then I should be on the 'Candidate parking information' page

@@ -129,15 +129,15 @@ describe Schools::SchoolProfile, type: :model do
     end
 
     it do
-      is_expected.to have_db_column(:candidate_experience_detail_parking_provided).of_type :boolean
+      is_expected.to have_db_column(:candidate_parking_information_parking_provided).of_type :boolean
     end
 
     it do
-      is_expected.to have_db_column(:candidate_experience_detail_parking_details).of_type :string
+      is_expected.to have_db_column(:candidate_parking_information_parking_details).of_type :string
     end
 
     it do
-      is_expected.to have_db_column(:candidate_experience_detail_nearby_parking_details).of_type :string
+      is_expected.to have_db_column(:candidate_parking_information_nearby_parking_details).of_type :string
     end
 
     it do
@@ -451,6 +451,31 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
 
+    context '#candidate_parking_information' do
+      let :form_model do
+        FactoryBot.build :candidate_parking_information
+      end
+
+      before do
+        model.candidate_parking_information = form_model
+      end
+
+      %i[
+        parking_provided
+        parking_details
+        nearby_parking_details
+      ].each do |attribute|
+        it "sets #{attribute} correctly" do
+          expect(model.send("candidate_parking_information_#{attribute}")).to \
+            eq form_model.send attribute
+        end
+      end
+
+      it 'returns the form model' do
+        expect(model.candidate_parking_information).to eq form_model
+      end
+    end
+
     context '#candidate_experience_detail' do
       let :form_model do
         FactoryBot.build :candidate_experience_detail
@@ -461,9 +486,6 @@ describe Schools::SchoolProfile, type: :model do
       end
 
       %i[
-        parking_provided
-        parking_details
-        nearby_parking_details
         start_time
         end_time
         times_flexible

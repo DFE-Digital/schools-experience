@@ -86,7 +86,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_candidate_experience_detail_path
+          new_schools_on_boarding_candidate_parking_information_path
       end
     end
   end

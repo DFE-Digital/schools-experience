@@ -147,11 +147,17 @@ Given "I have completed the Candidate dress code step" do
   )
 end
 
+Given "I have completed the Candidate parking information step" do
+  steps %(
+    Given I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
+    And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
+    When I submit the form
+  )
+end
+
 Given "I have completed the Candidate experience details step" do
   steps %(
     Given I am on the 'Candidate experience details' page
-    And I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
-    And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
     And I enter '8:15 am' into the 'Start time' text area
     And I enter '4:30 pm' into the 'Finish time' text area
     And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
@@ -250,24 +256,6 @@ Given "I have completed the following steps:" do |table|
   end
 end
 
-And "I complete the candidate experience form with invalid data" do
-  steps %(
-    Given I enter '8:15 am' into the 'Start time' text area
-    And I enter '4:30 pm' into the 'Finish time' text area
-    And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
-  )
-end
-
-And "I complete the candidate experience form with valid data" do
-  steps %(
-    Given I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
-    And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
-    And I enter '8:15 am' into the 'Start time' text area
-    And I enter '4:30 pm' into the 'Finish time' text area
-    And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
-  )
-end
-
 And "I complete the candidate dress code form with invalid data" do
   steps %(
     Given I check 'Business dress'
@@ -280,6 +268,34 @@ And "I complete the candidate dress code form with valid data" do
     Given I check 'Business dress'
     And I check 'Other'
     And I enter 'Must have nice hat' into the 'For example no denim, jeans, shorts, short skirts or trainers.' text area
+  )
+end
+
+And "I complete the candidate parking details form with invalid data" do
+  steps %(
+    Given I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
+  )
+end
+
+And "I complete the candidate parking details form with valid data" do
+  steps %(
+    Given I choose 'No' from the 'Do you provide parking for candidates?' radio buttons
+    And I enter 'Carpark next door' into the 'Provide details of where candidates can park near your school.' text area
+  )
+end
+
+And "I complete the candidate experience form with invalid data" do
+  steps %(
+    Given I enter '8:15 am' into the 'Start time' text area
+    And I enter '4:30 pm' into the 'Finish time' text area
+  )
+end
+
+And "I complete the candidate experience form with valid data" do
+  steps %(
+    And I enter '8:15 am' into the 'Start time' text area
+    And I enter '4:30 pm' into the 'Finish time' text area
+    And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
   )
 end
 

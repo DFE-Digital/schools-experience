@@ -90,13 +90,21 @@ FactoryBot.define do
       end
     end
 
-    trait :with_candidate_experience_detail do
+    trait :with_candidate_parking_information do
       after :build do |profile, evaluator|
         traits = []
 
         if evaluator.parking == false
           traits << :without_parking
         end
+
+        profile.candidate_parking_information = FactoryBot.build :candidate_parking_information, *traits
+      end
+    end
+
+    trait :with_candidate_experience_detail do
+      after :build do |profile, evaluator|
+        traits = []
 
         if evaluator.times_flexible == false
           traits << :without_flexible_times
@@ -168,6 +176,7 @@ FactoryBot.define do
       with_subjects
       with_description
       with_candidate_dress_code
+      with_candidate_parking_information
       with_candidate_experience_detail
       with_access_needs_support
       with_access_needs_detail

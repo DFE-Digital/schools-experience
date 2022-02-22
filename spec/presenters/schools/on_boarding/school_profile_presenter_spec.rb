@@ -323,7 +323,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   context '#parking' do
     context 'when parking is offered' do
       let :profile do
-        FactoryBot.build :school_profile, :with_candidate_experience_detail
+        FactoryBot.build :school_profile, :with_candidate_parking_information
       end
 
       it 'returns parking details' do
@@ -334,7 +334,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     context 'when parking is not offered' do
       let :profile do
         FactoryBot.build \
-          :school_profile, :with_candidate_experience_detail, parking: false
+          :school_profile, :with_candidate_parking_information, parking: false
       end
 
       it 'returns nearby parking details' do

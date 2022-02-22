@@ -18,7 +18,8 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_description,
-        :with_candidate_dress_code
+        :with_candidate_dress_code,
+        :with_candidate_parking_information
     end
 
     before do
@@ -48,7 +49,8 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
         :with_only_early_years_phase,
         :with_key_stage_list,
         :with_description,
-        :with_candidate_dress_code
+        :with_candidate_dress_code,
+        :with_candidate_parking_information
     end
 
     let :params do

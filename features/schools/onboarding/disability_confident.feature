@@ -15,6 +15,7 @@ Feature: Disability Confident
         | Subjects                         |                           |
         | Description                      |                           |
         | Candidate dress code             |                           |
+        | Candidate parking information    |                           |
         | Candidate experience details     |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |

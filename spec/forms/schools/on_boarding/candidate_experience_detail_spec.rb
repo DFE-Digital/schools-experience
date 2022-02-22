@@ -2,9 +2,6 @@ require 'rails_helper'
 
 describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
   context 'attributes' do
-    it { is_expected.to respond_to :parking_provided }
-    it { is_expected.to respond_to :parking_details }
-    it { is_expected.to respond_to :nearby_parking_details }
     it { is_expected.to respond_to :start_time }
     it { is_expected.to respond_to :end_time }
     it { is_expected.to respond_to :times_flexible }
@@ -12,22 +9,9 @@ describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.not_to allow_value(nil).for :parking_provided }
     it { is_expected.to validate_presence_of :start_time }
     it { is_expected.to validate_presence_of :end_time }
     it { is_expected.not_to allow_value(nil).for :times_flexible }
-
-    context 'when parking_provided' do
-      subject { described_class.new parking_provided: true }
-      it { is_expected.to validate_presence_of :parking_details }
-      it { is_expected.not_to validate_presence_of :nearby_parking_details }
-    end
-
-    context 'when not parking_provided' do
-      subject { described_class.new parking_provided: false }
-      it { is_expected.not_to validate_presence_of :parking_details }
-      it { is_expected.to validate_presence_of :nearby_parking_details }
-    end
 
     context 'start and end times' do
       valid_times = ['3', '19', '8AM', '8.15', '8:30AM', '8:30 AM', '8am', '8.00am', '3pm', '3 pm', '17:00']
