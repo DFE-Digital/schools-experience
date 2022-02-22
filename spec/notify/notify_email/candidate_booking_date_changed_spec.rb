@@ -33,7 +33,8 @@ describe NotifyEmail::CandidateBookingDateChanged do
     specify { expect(described_class).to respond_to(:from_booking) }
 
     let!(:school) { create(:bookings_school, urn: 11_048) }
-    let!(:profile) { create(:bookings_profile, school: school) }
+    let!(:profile) { create(:bookings_profile, experience_details: experience_details, school: school) }
+    let(:experience_details) { 'some info' }
     let(:to) { "morris.szyslak@moes.net" }
     let(:candidate_name) { "morris.szyslak" }
     let(:old_date) { '09 October 2019' }
@@ -131,6 +132,14 @@ describe NotifyEmail::CandidateBookingDateChanged do
 
       specify 'new_date is correctly-assigned' do
         expect(subject.new_date).to eql(booking.date.to_formatted_s(:govuk))
+      end
+    end
+
+    context 'when school has not provided any experience details' do
+      let(:experience_details) { nil }
+
+      specify 'placement details is set to an empty string' do
+        expect(subject.placement_details).to eql ""
       end
     end
   end
