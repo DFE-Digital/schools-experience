@@ -128,6 +128,11 @@ Rails.application.configure do
   config.active_job.queue_adapter = :delayed_job
 
   config.force_ssl = true
+  config.ssl_options = {
+    redirect: {
+      exclude: ->(request) { request.path.start_with?("/metrics") }
+    }
+  }
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
