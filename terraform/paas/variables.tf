@@ -60,6 +60,14 @@ variable "paas_space" {
   default = "sandbox"
 }
 
+variable "paas_monitoring_space" {
+  default = "sandbox"
+}
+
+variable "paas_monitoring_app" {
+  default = ""
+}
+
 variable "environment" {
   default = "sb"
 }

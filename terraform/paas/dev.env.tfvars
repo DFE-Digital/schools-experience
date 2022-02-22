@@ -1,4 +1,6 @@
 paas_space                = "get-into-teaching"
+paas_monitoring_space     = "get-into-teaching"
+paas_monitoring_app       = "prometheus-dev-get-into-teaching"
 paas_database_common_name = "school-experience-dev-pg-common-svc"
 paas_redis_1_name         = "school-experience-dev-redis-svc"
 paas_application_name     = "school-experience-app-dev"

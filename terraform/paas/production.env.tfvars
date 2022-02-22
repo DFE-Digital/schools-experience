@@ -1,4 +1,6 @@
 paas_space                = "get-into-teaching-production"
+paas_monitoring_space     = "get-into-teaching-monitoring"
+paas_monitoring_app       = "prometheus-prod-get-into-teaching"
 paas_database_common_name = "school-experience-prod-pg-common-svc"
 paas_redis_1_name         = "school-experience-prod-redis-svc"
 paas_application_name     = "school-experience-app-production"
