@@ -55,7 +55,7 @@ class NotifyEmail::CandidateBookingDateChanged < NotifyDespatchers::Email
     self.school_teacher_name = school_teacher_name
     self.school_teacher_email = school_teacher_email
     self.school_teacher_telephone = school_teacher_telephone
-    self.placement_details = placement_details
+    self.placement_details = placement_details.to_s
     self.candidate_instructions = candidate_instructions
     self.subject_name = subject_name
     self.cancellation_url = cancellation_url
