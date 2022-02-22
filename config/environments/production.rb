@@ -42,7 +42,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = false
 
   # Logging
   config.log_level = :info
@@ -126,8 +126,6 @@ Rails.application.configure do
     expire_after: 1.hour # Sets explicit TTL for Session Redis keys
 
   config.active_job.queue_adapter = :delayed_job
-
-  config.force_ssl = true
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
