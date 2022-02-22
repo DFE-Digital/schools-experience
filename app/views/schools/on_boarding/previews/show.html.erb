@@ -5,7 +5,7 @@
     @current_school.name => schools_dashboard_path,
     'School profile' => schools_on_boarding_profile_path,
     'Preview' => nil
-  } if @current_school.private_beta?
+  } if @current_school.onboarded?
 %>
 
 <h1 class="govuk-heading-l govuk-!-margin-top-4">

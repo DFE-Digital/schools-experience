@@ -22,7 +22,7 @@ module Schools
       end
 
       def continue(school_profile)
-        if current_school.private_beta? && school_profile.completed?
+        if current_school.onboarded? && school_profile.completed?
           Bookings::ProfilePublisher.new(current_school, school_profile).update!
           flash.notice = "Your profile has been saved and published."
         end

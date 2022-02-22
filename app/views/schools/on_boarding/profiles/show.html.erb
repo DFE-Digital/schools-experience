@@ -1,10 +1,10 @@
-<%- self.page_title = @current_school.private_beta? ? 'School profile' : 'Check your answers before setting up your school experience profile' -%>
+<%- self.page_title = @current_school.onboarded? ? 'School profile' : 'Check your answers before setting up your school experience profile' -%>
 
 <%
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
     'School profile' => nil
-  } if @current_school.private_beta?
+  } if @current_school.onboarded?
 %>
 
 <div class="govuk-grid-row" id="school-onboarding-profile">
@@ -84,7 +84,7 @@
         <% end %>
       </dl>
 
-      <% unless @current_school.private_beta? %>
+      <% unless @current_school.onboarded? %>
         <div class="govuk-form-group">
           <%= f.govuk_check_boxes_fieldset :acceptance, multiple: false do %>
             <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge:" } %>

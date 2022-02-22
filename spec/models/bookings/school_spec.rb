@@ -542,15 +542,15 @@ describe Bookings::School, type: :model do
       end
     end
 
-    describe '#private_beta?' do
+    describe '#onboarded?' do
       context 'without profile' do
         subject { create(:bookings_school) }
-        it { is_expected.not_to be_private_beta }
+        it { is_expected.not_to be_onboarded }
       end
 
       context 'with profile' do
         subject { create(:bookings_profile).school }
-        it { is_expected.to be_private_beta }
+        it { is_expected.to be_onboarded }
       end
     end
 

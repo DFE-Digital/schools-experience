@@ -181,7 +181,7 @@ class Bookings::School < ApplicationRecord
     urn.to_s.presence
   end
 
-  def private_beta?
+  def onboarded?
     profile.present?
   end
 
