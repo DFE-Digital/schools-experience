@@ -75,6 +75,7 @@ describe Bookings::SchoolSearch do
       let!(:matching_school) do
         create(
           :bookings_school,
+          :onboarded,
           name: "Springfield Primary School",
           coordinates: point_in_manchester,
           fee: 10
@@ -98,7 +99,7 @@ describe Bookings::SchoolSearch do
       end
 
       context 'Only enabled schools should be returned' do
-        let!(:enabled_school) { create(:bookings_school, coordinates: point_in_manchester) }
+        let!(:enabled_school) { create(:bookings_school, :onboarded, coordinates: point_in_manchester) }
         let!(:disabled_school) { create(:bookings_school, :disabled, coordinates: point_in_manchester) }
 
         subject { Bookings::SchoolSearch.new(location: 'Manchester').results }
@@ -140,7 +141,7 @@ describe Bookings::SchoolSearch do
           end
 
           let!(:matching_school) do
-            create(:bookings_school, name: "Springfield Primary School")
+            create(:bookings_school, :onboarded, name: "Springfield Primary School")
           end
 
           specify 'results should include matching records' do
@@ -203,7 +204,7 @@ describe Bookings::SchoolSearch do
             subject { Bookings::SchoolSearch.new(query: '', location: 'Manchester').results }
 
             let!(:matching_school) do
-              create(:bookings_school, name: "Springfield Primary School")
+              create(:bookings_school, :onboarded, name: "Springfield Primary School")
             end
 
             specify 'results should include matching records' do
@@ -332,7 +333,6 @@ describe Bookings::SchoolSearch do
 
         context 'Filtering on disability confident' do
           before do
-            create(:bookings_profile, school: matching_school)
             create(:bookings_profile, :without_supports_access_needs, school: non_matching_school)
           end
 
@@ -348,14 +348,11 @@ describe Bookings::SchoolSearch do
         end
 
         context 'Filtering on parking' do
-          before do
-            create(:bookings_profile, parking_provided: true, school: matching_school)
-            create(:bookings_profile, school: non_matching_school)
-          end
-
           subject { Bookings::SchoolSearch.new(query: '', location: coords_in_manchester, parking: '1').results }
 
           specify 'should return matching results' do
+            matching_school.profile.update(parking_provided: true)
+
             expect(subject).to include(matching_school)
           end
 
@@ -401,10 +398,10 @@ describe Bookings::SchoolSearch do
         let(:point_in_glasgow) { Bookings::School::GEOFACTORY.point(-4.219, 55.859) }
         let(:point_in_york) { Bookings::School::GEOFACTORY.point(-1.095, 53.597) }
 
-        let!(:glasgow_school) { create(:bookings_school, name: "Glasgow", coordinates: point_in_glasgow) }
-        let!(:york_school) { create(:bookings_school, name: "York", coordinates: point_in_york) }
-        let!(:mcr_school) { create(:bookings_school, name: "Manchester", coordinates: point_in_manchester) }
-        let!(:leeds_school) { create(:bookings_school, name: "Leeds", coordinates: point_in_leeds) }
+        let!(:glasgow_school) { create(:bookings_school, :onboarded, name: "Glasgow", coordinates: point_in_glasgow) }
+        let!(:york_school) { create(:bookings_school, :onboarded, name: "York", coordinates: point_in_york) }
+        let!(:mcr_school) { create(:bookings_school, :onboarded, name: "Manchester", coordinates: point_in_manchester) }
+        let!(:leeds_school) { create(:bookings_school, :onboarded, :onboarded, name: "Leeds", coordinates: point_in_leeds) }
 
         before do
           allow(Geocoder).to receive(:search).and_return(geocoder_manchester_search_result)
@@ -438,6 +435,10 @@ describe Bookings::SchoolSearch do
         expect(Bookings::School).to receive(:enabled).and_call_original
       end
 
+      specify 'should apply the :onboarded scope' do
+        expect(Bookings::School).to receive(:enabled).and_call_original
+      end
+
       specify 'should apply the :with_availability scope' do
         expect(Bookings::School).to receive(:enabled).and_call_original
       end
@@ -458,11 +459,11 @@ describe Bookings::SchoolSearch do
 
   describe '#total_count' do
     let!(:matching_schools) do
-      create_list(:bookings_school, 8)
+      create_list(:bookings_school, 8, :onboarded)
     end
 
     let!(:non_matching_school) do
-      create(:bookings_school, coordinates: Bookings::School::GEOFACTORY.point(-1.148, 52.794))
+      create(:bookings_school, :onboarded, coordinates: Bookings::School::GEOFACTORY.point(-1.148, 52.794))
     end
 
     specify 'total count should match the number of matching schools' do
@@ -579,7 +580,7 @@ describe Bookings::SchoolSearch do
     it { is_expected.to have_attributes radius: 1000 }
 
     context 'searching' do
-      let(:schools) { create_list :bookings_school, 3 }
+      let(:schools) { create_list :bookings_school, 3, :onboarded }
       let(:school_urns) { schools.map(&:urn) }
       let(:whitelist) { school_urns.slice(0, 2).join(' ') }
       subject { school_search.results.map(&:urn) }

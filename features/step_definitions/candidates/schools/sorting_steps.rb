@@ -16,6 +16,8 @@ Given("there there are schools with the following attributes:") do |table|
     )
   end
 
+  onboard_schools(@schools)
+
   expect(Bookings::School.count).to eql(table.rows.length)
 end
 

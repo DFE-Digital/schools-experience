@@ -91,6 +91,7 @@ private
       .that_provide(subjects)
       .at_phases(phases)
       .costing_upto(max_fee)
+      .onboarded
       .enabled
       .with_availability
       .distinct
