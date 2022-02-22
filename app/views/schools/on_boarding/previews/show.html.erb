@@ -29,7 +29,7 @@
 <div class="school-preview">
   <h2 class="govuk-heading-l govuk-!-margin-top-4"><%= @school.name %></h2>
 
-  <%= render 'candidates/schools/phase2', school: @school, include_candidate_request_links: false %>
+  <%= render 'candidates/schools/profile_full', school: @school, include_candidate_request_links: false %>
 </div>
 <div class="govuk-!-margin-top-5">
   <%= govuk_link_to 'Return to profile', schools_on_boarding_profile_path, secondary: true %>
