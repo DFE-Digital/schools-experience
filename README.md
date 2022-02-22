@@ -143,7 +143,7 @@ To add a feature flag, add an object to the `features` array in the following fo
 }
 ```
 
-This config is read into a dashboard available at `/feature_flags`.
+This config is read into a dashboard available at `/feature_flags` in any of the non-production environments.
 
 ## Testing
 
