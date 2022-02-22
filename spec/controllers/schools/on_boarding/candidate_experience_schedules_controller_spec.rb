@@ -2,7 +2,7 @@ require 'rails_helper'
 
 require Rails.root.join("spec", "controllers", "schools", "session_context")
 
-describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :request do
+describe Schools::OnBoarding::CandidateExperienceSchedulesController, type: :request do
   include_context "logged in DfE user"
 
   context '#new' do
@@ -23,12 +23,12 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
     end
 
     before do
-      get '/schools/on_boarding/candidate_experience_detail/new'
+      get '/schools/on_boarding/candidate_experience_schedule/new'
     end
 
     it 'assigns the model' do
-      expect(assigns(:candidate_experience_detail)).to \
-        eq Schools::OnBoarding::CandidateExperienceDetail.new
+      expect(assigns(:candidate_experience_schedule)).to \
+        eq Schools::OnBoarding::CandidateExperienceSchedule.new
     end
 
     it 'renders the new template' do
@@ -55,23 +55,23 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
 
     let :params do
       {
-        schools_on_boarding_candidate_experience_detail: \
-          candidate_experience_detail.attributes
+        schools_on_boarding_candidate_experience_schedule: \
+          candidate_experience_schedule.attributes
       }
     end
 
     before do
-      post '/schools/on_boarding/candidate_experience_detail/', params: params
+      post '/schools/on_boarding/candidate_experience_schedule/', params: params
     end
 
     context 'invalid' do
-      let :candidate_experience_detail do
-        Schools::OnBoarding::CandidateExperienceDetail.new
+      let :candidate_experience_schedule do
+        Schools::OnBoarding::CandidateExperienceSchedule.new
       end
 
       it "doesn't update the school_profile" do
-        expect(school_profile.reload.candidate_experience_detail.attributes).to \
-          eq candidate_experience_detail.attributes
+        expect(school_profile.reload.candidate_experience_schedule.attributes).to \
+          eq candidate_experience_schedule.attributes
       end
 
       it 'rerenders the new template' do
@@ -80,13 +80,13 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
     end
 
     context 'valid' do
-      let :candidate_experience_detail do
-        FactoryBot.build :candidate_experience_detail
+      let :candidate_experience_schedule do
+        FactoryBot.build :candidate_experience_schedule
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.candidate_experience_detail).to \
-          eq candidate_experience_detail
+        expect(school_profile.reload.candidate_experience_schedule).to \
+          eq candidate_experience_schedule
       end
 
       it 'redirects to the next step' do
@@ -102,12 +102,12 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
     end
 
     before do
-      get '/schools/on_boarding/candidate_experience_detail/edit'
+      get '/schools/on_boarding/candidate_experience_schedule/edit'
     end
 
     it 'assigns the model' do
-      expect(assigns(:candidate_experience_detail)).to \
-        eq school_profile.candidate_experience_detail
+      expect(assigns(:candidate_experience_schedule)).to \
+        eq school_profile.candidate_experience_schedule
     end
 
     it 'renders the edit template' do
@@ -122,23 +122,23 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
 
     let :params do
       {
-        schools_on_boarding_candidate_experience_detail: \
-          candidate_experience_detail.attributes
+        schools_on_boarding_candidate_experience_schedule: \
+          candidate_experience_schedule.attributes
       }
     end
 
     before do
-      patch '/schools/on_boarding/candidate_experience_detail/', params: params
+      patch '/schools/on_boarding/candidate_experience_schedule/', params: params
     end
 
     context 'invalid' do
-      let :candidate_experience_detail do
-        Schools::OnBoarding::CandidateExperienceDetail.new
+      let :candidate_experience_schedule do
+        Schools::OnBoarding::CandidateExperienceSchedule.new
       end
 
       it "doesn't update the school_profile" do
-        expect(school_profile.reload.candidate_experience_detail).not_to \
-          eq candidate_experience_detail
+        expect(school_profile.reload.candidate_experience_schedule).not_to \
+          eq candidate_experience_schedule
       end
 
       it 'rerenders the edit template' do
@@ -147,14 +147,14 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
     end
 
     context 'valid' do
-      let :candidate_experience_detail do
+      let :candidate_experience_schedule do
         FactoryBot.build \
-          :candidate_experience_detail
+          :candidate_experience_schedule
       end
 
       it 'updates the school_profile' do
-        expect(school_profile.reload.candidate_experience_detail).to \
-          eq candidate_experience_detail
+        expect(school_profile.reload.candidate_experience_schedule).to \
+          eq candidate_experience_schedule
       end
 
       it 'redirects to the school_profile' do

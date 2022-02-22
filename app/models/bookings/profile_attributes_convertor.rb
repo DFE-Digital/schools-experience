@@ -100,13 +100,13 @@ module Bookings
     end
 
     def copy_fields
-      output[:start_time]             = input[:candidate_experience_detail_start_time]
-      output[:end_time]               = input[:candidate_experience_detail_end_time]
+      output[:start_time]             = input[:candidate_experience_schedule_start_time]
+      output[:end_time]               = input[:candidate_experience_schedule_end_time]
       output[:experience_details]     = input[:experience_outline_candidate_experience].presence
-      output[:flexible_on_times]      = input[:candidate_experience_detail_times_flexible].present?
+      output[:flexible_on_times]      = input[:candidate_experience_schedule_times_flexible].present?
       output[:flexible_on_times_details] = conditional_assign(
-        :candidate_experience_detail_times_flexible,
-        :candidate_experience_detail_times_flexible_details
+        :candidate_experience_schedule_times_flexible,
+        :candidate_experience_schedule_times_flexible_details
       )
     end
 

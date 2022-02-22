@@ -1,6 +1,6 @@
 module Schools
   module OnBoarding
-    class CandidateExperienceDetail < Step
+    class CandidateExperienceSchedule < Step
       # Ensure that times look *roughly* valid. Note that it is
       # still possible to input invalid ones like '25:00'.
       # FIXME do we need to tighten this up/use a real timepicker?

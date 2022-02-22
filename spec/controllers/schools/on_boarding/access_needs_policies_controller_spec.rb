@@ -18,7 +18,7 @@ describe Schools::OnBoarding::AccessNeedsPoliciesController, type: :request do
       :with_description,
       :with_candidate_dress_code,
       :with_candidate_parking_information,
-      :with_candidate_experience_detail,
+      :with_candidate_experience_schedule,
       :with_access_needs_support,
       :with_access_needs_detail,
       :with_disability_confident

@@ -20,7 +20,7 @@ Feature: School Profile
         | Description                      |                           |
         | Candidate dress code             |                           |
         | Candidate parking information    |                           |
-        | Candidate experience details     |                           |
+        | Candidate experience schedule    |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |
         | Disability confident             |                           |

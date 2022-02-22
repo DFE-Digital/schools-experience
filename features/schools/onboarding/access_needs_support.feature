@@ -17,7 +17,7 @@ Feature: Access needs support
         | Description                      |                           |
         | Candidate dress code             |                           |
         | Candidate parking information    |                           |
-        | Candidate experience details     |                           |
+        | Candidate experience schedule    |                           |
 
   Scenario: Page title
     Given I am on the 'Access needs support' page

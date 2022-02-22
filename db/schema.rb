@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_22_100411) do
+ActiveRecord::Schema.define(version: 2022_02_22_172444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
@@ -385,9 +385,9 @@ ActiveRecord::Schema.define(version: 2022_02_22_100411) do
     t.string "candidate_parking_information_nearby_parking_details"
     t.boolean "candidate_experience_detail_disabled_facilities"
     t.string "candidate_experience_detail_disabled_facilities_details"
-    t.string "candidate_experience_detail_start_time"
-    t.string "candidate_experience_detail_end_time"
-    t.boolean "candidate_experience_detail_times_flexible"
+    t.string "candidate_experience_schedule_start_time"
+    t.string "candidate_experience_schedule_end_time"
+    t.boolean "candidate_experience_schedule_times_flexible"
     t.text "experience_outline_candidate_experience"
     t.boolean "teacher_training_provides_teacher_training"
     t.text "teacher_training_teacher_training_details"
@@ -398,7 +398,7 @@ ActiveRecord::Schema.define(version: 2022_02_22_100411) do
     t.integer "bookings_school_id", null: false
     t.boolean "phases_list_secondary_and_college", default: false, null: false
     t.boolean "confirmation_acceptance", default: false
-    t.text "candidate_experience_detail_times_flexible_details"
+    t.text "candidate_experience_schedule_times_flexible_details"
     t.string "admin_contact_email_secondary"
     t.boolean "administration_fee_step_completed", default: false
     t.boolean "dbs_fee_step_completed", default: false

@@ -345,7 +345,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#start_time' do
     let :profile do
-      FactoryBot.build :school_profile, :with_candidate_experience_detail
+      FactoryBot.build :school_profile, :with_candidate_experience_schedule
     end
 
     it 'returns the start time' do
@@ -355,7 +355,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#end_time' do
     let :profile do
-      FactoryBot.build :school_profile, :with_candidate_experience_detail
+      FactoryBot.build :school_profile, :with_candidate_experience_schedule
     end
 
     it 'returns the end time' do
@@ -367,7 +367,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     context 'when flexible_on_times' do
       let :profile do
         FactoryBot.build :school_profile, \
-          :with_candidate_experience_detail, times_flexible: true
+          :with_candidate_experience_schedule, times_flexible: true
       end
 
       it 'returns Yes with details' do
@@ -378,7 +378,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     context 'when not flexible_on_times' do
       let :profile do
         FactoryBot.build :school_profile,
-          :with_candidate_experience_detail, times_flexible: false
+          :with_candidate_experience_schedule, times_flexible: false
       end
 
       it 'returns no' do

@@ -89,7 +89,7 @@ describe Schools::OnBoarding::CandidateParkingInformationsController, type: :req
 
       it 'redirects to the next step' do
         expect(response).to redirect_to \
-          new_schools_on_boarding_candidate_experience_detail_path
+          new_schools_on_boarding_candidate_experience_schedule_path
       end
     end
   end

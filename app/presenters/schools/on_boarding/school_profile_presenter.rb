@@ -227,16 +227,16 @@ module Schools
       end
 
       def start_time
-        @school_profile.candidate_experience_detail.start_time
+        @school_profile.candidate_experience_schedule.start_time
       end
 
       def end_time
-        @school_profile.candidate_experience_detail.end_time
+        @school_profile.candidate_experience_schedule.end_time
       end
 
       def flexible_on_times
-        if @school_profile.candidate_experience_detail.times_flexible
-          'Yes - ' + @school_profile.candidate_experience_detail.times_flexible_details
+        if @school_profile.candidate_experience_schedule.times_flexible
+          'Yes - ' + @school_profile.candidate_experience_schedule.times_flexible_details
         else
           'No'
         end

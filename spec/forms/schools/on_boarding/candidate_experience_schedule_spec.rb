@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Schools::OnBoarding::CandidateExperienceDetail, type: :model do
+describe Schools::OnBoarding::CandidateExperienceSchedule, type: :model do
   context 'attributes' do
     it { is_expected.to respond_to :start_time }
     it { is_expected.to respond_to :end_time }

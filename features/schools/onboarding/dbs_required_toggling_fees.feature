@@ -35,7 +35,7 @@ Feature: Dbs required toggling available fees
         | Access needs policy              |                           |
         | Candidate dress code             |                           |
         | Candidate parking information    |                           |
-        | Candidate experience details     |                           |
+        | Candidate experience schedule    |                           |
         | Experience Outline               |                           |
         | Teacher training                 |                           |
         | Admin contact                    |                           |
@@ -60,7 +60,7 @@ Feature: Dbs required toggling available fees
         | Access needs policy              |                           |
         | Candidate dress code             |                           |
         | Candidate parking information    |                           |
-        | Candidate experience details     |                           |
+        | Candidate experience schedule    |                           |
         | Experience Outline               |                           |
         | Teacher training                 |                           |
         | Admin contact                    |                           |

@@ -23,7 +23,7 @@ Feature: Teacher training
         | Access needs policy              |                           |
         | Candidate dress code             |                           |
         | Candidate parking information    |                           |
-        | Candidate experience details     |                           |
+        | Candidate experience schedule    |                           |
         | Experience Outline               |                           |
 
   Scenario: Page title

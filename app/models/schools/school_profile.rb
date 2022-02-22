@@ -177,13 +177,13 @@ module Schools
       constructor: :compose
 
     composed_of \
-      :candidate_experience_detail,
-      class_name: 'Schools::OnBoarding::CandidateExperienceDetail',
+      :candidate_experience_schedule,
+      class_name: 'Schools::OnBoarding::CandidateExperienceSchedule',
       mapping: [
-        %w[candidate_experience_detail_start_time start_time],
-        %w[candidate_experience_detail_end_time end_time],
-        %w[candidate_experience_detail_times_flexible times_flexible],
-        %w[candidate_experience_detail_times_flexible_details times_flexible_details]
+        %w[candidate_experience_schedule_start_time start_time],
+        %w[candidate_experience_schedule_end_time end_time],
+        %w[candidate_experience_schedule_times_flexible times_flexible],
+        %w[candidate_experience_schedule_times_flexible_details times_flexible_details]
       ],
       constructor: :compose
 

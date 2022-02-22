@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :candidate_experience_detail, class: 'Schools::OnBoarding::CandidateExperienceDetail' do
+  factory :candidate_experience_schedule, class: 'Schools::OnBoarding::CandidateExperienceSchedule' do
     start_time { '8:15am' }
     end_time { '4:30pm' }
     times_flexible { true }

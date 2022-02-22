@@ -155,11 +155,11 @@ Given "I have completed the Candidate parking information step" do
   )
 end
 
-Given "I have completed the Candidate experience details step" do
+Given "I have completed the Candidate experience schedule step" do
   steps %(
-    Given I am on the 'Candidate experience details' page
-    And I enter '8:15 am' into the 'Start time' text area
-    And I enter '4:30 pm' into the 'Finish time' text area
+    Given I am on the 'Candidate experience schedule' page
+    And I enter '8:15 am' into the 'What is your start time for candidates?' text area
+    And I enter '4:30 pm' into the 'What is your finish time for candidates?' text area
     And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
     When I submit the form
   )
@@ -286,15 +286,15 @@ end
 
 And "I complete the candidate experience form with invalid data" do
   steps %(
-    Given I enter '8:15 am' into the 'Start time' text area
-    And I enter '4:30 pm' into the 'Finish time' text area
+    Given I enter '8:15 am' into the 'What is your start time for candidates?' text area
+    And I enter '4:30 pm' into the 'What is your finish time for candidates?' text area
   )
 end
 
 And "I complete the candidate experience form with valid data" do
   steps %(
-    And I enter '8:15 am' into the 'Start time' text area
-    And I enter '4:30 pm' into the 'Finish time' text area
+    And I enter '8:15 am' into the 'What is your start time for candidates?' text area
+    And I enter '4:30 pm' into the 'What is your finish time for candidates?' text area
     And I choose 'No' from the 'Are your start and finish times flexible?' radio buttons
   )
 end

@@ -304,7 +304,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'candidate_experience_detail required' do
+    context 'candidate_experience_schedule required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -321,8 +321,8 @@ describe Schools::OnBoarding::CurrentStep do
           :with_candidate_parking_information
       end
 
-      it 'returns :candidate_experience_detail' do
-        expect(returned_step).to eq :candidate_experience_detail
+      it 'returns :candidate_experience_schedule' do
+        expect(returned_step).to eq :candidate_experience_schedule
       end
     end
 
@@ -341,7 +341,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_dress_code,
           :with_candidate_parking_information,
-          :with_candidate_experience_detail
+          :with_candidate_experience_schedule
       end
 
       it 'returns :access_needs_support' do
@@ -364,7 +364,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_dress_code,
           :with_candidate_parking_information,
-          :with_candidate_experience_detail,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :without_access_needs_support
       end
@@ -389,7 +389,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_dress_code,
           :with_candidate_parking_information,
-          :with_candidate_experience_detail,
+          :with_candidate_experience_schedule,
           :with_access_needs_support
       end
 
@@ -413,7 +413,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_dress_code,
           :with_candidate_parking_information,
-          :with_candidate_experience_detail,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail
       end
@@ -438,7 +438,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_dress_code,
           :with_candidate_parking_information,
-          :with_candidate_experience_detail,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail,
           :with_disability_confident
@@ -464,7 +464,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_dress_code,
           :with_candidate_parking_information,
-          :with_candidate_experience_detail,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail,
           :with_disability_confident,
@@ -491,7 +491,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_dress_code,
           :with_candidate_parking_information,
-          :with_candidate_experience_detail,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail,
           :with_disability_confident,
@@ -520,7 +520,7 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description,
           :with_candidate_dress_code,
           :with_candidate_parking_information,
-          :with_candidate_experience_detail,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail,
           :with_disability_confident,

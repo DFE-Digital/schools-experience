@@ -15,7 +15,7 @@ module Schools
         description
         candidate_dress_code
         candidate_parking_information
-        candidate_experience_detail
+        candidate_experience_schedule
         access_needs_support
         access_needs_detail
         disability_confident
@@ -114,8 +114,8 @@ module Schools
         @school_profile.candidate_parking_information.dup.invalid?
       end
 
-      def candidate_experience_detail_required?
-        @school_profile.candidate_experience_detail.dup.invalid?
+      def candidate_experience_schedule_required?
+        @school_profile.candidate_experience_schedule.dup.invalid?
       end
 
       def access_needs_support_required?
