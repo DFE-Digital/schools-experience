@@ -16,23 +16,15 @@ RSpec.describe Bookings::RegistrationContactMapper do
 
     let(:registration) { build(:registration_session, :with_school) }
     let(:contact) { GetIntoTeachingApiClient::SchoolsExperienceSignUp.new }
-    let(:teachingsubjectid) do
-      Bookings::Subject.find_by!(
-        name: registration.teaching_preference.subject_first_choice
-      ).gitis_uuid
-    end
-    let(:teachingsubjectid2) do
-      Bookings::Subject.find_by!(
-        name: registration.teaching_preference.subject_second_choice
-      ).gitis_uuid
-    end
+    let(:teaching_subject_id) { SecureRandom.uuid }
+    let(:secondary_teaching_subject_id) { SecureRandom.uuid }
     let(:teaching_subjects) do
       [
         build(:api_lookup_item,
-          id: teachingsubjectid,
+          id: teaching_subject_id,
           value: registration.teaching_preference.subject_first_choice),
         build(:api_lookup_item,
-           id: teachingsubjectid2,
+           id: secondary_teaching_subject_id,
            value: registration.teaching_preference.subject_second_choice),
       ]
     end
@@ -51,8 +43,8 @@ RSpec.describe Bookings::RegistrationContactMapper do
     it { is_expected.to have_attributes(address_state_or_province: registration.contact_information.county) }
     it { is_expected.to have_attributes(address_postcode: registration.contact_information.postcode) }
     it { is_expected.to have_attributes(has_dbs_certificate: registration.background_check.has_dbs_check) }
-    it { is_expected.to have_attributes(preferred_teaching_subject_id: teachingsubjectid) }
-    it { is_expected.to have_attributes(secondary_preferred_teaching_subject_id: teachingsubjectid2) }
+    it { is_expected.to have_attributes(preferred_teaching_subject_id: teaching_subject_id) }
+    it { is_expected.to have_attributes(secondary_preferred_teaching_subject_id: secondary_teaching_subject_id) }
     it { is_expected.to have_attributes(accepted_policy_id: current_policy.id) }
 
     context "when has_dbs_certificate is changing" do
@@ -104,18 +96,18 @@ RSpec.describe Bookings::RegistrationContactMapper do
 
     let(:maths) { Bookings::Subject.find_by!(name: 'Maths') }
     let(:english) { Bookings::Subject.find_by!(name: 'English') }
+    let(:teaching_subjects) do
+      [
+        build(:api_lookup_item, value: maths.name),
+        build(:api_lookup_item, value: english.name),
+      ]
+    end
     let(:contact) do
       build(
         :api_schools_experience_sign_up_with_name,
-        preferred_teaching_subject_id: maths.gitis_uuid,
-        secondary_preferred_teaching_subject_id: english.gitis_uuid,
+        preferred_teaching_subject_id: teaching_subjects.find { |subject| subject.value == "Maths" }&.id,
+        secondary_preferred_teaching_subject_id: teaching_subjects.find { |subject| subject.value == "English" }&.id,
       )
-    end
-    let(:teaching_subjects) do
-      [
-        build(:api_lookup_item, id: maths.gitis_uuid, value: maths.name),
-        build(:api_lookup_item, id: english.gitis_uuid, value: english.name),
-      ]
     end
     let(:registration) { build(:registration_session) }
     let(:mapper) { described_class.new(registration, contact) }
