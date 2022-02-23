@@ -82,21 +82,5 @@ module Bookings
         api.get_latest_privacy_policy
       end
     end
-
-    def find_teaching_subjects
-      @find_teaching_subjects ||= begin
-        subjects = Bookings::Subject.where(name: [
-          teaching_preference.subject_first_choice,
-          teaching_preference.subject_second_choice
-        ]).index_by(&:name)
-
-        {
-          'dfe_teachingsubject01' =>
-            subjects[teaching_preference.subject_first_choice]&.gitis_uuid,
-          'dfe_teachingsubject02' =>
-            subjects[teaching_preference.subject_second_choice]&.gitis_uuid
-        }
-      end
-    end
   end
 end
