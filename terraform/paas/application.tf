@@ -23,6 +23,7 @@ resource "cloudfoundry_app" "application" {
   memory       = var.application_memory
   disk_quota   = var.application_disk
   strategy     = var.strategy
+  health_check_type = "process"
   timeout      = var.timeout
 
 
