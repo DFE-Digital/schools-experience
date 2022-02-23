@@ -29,10 +29,30 @@ fi
 
 rval=0
 FULL_URL="https://${URL}.london.cloudapps.digital/healthcheck"
-http_status=$(curl ${AUTHORITY} -o /dev/null -s -w "%{http_code}"  ${FULL_URL})
-if [ "${http_status}" != "200" ]
+
+http_status()
+{
+     echo $(curl ${AUTHORITY} -o /dev/null -s -w "%{http_code}"  ${FULL_URL})
+}
+
+ 
+count=0
+while [ "$(http_status)" != "200" ]
+do
+    if [ ${count} -eq 10 ]
+    then
+	    echo "Timeout after ${count} attempts"
+	    break
+    else
+	    ((count++))
+	    echo "Waiting for Server attempt ${count} of 10"
+	    sleep 30
+    fi
+done
+
+if [ "$(http_status)" != "200" ]
 then
-    echo "HTTP Status ${http_status}"
+    echo "HTTP Status $(http_status)"
     rval=1
 else
     echo "HTTP Status is Healthy"
