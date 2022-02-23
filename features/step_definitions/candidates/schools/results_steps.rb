@@ -4,7 +4,7 @@ Given("the phases {string} and {string} exist") do |phase_one, phase_two|
 end
 
 Given("there are some schools with a range of fees containing the word {string}") do |string|
-  {
+  schools = {
     "Grammar School" => {
       phases: [@phase_two],
       fee: 30
@@ -26,6 +26,8 @@ Given("there are some schools with a range of fees containing the word {string}"
       fee: attributes[:fee]
     )
   end
+
+  onboard_schools(schools)
 end
 
 Given("I have searched for {string} and am on the results page") do |string|
@@ -124,7 +126,8 @@ Given("my search is outside of England") do
 end
 
 Given("there are some schools just outside it") do
-  FactoryBot.create_list(:bookings_school, 2, coordinates: Bookings::School::GEOFACTORY.point(-2.421, 53.624))
+  schools = FactoryBot.create_list(:bookings_school, 2, coordinates: Bookings::School::GEOFACTORY.point(-2.421, 53.624))
+  onboard_schools(schools)
 end
 
 When("I search for schools within {int} miles") do |int|

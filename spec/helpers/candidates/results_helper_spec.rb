@@ -23,12 +23,12 @@ describe Candidates::ResultsHelper, type: :helper do
     end
 
     context 'When there fewer than one page of results' do
-      let!(:schools) { create_list(:bookings_school, 5, coordinates: point_in_manchester) }
+      let!(:schools) { create_list(:bookings_school, 5, :onboarded, coordinates: point_in_manchester) }
       specify { expect(subject).to eql('Displaying all 5 results') }
     end
 
     context 'When there are more than one page of results' do
-      let!(:schools) { create_list(:bookings_school, 18, coordinates: point_in_manchester) }
+      let!(:schools) { create_list(:bookings_school, 18, :onboarded, coordinates: point_in_manchester) }
       specify { expect(subject).to eql("Showing 1–15 of 18 results") }
     end
   end
