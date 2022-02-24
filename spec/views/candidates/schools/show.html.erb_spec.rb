@@ -59,17 +59,6 @@ RSpec.describe "candidates/schools/show.html.erb", type: :view do
       expect(rendered).to have_css('h1', text: school.name)
     end
 
-    it "will provide a link to apply" do
-      link = new_candidates_school_registrations_personal_information_path(school)
-      expect(rendered).to have_css("a.govuk-button[href=\"#{link}\"]")
-    end
-
-    it "has two start request buttons with appropriate responsive classes" do
-      %w[school-start-request-button__tablet_plus school-start-request-button__mobile].each do |css_class|
-        expect(rendered).to have_css("div.#{css_class} > a", text: 'Start request')
-      end
-    end
-
     it "has a banner to promote the search page" do
       expect(rendered).to have_css("div.govuk-inset-text", text: 'This school has not yet joined the Get school experience service.')
       expect(rendered).to have_css("div.govuk-inset-text > a", text: 'Search for schools offering school experience')

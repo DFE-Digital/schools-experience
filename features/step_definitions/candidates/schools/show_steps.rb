@@ -126,7 +126,11 @@ end
 
 Then("there should be a button called {string} that begins the wizard") do |string|
   # ensure there's a link
-  expect(page).to have_link(string, href: new_candidates_school_registrations_personal_information_path(@school.urn))
+  link = page.first(:link, string)
+  personal_info_path = new_candidates_school_registrations_personal_information_path(@school.urn)
+  subject_and_date_path = new_candidates_school_registrations_subject_and_date_information_path(@school)
+
+  expect(link[:href]).to start_with(personal_info_path).or start_with(subject_and_date_path)
 
   # and make sure it's button-like
   expect(page).to have_css(".govuk-button", text: string)

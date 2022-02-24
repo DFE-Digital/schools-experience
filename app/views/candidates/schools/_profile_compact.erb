@@ -1,0 +1,80 @@
+<div class="govuk-grid-row school-profile">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @school.placement_info.present? %>
+    <section id="school-placement-info" class="govuk-!-margin-bottom-8">
+      <%= safe_format @school.placement_info %>
+    </section>
+    <% end %>
+
+    <h2 id="about-our-school-experience">About our school experience</h2>
+
+    <% if @school.teacher_training_provider? %>
+    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+      <%= dlist_item "Teacher training", id: "teacher-training" do %>
+        <%= safe_format @school.teacher_training_info %>
+      <% end %>
+    </dl>
+    <% end %>
+
+    <p><strong>Links to more information about our school</strong></p>
+
+    <ul id="school-websites" class="govuk-list govuk-!-margin-bottom-8">
+      <% if @school.website.present? %>
+        <li id="school-website">
+          <%= link_to "#{@school.name} website", @school.website %>
+        </li>
+      <% end %>
+
+      <li>
+        <%= link_to "#{@school.name} Get Information About Schools", gias_school_url(@school.urn) %>
+      </li>
+
+      <li>
+        <%= link_to "Ofsted report: #{@school.name}", ofsted_report_url(@school.urn) %>
+      </li>
+
+      <li>
+        <%= link_to "Performance information: #{@school.name}", performance_report_url(@school.urn) %>
+      </li>
+
+      <% if @school.teacher_training_provider? && @school.teacher_training_website.present? %>
+      <li>
+        <%= link_to "Teacher training: #{@school.name}", cleanup_school_url(@school.school.teacher_training_website) %>
+      </li>
+      <% end %>
+    </ul>
+
+    <h2 id="location">Location</h2>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">
+        <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+          <%= dlist_item "Address", id: "school-address" do %>
+            <%= format_school_address @school %>
+          <% end %>
+        </dl>
+      </div>
+
+      <div class="govuk-grid-column-three-quarters">
+        <%= school_location_map @school %>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="panel-highlight">
+      <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+        <%= dlist_item "Address", id: "school-address-sidebar" do %>
+          <%= format_school_address(@school) %>
+        <% end %>
+
+        <%= dlist_item "School phases", id: "school-phases" do %>
+          <%= format_school_phases_compact(@school) %>
+        <% end %>
+
+        <%= dlist_item "Subjects", id: "school-subjects" do %>
+          <%= format_school_subjects_list(@school) %>
+        <% end if @school.subjects.present? %>
+      </dl>
+		</div>
+  </div>
+</div>
