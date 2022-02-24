@@ -97,7 +97,7 @@ elif [[ ${MODE} == "BACKGROUND" ]] ; then
 	  echo Waiting one minute
 	  sleep 60
 	  echo Running Background Jobs
-          bundle exec ./bin/delayed_job run
+          ./bin/delayed_job start && PORT=3000 ./bin/metrics
 elif [[ ${MODE} == "RUBOCOP" ]] ; then
 	  echo Running Rubocop
 	  bundle exec rubocop app config lib features spec --format json --out=/app/out/rubocop-result.json
