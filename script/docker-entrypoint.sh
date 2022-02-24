@@ -94,6 +94,8 @@ if [[ ${MODE} == "FRONTEND" ]] ; then
 	  echo Running Frontend
           bundle exec rails server
 elif [[ ${MODE} == "BACKGROUND" ]] ; then
+	  echo Waiting one minute
+	  sleep 60
 	  echo Running Background Jobs
 	  export PORT=3000
           bundle exec ./bin/delayed_job run
