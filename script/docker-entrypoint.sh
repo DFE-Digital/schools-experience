@@ -97,7 +97,6 @@ elif [[ ${MODE} == "BACKGROUND" ]] ; then
 	  echo Waiting one minute
 	  sleep 60
 	  echo Running Background Jobs
-	  export PORT=3000
           bundle exec ./bin/delayed_job run
 elif [[ ${MODE} == "RUBOCOP" ]] ; then
 	  echo Running Rubocop
