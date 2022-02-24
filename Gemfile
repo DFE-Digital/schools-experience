@@ -42,6 +42,7 @@ gem 'yabeda-http_requests'
 gem 'yabeda-prometheus'
 gem 'yabeda-puma-plugin'
 gem 'yabeda-rails'
+gem "webrick"
 
 gem 'dotenv-rails', '>= 2.7.6'
 
