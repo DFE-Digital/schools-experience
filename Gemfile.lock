@@ -667,6 +667,7 @@ DEPENDENCIES
   web-console (>= 4.1.0)
   webmock
   webpacker (~> 5.4)
+  webrick
   yabeda-delayed_job
   yabeda-gc
   yabeda-http_requests

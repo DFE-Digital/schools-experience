@@ -95,8 +95,8 @@ if [[ ${MODE} == "FRONTEND" ]] ; then
           bundle exec rails server
 elif [[ ${MODE} == "BACKGROUND" ]] ; then
 	  echo Running Background Jobs
-          export PORT=3000 
-          ./bin/delayed_job run
+	  export PORT=3000
+          bundle exec ./bin/delayed_job run
 elif [[ ${MODE} == "RUBOCOP" ]] ; then
 	  echo Running Rubocop
 	  bundle exec rubocop app config lib features spec --format json --out=/app/out/rubocop-result.json
