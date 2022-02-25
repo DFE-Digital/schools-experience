@@ -36,13 +36,13 @@ gem 'rails_semantic_logger'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 # Metrics
+gem "webrick"
 gem 'yabeda-delayed_job'
 gem 'yabeda-gc'
 gem 'yabeda-http_requests'
 gem 'yabeda-prometheus'
 gem 'yabeda-puma-plugin'
 gem 'yabeda-rails'
-gem "webrick"
 
 gem 'dotenv-rails', '>= 2.7.6'
 
