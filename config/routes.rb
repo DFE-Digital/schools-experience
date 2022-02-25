@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  mount Yabeda::Prometheus::Exporter => '/metrics'
+  # TODO: disable as we are leaking PII from the delayed jobs metrics
+  # mount Yabeda::Prometheus::Exporter => '/metrics'
 
   get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
   get '/healthcheck', to: 'healthchecks#show', as: :healthcheck_json
