@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.4'
+gem 'rails', '~> 6.1.4', '>= 6.1.4.6'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 5.6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.4'
+gem 'webpacker', '~> 5.4', '>= 5.4.3'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -46,7 +46,7 @@ gem "webrick"
 
 gem 'dotenv-rails', '>= 2.7.6'
 
-gem 'govuk_design_system_formbuilder', '~> 3.0'
+gem 'govuk_design_system_formbuilder', '~> 3.0', '>= 3.0.1'
 gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
@@ -61,7 +61,7 @@ gem 'kaminari'
 
 gem 'phonelib'
 gem 'sentry-delayed_job'
-gem 'sentry-rails', '>= 4.6.5'
+gem 'sentry-rails', '>= 5.1.0'
 gem 'sentry-ruby'
 
 gem 'rack-attack'
@@ -81,7 +81,7 @@ gem 'validates_timeliness', '>= 5.0.0.beta1'
 gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
 # Ignore cloudfront IPs when getting customer IP address
-gem 'actionpack-cloudfront', '>= 1.1.0'
+gem 'actionpack-cloudfront', '>= 1.2.0'
 
 gem 'invisible_captcha', '>= 2.0.0'
 gem 'meta-tags', '~> 2.16', '>= 2.16.0'
@@ -102,7 +102,7 @@ group :development, :test do
   # Testing framework
   gem 'factory_bot_rails', '>= 6.2.0'
   gem 'rspec_junit_formatter'
-  gem 'rspec-rails', '~> 5.1'
+  gem 'rspec-rails', '~> 5.1', '>= 5.1.0'
   gem 'rspec-sonarqube-formatter'
 
   gem 'brakeman', '>= 4.4.0'
@@ -115,7 +115,7 @@ end
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '>= 3.0.5'
-  gem 'web-console', '>= 4.1.0'
+  gem 'web-console', '>= 4.2.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -129,7 +129,7 @@ end
 
 group :test do
   # Adds support for Capybara system testing and selenium
-  gem 'capybara', '>= 2.15'
+  gem 'capybara', '>= 3.36.0'
 
   gem 'selenium-webdriver'
 
