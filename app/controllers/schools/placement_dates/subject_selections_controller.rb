@@ -1,6 +1,8 @@
 module Schools
   module PlacementDates
     class SubjectSelectionsController < BaseController
+      include Wizard
+
       before_action :set_placement_date
 
       def new
@@ -15,9 +17,7 @@ module Schools
         @subject_selection = SubjectSelection.new subject_selection_params
 
         if @subject_selection.save @placement_date
-          @placement_date.publish
-          auto_enable_school
-          redirect_to schools_placement_dates_path
+          next_step @placement_date, :subject_selection
         else
           render :new
         end
