@@ -1,5 +1,6 @@
 class Schools::PlacementDatesController < Schools::BaseController
   before_action :set_placement_date, only: %w[edit update]
+  include Schools::PlacementDates::Wizard
 
   def index
     @placement_dates = current_school
@@ -66,16 +67,6 @@ private
 
   def school_supports_subjects?
     @current_school.has_secondary_phase?
-  end
-
-  def next_step(placement_date)
-    if placement_date.supports_subjects?
-      redirect_to new_schools_placement_date_configuration_path(placement_date)
-    else
-      placement_date.publish
-      auto_enable_school
-      redirect_to schools_placement_dates_path
-    end
   end
 
   def set_placement_date

@@ -1,6 +1,8 @@
 module Schools
   module PlacementDates
     class ConfigurationsController < BaseController
+      include Wizard
+
       before_action :set_placement_date
 
       def new
@@ -12,23 +14,13 @@ module Schools
         @configuration.supports_subjects = @placement_date.supports_subjects
 
         if @configuration.save @placement_date
-          redirect_to next_step
+          next_step @placement_date, :configuration
         else
           render :new
         end
       end
 
     private
-
-      def next_step
-        if @configuration.subject_specific?
-          new_schools_placement_date_subject_selection_path @placement_date
-        else
-          @placement_date.publish
-          auto_enable_school
-          schools_placement_dates_path
-        end
-      end
 
       def set_placement_date
         @placement_date = \

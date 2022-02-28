@@ -35,12 +35,26 @@ describe Schools::PlacementDatesController, type: :request do
         context "when the school has only primary" do
           before do
             Bookings::School.find_by!(urn: urn).phases << create(:bookings_phase, :primary)
+            school.update(enabled: false)
           end
 
           before { subject }
 
           specify 'supports_subjects should be set to false' do
             expect(placement_date.supports_subjects).to be false
+          end
+
+          it "enables the school" do
+            expect(school.reload.enabled?).to be true
+          end
+
+          it "publishes the placement date" do
+            expect(placement_date.reload.published_at).to_not be_nil
+            expect(placement_date.reload.active).to be true
+          end
+
+          it 'redirects to the placement dates index page' do
+            expect(subject).to redirect_to(schools_placement_dates_path)
           end
         end
 
