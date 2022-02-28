@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Schools::ChangeSchool, type: :model do
   subject { change_school }
 
-  let(:first_school) { create(:bookings_school) }
-  let(:second_school) { create(:bookings_school) }
+  let(:first_school) { create(:bookings_school, name: "B school") }
+  let(:second_school) { create(:bookings_school, name: "A school") }
   let(:user_uuid) { SecureRandom.uuid }
   let(:user) { Struct.new(:sub).new(user_uuid) }
   let(:change_to_urn) { nil }
@@ -43,9 +43,22 @@ describe Schools::ChangeSchool, type: :model do
   end
 
   describe '#available_schools' do
-    it 'should only return schools which we have in our system' do
-      is_expected.to have_attributes \
-        available_schools: match_array([first_school, second_school])
+    subject { change_school.available_schools }
+
+    it 'only returns schools which we have in our system' do
+      is_expected.to contain_exactly(first_school, second_school)
+    end
+
+    it 'returns schools in alphabetical order' do
+      is_expected.to eq([second_school, first_school])
+    end
+
+    context 'when a school has outstanding tasks' do
+      before { create :placement_request, school: first_school }
+
+      it 'returns schools with the most outstanding tasks first' do
+        is_expected.to eq([first_school, second_school])
+      end
     end
   end
 

@@ -37,7 +37,9 @@ module Schools
     end
 
     def available_schools
-      Bookings::School.ordered_by_name.where(urn: organisation_urns)
+      Bookings::School.where(urn: organisation_urns).sort_by do |school|
+        [-task_count_for_urn(school.urn), school.name]
+      end
     end
 
     def school_uuid
@@ -67,7 +69,7 @@ module Schools
     end
 
     def school_task_counts
-      @school_task_counts = Schools::OutstandingTasks.new(organisation_urns)
+      @school_task_counts ||= Schools::OutstandingTasks.new(organisation_urns)
         .summarize
         .transform_values { |h| h.values.sum }
     end
