@@ -14,6 +14,15 @@ GIT
       get_into_teaching_api_client
 
 GIT
+  remote: https://github.com/DFE-Digital/yabeda-delayed_job.git
+  revision: 2251f9d1828d491fe5b8e48d168eae76df97c054
+  ref: 2251f9d
+  specs:
+    yabeda-delayed_job (0.1.0)
+      delayed_job
+      yabeda
+
+GIT
   remote: https://github.com/microsoft/ApplicationInsights-Ruby.git
   revision: a74292001cf12f6de957dfdcefaf8dbe415d7181
   ref: a7429200
@@ -255,7 +264,7 @@ GEM
     hashdiff (1.0.1)
     htmlentities (4.3.4)
     httpclient (2.8.3)
-    i18n (1.9.1)
+    i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     invisible_captcha (2.0.0)
       rails (>= 5.0)
@@ -571,9 +580,6 @@ GEM
       anyway_config (>= 1.0, < 3)
       concurrent-ruby
       dry-initializer
-    yabeda-delayed_job (0.1.0)
-      delayed_job
-      yabeda
     yabeda-gc (0.1.1)
       yabeda (~> 0.6)
     yabeda-http_requests (0.2.0)
@@ -668,7 +674,7 @@ DEPENDENCIES
   webmock
   webpacker (~> 5.4)
   webrick
-  yabeda-delayed_job
+  yabeda-delayed_job!
   yabeda-gc
   yabeda-http_requests
   yabeda-prometheus
