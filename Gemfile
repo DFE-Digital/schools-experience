@@ -46,7 +46,7 @@ gem 'yabeda-rails'
 
 gem 'dotenv-rails', '>= 2.7.6'
 
-gem 'govuk_design_system_formbuilder', '~> 3.0', '>= 3.0.1'
+gem 'govuk_design_system_formbuilder', '~> 3.0'
 gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
