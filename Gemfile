@@ -40,9 +40,10 @@ gem "webrick"
 gem 'yabeda-delayed_job', github: "DFE-Digital/yabeda-delayed_job", ref: "2251f9d"
 gem 'yabeda-gc'
 gem 'yabeda-http_requests'
-gem 'yabeda-prometheus'
+gem 'yabeda-prometheus', '0.6.2'
 gem 'yabeda-puma-plugin'
 gem 'yabeda-rails'
+gem 'yabeda', '0.9.0'
 
 gem 'dotenv-rails', '>= 2.7.6'
 

@@ -576,8 +576,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yabeda (0.11.0)
-      anyway_config (>= 1.0, < 3)
+    yabeda (0.9.0)
       concurrent-ruby
       dry-initializer
     yabeda-gc (0.1.1)
@@ -585,10 +584,10 @@ GEM
     yabeda-http_requests (0.2.0)
       sniffer
       yabeda
-    yabeda-prometheus (0.8.0)
+    yabeda-prometheus (0.6.2)
       prometheus-client (>= 0.10, < 3.0)
       rack
-      yabeda (~> 0.10)
+      yabeda (~> 0.5)
     yabeda-puma-plugin (0.6.0)
       json
       puma
@@ -674,10 +673,11 @@ DEPENDENCIES
   webmock
   webpacker (~> 5.4, >= 5.4.3)
   webrick
+  yabeda (= 0.9.0)
   yabeda-delayed_job!
   yabeda-gc
   yabeda-http_requests
-  yabeda-prometheus
+  yabeda-prometheus (= 0.6.2)
   yabeda-puma-plugin
   yabeda-rails
 
