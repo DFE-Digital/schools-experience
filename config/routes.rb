@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  unless Rails.env.production?
-    mount Yabeda::Prometheus::Exporter => '/metrics'
-  end
+  mount Yabeda::Prometheus::Exporter => '/metrics'
 
   get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
   get '/healthcheck', to: 'healthchecks#show', as: :healthcheck_json
