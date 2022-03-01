@@ -5,6 +5,7 @@ FactoryBot.define do
     published_at { DateTime.now }
     supports_subjects { true }
     virtual { false }
+    start_availability_offset { 75 }
 
     trait :in_the_past do
       date { 6.weeks.ago }
