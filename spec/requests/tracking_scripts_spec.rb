@@ -12,7 +12,7 @@ describe "Tracking Scripts", type: :request do
 
   describe "Google Tag Manager" do
     let(:tracking_id_key) { "GTM_ID" }
-    let(:gtm_script) { %r{<script src="/packs-test/js/gtm-.*\.js" data-gtm-id="#{tracking_id}" data-gtm-nonce=".*"></script>} }
+    let(:gtm_script) { %r{<script src="/packs-test/js/gtm.*\.js" data-gtm-id="#{tracking_id}" data-gtm-nonce=".*"></script>} }
     let(:gtm_noscript) { %(https://www\.googletagmanager\.com/ns\.html\?id=#{tracking_id}") }
 
     context "when the user has accepted analytics cookies and GTM_ID is present in the environment" do

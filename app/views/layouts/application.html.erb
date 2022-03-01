@@ -2,7 +2,7 @@
 <html lang="en" class="govuk-template ">
   <head>
     <%= render 'shared/application/javascript_cookie_preferences' %>
-    <%= javascript_pack_tag 'gtm', data: { "gtm-id": gtm_id, "gtm-nonce": content_security_policy_nonce } if gtm_enabled? %>
+    <%= javascript_pack_tag 'application', 'gtm', data: { "gtm-id": gtm_id, "gtm-nonce": content_security_policy_nonce, "gtm-enabled": gtm_enabled? } %>
     <title><%= page_title %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -112,7 +112,5 @@
         </div>
       </div>
     </footer>
-
-    <%= javascript_pack_tag 'application' %>
   </body>
 </html>
