@@ -37,7 +37,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Metrics
 gem "webrick"
-gem 'yabeda-delayed_job', github: "DFE-Digital/yabeda-delayed_job", ref: "2251f9d"
+gem 'yabeda-delayed_job', github: "DFE-Digital/yabeda-delayed_job", branch: "remove-per-attribute"
 gem 'yabeda-gc'
 gem 'yabeda-http_requests'
 gem 'yabeda-prometheus'
