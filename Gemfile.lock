@@ -674,6 +674,7 @@ DEPENDENCIES
   webmock
   webpacker (~> 5.4, >= 5.4.3)
   webrick
+  yabeda
   yabeda-delayed_job!
   yabeda-gc
   yabeda-http_requests
