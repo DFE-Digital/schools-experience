@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 2022_03_04_152958) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "address_standardizer"
   enable_extension "plpgsql"
   enable_extension "postgis"
 

@@ -5,6 +5,11 @@ module Schools
         @other_fee = current_school_profile.other_fee
       end
 
+      def edit
+        @other_fee = current_school_profile.other_fee
+        render :new
+      end
+
       def create
         @other_fee = OtherFee.new other_fee_params
 

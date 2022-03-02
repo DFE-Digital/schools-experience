@@ -5,6 +5,11 @@ module Schools
         @dbs_fee = current_school_profile.dbs_fee
       end
 
+      def new
+        @dbs_fee = current_school_profile.dbs_fee
+        render :new
+      end
+
       def create
         @dbs_fee = DBSFee.new dbs_fee_params
 

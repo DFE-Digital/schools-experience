@@ -1,0 +1,43 @@
+<%- self.page_title = 'On-boarding Progress' -%>
+
+<%= govuk_back_link javascript: true %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= @current_school.name %> Profile
+    </h1>
+
+    <h2>Application Incomplete</h2>
+
+    <p>You have completed <%= @current_step.completed_section_count %> out of <%= @current_step.class::SECTIONS.count %> sections</p>
+
+    <ol class="on-boarding-tasks">
+    <% @current_step.class::SECTIONS.each do |section, steps| %>
+      <li>
+        <h2 class="govuk-heading-m"><%= t("on_boarding.section.#{section}") %></h2>
+
+        <dl class="govuk-summary-list">
+          <% steps.each do |step| %>
+            <%
+              if @current_step.state(step) == :complete
+                path = public_send("edit_schools_on_boarding_#{step}_path")
+              else
+                path = public_send("new_schools_on_boarding_#{step}_path")
+              end
+            %>
+
+            <%= task_row(t("on_boarding.step.#{step}"), path, @current_step.state(step)) %>
+          <% end %>
+        </dl>
+      </li>
+    <% end %>
+
+    <h2 class="govuk-heading-m">Check and submit</h2>
+    <% unless @current_school_profile.completed? %>
+      <p>You can only check and submit your profile after it has been completed.</p>
+    <% end %>
+    <%= link_to("Check and submit your profile", schools_on_boarding_profile_path, class: "govuk-button", disabled: !@current_school_profile.completed?) %>
+  </div>
+</div>
+

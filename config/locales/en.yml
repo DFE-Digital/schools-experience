@@ -30,6 +30,32 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  on_boarding:
+    section:
+      dbs_check: "DBS Check"
+      candidate_requirements: "Candidate requirements"
+      disability_and_access: "Disability and Access"
+      type_of_experience: "Type of experience"
+      admin_contact_details: "Admin contact details"
+    step:
+      dbs_requirement: "DBS requirements"
+      candidate_requirements_selection: "Candidate requirements"
+      administration_fee: "Admin"
+      dbs_fee: "DBS"
+      other_fee: "Other"
+      phases_list: "Phases"
+      key_stage_list: "Key stages"
+      description: "School description"
+      candidate_dress_code: "Dress code"
+      candidate_parking_information: "Parking"
+      candidate_experience_schedule: "Start and finish times"
+      access_needs_detail: "Details"
+      disability_confident: "Disability Confident employer scheme"
+      access_needs_policy: "Online information"
+      experience_outline: "Details"
+      teacher_training: "Teacher training details"
+      admin_contact: "Admin contact"
+
   errors:
    format: "%{message}"
    messages:

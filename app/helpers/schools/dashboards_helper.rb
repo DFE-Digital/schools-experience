@@ -5,7 +5,7 @@ module Schools::DashboardsHelper
     if school.placement_requests.any?
       "You have school experience requests waiting"
     else
-      "Your profile is not complete"
+      "Important"
     end
   end
 

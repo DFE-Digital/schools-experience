@@ -2,42 +2,70 @@
 module Schools
   module OnBoarding
     class CurrentStep
-      STEPS = %i[
-        dbs_requirement
-        candidate_requirements_selection
-        fees
-        administration_fee
-        dbs_fee
-        other_fee
-        phases_list
-        key_stage_list
-        subjects
-        description
-        candidate_dress_code
-        candidate_parking_information
-        candidate_experience_schedule
-        access_needs_support
-        access_needs_detail
-        disability_confident
-        access_needs_policy
-        experience_outline
-        teacher_training
-        admin_contact
-      ].freeze
+      SECTIONS = {
+        dbs_check: %i(dbs_requirement),
+        candidate_requirements: %i(candidate_requirements_selection),
+        fees: %i(fees administration_fee dbs_fee other_fee),
+        stages: %i(phases_list key_stage_list subjects),
+        description: %i(description candidate_dress_code candidate_parking_information candidate_experience_schedule),
+        disability_and_access: %i(access_needs_support access_needs_detail disability_confident access_needs_policy),
+        type_of_experience: %i(experience_outline teacher_training),
+        admin_contact_details: %i(admin_contact),
+      }.freeze
 
-      def self.for(school_profile)
-        new(school_profile).call
+      def self.for(school_profile, last_step)
+        new(school_profile).call(last_step)
       end
 
       def initialize(school_profile)
         @school_profile = school_profile
       end
 
-      def call
-        STEPS.detect(&method(:required?)) || :COMPLETED
+      def call(last_step)
+        section = SECTIONS.invert.find { |steps, section| last_step.in?(steps) }.last
+        steps_in_section = SECTIONS[section]
+        last_step_index = steps_in_section.index(last_step)
+
+        if last_step_index == steps_in_section.count
+          nil # Go back to progress page
+        else
+          steps_in_section[(last_step_index + 1)..].detect(&method(:required?))
+        end
       end
 
-    private
+      def state(step)
+        section = SECTIONS.invert.find { |steps, section| step.in?(steps) }.last
+
+        if send("#{step}_required?")
+          :not_started
+        else
+          first_step_in_section = SECTIONS[section].first
+
+          if send("#{first_step_in_section}_required?")
+            :cannot_start_yet
+          else
+            if respond_to?("#{step}_applicable?", true) && !send("#{step}_applicable?")
+              :not_applicable
+            else
+              :complete
+            end
+          end
+        end
+      end
+
+      def completed?
+        steps = SECTIONS.values.flatten
+
+        steps.none? { |step| send("#{step}_required?") }
+      end
+
+      def completed_section_count
+        SECTIONS.select do |section, steps|
+          steps.none? { |step| send("#{step}_required?") }
+        end.count
+      end
+
+      private
 
       def required?(step)
         send "#{step}_required?"
@@ -62,7 +90,11 @@ module Schools
 
         return true if @school_profile.administration_fee.dup.invalid?
 
-        !@school_profile.administration_fee_step_completed?
+        !@school_profile.administration_fee_not_set
+      end
+
+      def administration_fee_applicable?
+        @school_profile.fees.administration_fees
       end
 
       def dbs_fee_required?
@@ -70,7 +102,11 @@ module Schools
 
         return true if @school_profile.dbs_fee.dup.invalid?
 
-        !@school_profile.dbs_fee_step_completed?
+        !@school_profile.dbs_fee_not_set
+      end
+
+      def dbs_fee_applicable?
+        @school_profile.fees.dbs_fees
       end
 
       def other_fee_required?
@@ -78,7 +114,11 @@ module Schools
 
         return true if @school_profile.other_fee.dup.invalid?
 
-        !@school_profile.other_fee_step_completed?
+        !@school_profile.other_fee_not_set
+      end
+
+      def other_fee_applicable?
+        @school_profile.fees.other_fees
       end
 
       def phases_list_required?
@@ -90,6 +130,10 @@ module Schools
           @school_profile.key_stage_list.dup.invalid?
       end
 
+      def key_stage_list_applicable?
+        @school_profile.phases_list.primary?
+      end
+
       def subjects_required?
         return false if @school_profile.subjects.any?
 
@@ -98,6 +142,10 @@ module Schools
         return true if @school_profile.phases_list.college?
 
         false
+      end
+
+      def subjects_applicable?
+        @school_profile.phases_list.secondary?
       end
 
       def description_required?
@@ -128,16 +176,28 @@ module Schools
         @school_profile.access_needs_detail.dup.invalid?
       end
 
+      def access_needs_detail_applicable?
+        @school_profile.access_needs_support.supports_access_needs?
+      end
+
       def disability_confident_required?
         return false unless @school_profile.access_needs_support.supports_access_needs?
 
         @school_profile.disability_confident.dup.invalid?
       end
 
+      def disability_confident_applicable?
+        @school_profile.access_needs_support.supports_access_needs?
+      end
+
       def access_needs_policy_required?
         return false unless @school_profile.access_needs_support.supports_access_needs?
 
         @school_profile.access_needs_policy.dup.invalid?
+      end
+
+      def access_needs_policy_applicable?
+        @school_profile.access_needs_support.supports_access_needs?
       end
 
       def experience_outline_required?

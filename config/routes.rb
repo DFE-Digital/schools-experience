@@ -118,12 +118,13 @@ Rails.application.routes.draw do
     end
 
     namespace :on_boarding do
+      resource :progress, only: %i[show]
       resource :dbs_requirement, only: %i[new create edit update]
       resource :candidate_requirements_selection, only: %i[new create edit update]
       resource :fees, only: %i[new create edit update]
-      resource :administration_fee, only: %i[new create]
-      resource :dbs_fee, only: %i[new create]
-      resource :other_fee, only: %i[new create]
+      resource :administration_fee, only: %i[new create edit]
+      resource :dbs_fee, only: %i[new create edit]
+      resource :other_fee, only: %i[new create edit]
       resource :phases_list, only: %i[new create edit update]
       resource :key_stage_list, only: %i[new create edit update]
       resource :subjects, only: %i[new create edit update]

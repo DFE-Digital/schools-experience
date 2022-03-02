@@ -277,12 +277,12 @@ module Schools
       Bookings::Subject.all
     end
 
-    def current_step
-      OnBoarding::CurrentStep.for self
+    def current_step(last_step)
+      OnBoarding::CurrentStep.for self, last_step
     end
 
     def completed?
-      current_step == :COMPLETED
+      OnBoarding::CurrentStep.new(self).completed?
     end
 
     def requires_subjects?
