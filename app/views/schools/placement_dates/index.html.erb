@@ -51,11 +51,12 @@
               <%= placement_date_experience_type_tag placement_date.virtual %>
             </td>
 
-            <td class="govuk-table__cell">
+            <td class="govuk-table__cell action-links">
               <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
                 Change
                 <span class="govuk-visually-hidden"> placement date <%= placement_date.date.to_formatted_s(:govuk) %></span>
               <%- end -%>
+              <%= close_date_link(placement_date) %>
             </td>
           </tr>
         <%- end -%>

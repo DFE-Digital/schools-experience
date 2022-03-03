@@ -1,11 +1,11 @@
 Feature: Listing placement dates
-    So I can manage my placement dates
-    As a school administrator
-    I want an overview of existing dates
+  So I can manage my placement dates
+  As a school administrator
+  I want an overview of existing dates
 
-    Background:
-        Given I am logged in as a DfE user
-        And my school is fully-onboarded
+  Background:
+    Given I am logged in as a DfE user
+    And my school is fully-onboarded
 
     Scenario: Page title
         Given I am on the 'placement dates' page
@@ -43,3 +43,14 @@ Feature: Listing placement dates
   Scenario: The return to dashboard button
       Given I am on the 'placement dates' page
       Then there should be a 'Return to dashboard' link to the 'schools dashboard'
+
+  Scenario: Deactivating a placement date
+    Given my school has a placement date
+    And I am on the 'placement dates' page
+    And I should my placement date listed
+    And I click the link to the close confirmation page
+    And I should be on the Are you sure you want to close this date page
+    And 'Yes' radio button should be selected
+    When I submit the form
+    Then I am on the 'placement dates' page
+    And my placement should have been 'deactivated'
