@@ -1,0 +1,24 @@
+.on-boarding-progress {
+  .can-add {
+    border-left: 3px solid #1f6fb8;
+    padding-left: 1rem;
+    margin-bottom: 2em;
+  }
+
+  .fees dl:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .sidebar {
+    border-left: 1px solid #ccc;
+    padding: 1rem;
+  }
+
+  .govuk-summary-list__value > p {
+    margin-bottom: 10px;
+  }
+
+  .tt-links {
+    margin-bottom: 10px !important;
+  }
+}

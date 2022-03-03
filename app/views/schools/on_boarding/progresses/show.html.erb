@@ -1,0 +1,380 @@
+<%- self.page_title = 'On-boarding Progress' -%>
+
+<% if @current_step.incomplete_steps.count > 0 %>
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-full">
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+		  <div class="govuk-notification-banner__header">
+		    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+		      Profile status
+		    </h2>
+		  </div>
+		  <div class="govuk-notification-banner__content">
+		    <p class="govuk-notification-banner__heading">
+		      Sections you still need to complete to create a full profile:
+		    </p>
+		    <ul class="govuk-list">
+        <% @current_step.incomplete_steps.each do |step| %>
+        <li><%= link_to(t("on_boarding.step.#{step}"), public_send("edit_schools_on_boarding_#{step}_path")) %></li>
+        <% end %>
+			</ul>
+		  </div>
+		</div>
+	</div>
+</div>
+<% end %>
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<h3 class="govuk-heading-m">Preview your profile lite below</h3>
+		<p>The profile below replicates what a candidate can see. You can add and change information, once you are happy then you can submit.</p>
+    <%= link_to("Submit profile", schools_on_boarding_profile_path, class: "govuk-button") %>
+		<p><%= link_to("Back to dashboard", schools_dashboard_path) %></p>
+	</div>
+</div>
+
+<hr>
+
+<span class="govuk-caption-xl govuk-!-margin-top-4">School profile</span>
+<h1 class="govuk-heading-l"><%= @current_school.name %></h1>
+
+<div class="govuk-grid-row school-profile on-boarding-progress">
+  <div class="govuk-grid-column-two-thirds">
+    <section id="school-placement-info" class="govuk-!-margin-bottom-8">
+      <% if @profile.description.details.present? %>
+        <%= safe_format @profile.description.details %>
+        <p><%= link_to("Change description", edit_schools_on_boarding_description_path) %></p>
+      <% else %>
+        <div class="can-add">
+          <%= link_to("Add description", edit_schools_on_boarding_description_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+        </div>
+      <% end %>
+    </section>
+
+    <h2 id="about-our-school-experience">About our school experience</h2>
+
+    <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+      <% if @presenter.school_experience_details.present? %>
+        <%= dlist_item "Details" do %>
+          <p><%= content_or_msg @presenter.school_experience_details %></p>
+          <p><%= link_to("Change details", edit_schools_on_boarding_experience_outline_path) %></p>
+        <% end %>
+      <% else %>
+        <div class="can-add">
+          <h3 class="govuk-heading-s">Details</h3>
+          <%= link_to("Add details", edit_schools_on_boarding_experience_outline_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+        </div>
+      <% end %>
+
+      <% if @presenter.start_time.present? %>
+        <%= dlist_item "Start and finish times" do %>
+          <% if @presenter.start_time %>
+            <%= @presenter.start_time %> to <%= @presenter.end_time %>
+
+            <% if @presenter.flexible_on_times %>
+              - Flexible
+            <% end %>
+
+            <% if @profile.candidate_experience_detail.times_flexible_details.present? %>
+              <%= safe_format @profile.candidate_experience_detail.times_flexible_details %>
+            <% end %>
+          <% end %>
+          <p><%= link_to("Change times", edit_schools_on_boarding_candidate_experience_detail_path) %></p>
+        <% end %>
+      <% else %>
+        <div class="can-add">
+          <h3 class="govuk-heading-s">Start and finish times</h3>
+          <%= link_to("Add times", edit_schools_on_boarding_candidate_experience_detail_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+        </div>
+      <% end %>
+
+      <% if @presenter.dress_code.present? %>
+        <%= dlist_item "Dress code" do %>
+          <p><%= @presenter.dress_code %></p>
+          <p><%= link_to("Change dress code", edit_schools_on_boarding_candidate_experience_detail_path) %></p>
+        <% end %>
+      <% else %>
+        <div class="can-add">
+          <h3 class="govuk-heading-s">Dress code</h3>
+          <p>Details for covering up tattoos, smartly dressed?</p>
+          <p>Require sportswear for PE?</p>
+          <%= link_to("Add dress code", edit_schools_on_boarding_candidate_experience_detail_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+        </div>
+      <% end %>
+
+      <% unless @profile.teacher_training_provides_teacher_training.nil? %>
+        <%= dlist_item "Teacher training" do %>
+          <% if @profile.teacher_training_provides_teacher_training %>
+          <%= safe_format @profile.teacher_training.teacher_training_details %>
+          <p>
+            <%= link_to "Find out more about our teacher training", @profile.teacher_training.teacher_training_url %>
+          </p>
+          <% else %>
+          <p>Does not provide teacher training
+          <% end %>
+          <p><%= link_to("Change teacher training", edit_schools_on_boarding_teacher_training_path) %></p>
+        <% end %>
+      <% else %>
+        <div class="can-add">
+          <h3 class="govuk-heading-s">Teacher training</h3>
+          <%= link_to("Add teacher training", edit_schools_on_boarding_teacher_training_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+        </div>
+      <% end %>
+    </dl>
+
+    <% unless @profile.teacher_training.provides_teacher_training.nil? %>
+      <p><strong>Links to more information about our school</strong></p>
+
+      <ul class="govuk-list govuk-!-margin-bottom-8 tt-links">
+        <% if  @current_school.website.present? %>
+          <li id="school-website">
+            <%= link_to "#{ @current_school.name} website",  @current_school.website %>
+          </li>
+        <% end %>
+
+        <li>
+          <%= link_to "#{ @current_school.name} Get Information About Schools", gias_school_url( @current_school.urn) %>
+        </li>
+
+        <li>
+          <%= link_to "Ofsted report: #{ @current_school.name}", ofsted_report_url( @current_school.urn) %>
+        </li>
+
+        <li>
+          <%= link_to "Performance information: #{ @current_school.name}", performance_report_url( @current_school.urn) %>
+        </li>
+
+        <% if @profile.teacher_training.provides_teacher_training %>
+        <li>
+          <%= link_to "Teacher training: #{ @current_school.name}", cleanup_school_url(@profile.teacher_training.teacher_training_url) %>
+        </li>
+        <% end %>
+      </ul>
+      <p><%= link_to("Change links", edit_schools_on_boarding_teacher_training_path) %></p>
+    <% else %>
+      <div class="can-add">
+        <h3 class="govuk-heading-s">Links to more information about our school</h3>
+        <p>Link to the schools website</p>
+        <p>Are there any links to other schools within a trust?</p>
+        <%= link_to("Add links", edit_schools_on_boarding_teacher_training_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+      </div>
+    <% end %>
+
+    <div>
+      <h2>Entry requirements</h2>
+      <% if @presenter.individual_requirements_raw.present? %>
+        <p>You must:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <%= split_to_list(@presenter.individual_requirements) %>
+        </ul>
+        <p><%= link_to("Change entry requirements", edit_schools_on_boarding_candidate_requirements_selection_path) %></p>
+      <% else %>
+        <div class="can-add">
+          <%= link_to("Add entry requirements", edit_schools_on_boarding_candidate_requirements_selection_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @presenter.dbs_requirement.present? %>
+      <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+        <%= dlist_item "DBS check required" do %>
+          <p>
+            <%= @presenter.dbs_requirement %>.
+            <%= safe_format(@presenter.dbs_details, wrapper_tag: "span") if @presenter.dbs_details.present? %>
+          </p>
+        <% end %>
+        <p><%= link_to("Change DBS check", edit_schools_on_boarding_dbs_requirement_path) %></p>
+      </dl>
+    <% else %>
+      <div class="can-add">
+        <h3 class="govuk-heading-s">DBS check required</h3>
+        <%= link_to("Add DBS check", edit_schools_on_boarding_dbs_requirement_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+      </div>
+    <% end %>
+
+
+    <h2 id="placement-dates">Placement dates</h2>
+    <p>Can only be added once a profile is complete</p>
+
+    <h2 id="fees">Fees</h2>
+
+    <div class="fees">
+      <% if @profile.fees.administration_fees || @profile.fees.other_fees || @profile.fees.dbs_fees %>
+        <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+          <%= dlist_item "Admin fees" do %>
+            <p>
+              <%= number_to_currency @profile.administration_fee.amount_pounds %>
+              <%= @profile.administration_fee.interval %>,
+              <%= @profile.administration_fee.payment_method %>,
+            </p>
+
+            <%= safe_format @profile.administration_fee.description %>
+          <% end if @profile.fees.administration_fees %>
+
+          <%= dlist_item "Other fees" do %>
+            <p>
+              <%= number_to_currency @profile.other_fee.amount_pounds %>
+              <%= @profile.other_fee.interval %>,
+              <%= @profile.other_fee.payment_method %>,
+            </p>
+
+            <%= safe_format @profile.other_fee.description %>
+          <% end if @profile.fees.other_fees %>
+
+          <%= dlist_item "DBS check fees" do %>
+            <p>
+              <%= number_to_currency @profile.dbs_fee.amount_pounds %>
+              <%= @profile.dbs_fee.interval %>,
+              <%= @profile.dbs_fee.payment_method %>,
+            </p>
+
+            <%= safe_format presenter.dbs_fee_description %>
+          <% end if @profile.fees.dbs_fees %>
+        </dl>
+        <p><%= link_to("Change fees", edit_schools_on_boarding_fees_path) %></p>
+      <% else %>
+        <div class="can-add">
+          <%= link_to("Add fees", edit_schools_on_boarding_fees_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+        </div>
+      <% end %>
+    </div>
+
+    <h2 id="location">Location</h2>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">
+        <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+          <%= dlist_item "Address", id: "school-address" do %>
+            <%= format_school_address @current_school %>
+          <% end %>
+        </dl>
+      </div>
+
+      <div class="govuk-grid-column-three-quarters">
+        <%= school_location_map @current_school %>
+      </div>
+    </div>
+
+    <% unless @profile.candidate_experience_detail.parking_provided.nil? %>
+      <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+        <%= dlist_item "Parking" do %>
+          <% if @profile.candidate_experience_detail.parking_provided %>
+            <p>Yes - on site parking provided</p>
+          <% else %>
+            <p>Not available on site</p>
+          <% end %>
+
+          <%= safe_format @profile.candidate_experience_detail.parking_details %>
+          <p><%= link_to("Change parking", edit_schools_on_boarding_candidate_experience_detail_path) %></p>
+        <% end %>
+      </dl>
+    <% else %>
+      <div class="can-add">
+        <h3 class="govuk-heading-s">Parking</h3>
+        <p>Is there any parking onsite?</p>
+        <p>Are there busier times than others?</p>
+        <p>Is the school willing to pay for parking?</p>
+        <%= link_to("Add parking", edit_schools_on_boarding_candidate_experience_detail_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+      </div>
+    <% end %>
+
+    <% unless @profile.access_needs_support.supports_access_needs.nil? %>
+      <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+        <%= dlist_item "Disability and access" do %>
+          <p><%= @presenter.disability_and_access_needs_description.present? ? @presenter.disability_and_access_needs_description : "Access needs not specified" %></p>
+          <% unless @presenter.disability_and_access_needs_policy == "None" %>
+            <p><%= link_to(@presenter.disability_and_access_needs_policy) %></p>
+          <% end %>
+          <p><%= link_to("Change disability and access", edit_schools_on_boarding_access_needs_support_path) %></p>
+        <% end %>
+      </dl>
+    <% else %>
+      <div class="can-add">
+        <h3 class="govuk-heading-s">Disability and access</h3>
+        <p>Do you want to add details about how you can support candidates with disabilities and access needs?</p>
+        <%= link_to("Add disability and access", edit_schools_on_boarding_access_needs_support_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+      </div>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="govuk-!-margin-bottom-8 sidebar">
+      <dl class="govuk-summary-list govuk-summary-list--no-border vertical">
+        <%= dlist_item "Address" do %>
+          <%= format_school_address(@current_school) %>
+        <% end %>
+
+        <% if @presenter.format_school_phases_compact.present? %>
+          <%= dlist_item "School phases" do %>
+            <%= @presenter.format_school_phases_compact %>
+          <% end %>
+          <p><%= link_to("Change phases", edit_schools_on_boarding_phases_list_path) %></p>
+        <% else %>
+          <div class="can-add">
+            <h3 class="govuk-heading-s">School phases</h3>
+            <%= link_to("Add phases", edit_schools_on_boarding_phases_list_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+          </div>
+        <% end %>
+
+        <%= dlist_item "Dates" do %>
+          <%= link_to("#{number_with_delimiter(@presenter.total_available_dates)} dates available for this school", "#placement-dates") %>
+        <% end if @current_school.availability_preference_fixed? %>
+
+        <% if @presenter.dbs_requirement.present? %>
+          <%= dlist_item "DBS check required" do %>
+            <p>
+              <%= @presenter.dbs_requirement %>.
+              <%= safe_format(@presenter.dbs_details, wrapper_tag: "span") if @presenter.dbs_details.present? %>
+            </p>
+          <% end %>
+          <p><%= link_to("Change DBS check", edit_schools_on_boarding_dbs_requirement_path) %></p>
+        <% else %>
+          <div class="can-add">
+            <h3 class="govuk-heading-s">DBS check required</h3>
+            <%= link_to("Add DBS check", edit_schools_on_boarding_dbs_requirement_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+          </div>
+        <% end %>
+
+        <% unless @profile.access_needs_support.supports_access_needs.nil? %>
+          <%= dlist_item "Disability and access" do %>
+            <p><%= @presenter.disability_confident? ? "" : "Not" %> Disability Confident</p>
+            <p><%= link_to("Change disability and access", edit_schools_on_boarding_access_needs_support_path) %></p>
+          <% end %>
+        <% else %>
+          <div class="can-add">
+            <h3 class="govuk-heading-s">Disability and access</h3>
+            <p>Do you want to add details about how you can support candidates with disabilities and access needs?</p>
+            <%= link_to("Add disability and access", edit_schools_on_boarding_access_needs_support_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+          </div>
+        <% end %>
+
+        <% if @presenter.subjects_offered? %>
+          <% if @profile.subjects.present? %>
+            <%= dlist_item "Subjects" do %>
+              <%= @presenter.format_school_subjects_list %>
+            <% end %>
+            <p><%= link_to("Change subjects", edit_schools_on_boarding_subjects_path) %></p>
+          <% else %>
+            <div class="can-add">
+              <h3 class="govuk-heading-s">Subjects</h3>
+              <%= link_to("Add subjects", edit_schools_on_boarding_subjects_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <% if @presenter.primary_key_stages_offered? %>
+          <% if @presenter.primary_key_stages.present? %>
+            <%= dlist_item "Key stages" do %>
+              <%= @presenter.primary_key_stages %>
+            <% end %>
+            <p><%= link_to("Change key stages", edit_schools_on_boarding_key_stage_list_path) %></p>
+          <% else %>
+            <div class="can-add">
+              <h3 class="govuk-heading-s">Key stages</h3>
+              <%= link_to("Add key stages", edit_schools_on_boarding_key_stage_list_path, class: "govuk-button govuk-button--secondary govuk-!-margin-0") %>
+            </div>
+          <% end %>
+        <% end %>
+      </dl>
+		</div>
+  </div>
+</div>

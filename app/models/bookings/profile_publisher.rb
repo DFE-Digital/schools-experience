@@ -4,7 +4,7 @@ module Bookings
       @urn_or_school = urn_or_school
       @school_profile = school_profile
 
-      unless @school_profile.completed?
+      unless @school_profile.lite_completed?
         raise IncompleteSourceProfileError
       end
     end
@@ -16,6 +16,9 @@ module Bookings
         school.phase_ids = converted_phase_ids
         school.save!
         profile.updated_at = DateTime.now
+        profile.parking_details ||= "BLANK"
+        profile.start_time ||= "8:00"
+        profile.end_time ||= "16:00"
         profile.tap(&:save!)
       end
     end

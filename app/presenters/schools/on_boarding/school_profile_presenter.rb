@@ -2,6 +2,7 @@ module Schools
   module OnBoarding
     class SchoolProfilePresenter
       include ActionView::Helpers
+      include ActionView::Context
 
       def initialize(school_profile)
         @school_profile = school_profile
@@ -57,6 +58,38 @@ module Schools
         end
       end
 
+      def dbs_requirement
+        {
+          'required' => 'Yes',
+          'inschool' => 'Yes - when in school',
+          'notrequired' => 'No - Candidates will be accompanied at all times when in school'
+        }[@school_profile.dbs_requirement.dbs_policy_conditions]
+      end
+
+      def total_available_dates
+        available_dates_by_month.values.flatten.count
+      end
+
+      def available_dates_by_month
+        @available_dates_by_month ||= @school
+          .bookings_placement_dates
+          .eager_load(:subjects, placement_date_subjects: :bookings_subject)
+          .available
+          .group_by { |d| d.date.at_beginning_of_month }
+          .transform_values { |v| v.sort_by(&:date) }
+      end
+
+      def dbs_details
+        case @school_profile.dbs_requirement.dbs_policy_conditions
+        when 'required'
+          @school_profile.dbs_requirement.dbs_policy_details
+        when 'inschool'
+          @school_profile.dbs_requirement.dbs_policy_details_inschool
+        when 'notrequired'
+          ""
+        end
+      end
+
       def dbs_check
         unless @school_profile.dbs_requirement.dbs_policy_conditions.in? \
           Bookings::Profile::DBS_POLICY_CONDITIONS
@@ -85,6 +118,28 @@ module Schools
 
       def individual_requirements
         candidate_requirements_selection
+      end
+
+      def format_school_phases_compact
+        output = []
+
+        if @school_profile.phases_list.primary?
+          output << 'Primary (4 to 11 years)'
+        end
+
+        if @school_profile.phases_list.secondary?
+          output << 'Secondary (11 to 16 years)'
+        end
+
+        if @school_profile.phases_list.college?
+          output << 'Secondary with 16 to 18 years'
+        end
+
+        if @school_profile.phases_list.secondary_and_college
+          output << '16 - 18 years'
+        end
+
+        output.join(", ")
       end
 
       def school_experience_phases
@@ -186,6 +241,16 @@ module Schools
         output.to_sentence.capitalize
       end
 
+      def format_school_subjects_list
+        subjects = @school_profile.subjects.map(&:name)
+
+        return nil if subjects.empty?
+
+        content_tag(:ul, class: "govuk-list govuk-list--bullet") do
+          safe_join(subjects.map { |subject| content_tag(:li, subject) })
+        end
+      end
+
       def parking
         if @school_profile.candidate_parking_information.parking_provided
           @school_profile.candidate_parking_information.parking_details
@@ -204,6 +269,18 @@ module Schools
         else
           'No'
         end
+      end
+
+      def access_needs_description
+        disability_and_access_needs_description
+      end
+
+      def disability_confident?
+        @school_profile.disability_confident.is_disability_confident
+      end
+
+      def has_access_needs_policy?
+        @school_profile.access_needs_policy.has_access_needs_policy
       end
 
       def disability_and_access_needs_description
@@ -270,6 +347,10 @@ module Schools
         unless @school.onboarded?
           "To set up your profile, select the checkbox at the bottom of the page and select 'Accept and set up profile'."
         end
+      end
+
+      def individual_requirements_raw
+        CandidateRequirementsSelectionPresenter.new(@school_profile.attributes).requirements
       end
 
     private

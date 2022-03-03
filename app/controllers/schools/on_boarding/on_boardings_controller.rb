@@ -14,10 +14,18 @@ module Schools
       end
 
       def next_step_path(school_profile)
-        if school_profile.completed?
-          schools_on_boarding_profile_path
+        unless school_profile.lite_completed?
+          next_step = school_profile.current_step_lite
+
         else
-          public_send "new_schools_on_boarding_#{school_profile.current_step}_path"
+          last_step = request.path.split("/").last.to_sym
+          next_step = school_profile.current_step(last_step)
+        end
+
+        if next_step
+          public_send "new_schools_on_boarding_#{next_step}_path"
+        else
+          schools_on_boarding_progress_path
         end
       end
 

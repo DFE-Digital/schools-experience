@@ -2,39 +2,64 @@
 module Schools
   module OnBoarding
     class CurrentStep
-      STEPS = %i[
-        dbs_requirement
-        candidate_requirements_selection
-        fees
-        administration_fee
-        dbs_fee
-        other_fee
-        phases_list
-        key_stage_list
-        subjects
-        description
-        candidate_dress_code
-        candidate_parking_information
-        candidate_experience_schedule
-        access_needs_support
-        access_needs_detail
-        disability_confident
-        access_needs_policy
-        experience_outline
-        teacher_training
-        admin_contact
-      ].freeze
+      SECTIONS = {
+        dbs_check: %i(dbs_requirement),
+        candidate_requirements: %i(candidate_requirements_selection),
+        fees: %i(fees administration_fee dbs_fee other_fee),
+        stages: %i(phases_list key_stage_list subjects),
+        description: %i(description),
+        candidate_dress_code: %i(candidate_dress_code),
+        candidate_dresscandidate_parking_information_code: %i(candidate_parking_information),
+        candidate_experience_schedule: %i(candidate_experience_schedule),
+        disability_and_access: %i(access_needs_support access_needs_detail disability_confident access_needs_policy),
+        type_of_experience: %i(experience_outline),
+        teacher_training: %i(teacher_training),
+        admin_contact_details: %i(admin_contact),
+      }.freeze
 
-      def self.for(school_profile)
-        new(school_profile).call
+      LITE_STEPS = %i[
+        admin_contact
+        phases_list
+        subjects
+        dbs_requirement
+      ]
+
+      def self.for(school_profile, last_step)
+        new(school_profile).call(last_step)
+      end
+
+      def self.for_lite(school_profile)
+        new(school_profile).call_lite
       end
 
       def initialize(school_profile)
         @school_profile = school_profile
       end
 
-      def call
-        STEPS.detect(&method(:required?)) || :COMPLETED
+      def call(last_step)
+        section = SECTIONS.invert.find { |steps, section| last_step.in?(steps) }.last
+        steps_in_section = SECTIONS[section]
+        last_step_index = steps_in_section.index(last_step)
+
+        if last_step_index == steps_in_section.count
+          nil # Go back to progress page
+        else
+          steps_in_section[(last_step_index + 1)..].detect(&method(:required?))
+        end
+      end
+
+      def incomplete_steps
+        SECTIONS.values.flatten.select do |step|
+          send("#{step}_required?") && !@school_profile.send(step).dup.valid?
+        end
+      end
+
+      def lite_completed?
+        LITE_STEPS.none? { |step| send("#{step}_required?") }
+      end
+
+      def call_lite
+        LITE_STEPS.detect(&method(:required?))
       end
 
     private
@@ -58,27 +83,15 @@ module Schools
       end
 
       def administration_fee_required?
-        return false unless @school_profile.fees.administration_fees
-
-        return true if @school_profile.administration_fee.dup.invalid?
-
-        !@school_profile.administration_fee_step_completed?
+        @school_profile.fees.administration_fees
       end
 
       def dbs_fee_required?
-        return false unless @school_profile.fees.dbs_fees
-
-        return true if @school_profile.dbs_fee.dup.invalid?
-
-        !@school_profile.dbs_fee_step_completed?
+        @school_profile.fees.dbs_fees
       end
 
       def other_fee_required?
-        return false unless @school_profile.fees.other_fees
-
-        return true if @school_profile.other_fee.dup.invalid?
-
-        !@school_profile.other_fee_step_completed?
+        @school_profile.fees.other_fees
       end
 
       def phases_list_required?
@@ -123,21 +136,15 @@ module Schools
       end
 
       def access_needs_detail_required?
-        return false unless @school_profile.access_needs_support.supports_access_needs?
-
-        @school_profile.access_needs_detail.dup.invalid?
+        @school_profile.access_needs_support.supports_access_needs?
       end
 
       def disability_confident_required?
-        return false unless @school_profile.access_needs_support.supports_access_needs?
-
-        @school_profile.disability_confident.dup.invalid?
+        @school_profile.access_needs_support.supports_access_needs?
       end
 
       def access_needs_policy_required?
-        return false unless @school_profile.access_needs_support.supports_access_needs?
-
-        @school_profile.access_needs_policy.dup.invalid?
+        @school_profile.access_needs_support.supports_access_needs?
       end
 
       def experience_outline_required?

@@ -4,7 +4,7 @@ module Schools
       include MapsContentSecurityPolicy
 
       before_action do
-        unless current_school_profile.completed?
+        unless current_school_profile.lite_completed?
           continue(current_school_profile)
         end
       end

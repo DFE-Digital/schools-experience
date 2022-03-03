@@ -115,9 +115,9 @@ private
   end
 
   def at_least_one_key_stage
-    unless key_stage_early_years || key_stage_1 || key_stage_2
-      errors.add(:base, 'Choose at least one primary key stage')
-    end
+    # unless key_stage_early_years || key_stage_1 || key_stage_2
+    #   errors.add(:base, 'Choose at least one primary key stage')
+    # end
   end
 
   def nilify_blank_fields

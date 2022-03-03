@@ -30,6 +30,25 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  on_boarding:
+    step:
+      dbs_requirement: DBS check required
+      candidate_requirements_selection: Entry requirements
+      fees administration_fee: Admin fees
+      dbs_fee: DBS fees
+      other_fee: Other fees
+      phases_list: School phases
+      key_stage_list: Key stages
+      subjects: Subjects
+      description: Description
+      candidate_experience_detail: School experience details for candidates
+      access_needs_support: Disability and access
+      access_needs_detail: Disability and access (details)
+      disability_confident: Disability Confident
+      access_needs_policy: Access needs policy
+      experience_outline: School experience details
+      teacher_training: Teacher training
+      admin_contact: Admin contact details
   errors:
    format: "%{message}"
    messages:
