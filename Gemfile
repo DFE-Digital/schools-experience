@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 5.6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.4', '>= 5.4.3'
+gem 'shakapacker', '6.1.1'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
