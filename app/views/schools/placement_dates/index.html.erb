@@ -9,6 +9,10 @@
 
 <h1>Manage dates</h1>
 
+<div>
+  <%= govuk_link_to "Add a date", new_schools_placement_date_path %>
+</div>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
@@ -69,9 +73,7 @@
   </div>
 </div>
 
-<div>
-  <%= govuk_link_to "Add a date", new_schools_placement_date_path %>
-</div>
+
 
 <div>
   <%= govuk_link_to "Return to dashboard", schools_dashboard_path, secondary: true %>
