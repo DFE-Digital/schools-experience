@@ -81,14 +81,14 @@ RSpec.describe Bookings::ProfileAttributesConvertor, type: :model do
         model.candidate_requirements_selection_provide_photo_identification = false
         model.description_details = ' '
         model.candidate_experience_detail_disabled_facilities = false
-        model.candidate_experience_detail_other_dress_requirements = false
+        model.candidate_dress_code_other_dress_requirements = false
         model.admin_contact_email = ' '
         model.phases_list_primary = false
         model.phases_list_secondary = false
         model.phases_list_college = true
         model.phases_list_secondary_and_college = true
-        model.candidate_experience_detail_parking_provided = false
-        model.candidate_experience_detail_nearby_parking_details = 'somewhere further away'
+        model.candidate_parking_information_parking_provided = false
+        model.candidate_parking_information_nearby_parking_details = 'somewhere further away'
         model.teacher_training_provides_teacher_training = false
         model.fees_administration_fees = false
         model.fees_dbs_fees = false

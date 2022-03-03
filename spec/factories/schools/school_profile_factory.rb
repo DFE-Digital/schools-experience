@@ -83,7 +83,14 @@ FactoryBot.define do
       times_flexible { true }
     end
 
-    trait :with_candidate_experience_detail do
+    trait :with_candidate_dress_code do
+      candidate_dress_code_step_completed { true }
+      after :build do |profile|
+        profile.candidate_dress_code = FactoryBot.build :candidate_dress_code
+      end
+    end
+
+    trait :with_candidate_parking_information do
       after :build do |profile, evaluator|
         traits = []
 
@@ -91,11 +98,19 @@ FactoryBot.define do
           traits << :without_parking
         end
 
+        profile.candidate_parking_information = FactoryBot.build :candidate_parking_information, *traits
+      end
+    end
+
+    trait :with_candidate_experience_schedule do
+      after :build do |profile, evaluator|
+        traits = []
+
         if evaluator.times_flexible == false
           traits << :without_flexible_times
         end
 
-        profile.candidate_experience_detail = FactoryBot.build :candidate_experience_detail, *traits
+        profile.candidate_experience_schedule = FactoryBot.build :candidate_experience_schedule, *traits
       end
     end
 
@@ -160,7 +175,9 @@ FactoryBot.define do
       with_key_stage_list
       with_subjects
       with_description
-      with_candidate_experience_detail
+      with_candidate_dress_code
+      with_candidate_parking_information
+      with_candidate_experience_schedule
       with_access_needs_support
       with_access_needs_detail
       with_disability_confident

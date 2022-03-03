@@ -13,7 +13,9 @@ module Schools
         key_stage_list
         subjects
         description
-        candidate_experience_detail
+        candidate_dress_code
+        candidate_parking_information
+        candidate_experience_schedule
         access_needs_support
         access_needs_detail
         disability_confident
@@ -102,8 +104,18 @@ module Schools
         @school_profile.description.dup.invalid?
       end
 
-      def candidate_experience_detail_required?
-        @school_profile.candidate_experience_detail.dup.invalid?
+      def candidate_dress_code_required?
+        return true if @school_profile.candidate_dress_code.dup.invalid?
+
+        !@school_profile.candidate_dress_code_step_completed?
+      end
+
+      def candidate_parking_information_required?
+        @school_profile.candidate_parking_information.dup.invalid?
+      end
+
+      def candidate_experience_schedule_required?
+        @school_profile.candidate_experience_schedule.dup.invalid?
       end
 
       def access_needs_support_required?

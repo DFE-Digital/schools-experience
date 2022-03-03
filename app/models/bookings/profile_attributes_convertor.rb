@@ -65,14 +65,14 @@ module Bookings
     end
 
     def convert_dress_code
-      output[:dress_code_business] = input[:candidate_experience_detail_business_dress].present?
-      output[:dress_code_cover_tattoos] = input[:candidate_experience_detail_cover_up_tattoos].present?
-      output[:dress_code_remove_piercings] = input[:candidate_experience_detail_remove_piercings].present?
-      output[:dress_code_smart_casual] = input[:candidate_experience_detail_smart_casual].present?
+      output[:dress_code_business] = input[:candidate_dress_code_business_dress].present?
+      output[:dress_code_cover_tattoos] = input[:candidate_dress_code_cover_up_tattoos].present?
+      output[:dress_code_remove_piercings] = input[:candidate_dress_code_remove_piercings].present?
+      output[:dress_code_smart_casual] = input[:candidate_dress_code_smart_casual].present?
 
       output[:dress_code_other_details] = \
-        conditional_assign(:candidate_experience_detail_other_dress_requirements,
-          :candidate_experience_detail_other_dress_requirements_detail)
+        conditional_assign(:candidate_dress_code_other_dress_requirements,
+          :candidate_dress_code_other_dress_requirements_detail)
     end
 
     def convert_admin_details
@@ -100,23 +100,23 @@ module Bookings
     end
 
     def copy_fields
-      output[:start_time]             = input[:candidate_experience_detail_start_time]
-      output[:end_time]               = input[:candidate_experience_detail_end_time]
+      output[:start_time]             = input[:candidate_experience_schedule_start_time]
+      output[:end_time]               = input[:candidate_experience_schedule_end_time]
       output[:experience_details]     = input[:experience_outline_candidate_experience].presence
-      output[:flexible_on_times]      = input[:candidate_experience_detail_times_flexible].present?
+      output[:flexible_on_times]      = input[:candidate_experience_schedule_times_flexible].present?
       output[:flexible_on_times_details] = conditional_assign(
-        :candidate_experience_detail_times_flexible,
-        :candidate_experience_detail_times_flexible_details
+        :candidate_experience_schedule_times_flexible,
+        :candidate_experience_schedule_times_flexible_details
       )
     end
 
     def copy_parking
-      if input[:candidate_experience_detail_parking_provided]
+      if input[:candidate_parking_information_parking_provided]
         output[:parking_provided] = true
-        output[:parking_details]  = input[:candidate_experience_detail_parking_details]
+        output[:parking_details]  = input[:candidate_parking_information_parking_details]
       else
         output[:parking_provided] = false
-        output[:parking_details]  = input[:candidate_experience_detail_nearby_parking_details]
+        output[:parking_details]  = input[:candidate_parking_information_nearby_parking_details]
       end
     end
 

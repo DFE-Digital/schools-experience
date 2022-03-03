@@ -18,7 +18,9 @@ Feature: School Profile
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
-        | Candidate experience details     |                           |
+        | Candidate dress code             |                           |
+        | Candidate parking information    |                           |
+        | Candidate experience schedule    |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |
         | Disability confident             |                           |

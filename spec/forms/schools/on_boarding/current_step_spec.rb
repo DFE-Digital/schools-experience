@@ -242,7 +242,7 @@ describe Schools::OnBoarding::CurrentStep do
       end
     end
 
-    context 'candidate_experience_detail required' do
+    context 'candidate_dress_code required' do
       let :school_profile do
         FactoryBot.create :school_profile,
           :with_dbs_requirement,
@@ -257,8 +257,72 @@ describe Schools::OnBoarding::CurrentStep do
           :with_description
       end
 
-      it 'returns :candidate_experience_detail' do
-        expect(returned_step).to eq :candidate_experience_detail
+      it 'returns :candidate_dress_code' do
+        expect(returned_step).to eq :candidate_dress_code
+      end
+
+      context 'step not flagged as completed' do
+        let :school_profile do
+          FactoryBot.create :school_profile,
+            :with_dbs_requirement,
+            :with_candidate_requirements_selection,
+            :with_fees,
+            :with_administration_fee,
+            :with_dbs_fee,
+            :with_other_fee,
+            :with_phases,
+            :with_key_stage_list,
+            :with_subjects,
+            :with_description,
+            :with_candidate_dress_code, candidate_dress_code_step_completed: false
+        end
+
+        it 'returns :candidate_requirements_selection' do
+          expect(returned_step).to eq :candidate_dress_code
+        end
+      end
+    end
+
+    context 'candidate_parking_information required' do
+      let :school_profile do
+        FactoryBot.create :school_profile,
+          :with_dbs_requirement,
+          :with_candidate_requirements_selection,
+          :with_fees,
+          :with_administration_fee,
+          :with_dbs_fee,
+          :with_other_fee,
+          :with_phases,
+          :with_key_stage_list,
+          :with_subjects,
+          :with_description,
+          :with_candidate_dress_code
+      end
+
+      it 'returns :candidate_parking_information' do
+        expect(returned_step).to eq :candidate_parking_information
+      end
+    end
+
+    context 'candidate_experience_schedule required' do
+      let :school_profile do
+        FactoryBot.create :school_profile,
+          :with_dbs_requirement,
+          :with_candidate_requirements_selection,
+          :with_fees,
+          :with_administration_fee,
+          :with_dbs_fee,
+          :with_other_fee,
+          :with_phases,
+          :with_key_stage_list,
+          :with_subjects,
+          :with_description,
+          :with_candidate_dress_code,
+          :with_candidate_parking_information
+      end
+
+      it 'returns :candidate_experience_schedule' do
+        expect(returned_step).to eq :candidate_experience_schedule
       end
     end
 
@@ -275,7 +339,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_key_stage_list,
           :with_subjects,
           :with_description,
-          :with_candidate_experience_detail
+          :with_candidate_dress_code,
+          :with_candidate_parking_information,
+          :with_candidate_experience_schedule
       end
 
       it 'returns :access_needs_support' do
@@ -296,7 +362,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_key_stage_list,
           :with_subjects,
           :with_description,
-          :with_candidate_experience_detail,
+          :with_candidate_dress_code,
+          :with_candidate_parking_information,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :without_access_needs_support
       end
@@ -319,7 +387,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_key_stage_list,
           :with_subjects,
           :with_description,
-          :with_candidate_experience_detail,
+          :with_candidate_dress_code,
+          :with_candidate_parking_information,
+          :with_candidate_experience_schedule,
           :with_access_needs_support
       end
 
@@ -341,7 +411,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_key_stage_list,
           :with_subjects,
           :with_description,
-          :with_candidate_experience_detail,
+          :with_candidate_dress_code,
+          :with_candidate_parking_information,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail
       end
@@ -364,7 +436,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_key_stage_list,
           :with_subjects,
           :with_description,
-          :with_candidate_experience_detail,
+          :with_candidate_dress_code,
+          :with_candidate_parking_information,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail,
           :with_disability_confident
@@ -388,7 +462,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_key_stage_list,
           :with_subjects,
           :with_description,
-          :with_candidate_experience_detail,
+          :with_candidate_dress_code,
+          :with_candidate_parking_information,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail,
           :with_disability_confident,
@@ -413,7 +489,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_key_stage_list,
           :with_subjects,
           :with_description,
-          :with_candidate_experience_detail,
+          :with_candidate_dress_code,
+          :with_candidate_parking_information,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail,
           :with_disability_confident,
@@ -440,7 +518,9 @@ describe Schools::OnBoarding::CurrentStep do
           :with_key_stage_list,
           :with_subjects,
           :with_description,
-          :with_candidate_experience_detail,
+          :with_candidate_dress_code,
+          :with_candidate_parking_information,
+          :with_candidate_experience_schedule,
           :with_access_needs_support,
           :with_access_needs_detail,
           :with_disability_confident,

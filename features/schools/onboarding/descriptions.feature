@@ -25,4 +25,4 @@ Feature: Description
     Given I am on the 'Description' page
     And I enter 'We have a race track' into the 'Enter a description of your school' text area
     When I submit the form
-    Then I should be on the 'Candidate experience details' page
+    Then I should be on the 'Candidate dress code' page

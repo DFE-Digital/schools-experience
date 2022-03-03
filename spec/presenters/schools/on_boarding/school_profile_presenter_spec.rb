@@ -311,7 +311,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#dress_code' do
     let :profile do
-      FactoryBot.build :school_profile, :with_candidate_experience_detail
+      FactoryBot.build :school_profile, :with_candidate_dress_code
     end
 
     it 'returns the selected dress code options' do
@@ -323,7 +323,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   context '#parking' do
     context 'when parking is offered' do
       let :profile do
-        FactoryBot.build :school_profile, :with_candidate_experience_detail
+        FactoryBot.build :school_profile, :with_candidate_parking_information
       end
 
       it 'returns parking details' do
@@ -334,7 +334,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     context 'when parking is not offered' do
       let :profile do
         FactoryBot.build \
-          :school_profile, :with_candidate_experience_detail, parking: false
+          :school_profile, :with_candidate_parking_information, parking: false
       end
 
       it 'returns nearby parking details' do
@@ -345,7 +345,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#start_time' do
     let :profile do
-      FactoryBot.build :school_profile, :with_candidate_experience_detail
+      FactoryBot.build :school_profile, :with_candidate_experience_schedule
     end
 
     it 'returns the start time' do
@@ -355,7 +355,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#end_time' do
     let :profile do
-      FactoryBot.build :school_profile, :with_candidate_experience_detail
+      FactoryBot.build :school_profile, :with_candidate_experience_schedule
     end
 
     it 'returns the end time' do
@@ -367,7 +367,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     context 'when flexible_on_times' do
       let :profile do
         FactoryBot.build :school_profile, \
-          :with_candidate_experience_detail, times_flexible: true
+          :with_candidate_experience_schedule, times_flexible: true
       end
 
       it 'returns Yes with details' do
@@ -378,7 +378,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
     context 'when not flexible_on_times' do
       let :profile do
         FactoryBot.build :school_profile,
-          :with_candidate_experience_detail, times_flexible: false
+          :with_candidate_experience_schedule, times_flexible: false
       end
 
       it 'returns no' do

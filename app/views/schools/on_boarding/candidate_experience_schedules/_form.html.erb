@@ -1,0 +1,34 @@
+<% self.page_title = 'Enter start and finish times for candidates' %>
+
+<%= govuk_back_link javascript: true %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="gouvk-heading-l">
+      Enter start and finish times for candidates
+    </h1>
+
+    <%= form_for candidate_experience_schedule, url: url, method: method do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <%= f.govuk_text_field :start_time, class: 'govuk-!-width-one-quarter', label: { class: 'govuk-label govuk-label--m' } %>
+          <%= f.govuk_text_field :end_time, class: 'govuk-!-width-one-quarter', label: { class: 'govuk-label govuk-label--m' } %>
+        </fieldset>
+      </div>
+
+      <%= f.govuk_radio_buttons_fieldset :times_flexible do %>
+        <p>
+          For example, if you let candidates start and finish later, depending on their individual needs.
+        </p>
+        <%= f.govuk_radio_button :times_flexible, "true", link_errors: true do %>
+          <%= f.govuk_text_area :times_flexible_details, rows: 7 %>
+        <% end %>
+        <%= f.govuk_radio_button :times_flexible, "false" %>
+      <% end %>
+
+      <%= f.govuk_submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

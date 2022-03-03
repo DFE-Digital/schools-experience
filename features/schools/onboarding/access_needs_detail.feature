@@ -14,7 +14,9 @@ Feature: Access needs detail
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
-        | Candidate experience details     |                           |
+        | Candidate dress code             |                           |
+        | Candidate parking information    |                           |
+        | Candidate experience schedule    |                           |
         | Access needs support             |                           |
 
   Scenario: Page title

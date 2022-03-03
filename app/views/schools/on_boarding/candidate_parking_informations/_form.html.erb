@@ -1,0 +1,27 @@
+<% self.page_title = 'Enter parking information for candidates' %>
+
+<%= govuk_back_link javascript: true %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="gouvk-heading-l">
+      Parking information
+    </h1>
+
+    <%= form_for candidate_parking_information, url: url, method: method do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset :parking_provided do %>
+        <%= f.govuk_radio_button :parking_provided, "true", link_errors: true do %>
+          <%= f.govuk_text_area :parking_details, rows: 7 %>
+        <% end %>
+        <%= f.govuk_radio_button :parking_provided, "false" do %>
+          <%= f.govuk_text_area :nearby_parking_details, rows: 7 %>
+        <% end %>
+      <% end %>
+
+
+      <%= f.govuk_submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

@@ -163,34 +163,34 @@ module Schools
       def dress_code
         output = []
 
-        if @school_profile.candidate_experience_detail.business_dress
+        if @school_profile.candidate_dress_code.business_dress
           output << 'business dress'
         end
 
-        if @school_profile.candidate_experience_detail.cover_up_tattoos
+        if @school_profile.candidate_dress_code.cover_up_tattoos
           output << 'cover up tattoos'
         end
 
-        if @school_profile.candidate_experience_detail.remove_piercings
+        if @school_profile.candidate_dress_code.remove_piercings
           output << 'remove piercings'
         end
 
-        if @school_profile.candidate_experience_detail.smart_casual
+        if @school_profile.candidate_dress_code.smart_casual
           output << 'smart casual'
         end
 
-        if @school_profile.candidate_experience_detail.other_dress_requirements
-          output << @school_profile.candidate_experience_detail.other_dress_requirements_detail
+        if @school_profile.candidate_dress_code.other_dress_requirements
+          output << @school_profile.candidate_dress_code.other_dress_requirements_detail
         end
 
         output.to_sentence.capitalize
       end
 
       def parking
-        if @school_profile.candidate_experience_detail.parking_provided
-          @school_profile.candidate_experience_detail.parking_details
+        if @school_profile.candidate_parking_information.parking_provided
+          @school_profile.candidate_parking_information.parking_details
         else
-          @school_profile.candidate_experience_detail.nearby_parking_details
+          @school_profile.candidate_parking_information.nearby_parking_details
         end
       end
 
@@ -227,16 +227,16 @@ module Schools
       end
 
       def start_time
-        @school_profile.candidate_experience_detail.start_time
+        @school_profile.candidate_experience_schedule.start_time
       end
 
       def end_time
-        @school_profile.candidate_experience_detail.end_time
+        @school_profile.candidate_experience_schedule.end_time
       end
 
       def flexible_on_times
-        if @school_profile.candidate_experience_detail.times_flexible
-          'Yes - ' + @school_profile.candidate_experience_detail.times_flexible_details
+        if @school_profile.candidate_experience_schedule.times_flexible
+          'Yes - ' + @school_profile.candidate_experience_schedule.times_flexible_details
         else
           'No'
         end

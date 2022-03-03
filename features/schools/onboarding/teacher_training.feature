@@ -21,7 +21,9 @@ Feature: Teacher training
         | Access needs detail              |                           |
         | Disability confident             |                           |
         | Access needs policy              |                           |
-        | Candidate experience details     |                           |
+        | Candidate dress code             |                           |
+        | Candidate parking information    |                           |
+        | Candidate experience schedule    |                           |
         | Experience Outline               |                           |
 
   Scenario: Page title

@@ -320,20 +320,26 @@ en:
           attributes:
             details:
               blank: 'Provide details'
-        schools/on_boarding/candidate_experience_detail:
+        schools/on_boarding/candidate_dress_code:
           attributes:
             other_dress_requirements_detail:
               blank: 'Other dress code details are required'
+        schools/on_boarding/candidate_parking_information:
+          attributes:
             parking_provided:
               inclusion: 'Select whether parking is provided'
             parking_details:
               blank: 'Details of where candidates can park at your school are required'
             nearby_parking_details:
               blank: 'Details of where candidates can park near your school are required'
+        schools/on_boarding/candidate_experience_detail:
+          attributes:
             disabled_facilities:
               inclusion: 'Select whether you provide facilities or support for candidates with disabilities or access needs'
             disabled_facilities_details:
                 blank: 'Details of facilities or support for candidates with disabilities or access needs are required'
+        schools/on_boarding/candidate_experience_schedule:
+          attributes:
             start_time:
               blank: 'Start time is required'
               invalid: 'Enter a valid start time'
@@ -341,7 +347,7 @@ en:
               blank: 'End time is required'
               invalid: 'Enter a valid end time'
             times_flexible:
-              inclusion: 'Select whether your start and finish times are flexible'
+              inclusion: 'Select if your start and finish times are flexible'
             times_flexible_details:
               blank: 'Start and finish time details are required'
         schools/on_boarding/access_needs_detail:
@@ -618,6 +624,9 @@ en:
         dbs_policy_conditions_html: '<br>Around 12% of schools charge candidates fees to carry out DBS checks and charge an average of £55'
       schools_on_boarding_candidate_experience_detail:
         disabled_facilities: 'For example, disabled parking spaces and support for autistic spectrum disorders, dyslexia and hearing impairments'
+      schools_on_boarding_candidate_experience_schedule:
+        start_time: 'For example, 8:15am.'
+        end_time: 'For example, 3:30pm.'
       schools_on_boarding_teacher_training:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
       schools_placement_requests_add_more_details:
@@ -810,7 +819,7 @@ en:
           1: 'Secondary (11 to 16 years)'
         secondary_and_college_options:
           1: 'Secondary with 16 to 18 years'
-      schools_on_boarding_candidate_experience_detail:
+      schools_on_boarding_candidate_dress_code:
         business_dress_options:
           1: 'Business dress'
         cover_up_tattoos_options:
@@ -821,18 +830,21 @@ en:
           1: 'Smart casual'
         other_dress_requirements_options:
           1: 'Other'
-        other_dress_requirements_detail: 'For example no denim, jeans, shorts, short skirts, trainers'
+        other_dress_requirements_detail: 'For example no denim, jeans, shorts, short skirts or trainers.'
+      schools_on_boarding_candidate_parking_information:
         parking_provided_options:
           true: 'Yes'
           false: 'No'
         parking_details: 'Provide details.'
         nearby_parking_details: 'Provide details of where candidates can park near your school.'
+      schools_on_boarding_candidate_experience_detail:
         disabled_facilities:
           true: 'Yes'
           false: 'No'
         disabled_facilities_details: 'Provide details.'
-        start_time: 'Start time. For example, 8:15am.'
-        end_time: 'Finish time. For example, 4:30pm.'
+      schools_on_boarding_candidate_experience_schedule:
+        start_time: 'What is your start time for candidates?'
+        end_time: 'What is your finish time for candidates?'
         times_flexible_options:
           true: 'Yes'
           false: 'No'
@@ -981,9 +993,10 @@ en:
         <<: *schools_on_boarding_school_fee_helpers
       schools_on_boarding_other_fee:
         <<: *schools_on_boarding_school_fee_helpers
-      schools_on_boarding_candidate_experience_detail:
-        parking_provided: 'Do you provide parking for candidates?'
+      schools_on_boarding_candidate_experience_schedule:
         times_flexible: 'Are your start and finish times flexible?'
+      schools_on_boarding_candidate_parking_information:
+        parking_provided: 'Do you provide parking for candidates?'
       schools_on_boarding_access_needs_support:
         supports_access_needs: 'Do you want to add details about how you can support candidates with disabilities and access needs?'
       schools_on_boarding_disability_confident:
