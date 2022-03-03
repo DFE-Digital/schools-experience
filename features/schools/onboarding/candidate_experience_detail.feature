@@ -17,6 +17,7 @@ Feature: Candidate experience details
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
+        | Candidate dress code             |                           |
 
   Scenario: Page title
     Given I am already on the 'candidate experience details' page

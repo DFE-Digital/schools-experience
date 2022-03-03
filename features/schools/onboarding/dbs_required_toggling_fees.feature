@@ -33,6 +33,7 @@ Feature: Dbs required toggling available fees
         | Access needs detail              |                           |
         | Disability confident             |                           |
         | Access needs policy              |                           |
+        | Candidate dress code             |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
         | Teacher training                 |                           |
@@ -56,6 +57,7 @@ Feature: Dbs required toggling available fees
         | Access needs detail              |                           |
         | Disability confident             |                           |
         | Access needs policy              |                           |
+        | Candidate dress code             |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
         | Teacher training                 |                           |

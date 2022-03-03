@@ -157,12 +157,6 @@ module Schools
       :candidate_experience_detail,
       class_name: 'Schools::OnBoarding::CandidateExperienceDetail',
       mapping: [
-        %w[candidate_experience_detail_business_dress business_dress],
-        %w[candidate_experience_detail_cover_up_tattoos cover_up_tattoos],
-        %w[candidate_experience_detail_remove_piercings remove_piercings],
-        %w[candidate_experience_detail_smart_casual smart_casual],
-        %w[candidate_experience_detail_other_dress_requirements other_dress_requirements],
-        %w[candidate_experience_detail_other_dress_requirements_detail other_dress_requirements_detail],
         %w[candidate_experience_detail_parking_provided parking_provided],
         %w[candidate_experience_detail_parking_details parking_details],
         %w[candidate_experience_detail_nearby_parking_details nearby_parking_details],
@@ -170,6 +164,19 @@ module Schools
         %w[candidate_experience_detail_end_time end_time],
         %w[candidate_experience_detail_times_flexible times_flexible],
         %w[candidate_experience_detail_times_flexible_details times_flexible_details]
+      ],
+      constructor: :compose
+
+    composed_of \
+      :candidate_dress_code,
+      class_name: 'Schools::OnBoarding::CandidateDressCode',
+      mapping: [
+        %w[candidate_dress_code_business_dress business_dress],
+        %w[candidate_dress_code_cover_up_tattoos cover_up_tattoos],
+        %w[candidate_dress_code_remove_piercings remove_piercings],
+        %w[candidate_dress_code_smart_casual smart_casual],
+        %w[candidate_dress_code_other_dress_requirements other_dress_requirements],
+        %w[candidate_dress_code_other_dress_requirements_detail other_dress_requirements_detail],
       ],
       constructor: :compose
 

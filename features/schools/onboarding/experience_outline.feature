@@ -21,6 +21,7 @@ Feature: Experience Outline
         | Access needs detail              |                           |
         | Disability confident             |                           |
         | Access needs policy              |                           |
+        | Candidate dress code             |                           |
         | Candidate experience details     |                           |
 
   Scenario: Page title

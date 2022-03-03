@@ -6,12 +6,6 @@ module Schools
       # FIXME do we need to tighten this up/use a real timepicker?
       SCHOOL_TIME_FORMAT = %r{\A((\d{1,2})(?:(\.|:))(\d{1,2})\s*((?:(am|pm)))?)|\A([\d{1,2}]\s*(am|pm))|\A\d{1,2}\z}i.freeze
 
-      attribute :business_dress, :boolean, default: false
-      attribute :cover_up_tattoos, :boolean, default: false
-      attribute :remove_piercings, :boolean, default: false
-      attribute :smart_casual, :boolean, default: false
-      attribute :other_dress_requirements, :boolean, default: false
-      attribute :other_dress_requirements_detail, :string
       attribute :parking_provided, :boolean
       attribute :parking_details, :string
       attribute :nearby_parking_details, :string
@@ -20,16 +14,9 @@ module Schools
       attribute :times_flexible, :boolean
       attribute :times_flexible_details, :string
 
-      validates :business_dress, inclusion: [true, false]
-      validates :cover_up_tattoos, inclusion: [true, false]
-      validates :remove_piercings, inclusion: [true, false]
-      validates :smart_casual, inclusion: [true, false]
-      validates :other_dress_requirements, inclusion: [true, false]
-      validates :other_dress_requirements_detail, presence: true, if: :other_dress_requirements
       validates :parking_provided, inclusion: [true, false]
       validates :parking_details, presence: true, if: :parking_provided
       validates :nearby_parking_details, presence: true, if: -> { !parking_provided && !parking_provided.nil? }
-
       validates :start_time, presence: true
       validates :start_time, format: { with: SCHOOL_TIME_FORMAT }, if: -> { start_time.present? }
       validates :end_time, presence: true
@@ -38,12 +25,6 @@ module Schools
       validates :times_flexible_details, presence: true, if: :times_flexible
 
       def self.compose(
-        business_dress,
-        cover_up_tattoos,
-        remove_piercings,
-        smart_casual,
-        other_dress_requirements,
-        other_dress_requirements_detail,
         parking_provided,
         parking_details,
         nearby_parking_details,
@@ -53,12 +34,6 @@ module Schools
         times_flexible_details
       )
         new \
-          business_dress: business_dress,
-          cover_up_tattoos: cover_up_tattoos,
-          remove_piercings: remove_piercings,
-          smart_casual: smart_casual,
-          other_dress_requirements: other_dress_requirements,
-          other_dress_requirements_detail: other_dress_requirements_detail,
           parking_provided: parking_provided,
           parking_details: parking_details,
           nearby_parking_details: nearby_parking_details,

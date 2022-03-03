@@ -13,6 +13,7 @@ module Schools
         key_stage_list
         subjects
         description
+        candidate_dress_code
         candidate_experience_detail
         access_needs_support
         access_needs_detail
@@ -100,6 +101,12 @@ module Schools
 
       def description_required?
         @school_profile.description.dup.invalid?
+      end
+
+      def candidate_dress_code_required?
+        return true if @school_profile.candidate_dress_code.dup.invalid?
+
+        !@school_profile.candidate_dress_code_step_completed?
       end
 
       def candidate_experience_detail_required?

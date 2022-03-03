@@ -15,6 +15,7 @@ Feature: Access needs support
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
+        | Candidate dress code             |                           |
         | Candidate experience details     |                           |
 
   Scenario: Page title

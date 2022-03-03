@@ -17,6 +17,7 @@ Feature: Access needs policy
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
+        | Candidate dress code             |                           |
         | Candidate experience details     |                           |
         | Access needs support             |                           |
         | Access needs detail              |                           |

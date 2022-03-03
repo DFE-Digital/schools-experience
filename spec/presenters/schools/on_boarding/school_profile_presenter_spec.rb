@@ -311,7 +311,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
   context '#dress_code' do
     let :profile do
-      FactoryBot.build :school_profile, :with_candidate_experience_detail
+      FactoryBot.build :school_profile, :with_candidate_dress_code
     end
 
     it 'returns the selected dress code options' do

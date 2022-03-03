@@ -22,6 +22,7 @@ Feature: Admin contact
         | Access needs detail              |                           |
         | Disability confident             |                           |
         | Access needs policy              |                           |
+        | Candidate dress code             |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
         | Teacher training                 |                           |

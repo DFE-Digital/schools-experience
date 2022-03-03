@@ -320,10 +320,12 @@ en:
           attributes:
             details:
               blank: 'Provide details'
-        schools/on_boarding/candidate_experience_detail:
+        schools/on_boarding/candidate_dress_code:
           attributes:
             other_dress_requirements_detail:
               blank: 'Other dress code details are required'
+        schools/on_boarding/candidate_experience_detail:
+          attributes:
             parking_provided:
               inclusion: 'Select whether parking is provided'
             parking_details:
@@ -810,7 +812,7 @@ en:
           1: 'Secondary (11 to 16 years)'
         secondary_and_college_options:
           1: 'Secondary with 16 to 18 years'
-      schools_on_boarding_candidate_experience_detail:
+      schools_on_boarding_candidate_dress_code:
         business_dress_options:
           1: 'Business dress'
         cover_up_tattoos_options:
@@ -821,7 +823,8 @@ en:
           1: 'Smart casual'
         other_dress_requirements_options:
           1: 'Other'
-        other_dress_requirements_detail: 'For example no denim, jeans, shorts, short skirts, trainers'
+        other_dress_requirements_detail: 'For example no denim, jeans, shorts, short skirts or trainers.'
+      schools_on_boarding_candidate_experience_detail:
         parking_provided_options:
           true: 'Yes'
           false: 'No'

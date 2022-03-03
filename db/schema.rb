@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_16_163730) do
+ActiveRecord::Schema.define(version: 2022_02_21_164652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
@@ -374,12 +374,12 @@ ActiveRecord::Schema.define(version: 2022_02_16_163730) do
     t.boolean "key_stage_list_key_stage_1", default: false
     t.boolean "key_stage_list_key_stage_2", default: false
     t.text "description_details"
-    t.boolean "candidate_experience_detail_business_dress", default: false
-    t.boolean "candidate_experience_detail_cover_up_tattoos", default: false
-    t.boolean "candidate_experience_detail_remove_piercings", default: false
-    t.boolean "candidate_experience_detail_smart_casual", default: false
-    t.boolean "candidate_experience_detail_other_dress_requirements", default: false
-    t.string "candidate_experience_detail_other_dress_requirements_detail"
+    t.boolean "candidate_dress_code_business_dress", default: false
+    t.boolean "candidate_dress_code_cover_up_tattoos", default: false
+    t.boolean "candidate_dress_code_remove_piercings", default: false
+    t.boolean "candidate_dress_code_smart_casual", default: false
+    t.boolean "candidate_dress_code_other_dress_requirements", default: false
+    t.string "candidate_dress_code_other_dress_requirements_detail"
     t.boolean "candidate_experience_detail_parking_provided"
     t.string "candidate_experience_detail_parking_details"
     t.string "candidate_experience_detail_nearby_parking_details"
@@ -424,6 +424,7 @@ ActiveRecord::Schema.define(version: 2022_02_16_163730) do
     t.text "candidate_requirements_selection_photo_identification_details"
     t.string "dbs_requirement_dbs_policy_conditions"
     t.text "dbs_requirement_dbs_policy_details_inschool"
+    t.boolean "candidate_dress_code_step_completed", default: false
     t.index ["bookings_school_id"], name: "index_schools_school_profiles_on_bookings_school_id"
   end
 

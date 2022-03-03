@@ -128,6 +128,7 @@ Rails.application.routes.draw do
       resource :subjects, only: %i[new create edit update]
       resource :description, only: %i[new create edit update]
       resource :candidate_experience_detail, only: %i[new create edit update]
+      resource :candidate_dress_code, only: %i[new create edit update]
       resource :access_needs_support, only: %i[new create edit update]
       resource :access_needs_detail, only: %i[new create edit update]
       resource :disability_confident, only: %i[new create edit update]

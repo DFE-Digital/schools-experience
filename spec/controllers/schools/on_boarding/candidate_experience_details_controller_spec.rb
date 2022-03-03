@@ -17,7 +17,8 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list,
-        :with_description
+        :with_description,
+        :with_candidate_dress_code
     end
 
     before do
@@ -46,7 +47,8 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
         :with_other_fee,
         :with_only_early_years_phase,
         :with_key_stage_list,
-        :with_description
+        :with_description,
+        :with_candidate_dress_code
     end
 
     let :params do
@@ -145,7 +147,7 @@ describe Schools::OnBoarding::CandidateExperienceDetailsController, type: :reque
     context 'valid' do
       let :candidate_experience_detail do
         FactoryBot.build \
-          :candidate_experience_detail, business_dress: false
+          :candidate_experience_detail
       end
 
       it 'updates the school_profile' do

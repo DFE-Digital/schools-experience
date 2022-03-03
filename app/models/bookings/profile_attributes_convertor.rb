@@ -65,14 +65,14 @@ module Bookings
     end
 
     def convert_dress_code
-      output[:dress_code_business] = input[:candidate_experience_detail_business_dress].present?
-      output[:dress_code_cover_tattoos] = input[:candidate_experience_detail_cover_up_tattoos].present?
-      output[:dress_code_remove_piercings] = input[:candidate_experience_detail_remove_piercings].present?
-      output[:dress_code_smart_casual] = input[:candidate_experience_detail_smart_casual].present?
+      output[:dress_code_business] = input[:candidate_dress_code_business_dress].present?
+      output[:dress_code_cover_tattoos] = input[:candidate_dress_code_cover_up_tattoos].present?
+      output[:dress_code_remove_piercings] = input[:candidate_dress_code_remove_piercings].present?
+      output[:dress_code_smart_casual] = input[:candidate_dress_code_smart_casual].present?
 
       output[:dress_code_other_details] = \
-        conditional_assign(:candidate_experience_detail_other_dress_requirements,
-          :candidate_experience_detail_other_dress_requirements_detail)
+        conditional_assign(:candidate_dress_code_other_dress_requirements,
+          :candidate_dress_code_other_dress_requirements_detail)
     end
 
     def convert_admin_details

@@ -1,0 +1,46 @@
+<% self.page_title = 'Enter dress code details for candidates' %>
+
+<%= govuk_back_link javascript: true %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="gouvk-heading-l">
+      Do you have a dress code for candidates?
+    </h1>
+    <p>
+      Select all that apply.
+    </p>
+
+    <%= form_for candidate_dress_code, url: url, method: method do |f| %>
+      <%= f.govuk_error_summary link_base_errors_to: :business_dress_1 %>
+
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading"></h2>
+      </legend>
+
+      <%= f.govuk_check_boxes_fieldset :business_dress, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :business_dress, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :cover_up_tattoos, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :cover_up_tattoos, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :remove_piercings, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :remove_piercings, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :smart_casual, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :smart_casual, 1, 0, multiple: false %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :other_dress_requirements, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :other_dress_requirements, 1, 0, multiple: false do %>
+          <%= f.govuk_text_field :other_dress_requirements_detail %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

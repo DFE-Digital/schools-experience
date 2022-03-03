@@ -83,6 +83,13 @@ FactoryBot.define do
       times_flexible { true }
     end
 
+    trait :with_candidate_dress_code do
+      candidate_dress_code_step_completed { true }
+      after :build do |profile|
+        profile.candidate_dress_code = FactoryBot.build :candidate_dress_code
+      end
+    end
+
     trait :with_candidate_experience_detail do
       after :build do |profile, evaluator|
         traits = []
@@ -160,6 +167,7 @@ FactoryBot.define do
       with_key_stage_list
       with_subjects
       with_description
+      with_candidate_dress_code
       with_candidate_experience_detail
       with_access_needs_support
       with_access_needs_detail

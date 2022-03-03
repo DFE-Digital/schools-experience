@@ -21,6 +21,7 @@ Feature: Teacher training
         | Access needs detail              |                           |
         | Disability confident             |                           |
         | Access needs policy              |                           |
+        | Candidate dress code             |                           |
         | Candidate experience details     |                           |
         | Experience Outline               |                           |
 

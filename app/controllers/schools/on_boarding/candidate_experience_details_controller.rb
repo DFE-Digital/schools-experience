@@ -42,12 +42,6 @@ module Schools
 
       def candidate_experience_detail_params
         params.require(:schools_on_boarding_candidate_experience_detail).permit \
-          :business_dress,
-          :cover_up_tattoos,
-          :remove_piercings,
-          :smart_casual,
-          :other_dress_requirements,
-          :other_dress_requirements_detail,
           :parking_provided,
           :parking_details,
           :nearby_parking_details,

@@ -14,6 +14,7 @@ Feature: Access needs detail
         | Phases                           |                           |
         | Subjects                         |                           |
         | Description                      |                           |
+        | Candidate dress code             |                           |
         | Candidate experience details     |                           |
         | Access needs support             |                           |
 

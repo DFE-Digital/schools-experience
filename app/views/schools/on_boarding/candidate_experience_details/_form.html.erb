@@ -12,35 +12,7 @@
     </p>
 
     <%= form_for candidate_experience_detail, url: url, method: method do |f| %>
-      <%= f.govuk_error_summary link_base_errors_to: :business_dress_1 %>
-
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Do you have a dress code for candidates?</h2>
-      </legend>
-
-      <p>Select all that apply or leave blank if you have no dress code.</p>
-
-      <%= f.govuk_check_boxes_fieldset :business_dress, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :business_dress, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :cover_up_tattoos, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :cover_up_tattoos, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :remove_piercings, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :remove_piercings, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :smart_casual, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :smart_casual, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :other_dress_requirements, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :other_dress_requirements, 1, 0, multiple: false do %>
-          <%= f.govuk_text_field :other_dress_requirements_detail %>
-        <% end %>
-      <% end %>
+      <%= f.govuk_error_summary %>
 
       <%= f.govuk_radio_buttons_fieldset :parking_provided do %>
         <%= f.govuk_radio_button :parking_provided, "true", link_errors: true do %>
