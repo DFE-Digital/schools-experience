@@ -1,7 +1,20 @@
 Given "I have entered a placement date" do
   steps %(
     Given I am on the 'new placement date' page
-    And I fill in the form with a future date and duration of 3
+    And I fill in the form with a future date
+    And I submit the form
+  )
+end
+
+Given("I fill in the placement details form with a duration of {int}") do |int|
+  @duration = int
+  fill_in "How long will it last?", with: @duration
+  choose "In school experience"
+end
+
+Given "I have entered placement details" do
+  steps %(
+    Given I fill in the placement details form with a duration of 3
     And I submit the form
   )
 end
@@ -10,8 +23,7 @@ Given "I have entered a secondary placement date for a multi-phase school" do
   secondary_label = "Secondary including secondary schools"
 
   steps %(
-    Given I am on the 'new placement date' page
-    And I fill in the form with a future date and duration of 3
+    Given I fill in the placement details form with a duration of 3
     And I choose '#{secondary_label}' from the 'Select school experience phase' radio buttons
     And I submit the form
   )
@@ -82,6 +94,11 @@ Then "my date should be listed" do
   else
     date.subjects.map(&:name).each { |name| expect(page).to have_text name }
   end
+end
+
+Then("I should be on the new placement details page for my placement date") do
+  pd = Bookings::PlacementDate.last
+  expect(page.current_path).to eql(path_for('new placement details', placement_date_id: pd.id))
 end
 
 Then("I should be on the new configuration page for my placement date") do

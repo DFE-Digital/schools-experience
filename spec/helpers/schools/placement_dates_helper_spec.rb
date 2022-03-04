@@ -89,4 +89,24 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
       it { is_expected.to eq("primary-placement-date-2021-03-04") }
     end
   end
+
+  describe "#close_date_link" do
+    subject { close_date_link(placement_date) }
+
+    context "when date is available" do
+      let(:placement_date) { create :bookings_placement_date, :active }
+
+      it "returns a link to the close date page" do
+        expect(subject).to eq link_to("Close", schools_placement_date_close_path(placement_date.id))
+      end
+    end
+
+    context "when date is not available" do
+      let(:placement_date) { create :bookings_placement_date, active: false }
+
+      it "returns nil" do
+        expect(subject).to be_nil
+      end
+    end
+  end
 end

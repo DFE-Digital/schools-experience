@@ -9,6 +9,10 @@
 
 <h1>Manage dates</h1>
 
+<div>
+  <%= govuk_link_to "Add a date", new_schools_placement_date_path %>
+</div>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
@@ -51,11 +55,12 @@
               <%= placement_date_experience_type_tag placement_date.virtual %>
             </td>
 
-            <td class="govuk-table__cell">
+            <td class="govuk-table__cell action-links">
               <%= link_to(edit_schools_placement_date_path(placement_date)) do %>
                 Change
                 <span class="govuk-visually-hidden"> placement date <%= placement_date.date.to_formatted_s(:govuk) %></span>
               <%- end -%>
+              <%= close_date_link(placement_date) %>
             </td>
           </tr>
         <%- end -%>
@@ -68,9 +73,7 @@
   </div>
 </div>
 
-<div>
-  <%= govuk_link_to "Add a date", new_schools_placement_date_path %>
-</div>
+
 
 <div>
   <%= govuk_link_to "Return to dashboard", schools_dashboard_path, secondary: true %>

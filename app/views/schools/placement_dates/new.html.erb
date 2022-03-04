@@ -1,33 +1,9 @@
 <%- self.page_title = "Add a date" %>
 
-<h1>Add a date</h1>
-
-<p>
-  Enter a start date and tell us how long the experience will last.
-</p>
-
-<p>
-  These details will be shown to candidates to help them choose school experience
-  at your school.
-</p>
-
 <%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |f| %>
   <%= f.govuk_error_summary %>
-  <%= f.govuk_date_field :date, heading: true %>
-  <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days") %>
-  <%= f.govuk_number_field :start_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
-  <%= f.govuk_number_field :end_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
-  <%= f.govuk_radio_buttons_fieldset :virtual do %>
-    <%= f.govuk_radio_button :virtual, true, link_errors: true %>
-    <%= f.govuk_radio_button :virtual, false, label: { text: t("helpers.label.bookings_placement_date.virtual_options.false") }, hint: nil %>
-  <% end %>
+  <%= f.govuk_date_field :date, legend: { class: 'govuk-fieldset__legend govuk-fieldset__legend--l' } %>
 
-  <% if show_subject_support_option(@current_school) %>
-    <%= f.govuk_radio_buttons_fieldset :supports_subjects do %>
-      <%= f.govuk_radio_button :supports_subjects, false, label: { text: t("helpers.label.bookings_placement_date.supports_subjects_options.false") }, link_errors: true %>
-      <%= f.govuk_radio_button :supports_subjects, true %>
-    <% end %>
-  <% end %>
   <%= f.govuk_submit 'Continue' %>
 <%- end -%>
 

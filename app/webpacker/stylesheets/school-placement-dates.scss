@@ -3,13 +3,26 @@
 }
 
 table#placement-dates {
-  td.status {
-    strong {
-      &.govuk-tag--available {
-        background-color: govuk-colour('green');
+  td {
+    &.status {
+      strong {
+        &.govuk-tag--available {
+          background-color: govuk-colour('green');
+        }
+
+        &.govuk-tag--taken {
+          background-color: govuk-colour('red');
+        }
       }
-      &.govuk-tag--taken {
-        background-color: govuk-colour('red');
+    }
+
+    &.action-links {
+      a {
+        display: block;
+
+        &:not(:last-child) {
+          margin-bottom: 15px;
+        }
       }
     }
   }
@@ -19,6 +32,7 @@ table#placement-dates {
   fieldset {
     legend {
       margin-bottom: 20px;
+
       span.govuk-hint {
         margin-bottom: 0;
       }

@@ -1,0 +1,31 @@
+<% self.page_title = 'Placement details' %>
+
+<%= govuk_back_link javascript: true %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @placement_detail, method: :post, url: schools_placement_date_placement_detail_path(@placement_date) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1>Placement details</h1>
+
+      <%= f.hidden_field :school_has_primary_and_secondary_phases %>
+
+      <%= f.govuk_number_field :start_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
+      <%= f.govuk_number_field :end_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
+      <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days") %>
+      <%= f.govuk_radio_buttons_fieldset :virtual, inline: true do %>
+        <%= f.govuk_radio_button :virtual, "true", link_errors: true %>
+        <%= f.govuk_radio_button :virtual, "false" %>
+      <% end %>
+
+      <% if show_subject_support_option(@current_school) %>
+        <%= f.govuk_radio_buttons_fieldset :supports_subjects do %>
+          <%= f.govuk_radio_button :supports_subjects, "false", link_errors: true %>
+          <%= f.govuk_radio_button :supports_subjects, "true" %>
+        <% end %>
+      <% end %>
+      <%= f.govuk_submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

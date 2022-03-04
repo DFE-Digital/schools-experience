@@ -8,6 +8,7 @@ Feature: Configuring a placement date
     And my school is a 'secondary' school
     And my school is fully-onboarded
     And I have entered a placement date
+    And I have entered placement details
 
   Scenario: Page contents
     Then the page's main heading should be the date I just entered

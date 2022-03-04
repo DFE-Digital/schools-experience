@@ -31,6 +31,17 @@ Then("it should include a {string} link to the edit page") do |string|
   end
 end
 
+Then("I click the link to the close confirmation page") do
+  within('#placement-dates .placement-date') do
+    expect(page).to have_link("Close", href: schools_placement_date_close_path(placement_date_id: @placement_date.id))
+  end
+  click_link "Close"
+end
+
+Then "I should be on the Are you sure you want to close this date page" do
+  expect(page.current_path).to eq schools_placement_date_close_path(placement_date_id: Bookings::PlacementDate.last.id)
+end
+
 Then("there should be a {string} link to the new placement date page") do |string|
   expect(page).to have_link(string, href: new_schools_placement_date_path)
 end

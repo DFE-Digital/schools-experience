@@ -9,6 +9,7 @@ Feature: Selecting subjects for a placement date
         And my school is a 'secondary' school
         And the school has subjects
         And I have entered a placement date
+        And I have entered placement details
         And the placement date is subject specific
 
     Scenario: Page title

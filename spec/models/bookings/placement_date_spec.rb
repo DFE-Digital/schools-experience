@@ -79,51 +79,6 @@ describe Bookings::PlacementDate, type: :model do
       it { expect(subject).to validate_presence_of(:bookings_school) }
     end
 
-    context '#duration' do
-      specify do
-        expect(subject).to(
-          validate_numericality_of(:duration)
-            .is_greater_than_or_equal_to(1)
-            .is_less_than(100)
-        )
-      end
-      it { expect(subject).to validate_presence_of(:duration) }
-    end
-
-    context '#start_availability_offset' do
-      specify do
-        expect(subject).to(
-          validate_numericality_of(:start_availability_offset)
-            .is_greater_than_or_equal_to(1)
-            .is_less_than(181)
-        )
-      end
-      it { expect(subject).to validate_presence_of(:start_availability_offset) }
-
-      it "is greater than #end_availability_offset" do
-        subject.end_availability_offset = 1
-        is_expected.to allow_value(2).for :start_availability_offset
-        is_expected.to_not allow_values(0, 1).for :start_availability_offset
-      end
-    end
-
-    context '#end_availability_offset' do
-      specify do
-        expect(subject).to(
-          validate_numericality_of(:end_availability_offset)
-            .is_greater_than_or_equal_to(0)
-            .is_less_than(101)
-        )
-      end
-      it { expect(subject).to validate_presence_of(:end_availability_offset) }
-    end
-
-    context '#virtual' do
-      it { is_expected.to allow_values(true).for :virtual }
-      it { is_expected.to allow_values(false).for :virtual }
-      it { is_expected.not_to allow_values(nil).for :virtual }
-    end
-
     context '#max_bookings_count' do
       before { subject.published_at = Time.zone.today }
       it do

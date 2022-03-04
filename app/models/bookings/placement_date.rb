@@ -25,26 +25,6 @@ module Bookings
     accepts_nested_attributes_for :subjects, allow_destroy: true
 
     validates :bookings_school, presence: true
-    validates :duration,
-              presence: true,
-              numericality: {
-                greater_than_or_equal_to: 1,
-                less_than: 100
-              }
-
-    validates :start_availability_offset,
-              presence: true,
-              numericality: {
-                greater_than_or_equal_to: 1,
-                less_than: 181,
-              }
-
-    validates :end_availability_offset,
-              presence: true,
-              numericality: {
-                greater_than_or_equal_to: 0,
-                less_than: 101
-              }
 
     validates :date, presence: true
     validates :date,
@@ -55,16 +35,6 @@ module Bookings
               },
               if: -> { date.present? },
               on: :create
-
-    validates :virtual, inclusion: [true, false]
-
-    validate :start_offset_greater_than_end_offset
-
-    # users manually selecting this only happens when schools are both primary
-    # and secondary, otherwise it's automatically set in the controller
-    validates :supports_subjects,
-              inclusion: [true, false],
-              if: -> { bookings_school&.has_primary_and_secondary_phases? }
 
     with_options if: :published? do
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
@@ -148,14 +118,6 @@ module Bookings
       availability_start_date = date - start_availability_offset
       availability_end_date = date - end_availability_offset
       (availability_start_date.past? || availability_start_date.today?) && availability_end_date.future?
-    end
-
-    def start_offset_greater_than_end_offset
-      return if start_availability_offset.nil? || end_availability_offset.nil?
-
-      if start_availability_offset <= end_availability_offset
-        errors.add(:start_availability_offset, "The publish date must be before the closing date")
-      end
     end
   end
 end

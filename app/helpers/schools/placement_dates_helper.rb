@@ -46,4 +46,8 @@ module Schools::PlacementDatesHelper
   def placement_date_inschool_tag
     tag.strong "In school", class: "govuk-tag govuk-tag--yellow"
   end
+
+  def close_date_link(placement_date)
+    link_to("Close", schools_placement_date_close_path(placement_date.id)) if placement_date.available?
+  end
 end

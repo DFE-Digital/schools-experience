@@ -7,7 +7,7 @@ Given("I am on the edit page for my placement") do
   )
   path = edit_schools_placement_date_path(@placement_date)
   visit path
-  expect(page.current_path).to eql(path)
+  expect(page.current_path).to eql(new_schools_placement_date_placement_detail_path(@placement_date))
 end
 
 Given("I am on the edit page for my {string} placement") do |state|
@@ -18,7 +18,7 @@ Given("I am on the edit page for my {string} placement") do |state|
     duration: 6,
     bookings_school: @school
   )
-  path = edit_schools_placement_date_path(@placement_date)
+  path = new_schools_placement_date_placement_detail_path(@placement_date)
   visit path
   expect(page.current_path).to eql(path)
 end
@@ -36,8 +36,4 @@ Then("my placement should have been {string}") do |operation|
   within("tr[data-placement-date-id='#{@placement_date.id}']") do
     expect(page).to have_css('td.status', text: /#{description}/i)
   end
-end
-
-Then("the current start date should be present") do
-  expect(page).to have_css('.placement-start-date', text: @placement_date.date.to_formatted_s(:govuk))
 end
