@@ -1,9 +1,14 @@
-<%- self.page_title = "Add a date" %>
+<% self.page_title = "Add a date" %>
 
 <%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |f| %>
   <%= f.govuk_error_summary %>
   <%= f.govuk_date_field :date, legend: { tag: "h1", size: "l" } %>
 
+  <%= f.govuk_radio_buttons_fieldset :recurring, legend: { class: "govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular" } do %>
+    <%= f.govuk_radio_button :recurring, "true", link_errors: true %>
+    <%= f.govuk_radio_button :recurring, "false" %>
+  <% end %>
+
   <%= f.govuk_submit 'Continue' %>
-<%- end -%>
+<% end %>
 

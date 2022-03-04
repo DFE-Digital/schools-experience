@@ -5,6 +5,7 @@ module Schools
 
       STEPS = %i[
         placement_date
+        recurrences_selection
         placement_detail
         configuration
         subject_selection
@@ -35,6 +36,10 @@ module Schools
         send "#{step}_required?"
       end
 
+      def recurrences_selection_required?
+        @placement_date.recurring?
+      end
+
       def placement_detail_required?
         true
       end
@@ -45,6 +50,10 @@ module Schools
 
       def subject_selection_required?
         @placement_date.subject_specific?
+      end
+
+      def recurrences_session
+        session["date-recurrences-#{@placement_date.id}"] ||= {}
       end
     end
   end

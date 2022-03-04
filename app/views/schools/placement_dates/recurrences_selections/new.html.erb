@@ -1,0 +1,30 @@
+<% self.page_title = 'Placement date recurrences' %>
+
+<%= govuk_back_link javascript: true %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @recurrences_selection, method: :post, url: schools_placement_date_recurrences_selection_path(@placement_date) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.hidden_field :start_at, value: @placement_date.date %>
+
+      <%= f.govuk_radio_buttons_fieldset :recurrence_period,
+                                         legend: { class: 'govuk-fieldset__legend govuk-fieldset__legend--l' },
+                                         hint: { text: t('helpers.hint.schools_placement_dates_recurrences_selection.recurrence_period', date: @placement_date.date.to_formatted_s(:govuk)) } do %>
+        <%= f.govuk_radio_button :recurrence_period, :daily, link_errors: true %>
+        <%= f.govuk_radio_button :recurrence_period, :weekly %>
+        <%= f.govuk_radio_button :recurrence_period, :fortnightly %>
+        <%#= f.govuk_radio_button :recurrence_period, :custom do %>
+        <%#= f.govuk_collection_check_boxes :custom_recurrence_period, @recurrences_selection.weekdays, ->(weekday) { weekday }, ->(weekday) { weekday.humanize }, small: true, legend: { text: "What would you like for lunch on Wednesday?" } %>
+        <%# end %>
+      <% end %>
+
+      <%= f.govuk_date_field :end_at, legend: { class: "govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular" } %>
+
+      <p>You'll be able to preview and amend dates on the next step.</p>
+
+      <%= f.govuk_submit 'Continue' %>
+    <% end %>
+  </div>
+</div>

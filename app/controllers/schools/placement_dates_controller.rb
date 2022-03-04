@@ -63,6 +63,6 @@ private
   end
 
   def new_placement_date_params
-    params.require(:bookings_placement_date).permit(:date)
+    params.require(:bookings_placement_date).permit(:date, :recurring)
   end
 end

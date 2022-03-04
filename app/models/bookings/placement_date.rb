@@ -1,5 +1,7 @@
 module Bookings
   class PlacementDate < ApplicationRecord
+    attribute :recurring, :boolean, default: false
+
     belongs_to :bookings_school,
                class_name: 'Bookings::School',
                inverse_of: :bookings_placement_dates,
@@ -23,6 +25,8 @@ module Bookings
              source: :bookings_subject
 
     accepts_nested_attributes_for :subjects, allow_destroy: true
+
+    validates :recurring, inclusion: [true, false]
 
     validates :bookings_school, presence: true
 

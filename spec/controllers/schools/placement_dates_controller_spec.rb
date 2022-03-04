@@ -22,12 +22,26 @@ describe Schools::PlacementDatesController, type: :request do
     end
 
     context "when valid" do
-      let(:params) { { bookings_placement_date: { date: Date.today + 1.week } } }
+      let(:placement_date_id) { Bookings::PlacementDate.last.id }
 
-      it "redirects to the placement details page" do
-        expect(response).to redirect_to new_schools_placement_date_placement_detail_path(
-          placement_date_id: assigns(:placement_date).id
-        )
+      context "when not recurring" do
+        let(:params) { { bookings_placement_date: { date: Date.today + 1.week } } }
+
+        it "redirects to the placement details page" do
+          expect(response).to redirect_to new_schools_placement_date_placement_detail_path(
+            placement_date_id: placement_date_id
+          )
+        end
+      end
+
+      context "when recurring" do
+        let(:params) { { bookings_placement_date: { date: Date.today + 1.week, recurring: true } } }
+
+        it "redirects to the recurrences_selection page" do
+          expect(response).to redirect_to new_schools_placement_date_recurrences_selection_path(
+            placement_date_id: assigns(:placement_date).id
+          )
+        end
       end
     end
   end
