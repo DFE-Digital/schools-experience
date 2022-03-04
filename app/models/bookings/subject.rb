@@ -1,6 +1,4 @@
 class Bookings::Subject < ApplicationRecord
-  self.ignored_columns = [:gitis_uuid]
-
   validates :name,
     presence: true,
     length: { minimum: 2, maximum: 64 },
