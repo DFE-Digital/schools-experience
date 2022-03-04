@@ -9,7 +9,7 @@ Feature: Editing placement dates
 
     Scenario: Page title
         Given I am on the edit page for my placement
-        Then the page title should be 'Modify placement details'
+        Then the page title should be 'Placement details'
 
     Scenario: Placement date form
         Given I am on the edit page for my placement
@@ -18,7 +18,6 @@ Feature: Editing placement dates
             | How long will it last? | number |
             | When do you want to close this date to candidates? | number |
             | When do you want to publish this date? | number |
-        And the current start date should be present
 
     Scenario: Filling in and submitting the form
         Given I am on the edit page for my placement
@@ -36,12 +35,3 @@ Feature: Editing placement dates
         And I submit the form
         Given I am on the 'placement dates' page
         Then my placement should have been 'activated'
-
-    Scenario: Deactivating a placement date
-        Given I am on the edit page for my 'active' placement
-        And I click the 'Close placement date' link
-        Then I should be on the Are you sure you want to close this date page
-        Then 'Yes' radio button should be selected
-        When I submit the form
-        Given I am on the 'placement dates' page
-        Then my placement should have been 'deactivated'

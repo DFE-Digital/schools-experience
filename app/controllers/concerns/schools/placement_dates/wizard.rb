@@ -5,6 +5,7 @@ module Schools
 
       STEPS = %i[
         placement_date
+        placement_detail
         configuration
         subject_selection
       ].freeze
@@ -32,6 +33,10 @@ module Schools
 
       def required?(step)
         send "#{step}_required?"
+      end
+
+      def placement_detail_required?
+        true
       end
 
       def configuration_required?

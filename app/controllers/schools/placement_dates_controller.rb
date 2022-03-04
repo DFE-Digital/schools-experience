@@ -1,5 +1,5 @@
 class Schools::PlacementDatesController < Schools::BaseController
-  before_action :set_placement_date, only: %w[edit update]
+  before_action :set_placement_date, only: %w[edit]
   include Schools::PlacementDates::Wizard
 
   def index
@@ -22,14 +22,7 @@ class Schools::PlacementDatesController < Schools::BaseController
       .bookings_placement_dates
       .new(new_placement_date_params)
 
-    # if the user hasn't seen the 'select a phase' option on #new, set
-    # it here based on their available phases
-
     if @placement_date.valid?
-      unless new_placement_date_params.key?(:supports_subjects)
-        @placement_date.assign_attributes(supports_subjects: school_supports_subjects?)
-      end
-
       @placement_date.save
       next_step @placement_date
     else
@@ -37,14 +30,8 @@ class Schools::PlacementDatesController < Schools::BaseController
     end
   end
 
-  def edit; end
-
-  def update
-    if @placement_date.update(edit_placement_date_params)
-      next_step @placement_date
-    else
-      render :edit
-    end
+  def edit
+    next_step @placement_date
   end
 
   def close
@@ -76,10 +63,6 @@ private
   end
 
   def new_placement_date_params
-    params.require(:bookings_placement_date).permit(:date, :duration, :virtual, :supports_subjects, :start_availability_offset, :end_availability_offset)
-  end
-
-  def edit_placement_date_params
-    params.require(:bookings_placement_date).permit(:duration, :start_availability_offset, :end_availability_offset)
+    params.require(:bookings_placement_date).permit(:date)
   end
 end
