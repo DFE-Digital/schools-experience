@@ -1052,10 +1052,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.6.tgz#d5e0706cf8c6acd8c6032f8d54070af261bbbb2f"
   integrity sha512-ws57AidsDvREKrZKYffXddNkyaF14iHNHm8VQnZH6t99E8gczjNN0GpvcGny0imC80yQ0tHz1xVUKk/KFQSUyA==
 
-"@googlemaps/js-api-loader@^1.13.7":
-  version "1.13.7"
-  resolved "https://registry.yarnpkg.com/@googlemaps/js-api-loader/-/js-api-loader-1.13.7.tgz#05cd401569efbc4871d797341ee4f913aab9d729"
-  integrity sha512-nR37TVS7797p91Eng1NxEVpLeFz5H2TXkJHSBaFEM8wid+ffgBdmwRD2uD7TbcLBmHjRABLPrXPAyXhugx97tA==
+"@googlemaps/js-api-loader@^1.13.8":
+  version "1.13.8"
+  resolved "https://registry.yarnpkg.com/@googlemaps/js-api-loader/-/js-api-loader-1.13.8.tgz#9edfa766367dc145eec6a5ee6e90ba67244a4afb"
+  integrity sha512-xsn4vmrRc/p8PW6p6PglfInGiW9haEgkAeby4BGxNkVipWy8q0Wv16+sWpQ3rP31RahfWBoyVgAc1DgLXcZY3Q==
   dependencies:
     fast-deep-equal "^3.1.3"
 
