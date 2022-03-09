@@ -15,9 +15,9 @@
         <%= f.govuk_radio_button :recurrence_period, :daily, link_errors: true %>
         <%= f.govuk_radio_button :recurrence_period, :weekly %>
         <%= f.govuk_radio_button :recurrence_period, :fortnightly %>
-        <%#= f.govuk_radio_button :recurrence_period, :custom do %>
-        <%#= f.govuk_collection_check_boxes :custom_recurrence_period, @recurrences_selection.weekdays, ->(weekday) { weekday }, ->(weekday) { weekday.humanize }, small: true, legend: { text: "What would you like for lunch on Wednesday?" } %>
-        <%# end %>
+        <%= f.govuk_radio_button :recurrence_period, :custom, hint: { text: t("helpers.hint.schools_placement_dates_recurrence_selection.recurrence_period_custom") } do %>
+          <%= f.govuk_collection_check_boxes :custom_recurrence_days, @recurrences_selection.class::WEEKDAYS.map(&:to_s), ->(weekday) { weekday }, ->(weekday) { weekday.humanize }, small: true, legend: nil, include_hidden: false %>
+        <% end %>
       <% end %>
 
       <%= f.govuk_date_field :end_at, legend: { class: "govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular" } %>

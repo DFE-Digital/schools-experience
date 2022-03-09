@@ -414,6 +414,8 @@ en:
             end_at:
               blank: Enter the last date of the recurrence
               before_placement_start_at: Last date of recurrence must be after the first date
+            custom_recurrence_days:
+              inclusion: Select custom recurrence days
 
         schools/placement_dates/placement_detail:
           attributes:
@@ -626,6 +628,8 @@ en:
         duration: Enter number of days.
       bookings_placement_date:
         date: For example, 01 09 2020.
+      schools_placement_dates_recurrence_selection:
+        recurrence_period_custom: For example, recurring on every Monday and Thursday
       schools_placement_dates_placement_detail:
         end_availability_offset: You'll need enough time to process requests before the placement starts.
         start_availability_offset: We recommend publishing dates no more than 60 days in advance.

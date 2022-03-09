@@ -19,11 +19,12 @@ module Schools
       attribute :start_at, :date
       attribute :end_at, :date
       attribute :recurrence_period
-      # attribute :custom_recurrence_period
+      attribute :custom_recurrence_days
 
       validates :start_at, presence: true
       validates :end_at, presence: true
       validates :recurrence_period, presence: true
+      validates :custom_recurrence_days, inclusion: { in: WEEKDAYS.map(&:to_s) }, if: :recurrence_period_custom?
       validate :end_at_after_start_at
 
       def self.new_from_date(placement_date)
@@ -40,6 +41,8 @@ module Schools
           schedule.add_recurrence_rule IceCube::Rule.weekly
         when RECURRENCE_PERIODS[:fortnightly]
           schedule.add_recurrence_rule IceCube::Rule.weekly(2)
+        when RECURRENCE_PERIODS[:custom]
+          schedule.add_recurrence_rule IceCube::Rule.daily.day(*custom_recurrence_days.map(&:to_sym))
         end
 
         # TODO: These occurrences include the start_at date (see specs). Need to make sure we aren't creating
@@ -48,6 +51,10 @@ module Schools
       end
 
     private
+
+      def recurrence_period_custom?
+        recurrence_period == RECURRENCE_PERIODS[:custom]
+      end
 
       def end_at_after_start_at
         return if end_at.blank? || start_at.blank?

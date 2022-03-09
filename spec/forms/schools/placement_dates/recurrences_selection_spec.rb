@@ -30,6 +30,14 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
     context '#recurrence_period' do
       it { expect(subject).to validate_presence_of(:recurrence_period) }
     end
+
+    context '#custom_recurrence_days' do
+      context "when recurrence_period is custom" do
+        before { subject.recurrence_period = described_class::RECURRENCE_PERIODS[:custom] }
+
+        it { expect(subject).to validate_inclusion_of(:custom_recurrence_days).in_array(described_class::WEEKDAYS) }
+      end
+    end
   end
 
   context '.new_from_date' do
@@ -107,6 +115,28 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         expect(subject).to eq [
           next_monday,
           next_monday + 2.weeks
+        ]
+      end
+    end
+
+    context "when custom" do
+      let(:next_monday) { Date.today.next_occurring(:monday) }
+      let(:attributes) do
+        {
+          start_at: next_monday,
+          end_at: next_monday + 6.days,
+          recurrence_period: "custom",
+          custom_recurrence_days: ["monday", "wednesday", "friday"]
+        }
+      end
+
+      subject { described_class.new(attributes).recurring_dates }
+
+      it 'returns a correct array of dates' do
+        expect(subject).to eq [
+          next_monday,
+          next_monday + 2.days,
+          next_monday + 4.days
         ]
       end
     end

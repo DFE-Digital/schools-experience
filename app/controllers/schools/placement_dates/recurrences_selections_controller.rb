@@ -30,7 +30,7 @@ module Schools
 
       def recurrences_selection_params
         params.require(:schools_placement_dates_recurrences_selection).permit \
-          :start_at, :end_at, :recurrence_period, :custom_recurrence_period
+          :start_at, :end_at, :recurrence_period, custom_recurrence_days: []
       end
     end
   end
