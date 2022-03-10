@@ -19,9 +19,9 @@ ARG SHA
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
 # hadolint ignore=DL3018
-RUN apk add --no-cache bash build-base git tzdata libxml2 libxml2-dev \
+RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
 			postgresql-libs postgresql-dev nodejs yarn \
-            chromium=86.0.4240.111-r0 chromium-chromedriver=86.0.4240.111-r0
+            chromium=93.0.4577.82-r3 chromium-chromedriver=93.0.4577.82-r3
 
 # Remove once base image ruby:2.7.5-alpine3.15 has been updated with latest gmp
 RUN apk add --no-cache gmp=6.2.1-r1
