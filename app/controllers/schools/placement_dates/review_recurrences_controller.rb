@@ -6,14 +6,7 @@ module Schools
       before_action :set_placement_date
 
       def new
-        @selected_dates = recurrences_session[:recurrences]
-
-        start_date = @placement_date.date + 1.day
-        end_date = (start_date + 5.months).end_of_month
-
-        @dates_by_month = (start_date..end_date)
-          .to_a
-          .select(&:on_weekday?)
+        @dates_by_month = recurrences_session[:recurrences]
           .group_by { |date| date.to_formatted_s(:govuk_month_only) }
           .to_a
       end

@@ -25,6 +25,11 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         subject.start_at = now
         is_expected.to allow_value(now + 1.day).for :end_at
       end
+
+      it "cannot be later than 4 months after start_at" do
+        subject.start_at = now
+        is_expected.not_to allow_value(now + 4.months + 1.day).for :end_at
+      end
     end
 
     context '#recurrence_period' do

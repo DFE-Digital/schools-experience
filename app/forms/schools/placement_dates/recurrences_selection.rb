@@ -25,7 +25,11 @@ module Schools
       validates :end_at, presence: true
       validates :recurrence_period, presence: true
       validates :custom_recurrence_days, inclusion: { in: WEEKDAYS.map(&:to_s) }, if: :recurrence_period_custom?
-      validate :end_at_after_start_at
+      validates :end_at, timeliness: {
+        after: :start_at,
+        on_or_before: ->(selection) { selection.start_at + 4.months },
+        type: :date
+      }
 
       def self.new_from_date(placement_date)
         new(start_at: placement_date.date)
@@ -54,14 +58,6 @@ module Schools
 
       def recurrence_period_custom?
         recurrence_period == RECURRENCE_PERIODS[:custom]
-      end
-
-      def end_at_after_start_at
-        return if end_at.blank? || start_at.blank?
-
-        if end_at <= start_at
-          errors.add(:end_at, :before_placement_start_at)
-        end
       end
     end
   end

@@ -17,7 +17,7 @@
 
             <%= f.govuk_check_box :dates, date,
               label: { text: date.to_formatted_s(:govuk_weekday) },
-              checked: date.in?(@selected_dates),
+              checked: true,
               link_errors: index.zero?
             %>
           <% end %>

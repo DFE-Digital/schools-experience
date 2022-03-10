@@ -413,7 +413,8 @@ en:
               blank: Select how often you want this date to recur
             end_at:
               blank: Enter the last date of the recurrence
-              before_placement_start_at: Last date of recurrence must be after the first date
+              after: Last date of recurrence must be after the first date
+              on_or_before: Last date of recurrence must 4 months or less after the first date
             custom_recurrence_days:
               inclusion: Select custom recurrence days
 

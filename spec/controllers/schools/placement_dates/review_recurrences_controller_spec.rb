@@ -7,13 +7,13 @@ describe Schools::PlacementDates::ReviewRecurrencesController, type: :request do
   let(:school) { Bookings::School.find_by!(urn: urn).tap { |s| create :bookings_profile, school: s } }
   let(:placement_date) { create(:bookings_placement_date, bookings_school: school, supports_subjects: false, recurring: true) }
   let(:beginning_of_next_week) { placement_date.date.next_week.beginning_of_week }
-  let(:recurring_dates) { [beginning_of_next_week + 1.day, beginning_of_next_week + 2.days] }
+  let(:date_range) { [beginning_of_next_week + 1.day, beginning_of_next_week + 1.month] }
 
   before do
     params = {
       schools_placement_dates_recurrences_selection: {
-        start_at: recurring_dates.first,
-        end_at: recurring_dates.last,
+        start_at: date_range.first,
+        end_at: date_range.last,
         recurrence_period: "daily"
       }
     }
@@ -26,27 +26,26 @@ describe Schools::PlacementDates::ReviewRecurrencesController, type: :request do
       get new_schools_placement_date_review_recurrences_path(placement_date.id)
     end
 
-    it { expect(assigns(:selected_dates)).to eq(recurring_dates) }
     it { is_expected.to render_template(:new) }
 
-    it "renders dates for the next 6 months, excluding weekdays" do
+    it "renders recurring dates" do
       dates_by_month = assigns(:dates_by_month)
 
-      expect(dates_by_month.count).to eq(6)
+      expect(dates_by_month.count).to eq(2)
 
-      first_month = dates_by_month[0][0]
-      first_month_dates = dates_by_month[0][1]
-      expected_date = placement_date.date + 1.day
+      month_names = dates_by_month.map(&:first)
+      expect(month_names).to eq([
+        date_range.first.to_formatted_s(:govuk_month_only),
+        date_range.last.to_formatted_s(:govuk_month_only),
+      ])
 
-      expect(first_month).to eq(expected_date.to_formatted_s(:govuk_month_only))
-      expect(first_month_dates).to all(be_on_weekday)
-      expect(first_month_dates.map(&:month)).to all(eq(expected_date.month))
-      expect(first_month_dates.uniq.count).to eq(first_month_dates.count)
+      dates = dates_by_month.map(&:last).flatten
+      expect(dates).to eq((date_range.first..date_range.last).reject(&:on_weekend?).to_a)
     end
   end
 
   context "#create" do
-    let(:submitted_dates) { recurring_dates + [beginning_of_next_week + 3.days] }
+    let(:submitted_dates) { date_range }
 
     before do
       post schools_placement_date_review_recurrences_path(placement_date.id), params: { dates: submitted_dates }
