@@ -35,7 +35,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
       context "when recurrence_period is custom" do
         before { subject.recurrence_period = described_class::RECURRENCE_PERIODS[:custom] }
 
-        it { expect(subject).to validate_inclusion_of(:custom_recurrence_days).in_array(described_class::WEEKDAYS) }
+        it { expect(subject).to validate_inclusion_of(:custom_recurrence_days).in_array(described_class::WEEKDAYS.map(&:to_s)) }
       end
     end
   end
@@ -126,7 +126,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
           start_at: next_monday,
           end_at: next_monday + 6.days,
           recurrence_period: "custom",
-          custom_recurrence_days: ["monday", "wednesday", "friday"]
+          custom_recurrence_days: %w[monday wednesday friday]
         }
       end
 

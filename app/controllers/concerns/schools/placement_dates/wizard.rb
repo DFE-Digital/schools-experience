@@ -6,6 +6,7 @@ module Schools
       STEPS = %i[
         placement_date
         recurrences_selection
+        review_recurrences
         placement_detail
         configuration
         subject_selection
@@ -38,6 +39,10 @@ module Schools
 
       def recurrences_selection_required?
         @placement_date.recurring?
+      end
+
+      def review_recurrences_required?
+        recurrences_selection_required?
       end
 
       def placement_detail_required?

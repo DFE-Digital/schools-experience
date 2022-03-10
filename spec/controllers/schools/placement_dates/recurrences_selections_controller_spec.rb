@@ -6,7 +6,7 @@ describe Schools::PlacementDates::RecurrencesSelectionsController, type: :reques
 
   let(:school) { Bookings::School.find_by!(urn: urn).tap { |s| create :bookings_profile, school: s } }
 
-  let(:placement_date) { create :bookings_placement_date, bookings_school: school, supports_subjects: false }
+  let(:placement_date) { create :bookings_placement_date, bookings_school: school, supports_subjects: false, recurring: true }
 
   context '#new' do
     before do
@@ -66,7 +66,7 @@ describe Schools::PlacementDates::RecurrencesSelectionsController, type: :reques
         ])
       end
 
-      it { is_expected.to redirect_to new_schools_placement_date_placement_detail_path }
+      it { is_expected.to redirect_to new_schools_placement_date_review_recurrences_path }
     end
   end
 end
