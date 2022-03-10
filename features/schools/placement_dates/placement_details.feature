@@ -28,6 +28,8 @@ Feature: Creating new placement details
     When I fill in the placement details form with a duration of 3
     And I choose 'Primary including early years, key stage 1 and key stage 2' from the 'Select school experience phase' radio buttons
     And I submit the form
+    Then I should be on the 'publish dates' page for my placement date
+    And I submit the form
     Then I should be on the 'placement dates' page
     And my school should be enabled
 

@@ -2,6 +2,7 @@ Given "I have entered a placement date" do
   steps %(
     Given I am on the 'new placement date' page
     And I fill in the form with a future date
+    And I select not recurring
     And I submit the form
   )
 end
@@ -42,6 +43,7 @@ Given "I have previously selected {string}" do |subject_name|
 
   check(subject_name)
   click_button('Continue')
+  click_button('Publish placement date')
 
   expect(page.current_path).to eql(path_for('placement dates'))
   expect(page).to have_content(subject_name)
