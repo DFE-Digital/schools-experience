@@ -30,7 +30,7 @@ We also have markdown pages within the `doc` folder of this git repo
 - Redis
   - `brew install redis`
   - `brew services start redis`
-- NodeJS 14.x
+- NodeJS 16.x
 - Yarn
 - Chrome (for javascript tests in Cucumber)
 
@@ -133,12 +133,12 @@ To add a feature flag, add an object to the `features` array in the following fo
 {
   "features": [
     {
-      "name": "sms", 
+      "name": "sms",
       "description": "Sends reminder text messages",
       "enabled_for": {
         "environments": ["production", "staging"]
       }
-    } 
+    }
   ]
 }
 ```
