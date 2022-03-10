@@ -112,13 +112,8 @@ describe Schools::PlacementDates::ConfigurationsController, type: :request do
           expect(placement_date.reload.has_limited_availability?).to eq has_limited_availability
         end
 
-        it 'redirects to the dashboard' do
-          expect(response).to redirect_to schools_placement_dates_path
-        end
-
-        it 'publishes the date' do
-          expect(placement_date.reload.active).to be true
-          expect(placement_date.reload.published_at).to eq DateTime.now
+        it 'redirects to the publish_dates step' do
+          expect(response).to redirect_to new_schools_placement_date_publish_dates_path(placement_date)
         end
       end
     end

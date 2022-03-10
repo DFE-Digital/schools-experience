@@ -243,24 +243,52 @@ describe Bookings::PlacementDate, type: :model do
     end
   end
 
-  context 'publish' do
-    subject { create(:bookings_placement_date) }
+  describe "#mark_as_publishable!" do
+    let(:placement_date) { create(:bookings_placement_date, publishable: false) }
+
+    it "marks the date as publishable" do
+      expect { placement_date.mark_as_publishable! }.to change { placement_date.publishable }.from(false).to(true)
+    end
+  end
+
+  describe "#publish" do
+    let(:recurrences) { [] }
+    let(:date) { 3.weeks.from_now }
+
+    subject(:published_placement_date) do
+      create(:bookings_placement_date, date: date, active: false, published_at: nil, publishable: false).tap do |pd|
+        pd.publish!(recurrences)
+      end
+    end
+
+    it { is_expected.to be_active }
+    it { is_expected.to be_publishable }
+    it { expect(published_placement_date.published_at.to_date).to eq(Date.today) }
+
+    context "when there are published_placement_date" do
+      let(:recurrences) { [date + 1.day] }
+
+      it "publishes recurrences" do
+        expected_attributes = published_placement_date.attributes.except("created_at", "updated_at", "id", "date")
+        recurrence = described_class.find_by(date: recurrences.first)
+        expect(recurrence).to have_attributes(expected_attributes)
+      end
+    end
+  end
+
+  describe "#recur" do
+    let(:placement_date) { create(:bookings_placement_date, bookings_school: school) }
 
     before do
-      subject.active = false
-      subject.published_at = nil
-      freeze_time
-
-      subject.publish
+      placement_date.subject_specific = true
+      placement_date.subject_ids = school.subjects.pluck(:id)
+      placement_date.save!
     end
 
-    it 'updates #active to true' do
-      expect(subject.active).to be true
-    end
+    subject { placement_date.recur(Date.new(2022, 1, 3)) }
 
-    it 'sets #published_at to the current time' do
-      expect(subject.published_at).to eq DateTime.now
-    end
+    it { is_expected.to have_attributes(placement_date.attributes.except("created_at", "updated_at", "id", "date")) }
+    it { is_expected.to have_attributes(date: Date.new(2022, 1, 3)) }
   end
 
   context '#has_limited_availability?' do

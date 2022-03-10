@@ -49,7 +49,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         end
 
         it { expect(subject).to allow_values(described_class::WEEKDAYS.map(&:to_s)).for(:custom_recurrence_days) }
-        it { expect(subject).not_to allow_values(["never_day", "monday"]).for(:custom_recurrence_days) }
+        it { expect(subject).not_to allow_values(%w[never_day monday]).for(:custom_recurrence_days) }
       end
     end
   end

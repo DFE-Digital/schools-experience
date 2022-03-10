@@ -73,9 +73,9 @@ describe Schools::PlacementDates::PlacementDetailsController, type: :request do
       context "when does not support subjects" do
         let(:supports_subjects) { false }
 
-        it 'redirects to the configuration step' do
+        it 'redirects to the publish_dates step' do
           subject
-          expect(response).to redirect_to schools_placement_dates_path
+          expect(response).to redirect_to new_schools_placement_date_publish_dates_path(placement_date)
         end
       end
 

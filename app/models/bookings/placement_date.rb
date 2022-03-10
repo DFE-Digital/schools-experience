@@ -103,11 +103,26 @@ module Bookings
       !virtual?
     end
 
-    def publish
+    def publish!(recurrences = [])
       self.active = true
       self.published_at = DateTime.now
+      self.publishable = true
 
-      save!
+      transaction(requires_new: true) do
+        save!
+        recurrences.map(&method(:recur)).map(&:save!)
+      end
+    end
+
+    def recur(date)
+      dup.tap do |pd|
+        pd.date = date
+        pd.subject_ids = subject_ids
+      end
+    end
+
+    def mark_as_publishable!
+      update(publishable: true)
     end
 
     def experience_type

@@ -72,13 +72,8 @@ describe Schools::PlacementDates::SubjectSelectionsController, type: :request do
         expect(placement_date.subjects).to match_array school.subjects.first(2)
       end
 
-      it 'publishes the date' do
-        expect(placement_date.active).to be true
-        expect(placement_date.published_at).to eq DateTime.now
-      end
-
-      it 'redirects to placement dates index' do
-        expect(response).to redirect_to schools_placement_dates_path
+      it 'redirects to publish_dates step' do
+        expect(response).to redirect_to new_schools_placement_date_publish_dates_path(placement_date)
       end
     end
   end

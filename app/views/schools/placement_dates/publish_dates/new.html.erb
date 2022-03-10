@@ -1,0 +1,53 @@
+<% self.page_title = 'Check your placement details' %>
+
+<%= govuk_back_link javascript: true %>
+
+<h1>Check your placement details</h2>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <dl class="govuk-summary-list">
+      <%= summary_row \
+        "Date",
+        @placement_date.date.to_formatted_s(:govuk),
+        nil
+      %>
+
+      <%= summary_row \
+        "When do you want to close this date to candidates?",
+        "#{@placement_date.end_availability_offset} #{"day".pluralize(@placement_date.end_availability_offset)} before the event",
+        new_schools_placement_date_placement_detail_path(@placement_date)
+      %>
+
+      <%= summary_row \
+        "How long will it last",
+        "#{@placement_date.duration} #{"day".pluralize(@placement_date.duration)}",
+        new_schools_placement_date_placement_detail_path(@placement_date)
+      %>
+
+      <%= summary_row \
+        "Experience type",
+        @placement_date.virtual ? "Virtual" : "In school",
+        new_schools_placement_date_placement_detail_path(@placement_date)
+      %>
+
+      <%= summary_row \
+        "School phase",
+        @placement_date.supports_subjects ? "Secondary" : "Primary",
+        new_schools_placement_date_configuration_path(@placement_date)
+      %>
+
+      <% if @placement_date.subject_specific %>
+        <%= summary_row \
+          "Subjects",
+          @placement_date.subjects.map(&:name).to_sentence,
+          new_schools_placement_date_subject_selection_path(@placement_date)
+        %>
+      <% end %>
+    </dl>
+
+    <%= form_with url: schools_placement_date_publish_dates_path(@placement_date), method: "post" do |f| %>
+      <%= f.govuk_submit "Publish placement date" %>
+    <% end %>
+  </div>
+</div>

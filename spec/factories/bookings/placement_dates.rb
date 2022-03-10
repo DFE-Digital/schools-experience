@@ -3,6 +3,7 @@ FactoryBot.define do
     date { 3.weeks.from_now }
     association :bookings_school, :with_fixed_availability_preference, factory: :bookings_school
     published_at { DateTime.now }
+    publishable { true }
     supports_subjects { true }
     virtual { false }
     start_availability_offset { 75 }
