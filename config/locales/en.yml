@@ -415,6 +415,7 @@ en:
               blank: Enter the last date of the recurrence
               after: Last date of recurrence must be after the first date
               on_or_before: Last date of recurrence must 4 months or less after the first date
+              no_recurring_dates: There are no recurrences when using this last date
             custom_recurrence_days:
               inclusion: Select custom recurrence days
 

@@ -30,6 +30,12 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
         subject.start_at = now
         is_expected.not_to allow_value(now + 4.months + 1.day).for :end_at
       end
+
+      it "cannot result in no recurrences" do
+        subject.recurrence_period = described_class::RECURRENCE_PERIODS[:daily]
+        subject.start_at = Date.today.next_occurring(:friday)
+        is_expected.not_to allow_value(Date.today.next_occurring(:sunday)).for :end_at
+      end
     end
 
     context '#recurrence_period' do
@@ -38,9 +44,12 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
     context '#custom_recurrence_days' do
       context "when recurrence_period is custom" do
-        before { subject.recurrence_period = described_class::RECURRENCE_PERIODS[:custom] }
+        before do
+          subject.recurrence_period = described_class::RECURRENCE_PERIODS[:custom]
+        end
 
-        it { expect(subject).to validate_inclusion_of(:custom_recurrence_days).in_array(described_class::WEEKDAYS.map(&:to_s)) }
+        it { expect(subject).to allow_values(described_class::WEEKDAYS.map(&:to_s)).for(:custom_recurrence_days) }
+        it { expect(subject).not_to allow_values(["never_day", "monday"]).for(:custom_recurrence_days) }
       end
     end
   end
@@ -69,9 +78,8 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       subject { described_class.new(attributes).recurring_dates }
 
-      it 'returns a correct array of dates (skipping weekends)' do
+      it 'returns a correct array of dates (skipping weekends and the start_date)' do
         expect(subject).to eq [
-          next_monday,
           next_monday.next_occurring(:tuesday),
           next_monday.next_occurring(:wednesday),
           next_monday.next_occurring(:thursday),
@@ -96,7 +104,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [
-          next_monday,
           next_monday + 1.week,
           next_monday + 2.weeks,
           next_monday + 3.weeks
@@ -118,7 +125,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [
-          next_monday,
           next_monday + 2.weeks
         ]
       end
@@ -139,7 +145,6 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [
-          next_monday,
           next_monday + 2.days,
           next_monday + 4.days
         ]
