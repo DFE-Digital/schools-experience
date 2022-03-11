@@ -508,6 +508,7 @@ en:
             date:
               blank: Enter a start date
               on_or_after: Date must be in the future
+              on_weekend: Date must fall on a weekday
             supports_subjects:
               inclusion: Select the phase for this date
             virtual:

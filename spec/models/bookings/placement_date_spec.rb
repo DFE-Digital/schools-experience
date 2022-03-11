@@ -38,7 +38,8 @@ describe Bookings::PlacementDate, type: :model do
 
       context 'new placement dates must not be in the past' do
         specify 'should allow future dates' do
-          [Time.zone.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
+          next_monday = Date.today.next_occurring(:monday)
+          [next_monday, next_monday + 1.day, 3.weeks.from_now.next_occurring(:wednesday), 3.months.from_now.next_occurring(:friday)].each do |d|
             expect(subject).to allow_value(d).for(:date)
           end
         end
@@ -77,9 +78,16 @@ describe Bookings::PlacementDate, type: :model do
 
         context 'not too far in the future' do
           specify 'should not allow dates more than 2 years in the future' do
-            expect(subject).not_to allow_value((2.years + 1.day).from_now).for(:date)
-            expect(subject).to allow_value((2.years - 1.day).from_now).for(:date)
+            expect(subject).not_to allow_value((2.years + 1.day).from_now.next_occurring(:monday)).for(:date)
+            expect(subject).to allow_value((2.years - 1.day).from_now.beginning_of_week).for(:date)
           end
+        end
+
+        it "does not allow dates that fall on a weekend" do
+          expect(subject).not_to allow_values(
+            Date.today.next_occurring(:saturday),
+            Date.today.next_occurring(:sunday)
+          ).for(:date)
         end
       end
     end
@@ -253,9 +261,11 @@ describe Bookings::PlacementDate, type: :model do
 
   describe "#publish" do
     let(:recurrences) { [] }
-    let(:date) { 3.weeks.from_now }
+    let(:date) { 3.weeks.from_now.next_occurring(:monday) }
 
     subject(:published_placement_date) do
+      freeze_time
+
       create(:bookings_placement_date, date: date, active: false, published_at: nil, publishable: false).tap do |pd|
         pd.publish!(recurrences)
       end

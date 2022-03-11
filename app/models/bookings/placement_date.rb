@@ -46,6 +46,10 @@ module Bookings
       validates :subjects, absence: true, unless: :subject_specific?
     end
 
+    with_options unless: :published? do
+      validate :date_is_weekday
+    end
+
     scope :bookable_date, lambda {
       where arel_table[:date].gteq Bookings::Booking::MIN_BOOKING_DELAY.from_now.to_date
     }
@@ -137,6 +141,12 @@ module Bookings
       availability_start_date = date - start_availability_offset
       availability_end_date = date - end_availability_offset
       (availability_start_date.past? || availability_start_date.today?) && availability_end_date.future?
+    end
+
+    def date_is_weekday
+      return unless date&.on_weekend?
+
+      errors.add(:date, :on_weekend)
     end
   end
 end
