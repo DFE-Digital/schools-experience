@@ -10,7 +10,7 @@
       <%= f.hidden_field :start_at, value: @placement_date.date %>
 
       <%= f.govuk_radio_buttons_fieldset :recurrence_period,
-                                         legend: { class: 'govuk-fieldset__legend govuk-fieldset__legend--l' },
+                                         legend: { tag: "h1", size: "l" },
                                          hint: { text: t('helpers.hint.schools_placement_dates_recurrences_selection.recurrence_period', date: @placement_date.date.to_formatted_s(:govuk)) } do %>
         <%= f.govuk_radio_button :recurrence_period, :daily, link_errors: true %>
         <%= f.govuk_radio_button :recurrence_period, :weekly %>

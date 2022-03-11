@@ -30,8 +30,8 @@ Feature: Configuring a placement date
     When I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
     And I choose 'General experience' from the "Select type of experience" radio buttons
     And I submit the form
-    Then I should be on the 'publish dates' page for my placement date
-    And I submit the form
+    Then I should be on the 'new publish dates' page for my placement date
+    And I click the "Publish placement date" button
     Then I should be on the 'placement dates' page
     And my newly-created placement date should be listed
 
@@ -39,4 +39,4 @@ Feature: Configuring a placement date
     Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
     And I choose 'Specific to a subject' from the "Select type of experience" radio buttons
     When I submit the form
-    Then I should be on the new subject selection page for this date
+    Then I should be on the "new subject selection" page for my placement date

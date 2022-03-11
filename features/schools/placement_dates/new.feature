@@ -28,4 +28,11 @@ Feature: Creating new placement dates
         Given I am on the 'new placement date' page
         When I fill in the form with a future date
         And I submit the form
-        Then I should be on the new placement details page for my placement date
+        Then I should be on the "new placement details" page for my placement date
+
+    Scenario: Filling in and submitting the form (recurring)
+        Given I am on the 'new placement date' page
+        When I fill in the form with a future date
+        And I select recurring
+        And I submit the form
+        Then I should be on the 'new recurrences selection' page for my placement date

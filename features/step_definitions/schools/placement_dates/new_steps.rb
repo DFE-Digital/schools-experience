@@ -1,10 +1,14 @@
 Given("I fill in the form with a future date") do
-  @date = 1.week.from_now
+  @date = 1.week.from_now.next_occurring(:monday)
   step "I fill in the date field 'Enter placement start date' with #{@date.strftime('%d-%m-%Y')}"
 end
 
 Given("I select not recurring") do
   step "I choose 'No' from the 'Is this a recurring event?' radio buttons"
+end
+
+Given("I select recurring") do
+  step "I choose 'Yes' from the 'Is this a recurring event?' radio buttons"
 end
 
 Given("I fill in the {string} date field with an invalid date of 31st September next year") do |label|
