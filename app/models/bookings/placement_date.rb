@@ -1,7 +1,5 @@
 module Bookings
   class PlacementDate < ApplicationRecord
-    attribute :recurring, :boolean, default: false
-
     belongs_to :bookings_school,
                class_name: 'Bookings::School',
                inverse_of: :bookings_placement_dates,

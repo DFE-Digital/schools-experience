@@ -7,10 +7,6 @@ describe Bookings::PlacementDate, type: :model do
     create :bookings_school, :with_subjects, subject_count: 3
   end
 
-  describe "attributes" do
-    it { is_expected.to respond_to :recurring }
-  end
-
   describe 'Columns' do
     it { is_expected.to have_db_column(:bookings_school_id).of_type(:integer) }
     it { is_expected.to have_db_column(:date).of_type(:date) }
@@ -23,6 +19,7 @@ describe Bookings::PlacementDate, type: :model do
     it { is_expected.to have_db_column(:supports_subjects).of_type(:boolean) }
     it { is_expected.to have_db_column(:start_availability_offset).of_type(:integer).with_options(default: 60, null: false) }
     it { is_expected.to have_db_column(:end_availability_offset).of_type(:integer).with_options(default: 0, null: false) }
+    it { is_expected.to have_db_column(:recurring).of_type(:boolean).with_options(default: false, null: true) }
   end
 
   describe 'Validation' do
