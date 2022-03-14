@@ -36,5 +36,9 @@ FactoryBot.define do
     trait :not_supporting_subjects do
       supports_subjects { false }
     end
+
+    trait :outside_availability_window do
+      start_availability_offset { 1 }
+    end
   end
 end
