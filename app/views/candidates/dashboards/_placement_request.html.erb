@@ -1,0 +1,19 @@
+<% presenter = Candidates::PlacementPresenter.new(placement_request) %>
+
+<tr class="govuk-table__row placement-request" data-placement-request="<%= placement_request.id %>" data-urn="<%= placement_request.urn %>">
+  <td class="govuk-table__cell">
+    <%= presenter.date %>
+  </td>
+  <td class="govuk-table__cell">
+    <%= placement_request.school.name %>
+  </td>
+  <td class="govuk-table__cell">
+    <%= placement_request.requested_subject.name %>
+  </td>
+  <td class="govuk-table__cell">
+    <%= status_tag(presenter.status, presenter.status_tag_colour) %>
+  </td>
+  <td class="govuk-table__cell">
+    <%= review_or_cancel_placement_link(presenter.placement_action, placement_request.token) %>
+  </td>
+</tr>

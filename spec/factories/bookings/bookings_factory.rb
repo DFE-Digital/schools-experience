@@ -63,5 +63,9 @@ FactoryBot.define do
         bb.candidate_cancellation.viewed!
       end
     end
+
+    trait :with_candidates_feedback do
+      association :candidate_feedback, factory: :candidates_booking_feedback
+    end
   end
 end

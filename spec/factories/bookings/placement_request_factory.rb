@@ -96,6 +96,18 @@ FactoryBot.define do
       end
     end
 
+    trait :with_unattended_booking do
+      after :create do |placement_request|
+        FactoryBot.create \
+          :bookings_booking,
+          :with_existing_subject,
+          :unattended,
+          bookings_school: placement_request.school,
+          bookings_placement_request: placement_request,
+          bookings_placement_request_id: placement_request.id
+      end
+    end
+
     trait :viewed do
       after :create, &:viewed!
     end
@@ -119,11 +131,29 @@ FactoryBot.define do
     end
 
     trait :with_a_fixed_date_in_the_recent_past do
+      association \
+        :school,
+        :with_profile,
+        :with_subjects,
+        :with_fixed_availability_preference,
+        factory: :bookings_school,
+        urn: 11_048,
+        subject_count: 2
+
       availability { nil }
       association :placement_date, :in_the_recent_past, factory: :bookings_placement_date
     end
 
     trait :with_a_fixed_date_in_the_past do
+      association \
+        :school,
+        :with_profile,
+        :with_subjects,
+        :with_fixed_availability_preference,
+        factory: :bookings_school,
+        urn: 11_048,
+        subject_count: 2
+
       availability { nil }
       association :placement_date, :in_the_past, factory: :bookings_placement_date
     end
