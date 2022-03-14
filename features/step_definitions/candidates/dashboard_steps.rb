@@ -1,3 +1,11 @@
+Given("I am logged in as a candidate user") do
+  gitis_contact = FactoryBot.build(:api_schools_experience_sign_up_with_name)
+  @current_candidate = FactoryBot.create(:candidate, :confirmed, gitis_uuid: gitis_contact.candidate_id, gitis_contact: gitis_contact, created_in_gitis: true)
+
+  allow_any_instance_of(Candidates::DashboardBaseController).to receive(:current_contact).and_return(gitis_contact)
+  allow(Bookings::Candidate).to receive(:find_by_gitis_contact).and_return(@current_candidate)
+end
+
 Given("I visit the Dashboard page") do
   visit candidates_dashboard_path
 end
@@ -37,5 +45,19 @@ end
 Then('there should be a status notification for missing availability') do
   within('#profile-status') do
     expect(page).to have_content('You have no upcoming placement dates or information about availability. Your profile will not appear in candidate searches.')
+  end
+end
+
+Given('there is a fully-onboarded school') do
+  @school ||= FactoryBot.create(:bookings_school, :onboarded, urn: 123_456)
+end
+
+Given('there are some placement requests of the current user') do
+  @placement_requests = FactoryBot.create_list(:placement_request, 3, candidate: @current_candidate, school: @school)
+end
+
+Then('I should see all my placement requests listed') do
+  within("#placement-requests") do
+    expect(page).to have_css('.placement-request', count: @current_candidate.placement_requests.count)
   end
 end

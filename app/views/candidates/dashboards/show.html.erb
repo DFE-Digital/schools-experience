@@ -1,2 +1,45 @@
-<h1>Your requests and bookings</h1>
-<p>To be done</p>
+<% self.page_title = "Candidate dashboard" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div id="dashboard">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-full-column">
+          <span class="govuk-caption-xl">Your dashboard</span>
+          <h1 class="govuk-heading-l"><%= @current_candidate.full_name %></h1>
+
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+          <div id="placements">
+            <h2>Placements</h2>
+
+            <% if @placement_requests.any? %>
+              <%= pagination_bar @placement_requests %>
+
+              <table id="placement-requests" class="govuk-table">
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th class="govuk-table__header">Placement date</th>
+                    <th class="govuk-table__header">School</th>
+                    <th class="govuk-table__header">Subject</th>
+                    <th class="govuk-table__header">Status</th>
+                    <th class="govuk-table__header">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <%= render partial: 'candidates/dashboards/placement_request',
+                    collection: @placement_requests
+                  %>
+                </tbody>
+              </table>
+
+              <%= pagination_lower @placement_requests %>
+            <% else %>
+              <p>You have no placement requests or bookings</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
