@@ -9,9 +9,10 @@
 
 <div class="govuk-grid-row" id="school-onboarding-profile">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">
+    <h1 class="govuk-caption-l">
       <%= @profile.page_heading %>
     </h1>
+    <div class="govuk-heading-l" role="doc-subtitle"><%= @current_school.name %></div>
 
     <% if @profile.publish_warning %>
       <div class="govuk-warning-text">

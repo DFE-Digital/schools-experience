@@ -428,7 +428,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
       end
 
       it 'returns "School profile"' do
-        expect(subject.page_heading).to eq 'School profile'
+        expect(subject.page_heading).to eq 'Edit school profile'
       end
     end
 

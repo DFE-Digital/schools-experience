@@ -260,7 +260,7 @@ module Schools
 
       def page_heading
         if @school.onboarded?
-          'School profile'
+          'Edit school profile'
         else
           'Check your answers before setting up your profile'
         end
