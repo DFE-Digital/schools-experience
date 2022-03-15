@@ -20,8 +20,7 @@ describe HealthchecksController, type: :request do
 
     allow(ENV).to receive(:[]).with("REDIS_URL").and_return \
       "redis://localhost:6379/1"
-    allow(Redis).to \
-      receive(:current).and_return double(Redis, ping: "PONG")
+    allow(REDIS).to receive(:ping) { "PONG" }
 
     allow(ApplicationRecord).to \
       receive(:connected?).and_return(true)
@@ -40,7 +39,7 @@ describe HealthchecksController, type: :request do
 
     context 'with unhealthy Cache' do
       before do
-        allow(Redis.current).to receive(:ping) { raise Redis::TimeoutError }
+        allow(REDIS).to receive(:ping) { raise Redis::TimeoutError }
 
         get healthcheck_path
       end
@@ -199,7 +198,7 @@ describe HealthchecksController, type: :request do
 
     context 'with unhealthy Cache' do
       before do
-        allow(Redis.current).to receive(:ping) { raise Redis::TimeoutError }
+        allow(REDIS).to receive(:ping) { raise Redis::TimeoutError }
 
         get api_health_path
       end

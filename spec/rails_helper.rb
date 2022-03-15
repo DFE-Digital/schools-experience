@@ -88,7 +88,7 @@ RSpec.configure do |config|
   end
 
   config.after :suite do
-    Redis.current.keys("test:*").each { |k| Redis.current.del k }
+    REDIS.keys("test:*").each { |k| REDIS.del k }
   end
 end
 

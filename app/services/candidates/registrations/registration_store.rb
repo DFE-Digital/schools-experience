@@ -14,7 +14,7 @@ module Candidates
 
         # Note this is using the same connection as was created during boot
         # so no need for reconnection params here
-        @redis = Redis.current
+        @redis = REDIS
       end
 
       def store!(registration_session)

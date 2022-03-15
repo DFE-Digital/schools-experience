@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Candidates::Registrations::RegistrationStore do
   let :redis do
-    Redis.current
+    REDIS
   end
 
   let :session do
