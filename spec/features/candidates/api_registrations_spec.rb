@@ -17,6 +17,8 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   before do
     allow_any_instance_of(Candidates::Registrations::RegistrationSession).to \
       receive(:uuid).and_return(uuid)
+
+    allow(Feature).to receive(:enabled?).with(:candidates_dashboard) { true }
   end
 
   feature 'Candidate Registration' do
@@ -36,6 +38,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_application_preview_step button_text: 'Continue'
         complete_email_confirmation_step
         view_request_acknowledgement_step
+        visit_candidate_dashboard_step
       end
     end
 
@@ -299,6 +302,11 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
   def view_request_acknowledgement_step
     expect(page).to have_text "You've requested school experience at"
+  end
+
+  def visit_candidate_dashboard_step
+    click_button 'Visit your dashboard'
+    expect(page).to have_text "Your dashboard"
   end
 
   def sign_in_via_dashboard(sign_up)
