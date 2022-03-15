@@ -32,7 +32,7 @@
       "name": "candidates_dashboard",
       "description": "Allows candidates to sign in to a dashboard",
       "enabled_for": {
-        "environments": ["development", "test", "servertest"]
+        "environments": ["development", "test", "servertest", "staging"]
       }
     }
   ]
