@@ -23,23 +23,6 @@ describe("SearchController", () => {
       expect(wrapper.style.visibility).toEqual("");
     });
 
-    it("inserts the Google Places API script", () => {
-      expect(document.head.getElementsByTagName("script")[0].src).toEqual(
-        "https://maps.googleapis.com/maps/api/js?key=KEY&libraries=places"
-      );
-    });
-
-    it("initialises the autocomplete service", async () => {
-      await mockGoogleScriptLoading();
-
-      expect(
-        global.window.google.maps.places.AutocompleteService
-      ).toHaveBeenCalledTimes(1);
-      expect(
-        global.window.google.maps.places.AutocompleteSessionToken
-      ).toHaveBeenCalledTimes(1);
-    });
-
     it("removes the non-JavaScript input", () => {
       expect(
         document.querySelector('[data-autocomplete-target="nonJsInput"]')
@@ -126,13 +109,6 @@ describe("SearchController", () => {
         },
       },
     };
-  };
-
-  const mockGoogleScriptLoading = async () => {
-    const googlePlacesScript = document.head.getElementsByTagName("script")[0];
-    googlePlacesScript.dispatchEvent(new Event("load"));
-
-    await new Promise(process.nextTick);
   };
 
   const clearHead = () => {

@@ -1,4 +1,5 @@
 import { Controller } from "stimulus";
+import { Loader } from "@googlemaps/js-api-loader";
 import accessibleAutocomplete from "accessible-autocomplete";
 
 export default class extends Controller {
@@ -27,9 +28,7 @@ export default class extends Controller {
     this.#showErrorMessage();
 
     this.#setWrapperVisibility(true);
-
-    await this.#loadScript();
-    this.#initialiseService();
+    await this.#initialiseService();
   }
 
   #showErrorMessage() {
@@ -84,16 +83,14 @@ export default class extends Controller {
       .remove();
   }
 
-  async #loadScript() {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKeyValue}&libraries=places`;
-      script.onload = resolve;
-      document.head.append(script);
+  async #initialiseService() {
+    const loader = new Loader({
+      apiKey: this.apiKeyValue,
+      libraries: ["places"],
     });
-  }
 
-  #initialiseService() {
+    const google = await loader.load();
+
     this.#sessionToken = new google.maps.places.AutocompleteSessionToken();
     this.#autocompleteService = new google.maps.places.AutocompleteService();
   }
