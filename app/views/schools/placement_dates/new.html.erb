@@ -2,7 +2,7 @@
 
 <%= form_for @placement_date, url: schools_placement_dates_path, method: :post do |f| %>
   <%= f.govuk_error_summary %>
-  <%= f.govuk_date_field :date, legend: { class: 'govuk-fieldset__legend govuk-fieldset__legend--l' } %>
+  <%= f.govuk_date_field :date, legend: { tag: "h1", size: "l" } %>
 
   <%= f.govuk_submit 'Continue' %>
 <%- end -%>
