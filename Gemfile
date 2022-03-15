@@ -55,6 +55,7 @@ gem 'delayed_cron_job'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 
+gem "connection_pool"
 gem "redis", "~> 4.6"
 
 gem 'kaminari'

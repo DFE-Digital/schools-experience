@@ -77,7 +77,7 @@ RSpec.describe Healthcheck do
 
     context "with working connection" do
       before do
-        allow(Redis).to receive(:current).and_return double(Redis, ping: "PONG")
+        allow(REDIS).to receive(:ping).and_return("PONG")
       end
 
       it { is_expected.to be true }
@@ -86,7 +86,7 @@ RSpec.describe Healthcheck do
     context "with broken connection" do
       it "returns false" do
         [Errno::ETIMEDOUT, Redis::CannotConnectError].each do |error|
-          allow(Redis).to receive(:current).and_raise error
+          allow(REDIS).to receive(:ping).and_raise error
           expect(subject).to be false
         end
       end
@@ -94,7 +94,7 @@ RSpec.describe Healthcheck do
 
     context 'with non functional redis' do
       before do
-        allow(Redis.current).to receive(:ping) { raise Redis::TimeoutError }
+        allow(REDIS).to receive(:ping) { raise Redis::TimeoutError }
       end
 
       it { is_expected.to be false }
