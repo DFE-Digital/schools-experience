@@ -1,14 +1,16 @@
 module Schools::PlacementDatesHelper
-  def placement_date_display_status(val)
-    val ? "Open" : "Closed"
+  def placement_date_status_tag(placement_date)
+    if placement_date.available?
+      tag.strong "Open", class: "govuk-tag govuk-tag--available"
+    elsif placement_date.active
+      tag.strong "Scheduled", class: "govuk-tag govuk-tag--yellow"
+    else
+      tag.strong "Closed", class: "govuk-tag govuk-tag--taken"
+    end
   end
 
   def availability_status_display_status(val)
     val ? "fixed dates" : "flexible dates"
-  end
-
-  def placement_date_display_class(val)
-    val ? "govuk-tag--available" : "govuk-tag--taken"
   end
 
   def show_subject_support_option(school)

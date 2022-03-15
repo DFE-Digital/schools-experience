@@ -1,6 +1,28 @@
 require 'rails_helper'
 
 describe Schools::PlacementDatesHelper, type: 'helper' do
+  describe '#placement_date_status_tag' do
+    subject { placement_date_status_tag(placement_date) }
+
+    context "when placement date is available (inside availability window)" do
+      let(:placement_date) { create(:bookings_placement_date, :active) }
+
+      it { is_expected.to have_css "strong", text: "Open", class: "govuk-tag govuk-tag--available" }
+    end
+
+    context "when placement date is active but not available" do
+      let(:placement_date) { create(:bookings_placement_date, :active, :outside_availability_window) }
+
+      it { is_expected.to have_css "strong", text: "Scheduled", class: "govuk-tag govuk-tag--yellow" }
+    end
+
+    context "when placement date is inactive" do
+      let(:placement_date) { create(:bookings_placement_date, :inactive) }
+
+      it { is_expected.to have_css "strong", text: "Closed", class: "govuk-tag govuk-tag--taken" }
+    end
+  end
+
   describe '#placement_date_subject_description' do
     subject { placement_date_subject_description(pd) }
 
