@@ -30,7 +30,7 @@ class PagesController < ApplicationController
   end
 
   def robots
-    render "robots.txt", layout: false
+    render("robots", formats: :txt, layout: false)
   end
 
   def sitemap; end
