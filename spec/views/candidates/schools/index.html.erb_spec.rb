@@ -121,7 +121,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       let(:schools) { [build(:bookings_school), build(:bookings_school)] }
 
       it "shows when more than one result" do
-        expect(rendered).to have_css 'p', text: 'Sorted by distance'
+        expect(rendered).to have_css 'div', text: 'Sorted by distance'
       end
     end
 
@@ -129,7 +129,7 @@ RSpec.describe "candidates/schools/index.html.erb", type: :view do
       let(:schools) { [build(:bookings_school)] }
 
       it "shows when more than one result" do
-        expect(rendered).to_not have_css 'p', text: 'Sorted by distance'
+        expect(rendered).to_not have_css 'div', text: 'Sorted by distance'
       end
     end
   end
