@@ -31,7 +31,7 @@ module Candidates
         'Withdrawn' => 'govuk-tag--orange',
         'Candidate cancellation' => 'govuk-tag--orange',
         'School cancellation' => 'govuk-tag--orange',
-        'Expired' => 'govuk-tag--yellow',
+        'Expired' => 'govuk-tag--grey',
         'Not attended' => 'govuk-tag--yellow',
         'Rejected' => 'govuk-tag--red',
         'Booked' => 'govuk-tag--blue',
