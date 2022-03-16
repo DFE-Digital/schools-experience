@@ -13,7 +13,7 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
     context "when placement date is active but not available" do
       let(:placement_date) { create(:bookings_placement_date, :active, :outside_availability_window) }
 
-      it { is_expected.to have_css "strong", text: "Scheduled", class: "govuk-tag govuk-tag--yellow" }
+      it { is_expected.to have_css "strong", text: "Scheduled", class: "govuk-tag govuk-tag--grey" }
     end
 
     context "when placement date is inactive" do
