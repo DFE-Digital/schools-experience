@@ -13,6 +13,15 @@ Feature: Reviewing recurrences for a placement date
     And I click the "Check dates and continue" button
     Then the page's main heading should be 'Review dates'
 
+  Scenario: De-selecting all recurrences
+    Given I select "Daily" recurrence and enter a valid date
+    And I click the "Check dates and continue" button
+    Then I should see the "Daily" recurring dates
+    And all recurring dates should be checked
+    Then I uncheck all dates
+    And I click "Check dates and continue"
+    Then I should see an error message stating "Select at least one date"
+
   Scenario: Daily recurrence
     Given I select "Daily" recurrence and enter a valid date
     And I click the "Check dates and continue" button

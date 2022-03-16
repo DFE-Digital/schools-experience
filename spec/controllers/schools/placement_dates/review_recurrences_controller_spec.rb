@@ -40,7 +40,7 @@ describe Schools::PlacementDates::ReviewRecurrencesController, type: :request do
       ])
 
       dates = dates_by_month.map(&:last).flatten
-      expect(dates).to eq(((date_range.first + 1.day)..date_range.last).reject(&:on_weekend?).to_a)
+      expect(dates).to eq((date_range.first..date_range.last).reject(&:on_weekend?).to_a)
     end
   end
 
@@ -48,10 +48,11 @@ describe Schools::PlacementDates::ReviewRecurrencesController, type: :request do
     let(:submitted_dates) { date_range }
 
     before do
-      post schools_placement_date_review_recurrences_path(placement_date.id), params: { dates: submitted_dates }
+      post schools_placement_date_review_recurrences_path(placement_date.id),
+        params: { schools_placement_dates_review_recurrences: { dates: submitted_dates } }
     end
 
     it { is_expected.to redirect_to new_schools_placement_date_placement_detail_path }
-    it { expect(request.session["date-recurrences-#{placement_date.id}"][:recurrences]).to eq(submitted_dates) }
+    it { expect(request.session["date-recurrences-#{placement_date.id}"][:confirmed_recurrences]).to eq(submitted_dates) }
   end
 end

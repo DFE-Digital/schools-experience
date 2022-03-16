@@ -50,7 +50,7 @@ module Schools
           schedule.add_recurrence_rule IceCube::Rule.daily.day(*custom_recurrence_days.map(&:to_sym))
         end
 
-        schedule.occurrences_between(start_at + 1.day, end_at, spans: true).map(&:to_date)
+        schedule.occurrences_between(start_at, end_at, spans: true).map(&:to_date)
       end
 
     private

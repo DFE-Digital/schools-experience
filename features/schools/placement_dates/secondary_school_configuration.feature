@@ -11,7 +11,7 @@ Feature: Configuring a placement date
     And I have entered placement details
 
   Scenario: Page contents
-    Then the page's main heading should be the date I just entered
+    Then the page's main heading should be "Select type of experience"
     And I should see a back link
     And the page title should be 'Set date options'
 

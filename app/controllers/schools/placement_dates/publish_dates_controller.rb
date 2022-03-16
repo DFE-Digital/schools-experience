@@ -3,7 +3,7 @@ module Schools
     class PublishDatesController < BaseController
       include Wizard
 
-      before_action :set_placement_date
+      before_action :set_placement_date, :set_dates
 
       def new; end
 
@@ -12,6 +12,14 @@ module Schools
       end
 
     private
+
+      def set_dates
+        @dates = if @placement_date.recurring?
+                   recurrences_session[:confirmed_recurrences]
+                 else
+                   [@placement_date.date]
+                 end
+      end
 
       def set_placement_date
         @placement_date = \

@@ -20,7 +20,7 @@ Feature: Reviewing recurrences for a placement date
     Then I should see the date summary row
     And I should see the following summary rows:
       | Heading                                           | Value                       | Change link path                                  |
-      | When do you want to close this date to candidates | 0 days before the event     | /schools/placement_dates/\d+/placement_detail/new  |
+      | When do you want to close this date to candidates | 0 days before it starts     | /schools/placement_dates/\d+/placement_detail/new  |
       | How long will it last                             | 3 days                      | /schools/placement_dates/\d+/placement_detail/new  |
       | Experience type	                                  | In school                   | /schools/placement_dates/\d+/placement_detail/new  |
       | School phase                                      | Secondary                   | /schools/placement_dates/\d+/configuration/new     |

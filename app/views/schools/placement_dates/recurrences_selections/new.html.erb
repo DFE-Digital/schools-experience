@@ -11,7 +11,7 @@
 
       <%= f.govuk_radio_buttons_fieldset :recurrence_period,
                                          legend: { tag: "h1", size: "l" },
-                                         hint: { text: t('helpers.hint.schools_placement_dates_recurrences_selection.recurrence_period', date: @placement_date.date.to_formatted_s(:govuk)) } do %>
+                                         hint: { text: t('helpers.hint.schools_placement_dates_recurrence_selection.recurrence_period', date: @placement_date.date.to_formatted_s(:govuk)) } do %>
         <%= f.govuk_radio_button :recurrence_period, :daily, link_errors: true %>
         <%= f.govuk_radio_button :recurrence_period, :weekly %>
         <%= f.govuk_radio_button :recurrence_period, :fortnightly %>

@@ -2,29 +2,30 @@
 
 <%= govuk_back_link javascript: true %>
 
-<h1>Review dates</h2>
+<%= form_for @review_recurrences, url: schools_placement_date_review_recurrences_path(@placement_date), method: "post" do |f| %>
+  <%= f.govuk_error_summary %>
 
-<%= form_with url: schools_placement_date_review_recurrences_path(@placement_date), method: "post" do |f| %>
-  <% @dates_by_month.in_groups_of(3, false) do |group| %>
-    <div class="govuk-grid-row">
-    <% group.each do |month, dates| %>
-      <div class="govuk-grid-column-one-third">
-        <%= f.govuk_check_boxes_fieldset :dates, legend: { text: month, size: "s" }, small: true, multiple: false do %>
-          <% dates.each_with_index do |date, index| %>
-            <% if date.monday? && !index.zero? %>
-              <div class="govuk-checkboxes__divider">--</div>
+  <%= f.govuk_check_boxes_fieldset :dates, legend: { size: "l", tag: "h1" }, small: true, multiple: false do %>
+    <% @dates_by_month.in_groups_of(3, false) do |group| %>
+      <div class="govuk-grid-row">
+        <% group.each do |month, dates| %>
+          <div class="govuk-grid-column-one-third">
+            <h3><%= month %></h3>
+            <% dates.each_with_index do |date, index| %>
+              <% if date.monday? && !index.zero? %>
+                <div class="govuk-checkboxes__divider">--</div>
+              <% end %>
+
+              <%= f.govuk_check_box :dates, date,
+                label: { text: date.to_formatted_s(:govuk_weekday) },
+                checked: date.in?(@review_recurrences.dates),
+                link_errors: index.zero?
+              %>
             <% end %>
-
-            <%= f.govuk_check_box :dates, date,
-              label: { text: date.to_formatted_s(:govuk_weekday) },
-              checked: true,
-              link_errors: index.zero?
-            %>
-          <% end %>
+          </div>
         <% end %>
       </div>
     <% end %>
-    </div>
   <% end %>
 
   <%= f.govuk_submit "Check dates and continue" %>

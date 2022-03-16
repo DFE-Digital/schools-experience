@@ -13,7 +13,7 @@ Feature: Configuring a placement date
 
   Scenario: Page title
     Given I have entered a placement date
-    Then the page's main heading should be the date I just entered
+    Then the page's main heading should be "Select type of experience"
 
   @javascript
   Scenario: Select no max number of bookings

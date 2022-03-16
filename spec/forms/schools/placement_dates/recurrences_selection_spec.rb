@@ -33,7 +33,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       it "cannot result in no recurrences" do
         subject.recurrence_period = described_class::RECURRENCE_PERIODS[:daily]
-        subject.start_at = Date.today.next_occurring(:friday)
+        subject.start_at = Date.today.next_occurring(:saturday)
         is_expected.not_to allow_value(Date.today.next_occurring(:sunday)).for :end_at
       end
     end
@@ -80,6 +80,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       it 'returns a correct array of dates (skipping weekends and the start_date)' do
         expect(subject).to eq [
+          next_monday,
           next_monday.next_occurring(:tuesday),
           next_monday.next_occurring(:wednesday),
           next_monday.next_occurring(:thursday),
@@ -104,6 +105,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [
+          next_monday,
           next_monday + 1.week,
           next_monday + 2.weeks,
           next_monday + 3.weeks
@@ -125,6 +127,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [
+          next_monday,
           next_monday + 2.weeks
         ]
       end
@@ -145,6 +148,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       it 'returns a correct array of dates' do
         expect(subject).to eq [
+          next_monday,
           next_monday + 2.days,
           next_monday + 4.days
         ]

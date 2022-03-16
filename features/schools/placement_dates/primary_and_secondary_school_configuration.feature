@@ -11,7 +11,7 @@ Feature: Configuring a placement date
     And I have entered a secondary placement date for a multi-phase school
 
   Scenario: Page title
-    Then the page's main heading should be the date I just entered
+    Then the page's main heading should be "Select type of experience"
 
   @javascript
   Scenario: Select no max number of bookings

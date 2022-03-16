@@ -111,7 +111,7 @@ module Bookings
       self.publishable = true
 
       transaction(requires_new: true) do
-        save!
+        save! if recurrences.blank?
         recurrences.map(&method(:recur)).map(&:save!)
       end
     end

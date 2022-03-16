@@ -8,19 +8,19 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <dl class="govuk-summary-list">
       <%= summary_row \
-        "Date",
-        @placement_date.date.to_formatted_s(:govuk),
+        "Date".pluralize(@placement_date.recurring?),
+        safe_join(@dates.map { |d| d.to_formatted_s(:govuk) }, tag.br),
         nil
       %>
 
       <%= summary_row \
-        "When do you want to close this date to candidates?",
-        "#{@placement_date.end_availability_offset} #{"day".pluralize(@placement_date.end_availability_offset)} before the event",
+        end_availability_offset_label(@placement_date.recurring?),
+        "#{@placement_date.end_availability_offset} #{"day".pluralize(@placement_date.end_availability_offset)} before it starts",
         new_schools_placement_date_placement_detail_path(@placement_date)
       %>
 
       <%= summary_row \
-        "How long will it last",
+        duration_label(@placement_date.recurring?),
         "#{@placement_date.duration} #{"day".pluralize(@placement_date.duration)}",
         new_schools_placement_date_placement_detail_path(@placement_date)
       %>
@@ -47,7 +47,7 @@
     </dl>
 
     <%= form_with url: schools_placement_date_publish_dates_path(@placement_date), method: "post" do |f| %>
-      <%= f.govuk_submit "Publish placement date" %>
+      <%= f.govuk_submit "Publish placement #{"date".pluralize(@dates.count)}" %>
     <% end %>
   </div>
 </div>

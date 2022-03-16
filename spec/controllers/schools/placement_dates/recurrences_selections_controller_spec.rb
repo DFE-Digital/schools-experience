@@ -58,6 +58,7 @@ describe Schools::PlacementDates::RecurrencesSelectionsController, type: :reques
         perform_request
         recurrences = session["date-recurrences-#{placement_date.id}"][:recurrences]
         expect(recurrences).to eq([
+          beginning_of_next_week,
           beginning_of_next_week + 1.day,
           beginning_of_next_week + 2.days,
           beginning_of_next_week + 3.days,

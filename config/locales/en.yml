@@ -419,6 +419,11 @@ en:
             custom_recurrence_days:
               inclusion: Select custom recurrence days
 
+        schools/placement_dates/review_recurrences:
+          attributes:
+            dates:
+              blank: Select at least one date
+
         schools/placement_dates/placement_detail:
           attributes:
             duration:
@@ -617,8 +622,9 @@ en:
     hint:
       schools_placement_requests_confirm_booking:
         placement_details: You can add extra experience details
-      schools_placement_dates_recurrences_selection:
+      schools_placement_dates_recurrence_selection:
         recurrence_period: "This is from your start date of %{date}."
+        recurrence_period_custom: For example, recurring on every Monday and Thursday
       schools_placement_dates_subject_selection:
         subject_ids_html: This list is based on the <a href="/schools/on_boarding/subjects/new" target="_blank">subjects selected on your profile</a>, uncheck all that do not apply
       bookings_school:
@@ -631,8 +637,6 @@ en:
         duration: Enter number of days.
       bookings_placement_date:
         date: For example, 01 09 2020.
-      schools_placement_dates_recurrence_selection:
-        recurrence_period_custom: For example, recurring on every Monday and Thursday
       schools_placement_dates_placement_detail:
         end_availability_offset: You'll need enough time to process requests before the placement starts.
         start_availability_offset: We recommend publishing dates no more than 60 days in advance.
@@ -713,8 +717,11 @@ en:
           custom: Custom
       schools_placement_dates_placement_detail:
         duration: How long will it last?
+        duration_recurring: How long will they last?
         end_availability_offset: When do you want to close this date to candidates?
+        end_availability_offset_recurring: When do you want to close these dates to candidates?
         start_availability_offset: When do you want to publish this date?
+        start_availability_offset_recurring: When do you want to publish these dates?
         active_options:
           1: Make this date available to candidates?
         supports_subjects_options:
@@ -1025,6 +1032,8 @@ en:
       schools_placement_dates_placement_detail:
         supports_subjects: Select school experience phase
         virtual: Experience type
+      schools_placement_dates_review_recurrences:
+        dates: Review dates
       schools_placement_dates_subject_selection:
         subject_ids: Select school experience subjects
       schools_placement_dates_configuration_form:

@@ -66,6 +66,10 @@ Given "I have previously selected {string}" do |subject_name|
   expect(page).to have_content(subject_name)
 end
 
+Given("I uncheck all dates") do
+  page.all("input[type=checkbox]").each(&:uncheck)
+end
+
 When "I select {string} recurrence and enter a valid date" do |recurrence_type|
   placement_date = Bookings::PlacementDate.last.date
   valid_date = placement_date + 3.months
@@ -82,7 +86,7 @@ Then "I should see the {string} recurring dates" do |recurrence_type|
   placement_date = Bookings::PlacementDate.last.date
   placement_date_weekday = placement_date.strftime("%A").downcase
   recurring_dates = page.all("input[type=checkbox]").map { |c| c[:value].to_date }
-  all_weekdays = ((placement_date + 1.day)..(placement_date + 3.months)).reject(&:on_weekend?).to_a
+  all_weekdays = (placement_date..(placement_date + 3.months)).reject(&:on_weekend?).to_a
 
   case recurrence_type
   when "Daily"
@@ -93,7 +97,7 @@ Then "I should see the {string} recurring dates" do |recurrence_type|
   when "Fortnightly"
     fortnightly_dates = all_weekdays
       .select { |d| d.send("#{placement_date_weekday}?") }
-      .select.with_index { |_, i| i.odd? }
+      .select.with_index { |_, i| i.even? }
 
     expect(recurring_dates).to eq(fortnightly_dates)
   when "Custom"
@@ -133,12 +137,6 @@ end
 
 Then("the {string} checkbox should not be checked") do |subject_name|
   expect(get_input(page, subject_name)).not_to be_checked
-end
-
-Then "the page's main heading should be the date I just entered" do
-  date = @school.bookings_placement_dates.last
-  expected_title = "#{date.date.to_formatted_s(:govuk)} (#{date.duration} days)"
-  expect(page).to have_css 'h1', text: expected_title
 end
 
 Then "there should be a {string} number field" do |string|

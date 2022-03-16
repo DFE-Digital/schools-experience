@@ -3,23 +3,37 @@ module Schools
     class ReviewRecurrencesController < BaseController
       include Wizard
 
-      before_action :set_placement_date
+      before_action :set_placement_date, :set_dates_by_month
 
       def new
-        @dates_by_month = recurrences_session[:recurrences]
-          .group_by { |date| date.to_formatted_s(:govuk_month_only) }
-          .to_a
+        @review_recurrences = ReviewRecurrences.new(dates: recurring_dates_session)
       end
 
       def create
-        recurrences_session[:recurrences] = recurring_dates
-        next_step(@placement_date, :review_recurrences)
+        @review_recurrences = ReviewRecurrences.new(dates: recurring_dates_param)
+
+        if @review_recurrences.valid?
+          recurrences_session[:confirmed_recurrences] = @review_recurrences.dates
+          next_step(@placement_date, :review_recurrences)
+        else
+          render :new
+        end
       end
 
     private
 
-      def recurring_dates
-        params[:dates].map(&:to_date)
+      def set_dates_by_month
+        @dates_by_month = recurring_dates_session
+          .group_by { |date| date.to_formatted_s(:govuk_month_only) }
+          .to_a
+      end
+
+      def recurring_dates_session
+        recurrences_session[:recurrences]
+      end
+
+      def recurring_dates_param
+        params.dig(:schools_placement_dates_review_recurrences, :dates) || []
       end
 
       def set_placement_date

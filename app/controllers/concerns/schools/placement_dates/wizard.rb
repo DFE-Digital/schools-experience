@@ -19,7 +19,7 @@ module Schools
         next_step = find_next_step(current_step)
 
         if next_step == :COMPLETED
-          placement_date.publish!(recurrences_session[:recurrences])
+          placement_date.publish!(recurrences_session[:confirmed_recurrences])
           auto_enable_school
           redirect_to schools_placement_dates_path
         else
@@ -67,7 +67,8 @@ module Schools
 
       def recurrences_session
         session["date-recurrences-#{@placement_date.id}"] ||= {
-          recurrences: []
+          recurrences: [],
+          confirmed_recurrences: [],
         }
       end
     end

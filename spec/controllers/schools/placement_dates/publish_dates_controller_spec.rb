@@ -7,7 +7,7 @@ describe Schools::PlacementDates::PublishDatesController, type: :request do
   let(:school) { Bookings::School.find_by!(urn: urn).tap { |s| create :bookings_profile, school: s } }
   let(:placement_date) { create(:bookings_placement_date, bookings_school: school, supports_subjects: false, recurring: true) }
   let(:beginning_of_next_week) { placement_date.date.next_week.beginning_of_week }
-  let(:date_range) { [beginning_of_next_week + 1.day, beginning_of_next_week + 1.month] }
+  let(:date_range) { [beginning_of_next_week, beginning_of_next_week + 1.month] }
 
   before do
     params = {
