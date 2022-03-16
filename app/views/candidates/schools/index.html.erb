@@ -109,8 +109,10 @@
       <% @search.results.each_with_index do |school, _| %>
         <li data-school-urn="<%= school.urn %>">
           <article class="school-result">
-            <h2 class="govuk-heading-l">
-              <%= school.name %>
+            <h2 class="govuk-heading-s">
+              <%= link_to school.name,
+                          candidates_school_path(school),
+                          aria: { 'label': "View school details for #{school.name}" } %>
               <%- if school.respond_to? :distance -%>
             <span class="govuk-caption-m distance">
               <%= pluralize Conversions::Distance::Metres::ToMiles.convert(school.distance), 'mile' %>
@@ -125,10 +127,6 @@
               <%= summary_row 'Subjects', format_school_subjects(school), nil, show_action: false %>
               <%= summary_row 'Experience type', format_school_placement_locations(school), nil, show_action: false %>
             </dl>
-
-            <%= govuk_link_to 'View school details',
-                              candidates_school_path(school),
-                              aria: { 'label': "View school details for #{school.name}" } %>
           </article>
         </li>
       <% end %>
