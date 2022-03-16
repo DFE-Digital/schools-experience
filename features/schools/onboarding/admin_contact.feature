@@ -30,7 +30,7 @@ Feature: Admin contact
 
   Scenario: Page title
     Given I am on the 'Admin contact' page
-    Then the page title should be 'Enter school experience admin contact details'
+    Then the page title should be 'Admin contact details'
 
   Scenario: Completing the step with error
     Given I am on the 'Admin contact' page
