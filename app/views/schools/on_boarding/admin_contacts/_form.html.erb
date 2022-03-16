@@ -1,46 +1,31 @@
-<%- self.page_title = 'Enter school experience admin contact details' -%>
+<%- self.page_title = 'Admin contact details' -%>
 
 <%= govuk_back_link javascript: true %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      Enter school experience admin contact details
+      Admin contact details
     </h1>
     <%= form_for admin_contact, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
       <p>
-        Tell us the contact details of the person who manages school experience for your school.
+        These should be details of the person who will manage school experience requests for your school.
+        These are needed to receive request notifications, reminders and information about updates to the service.
       </p>
       <p>
-        The email will be used to send your school the following details:
-      </p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>
-          school experience requests notifications
-        </li>
-        <li>
-          reminders and other notifications
-        </li>
-        <li>
-          important information and updates about the service
-        </li>
-      </ul>
-      <p>
-        <strong>
-          We recommend you provide a general email address so more than one person can access the requests, messages and other information we’ll send you.
-        </strong>
+        Choose a generic email address if possible, so that more than one person can access the emails if necessary.
       </p>
       <p>
-        The contact details you provide will not be shared publicly or with
-        candidates until you've confirmed their school experience booking.
+        The contact details you provide will not be shared publicly or with candidates until you’ve confirmed their school experience booking.
       </p>
+
       <h2 class="govuk-heading-m">
         Provide admin contact details
       </h2>
 
-      <%= f.govuk_text_field :phone %>
+      <%= f.govuk_text_field :phone, width: 'one-half' %>
       <%= f.govuk_text_field :email %>
       <%= f.govuk_text_field :email_secondary %>
       <%= f.govuk_submit 'Continue' %>
