@@ -24,10 +24,6 @@ Then("there should be some useful hints on entering the correct URL") do
   end
 end
 
-Then("there should be some useful hints on why I might be here") do
-  expect(page).to have_content("Maybe you tried to change something you didn't have access to")
-end
-
 Then("there should be some text explaining technical difficulties") do
   expect(page).to have_content("We are currently experiencing technical difficulties")
 end

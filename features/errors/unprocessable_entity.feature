@@ -5,6 +5,5 @@ Feature: Unprocessable entity error page
 
     Scenario: The page contents
         Given I am on the 'unprocessable_entity' error page
-        Then the page's main header should be 'The change you attempted was rejected'
-        And there should be some useful hints on why I might be here
+        Then the page's main header should be 'We were unable to process this request'
         And there should be an email address for support
