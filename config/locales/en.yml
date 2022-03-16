@@ -361,7 +361,7 @@ en:
         schools/on_boarding/disability_confident:
           attributes:
             is_disability_confident:
-              inclusion: 'Select whether you are signed up to the Disability Confident employer scheme'
+              inclusion: Select if you're signed up to the Disability Confident employer scheme
         schools/on_boarding/access_needs_policy:
           attributes:
             has_access_needs_policy:

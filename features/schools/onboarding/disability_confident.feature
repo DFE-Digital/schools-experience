@@ -28,6 +28,7 @@ Feature: Disability Confident
     Given I am on the 'Disability Confident' page
     When I submit the form
     Then the page title should be 'Disability Confident'
+    And I should see a validation error message
 
   Scenario: Submitting the form successfully choosing yes
     Given I am on the 'Disability Confident' page
