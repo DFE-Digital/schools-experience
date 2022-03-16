@@ -3,7 +3,7 @@ module Schools::PlacementDatesHelper
     if placement_date.available?
       tag.strong "Open", class: "govuk-tag govuk-tag--available"
     elsif placement_date.active
-      tag.strong "Scheduled", class: "govuk-tag govuk-tag--yellow"
+      tag.strong "Scheduled", class: "govuk-tag govuk-tag--grey"
     else
       tag.strong "Closed", class: "govuk-tag govuk-tag--taken"
     end
