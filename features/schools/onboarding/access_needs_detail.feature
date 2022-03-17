@@ -23,7 +23,15 @@ Feature: Access needs detail
     Given I am on the 'Access needs detail' page
     Then the page title should be 'Access needs details'
 
+  Scenario: Submitting the form with error
+    Given I am on the 'Access needs detail' page
+    And I enter '' into the 'schools-on-boarding-access-needs-detail-description-field' text area
+    When I submit the form
+    Then the page title should be 'Access needs details'
+    And I should see a validation error message
+
   Scenario: Submitting the form successfully
     Given I am on the 'Access needs detail' page
+    And I enter 'Some text' into the 'schools-on-boarding-access-needs-detail-description-field' text area
     When I submit the form
-    Then I should be on the 'Disability Confident' page
+    Then I should be on the 'Disability confident' page
