@@ -258,20 +258,6 @@ module Schools
         @school_profile.flexible_dates?
       end
 
-      def page_heading
-        if @school.onboarded?
-          'Edit school profile'
-        else
-          'Check your answers before setting up your profile'
-        end
-      end
-
-      def publish_warning
-        unless @school.onboarded?
-          "To set up your profile, select the checkbox at the bottom of the page and select 'Accept and set up profile'."
-        end
-      end
-
     private
 
       def candidate_requirements

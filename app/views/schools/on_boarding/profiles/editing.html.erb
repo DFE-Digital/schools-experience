@@ -1,0 +1,68 @@
+<% self.page_title = 'School profile' %>
+
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'School profile' => nil
+  }
+%>
+
+<div class="govuk-grid-row" id="school-onboarding-profile">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-caption-l">
+      Edit school profile
+    </h1>
+    <div class="govuk-heading-l" role="doc-subtitle"><%= @current_school.name %></div>
+
+    <%= render 'success_notice' %>
+
+    <%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <div class="govuk-tabs" data-module="govuk-tabs">
+        <ul class="govuk-tabs__list">
+          <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+            <a class="govuk-tabs__tab" href="#school-experience-details-tab">
+              School experience details
+            </a>
+          </li>
+          <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+            <a class="govuk-tabs__tab" href="#candidate-information-tab">
+              Candidate information
+            </a>
+          </li>
+          <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+            <a class="govuk-tabs__tab" href="#admin-contact-details-tab">
+              Admin contact details
+            </a>
+          </li>
+        </ul>
+
+        <div class="govuk-tabs__panel" id="school-experience-details-tab">
+          <dl class="govuk-summary-list">
+            <%= render 'school_details_summary' %>
+            <%= render 'school_experience_details_summary' %>
+          </dl>
+        </div>
+
+        <div class="govuk-tabs__panel" id="candidate-information-tab">
+          <%= render 'candidate_information_summary' %>
+        </div>
+
+        <div class="govuk-tabs__panel" id="admin-contact-details-tab">
+          <%= render 'admin_contact_details_summary' %>
+        </div>
+
+        <div class="govuk-!-margin-top-4">
+          <div class="govuk-button-group">
+            <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, secondary: true %>
+          </div>
+
+          <div>
+            <%= govuk_link_to 'Return to dashboard', schools_dashboard_path, secondary: true %>
+          </div>
+        </div>
+    <% end %>
+    </div>
+  </div>
+</div>

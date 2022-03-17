@@ -24,8 +24,8 @@ describe Schools::OnBoarding::ConfirmationsController, type: :request do
         Schools::OnBoarding::Confirmation.new acceptance: false
       end
 
-      it 'rerenders the profile show page' do
-        expect(response).to render_template 'schools/on_boarding/profiles/show'
+      it 'rerenders the profile onboarding page' do
+        expect(response).to render_template 'schools/on_boarding/profiles/onboarding'
       end
 
       it 'does not updated the school profile' do
