@@ -15,7 +15,7 @@ module Schools
         else
           @school = current_school_profile.bookings_school
           @profile = SchoolProfilePresenter.new(current_school_profile)
-          render 'schools/on_boarding/profiles/show'
+          render 'schools/on_boarding/profiles/onboarding'
         end
       end
 

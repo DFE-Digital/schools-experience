@@ -1,0 +1,61 @@
+<% self.page_title = 'Check your answers before setting up your school experience profile' %>
+
+<div class="govuk-grid-row" id="school-onboarding-profile">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      Check your answers before setting up your profile
+    </h1>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        To set up your profile, select the checkbox at the bottom of the page and select 'Accept and set up profile'.
+      </strong>
+    </div>
+
+    <%= render 'schools/on_boarding/profiles/success_notice' %>
+
+    <%= form_for @confirmation, url: schools_on_boarding_confirmation_path do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h2 class="govuk-heading-m">School details</h2>
+      <dl class="govuk-summary-list">
+        <%= render 'schools/on_boarding/profiles/school_details_summary' %>
+      </dl>
+
+      <h2 class="govuk-heading-m">School experience details</h2>
+      <dl class="govuk-summary-list">
+        <%= render 'schools/on_boarding/profiles/school_experience_details_summary' %>
+      </dl>
+
+      <h2 class="govuk-heading-m">Candidate information</h2>
+      <%= render 'schools/on_boarding/profiles/candidate_information_summary' %>
+
+      <h2 class="govuk-heading-m">Admin contact details</h2>
+      <%= render 'schools/on_boarding/profiles/admin_contact_details_summary' %>
+
+      <div class="govuk-form-group">
+        <%= f.govuk_check_boxes_fieldset :acceptance, multiple: false do %>
+          <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "By checking this box and setting up your school experience profile you’re confirming, to the best of your knowledge:" } %>
+          <p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>the details you’re providing are correct</li>
+            <li>you agree to manage the data you receive in line with current GDPR regulations</li>
+            <li>you accept our <a href="/schools_privacy_policy" class="govuk-link">privacy policy</a></li>
+          </ul>
+          </p>
+        <% end %>
+      </div>
+
+      <div class="govuk-button-group">
+        <%= f.govuk_submit 'Accept and set up profile' %>
+        <%= govuk_link_to 'Preview profile', schools_on_boarding_preview_path, secondary: true %>
+      </div>
+
+      <div>
+        <%= govuk_link_to 'Return to dashboard', schools_dashboard_path, secondary: true %>
+      </div>
+    <% end %>
+  </div>
+</div>

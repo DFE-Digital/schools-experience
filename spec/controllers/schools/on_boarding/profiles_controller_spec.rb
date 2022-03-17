@@ -21,11 +21,11 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
   end
 
   context 'with a complete profile' do
-    context '#show' do
-      let! :school_profile do
-        FactoryBot.create :school_profile, :completed
-      end
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
 
+    context '#show' do
       before do
         get '/schools/on_boarding/profile'
       end
@@ -35,8 +35,19 @@ describe Schools::OnBoarding::ProfilesController, type: :request do
           eq Schools::OnBoarding::SchoolProfilePresenter.new(school_profile)
       end
 
-      it 'renders the show template' do
-        expect(response).to render_template :show
+      it 'renders the onboarding template' do
+        expect(response).to render_template :onboarding
+      end
+
+      context "when school is onboarded" do
+        let(:school) { create(:bookings_school, :onboarded) }
+        let(:school_profile) { FactoryBot.create :school_profile, :completed, bookings_school: school }
+
+        include_context "logged in DfE user for school with profile"
+
+        it 'renders the editing template' do
+          expect(response).to render_template :editing
+        end
       end
     end
   end

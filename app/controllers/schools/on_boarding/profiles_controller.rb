@@ -10,6 +10,8 @@ module Schools
       def show
         @confirmation = Confirmation.new
         @profile = SchoolProfilePresenter.new(current_school_profile)
+
+        render @current_school.onboarded? ? :editing : :onboarding
       end
     end
   end
