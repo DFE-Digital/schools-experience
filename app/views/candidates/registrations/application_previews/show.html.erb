@@ -4,7 +4,7 @@
   <%= form_for @privacy_policy,
         url: candidates_school_registrations_confirmation_email_path,
         data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>You'll receive an email with the following details once you've sent your school experience request.</p>
     <%= f.govuk_error_summary %>
@@ -125,29 +125,28 @@
           anchor: 'candidates_registrations_background_check_has_dbs_check_container'
         ) %>
     </dl>
-  </div>
-  <div class="govuk-grid-column-full">
-      <div class="govuk-form-group">
-        <%= f.govuk_check_boxes_fieldset :acceptance, multiple: false do %>
-          <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "By checking this box you're confirming that:" } %>
-          <p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>the details you've provided are correct</li>
-              <li>you're aged 18 or over</li>
-              <li>you've read our <a href="/privacy_policy" class="govuk-link">privacy policy</a></li>
-              <li>you understand that the DfE's
-              <a href="https://getintoteaching.education.gov.uk/" class="govuk-link">Get Into Teaching Information Service</a>
-              will use your personal details to provide you with
-              tailored advice and information about teacher training and a career as a teacher</li>
-            </ul>
-          </p>
-        <% end %>
-      </div>
-      <% if candidate_signed_in? %>
-        <%= f.govuk_submit 'Accept and send', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
-      <% else %>
-        <%= f.govuk_submit 'Continue', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
+
+    <div class="govuk-form-group">
+      <%= f.govuk_check_boxes_fieldset :acceptance, multiple: false do %>
+        <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "By checking this box you're confirming that:" } %>
+        <p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>the details you've provided are correct</li>
+          <li>you're aged 18 or over</li>
+          <li>you've read our <a href="/privacy_policy" class="govuk-link">privacy policy</a></li>
+          <li>you understand that the DfE's
+            <a href="https://getintoteaching.education.gov.uk/" class="govuk-link">Get Into Teaching Information Service</a>
+            will use your personal details to provide you with
+            tailored advice and information about teacher training and a career as a teacher</li>
+        </ul>
+        </p>
       <% end %>
+    </div>
+    <% if candidate_signed_in? %>
+      <%= f.govuk_submit 'Accept and send', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
+    <% else %>
+      <%= f.govuk_submit 'Continue', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
+    <% end %>
   </div>
   <% end %>
 </div>
