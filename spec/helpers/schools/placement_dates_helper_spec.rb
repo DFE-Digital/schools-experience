@@ -16,6 +16,12 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
       it { is_expected.to have_css "strong", text: "Scheduled", class: "govuk-tag govuk-tag--grey" }
     end
 
+    context "when placement date is active and end of availability is not in the future" do
+      let(:placement_date) { create(:bookings_placement_date, :active, date: Date.tomorrow, end_availability_offset: 1) }
+
+      it { is_expected.to have_css "strong", text: "Closed", class: "govuk-tag govuk-tag--taken" }
+    end
+
     context "when placement date is inactive" do
       let(:placement_date) { create(:bookings_placement_date, :inactive) }
 
