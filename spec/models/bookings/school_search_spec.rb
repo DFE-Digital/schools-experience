@@ -457,6 +457,112 @@ describe Bookings::SchoolSearch do
     end
   end
 
+  describe "#phase_count" do
+    let!(:early_years) { create(:bookings_phase, :early_years) }
+    let!(:primary) { create(:bookings_phase, :primary) }
+    let!(:secondary) { create(:bookings_phase, :secondary) }
+    let!(:college) { create(:bookings_phase, :college) }
+
+    let(:instance) { described_class.new(location: "Bury", radius: 50) }
+
+    it { expect(instance.phase_count(-1)).to eq(0) }
+
+    context "when there are schools with the given phase_id in the result set" do
+      before do
+        create_list(:bookings_school, 4, :onboarded, :early_years)
+        create_list(:bookings_school, 3, :onboarded, :primary)
+        create_list(:bookings_school, 2, :onboarded, :secondary)
+        create_list(:bookings_school, 1, :onboarded, :college)
+
+        outside_search_coordinates = Bookings::School::GEOFACTORY.point(-1.148, 52.794)
+        create(:bookings_school, :onboarded, :early_years, coordinates: outside_search_coordinates)
+        create(:bookings_school, :onboarded, :secondary, coordinates: outside_search_coordinates)
+      end
+
+      it { expect(instance.phase_count(early_years.id)).to eq(4) }
+      it { expect(instance.phase_count(primary.id)).to eq(3) }
+      it { expect(instance.phase_count(secondary.id)).to eq(2) }
+      it { expect(instance.phase_count(college.id)).to eq(1) }
+    end
+  end
+
+  describe "#subject_count" do
+    let(:maths) { Bookings::Subject.find_by(name: "Maths") }
+
+    let(:instance) { described_class.new(location: "Bury", radius: 50) }
+
+    it { expect(instance.subject_count(-1)).to eq(0) }
+
+    context "when there are schools with the given subject_id in the result set" do
+      before do
+        create_list(:bookings_school, 4, :onboarded).each do |s|
+          create(:bookings_schools_subject, bookings_school: s, bookings_subject: maths)
+        end
+
+        outside_search_coordinates = Bookings::School::GEOFACTORY.point(-1.148, 52.794)
+        outside_school = create(:bookings_school, :onboarded, coordinates: outside_search_coordinates)
+        create(:bookings_schools_subject, bookings_school: outside_school, bookings_subject: maths)
+      end
+
+      it { expect(instance.subject_count(maths.id)).to eq(4) }
+    end
+  end
+
+  describe "#dbs_not_required_count" do
+    let(:instance) { described_class.new(location: "Bury", radius: 50) }
+
+    it { expect(instance.dbs_not_required_count).to eq(0) }
+
+    context "when there are schools that do not require a dbs check in the result set" do
+      before do
+        create_list(:bookings_school, 2, :onboarded, profile: create(:bookings_profile, dbs_policy_conditions: "notrequired"))
+        create_list(:bookings_school, 2, :onboarded, profile: create(:bookings_profile, dbs_policy_conditions: "inschool"))
+
+        create(:bookings_school, :onboarded, profile: create(:bookings_profile, dbs_policy_conditions: "required"))
+        outside_search_coordinates = Bookings::School::GEOFACTORY.point(-1.148, 52.794)
+        create(:bookings_school, :onboarded, profile: create(:bookings_profile, dbs_policy_conditions: "notrequired"), coordinates: outside_search_coordinates)
+      end
+
+      it { expect(instance.dbs_not_required_count).to eq(2) }
+    end
+  end
+
+  describe "#disability_confident_count" do
+    let(:instance) { described_class.new(location: "Bury", radius: 50) }
+
+    it { expect(instance.disability_confident_count).to eq(0) }
+
+    context "when there are schools that do not require a dbs check in the result set" do
+      before do
+        create_list(:bookings_school, 2, :onboarded)
+
+        create(:bookings_school, :onboarded, profile: create(:bookings_profile, disability_confident: false))
+        outside_search_coordinates = Bookings::School::GEOFACTORY.point(-1.148, 52.794)
+        create(:bookings_school, :onboarded, coordinates: outside_search_coordinates)
+      end
+
+      it { expect(instance.disability_confident_count).to eq(2) }
+    end
+  end
+
+  describe "#parking_count" do
+    let(:instance) { described_class.new(location: "Bury", radius: 50) }
+
+    it { expect(instance.disability_confident_count).to eq(0) }
+
+    context "when there are schools that do not require a dbs check in the result set" do
+      before do
+        create_list(:bookings_school, 2, :onboarded, profile: create(:bookings_profile, parking_provided: true))
+
+        create(:bookings_school, :onboarded)
+        outside_search_coordinates = Bookings::School::GEOFACTORY.point(-1.148, 52.794)
+        create(:bookings_school, :onboarded, coordinates: outside_search_coordinates)
+      end
+
+      it { expect(instance.disability_confident_count).to eq(2) }
+    end
+  end
+
   describe '#total_count' do
     let!(:matching_schools) do
       create_list(:bookings_school, 8, :onboarded)

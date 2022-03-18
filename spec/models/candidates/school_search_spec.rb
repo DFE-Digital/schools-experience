@@ -41,6 +41,11 @@ RSpec.describe Candidates::SchoolSearch do
     it { expect(subject).to delegate_method(:errors).to(:school_search) }
     it { expect(subject).to delegate_method(:location_name).to(:school_search) }
     it { expect(subject).to delegate_method(:has_coordinates?).to(:school_search) }
+    it { expect(subject).to delegate_method(:phase_count).to(:school_search) }
+    it { expect(subject).to delegate_method(:subject_count).to(:school_search) }
+    it { expect(subject).to delegate_method(:dbs_not_required_count).to(:school_search) }
+    it { expect(subject).to delegate_method(:disability_confident_count).to(:school_search) }
+    it { expect(subject).to delegate_method(:parking_count).to(:school_search) }
   end
 
   context '.subjects=' do
