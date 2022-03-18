@@ -21,17 +21,14 @@ Feature: Editing placement dates
 
     Scenario: Filling in and submitting the form
         Given I am on the edit page for my placement
-        And I fill in the form with a duration of 6
+        And I fill in the placement details form with a duration of 6
         When I submit the form
-        Then I should be on the new configuration page for this date
-        Given I am on the 'placement dates' page
-        Then my newly-created placement date should be listed
+        Then I am on the 'placement dates' page
+        And my newly-created placement date should be listed
 
     @smoke_test
     Scenario: Activating a placement date
         Given I am on the edit page for my 'inactive' placement
         And I submit the form
-        Then I should be on the new configuration page for this date
-        And I submit the form
-        Given I am on the 'placement dates' page
-        Then my placement should have been 'activated'
+        Then I am on the 'placement dates' page
+        And my placement should have been 'activated'
