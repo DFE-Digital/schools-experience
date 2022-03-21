@@ -25,17 +25,19 @@ Feature: Creating new placement details
   Scenario: Primary and secondary schools: selecting primary
     Given my school is a 'primary and secondary' school
     And I have entered a placement date
-    When I fill in the placement details form with a duration of 3
+    And I fill in the placement details form with a duration of 3
     And I choose 'Primary including early years, key stage 1 and key stage 2' from the 'Select school experience phase' radio buttons
     And I submit the form
+    Then I should be on the 'new publish dates' page for my placement date
+    And I click the "Publish placement date" button
     Then I should be on the 'placement dates' page
     And my school should be enabled
 
   Scenario: Primary and secondary schools: selecting secondary
     Given my school is a 'primary and secondary' school
     And I have entered a placement date
-    When I fill in the placement details form with a duration of 3
+    And I fill in the placement details form with a duration of 3
     And I choose 'Secondary including secondary schools, sixth-forms, colleges and 16 to 18 years' from the 'Select school experience phase' radio buttons
     And I submit the form
-    Then I should be on the new configuration page for my placement date
+    Then I should be on the "new configuration" page for my placement date
     And there should be a subject specificity option

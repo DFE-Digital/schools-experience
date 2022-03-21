@@ -15,6 +15,18 @@ module Schools::PlacementDatesHelper
     val ? "fixed dates" : "flexible dates"
   end
 
+  def start_availability_offset_label(recurring, pulished)
+    t("helpers.label.schools_placement_dates_placement_detail.start_availability_offset#{'_recurring' if recurring && !pulished}")
+  end
+
+  def end_availability_offset_label(recurring, pulished)
+    t("helpers.label.schools_placement_dates_placement_detail.end_availability_offset#{'_recurring' if recurring && !pulished}")
+  end
+
+  def duration_label(recurring, pulished)
+    t("helpers.label.schools_placement_dates_placement_detail.duration#{'_recurring' if recurring && !pulished}")
+  end
+
   def show_subject_support_option(school)
     options = school.phases.map(&:supports_subjects)
 

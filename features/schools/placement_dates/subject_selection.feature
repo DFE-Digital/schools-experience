@@ -27,6 +27,8 @@ Feature: Selecting subjects for a placement date
         And I uncheck the 'Physics' checkbox
         And I uncheck the 'Biology' checkbox
         When I submit the form
+        Then I should be on the 'new publish dates' page for my placement date
+    And I click the "Publish placement date" button
         Then I should be on the 'placement dates' page
         And my date should be listed
 

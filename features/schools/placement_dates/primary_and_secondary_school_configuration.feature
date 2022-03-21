@@ -11,7 +11,7 @@ Feature: Configuring a placement date
     And I have entered a secondary placement date for a multi-phase school
 
   Scenario: Page title
-    Then the page's main heading should be the date I just entered
+    Then the page's main heading should be "Select type of experience"
 
   @javascript
   Scenario: Select no max number of bookings
@@ -28,6 +28,8 @@ Feature: Configuring a placement date
     When I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
     And I choose 'General experience' from the "Select type of experience" radio buttons
     And I submit the form
+    Then I should be on the 'new publish dates' page for my placement date
+    And I click the "Publish placement date" button
     Then I should be on the 'placement dates' page
     And my newly-created placement date should be listed
 
@@ -35,4 +37,4 @@ Feature: Configuring a placement date
     Given I choose 'No' from the "Is there a maximum number of bookings you’ll accept for this date?" radio buttons
     And I choose 'Specific to a subject' from the "Select type of experience" radio buttons
     When I submit the form
-    Then I should be on the new subject selection page for this date
+    Then I should be on the "new subject selection" page for my placement date

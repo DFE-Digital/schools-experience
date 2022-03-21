@@ -407,6 +407,23 @@ en:
             acceptance:
               accepted: "You need to confirm your details are correct and accept our privacy policy to continue"
 
+        schools/placement_dates/recurrences_selection:
+          attributes:
+            recurrence_period:
+              blank: Select how often you want this date to recur
+            end_at:
+              blank: Enter the last date of the recurrence
+              after: Last date of recurrence must be after the first date
+              on_or_before: Last date of recurrence must 4 months or less after the first date
+              no_recurring_dates: There are no recurrences when using this last date
+            custom_recurrence_days:
+              inclusion: Select custom recurrence days
+
+        schools/placement_dates/review_recurrences:
+          attributes:
+            dates:
+              blank: Select at least one date
+
         schools/placement_dates/placement_detail:
           attributes:
             duration:
@@ -496,6 +513,7 @@ en:
             date:
               blank: Enter a start date
               on_or_after: Date must be in the future
+              on_weekend: Date must fall on a weekday
             supports_subjects:
               inclusion: Select the phase for this date
             virtual:
@@ -604,6 +622,9 @@ en:
     hint:
       schools_placement_requests_confirm_booking:
         placement_details: You can add extra experience details
+      schools_placement_dates_recurrence_selection:
+        recurrence_period: "This is from your start date of %{date}."
+        recurrence_period_custom: For example, recurring on every Monday and Thursday
       schools_placement_dates_subject_selection:
         subject_ids_html: This list is based on the <a href="/schools/on_boarding/subjects/new" target="_blank">subjects selected on your profile</a>, uncheck all that do not apply
       bookings_school:
@@ -684,10 +705,23 @@ en:
           virtual: Virtual experience
           inschool: In school experience
           both: Both virtual and in school experiences
+      bookings_placement_date:
+        recurring_options:
+          true: "Yes"
+          false: "No"
+      schools_placement_dates_recurrences_selection:
+        recurrence_period_options:
+          daily: Daily
+          weekly: Weekly
+          fortnightly: Fortnightly
+          custom: Custom
       schools_placement_dates_placement_detail:
         duration: How long will it last?
+        duration_recurring: How long will they last?
         end_availability_offset: When do you want to close this date to candidates?
+        end_availability_offset_recurring: When do you want to close these dates to candidates?
         start_availability_offset: When do you want to publish this date?
+        start_availability_offset_recurring: When do you want to publish these dates?
         active_options:
           1: Make this date available to candidates?
         supports_subjects_options:
@@ -991,9 +1025,15 @@ en:
         experience_type: School experience type
       bookings_placement_date:
         date: Enter placement start date
+        recurring: Is this a recurring event?
+      schools_placement_dates_recurrences_selection:
+        recurrence_period: How often do you want this event to recur?
+        end_at: Enter last date of the recurrence
       schools_placement_dates_placement_detail:
         supports_subjects: Select school experience phase
         virtual: Experience type
+      schools_placement_dates_review_recurrences:
+        dates: Review dates
       schools_placement_dates_subject_selection:
         subject_ids: Select school experience subjects
       schools_placement_dates_configuration_form:

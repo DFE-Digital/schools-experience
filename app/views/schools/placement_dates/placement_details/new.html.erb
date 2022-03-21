@@ -11,9 +11,9 @@
 
       <%= f.hidden_field :school_has_primary_and_secondary_phases %>
 
-      <%= f.govuk_number_field :start_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
-      <%= f.govuk_number_field :end_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
-      <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m' }, suffix_text: t("helpers.suffix.schools_placement_dates.days") %>
+      <%= f.govuk_number_field :start_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m', text: start_availability_offset_label(@placement_date.recurring?, @placement_date.published?) }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
+      <%= f.govuk_number_field :end_availability_offset, width: 3, required: true, label: { class: 'govuk-heading-m', text: end_availability_offset_label(@placement_date.recurring?, @placement_date.published?) }, suffix_text: t("helpers.suffix.schools_placement_dates.days_before_the_event") %>
+      <%= f.govuk_number_field :duration, width: 3, required: true, label: { class: 'govuk-heading-m', text: duration_label(@placement_date.recurring?, @placement_date.published?) }, suffix_text: t("helpers.suffix.schools_placement_dates.days") %>
       <%= f.govuk_radio_buttons_fieldset :virtual, inline: true do %>
         <%= f.govuk_radio_button :virtual, "true", link_errors: true %>
         <%= f.govuk_radio_button :virtual, "false" %>

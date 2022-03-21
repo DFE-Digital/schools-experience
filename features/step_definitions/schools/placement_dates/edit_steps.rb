@@ -1,16 +1,17 @@
-Given("I am on the edit page for my placement") do
+Given("I am on the edit page for my {string} placement") do |type|
   @placement_date = FactoryBot.create(
     :bookings_placement_date,
     date: 3.weeks.from_now,
     duration: 6,
-    bookings_school: @school
+    bookings_school: @school,
+    recurring: type == "recurring"
   )
   path = edit_schools_placement_date_path(@placement_date)
   visit path
   expect(page.current_path).to eql(new_schools_placement_date_placement_detail_path(@placement_date))
 end
 
-Given("I am on the edit page for my {string} placement") do |state|
+Given("I am on the edit page for my placement that is {string}") do |state|
   @placement_date = FactoryBot.create(
     :bookings_placement_date,
     state.to_sym,

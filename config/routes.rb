@@ -102,6 +102,9 @@ Rails.application.routes.draw do
     resource :availability_preference, only: %i[edit update]
     resource :availability_info, only: %i[edit update], controller: 'availability_info'
     resources :placement_dates do
+      resource :recurrences_selection, only: %i[new create], controller: 'placement_dates/recurrences_selections'
+      resource :review_recurrences, only: %i[new create], controller: 'placement_dates/review_recurrences'
+      resource :publish_dates, only: %i[new create], controller: 'placement_dates/publish_dates'
       resource :placement_detail, only: %i[new create], controller: 'placement_dates/placement_details'
       resource :configuration, only: %i[new create], controller: 'placement_dates/configurations'
       resource :subject_selection, only: %i[new create], controller: 'placement_dates/subject_selections'

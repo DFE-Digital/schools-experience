@@ -29,6 +29,27 @@ describe Schools::PlacementDatesHelper, type: 'helper' do
     end
   end
 
+  describe "#start_availability_offset_label" do
+    it { expect(start_availability_offset_label(false, false)).to eq("When do you want to publish this date?") }
+    it { expect(start_availability_offset_label(false, true)).to eq("When do you want to publish this date?") }
+    it { expect(start_availability_offset_label(true, true)).to eq("When do you want to publish this date?") }
+    it { expect(start_availability_offset_label(true, false)).to eq("When do you want to publish these dates?") }
+  end
+
+  describe "#end_availability_offset_label" do
+    it { expect(end_availability_offset_label(false, false)).to eq("When do you want to close this date to candidates?") }
+    it { expect(end_availability_offset_label(false, true)).to eq("When do you want to close this date to candidates?") }
+    it { expect(end_availability_offset_label(true, true)).to eq("When do you want to close this date to candidates?") }
+    it { expect(end_availability_offset_label(true, false)).to eq("When do you want to close these dates to candidates?") }
+  end
+
+  describe "#duration_label" do
+    it { expect(duration_label(false, false)).to eq("How long will it last?") }
+    it { expect(duration_label(false, true)).to eq("How long will it last?") }
+    it { expect(duration_label(true, true)).to eq("How long will it last?") }
+    it { expect(duration_label(true, false)).to eq("How long will they last?") }
+  end
+
   describe '#placement_date_subject_description' do
     subject { placement_date_subject_description(pd) }
 

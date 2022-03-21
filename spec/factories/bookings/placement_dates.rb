@@ -1,8 +1,9 @@
 FactoryBot.define do
   factory :bookings_placement_date, class: 'Bookings::PlacementDate' do
-    date { 3.weeks.from_now }
+    date { 3.weeks.from_now.beginning_of_week }
     association :bookings_school, :with_fixed_availability_preference, factory: :bookings_school
     published_at { DateTime.now }
+    publishable { true }
     supports_subjects { true }
     virtual { false }
     start_availability_offset { 75 }

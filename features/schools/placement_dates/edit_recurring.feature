@@ -1,4 +1,4 @@
-Feature: Editing placement dates
+Feature: Editing a recurring placement date
     So I can manage placement dates
     As a school administrator
     I want to be able to update and delete records
@@ -8,11 +8,11 @@ Feature: Editing placement dates
         And my school is fully-onboarded
 
     Scenario: Page title
-        Given I am on the edit page for my "non-recurring" placement
+        Given I am on the edit page for my "recurring" placement
         Then the page title should be 'Placement details'
 
     Scenario: Placement date form
-        Given I am on the edit page for my "non-recurring" placement
+        Given I am on the edit page for my "recurring" placement
         Then I should see a form with the following fields:
             | Label                  | Type   |
             | How long will it last? | number |
@@ -20,18 +20,9 @@ Feature: Editing placement dates
             | When do you want to publish this date? | number |
 
     Scenario: Filling in and submitting the form
-        Given I am on the edit page for my "non-recurring" placement
+        Given I am on the edit page for my "recurring" placement
         And I fill in the placement details form with a duration of 6
         When I submit the form
         Then I should be on the "new publish dates" page for my placement date
         Given I am on the 'placement dates' page
         Then my newly-created placement date should be listed
-
-    @smoke_test
-    Scenario: Activating a placement date
-        Given I am on the edit page for my placement that is 'inactive'
-        And I submit the form
-        Then I should be on the "new publish dates" page for my placement date
-        And I click the "Publish placement date" button
-        Given I am on the 'placement dates' page
-        Then my placement should have been 'activated'

@@ -1,0 +1,32 @@
+<% self.page_title = 'Review dates' %>
+
+<%= govuk_back_link javascript: true %>
+
+<%= form_for @review_recurrences, url: schools_placement_date_review_recurrences_path(@placement_date), method: "post" do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= f.govuk_check_boxes_fieldset :dates, legend: { size: "l", tag: "h1" }, small: true, multiple: false do %>
+    <% @dates_by_month.in_groups_of(3, false) do |group| %>
+      <div class="govuk-grid-row">
+        <% group.each do |month, dates| %>
+          <div class="govuk-grid-column-one-third">
+            <h3><%= month %></h3>
+            <% dates.each_with_index do |date, index| %>
+              <% if date.monday? && !index.zero? %>
+                <div class="govuk-checkboxes__divider">--</div>
+              <% end %>
+
+              <%= f.govuk_check_box :dates, date,
+                label: { text: date.to_formatted_s(:govuk_weekday) },
+                checked: date.in?(@review_recurrences.dates),
+                link_errors: index.zero?
+              %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= f.govuk_submit "Check dates and continue" %>
+<% end %>

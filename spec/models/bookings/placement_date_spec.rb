@@ -19,17 +19,24 @@ describe Bookings::PlacementDate, type: :model do
     it { is_expected.to have_db_column(:supports_subjects).of_type(:boolean) }
     it { is_expected.to have_db_column(:start_availability_offset).of_type(:integer).with_options(default: 60, null: false) }
     it { is_expected.to have_db_column(:end_availability_offset).of_type(:integer).with_options(default: 0, null: false) }
+    it { is_expected.to have_db_column(:recurring).of_type(:boolean).with_options(default: false, null: true) }
   end
 
   describe 'Validation' do
     subject { described_class.new }
+
+    context "#recurring" do
+      it { is_expected.to allow_values(true, false).for :recurring }
+      it { is_expected.not_to allow_value(nil).for :recurring }
+    end
 
     context '#date' do
       it { expect(subject).to validate_presence_of(:date) }
 
       context 'new placement dates must not be in the past' do
         specify 'should allow future dates' do
-          [Time.zone.tomorrow, 3.days.from_now, 3.weeks.from_now, 3.months.from_now].each do |d|
+          next_monday = Date.today.next_occurring(:monday)
+          [next_monday, next_monday + 1.day, 3.weeks.from_now.next_occurring(:wednesday), 3.months.from_now.next_occurring(:friday)].each do |d|
             expect(subject).to allow_value(d).for(:date)
           end
         end
@@ -68,9 +75,16 @@ describe Bookings::PlacementDate, type: :model do
 
         context 'not too far in the future' do
           specify 'should not allow dates more than 2 years in the future' do
-            expect(subject).not_to allow_value((2.years + 1.day).from_now).for(:date)
-            expect(subject).to allow_value((2.years - 1.day).from_now).for(:date)
+            expect(subject).not_to allow_value((2.years + 1.day).from_now.next_occurring(:monday)).for(:date)
+            expect(subject).to allow_value((2.years - 1.day).from_now.beginning_of_week).for(:date)
           end
+        end
+
+        it "does not allow dates that fall on a weekend" do
+          expect(subject).not_to allow_values(
+            Date.today.next_occurring(:saturday),
+            Date.today.next_occurring(:sunday)
+          ).for(:date)
         end
       end
     end
@@ -234,24 +248,54 @@ describe Bookings::PlacementDate, type: :model do
     end
   end
 
-  context 'publish' do
-    subject { create(:bookings_placement_date) }
+  describe "#mark_as_publishable!" do
+    let(:placement_date) { create(:bookings_placement_date, publishable: false) }
 
-    before do
-      subject.active = false
-      subject.published_at = nil
+    it "marks the date as publishable" do
+      expect { placement_date.mark_as_publishable! }.to change { placement_date.publishable }.from(false).to(true)
+    end
+  end
+
+  describe "#publish" do
+    let(:recurrences) { [] }
+    let(:date) { 3.weeks.from_now.next_occurring(:monday) }
+
+    subject(:published_placement_date) do
       freeze_time
 
-      subject.publish
+      create(:bookings_placement_date, date: date, active: false, published_at: nil, publishable: false).tap do |pd|
+        pd.publish!(recurrences)
+      end
     end
 
-    it 'updates #active to true' do
-      expect(subject.active).to be true
+    it { is_expected.to be_active }
+    it { is_expected.to be_publishable }
+    it { expect(published_placement_date.published_at.to_date).to eq(Date.today) }
+
+    context "when there are published_placement_date" do
+      let(:recurrences) { [date + 1.day] }
+
+      it "publishes recurrences" do
+        expected_attributes = published_placement_date.attributes.except("created_at", "updated_at", "id", "date")
+        recurrence = described_class.find_by(date: recurrences.first)
+        expect(recurrence).to have_attributes(expected_attributes)
+      end
+    end
+  end
+
+  describe "#recur" do
+    let(:placement_date) { create(:bookings_placement_date, bookings_school: school) }
+
+    before do
+      placement_date.subject_specific = true
+      placement_date.subject_ids = school.subjects.pluck(:id)
+      placement_date.save!
     end
 
-    it 'sets #published_at to the current time' do
-      expect(subject.published_at).to eq DateTime.now
-    end
+    subject { placement_date.recur(Date.new(2022, 1, 3)) }
+
+    it { is_expected.to have_attributes(placement_date.attributes.except("created_at", "updated_at", "id", "date")) }
+    it { is_expected.to have_attributes(date: Date.new(2022, 1, 3)) }
   end
 
   context '#has_limited_availability?' do

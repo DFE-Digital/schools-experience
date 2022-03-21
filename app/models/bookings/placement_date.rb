@@ -24,6 +24,8 @@ module Bookings
 
     accepts_nested_attributes_for :subjects, allow_destroy: true
 
+    validates :recurring, inclusion: [true, false]
+
     validates :bookings_school, presence: true
 
     validates :date, presence: true
@@ -40,6 +42,10 @@ module Bookings
       validates :max_bookings_count, numericality: { greater_than: 0, allow_nil: true }
       validates :subjects, presence: true, if: %i[subject_specific? published?]
       validates :subjects, absence: true, unless: :subject_specific?
+    end
+
+    with_options unless: :published? do
+      validate :date_is_weekday
     end
 
     scope :bookable_date, lambda {
@@ -99,11 +105,26 @@ module Bookings
       !virtual?
     end
 
-    def publish
+    def publish!(recurrences = [])
       self.active = true
       self.published_at = DateTime.now
+      self.publishable = true
 
-      save!
+      transaction(requires_new: true) do
+        save! if recurrences.blank?
+        recurrences.map(&method(:recur)).map(&:save!)
+      end
+    end
+
+    def recur(date)
+      dup.tap do |pd|
+        pd.date = date
+        pd.subject_ids = subject_ids
+      end
+    end
+
+    def mark_as_publishable!
+      update(publishable: true)
     end
 
     def experience_type
@@ -118,6 +139,12 @@ module Bookings
       availability_start_date = date - start_availability_offset
       availability_end_date = date - end_availability_offset
       (availability_start_date.past? || availability_start_date.today?) && availability_end_date.future?
+    end
+
+    def date_is_weekday
+      return unless date&.on_weekend?
+
+      errors.add(:date, :on_weekend)
     end
   end
 end

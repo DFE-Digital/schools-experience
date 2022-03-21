@@ -16,8 +16,8 @@ module Schools
       validates :available_for_all_subjects, inclusion: [true, false], if: :supports_subjects
 
       def self.new_from_date(placement_date)
-        # Default fields to unselected
-        if placement_date.published?
+        # Default fields to unselected unless published/publishable.
+        if placement_date.published? || placement_date.publishable?
           new \
             max_bookings_count: placement_date.max_bookings_count,
             has_limited_availability: placement_date.has_limited_availability?,

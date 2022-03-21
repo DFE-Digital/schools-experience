@@ -5,20 +5,26 @@ module Schools
 
       STEPS = %i[
         placement_date
+        recurrences_selection
+        review_recurrences
         placement_detail
         configuration
         subject_selection
+        publish_dates
       ].freeze
 
     private
 
       def next_step(placement_date, current_step = :placement_date)
         next_step = find_next_step(current_step)
+
         if next_step == :COMPLETED
-          placement_date.publish
+          placement_date.publish!(recurrences_session[:confirmed_recurrences])
           auto_enable_school
           redirect_to schools_placement_dates_path
         else
+          @placement_date.mark_as_publishable! if next_step == STEPS.last
+
           redirect_to next_step_path(placement_date, next_step)
         end
       end
@@ -35,6 +41,18 @@ module Schools
         send "#{step}_required?"
       end
 
+      def recurrences_selection_required?
+        @placement_date.recurring? && !@placement_date.published?
+      end
+
+      def review_recurrences_required?
+        recurrences_selection_required?
+      end
+
+      def publish_dates_required?
+        true
+      end
+
       def placement_detail_required?
         true
       end
@@ -45,6 +63,13 @@ module Schools
 
       def subject_selection_required?
         @placement_date.subject_specific?
+      end
+
+      def recurrences_session
+        session["date-recurrences-#{@placement_date.id}"] ||= {
+          recurrences: [],
+          confirmed_recurrences: [],
+        }
       end
     end
   end

@@ -25,10 +25,27 @@ describe Schools::PlacementDates::ConfigurationForm, type: :model do
       end
     end
 
-    context 'when the placement_date has not already been published' do
+    context 'when the placement_date is publishable' do
       let :placement_date do
         create \
-          :bookings_placement_date, bookings_school: school, published_at: nil
+          :bookings_placement_date,
+          publishable: true,
+          bookings_school: school,
+          max_bookings_count: 3,
+          subject_specific: false
+      end
+
+      it 'returns a new subject selection with attributes set' do
+        expect(subject.available_for_all_subjects).to be true
+        expect(subject.max_bookings_count).to eq 3
+        expect(subject.has_limited_availability).to be true
+      end
+    end
+
+    context 'when the placement_date has not already been published/is not publishable' do
+      let :placement_date do
+        create \
+          :bookings_placement_date, bookings_school: school, published_at: nil, publishable: false
       end
 
       it 'returns a new subject selection without attributes set' do
