@@ -36,7 +36,7 @@ export default class extends Controller {
 
     this.locationFormGroupTarget.classList.add("govuk-form-group--error");
 
-    const errorMessage = document.createElement("span");
+    const errorMessage = document.createElement("p");
     errorMessage.textContent = this.errorValue;
     errorMessage.classList.add("govuk-error-message");
 

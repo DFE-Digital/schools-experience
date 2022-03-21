@@ -1,7 +1,7 @@
 import { Application } from "stimulus";
 import AutocompleteController from "autocomplete_controller.js";
 
-describe("SearchController", () => {
+describe("AutocompleteController", () => {
   beforeAll(() => {
     const application = Application.start();
     application.register("autocomplete", AutocompleteController);
@@ -50,7 +50,7 @@ describe("SearchController", () => {
 
       expect(locationFormGroup.classList).toContain("govuk-form-group--error");
 
-      const errorMessage = locationFormGroup.getElementsByTagName("span")[0];
+      const errorMessage = locationFormGroup.getElementsByTagName("p")[0];
       const hiddenErrorMessage = errorMessage.getElementsByTagName("span")[0];
 
       expect(errorMessage.textContent).toEqual(
