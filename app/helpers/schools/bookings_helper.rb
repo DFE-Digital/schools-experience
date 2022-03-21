@@ -14,12 +14,12 @@ module Schools::BookingsHelper
   def attendance_status(booking)
     case booking.attended
     when true
-      tag.strong 'YES', class: 'govuk-tag govuk-tag--available'
+      tag.strong 'YES', class: 'govuk-tag'
     when false
-      tag.strong 'NO', class: 'govuk-tag govuk-tag--unavailable'
+      tag.strong 'NO', class: 'govuk-tag govuk-tag--grey'
     when nil
       if booking.cancelled?
-        tag.strong 'CANCELLED', class: 'govuk-tag govuk-tag--unavailable'
+        tag.strong 'CANCELLED', class: 'govuk-tag govuk-tag--red'
       else
         tag.strong 'NOT SET', class: 'govuk-tag govuk-tag--default'
       end
