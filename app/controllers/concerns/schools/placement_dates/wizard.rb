@@ -42,7 +42,7 @@ module Schools
       end
 
       def recurrences_selection_required?
-        @placement_date.recurring?
+        @placement_date.recurring? && !@placement_date.published?
       end
 
       def review_recurrences_required?

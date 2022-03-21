@@ -78,7 +78,7 @@ describe Schools::PlacementDates::RecurrencesSelection, type: :model do
 
       subject { described_class.new(attributes).recurring_dates }
 
-      it 'returns a correct array of dates (skipping weekends and the start_date)' do
+      it 'returns a correct array of dates (skipping weekends)' do
         expect(subject).to eq [
           next_monday,
           next_monday.next_occurring(:tuesday),

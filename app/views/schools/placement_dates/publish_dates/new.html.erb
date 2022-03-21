@@ -14,13 +14,13 @@
       %>
 
       <%= summary_row \
-        end_availability_offset_label(@placement_date.recurring?),
+        end_availability_offset_label(@placement_date.recurring?, @placement_date.published?),
         "#{@placement_date.end_availability_offset} #{"day".pluralize(@placement_date.end_availability_offset)} before it starts",
         new_schools_placement_date_placement_detail_path(@placement_date)
       %>
 
       <%= summary_row \
-        duration_label(@placement_date.recurring?),
+        duration_label(@placement_date.recurring?, @placement_date.published?),
         "#{@placement_date.duration} #{"day".pluralize(@placement_date.duration)}",
         new_schools_placement_date_placement_detail_path(@placement_date)
       %>

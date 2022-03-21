@@ -14,7 +14,7 @@ module Schools
     private
 
       def set_dates
-        @dates = if @placement_date.recurring?
+        @dates = if @placement_date.recurring? && !@placement_date.published?
                    recurrences_session[:confirmed_recurrences]
                  else
                    [@placement_date.date]
