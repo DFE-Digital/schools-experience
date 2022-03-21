@@ -76,6 +76,11 @@ Then "I should be on the new subject selection page for this date" do
     path_for('new subject selection', placement_date_id: @school.bookings_placement_dates.last.id)
 end
 
+Then "I should be on the new configuration page for this date" do
+  expect(page.current_path).to eq \
+    path_for('new configuration', placement_date_id: @school.bookings_placement_dates.last.id)
+end
+
 Then "I should see a list of subjects the school offers" do
   @school.subjects.each do |subject|
     expect(page).to have_field(subject.name, type: 'checkbox')

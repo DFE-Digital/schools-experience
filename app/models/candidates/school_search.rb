@@ -91,9 +91,14 @@ module Candidates
       }
     end
 
-    delegate :results, to: :school_search
-
-    delegate :total_count, to: :school_search
+    delegate :results,
+       :total_count,
+       :phase_count,
+       :subject_count,
+       :dbs_not_required_count,
+       :disability_confident_count,
+       :parking_count,
+       to: :school_search
 
     def valid_search?
       query.present? ||

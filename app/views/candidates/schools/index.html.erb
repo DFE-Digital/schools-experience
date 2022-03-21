@@ -50,29 +50,33 @@
           <%= f.hidden_field :longitude %>
 
           <div class="filter">
-            <%= f.govuk_collection_check_boxes :phases, Candidates::School.phases, :first, :last,
+            <%= f.govuk_collection_check_boxes :phases, Candidates::School.phases, :first,
+              ->(phase) { "#{phase.last.gsub(/\(|\)/, "")} (#{@search.phase_count(phase.first)})" },
               legend: { text: t("helpers.fieldset.phases") }, hint: { text: t("helpers.hint.phases") } %>
           </div>
 
           <div class="filter">
-            <%= f.govuk_collection_check_boxes :subjects, Candidates::School.subjects, :first, :last,
+            <%= f.govuk_collection_check_boxes :subjects, Candidates::School.subjects, :first,
+              ->(subject) { "#{subject.last} (#{@search.subject_count(subject.first)})" },
               classes: %w(search-subjects-checkboxes), hint: { text: t("helpers.hint.subjects") } %>
           </div>
 
           <div class="filter">
-            <%= f.govuk_collection_check_boxes :dbs_policies, [[2, t("helpers.label.dbs_policies_2")]], :first, :last,
+            <%= f.govuk_collection_check_boxes :dbs_policies, [[2, t("helpers.label.dbs_policies_2")]], :first,
+              ->(dbs_policy) { "#{dbs_policy.last} (#{@search.dbs_not_required_count})" },
               legend: { text: t("helpers.fieldset.dbs_policies") }, hint: { text: t("helpers.hint.dbs_policies") } %>
           </div>
 
           <div class="filter">
             <%= f.govuk_check_boxes_fieldset :disability_confident, multiple: false, legend: { text: t("helpers.fieldset.disability_confident") } do %>
-              <%= f.govuk_check_box :disability_confident, "1", multiple: false, link_errors: true, include_hidden: false, label: { text: t("helpers.label.disability_confident") } %>
+              <%= f.govuk_check_box :disability_confident, "1", multiple: false, link_errors: true, include_hidden: false,
+                label: { text: "#{t("helpers.label.disability_confident")} (#{@search.disability_confident_count})" } %>
             <% end %>
           </div>
 
           <div class="filter">
             <%= f.govuk_check_boxes_fieldset :parking, multiple: false, legend: { text: t("helpers.fieldset.parking") } do %>
-              <%= f.govuk_check_box :parking, "1", multiple: false, link_errors: true, include_hidden: false, label: { text: t("helpers.label.parking") } %>
+              <%= f.govuk_check_box :parking, "1", multiple: false, link_errors: true, include_hidden: false, label: { text: "#{t("helpers.label.parking")} (#{@search.parking_count})" } %>
             <% end %>
           </div>
 

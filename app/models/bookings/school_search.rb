@@ -45,6 +45,53 @@ class Bookings::SchoolSearch < ApplicationRecord
       .per(PER_PAGE)
   end
 
+  def phase_count(phase_id)
+    @phase_count ||= base_query(include_distance: false)
+      .unscope(where: { bookings_schools_phases: :bookings_phase_id })
+      .joins(:bookings_schools_phases)
+      .group("bookings_schools_phases.bookings_phase_id")
+      .count
+
+    @phase_count[phase_id] || 0
+  end
+
+  def subject_count(subject_id)
+    @subject_count ||= base_query(include_distance: false)
+      .unscope(where: { bookings_schools_subjects: :bookings_subject_id })
+      .joins(:bookings_schools_subjects)
+      .group("bookings_schools_subjects.bookings_subject_id")
+      .count
+
+    @subject_count[subject_id] || 0
+  end
+
+  def dbs_not_required_count
+    @dbs_count ||= base_query(include_distance: false)
+      .unscope(where: { bookings_profiles: :dbs_policy_conditions })
+      .group("bookings_profiles.dbs_policy_conditions")
+      .count
+
+    @dbs_count.slice("notrequired", "inschool").values.sum || 0
+  end
+
+  def disability_confident_count
+    @disability_confident_count ||= base_query(include_distance: false)
+      .unscope(where: { bookings_profiles: :disability_confident })
+      .group("bookings_profiles.disability_confident")
+      .count
+
+    @disability_confident_count[true] || 0
+  end
+
+  def parking_count
+    @parking_count ||= base_query(include_distance: false)
+      .unscope(where: { bookings_profiles: :parking_provided })
+      .group("bookings_profiles.parking_provided")
+      .count
+
+    @parking_count[true] || 0
+  end
+
   def total_count
     base_query(include_distance: false).count.tap do |count|
       save_with_result_count(count)
