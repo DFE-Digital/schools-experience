@@ -70,9 +70,5 @@ table#bookings {
   &.govuk-tag--available {
     background-color: govuk-colour('green');
   }
-
-  &.govuk-tag--unavailable {
-    background-color: govuk-colour('red');
-  }
 }
 
