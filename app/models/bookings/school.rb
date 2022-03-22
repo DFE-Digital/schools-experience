@@ -153,6 +153,18 @@ class Bookings::School < ApplicationRecord
 
   scope :with_availability, -> { flexible_with_description.or(fixed_with_available_dates) }
 
+  scope :without_availability, lambda {
+    flexible.where(availability_info: nil).or(
+      fixed.where.not(
+        id: Bookings::School
+          .default_scoped
+          .joins(:available_placement_dates)
+          .except(:select)
+          .select(:id)
+      )
+    )
+  }
+
   scope :with_dbs_policies, lambda { |policies|
     if policies.present?
       joins(:profile).where('bookings_profiles.dbs_policy_conditions IN (?)', policies)

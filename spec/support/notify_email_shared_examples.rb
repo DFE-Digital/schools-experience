@@ -26,7 +26,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
   end
 
   subject do
-    described_class.new(to: to, **personalisation)
+    described_class.new(to: to, **personalisation || {})
   end
 
   before do
@@ -44,7 +44,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
   end
 
   describe 'Initialization' do
-    personalisation.each do |k, _|
+    personalisation&.each do |k, _|
       specify "should raise an error if supplied without :#{k}" do
         { to: to }.merge(personalisation.except(k)).tap do |args|
           expect { described_class.new(args) }.to raise_error(ArgumentError, "missing keyword: :#{k}")
@@ -54,7 +54,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
   end
 
   describe 'Attributes' do
-    personalisation.each do |k, _|
+    personalisation&.each do |k, _|
       specify "should respond to #{k}" do
         expect(subject).to respond_to(k)
       end
@@ -82,7 +82,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
   end
 
   describe 'Template' do
-    subject { described_class.new(to: to, **personalisation) }
+    subject { described_class.new(to: to, **personalisation || {}) }
     let(:template_path) { [Rails.root, "app", "notify", template_folder] }
 
     let(:template) do
