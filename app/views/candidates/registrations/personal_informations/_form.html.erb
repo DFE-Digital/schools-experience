@@ -4,26 +4,27 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">
-      Check if we already have your details
-    </h1>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <p class="govuk-body">
-          Provide the following information so we can check if we already have
-          your details.
-        </p>
-
-        <p>
-        If we do not have your details, we'll register them with the DfE's Get Into Teaching service.
-        Get Into Teaching offers help and advice about becoming a teacher.
-        </p>
-
         <%= form_for personal_information,
               url: candidates_school_registrations_personal_information_path,
               data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
 
           <%= f.govuk_error_summary %>
+
+          <h1 class="govuk-heading-l">
+            Check if we already have your details
+          </h1>
+
+          <p>
+            Provide the following information so we can check if we already have
+            your details.
+          </p>
+
+          <p>
+          If we do not have your details, we'll register them with the DfE's Get Into Teaching service.
+          Get Into Teaching offers help and advice about becoming a teacher.
+          </p>
 
           <%= f.govuk_text_field :first_name, autocomplete: 'given-name',
                 readonly: personal_information.read_only,

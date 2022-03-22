@@ -4,22 +4,22 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      Enter your school experience details
-    </h1>
-
-    <p>
-      These details will help candidates select a school experience.
-    </p>
-
-    <p>
-      You'll be given a chance to check and change the details you enter.
-    </p>
-
     <%= form_for dbs_requirement, url: url, method: method do |f| %>
-      <%= f.govuk_radio_buttons_fieldset :dbs_policy_conditions do %>
-        <%= f.govuk_error_summary %>
+      <%= f.govuk_error_summary %>
 
+      <h1 class="govuk-heading-l">
+        Enter your school experience details
+      </h1>
+
+      <p>
+        These details will help candidates select a school experience.
+      </p>
+
+      <p>
+        You'll be given a chance to check and change the details you enter.
+      </p>
+
+      <%= f.govuk_radio_buttons_fieldset :dbs_policy_conditions do %>
         <%= f.govuk_radio_button :dbs_policy_conditions, 'required', link_errors: true do %>
           <%= f.govuk_text_area :dbs_policy_details, max_words: 50 %>
         <% end %>

@@ -2,9 +2,9 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Cancel request</h1>
-      <%= form_for cancellation, url: candidates_placement_request_cancellation_path(cancellation.placement_request.token) do |f| %>
-        <%= f.govuk_error_summary %>
+    <%= form_for cancellation, url: candidates_placement_request_cancellation_path(cancellation.placement_request.token) do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">Cancel request</h1>
 
       <p>
       You've chosen to cancel your school experience request for <%= f.object.school_name %>.
