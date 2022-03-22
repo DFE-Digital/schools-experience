@@ -4,12 +4,12 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      Which school phases do you offer experience with?
-    </h1>
-
     <%= form_for phases_list, url: url, method: method do |f| %>
       <%= f.govuk_error_summary link_base_errors_to: :primary_1 %>
+
+      <h1 class="govuk-heading-l">
+        Which school phases do you offer experience with?
+      </h1>
 
       <p>
         Select all that apply.

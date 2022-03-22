@@ -2,33 +2,33 @@
 <%= govuk_back_link %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1>You’re already registered with us</h1>
-    <p>
-      The details you have entered match our records.
-      You could have given them to us when you:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>attended one of our teaching events</li>
-      <li>previously used this service</li>
-      <li>
-        registered with our partner
-        <a href="https://getintoteaching.education.gov.uk/" class="govuk-link">
-          Get Into Teaching Information Service
-        </a>
-      </li>
-    </ul>
-
-    <h2>Verify your details to continue</h2>
-
-    <p>We've emailed a verification code to:</p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li><%= @email_address %></li>
-    </ul>
-
     <%= form_for @verification_code, url: candidates_registration_verify_code_path, method: :put do |f| %>
       <%= f.govuk_error_summary %>
+
+      <h1>You’re already registered with us</h1>
+      <p>
+        The details you have entered match our records.
+        You could have given them to us when you:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>attended one of our teaching events</li>
+        <li>previously used this service</li>
+        <li>
+          registered with our partner
+          <a href="https://getintoteaching.education.gov.uk/" class="govuk-link">
+            Get Into Teaching Information Service
+          </a>
+        </li>
+      </ul>
+
+      <h2>Verify your details to continue</h2>
+
+      <p>We've emailed a verification code to:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li><%= @email_address %></li>
+      </ul>
 
       <%= f.hidden_field :email %>
       <%= f.hidden_field :firstname %>

@@ -4,11 +4,11 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      DBS check costs
-    </h1>
-
     <%= form_for @dbs_fee, url: schools_on_boarding_dbs_fee_path do |f| %>
+      <h1 class="govuk-heading-l">
+        DBS check costs
+      </h1>
+
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_number_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.9, label: { class: 'govuk-heading-m' }, prefix_text: '£' %>

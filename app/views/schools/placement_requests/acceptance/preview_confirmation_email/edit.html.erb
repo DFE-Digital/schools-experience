@@ -4,16 +4,17 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1>Send details to candidate</h1>
-
-    <p>
-      The following contains the wording of the confirmation email which will be
-      sent to <%= @placement_request.candidate_name %>
-      to confirm their booking.
-    </p>
-
     <%= form_for @booking, url: schools_placement_request_acceptance_preview_confirmation_email_path(@placement_request.id) do |f| %>
       <%= f.govuk_error_summary %>
+
+      <h1>Send details to candidate</h1>
+
+      <p>
+        The following contains the wording of the confirmation email which will be
+        sent to <%= @placement_request.candidate_name %>
+        to confirm their booking.
+      </p>
+
       <div class="email-preview">
         <p>Dear <%= @placement_request.candidate_name %>,</p>
 

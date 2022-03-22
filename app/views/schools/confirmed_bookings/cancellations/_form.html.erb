@@ -4,11 +4,11 @@
 <%= form_for cancellation, url: schools_booking_cancellation_path do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+      <%= f.govuk_error_summary %>
+
       <h1 class="govuk-heading-l">
         Review and send cancellation email to candidate
       </h1>
-
-      <%= f.govuk_error_summary %>
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

@@ -5,9 +5,10 @@
         url: candidates_school_registrations_confirmation_email_path,
         data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
   <div class="govuk-grid-column-two-thirds">
+    <%= f.govuk_error_summary %>
+
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>You'll receive an email with the following details once you've sent your school experience request.</p>
-    <%= f.govuk_error_summary %>
 
     <h2 class="govuk-heading-m">Personal details</h2>
     <dl class="govuk-summary-list">

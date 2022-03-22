@@ -2,20 +2,20 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      Verify your school experience sign in
-    </h1>
-
-    <p>
-      You now need to <strong>enter the verification code</strong> we've sent to the following email address:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li><%= @verification_code.email %></li>
-    </ul>
-
     <%= form_for @verification_code, url: candidates_signin_code_path, method: :put do |f| %>
       <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        Verify your school experience sign in
+      </h1>
+
+      <p>
+        You now need to <strong>enter the verification code</strong> we've sent to the following email address:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li><%= @verification_code.email %></li>
+      </ul>
 
       <%= f.hidden_field :firstname %>
       <%= f.hidden_field :lastname %>

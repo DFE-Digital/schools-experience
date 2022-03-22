@@ -4,12 +4,12 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      Teacher training details
-    </h1>
-
     <%= form_for teacher_training, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        Teacher training details
+      </h1>
 
       <%= f.govuk_radio_buttons_fieldset :provides_teacher_training do %>
         <%= f.govuk_radio_button :provides_teacher_training, "true", link_errors: true do %>

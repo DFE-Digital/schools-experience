@@ -1,8 +1,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Give feedback on your experience</h1>
     <%= form_for(feedback, url: candidates_booking_feedback_path(params[:booking_token])) do |f| %>
       <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">Give feedback on your experience</h1>
 
       <p>
         Help us improve the school experience service.

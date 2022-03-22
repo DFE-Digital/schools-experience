@@ -7,13 +7,13 @@
   }
 %>
 
-<h1>Confirm attendance</h1>
-
 <%- if @bookings.any? %>
 
   <%= form_for @updated_attendance, url: nil do |f| %>
     <%= f.govuk_error_summary %>
   <% end %>
+
+  <h1>Confirm attendance</h1>
 
   <%= form_with url: schools_confirm_attendance_path, method: 'put' do |f| %>
     <%= pagination_bar @bookings %>
@@ -61,6 +61,8 @@
   <% end %>
 
 <% else %>
+  <h1>Confirm attendance</h1>
+
   <p>
     There are no bookings that need their attendance to be confirmed.
   </p>
