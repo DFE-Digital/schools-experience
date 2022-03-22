@@ -21,17 +21,5 @@ module Schools
     def scope
       current_school.placement_requests.rejected
     end
-
-    def assign_gitis_contacts(requests)
-      return requests if requests.empty?
-
-      contact_ids = requests.map(&:contact_uuid)
-      api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
-      contacts = api.get_schools_experience_sign_ups(contact_ids).index_by(&:candidate_id)
-
-      requests.each do |req|
-        req.candidate.gitis_contact = contacts[req.contact_uuid]
-      end
-    end
   end
 end
