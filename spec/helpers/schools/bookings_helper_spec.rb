@@ -9,7 +9,7 @@ describe Schools::BookingsHelper, type: 'helper' do
 
       it do
         is_expected.to \
-          have_css('strong.govuk-tag.govuk-tag--available', text: 'YES')
+          have_css('strong.govuk-tag', text: 'YES')
       end
     end
 
