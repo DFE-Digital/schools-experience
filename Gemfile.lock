@@ -254,7 +254,7 @@ GEM
     fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
-    geocoder (1.7.3)
+    geocoder (1.7.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
     govuk_design_system_formbuilder (3.0.2)
