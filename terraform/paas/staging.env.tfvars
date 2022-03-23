@@ -11,6 +11,8 @@ environment               = "staging"
 application_environment   = "dfe-school-experience-staging"
 azure_key_vault           = "s105t01-kv"
 azure_resource_group      = "s105t01-staging-vault-resource-group"
+database_plan             = "small-13"
+
 alerts = {
   SchoolExperience_Staging = {
     website_name   = "School Experience (Staging)"
