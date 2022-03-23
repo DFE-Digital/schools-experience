@@ -139,6 +139,10 @@ Then("there should not be a {string} checkbox") do |label_text|
   expect(page).not_to have_css('label', text: label_text)
 end
 
+Then("{string} checkbox should be selected") do |label_text|
+  expect(find(:checkbox, label_text)).to be_checked
+end
+
 Then("{string} radio button should be selected") do |label_text|
   expect(find(:radio_button, label_text)).to be_checked
 end

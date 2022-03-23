@@ -10,9 +10,7 @@ Feature: Dbs required toggling available fees
   Scenario: New DBS requirement choosing Yes
     Given I have completed the DBS Requirements step
     When I am on the 'fees charged' page
-    Then I should see radio buttons for 'DBS check costs' with the following options:
-      | Yes |
-      | No  |
+    Then there should be a "DBS check costs" checkbox
 
   Scenario: New DBS requirement choosing No
     Given I have completed the DBS Requirements step, choosing No
@@ -68,6 +66,6 @@ Feature: Dbs required toggling available fees
     And I choose 'Yes - Outline your DBS requirements' from the 'Do you require candidates to have or get a DBS check?' radio buttons
     And I enter 'Always require DBS check' into the 'Provide details in 50 words or less.' text area
     And I submit the form
-    And I choose 'Yes' from the 'DBS check costs' radio buttons
+    And I check 'DBS check costs'
     When I submit the form
     Then I should be on the 'DBS check costs' page

@@ -110,7 +110,7 @@ Feature: School Profile
       Given my school is fully-onboarded
       And I am on the 'Profile' page
       When I click the 'Change' button for the 'Fees' row
-      And I choose 'Yes' from the 'Administration costs' radio buttons
+      And I check 'Administration costs'
       When I submit the form
       When I have entered the following details into the form:
         | Enter the number of pounds   | 100                        |

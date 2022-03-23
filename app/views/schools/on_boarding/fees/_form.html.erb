@@ -1,4 +1,4 @@
-<%- self.page_title = 'Do you charge fees to cover any of the following?' -%>
+<%- self.page_title = 'Fees' -%>
 
 <%= govuk_back_link javascript: true %>
 
@@ -8,37 +8,35 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
-        Do you charge fees to cover any of the following?
+        Fees
       </h1>
 
       <p>
-        Some schools charge fees to cover the associated costs of running school experience.
+        Some schools charge fees to cover the costs of running school experience.
       </p>
 
       <p>
-        This includes fees to cover administration costs, background and security ‘DBS check’ charges or any other school experience-related costs schools might incur.
+        This includes fees to cover administration costs, DBS checks and any other costs related to school experience.
       </p>
 
-      <% # hidden_field ensures the form is submitted if no radios selected %>
-      <%= f.hidden_field :administration_fees %>
+      <p>
+        Select which fees candidates have to pay.
+      </p>
 
-      <%= f.govuk_radio_buttons_fieldset :administration_fees do %>
-        <%= f.govuk_radio_button :administration_fees, "true", 'aria-label': 'Yes, we charge a fee to cover administration costs', link_errors: true %>
-        <%= f.govuk_radio_button :administration_fees, "false", 'aria-label': 'No, we do not charge a fee to cover administration costs' %>
+      <%= f.govuk_check_boxes_fieldset :administration_fees, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :administration_fees, 1, 0, multiple: false %>
       <% end %>
 
       <% if requires_dbs_check %>
-        <%= f.govuk_radio_buttons_fieldset :dbs_fees do %>
-          <%= f.govuk_radio_button :dbs_fees, "true", 'aria-label': 'Yes, we charge a fee to cover DBS check costs', link_errors: true %>
-          <%= f.govuk_radio_button :dbs_fees, "false", 'aria-label': 'No, we do not charge a fee to cover DBS check costs' %>
+        <%= f.govuk_check_boxes_fieldset :dbs_fees, multiple: false, legend: nil do %>
+          <%= f.govuk_check_box :dbs_fees, 1, 0, multiple: false %>
         <% end %>
       <% else %>
         <%= f.hidden_field :dbs_fees, value: "false" %>
       <% end %>
 
-      <%= f.govuk_radio_buttons_fieldset :other_fees do %>
-        <%= f.govuk_radio_button :other_fees, "true", 'aria-label': 'Yes, we charge a fee to cover other costs', link_errors: true %>
-        <%= f.govuk_radio_button :other_fees, "false", 'aria-label': 'No, we do not charge a fee to cover other costs' %>
+      <%= f.govuk_check_boxes_fieldset :other_fees, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :other_fees, 1, 0, multiple: false %>
       <% end %>
 
       <%= f.govuk_submit 'Continue' %>
