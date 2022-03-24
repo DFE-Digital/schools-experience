@@ -22,6 +22,9 @@ RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
 			postgresql-libs postgresql-dev nodejs yarn \
             chromium=93.0.4577.82-r3 chromium-chromedriver=93.0.4577.82-r3
 
+# Remove once base image ruby:3.1.0-alpine3.15 has been updated
+RUN apk add --no-cache gmp=6.2.1-r1 libretls=3.3.4-r3
+
 # Copy Entrypoint script
 COPY script/docker-entrypoint.sh .
 RUN chmod +x /app/docker-entrypoint.sh
