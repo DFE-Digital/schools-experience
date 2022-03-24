@@ -44,11 +44,6 @@ Style/TrailingCommaInArrayLiteral:
 Style/TrailingCommaInHashLiteral:
   Enabled: false
 
-# Brakeman (which relies on ruby-parser) does not yet support this syntax
-# See https://github.com/seattlerb/ruby_parser/issues/326
-Style/HashSyntax:
-  EnforcedShorthandSyntax: never
-
 # Excluded because all our jobs are set to retry by default, we dont want that
 # logic applied to CronJobs so we are inheriting from ApplicationJobs parent to
 # solve this.

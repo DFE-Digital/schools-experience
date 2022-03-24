@@ -4,7 +4,7 @@
   <%= form_for teaching_preference, url: candidates_school_registrations_teaching_preference_path, data: { controller: 'subject-preference-form' } do |f| %>
     <%= f.govuk_error_summary %>
 
-    <%= f.govuk_collection_radio_buttons :teaching_stage, f.object.available_teaching_stages, :to_s, :to_s, legend: { tag: "h1" } %>
+    <%= f.govuk_collection_radio_buttons :teaching_stage, f.object.available_teaching_stages, :to_s, :to_s, { legend: { tag: "h1" } } %>
 
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

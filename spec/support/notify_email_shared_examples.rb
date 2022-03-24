@@ -47,7 +47,7 @@ shared_examples_for "notify template" do |template_id, personalisation|
     personalisation&.each do |k, _|
       specify "should raise an error if supplied without :#{k}" do
         { to: to }.merge(personalisation.except(k)).tap do |args|
-          expect { described_class.new(args) }.to raise_error(ArgumentError, /required keywords:.*#{k}/)
+          expect { described_class.new(args) }.to raise_error(ArgumentError, "missing keyword: :#{k}")
         end
       end
     end

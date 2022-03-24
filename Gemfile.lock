@@ -203,7 +203,6 @@ GEM
       rack-protection (>= 1.5.5)
       sinatra (>= 1.4.4)
     diff-lcs (1.5.0)
-    digest (3.1.0)
     docile (1.4.0)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
@@ -271,7 +270,6 @@ GEM
     ice_cube (0.16.4)
     invisible_captcha (2.0.0)
       rails (>= 5.0)
-    io-wait (0.2.1)
     json (2.6.1)
     json-jwt (1.13.0)
       activesupport (>= 4.2)
@@ -316,13 +314,6 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    net-protocol (0.1.2)
-      io-wait
-      timeout
-    net-smtp (0.3.1)
-      digest
-      net-protocol
-      timeout
     nio4r (2.5.8)
     nokogiri (1.13.3)
       mini_portile2 (~> 2.8.0)
@@ -555,7 +546,6 @@ GEM
     thor (1.2.1)
     tilt (2.0.10)
     timeliness (0.4.4)
-    timeout (0.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     uk_postcode (2.1.7)
@@ -650,7 +640,6 @@ DEPENDENCIES
   kaminari
   listen (>= 3.0.5)
   meta-tags (~> 2.16, >= 2.16.0)
-  net-smtp
   notifications-ruby-client
   openid_connect
   parallel_tests
@@ -697,7 +686,7 @@ DEPENDENCIES
   yabeda-rails
 
 RUBY VERSION
-   ruby 3.1.0p0
+   ruby 2.7.5p203
 
 BUNDLED WITH
    2.3.4

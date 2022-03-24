@@ -4,7 +4,7 @@ module Schools
       # Ensure that times look *roughly* valid. Note that it is
       # still possible to input invalid ones like '25:00'.
       # FIXME do we need to tighten this up/use a real timepicker?
-      SCHOOL_TIME_FORMAT = %r{\A((\d{1,2})(?:(\.|:))(\d{1,2})\s*((?:(am|pm)))?)|\A([\d{1,2}]\s*(am|pm))|\A\d{1,2}\z}i
+      SCHOOL_TIME_FORMAT = %r{\A((\d{1,2})(?:(\.|:))(\d{1,2})\s*((?:(am|pm)))?)|\A([\d{1,2}]\s*(am|pm))|\A\d{1,2}\z}i.freeze
 
       attribute :start_time, :string
       attribute :end_time, :string

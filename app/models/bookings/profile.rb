@@ -1,6 +1,6 @@
 class Bookings::Profile < ApplicationRecord
   AVAILABLE_INTERVALS = %w[Daily One-off].freeze
-  EMAIL_FORMAT = /\A.*@.*\..*\z/
+  EMAIL_FORMAT = /\A.*@.*\..*\z/.freeze
   DBS_POLICY_CONDITIONS = %w[required inschool notrequired].freeze
 
   FIELDS_TO_NILIFY = %i[teacher_training_info teacher_training_url].freeze

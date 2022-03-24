@@ -2,7 +2,7 @@ class Bookings::Candidate < ApplicationRecord
   attr_accessor :gitis_contact
   alias_method :contact, :gitis_contact
 
-  GITIS_ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/
+  GITIS_ID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/.freeze
 
   # delete_all used since there may be a lot of tokens
   # and the tokens don't have any real logic

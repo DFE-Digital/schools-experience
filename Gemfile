@@ -83,9 +83,6 @@ gem 'validates_timeliness', '>= 5.0.0.beta1'
 
 gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
-# See https://github.com/mikel/mail/pull/1439
-gem 'net-smtp', require: false
-
 # Ignore cloudfront IPs when getting customer IP address
 gem 'actionpack-cloudfront', '>= 1.2.0'
 
