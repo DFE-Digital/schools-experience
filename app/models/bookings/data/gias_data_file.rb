@@ -2,7 +2,7 @@ module Bookings
   module Data
     class GiasDataFile
       EXPECTED_HEADER = '"URN","LA (code)","LA (name)","EstablishmentNumber","EstablishmentName"'.freeze
-      EXPECTED_FIRST_ROW = %r(\A\d{3}\d+,).freeze
+      EXPECTED_FIRST_ROW = %r(\A\d{3}\d+,)
       TEMP_PATH = Rails.root.join('tmp', 'gias').freeze
       attr_reader :today
 
