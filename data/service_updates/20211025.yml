@@ -1,15 +1,15 @@
 ---
-title: 25 October 2021 - 'Under consideration' status tag and new features
+title: "'Under consideration' status tag and new features"
 summary: You can now place a request ‘under consideration’ before you accept it or decline it.
 html_content: |-
   <p>
-    We’ve created a new status tag for requests that are under consideration. 
+    We’ve created a new status tag for requests that are under consideration.
   </p>
   <p>
   This allows you to contact a candidate for more information before you make a decision about their request.
   </p>
   <p>
-  When you open up a request you’ll now have 3 actions to choose from: 
+  When you open up a request you’ll now have 3 actions to choose from:
 
   <ul class="govuk-list govuk-list--bullet">
   <li>‘Accept request’</li>
@@ -17,7 +17,7 @@ html_content: |-
   <li>‘Place under consideration’</li>
   </ul>
   </p>
-  
+
   <p>
   If you place a request ‘under consideration’, you’ll see this new tag next to it in ‘Manage requests’.
   </p>
@@ -33,7 +33,7 @@ html_content: |-
 
   <h3>Flagging duplicate requests</h3>
 
-  <p>If a candidate who has already requested experience at your school tries to make another request, the system will recognise this as a duplicate request. 
+  <p>If a candidate who has already requested experience at your school tries to make another request, the system will recognise this as a duplicate request.
 
   You’ll see the ‘flagged’ status tag next to these requests on the ‘Manage requests’ page. This will help you to decline requests from candidates you’ve already turned down.
   </p>

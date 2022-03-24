@@ -35,4 +35,8 @@ class ServiceUpdate
       COOKIE_KEY
     end
   end
+
+  def title_with_date
+    "#{date.to_formatted_s(:govuk)} - #{title}"
+  end
 end

@@ -77,4 +77,12 @@ describe ServiceUpdate, type: :model do
     subject { described_class.from_param attrs[:date] }
     it { is_expected.to eq service_update }
   end
+
+  describe "#title_with_date" do
+    subject { described_class.new(attrs).title_with_date }
+
+    it "returns the title preceded by the date" do
+      expect(subject).to eq "1 June 2020 - Service Update A"
+    end
+  end
 end
