@@ -1,4 +1,4 @@
-FROM ruby:2.7.5-alpine3.15
+FROM ruby:3.1.0-alpine3.15
 # Remove apk add for gmp 6.2.1-r1 when the base image is updated
 
 ENV RAILS_ENV=production \
@@ -22,9 +22,6 @@ RUN echo "sha-${SHA}" > /etc/school-experience-sha
 RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
 			postgresql-libs postgresql-dev nodejs yarn \
             chromium=93.0.4577.82-r3 chromium-chromedriver=93.0.4577.82-r3
-
-# Remove once base image ruby:2.7.5-alpine3.15 has been updated with latest gmp
-RUN apk add --no-cache gmp=6.2.1-r1 libretls=3.3.4-r3
 
 # Copy Entrypoint script
 COPY script/docker-entrypoint.sh .
