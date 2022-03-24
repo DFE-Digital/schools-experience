@@ -9,6 +9,7 @@ application_instances     = 1
 delayed_jobs              = 1
 environment               = "staging"
 application_environment   = "dfe-school-experience-staging"
+database_plan             = "small-13"
 azure_key_vault           = "s105t01-kv"
 azure_resource_group      = "s105t01-staging-vault-resource-group"
 alerts = {
