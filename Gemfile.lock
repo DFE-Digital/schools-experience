@@ -592,8 +592,6 @@ GEM
       anyway_config (>= 1.0, < 3)
       concurrent-ruby
       dry-initializer
-    yabeda-gc (0.1.1)
-      yabeda (~> 0.6)
     yabeda-http_requests (0.2.0)
       sniffer
       yabeda
@@ -690,7 +688,6 @@ DEPENDENCIES
   webmock
   webrick
   yabeda-delayed_job!
-  yabeda-gc
   yabeda-http_requests
   yabeda-prometheus
   yabeda-puma-plugin
