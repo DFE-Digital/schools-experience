@@ -14,17 +14,17 @@ locals {
 
 
 resource "cloudfoundry_app" "application" {
-  name         = var.paas_application_name
-  space        = data.cloudfoundry_space.space.id
-  command      = "/app/docker-entrypoint.sh ${var.FRONTEND}" 
-  docker_image = var.paas_docker_image
-  stopped      = var.application_stopped
-  instances    = var.application_instances
-  memory       = var.application_memory
-  disk_quota   = var.application_disk
-  strategy     = var.strategy
-  health_check_type = "process"
-  timeout      = var.timeout
+  name              = var.paas_application_name
+  space             = data.cloudfoundry_space.space.id
+  command           = "/app/docker-entrypoint.sh ${var.FRONTEND}" 
+  docker_image      = var.paas_docker_image
+  stopped           = var.application_stopped
+  instances         = var.application_instances
+  memory            = var.application_memory
+  disk_quota        = var.application_disk
+  strategy          = var.strategy
+  health_check_type = "port"
+  timeout           = var.timeout
 
 
   dynamic "service_binding" {
