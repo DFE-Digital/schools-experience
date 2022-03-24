@@ -1,5 +1,4 @@
 FROM ruby:3.1.0-alpine3.15
-# Remove apk add for gmp 6.2.1-r1 when the base image is updated
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -43,6 +42,7 @@ RUN gem install bundler --version='~> 2.3.4' && \
 
 # Add code and compile assets
 COPY . .
+RUN gem install nokogiri:1.13.3
 RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 # Create symlinks for CSS files without digest hashes for use in error pages
