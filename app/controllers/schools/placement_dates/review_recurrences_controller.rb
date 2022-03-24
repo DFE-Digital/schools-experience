@@ -10,7 +10,7 @@ module Schools
       end
 
       def create
-        @review_recurrences = ReviewRecurrences.new(dates: recurring_dates_param)
+        @review_recurrences = ReviewRecurrences.new(dates: recurring_dates_string_param.split(", "))
 
         if @review_recurrences.valid?
           recurrences_session[:confirmed_recurrences] = @review_recurrences.dates
@@ -34,6 +34,10 @@ module Schools
 
       def recurring_dates_param
         params.dig(:schools_placement_dates_review_recurrences, :dates) || []
+      end
+
+      def recurring_dates_string_param
+        params.dig(:schools_placement_dates_review_recurrences, :dates_as_string) || []
       end
 
       def set_placement_date

@@ -11,6 +11,10 @@ module Schools
       def dates
         super&.map(&:to_date)
       end
+
+      def dates_as_string
+        dates.join(", ")
+      end
     end
   end
 end
