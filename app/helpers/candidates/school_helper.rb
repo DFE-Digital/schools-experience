@@ -135,7 +135,7 @@ module Candidates::SchoolHelper
 
   def dlist_item(key, attrs = {}, &block)
     classes = ['govuk-summary-list__row', attrs[:class]].flatten.compact.join(' ')
-    tag.div **attrs.merge(class: classes) do
+    tag.div(**attrs.merge(class: classes)) do
       tag.dt(key, class: 'govuk-summary-list__key') +
         tag.dd(class: 'govuk-summary-list__value', &block)
     end

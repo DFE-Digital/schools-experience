@@ -1,5 +1,5 @@
 class GeocodingRequest
-  POSTCODE_REGEX = %r{([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})}i.freeze
+  POSTCODE_REGEX = %r{([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})}i
 
   def initialize(search_request, region)
     @request = search_request.dup
