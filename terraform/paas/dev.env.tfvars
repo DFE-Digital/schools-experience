@@ -9,4 +9,4 @@ delayed_jobs              = 1
 environment               = "dev"
 azure_key_vault           = "s105d01-kv"
 azure_resource_group      = "s105d01-dev-vault-resource-group"
-database_plan             = "small-12"
+database_plan             = "small-13"
