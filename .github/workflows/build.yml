@@ -93,63 +93,63 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
-
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1.14.1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-
-      - name: Bring up Docker compose Stack
-        run: docker-compose -f docker-compose-paas.yml up -d
-        env:
-          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
-
-      - name: Lint Ruby
-        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
-
-      - name: Keep Rubocop output
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: Rubocop_results
-          path: ${{ github.workspace }}/out/rubocop-result.json
-
-      - name: Run Specs
-        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
-        env:
-          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
-
-      - name:  Keep Unit Tests Results
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: unit_tests
-          path: ${{ github.workspace }}/out/test-report.xml
-
-
-      - name:  Keep Code Coverage Report
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: Code_Coverage
-          path: ${{ github.workspace }}/coverage/coverage.json
+#      - name: set-up-environment
+#        uses: DFE-Digital/github-actions/set-up-environment@master
+#
+#      - uses: Azure/login@v1
+#        with:
+#            creds: ${{ secrets.AZURE_CREDENTIALS }}
+#
+#      - uses: DfE-Digital/keyvault-yaml-secret@v1
+#        id:  keyvault-yaml-secret
+#        with:
+#          keyvault: ${{ secrets.KEY_VAULT}}
+#          secret: SE-INFRA-SECRETS
+#          key: ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK
+#        env:
+#          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+#
+#      - name: Login to GitHub Container Registry
+#        uses: docker/login-action@v1.14.1
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.repository_owner }}
+#          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+#
+#      - name: Bring up Docker compose Stack
+#        run: docker-compose -f docker-compose-paas.yml up -d
+#        env:
+#          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+#
+#      - name: Lint Ruby
+#        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
+#
+#      - name: Keep Rubocop output
+#        if: always()
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: Rubocop_results
+#          path: ${{ github.workspace }}/out/rubocop-result.json
+#
+#      - name: Run Specs
+#        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
+#        env:
+#          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+#
+#      - name:  Keep Unit Tests Results
+#        if: always()
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: unit_tests
+#          path: ${{ github.workspace }}/out/test-report.xml
+#
+#
+#      - name:  Keep Code Coverage Report
+#        if: always()
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: Code_Coverage
+#          path: ${{ github.workspace }}/coverage/coverage.json
 
   security_tests:
     name: Security Tests
@@ -205,50 +205,50 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
-
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: ACTIONS-API-ACCESS-TOKEN
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1.14.1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-
-      - name: Run Cucumber Tests
-        run: |-
-          docker-compose -f docker-compose-paas.yml run --rm \
-            -e RAILS_ENV \
-            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
-            -e NODE \
-            -e NODE_COUNT \
-            db-tasks -p ${PROFILE} cucumber
-        env:
-          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
-          PROFILE: continuous_integration
-          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
-          NODE: ${{ matrix.node }}
-          NODE_COUNT: 2
-
-      - name:  Keep Unit Tests Results
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: cucumber_tests
-          path: ${{ github.workspace }}/out
+#      - name: set-up-environment
+#        uses: DFE-Digital/github-actions/set-up-environment@master
+#
+#      - uses: Azure/login@v1
+#        with:
+#            creds: ${{ secrets.AZURE_CREDENTIALS }}
+#
+#      - uses: DfE-Digital/keyvault-yaml-secret@v1
+#        id:  keyvault-yaml-secret
+#        with:
+#          keyvault: ${{ secrets.KEY_VAULT}}
+#          secret: SE-INFRA-SECRETS
+#          key: ACTIONS-API-ACCESS-TOKEN
+#        env:
+#          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+#
+#      - name: Login to GitHub Container Registry
+#        uses: docker/login-action@v1.14.1
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.repository_owner }}
+#          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+#
+#      - name: Run Cucumber Tests
+#        run: |-
+#          docker-compose -f docker-compose-paas.yml run --rm \
+#            -e RAILS_ENV \
+#            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
+#            -e NODE \
+#            -e NODE_COUNT \
+#            db-tasks -p ${PROFILE} cucumber
+#        env:
+#          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+#          PROFILE: continuous_integration
+#          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
+#          NODE: ${{ matrix.node }}
+#          NODE_COUNT: 2
+#
+#      - name:  Keep Unit Tests Results
+#        if: always()
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: cucumber_tests
+#          path: ${{ github.workspace }}/out
 
   selenium_cucumber_tests:
     name: Chrome Cucumber Tests
@@ -262,51 +262,51 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
-
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: ACTIONS-API-ACCESS-TOKEN
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1.14.1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
-
-      - name: Run Cucumber Tests
-        run: |-
-          docker-compose -f docker-compose-paas.yml run --rm \
-            -e RAILS_ENV \
-            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
-            -e NODE \
-            -e NODE_COUNT \
-            school-experience -p ${PROFILE} cucumber
-        env:
-          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
-          PROFILE: selenium
-          RAILS_ENV: test
-          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
-          NODE: ${{ matrix.node }}
-          NODE_COUNT: 2
-
-      - name:  Keep Unit Tests Results
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: selenium_cucumber_tests
-          path: ${{ github.workspace }}/out
+#      - name: set-up-environment
+#        uses: DFE-Digital/github-actions/set-up-environment@master
+#
+#      - uses: Azure/login@v1
+#        with:
+#            creds: ${{ secrets.AZURE_CREDENTIALS }}
+#
+#      - uses: DfE-Digital/keyvault-yaml-secret@v1
+#        id:  keyvault-yaml-secret
+#        with:
+#          keyvault: ${{ secrets.KEY_VAULT}}
+#          secret: SE-INFRA-SECRETS
+#          key: ACTIONS-API-ACCESS-TOKEN
+#        env:
+#          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+#
+#      - name: Login to GitHub Container Registry
+#        uses: docker/login-action@v1.14.1
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.repository_owner }}
+#          password: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+#
+#      - name: Run Cucumber Tests
+#        run: |-
+#          docker-compose -f docker-compose-paas.yml run --rm \
+#            -e RAILS_ENV \
+#            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
+#            -e NODE \
+#            -e NODE_COUNT \
+#            school-experience -p ${PROFILE} cucumber
+#        env:
+#          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+#          PROFILE: selenium
+#          RAILS_ENV: test
+#          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
+#          NODE: ${{ matrix.node }}
+#          NODE_COUNT: 2
+#
+#      - name:  Keep Unit Tests Results
+#        if: always()
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: selenium_cucumber_tests
+#          path: ${{ github.workspace }}/out
 
   sonarcloud:
     name: SonarCloud
@@ -318,35 +318,35 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
+#      - name: set-up-environment
+#        uses: DFE-Digital/github-actions/set-up-environment@master
 
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+#      - uses: Azure/login@v1
+#        with:
+#            creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: SONAR-TOKEN
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+#      - uses: DfE-Digital/keyvault-yaml-secret@v1
+#        id:  keyvault-yaml-secret
+#        with:
+#          keyvault: ${{ secrets.KEY_VAULT}}
+#          secret: SE-INFRA-SECRETS
+#          key: SONAR-TOKEN
+#        env:
+#          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Download Test Artifacts
-        uses: actions/download-artifact@v2
-        with:
-            path: ${{ github.workspace }}/out/
+#      - name: Download Test Artifacts
+#        uses: actions/download-artifact@v2
+#        with:
+#            path: ${{ github.workspace }}/out/
 
-      - name: Fixup report file paths
-        run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
+#      - name: Fixup report file paths
+#        run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ steps.keyvault-yaml-secret.outputs.SONAR-TOKEN }}
+#      - name: SonarCloud Scan
+#        uses: SonarSource/sonarcloud-github-action@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SONAR_TOKEN: ${{ steps.keyvault-yaml-secret.outputs.SONAR-TOKEN }}
 
   prepare:
     name: Configure Matrix Deployments
@@ -463,7 +463,7 @@ jobs:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
           KEY_VAULT:         ${{ secrets.KEY_VAULT }}
           ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
       - name: Trigger Deployment to ${{matrix.environment}}
         if: matrix.environment != 'Review'
@@ -474,7 +474,7 @@ jobs:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
           KEY_VAULT:         ${{ secrets.KEY_VAULT }}
           ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
       - name: Post sticky pull request comment
         if: matrix.environment == 'Review'
@@ -547,7 +547,7 @@ jobs:
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK 
+          key: SLACK-WEBHOOK
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
