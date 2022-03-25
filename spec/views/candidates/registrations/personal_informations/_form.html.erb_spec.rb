@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/registrations/personal_informations/_form.html.erb", type: :view do
+RSpec.describe "candidates/registrations/personal_informations/_form", type: :view do
   let(:email_selector) do
     "input#candidates-registrations-personal-information-email-field"
   end

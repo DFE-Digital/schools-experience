@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'schools/switch/show.html.erb', type: :view do
+describe 'schools/switch/show', type: :view do
   let(:school) { create(:bookings_school) }
   before { assign :current_school, school }
 

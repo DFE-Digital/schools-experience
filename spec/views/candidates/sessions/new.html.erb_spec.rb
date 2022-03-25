@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/sessions/new.html.erb", type: :view do
+RSpec.describe "candidates/sessions/new", type: :view do
   let(:candidates_session) { Candidates::Session.new(nil) }
 
   context "with unvalidated" do

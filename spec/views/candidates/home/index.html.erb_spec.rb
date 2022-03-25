@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/home/index.html.erb", type: :view do
+RSpec.describe "candidates/home/index", type: :view do
   describe 'content' do
     before { render }
     it "will show the masthead text" do

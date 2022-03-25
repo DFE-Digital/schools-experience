@@ -50,8 +50,7 @@ shared_context "logged in DfE user" do
               sub: user_guid,
               raw_attributes: { sub: user_guid }
             ),
-            urn: urn,
-            "enabled?": true
+            urn: urn
           )
         )
       )
