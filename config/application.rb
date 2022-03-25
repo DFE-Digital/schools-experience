@@ -35,7 +35,7 @@ Prometheus::Client.config.data_store = file_store
 module SchoolExperience
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     config.active_model.i18n_customize_full_message = true
 
