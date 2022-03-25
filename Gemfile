@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.5'
+gem 'rails', '~> 7.0.0'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -15,7 +15,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '~> 7.1'
+gem 'activerecord-postgis-adapter'
 gem 'breasal'
 gem 'geocoder'
 
