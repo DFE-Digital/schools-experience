@@ -4,131 +4,11 @@
 $govuk-blue: #1d70b8;
 $govuk-dark-blue: #003078;
 
-// RESIZING THE CALENDAR
-.calendar-wrapper {
-  $dayWidth: 50px; /*pixel square for each day - default is 39 */
-  $width: $dayWidth * 7;
+.wrapper {
+  display: flex;
 
-  .flatpickr-calendar {
-    width: $width;
-    box-shadow: none;
-  }
-
-  .dayContainer {
-    width: $width;
-    min-width: $width;
-    max-width: $width;
-  }
-
-  .flatpickr-days {
-    width: $width;
-  }
-
-  .flatpickr-day {
-    max-width: $dayWidth;
-    height: $dayWidth;
-    line-height: $dayWidth;
-    font-size: 19px;
-  }
-
-  // HIDING THE INPUT
-  input,
-  label {
-    display: none;
-  }
-
-  // STYLING THE MONTH/YEAR TOP SEGMENT
-  .flatpickr-months {
-    @mixin month-year-text {
-      font-size: 19px !important;
-      font-weight: 700 !important;
-      color: $govuk-blue;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .flatpickr-month {
-      padding-bottom: 20px;
-
-      .flatpickr-current-month {
-        @include month-year-text;
-        pointer-events: none;
-
-        .cur-year {
-          @include month-year-text;
-        }
-
-        // Hides the year selection arrows
-        .arrowUp,
-        .arrowDown {
-          display: none;
-        }
-
-        // Reduces width because of missing selection arrows
-        .numInputWrapper {
-          width: 5ch;
-        }
-      }
-    }
-
-    .flatpickr-next-month,
-    .flatpickr-prev-month {
-      stroke-width: 3;
-      stroke: $govuk-blue;
-    }
-  }
-
-  .flatpickr-weekday {
-    font-size: 19px;
-    color: black;
-  }
-
-  .flatpickr-days {
-    .dayContainer {
-      margin-top: 5px; // stop close button clipping
-    }
-
-    .flatpickr-day {
-      &.flatpickr-disabled,
-      &.nextMonthDay,
-      &.prevMonthDay {
-        color: silver;
-      }
-
-      &.selected {
-        color: white;
-        font-weight: 700;
-        background: none;
-        border: 1px transparent solid;
-
-        &:before {
-          // Using pseudo element to prevent content shift
-          content: "";
-          width: 85%;
-          height: 85%;
-          border-radius: 100%;
-          background-color: $govuk-blue;
-          position: absolute;
-          z-index: -99;
-          left: 0;
-          right: 0;
-          top: 0;
-          margin: auto;
-          bottom: 0;
-          text-align: center;
-        }
-      }
-
-      &.today {
-        border-color: transparent;
-      }
-    }
-  }
-
-  .close-button {
+  @mixin close-button {
     position: absolute;
-    top: -3px;
-    right: -3px;
     display: block;
     box-sizing: border-box;
     width: 20px;
@@ -140,4 +20,174 @@ $govuk-dark-blue: #003078;
     background: linear-gradient(-45deg, transparent 0%, transparent 46%, white 46%, white 56%, transparent 56%, transparent 100%), linear-gradient(45deg, transparent 0%, transparent 46%, white 46%, white 56%, transparent 56%, transparent 100%);
     background-color: $govuk-dark-blue;
   }
+
+  .calendar-wrapper {
+    .inline {
+      display: inline-block;
+    }
+
+    // RESIZING THE CALENDAR
+    $dayWidth: 50px; /*pixel square for each day - default is 39 */
+    $width: $dayWidth * 7;
+
+    .flatpickr-calendar {
+      width: $width;
+      box-shadow: none;
+    }
+
+    .dayContainer {
+      width: $width;
+      min-width: $width;
+      max-width: $width;
+    }
+
+    .flatpickr-days {
+      width: $width;
+    }
+
+    .flatpickr-day {
+      max-width: $dayWidth;
+      height: $dayWidth;
+      line-height: $dayWidth;
+      font-size: 19px;
+    }
+
+    // HIDING THE INPUT
+    input,
+    label {
+      display: none;
+    }
+
+    // STYLING THE MONTH/YEAR TOP SEGMENT
+    .flatpickr-months {
+      @mixin month-year-text {
+        font-size: 19px !important;
+        font-weight: 700 !important;
+        color: $govuk-blue;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .flatpickr-month {
+        padding-bottom: 20px;
+
+        .flatpickr-current-month {
+          @include month-year-text;
+          pointer-events: none;
+
+          .cur-year {
+            @include month-year-text;
+            display: inline-block;
+          }
+
+          // Hides the year selection arrows
+          .arrowUp,
+          .arrowDown {
+            display: none;
+          }
+
+          // Reduces width because of missing selection arrows
+          .numInputWrapper {
+            width: 5ch;
+          }
+        }
+      }
+
+      .flatpickr-next-month,
+      .flatpickr-prev-month {
+        stroke-width: 3;
+        stroke: $govuk-blue;
+      }
+    }
+
+    .flatpickr-weekday {
+      font-size: 19px;
+      color: black;
+    }
+
+    .flatpickr-days {
+      .dayContainer {
+        margin-top: 5px; // stop close button clipping
+      }
+
+      .flatpickr-day {
+        &.flatpickr-disabled,
+        &.nextMonthDay,
+        &.prevMonthDay {
+          color: silver;
+        }
+
+        &.selected {
+          color: white;
+          font-weight: 700;
+          background: none;
+          border: 1px transparent solid;
+
+          &:before {
+            // Using pseudo element to prevent content shift
+            content: "";
+            width: 85%;
+            height: 85%;
+            border-radius: 100%;
+            background-color: $govuk-blue;
+            position: absolute;
+            z-index: -99;
+            left: 0;
+            right: 0;
+            top: 0;
+            margin: auto;
+            bottom: 0;
+            text-align: center;
+          }
+        }
+
+        &.today {
+          border-color: transparent;
+        }
+      }
+    }
+
+    .close-button {
+      top: -3px;
+      right: -3px;
+      @include close-button;
+    }
+  }
+
+  .date-tags-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 180px);
+    grid-template-rows: repeat(8, 40px); // FIX
+    margin-top: 50px;
+
+    .tag {
+      background: $govuk-blue;
+      padding: 5px;
+      border-radius: 4px;
+      margin: 5px;
+      color: white;
+      text-align: center;
+      text-indent: 10px; // to account for close button
+
+      &:before {
+        content: "";
+        @include close-button;
+        //padding-right: 15px;
+      }
+
+      &:hover {
+        background: $govuk-dark-blue;
+      }
+
+      &:active {
+        box-shadow: inset 0 0 0 2px;
+        border: solid 1px #0b0c0c;
+        outline: 3px solid #fd0;
+      }
+    }
+  }
+}
+
+.button-wrapper {
+  margin-top: 30px;
 }

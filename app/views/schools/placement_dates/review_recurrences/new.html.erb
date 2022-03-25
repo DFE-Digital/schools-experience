@@ -5,13 +5,22 @@
 <%= form_for @review_recurrences, url: schools_placement_date_review_recurrences_path(@placement_date), method: "post", data: { controller: :calendar } do |f| %>
   <%= f.govuk_error_summary %>
 
-  <div class="calendar-wrapper">
-    <%= f.govuk_text_field :dates_as_string,
-                           class: "calendar",
-                           label: { text: nil },
-                           data: { "calendar-target": "input" } %>
+  <div class="wrapper">
+    <div class="calendar-wrapper">
+      <%= f.text_field :dates_as_string,
+                       class: "calendar",
+                       label: { text: nil },
+                       data: { "calendar-target": "input" } %>
+    </div>
+
+    <hr/>
+
+    <div class="date-tags-wrapper" data-calendar-target="tagsWrapper"></div>
   </div>
 
 
-  <%= f.govuk_submit "Check dates and continue" %>
+  <div class="button-wrapper">
+    <%= f.govuk_submit "Check dates and continue" %>
+  </div>
+
 <% end %>
