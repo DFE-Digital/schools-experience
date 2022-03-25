@@ -65,7 +65,10 @@ describe Bookings::PlacementDate, type: :model do
 
         context 'updating expired placement dates' do
           let(:expired_pd) { build(:bookings_placement_date, :active, :in_the_past) }
-          before { expired_pd.save(validate: false) }
+          before do
+            expired_pd.bookings_school = school
+            expired_pd.save(validate: false)
+          end
 
           specify 'should allow updates' do
             expect(expired_pd.update(active: false)).to be(true)

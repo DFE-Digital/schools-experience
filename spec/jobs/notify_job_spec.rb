@@ -70,7 +70,7 @@ shared_examples "notify_job" do
         it 'lets the error propogate to application job' do
           expect(described_class.queue_adapter).to \
             have_received(:enqueue_at).with \
-              an_instance_of(described_class), retry_in
+              an_instance_of(described_class), be_within(3.seconds).of(retry_in)
         end
       end
     end
