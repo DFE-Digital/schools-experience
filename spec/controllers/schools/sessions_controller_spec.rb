@@ -3,6 +3,8 @@ require_relative 'session_context'
 
 describe Schools::SessionsController, type: :request do
   shared_context 'oidc callback' do
+    include_context "session double"
+
     let(:code) { 'OTA4MTU0ZTgtMjBhZC00YmNmLThmMmQtOGZiZDhmNTYxMTA2vLY8wh-MpR-WR3vsn4C2J_oBkN-KGjD9-XVcDFS8UyADwt5DrIrYe0Gjgsj2gpvAt5L2cka5n8ZZmiojr6zgWg' }
     let(:session_state) { '652b5afc63d7c4875c42de4231f66e4940226f840b2a7ea02441544751ea0a2a.h3bd7bc2438a84dc' }
     let(:access_token) { 'abc123' }
@@ -10,12 +12,11 @@ describe Schools::SessionsController, type: :request do
     let(:urn) { 123_456 }
     let(:school_name) { "Springfield Elementary" }
 
+    let(:session_hash) { {} }
+
     before do
-      allow_any_instance_of(ActionDispatch::Request)
-        .to receive(:session).and_return(
-          return_url: return_url,
-          state: state
-        )
+      session_hash[:return_url] = return_url
+      session_hash[:state] = state
     end
 
     before do
@@ -170,12 +171,9 @@ describe Schools::SessionsController, type: :request do
       include_context 'oidc callback'
 
       before do
-        allow_any_instance_of(ActionDispatch::Request)
-          .to receive(:session).and_return(
-            return_url: return_url,
-            state: state,
-            current_user: { name: 'Milhouse' }
-          )
+        session_hash[:return_url] = return_url
+        session_hash[:state] = state
+        session_hash[:current_user] = { name: 'Milhouse' }
       end
 
       subject { get auth_callback_path }

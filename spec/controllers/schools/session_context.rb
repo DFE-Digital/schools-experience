@@ -1,4 +1,6 @@
 shared_context "logged in DfE user" do
+  include_context "session double"
+
   let(:urn) { 123_456 }
   let(:user_guid) { '33333333-4444-5555-6666-777777777777' }
   let(:dfe_signin_school_urn) { 123_489 }
@@ -40,20 +42,13 @@ shared_context "logged in DfE user" do
       @current_user_school = FactoryBot.create(:bookings_school, urn: urn)
     end
 
-    allow_any_instance_of(ActionDispatch::Request)
-      .to(
-        receive(:session).and_return(
-          OpenStruct.new(
-            current_user: OpenStruct.new(
-              given_name: 'Martin',
-              family_name: 'Prince',
-              sub: user_guid,
-              raw_attributes: { sub: user_guid }
-            ),
-            urn: urn
-          )
-        )
-      )
+    session_hash[:urn] = urn
+    session_hash[:current_user] = OpenStruct.new(
+      given_name: 'Martin',
+      family_name: 'Prince',
+      sub: user_guid,
+      raw_attributes: { sub: user_guid }
+    )
 
     stub_request(:get, "https://some-signin-host.signin.education.gov.uk/users/#{user_guid}/organisations")
       .to_return(
