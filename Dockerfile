@@ -1,4 +1,5 @@
 FROM ruby:3.1.0-alpine3.15
+# remove upgrade zlib-dev when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -17,10 +18,14 @@ CMD ["-m", "--frontend" ]
 ARG SHA
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
+# remove upgrade zlib-dev when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
+# hadolint ignore=DL3018
+RUN apk update && apk add -Uu --no-cache zlib-dev
+
 # hadolint ignore=DL3018
 RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
 			postgresql-libs postgresql-dev nodejs yarn \
-            chromium=93.0.4577.82-r3 chromium-chromedriver=93.0.4577.82-r3
+            chromium=99.0.4844.84-r0 chromium-chromedriver=99.0.4844.84-r0
 
 # Remove once base image ruby:3.1.0-alpine3.15 has been updated
 RUN apk add --no-cache gmp=6.2.1-r1 libretls=3.3.4-r3
