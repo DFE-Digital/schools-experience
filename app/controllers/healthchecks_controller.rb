@@ -1,4 +1,6 @@
 class HealthchecksController < ApplicationController
+  skip_before_action :http_basic_authenticate, if: :skip_basic_auth?
+
   def deployment
     @healthcheck = Healthcheck.new
     status = @healthcheck.to_h[:healthy] ? :ok : :internal_server_error
@@ -27,5 +29,11 @@ class HealthchecksController < ApplicationController
     whitelist = ENV['CANDIDATE_URN_WHITELIST'].blank? ? [] : ENV['CANDIDATE_URN_WHITELIST'].to_s.strip.split(%r{[\s,]+}).map(&:to_i)
 
     render json: whitelist
+  end
+
+private
+
+  def skip_basic_auth?
+    requires_basic_auth? && action_name != "show"
   end
 end

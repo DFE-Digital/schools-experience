@@ -1,10 +1,16 @@
 class ApplicationController < ActionController::Base
   rescue_from ActionController::InvalidAuthenticityToken, with: :session_expired
 
+  before_action :http_basic_authenticate, if: :requires_basic_auth?
+
   CRAWLABLE_PATHS = %w[/ /candidates /robots.txt /sitemap.xml].freeze
   before_action :add_x_robots_tag
 
 protected
+
+  def requires_basic_auth?
+    ENV['SECURE_USERNAME'].present? && ENV['SECURE_PASSWORD'].present? && !Rails.env.test?
+  end
 
   def add_x_robots_tag(set_to_all: false)
     headers["X-Robots-Tag"] = if set_to_all || request.path.in?(CRAWLABLE_PATHS)
