@@ -17,11 +17,11 @@ module Conversions
             metres.to_f / METRES_IN_MILE
           elsif precision.zero?
             (metres.to_f / METRES_IN_MILE)
-              .to_s(:rounded, precision: 0)
+              .to_fs(:rounded, precision: 0)
               .to_i
           else
             (metres.to_f / METRES_IN_MILE)
-              .to_s(:rounded, precision: precision)
+              .to_fs(:rounded, precision: precision)
               .to_f
           end
         end
