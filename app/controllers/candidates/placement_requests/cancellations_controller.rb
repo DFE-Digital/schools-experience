@@ -23,7 +23,8 @@ module Candidates
           notify_candidate @cancellation
           @cancellation.sent!
 
-          Bookings::Gitis::SchoolExperience.from_cancellation(@cancellation, :cancelled_by_candidate)
+          status = placement_request.booking.present? ? :cancelled_by_candidate : :withdrawn
+          Bookings::Gitis::SchoolExperience.from_cancellation(@cancellation, status)
             .write_to_gitis_contact(@cancellation.contact_uuid)
 
           redirect_to candidates_placement_request_cancellation_path \

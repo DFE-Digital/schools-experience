@@ -212,12 +212,26 @@ describe Candidates::PlacementRequests::CancellationsController, type: :request 
             expect(placement_request).to be_closed
           end
 
-          it 'creates a school experience and sends it to the API' do
+          it 'creates a withdrawn school experience and sends it to the API' do
             expect(Bookings::Gitis::SchoolExperience).to \
-              have_received(:from_cancellation).with(instance_of(Bookings::PlacementRequest::Cancellation), :cancelled_by_candidate)
+              have_received(:from_cancellation).with(instance_of(Bookings::PlacementRequest::Cancellation), :withdrawn)
 
             expect(school_experience).to \
               have_received(:write_to_gitis_contact).with(placement_request.contact_uuid)
+          end
+
+          context "when the request has been accepted by the school (it has a booking)" do
+            let :placement_request do
+              FactoryBot.create :placement_request, :booked
+            end
+
+            it 'creates a cancelled by candidate school experience and sends it to the API' do
+              expect(Bookings::Gitis::SchoolExperience).to \
+                have_received(:from_cancellation).with(instance_of(Bookings::PlacementRequest::Cancellation), :cancelled_by_candidate)
+
+              expect(school_experience).to \
+                have_received(:write_to_gitis_contact).with(placement_request.contact_uuid)
+            end
           end
 
           it 'redirects to the show action' do
