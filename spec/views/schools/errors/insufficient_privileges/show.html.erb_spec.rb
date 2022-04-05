@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'schools/errors/insufficient_privileges/show.html.erb' do
+describe 'schools/errors/insufficient_privileges/show' do
   subject { render && response }
 
   before { assign "organisation_access_url", "/organisation" }

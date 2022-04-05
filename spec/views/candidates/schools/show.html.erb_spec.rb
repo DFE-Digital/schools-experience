@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/schools/show.html.erb", type: :view do
+RSpec.describe "candidates/schools/show", type: :view do
   let(:urn) { create(:bookings_school).urn }
   let(:school) { Candidates::School.find(urn) }
 

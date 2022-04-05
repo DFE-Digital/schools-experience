@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'schools/change_schools/show.html.erb', type: :view do
+describe 'schools/change_schools/show', type: :view do
   before { allow(Rails.application.config.x).to receive(:dfe_sign_in_api_enabled).and_return(true) }
 
   let(:school) { create(:bookings_school) }

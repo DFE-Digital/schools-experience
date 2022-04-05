@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/registrations/sign_ins/show.html.erb", type: :view do
+RSpec.describe "candidates/registrations/sign_ins/show", type: :view do
   let(:verification_code) do
     Candidates::VerificationCode.new(
       email: 'test@testymctest.com',

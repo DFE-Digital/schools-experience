@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/schools/index.html.erb", type: :view do
+RSpec.describe "candidates/schools/index", type: :view do
   context 'with fresh search' do
     before do
       assign(:search, Candidates::SchoolSearch.new)

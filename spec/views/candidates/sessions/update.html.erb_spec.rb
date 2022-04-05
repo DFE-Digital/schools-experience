@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/sessions/update.html.erb", type: :view do
+RSpec.describe "candidates/sessions/update", type: :view do
   before { render }
 
   it "should explain the session token is invalid" do

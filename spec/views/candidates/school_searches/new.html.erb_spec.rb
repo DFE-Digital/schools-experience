@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "candidates/school_searches/new.html.erb", type: :view do
+RSpec.describe "candidates/school_searches/new", type: :view do
   let(:whitelist) { '' }
 
   before do
