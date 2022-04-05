@@ -131,7 +131,7 @@ describe Schools::Attendance do
         expect(Bookings::Gitis::SchoolExperience).to \
           have_received(:from_booking).with(instance_of(Bookings::Booking), :completed).exactly(2).times
         expect(Bookings::Gitis::SchoolExperience).to \
-          have_received(:from_booking).with(instance_of(Bookings::Booking), :withdrawn).exactly(1).time
+          have_received(:from_booking).with(instance_of(Bookings::Booking), :did_not_attend).exactly(1).time
         expect(school_experience).to \
           have_received(:write_to_gitis_contact).with(booking.contact_uuid)
       end

@@ -32,7 +32,7 @@ module Schools
     def update_gitis
       bookings_params.slice(*updated_bookings).each do |booking_id, attended|
         fetch(booking_id).tap do |booking|
-          status = ActiveModel::Type::Boolean.new.cast(attended) ? :completed : :withdrawn
+          status = ActiveModel::Type::Boolean.new.cast(attended) ? :completed : :did_not_attend
           Bookings::Gitis::SchoolExperience.from_booking(booking, status)
             .write_to_gitis_contact(booking.contact_uuid)
         end

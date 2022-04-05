@@ -84,7 +84,7 @@ describe Schools::ConfirmAttendanceController, type: :request do
     context "when did not attend" do
       it 'creates a school experience and sends it to the API' do
         expect(Bookings::Gitis::SchoolExperience).to \
-          have_received(:from_booking).with(instance_of(Bookings::Booking), :withdrawn)
+          have_received(:from_booking).with(instance_of(Bookings::Booking), :did_not_attend)
         expect(school_experience).to \
           have_received(:write_to_gitis_contact).with(attended.contact_uuid)
       end
