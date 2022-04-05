@@ -28,8 +28,6 @@
       <%= govuk_link_to 'Search for school experience', new_candidates_school_search_path, class: "govuk-!-margin-bottom-0" %>
     </p>
 
-    <% if Feature.enabled?(:candidates_dashboard)  %>
-      <%= govuk_button_to "Visit your dashboard", candidates_dashboard_path, method: :get, secondary: true %>
-    <% end %>
+    <%= govuk_button_to "Visit your dashboard", candidates_dashboard_path, method: :get, secondary: true %>
   </div>
 </div>

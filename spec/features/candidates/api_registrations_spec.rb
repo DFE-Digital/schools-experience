@@ -17,8 +17,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   before do
     allow_any_instance_of(Candidates::Registrations::RegistrationSession).to \
       receive(:uuid).and_return(uuid)
-
-    allow(Feature).to receive(:enabled?).with(:candidates_dashboard) { true }
   end
 
   feature 'Candidate Registration' do

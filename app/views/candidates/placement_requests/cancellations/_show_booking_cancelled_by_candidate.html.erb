@@ -27,13 +27,10 @@
       <%= chat_service %>
     </p>
 
-
-    <% if Feature.enabled?(:candidates_dashboard) %>
-      <h2 class="govuk-heading-m">View and request more school experience</h2>
-      <p>
-        <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
-      </p>
-    <% end %>
+    <h2 class="govuk-heading-m">View and request more school experience</h2>
+    <p>
+      <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
+    </p>
   </div>
 </div>
 
