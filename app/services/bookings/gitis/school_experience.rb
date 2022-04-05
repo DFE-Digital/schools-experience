@@ -9,19 +9,21 @@ module Bookings
 
       # requested: placement requested by candidate
       # confirmed: placement request accepted by school
-      # withdrawn: candidate didn't attend placement
-      # rejected: request rejected by school
-      # cancelled_by_school: cancelled by school
-      # cancelled_by_candidate: cancelled by candidate
+      # did_not_attend: candidate did not attend placement
+      # rejected: request rejected by school (before being accepted)
+      # cancelled_by_school: cancelled by school (after being accepted)
+      # cancelled_by_candidate: cancelled by candidate (after being accepted)
       # completed: candidate attended placement
+      # withdrawn: placement withdrawn by candidate (before being accepted)
       GITIS_STATUS = {
         requested: 1,
         confirmed: 222_750_000,
-        withdrawn: 222_750_001,
+        did_not_attend: 222_750_001,
         rejected: 222_750_002,
         cancelled_by_school: 222_750_003,
         cancelled_by_candidate: 222_750_004,
-        completed: 222_750_005
+        completed: 222_750_005,
+        withdrawn: 222_750_006,
       }.freeze.with_indifferent_access
 
       attr_reader :date, :urn, :school_name, :teaching_subject_name, :duration, :status

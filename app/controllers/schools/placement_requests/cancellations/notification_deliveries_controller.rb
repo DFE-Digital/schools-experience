@@ -15,7 +15,7 @@ module Schools
           notify_candidate @cancellation
           @cancellation.sent!
 
-          Bookings::Gitis::SchoolExperience.from_cancellation(@cancellation, :cancelled_by_school)
+          Bookings::Gitis::SchoolExperience.from_cancellation(@cancellation, :rejected)
             .write_to_gitis_contact(@cancellation.contact_uuid)
 
           redirect_to \

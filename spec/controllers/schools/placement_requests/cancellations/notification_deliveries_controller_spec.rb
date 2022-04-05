@@ -88,7 +88,7 @@ describe Schools::PlacementRequests::Cancellations::NotificationDeliveriesContro
 
       it 'creates a school experience and sends it to the API' do
         expect(Bookings::Gitis::SchoolExperience).to \
-          have_received(:from_cancellation).with(instance_of(Bookings::PlacementRequest::Cancellation), :cancelled_by_school)
+          have_received(:from_cancellation).with(instance_of(Bookings::PlacementRequest::Cancellation), :rejected)
 
         expect(school_experience).to \
           have_received(:write_to_gitis_contact).with(placement_request.contact_uuid)
