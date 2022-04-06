@@ -24,6 +24,8 @@ class Schools::PlacementDatesController < Schools::BaseController
 
     if @placement_date.valid?
       @placement_date.save
+      recurrences_session[:recurrences] = [@placement_date.date]
+
       next_step @placement_date
     else
       render :new

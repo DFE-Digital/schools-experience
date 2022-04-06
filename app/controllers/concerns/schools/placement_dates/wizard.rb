@@ -5,7 +5,6 @@ module Schools
 
       STEPS = %i[
         placement_date
-        recurrences_selection
         review_recurrences
         placement_detail
         configuration
