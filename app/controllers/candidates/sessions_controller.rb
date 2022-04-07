@@ -47,11 +47,4 @@ private
   def session_params
     params.require(:candidates_session).permit(:email, :firstname, :lastname)
   end
-
-  def deliver_signin_link(email_address, token)
-    NotifyEmail::CandidateSigninLink.new(
-      to: email_address,
-      confirmation_link: candidates_signin_confirmation_url(token)
-    ).despatch_later!
-  end
 end
