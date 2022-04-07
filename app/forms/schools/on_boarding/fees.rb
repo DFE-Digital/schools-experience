@@ -7,11 +7,13 @@ module Schools
 
       def self.compose(administration_fees, dbs_fees, other_fees)
         selected_fees = []
-
         selected_fees << "administration_fees" if administration_fees
         selected_fees << "dbs_fees" if dbs_fees
         selected_fees << "other_fees" if other_fees
-        selected_fees << "none" if !administration_fees && !dbs_fees & !other_fees
+
+        unless [administration_fees, dbs_fees, other_fees].all?(&:nil?)
+          selected_fees << "none" if !administration_fees && !dbs_fees & !other_fees
+        end
 
         new(selected_fees: selected_fees)
       end
