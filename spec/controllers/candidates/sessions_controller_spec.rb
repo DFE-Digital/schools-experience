@@ -41,13 +41,32 @@ RSpec.describe Candidates::SessionsController, type: :request do
     context "for unknown user" do
       include_context "api candidate not matched back"
 
-      before do
-        post candidates_signin_path, params: { candidates_session: valid_creds }
+      context "when less than 3 failed attempts" do
+        before do
+          2.times do
+            post candidates_signin_path, params: { candidates_session: valid_creds }
+          end
+        end
+
+        it "renders an error page with a link to try again" do
+          expect(response).to have_http_status(:success)
+          expect(response.body).to match('We didn’t recognise the email address you entered')
+          expect(response.body).to match("Try entering your details again.")
+        end
       end
 
-      it "returns http success" do
-        expect(response).to have_http_status(:success)
-        expect(response.body).to match('Verify your school experience sign in')
+      context "when there have been more than 2 failed attempts" do
+        before do
+          3.times do
+            post candidates_signin_path, params: { candidates_session: valid_creds }
+          end
+        end
+
+        it "renders an error page" do
+          expect(response).to have_http_status(:success)
+          expect(response.body).to match('We didn’t recognise the email address you entered')
+          expect(response.body).to match("To login, you need to be registered with us.")
+        end
       end
     end
 
