@@ -5,7 +5,8 @@ import '../stylesheets/calendar.scss';
 export default class extends Controller {
   static targets = [
     "input",
-    "tagsWrapper"
+    "tagsWrapper",
+    "startAt"
   ];
 
   async connect() {
@@ -25,10 +26,13 @@ export default class extends Controller {
         this.#addTags(selectedDates, instance)
       },
       onChange: (selectedDates, dateString, instance) => {
+        console.log(this.startAtTarget.value)
         this.#addTags(selectedDates, instance)
       },
       disable: [this.#disableWeekends],
-      mode: "multiple"
+      mode: "multiple",
+      minDate: this.startAtTarget.value,
+      maxDate: this.#addMonthsToDate(this.startAtTarget.value, 4)
     });
   }
 
@@ -80,5 +84,10 @@ export default class extends Controller {
 
   #sortDates = (dates) => {
     return dates.sort((a, b) => a.getTime() - b.getTime());
+  }
+
+  #addMonthsToDate = (dateString, numberOfMonths) => {
+    const date = new Date(dateString)
+    return new Date(date.setMonth(date.getMonth() + numberOfMonths));
   }
 }
