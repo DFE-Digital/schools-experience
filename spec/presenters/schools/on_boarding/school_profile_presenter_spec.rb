@@ -310,13 +310,22 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
   end
 
   context '#dress_code' do
-    let :profile do
-      FactoryBot.build :school_profile, :with_candidate_dress_code
+    context "when dress code options are selected" do
+      let(:profile) { build :school_profile, :with_candidate_dress_code }
+
+      it 'returns the selected dress code options' do
+        expect(subject.dress_code).to \
+          eq "Business dress, cover up tattoos, remove piercings, smart casual, and must have nice hat"
+      end
     end
 
-    it 'returns the selected dress code options' do
-      expect(subject.dress_code).to \
-        eq "Business dress, cover up tattoos, remove piercings, smart casual, and must have nice hat"
+    context "when 'none' is selected" do
+      let(:profile) { build :school_profile, :with_none_candidate_dress_code }
+
+      it 'returns the selected dress code options' do
+        expect(subject.dress_code).to \
+          eq "None"
+      end
     end
   end
 

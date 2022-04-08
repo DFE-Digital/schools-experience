@@ -183,6 +183,10 @@ module Schools
           output << @school_profile.candidate_dress_code.other_dress_requirements_detail
         end
 
+        if @school_profile.candidate_dress_code.none?
+          output << 'none'
+        end
+
         output.to_sentence.capitalize
       end
 
