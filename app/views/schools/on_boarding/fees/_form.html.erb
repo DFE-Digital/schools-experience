@@ -29,8 +29,6 @@
 
         <% if requires_dbs_check %>
           <%= f.govuk_check_box :selected_fees, "dbs_fees" %>
-        <% else %>
-          <%= f.hidden_field :dbs_fees, value: "false" %>
         <% end %>
 
         <%= f.govuk_check_box :selected_fees, "other_fees" %>
