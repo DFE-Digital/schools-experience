@@ -11,11 +11,7 @@
       View and request more school experience
     </h2>
     <p>
-      <% if Feature.enabled?(:candidates_dashboard)  %>
-        <%= link_to "Your requests and bookings", candidates_dashboard_path %>
-      <% else %>
-        <%= link_to "Find more school experience", candidates_root_path %>
-      <% end %>
+      <%= link_to "Your requests and bookings", candidates_dashboard_path %>
     </p>
   </div>
 </div>

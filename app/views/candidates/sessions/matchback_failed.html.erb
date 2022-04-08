@@ -1,0 +1,7 @@
+<h1>We didn’t recognise the email address you entered</h1>
+<% if try_matchback_again? %>
+  <p><%= link_to("Try entering your details again.", :back) %></p>
+<% else %>
+  <p>To login, you need to be registered with us.</p>
+  <p>Once you’re registered, you can try again.</p>
+<% end %>

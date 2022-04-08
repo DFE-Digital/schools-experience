@@ -36,12 +36,6 @@
     <h2 class="govuk-heading-m">
       View and request more school experience
     </h2>
-    <% if Feature.enabled?(:candidates_dashboard)  %>
-      <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
-    <% else %>
-      <p>
-        <%= link_to 'Find more school experience', candidates_root_path %>
-      </p>
-    <% end %>
+    <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
   </div>
 </div>

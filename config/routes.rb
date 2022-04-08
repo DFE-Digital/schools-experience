@@ -188,13 +188,12 @@ Rails.application.routes.draw do
       resource :feedback, only: %i[new create show], controller: "booking_feedbacks"
     end
 
-    if Feature.enabled?(:candidates_dashboard)
-      get 'signin', to: 'sessions#new'
-      post 'signin', to: 'sessions#create'
-      put 'signin', to: 'sessions#update', as: :signin_code
+    get 'signin', to: 'sessions#new'
+    post 'signin', to: 'sessions#create'
+    put 'signin', to: 'sessions#update', as: :signin_code
+    get 'signout', to: 'sessions#sign_out'
 
-      resource :dashboard, only: :show
-    end
+    resource :dashboard, only: :show
 
     resources :feedbacks, only: %i[new create show]
   end

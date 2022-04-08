@@ -36,34 +36,4 @@ RSpec.describe "candidates/home/index", type: :view do
     it { is_expected.to have_css('a.govuk-button', text: 'Start now') }
     it { is_expected.to have_css('#candidate-alert-notification') }
   end
-
-  describe 'Used the service before?' do
-    let(:heading_text) { 'Used the service before?' }
-
-    context 'when disabled' do
-      before do
-        allow(Feature).to receive(:enabled?).with(:candidates_dashboard) { false }
-      end
-
-      before { render }
-
-      specify 'should not allow the candidate to sign in' do
-        expect(rendered).not_to have_css('h2', text: heading_text)
-        expect(rendered).not_to have_link('Sign in', href: candidates_dashboard_path)
-      end
-    end
-
-    context 'when enabled' do
-      before do
-        allow(Feature).to receive(:enabled?).with(:candidates_dashboard) { true }
-      end
-
-      before { render }
-
-      specify 'should allow the candidate to sign in' do
-        expect(rendered).to have_css('h2', text: heading_text)
-        expect(rendered).to have_link('Sign in', href: candidates_dashboard_path)
-      end
-    end
-  end
 end

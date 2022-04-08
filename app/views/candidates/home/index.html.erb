@@ -62,21 +62,6 @@ Visit schools to see how teachers plan lessons, manage classrooms and teach subj
         listed and need to be paid directly to the individual school.
       </p>
     </section>
-
-    <% if Feature.enabled?(:candidates_dashboard) %>
-      <section class="used-the-service-before">
-        <h2 class="govuk-heading-m">Used the service before?</h2>
-
-        <p>
-          If you've used the service before and want to make a new school
-          experience request:
-        </p>
-
-        <p>
-          <%= link_to 'Sign in', candidates_dashboard_path %>
-        </p>
-      </section>
-    <% end %>
   </div>
 
   <div class="govuk-grid-column-one-third column-top-border">
@@ -122,6 +107,18 @@ Visit schools to see how teachers plan lessons, manage classrooms and teach subj
           <li>
             <%= link_to schools_path, class: "govuk-!-font-weight-bold" do %>
               Manage school experience <span class="govuk-visually-hidden">in Subsection</span>
+            <% end %>
+          </li>
+        </ul>
+
+        <h2 class="govuk-heading-m" id="subsection-title">
+          If you're a candidate
+        </h2>
+
+        <ul class="govuk-list govuk-!-font-size-16 govuk-se-spaced-list">
+          <li>
+            <%= link_to candidates_dashboard_path, class: "govuk-!-font-weight-bold" do %>
+              Manage your bookings<span class="govuk-visually-hidden">in Subsection</span>
             <% end %>
           </li>
         </ul>

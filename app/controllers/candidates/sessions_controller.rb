@@ -1,5 +1,6 @@
 class Candidates::SessionsController < ApplicationController
   include GitisAuthentication
+  helper_method :try_matchback_again?
 
   def new
     @candidates_session = Candidates::Session.new
@@ -9,10 +10,11 @@ class Candidates::SessionsController < ApplicationController
     @candidates_session = Candidates::Session.new(retrieve_params)
     @verification_code = Candidates::VerificationCode.new(retrieve_params)
 
-    if @candidates_session.valid?
-      @verification_code.issue_verification_code
-    else
-      render 'new'
+    render 'new' unless @candidates_session.valid?
+
+    unless @verification_code.issue_verification_code
+      matchback_failures[:number_of_failures] += 1
+      render "matchback_failed"
     end
   end
 
@@ -28,6 +30,12 @@ class Candidates::SessionsController < ApplicationController
     else
       render :create
     end
+  end
+
+  def sign_out
+    sign_candidate_out
+
+    redirect_to candidates_dashboard_path
   end
 
 private
@@ -48,10 +56,13 @@ private
     params.require(:candidates_session).permit(:email, :firstname, :lastname)
   end
 
-  def deliver_signin_link(email_address, token)
-    NotifyEmail::CandidateSigninLink.new(
-      to: email_address,
-      confirmation_link: candidates_signin_confirmation_url(token)
-    ).despatch_later!
+  def try_matchback_again?
+    matchback_failures[:number_of_failures] < 3
+  end
+
+  def matchback_failures
+    session["matchback_failures"] ||= {
+      number_of_failures: 0
+    }
   end
 end
