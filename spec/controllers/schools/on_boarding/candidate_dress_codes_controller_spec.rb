@@ -61,9 +61,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
     end
 
     context 'invalid' do
-      let :candidate_dress_code do
-        Schools::OnBoarding::CandidateDressCode.new(other_dress_requirements: true)
-      end
+      let(:candidate_dress_code) { FactoryBot.build(:candidate_dress_code, selected_requirements: %w[business_dress none]) }
 
       it "doesn't update the school_profile" do
         expect(school_profile.reload.candidate_dress_code_step_completed).to be false
@@ -75,9 +73,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
     end
 
     context 'valid' do
-      let :candidate_dress_code do
-        FactoryBot.build :candidate_dress_code
-      end
+      let(:candidate_dress_code) { FactoryBot.build :candidate_dress_code }
 
       it 'updates the school_profile' do
         expect(school_profile.reload.candidate_dress_code).to \
@@ -127,9 +123,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
     end
 
     context 'invalid' do
-      let :candidate_dress_code do
-        Schools::OnBoarding::CandidateDressCode.new(other_dress_requirements: true)
-      end
+      let(:candidate_dress_code) { FactoryBot.build(:candidate_dress_code, selected_requirements: %w[business_dress none]) }
 
       it "doesn't update the school_profile" do
         expect(school_profile.reload.candidate_dress_code).not_to \
@@ -142,10 +136,7 @@ describe Schools::OnBoarding::CandidateDressCodesController, type: :request do
     end
 
     context 'valid' do
-      let :candidate_dress_code do
-        FactoryBot.build \
-          :candidate_dress_code, business_dress: false
-      end
+      let(:candidate_dress_code) { FactoryBot.build :candidate_dress_code }
 
       it 'updates the school_profile' do
         expect(school_profile.reload.candidate_dress_code).to \

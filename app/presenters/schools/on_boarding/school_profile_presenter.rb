@@ -163,23 +163,23 @@ module Schools
       def dress_code
         output = []
 
-        if @school_profile.candidate_dress_code.business_dress
+        if @school_profile.candidate_dress_code.business_dress?
           output << 'business dress'
         end
 
-        if @school_profile.candidate_dress_code.cover_up_tattoos
+        if @school_profile.candidate_dress_code.cover_up_tattoos?
           output << 'cover up tattoos'
         end
 
-        if @school_profile.candidate_dress_code.remove_piercings
+        if @school_profile.candidate_dress_code.remove_piercings?
           output << 'remove piercings'
         end
 
-        if @school_profile.candidate_dress_code.smart_casual
+        if @school_profile.candidate_dress_code.smart_casual?
           output << 'smart casual'
         end
 
-        if @school_profile.candidate_dress_code.other_dress_requirements
+        if @school_profile.candidate_dress_code.other_dress_requirements?
           output << @school_profile.candidate_dress_code.other_dress_requirements_detail
         end
 

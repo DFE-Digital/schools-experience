@@ -5,7 +5,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for candidate_dress_code, url: url, method: method do |f| %>
-      <%= f.govuk_error_summary link_base_errors_to: :business_dress_1 %>
+      <%= f.govuk_error_summary %>
 
       <h1 class="gouvk-heading-l">
         Do you have a dress code for candidates?
@@ -18,26 +18,18 @@
         <h2 class="govuk-fieldset__heading"></h2>
       </legend>
 
-      <%= f.govuk_check_boxes_fieldset :business_dress, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :business_dress, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :cover_up_tattoos, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :cover_up_tattoos, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :remove_piercings, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :remove_piercings, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :smart_casual, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :smart_casual, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :other_dress_requirements, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :other_dress_requirements, 1, 0, multiple: false do %>
+      <%= f.govuk_check_boxes_fieldset :selected_requirements, legend: nil do %>
+        <%= f.govuk_check_box :selected_requirements, "business_dress" %>
+        <%= f.govuk_check_box :selected_requirements, "cover_up_tattoos" %>
+        <%= f.govuk_check_box :selected_requirements, "remove_piercings" %>
+        <%= f.govuk_check_box :selected_requirements, "smart_casual" %>
+        <%= f.govuk_check_box :selected_requirements, "other_dress_requirements" do %>
           <%= f.govuk_text_field :other_dress_requirements_detail %>
         <% end %>
+
+        <%= f.govuk_check_box_divider %>
+
+        <%= f.govuk_check_box :selected_requirements, "none", exclusive: true %>
       <% end %>
 
       <%= f.govuk_submit 'Continue' %>

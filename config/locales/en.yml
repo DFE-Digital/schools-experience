@@ -318,6 +318,8 @@ en:
               blank: 'Provide details'
         schools/on_boarding/candidate_dress_code:
           attributes:
+            selected_requirements:
+              no_requirements_selected: Select dress code requirements, or select “None”
             other_dress_requirements_detail:
               blank: 'Other dress code details are required'
         schools/on_boarding/candidate_parking_information:
@@ -865,16 +867,13 @@ en:
         secondary_and_college_options:
           1: 'Secondary with 16 to 18 years'
       schools_on_boarding_candidate_dress_code:
-        business_dress_options:
-          1: 'Business dress'
-        cover_up_tattoos_options:
-          1: 'Cover up tattoos'
-        remove_piercings_options:
-          1: 'Remove piercings'
-        smart_casual_options:
-          1: 'Smart casual'
-        other_dress_requirements_options:
-          1: 'Other'
+        selected_requirements_options:
+          business_dress: Business dress
+          cover_up_tattoos: Cover up tattoos
+          remove_piercings: Remove piercings
+          smart_casual: Smart casual
+          other_dress_requirements: Other
+          none: None
         other_dress_requirements_detail: 'For example no denim, jeans, shorts, short skirts or trainers.'
       schools_on_boarding_candidate_parking_information:
         parking_provided_options:
