@@ -24,6 +24,13 @@ FactoryBot.define do
       fees_other_fees { true }
     end
 
+    trait :dbs_fees_not_present do
+      after :build do |profile|
+        profile.fees = \
+          FactoryBot.build :fees, dbs_fees_not_present: true
+      end
+    end
+
     trait :with_administration_fee do
       administration_fee_amount_pounds { 123.45 }
       administration_fee_description { 'General administration' }

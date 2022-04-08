@@ -69,6 +69,22 @@ describe Schools::OnBoarding::CurrentStep do
       it 'returns :fees' do
         expect(returned_step).to eq :fees
       end
+
+      context "when DBS fees not present" do
+        let :school_profile do
+          FactoryBot.build :school_profile,
+                           :with_dbs_requirement,
+                           :with_candidate_requirements_selection,
+                           :with_fees,
+                           :with_administration_fee,
+                           :with_other_fee,
+                           :dbs_fees_not_present
+        end
+
+        it 'returns :fees' do
+          expect(returned_step).to eq :fees
+        end
+      end
     end
 
     context 'administration_fee required' do

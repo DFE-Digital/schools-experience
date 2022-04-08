@@ -2,6 +2,10 @@ module Schools
   module OnBoarding
     class Fees < Step
       attribute :selected_fees, default: []
+      # When a school chooses to update their DBS check requirements to yes, we want to redirect them
+      # to the fees step, as they won't yet have had the option to select whether any DBS fees are
+      # required. Use dbs_fees_not_present to control the flow in that scenario.
+      attribute :dbs_fees_not_present
 
       validate :fees_or_none_selected
 
@@ -16,7 +20,7 @@ module Schools
           selected_fees << "none"
         end
 
-        new(selected_fees: selected_fees)
+        new(selected_fees: selected_fees, dbs_fees_not_present: dbs_fees.nil?)
       end
 
       def administration_fees?

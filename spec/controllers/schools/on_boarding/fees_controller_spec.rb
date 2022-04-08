@@ -16,7 +16,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
     end
 
     it 'assigns the model' do
-      expect(assigns(:fees)).to eq Schools::OnBoarding::Fees.new
+      expect(assigns(:fees)).to eq Schools::OnBoarding::Fees.new(dbs_fees_not_present: true)
     end
 
     it 'renders the new template' do

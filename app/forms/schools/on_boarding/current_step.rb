@@ -54,6 +54,8 @@ module Schools
       end
 
       def fees_required?
+        return true if @school_profile.fees.dup.dbs_fees_not_present
+
         @school_profile.fees.dup.invalid?
       end
 
