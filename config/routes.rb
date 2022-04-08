@@ -191,6 +191,7 @@ Rails.application.routes.draw do
     get 'signin', to: 'sessions#new'
     post 'signin', to: 'sessions#create'
     put 'signin', to: 'sessions#update', as: :signin_code
+    get 'signout', to: 'sessions#sign_out'
 
     resource :dashboard, only: :show
 

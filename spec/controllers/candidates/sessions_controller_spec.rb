@@ -121,4 +121,15 @@ RSpec.describe Candidates::SessionsController, type: :request do
       end
     end
   end
+
+  describe "sign_out" do
+    include_context "api candidate matched back"
+
+    before { get candidates_signout_path }
+
+    it "empties the gitis_contact session and redirects to the dashboard sign in" do
+      expect(session[:gitis_contact]).to be nil
+      expect(response).to redirect_to(candidates_dashboard_path)
+    end
+  end
 end

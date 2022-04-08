@@ -57,6 +57,10 @@ protected
     current_candidate || raise(UnauthorizedCandidate)
   end
 
+  def sign_candidate_out
+    session[:gitis_contact] = nil
+  end
+
   def delete_registration_sessions!
     session[:registrations] = nil
   end

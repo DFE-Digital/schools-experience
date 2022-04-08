@@ -66,13 +66,29 @@ describe ApplicationHelper, type: :helper do
   context '#current_user_info_and_logout_link' do
     subject { helper.current_user_info_and_logout_link user }
     context 'when a user is logged in' do
-      specify "should contain the person's name and a logout link" do
+      specify "should contain the person's name" do
         expect(subject).to include("#{given_name} #{family_name}")
       end
 
       specify "should contain a logout link" do
         expect(subject).to have_link('Logout', href: '/schools/session/logout')
       end
+    end
+  end
+
+  context '#current_candidate_info_and_logout_link' do
+    let(:current_candidate) do
+      create(:candidate, :with_api_contact)
+    end
+
+    subject { helper.current_candidate_info_and_logout_link current_candidate }
+
+    specify "should contain the person's name" do
+      expect(subject).to include(current_candidate.full_name)
+    end
+
+    specify "should contain a logout link" do
+      expect(subject).to have_link('Logout', href: '/candidates/signout')
     end
   end
 

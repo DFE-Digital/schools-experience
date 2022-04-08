@@ -65,6 +65,14 @@ module ApplicationHelper
     link_to text, path, 'aria-label': "#{text} #{key}"
   end
 
+  def current_candidate_info_and_logout_link(candidate)
+    logout_link = link_to("Logout", candidates_signout_path)
+
+    greeting = "Welcome #{candidate.full_name}"
+
+    safe_join([greeting, logout_link].compact, " ")
+  end
+
   def current_user_info_and_logout_link(user)
     logout_link = link_to("Logout", logout_schools_session_path)
 

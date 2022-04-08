@@ -32,6 +32,12 @@ class Candidates::SessionsController < ApplicationController
     end
   end
 
+  def sign_out
+    sign_candidate_out
+
+    redirect_to candidates_dashboard_path
+  end
+
 private
 
   def retrieve_params
