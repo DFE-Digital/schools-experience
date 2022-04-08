@@ -39,7 +39,7 @@
 
       <% if @school.teacher_training_provider? && @school.teacher_training_website.present? %>
       <li>
-        <%= link_to "Teacher training: #{@school.name}", cleanup_school_url(@school.school.teacher_training_website) %>
+        <%= link_to "Teacher training: #{@school.name}", cleanup_school_url(@school.teacher_training_website) %>
       </li>
       <% end %>
     </ul>
