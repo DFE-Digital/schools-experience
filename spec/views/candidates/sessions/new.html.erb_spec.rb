@@ -12,7 +12,7 @@ RSpec.describe "candidates/sessions/new", type: :view do
 
     it "will show the sign in form" do
       expect(rendered).to have_css('h1', text: 'Get school experience sign in')
-      expect(rendered).to have_css('p', text: /supply details below/i)
+      expect(rendered).to have_css('p', text: /we will send you a code/i)
       expect(rendered).to have_css("form")
       expect(rendered).to have_css("input[name=\"candidates_session[email]\"]")
       expect(rendered).not_to have_css(".govuk-form-group--error")
@@ -29,7 +29,7 @@ RSpec.describe "candidates/sessions/new", type: :view do
 
     it "will show the errors in the sign in form" do
       expect(rendered).to have_css('h1', text: 'Get school experience sign in')
-      expect(rendered).to have_css('p', text: /supply details below/i)
+      expect(rendered).to have_css('p', text: /we will send you a code/i)
       expect(rendered).to have_css("form")
       expect(rendered).to have_css(".govuk-form-group--error input[name=\"candidates_session[email]\"]")
     end
