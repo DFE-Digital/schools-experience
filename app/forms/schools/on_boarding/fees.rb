@@ -11,8 +11,9 @@ module Schools
         selected_fees << "dbs_fees" if dbs_fees
         selected_fees << "other_fees" if other_fees
 
-        unless [administration_fees, dbs_fees, other_fees].all?(&:nil?)
-          selected_fees << "none" if !administration_fees && !dbs_fees & !other_fees
+        # Comparing explicitly to false because a nil attribute shouldn't infer "none".
+        if administration_fees == false && dbs_fees == false && other_fees == false
+          selected_fees << "none"
         end
 
         new(selected_fees: selected_fees)
