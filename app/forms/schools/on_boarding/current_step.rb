@@ -58,7 +58,7 @@ module Schools
       end
 
       def administration_fee_required?
-        return false unless @school_profile.fees.administration_fees
+        return false unless @school_profile.fees.administration_fees?
 
         return true if @school_profile.administration_fee.dup.invalid?
 
@@ -66,7 +66,7 @@ module Schools
       end
 
       def dbs_fee_required?
-        return false unless @school_profile.fees.dbs_fees
+        return false unless @school_profile.fees.dbs_fees?
 
         return true if @school_profile.dbs_fee.dup.invalid?
 
@@ -74,7 +74,7 @@ module Schools
       end
 
       def other_fee_required?
-        return false unless @school_profile.fees.other_fees
+        return false unless @school_profile.fees.other_fees?
 
         return true if @school_profile.other_fee.dup.invalid?
 

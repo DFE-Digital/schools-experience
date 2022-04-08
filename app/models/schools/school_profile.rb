@@ -85,9 +85,9 @@ module Schools
       :fees,
       class_name: 'Schools::OnBoarding::Fees',
       mapping: [
-        %w[fees_administration_fees administration_fees],
-        %w[fees_dbs_fees dbs_fees],
-        %w[fees_other_fees other_fees]
+        %w[fees_administration_fees administration_fees?],
+        %w[fees_dbs_fees dbs_fees?],
+        %w[fees_other_fees other_fees?]
       ],
       constructor: :compose
 

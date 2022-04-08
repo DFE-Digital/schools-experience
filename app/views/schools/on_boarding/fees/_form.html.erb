@@ -23,20 +23,21 @@
         Select which fees candidates have to pay.
       </p>
 
-      <%= f.govuk_check_boxes_fieldset :administration_fees, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :administration_fees, 1, 0, multiple: false %>
-      <% end %>
+      <%= f.govuk_check_boxes_fieldset :selected_fees, legend: nil do %>
 
-      <% if requires_dbs_check %>
-        <%= f.govuk_check_boxes_fieldset :dbs_fees, multiple: false, legend: nil do %>
-          <%= f.govuk_check_box :dbs_fees, 1, 0, multiple: false %>
+        <%= f.govuk_check_box :selected_fees, "administration_fees" %>
+
+        <% if requires_dbs_check %>
+          <%= f.govuk_check_box :selected_fees, "dbs_fees" %>
+        <% else %>
+          <%= f.hidden_field :dbs_fees, value: "false" %>
         <% end %>
-      <% else %>
-        <%= f.hidden_field :dbs_fees, value: "false" %>
-      <% end %>
 
-      <%= f.govuk_check_boxes_fieldset :other_fees, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :other_fees, 1, 0, multiple: false %>
+        <%= f.govuk_check_box :selected_fees, "other_fees" %>
+
+        <%= f.govuk_check_box_divider %>
+
+        <%= f.govuk_check_box :selected_fees, "none", exclusive: true %>
       <% end %>
 
       <%= f.govuk_submit 'Continue' %>
