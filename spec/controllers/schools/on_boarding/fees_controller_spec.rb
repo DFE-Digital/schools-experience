@@ -16,7 +16,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
     end
 
     it 'assigns the model' do
-      expect(assigns(:fees)).to eq Schools::OnBoarding::Fees.new
+      expect(assigns(:fees)).to eq Schools::OnBoarding::Fees.new(dbs_fees_specified: false)
     end
 
     it 'renders the new template' do
@@ -41,11 +41,11 @@ describe Schools::OnBoarding::FeesController, type: :request do
 
     context 'invalid' do
       let :fees do
-        Schools::OnBoarding::Fees.new(administration_fees: nil, dbs_fees: nil, other_fees: nil)
+        Schools::OnBoarding::Fees.new(selected_fees: %w[administration_fees none])
       end
 
       it "doesn't update the school_profile" do
-        expect(school_profile.reload.fees).to eq fees
+        expect(school_profile.reload.fees).not_to eq fees
       end
 
       it 'rerenders the new template' do
@@ -93,9 +93,7 @@ describe Schools::OnBoarding::FeesController, type: :request do
     end
 
     let :params do
-      {
-        schools_on_boarding_fees: fees.attributes
-      }
+      { schools_on_boarding_fees: fees.attributes }
     end
 
     before do
@@ -104,21 +102,21 @@ describe Schools::OnBoarding::FeesController, type: :request do
 
     context 'invalid' do
       let :fees do
-        Schools::OnBoarding::Fees.new(administration_fees: nil, dbs_fees: nil, other_fees: nil)
+        Schools::OnBoarding::Fees.new(selected_fees: %w[administration_fees none])
       end
 
       it "doesn't update the school_profile" do
         expect(school_profile.reload.fees).not_to eq fees
       end
 
-      it 'rerenders the edit template' do
+      it 're-renders the edit template' do
         expect(response).to render_template :edit
       end
     end
 
     context 'valid' do
       let :fees do
-        FactoryBot.build :fees, dbs_fees: !school_profile.dbs_fee
+        FactoryBot.build :fees
       end
 
       it 'updates the school_profile' do

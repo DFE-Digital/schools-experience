@@ -11,7 +11,6 @@ module Schools
 
       def create
         @fees = Fees.new fees_params
-
         if @fees.valid?
           current_school_profile.update! fees: @fees
           continue(current_school_profile)
@@ -42,10 +41,7 @@ module Schools
     private
 
       def fees_params
-        params.require(:schools_on_boarding_fees).permit \
-          :administration_fees,
-          :dbs_fees,
-          :other_fees
+        params.require(:schools_on_boarding_fees).permit(selected_fees: [])
       end
     end
   end

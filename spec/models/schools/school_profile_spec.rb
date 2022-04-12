@@ -298,15 +298,15 @@ describe Schools::SchoolProfile, type: :model do
 
       it 'sets fees_administration_fees' do
         expect(model.fees_administration_fees).to eq \
-          form_model.administration_fees
+          form_model.administration_fees?
       end
 
       it 'sets fees_dbs_fees' do
-        expect(model.fees_dbs_fees).to eq form_model.dbs_fees
+        expect(model.fees_dbs_fees).to eq form_model.dbs_fees?
       end
 
       it 'sets fees_other_fees' do
-        expect(model.fees_other_fees).to eq form_model.other_fees
+        expect(model.fees_other_fees).to eq form_model.other_fees?
       end
 
       it 'returns the form model' do
@@ -676,7 +676,7 @@ describe Schools::SchoolProfile, type: :model do
 
         before do
           school_profile.update! \
-            fees: FactoryBot.build(:fees, administration_fees: false)
+            fees: FactoryBot.build(:fees, selected_fees: %w[dbs_fees other_fees])
         end
 
         it 'resets administration_fee' do
@@ -691,7 +691,7 @@ describe Schools::SchoolProfile, type: :model do
         end
 
         before do
-          school_profile.update! fees: FactoryBot.build(:fees, dbs_fees: false)
+          school_profile.update! fees: FactoryBot.build(:fees, selected_fees: %w[administration_fees other_fees])
         end
 
         it 'resets dbs_fee' do
@@ -706,7 +706,7 @@ describe Schools::SchoolProfile, type: :model do
 
         before do
           school_profile.update! \
-            fees: FactoryBot.build(:fees, other_fees: false)
+            fees: FactoryBot.build(:fees, selected_fees: %w[administration_fees dbs_fees])
         end
 
         it 'resets other_fee' do

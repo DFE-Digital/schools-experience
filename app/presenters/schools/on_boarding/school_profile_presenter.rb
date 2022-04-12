@@ -38,15 +38,15 @@ module Schools
       def fees
         output = []
 
-        if @school_profile.fees.administration_fees
+        if @school_profile.fees.administration_fees?
           output << description_for_fee(@school_profile.administration_fee)
         end
 
-        if @school_profile.fees.dbs_fees
+        if @school_profile.fees.dbs_fees?
           output << description_for_fee(@school_profile.dbs_fee)
         end
 
-        if @school_profile.fees.other_fees
+        if @school_profile.fees.other_fees?
           output << description_for_fee(@school_profile.other_fee)
         end
 
