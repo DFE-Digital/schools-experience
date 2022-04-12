@@ -3,6 +3,11 @@ require 'rails_helper'
 describe Schools::OnBoarding::Fees, type: :model do
   context '#attributes' do
     it { is_expected.to respond_to :selected_fees }
+    it { is_expected.to respond_to :dbs_fees_specified }
+  end
+
+  describe 'default values' do
+    it { expect(subject.dbs_fees_specified).to be(true) }
   end
 
   context 'validations' do

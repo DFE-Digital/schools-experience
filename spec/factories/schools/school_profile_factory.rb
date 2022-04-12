@@ -24,10 +24,10 @@ FactoryBot.define do
       fees_other_fees { true }
     end
 
-    trait :dbs_fees_not_present do
+    trait :with_dbs_fees_not_specified do
       after :build do |profile|
         profile.fees = \
-          FactoryBot.build :fees, dbs_fees_not_present: true
+          FactoryBot.build :fees, selected_fees: %w[administration_fees other_fees], dbs_fees_specified: false
       end
     end
 
