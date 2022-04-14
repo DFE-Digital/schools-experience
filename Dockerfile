@@ -1,5 +1,5 @@
 FROM ruby:3.1.0-alpine3.15
-# remove upgrade zlib-dev when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
+# remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -18,9 +18,9 @@ CMD ["-m", "--frontend" ]
 ARG SHA
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
-# remove upgrade zlib-dev when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
+# remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
 # hadolint ignore=DL3018
-RUN apk update && apk add -Uu --no-cache zlib-dev
+RUN apk update && apk add -Uu --no-cache zlib-dev busybox
 
 # hadolint ignore=DL3018
 RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
