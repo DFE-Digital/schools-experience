@@ -425,9 +425,9 @@ jobs:
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           secret: SE-INFRA-SECRETS
-          key: ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK , SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
+          key: SLACK-WEBHOOK , SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Cloud Foundry
         if: matrix.environment == 'Review'
@@ -451,7 +451,7 @@ jobs:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
           KEY_VAULT:         ${{ secrets.KEY_VAULT }}
           ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
       - name: Trigger Deployment to ${{matrix.environment}}
         if: matrix.environment != 'Review'
@@ -462,7 +462,7 @@ jobs:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
           KEY_VAULT:         ${{ secrets.KEY_VAULT }}
           ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
       - name: Post sticky pull request comment
         if: matrix.environment == 'Review'
@@ -477,7 +477,7 @@ jobs:
         if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
         uses: actions-ecosystem/action-add-labels@v1.1.3
         with:
-          github_token: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: Review
 
       - name: Get Release Id from Tag
@@ -485,7 +485,7 @@ jobs:
         uses: DFE-Digital/github-actions/DraftReleaseByTag@master
         with:
           TAG: ${{needs.prepare.outputs.release_tag}}
-          TOKEN: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Release
         if:  matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
@@ -535,7 +535,7 @@ jobs:
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK 
+          key: SLACK-WEBHOOK
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 

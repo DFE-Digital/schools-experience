@@ -37,16 +37,16 @@ jobs:
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           secret: SE-INFRA-SECRETS
-          key: ACTIONS-API-ACCESS-TOKEN, SLACK-WEBHOOK, SLACK-RELEASE-NOTE-WEBHOOK
+          key: SLACK-WEBHOOK, SLACK-RELEASE-NOTE-WEBHOOK
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Release Id from Tag
         id: tag_id
         uses: DFE-Digital/github-actions/DraftReleaseByTag@master
         with:
           TAG: ${{ github.event.inputs.tag }}
-          TOKEN: ${{ steps.keyvault-yaml-secret.outputs.ACTIONS-API-ACCESS-TOKEN }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check if found
         if: steps.tag_id.outputs.release_id == ''
