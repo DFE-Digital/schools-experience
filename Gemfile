@@ -110,7 +110,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 5.1'
   gem 'rspec-sonarqube-formatter'
 
-  gem 'brakeman', '>= 4.4.0'
+  gem 'brakeman', '>= 5.2.3'
 
   gem 'bullet'
 
