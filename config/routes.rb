@@ -161,7 +161,7 @@ Rails.application.routes.draw do
     get 'verify/:school_id/:token/:uuid', to: 'registrations/sign_ins#update', as: :registration_verify
     put 'verify/:school_id', to: 'registrations/sign_ins#update', as: :registration_verify_code
 
-    resources :schools, only: %i[index show] do
+    resources :schools, only: %i[index show create] do
       namespace :registrations do
         resource :personal_information, only: %i[new create edit update]
         resource :sign_in, only: %i[show create]

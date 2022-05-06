@@ -30,6 +30,6 @@ end
 
 Given("I have made an invalid search for schools near {string}") do |string|
   path = candidates_schools_path
-  visit(candidates_schools_path(location: string))
+  visit(candidates_schools_path(location: Encryptor.encrypt(string)))
   expect(page.current_path).to eql(path)
 end

@@ -8,6 +8,12 @@ RSpec.describe Candidates::SchoolSearch do
     end
   end
 
+  describe ".encrypted_attributes" do
+    subject { described_class.encrypted_attributes }
+
+    it { is_expected.to eq(%w[location]) }
+  end
+
   context '.new' do
     subject do
       described_class.new(

@@ -17,7 +17,7 @@
       <%= form_for(@search,
                    as: '',
                    url: candidates_schools_path,
-                   method: :get,
+                   method: :post,
                    html: { class: 'school-search-form' },
                    data: { controller: :autocomplete,
                            "autocomplete-target": "wrapper",

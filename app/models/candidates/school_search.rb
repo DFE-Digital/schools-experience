@@ -1,6 +1,9 @@
 module Candidates
   class SchoolSearch
     include ActiveModel::Model
+    include ActiveModel::Attributes
+    include EncryptedAttributes
+    encrypt_attributes :location
 
     DISTANCES = [
       [1, '1 mile'],
@@ -19,9 +22,15 @@ module Candidates
       ['90', 'up to £90']
     ].freeze
 
-    attr_accessor :query, :location, :latitude, :disability_confident,
-                  :longitude, :page, :parking
-    attr_reader :distance, :max_fee
+    attribute :query
+    attribute :location
+    attribute :latitude
+    attribute :disability_confident
+    attribute :longitude
+    attribute :page
+    attribute :parking
+    attribute :distance, :integer, default: 10
+    attribute :max_fee
 
     delegate :location_name, :country, :has_coordinates?, :valid?, :errors, to: :school_search
     delegate :whitelisted_urns, :whitelisted_urns?, to: Bookings::SchoolSearch
@@ -34,16 +43,6 @@ module Candidates
       def distances
         DISTANCES
       end
-    end
-
-    def initialize(*args)
-      @distance = 10
-
-      super
-    end
-
-    def distance=(dist)
-      @distance = dist.present? ? dist.to_i : nil
     end
 
     def subjects
@@ -72,7 +71,7 @@ module Candidates
 
     def max_fee=(max_f)
       max_f = max_f.to_s.strip
-      @max_fee = FEES.map(&:first).include?(max_f) ? max_f : ''
+      super(FEES.map(&:first).include?(max_f) ? max_f : '')
     end
 
     def applied_filters

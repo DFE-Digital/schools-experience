@@ -2,7 +2,7 @@ class Candidates::SchoolSearchesController < ApplicationController
   before_action :redirect_if_deactivated
 
   def new
-    @search = Candidates::SchoolSearch.new(search_params)
+    @search = Candidates::SchoolSearch.new_decrypt(search_params)
   end
 
 private
