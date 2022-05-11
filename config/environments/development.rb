@@ -119,7 +119,7 @@ Rails.application.configure do
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)
 
-  config.x.maintenance_mode = true
+  config.x.maintenance_mode = %w[1 yes true].include?(ENV['MAINTENANCE_MODE'].to_s)
 
   config.x.git_api_token = Rails.application.credentials.git_api_token.presence
   config.x.git_api_endpoint = "https://get-into-teaching-api-dev.london.cloudapps.digital/api"
