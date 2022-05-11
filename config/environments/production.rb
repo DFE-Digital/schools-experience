@@ -164,7 +164,7 @@ Rails.application.configure do
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 70)
 
-  config.x.maintenance_mode = %w[1 yes true].include?(ENV['MAINTENANCE_MODE'].to_s)
+  config.x.maintenance_mode = true
 
   config.x.git_api_token = ENV['GIT_API_TOKEN']
   config.x.api_client_cache_store = ActiveSupport::Cache::RedisCacheStore.new(namespace: "GIT-API-HTTP")
