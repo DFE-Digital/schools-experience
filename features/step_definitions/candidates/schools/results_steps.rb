@@ -31,7 +31,7 @@ Given("there are some schools with a range of fees containing the word {string}"
 end
 
 Given("I have searched for {string} and am on the results page") do |string|
-  path = candidates_schools_path(location: string, distance: 100)
+  path = candidates_schools_path(location: Encryptor.encrypt(string), distance: 100)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
   expect(path_with_query).to eql(path)
@@ -131,7 +131,7 @@ Given("there are some schools just outside it") do
 end
 
 When("I search for schools within {int} miles") do |int|
-  path = candidates_schools_path(location: 'Bury', distance: int)
+  path = candidates_schools_path(location: Encryptor.encrypt('Bury'), distance: int)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
   expect(path_with_query).to eql(path)

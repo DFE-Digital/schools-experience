@@ -22,7 +22,7 @@ Given("there there are schools with the following attributes:") do |table|
 end
 
 When("I have provided {string} as my location") do |location|
-  path = candidates_schools_path(location: location, distance: 25)
+  path = candidates_schools_path(location: Encryptor.encrypt(location), distance: 25)
   visit(path)
   path_with_query = [page.current_path, URI.parse(page.current_url).query].join("?")
   expect(path_with_query).to eql(path)

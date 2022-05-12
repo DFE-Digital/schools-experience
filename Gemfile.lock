@@ -270,6 +270,7 @@ GEM
       activesupport (>= 6.1)
       deep_merge (~> 1.2.1)
     hashdiff (1.0.1)
+    hashids (1.0.6)
     htmlentities (4.3.4)
     httpclient (2.8.3)
     i18n (1.10.0)
@@ -638,6 +639,7 @@ DEPENDENCIES
   geocoder
   get_into_teaching_api_client_faraday!
   govuk_design_system_formbuilder (~> 3.0)
+  hashids
   ice_cube
   invisible_captcha (>= 2.0.0)
   json (>= 2.3.0)

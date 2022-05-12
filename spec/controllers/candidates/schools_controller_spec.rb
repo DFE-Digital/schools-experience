@@ -5,7 +5,7 @@ RSpec.describe Candidates::SchoolsController, type: :request do
     let(:query_params) do
       {
         query: 'Something',
-        location: 'Manchester',
+        location: Encryptor.encrypt('Manchester'),
         latitude: '53.481',
         longitude: '-2.241',
         distance: '10',

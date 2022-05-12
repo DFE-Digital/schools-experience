@@ -4,8 +4,13 @@ class Candidates::SchoolsController < ApplicationController
 
   before_action :redirect_if_deactivated
 
+  def create
+    encrypted_params = Candidates::SchoolSearch.new(search_params).encrypted_attributes
+    redirect_to(candidates_schools_path(encrypted_params))
+  end
+
   def index
-    @search = Candidates::SchoolSearch.new(search_params)
+    @search = Candidates::SchoolSearch.new_decrypt(search_params)
     render 'candidates/school_searches/new' and return unless @search.valid? && location_present?
 
     @facet_tags = FacetTagsPresenter.new(@search.applied_filters)
@@ -14,7 +19,7 @@ class Candidates::SchoolsController < ApplicationController
 
     if @search.results.empty? && !@search.whitelisted_urns?
       @expanded_search_radius = true
-      @search = Candidates::SchoolSearch.new(search_params.merge(distance: EXPANDED_SEARCH_RADIUS))
+      @search = Candidates::SchoolSearch.new_decrypt(search_params.merge(distance: EXPANDED_SEARCH_RADIUS))
     end
   end
 
