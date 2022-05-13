@@ -302,7 +302,7 @@ GEM
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.17.0)
+    loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -338,7 +338,9 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.4-x86_64-darwin)
+    nokogiri (1.13.6-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
@@ -509,16 +511,16 @@ GEM
     semantic_logger (4.10.0)
       concurrent-ruby (~> 1.0)
     semantic_range (3.0.0)
-    sentry-delayed_job (5.2.1)
+    sentry-delayed_job (5.3.0)
       delayed_job (>= 4.0)
-      sentry-ruby-core (~> 5.2.1)
-    sentry-rails (5.2.1)
+      sentry-ruby-core (~> 5.3.0)
+    sentry-rails (5.3.0)
       railties (>= 5.0)
-      sentry-ruby-core (~> 5.2.1)
-    sentry-ruby (5.2.1)
+      sentry-ruby-core (~> 5.3.0)
+    sentry-ruby (5.3.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      sentry-ruby-core (= 5.2.1)
-    sentry-ruby-core (5.2.1)
+      sentry-ruby-core (= 5.3.0)
+    sentry-ruby-core (5.3.0)
       concurrent-ruby
     shakapacker (6.1.1)
       activesupport (>= 5.2)
@@ -609,6 +611,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
