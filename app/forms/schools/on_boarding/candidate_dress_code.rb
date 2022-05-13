@@ -24,8 +24,13 @@ module Schools
         selected_requirements << "other_dress_requirements" if other_dress_requirements
 
         # Comparing explicitly to false because a nil attribute shouldn't infer "none".
-        if business_dress == false && cover_up_tattoos == false && remove_piercings == false &&
-            smart_casual == false && other_dress_requirements == false
+        if [
+          business_dress,
+          cover_up_tattoos,
+          remove_piercings,
+          smart_casual,
+          other_dress_requirements
+        ].all?(false)
           selected_requirements << "none"
         end
 
@@ -59,10 +64,10 @@ module Schools
     private
 
       def dress_code_requirements_or_none_selected
-        no_options_selected = !none? && !business_dress? && !cover_up_tattoos? && !remove_piercings? &&
-          !smart_casual? && !other_dress_requirements?
-        requirements_and_none_selected = none? && (business_dress? || cover_up_tattoos? || remove_piercings? ||
-          smart_casual? || other_dress_requirements?)
+        # selected_requirements will always contain an empty string from the form body
+        requirements = selected_requirements.reject(&:empty?)
+        no_options_selected = requirements.empty?
+        requirements_and_none_selected = none? && requirements.count > 1
 
         if no_options_selected || requirements_and_none_selected
           errors.add(:selected_requirements, :no_requirements_selected)

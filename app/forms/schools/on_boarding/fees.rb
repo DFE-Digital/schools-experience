@@ -16,7 +16,7 @@ module Schools
         selected_fees << "other_fees" if other_fees
 
         # Comparing explicitly to false because a nil attribute shouldn't infer "none".
-        if administration_fees == false && dbs_fees == false && other_fees == false
+        if [administration_fees, dbs_fees, other_fees].all?(false)
           selected_fees << "none"
         end
 
@@ -42,8 +42,10 @@ module Schools
     private
 
       def fees_or_none_selected
-        no_options_selected = !none? && !administration_fees? && !dbs_fees? && !other_fees?
-        fees_and_no_fees_selected = none? && (administration_fees? || dbs_fees? || other_fees?)
+        # selected_fees will always contain an empty string from the form body
+        fees = selected_fees.reject(&:empty?)
+        no_options_selected = fees.empty?
+        fees_and_no_fees_selected = none? && fees.count > 1
 
         if no_options_selected || fees_and_no_fees_selected
           errors.add(:selected_fees, :no_fees_selected)

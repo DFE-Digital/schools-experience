@@ -25,13 +25,13 @@ describe Schools::OnBoarding::CandidateDressCode, type: :model do
       context "when no options are selected" do
         subject { described_class.new(selected_requirements: []) }
 
-        it { expect(subject.invalid?).to be true }
+        it { expect(subject).to be_invalid }
       end
 
       context "when requirement and no requirements are selected" do
         subject { described_class.new(selected_requirements: %w[business_dress none]) }
 
-        it { expect(subject.invalid?).to be true }
+        it { expect(subject).to be_invalid }
       end
     end
   end
