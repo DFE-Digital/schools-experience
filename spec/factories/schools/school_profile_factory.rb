@@ -97,6 +97,13 @@ FactoryBot.define do
       end
     end
 
+    trait :with_none_candidate_dress_code do
+      candidate_dress_code_step_completed { true }
+      after :build do |profile|
+        profile.candidate_dress_code = FactoryBot.build :candidate_dress_code, selected_requirements: %w[none]
+      end
+    end
+
     trait :with_candidate_parking_information do
       after :build do |profile, evaluator|
         traits = []

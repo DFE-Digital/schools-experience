@@ -41,13 +41,10 @@ module Schools
     private
 
       def candidate_dress_code_params
-        params.require(:schools_on_boarding_candidate_dress_code).permit \
-          :business_dress,
-          :cover_up_tattoos,
-          :remove_piercings,
-          :smart_casual,
-          :other_dress_requirements,
-          :other_dress_requirements_detail
+        params.require(:schools_on_boarding_candidate_dress_code).permit(
+          :other_dress_requirements_detail,
+          selected_requirements: []
+        )
       end
     end
   end

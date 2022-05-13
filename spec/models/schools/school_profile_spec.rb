@@ -433,11 +433,11 @@ describe Schools::SchoolProfile, type: :model do
       end
 
       %i[
-        business_dress
-        cover_up_tattoos
-        remove_piercings
-        smart_casual
-        other_dress_requirements
+        business_dress?
+        cover_up_tattoos?
+        remove_piercings?
+        smart_casual?
+        other_dress_requirements?
         other_dress_requirements_detail
       ].each do |attribute|
         it "sets #{attribute} correctly" do

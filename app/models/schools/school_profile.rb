@@ -157,11 +157,11 @@ module Schools
       :candidate_dress_code,
       class_name: 'Schools::OnBoarding::CandidateDressCode',
       mapping: [
-        %w[candidate_dress_code_business_dress business_dress],
-        %w[candidate_dress_code_cover_up_tattoos cover_up_tattoos],
-        %w[candidate_dress_code_remove_piercings remove_piercings],
-        %w[candidate_dress_code_smart_casual smart_casual],
-        %w[candidate_dress_code_other_dress_requirements other_dress_requirements],
+        %w[candidate_dress_code_business_dress business_dress?],
+        %w[candidate_dress_code_cover_up_tattoos cover_up_tattoos?],
+        %w[candidate_dress_code_remove_piercings remove_piercings?],
+        %w[candidate_dress_code_smart_casual smart_casual?],
+        %w[candidate_dress_code_other_dress_requirements other_dress_requirements?],
         %w[candidate_dress_code_other_dress_requirements_detail other_dress_requirements_detail],
       ],
       constructor: :compose
