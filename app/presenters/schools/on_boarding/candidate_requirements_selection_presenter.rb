@@ -45,6 +45,10 @@ module Schools
           output << other_details
         end
 
+        if none?
+          output << "None"
+        end
+
         output
       end
 
@@ -86,6 +90,17 @@ module Schools
 
       def other?
         @attributes.fetch :candidate_requirements_selection_other
+      end
+
+      def none?
+        [
+          on_teacher_training_course?,
+          not_on_another_training_course?,
+          has_or_working_towards_degree?,
+          live_locally?,
+          provide_photo_identification?,
+          other?
+        ].all?(false)
       end
 
       def other_details

@@ -43,16 +43,12 @@ module Schools
     private
 
       def candidate_requirements_selection_params
-        params.require(:schools_on_boarding_candidate_requirements_selection).permit \
-          :on_teacher_training_course,
-          :not_on_another_training_course,
-          :has_or_working_towards_degree,
-          :live_locally,
+        params.require(:schools_on_boarding_candidate_requirements_selection).permit(
           :maximum_distance_from_school,
-          :provide_photo_identification,
           :photo_identification_details,
-          :other,
-          :other_details
+          :other_details,
+          selected_requirements: []
+        )
       end
     end
   end

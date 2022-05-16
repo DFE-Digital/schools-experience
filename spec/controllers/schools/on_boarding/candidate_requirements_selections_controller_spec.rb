@@ -124,7 +124,7 @@ describe Schools::OnBoarding::CandidateRequirementsSelectionsController, type: :
     context 'valid' do
       let :candidate_requirements_selection do
         school_profile.candidate_requirements_selection.dup.tap do |m|
-          m.has_or_working_towards_degree = !m.has_or_working_towards_degree
+          m.selected_requirements << "has_or_working_towards_degree" unless m.has_or_working_towards_degree?
         end
       end
 
