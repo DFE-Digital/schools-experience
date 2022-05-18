@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 5.6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'shakapacker', '6.1.1'
+gem 'shakapacker', '6.2.1'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -61,7 +61,7 @@ gem 'kaminari'
 
 gem 'phonelib'
 gem 'sentry-delayed_job'
-gem 'sentry-rails', '>= 5.1.0'
+gem 'sentry-rails'
 gem 'sentry-ruby'
 
 gem 'rack-attack'
