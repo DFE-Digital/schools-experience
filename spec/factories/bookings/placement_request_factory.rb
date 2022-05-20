@@ -71,6 +71,14 @@ FactoryBot.define do
       end
     end
 
+    trait :subject_specific do
+      before(:create) do |bb|
+        bb.subject = \
+          Bookings::Subject.find_by! \
+            name: bb.available_subject_choices.first
+      end
+    end
+
     trait :booked do
       after :create do |placement_request|
         FactoryBot.create \
