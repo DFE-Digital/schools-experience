@@ -6,7 +6,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_for candidate_requirements_selection, url: schools_on_boarding_candidate_requirements_selection_path, method: method,
                  html: { class: "candidate-requirements-selection" } do |f| %>
-      <%= f.govuk_error_summary link_base_errors_to: :on_teacher_training_course_1 %>
+      <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
         What requirements do you have?
@@ -16,34 +16,21 @@
         Select all that apply.
       </p>
 
-      <%= f.govuk_check_boxes_fieldset :on_teacher_training_course, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :on_teacher_training_course, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :not_on_another_training_course, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :not_on_another_training_course, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :has_or_working_towards_degree, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :has_or_working_towards_degree, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :live_locally, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :live_locally, 1, 0, multiple: false do %>
+      <%= f.govuk_check_boxes_fieldset :selected_requirements, legend: nil do %>
+        <%= f.govuk_check_box :selected_requirements, "on_teacher_training_course" %>
+        <%= f.govuk_check_box :selected_requirements, "not_on_another_training_course" %>
+        <%= f.govuk_check_box :selected_requirements, "has_or_working_towards_degree" %>
+        <%= f.govuk_check_box :selected_requirements, "live_locally" do %>
           <%= f.govuk_number_field :maximum_distance_from_school %>
         <% end %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :provide_photo_identification, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :provide_photo_identification, 1, 0, multiple: false do %>
+        <%= f.govuk_check_box :selected_requirements, "provide_photo_identification" do %>
           <%= f.govuk_text_field :photo_identification_details %>
         <% end %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :other, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :other, 1, 0, multiple: false do %>
+        <%= f.govuk_check_box :selected_requirements, "other" do %>
           <%= f.govuk_text_field :other_details %>
         <% end %>
+        <%= f.govuk_check_box_divider %>
+        <%= f.govuk_check_box :selected_requirements, "none", exclusive: true %>
       <% end %>
 
       <%= f.govuk_submit 'Continue' %>
