@@ -261,7 +261,7 @@ GEM
     fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
-    geocoder (1.7.5)
+    geocoder (1.8.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     govuk_design_system_formbuilder (3.0.2)
@@ -339,6 +339,8 @@ GEM
       timeout
     nio4r (2.5.8)
     nokogiri (1.13.6-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
@@ -609,6 +611,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
