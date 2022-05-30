@@ -195,7 +195,6 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    deep_merge (1.2.2)
     delayed_cron_job (0.9.0)
       fugit (>= 1.5)
     delayed_job (4.1.10)
@@ -264,13 +263,15 @@ GEM
     geocoder (1.8.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    govuk_design_system_formbuilder (3.0.2)
+    govuk_design_system_formbuilder (3.0.3)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
-      deep_merge (~> 1.2.1)
+      html-attributes-utils (~> 0.9.0)
     hashdiff (1.0.1)
     hashids (1.0.6)
+    html-attributes-utils (0.9.0)
+      activesupport (>= 6.1.4.4)
     htmlentities (4.3.4)
     httpclient (2.8.3)
     i18n (1.10.0)
@@ -339,6 +340,8 @@ GEM
       timeout
     nio4r (2.5.8)
     nokogiri (1.13.6-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
@@ -609,6 +612,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
