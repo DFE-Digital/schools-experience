@@ -279,7 +279,7 @@ GEM
     invisible_captcha (2.0.0)
       rails (>= 5.0)
     io-wait (0.2.1)
-    json (2.6.1)
+    json (2.6.2)
     json-jwt (1.13.0)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -339,6 +339,8 @@ GEM
       timeout
     nio4r (2.5.8)
     nokogiri (1.13.6-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
@@ -609,6 +611,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
