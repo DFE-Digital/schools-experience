@@ -57,13 +57,7 @@ class GetIntoTeachingApiClient::SchoolsExperienceApi
 private
 
   def fake_candidate_id
-    fake_uuid = Rails.application.config.x.gitis.fake_crm_uuid
-
-    if %w[true yes 1].include? fake_uuid
-      KNOWN_UUID
-    else
-      fake_uuid.presence || SecureRandom.uuid
-    end
+    SecureRandom.uuid
   end
 
   def fake_sign_up_data
