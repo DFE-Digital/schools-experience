@@ -114,7 +114,6 @@ Rails.application.configure do
     Rails.application.config.x.notify_client = ENV['NOTIFY_CLIENT']
   end
 
-  config.x.gitis.fake_crm_uuid = ENV.fetch('FAKE_CRM_UUID', nil)
   config.x.gitis.privacy_consent_id = ENV['CRM_PRIVACY_CONSENT_ID'].presence || '222750001'
 
   config.ab_threshold = Integer ENV.fetch('AB_TEST_THRESHOLD', 100)

@@ -24,7 +24,7 @@ deployment configuration.
 
 If required Exceptions Notifications can be sent to Sentry.
 
-`SENTRY_DSN` - Send exception reports to sentry, config value supplied by Sentry.
+`SENTRY_DSN` - Send exception reports to sentry, config value supplied by Sentry. An organisation owner or #digital-tools-support can add new members to the school-experience team in the org dfe-teacher-services. Then a new key can be generated via https://sentry.io/settings/dfe-teacher-services/projects/school-experience/keys/.
 
 ## Monitoring
 
@@ -34,15 +34,25 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `CRM_PRIVACY_CONSENT_ID` - GUID for the privacy policy consent id used by candidates - supplied by Gitis team
 
-`GIT_API_TOKEN` - API key for the GiT API
+`GIT_API_TOKEN` - [API key for the GiT API](https://dfedigital.atlassian.net/wiki/spaces/GGIT/pages/2257682445/API-KEYS).
 
 ## DFE Sign-in configuration
 
 `DFE_SIGNIN_CLIENT_ID` - Client ID for OIDC integration with Sign-in
 
-`DFE_SIGNIN_SECRET` - Client Secret for OIDC integration with Sign-in
+`DFE_SIGNIN_SECRET` - Secret string used to encore/decode the payload when communicating with DSI. It it generated on the manage service page in OpenID Connect / Client secret
 
 `DFE_SIGNIN_BASE_URL` - URL for the site which DfE Sign-in OIDC flow will link back to
+
+`DFE_SIGNIN_API_ENDPOINT` - DSI API endpoint to access extra data from the API. May point to preprod or prod DSI environment.
+
+`DFE_SIGNIN_API_SECRET` - Secret string used to decode the payload from DSI API. It it generated on the manage service page in API / Secret.
+
+`DFE_SIGNIN_BASE_URL` - URL shown on DSI /my-services page. It it set on the manage service page in Service details / Home Url.
+
+`DFE_SIGNIN_CLIENT_ID` - Client ID used to connect to DSI via OIDC. It it set on the manage service page in OpenID Connect / Client Id.
+
+`DFE_SIGNIN_HOST` - DSI OIDC environment endpoint for authentication. May point to preprod or prod DSI environment.
 
 `DFE_SIGNIN_API_ENABLED` - Enhance the integration using the Sign-in API, also turns on check if the user belongs to multiple organisations, 1 = on, blank = off
 
@@ -50,13 +60,11 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED` - Moves choosing an organisation from the Sign-in chooser to the the Change school screen within the app.
 
-`DFE_SIGNIN_REQUEST_ORGANISATION_URL` - Shows a button on the Change school screen linking to DfE Sign-in request organisation functionality.
+`DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID` - UUID of the School experience service within the designated Sign-in environment, needed for the role check functionality. It can be found in the URL of the manage service.
 
-`DFE_SERVICES_LIST_URL` - Shows a link to the other services the user has access to within DfE Sign-in
+`DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID` - UUID of the School experience administrator role within the designated Sign-in environment, needed for the role check functionality. It can be found in the manage service in the Manage roles section.
 
-`DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID` - UUID of the School experience service within the designated Sign-in environment, needed for the role check functionality
-
-`DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID` - UUID of the School experience administrator role within the designated Sign-in environment, needed for the role check functionality
+`DFE_SIGNIN_API_CLIENT` - Sets the iss claim in the payload. The "iss" (issuer) claim identifies the principal that issued the JWT. It it set on the manage service page in OpenID Connect / Client Id.
 
 ## Other integrations
 
@@ -67,6 +75,8 @@ If required Exceptions Notifications can be sent to Sentry.
 `GTM_ID` - Google Tag Manager account id
 
 `GTM_UA_ID` - Universal Analytics ID (required for clearning the cookie)
+
+`SLACK_WEBHOOK` - Webhook to communicate pipeline events to Slack channel. A new token may be generated on Slack app https://ukgovernmentdfe.slack.com/apps/A02HUD62ADP-school-experience-deployments. New collaborators may be added by existing collaborators or #digital-tools-support.
 
 ## Deactivating the service
 
@@ -94,8 +104,6 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 
 `CANONICAL_DOMAIN` - if set, connections via a different domain are redirected to the canonical one
 
-`OLD_SEP_DOMAINS` - comma separated list, if a connection is for a matching domain, than redirect to the 'Service has migrated' page on the canonical domain.
-
 ## Admin tools
 
 `DELAYED_JOB_ADMIN_ENABLED` - enable the DelayedJob admin UI, 1 = on, blank = off
@@ -106,3 +114,9 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 ## Deployment tools
 
 `DEPLOYMENT_ID` - String to be available at `/healthcheck` - used to check the deployed version
+
+## Other
+
+`CANDIDATE_URN_WHITELIST` - Comma separated whitelist of school URNS which will always be shown in the search results.
+
+`SECRET_KEY_BASE` - Key used by Rails to verify the integrity of signed cookies.
