@@ -38,17 +38,13 @@ If required Exceptions Notifications can be sent to Sentry.
 
 ## DFE Sign-in configuration
 
-`DFE_SIGNIN_CLIENT_ID` - Client ID for OIDC integration with Sign-in
-
 `DFE_SIGNIN_SECRET` - Secret string used to encore/decode the payload when communicating with DSI. It it generated on the manage service page in OpenID Connect / Client secret
-
-`DFE_SIGNIN_BASE_URL` - URL for the site which DfE Sign-in OIDC flow will link back to
 
 `DFE_SIGNIN_API_ENDPOINT` - DSI API endpoint to access extra data from the API. May point to preprod or prod DSI environment.
 
 `DFE_SIGNIN_API_SECRET` - Secret string used to decode the payload from DSI API. It it generated on the manage service page in API / Secret.
 
-`DFE_SIGNIN_BASE_URL` - URL shown on DSI /my-services page. It it set on the manage service page in Service details / Home Url.
+`DFE_SIGNIN_BASE_URL` - URL for the site which DfE Sign-in OIDC flow will link back to. Shown on DSI /my-services page. It it set on the manage service page in Service details / Home Url.
 
 `DFE_SIGNIN_CLIENT_ID` - Client ID used to connect to DSI via OIDC. It it set on the manage service page in OpenID Connect / Client Id.
 
@@ -68,9 +64,9 @@ If required Exceptions Notifications can be sent to Sentry.
 
 ## Other integrations
 
-`NOTIFY_API_KEY` - API key used to send emails via Notify
+`NOTIFY_API_KEY` - API key used to send emails via Notify. Tech leads and senior developers have access to the Notify account.
 
-`GOOGLE_MAPS_KEY` - API key used to query Google Maps
+`GOOGLE_MAPS_KEY` - API key used to query Google Maps. Created in the "Becoming a Teacher" Google cloud project.
 
 `GTM_ID` - Google Tag Manager account id
 
