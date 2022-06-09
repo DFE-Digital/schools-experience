@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.0.0'
+gem 'rails', '~> 7.0.3'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 5.6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'shakapacker', '6.2.1'
+gem 'shakapacker', '6.4.1'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
