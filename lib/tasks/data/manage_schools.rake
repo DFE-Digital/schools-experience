@@ -29,5 +29,18 @@ namespace :data do
       )
       Bookings::Data::SchoolManager.new(response_data).disable_urns
     end
+
+    desc "Find on-boarded schools that have subsequently closed (and the urn of matching/replacement schools now open)"
+    task identify_onboarded_closed: :environment do |_t, _args|
+      reconciler = Bookings::Data::GiasReconciler.new
+      schools = reconciler.identify_onboarded_closed
+      reopened_urns = reconciler.find_reopened_urns(schools.pluck(:urn))
+
+      results = schools.map do |s|
+        [s.urn, s.name, s.enabled, reopened_urns[s.urn].join("|")]
+      end
+
+      puts(results.map { |row| row.join(", ") })
+    end
   end
 end
