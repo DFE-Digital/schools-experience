@@ -1061,5 +1061,5 @@ en:
 
   views:
     pagination:
-      next: Next
-      previous: Previous
+      next: Next page
+      previous: Previous page
