@@ -5,5 +5,7 @@
 <p>
   <%= service_update.summary %>
   -
-  <%= link_to 'read more', service_update %>
+  <%= link_to service_update do %>
+    read more <span class="govuk-visually-hidden">about "<%= service_update.title %>"</span>
+  <% end %>
 </p>

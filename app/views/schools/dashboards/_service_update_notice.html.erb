@@ -8,6 +8,8 @@
   </p>
 
   <p>
-    <%= link_to 'Read more', service_updates_path %>
+    <%= link_to service_updates_path do %>
+      Read more <span class="govuk-visually-hidden">about "<%= @latest_service_update.title %>"</span>
+    <% end %>
   </p>
 </div>
