@@ -5,15 +5,8 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_for access_needs_detail, url: schools_on_boarding_access_needs_detail_path, method: method do |f| %>
       <%= f.govuk_error_summary %>
-      <h1 class="govuk-heading-l">
-        Enter details about the facilities and support you provide for candidates with disabilities and access needs
-      </h1>
 
-      <p>
-        You can edit, or add to, the following suggested wording.
-      </p>
-
-      <%= f.govuk_text_area :description, rows: 9, label: nil %>
+      <%= f.govuk_text_area :description, rows: 9, label: { tag: "h1", size: "l" } %>
 
       <%= f.govuk_submit 'Continue' %>
     <% end %>

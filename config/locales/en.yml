@@ -669,6 +669,8 @@ en:
         end_time: 'For example, 3:30pm.'
       schools_on_boarding_teacher_training:
         provides_teacher_training: 'For example, are you a School Direct lead or partner school or do you offer mainstream teacher training placements.'
+      schools_on_boarding_access_needs_detail:
+        description: You can edit, or add to, the following suggested wording.
       schools_placement_requests_add_more_details:
         location: Describe where the candidate should report to on the day of the experience
       schools_on_boarding_school_fee_hints: &schools_on_boarding_school_fee_hints
@@ -891,6 +893,8 @@ en:
           true: 'Yes'
           false: 'No'
         times_flexible_details: 'Provide details.'
+      schools_on_boarding_access_needs_detail:
+        description: Enter details about the facilities and support you provide for candidates with disabilities and access needs
       schools_on_boarding_access_needs_support:
         supports_access_needs_options:
           true: 'Yes'
