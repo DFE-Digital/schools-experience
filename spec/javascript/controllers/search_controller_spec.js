@@ -107,7 +107,14 @@ describe('SearchController', () => {
     describe('changing the form', () => {
       beforeEach(() => {
         const form = document.getElementById('form')
-        form.dispatchEvent(new Event('change'))
+        const event = new Event('change')
+
+        Object.defineProperty(event, 'target', {
+          writable: false,
+          value: document.getElementById('checkbox-1-field')
+        });
+
+        form.dispatchEvent(event)
       })
 
       it('performs a search', () => {
@@ -136,6 +143,11 @@ describe('SearchController', () => {
       it('sends a page view to gtag', () => {
         expect(window.gtag).toHaveBeenCalledWith('set', 'page_path', '/path?checkbox1=1&checkbox2=2&checkbox3=3');
         expect(window.gtag).toHaveBeenCalledWith('event', 'page_view');
+      })
+
+      it('re-focuses on the target element', () => {
+        var focusedElementId = document.activeElement.getAttribute('id')
+        expect(focusedElementId).toEqual('checkbox-1-field')
       })
     })
 

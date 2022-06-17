@@ -52,7 +52,9 @@ export default class extends Controller {
     }
   }
 
-  performSearch() {
+  performSearch(e) {
+    this.focusElementId = e?.target.getAttribute('id');
+
     if (!this.supported) {
       return
     }
@@ -84,6 +86,11 @@ export default class extends Controller {
         this.updateInterface()
 
         this.loadingTarget.classList.remove('active')
+
+        const focusElement = document.getElementById(this.focusElementId);
+        if (focusElement) {
+          focusElement.focus();
+        }
       })
   }
 
