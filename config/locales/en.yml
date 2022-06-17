@@ -675,6 +675,8 @@ en:
         location: Describe where the candidate should report to on the day of the experience
       schools_on_boarding_school_fee_hints: &schools_on_boarding_school_fee_hints
         payment_method: For example, by bank transfer, in cash or via PayPal.
+      schools_on_boarding_candidate_requirements_selection:
+        selected_requirements: Select all that apply.
       schools_on_boarding_administration_fee:
         <<: *schools_on_boarding_school_fee_hints
       schools_on_boarding_dbs_fee:
@@ -1042,6 +1044,8 @@ en:
         <<: *schools_on_boarding_school_fee_helpers
       schools_on_boarding_candidate_experience_schedule:
         times_flexible: 'Are your start and finish times flexible?'
+      schools_on_boarding_candidate_requirements_selection:
+        selected_requirements: What requirements do you have?
       schools_on_boarding_candidate_parking_information:
         parking_provided: 'Do you provide parking for candidates?'
       schools_on_boarding_access_needs_support:
