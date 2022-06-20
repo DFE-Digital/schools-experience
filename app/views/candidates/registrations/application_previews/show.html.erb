@@ -129,8 +129,7 @@
 
     <div class="govuk-form-group">
       <%= f.govuk_check_boxes_fieldset :acceptance, multiple: false do %>
-        <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "By checking this box you're confirming that:" } %>
-        <p>
+        <p>By continuing you're confirming that:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>the details you've provided are correct</li>
           <li>you're aged 18 or over</li>
@@ -140,7 +139,7 @@
             will use your personal details to provide you with
             tailored advice and information about teacher training and a career as a teacher</li>
         </ul>
-        </p>
+        <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "I confirm that the application is accurate" } %>
       <% end %>
     </div>
     <% if candidate_signed_in? %>
