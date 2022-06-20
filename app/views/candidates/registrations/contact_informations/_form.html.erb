@@ -30,15 +30,15 @@
           <%= f.govuk_phone_field :phone, autocomplete: 'on' %>
 
           <h2 class="govuk-heading-m">Address</h2>
-          <%= f.govuk_text_field :building, autocomplete: 'home address-line1' %>
+          <%= f.govuk_text_field :building, autocomplete: 'address-line1' %>
           <% if f.object.errors[:street].any? %>
-            <%= f.govuk_text_field :street, autocomplete: 'home address-line2' %>
+            <%= f.govuk_text_field :street, autocomplete: 'address-line2' %>
           <% else %>
-            <%= f.govuk_text_field :street, autocomplete: 'home address-line2', label: { class: 'govuk-visually-hidden' } %>
+            <%= f.govuk_text_field :street, autocomplete: 'address-line2', label: { class: 'govuk-visually-hidden' } %>
           <% end %>
-          <%= f.govuk_text_field :town_or_city, autocomplete: 'home address-level2', class: 'govuk-!-width-two-thirds' %>
-          <%= f.govuk_text_field :county, autocomplete: 'home address-level1', class: 'govuk-!-width-two-thirds' %>
-          <%= f.govuk_text_field :postcode, autocomplete: 'home postal-code', class: 'govuk-input govuk-input--width-10' %>
+          <%= f.govuk_text_field :town_or_city, autocomplete: 'address-level2', class: 'govuk-!-width-two-thirds' %>
+          <%= f.govuk_text_field :county, autocomplete: 'address-level1', class: 'govuk-!-width-two-thirds' %>
+          <%= f.govuk_text_field :postcode, autocomplete: 'postal-code', class: 'govuk-input govuk-input--width-10' %>
 
           <%= f.govuk_submit 'Continue' %>
         <% end %>
