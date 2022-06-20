@@ -1,4 +1,4 @@
-<% self.page_title = "School experience placements #{ describe_current_search @search }" %>
+<% self.page_title = "School experience placements #{ describe_current_search @search, include_result_count: true }" %>
 <%= govuk_back_link new_candidates_school_search_path(school_new_search_params) %>
 
 <div class="govuk-grid-row">

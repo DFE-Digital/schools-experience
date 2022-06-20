@@ -9,7 +9,7 @@ export default class extends Controller {
 
   connect() {
     if (this.supported) {
-      this.updateInterface()
+      this.updateInterfaceState()
     }
   }
 
@@ -62,10 +62,8 @@ export default class extends Controller {
     const params = new URLSearchParams(new FormData(this.formTarget))
     const url = `${this.formAction}?${params.toString()}`
 
+    this.updateHistory(url)
     this.executeSearch(url)
-
-    history.replaceState({}, document.title, url)
-
     this.sendPageView(url)
   }
 
@@ -82,16 +80,14 @@ export default class extends Controller {
 
         document.getElementById(this.resultsIdValue).innerHTML = results.innerHTML
         document.getElementById(this.formIdValue).innerHTML = form.innerHTML
+        document.title = response.title;
 
-        this.updateInterface()
-
-        this.loadingTarget.classList.remove('active')
-
-        const focusElement = document.getElementById(this.focusElementId);
-        if (focusElement) {
-          focusElement.focus();
-        }
+        this.updateInterfaceState()
       })
+  }
+
+  updateHistory(url) {
+    history.replaceState({}, document.title, url)
   }
 
   sendPageView(url) {
@@ -101,9 +97,15 @@ export default class extends Controller {
     }
   }
 
-  updateInterface() {
+  updateInterfaceState() {
     this.submitTarget.classList.add('hidden')
     this.tagTargets.forEach(tag => tag.classList.add('interactive'))
+    this.loadingTarget.classList.remove('active')
+
+    const focusElement = document.getElementById(this.focusElementId);
+    if (focusElement) {
+      focusElement.focus();
+    }
   }
 
   get formAction() {

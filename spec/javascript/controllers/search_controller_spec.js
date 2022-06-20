@@ -25,7 +25,17 @@ describe('SearchController', () => {
       expect(loading.classList).toContain('active')
 
       return Promise.resolve({
-        text: () => Promise.resolve(`${responseForm}${responseSearchResults}`),
+        text: () => Promise.resolve(`
+          <html>
+            <head>
+              <title>New Title</title>
+            </head>
+            <body>
+              ${responseForm}
+              ${responseSearchResults}
+            </body>
+            </html>
+          `),
       })
     })
   }
@@ -39,7 +49,8 @@ describe('SearchController', () => {
     window.gtag = jest.fn();
   };
 
-  const setBody = () => {
+  const setDocument = () => {
+    document.title = 'Title'
     document.body.innerHTML = `
       <div data-controller="search" data-search-results-id-value="search-results" data-search-form-id-value="form">
         ${generateForm()}
@@ -90,7 +101,7 @@ describe('SearchController', () => {
     beforeEach(() => {
       mockFetch()
       mockHistory()
-      setBody()
+      setDocument()
       mockGtag()
     })
 
@@ -137,7 +148,7 @@ describe('SearchController', () => {
       })
 
       it('updates the page history', () => {
-        expect(history.replaceState).toHaveBeenCalledWith({}, document.title, '/path?checkbox1=1&checkbox2=2&checkbox3=3')
+        expect(history.replaceState).toHaveBeenCalledWith({}, "Title", '/path?checkbox1=1&checkbox2=2&checkbox3=3')
       })
 
       it('sends a page view to gtag', () => {
@@ -148,6 +159,10 @@ describe('SearchController', () => {
       it('re-focuses on the target element', () => {
         var focusedElementId = document.activeElement.getAttribute('id')
         expect(focusedElementId).toEqual('checkbox-1-field')
+      })
+
+      it('updates the page title', () => {
+          expect(document.title).toEqual('New Title')
       })
     })
 
@@ -197,7 +212,7 @@ describe('SearchController', () => {
       delete global.fetch;
       delete global.URLSearchParams;
 
-      setBody()
+      setDocument()
     })
 
     it('does not hide the search button', () => {

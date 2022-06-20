@@ -79,14 +79,19 @@ module Candidates::SchoolHelper
     school.phases.map(&:name).to_sentence
   end
 
-  def describe_current_search(search)
-    if search.location_name.present?
-      "near #{search.location_name}"
-    elsif search.location.present?
-      "near #{search.location}"
-    else
-      "matching #{search.query}"
-    end
+  def describe_current_search(search, include_result_count: false)
+    description = if search.location_name.present?
+                    "near #{search.location_name}"
+                  elsif search.location.present?
+                    "near #{search.location}"
+                  else
+                    "matching #{search.query}"
+                  end
+
+    return description unless include_result_count
+
+    result_count = pluralize(number_with_delimiter(search.total_count), "result")
+    "#{result_count} #{description}"
   end
 
   def show_lower_navigation?(count)
