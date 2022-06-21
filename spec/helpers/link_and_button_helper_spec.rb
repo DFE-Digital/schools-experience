@@ -76,7 +76,7 @@ describe LinkAndButtonHelper do
   end
 
   describe '#govuk_button_to' do
-    include_examples 'govuk-styled links and buttons', 'govuk_button_to', 'input'
+    include_examples 'govuk-styled links and buttons', 'govuk_button_to', 'button'
   end
 
   describe '#govuk_back_link' do

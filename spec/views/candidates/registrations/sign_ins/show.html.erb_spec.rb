@@ -21,6 +21,6 @@ RSpec.describe "candidates/registrations/sign_ins/show", type: :view do
     expect(rendered).to have_css('h1', text: /already registered with us/i)
     expect(rendered).to have_css('li', text: 'test@testymctest.com')
     expect(rendered).to \
-      have_css("form[action=\"/my/resend/link\"] input[value=\"Resend verification code\"]")
+      have_css("form[action=\"/my/resend/link\"] button", text: "Resend verification code")
   end
 end
