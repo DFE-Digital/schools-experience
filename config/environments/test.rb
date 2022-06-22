@@ -154,6 +154,12 @@ Rails.application.configure do
 
   Rails.application.routes.default_url_options = { protocol: 'https' }
 
+  # We get a foreign key error on the CI run if this is enabled; I think
+  # our fixtures are actually fine and its masking another exception. We
+  # should look to enable this to be inline with the Rails 7 defaults at
+  # some point.
+  config.active_record.verify_foreign_keys_for_fixtures = false
+
   # Don't actually attempt to delivery emails during tests
   config.x.notify_client = 'NotifyFakeClient'
 
