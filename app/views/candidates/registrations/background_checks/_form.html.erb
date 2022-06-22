@@ -1,5 +1,6 @@
 <% self.page_title = 'Background and security checks' %>
-<%= govuk_back_link %>
+<% content_for :back_link do govuk_back_link; end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for background_check, url: candidates_school_registrations_background_check_path do |f| %>

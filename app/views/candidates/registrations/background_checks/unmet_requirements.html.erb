@@ -1,19 +1,22 @@
 <% self.page_title = 'DBS certificate is required' %>
+<% content_for :back_link do
+  govuk_back_link edit_candidates_school_registrations_background_check_path(
+    anchor: 'candidates_registrations_background_check_has_dbs_check_container'
+  )
+end %>
 
-<%= govuk_back_link edit_candidates_school_registrations_background_check_path(
-          anchor: 'candidates_registrations_background_check_has_dbs_check_container'
-        ) %>
+<%=  %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">You need a DBS certificate at this school</h1>
-    <p>This school requires you to have a DBS certificate for the requested school experience type. 
+    <p>This school requires you to have a DBS certificate for the requested school experience type.
     There are schools that do not require a DBS certificate for all types of school experience.</p>
-        
+
       <p>
         <%= govuk_link_to 'Search again', new_candidates_school_search_path %>
       </p>
 
-    
+
     <p>
       <strong>
         <%= link_to "Find out more about 'DBS checks' and 'DBS certificates'", 'https://www.gov.uk/government/organisations/disclosure-and-barring-service/about' %>

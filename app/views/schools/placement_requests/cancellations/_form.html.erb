@@ -1,6 +1,5 @@
 <%- self.page_title = "Review and send rejection email to candidate" %>
-
-<%= govuk_back_link schools_placement_request_path(@cancellation.placement_request) %>
+<% content_for :back_link do govuk_back_link(schools_placement_request_path(@cancellation.placement_request)); end %>
 
 <%= form_for cancellation, url: schools_placement_request_cancellation_path do |f| %>
   <div class="govuk-grid-row">
