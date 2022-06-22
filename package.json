@@ -2,8 +2,8 @@
   "name": "school_experience",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.18.2",
-    "@babel/plugin-transform-runtime": "^7.18.2",
+    "@babel/core": "^7.18.5",
+    "@babel/plugin-transform-runtime": "^7.18.5",
     "@babel/preset-env": "^7.18.2",
     "@babel/runtime": "^7.18.3",
     "@googlemaps/js-api-loader": "^1.14.3",
@@ -11,14 +11,14 @@
     "accessible-autocomplete": "^2.0.4",
     "babel-loader": "^8.2.5",
     "babel-plugin-macros": "^3.1.0",
-    "compression-webpack-plugin": "^9.2.0",
+    "compression-webpack-plugin": "^10.0.0",
     "core-js": "^3.22.8",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.0.0",
     "custom-event-polyfill": "^1.0.7",
     "govuk-frontend": "^4.0.1",
     "js-cookie": "^3.0.1",
-    "mini-css-extract-plugin": "^2.6.0",
+    "mini-css-extract-plugin": "^2.6.1",
     "postcss-preset-env": "^6.7.1",
     "sass": "^1.52.2",
     "sass-loader": "^13.0.0",
@@ -28,13 +28,13 @@
     "terser-webpack-plugin": "^5.3.3",
     "webpack": "^5.69.1",
     "webpack-assets-manifest": "^5.1.0",
-    "webpack-cli": "^4.9.2",
+    "webpack-cli": "^4.10.0",
     "webpack-merge": "^5.8.0",
     "webpack-sources": "^3.2.3"
   },
   "devDependencies": {
     "babel-plugin-dynamic-import-node": "^2.3.3",
-    "jest": "^28.1.0",
+    "jest": "^28.1.1",
     "webpack-dev-server": "^4.7.4"
   },
   "jest": {
