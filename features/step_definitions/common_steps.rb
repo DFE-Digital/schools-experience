@@ -64,9 +64,9 @@ Then("I should see a {string} link to the booking") do |link_text|
 end
 
 Then("the page title should be {string}") do |title|
-  title_suffix = "DfE School Experience"
+  title_suffix = "Get school experience - GOV.UK"
   expect(title).to be_present
-  expect(page.title).to eql([title, title_suffix].join(' | '))
+  expect(page.title).to eql([title, title_suffix].join(' - '))
 end
 
 Then("there should be a {string} warning") do |string|
