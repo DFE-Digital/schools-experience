@@ -160,10 +160,9 @@ en:
         candidates/registrations/contact_information:
           attributes:
             building:
-              blank: "Enter your building"
-              too_long: "Building must be 250 characters or fewer"
+              blank: "Enter the first line of your address"
+              too_long: "Address line 1 must be 250 characters or fewer"
             county:
-              blank: "Enter your county"
               too_long: "County must be 50 characters or fewer"
             phone:
               blank: "Enter your telephone number"
@@ -174,10 +173,8 @@ en:
               invalid: 'Enter a valid postcode'
               too_long: "Postcode must be 20 characters or fewer"
             street:
-              blank: "Enter your street"
-              too_long: "Street must be 250 characters or fewer"
+              too_long: "Address line 2 must be 250 characters or fewer"
             town_or_city:
-              blank: "Enter your town or city"
               too_long: "Town or city must be 80 characters or fewer"
 
         candidates/registrations/education:
@@ -761,9 +758,11 @@ en:
           inschool: In school
           virtual: Virtual
       candidates_registrations_contact_information:
-        building: "Building and street"
+        building: "Address line 1"
+        street: "Address line 2 (optional)"
         phone: "UK telephone number"
-        town_or_city: "Town or city"
+        town_or_city: "Town or city (optional)"
+        county: "County (optional)"
       candidates_registrations_personal_information:
         first_name: First name
         last_name: Last name

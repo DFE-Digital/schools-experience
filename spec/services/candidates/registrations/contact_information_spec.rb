@@ -17,12 +17,12 @@ describe Candidates::Registrations::ContactInformation, type: :model do
     context 'building' do
       it { is_expected.to validate_presence_of :building }
 
-      let(:too_long_msg) { 'Building must be 250 characters or fewer' }
+      let(:too_long_msg) { 'Address line 1 must be 250 characters or fewer' }
       it { is_expected.to validate_length_of(:building).is_at_most(250).with_message(too_long_msg) }
     end
 
     context 'street' do
-      let(:too_long_msg) { 'Street must be 250 characters or fewer' }
+      let(:too_long_msg) { 'Address line 2 must be 250 characters or fewer' }
 
       it { is_expected.to validate_length_of(:street).is_at_most(250).with_message(too_long_msg) }
     end

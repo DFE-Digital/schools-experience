@@ -32,11 +32,7 @@
 
           <h2 class="govuk-heading-m">Address</h2>
           <%= f.govuk_text_field :building, autocomplete: 'address-line1' %>
-          <% if f.object.errors[:street].any? %>
-            <%= f.govuk_text_field :street, autocomplete: 'address-line2' %>
-          <% else %>
-            <%= f.govuk_text_field :street, autocomplete: 'address-line2', label: { class: 'govuk-visually-hidden' } %>
-          <% end %>
+          <%= f.govuk_text_field :street, autocomplete: 'address-line2' %>
           <%= f.govuk_text_field :town_or_city, autocomplete: 'address-level2', class: 'govuk-!-width-two-thirds' %>
           <%= f.govuk_text_field :county, autocomplete: 'address-level1', class: 'govuk-!-width-two-thirds' %>
           <%= f.govuk_text_field :postcode, autocomplete: 'postal-code', class: 'govuk-input govuk-input--width-10' %>

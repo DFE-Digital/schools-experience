@@ -26,10 +26,10 @@ end
 
 Given("I have completed the contact information form") do
   visit path_for 'enter your contact details', school: @school
-  fill_in 'Building', with: 'Test house'
-  fill_in 'Street', with: 'Test street'
-  fill_in 'Town or city', with: 'Test Town'
-  fill_in 'County', with: 'Testshire'
+  fill_in 'Address line 1', with: 'Test house'
+  fill_in 'Address line 2 (optional)', with: 'Test street'
+  fill_in 'Town or city (optional)', with: 'Test Town'
+  fill_in 'County (optional)', with: 'Testshire'
   fill_in 'Postcode', with: 'TE57 1NG'
   fill_in 'UK telephone number', with: '01234567890'
   click_button 'Continue'
@@ -85,10 +85,10 @@ end
 
 Then("the contact information form should populated with the details I've entered so far") do
   visit path_for 'enter your contact details', school: @school
-  expect(find_field('Building').value).to eq 'Test house'
-  expect(find_field('Street').value).to eq 'Test street'
-  expect(find_field('Town or city').value).to eq 'Test Town'
-  expect(find_field('County').value).to eq 'Testshire'
+  expect(find_field('Address line 1').value).to eq 'Test house'
+  expect(find_field('Address line 2 (optional)').value).to eq 'Test street'
+  expect(find_field('Town or city (optional)').value).to eq 'Test Town'
+  expect(find_field('County (optional)').value).to eq 'Testshire'
   expect(find_field('Postcode').value).to eq 'TE57 1NG'
   expect(find_field('UK telephone number').value).to eq '01234567890'
 end
