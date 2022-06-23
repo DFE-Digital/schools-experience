@@ -110,6 +110,11 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
+  # See: https://github.com/rails/rails/issues/21948
+  config.action_dispatch.default_headers.merge!(
+    "Cache-Control" => "no-store, no-cache"
+  )
+
   # Use Redis for Session and cache if REDIS_URL or REDIS_CACHE_URL is set
   config.cache_store = :redis_cache_store,
                        {
