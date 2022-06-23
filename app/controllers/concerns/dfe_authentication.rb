@@ -28,7 +28,7 @@ module DFEAuthentication
         state: session[:state],
         nonce: session[:nonce],
         scope: oidc_auth_scope
-      )
+      ), allow_other_host: true
     end
 
     helper_method :has_other_schools?

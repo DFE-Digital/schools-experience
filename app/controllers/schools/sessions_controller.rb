@@ -44,7 +44,8 @@ module Schools
           host: get_oidc_client.host,
           path: '/session/end',
           query: build_logout_query(id_token)
-        ).to_s
+        ).to_s,
+        allow_other_host: true
       )
     end
 
