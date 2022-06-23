@@ -150,51 +150,69 @@ RSpec.describe Candidates::SchoolHelper, type: :helper do
   end
 
   context '.describe_current_search' do
+    let(:opts) { {} }
+
+    subject { describe_current_search(search, **opts) }
+
     context 'with location search' do
       context 'and name supplied by search' do
-        subject do
-          double('Location search',
+        let(:search) do
+          instance_double(Candidates::SchoolSearch,
             latitude: '',
             longitude: '',
+            total_count: 3435,
             location: 'Manchester',
             location_name: 'Manchester, United Kingdom',
             query: '')
         end
 
-        it('should say near Manchester') do
-          expect(describe_current_search(subject)).to match(/near Manchester, United Kingdom/)
+        it { is_expected.to eq("near Manchester, United Kingdom") }
+
+        context "when include_result_count is true" do
+          let(:opts) { { include_result_count: true } }
+
+          it { is_expected.to eq("3,435 results near Manchester, United Kingdom") }
         end
       end
 
       context 'without name supplied by search' do
-        subject do
-          double('Location search',
+        let(:search) do
+          instance_double(Candidates::SchoolSearch,
             latitude: '',
             longitude: '',
             location: 'Manchester',
             location_name: nil,
+            total_count: 0,
             query: '')
         end
 
-        it('should say near Manchester') do
-          expect(describe_current_search(subject)).to match(/near Manchester$/)
+        it { is_expected.to eq("near Manchester") }
+
+        context "when include_result_count is true" do
+          let(:opts) { { include_result_count: true } }
+
+          it { is_expected.to eq("0 results near Manchester") }
         end
       end
     end
 
     context 'with query search' do
-      subject do
-        double('Text search',
+      let(:search) do
+        instance_double(Candidates::SchoolSearch,
           latitude: '',
           longitude: '',
           location: '',
+          total_count: 1,
           location_name: nil,
           query: 'special school')
       end
 
-      it('should say matching special school') do
-        expect(describe_current_search(subject)).to \
-          match(/matching special school/i)
+      it { is_expected.to eq("matching special school") }
+
+      context "when include_result_count is true" do
+        let(:opts) { { include_result_count: true } }
+
+        it { is_expected.to eq("1 result matching special school") }
       end
     end
   end

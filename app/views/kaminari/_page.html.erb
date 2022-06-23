@@ -8,5 +8,13 @@
     remote:        data-remote
 -%>
 <span class="page<%= ' current' if page.current? %>">
-  <%= link_to_unless page.current?, page, url, {remote: remote, rel: page.rel} %>
+  <% if page.current? %>
+    <span class="govuk-visually-hidden">Current page:</span>
+    <%= page %>
+  <% else %>
+    <%= link_to(url, remote: remote, rel: page.rel) do %>
+      <span class="govuk-visually-hidden">Page:</span>
+      <%= page %>
+    <% end %>
+  <% end %>
 </span>
