@@ -1,8 +1,7 @@
 <% self.page_title = @school.name %>
 <% description "#{@school.name} is offering school experience opportunities through the DfE's Get school experience service.
 Find out more about a career in teaching, experience days and how to apply." %>
-
-<%= govuk_back_link javascript: true %>
+<% content_for :back_link do govuk_back_link(javascript: true); end %>
 
 <% if !@school.onboarded? %>
   <div class="govuk-inset-text">

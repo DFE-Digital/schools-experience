@@ -1,7 +1,7 @@
+<% content_for :back_link do govuk_back_link(javascript: true); end %>
+
 <div class="govuk-grid-row">
   <article class="govuk-grid-column-full">
-    <%= govuk_back_link javascript: true %>
-
     <%= page_heading do %>
       Accessibility statement for the school experience service
     <% end %>
@@ -58,8 +58,8 @@
 
       <ul class="govuk-list">
         <li>
-          <%= mail_to 'organise.school-experience@education.gov.uk', 
-                'organise.school-experience@education.gov.uk', 
+          <%= mail_to 'organise.school-experience@education.gov.uk',
+                'organise.school-experience@education.gov.uk',
                 aria: { label: 'School experience support email address' } %>
         </li>
       </ul>
@@ -78,7 +78,7 @@
 
       <p>
         If you find any problems that are not listed on this page or think we're
-        not meeting accessibility requirements email 
+        not meeting accessibility requirements email
         <%= mail_to 'organise.school-experience@education.gov.uk' %>.
       </p>
     </section>

@@ -53,10 +53,10 @@ end
 
 Given("I have filled in my contact information successfully") do
   # Submit contact information form successfully
-  fill_in 'Building', with: 'Test house'
-  fill_in 'Street', with: 'Test street'
-  fill_in 'Town or city', with: 'Test Town'
-  fill_in 'County', with: 'Testshire'
+  fill_in 'Address line 1', with: 'Test house'
+  fill_in 'Address line 2 (optional)', with: 'Test street'
+  fill_in 'Town or city (optional)', with: 'Test Town'
+  fill_in 'County (optional)', with: 'Testshire'
   fill_in 'Postcode', with: 'TE57 1NG'
   fill_in 'UK telephone number', with: '01234567890'
   click_button 'Continue'

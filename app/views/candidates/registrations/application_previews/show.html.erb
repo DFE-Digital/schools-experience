@@ -1,5 +1,6 @@
 <% self.page_title = 'Check your answers' %>
-<%= govuk_back_link %>
+<% content_for :back_link do govuk_back_link; end %>
+
 <div class="govuk-grid-row" id="application-preview">
   <%= form_for @privacy_policy,
         url: candidates_school_registrations_confirmation_email_path,

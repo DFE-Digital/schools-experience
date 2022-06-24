@@ -1,5 +1,6 @@
 <% self.page_title = 'Which of the following best describes how you feel about teaching?' %>
-<%= govuk_back_link %>
+<% content_for :back_link do govuk_back_link; end %>
+
 <div id="teaching-preference">
   <%= form_for teaching_preference, url: candidates_school_registrations_teaching_preference_path, data: { controller: 'subject-preference-form' } do |f| %>
     <%= f.govuk_error_summary %>

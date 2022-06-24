@@ -1,9 +1,8 @@
 <%- self.page_title = "Change booking date" %>
+<% content_for :back_link do govuk_back_link(schools_booking_path(@booking)); end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-     <%= govuk_back_link schools_booking_path(@booking) %>
-
     <%= form_for @booking, url: schools_booking_date_path(@booking), method: 'patch' do |f| %>
       <%= f.govuk_error_summary %>
 

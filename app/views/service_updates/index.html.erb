@@ -1,4 +1,4 @@
-<%= govuk_back_link schools_dashboard_path %>
+<% content_for :back_link do govuk_back_link(schools_dashboard_path); end %>
 
 <%= page_heading do %>
   Service updates and guidance

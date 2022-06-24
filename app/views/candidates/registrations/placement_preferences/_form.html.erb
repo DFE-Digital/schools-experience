@@ -1,5 +1,6 @@
 <% self.page_title = 'What do you want to get out of your school experience?' %>
-<%= govuk_back_link %>
+<% content_for :back_link do govuk_back_link; end %>
+
 <div class="govuk-grid-row" id="placement-preference">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for placement_preference, url: candidates_school_registrations_placement_preference_path do |f| %>

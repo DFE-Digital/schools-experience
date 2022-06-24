@@ -1,6 +1,5 @@
 <% self.page_title = 'Review dates' %>
-
-<%= govuk_back_link javascript: true %>
+<% content_for :back_link do govuk_back_link(javascript: true); end %>
 
 <%= form_for @review_recurrences, url: schools_placement_date_review_recurrences_path(@placement_date), method: "post" do |f| %>
   <%= f.govuk_error_summary %>

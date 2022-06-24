@@ -1,4 +1,4 @@
-<%= govuk_back_link service_updates_path %>
+<% content_for :back_link do govuk_back_link(service_updates_path); end %>
 
 <%= page_heading do %>
   Service update - <%= @update.date.to_formatted_s(:govuk) %>

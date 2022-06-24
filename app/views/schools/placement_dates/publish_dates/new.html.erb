@@ -1,6 +1,5 @@
 <% self.page_title = 'Check your placement details' %>
-
-<%= govuk_back_link javascript: true %>
+<% content_for :back_link do govuk_back_link(javascript: true); end %>
 
 <h1>Check your placement details</h2>
 

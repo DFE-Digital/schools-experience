@@ -60,6 +60,10 @@
 
       <%= render 'shared/candidates/alert_notification' if show_candidate_alert_notification? %>
 
+      <% if content_for?(:back_link) %>
+        <%= yield(:back_link) %>
+      <% end %>
+
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <%= yield %>
       </main>
