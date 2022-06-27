@@ -464,6 +464,14 @@ jobs:
           ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
           GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Determine DfE Sign In Message
+        uses: haya14busa/action-cond@v1
+        id: dsiMessage
+        with:
+          cond: ${{ env.STATIC_ROUTE != '' }}
+          if_true: ':white_check_mark: DfE sign in route obtained: https://${{env.STATIC_ROUTE}}.london.cloudapps.digital'
+          if_false: ':warning: **DfE sign in route pool exhausted (close some open PRs!)**'
+
       - name: Post sticky pull request comment
         if: matrix.environment == 'Review'
         uses: marocchino/sticky-pull-request-comment@v2
@@ -471,7 +479,7 @@ jobs:
           recreate: true
           message: |
                    Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
-                   Static DFE_SIGNIN Path used https://${{env.STATIC_ROUTE}}.london.cloudapps.digital
+                   ${{ steps.dsiMessage.outputs.value }}
 
       - name: Add Review Label
         if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
