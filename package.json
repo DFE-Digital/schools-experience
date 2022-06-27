@@ -20,7 +20,7 @@
     "js-cookie": "^3.0.1",
     "mini-css-extract-plugin": "^2.6.1",
     "postcss-preset-env": "^6.7.1",
-    "sass": "^1.52.2",
+    "sass": "^1.53.0",
     "sass-loader": "^13.0.0",
     "shakapacker": "6.4.1",
     "stimulus": "^3.0",
