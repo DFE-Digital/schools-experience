@@ -42,3 +42,6 @@ yarn-debug.log*
 .yarn-integrity
 fetch_config.rb
 coverage
+
+# Visual Studio Code
+.vscode
