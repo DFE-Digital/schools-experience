@@ -45,7 +45,7 @@ gem 'yabeda-rails'
 
 gem 'dotenv-rails', '>= 2.7.6'
 
-gem 'govuk_design_system_formbuilder', '~> 3.0'
+gem 'govuk_design_system_formbuilder', '~> 3.1'
 gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
@@ -55,7 +55,7 @@ gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 
 gem "connection_pool"
-gem "redis", "~> 4.6"
+gem "redis", "~> 4.7"
 
 gem 'kaminari'
 
