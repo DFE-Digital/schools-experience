@@ -72,7 +72,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push to GitHub Container Registry
-        uses: docker/build-push-action@v3.0.0
+        uses: docker/build-push-action@v3.1.0
         with:
           cache-from: ${{ env.DOCKER_REPOSITORY }}:master
           tags: |
