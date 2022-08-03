@@ -1,3 +1,9 @@
+if Rails.env.test?
+  # Default tags are not important in test but this ensures
+  # our custom metrics are setup/testable.
+  ENV["VCAP_APPLICATION"] ||= "{}"
+end
+
 if ENV.key?("VCAP_APPLICATION")
   vcap_config = JSON.parse(ENV["VCAP_APPLICATION"])
 
@@ -6,5 +12,9 @@ if ENV.key?("VCAP_APPLICATION")
     default_tag :app_instance, ENV["CF_INSTANCE_INDEX"]
     default_tag :organisation, vcap_config["organization_name"]
     default_tag :space, vcap_config["space_name"]
+
+    group :gse do
+      counter :delayed_job_heart_beat, comment: "Counter for a delayed job heart beat/monitoring"
+    end
   end
 end

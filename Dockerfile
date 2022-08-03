@@ -1,5 +1,4 @@
 FROM ruby:3.1.0-alpine3.15
-# remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -19,8 +18,9 @@ ARG SHA
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
 # remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
+# also https://security.snyk.io/vuln/SNYK-ALPINE315-NCURSES-2952568
 # hadolint ignore=DL3018
-RUN apk update && apk add -Uu --no-cache zlib-dev busybox
+RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses
 
 # hadolint ignore=DL3018
 RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
@@ -43,7 +43,6 @@ COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
 RUN gem install bundler --version='~> 2.3.4' && \
     bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
-    bundle config set without 'development' && \
     bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
