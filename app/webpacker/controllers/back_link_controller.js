@@ -1,4 +1,4 @@
-import { Controller } from "stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 // This replaces a back link with an actual 'pop' from the users browser
 // history, rather than being a forward navigation to what we think was their
