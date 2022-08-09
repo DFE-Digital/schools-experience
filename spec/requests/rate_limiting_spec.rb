@@ -36,10 +36,7 @@ describe "Rate limiting" do
 
     it_behaves_like "an IP-based rate limited endpoint", "POST /candidates/schools/:school_id/registrations/confirmation_email", 5, 1.minute do
       def perform_request
-        key = Candidates::Registrations::PrivacyPolicy.model_name.param_key
-        params = { key => { acceptance: '1' } }
-
-        post candidates_school_registrations_confirmation_email_path(11_048), params: params, headers: { "REMOTE_ADDR" => ip }
+        post candidates_school_registrations_confirmation_email_path(11_048), headers: { "REMOTE_ADDR" => ip }
       end
     end
   end

@@ -8,12 +8,7 @@ module Candidates
       end
 
       def create
-        @privacy_policy = PrivacyPolicy.new privacy_policy_params
-
-        if @privacy_policy.not_accepted?
-          @application_preview = ApplicationPreview.new current_registration
-          render 'candidates/registrations/application_previews/show'
-        elsif candidate_signed_in?
+        if candidate_signed_in?
           RegistrationStore.instance.store! current_registration
           redirect_to candidates_confirm_path uuid: current_registration.uuid
         else
@@ -31,13 +26,6 @@ module Candidates
         # candidate is applying, or we push a code change mid way through a
         # registration.
         redirect_to next_step_path(current_registration)
-      end
-
-    private
-
-      def privacy_policy_params
-        params.require(:candidates_registrations_privacy_policy).permit \
-          :acceptance
       end
     end
   end

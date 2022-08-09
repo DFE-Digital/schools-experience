@@ -2,14 +2,12 @@
 <% content_for :back_link do govuk_back_link; end %>
 
 <div class="govuk-grid-row" id="application-preview">
-  <%= form_for @privacy_policy,
-        url: candidates_school_registrations_confirmation_email_path,
+  <%= form_with url: candidates_school_registrations_confirmation_email_path,
         data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
   <div class="govuk-grid-column-two-thirds">
-    <%= f.govuk_error_summary %>
-
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>You'll receive an email with the following details once you've sent your school experience request.</p>
+    <p>Find out how we look after your data in our <a href="/privacy_policy" class="govuk-link">privacy policy</a></p>
 
     <h2 class="govuk-heading-m">Personal details</h2>
     <dl class="govuk-summary-list">
@@ -129,19 +127,15 @@
     </dl>
 
     <div class="govuk-form-group">
-      <%= f.govuk_check_boxes_fieldset :acceptance, multiple: false do %>
-        <p>By continuing you're confirming that:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>the details you've provided are correct</li>
-          <li>you're aged 18 or over</li>
-          <li>you've read our <a href="/privacy_policy" class="govuk-link">privacy policy</a></li>
-          <li>you understand that the DfE's
-            <a href="https://getintoteaching.education.gov.uk/" class="govuk-link">Get Into Teaching Information Service</a>
-            will use your personal details to provide you with
-            tailored advice and information about teacher training and a career as a teacher</li>
-        </ul>
-        <%= f.govuk_check_box :acceptance, 1, 0, multiple: false, link_errors: true, label: { text: "I confirm that the application is accurate" } %>
-      <% end %>
+      <p>By continuing you're confirming that:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>the details you've provided are correct</li>
+        <li>you're aged 18 or over</li>
+        <li>you understand that the DfE's
+          <a href="https://getintoteaching.education.gov.uk/" class="govuk-link">Get Into Teaching Information Service</a>
+          will use your personal details to provide you with
+          tailored advice and information about teacher training and a career as a teacher</li>
+      </ul>
     </div>
     <% if candidate_signed_in? %>
       <%= f.govuk_submit 'Accept and send', class: 'govuk-button', data: { prevent_double_click_target: "submitButton" } %>
