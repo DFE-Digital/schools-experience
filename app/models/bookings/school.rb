@@ -274,7 +274,7 @@ private
   end
 
   def has_available_flex_dates?
-    !availability_preference_fixed? && availability_info?
+    !availability_preference_fixed?
   end
 
   def nilify_availability_info

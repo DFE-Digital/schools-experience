@@ -24,7 +24,11 @@ describe Bookings::School, type: :model do
 
       context 'overwriting empty strings before validation' do
         subject { create(:bookings_school) }
-        before { subject.update(availability_info: '') }
+        before do
+          subject.availability_info = ''
+          subject.valid?
+        end
+
         specify 'should overwrite empty strings with nil' do
           expect(subject.availability_info).to be_nil
         end
@@ -429,12 +433,11 @@ describe Bookings::School, type: :model do
       specify { expect(described_class).to respond_to(:with_availability) }
       specify { expect(described_class).to respond_to(:without_availability) }
 
-      specify { expect(described_class.new).to have_db_column(:availability_info).of_type(:text) }
+      specify { expect(described_class.new).to have_db_column(:availability_info).of_type(:text).with_options(null: false, default: I18n.t("defaults.bookings_school.availability_info")) }
       specify { expect(described_class.new).to have_db_column(:availability_preference_fixed).of_type(:boolean).with_options(default: false) }
-      specify { expect(described_class.new).to have_db_column(:experience_type).of_type(:string) }
+      specify { expect(described_class.new).to have_db_column(:experience_type).of_type(:string).with_options(null: false, default: :inschool) }
 
       let!(:flexible_with_description) { create(:bookings_school) }
-      let!(:flexible_without_description) { create(:bookings_school, availability_info: nil) }
       let!(:fixed_without_dates) { create(:bookings_school, :with_fixed_availability_preference) }
       let!(:fixed_with_dates) { create(:bookings_school, :with_fixed_availability_preference) }
 
@@ -445,7 +448,7 @@ describe Bookings::School, type: :model do
         subject { described_class.flexible }
 
         specify 'should include schools that offer flexible dates' do
-          expect(subject).to include(flexible_with_description, flexible_without_description)
+          expect(subject).to include(flexible_with_description)
         end
 
         specify 'should not include schools that offer fixed dates' do
@@ -458,10 +461,6 @@ describe Bookings::School, type: :model do
 
         specify 'should include schools that offer flexible_dates with availability_description' do
           expect(subject).to include(flexible_with_description)
-        end
-
-        specify 'should not include schools that offer flexible_dates without availability_description' do
-          expect(subject).not_to include(flexible_without_description)
         end
 
         specify 'should not include schools that offer fixed dates' do
@@ -478,7 +477,7 @@ describe Bookings::School, type: :model do
         end
 
         specify 'should not include schools that offer flexible dates' do
-          expect(subject).not_to include(flexible_with_description, flexible_without_description)
+          expect(subject).not_to include(flexible_with_description)
         end
       end
 
@@ -503,17 +502,13 @@ describe Bookings::School, type: :model do
         specify 'should not include schools that are fixed with no available dates' do
           expect(subject).not_to include(fixed_without_dates)
         end
-
-        specify 'should not include schools that are flexible with no availability_description' do
-          expect(subject).not_to include(flexible_without_description)
-        end
       end
 
       context '.without_availability' do
         subject { described_class.without_availability }
 
-        it 'includes schools that are flexible without availability info or fixed without available dates' do
-          expect(subject).to include(fixed_without_dates, flexible_without_description)
+        it 'includes schools that are fixed without available dates' do
+          expect(subject).to include(fixed_without_dates)
         end
 
         it 'does not include schools that are fixed with available dates' do
@@ -548,11 +543,6 @@ describe Bookings::School, type: :model do
         context 'with availability_info' do
           subject { build(:bookings_school) }
           it { is_expected.to have_availability }
-        end
-
-        context 'without availability_info' do
-          subject { build(:bookings_school, availability_info: nil) }
-          it { is_expected.not_to have_availability }
         end
       end
 
@@ -739,12 +729,6 @@ describe Bookings::School, type: :model do
       context "with flexible dates" do
         subject { create :bookings_school, experience_type: etype }
 
-        context "with experience_type not set" do
-          let(:etype) { nil }
-
-          it { is_expected.to be_has_inschool_placements }
-        end
-
         context "with experience_type set to both" do
           let(:etype) { "both" }
 
@@ -798,12 +782,6 @@ describe Bookings::School, type: :model do
     describe "#has_virtual_placements?" do
       context "with flexible dates" do
         subject { create :bookings_school, experience_type: etype }
-
-        context "with experience_type not set" do
-          let(:etype) { nil }
-
-          it { is_expected.to be_has_virtual_placements }
-        end
 
         context "with experience_type set to both" do
           let(:etype) { "both" }

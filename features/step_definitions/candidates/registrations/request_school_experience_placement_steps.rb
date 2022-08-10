@@ -41,11 +41,6 @@ Then("I should see a warning containing the availability information") do
   end
 end
 
-Given("my school has no availability information set") do
-  @school ||= FactoryBot.create(:bookings_school)
-  @school.update! availability_info: nil
-end
-
 Then("I should see no warning containing the availability information") do
   expect(page).not_to have_css('section.govuk-se-warning')
 end

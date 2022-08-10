@@ -152,11 +152,6 @@ Then("the placement information section should not be visible") do
   expect(page).not_to have_css("#school-placement-info")
 end
 
-Given("the chosen school has no availability information") do
-  @school.update!(availability_info: nil, availability_preference_fixed: false)
-  expect(@school.availability_info).to be_nil
-end
-
 Then("the availability information should read {string}") do |string|
   within("#placement-availability") do
     expect(page).to have_css('p', text: string)

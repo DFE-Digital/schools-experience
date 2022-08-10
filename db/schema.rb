@@ -231,7 +231,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_142124) do
     t.boolean "teacher_training_provider", default: false, null: false
     t.text "teacher_training_info"
     t.text "primary_key_stage_info"
-    t.text "availability_info", default: "This school has not yet provided their availability for offering school experience.\nYou can still request experience with this school and they will contact you when they have availability\n", null: false
+    t.text "availability_info", default: "This school has not yet provided their availability for offering school experience. You can still request experience with this school and they will contact you when they have availability.", null: false
     t.string "teacher_training_website"
     t.boolean "enabled", default: false, null: false
     t.boolean "availability_preference_fixed", default: false
