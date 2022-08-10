@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_08_10_101108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
   enable_extension "plpgsql"
@@ -22,8 +21,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.integer "bookings_subject_id", null: false
     t.integer "bookings_placement_request_id", null: false
     t.integer "bookings_school_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "placement_details"
     t.string "contact_name"
     t.string "contact_number"
@@ -31,7 +30,7 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.text "location"
     t.string "candidate_instructions"
     t.integer "duration", default: 1, null: false
-    t.datetime "accepted_at"
+    t.datetime "accepted_at", precision: nil
     t.boolean "attended"
     t.string "experience_type"
     t.index ["bookings_placement_request_id"], name: "index_bookings_bookings_on_bookings_placement_request_id", unique: true
@@ -41,17 +40,17 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
 
   create_table "bookings_candidates", force: :cascade do |t|
     t.uuid "gitis_uuid", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "confirmed_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "confirmed_at", precision: nil
     t.boolean "created_in_gitis", default: false
     t.index ["gitis_uuid"], name: "index_bookings_candidates_on_gitis_uuid", unique: true
   end
 
   create_table "bookings_phases", force: :cascade do |t|
     t.string "name", limit: 32, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "position"
     t.integer "edubase_id"
     t.boolean "supports_subjects", default: true, null: false
@@ -62,21 +61,21 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
   create_table "bookings_placement_date_subjects", force: :cascade do |t|
     t.bigint "bookings_placement_date_id"
     t.bigint "bookings_subject_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["bookings_placement_date_id"], name: "index_placement_date_subject_on_date_id"
     t.index ["bookings_subject_id"], name: "index_placement_date_subject_on_subject_id"
   end
 
   create_table "bookings_placement_dates", force: :cascade do |t|
     t.date "date", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "duration", default: 1, null: false
     t.boolean "active", default: true, null: false
     t.integer "bookings_school_id", null: false
     t.integer "max_bookings_count"
-    t.datetime "published_at"
+    t.datetime "published_at", precision: nil
     t.boolean "subject_specific", default: false, null: false
     t.boolean "supports_subjects"
     t.boolean "virtual"
@@ -90,12 +89,12 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
   create_table "bookings_placement_request_cancellations", force: :cascade do |t|
     t.bigint "bookings_placement_request_id"
     t.text "reason"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "cancelled_by", null: false
-    t.datetime "sent_at"
+    t.datetime "sent_at", precision: nil
     t.text "extra_details"
-    t.datetime "viewed_at"
+    t.datetime "viewed_at", precision: nil
     t.string "rejection_category"
     t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id", unique: true
     t.index ["rejection_category"], name: "index_bookings_placement_request_cancellations_category"
@@ -111,17 +110,17 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.string "subject_first_choice", null: false
     t.string "subject_second_choice", null: false
     t.boolean "has_dbs_check", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "availability"
     t.integer "bookings_placement_date_id"
     t.integer "bookings_school_id"
     t.string "token"
     t.uuid "analytics_tracking_uuid"
-    t.datetime "viewed_at"
+    t.datetime "viewed_at", precision: nil
     t.bigint "candidate_id"
     t.bigint "bookings_subject_id"
-    t.datetime "under_consideration_at"
+    t.datetime "under_consideration_at", precision: nil
     t.string "experience_type"
     t.index ["bookings_placement_date_id"], name: "index_bookings_placement_requests_on_bookings_placement_date_id"
     t.index ["bookings_school_id"], name: "index_bookings_placement_requests_on_bookings_school_id"
@@ -171,8 +170,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.text "other_fee_description"
     t.string "other_fee_interval"
     t.text "other_fee_payment_method"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "flexible_on_times_details"
     t.string "admin_contact_email_secondary"
     t.boolean "dbs_requires_check"
@@ -196,8 +195,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.integer "page"
     t.integer "number_of_results", default: 0
     t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.uuid "analytics_tracking_uuid"
     t.integer "dbs_policies", array: true
     t.boolean "disability_confident"
@@ -207,16 +206,16 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
   create_table "bookings_school_types", force: :cascade do |t|
     t.string "name", limit: 64, null: false
     t.integer "edubase_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["name"], name: "index_bookings_school_types_on_name", unique: true
   end
 
   create_table "bookings_schools", force: :cascade do |t|
     t.string "name", limit: 128, null: false
     t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "fee", default: 0, null: false
     t.integer "urn", null: false
     t.string "website"
@@ -232,13 +231,13 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.boolean "teacher_training_provider", default: false, null: false
     t.text "teacher_training_info"
     t.text "primary_key_stage_info"
-    t.text "availability_info"
+    t.text "availability_info", default: "This school has not yet provided their availability for offering school experience.\nYou can still request experience with this school and they will contact you when they have availability\n"
     t.string "teacher_training_website"
     t.boolean "enabled", default: false, null: false
     t.boolean "availability_preference_fixed", default: false
     t.integer "views", default: 0, null: false
     t.uuid "dfe_signin_organisation_uuid"
-    t.string "experience_type"
+    t.string "experience_type", default: "inschool"
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
     t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true
@@ -247,23 +246,23 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
   create_table "bookings_schools_phases", force: :cascade do |t|
     t.integer "bookings_school_id", null: false
     t.integer "bookings_phase_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["bookings_school_id", "bookings_phase_id"], name: "index_bookings_schools_phases_school_id_and_phase_id", unique: true
   end
 
   create_table "bookings_schools_subjects", force: :cascade do |t|
     t.integer "bookings_school_id", null: false
     t.integer "bookings_subject_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["bookings_school_id", "bookings_subject_id"], name: "index_bookings_schools_subjects_school_id_and_subject_id", unique: true
   end
 
   create_table "bookings_subjects", force: :cascade do |t|
     t.string "name", limit: 64, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "hidden", default: false
     t.boolean "secondary_subject", default: true, null: false
     t.index ["hidden"], name: "index_bookings_subjects_on_hidden"
@@ -277,18 +276,18 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.boolean "influenced_decision"
     t.boolean "intends_to_apply"
     t.integer "effect_on_decision"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["bookings_booking_id"], name: "index_candidates_booking_feedbacks_on_bookings_booking_id", unique: true
   end
 
   create_table "candidates_session_tokens", force: :cascade do |t|
     t.string "token", null: false
     t.bigint "candidate_id", null: false
-    t.datetime "expired_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "confirmed_at"
+    t.datetime "expired_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "confirmed_at", precision: nil
     t.index ["candidate_id"], name: "index_candidates_session_tokens_on_candidate_id"
     t.index ["token"], name: "index_candidates_session_tokens_on_token", unique: true
   end
@@ -298,13 +297,13 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "cron"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
@@ -314,8 +313,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.string "event_type", null: false
     t.integer "recordable_id"
     t.string "recordable_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "bookings_candidate_id"
     t.index ["bookings_candidate_id"], name: "index_events_on_bookings_candidate_id"
     t.index ["bookings_school_id"], name: "index_events_on_bookings_school_id"
@@ -327,8 +326,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
     t.text "reason_for_using_service_explanation"
     t.integer "rating", null: false
     t.text "improvements"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "urn"
     t.boolean "successful_visit"
     t.text "unsuccessful_visit_explanation"
@@ -338,16 +337,16 @@ ActiveRecord::Schema[6.1].define(version: 2022_03_10_115236) do
   create_table "schools_on_boarding_profile_subjects", force: :cascade do |t|
     t.bigint "schools_school_profile_id"
     t.bigint "bookings_subject_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["bookings_subject_id"], name: "index_profile_subjects_on_school_profile_i"
     t.index ["schools_school_profile_id", "bookings_subject_id"], name: "index_profile_subjects_school_profile_id_and_subject_id", unique: true
     t.index ["schools_school_profile_id"], name: "index_profile_subjects_on_school_profile_id"
   end
 
   create_table "schools_school_profiles", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "candidate_requirement_dbs_requirement"
     t.text "candidate_requirement_dbs_policy"
     t.boolean "candidate_requirement_requirements"

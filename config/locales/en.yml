@@ -41,6 +41,10 @@ en:
         unit: '£'
         delimiter: ''
 
+  defaults:
+    bookings_school:
+      availability_info: This school has not yet provided their availability for offering school experience. You can still request experience with this school and they will contact you when they have availability.
+
   subject_and_date_information_errors: &subject_and_date_information_errors
     attributes:
       bookings_placement_date_id:
