@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_101108) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_10_142124) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
   enable_extension "plpgsql"
@@ -231,13 +231,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_101108) do
     t.boolean "teacher_training_provider", default: false, null: false
     t.text "teacher_training_info"
     t.text "primary_key_stage_info"
-    t.text "availability_info", default: "This school has not yet provided their availability for offering school experience.\nYou can still request experience with this school and they will contact you when they have availability\n"
+    t.text "availability_info", default: "This school has not yet provided their availability for offering school experience.\nYou can still request experience with this school and they will contact you when they have availability\n", null: false
     t.string "teacher_training_website"
     t.boolean "enabled", default: false, null: false
     t.boolean "availability_preference_fixed", default: false
     t.integer "views", default: 0, null: false
     t.uuid "dfe_signin_organisation_uuid"
-    t.string "experience_type", default: "inschool"
+    t.string "experience_type", default: "inschool", null: false
     t.index ["coordinates"], name: "index_bookings_schools_on_coordinates", using: :gist
     t.index ["name"], name: "index_bookings_schools_on_name"
     t.index ["urn"], name: "index_bookings_schools_on_urn", unique: true
