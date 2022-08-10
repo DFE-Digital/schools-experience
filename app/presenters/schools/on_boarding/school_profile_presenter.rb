@@ -77,7 +77,7 @@ module Schools
           ].compact.join(' - ')
         when 'notrequired'
           [
-            'No - Candidates will be accompanied at all times when in school',
+            'No, candidates will be accompanied at all times',
             @school_profile.dbs_requirement.no_dbs_policy_details.presence
           ].compact.join(' - ')
         end

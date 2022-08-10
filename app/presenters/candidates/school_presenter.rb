@@ -93,7 +93,7 @@ module Candidates
       {
         'required' => 'Yes',
         'inschool' => 'Yes - when in school',
-        'notrequired' => 'No - Candidates will be accompanied at all times when in school'
+        'notrequired' => 'No, candidates will be accompanied at all times'
       }[profile.dbs_policy_conditions]
     end
 

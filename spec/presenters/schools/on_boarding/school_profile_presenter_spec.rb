@@ -124,7 +124,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
         it 'returns the correct details' do
           expect(subject.dbs_check).to eq \
-            'No - Candidates will be accompanied at all times when in school - Some details'
+            'No, candidates will be accompanied at all times - Some details'
         end
       end
 
@@ -135,7 +135,7 @@ describe Schools::OnBoarding::SchoolProfilePresenter do
 
         it 'returns the correct details' do
           expect(subject.dbs_check).to eq \
-            'No - Candidates will be accompanied at all times when in school'
+            'No, candidates will be accompanied at all times'
         end
       end
     end
