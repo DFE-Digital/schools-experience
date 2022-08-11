@@ -819,9 +819,9 @@ en:
         dbs_policy_details_inschool: 'Provide the details in 50 words or less.'
         no_dbs_policy_details: 'Provide any extra details in 50 words or less.'
         dbs_policy_conditions_options:
-          required: 'Yes - Outline your DBS requirements'
-          inschool: 'Yes - only when in school - outline your DBS requirements'
-          notrequired: 'No - Candidates will be accompanied at all times when in school'
+          required: 'Yes, for in-school and virtual experience'
+          inschool: 'Yes, only for in-school experience'
+          notrequired: 'No, candidates will be accompanied at all times'
       schools_on_boarding_candidate_requirements_selection:
         selected_requirements_options:
           on_teacher_training_course: Candidates must apply to our (or a partner school's) teacher training course
@@ -1034,7 +1034,7 @@ en:
         has_limited_availability: Is there a maximum number of bookings you’ll accept for this date?
         available_for_all_subjects: Select type of experience
       schools_on_boarding_dbs_requirement:
-        dbs_policy_conditions: 'Do you require candidates to have or get a DBS check?'
+        dbs_policy_conditions: 'Do candidates need to have or get a DBS check?'
       schools_on_boarding_administration_fee:
         <<: *schools_on_boarding_school_fee_helpers
       schools_on_boarding_dbs_fee:

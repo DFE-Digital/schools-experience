@@ -136,7 +136,7 @@ RSpec.describe Candidates::SchoolPresenter do
       context 'when notrequired' do
         before { profile.dbs_policy_conditions = "notrequired" }
 
-        it { is_expected.to eql 'No - Candidates will be accompanied at all times when in school' }
+        it { is_expected.to eql 'No, candidates will be accompanied at all times' }
       end
     end
   end

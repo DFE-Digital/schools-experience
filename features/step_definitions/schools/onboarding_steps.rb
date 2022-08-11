@@ -5,7 +5,7 @@ end
 Given "I have completed the DBS Requirements step" do
   steps %(
     Given I am on the 'DBS requirements' page
-    And I choose 'Yes - Outline your DBS requirements' from the 'Do you require candidates to have or get a DBS check?' radio buttons
+    And I choose 'Yes, for in-school and virtual experience' from the 'Do candidates need to have or get a DBS check?' radio buttons
     And I enter 'Always require DBS check' into the 'Provide details in 50 words or less.' text area
     When I submit the form
   )
@@ -14,7 +14,7 @@ end
 Given "I have completed the DBS Requirements step, choosing No" do
   steps %(
     Given I am on the 'DBS requirements' page
-    And I choose 'No - Candidates will be accompanied at all times' from the 'Do you require candidates to have or get a DBS check?' radio buttons
+    And I choose 'No, candidates will be accompanied at all times' from the 'Do candidates need to have or get a DBS check?' radio buttons
     When I submit the form
   )
 end
