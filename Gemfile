@@ -78,7 +78,10 @@ gem 'faraday'
 gem 'ice_cube'
 
 gem 'activerecord-import'
-gem 'validates_timeliness', '>= 5.0.0.beta1'
+
+# Using a fork until Rails 7 support is upstreamed.
+# See https://github.com/adzap/validates_timeliness/pull/213
+gem "validates_timeliness", github: "mitsuru/validates_timeliness", ref: "f28a625"
 
 gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
 
