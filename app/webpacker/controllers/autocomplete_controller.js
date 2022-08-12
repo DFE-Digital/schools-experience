@@ -1,4 +1,4 @@
-import { Controller } from "stimulus";
+import { Controller } from '@hotwired/stimulus'
 import { Loader } from "@googlemaps/js-api-loader";
 import accessibleAutocomplete from "accessible-autocomplete";
 

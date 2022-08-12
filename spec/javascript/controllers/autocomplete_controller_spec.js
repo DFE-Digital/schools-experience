@@ -1,4 +1,4 @@
-import { Application } from "stimulus";
+import { Application } from '@hotwired/stimulus'
 import AutocompleteController from "autocomplete_controller.js";
 
 describe("AutocompleteController", () => {
