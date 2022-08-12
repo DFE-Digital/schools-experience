@@ -14,3 +14,12 @@ azure_key_vault           = "s105p01-kv"
 azure_resource_group      = "s105p01-prod-vault-resource-group"
 database_plan             = "small-ha-13"
 redis_1_plan              = "micro-ha-5_x"
+
+alerts = {
+  SchoolExperience_Production = {
+    website_name   = "School Experience (Production)"
+    website_url    = "https://schoolexperience.education.gov.uk/healthcheck.json"
+    check_rate     = 60
+    contact_group  = [239498]
+  }
+}

@@ -1,4 +1,4 @@
-# These settings are for the sandbox and should mainly be overriden by TF_VARS 
+# These settings are for the sandbox and should mainly be overriden by TF_VARS
 # or set with environment variables TF_VAR_xxxx
 
 variable "api_url" {
@@ -25,11 +25,11 @@ variable "paas_internet_hostnames" {
 }
 
 variable "FRONTEND" {
-  default = "migrate frontend" 
+  default = "migrate frontend"
 }
 
 variable "BACKGROUND" {
-  default = "background" 
+  default = "background"
 }
 
 variable "strategy" {
@@ -127,6 +127,11 @@ variable "paas_docker_image" {
 variable "alerts" {
   type    = map(any)
   default = {}
+}
+
+variable "statuscake_enable_basic_auth" {
+  type    = bool
+  default = false
 }
 
 variable "timeout" {
