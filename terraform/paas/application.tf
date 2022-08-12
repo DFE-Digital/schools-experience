@@ -16,7 +16,7 @@ locals {
 resource "cloudfoundry_app" "application" {
   name              = var.paas_application_name
   space             = data.cloudfoundry_space.space.id
-  command           = "/app/docker-entrypoint.sh ${var.FRONTEND}" 
+  command           = "/app/docker-entrypoint.sh ${var.FRONTEND}"
   docker_image      = var.paas_docker_image
   stopped           = var.application_stopped
   instances         = var.application_instances
@@ -79,10 +79,6 @@ resource "cloudfoundry_app" "delayed_jobs" {
     content {
       service_instance = service_binding.value["id"]
     }
-  }
-
-  routes {
-    route = cloudfoundry_route.route_delayed_internal.id
   }
 
   dynamic "routes" {
