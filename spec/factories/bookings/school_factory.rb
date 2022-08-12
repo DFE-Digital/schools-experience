@@ -29,8 +29,7 @@ FactoryBot.define do
     end
 
     trait :without_availability do
-      availability_info { nil }
-      experience_type { nil }
+      availability_preference_fixed { true }
     end
 
     trait :with_fixed_availability_preference do

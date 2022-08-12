@@ -66,11 +66,6 @@ Feature: School show page (enhanced data)
             """
         When I am on the profile page for the chosen school
         Then I should see availability information
-
-    Scenario: Placement availability
-        Given the chosen school has no availability information
-        When I am on the profile page for the chosen school
-        Then the availability information should read 'No information supplied'
     
     Scenario: DBS Check info
         Given I am on the profile page for the chosen school

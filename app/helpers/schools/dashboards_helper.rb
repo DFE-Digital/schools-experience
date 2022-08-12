@@ -32,11 +32,6 @@ module Schools::DashboardsHelper
       school.bookings_placement_dates.available.none?
   end
 
-  def show_no_availability_info_warning?(school)
-    !school.availability_preference_fixed? &&
-      school.availability_info.blank?
-  end
-
   def status_column_size(status)
     {
       disabled: 'govuk-grid-column-one-third',

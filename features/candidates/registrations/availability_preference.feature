@@ -22,11 +22,6 @@ Feature: Availability preference
         When I am on the 'Availability preference' page for my school of choice
         Then I should see a warning containing the availability information
 
-    Scenario: No warning should be displayed if the availability information is absent
-        Given my school has no availability information set
-        When I am on the 'Availability preference' page for my school of choice
-        Then I should see no warning containing the availability information
-
     @javascript
     Scenario: Word counting in placement objectives
         Given I am on the 'Availability preference' page for my school of choice

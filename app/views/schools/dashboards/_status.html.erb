@@ -9,13 +9,6 @@
         <%= link_to 'add experience dates',
           schools_placement_dates_path, class: 'govuk-link' %>.
       </p>
-    <% elsif type == :enabled_without_availability %>
-      <p>
-        You have no upcoming placement dates or information about availability.
-        Your profile will not appear in candidate searches.
-        <%= link_to 'Add dates or availability',
-          edit_schools_availability_preference_path, class: 'govuk-link' %>.
-      </p>
     <% end %>
   </div>
   <div class="govuk-grid-column-one-third">

@@ -140,15 +140,6 @@ Feature: The School Dashboard
         Then there should be a status notification for missing dates
         And there should be a 'add experience dates' link to the 'placement dates'
 
-    Scenario: Displaying a warning when flexible with no description
-        Given my school has fully-onboarded
-        And my school is enabled
-        And it has 'flexible' availability
-        And my school has no availability information set
-        When I am on the 'schools dashboard' page
-        Then there should be a status notification for missing availability
-        And there should be a 'Add dates or availability' link to the 'availability preferences'
-
     Scenario: Display CTA when in a school group
         Given my school is part of a group of schools
         When I am on the 'schools dashboard' page

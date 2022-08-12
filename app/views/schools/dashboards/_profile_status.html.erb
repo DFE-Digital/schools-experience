@@ -4,8 +4,4 @@
   <% if show_no_placement_dates_warning?(@current_school) %>
     <%= render partial: 'status', locals: { type: :enabled_without_dates} %>
   <% end %>
-
-  <% if show_no_availability_info_warning?(@current_school) %>
-    <%= render partial: 'status', locals: { type: :enabled_without_availability} %>
-  <% end %>
 <% end %>
