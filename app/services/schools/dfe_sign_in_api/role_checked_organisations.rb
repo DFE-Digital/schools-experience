@@ -28,6 +28,8 @@ module Schools
       end
 
       def has_role?(org_uuid, _org_urn)
+        return true unless Schools::DFESignInAPI::Client.role_check_enabled?
+
         Roles.new(user_uuid, org_uuid).has_school_experience_role?
       end
     end
