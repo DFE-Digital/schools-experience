@@ -12,15 +12,3 @@ application_environment   = "dfe-school-experience-staging"
 database_plan             = "small-13"
 azure_key_vault           = "s105t01-kv"
 azure_resource_group      = "s105t01-staging-vault-resource-group"
-alerts = {
-  SchoolExperience_Staging = {
-    website_name   = "School Experience (Staging)"
-    website_url    = "https://school-experience-app-staging.london.cloudapps.digital/healthcheck.json"
-    test_type      = "HTTP"
-    check_rate     = 60
-    contact_group  = [239498]
-    trigger_rate   = 0
-    confirmations  = 2
-    node_locations = ["UKINT", "UK1", "MAN1", "MAN5", "DUB2"]
-  }
-}
