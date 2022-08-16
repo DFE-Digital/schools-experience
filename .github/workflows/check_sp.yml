@@ -71,7 +71,7 @@ jobs:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
            SLACK_TITLE: A Service Principal secret is expiring soon
            SLACK_MESSAGE: |
-                         The Service Principal ${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Application }}
-                         with secret ${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Name }} is due to expire in ${{fromJson(steps.pwsh_check_expire.outputs.json_data).data.ExpiresDays}} days.
+                         The Service Principal *${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Application }}*
+                         with secret *${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Name }}* is due to expire in *${{fromJson(steps.pwsh_check_expire.outputs.json_data).data.ExpiresDays}}* days.
                          Please follow the <https://dfe-technical-guidance.london.cloudapps.digital/infrastructure/hosting/azure-cip/#service-principal|Use the service principal in external systems> process to renew.
            SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
