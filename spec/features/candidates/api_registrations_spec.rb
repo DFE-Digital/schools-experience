@@ -279,15 +279,12 @@ feature 'Candidate Registrations (via the API)', type: :feature do
     expect(page).to have_text "Teaching subject - second choice Maths"
     expect(page).to have_text "DBS certificate Yes"
 
-    # Submit email confirmation form with errors
-    click_button button_text
-    expect(page).to have_text 'You need to confirm your details are correct and accept our privacy policy to continue'
-    expect(page).not_to have_text \
-      "We've sent a link to the following email address:\ntest@example.com"
-
     # Submit email confirmation form successfully
-    check "candidates_registrations_privacy_policy[acceptance]"
     click_button button_text
+    # Check they see a success message (changes for new/existing users)
+    new_user_success = /We've sent a link to the following email address/
+    existing_user_success = /What happens next/
+    expect(page.text).to match %r{(#{new_user_success})|(#{existing_user_success})}
   end
 
   def complete_email_confirmation_step

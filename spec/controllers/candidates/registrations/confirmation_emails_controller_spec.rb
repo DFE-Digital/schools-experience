@@ -28,125 +28,95 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
   end
 
   context '#create' do
-    context 'privacy policy not accepted' do
-      let :privacy_policy_params do
-        { candidates_registrations_privacy_policy: { acceptance: '0' } }
+    context 'skipped step' do
+      before { registration_store.send :delete, 'some-uuid' } # ensure key not left lying around
+
+      let :registration_session do
+        FactoryBot.build :registration_session, with: []
       end
 
       before do
-        post candidates_school_registrations_confirmation_email_path(school),
-          params: privacy_policy_params
+        post candidates_school_registrations_confirmation_email_path(school)
       end
 
-      it 'renders the application_preview show template' do
-        expect(response).to render_template \
-          'candidates/registrations/application_previews/show'
+      it "doesn't store the session" do
+        expect {
+          registration_store.retrieve! registration_session.uuid
+        }.to raise_error \
+          Candidates::Registrations::RegistrationStore::SessionNotFound
       end
 
       it "doesn't enqueues the confirmation email job" do
         expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
-          have_received :perform_later
+          have_received(:perform_later).with \
+            registration_session.uuid, 'www.example.com'
+      end
+
+      it "redirects to the first missing step" do
+        expect(response).to redirect_to \
+          new_candidates_school_registrations_personal_information_path school
       end
     end
 
-    context 'privacy policy accepted' do
-      let :privacy_policy_params do
-        { candidates_registrations_privacy_policy: { acceptance: '1' } }
+    context 'no skipped steps' do
+      before do
+        post candidates_school_registrations_confirmation_email_path(school)
       end
 
-      context 'skipped step' do
-        before { registration_store.send :delete, 'some-uuid' } # ensure key not left lying around
-
-        let :registration_session do
-          FactoryBot.build :registration_session, with: []
-        end
-
-        before do
-          post candidates_school_registrations_confirmation_email_path(school),
-            params: privacy_policy_params
-        end
-
-        it "doesn't store the session" do
-          expect {
-            registration_store.retrieve! registration_session.uuid
-          }.to raise_error \
-            Candidates::Registrations::RegistrationStore::SessionNotFound
-        end
-
-        it "doesn't enqueues the confirmation email job" do
-          expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
-            have_received(:perform_later).with \
-              registration_session.uuid, 'www.example.com'
-        end
-
-        it "redirects to the first missing step" do
-          expect(response).to redirect_to \
-            new_candidates_school_registrations_personal_information_path school
-        end
+      it 'marks the session as pending' do
+        expect(registration_session).to be_pending_email_confirmation
       end
 
-      context 'no skipped steps' do
-        before do
-          post candidates_school_registrations_confirmation_email_path(school),
-            params: privacy_policy_params
-        end
-
-        it 'marks the session as pending' do
-          expect(registration_session).to be_pending_email_confirmation
-        end
-
-        it 'stores the session' do
-          expect(registration_store.retrieve!(registration_session.uuid)).to \
-            eq registration_session
-        end
-
-        it 'enqueues the confirmation email job' do
-          expect(Candidates::Registrations::SendEmailConfirmationJob).to \
-            have_received(:perform_later).with \
-              registration_session.uuid, 'www.example.com'
-        end
-
-        it 'redirects to the check your email page' do
-          expect(response).to redirect_to \
-            candidates_school_registrations_confirmation_email_path school
-        end
+      it 'stores the session' do
+        expect(registration_store.retrieve!(registration_session.uuid)).to \
+          eq registration_session
       end
 
-      context 'no skipped steps and already signed in' do
-        let(:candidate) { create(:candidate, :confirmed) }
-        let(:contact) do
-          api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
-          api.get_schools_experience_sign_up(candidate.gitis_uuid)
-        end
-        let(:contact_attributes) { contact.to_hash }
+      it 'enqueues the confirmation email job' do
+        expect(Candidates::Registrations::SendEmailConfirmationJob).to \
+          have_received(:perform_later).with \
+            registration_session.uuid, 'www.example.com'
+      end
 
-        before do
-          allow_any_instance_of(ActionDispatch::Request::Session).to \
-            receive(:[]).with(:gitis_contact).and_return(contact_attributes)
+      it 'redirects to the check your email page' do
+        expect(response).to redirect_to \
+          candidates_school_registrations_confirmation_email_path school
+      end
+    end
 
-          post candidates_school_registrations_confirmation_email_path(school),
-            params: privacy_policy_params
-        end
+    context 'no skipped steps and already signed in' do
+      let(:candidate) { create(:candidate, :confirmed) }
+      let(:contact) do
+        api = GetIntoTeachingApiClient::SchoolsExperienceApi.new
+        api.get_schools_experience_sign_up(candidate.gitis_uuid)
+      end
+      let(:contact_attributes) { contact.to_hash }
 
-        it 'stores the session' do
-          expect(registration_store.retrieve!(registration_session.uuid)).to \
-            eq registration_session
-        end
+      before do
+        allow_any_instance_of(ActionDispatch::Request::Session).to \
+          receive(:[]).with(:gitis_contact).and_return(contact_attributes)
 
-        it 'does not mark the session as pending email confirmation' do
-          expect(registration_session).not_to be_pending_email_confirmation
-        end
+        post candidates_school_registrations_confirmation_email_path(school)
+      end
 
-        it 'wont enqueue a confirmation email job' do
-          expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
-            have_received(:perform_later).with \
-              registration_session.uuid, 'www.example.com'
-        end
+      it 'stores the session' do
+        expect(registration_store.retrieve!(registration_session.uuid)).to \
+          eq registration_session
+      end
 
-        it 'redirects to the placement_request page' do
-          expect(response).to redirect_to \
-            candidates_confirm_path registration_session.uuid
-        end
+      it 'does not mark the session as pending email confirmation' do
+        expect(registration_session).not_to be_pending_email_confirmation
+      end
+
+      it 'wont enqueue a confirmation email job' do
+        expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
+          have_received(:perform_later).with \
+            registration_session.uuid, 'www.example.com'
+      end
+
+      it 'redirects to the placement_request page' do
+        expect(response).to redirect_to \
+          candidates_confirm_path registration_session.uuid
       end
     end
   end
