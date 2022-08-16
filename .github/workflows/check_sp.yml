@@ -60,7 +60,7 @@ jobs:
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK
+          key: SLACK-WEBHOOK-TEST
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -69,9 +69,9 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
-           SLACK_TITLE: A Service Principal secret is expiring soon
+           SLACK_TITLE: ':alert: A Service Principal secret is expiring soon :alert:'
            SLACK_MESSAGE: |
                          The Service Principal *${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Application }}*
-                         with secret *${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Name }}* is due to expire in *${{fromJson(steps.pwsh_check_expire.outputs.json_data).data.ExpiresDays}}* days.
+                         secret *${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Name }}* is due to expire in *${{fromJson(steps.pwsh_check_expire.outputs.json_data).data.ExpiresDays}}* days.
                          Please follow the <https://dfe-technical-guidance.london.cloudapps.digital/infrastructure/hosting/azure-cip/#service-principal|Use the service principal in external systems> process to renew.
-           SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
+           SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK-TEST }}
