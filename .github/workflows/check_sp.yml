@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check ${{ matrix.data.principal }}
-        uses: DFE-Digital/github-actions/CheckServicePrincipal@master
+        uses: DFE-Digital/github-actions/CheckServicePrincipal@629-update-checkserviceprincipal-workflow
         id: pwsh_check_expire
         with:
             AzureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
