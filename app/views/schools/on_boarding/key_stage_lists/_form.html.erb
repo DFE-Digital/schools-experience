@@ -14,15 +14,9 @@
         Select all that apply.
       </p>
 
-      <%= f.govuk_check_boxes_fieldset :early_years, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :early_years, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :key_stage_1, multiple: false, legend: nil do %>
+      <%= f.govuk_check_boxes_fieldset :key_stages, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :early_years, 1, 0, multiple: false, link_errors: true %>
         <%= f.govuk_check_box :key_stage_1, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :key_stage_2, multiple: false, legend: nil do %>
         <%= f.govuk_check_box :key_stage_2, 1, 0, multiple: false %>
       <% end %>
 
