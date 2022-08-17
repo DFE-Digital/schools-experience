@@ -38,40 +38,40 @@ jobs:
             ExpiresWithinDays: 30
 
       - name: Processing ${{ matrix.data.principal }}
-        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert == true
+        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         run:  echo Expires in ${{fromJson(steps.pwsh_check_expire.outputs.json_data).data.ExpiresDays}} days
 
       - name: Check out the repo
-        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert == true
+        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         uses: actions/checkout@v3
 
       - name: set-up-environment
-        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert == true
+        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         uses: DFE-Digital/github-actions/set-up-environment@master
 
       - uses: Azure/login@v1
-        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert == true
+        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - uses: DfE-Digital/keyvault-yaml-secret@v1
-        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert == true
+        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         id:  keyvault-yaml-secret
         with:
           keyvault: ${{ secrets.KEY_VAULT}}
           secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK-TEST
+          key: SLACK-WEBHOOK
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Slack Notification
-        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert == true
+        if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         uses: rtCamp/action-slack-notify@master
         env:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
-           SLACK_TITLE: ':alert: A Service Principal secret is expiring soon :alert:'
+           SLACK_TITLE: A Service Principal secret is expiring soon
            SLACK_MESSAGE: |
                          The Service Principal *${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Application }}*
                          secret *${{ fromJson(steps.pwsh_check_expire.outputs.json_data).data.Name }}* is due to expire in *${{fromJson(steps.pwsh_check_expire.outputs.json_data).data.ExpiresDays}}* days.
                          Please follow the <https://dfe-technical-guidance.london.cloudapps.digital/infrastructure/hosting/azure-cip/#service-principal|Use the service principal in external systems> process to renew.
-           SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK-TEST }}
+           SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}

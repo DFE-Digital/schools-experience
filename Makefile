@@ -38,8 +38,7 @@ review:
 	$(eval export AZ_SUBSCRIPTION=s105-schoolexperience-development)
 	$(eval export TF_VAR_paas_application_name=${PR_NAME})
 	cf target -s ${SPACE_NAME}
-	cf delete-orphaned-routes -f
-	$(eval export TF_VAR_static_route=$(shell script/get_next_mapping.sh ${PR_NAME}))
+
 	$(eval BACKEND_KEY=-backend-config=key=${PR_NAME}.tfstate)
 
 .PHONY: staging
