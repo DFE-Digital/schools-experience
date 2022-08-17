@@ -59,6 +59,8 @@ gem "redis", "~> 4.7"
 
 gem 'kaminari'
 
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.3.2"
+
 gem 'phonelib'
 gem 'sentry-delayed_job'
 gem 'sentry-rails'
@@ -79,7 +81,7 @@ gem 'ice_cube'
 
 gem 'activerecord-import'
 
-# Using a fork until Rails 7 support is upstreamed.
+# Using a fork until Rails 7 support is upstreamed.
 # See https://github.com/adzap/validates_timeliness/pull/213
 gem "validates_timeliness", github: "mitsuru/validates_timeliness", ref: "f28a625"
 
