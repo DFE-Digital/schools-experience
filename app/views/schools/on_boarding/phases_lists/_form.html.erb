@@ -14,19 +14,10 @@
         Select all that apply.
       </p>
 
-      <%= f.govuk_check_boxes_fieldset :primary, multiple: false, legend: nil do %>
-        <%= f.govuk_check_box :primary, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :secondary, multiple: false, legend: nil do %>
+      <%= f.govuk_check_boxes_fieldset :phases, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :primary, 1, 0, multiple: false, link_errors: true %>
         <%= f.govuk_check_box :secondary, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :secondary_and_college, multiple: false, legend: nil do %>
         <%= f.govuk_check_box :secondary_and_college, 1, 0, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_check_boxes_fieldset :college, multiple: false, legend: nil do %>
         <%= f.govuk_check_box :college, 1, 0, multiple: false %>
       <% end %>
 
