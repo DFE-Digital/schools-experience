@@ -11,10 +11,12 @@ class Schools::InsecureSessionsController < ApplicationController
     # NOTE: the sub (subscription) param is the user's unique identifier
     # on DfE Sign-in and is hard-coded here. It must match the corresponding
     # value injected into Schools::SessionsController
-    session[:current_user] = OpenIDConnect::ResponseObject::UserInfo.new(
-      given_name: 'Martin',
-      family_name: 'Prince',
-      sub: '33333333-4444-5555-6666-777777777777'
+    session[:current_user] = UserInfoDecorator.new(
+      OpenIDConnect::ResponseObject::UserInfo.new(
+        given_name: 'Martin',
+        family_name: 'Prince',
+        sub: '33333333-4444-5555-6666-777777777777'
+      )
     )
 
     unless Schools::ChangeSchool.allow_school_change_in_app?

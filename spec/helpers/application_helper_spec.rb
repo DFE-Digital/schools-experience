@@ -8,9 +8,10 @@ describe ApplicationHelper, type: :helper do
   let(:given_name) { 'Martin' }
   let(:family_name) { 'Prince' }
   let(:user) do
-    OpenIDConnect::ResponseObject::UserInfo.new \
-      given_name: given_name,
-      family_name: family_name
+    UserInfoDecorator.new(
+      OpenIDConnect::ResponseObject::UserInfo.new(given_name: given_name,
+                                                  family_name: family_name)
+    )
   end
 
   context 'Breadcrumbs' do
