@@ -90,7 +90,7 @@ describe Schools::SessionsController, type: :request do
       end
 
       specify 'should save the current user in the session' do
-        expect(session[:current_user]).to be_a(OpenIDConnect::ResponseObject::UserInfo)
+        expect(session[:current_user]).to be_a(UserInfoDecorator)
       end
 
       context 'errors' do
@@ -173,7 +173,9 @@ describe Schools::SessionsController, type: :request do
       before do
         session_hash[:return_url] = return_url
         session_hash[:state] = state
-        session_hash[:current_user] = { name: 'Milhouse' }
+        session_hash[:current_user] = UserInfoDecorator.new(
+          OpenIDConnect::ResponseObject::UserInfo.new(sub: "abc1243", name: 'Milhouse')
+        )
       end
 
       subject { get auth_callback_path }

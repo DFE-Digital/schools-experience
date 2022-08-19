@@ -123,4 +123,6 @@ Rails.application.configure do
   config.x.git_api_token = Rails.application.credentials.git_api_token.presence
   config.x.git_api_endpoint = "https://get-into-teaching-api-dev.london.cloudapps.digital/api"
   config.x.api_client_cache_store = ActiveSupport::Cache::MemoryStore.new
+
+  config.x.dfe_analytics = true
 end

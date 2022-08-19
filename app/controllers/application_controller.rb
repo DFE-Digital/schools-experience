@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include DfE::Analytics::Requests
+
   rescue_from ActionController::InvalidAuthenticityToken, with: :session_expired
 
   before_action :http_basic_authenticate, if: :requires_basic_auth?

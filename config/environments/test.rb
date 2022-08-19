@@ -192,6 +192,8 @@ Rails.application.configure do
   config.x.git_api_endpoint = "https://fake-git.api/api"
   config.x.api_client_cache_store = ActiveSupport::Cache::MemoryStore.new
 
+  config.x.dfe_analytics = true
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.raise = true
