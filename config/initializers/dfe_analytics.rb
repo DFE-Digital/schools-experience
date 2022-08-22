@@ -9,7 +9,7 @@ DfE::Analytics.configure do |config|
 
   # Which ActiveJob queue to put events on
   #
-  config.queue = :analytics
+  # config.queue = :default
 
   # The name of the BigQuery table we’re writing to.
   #
