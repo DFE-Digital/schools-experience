@@ -1,2 +1,12 @@
 ---
-shared: {}
+:shared:
+  :bookings_school_searches:
+  - query
+  - location
+  - coordinates
+  :bookings_candidates:
+  - id
+  :bookings_placement_requests:
+  - candidate_id
+  :events:
+  - bookings_candidate_id
