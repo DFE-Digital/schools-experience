@@ -4,10 +4,8 @@ data "cloudfoundry_app" "prometheus" {
 }
 
 data "cloudfoundry_app" "monitor_delayed" {
-
-  count      = length( cloudfoundry_app.delayed_jobs ) == 0 ? 0 : 1
-
-  name_or_id = cloudfoundry_app.delayed_jobs[0].id
+  count      = length(cloudfoundry_app.delayed_jobs) > 0 ? 1 : 0
+  name_or_id = cloudfoundry_app.delayed_jobs.id
   space      = data.cloudfoundry_space.space.id
 
   depends_on = [cloudfoundry_app.delayed_jobs ]

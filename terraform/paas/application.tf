@@ -61,7 +61,6 @@ resource "cloudfoundry_app" "application" {
 }
 
 resource "cloudfoundry_app" "delayed_jobs" {
-  count             = var.delayed_jobs
   name              = "${var.paas_application_name}-delayed_job"
   space             = data.cloudfoundry_space.space.id
   command           = "/app/docker-entrypoint.sh ${var.BACKGROUND}"
