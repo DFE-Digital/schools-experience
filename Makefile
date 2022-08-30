@@ -91,7 +91,7 @@ terraform-init: set-azure-account
 	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
 	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/schools-experience:$(IMAGE_TAG))
 
-	terraform -chdir=terraform/paas init -reconfigure -backend-config=${DEPLOY_ENV}.bk.vars ${BACKEND_KEY}
+	terraform -chdir=terraform/paas init -reconfigure -upgrade -backend-config=${DEPLOY_ENV}.bk.vars ${BACKEND_KEY}
 
 terraform-plan: terraform-init
 	terraform -chdir=terraform/paas plan -var-file=${DEPLOY_ENV}.env.tfvars
