@@ -53,8 +53,8 @@ It helps avoid drop outs of the Initial Teacher Training programme. 
 
 ## Accessibility
 
-The School Experience service has been designed and developed with all users in mind. We have designed in line with the GDS Design Guidelines and Patterns. 
-We have also designed and developed various a wide range of [browsers and devices](https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices)
+The School Experience service has been designed and developed with all users in mind. We have designed in line with the GDS Design Guidelines and Patterns.
+We have also designed and developed the service to support a wide range of [browsers and devices](https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices)
 
 The service has been tested with a number of schools and candidates with different equipment and browsers. 
 
@@ -64,11 +64,10 @@ A copy of the report is available [here](https://drive.google.com/file/d/1wEXgQD
 
 ## Technical Documentation
 
-For detailed information and support the user should read [DfE Technical Guidance](https://technical-guidance.education.gov.uk/). 
+For detailed information and support the user should read [DfE Technical Guidance](https://technical-guidance.education.gov.uk/).
 
 The documentation provided here will reference [DfE Technical Guidance](https://technical-guidance.education.gov.uk/) and will document deviations from it.
 
-## Support  
+## Support
 
 Support contacts can be found at [Support](https://technical-guidance.education.gov.uk/infrastructure/support/)
-

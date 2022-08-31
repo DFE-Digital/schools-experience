@@ -22,7 +22,7 @@ provider "azurerm" {
 }
 
 terraform {
-  required_version = "~> 0.14"
+  required_version = "1.2.8"
 
   required_providers {
     cloudfoundry = {
