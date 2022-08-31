@@ -39,8 +39,8 @@ runs:
         with:
            KEY_VAULT: ${{ inputs.KEY_VAULT }}
            SECRETS: |
-                SE-SECRETS 
-                SE-INFRA-SECRETS 
+                SE-SECRETS
+                SE-INFRA-SECRETS
 
       - name: Get Short SHA
         id: sha
@@ -106,9 +106,9 @@ runs:
           secret: SE-SECRETS
           key: SECURE_USERNAME , SECURE_PASSWORD
 
-      - uses: hashicorp/setup-terraform@v1.3.2
+      - uses: hashicorp/setup-terraform@v2.0.0
         with:
-          terraform_version: 0.14.9
+          terraform_version: 1.2.8
 
       - name: Terraform ( ${{inputs.environment}} )
         shell: bash
@@ -131,7 +131,7 @@ runs:
         env:
              HTTPAUTH_USERNAME: ${{steps.keyvault-yaml-secret.outputs.SECURE_USERNAME}}
              HTTPAUTH_PASSWORD: ${{steps.keyvault-yaml-secret.outputs.SECURE_PASSWORD}}
-            
+
       - name: Log Deployment
         if: always()
         uses: DFE-Digital/github-actions/SendToLogit@master
@@ -139,8 +139,8 @@ runs:
            LOGIT-API-KEY: ${{ steps.keyvault-infra-secret.outputs.LOGIT-API }}
            logtype: "github"
            JSON: |
-                '{"Application" : "${{env.PAAS_APPLICATION_NAME}}", 
+                '{"Application" : "${{env.PAAS_APPLICATION_NAME}}",
                   "Status"      : "${{ job.status }}",
-                  "Action"      : "Deploy",                        
-                  "Environment" : "${{inputs.environment}}",              
+                  "Action"      : "Deploy",
+                  "Environment" : "${{inputs.environment}}",
                   "Version"     : "${{ inputs.sha }}" }'
