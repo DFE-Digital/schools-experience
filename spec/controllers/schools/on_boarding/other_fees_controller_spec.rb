@@ -29,6 +29,25 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
     end
   end
 
+  context '#edit' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    before do
+      get '/schools/on_boarding/other_fee/new'
+    end
+
+    it 'assigns the model' do
+      expect(assigns(:other_fee)).to \
+        eq school_profile.other_fee
+    end
+
+    it 'renders the new template' do
+      expect(response).to render_template :new
+    end
+  end
+
   context '#create' do
     let :params do
       { schools_on_boarding_other_fee: other_fee.attributes }

@@ -27,6 +27,25 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
     end
   end
 
+  context '#edit' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    before do
+      get '/schools/on_boarding/dbs_fee/new'
+    end
+
+    it 'assigns the model' do
+      expect(assigns(:dbs_fee)).to \
+        eq school_profile.dbs_fee
+    end
+
+    it 'renders the new template' do
+      expect(response).to render_template :new
+    end
+  end
+
   context '#create' do
     let :params do
       { schools_on_boarding_dbs_fee: dbs_fee.attributes }
