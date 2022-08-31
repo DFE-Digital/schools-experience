@@ -277,12 +277,20 @@ module Schools
       Bookings::Subject.all
     end
 
-    def current_step
-      OnBoarding::CurrentStep.for self
+    def current_step(previous_step = nil)
+      if Feature.enabled?(:task_progress_on_boarding)
+        OnBoarding::Wizard.new(self).next_step(previous_step)
+      else
+        OnBoarding::CurrentStep.for(self)
+      end
     end
 
     def completed?
-      current_step == :COMPLETED
+      if Feature.enabled?(:task_progress_on_boarding)
+        OnBoarding::Wizard.new(self).completed?
+      else
+        current_step == :COMPLETED
+      end
     end
 
     def requires_subjects?

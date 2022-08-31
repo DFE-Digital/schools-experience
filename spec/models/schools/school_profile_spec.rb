@@ -814,4 +814,53 @@ describe Schools::SchoolProfile, type: :model do
       end
     end
   end
+
+  describe "#current_step" do
+    let(:previous_step) { nil }
+    let(:school_profile) { build(:school_profile) }
+
+    subject { school_profile.current_step(previous_step) }
+
+    it { is_expected.to be(:dbs_requirement) }
+
+    context "when the task_progress_on_boarding feature is enabled" do
+      let(:previous_step) { :dbs_requirement }
+
+      before do
+        allow(Feature).to receive(:enabled?)
+          .with(:task_progress_on_boarding).and_return(true)
+      end
+
+      it { is_expected.to be(:fees) }
+    end
+  end
+
+  describe "#completed?" do
+    let(:school_profile) { build(:school_profile) }
+
+    subject { school_profile }
+
+    it { is_expected.not_to be_completed }
+
+    context "when completed" do
+      let(:school_profile) { create(:school_profile, :completed) }
+
+      it { is_expected.to be_completed }
+    end
+
+    context "when the task_progress_on_boarding feature is enabled" do
+      before do
+        allow(Feature).to receive(:enabled?)
+          .with(:task_progress_on_boarding).and_return(true)
+      end
+
+      it { is_expected.not_to be_completed }
+
+      context "when completed" do
+        let(:school_profile) { create(:school_profile, :completed) }
+
+        it { is_expected.to be_completed }
+      end
+    end
+  end
 end
