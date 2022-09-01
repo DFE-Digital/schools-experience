@@ -121,6 +121,7 @@ Rails.application.routes.draw do
     end
 
     namespace :on_boarding do
+      resource :progress, only: %i[show]
       resource :dbs_requirement, only: %i[new create edit update]
       resource :candidate_requirements_selection, only: %i[new create edit update]
       resource :fees, only: %i[new create edit update]
