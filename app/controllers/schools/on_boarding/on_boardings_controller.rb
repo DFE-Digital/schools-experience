@@ -14,10 +14,23 @@ module Schools
       end
 
       def next_step_path(school_profile)
-        if school_profile.completed?
-          schools_on_boarding_profile_path
+        if Feature.enabled?(:task_progress_on_boarding)
+          task_progress_next_step_path(school_profile)
         else
-          public_send "new_schools_on_boarding_#{school_profile.current_step}_path"
+          return schools_on_boarding_profile_path if school_profile.completed?
+
+          public_send("new_schools_on_boarding_#{school_profile.current_step}_path")
+        end
+      end
+
+      def task_progress_next_step_path(school_profile)
+        previous_step = request.path.split("/").last.to_sym
+        next_step = school_profile.current_step(previous_step)
+
+        if next_step
+          public_send("new_schools_on_boarding_#{next_step}_path")
+        else
+          schools_on_boarding_progress_path
         end
       end
 

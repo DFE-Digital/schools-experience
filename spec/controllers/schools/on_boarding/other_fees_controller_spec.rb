@@ -14,6 +14,12 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
       :with_administration_fee,
       :with_dbs_fee
   end
+  let(:task_progress_on_boarding) { false }
+
+  before do
+    allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
+      .and_return(task_progress_on_boarding)
+  end
 
   context '#new' do
     before do
@@ -90,6 +96,14 @@ describe Schools::OnBoarding::OtherFeesController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to new_schools_on_boarding_phases_list_path
+      end
+
+      context "when the task_progress_on_boarding feature is enabled" do
+        let(:task_progress_on_boarding) { true }
+
+        it 'redirects to the progress page' do
+          expect(response).to redirect_to schools_on_boarding_progress_path
+        end
       end
     end
   end
