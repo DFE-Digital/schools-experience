@@ -9,6 +9,8 @@
 
     <p>You have completed <%= @wizard.count_completed_sections %> out of <%= @wizard.class::SECTIONS.count %> sections.</p>
 
+    <p>Last saved on <%= @wizard.school_profile.updated_at.to_formatted_s(:date_and_time) %>.</p>
+
     <ol class="on-boarding-tasks">
     <% @wizard.class::SECTIONS.each do |section, steps| %>
       <li>
