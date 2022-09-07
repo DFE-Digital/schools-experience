@@ -32,7 +32,7 @@
       "name": "task_progress_on_boarding",
       "description": "Enables the task progress style of on-boarding journey",
       "enabled_for": {
-        "environments": ["development", "staging"]
+        "environments": ["development", "staging", "production"]
       }
     }
   ]
