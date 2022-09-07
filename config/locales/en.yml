@@ -45,6 +45,35 @@ en:
     bookings_school:
       availability_info: This school has not yet provided their availability for offering school experience. You can still request experience with this school and they will contact you when they have availability.
 
+  on_boarding:
+    section:
+      safeguarding_and_fees: "Safeguarding and fees"
+      subjects_and_education_phases: "School experience subjects and education phase"
+      candidate_requirements_and_school_experience_details: "Candidate requirements and school experience details"
+      disability_and_access: "Disability and access"
+      admin_contact_details: "Admin contact details"
+    step:
+      dbs_requirement: "DBS requirements"
+      candidate_requirements_selection: "Candidate requirements"
+      administration_fee: "Administration fees"
+      fees: "Fees"
+      dbs_fee: "DBS fees"
+      other_fee: "Other fees"
+      phases_list: "Phases"
+      key_stage_list: "Key stages"
+      description: "School description"
+      candidate_dress_code: "Dress code"
+      candidate_parking_information: "Parking"
+      candidate_experience_schedule: "Start and finish times"
+      access_needs_support: "Access needs support"
+      access_needs_detail: "Experience details"
+      disability_confident: "Disability Confident employer scheme"
+      access_needs_policy: "Online information"
+      experience_outline: "Details"
+      teacher_training: "Teacher training details"
+      admin_contact: "Admin contact"
+      subjects: "Subjects"
+
   subject_and_date_information_errors: &subject_and_date_information_errors
     attributes:
       bookings_placement_date_id:

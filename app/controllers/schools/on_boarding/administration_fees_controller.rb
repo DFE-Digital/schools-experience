@@ -5,6 +5,11 @@ module Schools
         @administration_fee = current_school_profile.administration_fee
       end
 
+      def edit
+        @administration_fee = current_school_profile.administration_fee
+        render :new
+      end
+
       def create
         @administration_fee = AdministrationFee.new administration_fee_params
 

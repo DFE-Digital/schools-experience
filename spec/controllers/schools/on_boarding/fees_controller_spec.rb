@@ -10,6 +10,12 @@ describe Schools::OnBoarding::FeesController, type: :request do
         :with_dbs_requirement,
         :with_candidate_requirements_selection
     end
+    let(:task_progress_on_boarding) { false }
+
+    before do
+      allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
+        .and_return(task_progress_on_boarding)
+    end
 
     before do
       get '/schools/on_boarding/fees/new'
@@ -65,6 +71,15 @@ describe Schools::OnBoarding::FeesController, type: :request do
       it 'redirects to the correct_step' do
         expect(response).to redirect_to \
           new_schools_on_boarding_administration_fee_path
+      end
+
+      context "when the task_progress_on_boarding feature is enabled" do
+        let(:task_progress_on_boarding) { true }
+
+        it 'redirects to the correct_step' do
+          expect(response).to redirect_to \
+            new_schools_on_boarding_administration_fee_path
+        end
       end
     end
   end

@@ -12,6 +12,12 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
       :with_fees,
       :with_administration_fee
   end
+  let(:task_progress_on_boarding) { false }
+
+  before do
+    allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
+      .and_return(task_progress_on_boarding)
+  end
 
   context '#new' do
     before do
@@ -20,6 +26,25 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
 
     it 'assigns the model' do
       expect(assigns(:dbs_fee)).to eq Schools::OnBoarding::DBSFee.new
+    end
+
+    it 'renders the new template' do
+      expect(response).to render_template :new
+    end
+  end
+
+  context '#edit' do
+    let! :school_profile do
+      FactoryBot.create :school_profile, :completed
+    end
+
+    before do
+      get '/schools/on_boarding/dbs_fee/new'
+    end
+
+    it 'assigns the model' do
+      expect(assigns(:dbs_fee)).to \
+        eq school_profile.dbs_fee
     end
 
     it 'renders the new template' do
@@ -69,6 +94,14 @@ describe Schools::OnBoarding::DbsFeesController, type: :request do
 
       it 'redirects to the next step' do
         expect(response).to redirect_to new_schools_on_boarding_other_fee_path
+      end
+
+      context "when the task_progress_on_boarding feature is enabled" do
+        let(:task_progress_on_boarding) { true }
+
+        it 'redirects to the next step' do
+          expect(response).to redirect_to new_schools_on_boarding_other_fee_path
+        end
       end
     end
   end

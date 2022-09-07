@@ -10,7 +10,7 @@
         Before you can receive requests, you need to complete your school profile.
         <span class="govuk-heading-s govuk-!-margin-top-4">
           <%= link_to 'Complete your school profile',
-            schools_on_boarding_profile_path,
+            Feature.enabled?(:task_progress_on_boarding) ? schools_on_boarding_progress_path : schools_on_boarding_profile_path,
             class: 'govuk-link'
           %>
         </span>
