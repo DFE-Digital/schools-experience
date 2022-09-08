@@ -27,11 +27,10 @@ module Schools
         previous_step = request.path.split("/").last.to_sym
         next_step = school_profile.current_step(previous_step)
 
-        if next_step
-          public_send("new_schools_on_boarding_#{next_step}_path")
-        else
-          schools_on_boarding_progress_path
-        end
+        return public_send("new_schools_on_boarding_#{next_step}_path") if next_step
+        return schools_on_boarding_profile_path if school_profile.bookings_school.onboarded?
+
+        schools_on_boarding_progress_path
       end
 
       def continue(school_profile)
