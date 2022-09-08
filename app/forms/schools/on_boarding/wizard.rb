@@ -1,8 +1,6 @@
 module Schools
   module OnBoarding
     class Wizard
-      class StepNotFoundError < RuntimeError; end
-
       attr_reader :school_profile
 
       SECTIONS = {
@@ -74,13 +72,15 @@ module Schools
 
       def section_key(step)
         section_info = SECTIONS.invert.find { |steps, _section| step.in?(steps) }
-        raise StepNotFoundError, "#{step} step not found" if section_info.nil?
-
-        section_info.last
+        section_info&.last
       end
 
       def remaining_steps_in_section(after_step)
-        steps_in_section = SECTIONS[section_key(after_step)]
+        key = section_key(after_step)
+
+        return all_steps if key.nil?
+
+        steps_in_section = SECTIONS[key]
         steps_in_section[(steps_in_section.index(after_step) + 1)..]
       end
 

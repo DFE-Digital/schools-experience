@@ -10,13 +10,17 @@ describe Schools::OnBoarding::Wizard do
     context "when previous_step is nil" do
       let(:previous_step) { nil }
 
-      it { expect { next_step }.to raise_error(described_class::StepNotFoundError) }
+      it "returns the first required step (from all steps/sections)" do
+        is_expected.to be(:dbs_requirement)
+      end
     end
 
     context "when previous_step is unknown" do
       let(:previous_step) { :unknown }
 
-      it { expect { next_step }.to raise_error(described_class::StepNotFoundError).with_message("unknown step not found") }
+      it "returns the first required step (from all steps/sections)" do
+        is_expected.to be(:dbs_requirement)
+      end
     end
 
     context "when previous_step is the last step of a section" do
