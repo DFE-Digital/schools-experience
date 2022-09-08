@@ -45,7 +45,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
 
   context '#create' do
     let :cancellation_params do
-      { bookings_placement_request_cancellation: cancellation.attributes.merge(rejection_category: :other) }
+      { bookings_placement_request_cancellation: cancellation.attributes.merge(other: true) }
     end
 
     before do
@@ -90,7 +90,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
       context 'success' do
         let :cancellation do
           FactoryBot.build :cancellation,
-            rejection_category: 'fully_booked',
+            fully_booked: true,
             reason: "school's out for summer",
             placement_request: placement_request
         end
@@ -160,7 +160,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
       let :cancellation do
         FactoryBot.build :cancellation,
           reason: "school's out for ever",
-          rejection_category: 'fully_booked',
+          fully_booked: true,
           placement_request: placement_request
       end
 
@@ -186,7 +186,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
           FactoryBot.build :cancellation,
             reason: "",
             placement_request: placement_request,
-            rejection_category: :other
+            other: true
         end
 
         it 'rerenders the edit template' do
@@ -203,7 +203,7 @@ describe Schools::PlacementRequests::CancellationsController, type: :request do
         let :cancellation do
           FactoryBot.build :cancellation,
             reason: "school's out for ever",
-            rejection_category: :fully_booked,
+            fully_booked: true,
             placement_request: placement_request
         end
 

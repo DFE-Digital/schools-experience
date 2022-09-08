@@ -72,7 +72,7 @@ end
 
 Given("there is at least one rejected request") do
   step "there is 1 rejected requests"
-  @rejected_request.cancellation.update(rejection_category: :other, reason: 'MyText')
+  @rejected_request.cancellation.update(other: true, reason: 'MyText')
 end
 
 When("I am viewing the rejected request") do
@@ -85,7 +85,7 @@ end
 Given("a request has been rejected because of {string}") do |rejection_category|
   step %(there is 1 rejected requests)
   @cancellation = @rejected_request.cancellation.tap do |cancellation|
-    cancellation.update(rejection_category: rejection_category)
+    cancellation.update(rejection_category => true)
   end
 end
 

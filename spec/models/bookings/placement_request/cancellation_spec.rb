@@ -4,35 +4,64 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
   it { is_expected.to belong_to :placement_request }
   it { is_expected.to have_db_column(:reason).of_type(:text).with_options null: true }
   it { is_expected.to have_db_column(:extra_details).of_type(:text) }
+  it { is_expected.to have_db_column(:fully_booked).of_type(:boolean) }
+  it { is_expected.to have_db_column(:date_not_available).of_type(:boolean) }
+  it { is_expected.to have_db_column(:accepted_on_ttc).of_type(:boolean) }
+  it { is_expected.to have_db_column(:no_relevant_degree).of_type(:boolean) }
+  it { is_expected.to have_db_column(:no_phase_availability).of_type(:boolean) }
+  it { is_expected.to have_db_column(:candidate_not_local).of_type(:boolean) }
+  it { is_expected.to have_db_column(:duplicate).of_type(:boolean) }
+  it { is_expected.to have_db_column(:info_not_provided).of_type(:boolean) }
+  it { is_expected.to have_db_column(:wrong_choice_primary).of_type(:boolean) }
+  it { is_expected.to have_db_column(:cancelation_requested).of_type(:boolean) }
+  it { is_expected.to have_db_column(:wrong_choice_secondary).of_type(:boolean) }
+  it { is_expected.to have_db_column(:other).of_type(:boolean) }
 
   describe 'Validation' do
     it { is_expected.not_to validate_presence_of :extra_details }
     it { is_expected.to validate_inclusion_of(:cancelled_by).in_array %w[candidate school] }
     it { is_expected.to validate_presence_of(:reason).on(%i[school_cancellation candidate_cancellation]) }
+    it { is_expected.not_to validate_presence_of(:reason) }
 
-    it do
-      is_expected.to validate_inclusion_of(:rejection_category).in_array(
-        Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS
-      ).on(:rejection)
+    context "when 'other' is specififed" do
+      let(:cancellation) { build(:cancellation, other: true) }
+
+      it { expect(cancellation).to validate_presence_of(:reason).on(%i[rejection]) }
     end
 
-    describe 'rejection' do
-      context "when #rejection_category is not 'other'" do
-        subject { described_class.new(rejection_category: :fully_booked) }
-        before { subject.valid?(context: :rejection) }
+    describe "rejection" do
+      let(:cancellation) { build(:cancellation) }
 
-        specify 'reason should be valid' do
-          expect(subject.errors.messages[:reason]).to be_empty
-        end
+      before { cancellation.save(context: :rejection) }
+
+      subject { cancellation.errors.messages }
+
+      it { is_expected.to include(base: ["Chooose a reason for rejecting this candidate"]) }
+
+      context "when there are rejection categories specified" do
+        let(:cancellation) { build(:cancellation, fully_booked: true) }
+
+        it { is_expected.to be_empty }
       end
+    end
+  end
 
-      context "when #rejection_category is 'other'" do
-        subject { described_class.new(rejection_category: :other) }
-        before { subject.valid?(context: :rejection) }
+  describe "before save" do
+    let(:cancellation) { build(:cancellation, reason: "Other reason.") }
 
-        specify 'reason should be valid' do
-          expect(subject.errors.messages[:reason]).to be_empty
-        end
+    it { expect { cancellation.save }.not_to change(cancellation, :rejection_category) }
+
+    context "when a rejection category was changed" do
+      let(:cancellation) { build(:cancellation, fully_booked: true) }
+
+      it { expect { cancellation.save }.to change(cancellation, :rejection_category).to("fully_booked") }
+    end
+
+    context "when multiple rejection categories are changed" do
+      let(:cancellation) { build(:cancellation, duplicate: true, wrong_choice_secondary: true) }
+
+      it "sets the rejection_category to the first category that is true" do
+        expect { cancellation.save }.to change(cancellation, :rejection_category).to("duplicate")
       end
     end
   end
@@ -112,29 +141,85 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
     end
   end
 
-  describe '#humanised_rejection_category' do
-    let(:placement_request) { FactoryBot.create(:placement_request) }
+  describe "#rejection_description" do
+    subject { cancellation.rejection_description }
 
-    context 'when set to a value' do
-      let(:category) { 'fully_booked' }
-      let(:translated_string) { "sorry, we're totally full" }
-      subject { build :cancellation, placement_request: placement_request, rejection_category: category }
+    context "when there are no categories selected or reason specified" do
+      let(:cancellation) { build(:cancellation, reason: nil) }
 
-      before do
-        allow(I18n).to(receive(:t).with(
-          "helpers.label.bookings_placement_request_cancellation.rejection_category_options.#{category}"
-        ).and_return(translated_string))
+      it { is_expected.to be_nil }
+    end
+
+    context "when there is only one category selected" do
+      let(:cancellation) { build(:cancellation, fully_booked: true, reason: nil) }
+
+      it { is_expected.to eq("The date you requested is fully booked.") }
+    end
+
+    context "when there are multiple categories selected" do
+      let(:cancellation) { build(:cancellation, fully_booked: true, duplicate: true, reason: nil) }
+
+      it { is_expected.to eq("The date you requested is fully booked. This is a duplicate request.") }
+    end
+
+    context "when there is only a reason specified" do
+      let(:cancellation) { build(:cancellation, reason: "Other reason.") }
+
+      it { is_expected.to eq("Other reason.") }
+    end
+
+    context "when there are categories and a reason specified" do
+      let(:cancellation) { build(:cancellation, fully_booked: true, duplicate: true, reason: "Other reason.") }
+
+      it { is_expected.to eq("The date you requested is fully booked. This is a duplicate request. Other reason.") }
+    end
+
+    context "when there are categories including 'other' and a reason specified" do
+      let(:cancellation) { build(:cancellation, other: true, duplicate: true, reason: "Other reason.") }
+
+      it { is_expected.to eq("This is a duplicate request. Other reason.") }
+    end
+  end
+
+  describe "#humanised_rejection_categories" do
+    subject { cancellation.humanised_rejection_categories }
+
+    context "when there are no categories selected or reason specified" do
+      let(:cancellation) { build(:cancellation, reason: " ") }
+
+      it { is_expected.to be_nil }
+    end
+
+    context "when multiple categories selected" do
+      let(:cancellation) { build(:cancellation, fully_booked: true, duplicate: true, reason: nil) }
+
+      it "returns the translated strings" do
+        is_expected.to contain_exactly(
+          "The date you requested is fully booked.",
+          "This is a duplicate request."
+        )
       end
 
-      specify 'should return the translated string' do
-        expect(subject.humanised_rejection_category).to eql(translated_string)
+      context "when 'other' is also selected'" do
+        before do
+          cancellation.other = true
+          cancellation.reason = "Other reason."
+        end
+
+        it "returns the translated strings" do
+          is_expected.to contain_exactly(
+            "The date you requested is fully booked.",
+            "This is a duplicate request.",
+            "Other reason."
+          )
+        end
       end
     end
 
-    context "when set to 'other'" do
-      subject { build :cancellation, placement_request: placement_request, rejection_category: 'other' }
+    context "when no categories have been selected but a reason is present" do
+      let(:cancellation) { build(:cancellation, reason: "Other reason.") }
 
-      specify { expect(subject.humanised_rejection_category).to be_nil }
+      it { is_expected.to contain_exactly("Other reason.") }
     end
   end
 end
