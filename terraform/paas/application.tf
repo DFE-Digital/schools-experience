@@ -90,3 +90,34 @@ resource "cloudfoundry_app" "delayed_jobs" {
   environment = merge(local.application_secrets, local.environment_map)
 
 }
+
+resource "cloudfoundry_app" "sidekiq_jobs" {
+  name              = "${var.paas_application_name}-sidekiq_job"
+  space             = data.cloudfoundry_space.space.id
+  command           = "/app/docker-entrypoint.sh ${var.SIDEKIQ}"
+  docker_image      = var.paas_docker_image
+  stopped           = var.application_stopped
+  instances         = var.sidekiq_job_instances
+  memory            = var.application_memory
+  disk_quota        = var.application_disk
+  strategy          = var.strategy
+  health_check_type = "process"
+  timeout           = var.timeout
+
+  dynamic "service_binding" {
+    for_each = data.cloudfoundry_user_provided_service.logging
+    content {
+      service_instance = service_binding.value["id"]
+    }
+  }
+
+  dynamic "routes" {
+    for_each = cloudfoundry_route.route_sidekiq
+    content {
+      route = routes.value["id"]
+    }
+  }
+
+  environment = merge(local.application_secrets, local.environment_map)
+
+}

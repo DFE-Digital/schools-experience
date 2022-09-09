@@ -7,6 +7,7 @@ paas_application_name     = "school-experience-app-staging"
 paas_internet_hostnames   = ["staging-schoolexperience","schoolexperience-staging"]
 application_instances     = 1
 delayed_job_instances     = 2
+sidekiq_job_instances     = 0
 environment               = "staging"
 application_environment   = "dfe-school-experience-staging"
 database_plan             = "small-13"

@@ -11,7 +11,8 @@ The endpoint has been written for the Dockerfile. This has three parameters
 - -m - Carry out migration
 - -f run in frontend mode
 - -b run in background jobs mode
-( -f -b are mutually exclusive )
+- -s run in sidekiq jobs mode
+( -f -b and -s are mutually exclusive )
 
 ## Migration Policy
 In the following environments the two applications are set as

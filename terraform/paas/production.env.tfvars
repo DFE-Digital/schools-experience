@@ -8,6 +8,7 @@ paas_internet_hostnames   = ["schoolexperience"]
 application_instances     = 2
 application_memory        = 2046
 delayed_job_instances     = 2
+sidekiq_job_instances     = 0
 environment               = "production"
 application_environment   = "dfe-school-experience-production"
 azure_key_vault           = "s105p01-kv"

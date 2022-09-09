@@ -37,6 +37,22 @@ services:
      depends_on:
        - db-tasks
 
+   sidekiq-jobs:
+     build: .
+     command: sidekiq
+     restart: always
+     healthcheck:
+       disable: true
+     environment:
+       - RAILS_ENV=servertest
+       - DATABASE_URL=postgis://postgres:secret@postgres/school_experience
+       - REDIS_URL=redis://redis:6379/1
+       - SECRET_KEY_BASE=stubbed
+       - SKIP_FORCE_SSL=true
+       - WEB_URL=postgis://postgres:secret@postgres/school_experience
+     depends_on:
+       - db-tasks
+
    db-tasks:
      build: .
      command: database

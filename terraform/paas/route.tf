@@ -24,6 +24,13 @@ resource "cloudfoundry_route" "route_delayed" {
   space    = data.cloudfoundry_space.space.id
 }
 
+resource "cloudfoundry_route" "route_sidekiq" {
+  count    = var.sidekiq_job_instances > 0 ? 1 : 0
+  domain   = data.cloudfoundry_domain.internal.id
+  hostname = "${var.paas_application_name}-sidekiq"
+  space    = data.cloudfoundry_space.space.id
+}
+
 resource "cloudfoundry_route" "static_route" {
   count    = var.static_route == "" ? 0 :1
   domain   = data.cloudfoundry_domain.cloudapps.id
