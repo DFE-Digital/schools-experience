@@ -1,6 +1,14 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username), ::Digest::SHA256.hexdigest(ENV["SECURE_USERNAME"])) &
+      ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password), ::Digest::SHA256.hexdigest(ENV["SECURE_PASSWORD"]))
+  end
+
+  mount Sidekiq::Web => "/sidekiq" unless Rails.env.production?
   mount Yabeda::Prometheus::Exporter => '/metrics'
 
   get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck

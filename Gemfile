@@ -35,9 +35,12 @@ gem 'rails_semantic_logger'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem "sidekiq"
+
 # Metrics
 gem "webrick"
 gem 'yabeda-delayed_job', github: "DFE-Digital/yabeda-delayed_job", ref: "2251f9d"
+gem 'yabeda-sidekiq'
 gem 'yabeda-http_requests'
 gem 'yabeda-prometheus'
 gem 'yabeda-puma-plugin'

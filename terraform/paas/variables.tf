@@ -32,6 +32,10 @@ variable "BACKGROUND" {
   default = "background"
 }
 
+variable "SIDEKIQ" {
+  default = "sidekiq"
+}
+
 variable "strategy" {
   default = "blue-green-v2"
 }
@@ -41,6 +45,10 @@ variable "application_instances" {
 }
 
 variable "delayed_job_instances" {
+  default = 1
+}
+
+variable "sidekiq_job_instances" {
   default = 1
 }
 
