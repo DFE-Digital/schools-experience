@@ -36,6 +36,7 @@ gem 'rails_semantic_logger'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem "sidekiq"
+gem "sidekiq-cron"
 
 # Metrics
 gem "webrick"

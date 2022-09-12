@@ -1,0 +1,25 @@
+# Sidekiq scheduled tasks/cron jobs
+
+heart_beat_job:
+  cron: "* * * * *" # every minute
+  class: "Cron::HeartBeatJob"
+
+identify_closed_schools_job:
+  cron: "0 9 * * 1" # at 09:00 on Monday
+  class: "Cron::IdentifyClosedSchoolsJob"
+
+sync_schools_job:
+  cron: "30 7 * * *" # at 07:30
+  class: "Cron::SyncSchoolsJob"
+
+send_tomorrow_reminders_job:
+  cron: "30 9 * * *" # at 09:30
+  class: "Cron::Reminders::TomorrowJob"
+
+send_next_week_reminders_job:
+  cron: "35 9 * * *" # at 09:35
+  class: "Cron::Reminders::NextWeekJob"
+
+add_availability_job:
+  cron: "40 9 * * *" # at 09:40
+  class: "Cron::Reminders::AddAvailabilityJob"
