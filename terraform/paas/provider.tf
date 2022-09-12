@@ -5,11 +5,11 @@ provider "cloudfoundry" {
 }
 
 provider "statuscake" {
-  api_token   = local.infrastructure_secrets.SC-PASSWORD
+  api_token = local.infrastructure_secrets.SC-PASSWORD
 }
 
 locals {
-  azure_credentials =  jsondecode(var.AZURE_CREDENTIALS)
+  azure_credentials = jsondecode(var.AZURE_CREDENTIALS)
 }
 
 provider "azurerm" {
@@ -25,6 +25,11 @@ terraform {
   required_version = "1.2.8"
 
   required_providers {
+
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.22.0"
+    }
     cloudfoundry = {
       source  = "cloudfoundry-community/cloudfoundry"
       version = "0.15.5"
