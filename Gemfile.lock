@@ -579,6 +579,9 @@ GEM
       sentry-ruby (~> 5.4.1)
     sentry-ruby (5.4.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    sentry-sidekiq (5.4.1)
+      sentry-ruby (~> 5.4.1)
+      sidekiq (>= 3.0)
     shakapacker (6.5.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
@@ -590,6 +593,9 @@ GEM
       connection_pool (>= 2.2.5)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
+    sidekiq-cron (1.7.0)
+      fugit (~> 1)
+      sidekiq (>= 4.2.1)
     signet (0.17.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -749,9 +755,11 @@ DEPENDENCIES
   sentry-delayed_job
   sentry-rails
   sentry-ruby
+  sentry-sidekiq
   shakapacker (= 6.5.1)
   shoulda-matchers (~> 5.0)
   sidekiq
+  sidekiq-cron
   simplecov
   spring
   spring-commands-rspec

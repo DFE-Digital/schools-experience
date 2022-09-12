@@ -36,6 +36,7 @@ gem 'rails_semantic_logger'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem "sidekiq"
+gem "sidekiq-cron"
 
 # Metrics
 gem "webrick"
@@ -66,6 +67,7 @@ gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.3.2"
 
 gem 'phonelib'
 gem 'sentry-delayed_job'
+gem 'sentry-sidekiq'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 
