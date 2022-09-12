@@ -579,6 +579,9 @@ GEM
       sentry-ruby (~> 5.4.1)
     sentry-ruby (5.4.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    sentry-sidekiq (5.4.1)
+      sentry-ruby (~> 5.4.1)
+      sidekiq (>= 3.0)
     shakapacker (6.5.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
@@ -752,6 +755,7 @@ DEPENDENCIES
   sentry-delayed_job
   sentry-rails
   sentry-ruby
+  sentry-sidekiq
   shakapacker (= 6.5.1)
   shoulda-matchers (~> 5.0)
   sidekiq

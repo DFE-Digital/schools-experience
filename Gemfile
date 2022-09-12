@@ -67,6 +67,7 @@ gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.3.2"
 
 gem 'phonelib'
 gem 'sentry-delayed_job'
+gem 'sentry-sidekiq'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 
