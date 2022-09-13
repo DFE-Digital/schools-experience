@@ -214,8 +214,6 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     declarative (0.0.20)
-    delayed_cron_job (0.9.0)
-      fugit (>= 1.5)
     delayed_job (4.1.10)
       activesupport (>= 3.0, < 8.0)
     delayed_job_active_record (4.1.7)
@@ -710,7 +708,6 @@ DEPENDENCIES
   cucumber-rails (>= 2.4.0)
   daemons
   database_cleaner
-  delayed_cron_job
   delayed_job_active_record
   delayed_job_web
   dfe-analytics!

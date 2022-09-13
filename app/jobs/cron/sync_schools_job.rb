@@ -1,6 +1,4 @@
-class Cron::SyncSchoolsJob < CronJob
-  self.cron_expression = '30 7 * * *'
-
+class Cron::SyncSchoolsJob < ApplicationJob
   def perform
     Bookings::SchoolSync.new.sync
   end

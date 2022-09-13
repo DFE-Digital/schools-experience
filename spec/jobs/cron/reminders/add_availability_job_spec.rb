@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 describe Cron::Reminders::AddAvailabilityJob, type: :job do
-  specify 'should have a schedule of daily at 09:40' do
-    expect(described_class.cron_expression).to eql('40 9 * * *')
-  end
-
   describe '#perform' do
     let(:reminder_email_double) { instance_double(NotifyEmail::SchoolAddAvailabilityReminder, despatch_later!: true) }
     let(:admin_contact_email) { "admin@email.com" }

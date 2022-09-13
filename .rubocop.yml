@@ -49,13 +49,6 @@ Style/TrailingCommaInHashLiteral:
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
 
-# Excluded because all our jobs are set to retry by default, we dont want that
-# logic applied to CronJobs so we are inheriting from ApplicationJobs parent to
-# solve this.
-Rails/ApplicationJob:
-  Exclude:
-    - app/jobs/cron_job.rb
-
 Rails/DynamicFindBy:
   Enabled: false
 

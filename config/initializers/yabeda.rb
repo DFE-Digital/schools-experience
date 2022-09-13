@@ -15,6 +15,7 @@ if ENV.key?("VCAP_APPLICATION")
 
     group :gse do
       counter :delayed_job_heart_beat, comment: "Counter for a delayed job heart beat/monitoring"
+      counter :sidekiq_heart_beat, comment: "Counter for a sidekiq job heart beat/monitoring"
     end
   end
 end
