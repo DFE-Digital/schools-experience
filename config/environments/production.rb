@@ -130,7 +130,7 @@ Rails.application.configure do
     key: 'schoolex-session',
     expire_after: 3.hours # Sets explicit TTL for Session Redis keys
 
-  config.active_job.queue_adapter = :delayed_job
+  config.active_job.queue_adapter = :sidekiq
 
   config.force_ssl = true
   config.ssl_options = {
