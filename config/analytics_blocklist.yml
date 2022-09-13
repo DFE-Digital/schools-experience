@@ -1,19 +1,5 @@
 ---
 :shared:
-  :delayed_jobs:
-  - id
-  - priority
-  - attempts
-  - handler
-  - last_error
-  - run_at
-  - locked_at
-  - failed_at
-  - locked_by
-  - queue
-  - created_at
-  - updated_at
-  - cron
   :bookings_placement_request_cancellations:
   - reason
   - extra_details

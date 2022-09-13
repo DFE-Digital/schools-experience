@@ -28,10 +28,6 @@ variable "FRONTEND" {
   default = "migrate frontend"
 }
 
-variable "BACKGROUND" {
-  default = "background"
-}
-
 variable "SIDEKIQ" {
   default = "sidekiq"
 }
@@ -41,10 +37,6 @@ variable "strategy" {
 }
 
 variable "application_instances" {
-  default = 1
-}
-
-variable "delayed_job_instances" {
   default = 1
 }
 

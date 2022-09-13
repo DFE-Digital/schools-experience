@@ -40,7 +40,6 @@ gem "sidekiq-cron"
 
 # Metrics
 gem "webrick"
-gem 'yabeda-delayed_job', github: "DFE-Digital/yabeda-delayed_job", ref: "2251f9d"
 gem 'yabeda-http_requests'
 gem 'yabeda-prometheus'
 gem 'yabeda-puma-plugin'
@@ -54,8 +53,6 @@ gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
 gem 'daemons'
-gem 'delayed_job_active_record'
-gem 'delayed_job_web'
 
 gem "connection_pool"
 gem "redis", "~> 4.7"
@@ -65,7 +62,6 @@ gem 'kaminari'
 gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.3.2"
 
 gem 'phonelib'
-gem 'sentry-delayed_job'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'sentry-sidekiq'

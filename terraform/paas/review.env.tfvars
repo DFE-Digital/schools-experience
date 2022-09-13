@@ -7,7 +7,6 @@ application_environment   = "dfe-school-experience-review"
 application_instances     = 1
 logging                   = 0
 databases                 = 0
-delayed_job_instances     = 0
 sidekiq_job_instances     = 0
 environment               = "dev"
 azure_key_vault           = "s105d01-kv"

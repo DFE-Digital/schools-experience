@@ -23,15 +23,6 @@ GIT
       get_into_teaching_api_client
 
 GIT
-  remote: https://github.com/DFE-Digital/yabeda-delayed_job.git
-  revision: 2251f9d1828d491fe5b8e48d168eae76df97c054
-  ref: 2251f9d
-  specs:
-    yabeda-delayed_job (0.1.0)
-      delayed_job
-      yabeda
-
-GIT
   remote: https://github.com/microsoft/ApplicationInsights-Ruby.git
   revision: a74292001cf12f6de957dfdcefaf8dbe415d7181
   ref: a7429200
@@ -214,16 +205,6 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     declarative (0.0.20)
-    delayed_job (4.1.10)
-      activesupport (>= 3.0, < 8.0)
-    delayed_job_active_record (4.1.7)
-      activerecord (>= 3.0, < 8.0)
-      delayed_job (>= 3.0, < 5)
-    delayed_job_web (1.4.4)
-      activerecord (> 3.0.0)
-      delayed_job (> 2.0.3)
-      rack-protection (>= 1.5.5)
-      sinatra (>= 1.4.4)
     diff-lcs (1.5.0)
     digest (3.1.0)
     docile (1.4.0)
@@ -370,8 +351,6 @@ GEM
     multi_json (1.15.0)
     multi_test (0.1.2)
     multipart-post (2.2.3)
-    mustermann (1.1.1)
-      ruby2_keywords (~> 0.0.1)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -436,8 +415,6 @@ GEM
       httpclient
       json-jwt (>= 1.11.0)
       rack (>= 2.1.0)
-    rack-protection (2.2.0)
-      rack
     rack-proxy (0.7.2)
       rack
     rack-rewrite (1.5.1)
@@ -569,9 +546,6 @@ GEM
     semantic_logger (4.10.0)
       concurrent-ruby (~> 1.0)
     semantic_range (3.0.0)
-    sentry-delayed_job (5.4.1)
-      delayed_job (>= 4.0)
-      sentry-ruby (~> 5.4.1)
     sentry-rails (5.4.1)
       railties (>= 5.0)
       sentry-ruby (~> 5.4.1)
@@ -605,11 +579,6 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    sinatra (2.2.0)
-      mustermann (~> 1.0)
-      rack (~> 2.2)
-      rack-protection (= 2.2.0)
-      tilt (~> 2.0)
     sniffer (0.4.0)
       active_attr (>= 0.10.2)
       anyway_config (>= 1.0)
@@ -625,7 +594,6 @@ GEM
     sys-uname (1.2.2)
       ffi (~> 1.1)
     thor (1.2.1)
-    tilt (2.0.10)
     timeliness (0.4.4)
     timeout (0.3.0)
     trailblazer-option (0.1.2)
@@ -708,8 +676,6 @@ DEPENDENCIES
   cucumber-rails (>= 2.4.0)
   daemons
   database_cleaner
-  delayed_job_active_record
-  delayed_job_web
   dfe-analytics!
   dotenv-rails (>= 2.7.6)
   factory_bot_rails (>= 6.2.0)
@@ -749,7 +715,6 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop-govuk
   selenium-webdriver
-  sentry-delayed_job
   sentry-rails
   sentry-ruby
   sentry-sidekiq
@@ -766,7 +731,6 @@ DEPENDENCIES
   web-console (>= 4.2.0)
   webmock
   webrick
-  yabeda-delayed_job!
   yabeda-http_requests
   yabeda-prometheus
   yabeda-puma-plugin

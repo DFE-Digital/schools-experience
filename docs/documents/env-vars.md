@@ -100,13 +100,6 @@ REDIS_URL - url for Redis server, defaults to local Redis server
 
 `CANONICAL_DOMAIN` - if set, connections via a different domain are redirected to the canonical one
 
-## Admin tools
-
-`DELAYED_JOB_ADMIN_ENABLED` - enable the DelayedJob admin UI, 1 = on, blank = off
-
-`DELAYED_JOB_ADMIN_USERNAME` - username for the admin UI, required for UI to be enabled
-`DELAYED_JOB_ADMIN_PASSWORD` - password for the admin UI, required for UI to be enabled
-
 ## Deployment tools
 
 `DEPLOYMENT_ID` - String to be available at `/healthcheck` - used to check the deployed version
