@@ -13,5 +13,9 @@ describe Cron::HeartBeatJob, type: :job do
     it "increments the delayed_job_heart_beat metric" do
       expect { perform }.to increment_yabeda_counter(Yabeda.gse.delayed_job_heart_beat).by(1)
     end
+
+    it "increments the sidekiq_heart_beat metric" do
+      expect { perform }.to increment_yabeda_counter(Yabeda.gse.sidekiq_heart_beat).by(1)
+    end
   end
 end
