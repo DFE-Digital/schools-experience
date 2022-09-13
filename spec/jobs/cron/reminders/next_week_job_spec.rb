@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 describe Cron::Reminders::NextWeekJob, type: :job do
-  specify 'should have a schedule of daily at 09:35' do
-    expect(described_class.cron_expression).to eql('35 9 * * *')
-  end
-
   describe '#time_until_booking' do
     specify { expect(subject.time_until_booking).to eql('one week') }
   end

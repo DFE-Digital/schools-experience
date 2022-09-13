@@ -1,8 +1,6 @@
 module Cron
   module Reminders
-    class AddAvailabilityJob < CronJob
-      self.cron_expression = '40 9 * * *'
-
+    class AddAvailabilityJob < ApplicationJob
       def perform
         profiles_created_yesterday_with_no_availability.each do |booking_profile|
           NotifyEmail::SchoolAddAvailabilityReminder.new(

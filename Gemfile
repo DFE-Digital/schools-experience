@@ -54,7 +54,6 @@ gem 'notifications-ruby-client'
 
 gem 'acts_as_list'
 gem 'daemons'
-gem 'delayed_cron_job'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 

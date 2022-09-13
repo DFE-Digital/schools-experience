@@ -1,7 +1,4 @@
-class Cron::IdentifyClosedSchoolsJob < CronJob
-  # Every Monday at 9am
-  self.cron_expression = "0 9 * * 1"
-
+class Cron::IdentifyClosedSchoolsJob < ApplicationJob
   SERVICE_INBOX = "school.experience@education.gov.uk".freeze
   EMPTY_TEXT = "There are no closed, on-boarded schools.".freeze
 

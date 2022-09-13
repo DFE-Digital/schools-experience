@@ -1,10 +1,6 @@
 require "rails_helper"
 
 describe Cron::IdentifyClosedSchoolsJob, type: :job do
-  it 'is scheduled for 9am on Mondays' do
-    expect(described_class.cron_expression).to eql("0 9 * * 1")
-  end
-
   describe "#perform" do
     let(:email_double) { instance_double(NotifyEmail::ClosedOnboardedSchoolsSummary, despatch_later!: nil) }
     let(:closed_school_1) { create(:bookings_school, :onboarded) }

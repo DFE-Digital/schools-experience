@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 describe Cron::SyncSchoolsJob, type: :job do
-  specify 'should have a schedule of daily at 07:30' do
-    expect(described_class.cron_expression).to eql('30 7 * * *')
-  end
-
   describe '#perform' do
     let(:school_sync_instance) { double Object, sync: true }
 

@@ -1,8 +1,6 @@
 module Cron
   module Reminders
-    class TomorrowJob < CronJob
-      self.cron_expression = '30 9 * * *'
-
+    class TomorrowJob < ApplicationJob
       # Create one Bookings::ReminderJob _per booking_, each
       # Bookings::ReminderJob, via Bookings::Reminder is responsible
       # for pulling its own information (name, email) from Gitis and should
