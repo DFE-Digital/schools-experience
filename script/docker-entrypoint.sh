@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MODE=NOTSET
-MODE_ERROR="Mode must be one of (  -b (background), -s (sidekiq), -c (brakeman), -f (frontend), -r (rubocop) , -x (database) , -y (cucumber) , -z (rspec), -s (shell) )"
+MODE_ERROR="Mode must be one of (  -s (sidekiq), -c (brakeman), -f (frontend), -r (rubocop) , -x (database) , -y (cucumber) , -z (rspec), -s (shell) )"
 
 while [[ $# -gt 0 ]]; do
   key="$1"
@@ -82,14 +82,6 @@ while [[ $# -gt 0 ]]; do
           fi
 	  shift
       ;;
-    -b|background)
-	  if [[ ${MODE} != "NOTSET" ]] ; then
-		  echo ${MODE_ERROR}
-	  else
-	          MODE=BACKGROUND
-          fi
-	  shift
-      ;;
     *)    # unknown option
 	  echo Unknown Option
 	  shift
@@ -101,11 +93,6 @@ done
 if [[ ${MODE} == "FRONTEND" ]] ; then
 	  echo Running Frontend
           bundle exec rails server
-elif [[ ${MODE} == "BACKGROUND" ]] ; then
-	  echo Waiting one minute
-	  sleep 60
-	  echo Running Background Jobs
-    PORT=3000 ./bin/delayed_job start
 elif [[ ${MODE} == "SIDEKIQ" ]] ; then
 	  echo Waiting one minute
 	  sleep 60

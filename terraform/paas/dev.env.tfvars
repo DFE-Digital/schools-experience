@@ -5,7 +5,6 @@ paas_database_common_name = "school-experience-dev-pg-common-svc"
 paas_redis_1_name         = "school-experience-dev-redis-svc"
 paas_application_name     = "school-experience-app-dev"
 logging                   = 0
-delayed_job_instances     = 0
 sidekiq_job_instances     = 1
 environment               = "dev"
 azure_key_vault           = "s105d01-kv"

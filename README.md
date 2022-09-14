@@ -52,8 +52,8 @@ We also have markdown pages within the `doc` folder of this git repo
 9. Run `bundle exec rake cucumber` to run the cucumber tests.
 10. Run `yarn spec` to run the Javascript tests.
 11. Run `bundle exec rails s` to launch the app on https://localhost:3000.
-12. If running with `RAILS_ENV=production`, DelayedJob is needed for background job processing
-   a. running `bundle exec rake jobs:work` will start a DelayedJob Worker
+12. If running with `RAILS_ENV=production`, Sidekiq is needed for background job processing
+   a. running `bundle exec sidekiq -c config/sidekiq.yml` will start a Sidekiq Worker
 
 ### If Chrome give a certificates error and will not let you proceed
 
