@@ -11,7 +11,7 @@ describe Schools::OnBoarding::Wizard do
       let(:previous_step) { nil }
 
       it "returns the first required step (from all steps/sections)" do
-        is_expected.to be(:dbs_requirement)
+        is_expected.to be(:phases_list)
       end
     end
 
@@ -19,7 +19,7 @@ describe Schools::OnBoarding::Wizard do
       let(:previous_step) { :unknown }
 
       it "returns the first required step (from all steps/sections)" do
-        is_expected.to be(:dbs_requirement)
+        is_expected.to be(:phases_list)
       end
     end
 

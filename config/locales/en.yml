@@ -47,9 +47,9 @@ en:
 
   on_boarding:
     section:
-      safeguarding_and_fees: "Safeguarding and fees"
       subjects_and_education_phases: "School experience subjects and education phase"
       candidate_requirements_and_school_experience_details: "Candidate requirements and school experience details"
+      safeguarding_and_fees: "Safeguarding and fees"
       disability_and_access: "Disability and access"
       admin_contact_details: "Admin contact details"
     step:
