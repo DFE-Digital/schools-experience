@@ -33,8 +33,10 @@ module Schools::PlacementRequestsHelper
   end
 
   def cancellation_reasons(cancellation)
-    safe_join(
-      Array.wrap(cancellation.humanised_rejection_categories).map { |r| tag.p(r) }
-    )
+    tag.ul(class: "govuk-list govuk-list--bullet") do |_ul|
+      safe_join(
+        Array.wrap(cancellation.humanised_rejection_categories).map { |r| tag.li(r) }
+      )
+    end
   end
 end

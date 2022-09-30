@@ -26,11 +26,15 @@ private
   def personalisation
     {
       school_name: school_name,
-      rejection_reasons: rejection_reasons,
+      rejection_reasons: bulleted_rejection_reasons,
       extra_details: extra_details,
       dates_requested: dates_requested,
       school_search_url: school_search_url,
       candidate_name: candidate_name
     }
+  end
+
+  def bulleted_rejection_reasons
+    rejection_reasons.map { |r| "* #{r}" }.join("\n")
   end
 end
