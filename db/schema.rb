@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_142124) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_07_093024) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "address_standardizer"
   enable_extension "plpgsql"
@@ -96,6 +96,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_142124) do
     t.text "extra_details"
     t.datetime "viewed_at", precision: nil
     t.string "rejection_category"
+    t.boolean "fully_booked", default: false
+    t.boolean "accepted_on_ttc", default: false
+    t.boolean "date_not_available", default: false
+    t.boolean "no_relevant_degree", default: false
+    t.boolean "no_phase_availability", default: false
+    t.boolean "candidate_not_local", default: false
+    t.boolean "duplicate", default: false
+    t.boolean "info_not_provided", default: false
+    t.boolean "cancelation_requested", default: false
+    t.boolean "wrong_choice_secondary", default: false
+    t.boolean "wrong_choice_primary", default: false
+    t.boolean "other", default: false
     t.index ["bookings_placement_request_id"], name: "index_cancellations_on_bookings_placement_request_id", unique: true
     t.index ["rejection_category"], name: "index_bookings_placement_request_cancellations_category"
   end

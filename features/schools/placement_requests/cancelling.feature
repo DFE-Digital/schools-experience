@@ -39,7 +39,7 @@ Feature: Rejecting placement requests
     Scenario: Reject form
         Given there is at least one placement request
         When I am on the reject placement request page
-        Then I should see radio buttons for 'Rejection reason' with the following options:
+        Then I should see checkboxes for 'Rejection reasons' with the following options:
             | The date you requested is fully booked                                                                    |
             | We cannot offer you school experience because you've already been accepted on a teacher training course   |
             | We can no longer offer the date you've requested                                                          |
@@ -59,7 +59,7 @@ Feature: Rejecting placement requests
     Scenario: Rejecting the requests
         Given there is at least one placement request
         And I am on the reject placement request page
-        And I choose 'You asked us to cancel your request' from the 'Rejection reason' radio buttons
+        And I check the 'You asked us to cancel your request' checkbox
         And I have entered a extra details in the extra details text area
         When I click the 'Preview rejection email' button
         Then I should see a preview of what I have entered
@@ -68,14 +68,14 @@ Feature: Rejecting placement requests
     Scenario: Entering a custom option
         Given there is at least one placement request
         And I am on the reject placement request page
-        And I choose 'Other' from the 'Rejection reason' radio buttons
+        And I check the 'Other' checkbox
         Then a text area labelled 'Cancellation reasons' should have appeared
 
     @javascript
     Scenario: Rejecting the requests with a custom reason
         Given there is at least one placement request
         And I am on the reject placement request page
-        And I choose 'Other' from the 'Rejection reason' radio buttons
+        And I check the 'Other' checkbox
 		And I enter 'The school will be closed' into the 'Cancellation reasons' text area
         When I click the 'Preview rejection email' button
         Then I should see my custom cancellation reason

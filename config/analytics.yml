@@ -15,6 +15,18 @@
   - sent_at
   - viewed_at
   - rejection_category
+  - fully_booked
+  - accepted_on_ttc
+  - date_not_available
+  - no_relevant_degree
+  - no_phase_availability
+  - candidate_not_local
+  - duplicate
+  - info_not_provided
+  - cancelation_requested
+  - wrong_choice_secondary
+  - wrong_choice_primary
+  - other
   :schools_school_profiles:
   - id
   - created_at

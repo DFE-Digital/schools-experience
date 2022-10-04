@@ -35,6 +35,13 @@ Then("I should see radio buttons for {string} with the following options:") do |
   )
 end
 
+Then("I should see checkboxes for {string} with the following options:") do |string, table|
+  ensure_check_boxes_exist(
+    get_form_group(page, string),
+    table.raw.flatten.to_a
+  )
+end
+
 Then("I should not see {string}") do |string|
   expect(page).not_to have_content string
 end

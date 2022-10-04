@@ -1,7 +1,7 @@
 class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   include ViewTrackable
 
-  SCHOOL_REJECTION_REASONS = %w[
+  SCHOOL_REJECTION_REASONS = %i[
     fully_booked
     accepted_on_ttc
     date_not_available
@@ -25,14 +25,16 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
     class_name: 'Bookings::PlacementRequest',
     foreign_key: 'bookings_placement_request_id'
 
+  before_save :set_rejection_category
+
   validates :bookings_placement_request_id, uniqueness: true
   validates :cancelled_by, inclusion: %w[candidate school]
   validate :placement_request_not_closed, on: :create, if: :placement_request
 
   validates :reason, presence: true, on: %i[school_cancellation candidate_cancellation]
-  validates :reason, presence: true, on: :rejection, if: -> { rejection_category == 'other' }
+  validates :reason, presence: true, on: :rejection, if: :other?
 
-  validates :rejection_category, inclusion: SCHOOL_REJECTION_REASONS, on: :rejection
+  validate :rejection_categories_present, on: :rejection
 
   delegate \
     :candidate_email,
@@ -86,23 +88,46 @@ class Bookings::PlacementRequest::Cancellation < ApplicationRecord
   end
 
   def rejection_description
-    humanised_rejection_category || reason
+    humanised_rejection_categories&.join(" ")
   end
 
-  def humanised_rejection_category
-    return nil if rejection_category == 'other' || rejection_category.nil?
-
-    I18n.t(
-      %w[
-        helpers
-        label
-        bookings_placement_request_cancellation
-        rejection_category_options
-      ].push(rejection_category).join('.')
-    )
+  def humanised_rejection_categories
+    SCHOOL_REJECTION_REASONS
+      .excluding(:other)
+      .select { |a| self[a] }
+      .map { |rejection_category|
+        I18n.t([
+          "helpers",
+          "label",
+          "bookings_placement_request_cancellation",
+          "#{rejection_category}_options",
+          1
+        ].join('.'))
+      }
+      .push(reason)
+      .reject(&:blank?)
+      .presence
   end
 
 private
+
+  def rejection_categories_present
+    return if SCHOOL_REJECTION_REASONS.any? { |a| self[a] }
+
+    errors.add(:base, :no_rejection_category_selected)
+  end
+
+  def set_rejection_category
+    rejection_category_changed = changed_attribute_names_to_save
+      .map(&:to_sym)
+      .intersect?(SCHOOL_REJECTION_REASONS)
+
+    return unless rejection_category_changed
+
+    # We are only maintaining this until the multiple rejection categories
+    # has been rolled out; then the attribute can be removed.
+    self.rejection_category = SCHOOL_REJECTION_REASONS.find { |a| self[a] }
+  end
 
   def placement_request_not_closed
     if placement_request.closed?

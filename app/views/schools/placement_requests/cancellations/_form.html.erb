@@ -4,7 +4,7 @@
 <%= form_for cancellation, url: schools_placement_request_cancellation_path do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <%= f.govuk_error_summary %>
+      <%= f.govuk_error_summary link_base_errors_to: :fully_booked_1 %>
 
       <h1 class="govuk-heading-l">
         Review and send rejection email to candidate
@@ -20,19 +20,19 @@
             cancellation: cancellation,
             reason: capture do
               content_tag('div', class: 'editable') do
-                f.govuk_radio_buttons_fieldset(
-                  :rejection_category,
+                f.govuk_check_boxes_fieldset(
+                  :rejection_categories,
                   small: true,
-                  legend: { class: 'govuk-visually-hidden', text: 'Rejection reason' }
+                  legend: { class: 'govuk-visually-hidden', text: 'Rejection reasons' }
                 ) do
                   safe_join(
                     [
                       Bookings::PlacementRequest::Cancellation::SCHOOL_REJECTION_REASONS
-                        .reject { |reason| reason == 'other' }
+                        .reject { |reason| reason == :other }
                         .each_with_index.map do |option, index|
-                          f.govuk_radio_button :rejection_category, option, link_errors: index.zero?
+                          f.govuk_check_box option, 1, 0, multiple: false, link_errors: index.zero?
                         end,
-                      (f.govuk_radio_button :rejection_category, :other do
+                      (f.govuk_check_box :other, 1, 0, multiple: false do
                         f.govuk_text_area :reason
                       end)
                     ]

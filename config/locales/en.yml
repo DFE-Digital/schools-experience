@@ -520,8 +520,8 @@ en:
           attributes:
             reason:
               blank: 'Cancellation reason is required'
-            rejection_category:
-              inclusion: Chooose a reason for rejecting this candidate
+            base:
+              no_rejection_category_selected: Chooose a reason for rejecting this candidate
         bookings/school_search:
           attributes:
             location:
@@ -767,19 +767,30 @@ en:
       bookings_placement_request_cancellation:
         reason: Cancellation reasons
         extra_details: Extra details
-        rejection_category_options:
-          fully_booked: The date you requested is fully booked.
-          accepted_on_ttc: We cannot offer you school experience because you've already been accepted on a teacher training course.
-          date_not_available: We can no longer offer the date you've requested.
-          no_relevant_degree: We do not believe you have a relevant degree for the school experience you're applying for.
-          no_phase_availability: We're unable to offer you school experience for the teaching phase you're interested in.
-          candidate_not_local: We're looking for candidates that live locally to the school.
-          duplicate: This is a duplicate request.
-          info_not_provided: We did not hear back from you after contacting you for more information.
-          cancelation_requested: You asked us to cancel your request.
-          wrong_choice_secondary: You've told us you want to get primary school experience, but you've chosen a secondary school placement.
-          wrong_choice_primary: You've told us you want to get secondary school experience, but you've chosen a primary school placement.
-          other: Other
+        fully_booked_options:
+          1: The date you requested is fully booked.
+        accepted_on_ttc_options:
+          1: We cannot offer you school experience because you've already been accepted on a teacher training course.
+        date_not_available_options:
+          1: We can no longer offer the date you've requested.
+        no_relevant_degree_options:
+          1: We do not believe you have a relevant degree for the school experience you're applying for.
+        no_phase_availability_options:
+          1: We're unable to offer you school experience for the teaching phase you're interested in.
+        candidate_not_local_options:
+          1: We're looking for candidates that live locally to the school.
+        duplicate_options:
+          1: This is a duplicate request.
+        info_not_provided_options:
+          1: We did not hear back from you after contacting you for more information.
+        cancelation_requested_options:
+          1: You asked us to cancel your request.
+        wrong_choice_secondary_options:
+          1: You've told us you want to get primary school experience, but you've chosen a secondary school placement.
+        wrong_choice_primary_options:
+          1: You've told us you want to get secondary school experience, but you've chosen a primary school placement.
+        other_options:
+          1: Other
       bookings_booking:
         duration: How long will it last?
         contact_name: Name
