@@ -44,6 +44,12 @@ RSpec.describe Healthcheck do
 
       it { is_expected.to be true }
     end
+
+    context "when the connection times out" do
+      include_context "api connection timeout"
+
+      it { is_expected.to be false }
+    end
   end
 
   describe "test_postgresql" do

@@ -32,7 +32,7 @@ class Healthcheck
     health = GetIntoTeachingApiClient::OperationsApi.new.health_check
 
     FUNCTIONAL_API_STATUS_CODES.any?(health.status)
-  rescue Faraday::Error, GetIntoTeachingApiClient::ApiError
+  rescue Faraday::Error, GetIntoTeachingApiClient::ApiError, Rack::Timeout::RequestTimeoutException
     false
   end
 

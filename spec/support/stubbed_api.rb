@@ -44,6 +44,13 @@ shared_context "api degraded (CRM online)" do
   end
 end
 
+shared_context "api connection timeout" do
+  before do
+    allow_any_instance_of(GetIntoTeachingApiClient::OperationsApi).to \
+      receive(:health_check).and_raise(Rack::Timeout::RequestTimeoutException.new(double("env")))
+  end
+end
+
 shared_context "api correct verification code" do
   let(:code) { "123456" }
   let(:sign_up) { build(:api_schools_experience_sign_up_with_name) }
