@@ -4,12 +4,12 @@ updates:
   - package-ecosystem: bundler
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
 
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
 
   - package-ecosystem: docker
     directory: /
@@ -19,9 +19,9 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      
+      interval: daily
+
   - package-ecosystem: terraform
     directory: /terraform/paas/
     schedule:
-      interval: daily      
+      interval: daily
