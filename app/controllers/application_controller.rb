@@ -28,8 +28,8 @@ protected
     end
   end
 
-  def session_expired(exception)
-    Sentry.capture_exception(exception)
+  def session_expired
+    Yabeda.gse.invalid_authenticity_token.increment({}, by: 1)
 
     render 'shared/session_expired'
   end

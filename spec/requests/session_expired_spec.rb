@@ -8,10 +8,16 @@ describe "Expired Session", type: :request do
       end
     end
 
-    it "will show the Expired Session page" do
+    subject(:perform_request) do
       get candidates_root_path
-      expect(response).to have_http_status(200)
-      expect(response.body).to match(/Session expired/)
+      response
+    end
+
+    it { is_expected.to have_http_status(:success) }
+    it { expect(perform_request.body).to include("Session expired") }
+
+    it "increments the invalid_authenticity_token metric" do
+      expect { perform_request }.to increment_yabeda_counter(Yabeda.gse.invalid_authenticity_token).by(1)
     end
   end
 end
