@@ -127,6 +127,17 @@ private
   def save_with_result_count(count)
     self.number_of_results = count
     save
+  rescue ActiveRecord::StatementInvalid => e
+    # This is a temporary measure to pin down a PG::CharacterNotInRepertoire exception
+    # that is occasionally raised on saving this model. I'm not sure how it gets into
+    # this state yet, but I expect its someone/a bot with JS disabled putting unexpected
+    # characters into the input field.
+    Rails.logger.error({ error: e, details: { location: location, query: query } })
+
+    # Attempt to recover.
+    utf8_encoding = Encoding.find("UTF-8")
+    self.query = query&.encode(utf8_encoding, invalid: :replace, undef: :replace, replace: "")
+    save
   end
 
   # Note, all of the scopes provided by +Bookings::School+ will not

@@ -577,9 +577,11 @@ describe Bookings::SchoolSearch do
     end
 
     context 'Saving results' do
-      subject { Bookings::SchoolSearch.new(location: "Bury", radius: 50) }
+      let(:location) { "Bury" }
+      let(:query) { nil }
+      let(:instance) { Bookings::SchoolSearch.new(location: location, query: query, radius: 50) }
 
-      before { subject.total_count }
+      subject { instance.tap(&:total_count) }
 
       specify 'should save the record' do
         expect(subject).to be_persisted
@@ -587,6 +589,22 @@ describe Bookings::SchoolSearch do
 
       specify 'should save the total number of results' do
         expect(subject.number_of_results).to eql(matching_schools.length)
+      end
+
+      context "when the query contains an unexpected ASCII byte sequence" do
+        let(:query) { "Springfield\xa1" }
+
+        before do
+          allow(Rails.logger).to receive(:error)
+        end
+
+        it "logs an error and recovers by removing the unexpected character" do
+          expect(subject.query).to eq("Springfield")
+          expect(Rails.logger).to have_received(:error).with({
+            error: an_instance_of(ActiveRecord::StatementInvalid),
+            details: { location: location, query: query }
+          })
+        end
       end
 
       context 'filtering' do
