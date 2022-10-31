@@ -31,6 +31,10 @@ module Schools
           &.fetch('id')
       end
 
+      def organisation(urn)
+        organisations.find { |o| o["urn"].to_i == urn }
+      end
+
     private
 
       def organisations

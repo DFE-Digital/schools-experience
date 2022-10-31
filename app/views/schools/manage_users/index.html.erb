@@ -1,0 +1,42 @@
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    "Manage users" => nil
+  }
+%>
+
+<div id="manage-users-index" class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= page_heading 'Users' %>
+
+    <% if @users.any? %>
+      <%= pagination_bar @users %>
+
+      <table id="users" class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <%- @users.each do |user| -%>
+            <tr class="govuk-table__row">
+              <td class="name govuk-table__cell">
+                <%= "#{user["firstName"]} #{user["lastName"]}" %>
+              </td>
+            </tr>
+          <%- end -%>
+        </tbody>
+      </table>
+
+      <%= pagination_lower @users %>
+
+    <% else %>
+      <p>
+        There are no users.
+      </p>
+    <% end %>
+
+    <%= govuk_link_to "Return to dashboard", schools_dashboard_path, secondary: true %>
+  </div>
+</div>

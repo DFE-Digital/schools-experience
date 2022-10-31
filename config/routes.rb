@@ -94,6 +94,7 @@ Rails.application.routes.draw do
     end
     resources :archived_placement_requests, only: %i[index]
     resources :withdrawn_requests, only: %i[index show]
+    resources :manage_users, only: %i[index]
     resources :rejected_requests, only: %i[index show]
     resources :confirmed_bookings, path: 'bookings', as: 'bookings', only: %i[index show] do
       resource :cancellation, only: %i[show new create edit update], controller: 'confirmed_bookings/cancellations' do
