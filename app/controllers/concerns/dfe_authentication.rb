@@ -7,7 +7,7 @@ module DFEAuthentication
   protected
 
     def current_user
-      @current_user ||= session[:current_user]
+      @current_user ||= (User.exchange(session[:current_user]) if session[:current_user].present?)
     end
     alias_method :set_current_user, :current_user
     helper_method :current_user

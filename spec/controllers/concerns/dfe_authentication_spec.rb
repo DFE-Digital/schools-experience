@@ -6,7 +6,14 @@ describe DFEAuthentication do
   describe Schools::DashboardsController, type: :controller do
     it { expect(described_class.ancestors).to include(DFEAuthentication) }
 
-    let(:teacher) { { name: "Seymour Skinner" } }
+    let(:teacher_session) do
+      UserInfoDecorator.new(
+        OpenIDConnect::ResponseObject::UserInfo.new(
+          sub: teacher_user.sub
+        )
+      )
+    end
+    let(:teacher_user) { create(:user) }
     let(:auth_host) { Rails.application.config.x.oidc_host }
 
     describe 'login redirect' do
@@ -48,20 +55,20 @@ describe DFEAuthentication do
     context '#current_user' do
       context 'when the current_user is set' do
         before do
-          subject.instance_variable_set(:@current_user, teacher)
+          subject.instance_variable_set(:@current_user, teacher_user)
         end
 
         specify 'should return the current user' do
-          expect(subject.send(:current_user)).to eql(teacher)
+          expect(subject.send(:current_user)).to eql(teacher_user)
         end
       end
 
       context 'when the current user is not set' do
         before { get :show }
-        before { controller.session[:current_user] = teacher }
+        before { controller.session[:current_user] = teacher_session }
 
         specify 'should retrieve the current user from the session' do
-          expect(subject.send(:current_user)).to eql(teacher)
+          expect(subject.send(:current_user)).to eql(teacher_user)
         end
       end
     end
@@ -69,7 +76,7 @@ describe DFEAuthentication do
     context '#user_signed_in?' do
       context 'when a user is signed in' do
         before do
-          subject.instance_variable_set(:@current_user, teacher)
+          subject.instance_variable_set(:@current_user, teacher_user)
         end
 
         it 'should be true' do
