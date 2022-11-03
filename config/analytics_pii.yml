@@ -1,5 +1,8 @@
 ---
 :shared:
+  :users:
+  - id
+  - sub
   :bookings_school_searches:
   - query
   - location
