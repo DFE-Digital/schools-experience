@@ -7,10 +7,8 @@ describe DFEAuthentication do
     it { expect(described_class.ancestors).to include(DFEAuthentication) }
 
     let(:teacher_session) do
-      UserInfoDecorator.new(
-        OpenIDConnect::ResponseObject::UserInfo.new(
-          sub: teacher_user.sub
-        )
+      OpenIDConnect::ResponseObject::UserInfo.new(
+        sub: teacher_user.sub
       )
     end
     let(:teacher_user) { create(:user) }

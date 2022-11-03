@@ -8,12 +8,10 @@ describe ApplicationHelper, type: :helper do
   let(:given_name) { 'Martin' }
   let(:family_name) { 'Prince' }
   let(:dfe_sign_in_user) do
-    UserInfoDecorator.new(
-      OpenIDConnect::ResponseObject::UserInfo.new(
-        sub: "33333333-4444-5555-6666-777777777777",
-        given_name: given_name,
-        family_name: family_name
-      )
+    OpenIDConnect::ResponseObject::UserInfo.new(
+      sub: "33333333-4444-5555-6666-777777777777",
+      given_name: given_name,
+      family_name: family_name
     )
   end
   let(:user) { User.exchange(dfe_sign_in_user) }

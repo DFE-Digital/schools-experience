@@ -118,7 +118,7 @@ module Schools
           urn = userinfo.raw_attributes.dig("organisation", "urn")
 
           info[:id_token]              = access_token.id_token # store this for logout flows.
-          info[:current_user]          = UserInfoDecorator.new(userinfo)
+          info[:current_user]          = userinfo
           info[:urn]                   = urn.presence && urn.to_i
           info[:school_name]           = userinfo.raw_attributes.dig("organisation", "name")
           info[:dfe_sign_in_org_uuid]  = userinfo.raw_attributes.dig("organisation", "id").presence
