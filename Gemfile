@@ -38,6 +38,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem "sidekiq"
 gem "sidekiq-cron"
 
+# Roles
+gem "rolify"
+
 # Metrics
 gem "webrick"
 gem 'yabeda-http_requests'

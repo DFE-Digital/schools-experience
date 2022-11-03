@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  rolify
+
   attr_writer :dfe_sign_in_user
 
   delegate :sub, :raw_attributes, to: :@dfe_sign_in_user
