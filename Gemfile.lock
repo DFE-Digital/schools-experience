@@ -361,6 +361,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.9-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.13.9-x86_64-linux)
+      racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
     openid_connect (1.3.1)
@@ -395,7 +397,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (5.0.0)
-    puma (5.6.5)
+    puma (6.0.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.6.0)
@@ -648,6 +650,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
@@ -692,7 +695,7 @@ DEPENDENCIES
   phonelib
   pry-byebug
   pry-rails
-  puma (~> 5.6)
+  puma (~> 6.0)
   rack-attack
   rack-rewrite
   rack-timeout
