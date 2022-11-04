@@ -130,6 +130,6 @@ module ApplicationHelper
 private
 
   def valid_user?(user)
-    user.is_a?(UserInfoDecorator)
+    user.is_a?(User)
   end
 end

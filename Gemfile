@@ -23,7 +23,7 @@ gem 'geocoder'
 gem 'puma', '~> 5.6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'shakapacker', '6.5.1'
+gem 'shakapacker', '6.5.2'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -59,7 +59,7 @@ gem "redis", "~> 4.7"
 
 gem 'kaminari'
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.3.2"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
 
 gem 'phonelib'
 gem 'sentry-rails'

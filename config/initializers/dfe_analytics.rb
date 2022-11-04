@@ -44,6 +44,8 @@ DfE::Analytics.configure do |config|
   #
   config.enable_analytics = proc { Rails.application.config.x.dfe_analytics }
 
+  config.user_identifier = proc { |user| user&.sub }
+
   # The environment we’re running in. This value will be attached
   # to all events we send to BigQuery.
   #

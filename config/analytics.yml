@@ -1,5 +1,10 @@
 ---
 :shared:
+  :users:
+  - id
+  - sub
+  - created_at
+  - updated_at
   :schools_on_boarding_profile_subjects:
   - id
   - schools_school_profile_id

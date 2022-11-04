@@ -36,14 +36,12 @@
   - created_at
   - updated_at
   - confirmed_at
-  :bookings_candidates:
-  - gitis_uuid
-  :bookings_bookings:
-  - placement_details
-  - contact_name
-  - contact_number
+  :bookings_schools:
   - contact_email
-  - candidate_instructions
+  - placement_info
+  - teacher_training_info
+  - primary_key_stage_info
+  - availability_info
   :bookings_profiles:
   - description_details
   - dress_code_other_details
@@ -63,15 +61,17 @@
   - access_needs_description
   - access_needs_policy_url
   - dbs_policy_conditions
-  :feedbacks:
-  - reason_for_using_service_explanation
-  - unsuccessful_visit_explanation
-  :bookings_schools:
-  - contact_email
-  - placement_info
-  - teacher_training_info
-  - primary_key_stage_info
-  - availability_info
+  :bookings_candidates:
+  - gitis_uuid
   :bookings_placement_requests:
   - degree_stage_explaination
   - token
+  :bookings_bookings:
+  - placement_details
+  - contact_name
+  - contact_number
+  - contact_email
+  - candidate_instructions
+  :feedbacks:
+  - reason_for_using_service_explanation
+  - unsuccessful_visit_explanation
