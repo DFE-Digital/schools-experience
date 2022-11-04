@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Bookings::School, type: :model do
+  it { is_expected.to respond_to(:roles) }
+
   describe 'Validation' do
     context 'name' do
       it { is_expected.to validate_presence_of(:name) }
