@@ -34,6 +34,14 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the managing requests panel
 
+    Scenario: User management
+        Given my school has fully-onboarded
+        And the 'id_only_access' feature is enabled
+        When I am on the 'schools dashboard' page
+        Then I should see the following 'user-management' links:
+            | Text            | Hint | Path                  |
+            | Manage users    | None | /schools/manage_users |
+
     Scenario: Active requests
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page

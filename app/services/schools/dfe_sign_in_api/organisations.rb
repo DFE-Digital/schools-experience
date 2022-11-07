@@ -26,12 +26,18 @@ module Schools
       end
 
       def id(urn)
-        organisations
-          .find { |org| org['urn'].to_i == urn }
-          &.fetch('id')
+        organisation(urn)&.fetch("id")
+      end
+
+      def ukprn(urn)
+        organisation(urn)&.fetch("ukprn")
       end
 
     private
+
+      def organisation(urn)
+        organisations.find { |org| org["urn"].to_i == urn }
+      end
 
       def organisations
         @response ||= response

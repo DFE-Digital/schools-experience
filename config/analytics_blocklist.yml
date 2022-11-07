@@ -75,3 +75,6 @@
   :feedbacks:
   - reason_for_using_service_explanation
   - unsuccessful_visit_explanation
+  :users:
+  - family_name
+  - given_name

@@ -27,6 +27,10 @@ Given("I save the page") do
   save_page
 end
 
+Given("the {string} feature is enabled") do |feature|
+  allow(Feature).to receive(:enabled?).with(feature.to_sym) { true }
+end
+
 Then("the page's main header/heading should be {string}") do |string|
   expect(page).to have_css("h1", text: string)
 end

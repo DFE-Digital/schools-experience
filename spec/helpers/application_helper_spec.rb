@@ -7,14 +7,14 @@ end
 describe ApplicationHelper, type: :helper do
   let(:given_name) { 'Martin' }
   let(:family_name) { 'Prince' }
-  let(:dfe_sign_in_user) do
-    OpenIDConnect::ResponseObject::UserInfo.new(
+  let(:user_attributes) do
+    {
       sub: "33333333-4444-5555-6666-777777777777",
       given_name: given_name,
       family_name: family_name
-    )
+    }
   end
-  let(:user) { User.exchange(dfe_sign_in_user) }
+  let(:user) { User.exchange(user_attributes) }
 
   context 'Breadcrumbs' do
     let(:args) do

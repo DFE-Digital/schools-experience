@@ -34,6 +34,13 @@
       "enabled_for": {
         "environments": ["development", "staging", "production"]
       }
+    },
+    {
+      "name": "id_only_access",
+      "description": "Enables the DfE sign in ID only access account with app-based permissions",
+      "enabled_for": {
+        "environments": ["development", "staging"]
+      }
     }
   ]
 }

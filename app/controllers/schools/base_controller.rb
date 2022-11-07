@@ -21,8 +21,7 @@ module Schools
 
     def current_school
       if current_urn.blank?
-        sub = current_user.raw_attributes["sub"]
-        raise MissingURN, "school urn is missing, unable to match with school for - user #{sub}"
+        raise MissingURN, "school urn is missing, unable to match with school for - user #{current_user.sub}"
       end
 
       @current_school ||= retrieve_school(current_urn)
@@ -42,8 +41,7 @@ module Schools
 
     def retrieve_school(urn)
       if urn.blank?
-        sub = current_user.raw_attributes["sub"]
-        raise MissingURN, "school urn is missing, unable to match with school for - user #{sub}"
+        raise MissingURN, "school urn is missing, unable to match with school for - user #{current_user.sub}"
       end
 
       Bookings::School.find_by!(urn: urn)

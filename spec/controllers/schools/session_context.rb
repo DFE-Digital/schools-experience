@@ -5,10 +5,19 @@ shared_context "logged in DfE user" do
   let(:user_guid) { '33333333-4444-5555-6666-777777777777' }
   let(:dfe_signin_school_urn) { 123_489 }
   let(:dfe_signin_school_id) { '33333333-aaaa-5555-bbbb-777777777777' }
+  let(:dfe_signin_school_ukprn) { "abc-123" }
+  let(:dfe_signin_users_data) do
+    {
+      users: [
+        { sub: "abc-123", familyName: "Doe", givenName: "John" },
+        { sub: "def-456", familyName: "Smith", givenName: "Jane" },
+      ]
+    }
+  end
   let(:dfe_signin_school_data) do
     [
-      { urn: dfe_signin_school_urn, name: 'School A', id: dfe_signin_school_id },
-      { urn: 123_490, name: 'School B', id: '33333333-aaaa-5555-cccc-777777777777' }
+      { urn: dfe_signin_school_urn, name: 'School A', id: dfe_signin_school_id, ukprn: dfe_signin_school_ukprn },
+      { urn: 123_490, name: 'School B', id: '33333333-aaaa-5555-cccc-777777777777', ukprn: "def-456" }
     ]
   end
 
@@ -61,6 +70,13 @@ shared_context "logged in DfE user" do
       .to_return(
         status: 200,
         body: dfe_signin_role_data.to_json,
+        headers: {}
+      )
+
+    stub_request(:get, "https://some-signin-host.signin.education.gov.uk/organisations/#{dfe_signin_school_ukprn}/users")
+      .to_return(
+        status: 200,
+        body: dfe_signin_users_data.to_json,
         headers: {}
       )
   end

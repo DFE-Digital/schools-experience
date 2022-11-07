@@ -47,6 +47,12 @@ describe Schools::DFESignInAPI::Organisations do
     end
   end
 
+  describe "#ukprn" do
+    specify "returns the organisation's ukprn given the correct URN" do
+      expect(subject.ukprn(dfe_signin_school_urn)).to eql(dfe_signin_school_ukprn)
+    end
+  end
+
   describe 'error_handling' do
     subject { Schools::DFESignInAPI::Organisations.new(user_guid) }
 
