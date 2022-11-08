@@ -61,6 +61,8 @@ gem 'kaminari'
 
 gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
 
+gem "rolify"
+
 gem 'phonelib'
 gem 'sentry-rails'
 gem 'sentry-ruby'

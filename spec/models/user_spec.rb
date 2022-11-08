@@ -9,6 +9,8 @@ RSpec.describe User, type: :model do
     )
   end
 
+  it { is_expected.to respond_to(:has_role?) }
+
   describe ".exchange" do
     subject(:exchange) { described_class.exchange(dfe_sign_in_user) }
 
