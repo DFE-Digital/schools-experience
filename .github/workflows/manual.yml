@@ -56,7 +56,7 @@ jobs:
           sha: ${{github.sha}}
 
       - name: Print outputs
-        if: steps.tag_id.outputs.release_id == ''
+        # if: steps.tag_id.outputs.release_id == ''
         run: |
              echo "tag_version.outputs.pr_number: ${{ steps.tag_version.outputs.pr_number }}"
              echo "tag_version.outputs.pr_text: ${{ steps.tag_version.outputs.pr_text }}"
