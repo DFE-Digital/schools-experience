@@ -41,19 +41,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get Release Id from Tag
-        id: tag_id
-        uses: DFE-Digital/github-actions/DraftReleaseByTag@master
-        with:
-          TAG: ${{ github.event.inputs.tag }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Get Release Id from Tag
+      #   id: tag_id
+      #   uses: DFE-Digital/github-actions/DraftReleaseByTag@master
+      #   with:
+      #     TAG: ${{ github.event.inputs.tag }}
+      #     TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Tag from PR Number
         # if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         id: tag_version
         uses: DFE-Digital/github-actions/GenerateReleaseFromSHA@700-update-set-output-usage-GenerateReleaseFromSHA
         with:
-          sha: ${{github.sha}}
+          sha: ${{ github.event.inputs.tag }}
 
       - name: Print outputs
         # if: steps.tag_id.outputs.release_id == ''
