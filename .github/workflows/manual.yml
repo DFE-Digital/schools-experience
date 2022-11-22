@@ -48,38 +48,53 @@ jobs:
           TAG: ${{ github.event.inputs.tag }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if found
+      - name: Generate Tag from PR Number
+        # if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        id: tag_version
+        uses: DFE-Digital/github-actions/GenerateReleaseFromSHA@700-update-set-output-usage-GenerateReleaseFromSHA
+        with:
+          sha: ${{github.sha}}
+
+      - name: Print outputs
         if: steps.tag_id.outputs.release_id == ''
         run: |
-             echo "::error ::Tag ${{ github.event.inputs.tag }} cannot be found in releases"
-             exit 1
+             echo "tag_version.outputs.pr_number: ${{ steps.tag_version.outputs.pr_number }}"
+             echo "tag_version.outputs.pr_text: ${{ steps.tag_version.outputs.pr_text }}"
+             echo "tag_version.outputs.pr_found: ${{ steps.tag_version.outputs.pr_found }}"
 
-      - name: Deploy to ${{github.event.inputs.environment}}
-        uses: ./.github/workflows/actions/deploy
-        id: deploy
-        with:
-          environment: ${{ github.event.inputs.environment }}
-          sha:  ${{ steps.tag_id.outputs.release_sha }}
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-          KEY_VAULT:         ${{ secrets.KEY_VAULT }}
-          ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+      # - name: Check if found
+      #   if: steps.tag_id.outputs.release_id == ''
+      #   run: |
+      #        echo "::error ::Tag ${{ github.event.inputs.tag }} cannot be found in releases"
+      #        exit 1
+      #        ${{ steps.tag_version.outputs.pr_number }}
 
-      - name: Slack Release Notification
-        if: steps.tag_id.outputs.release_id && github.event.inputs.environment == 'Production'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_SUCCESS}}
-          SLACK_TITLE: "Release Published to ${{github.event.inputs.environment}}: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
-          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
-          MSG_MINIMAL: true
+      # - name: Deploy to ${{github.event.inputs.environment}}
+      #   uses: ./.github/workflows/actions/deploy
+      #   id: deploy
+      #   with:
+      #     environment: ${{ github.event.inputs.environment }}
+      #     sha:  ${{ steps.tag_id.outputs.release_sha }}
+      #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      #     KEY_VAULT:         ${{ secrets.KEY_VAULT }}
+      #     ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
+      #     GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Slack Notification
-        if: failure() && github.event.inputs.environment == 'Production'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_FAILURE}}
-          SLACK_TITLE: "Manual Release Failed: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}} release
-          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
+      # - name: Slack Release Notification
+      #   if: steps.tag_id.outputs.release_id && github.event.inputs.environment == 'Production'
+      #   uses: rtCamp/action-slack-notify@master
+      #   env:
+      #     SLACK_COLOR: ${{env.SLACK_SUCCESS}}
+      #     SLACK_TITLE: "Release Published to ${{github.event.inputs.environment}}: ${{steps.tag_id.outputs.release_name}}"
+      #     SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
+      #     SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
+      #     MSG_MINIMAL: true
+
+      # - name: Slack Notification
+      #   if: failure() && github.event.inputs.environment == 'Production'
+      #   uses: rtCamp/action-slack-notify@master
+      #   env:
+      #     SLACK_COLOR: ${{env.SLACK_FAILURE}}
+      #     SLACK_TITLE: "Manual Release Failed: ${{steps.tag_id.outputs.release_name}}"
+      #     SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}} release
+      #     SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
