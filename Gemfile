@@ -20,10 +20,10 @@ gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 5.6'
+gem 'puma', '~> 6.0'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'shakapacker', '6.5.2'
+gem 'shakapacker', '6.5.4'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -142,7 +142,7 @@ end
 
 group :test do
   # Adds support for Capybara system testing and selenium
-  gem 'capybara', '>= 3.36.0'
+  gem 'capybara', '>= 3.38.0'
 
   gem 'selenium-webdriver'
 
