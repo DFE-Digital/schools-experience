@@ -22,8 +22,6 @@ module Schools::OnBoardingHelper
     return nil if status == :cannot_start_yet
 
     color = case status
-            when :not_applicable
-              "blue"
             when :complete
               "green"
             else
