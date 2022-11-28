@@ -4,13 +4,6 @@ module Schools
       attr_reader :school_profile
 
       SECTIONS = {
-        safeguarding_and_fees: %i[
-          dbs_requirement
-          fees
-          administration_fee
-          dbs_fee
-          other_fee
-        ],
         subjects_and_education_phases: %i[
           phases_list
           key_stage_list
@@ -24,6 +17,13 @@ module Schools
           candidate_experience_schedule
           experience_outline
           teacher_training
+        ],
+        safeguarding_and_fees: %i[
+          dbs_requirement
+          fees
+          administration_fee
+          dbs_fee
+          other_fee
         ],
         disability_and_access: %i[
           access_needs_support
