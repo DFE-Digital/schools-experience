@@ -6,9 +6,11 @@
     <%= form_for experience_outline, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         School experience details
-      </h1>
+      </h2>
 
       <p>
         Use this section to tell candidates what they can expect when they get experience at your school.
@@ -29,7 +31,7 @@
         </ul>
       </p>
 
-      <%= f.govuk_text_area :candidate_experience, max_words: 200, rows: 4, label: -> { tag.h2('What kind of school experience do you offer?') } %>
+      <%= f.govuk_text_area :candidate_experience, max_words: 200, rows: 4, label: -> { tag.h3('What kind of school experience do you offer?', class: "govuk-heading-m") } %>
 
       <%= f.govuk_submit 'Continue' %>
     <% end %>

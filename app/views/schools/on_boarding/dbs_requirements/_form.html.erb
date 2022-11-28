@@ -6,9 +6,11 @@
     <%= form_for dbs_requirement, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         Enter your school experience details
-      </h1>
+      </h2>
 
       <p>
         These details will help candidates select a school experience.
@@ -18,7 +20,7 @@
         You'll be given a chance to check and change the details you enter.
       </p>
 
-      <%= f.govuk_radio_buttons_fieldset :dbs_policy_conditions do %>
+      <%= f.govuk_radio_buttons_fieldset :dbs_policy_conditions, legend: { tag: "h3" } do %>
         <%= f.govuk_radio_button :dbs_policy_conditions, 'required', link_errors: true do %>
           <%= f.govuk_text_area :dbs_policy_details, max_words: 50 %>
         <% end %>

@@ -6,11 +6,13 @@
     <%= form_for candidate_parking_information, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="gouvk-heading-l">
-        Parking information
-      </h1>
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
 
-      <%= f.govuk_radio_buttons_fieldset :parking_provided do %>
+      <h2 class="govuk-heading-l">
+        Parking information
+      </h2>
+
+      <%= f.govuk_radio_buttons_fieldset :parking_provided, legend: { tag: "h3", size: "m" } do %>
         <%= f.govuk_radio_button :parking_provided, "true", link_errors: true do %>
           <%= f.govuk_text_area :parking_details, rows: 7 %>
         <% end %>

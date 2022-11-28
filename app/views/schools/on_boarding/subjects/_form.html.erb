@@ -5,9 +5,11 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_for subject_list, url: schools_on_boarding_subjects_path, method: method do |f| %>
       <%= f.govuk_error_summary link_base_errors_to: :subject_ids_1 %>
-      <h1 class="govuk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         Select school experience subjects
-      </h1>
+      </h2>
 
       <p>
         Tell us which subjects you offer for secondary school experience and

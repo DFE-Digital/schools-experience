@@ -6,9 +6,11 @@
     <%= form_for fees, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         Fees
-      </h1>
+      </h2>
 
       <p>
         Some schools charge fees to cover the costs of running school experience.

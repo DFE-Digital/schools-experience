@@ -6,24 +6,23 @@
     <%= form_for model, url: submission_path do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        <%= title %>
-      </h1>
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
 
-      <%= f.govuk_number_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.9, label: { class: 'govuk-heading-m' }, prefix_text: '£' %>
+      <h2 class="govuk-heading-l">
+        <%= title %>
+      </h2>
+
+      <%= f.govuk_number_field :amount_pounds, width: 5, step: 0.01, min: 0, max: 9999.9, label: { tag: "h3", size: "m" }, prefix_text: '£' %>
 
       <%= f.govuk_text_area :description, rows: 7 %>
 
-      <%= f.govuk_radio_buttons_fieldset :interval do %>
+      <%= f.govuk_radio_buttons_fieldset :interval, legend: { tag: "h3", size: "m" } do %>
         <% f.object.available_intervals.each_with_index do |interval, index| %>
           <%= f.govuk_radio_button :interval, interval, label: { text: interval }, link_errors: index.zero? %>
         <% end %>
       <% end %>
 
-      <%= f.govuk_text_area :payment_method, rows: 7,
-        label: {
-          class: 'govuk-heading-m'
-        } %>
+      <%= f.govuk_text_area :payment_method, rows: 7, label: { tag: "h3", size: "m" } %>
 
       <%= f.govuk_submit 'Continue' %>
     <% end %>
