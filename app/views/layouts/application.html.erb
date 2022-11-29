@@ -72,7 +72,27 @@
     <footer class="govuk-footer " role="contentinfo">
       <div class="govuk-width-container ">
         <div class="govuk-footer__meta">
-          <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+          <section class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+
+            <% unless in_schools_namespace? %>
+              <h2 class="govuk-heading-m">Get help</h2>
+
+              <p class="govuk-body-s govuk-!-margin-bottom-1">
+                Call 0800 389 2500 or <%= link_to("chat online", "https://getintoteaching.education.gov.uk/#talk-to-us", class: "govuk-footer__link") %>
+              </p>
+
+              <p class="govuk-body-s govuk-!-margin-bottom-1">
+                Monday to Friday, 8:30am to 5:30pm (except public holidays)
+              </p>
+
+              <p class="govuk-body-s">
+                Free of charge
+              </p>
+
+              <div class="govuk-!-margin-bottom-5">
+                <%= link_to("Make a complaint or give feedback", new_candidates_feedback_path, class: "govuk-footer__link")%>
+              </div>
+            <% end %>
 
             <h2 class="govuk-visually-hidden">
               Support links
@@ -109,7 +129,7 @@
               All content is available under the
               <a class="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
             </span>
-          </div>
+          </section>
           <div class="govuk-footer__meta-item">
             <a class="govuk-footer__link govuk-footer__copyright-logo" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
           </div>

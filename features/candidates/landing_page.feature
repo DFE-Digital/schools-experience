@@ -34,3 +34,7 @@ Feature: Candidate landing page
     Scenario: No account links in the phase banner
         Given I am on the 'landing' page
         Then there should be no 'Choose another service' link in the phase banner
+
+    Scenario: Get help footer section
+        Given I am on the 'landing' page
+        Then there should be a section titled 'Get help'

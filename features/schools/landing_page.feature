@@ -11,3 +11,7 @@ Feature: The School Landing Page
     Scenario: Start now button
         Given I am on the 'schools' page
         Then there should be a 'Start now' link to the 'schools dashboard'
+
+    Scenario: Get help footer section
+        Given I am on the 'schools' page
+        Then there should not be a section titled 'Get help'
