@@ -5,9 +5,12 @@ describe Cron::IdentifyClosedSchoolsJob, type: :job do
     let(:email_double) { instance_double(NotifyEmail::ClosedOnboardedSchoolsSummary, despatch_later!: nil) }
     let(:closed_school_1) { create(:bookings_school, :onboarded) }
     let(:closed_school_2) { create(:bookings_school, :onboarded) }
-    let(:closed_school_3) { create(:bookings_school, :onboarded) }
+    let(:closed_school_3) { create(:bookings_school, :onboarded, :disabled) }
+    let(:closed_school_4) { create(:bookings_school, :onboarded, :disabled) }
+    let(:closed_school_5) { create(:bookings_school, :onboarded) }
     let(:reopened_school_1) { create(:bookings_school) }
     let(:reopened_school_2) { create(:bookings_school) }
+    let(:reopened_school_3) { create(:bookings_school) }
     let(:csv) do
       <<~CSV
         URN,CloseDate,LA (code),EstablishmentNumber,LA (name)
@@ -16,6 +19,9 @@ describe Cron::IdentifyClosedSchoolsJob, type: :job do
         #{reopened_school_1.urn},,888,1572,Hillend Primary
         #{reopened_school_2.urn},,888,1572,Hillend Primary
         #{closed_school_3.urn},#{2.days.ago},999,1984,Main St Secondary
+        #{closed_school_4.urn},#{5.days.ago},777,1847,St Anne Primary
+        #{reopened_school_3.urn},,777,1847,St Anne Primary
+        #{closed_school_5.urn},#{12.days.ago},444,1746,St James Primary
       CSV
     end
 
@@ -30,9 +36,24 @@ describe Cron::IdentifyClosedSchoolsJob, type: :job do
     end
 
     it "emails the service inbox with closed, on-boarded school details" do
-      closed_text = "#{closed_school_1.name} is enabled (URN #{closed_school_1.urn}, replacement URN(s) #{reopened_school_1.urn} and #{reopened_school_2.urn}). "\
-      "#{closed_school_2.name} is enabled (URN #{closed_school_2.urn}, replacement URN(s) #{reopened_school_1.urn} and #{reopened_school_2.urn}). "\
-      "#{closed_school_3.name} is enabled (URN #{closed_school_3.urn})."
+      closed_text = <<~MARKDOWN.chomp
+        ## Schools that are disabled without replacements
+
+        * #{closed_school_3.name} (URN #{closed_school_3.urn}).
+
+        ## Schools that are disabled with replacements
+
+        * #{closed_school_4.name} (URN #{closed_school_4.urn}, replacement URN(s) #{reopened_school_3.urn}).
+
+        ## Schools that are enabled without replacements
+
+        * #{closed_school_5.name} (URN #{closed_school_5.urn}).
+
+        ## Schools that are enabled with replacements
+
+        * #{closed_school_1.name} (URN #{closed_school_1.urn}, replacement URN(s) #{reopened_school_1.urn} and #{reopened_school_2.urn}).
+        * #{closed_school_2.name} (URN #{closed_school_2.urn}, replacement URN(s) #{reopened_school_1.urn} and #{reopened_school_2.urn}).
+      MARKDOWN
 
       params = {
         to: described_class::SERVICE_INBOX,

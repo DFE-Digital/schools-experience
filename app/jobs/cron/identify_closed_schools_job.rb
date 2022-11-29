@@ -16,11 +16,26 @@ private
   def closed_onboarded_schools
     return EMPTY_TEXT if closed_schools.none?
 
-    closed_schools.map(&method(:sentence)).join(" ")
+    [
+      titled_bullet_list("Schools that are disabled without replacements", schools_disabled_without_replacements),
+      titled_bullet_list("Schools that are disabled with replacements", schools_disabled_with_replacements),
+      titled_bullet_list("Schools that are enabled without replacements", schools_enabled_without_replacements),
+      titled_bullet_list("Schools that are enabled with replacements", schools_enabled_with_replacements),
+    ].compact.join.strip
+  end
+
+  def titled_bullet_list(title, schools)
+    return unless schools.any?
+
+    <<~MARKDOWN
+      ## #{title}
+
+      #{schools.map(&method(:sentence)).join}
+    MARKDOWN
   end
 
   def sentence(school)
-    "#{school.name} is #{enabled_text(school)} (URN #{school.urn}#{replacement_urns_text(school)})."
+    "* #{school.name} (URN #{school.urn}#{replacement_urns_text(school)}).\n"
   end
 
   def enabled_text(school)
@@ -41,6 +56,26 @@ private
 
   def closed_schools
     @closed_schools ||= reconciler.identify_onboarded_closed
+  end
+
+  def schools_disabled_without_replacements
+    @schools_disabled_without_replacements ||=
+      closed_schools.select { |school| school.disabled? && reopened_urns[school.urn].none? }
+  end
+
+  def schools_disabled_with_replacements
+    @schools_disabled_with_replacements ||=
+      closed_schools.select { |school| school.disabled? && reopened_urns[school.urn].any? }
+  end
+
+  def schools_enabled_without_replacements
+    @schools_enabled_without_replacements ||=
+      closed_schools.select { |school| school.enabled? && reopened_urns[school.urn].none? }
+  end
+
+  def schools_enabled_with_replacements
+    @schools_enabled_with_replacements ||=
+      closed_schools.select { |school| school.enabled? && reopened_urns[school.urn].any? }
   end
 
   def reopened_urns
