@@ -14,9 +14,9 @@ jobs:
       - name: Select Tests
         id: select-tests
         run: |
-          d="{'environment' :'Development'  , 'principal': 's105d01-keyvault-readonly-access'}"
-          t="{'environment' :'Test'         , 'principal': 's105t01-keyvault-readonly-access'}"
-          p="{'environment' :'Production'   , 'principal': 's105p01-keyvault-readonly-access'}"
+          d="{'environment' :'Development'  , 'principal': 's105d01-keyvault-readonly-access', 'keyvault': 's105d01-kv'}"
+          t="{'environment' :'Test'         , 'principal': 's105t01-keyvault-readonly-access', 'keyvault': 's105t01-kv'}"
+          p="{'environment' :'Production'   , 'principal': 's105p01-keyvault-readonly-access', 'keyvault': 's105p01-kv'}"
           tests="{ 'data':[ ${d} ,  ${t} ,  ${p} ]}"
           echo "tests=${tests}" >> $GITHUB_OUTPUT
 
@@ -58,7 +58,7 @@ jobs:
         if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         id:  keyvault-yaml-secret
         with:
-          keyvault: ${{ secrets.KEY_VAULT}}
+          keyvault: ${{ matrix.data.keyvault }}
           secret: SE-INFRA-SECRETS
           key: SLACK-WEBHOOK
         env:
@@ -66,7 +66,7 @@ jobs:
 
       - name: Slack Notification
         if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
-        uses: rtCamp/action-slack-notify@master
+        uses: rtCamp/action-slack-notify@v2
         env:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
            SLACK_TITLE: A Service Principal secret is expiring soon
