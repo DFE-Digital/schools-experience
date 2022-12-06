@@ -35,6 +35,10 @@ Then("there should be a section titled {string}") do |string|
   expect(page).to have_css('section > h2.govuk-heading-m', text: string)
 end
 
+Then("there should not be a section titled {string}") do |string|
+  expect(page).not_to have_css('section > h2.govuk-heading-m', text: string)
+end
+
 Then("the page should have a heading called {string}") do |string|
   expect(page).to have_css("h1.govuk-fieldset__heading", text: string)
 end

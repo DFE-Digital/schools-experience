@@ -13,6 +13,6 @@ Feature: Service Updates
     
     Scenario: Viewing the Dashboard after viewing Service Updates
         Given I am on the 'service updates' page
-        And I click 'back'
+        And I click 'Back'
         Then I am on the 'schools dashboard' page
         And I should not see the latest service update notification
