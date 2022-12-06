@@ -50,7 +50,7 @@ describe Schools::OnBoardingHelper, type: :helper do
     context "when not_applicable" do
       let(:status) { :not_applicable }
 
-      it { is_expected.to have_css("strong.govuk-tag.govuk-tag--blue", text: "Not applicable") }
+      it { is_expected.to have_css("strong.govuk-tag.govuk-tag--grey", text: "Not applicable") }
     end
 
     context "when cannot_start_yet" do
