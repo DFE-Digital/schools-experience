@@ -103,7 +103,7 @@ RSpec.describe PlacementRequestTransfer do
     end
 
     context "when the school experience types are incompatible" do
-      let(:message) { "school does not support #{placement_request.school.experience_type} experience type" }
+      let(:message) { "school does not support #{placement_request.experience_type} experience type" }
 
       before { school.update(experience_type: "virtual") }
 
