@@ -67,8 +67,8 @@ private
   def verify_experience_type!
     return if school.experience_type == "both"
 
-    unless school.experience_type == placement_request.school.experience_type
-      raise TransferError, "school does not support #{placement_request.school.experience_type} experience type"
+    unless school.experience_type == placement_request.experience_type
+      raise TransferError, "school does not support #{placement_request.experience_type} experience type"
     end
   end
 
