@@ -365,4 +365,22 @@ RSpec.describe Bookings::Candidate, type: :model do
       end
     end
   end
+
+  describe "#orphaned?" do
+    subject { build(:candidate) }
+
+    it { is_expected.not_to be_orphaned }
+
+    context "when an gitis_contact is set" do
+      subject { build(:candidate, :with_api_contact) }
+
+      it { is_expected.not_to be_orphaned }
+    end
+
+    context "when the gitis_contact is missing" do
+      subject { build(:candidate, :with_missing_api_contact) }
+
+      it { is_expected.to be_orphaned }
+    end
+  end
 end

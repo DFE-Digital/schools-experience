@@ -94,6 +94,10 @@ class Bookings::Candidate < ApplicationRecord
     "#{gitis_contact.first_name} #{gitis_contact.last_name}"
   end
 
+  def orphaned?
+    gitis_contact.is_a?(Bookings::Gitis::MissingContact)
+  end
+
   def confirmed?
     confirmed_at?
   end

@@ -11,6 +11,10 @@ FactoryBot.define do
       gitis_uuid { gitis_contact.candidate_id }
     end
 
+    trait :with_missing_api_contact do
+      gitis_contact { Bookings::Gitis::MissingContact.new(gitis_uuid) }
+    end
+
     trait :with_attended_booking do
       after :create do |candidate|
         FactoryBot.create(:placement_request, :with_attended_booking, candidate: candidate)
