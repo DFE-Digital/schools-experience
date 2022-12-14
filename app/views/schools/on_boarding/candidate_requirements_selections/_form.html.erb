@@ -7,7 +7,9 @@
                  html: { class: "candidate-requirements-selection" } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_check_boxes_fieldset :selected_requirements, legend: { tag: "h1", size: "l" } do %>
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <%= f.govuk_check_boxes_fieldset :selected_requirements, legend: { tag: "h2", size: "l" } do %>
         <%= f.govuk_check_box :selected_requirements, "on_teacher_training_course" %>
         <%= f.govuk_check_box :selected_requirements, "not_on_another_training_course" %>
         <%= f.govuk_check_box :selected_requirements, "has_or_working_towards_degree" %>

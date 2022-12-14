@@ -6,9 +6,11 @@
     <%= form_for key_stage_list, url: url, method: method do |f| %>
       <%= f.govuk_error_summary link_base_errors_to: :early_years_1 %>
 
-      <h1 class="govuk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         Which key stages do you offer experience with?
-      </h1>
+      </h2>
 
       <p>
         Select all that apply.

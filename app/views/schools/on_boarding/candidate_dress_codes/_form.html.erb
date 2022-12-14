@@ -6,16 +6,15 @@
     <%= form_for candidate_dress_code, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="gouvk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         Do you have a dress code for candidates?
-      </h1>
+      </h2>
+
       <p>
         Select all that apply.
       </p>
-
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading"></h2>
-      </legend>
 
       <%= f.govuk_check_boxes_fieldset :selected_requirements, legend: nil do %>
         <%= f.govuk_check_box :selected_requirements, "business_dress" %>

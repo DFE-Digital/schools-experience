@@ -6,18 +6,20 @@
     <%= form_for candidate_experience_schedule, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="gouvk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         Enter start and finish times for candidates
-      </h1>
+      </h2>
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
-          <%= f.govuk_text_field :start_time, class: 'govuk-!-width-one-quarter', label: { class: 'govuk-label govuk-label--m' } %>
-          <%= f.govuk_text_field :end_time, class: 'govuk-!-width-one-quarter', label: { class: 'govuk-label govuk-label--m' } %>
+          <%= f.govuk_text_field :start_time, class: 'govuk-!-width-one-quarter', label: { tag: "h3", class: 'govuk-label govuk-label--m' } %>
+          <%= f.govuk_text_field :end_time, class: 'govuk-!-width-one-quarter', label: { tag: "h3", class: 'govuk-label govuk-label--m' } %>
         </fieldset>
       </div>
 
-      <%= f.govuk_radio_buttons_fieldset :times_flexible do %>
+      <%= f.govuk_radio_buttons_fieldset :times_flexible, legend: { tag: "h3", size: "m" } do %>
         <p>
           For example, if you let candidates start and finish later, depending on their individual needs.
         </p>

@@ -6,7 +6,10 @@
     <%= form_for disability_confident, url: schools_on_boarding_disability_confident_path, method: method do |f| %>
       <%= f.govuk_error_summary %>
       <%= f.hidden_field :is_disability_confident, value: nil %>
-      <%= f.govuk_radio_buttons_fieldset :is_disability_confident, legend: { tag: "h1", size: "l" } do %>
+
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <%= f.govuk_radio_buttons_fieldset :is_disability_confident, legend: { tag: "h2", size: "l" } do %>
 
         <div>
           <%= image_pack_tag 'disability-confident-small.png', alt: 'Disability confident logo' %>

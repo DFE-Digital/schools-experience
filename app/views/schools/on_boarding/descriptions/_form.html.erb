@@ -6,9 +6,11 @@
     <%= form_for description, url: schools_on_boarding_description_path, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         School description
-      </h1>
+      </h2>
 
       <p>
         Use this section to tell candidates about your school.
@@ -29,7 +31,7 @@
         able to add those details later.
       </p>
 
-      <%= f.govuk_text_area :details, max_words: 200, rows: 10, label: -> { tag.h2('Enter a description of your school') } %>
+      <%= f.govuk_text_area :details, max_words: 200, rows: 10, label: -> { tag.h3('Enter a description of your school', class: "govuk-heading-m") } %>
 
       <%= f.govuk_submit 'Continue' %>
     <% end %>

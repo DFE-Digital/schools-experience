@@ -6,11 +6,13 @@
     <%= form_for teacher_training, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        Teacher training details
-      </h1>
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
 
-      <%= f.govuk_radio_buttons_fieldset :provides_teacher_training do %>
+      <h2 class="govuk-heading-l">
+        Teacher training details
+      </h2>
+
+      <%= f.govuk_radio_buttons_fieldset :provides_teacher_training, legend: { tag: "h3", size: "m" } do %>
         <%= f.govuk_radio_button :provides_teacher_training, "true", link_errors: true do %>
           <%= f.govuk_text_area :teacher_training_details, rows: 7 %>
           <%= f.govuk_url_field :teacher_training_url, placeholder: 'https://example.org' %>

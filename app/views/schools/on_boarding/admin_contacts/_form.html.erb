@@ -6,9 +6,11 @@
     <%= form_for admin_contact, url: url, method: method do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
+      <h1 class="govuk-heading-xl"><%= @current_school.name %></h1>
+
+      <h2 class="govuk-heading-l">
         Admin contact details
-      </h1>
+      </h2>
 
       <p>
         These should be details of the person who will manage school experience requests for your school.
@@ -21,9 +23,9 @@
         The contact details you provide will not be shared publicly or with candidates until you’ve confirmed their school experience booking.
       </p>
 
-      <h2 class="govuk-heading-m">
+      <h3 class="govuk-heading-m">
         Provide admin contact details
-      </h2>
+      </h3>
 
       <%= f.govuk_phone_field :phone, width: 'one-half' %>
       <%= f.govuk_text_field :email %>
