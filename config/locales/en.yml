@@ -989,6 +989,9 @@ en:
       schools_placement_dates_subject_selection:
         available_for_all_subjects: 'All subjects'
 
+      schools_prepopulate_school_profile:
+        prepopulate_from_urn: Select another school
+
       candidates_feedback:
         <<: *feedback_label
         reason_for_using_service_options:

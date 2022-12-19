@@ -2,6 +2,32 @@ Given "I check {string}" do |string|
   check string
 end
 
+Given("the Task Based On-boarding feature is enabled") do
+  allow(Feature).to receive(:enabled?).with(:task_progress_on_boarding)
+    .and_return(true)
+end
+
+Given("I am on-boarding a new school") do
+  new_school = FactoryBot.create(:bookings_school, name: "New School", urn: 123_490)
+
+  allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+    receive(:uuids).and_return \
+      SecureRandom.uuid => new_school.urn
+end
+
+Given("I am on-boarding a new school and have access to another school that is already on-boarded") do
+  existing_school = FactoryBot.create(:bookings_school, :onboarded, :with_school_profile, name: "Existing School", urn: 123_489)
+  new_school = FactoryBot.create(:bookings_school, name: "New School", urn: 123_490)
+
+  allow_any_instance_of(Schools::DFESignInAPI::Organisations).to \
+    receive(:uuids).and_return \
+      SecureRandom.uuid => existing_school.urn,
+      SecureRandom.uuid => new_school.urn
+
+  allow(Schools::PrepopulateSchoolProfile).to \
+    receive(:enabled?).and_return(true)
+end
+
 Given "I have completed the DBS Requirements step" do
   steps %(
     Given I am on the 'DBS requirements' page
