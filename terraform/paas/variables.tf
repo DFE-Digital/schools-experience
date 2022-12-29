@@ -33,7 +33,7 @@ variable "SIDEKIQ" {
 }
 
 variable "strategy" {
-  default = "blue-green-v2"
+  default = "blue-green"
 }
 
 variable "application_instances" {
