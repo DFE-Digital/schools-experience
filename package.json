@@ -18,7 +18,7 @@
     "custom-event-polyfill": "^1.0.7",
     "govuk-frontend": "^4.0.1",
     "js-cookie": "^3.0.1",
-    "mini-css-extract-plugin": "^2.7.0",
+    "mini-css-extract-plugin": "^2.7.2",
     "postcss-preset-env": "^6.7.1",
     "sass": "^1.55.0",
     "sass-loader": "^13.1.0",
