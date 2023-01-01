@@ -212,7 +212,7 @@ GEM
       dotenv (= 2.8.1)
       railties (>= 3.2)
     dry-initializer (3.1.1)
-    erubi (1.11.0)
+    erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
     factory_bot (6.2.1)
@@ -330,7 +330,7 @@ GEM
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.19.0)
+    loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.8.0)
@@ -348,7 +348,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
-    minitest (5.16.3)
+    minitest (5.17.0)
     msgpack (1.5.4)
     multi_json (1.15.0)
     multi_test (0.1.2)
@@ -362,7 +362,9 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.8)
-    nokogiri (1.13.9-x86_64-darwin)
+    nokogiri (1.13.10-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -401,8 +403,8 @@ GEM
     puma (6.0.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
-    racc (1.6.1)
-    rack (2.2.4)
+    racc (1.6.2)
+    rack (2.2.5)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
     rack-oauth2 (1.21.3)
@@ -443,9 +445,9 @@ GEM
       activesupport (>= 4.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.4.3)
-      loofah (~> 2.3)
-    rails_semantic_logger (4.10.0)
+    rails-html-sanitizer (1.4.4)
+      loofah (~> 2.19, >= 2.19.1)
+    rails_semantic_logger (4.11.0)
       rack
       railties (>= 5.1)
       semantic_logger (~> 4.9)
@@ -542,7 +544,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    semantic_logger (4.10.0)
+    semantic_logger (4.12.0)
       concurrent-ruby (~> 1.0)
     semantic_range (3.0.0)
     sentry-rails (5.7.0)
@@ -655,6 +657,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
