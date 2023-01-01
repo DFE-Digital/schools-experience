@@ -22,7 +22,7 @@
     "postcss-preset-env": "^6.7.1",
     "sass": "^1.55.0",
     "sass-loader": "^13.1.0",
-    "shakapacker": "6.5.4",
+    "shakapacker": "6.5.5",
     "stimulus": "^3.2.1",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.6",
