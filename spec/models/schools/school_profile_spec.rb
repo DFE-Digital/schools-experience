@@ -781,6 +781,18 @@ describe Schools::SchoolProfile, type: :model do
     end
   end
 
+  describe "#dup" do
+    let(:profile) { create(:school_profile, :completed) }
+
+    subject(:duplicate) { profile.dup }
+
+    it "duplicates the profile and related subjects" do
+      expected_attributes = profile.attributes.without(%w[id created_at updated_at])
+      expect(duplicate).to have_attributes(expected_attributes)
+      expect(duplicate.subjects).to eq(profile.subjects)
+    end
+  end
+
   context '#requires_subjects?' do
     let :school_profile do
       FactoryBot.create :school_profile

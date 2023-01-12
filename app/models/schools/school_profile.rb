@@ -296,5 +296,11 @@ module Schools
     def requires_subjects?
       phases_list.secondary? || phases_list.college?
     end
+
+    def dup
+      super.tap do |profile|
+        profile.subjects = subjects
+      end
+    end
   end
 end

@@ -1,0 +1,18 @@
+<% if @prepopulate_school_profile.enabled? && @prepopulate_school_profile.available_schools_any? %>
+  <h2>Prepopulate this school profile</h2>
+
+  <p>
+    You have access to other, onboarded schools.
+    Select another school to prepopulate the profile of <%= @current_school.name %>.
+  </p>
+
+  <%= form_for(@prepopulate_school_profile) do |f| %>
+    <%= f.govuk_collection_select :prepopulate_from_urn,
+      @prepopulate_school_profile.available_schools,
+      :urn,
+      :name
+    %>
+
+    <%= f.govuk_submit "Prepopulate" %>
+  <% end %>
+<% end %>
