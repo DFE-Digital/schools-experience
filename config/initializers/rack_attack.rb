@@ -17,7 +17,7 @@ module Rack
       end
 
       # Throttle candidate registration submissions by IP (5rpm)
-      throttle("registrations/confirmation_email req/ip", limit: 5, period: 1.minute) do |req|
+      throttle("registrations/confirmation_email req/ip", limit: 3, period: 1.minute) do |req|
         req.ip if req.post? && req.path.match?(/registrations\/confirmation_email/)
       end
     end

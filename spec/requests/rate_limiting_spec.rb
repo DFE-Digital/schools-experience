@@ -34,7 +34,7 @@ describe "Rate limiting" do
                                               ]
     end
 
-    it_behaves_like "an IP-based rate limited endpoint", "POST /candidates/schools/:school_id/registrations/confirmation_email", 5, 1.minute do
+    it_behaves_like "an IP-based rate limited endpoint", "POST /candidates/schools/:school_id/registrations/confirmation_email", 3, 1.minute do
       def perform_request
         post candidates_school_registrations_confirmation_email_path(11_048), headers: { "REMOTE_ADDR" => ip }
       end
