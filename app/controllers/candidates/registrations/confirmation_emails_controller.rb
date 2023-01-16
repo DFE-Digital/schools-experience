@@ -1,6 +1,8 @@
 module Candidates
   module Registrations
     class ConfirmationEmailsController < RegistrationsController
+      invisible_captcha only: [:create], timestamp_threshold: 1.second
+
       def show
         @email = current_registration.email
         @school_name = current_registration.school.name

@@ -122,6 +122,8 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
 
       before do
         allow_any_instance_of(ActionDispatch::Request::Session).to \
+          receive(:[]).and_call_original
+        allow_any_instance_of(ActionDispatch::Request::Session).to \
           receive(:[]).with(:gitis_contact).and_return(contact_attributes)
 
         post candidates_school_registrations_confirmation_email_path(school)
