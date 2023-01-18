@@ -4,6 +4,9 @@
 <div class="govuk-grid-row" id="application-preview">
   <%= form_with url: candidates_school_registrations_confirmation_email_path,
         data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
+
+  <%= invisible_captcha %>
+
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Check your answers before requesting your school experience</h1>
     <p>You'll receive an email with the following details once you've sent your school experience request.</p>

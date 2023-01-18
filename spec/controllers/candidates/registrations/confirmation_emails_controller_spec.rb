@@ -28,6 +28,10 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
   end
 
   context '#create' do
+    let(:skip_confirmation_emails) { false }
+
+    before { allow(Feature).to receive(:enabled?).with(:skip_candidate_confirmation_emails) { skip_confirmation_emails } }
+
     context 'skipped step' do
       before { registration_store.send :delete, 'some-uuid' } # ensure key not left lying around
 
@@ -82,6 +86,30 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
         expect(response).to redirect_to \
           candidates_school_registrations_confirmation_email_path school
       end
+
+      context "when the skip_candidate_confirmation_emails feature is enabled" do
+        let(:skip_confirmation_emails) { true }
+
+        it "does not mark the session as pending" do
+          expect(registration_session).not_to be_pending_email_confirmation
+        end
+
+        it "stores the session" do
+          expect(registration_store.retrieve!(registration_session.uuid)).to \
+            eq registration_session
+        end
+
+        it "does not enqueue the confirmation email job" do
+          expect(Candidates::Registrations::SendEmailConfirmationJob).not_to \
+            have_received(:perform_later).with \
+              registration_session.uuid, "www.example.com"
+        end
+
+        it "redirects to the placement_request page" do
+          expect(response).to redirect_to \
+            candidates_confirm_path registration_session.uuid
+        end
+      end
     end
 
     context 'no skipped steps and already signed in' do
@@ -93,6 +121,8 @@ describe Candidates::Registrations::ConfirmationEmailsController, type: :request
       let(:contact_attributes) { contact.to_hash }
 
       before do
+        allow_any_instance_of(ActionDispatch::Request::Session).to \
+          receive(:[]).and_call_original
         allow_any_instance_of(ActionDispatch::Request::Session).to \
           receive(:[]).with(:gitis_contact).and_return(contact_attributes)
 
