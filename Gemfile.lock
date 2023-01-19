@@ -258,7 +258,7 @@ GEM
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     geocoder (1.8.0)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     google-apis-bigquery_v2 (0.42.0)
       google-apis-core (>= 0.9.0, < 2.a)
@@ -363,6 +363,8 @@ GEM
       net-protocol
     nio4r (2.5.8)
     nokogiri (1.13.10-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -655,6 +657,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
