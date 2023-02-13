@@ -813,7 +813,7 @@ describe Bookings::PlacementRequest, type: :model do
         it 'does not returns Expired when it is not older than two months' do
           request = create(:placement_request)
 
-          travel 2.months do
+          travel(2.months - 1.day) do
             expect(request.status).not_to eq 'Expired'
           end
         end
