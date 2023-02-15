@@ -431,7 +431,7 @@ jobs:
 
       - name: Login to Cloud Foundry
         if: matrix.environment == 'Review'
-        run: cf login -a api.london.cloud.service.gov.uk -u ${{steps.keyvault-yaml-secret.outputs.PAAS-USERNAME}} -p ${{steps.keyvault-yaml-secret.outputs.PAAS-PASSWORD}} -s get-into-teaching
+        run: cf login -a api.london.cloud.service.gov.uk -u ${{steps.keyvault-yaml-secret.outputs.PAAS-USERNAME}} -p "${{steps.keyvault-yaml-secret.outputs.PAAS-PASSWORD}}" -s get-into-teaching
 
       - name: Get Static Route
         if: matrix.environment == 'Review'
