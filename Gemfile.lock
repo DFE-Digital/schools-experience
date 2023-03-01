@@ -9,11 +9,11 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/get-into-teaching-api-ruby-client.git
-  revision: faced708d161b73a567d7eea766c6afb5795834c
+  revision: b4183f7116116c388eb1d5d77ce79c1a5e8c493b
   specs:
-    get_into_teaching_api_client (2.3.0)
+    get_into_teaching_api_client (3.1.0)
       faraday (~> 1.0, >= 1.0.1)
-    get_into_teaching_api_client_faraday (2.3.0)
+    get_into_teaching_api_client_faraday (3.1.0)
       activesupport
       faraday
       faraday-encoding
@@ -154,7 +154,7 @@ GEM
     childprocess (4.1.0)
     choice (0.2.0)
     coderay (1.1.3)
-    concurrent-ruby (1.2.0)
+    concurrent-ruby (1.2.2)
     connection_pool (2.3.0)
     crack (0.4.5)
       rexml
@@ -352,7 +352,7 @@ GEM
     msgpack (1.5.4)
     multi_json (1.15.0)
     multi_test (0.1.2)
-    multipart-post (2.2.3)
+    multipart-post (2.3.0)
     net-imap (0.3.1)
       net-protocol
     net-pop (0.1.2)
@@ -363,6 +363,8 @@ GEM
       net-protocol
     nio4r (2.5.8)
     nokogiri (1.13.10-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -655,6 +657,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
