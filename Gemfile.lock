@@ -132,7 +132,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.13.0)
       msgpack (~> 1.2)
-    brakeman (5.3.1)
+    brakeman (5.4.1)
     breasal (0.0.1)
     builder (3.2.4)
     bullet (7.0.4)
@@ -363,6 +363,8 @@ GEM
       net-protocol
     nio4r (2.5.8)
     nokogiri (1.13.10-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -655,6 +657,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
