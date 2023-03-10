@@ -28,17 +28,12 @@ FactoryBot.define do
     end
   end
 
-  factory :api_lookup_item, class: GetIntoTeachingApiClient::LookupItem do
-    id { SecureRandom.uuid }
-    sequence(:value) { |i| "value-#{i}" }
-  end
-
   factory :api_privacy_policy, class: GetIntoTeachingApiClient::PrivacyPolicy do
     id { SecureRandom.uuid }
     text { "policy text" }
   end
 
-  factory :api_teaching_subject, class: GetIntoTeachingApiClient::LookupItem do
+  factory :api_teaching_subject, class: GetIntoTeachingApiClient::TeachingSubject do
     id { SecureRandom.uuid }
     sequence(:value) { |i| "Gitis Subject #{i}" }
   end

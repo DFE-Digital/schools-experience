@@ -17,7 +17,7 @@ end
 class GetIntoTeachingApiClient::LookupItemsApi
   def get_teaching_subjects
     [
-      GetIntoTeachingApiClient::LookupItem.new(id: SecureRandom.uuid, value: "Maths")
+      GetIntoTeachingApiClient::TeachingSubject.new(id: SecureRandom.uuid, value: "Maths")
     ]
   end
 end

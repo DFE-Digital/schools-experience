@@ -20,10 +20,10 @@ RSpec.describe Bookings::RegistrationContactMapper do
     let(:secondary_teaching_subject_id) { SecureRandom.uuid }
     let(:teaching_subjects) do
       [
-        build(:api_lookup_item,
+        build(:api_teaching_subject,
           id: teaching_subject_id,
           value: registration.teaching_preference.subject_first_choice),
-        build(:api_lookup_item,
+        build(:api_teaching_subject,
            id: secondary_teaching_subject_id,
            value: registration.teaching_preference.subject_second_choice),
       ]
@@ -98,8 +98,8 @@ RSpec.describe Bookings::RegistrationContactMapper do
     let(:english) { Bookings::Subject.find_by!(name: 'English') }
     let(:teaching_subjects) do
       [
-        build(:api_lookup_item, value: maths.name),
-        build(:api_lookup_item, value: english.name),
+        build(:api_teaching_subject, value: maths.name),
+        build(:api_teaching_subject, value: english.name),
       ]
     end
     let(:contact) do

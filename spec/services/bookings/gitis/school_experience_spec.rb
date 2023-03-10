@@ -64,7 +64,7 @@ describe Bookings::Gitis::SchoolExperience, type: :model do
         .to receive(:add_school_experience).with(gitis_id, expected_school_experience)
 
       allow_any_instance_of(GetIntoTeachingApiClient::LookupItemsApi)
-        .to receive(:get_teaching_subjects).and_return([build(:api_lookup_item, id: subject_id, value: subject_name)])
+        .to receive(:get_teaching_subjects).and_return([build(:api_teaching_subject, id: subject_id, value: subject_name)])
     end
 
     describe "#write_to_gitis_contact" do

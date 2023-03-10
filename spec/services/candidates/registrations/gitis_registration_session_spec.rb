@@ -76,10 +76,10 @@ describe Candidates::Registrations::GitisRegistrationSession do
     let(:school) { Bookings::School.find_by(urn: '999') || FactoryBot.create(:bookings_school, urn: '999') }
     let(:teaching_subjects) do
       [
-        build(:api_lookup_item,
+        build(:api_teaching_subject,
           id: contact.preferred_teaching_subject_id,
           value: "Maths"),
-        build(:api_lookup_item,
+        build(:api_teaching_subject,
            id: contact.secondary_preferred_teaching_subject_id,
            value: "English"),
       ]

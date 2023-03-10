@@ -6,7 +6,7 @@ describe Bookings::Gitis::SubjectFetcher do
   let(:subject_id) { 275_000_001 }
   let(:teaching_subjects) do
     [
-      build(:api_lookup_item, id: subject_id, value: subject_name),
+      build(:api_teaching_subject, id: subject_id, value: subject_name),
     ]
   end
   before do
