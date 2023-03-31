@@ -9,11 +9,11 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/get-into-teaching-api-ruby-client.git
-  revision: b4183f7116116c388eb1d5d77ce79c1a5e8c493b
+  revision: a7a90dcad3504755cde124a7e180cdc9e6211c2d
   specs:
-    get_into_teaching_api_client (3.1.0)
+    get_into_teaching_api_client (3.2.0)
       faraday (~> 1.0, >= 1.0.1)
-    get_into_teaching_api_client_faraday (3.1.0)
+    get_into_teaching_api_client_faraday (3.2.0)
       activesupport
       faraday
       faraday-encoding
@@ -155,7 +155,7 @@ GEM
     choice (0.2.0)
     coderay (1.1.3)
     concurrent-ruby (1.2.2)
-    connection_pool (2.3.0)
+    connection_pool (2.4.0)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -402,7 +402,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.6.2)
-    rack (2.2.6.2)
+    rack (2.2.6.4)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
     rack-oauth2 (1.21.3)
@@ -564,9 +564,10 @@ GEM
       connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
-    sidekiq-cron (1.9.1)
+    sidekiq-cron (1.10.0)
       fugit (~> 1.8)
-      sidekiq (>= 4.2.1)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6)
     signet (0.17.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -700,7 +701,6 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma (~> 6.0)
-  rack (= 2.2.6.2)
   rack-attack
   rack-rewrite
   rack-timeout
