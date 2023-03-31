@@ -18,9 +18,10 @@ ARG SHA
 RUN echo "sha-${SHA}" > /etc/school-experience-sha
 
 # remove upgrade zlib-dev & busybox when ruby:3.1.0-alpine3.15 base image is updated to address snyk vuln https://snyk.io/vuln/SNYK-ALPINE315-ZLIB-2434420
-# also https://security.snyk.io/vuln/SNYK-ALPINE315-NCURSES-2952568
+# ncurses - https://security.snyk.io/vuln/SNYK-ALPINE315-NCURSES-2952568
+# openssl - https://security.snyk.io/vuln/SNYK-ALPINE316-OPENSSL-3368756
 # hadolint ignore=DL3018
-RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses
+RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses openssl
 
 # hadolint ignore=DL3018
 RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
