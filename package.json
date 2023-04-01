@@ -20,7 +20,7 @@
     "govuk-frontend": "^4.0.1",
     "js-cookie": "^3.0.1",
     "json5": "2.2.3",
-    "mini-css-extract-plugin": "^2.7.2",
+    "mini-css-extract-plugin": "^2.7.5",
     "postcss-preset-env": "^6.7.1",
     "sass": "^1.59.3",
     "sass-loader": "^13.1.0",
