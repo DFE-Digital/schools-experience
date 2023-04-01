@@ -364,6 +364,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.14.2-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.14.2-x86_64-linux)
+      racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
     openid_connect (1.4.2)
@@ -582,7 +584,7 @@ GEM
     sniffer (0.4.0)
       active_attr (>= 0.10.2)
       anyway_config (>= 1.0)
-    spring (4.1.0)
+    spring (4.1.1)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     stoplight (3.0.1)
@@ -656,6 +658,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
