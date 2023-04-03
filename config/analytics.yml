@@ -230,6 +230,7 @@
   - edubase_id
   - supports_subjects
   :bookings_candidates:
+  - gitis_uuid
   - id
   - created_at
   - updated_at
