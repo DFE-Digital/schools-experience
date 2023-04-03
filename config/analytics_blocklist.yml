@@ -61,8 +61,6 @@
   - access_needs_description
   - access_needs_policy_url
   - dbs_policy_conditions
-  :bookings_candidates:
-  - gitis_uuid
   :bookings_placement_requests:
   - degree_stage_explaination
   - token
