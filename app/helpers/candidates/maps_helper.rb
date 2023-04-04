@@ -11,12 +11,12 @@ module Candidates::MapsHelper
     location = "#{latitude},#{longitude}"
 
     params = {
-      center: location,
-      key: google_maps_api_key,
-      markers: location,
-      scale: scale,
-      size: mapsize.join('x'),
-      zoom: zoom
+      "center" => location,
+      "key" => google_maps_api_key,
+      "markers" => location,
+      "scale" => scale.to_s,
+      "size" => mapsize.join('x'),
+      "zoom" => zoom.to_s
     }
 
     tmpl = Addressable::Template.new(STATIC_MAP_URL)
