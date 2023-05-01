@@ -364,6 +364,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.14.2-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.14.2-x86_64-linux)
+      racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
     openid_connect (1.4.2)
@@ -402,7 +404,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (2.2.7)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
     rack-oauth2 (1.21.3)
@@ -462,6 +464,8 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.8.1)
+    redis-client (0.14.1)
+      connection_pool
     redlock (1.3.2)
       redis (>= 3.0.0, < 6.0)
     regexp_parser (2.5.0)
@@ -560,10 +564,11 @@ GEM
       semantic_range (>= 2.3.0)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.5.8)
-      connection_pool (>= 2.2.5, < 3)
-      rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+    sidekiq (7.0.9)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.11.0)
     sidekiq-cron (1.10.0)
       fugit (~> 1.8)
       globalid (>= 1.0.1)
@@ -656,6 +661,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
@@ -721,7 +727,7 @@ DEPENDENCIES
   sentry-sidekiq
   shakapacker (= 6.5.5)
   shoulda-matchers (~> 5.0)
-  sidekiq (< 7)
+  sidekiq (< 8)
   sidekiq-cron
   simplecov
   spring
