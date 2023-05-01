@@ -130,7 +130,7 @@ GEM
     attr_required (1.0.1)
     bindata (2.4.14)
     bindex (0.8.1)
-    bootsnap (1.13.0)
+    bootsnap (1.16.0)
       msgpack (~> 1.2)
     brakeman (5.4.1)
     breasal (0.0.1)
@@ -349,7 +349,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
     minitest (5.18.0)
-    msgpack (1.5.4)
+    msgpack (1.7.0)
     multi_json (1.15.0)
     multi_test (0.1.2)
     multipart-post (2.3.0)
@@ -363,6 +363,8 @@ GEM
       net-protocol
     nio4r (2.5.8)
     nokogiri (1.14.2-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -656,6 +658,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
