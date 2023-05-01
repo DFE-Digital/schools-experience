@@ -55,7 +55,7 @@ gem 'acts_as_list'
 gem 'daemons'
 
 gem "connection_pool"
-gem "redis", "~> 4.7"
+gem "redis", "~> 5.0"
 
 gem 'kaminari'
 
