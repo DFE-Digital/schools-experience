@@ -124,7 +124,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     aes_key_wrap (1.1.0)
     amazing_print (1.4.0)
-    anyway_config (2.3.0)
+    anyway_config (2.4.0)
       ruby-next-core (>= 0.14.0)
     ast (2.4.2)
     attr_required (1.0.1)
@@ -362,7 +362,7 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.8)
-    nokogiri (1.14.2-x86_64-darwin)
+    nokogiri (1.14.3-x86_64-darwin)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -402,7 +402,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (2.2.7)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
     rack-oauth2 (1.21.3)
@@ -411,7 +411,7 @@ GEM
       httpclient
       json-jwt (>= 1.11.0)
       rack (>= 2.1.0)
-    rack-proxy (0.7.4)
+    rack-proxy (0.7.6)
       rack
     rack-rewrite (1.5.1)
     rack-test (2.1.0)
@@ -553,7 +553,7 @@ GEM
     sentry-sidekiq (5.8.0)
       sentry-ruby (~> 5.8.0)
       sidekiq (>= 3.0)
-    shakapacker (6.5.5)
+    shakapacker (6.6.0)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -719,7 +719,7 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   sentry-sidekiq
-  shakapacker (= 6.5.5)
+  shakapacker (= 6.6.0)
   shoulda-matchers (~> 5.0)
   sidekiq (< 7)
   sidekiq-cron
