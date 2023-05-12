@@ -4,8 +4,7 @@
 
 ## Documentation
 
-Confluence contains most of the project documentation, a good starting point is
-the Development page.
+Legacy documentation is available on Confluence; whilst some of this is still relevant its largely only useful as a historical reference.
 
 [Confluence Development page](https://dfedigital.atlassian.net/wiki/spaces/SE/pages/945618970/Development)
 
@@ -47,11 +46,11 @@ We also have markdown pages within the `doc` folder of this git repo
 4. Run `bin/rails db:setup` to set up the database development and test schemas, and seed with test data.
 5. If you don't wish to use the first available Redis Database, set the `REDIS_URL`, eg in the `.env` file
 6. Create SSL certificates - `bundle exec rake dev:ssl:generate`
-7. Add the `config/master.key` file - this is available from other team members
-8. Run `bundle exec rake spec` to run the spec tests.
-9. Run `bundle exec rake cucumber` to run the cucumber tests.
+7. Get a copy of `.env.local` from another team member
+8. Run `rspec` to run the spec tests.
+9. Run `cucumber` to run the cucumber tests.
 10. Run `yarn spec` to run the Javascript tests.
-11. Run `bundle exec rails s` to launch the app on https://localhost:3000.
+11. Run `rails s` to launch the app on https://localhost:3000.
 12. If running with `RAILS_ENV=production`, Sidekiq is needed for background job processing
    a. running `bundle exec sidekiq -c config/sidekiq.yml` will start a Sidekiq Worker
 
@@ -76,7 +75,7 @@ We also have markdown pages within the `doc` folder of this git repo
 
 ## Whats included in this App?
 
-- Rails 6.1 app with Webpacker
+- Rails 7 app with Shakapacker
 - SassC (replacement for deprecated sass-rails)
 - [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend)
 - [GOV.UK Lint](https://github.com/alphagov/rubocop-govuk)
@@ -85,7 +84,7 @@ We also have markdown pages within the `doc` folder of this git repo
 - Cucumber
 - Dotenv (managing environment variables)
 - Dockerfile to package app for deployment
-- Azure DevOps integration
+- GOV.UK PaaS terraform files
 
 ## Getting started
 
@@ -114,8 +113,7 @@ This can be controlled from various environment variables, see
 
 ## Monitoring health and deployment version
 
-There is a JSON `/healthcheck` endpoint which will verify connectivity to each of the
-services dependencies to confirm whether the service is healthy.
+There is a JSON `/healthcheck` endpoint which will verify connectivity to each of the service dependencies to confirm whether the service is healthy.
 
 The endpoint also includes the git commit SHA of the codebase deployed as well
 as a copy of the `DEPLOYMENT_ID` to allow checking when the deployed version has
@@ -147,7 +145,7 @@ This config is read into a dashboard available at `/feature_flags` in any of the
 
 ## Testing
 
-If you have plenty of cpu cores, it faster to run tests with parallel_tests
+If you have plenty of cpu cores, it is faster to run tests with parallel_tests
 
 1. Create the databases - `bundle exec rake parallel:create`
 2. Copy the schema over from the main database - `bundle exec rake parallel:prepare`
@@ -181,8 +179,3 @@ or
 ```bash
 redis-server
 ```
-
-## Deployment
-### Review Applications
-
-When deploying a review application a script is run to find the first available static route (review-school-experience[1-10] ) and attach that to the review, via terraform. This enables the DFE Sign In process to work.
