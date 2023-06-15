@@ -365,6 +365,8 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.15.1-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.15.1-x86_64-linux)
+      racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
     openid_connect (1.4.2)
@@ -538,7 +540,7 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    selenium-webdriver (4.9.1)
+    selenium-webdriver (4.10.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -656,6 +658,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
@@ -670,7 +673,7 @@ DEPENDENCIES
   breasal
   bullet
   byebug
-  capybara (>= 3.39.1)
+  capybara (>= 3.38.0)
   capybara-screenshot
   connection_pool
   cucumber-rails (>= 2.4.0)
