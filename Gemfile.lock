@@ -290,18 +290,18 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
-    govuk_design_system_formbuilder (3.3.0)
+    govuk_design_system_formbuilder (4.0.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
-      html-attributes-utils (~> 0.9, >= 0.9.2)
+      html-attributes-utils (~> 1)
     hashdiff (1.0.1)
     hashids (1.0.6)
-    html-attributes-utils (0.9.2)
+    html-attributes-utils (1.0.0)
       activesupport (>= 6.1.4.4)
     htmlentities (4.3.4)
     httpclient (2.8.3)
-    i18n (1.13.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     ice_cube (0.16.4)
     invisible_captcha (2.1.0)
@@ -363,7 +363,9 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.15.1-x86_64-darwin)
+    nokogiri (1.15.2-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.15.2-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -402,7 +404,7 @@ GEM
     puma (6.1.1)
       nio4r (~> 2.0)
     raabro (1.4.0)
-    racc (1.6.2)
+    racc (1.7.1)
     rack (2.2.7)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
@@ -444,8 +446,9 @@ GEM
       activesupport (>= 4.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.5.0)
-      loofah (~> 2.19, >= 2.19.1)
+    rails-html-sanitizer (1.6.0)
+      loofah (~> 2.21)
+      nokogiri (~> 1.14)
     rails_semantic_logger (4.12.0)
       rack
       railties (>= 5.1)
@@ -656,6 +659,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
@@ -670,7 +674,7 @@ DEPENDENCIES
   breasal
   bullet
   byebug
-  capybara (>= 3.39.1)
+  capybara (>= 3.38.0)
   capybara-screenshot
   connection_pool
   cucumber-rails (>= 2.4.0)
@@ -683,7 +687,7 @@ DEPENDENCIES
   foreman
   geocoder
   get_into_teaching_api_client_faraday!
-  govuk_design_system_formbuilder (~> 3.1)
+  govuk_design_system_formbuilder (~> 4.0)
   hashids
   ice_cube
   invisible_captcha (>= 2.0.0)
