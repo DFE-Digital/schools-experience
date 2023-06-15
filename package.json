@@ -12,7 +12,7 @@
     "babel-loader": "^9.1.2",
     "babel-plugin-macros": "^3.1.0",
     "compression-webpack-plugin": "^10.0.0",
-    "core-js": "^3.29.1",
+    "core-js": "^3.31.0",
     "css-loader": "^6.7.3",
     "css-minimizer-webpack-plugin": "^5.0.0",
     "custom-event-polyfill": "^1.0.7",
