@@ -197,9 +197,9 @@ GEM
       cucumber-core (~> 10.1, >= 10.1.0)
       cucumber-cucumber-expressions (~> 14.0, >= 14.0.0)
     daemons (1.4.1)
-    database_cleaner (2.0.1)
-      database_cleaner-active_record (~> 2.0.0)
-    database_cleaner-active_record (2.0.1)
+    database_cleaner (2.0.2)
+      database_cleaner-active_record (>= 2, < 3)
+    database_cleaner-active_record (2.1.0)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
@@ -301,7 +301,7 @@ GEM
       activesupport (>= 6.1.4.4)
     htmlentities (4.3.4)
     httpclient (2.8.3)
-    i18n (1.13.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     ice_cube (0.16.4)
     invisible_captcha (2.1.0)
@@ -364,6 +364,8 @@ GEM
       net-protocol
     nio4r (2.5.9)
     nokogiri (1.15.1-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.15.1-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -656,6 +658,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-cloudfront (>= 1.2.0)
@@ -670,7 +673,7 @@ DEPENDENCIES
   breasal
   bullet
   byebug
-  capybara (>= 3.39.1)
+  capybara (>= 3.38.0)
   capybara-screenshot
   connection_pool
   cucumber-rails (>= 2.4.0)
