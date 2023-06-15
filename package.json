@@ -22,7 +22,7 @@
     "json5": "2.2.3",
     "mini-css-extract-plugin": "^2.7.6",
     "postcss-preset-env": "^6.7.1",
-    "sass": "^1.59.3",
+    "sass": "^1.63.4",
     "sass-loader": "^13.2.2",
     "shakapacker": "6.6.0",
     "stimulus": "^3.2.1",
