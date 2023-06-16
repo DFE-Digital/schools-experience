@@ -197,9 +197,9 @@ GEM
       cucumber-core (~> 10.1, >= 10.1.0)
       cucumber-cucumber-expressions (~> 14.0, >= 14.0.0)
     daemons (1.4.1)
-    database_cleaner (2.0.1)
-      database_cleaner-active_record (~> 2.0.0)
-    database_cleaner-active_record (2.0.1)
+    database_cleaner (2.0.2)
+      database_cleaner-active_record (>= 2, < 3)
+    database_cleaner-active_record (2.1.0)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
@@ -290,14 +290,14 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
-    govuk_design_system_formbuilder (3.3.0)
+    govuk_design_system_formbuilder (4.0.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
-      html-attributes-utils (~> 0.9, >= 0.9.2)
+      html-attributes-utils (~> 1)
     hashdiff (1.0.1)
     hashids (1.0.6)
-    html-attributes-utils (0.9.2)
+    html-attributes-utils (1.0.0)
       activesupport (>= 6.1.4.4)
     htmlentities (4.3.4)
     httpclient (2.8.3)
@@ -388,7 +388,7 @@ GEM
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
-    phonelib (0.7.6)
+    phonelib (0.8.2)
     prometheus-client (2.1.0)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -538,7 +538,7 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    selenium-webdriver (4.9.1)
+    selenium-webdriver (4.10.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -670,12 +670,12 @@ DEPENDENCIES
   breasal
   bullet
   byebug
-  capybara (>= 3.39.1)
+  capybara (>= 3.38.0)
   capybara-screenshot
   connection_pool
-  cucumber-rails (>= 2.4.0)
+  cucumber-rails (= 2.5.1)
   daemons
-  database_cleaner
+  database_cleaner (= 2.0.2)
   dfe-analytics!
   dotenv-rails (>= 2.7.6)
   factory_bot_rails (>= 6.2.0)
@@ -683,7 +683,7 @@ DEPENDENCIES
   foreman
   geocoder
   get_into_teaching_api_client_faraday!
-  govuk_design_system_formbuilder (~> 3.1)
+  govuk_design_system_formbuilder (= 4.0.0)
   hashids
   ice_cube
   invisible_captcha (>= 2.0.0)
@@ -697,7 +697,7 @@ DEPENDENCIES
   parallel_tests
   pg (>= 0.18, < 2.0)
   pg_search
-  phonelib
+  phonelib (= 0.8.2)
   pry-byebug
   pry-rails
   puma (~> 6.0)
@@ -715,7 +715,7 @@ DEPENDENCIES
   rspec-sonarqube-formatter
   rspec_junit_formatter
   rubocop-govuk
-  selenium-webdriver
+  selenium-webdriver (= 4.10.0)
   sentry-rails
   sentry-ruby
   sentry-sidekiq
