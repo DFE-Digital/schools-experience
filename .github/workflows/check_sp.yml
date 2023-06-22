@@ -15,7 +15,7 @@ jobs:
         id: select-tests
         run: |
           d="{'environment' :'Development'  , 'principal': 's105d01-keyvault-readonly-access', 'keyvault': 's105d01-kv'}"
-          t="{'environment' :'Test'         , 'principal': 's105t01-keyvault-readonly-access', 'keyvault': 's105t01-kv'}"
+          t="{'environment' :'Staging'      , 'principal': 's105t01-keyvault-readonly-access', 'keyvault': 's105t01-kv'}"
           p="{'environment' :'Production'   , 'principal': 's105p01-keyvault-readonly-access', 'keyvault': 's105p01-kv'}"
           tests="{ 'data':[ ${d} ,  ${t} ,  ${p} ]}"
           echo "tests=${tests}" >> $GITHUB_OUTPUT
@@ -61,8 +61,6 @@ jobs:
           keyvault: ${{ matrix.data.keyvault }}
           secret: SE-INFRA-SECRETS
           key: SLACK-WEBHOOK
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Slack Notification
         if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
