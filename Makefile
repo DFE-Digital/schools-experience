@@ -1,3 +1,9 @@
+TERRAFILE_VERSION=0.8
+ARM_TEMPLATE_TAG=1.1.6
+RG_TAGS={"Product" : "Get Schools Experience"}
+SERVICE_SHORT=gse
+REGION=UK South
+
 ifndef VERBOSE
 .SILENT:
 endif
@@ -27,6 +33,15 @@ development:
 	$(eval export DEPLOY_ENV=dev)
 	$(eval export KEY_VAULT=s105d01-kv)
 	$(eval export AZ_SUBSCRIPTION=s105-schoolexperience-development)
+
+.PHONY: development_aks
+development_aks:
+	$(eval include global_config/development_aks.sh)
+
+.PHONY: set-key-vault-names
+set-key-vault-names:
+	$(eval KEY_VAULT_APPLICATION_NAME=$(AZURE_RESOURCE_PREFIX)-$(SERVICE_SHORT)-$(CONFIG_SHORT)-app-kv)
+	$(eval KEY_VAULT_INFRASTRUCTURE_NAME=$(AZURE_RESOURCE_PREFIX)-$(SERVICE_SHORT)-$(CONFIG_SHORT)-inf-kv)
 
 .PHONY: review
 review:
@@ -104,3 +119,18 @@ terraform-destroy: terraform-init
 
 delete-state-file:
 	az storage blob delete --container-name pass-tfstate --delete-snapshots include --account-name s105d01devstorage -n ${PR_NAME}.tfstate
+
+set-what-if:
+	$(eval WHAT_IF=--what-if)
+
+arm-deployment: set-azure-account set-key-vault-names
+	az deployment sub create --name "resourcedeploy-tsc-$(shell date +%Y%m%d%H%M%S)" \
+		-l "${REGION}" --template-uri "https://raw.githubusercontent.com/DFE-Digital/tra-shared-services/${ARM_TEMPLATE_TAG}/azure/resourcedeploy.json" \
+		--parameters "resourceGroupName=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" 'tags=${RG_TAGS}' \
+			"tfStorageAccountName=${STORAGE_ACCOUNT_NAME}" "tfStorageContainerName=${SERVICE_SHORT}-tfstate" \
+			keyVaultNames='("${KEY_VAULT_APPLICATION_NAME}", "${KEY_VAULT_INFRASTRUCTURE_NAME}")' \
+			"enableKVPurgeProtection=${KEY_VAULT_PURGE_PROTECTION}" ${WHAT_IF}
+
+deploy-arm-resources: arm-deployment
+
+validate-arm-resources: set-what-if arm-deployment
