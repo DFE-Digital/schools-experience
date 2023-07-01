@@ -4,7 +4,7 @@
   "dependencies": {
     "@babel/core": "^7.22.1",
     "@babel/plugin-transform-runtime": "^7.22.4",
-    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-env": "^7.22.5",
     "@babel/runtime": "^7.22.3",
     "@googlemaps/js-api-loader": "^1.15.1",
     "@stimulus/polyfills": "^2.0.0",
