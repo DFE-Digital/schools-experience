@@ -45,3 +45,10 @@ coverage
 
 # Visual Studio Code
 .vscode
+
+# devops files
+
+bin/terrafile
+
+# Downloaded terraform modules
+terraform/aks/vendor/

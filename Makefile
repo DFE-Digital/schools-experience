@@ -3,6 +3,7 @@ ARM_TEMPLATE_TAG=1.1.6
 RG_TAGS={"Product" : "Get Schools Experience"}
 SERVICE_SHORT=gse
 REGION=UK South
+SERVICE_NAME=getschoolsexperience
 
 ifndef VERBOSE
 .SILENT:
@@ -89,6 +90,12 @@ install-fetch-config:
 	    && chmod +x fetch_config.rb \
 	    || true
 
+install-terrafile: ## Install terrafile to manage terraform modules
+	[ ! -f bin/terrafile ] \
+		&& curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
+		| tar xz -C ./bin terrafile \
+		|| true
+
 edit-app-secrets: install-fetch-config set-azure-account
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${APPLICATION_SECRETS} -e -d azure-key-vault-secret:${KEY_VAULT}/${APPLICATION_SECRETS} -f yaml -c
 
@@ -101,18 +108,26 @@ edit-infra-secrets: install-fetch-config set-azure-account
 print-infra-secrets: install-fetch-config set-azure-account
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${INFRA_SECRETS}  -f yaml
 
-terraform-init: set-azure-account
-	$(if $(or $(IMAGE_TAG), $(NO_IMAGE_TAG_DEFAULT)), , $(eval export IMAGE_TAG=master))
-	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
-	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/schools-experience:$(IMAGE_TAG))
+terraform-init: install-terrafile set-azure-account
+	./bin/terrafile -p terraform/aks/vendor/modules -f terraform/aks/config/$(CONFIG)_Terrafile
+	terraform -chdir=terraform/aks init -upgrade -reconfigure \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=${CONFIG}.tfstate
 
-	terraform -chdir=terraform/paas init -reconfigure -upgrade -backend-config=${DEPLOY_ENV}.bk.vars ${BACKEND_KEY}
+	$(eval export TF_VAR_azure_resource_prefix=$(AZURE_RESOURCE_PREFIX))
+	$(eval export TF_VAR_config_short=$(CONFIG_SHORT))
+	$(eval export TF_VAR_service_short=$(SERVICE_SHORT))
+	$(eval export TF_VAR_rg_name=$(RESOURCE_GROUP_NAME))
+	$(eval export TF_VAR_service_name=$(SERVICE_NAME))
 
 terraform-plan: terraform-init
-	terraform -chdir=terraform/paas plan -var-file=${DEPLOY_ENV}.env.tfvars
+	terraform  -chdir=terraform/aks plan -var-file "config/${CONFIG}.tfvars.json"
 
-terraform: terraform-init
-	terraform -chdir=terraform/paas apply -var-file=${DEPLOY_ENV}.env.tfvars ${AUTO_APPROVE}
+
+terraform-apply: terraform-init
+	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json"
+
 
 terraform-destroy: terraform-init
 	terraform -chdir=terraform/paas destroy -var-file=${DEPLOY_ENV}.env.tfvars ${AUTO_APPROVE}
