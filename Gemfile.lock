@@ -545,13 +545,13 @@ GEM
     semantic_logger (4.13.0)
       concurrent-ruby (~> 1.0)
     semantic_range (3.0.0)
-    sentry-rails (5.8.0)
+    sentry-rails (5.10.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.8.0)
-    sentry-ruby (5.8.0)
+      sentry-ruby (~> 5.10.0)
+    sentry-ruby (5.10.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-sidekiq (5.8.0)
-      sentry-ruby (~> 5.8.0)
+    sentry-sidekiq (5.10.0)
+      sentry-ruby (~> 5.10.0)
       sidekiq (>= 3.0)
     shakapacker (6.6.0)
       activesupport (>= 5.2)
@@ -713,12 +713,12 @@ DEPENDENCIES
   rspec-json_expectations (~> 2.2)
   rspec-rails (~> 6.0.1)
   rspec-sonarqube-formatter
-  rspec_junit_formatter (>= 0.6.0)
+  rspec_junit_formatter
   rubocop-govuk
   selenium-webdriver
-  sentry-rails
-  sentry-ruby
-  sentry-sidekiq
+  sentry-rails (>= 5.9.0)
+  sentry-ruby (>= 5.9.0)
+  sentry-sidekiq (>= 5.9.0)
   shakapacker (= 6.6.0)
   shoulda-matchers (~> 5.0)
   sidekiq (< 7)
