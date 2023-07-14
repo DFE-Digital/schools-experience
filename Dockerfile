@@ -34,6 +34,9 @@ RUN apk add --no-cache gmp=6.2.1-r1 libretls=3.3.4-r3
 COPY script/docker-entrypoint.sh .
 RUN chmod +x /app/docker-entrypoint.sh
 
+# add snyk ignore list
+COPY .snyk /
+
 # install NPM packages removign artifacts
 COPY package.json yarn.lock ./
 RUN yarn install && yarn cache clean
