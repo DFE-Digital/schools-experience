@@ -41,7 +41,7 @@ RUN yarn install && yarn cache clean
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
-RUN gem install bundler --version='~> 2.3.4' && \
+RUN gem install bundler --version='~> 2.3.6' && \
     bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
     bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
@@ -49,8 +49,7 @@ RUN gem install bundler --version='~> 2.3.4' && \
 
 # Add code and compile assets
 COPY . .
-RUN gem install nokogiri:1.13.3 && \
-    bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+RUN bundle exec rake assets:precompile SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 # Create symlinks for CSS files without digest hashes for use in error pages
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
