@@ -28,7 +28,7 @@
     "json5": "2.2.3",
     "mini-css-extract-plugin": "^2.7.6",
     "postcss-preset-env": "^6.7.1",
-    "sass": "^1.63.4",
+    "sass": "^1.63.6",
     "sass-loader": "^13.3.2",
     "semver": "^7.5.2",
     "shakapacker": "6.6.0",
