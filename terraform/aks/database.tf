@@ -12,6 +12,7 @@ module "postgres" {
   azure_enable_monitoring      = var.enable_monitoring
   server_version               = "14"
   azure_enable_backup_storage  = var.azure_enable_backup_storage
+  azure_extensions             = ["POSTGIS", "address_standardizer", "plpgsql"]
 }
 
 module "redis-cache" {
