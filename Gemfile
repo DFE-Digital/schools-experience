@@ -15,7 +15,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter'
+gem 'activerecord-postgis-adapter', '8.0.2'
 gem 'breasal'
 gem 'geocoder'
 
@@ -87,7 +87,7 @@ gem 'activerecord-import'
 # See https://github.com/adzap/validates_timeliness/pull/213
 gem "validates_timeliness", github: "mitsuru/validates_timeliness", ref: "f28a625"
 
-gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teaching-api-ruby-client", require: "api/client"
+gem "get_into_teaching_api_client_faraday", github: "DFE-Digital/get-into-teaching-api-ruby-client", ref: "6619b0f", require: "api/client"
 
 # See https://github.com/mikel/mail/pull/1439
 gem 'net-smtp', require: false
@@ -119,7 +119,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 6.0.1'
   gem 'rspec-sonarqube-formatter'
 
-  gem 'brakeman', '>= 5.2.3'
+  gem 'brakeman', '>= 6.0.1'
 
   gem 'bullet'
 
@@ -128,7 +128,7 @@ end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen', '>= 3.0.5'
+  gem 'listen', '>= 3.8.0'
   gem 'web-console', '>= 4.2.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -146,7 +146,7 @@ group :test do
 
   gem 'selenium-webdriver'
 
-  gem 'cucumber-rails', '>= 2.4.0', require: false
+  gem 'cucumber-rails', '>= 2.6.1', require: false
   gem 'database_cleaner'
 
   gem 'rails-controller-testing', '>= 1.0.5'
