@@ -50,6 +50,32 @@ variable "azure_enable_backup_storage" {
   default     = true
   description = "Create storage account for database backup"
 }
+variable "deploy_redis" {
+  default     = true
+  description = "whether Deploy redis or not"
+}
+
+variable "deploy_postgres" {
+  default     = true
+  description = "whether Deploy postgres or not"
+}
+variable "key_vault_name" {
+  default     = null
+  description = "the name of the key vault to get postgres and redis"
+}
+variable "key_vault_resource_group" {
+  default     = null
+  description = "the name of the key vault resorce group"
+}
+variable "review_url_db_name" {
+  default     = null
+  description = "the name of the secret storing review db url"
+}
+variable "review_url_redis_name" {
+    default     = null
+  description = "the name of the secret storing review redis url"
+}
+
 
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)

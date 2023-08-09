@@ -59,6 +59,14 @@ review:
 	$(eval export TF_VAR_static_route=$(shell script/get_next_mapping.sh ${PR_NAME}))
 	$(eval BACKEND_KEY=-backend-config=key=${PR_NAME}.tfstate)
 
+.PHONY: review_aks
+review_aks:
+	$(eval include global_config/review.sh)
+	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER"))
+	$(eval export PR_NAME=review-school-experience-${PR_NUMBER})
+	$(eval export TF_VAR_static_route=$(shell script/get_next_mapping.sh ${PR_NAME}))
+	$(eval export TF_VAR_environment=review-pr-$(PR_NUMBER))
+
 .PHONY: staging
 staging:
 	$(eval export DEPLOY_ENV=staging)
@@ -118,7 +126,7 @@ terraform-init-aks: composed-variables bin/terrafile set-azure-account
 	terraform -chdir=terraform/aks init -upgrade -reconfigure \
 		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
-		-backend-config=key=${ENVIRONMENT}_kubernetes.tfstate
+		-backend-config=key=${ENVIRONMENT}${PR_NUMBER}_kubernetes.tfstate
 
 	$(eval export TF_VAR_azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
 	$(eval export TF_VAR_config_short=${CONFIG_SHORT})

@@ -1,5 +1,6 @@
 module "postgres" {
-  source = "./vendor/modules/aks//aks/postgres"
+  count                        = var.deploy_postgres ? 1 : 0
+  source                       = "./vendor/modules/aks//aks/postgres"
 
   namespace                    = var.namespace
   environment                  = var.environment
@@ -16,6 +17,7 @@ module "postgres" {
 }
 
 module "redis-cache" {
+  count                        = var.deploy_redis ? 1 : 0
   source                       = "./vendor/modules/aks//aks/redis"
 
   namespace                    = var.namespace

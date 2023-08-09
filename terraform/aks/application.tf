@@ -7,7 +7,6 @@ module "application_configuration" {
   service_short          = var.service_short
   config_short           = var.config_short
   secret_key_vault_short = "app"
-
   # Delete for non rails apps
   is_rails_application = true
 
@@ -16,9 +15,8 @@ module "application_configuration" {
     PGSSLMODE        = local.postgres_ssl_mode
   }
   secret_variables = {
-    DATABASE_URL = module.postgres.url
-    REDIS_URL    = module.redis-cache.url
-
+    DATABASE_URL = var.deploy_postgres ? module.postgres[0].url : "${data.azurerm_key_vault_secret.db_url[0].value}"
+    REDIS_URL    = var.deploy_redis ?  module.redis-cache[0].url : "${data.azurerm_key_vault_secret.redis_url[0].value}"
   }
 }
 
@@ -38,5 +36,4 @@ module "web_application" {
   docker_image = var.docker_image
   command      = ["/app/docker-entrypoint.sh", "-m", "-f"]
   probe_path   = null
-
 }
