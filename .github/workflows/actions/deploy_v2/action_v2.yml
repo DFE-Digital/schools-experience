@@ -1,0 +1,160 @@
+name: deploy
+description: deploys application
+
+inputs:
+  arm-access-key:
+    required: true
+  azure-credentials:
+    required: true
+  environment:
+    description: Environment to deploy to
+    required: true
+  pr-number:
+    description: PR number for the review app
+    required: false
+  sha:
+    description: Commit sha to be deployed
+    required: true
+  slack-webhook:
+    required: true
+
+outputs:
+  deploy-url:
+    value: ${{ steps.set_env_var.outputs.deploy_url }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set Environment variables
+      id: set_env_var
+      shell: bash
+      run: |
+        tf_vars_file=terraform/aks/workspace-variables/${{ inputs.environment }}.tfvars.json
+        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/provider.tf | grep -o [0-9\.]*)
+        echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "aks_app_environment=$(jq -r '.paas_app_environment' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
+        echo "namespace=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+        if [ -n "${{ inputs.pr-number }}" ]; then
+          APP_NAME=pr-${{ inputs.pr-number }}
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
+          echo "deploy_url=https://register-${APP_NAME}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
+          echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
+        else
+          aks_app_environment=$(jq -r '.paas_app_environment' ${tf_vars_file})
+          echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
+          hostname=$(jq -r '.gov_uk_host_names[0]' ${tf_vars_file})
+          if [[ $hostname != null ]]; then
+            echo "deploy_url=https://${hostname}" >> $GITHUB_OUTPUT
+          else
+            if [[ $cluster == 'production' ]]; then
+              echo "deploy_url=https://register-${aks_app_environment}.teacherservices.cloud" >> $GITHUB_OUTPUT
+            else
+              echo "deploy_url=https://register-${aks_app_environment}.${cluster}.teacherservices.cloud" >> $GITHUB_OUTPUT
+            fi
+          fi
+        fi
+        echo "worker_app_instances=$(jq -r '.worker_apps.worker.replicas' ${tf_vars_file})" >> $GITHUB_ENV
+
+    - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azure-credentials }}
+
+    - name: Validate Azure Key Vault secrets
+      uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
+      with:
+        KEY_VAULT: ${{ env.key_vault_name }}
+        SECRETS: |
+          ${{ env.key_vault_app_secret_name }}
+          ${{ env.key_vault_infra_secret_name }}
+
+    - name: Terraform init, plan & apply
+      shell: bash
+      run: make ${{ inputs.environment }} ci deploy
+      env:
+        ARM_ACCESS_KEY: ${{ inputs.arm-access-key }}
+        IMAGE_TAG: ${{ inputs.sha }}
+        APP_NAME: ${{ env.APP_NAME }}
+        TF_VAR_azure_credentials: ${{ inputs.azure-credentials }}
+        CONFIRM_PRODUCTION: true
+
+    - name: Set up environment variables
+      shell: bash
+      run: |
+        case ${{ env.cluster }} in
+          test)
+            echo "cluster_rg=s189t01-tsc-ts-rg" >> $GITHUB_ENV
+            echo "cluster_name=s189t01-tsc-test-aks" >> $GITHUB_ENV
+            ;;
+          production)
+            echo "cluster_rg=s189p01-tsc-pd-rg" >> $GITHUB_ENV
+            echo "cluster_name=s189p01-tsc-production-aks" >> $GITHUB_ENV
+            ;;
+          *)
+            echo "unknown cluster"
+            ;;
+        esac
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: "v1.26.1" # default is latest stable
+
+    - name: K8 setup
+      shell: bash
+      run: |
+        az aks get-credentials -g ${{ env.cluster_rg }} -n ${{ env.cluster_name }}
+        make install-konduit
+
+    - name: Run data migrations
+      shell: bash
+      if: inputs.environment == 'staging_aks' || inputs.environment == 'productiondata_aks' || inputs.environment == 'production_aks'
+      run: kubectl exec -n ${{ env.namespace }} deployment/register-${{ env.aks_app_environment }} -- /bin/sh -c "cd /app && bundle exec rails data:migrate"
+
+    - name: Generate example data
+      shell: bash
+      if: inputs.environment == 'review_aks'
+      run: kubectl exec -n ${{ env.namespace }} deployment/register-${APP_NAME} -- /bin/sh -c "cd /app && bundle exec rails db:seed example_data:generate"
+
+    - name: Delete redis queues for productiondata
+      shell: bash
+      if: ${{ inputs.environment == 'productiondata_aks' && env.worker_app_instances == 0 }}
+      run: |
+        sudo apt-get install -y redis-tools redis-server
+        bin/konduit.sh -r REDIS_QUEUE_URL register-productiondata -- redis-cli del queues
+
+# temporary will running alongside paas env
+    - name: Delete redis queues for production
+      shell: bash
+      if: ${{ inputs.environment == 'production_aks' && env.worker_app_instances == 0 }}
+      run: |
+        sudo apt-get install -y redis-tools redis-server
+        bin/konduit.sh -r REDIS_QUEUE_URL register-production -- redis-cli del queues
+
+    - name: Run Smoke Tests for ${{ inputs.environment }}
+      uses: ./.github/actions/smoke-test_v2/
+      with:
+        environment: ${{ inputs.environment }}
+        app-env: ${{ env.aks_app_environment }}
+        pr-number: ${{ inputs.pr-number }}
+        slack-webhook: ${{ inputs.slack-webhook }}
+
+#    - name: Notify Slack channel on job failure
+#      if: ${{ failure() && github.ref == 'refs/heads/main' }}
+#      uses: rtCamp/action-slack-notify@master
+#      env:
+#        SLACK_CHANNEL: twd_publish_register_tech
+#        SLACK_COLOR: '#ef5343'
+#        SLACK_ICON_EMOJI: ':github-logo:'
+#        SLACK_USERNAME: Register Trainee Teachers
+#        SLACK_TITLE: Deployment failure on ${{ inputs.environment }}
+#        SLACK_MESSAGE: ':alert: Deployment of commit ${{ inputs.sha }} to ${{ inputs.environment }} failed :sadparrot:'
+#        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
