@@ -1,15 +1,9 @@
 name: Build and Deploy
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: Environment to deploy to
-        required: true
-        type: choice
-        default: development_aks
-        options:
-        - development_aks
-        - test_aks
+  pull_request:
+  push:
+    branches: [ master ]
 
 permissions:
   contents: write
@@ -22,7 +16,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    # environment: ${{ github.event.inputs.environment }}
     outputs:
       DOCKER_IMAGE: ${{ steps.docker.outputs.DOCKER_IMAGE }}
 
@@ -37,21 +30,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SLACK-WEBHOOK
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK
+          keyvault: ${{ secrets.KEY_VAULT}}
+          secret: SE-INFRA-SECRETS
+          key: SLACK-WEBHOOK
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -103,8 +89,7 @@ jobs:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
            SLACK_MESSAGE: 'There has been a failure building the application'
            SLACK_TITLE: 'Failure Building Application'
-           SLACK_WEBHOOK: ${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}
-          #  replace  92 with gitapi example
+           SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
 
   spec_tests:
     name: Unit Tests
@@ -120,22 +105,15 @@ jobs:
       - uses: Azure/login@v1
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #  change to use new action
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SLACK-WEBHOOK
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK
+          keyvault: ${{ secrets.KEY_VAULT}}
+          secret: SE-INFRA-SECRETS
+          key: SLACK-WEBHOOK
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -178,7 +156,6 @@ jobs:
         with:
           name: Code_Coverage
           path: ${{ github.workspace }}/coverage/coverage.json
-    # add notification to this job
 
   security_tests:
     name: Security Tests
@@ -195,21 +172,14 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SNYK-TOKEN
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Fetch synk token
-        id: get-synk-token
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SNYK-TOKEN
+          keyvault: ${{ secrets.KEY_VAULT}}
+          secret: SE-INFRA-SECRETS
+          key: SNYK-TOKEN
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -221,7 +191,7 @@ jobs:
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
-          SNYK_TOKEN: ${{ steps.get-synk-token.outputs.SNYK-TOKEN }}
+          SNYK_TOKEN: ${{ steps.keyvault-yaml-secret.outputs.SNYK-TOKEN }}
         with:
           image: ${{needs.build.outputs.DOCKER_IMAGE}}
           args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
@@ -343,21 +313,14 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SONAR-TOKEN
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Fetch sonar token
-        id: get-sonar-token
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SONAR-TOKEN
+          keyvault: ${{ secrets.KEY_VAULT}}
+          secret: SE-INFRA-SECRETS
+          key: SONAR-TOKEN
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Download Test Artifacts
         uses: actions/download-artifact@v3
@@ -371,7 +334,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
+          SONAR_TOKEN: ${{ steps.keyvault-yaml-secret.outputs.SONAR-TOKEN }}
 
   prepare:
     name: Configure Matrix Deployments
@@ -457,21 +420,14 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SLACK-WEBHOOK , SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      - uses: DfE-Digital/keyvault-yaml-secret@v1
+        id:  keyvault-yaml-secret
         with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK, SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
+          keyvault: ${{ secrets.KEY_VAULT}}
+          secret: SE-INFRA-SECRETS
+          key: SLACK-WEBHOOK , SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Cloud Foundry
         if: matrix.environment == 'Review'
@@ -601,7 +557,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: ZAP Scan
-        uses: zaproxy/action-full-scan@v0.6.0
+        uses: zaproxy/action-full-scan@v0.4.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'

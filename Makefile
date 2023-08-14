@@ -91,6 +91,7 @@ production_aks:
 
 .PHONY: ci
 ci:
+    $(eval export DISABLE_PASSCODE=true)
 	$(eval AUTO_APPROVE=-auto-approve)
 
 clean:
