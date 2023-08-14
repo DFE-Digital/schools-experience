@@ -39,13 +39,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK
-
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
         with:

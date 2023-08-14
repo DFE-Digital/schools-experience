@@ -1,0 +1,440 @@
+name: Build and Deploy
+concurrency: build_and_deploy_${{ github.ref_name }}
+
+on:
+  push:
+   branches:
+    - main
+  pull_request:
+    branches:
+    - main
+    types: [opened, reopened, synchronize, labeled]
+
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+
+jobs:
+  build:
+    name: Build
+    env:
+      DOCKER_IMAGE: ghcr.io/dfe-digital/register-trainee-teachers
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_HOSTNAME: localhost
+    outputs:
+      docker_image: ${{ env.DOCKER_IMAGE }}
+      image_tag: ${{ env.IMAGE_TAG }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      name: Checkout
+
+    - name: Set environment variables (push)
+      if: github.event_name == 'push'
+      run: |
+        GIT_BRANCH=${GITHUB_REF##*/}
+        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV # GIT_BRANCH will be main for refs/heads/main
+        echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
+
+    - name: Set environment variables (pull_request)
+      if: github.event_name == 'pull_request'
+      run: |
+        GIT_BRANCH=${GITHUB_HEAD_REF##*/}
+        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+        echo "IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+
+    - name: Set KV environment variables
+      run: |
+        # tag build to the review env for vars and secrets
+        tf_vars_file=terraform/paas/workspace-variables/review.tfvars.json
+        echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "KEY_VAULT_INFRA_SECRET_NAME=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+
+    - uses: DFE-Digital/keyvault-yaml-secret@v1
+      id: get-secret
+      with:
+        keyvault: ${{ env.KEY_VAULT_NAME }}
+        secret: ${{ env.KEY_VAULT_INFRA_SECRET_NAME }}
+        key: SNYK_TOKEN
+
+    - name: Build Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        tags: |
+          ${{env.DOCKER_IMAGE}}:${{env.IMAGE_TAG}}
+          ${{env.DOCKER_IMAGE}}:${{env.BRANCH_TAG}}
+        push: false
+        load: true
+        cache-to: type=inline
+        cache-from: |
+          type=registry,ref=${{env.DOCKER_IMAGE}}:main
+          type=registry,ref=${{env.DOCKER_IMAGE}}:${{env.IMAGE_TAG}}
+          type=registry,ref=${{env.DOCKER_IMAGE}}:${{env.BRANCH_TAG}}
+        build-args: COMMIT_SHA=${{ github.sha }}
+
+    - name: Push ${{ env.DOCKER_IMAGE }} images for review
+      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+      run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+
+    - name: Run Snyk to check Docker image for vulnerabilities
+      uses: snyk/actions/docker@master
+      env:
+        SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
+      with:
+        image: ${{ env.DOCKER_IMAGE }}:${{ env.IMAGE_TAG }}
+        args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
+
+    - name: Push ${{ env.DOCKER_IMAGE }} images
+      if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy') }}
+      run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+
+    - name: Check for Failure
+      if: ${{ failure() && github.ref == 'refs/heads/main' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_publish_register_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Register Trainee Teachers
+        SLACK_TITLE: Build Failure
+        SLACK_MESSAGE: ':alert: Build failure on commit ${{env.IMAGE_TAG}} :sadparrot:'
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  test:
+    name: Test
+    needs: [build]
+    outputs:
+      image_tag: ${{ needs.build.outputs.image_tag }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set environment variables
+      run: |
+        echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+
+    - name: Set KV environment variables
+      run: |
+        # tag build to the review env for vars and secrets
+        tf_vars_file=terraform/paas/workspace-variables/review.tfvars.json
+        echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "KEY_VAULT_APP_SECRET_NAME=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+
+    - uses: DFE-Digital/keyvault-yaml-secret@v1
+      id: get-secret
+      with:
+        keyvault: ${{ env.KEY_VAULT_NAME }}
+        secret: ${{ env.KEY_VAULT_APP_SECRET_NAME }}
+        key: SENTRY_DSN
+
+    - name: Pull docker images
+      run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
+
+    - name: Bring images up
+      run: |
+        docker-compose up --no-build -d
+        docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+        docker-compose exec -T web /bin/sh -c "yarn add jest@29.3.1"
+        docker-compose exec -T web /bin/sh -c "RAILS_ENV=test bundle exec rails assets:precompile"
+      env:
+        SENTRY_DSN: ${{ steps.get-secret.outputs.sentry_dsn }}
+
+    - name: Install chromedriver
+      run: docker-compose exec -T web /bin/sh -c 'apk add chromium chromium-chromedriver'
+
+    - name: Setup DB
+      run: docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
+
+    - name: Run Ruby Linter
+      run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop app config db lib spec Gemfile --format clang'
+
+    - name: Run JavaScript Linter
+      run: docker-compose exec -T web /bin/sh -c 'bundle exec rake lint:javascript'
+
+    - name: Run SCSS Linter
+      run:  docker-compose exec -T web /bin/sh -c 'bundle exec rake lint:scss'
+
+    - name: Run DfE Analytics checks
+      run:  docker-compose exec -T web /bin/sh -c 'RAILS_ENV=test bundle exec rake db:test:load dfe:analytics:check'
+
+    - name: Run Rspec tests
+      run: docker-compose exec --env COVERAGE=true -T web /bin/sh -c 'RAILS_ENV=test bundle exec rake spec'
+
+    - name: Run Javascript tests
+      run: docker-compose exec -T web /bin/sh -c 'yarn run test'
+
+    - name: Check for Failure
+      if: ${{ failure() && github.ref == 'refs/heads/main' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_publish_register_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Register Trainee Teachers
+        SLACK_TITLE: Build Failure
+        SLACK_MESSAGE: ':alert: Test failure on commit ${{env.IMAGE_TAG}} :sadparrot:'
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy_review:
+    name: Deployment To Review
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    if: ${{ github.event_name == 'pull_request' && (contains(github.event.pull_request.labels.*.name, 'deploy') || contains(github.event.pull_request.labels.*.name, 'dependencies')) }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Start review-${{ github.event.pull_request.number }} Deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        env: review-${{ github.event.pull_request.number }}
+        ref: ${{ github.head_ref }}
+        step:  start
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Deploy App to Review
+      id: deploy_review
+      uses: ./.github/actions/deploy/
+      with:
+        arm-access-key: ${{ secrets.ARM_ACCESS_KEY_REVIEW }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+        environment: review
+        pr-number: ${{ github.event.pull_request.number }}
+        sha: ${{ needs.build.outputs.image_tag }}
+        slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+    - name: Update review-${{ github.event.pull_request.number }} status
+      if: always()
+      uses: bobheadxi/deployments@v1
+      with:
+        step: finish
+        token:  ${{ secrets.GITHUB_TOKEN }}
+        env:  review-${{ github.event.pull_request.number }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        env_url: ${{ steps.deploy_review.outputs.deploy-url }}
+        ref: ${{ github.head_ref }}
+
+  deploy-v2-review-app:
+    name: Deployment To Review v2
+    concurrency: deploy_v2_review_${{ github.event.pull_request.number }}
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start review_aks-${{ github.event.pull_request.number }} Deployment
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          env: review_aks-${{ github.event.pull_request.number }}
+          ref: ${{ github.head_ref }}
+          step:  start
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy App to Review v2
+        id: deploy_v2_review
+        uses: ./.github/actions/deploy_v2/
+        with:
+          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}
+          azure-credentials:  ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
+          environment: review_aks
+          pr-number: ${{ github.event.pull_request.number }}
+          sha: ${{ needs.build.outputs.IMAGE_TAG }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Update review_aks-${{ github.event.pull_request.number }} status
+        if: always()
+        uses: bobheadxi/deployments@v1
+        with:
+          env:  review_aks-${{ github.event.pull_request.number }}
+          ref: ${{ github.head_ref }}
+          step: finish
+          token:  ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ steps.deploy_v2_review.outputs.deploy-url }}
+
+  merge-dependabot:
+    name: Merge dependabot
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'dependencies') }}
+    needs: [test, deploy_review]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Merge minor dependency updates
+        uses: fastify/github-action-merge-dependabot@v3
+        with:
+          github-token: ${{ secrets.API_TOKEN_FOR_GITHUB_ACTION }}
+          target: minor
+          exclude: 'govuk-components,govuk_design_system_formbuilder,govuk-frontend,@ministryofjustice/frontend'
+          merge-method: merge
+
+  deploy-before-production:
+    name: Parallel deployment before production
+    environment:
+      name: ${{ matrix.environment }}
+      url: ${{ steps.deploy_app_before_production.outputs.deploy-url }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [qa,staging]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Deploy app to ${{ matrix.environment }}
+      id: deploy_app_before_production
+      uses: ./.github/actions/deploy/
+      with:
+        arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
+        azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+        environment: ${{ matrix.environment }}
+        sha: ${{ github.sha }}
+        slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-aks-before-production:
+    name: Parallel deployment before production v2
+    environment:
+      name: ${{ matrix.environment }}
+      url: ${{ steps.deploy_app_before_production_v2.outputs.deploy-url }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [qa_aks,staging_aks]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Deploy app to ${{ matrix.environment }} v2
+      id: deploy_app_before_production_v2
+      uses: ./.github/actions/deploy_v2/
+      with:
+        arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
+        azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+        environment: ${{ matrix.environment }}
+        sha: ${{ github.sha }}
+        slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-production:
+    name: Production deployment
+    environment:
+      name: production
+      url: ${{ steps.deploy_app.outputs.deploy-url }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    needs: [deploy-before-production]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Deploy app to production
+      id: deploy_app
+      uses: ./.github/actions/deploy/
+      with:
+        arm-access-key: ${{ secrets.ARM_ACCESS_KEY_PRODUCTION }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+        environment: production
+        sha: ${{ github.sha }}
+        slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-aks-production:
+    name: Production deployment v2
+    environment:
+      name: production_aks
+      url: ${{ steps.deploy_app_v2.outputs.deploy-url }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    needs: [deploy-aks-before-production]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Deploy app to production v2
+      id: deploy_app_v2
+      uses: ./.github/actions/deploy_v2/
+      with:
+        arm-access-key: ${{ secrets.ARM_ACCESS_KEY_PRODUCTION_AKS }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION_AKS }}
+        environment: production_aks
+        sha: ${{ github.sha }}
+        slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-after-production:
+    name: Deployment after production
+    environment:
+      name: productiondata
+      url: ${{ steps.deploy_app_after_production.outputs.deploy-url }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    needs: [deploy-production]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Deploy app to productiondata
+      id: deploy_app_after_production
+      uses: ./.github/actions/deploy/
+      with:
+        arm-access-key: ${{ secrets.ARM_ACCESS_KEY_PRODUCTIONDATA }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTIONDATA }}
+        environment: productiondata
+        sha: ${{ github.sha }}
+        slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-aks-after-production:
+    name: Deployment after production v2
+    environment:
+      name: productiondata_aks
+      url: ${{ steps.deploy_app_after_production_v2.outputs.deploy-url }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    needs: [deploy-aks-production]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Deploy app to productiondata v2
+      id: deploy_app_after_production_v2
+      uses: ./.github/actions/deploy_v2/
+      with:
+        arm-access-key: ${{ secrets.ARM_ACCESS_KEY_PRODUCTIONDATA_AKS }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTIONDATA_AKS }}
+        environment: productiondata_aks
+        sha: ${{ github.sha }}
+        slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
