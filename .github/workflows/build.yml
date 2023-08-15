@@ -30,12 +30,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK
+      # - name: Fetch Slack Webhook Value
+      #   id: get-slack-webhook
+      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      #   with:
+      #     keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+      #     secrets: SLACK-WEBHOOK
 
       - name: Set up Docker Buildx
         id: buildx
@@ -74,14 +74,14 @@ jobs:
             ${{env.DOCKER_REPOSITORY}}:sha-${{ steps.vars.outputs.sha_short }}
           build-args: GIT_COMMIT_SHA=${{ steps.vars.outputs.sha_short }}
 
-      - name: Slack Notification
-        if: failure() && github.ref == 'refs/heads/master'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_FAILURE}}
-          SLACK_MESSAGE: 'The pipeline has failed to build the API image'
-          SLACK_TITLE: 'Failure to Build API '
-          SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
+      # - name: Slack Notification
+      #   if: failure() && github.ref == 'refs/heads/master'
+      #   uses: rtCamp/action-slack-notify@master
+      #   env:
+      #     SLACK_COLOR: ${{env.SLACK_FAILURE}}
+      #     SLACK_MESSAGE: 'The pipeline has failed to build the API image'
+      #     SLACK_TITLE: 'Failure to Build API '
+      #     SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
 
   development:
     name: Development Deployment
@@ -124,14 +124,14 @@ jobs:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
 
-      - name: Slack Notification
-        if: failure() && github.ref == 'refs/heads/master'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_FAILURE}}
-          SLACK_MESSAGE: 'The pipeline has failed to build the API image'
-          SLACK_TITLE: 'Failure to Build API '
-          SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
+      # - name: Slack Notification
+      #   if: failure() && github.ref == 'refs/heads/master'
+      #   uses: rtCamp/action-slack-notify@master
+      #   env:
+      #     SLACK_COLOR: ${{env.SLACK_FAILURE}}
+      #     SLACK_MESSAGE: 'The pipeline has failed to build the API image'
+      #     SLACK_TITLE: 'Failure to Build API '
+      #     SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
 
   # test:
   #   name: Test Deployment
