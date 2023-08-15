@@ -10,6 +10,10 @@ inputs:
   azure-credentials:
     description: Credentials for azure
     required: true
+  pr:
+    description: Pull Request Reference
+    required: false
+
 outputs:
   deploy-url:
     value: ${{ steps.set_env_var.outputs.deploy_url }}
@@ -49,8 +53,18 @@ runs:
         echo "${{ inputs.sha }}"
         echo "terraform version is ${{ env.TERRAFORM_VERSION }}"
         echo terraform version
+
     - name: Terraform init, plan & apply
+      if: ${{ inputs.sha }} == "Review_aks"
       shell: bash
-      run: make ci ${{ inputs.environment }} terraform-apply-aks
+      run: make ci ${{ inputs.environment }} terraform-plan-aks PR_NUMBER=${{ inputs.pr }}
+      env:
+        IMAGE_TAG: ${{ inputs.sha }}
+
+
+    - name: Terraform init, plan & apply
+      if: ${{ inputs.sha }} != "Review_aks"
+      shell: bash
+      run: make ci ${{ inputs.environment }} terraform-plan-aks
       env:
         IMAGE_TAG: ${{ inputs.sha }}

@@ -19,7 +19,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     outputs:
       DOCKER_IMAGE: ${{steps.docker.outputs.DOCKER_IMAGE}}
-      image_tag_sha: "sha-${{ steps.vars.outputs.sha_short }}"
+      image_tag_sha: "sha-${{ steps.sha.outputs.short }}"
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -398,6 +398,7 @@ jobs:
         with:
           name: selenium_cucumber_tests
           path: ${{ github.workspace }}/out
+
   sonarcloud:
     name: SonarCloud
     environment: ${{ github.event.inputs.environment }}
@@ -440,12 +441,12 @@ jobs:
       - name: Fixup report file paths
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
-
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
+    #  sonar token empty hence error
 
   prepare:
     name: Configure Matrix Deployments
@@ -493,7 +494,7 @@ jobs:
 
   development:
     name:  Deployment
-    needs: [ prepare, build ]
+    needs: [ prepare ]
     strategy:
       max-parallel: 1
       matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
@@ -531,9 +532,11 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          environment: development_aks
+          environment: ${{matrix.environment}}
           sha: ${{needs.build.outputs.image_tag_sha}}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+
 
 
       - name: Slack Notification
