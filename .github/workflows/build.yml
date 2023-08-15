@@ -87,7 +87,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    environment: development_aks
+    # environment: ${{ github.event.inputs.environment }}
     outputs:
       DOCKER_IMAGE: ${{ steps.docker.outputs.DOCKER_IMAGE }}
 
