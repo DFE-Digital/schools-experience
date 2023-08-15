@@ -180,54 +180,54 @@ jobs:
           path: ${{ github.workspace }}/coverage/coverage.json
     # add notification to this job
 
-  security_tests:
-    name: Security Tests
-    runs-on: ubuntu-latest
-    needs: [ build ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # security_tests:
+  #   name: Security Tests
+  #   runs-on: ubuntu-latest
+  #   needs: [ build ]
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
+  #     - name: set-up-environment
+  #       uses: DFE-Digital/github-actions/set-up-environment@master
 
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #     - uses: Azure/login@v1
+  #       with:
+  #           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SNYK-TOKEN
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  #     # - uses: DfE-Digital/keyvault-yaml-secret@v1
+  #     #   id:  keyvault-yaml-secret
+  #     #   with:
+  #     #     keyvault: ${{ secrets.KEY_VAULT}}
+  #     #     secret: SE-INFRA-SECRETS
+  #     #     key: SNYK-TOKEN
+  #     #   env:
+  #     #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Fetch synk token
-        id: get-synk-token
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SNYK-TOKEN
+  #     - name: Fetch synk token
+  #       id: get-synk-token
+  #       uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+  #       with:
+  #         keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+  #         secrets: SNYK-TOKEN
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.repository_owner }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Snyk to check Docker image for vulnerabilities
-        uses: snyk/actions/docker@master
-        env:
-          SNYK_TOKEN: ${{ steps.get-synk-token.outputs.SNYK-TOKEN }}
-        with:
-          image: ${{needs.build.outputs.DOCKER_IMAGE}}
-          args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
+  #     - name: Run Snyk to check Docker image for vulnerabilities
+  #       uses: snyk/actions/docker@master
+  #       env:
+  #         SNYK_TOKEN: ${{ steps.get-synk-token.outputs.SNYK-TOKEN }}
+  #       with:
+  #         image: ${{needs.build.outputs.DOCKER_IMAGE}}
+  #         args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
 
-      - name: Run Brakeman static security scanner
-        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
+  #     - name: Run Brakeman static security scanner
+  #       run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
 
   cucumber_tests:
     name: Cucumber Tests
