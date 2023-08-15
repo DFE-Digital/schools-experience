@@ -37,21 +37,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SLACK-WEBHOOK
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      # - name: Fetch Slack Webhook Value
-      #   id: get-slack-webhook
-      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-      #   with:
-      #     keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-      #     secrets: SLACK-WEBHOOK
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -96,14 +87,14 @@ jobs:
           build-args:
                  SHA=${{ steps.sha.outputs.short }}
 
-      # - name: Slack Notification
-      #   if: failure() && github.ref == 'refs/heads/master'
-      #   uses: rtCamp/action-slack-notify@master
-      #   env:
-      #      SLACK_COLOR: ${{env.SLACK_ERROR}}
-      #      SLACK_MESSAGE: 'There has been a failure building the application'
-      #      SLACK_TITLE: 'Failure Building Application'
-      #      SLACK_WEBHOOK: ${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}
+      - name: Slack Notification
+        if: failure() && github.ref == 'refs/heads/master'
+        uses: rtCamp/action-slack-notify@master
+        env:
+           SLACK_COLOR: ${{env.SLACK_ERROR}}
+           SLACK_MESSAGE: 'There has been a failure building the application'
+           SLACK_TITLE: 'Failure Building Application'
+           SLACK_WEBHOOK: ${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}
 
 
   spec_tests:
@@ -120,22 +111,13 @@ jobs:
       - uses: Azure/login@v1
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #  change to use new action
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SLACK-WEBHOOK
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      # - name: Fetch Slack Webhook Value
-      #   id: get-slack-webhook
-      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-      #   with:
-      #     keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-      #     secrets: SLACK-WEBHOOK
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -208,7 +190,7 @@ jobs:
   #       id: get-synk-token
   #       uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
   #       with:
-  #         keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+  #         keyvault: ${{ secrets.INF_KEY_VAULT}}
   #         secrets: SNYK-TOKEN
 
   #     - name: Login to GitHub Container Registry
