@@ -46,12 +46,12 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK
+      # - name: Fetch Slack Webhook Value
+      #   id: get-slack-webhook
+      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      #   with:
+      #     keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+      #     secrets: SLACK-WEBHOOK
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -96,15 +96,15 @@ jobs:
           build-args:
                  SHA=${{ steps.sha.outputs.short }}
 
-      - name: Slack Notification
-        if: failure() && github.ref == 'refs/heads/master'
-        uses: rtCamp/action-slack-notify@master
-        env:
-           SLACK_COLOR: ${{env.SLACK_ERROR}}
-           SLACK_MESSAGE: 'There has been a failure building the application'
-           SLACK_TITLE: 'Failure Building Application'
-           SLACK_WEBHOOK: ${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}
-          #  replace  92 with gitapi example
+      # - name: Slack Notification
+      #   if: failure() && github.ref == 'refs/heads/master'
+      #   uses: rtCamp/action-slack-notify@master
+      #   env:
+      #      SLACK_COLOR: ${{env.SLACK_ERROR}}
+      #      SLACK_MESSAGE: 'There has been a failure building the application'
+      #      SLACK_TITLE: 'Failure Building Application'
+      #      SLACK_WEBHOOK: ${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}
+
 
   spec_tests:
     name: Unit Tests
@@ -130,12 +130,12 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK
+      # - name: Fetch Slack Webhook Value
+      #   id: get-slack-webhook
+      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      #   with:
+      #     keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+      #     secrets: SLACK-WEBHOOK
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -466,12 +466,12 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK, SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
+      # - name: Fetch Slack Webhook Value
+      #   id: get-slack-webhook
+      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      #   with:
+      #     keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+      #     secrets: SLACK-WEBHOOK, SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
 
       - name: Login to Cloud Foundry
         if: matrix.environment == 'Review'
@@ -484,8 +484,7 @@ jobs:
               STATIC_ROUTE=$( ${GITHUB_WORKSPACE}/script/get_next_mapping.sh ${{env.REVIEW_APPLICATION}}-${{github.event.number}} )
               echo "STATIC_ROUTE=${STATIC_ROUTE}" >> $GITHUB_ENV
 
-      - name: Trigger Deployment to ${{matrix.environment}}
-        if: matrix.environment == 'Review'
+      - name: Trigger Deployment to development_aks
         uses: ./.github/workflows/actions/deploy
         with:
           environment: development_aks
