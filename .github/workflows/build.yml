@@ -87,7 +87,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    # environment: ${{ github.event.inputs.environment }}
+    environment: ${{ github.event.inputs.environment }}
     outputs:
       DOCKER_IMAGE: ${{ steps.docker.outputs.DOCKER_IMAGE }}
 
@@ -101,6 +101,13 @@ jobs:
       - uses: Azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
 
       - name: Fetch Slack Webhook Value
         id: get-slack-webhook
