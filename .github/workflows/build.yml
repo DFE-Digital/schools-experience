@@ -492,7 +492,7 @@ jobs:
           RELEASE_ID: ${{ steps.release.outputs.id }}
           TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-  development:
+  deployments:
     name:  Deployment
     needs: [ prepare ]
     strategy:
@@ -535,9 +535,6 @@ jobs:
           environment: ${{matrix.environment}}
           sha: ${{needs.build.outputs.image_tag_sha}}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-
-
-
 
       - name: Slack Notification
         if: failure() && github.ref == 'refs/heads/master'
