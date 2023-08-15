@@ -47,7 +47,7 @@ runs:
       shell: bash
       run: |
         echo "${{ inputs.sha }}"
-
+        echo "terraform version is ${{ env.TERRAFORM_VERSION }}"
     - name: Terraform init, plan & apply
       shell: bash
       run: make ci ${{ inputs.environment }} terraform-apply
