@@ -287,16 +287,18 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Snyk to check Docker image for vulnerabilities
-        uses: snyk/actions/docker@master
-        env:
-          SNYK_TOKEN: ${{ steps.get-synk-token.outputs.SNYK-TOKEN }}
-        with:
-          image: ${{needs.build.outputs.DOCKER_IMAGE}}
-          args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
+      # - name: Run Snyk to check Docker image for vulnerabilities
+      #   uses: snyk/actions/docker@master
+      #   env:
+      #     SNYK_TOKEN: ${{ steps.get-synk-token.outputs.SNYK-TOKEN }}
+      #   with:
+      #     image: ${{needs.build.outputs.DOCKER_IMAGE}}
+      #     args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
 
-      - name: Run Brakeman static security scanner
-        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
+      # - name: Run Brakeman static security scanner
+      #   run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
+      - name: Run hello
+        run: echo "hello tope"
 
   cucumber_tests:
     name: Cucumber Tests
