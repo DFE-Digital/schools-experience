@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     outputs:
-      DOCKER_IMAGE: ${{steps.docker_image.outputs.DOCKER_IMAGE}}
+      DOCKER_IMAGE: ${{steps.docker.outputs.DOCKER_IMAGE}}
       image_tag_sha: "sha-${{ steps.vars.outputs.sha_short }}"
     steps:
       - name: Check out the repo
