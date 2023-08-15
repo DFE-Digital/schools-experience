@@ -375,7 +375,7 @@ jobs:
 
   prepare:
     name: Configure Matrix Deployments
-    needs: [ sonarcloud ]
+    # needs: [ sonarcloud ]
     runs-on: ubuntu-latest
     outputs:
       matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
