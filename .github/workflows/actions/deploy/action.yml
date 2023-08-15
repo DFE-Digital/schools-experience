@@ -51,6 +51,6 @@ runs:
         echo terraform version
     - name: Terraform init, plan & apply
       shell: bash
-      run: make ci ${{ inputs.environment }} terraform-apply
+      run: make ci ${{ inputs.environment }} terraform-apply-aks
       env:
         IMAGE_TAG: ${{ inputs.sha }}
