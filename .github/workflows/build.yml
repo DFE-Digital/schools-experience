@@ -419,12 +419,12 @@ jobs:
 
   deployments:
     name: Deployments
-    strategy:
-      max-parallel: 1
-      matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
+    # strategy:
+      # max-parallel: 1
+      # matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
     environment:
-       name: ${{matrix.environment}}
-    concurrency: ${{matrix.environment}}_${{github.event.number}}
+       name: development_aks
+    # concurrency: ${{matrix.environment}}_${{github.event.number}}
     needs: [ prepare ]
     runs-on: ubuntu-latest
     steps:
@@ -439,19 +439,19 @@ jobs:
            REFERENCE=${{github.ref}}
            echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
 
-      - name: Install Cloud Foundry
-        if: matrix.environment == 'Review'
-        run: |
-          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          sudo apt-get update
-          sudo apt-get install cf7-cli
+      # - name: Install Cloud Foundry
+      #   if: matrix.environment == 'Review'
+      #   run: |
+      #     wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+      #     echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+      #     sudo apt-get update
+      #     sudo apt-get install cf7-cli
 
-      - name: Set Review specific variables
-        if: matrix.environment == 'Review'
-        run: |
-           REFERENCE=${{github.event.pull_request.head.ref}}
-           echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
+      # - name: Set Review specific variables
+      #   if: matrix.environment == 'Review'
+      #   run: |
+      #      REFERENCE=${{github.event.pull_request.head.ref}}
+      #      echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
 
       - uses: Azure/login@v1
         with:
@@ -488,7 +488,7 @@ jobs:
         if: matrix.environment == 'Review'
         uses: ./.github/workflows/actions/deploy
         with:
-          environment: ${{matrix.environment}}
+          environment: development_aks
           sha:  ${{ github.sha }}
           pr:   ${{github.event.number}}
           static:  ${{env.STATIC_ROUTE}}
@@ -497,16 +497,16 @@ jobs:
           ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
           GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Trigger Deployment to ${{matrix.environment}}
-        if: matrix.environment != 'Review'
-        uses: ./.github/workflows/actions/deploy
-        with:
-          environment: ${{matrix.environment}}
-          sha:  ${{ github.sha }}
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-          KEY_VAULT:         ${{ secrets.KEY_VAULT }}
-          ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+      # - name: Trigger Deployment to ${{matrix.environment}}
+      #   if: matrix.environment != 'Review'
+      #   uses: ./.github/workflows/actions/deploy
+      #   with:
+      #     environment: ${{matrix.environment}}
+      #     sha:  ${{ github.sha }}
+      #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      #     KEY_VAULT:         ${{ secrets.KEY_VAULT }}
+      #     ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
+      #     GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
       - name: Determine DfE Sign In Message
         uses: haya14busa/action-cond@v1
