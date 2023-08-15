@@ -190,6 +190,7 @@ jobs:
 
   spec_tests:
     name: Unit Tests
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
@@ -255,6 +256,7 @@ jobs:
 
   security_tests:
     name: Security Tests
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
@@ -295,6 +297,7 @@ jobs:
 
   cucumber_tests:
     name: Cucumber Tests
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     needs: [ build ]
     strategy:
@@ -343,6 +346,7 @@ jobs:
 
   selenium_cucumber_tests:
     name: Chrome Cucumber Tests
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     needs: [ build ]
     strategy:
@@ -391,6 +395,7 @@ jobs:
           path: ${{ github.workspace }}/out
   sonarcloud:
     name: SonarCloud
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     needs: [ selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
     steps:
@@ -419,7 +424,7 @@ jobs:
         id: get-sonar-token
         uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
         with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
           secrets: SONAR-TOKEN
 
       - name: Download Test Artifacts
