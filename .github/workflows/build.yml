@@ -100,12 +100,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK
+      # - name: Fetch Slack Webhook Value
+      #   id: get-slack-webhook
+      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      #   with:
+      #     keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+      #     secrets: SLACK-WEBHOOK
 
       - name: Bring up Docker compose Stack
         run: docker-compose -f docker-compose-paas.yml up -d
