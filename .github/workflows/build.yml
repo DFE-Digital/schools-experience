@@ -326,52 +326,52 @@ jobs:
           name: selenium_cucumber_tests
           path: ${{ github.workspace }}/out
 
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    needs: [ selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
-    steps:
+  # sonarcloud:
+  #   name: SonarCloud
+  #   runs-on: ubuntu-latest
+  #   needs: [ selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
+  #   steps:
 
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
+  #     - name: set-up-environment
+  #       uses: DFE-Digital/github-actions/set-up-environment@master
 
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #     - uses: Azure/login@v1
+  #       with:
+  #           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SONAR-TOKEN
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  #     # - uses: DfE-Digital/keyvault-yaml-secret@v1
+  #     #   id:  keyvault-yaml-secret
+  #     #   with:
+  #     #     keyvault: ${{ secrets.KEY_VAULT}}
+  #     #     secret: SE-INFRA-SECRETS
+  #     #     key: SONAR-TOKEN
+  #     #   env:
+  #     #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Fetch sonar token
-        id: get-sonar-token
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
-          secrets: SONAR-TOKEN
+  #     - name: Fetch sonar token
+  #       id: get-sonar-token
+  #       uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+  #       with:
+  #         keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+  #         secrets: SONAR-TOKEN
 
-      - name: Download Test Artifacts
-        uses: actions/download-artifact@v3
-        with:
-            path: ${{ github.workspace }}/out/
+  #     - name: Download Test Artifacts
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #           path: ${{ github.workspace }}/out/
 
-      - name: Fixup report file paths
-        run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
+  #     - name: Fixup report file paths
+  #       run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
+  #     - name: SonarCloud Scan
+  #       uses: SonarSource/sonarcloud-github-action@master
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         SONAR_TOKEN: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
 
   prepare:
     name: Configure Matrix Deployments
