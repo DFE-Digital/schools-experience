@@ -50,7 +50,7 @@ jobs:
         id: get-slack-webhook
         uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
         with:
-          keyvault: ${{ secrets.INFRA_KEY_VAULT}}
+          keyvault: ${{ secrets.KEY_VAULT}}
           secrets: SLACK-WEBHOOK
 
       - name: Lint Dockerfile
