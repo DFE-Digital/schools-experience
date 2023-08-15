@@ -22,7 +22,7 @@ runs:
       run: |
         echo  ls terraform
         tf_vars_file=terraform/aks/config/${{ inputs.environment }}.tfvars.json
-        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/provider.tf | grep -o [0-9\.]*)
+        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/terraform.tf | grep -o [0-9\.]*)
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
         echo "aks_app_environment=$(jq -r '.environment' ${tf_vars_file})" >> $GITHUB_ENV
         echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
