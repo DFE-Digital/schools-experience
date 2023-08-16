@@ -32,14 +32,14 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Fetch sonar token
-        id: get-sonar-token
+        id: get-sonar-token-v1
         uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
         with:
           keyvault: ${{ secrets.INF_KEY_VAULT}}
           secrets: SONAR-TOKEN
       - name: display sonar token value
-        id: sha
-        run:  echo "sonar token value is -  ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}"
+        id: dislay-sonar
+        run:  echo "sonar token value is -  ${{ steps.get-sonar-token-v1.outputs.SONAR-TOKEN }}"
 
 
       - name: Fetch Slack Webhook Value
