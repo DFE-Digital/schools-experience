@@ -36,7 +36,7 @@ jobs:
         uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
         with:
           keyvault: ${{ secrets.INF_KEY_VAULT}}
-          secrets: SONAR-TOKEN
+          secrets: SONAR-TOKEN,SLACK-WEBHOOK
       - name: display sonar token value
         id: dislay-sonar
         run:  echo "sonar token value is -  ${{ steps.get-sonar-token-v1.outputs.SONAR-TOKEN }}"
