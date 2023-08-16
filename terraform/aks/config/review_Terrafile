@@ -1,3 +1,3 @@
 aks:
     source:  "https://github.com/DFE-Digital/terraform-modules"
-    version: "main"
+    version: "573-terraform-modules-postgres-exclude-from-passwords"

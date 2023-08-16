@@ -461,7 +461,7 @@ jobs:
         run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development_aks\" , \"staging_aks\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
-        if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
+        # if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
         run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review_aks\", \"development_aks\"]}" >> $GITHUB_ENV
 
       - name: Generate Tag from PR Number
@@ -496,30 +496,30 @@ jobs:
     name:  Deployment
     needs: [ prepare ]
     strategy:
-      # max-parallel: 1
+      max-parallel: 1
       matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
     environment:
        name: ${{matrix.environment}}
       #  name: Development_aks
-    # concurrency: ${{matrix.environment}}_${{github.event.number}}
+    concurrency: ${{matrix.environment}}_${{github.event.number}}
     runs-on: ubuntu-latest
     steps:
-      # - name: Check out the repo
-      #   uses: actions/checkout@v3
+      - name: Check out the repo
+        uses: actions/checkout@v3
 
-      # - name: set-up-environment
-      #   uses: DFE-Digital/github-actions/set-up-environment@master
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
 
-      # - uses: Azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - name: Fetch Slack Webhook Value
-      #   id: get-slack-webhook
-      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-      #   with:
-      #     keyvault: ${{ secrets.INF_KEY_VAULT}}
-      #     secrets: SLACK-WEBHOOK
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
 
       - name: Bring up Docker compose Stack
         run: docker-compose -f docker-compose-paas.yml up -d
@@ -538,14 +538,14 @@ jobs:
           sha: ${{needs.build.outputs.image_tag_sha}}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - name: Slack Notification
-      #   if: failure() && github.ref == 'refs/heads/master'
-      #   uses: rtCamp/action-slack-notify@master
-      #   env:
-      #     SLACK_COLOR: ${{env.SLACK_FAILURE}}
-      #     SLACK_MESSAGE: 'The pipeline has failed to build the API image'
-      #     SLACK_TITLE: 'Failure to Build API '
-      #     SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
+      - name: Slack Notification
+        if: failure() && github.ref == 'refs/heads/master'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_FAILURE}}
+          SLACK_MESSAGE: 'The pipeline has failed to build the API image'
+          SLACK_TITLE: 'Failure to Build API '
+          SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
 
 
 
