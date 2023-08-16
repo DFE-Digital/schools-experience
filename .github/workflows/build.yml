@@ -534,7 +534,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           # environment: ${{matrix.environment}}
-          environment: Development_aks
+          environment: development_aks
           sha: ${{needs.build.outputs.image_tag_sha}}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 

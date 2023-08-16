@@ -55,7 +55,7 @@ runs:
         echo terraform version
 
     - name: Terraform init, plan & apply
-      if: ${{ inputs.sha }} == "Review_aks"
+      if: ${{ inputs.sha }} == "review_aks"
       shell: bash
       run: make ci ${{ inputs.environment }} terraform-plan-aks PR_NUMBER=${{ inputs.pr }}
       env:
@@ -63,7 +63,7 @@ runs:
 
 
     - name: Terraform init, plan & apply
-      if: ${{ inputs.sha }} != "Review_aks"
+      if: ${{ inputs.sha }} != "review_aks"
       shell: bash
       run: make ci ${{ inputs.environment }} terraform-plan-aks
       env:
