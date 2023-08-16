@@ -1,0 +1,505 @@
+name: Build and Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        type: choice
+        default: development_aks
+        options:
+        - development_aks
+        - test_aks
+
+jobs:
+
+  build:
+    name: Build and push to Github Container Registry
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    outputs:
+      DOCKER_IMAGE: ${{steps.docker.outputs.DOCKER_IMAGE}}
+      image_tag_sha: "sha-${{ steps.sha.outputs.short }}"
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch sonar token
+        id: get-sonar-token-v1
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SONAR-TOKEN
+      - name: display sonar token value
+        id: dislay-sonar
+        run:  echo "sonar token value is -  ${{ steps.get-sonar-token-v1.outputs.SONAR-TOKEN }}"
+
+
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
+
+      - name: Lint Dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+             dockerfile: "Dockerfile"
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+
+      - name: Get Short SHA
+        id: sha
+        run:  echo "short=$(echo $GITHUB_SHA | cut -c -7)" >> $GITHUB_OUTPUT
+
+      - name: Set DOCKER_IMAGE environment variable
+        id:   docker
+        run: |
+             if [ "${{github.ref}}" == "refs/heads/master" ]
+             then
+                echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
+                echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:master" >> $GITHUB_OUTPUT
+             else
+                echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
+                echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
+             fi
+
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push to GitHub Container Registry
+        uses: docker/build-push-action@v3
+        with:
+          cache-from: ${{ env.DOCKER_REPOSITORY }}:master
+          tags: |
+                 ${{ steps.docker.outputs.DOCKER_IMAGE }}
+                 ${{ steps.docker.outputs.DOCKER_MASTER }}
+          push: true
+          build-args:
+                 SHA=${{ steps.sha.outputs.short }}
+
+      - name: Slack Notification
+        if: failure() && github.ref == 'refs/heads/master'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_FAILURE}}
+          SLACK_MESSAGE: 'The pipeline has failed to build the API image'
+          SLACK_TITLE: 'Failure to Build API '
+          SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
+
+  spec_tests:
+    name: Unit Tests
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bring up Docker compose Stack
+        run: docker-compose -f docker-compose-paas.yml up -d
+        env:
+          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+
+      - name: Lint Ruby
+        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
+
+      - name: Keep Rubocop output
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Rubocop_results
+          path: ${{ github.workspace }}/out/rubocop-result.json
+
+      - name: Run Specs
+        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
+        env:
+          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+
+      - name:  Keep Unit Tests Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit_tests
+          path: ${{ github.workspace }}/out/test-report.xml
+
+
+      - name:  Keep Code Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Code_Coverage
+          path: ${{ github.workspace }}/coverage/coverage.json
+
+
+  security_tests:
+    name: Security Tests
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch synk token
+        id: get-synk-token
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SNYK-TOKEN
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Run Snyk to check Docker image for vulnerabilities
+      #   uses: snyk/actions/docker@master
+      #   env:
+      #     SNYK_TOKEN: ${{ steps.get-synk-token.outputs.SNYK-TOKEN }}
+      #   with:
+      #     image: ${{needs.build.outputs.DOCKER_IMAGE}}
+      #     args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
+
+      - name: Run Brakeman static security scanner
+        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
+
+  cucumber_tests:
+    name: Cucumber Tests
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [1, 2]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Cucumber Tests
+        run: |-
+          docker-compose -f docker-compose-paas.yml run --rm \
+            -e RAILS_ENV \
+            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
+            -e NODE \
+            -e NODE_COUNT \
+            db-tasks -p ${PROFILE} cucumber
+        env:
+          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+          PROFILE: continuous_integration
+          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
+          NODE: ${{ matrix.node }}
+          NODE_COUNT: 2
+
+      - name:  Keep Unit Tests Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cucumber_tests
+          path: ${{ github.workspace }}/out
+
+  selenium_cucumber_tests:
+    name: Chrome Cucumber Tests
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [1, 2]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Cucumber Tests
+        run: |-
+          docker-compose -f docker-compose-paas.yml run --rm \
+            -e RAILS_ENV \
+            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
+            -e NODE \
+            -e NODE_COUNT \
+            school-experience -p ${PROFILE} cucumber
+        env:
+          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+          PROFILE: selenium
+          RAILS_ENV: test
+          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
+          NODE: ${{ matrix.node }}
+          NODE_COUNT: 2
+
+      - name:  Keep Unit Tests Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium_cucumber_tests
+          path: ${{ github.workspace }}/out
+
+  sonarcloud:
+    name: SonarCloud
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [ selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
+    steps:
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch sonar token
+        id: get-sonar-token
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SONAR-TOKEN
+
+      - name: Download Test Artifacts
+        uses: actions/download-artifact@v3
+        with:
+            path: ${{ github.workspace }}/out/
+
+      - name: Fixup report file paths
+        run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
+    #  sonar token empty hence error
+
+  prepare:
+    name: Configure Matrix Deployments
+    needs: [ sonarcloud ]
+    runs-on: ubuntu-latest
+    outputs:
+      matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
+      release_tag: ${{steps.tag_version.outputs.pr_number}}
+    steps:
+      - name: Set matrix environments (Push to master)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development_aks\" , \"staging_aks\"]}" >> $GITHUB_ENV
+
+      - name: Set matrix environments ( Review)
+        # if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
+        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review_aks\", \"development_aks\"]}" >> $GITHUB_ENV
+
+      - name: Generate Tag from PR Number
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        id: tag_version
+        uses: DFE-Digital/github-actions/GenerateReleaseFromSHA@master
+        with:
+          sha: ${{github.sha}}
+
+      - name: Create a GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && steps.tag_version.outputs.pr_found == 1
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.pr_number }}
+          body: ${{ steps.tag_version.outputs.pr_number }}
+          release_name: Release ${{ steps.tag_version.outputs.pr_number }}
+          commitish: ${{ github.sha}}
+          prerelease: false
+
+      - name: Copy PR Info to Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'  && steps.release.outputs.id
+        uses: DFE-Digital/github-actions/CopyPRtoRelease@master
+        with:
+          PR_NUMBER:  ${{ steps.tag_version.outputs.pr_number }}
+          RELEASE_ID: ${{ steps.release.outputs.id }}
+          TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  deployments:
+    name:  Deployment
+    needs: [ prepare ]
+    strategy:
+      max-parallel: 1
+      matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
+    environment:
+       name: ${{matrix.environment}}
+    concurrency: ${{matrix.environment}}_${{github.event.number}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
+
+      - name: Trigger ${{matrix.environment}} Deployment
+        if: matrix.environment == 'review_aks'
+        uses: ./.github/workflows/actions/deploy
+        with:
+          environment: ${{matrix.environment}}
+          sha: ${{needs.build.outputs.image_tag_sha}}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          pr:   ${{github.event.number}}
+
+      - name: Trigger ${{matrix.environment}} Deployment
+        if: matrix.environment != 'reviewks_aks'
+        uses: ./.github/workflows/actions/deploy
+        with:
+          environment: ${{matrix.environment}}
+          sha: ${{needs.build.outputs.image_tag_sha}}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Slack Notification
+        if: failure() && github.ref == 'refs/heads/master'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_FAILURE}}
+          SLACK_MESSAGE: 'The pipeline has failed to build the API image'
+          SLACK_TITLE: 'Failure to Build API '
+          SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
+
+
+  owasp:
+    name: 'OWASP Test'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    needs: [  deployments  ]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
+
+      # - uses: DfE-Digital/keyvault-yaml-secret@v1
+      #   id:  keyvault-yaml-secret
+      #   with:
+      #     keyvault: ${{ secrets.KEY_VAULT}}
+      #     secret: SE-SECRETS
+      #     key: SECURE_USERNAME , SECURE_PASSWORD
+      #   env:
+      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Fetch username and password
+        id: get-security-details
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.APP_KEY_VAULT}}
+          secrets: SECURE_USERNAME , SECURE_PASSWORD
+
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.4.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: 'owasp/zap2docker-stable'
+          target: 'https://${{ steps.get-security-details.outputs.SECURE_USERNAME }}:${{ steps.get-security-details.outputs.SECURE_PASSWORD }}@${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+
+      - name: Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+           SLACK_COLOR: ${{env.SLACK_FAILURE}}
+           SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
+           SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
+           SLACK_WEBHOOK: ${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}
