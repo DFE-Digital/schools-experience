@@ -458,11 +458,11 @@ jobs:
     steps:
       - name: Set matrix environments (Push to master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Development_aks\" , \"Staging_aks\"]}" >> $GITHUB_ENV
+        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development_aks\" , \"staging_aks\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
         if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
-        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Review_aks\", \"Development_aks\"]}" >> $GITHUB_ENV
+        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review_aks\", \"development_aks\"]}" >> $GITHUB_ENV
 
       - name: Generate Tag from PR Number
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -495,13 +495,13 @@ jobs:
   deployments:
     name:  Deployment
     needs: [ prepare ]
-    # strategy:
-    #   max-parallel: 1
-    #   matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
+    strategy:
+      max-parallel: 1
+      matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
     environment:
-      #  name: ${{matrix.environment}}
-       name: Development_aks
-    # concurrency: ${{matrix.environment}}_${{github.event.number}}
+       name: ${{matrix.environment}}
+      #  name: Development_aks
+    concurrency: ${{matrix.environment}}_${{github.event.number}}
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -533,8 +533,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          # environment: ${{matrix.environment}}
-          environment: development_aks
+          environment: ${{matrix.environment}}
+          # environment: development_aks
           sha: ${{needs.build.outputs.image_tag_sha}}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
