@@ -33,7 +33,7 @@ jobs:
 
       - name: Fetch sonar token
         id: get-sonar-token-v1
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@fix-fetch-secrets-bug
         with:
           keyvault: ${{ secrets.INF_KEY_VAULT}}
           secrets: SONAR-TOKEN
