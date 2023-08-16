@@ -496,12 +496,12 @@ jobs:
     name:  Deployment
     needs: [ prepare ]
     strategy:
-      max-parallel: 1
+      # max-parallel: 1
       matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
     environment:
        name: ${{matrix.environment}}
       #  name: Development_aks
-    concurrency: ${{matrix.environment}}_${{github.event.number}}
+    # concurrency: ${{matrix.environment}}_${{github.event.number}}
     runs-on: ubuntu-latest
     steps:
       # - name: Check out the repo
