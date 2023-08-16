@@ -1,0 +1,23 @@
+name: Deploy to AKS
+description: deploys application
+inputs:
+  environment:
+    description: Environment to deploy to
+    required: true
+  sha:
+    description: Commit sha to be deployed
+    required: true
+  azure-credentials:
+    description: Credentials for azure
+    required: true
+  pr:
+    description: Pull Request Reference
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Print environment
+      id: print-sha
+      shell: bash
+      run: |
+        echo "environment is ${{ inputs.environment }}"
