@@ -47,11 +47,6 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@master
 
-      # - name: Get Short SHA
-      #   id: vars
-      #   run: |
-      #     echo "sha_short=$(echo $GITHUB_SHA | cut -c -7)" >> $GITHUB_OUTPUT
-
       - name: Get Short SHA
         id: sha
         run:  echo "short=$(echo $GITHUB_SHA | cut -c -7)" >> $GITHUB_OUTPUT
@@ -68,31 +63,12 @@ jobs:
                 echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
              fi
 
-      # - name: Cache Docker layers
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: /tmp/.buildx-cache
-      #     key: ${{ runner.os }}-buildx-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-buildx-
-
       - name: Login to Github Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Build
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     push: ${{ github.ref == 'refs/heads/master' }}
-      #     builder: ${{ steps.buildx.outputs.name }}
-      #     cache-from: type=local,src=/tmp/.buildx-cache
-      #     cache-to: type=local,dest=/tmp/.buildx-cache
-      #     tags: |
-      #       ${{env.DOCKER_REPOSITORY}}:sha-${{ steps.vars.outputs.sha_short }}
-      #     build-args: GIT_COMMIT_SHA=${{ steps.vars.outputs.sha_short }}
 
       - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v3
@@ -113,83 +89,6 @@ jobs:
           SLACK_MESSAGE: 'The pipeline has failed to build the API image'
           SLACK_TITLE: 'Failure to Build API '
           SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
-
-  # build:
-  #   name: Build
-  #   runs-on: ubuntu-latest
-  #   # environment: ${{ github.event.inputs.environment }}
-  #   outputs:
-  #     DOCKER_IMAGE: ${{ steps.docker.outputs.DOCKER_IMAGE }}
-
-  #   steps:
-  #     - name: Check out the repo
-  #       uses: actions/checkout@v3
-
-  #     - name: set-up-environment
-  #       uses: DFE-Digital/github-actions/set-up-environment@master
-
-  #     - uses: Azure/login@v1
-  #       with:
-  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-  #     - name: Fetch Slack Webhook Value
-  #       id: get-slack-webhook
-  #       uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-  #       with:
-  #         keyvault: ${{ secrets.INF_KEY_VAULT}}
-  #         secrets: SLACK-WEBHOOK
-
-  #     - name: Lint Dockerfile
-  #       uses: brpaz/hadolint-action@master
-  #       with:
-  #            dockerfile: "Dockerfile"
-
-  #     - name: Set up Docker Buildx
-  #       id: buildx
-  #       uses: docker/setup-buildx-action@master
-
-  #     - name: Get Short SHA
-  #       id: sha
-  #       run:  echo "short=$(echo $GITHUB_SHA | cut -c -7)" >> $GITHUB_OUTPUT
-
-  #     - name: Set DOCKER_IMAGE environment variable
-  #       id:   docker
-  #       run: |
-  #            if [ "${{github.ref}}" == "refs/heads/master" ]
-  #            then
-  #               echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
-  #               echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:master" >> $GITHUB_OUTPUT
-  #            else
-  #               echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
-  #               echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
-  #            fi
-
-  #     - name: Login to GitHub Container Registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.repository_owner }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
-
-  #     - name: Build and push to GitHub Container Registry
-  #       uses: docker/build-push-action@v3
-  #       with:
-  #         cache-from: ${{ env.DOCKER_REPOSITORY }}:master
-  #         tags: |
-  #                ${{ steps.docker.outputs.DOCKER_IMAGE }}
-  #                ${{ steps.docker.outputs.DOCKER_MASTER }}
-  #         push: true
-  #         build-args:
-  #                SHA=${{ steps.sha.outputs.short }}
-
-  #     - name: Slack Notification
-  #       if: failure() && github.ref == 'refs/heads/master'
-  #       uses: rtCamp/action-slack-notify@master
-  #       env:
-  #          SLACK_COLOR: ${{env.SLACK_ERROR}}
-  #          SLACK_MESSAGE: 'There has been a failure building the application'
-  #          SLACK_TITLE: 'Failure Building Application'
-  #          SLACK_WEBHOOK: ${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}
 
   spec_tests:
     name: Unit Tests
@@ -287,18 +186,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Run Snyk to check Docker image for vulnerabilities
-      #   uses: snyk/actions/docker@master
-      #   env:
-      #     SNYK_TOKEN: ${{ steps.get-synk-token.outputs.SNYK-TOKEN }}
-      #   with:
-      #     image: ${{needs.build.outputs.DOCKER_IMAGE}}
-      #     args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
+      - name: Run Snyk to check Docker image for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ steps.get-synk-token.outputs.SNYK-TOKEN }}
+        with:
+          image: ${{needs.build.outputs.DOCKER_IMAGE}}
+          args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
 
-      # - name: Run Brakeman static security scanner
-      #   run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
-      - name: Run hello
-        run: echo "hello tope"
+      - name: Run Brakeman static security scanner
+        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
 
   cucumber_tests:
     name: Cucumber Tests
@@ -417,15 +314,6 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - uses: DfE-Digital/keyvault-yaml-secret@v1
-      #   id:  keyvault-yaml-secret
-      #   with:
-      #     keyvault: ${{ secrets.KEY_VAULT}}
-      #     secret: SE-INFRA-SECRETS
-      #     key: SONAR-TOKEN
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
       - name: Fetch sonar token
         id: get-sonar-token
         uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
@@ -441,11 +329,11 @@ jobs:
       - name: Fixup report file paths
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
 
-      # - name: SonarCloud Scan
-      #   uses: SonarSource/sonarcloud-github-action@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SONAR_TOKEN: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
     #  sonar token empty hence error
 
   prepare:
@@ -500,7 +388,6 @@ jobs:
       matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
     environment:
        name: ${{matrix.environment}}
-      #  name: Development_aks
     concurrency: ${{matrix.environment}}_${{github.event.number}}
     runs-on: ubuntu-latest
     steps:
@@ -534,7 +421,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           environment: ${{matrix.environment}}
-          # environment: development_aks
           sha: ${{needs.build.outputs.image_tag_sha}}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -548,12 +434,54 @@ jobs:
           SLACK_WEBHOOK: "${{ steps.get-slack-webhook.outputs.SLACK-WEBHOOK }}"
 
 
+  owasp:
+    name: 'OWASP Test'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    needs: [  deployments  ]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
 
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Fetch Slack Webhook Value
+        id: get-slack-webhook
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SLACK-WEBHOOK
 
+      # - uses: DfE-Digital/keyvault-yaml-secret@v1
+      #   id:  keyvault-yaml-secret
+      #   with:
+      #     keyvault: ${{ secrets.KEY_VAULT}}
+      #     secret: SE-SECRETS
+      #     key: SECURE_USERNAME , SECURE_PASSWORD
+      #   env:
+      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+      - name: Fetch username and password
+        id: get-security-details
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+        with:
+          keyvault: ${{ secrets.APP_KEY_VAULT}}
+          secrets: SECURE_USERNAME , SECURE_PASSWORD
 
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.4.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: 'owasp/zap2docker-stable'
+          target: 'https://${{ steps.get-security-details.outputs.SECURE_USERNAME }}:${{ steps.get-security-details.outputs.SECURE_PASSWORD }}@${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
 
 
 
