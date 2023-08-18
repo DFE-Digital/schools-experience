@@ -20,7 +20,7 @@ gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 6.0'
+gem 'puma', '~> 6.3'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'shakapacker', '6.6.0'
