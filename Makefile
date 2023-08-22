@@ -73,6 +73,10 @@ staging:
 	$(eval export KEY_VAULT=s105t01-kv)
 	$(eval export AZURE_SUBSCRIPTION=s105-schoolexperience-test)
 
+.PHONY: staging_aks
+staging_aks:
+	$(eval include global_config/staging.sh)
+
 .PHONY: production
 production:
 	$(eval export DEPLOY_ENV=production)
