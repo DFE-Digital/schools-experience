@@ -1,0 +1,15 @@
+name: Build and Deploy
+on:
+  push:
+    branches: [ test-az-login ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
