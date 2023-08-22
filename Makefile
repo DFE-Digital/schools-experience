@@ -1,6 +1,7 @@
 TERRAFILE_VERSION=0.8
 ARM_TEMPLATE_TAG=1.1.6
 RG_TAGS={"Product" : "Get Schools Experience"}
+DOMAIN_RG_TAGS={"Product" : "Teacher services cloud"}
 REGION=UK South
 SERVICE_NAME=get-schools-experience
 SERVICE_SHORT=gse
@@ -83,12 +84,14 @@ production:
 	$(eval export KEY_VAULT=s105p01-kv)
 	$(eval export AZURE_SUBSCRIPTION=s105-schoolexperience-production)
 
+.PHONY: production_aks
+production_aks:
+	$(eval include global_config/production.sh)
+
+
 .PHONY: ci
 ci:
 	$(eval AUTO_APPROVE=-auto-approve)
-
-set-azure-account:
-	[ "${SKIP_AZURE_LOGIN}" != "true" ] && az account set -s ${AZURE_SUBSCRIPTION} || true
 
 clean:
 	[ ! -f fetch_config.rb ]  \
@@ -166,11 +169,23 @@ terraform-destroy-aks: terraform-init-aks
 delete-state-file:
 	az storage blob delete --container-name pass-tfstate --delete-snapshots include --account-name s105d01devstorage -n ${PR_NAME}.tfstate
 
+domains:
+	$(eval include global_config/domains.sh)
+
+domains-composed-variables:
+	$(eval RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}domains-rg)
+	$(eval KEYVAULT_NAMES=["${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}domains-kv"])
+	$(eval STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}domainstf)
+	$(eval RG_TAGS=${DOMAIN_RG_TAGS})
+
+set-azure-account:
+	[ "${SKIP_AZURE_LOGIN}" != "true" ] && az account set -s ${AZURE_SUBSCRIPTION} || true
+
 set-what-if:
 	$(eval WHAT_IF=--what-if)
 
-arm-deployment: composed-variables set-azure-account
-	$(if ${KEYVAULT_NAMES}, $(eval KV_ARG=keyVaultNames=${KEYVAULT_NAMES}),)
+arm-deployment: set-azure-account
+	$(if ${KEYVAULT_NAMES}, $(eval KV_ARG='keyVaultNames=${KEYVAULT_NAMES}'),)
 
 	az deployment sub create --name "resourcedeploy-tsc-$(shell date +%Y%m%d%H%M%S)" \
 		-l "${REGION}" --template-uri "https://raw.githubusercontent.com/DFE-Digital/tra-shared-services/${ARM_TEMPLATE_TAG}/azure/resourcedeploy.json" \
@@ -180,6 +195,38 @@ arm-deployment: composed-variables set-azure-account
 			"enableKVPurgeProtection=${KV_PURGE_PROTECTION}" \
 			${WHAT_IF}
 
-deploy-arm-resources: arm-deployment
+deploy-arm-resources: composed-variables arm-deployment
 
-validate-arm-resources: set-what-if arm-deployment
+validate-arm-resources: composed-variables set-what-if arm-deployment
+
+deploy-domain-arm-resources: domains domains-composed-variables arm-deployment # make deploy-domain-arm-resources
+
+validate-domain-arm-resources: set-what-if domains domains-composed-variables arm-deployment # make validate-domain-arm-resources
+
+domains-infra-init: bin/terrafile domains-composed-variables set-azure-account
+	./bin/terrafile -p terraform/domains/infrastructure/vendor/modules -f terraform/domains/infrastructure/config/zones_Terrafile
+
+	terraform -chdir=terraform/domains/infrastructure init -reconfigure -upgrade \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=domains_infrastructure.tfstate
+
+domains-infra-plan: domains domains-infra-init # make domains-infra-plan
+	terraform -chdir=terraform/domains/infrastructure plan -var-file config/zones.tfvars.json
+
+domains-infra-apply: domains domains-infra-init # make domains-infra-apply
+	terraform -chdir=terraform/domains/infrastructure apply -var-file config/zones.tfvars.json ${AUTO_APPROVE}
+
+domains-init: bin/terrafile domains-composed-variables set-azure-account
+	./bin/terrafile -p terraform/domains/environment_domains/vendor/modules -f terraform/domains/environment_domains/config/${CONFIG}_Terrafile
+
+	terraform -chdir=terraform/domains/environment_domains init -upgrade -reconfigure \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=${ENVIRONMENT}.tfstate
+
+domains-plan: domains domains-init # make development_aks domains-plan
+	terraform -chdir=terraform/domains/environment_domains plan -var-file config/${CONFIG}.tfvars.json
+
+domains-apply: domains domains-init # make development_aks domains-apply
+	terraform -chdir=terraform/domains/environment_domains apply -var-file config/${CONFIG}.tfvars.json ${AUTO_APPROVE}
