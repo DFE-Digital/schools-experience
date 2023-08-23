@@ -1,7 +1,6 @@
 TERRAFILE_VERSION=0.8
 ARM_TEMPLATE_TAG=1.1.6
 RG_TAGS={"Product" : "Get Schools Experience"}
-DOMAIN_RG_TAGS={"Product" : "Teacher services cloud"}
 REGION=UK South
 SERVICE_NAME=get-schools-experience
 SERVICE_SHORT=gse
@@ -176,7 +175,6 @@ domains-composed-variables:
 	$(eval RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}domains-rg)
 	$(eval KEYVAULT_NAMES=["${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}domains-kv"])
 	$(eval STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}domainstf)
-	$(eval RG_TAGS=${DOMAIN_RG_TAGS})
 
 set-azure-account:
 	[ "${SKIP_AZURE_LOGIN}" != "true" ] && az account set -s ${AZURE_SUBSCRIPTION} || true
