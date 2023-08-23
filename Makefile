@@ -27,6 +27,8 @@ help:
 	echo "        make  development edit-app-secrets"
 	echo ""
 
+	@grep -E '^[a-zA-Z\._\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
 APPLICATION_SECRETS=SE-SECRETS
 INFRA_SECRETS=SE-INFRA-SECRETS
 
@@ -86,7 +88,6 @@ production:
 .PHONY: production_aks
 production_aks:
 	$(eval include global_config/production.sh)
-
 
 .PHONY: ci
 ci:
@@ -197,9 +198,9 @@ deploy-arm-resources: composed-variables arm-deployment
 
 validate-arm-resources: composed-variables set-what-if arm-deployment
 
-deploy-domain-arm-resources: domains domains-composed-variables arm-deployment # make deploy-domain-arm-resources
+deploy-domain-arm-resources: domains domains-composed-variables arm-deployment ## Deploy initial Azure resources (resource group, tfstate storage and key vault) will be deployed. Usage: make deploy-domain-arm-resources
 
-validate-domain-arm-resources: set-what-if domains domains-composed-variables arm-deployment # make validate-domain-arm-resources
+validate-domain-arm-resources: set-what-if domains domains-composed-variables arm-deployment ## Validate what Azure resources will be deployed. Usage: make validate-domain-arm-resources
 
 domains-infra-init: bin/terrafile domains-composed-variables set-azure-account
 	./bin/terrafile -p terraform/domains/infrastructure/vendor/modules -f terraform/domains/infrastructure/config/zones_Terrafile
@@ -209,10 +210,10 @@ domains-infra-init: bin/terrafile domains-composed-variables set-azure-account
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
 		-backend-config=key=domains_infrastructure.tfstate
 
-domains-infra-plan: domains domains-infra-init # make domains-infra-plan
+domains-infra-plan: domains domains-infra-init ## Terraform plan for DNS infrastructure (zone and front door. Usage: make domains-infra-plan
 	terraform -chdir=terraform/domains/infrastructure plan -var-file config/zones.tfvars.json
 
-domains-infra-apply: domains domains-infra-init # make domains-infra-apply
+domains-infra-apply: domains domains-infra-init ## Terraform apply for DNS infrastructure (zone and front door). Usage: make domains-infra-apply
 	terraform -chdir=terraform/domains/infrastructure apply -var-file config/zones.tfvars.json ${AUTO_APPROVE}
 
 domains-init: bin/terrafile domains-composed-variables set-azure-account
@@ -223,8 +224,8 @@ domains-init: bin/terrafile domains-composed-variables set-azure-account
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
 		-backend-config=key=${ENVIRONMENT}.tfstate
 
-domains-plan: domains domains-init # make development_aks domains-plan
+domains-plan: domains domains-init ## Terraform plan for DNS environment domains. Usage: make development_aks domains-plan
 	terraform -chdir=terraform/domains/environment_domains plan -var-file config/${CONFIG}.tfvars.json
 
-domains-apply: domains domains-init # make development_aks domains-apply
+domains-apply: domains domains-init ## Terraform apply for DNS environment domains. Usage: make development_aks domains-apply
 	terraform -chdir=terraform/domains/environment_domains apply -var-file config/${CONFIG}.tfvars.json ${AUTO_APPROVE}
