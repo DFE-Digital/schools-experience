@@ -1,8 +1,8 @@
 TERRAFILE_VERSION=0.8
 ARM_TEMPLATE_TAG=1.1.6
-RG_TAGS={"Product" : "Get Schools Experience"}
+RG_TAGS={"Product" : "Get School Experience"}
 REGION=UK South
-SERVICE_NAME=get-schools-experience
+SERVICE_NAME=get-school-experience
 SERVICE_SHORT=gse
 DOCKER_REPOSITORY=ghcr.io/dfe-digital/schools-experience
 
