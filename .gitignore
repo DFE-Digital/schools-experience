@@ -46,15 +46,12 @@ coverage
 # Visual Studio Code
 .vscode
 
-# devops files
+# DevOps files
 
 bin/terrafile
 
-# Downloaded terraform modules
-terraform/aks/vendor/
+# Terraform files
+vendor/
 
 .terraform
-terraform/application/vendor
-terraform/domains/environment_domains/vendor
 terraform.tfstate*
-terraform/application/.terraform.lock.hcl
