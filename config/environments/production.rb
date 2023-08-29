@@ -173,7 +173,7 @@ Rails.application.configure do
 
   config.x.git_api_token = ENV['GIT_API_TOKEN']
   config.x.api_client_cache_store = ActiveSupport::Cache::RedisCacheStore.new(namespace: "GIT-API-HTTP")
-  config.x.git_api_endpoint = "https://get-into-teaching-api-prod.london.cloudapps.digital/api"
+  config.x.git_api_endpoint = "https://getintoteachingapi-production.teacherservices.cloud/api"
 
   config.x.dfe_analytics = true
 end
