@@ -15,7 +15,10 @@ module "application_configuration" {
     PGSSLMODE        = local.postgres_ssl_mode
   }
   secret_variables = {
-    DATABASE_URL = var.deploy_postgres ? module.postgres[0].url : "${data.azurerm_key_vault_secret.db_url[0].value}"
+    DB_HOST      = var.deploy_postgres ? module.postgres[0].host : "${data.azurerm_key_vault_secret.db_host[0].value}"
+    DB_USERNAME  = var.deploy_postgres ? module.postgres[0].username : "${data.azurerm_key_vault_secret.db_username[0].value}"
+    DB_PASSWORD  = var.deploy_postgres ? module.postgres[0].password : "${data.azurerm_key_vault_secret.db_password[0].value}"
+    DB_DATABASE  = var.deploy_postgres ? module.postgres[0].name : "${data.azurerm_key_vault_secret.db_name[0].value}"
     REDIS_URL    = var.deploy_redis ?  module.redis-cache[0].url : "${data.azurerm_key_vault_secret.redis_url[0].value}"
   }
 }

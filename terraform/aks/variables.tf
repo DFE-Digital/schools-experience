@@ -52,31 +52,41 @@ variable "azure_enable_backup_storage" {
 }
 variable "deploy_redis" {
   default     = true
-  description = "whether Deploy redis or not"
+  description = "Whether Deploy redis or not"
 }
 
 variable "deploy_postgres" {
   default     = true
-  description = "whether Deploy postgres or not"
+  description = "Whether Deploy postgres or not"
 }
 variable "key_vault_name" {
   default     = null
-  description = "the name of the key vault to get postgres and redis"
+  description = "The name of the key vault to get postgres and redis"
 }
 variable "key_vault_resource_group" {
   default     = null
-  description = "the name of the key vault resorce group"
+  description = "The name of the key vault resorce group"
 }
-variable "review_url_db_name" {
+variable "review_db_dbname" {
   default     = null
-  description = "the name of the secret storing review db url"
+  description = "The name of the secret storing review db name"
+}
+variable "review_db_password" {
+  default     = null
+  description = "The name of the secret storing review db password"
+}
+variable "review_db_username" {
+  default     = null
+  description = "The name of the secret storing review db username"
+}
+variable "review_db_hostname" {
+  default     = null
+  description = "The name of the secret storing review db host"
 }
 variable "review_url_redis_name" {
     default     = null
-  description = "the name of the secret storing review redis url"
+  description = "The name of the secret storing review redis url"
 }
-
-
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)
 
