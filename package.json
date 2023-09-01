@@ -32,7 +32,7 @@
     "sass-loader": "^13.3.2",
     "semver": "^7.5.2",
     "shakapacker": "6.6.0",
-    "stimulus": "^3.2.1",
+    "stimulus": "^3.2.2",
     "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.9",
     "webpack": "^5.69.1",
