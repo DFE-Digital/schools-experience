@@ -135,16 +135,16 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-  #     - uses: Azure/login@v1
-  #       with:
-  #           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  #     - name: Login to GitHub Container Registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.repository_owner }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Fetch Slack Webhook Value
       #   id: get-slack-webhook
@@ -153,35 +153,35 @@ jobs:
       #     keyvault: ${{ secrets.INF_KEY_VAULT}}
       #     secrets: SLACK-WEBHOOK
 
-  #     - name: Lint Ruby
-  #       run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
+      - name: Lint Ruby
+        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
 
-  #     - name: Keep Rubocop output
-  #       if: always()
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: Rubocop_results
-  #         path: ${{ github.workspace }}/out/rubocop-result.json
+      - name: Keep Rubocop output
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Rubocop_results
+          path: ${{ github.workspace }}/out/rubocop-result.json
 
-  #     - name: Run Specs
-  #       run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
-  #       env:
-  #         IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+      - name: Run Specs
+        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
+        env:
+          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
-  #     - name:  Keep Unit Tests Results
-  #       if: always()
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: unit_tests
-  #         path: ${{ github.workspace }}/out/test-report.xml
+      - name:  Keep Unit Tests Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit_tests
+          path: ${{ github.workspace }}/out/test-report.xml
 
 
-  #     - name:  Keep Code Coverage Report
-  #       if: always()
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: Code_Coverage
-  #         path: ${{ github.workspace }}/coverage/coverage.json
+      - name:  Keep Code Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Code_Coverage
+          path: ${{ github.workspace }}/coverage/coverage.json
 
 
       - name:  Keep Code Coverage Report
@@ -201,12 +201,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-  #     - name: set-up-environment
-  #       uses: DFE-Digital/github-actions/set-up-environment@master
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
 
-  #     - uses: Azure/login@v1
-  #       with:
-  #           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Fetch synk token
         id: get-synk-token
@@ -215,12 +215,12 @@ jobs:
           keyvault: ${{ secrets.INF_KEY_VAULT}}
           secrets: SNYK-TOKEN
 
-  #     - name: Login to GitHub Container Registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.repository_owner }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Run Snyk to check Docker image for vulnerabilities
       #   uses: snyk/actions/docker@master
@@ -230,8 +230,8 @@ jobs:
       #     image: ${{needs.build.outputs.DOCKER_IMAGE}}
       #     args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
 
-  #     - name: Run Brakeman static security scanner
-  #       run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
+      - name: Run Brakeman static security scanner
+        run: docker run -t --rm -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  brakeman
 
   cucumber_tests:
     name: Cucumber Tests
@@ -245,41 +245,41 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-  #     - name: set-up-environment
-  #       uses: DFE-Digital/github-actions/set-up-environment@master
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
 
-  #     - uses: Azure/login@v1
-  #       with:
-  #           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  #     - name: Login to GitHub Container Registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.repository_owner }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Run Cucumber Tests
-  #       run: |-
-  #         docker-compose -f docker-compose-paas.yml run --rm \
-  #           -e RAILS_ENV \
-  #           -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
-  #           -e NODE \
-  #           -e NODE_COUNT \
-  #           db-tasks -p ${PROFILE} cucumber
-  #       env:
-  #         IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
-  #         PROFILE: continuous_integration
-  #         DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
-  #         NODE: ${{ matrix.node }}
-  #         NODE_COUNT: 2
+      - name: Run Cucumber Tests
+        run: |-
+          docker-compose -f docker-compose-paas.yml run --rm \
+            -e RAILS_ENV \
+            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
+            -e NODE \
+            -e NODE_COUNT \
+            db-tasks -p ${PROFILE} cucumber
+        env:
+          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+          PROFILE: continuous_integration
+          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
+          NODE: ${{ matrix.node }}
+          NODE_COUNT: 2
 
-  #     - name:  Keep Unit Tests Results
-  #       if: always()
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: cucumber_tests
-  #         path: ${{ github.workspace }}/out
+      - name:  Keep Unit Tests Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cucumber_tests
+          path: ${{ github.workspace }}/out
 
   selenium_cucumber_tests:
     name: Chrome Cucumber Tests
@@ -293,42 +293,42 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-  #     - name: set-up-environment
-  #       uses: DFE-Digital/github-actions/set-up-environment@master
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
 
-  #     - uses: Azure/login@v1
-  #       with:
-  #           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  #     - name: Login to GitHub Container Registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.repository_owner }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Run Cucumber Tests
-  #       run: |-
-  #         docker-compose -f docker-compose-paas.yml run --rm \
-  #           -e RAILS_ENV \
-  #           -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
-  #           -e NODE \
-  #           -e NODE_COUNT \
-  #           school-experience -p ${PROFILE} cucumber
-  #       env:
-  #         IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
-  #         PROFILE: selenium
-  #         RAILS_ENV: test
-  #         DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
-  #         NODE: ${{ matrix.node }}
-  #         NODE_COUNT: 2
+      - name: Run Cucumber Tests
+        run: |-
+          docker-compose -f docker-compose-paas.yml run --rm \
+            -e RAILS_ENV \
+            -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
+            -e NODE \
+            -e NODE_COUNT \
+            school-experience -p ${PROFILE} cucumber
+        env:
+          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+          PROFILE: selenium
+          RAILS_ENV: test
+          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
+          NODE: ${{ matrix.node }}
+          NODE_COUNT: 2
 
-  #     - name:  Keep Unit Tests Results
-  #       if: always()
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: selenium_cucumber_tests
-  #         path: ${{ github.workspace }}/out
+      - name:  Keep Unit Tests Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium_cucumber_tests
+          path: ${{ github.workspace }}/out
 
   sonarcloud:
     name: SonarCloud
