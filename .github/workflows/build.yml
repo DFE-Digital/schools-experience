@@ -372,7 +372,7 @@ jobs:
 
       - name: Get Short SHA
         id: run-ls
-        run:  ls /home/runner/work
+        run:  ls /home/runner/work/schools-experience
 
       - name: Fixup report file paths
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
