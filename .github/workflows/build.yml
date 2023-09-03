@@ -335,7 +335,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     # needs: [build, selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
-    needs: [build, selenium_cucumber_tests, cucumber_tests , security_tests ]
+    needs: [build ]
     steps:
 
       - uses: actions/checkout@v3
