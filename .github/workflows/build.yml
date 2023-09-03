@@ -11,15 +11,21 @@ on:
         - development_aks
         - test_aks
 
-jobs:
+permissions:
+  contents: write
+  deployments: write
+  issues: write
+  packages: write
+  pull-requests: write
 
+jobs:
   build:
-    name: Build and push to Github Container Registry
+    name: Build
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
+    # environment: ${{ github.event.inputs.environment }}
     outputs:
-      DOCKER_IMAGE: ${{steps.docker.outputs.DOCKER_IMAGE}}
-      image_tag_sha: "sha-${{ steps.sha.outputs.short }}"
+      DOCKER_IMAGE: ${{ steps.docker.outputs.DOCKER_IMAGE }}
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3

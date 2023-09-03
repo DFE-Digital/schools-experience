@@ -1,0 +1,65 @@
+name: Build and Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        type: choice
+        default: development_aks
+        options:
+        - development_aks
+        - test_aks
+
+jobs:
+
+  build:
+    name: Build and push to Github Container Registry
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    outputs:
+      DOCKER_IMAGE: ${{steps.docker.outputs.DOCKER_IMAGE}}
+      image_tag_sha: "sha-${{ steps.sha.outputs.short }}"
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch sonar token
+        id: get-sonar-token-v1
+        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@fix-fetch-secrets-bug
+        with:
+          keyvault: ${{ secrets.INF_KEY_VAULT}}
+          secrets: SONAR-TOKEN
+
+      - name: display sonar token value
+        id: dislay-sonar
+        run:  echo "sonar token value is -  ${{ steps.get-sonar-token-v1.outputs.SONAR-TOKEN }}"
+
+      - name: Retrieve Slack Webhook from KV
+        uses: azure/CLI@v1
+        id: fetch-slack-webhook-v1
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
+      - name: display sonar token value
+        id: dislay-sonar-v3
+        run:  echo "slack webhook value is -  ${{ steps.fetch-slack-webhook-v1.outputs.SLACK-WEBHOOK }}"
+
+      - name: Retrieve SYNK  from KV
+        uses: azure/CLI@v1
+        id: fetch-synk
+        with:
+          inlineScript: |
+            SYNK_VALUE=$(az keyvault secret show --name "SNYK-TOKEN" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "SNYK-TOKEN=$SYNK_VALUE" >> $GITHUB_OUTPUT
+      - name: display sonar token value
+        id: dislay-synk
+        run:  echo "slack webhook value is -  ${{ steps.fetch-synk.outputs.SNYK-TOKEN }}"
