@@ -25,7 +25,8 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     outputs:
       DOCKER_IMAGE: ${{ steps.docker.outputs.DOCKER_IMAGE }}
-
+      slack_webhook:  ${{ steps.fetch-slack-webhook-v1.outputs.SLACK-WEBHOOK }}
+      synk_token: ${{ steps.fetch-synk.outputs.SYNK-TOKEN }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -55,6 +56,14 @@ jobs:
         with:
           keyvault: ${{ secrets.INF_KEY_VAULT}}
           secrets: SLACK-WEBHOOK
+
+      - name: Retrieve SYNK  from KV
+        uses: azure/CLI@v1
+        id: fetch-synk
+        with:
+          inlineScript: |
+            SYNK_VALUE=$(az keyvault secret show --name "SNYK-TOKEN" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "SYNK-TOKEN=$SYNK_VALUE" >> $GITHUB_OUTPUT
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -694,7 +703,7 @@ jobs:
 
   prepare:
     name: Configure Matrix Deployments
-    # needs: [ sonarcloud ]
+    needs: [ sonarcloud ]
     runs-on: ubuntu-latest
     outputs:
       matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
