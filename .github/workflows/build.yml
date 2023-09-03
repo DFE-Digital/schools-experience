@@ -27,6 +27,7 @@ jobs:
       DOCKER_IMAGE: ${{ steps.docker.outputs.DOCKER_IMAGE }}
       slack_webhook:  ${{ steps.fetch-slack-webhook-v1.outputs.SLACK-WEBHOOK }}
       synk_token: ${{ steps.fetch-synk.outputs.SYNK-TOKEN }}
+      sonar_token: ${{ steps.get-sonar-token.outputs.SONAR-TOKEN }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -64,6 +65,14 @@ jobs:
           inlineScript: |
             SYNK_VALUE=$(az keyvault secret show --name "SNYK-TOKEN" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
             echo "SYNK-TOKEN=$SYNK_VALUE" >> $GITHUB_OUTPUT
+
+      - name: Retrieve SYNK  from KV
+        uses: azure/CLI@v1
+        id: get-sonar-token
+        with:
+          inlineScript: |
+            SONAR_VALUE=$(az keyvault secret show --name "SONAR-TOKEN" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "SONAR-TOKEN=$SONAR_VALUE" >> $GITHUB_OUTPUT
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -126,53 +135,53 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
+  #     - uses: Azure/login@v1
+  #       with:
+  #           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.repository_owner }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch Slack Webhook Value
-        id: get-slack-webhook
-        uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
-        with:
-          keyvault: ${{ secrets.INF_KEY_VAULT}}
-          secrets: SLACK-WEBHOOK
+      # - name: Fetch Slack Webhook Value
+      #   id: get-slack-webhook
+      #   uses: DFE-Digital/github-actions/fetch-key-vault-secrets@master
+      #   with:
+      #     keyvault: ${{ secrets.INF_KEY_VAULT}}
+      #     secrets: SLACK-WEBHOOK
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Lint Ruby
+  #       run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
 
-      - name: Bring up Docker compose Stack
-        run: docker-compose -f docker-compose-paas.yml up -d
-        env:
-          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
+  #     - name: Keep Rubocop output
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: Rubocop_results
+  #         path: ${{ github.workspace }}/out/rubocop-result.json
 
-      - name: Lint Ruby
-        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
+  #     - name: Run Specs
+  #       run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
+  #       env:
+  #         IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
-      - name: Keep Rubocop output
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: Rubocop_results
-          path: ${{ github.workspace }}/out/rubocop-result.json
+  #     - name:  Keep Unit Tests Results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: unit_tests
+  #         path: ${{ github.workspace }}/out/test-report.xml
 
-      - name: Run Specs
-        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
-        env:
-          IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
-      - name:  Keep Unit Tests Results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: unit_tests
-          path: ${{ github.workspace }}/out/test-report.xml
+  #     - name:  Keep Code Coverage Report
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: Code_Coverage
+  #         path: ${{ github.workspace }}/coverage/coverage.json
 
 
       - name:  Keep Code Coverage Report
@@ -327,7 +336,8 @@ jobs:
     name: SonarCloud
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
-    needs: [ selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
+    # needs: [build, selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
+    needs: [build, selenium_cucumber_tests, cucumber_tests , security_tests ]
     steps:
 
       - uses: actions/checkout@v3
