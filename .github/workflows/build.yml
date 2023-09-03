@@ -368,7 +368,8 @@ jobs:
       - name: Download Test Artifacts
         uses: actions/download-artifact@v3
         with:
-            path: ${{ github.workspace }}/out/
+            # path: ${{ github.workspace }}/out/
+            path: /home/runner/work/schools-experience/schools-experience/out/
 
       - name: Get Short SHA
         id: run-ls
