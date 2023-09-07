@@ -18,12 +18,4 @@ if ENV.key?("VCAP_APPLICATION")
       counter :invalid_authenticity_token, comment: "Counter for tracking invalid authenticity token (CSRF) errors"
     end
   end
-else
-  Yabeda.configure do
-    default_tag :app_instance, ENV["HOSTNAME"]
-    group :gse do
-      counter :sidekiq_heart_beat, comment: "Counter for a sidekiq job heart beat/monitoring"
-      counter :invalid_authenticity_token, comment: "Counter for tracking invalid authenticity token (CSRF) errors"
-    end
-  end
 end
