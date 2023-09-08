@@ -1,6 +1,8 @@
 variable "cluster" {
   description = "AKS cluster where this app is deployed. Either 'test' or 'production'"
 }
+
+variable "app_name" { default = null }
 variable "namespace" {
   description = "AKS namespace where this app is deployed"
 }
@@ -34,6 +36,16 @@ variable "enable_postgres_ssl" {
 variable "docker_image" {
   description = "Docker image full name to identify it in the registry. Includes docker registry, repository and tag e.g.: ghcr.io/dfe-digital/teacher-pay-calculator:673f6309fd0c907014f44d6732496ecd92a2bcd0"
 }
+
+variable "sidekiq_memory_max" {
+  description = "maximum memory of the sidekiq"
+}
+
+variable "sidekiq_replicas" {
+  description = "number of replicas of the sidekiq"
+}
+
+
 variable "external_url" {
   default     = null
   description = "Healthcheck URL for StatusCake monitoring"
@@ -63,6 +75,11 @@ variable "key_vault_name" {
   default     = null
   description = "The name of the key vault to get postgres and redis"
 }
+
+variable "infra_key_vault_name" {
+  default     = null
+  description = "The name of the key vault to get postgres and redis"
+}
 variable "key_vault_resource_group" {
   default     = null
   description = "The name of the key vault resorce group"
@@ -75,6 +92,24 @@ variable "review_db_password" {
   default     = null
   description = "The name of the secret storing review db password"
 }
+
+variable "worker_apps" {
+  type = map(
+    object({
+      startup_command = optional(list(string), [])
+      probe_command   = optional(list(string), [])
+      replicas        = optional(number, 1)
+      memory_max      = optional(string, "1Gi")
+    })
+  )
+  default = {}
+}
+
+variable "statuscake_alerts" {
+  type    = map(any)
+  default = {}
+}
+
 variable "review_db_username" {
   default     = null
   description = "The name of the secret storing review db username"
@@ -84,11 +119,16 @@ variable "review_db_hostname" {
   description = "The name of the secret storing review db host"
 }
 variable "review_url_redis_name" {
-    default     = null
+  default     = null
   description = "The name of the secret storing review redis url"
+}
+variable "statuscake_password_name" {
+  default     = "SC-PASSWORD"
+  description = "The name of the statuscake password"
 }
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)
 
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
+  app_name_suffix   = var.app_name == null ? var.environment : var.app_name
 }
