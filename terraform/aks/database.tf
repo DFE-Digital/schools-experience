@@ -1,7 +1,7 @@
 module "postgres" {
   count  = var.deploy_postgres ? 1 : 0
   source = "./vendor/modules/aks//aks/postgres"
-
+  
   namespace                   = var.namespace
   environment                 = var.environment
   azure_resource_prefix       = var.azure_resource_prefix
@@ -17,7 +17,6 @@ module "postgres" {
   azure_extensions            = ["POSTGIS", "address_standardizer", "plpgsql"]
   azure_enable_high_availability = var.postgres_enable_high_availability
   azure_maintenance_window       = var.azure_maintenance_window
-
 }
 
 module "redis-cache" {
