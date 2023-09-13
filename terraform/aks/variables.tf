@@ -84,6 +84,16 @@ variable "key_vault_resource_group" {
   default     = null
   description = "The name of the key vault resorce group"
 }
+variable "azure_maintenance_window" {
+  default = null
+}
+variable "postgres_flexible_server_sku" {
+default = "B_Standard_B1ms"
+}
+variable "postgres_enable_high_availability" {
+  default = false
+}
+
 variable "review_db_dbname" {
   default     = null
   description = "The name of the secret storing review db name"
