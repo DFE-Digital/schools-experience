@@ -35,7 +35,7 @@ gem 'rails_semantic_logger'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem "sidekiq", "< 7"
+gem "sidekiq", "< 8"
 gem "sidekiq-cron"
 
 # Metrics
