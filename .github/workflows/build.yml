@@ -840,12 +840,13 @@ jobs:
         with:
           environment: development_aks
           sha:  ${{ github.sha }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pr:   ${{github.event.number}}
-          static:  ${{env.STATIC_ROUTE}}
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-          KEY_VAULT:         ${{ secrets.KEY_VAULT }}
-          ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          # static:  ${{env.STATIC_ROUTE}}
+
+          # KEY_VAULT:         ${{ secrets.KEY_VAULT }}
+          # ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
+          # GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Trigger Deployment to ${{matrix.environment}}
       #   if: matrix.environment != 'Review'

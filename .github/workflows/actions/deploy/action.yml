@@ -13,15 +13,7 @@ inputs:
   pr:
     description: Pull Request Reference
     required: false
-  static:
-    description: Static Route
-    required: false
-  KEY_VAULT:
-    required: true
-  ARM_ACCESS_KEY:
-    required: true
-  GITHUB_TOKEN:
-    required: true
+
 outputs:
   deploy-url:
     value: ${{ steps.set_env_var.outputs.deploy_url }}
@@ -32,55 +24,17 @@ runs:
       id: set_env_var
       shell: bash
       run: |
+        echo  ls terraform
         tf_vars_file=terraform/aks/config/${{ inputs.environment }}.tfvars.json
-        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/provider.tf | grep -o [0-9\.]*)
+        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/terraform.tf | grep -o [0-9\.]*)
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
         echo "aks_app_environment=$(jq -r '.environment' ${tf_vars_file})" >> $GITHUB_ENV
         echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
         echo "namespace=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
-        echo RUN_TEST="true" >> $GITHUB_OUTPUT
-        if [ "${{inputs.environment }}" == "Review" ]
-        then
-            echo "control=review" >> $GITHUB_OUTPUT
-            pr_name="${{env.REVIEW_APPLICATION}}-${{inputs.pr}}"
-            echo "pr_name=${pr_name}" >> $GITHUB_OUTPUT
-            echo "healthcheck=${pr_name}" >> $GITHUB_OUTPUT
-            echo "key=${pr_name}" >> $GITHUB_OUTPUT
-            echo "TF_VAR_paas_application_name=${pr_name}" >> $GITHUB_ENV
-            echo "TF_VAR_static_route=${{ inputs.static }}" >> $GITHUB_ENV
-            echo "docker_image=${{env.DOCKER_REPOSITORY}}:review-${{steps.sha.outputs.short}}" >> $GITHUB_OUTPUT
-        fi
-
-
-        if [ "${{inputs.environment }}" == "Development" ]
-        then
-            echo "control=dev" >> $GITHUB_OUTPUT
-            echo "healthcheck=${{env.PAAS_APPLICATION_NAME}}-dev" >> $GITHUB_OUTPUT
-            echo "key=schools-experience.dev.terraform" >> $GITHUB_OUTPUT
-            echo "docker_image=${{env.DOCKER_REPOSITORY}}:sha-${{ steps.sha.outputs.short}}" >> $GITHUB_OUTPUT
-        fi
-
-        if [ "${{inputs.environment }}" == "Staging" ]
-        then
-            echo "control=staging" >> $GITHUB_OUTPUT
-            echo "healthcheck=${{env.PAAS_APPLICATION_NAME}}-staging" >> $GITHUB_OUTPUT
-            echo "key=schools-experience.staging.terraform" >> $GITHUB_OUTPUT
-            echo "docker_image=${{env.DOCKER_REPOSITORY}}:sha-${{ steps.sha.outputs.short}}" >> $GITHUB_OUTPUT
-        fi
-
-        if [ "${{inputs.environment }}" == "Production" ]
-        then
-            echo "control=production" >> $GITHUB_OUTPUT
-            echo "healthcheck=${{env.PAAS_APPLICATION_NAME}}-production" >> $GITHUB_OUTPUT
-            echo "key=schools-experience.production.terraform" >> $GITHUB_OUTPUT
-            echo "docker_image=${{env.DOCKER_REPOSITORY}}:sha-${{ steps.sha.outputs.short}}" >> $GITHUB_OUTPUT
-        fi
-
-        if [ "${{inputs.environment }}" == "Production" ]
-        then
-              echo "deploy_url=https://get-schools-experience-${{ env.aks_app_environment }}.teacherservices.cloud" >> $GITHUB_OUTPUT
+        if [[ $cluster == 'production' ]]; then
+              echo "deploy_url=https://getintoteachingapi-${{ env.aks_app_environment }}.teacherservices.cloud" >> $GITHUB_OUTPUT
             else
-              echo "deploy_url=https://get-schools-experience-${{ env.aks_app_environment }}.${cluster}.teacherservices.cloud" >> $GITHUB_OUTPUT
+              echo "deploy_url=https://getintoteachingapi-${{ env.aks_app_environment }}.${cluster}.teacherservices.cloud" >> $GITHUB_OUTPUT
         fi
 
     - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
@@ -97,9 +51,20 @@ runs:
       shell: bash
       run: |
         echo "${{ inputs.sha }}"
+        echo "terraform version is ${{ env.TERRAFORM_VERSION }}"
+        echo terraform version
 
     - name: Terraform init, plan & apply
+      if: ${{ inputs.environment }} == "review_aks"
       shell: bash
-      run: make ci ${{ inputs.environment }} terraform-apply
+      run: make ci ${{ inputs.environment }} terraform-plan-aks PR_NUMBER=${{ inputs.pr }}
+      env:
+        IMAGE_TAG: ${{ inputs.sha }}
+
+
+    - name: Terraform init, plan & apply
+      if: ${{ inputs.environment }} != "review_aks"
+      shell: bash
+      run: make ci ${{ inputs.environment }} terraform-plan-aks
       env:
         IMAGE_TAG: ${{ inputs.sha }}
