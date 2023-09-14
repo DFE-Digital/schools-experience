@@ -230,3 +230,7 @@ domains-plan: domains domains-init ## Terraform plan for DNS environment domains
 
 domains-apply: domains domains-init ## Terraform apply for DNS environment domains. Usage: make development_aks domains-apply
 	terraform -chdir=terraform/domains/environment_domains apply -var-file config/${CONFIG}.tfvars.json ${AUTO_APPROVE}
+
+bin/konduit.sh:
+	curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/main/scripts/konduit.sh -o bin/konduit.sh \
+		&& chmod +x bin/konduit.sh
