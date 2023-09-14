@@ -840,7 +840,7 @@ jobs:
         with:
           environment: development_aks
           sha:  ${{ github.sha }}
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pr:   ${{github.event.number}}
           # static:  ${{env.STATIC_ROUTE}}
 
