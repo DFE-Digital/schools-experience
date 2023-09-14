@@ -9,7 +9,8 @@ on:
         default: development_aks
         options:
         - development_aks
-        - test_aks
+        - staging_aks
+        - production_aks
 
 permissions:
   contents: write

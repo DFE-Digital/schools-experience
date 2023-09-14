@@ -1,0 +1,146 @@
+name: Backup and restore Postgres DB from PAAS to AKS
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options:
+          - pre-production
+          - production
+
+env:
+  BACKUP_ARTIFACT_NAME: ${{ inputs.environment }}-backup
+
+jobs:
+  backup:
+    name: Backup from PAAS
+    runs-on: ubuntu-latest
+
+    environment: ${{ inputs.environment }}
+
+    env:
+      ENVIRONMENT_NAME: ${{ inputs.environment }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - run: |
+        tfvars_file=terraform/paas/workspace_variables/${{ env.ENVIRONMENT_NAME }}.tfvars.json
+        echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tfvars_file})" >> $GITHUB_ENV
+        echo "PAAS_SPACE=$(jq -r '.paas_space' ${tfvars_file})" >> $GITHUB_ENV
+        echo "DB_NAME=$(jq -r '.postgres_database_name' ${tfvars_file})" >> $GITHUB_ENV
+
+    - uses: Azure/get-keyvault-secrets@v1
+      id: get_secrets
+      with:
+        keyvault: ${{ env.KEY_VAULT_NAME }}
+        secrets: "PAAS-USER,PAAS-PASSWORD"
+
+    - uses: DFE-Digital/github-actions/setup-cf-cli@master
+      with:
+        CF_USERNAME: ${{ steps.get_secrets.outputs.PAAS-USER }}
+        CF_PASSWORD: ${{ steps.get_secrets.outputs.PAAS-PASSWORD }}
+        CF_SPACE_NAME: ${{ env.PAAS_SPACE }}
+        INSTALL_CONDUIT: true
+
+    - uses: DFE-Digital/github-actions/install-postgres-client@master
+
+    - name: Backup database
+      run: |
+        exclude_arg=""
+
+        case "${{ env.ENVIRONMENT_NAME }}" in
+        dev | test)
+          exclude_arg="--exclude-table entity_changes_journals"
+          ;;
+        esac
+
+        cf conduit ${{ env.DB_NAME }} -- pg_dump -E utf8 --clean --compress=1 --if-exists --no-owner --no-privileges --verbose -f backup.sql.gz --exclude-table users $exclude_arg
+
+    - name: Upload backup
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.BACKUP_ARTIFACT_NAME }}
+        path: backup.sql.gz
+        retention-days: 1
+
+  restore:
+    name: Restore to AKS
+    runs-on: ubuntu-latest
+    needs: backup
+
+    environment: ${{ inputs.environment }}_aks
+
+    env:
+      ENVIRONMENT_NAME: ${{ inputs.environment }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - run: |
+        test_cluster_rg=s189t01-tsc-ts-rg
+        test_cluster_name=s189t01-tsc-test-aks
+        prod_cluster_rg=s189p01-tsc-pd-rg
+        prod_cluster_name=s189p01-tsc-production-aks
+
+        case "${ENVIRONMENT_NAME}" in
+        dev)
+          echo "cluster_rg=$test_cluster_rg" >> $GITHUB_ENV
+          echo "cluster_name=$test_cluster_name" >> $GITHUB_ENV
+          echo "key_vault_name=s189t01-trs-dv-inf-kv" >> $GITHUB_ENV
+          ;;
+        test)
+          echo "cluster_rg=$test_cluster_rg" >> $GITHUB_ENV
+          echo "cluster_name=$test_cluster_name" >> $GITHUB_ENV
+          echo "key_vault_name=s189t01-trs-ts-inf-kv" >> $GITHUB_ENV
+          ;;
+        pre-production)
+          echo "cluster_rg=$test_cluster_rg" >> $GITHUB_ENV
+          echo "cluster_name=$test_cluster_name" >> $GITHUB_ENV
+          echo "key_vault_name=s189t01-trs-pp-inf-kv" >> $GITHUB_ENV
+          ;;
+        production)
+          echo "cluster_rg=$prod_cluster_rg" >> $GITHUB_ENV
+          echo "cluster_name=$prod_cluster_name" >> $GITHUB_ENV
+          echo "key_vault_name=s189p01-trs-pd-inf-kv" >> $GITHUB_ENV
+          ;;
+        *)
+          echo "unknown cluster"
+          ;;
+        esac
+
+    - uses: azure/setup-kubectl@v3
+
+    - run: |
+        az aks get-credentials -g ${{ env.cluster_rg }} -n ${{ env.cluster_name }}
+        make install-konduit
+
+    - name: Download backup
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ env.BACKUP_ARTIFACT_NAME }}
+
+    - name: Restore database
+      run: bin/konduit.sh -k ${{ env.key_vault_name }} -d trs -i backup.sql.gz -c trs-${{ env.ENVIRONMENT_NAME }}-ui -- psql
+
+    - name: Remove PaaS event triggers
+      shell: bash
+      run: |
+        bin/konduit.sh -k ${{ env.key_vault_name }} -d trs trs-${{ env.ENVIRONMENT_NAME }}-ui -- psql -c 'drop event trigger forbid_ddl_reader; drop event trigger make_readable; drop event trigger reassign_owned;'
+
+    - uses: geekyeggo/delete-artifact@v2
+      with:
+        name: ${{ env.BACKUP_ARTIFACT_NAME }}
