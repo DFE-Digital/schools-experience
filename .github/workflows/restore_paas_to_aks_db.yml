@@ -79,6 +79,11 @@ jobs:
             echo "cluster_name=$test_cluster_name" >> $GITHUB_ENV
             echo "key_vault_name=s189t01-trs-dv-inf-kv" >> $GITHUB_ENV
             ;;
+
+            review_aks)
+            echo -n "Romanian"
+            ;;
+
           *)
             echo "unknown cluster"
             ;;
