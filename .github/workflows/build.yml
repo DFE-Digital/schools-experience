@@ -339,18 +339,24 @@ jobs:
   prepare:
     name: Configure Matrix Deployments
     needs: [ sonarcloud ]
+
     runs-on: ubuntu-latest
     outputs:
       matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
+      matrix_aks_environments: ${{ env.MATRIX_AKS_ENVIRONMENTS }}
       release_tag: ${{steps.tag_version.outputs.pr_number}}
     steps:
       - name: Set matrix environments (Push to master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Development\" , \"Staging\",\"Production\"]}" >> $GITHUB_ENV
+        run: |
+            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Development\" , \"Staging\",\"Production\"]}" >> $GITHUB_ENV
+            echo "MATRIX_AKS_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
         if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
-        run: echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Review\"]}" >> $GITHUB_ENV
+        run: |
+            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Review\"]}" >> $GITHUB_ENV
+            echo "MATRIX_AKS_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
 
       - name: Generate Tag from PR Number
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -477,6 +483,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
+          header: PAAS
           message: |
                    Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
                    ${{ steps.dsiMessage.outputs.value }}
@@ -522,10 +529,58 @@ jobs:
           SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
           SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
 
+  deployments_aks:
+    name: Deployments aks
+    strategy:
+      max-parallel: 1
+      matrix: ${{fromJSON(needs.prepare.outputs.matrix_aks_environments)}}
+    environment:
+       name: ${{matrix.environment}}_aks
+    concurrency: ${{matrix.environment}}_${{github.event.number}}_aks
+    needs: [ prepare ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: set-up-environment
+        uses: DFE-Digital/github-actions/set-up-environment@master
+
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Trigger Deployment to ${{matrix.environment}}
+        uses: ./.github/workflows/actions/deploy_v2
+        with:
+          environment: ${{matrix.environment}}
+          sha:  ${{ github.sha }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          pr:   ${{github.event.number}}
+
+      - name: Determine DfE Sign In Message
+        uses: haya14busa/action-cond@v1
+        id: dsiMessage
+        with:
+          cond: ${{ env.STATIC_ROUTE != '' }}
+          if_true: ':white_check_mark: DfE sign in route obtained: https://${{env.STATIC_ROUTE}}.london.cloudapps.digital'
+          if_false: ':warning: **DfE sign in route pool exhausted (close some open PRs!)**'
+
+      - name: Post sticky pull request comment
+        if: matrix.environment == 'Review'
+        uses: marocchino/sticky-pull-request-comment@v2
+
+        with:
+          recreate: true
+          header: AKS
+          message: |
+                   Review app deployed  to https://${{env.AKS_REVIEW_APPLICATION}}-${{github.event.number}}.${{env.REVIEW_AKS_DOMAIN}}
+                   ${{ steps.dsiMessage.outputs.value }}
+
   owasp:
     name: 'OWASP Test'
     runs-on: ubuntu-latest
-    needs: [  deployments  ]
+    needs: [ deployments ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
