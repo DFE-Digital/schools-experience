@@ -139,7 +139,7 @@ terraform-init-aks: composed-variables bin/terrafile set-azure-account
 	$(eval export TF_VAR_config_short=${CONFIG_SHORT})
 	$(eval export TF_VAR_service_name=${SERVICE_NAME})
 	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
-	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG})
+	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG_PREFIX}-${IMAGE_TAG})
 
 terraform-init: set-azure-account
 	$(if $(or $(IMAGE_TAG), $(NO_IMAGE_TAG_DEFAULT)), , $(eval export IMAGE_TAG=master))
