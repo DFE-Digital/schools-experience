@@ -13,9 +13,6 @@ variable "azure_credentials_json" {
   default     = null
   description = "JSON containing the service principal authentication key when running in automation"
 }
-variable "paas_space" {
-  description = "the space for corresponding paas app"
-}
 variable "azure_resource_prefix" {
   description = "Standard resource prefix. Usually s189t01 (test) or s189p01 (production)"
 }

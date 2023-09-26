@@ -160,10 +160,6 @@ terraform-apply: terraform-init
 terraform-apply-aks: terraform-init-aks
 	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
 
-bin/konduit.sh:
-	curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/main/scripts/konduit.sh -o bin/konduit.sh \
-		&& chmod +x bin/konduit.sh
-
 terraform-destroy: terraform-init
 	terraform -chdir=terraform/paas destroy -var-file=${DEPLOY_ENV}.env.tfvars ${AUTO_APPROVE}
 
