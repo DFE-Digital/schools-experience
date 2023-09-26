@@ -1,0 +1,40 @@
+name: Destroy Review Instance
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  destroy:
+    name: Destroy
+    environment:
+       name: review_aks
+    runs-on: ubuntu-latest
+    concurrency: review_${{github.event.number}}_aks
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set Environment variables
+        shell: bash
+        run: |
+          tf_vars_file=terraform/aks/config/review.tfvars.json
+          terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/terraform.tf | grep -o [0-9\.]*)
+          echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
+
+      - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - uses: DFE-Digital/github-actions/set-arm-environment-variables@master
+        with:
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Destroy
+        run: |
+            make ci review_aks terraform-destroy-aks PR_NUMBER=${{github.event.number}}
+
+      - name: Delete Terraform State File
+        run:  az storage blob delete --container-name  terraform-state --account-name s189t01gsetfstatervsa --account-key ${{secrets.ARM_ACCESS_KEY}} -n ${{github.event.number}}_kubernetes.tfstate
