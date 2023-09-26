@@ -29,10 +29,35 @@ jobs:
 
       - uses: DFE-Digital/github-actions/install-postgres-client@master
 
+      - name: Set AKS environment name
+        id: set_aks_env_name
+        run: |
+          case "${{ inputs.environment }}" in
+          development)
+            echo "ENVIRONMENT_ABR=dev" >> $GITHUB_ENV
+            echo "TFVARS_NAME=dev" >> $GITHUB_ENV
+            echo "KEY_VAULT_NAME=s189t01-gse-dv-inf-kv" >> $GITHUB_OUTPUT
+            ;;
+          staging)
+            echo "ENVIRONMENT_ABR=staging" >> $GITHUB_ENV
+            echo "TFVARS_NAME=staging" >> $GITHUB_ENV
+            echo "KEY_VAULT_NAME=s189t01-gse-stg-inf-kv" >> $GITHUB_OUTPUT
+            ;;
+          production)
+            echo "ENVIRONMENT_ABR=prod" >> $GITHUB_ENV
+            echo "TFVARS_NAME=production" >> $GITHUB_ENV
+            echo "KEY_VAULT_NAME=s189p01-gse-pd-inf-kv" >> $GITHUB_OUTPUT
+            ;;
+          *)
+            echo "unknown cluster"
+            ;;
+          esac
+
+
       - name: Set environment variables
         shell: bash
         run: |
-          tf_vars_file=terraform/paas/${{ inputs.environment }}.env.tfvars
+          tf_vars_file=terraform/paas/${{ env.TFVARS_NAME }}.env.tfvars
           echo "KEY_VAULT_NAME=$(jq -r '.azure_key_vault' ${tf_vars_file})" >> $GITHUB_ENV
           echo "PAAS_SPACE=$(jq -r '.paas_space' ${tf_vars_file})" >> $GITHUB_ENV
 
@@ -55,27 +80,6 @@ jobs:
           CF_PASSWORD: ${{ steps.fetch-cf-creds.outputs.PAAS-PASSWORD }}
           CF_SPACE_NAME: ${{ env.PAAS_SPACE }}
           INSTALL_CONDUIT: true
-
-      - name: Set AKS environment name
-        id: set_aks_env_name
-        run: |
-          case "${{ inputs.environment }}" in
-          development)
-            echo "ENVIRONMENT_ABR=dev" >> $GITHUB_ENV
-            echo "KEY_VAULT_NAME=s189t01-gse-dv-inf-kv" >> $GITHUB_OUTPUT
-            ;;
-          staging)
-            echo "ENVIRONMENT_ABR=staging" >> $GITHUB_ENV
-            echo "KEY_VAULT_NAME=s189t01-gse-stg-inf-kv" >> $GITHUB_OUTPUT
-            ;;
-          production)
-             echo "ENVIRONMENT_ABR=prod" >> $GITHUB_ENV
-            echo "KEY_VAULT_NAME=s189p01-gse-pd-inf-kv" >> $GITHUB_OUTPUT
-            ;;
-          *)
-            echo "unknown cluster"
-            ;;
-          esac
 
       - name: Backup database
         run: |
