@@ -105,6 +105,10 @@ install-fetch-config:
 	    && chmod +x fetch_config.rb \
 	    || true
 
+bin/konduit.sh:
+	curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/main/scripts/konduit.sh -o bin/konduit.sh \
+		&& chmod +x bin/konduit.sh
+
 edit-app-secrets: install-fetch-config set-azure-account
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${APPLICATION_SECRETS} -e -d azure-key-vault-secret:${KEY_VAULT}/${APPLICATION_SECRETS} -f yaml -c
 
