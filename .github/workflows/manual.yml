@@ -58,9 +58,10 @@ jobs:
         shell: bash
         run: |
           tf_vars_file=terraform/paas/${{ env.TFVARS_NAME }}.env.tfvars
+          file_json=$(yq r $tf_vars_file -j)
           file_json=$(jq -Rn '[inputs]' $tf_vars_file)
-          azure_key_vault=$(echo "$file_json" | jq -r '.[0] | select(.key == "azure_key_vault") | .value')
-          paas_space=$(echo "$file_json" | jq -r '.[0] | select(.key == "paas_space") | .value')
+          paas_space=$(echo "$file_json" | jq -r '.paas_space')
+          azure_key_vault=$(echo "$file_json" | jq -r '.azure_key_vault')
           echo "KEY_VAULT_NAME=$azure_key_vault" >> $GITHUB_ENV
           echo "PAAS_SPACE=$paas_space" >> $GITHUB_ENV
 
