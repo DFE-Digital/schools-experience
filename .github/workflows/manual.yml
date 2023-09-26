@@ -165,7 +165,7 @@ jobs:
       - name: Remove PaaS event triggers
         shell: bash
         run: |
-          bin/konduit.sh ${{ env.app_name }} -- psql -c 'drop event trigger forbid_ddl_reader; drop event trigger make_readable; drop event trigger reassign_owned;'
+          bin/konduit.sh  -k ${{ env.key_vault_name }} -d gse-${{ inputs.environment }} get-school-experience-${{ inputs.environment }}  -- psql -c 'drop event trigger forbid_ddl_reader; drop event trigger make_readable; drop event trigger reassign_owned;'
 
       - uses: geekyeggo/delete-artifact@v2
         with:
