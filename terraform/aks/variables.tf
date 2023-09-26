@@ -9,6 +9,11 @@ variable "namespace" {
 variable "environment" {
   description = "Name of the deployed environment in AKS"
 }
+
+variable "paas_space" {
+  description = "the space for corresponding paas app"
+}
+
 variable "azure_credentials_json" {
   default     = null
   description = "JSON containing the service principal authentication key when running in automation"
