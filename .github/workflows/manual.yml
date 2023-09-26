@@ -58,10 +58,12 @@ jobs:
         shell: bash
         run: |
           tf_vars_file=terraform/paas/${{ env.TFVARS_NAME }}.env.tfvars
-          file_json=$(yq -o json $tf_vars_file)
-          echo "KEY_VAULT_NAME=$(jq -r '.azure_key_vault' ${tf_varsfile_json_file})"
-          echo "KEY_VAULT_NAME=$(jq -r '.azure_key_vault' ${tf_varsfile_json_file})" >> $GITHUB_ENV
-          echo "PAAS_SPACE=$(jq -r '.paas_space' ${tf_varsfile_json_file})" >> $GITHUB_ENV
+          env_content=$(<"$tf_vars_file")
+          paas_space=$(echo "$env_content" | grep -o 'paas_space\s*=\s*"[^"]*"' | awk -F'"' '{print $2}')
+          azure_key_vault=$(echo "$env_content" | grep -o 'azure_key_vault\s*=\s*"[^"]*"' | awk -F'"' '{print $2}')
+          echo "paas_space is: $paas_space"
+          echo "KEY_VAULT_NAME=$azure_key_vault" >> $GITHUB_ENV
+          echo "PAAS_SPACE=$paas_space" >> $GITHUB_ENV
 
       - name: Retrieve Cloudfoundry credentials from KV
         uses: azure/CLI@v1
