@@ -1,5 +1,9 @@
 name: Backup and restore Postgres DB from PAAS to AKS
 on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
   workflow_dispatch:
     inputs:
       environment:
