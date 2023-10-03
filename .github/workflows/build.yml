@@ -41,7 +41,5 @@ jobs:
            echo $INGS
 
            for ing in ${INGS}; do
-              NAME=$(echo ${ing} | jq -r '.metadata.name')
-              echo "${NAME}"
-
+              echo "${ing}"
            done
