@@ -43,7 +43,7 @@ jobs:
            echo $INGS
 
            for ing in ${INGS}; do
-              echo "${ing[0]}"
+              echo "first item=${ing[0]}, second item=${ing[1]} "
               if [ "${ing}" == "$current" ]; then
                echo  "found=1"
               fi
