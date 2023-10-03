@@ -38,3 +38,4 @@ jobs:
 
            INGS=$(kubectl get ing -n git-development -o json | \
            jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr"))')
+           echo $INGS
