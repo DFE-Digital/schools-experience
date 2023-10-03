@@ -34,12 +34,17 @@ jobs:
 
         shell: bash
         run: |
+           current="get-school-experience-review-pr-2973"
            make review_test get-cluster-credentials
+           # find if it is already in list of ingresses
 
            INGS=$(kubectl get ing -n git-development -o json | \
            jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr"))| .metadata.name, .spec.rules[0].http.paths[0].backend.service.name')
            echo $INGS
 
            for ing in ${INGS}; do
-              echo "${ing}"
+              echo "${ing[0]}"
+              if [ "${ing}" == "$current" ]; then
+               echo  "found=1"
+              fi
            done
