@@ -42,9 +42,11 @@ jobs:
            jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr")) | .metadata.name, .spec.rules[0].http.paths[0].backend.service.name'))
 
            for ((i = 0; i < ${#INGS[@]}; i += 2)); do
-              current="${INGS[i]}"
+              itemname="${INGS[i]}"
               backend_service="${INGS[i + 1]}"
-              echo "Name: ${current}"
+              echo "Name: ${itemname}"
               echo "Backend Service: ${backend_service}"
-
+              if [ "$itemname" == "$current" ]; then
+               echo  "found existing ${itemname} ${backend_service} "
+              fi
            done
