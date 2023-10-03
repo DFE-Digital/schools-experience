@@ -34,7 +34,7 @@ jobs:
 
         shell: bash
         run: |
-          make review_test get-cluster-credentials CONFIRM_TEST=yes
-          xx=$(kubectl get ing -o=custom-columns='NAME:.metadata.name,SVCs:..service.name' -n git-development)
-          kubectl get ing -n git-development -o=json | jq '.items[] | select(..|.service?.name  | contains("get-school-experience-review-pr")) | .metadata.name'
-          echo $xx
+           INGS=$(kubectl get ing -n ${NAMESPACE} -o json | \
+           jq -r '.items[] | select(.metadata.name | startswith("'${PREFIX}'"))')
+
+           echo $INGS
