@@ -34,7 +34,7 @@ jobs:
 
         shell: bash
         run: |
-           INGS=$(kubectl get ing -n ${NAMESPACE} -o json | \
-           jq -r '.items[] | select(.metadata.name | startswith("'${PREFIX}'"))')
+           INGS=$(kubectl get ing -n git-development -o json | \
+           jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr"))')
 
            echo $INGS
