@@ -35,4 +35,4 @@ jobs:
         shell: bash
         run: |
           make review_test get-cluster-credentials CONFIRM_TEST=yes
-          kubectl get ing -o=json | jq '.items[] | select(..|.service?.name | startswith("get-school-experience-review-pr")) | .metadata.name'
+          kubectl get ing -n git-development -o=json | jq '.items[] | select(..|.service?.name | startswith("get-school-experience-review-pr")) | .metadata.name'
