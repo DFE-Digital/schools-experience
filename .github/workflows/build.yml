@@ -35,6 +35,7 @@ jobs:
         shell: bash
         run: |
           make review_test get-cluster-credentials CONFIRM_TEST=yes
-          kubectl get svc  -n git-development
-          echo "kubequery=$(kubectl get ing -o=custom-columns=NAME:.metadata.name,SVCs:..service.name -n git-development)" >> $GITHUB_ENV
+          xx=kubectl get svc  -n git-development
+          echo "xx is $xx"
+          kubequery=$(kubectl get ing -o=custom-columns=NAME:.metadata.name,SVCs:..service.name -n git-development)"
           echo "result $kubequery"
