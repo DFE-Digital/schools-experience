@@ -79,6 +79,16 @@ staging:
 staging_aks:
 	$(eval include global_config/staging.sh)
 
+
+review_test:
+	$(if $(or ${CI}, ${CONFIRM_TEST}), , $(error Missing CONFIRM_TEST=yes))
+	$(eval include global_config/review.sh)
+
+
+get-cluster-credentials: set-azure-account ## make <config> get-cluster-credentials [ENVIRONMENT=<clusterX>]
+	az aks get-credentials --overwrite-existing -g s189t01-tsc-ts-rg -n s189t01-tsc-test-aks
+
+
 .PHONY: production
 production:
 	$(eval export DEPLOY_ENV=production)
