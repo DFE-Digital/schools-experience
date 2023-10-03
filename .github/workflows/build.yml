@@ -34,7 +34,7 @@ jobs:
 
         shell: bash
         run: |
-           current="get-school-experience-review-pr-2973"
+           current="get-school-experience-review-pr-2973.test.teacherservices.cloud"
            make review_test get-cluster-credentials
            # find if it is already in list of ingresses
 
