@@ -38,13 +38,13 @@ jobs:
            make review_test get-cluster-credentials
            # find if it is already in list of ingresses
 
-           INGS=$(kubectl get ing -n git-development -o json | \
+           readarray -t INGS < < $(kubectl get ing -n git-development -o json | \
            jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr"))| .metadata.name, .spec.rules[0].http.paths[0].backend.service.name')
            echo $INGS
 
            for ing in ${INGS}; do
               echo "first item=${ing[0]}, second item=${ing[1]} "
-              if [ "${ing}" == "$current" ]; then
+              if [ "${ing[0]}" == "$current" ]; then
                echo  "found=1"
               fi
            done
