@@ -36,4 +36,12 @@ jobs:
         run: |
            make review_test get-cluster-credentials
 
-           kubectl get ing -n git-development -o=json | jq '.items[] | select(..|.service?.name | test("get-school-experience-review-pr")) | .metadata.name'
+           INGS=$(kubectl get ing -n git-development -o json | \
+           jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr"))')
+           echo $INGS
+
+           for ing in ${INGS}; do
+              NAME=$(echo ${ing} | jq -r '.metadata.name')
+              echo "${NAME}"
+
+           done
