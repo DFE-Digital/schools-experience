@@ -35,4 +35,25 @@ jobs:
         shell: bash
         run: |
           make review_test get-cluster-credentials CONFIRM_TEST=yes
-          kubectl get ing -n git-development -o=json | jq '.items[] | select(startswith("get-school-experience-review-pr") | .service?.name) | .metadata.name'
+          NAMESPACE="default"
+
+          # Prefix to search for
+          PREFIX="get-school-experience-review-pr"
+
+          # Query ingresses and filter by prefix
+          INGS=$(kubectl get ing -n ${NAMESPACE} -o json | \
+            jq -r '.items[] | select(.metadata.name | startswith("'${PREFIX}'"))')
+
+          echo "Ingress Name - Service"
+          for ing in ${INGS}; do
+
+            # Get name
+            NAME=$(echo ${ing} | jq -r '.metadata.name')
+
+            # Get service name
+            SVC=$(echo ${ing} | jq -r '.spec.rules[0].http.paths[0].backend.service.name')
+
+            # Print output
+            echo "${NAME} - ${SVC}"
+
+          done
