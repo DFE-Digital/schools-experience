@@ -35,5 +35,5 @@ jobs:
         shell: bash
         run: |
           make review_test get-cluster-credentials CONFIRM_TEST=yes
-          xx=$(kubectl get ing -o=custom-columns=NAME:.metadata.name,SVCs:..service.name -n git-development)
-          `echo $xx`
+          xx=$(kubectl get ing  -n git-development)
+          `echo ${xx}`
