@@ -39,3 +39,10 @@ jobs:
            INGS=$(kubectl get ing -n git-development -o json | \
            jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr"))')
            echo $INGS
+
+           for ing in ${INGS}; do
+              NAME=$(echo ${ing} | jq -r '.metadata.name')
+              SVC=$(echo ${ing} | jq -r '.spec.rules[0].http.paths[0].backend.service.name')
+              echo "${NAME} - ${SVC}"
+
+           done
