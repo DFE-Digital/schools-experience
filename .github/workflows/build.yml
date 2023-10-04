@@ -50,3 +50,7 @@ jobs:
                echo  "found existing ${itemname} ${backend_service} "
               fi
            done
+
+           pseudocode
+
+           find from list of existing
