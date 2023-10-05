@@ -349,7 +349,7 @@ jobs:
       - name: Set matrix environments (Push to master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Staging\",\"Production\"]}" >> $GITHUB_ENV
+            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Production\"]}" >> $GITHUB_ENV
             echo "MATRIX_AKS_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
