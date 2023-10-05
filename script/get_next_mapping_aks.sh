@@ -1,66 +1,166 @@
 # Input variables
-ADD_ROUTE=${1}
+pr_number=${1}
 
-# Static Variables
-DOMAIN="london.cloudapps.digital"
-URL="https://api.london.cloud.service.gov.uk/v3/"
-STATIC="review-school-experience-"
-STATIC_START=1
-STATIC_END=20
-create=0
+##########################new code starts######################################
 
-# Get the token needed to run this
-TOKEN=$(cf oauth-token)
+# check_existing_ingress "${numbers_from_ings1[@]}"
+check_existing_ingress() {
+  local current="get-school-experience-review-pr-2973.test.teacherservices.cloud"
+
+  # Find if it is already in the list of ingresses
+  INGS=($(kubectl get ing -n git-development -o json | \
+    jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr")) | .metadata.name'))
+
+  ings1_list=()
+
+  for ((i = 0; i < ${#INGS[@]}; i += 1)); do
+    itemname="${INGS[i]}"
+    ings1_list+=("$itemname")  # Add itemname to the list
+    if [ "$itemname" == "$current" ]; then
+      echo  "Found existing ${itemname} ${backend_service} "
+    fi
+  done
+
+  echo "ings1_list from the function is: ${ings1_list[@]}"
+}
+
+extract_numbers_from_list() {
+  local input_strings=("$@")
+  local prefix="review-get-into-teaching-app-"
+  local suffix="-internal"
+  local numbers=()
+
+  for input_string in "${input_strings[@]}"; do
+    if [[ "$input_string" =~ "${prefix}([0-9]+)${suffix}" ]]; then
+      numbers+=("${BASH_REMATCH[1]}")
+    else
+      numbers+=("Number not found")
+    fi
+  done
+
+  echo "${numbers[@]}"
+}
+
+get_ings1_list() {
+  # Find if it is already in the list of ingresses
+  INGS=($(kubectl get ing -n git-development -o json | \
+    jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr")) | .metadata.name, .spec.rules[0].http.paths[0].backend.service.name'))
+
+  ings1_list=()
+
+  for ((i = 1; i < ${#INGS[@]}; i += 1)); do
+    ings1_list+=("${INGS[i]}")
+  done
+
+  echo "${ings1_list[@]}"
+}
+
+number_exists_in_list() {
+  local number_to_check="$1"
+  shift
+  local number_list=("$@")
+
+  for number in "${number_list[@]}"; do
+    if [ "$number_to_check" -eq "$number" ]; then
+      return 0  # Number found
+    fi
+  done
+
+  return 1  # Number not found
+}
+
+# Example usage:
+extract_numbers_from_list() {
+  local input_strings=("$@")
+  local prefix="get-school-experience-review-pr-"
+  local suffix=".test.teacherservices.cloud"
+  local numbers=()
+
+  for input_string in "${input_strings[@]}"; do
+    if [[ "$input_string" =~ "${prefix}([0-9]+)${suffix}" ]]; then
+      numbers+=("${BASH_REMATCH[1]}")
+    else
+      numbers+=("Number not found")
+    fi
+  done
+
+  echo "${numbers[@]}"
+}
+
+number_exists_in_list() {
+  local number_to_check="$1"
+  shift
+  local number_list=("$@")
+
+  for number in "${number_list[@]}"; do
+    if [ "$number_to_check" -eq "$number" ]; then
+      return 0  # Number found
+    fi
+  done
+
+  return 1  # Number not found
+}
+
+# Example usage with extract_numbers_from_list and number_exists_in_list
+# string_list=("review-get-into-teaching-app-2619-internal" "review-get-into-teaching-app-2685-internal" "review-get-into-teaching-app-2632-internal")
+
+# # Extract numbers from the string list
+# numbers_from_list=($(extract_numbers_from_list "${string_list[@]}"))
+
+# Number to find
+number_to_find=$pr_number
+
+# Check if the number exists in the extracted list
+# if number_exists_in_list "$number_to_find" "${numbers_from_list[@]}"; then
+#   echo "$number_to_find exists in the list."
+# else
+#   echo "$number_to_find does not exist in the list."
+# fi
 
 
-#  List all the applications that we are interested in
-APPS=$(curl -s "${URL}/apps?per_page=2000"  -X GET  -H "Authorization: ${TOKEN}" | jq '.resources[] | select(.name | startswith("review-school-experience"))  | {name,guid}')
+# Get the INGS[1] values
+#  ings1_list=$(check_existing_ingress)
+ #echo "ings1_list is $ings1_list"
+# # Use ings1_list as input to extract_numbers_from_list
+ #numbers_from_ings1=$(extract_numbers_from_list "${ings1_list[@]}")
+# echo "============================================================="
+# echo "numbers_from_ings1 is $numbers_from_ings1"
 
-# Check the route we want to add exists
-CURRENT=$(echo ${APPS} | jq --arg ROUTE "${ADD_ROUTE}"  '. | select (.name==$ROUTE) | {name,guid} ')
-if [[ -z "${CURRENT}"  ]] ; then
-   create=1
-else
-   create=1
-   GUID=$(echo ${CURRENT}  | jq -r '.guid' )
-   LIST_OF_ROUTES=$(curl -s "${URL}/routes?app_guids=${GUID}"  -X GET  -H "Authorization: ${TOKEN}" | jq '.resources[] | {host,guid,url}')
-   while read i; do
-      for (( v=${STATIC_START} ; v<${STATIC_END}+1 ; v++ ))
-      do
-          if [[ "${i}" == "${STATIC}${v}" ]] ; then
-	      echo "${i}"
-              create=0
-	      break
-          fi
-      done
-    done <<< "$( echo "${LIST_OF_ROUTES}" | jq -r  '.host ' )"
-fi
+# # Call the check_existing_ingress function with numbers_from_ings1 as input
 
-if [[ ${create} == 1 ]]; then
 
-	   CSV_LIST=$( echo "${APPS}" | jq -r -c  '.guid ' | tr '\n' ',' )
+# Call the function
+#check_existing_ingress
+extract_numbers_from_list() {
+  local input_strings=("$@")
+  local pattern="get-school-experience-review-pr-([0-9]+)\.test\.teacherservices\.cloud"
+  local numbers=()
 
-           LIST_OF_ROUTES=$(curl -s "${URL}/routes?per_page=2000&app_guids=${CSV_LIST}"  -X GET  -H "Authorization: ${TOKEN}" | jq '.resources[] | {host,guid,url}')
+  for input_string in "${input_strings[@]}"; do
+    if [[ "$input_string" =~ $pattern ]]; then
+      numbers+=("${BASH_REMATCH[1]}")
+    else
+      numbers+=("Number not found")
+    fi
+  done
 
-	   for (( v=${STATIC_START} ; v<${STATIC_END}+1 ; v++ ))
-           do
-              USED[$v]=0
-              while read i; do
-		if [[ "${STATIC}${v}.${DOMAIN}" == ${i} ]]; then
-                    USED[$v]=1
-		fi
-	      done <<< "$(echo "${LIST_OF_ROUTES}" | jq -r -c  '.url ')"
-           done
+  echo "${numbers[@]}"
+}
 
-	   c=${STATIC_START}
-	   for i in "${USED[@]}"; do
-		   if [[ ${i} == 0 ]] ; then
-	              echo "${STATIC}${c}"
-	              #echo cf map-route ${ADD_ROUTE}  ${DOMAIN} --hostname ${STATIC}${c}
-	              #echo cf set-env ${ADD_ROUTE} DFE_SIGNIN_BASE_URL https://${STATIC}${c}.${DOMAIN}
-	              #echo cf restage  ${ADD_ROUTE}
-                      break
-	           fi
-		   ((c+=1))
-	   done
-fi
+# Example usage with the input strings
+input_strings=(
+  "get-school-experience-review-pr-2972.test.teacherservices.cloud"
+  "get-school-experience-review-pr-2973.test.teacherservices.cloud"
+  "get-school-experience-review-pr-777.test.teacherservices.cloud"
+)
+
+# Extract numbers from the input strings
+numbers_from_list=($(extract_numbers_from_list "${input_strings[@]}"))
+
+# Print the extracted numbers
+for number in "${numbers_from_list[@]}"; do
+  echo "$number"
+done
+
+
+# ############################END NEW CODE####################################
