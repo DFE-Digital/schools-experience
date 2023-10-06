@@ -48,6 +48,13 @@ variable "sidekiq_replicas" {
   description = "number of replicas of the sidekiq"
 }
 
+variable "dsi_hostname" {
+  description = "the static hostname for dsi "
+  default =   ""
+}
+
+
+
 
 variable "external_url" {
   default     = null
@@ -144,4 +151,6 @@ locals {
 
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
   app_name_suffix   = var.app_name == null ? var.environment : var.app_name
+
+  web_external_hostnames = var.dsi_hostname =="" ? [] : [var.dsi_hostname]
 }
