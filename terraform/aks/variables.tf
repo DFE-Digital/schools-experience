@@ -48,6 +48,12 @@ variable "sidekiq_replicas" {
   description = "number of replicas of the sidekiq"
 }
 
+variable "app_replicas" {
+  description = "number of replicas of the web app"
+  default = 1
+}
+
+
 
 variable "external_url" {
   default     = null
