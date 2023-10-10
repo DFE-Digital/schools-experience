@@ -342,22 +342,18 @@ jobs:
 
     runs-on: ubuntu-latest
     outputs:
-      matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
       matrix_aks_environments: ${{ env.MATRIX_AKS_ENVIRONMENTS }}
       release_tag: ${{steps.tag_version.outputs.pr_number}}
     steps:
       - name: Set matrix environments (Push to master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Production\"]}" >> $GITHUB_ENV
             echo "MATRIX_AKS_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
         if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
         run: |
-            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"Review\"]}" >> $GITHUB_ENV
             echo "MATRIX_AKS_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
-
       - name: Generate Tag from PR Number
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         id: tag_version
@@ -385,149 +381,6 @@ jobs:
           PR_NUMBER:  ${{ steps.tag_version.outputs.pr_number }}
           RELEASE_ID: ${{ steps.release.outputs.id }}
           TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-  deployments:
-    name: Deployments
-    strategy:
-      max-parallel: 1
-      matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
-    environment:
-       name: ${{matrix.environment}}
-    concurrency: ${{matrix.environment}}_${{github.event.number}}
-    needs: [ prepare ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
-
-      - name: set-up-environment
-        uses: DFE-Digital/github-actions/set-up-environment@master
-
-      - name: Set environment variable
-        run: |
-           REFERENCE=${{github.ref}}
-           echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
-
-      - name: Install Cloud Foundry
-        if: matrix.environment == 'Review'
-        run: |
-          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          sudo apt-get update
-          sudo apt-get install cf7-cli
-
-      - name: Set Review specific variables
-        if: matrix.environment == 'Review'
-        run: |
-           REFERENCE=${{github.event.pull_request.head.ref}}
-           echo "REFERENCE=${REFERENCE}" >> $GITHUB_ENV
-
-      - uses: Azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK , SLACK-RELEASE-NOTE-WEBHOOK , PAAS-USERNAME , PAAS-PASSWORD
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to Cloud Foundry
-        if: matrix.environment == 'Review'
-        run: cf login -a api.london.cloud.service.gov.uk -u ${{steps.keyvault-yaml-secret.outputs.PAAS-USERNAME}} -p "${{steps.keyvault-yaml-secret.outputs.PAAS-PASSWORD}}" -s get-into-teaching
-
-      - name: Get Static Route
-        if: matrix.environment == 'Review'
-        run: |
-              cf delete-orphaned-routes -f
-              STATIC_ROUTE=$( ${GITHUB_WORKSPACE}/script/get_next_mapping.sh ${{env.REVIEW_APPLICATION}}-${{github.event.number}} )
-              echo "STATIC_ROUTE=${STATIC_ROUTE}" >> $GITHUB_ENV
-
-      - name: Trigger Deployment to ${{matrix.environment}}
-        if: matrix.environment == 'Review'
-        uses: ./.github/workflows/actions/deploy
-        with:
-          environment: ${{matrix.environment}}
-          sha:  ${{ github.sha }}
-          pr:   ${{github.event.number}}
-          static:  ${{env.STATIC_ROUTE}}
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-          KEY_VAULT:         ${{ secrets.KEY_VAULT }}
-          ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Trigger Deployment to ${{matrix.environment}}
-        if: matrix.environment != 'Review'
-        uses: ./.github/workflows/actions/deploy
-        with:
-          environment: ${{matrix.environment}}
-          sha:  ${{ github.sha }}
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-          KEY_VAULT:         ${{ secrets.KEY_VAULT }}
-          ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Determine DfE Sign In Message
-        uses: haya14busa/action-cond@v1
-        id: dsiMessage
-        with:
-          cond: ${{ env.STATIC_ROUTE != '' }}
-          if_true: ':white_check_mark: DfE sign in route obtained: https://${{env.STATIC_ROUTE}}.london.cloudapps.digital'
-          if_false: ':warning: **DfE sign in route pool exhausted (close some open PRs!)**'
-
-      - name: Post sticky pull request comment
-        if: matrix.environment == 'Review'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          recreate: true
-          header: PAAS
-          message: |
-                   Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.DOMAIN}}
-                   ${{ steps.dsiMessage.outputs.value }}
-
-      - name: Add Review Label
-        if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
-        uses: actions-ecosystem/action-add-labels@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: Review
-
-      - name: Get Release Id from Tag
-        id: tag_id
-        uses: DFE-Digital/github-actions/DraftReleaseByTag@master
-        with:
-          TAG: ${{needs.prepare.outputs.release_tag}}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish Release
-        if:  matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
-        uses: eregon/publish-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{steps.tag_id.outputs.release_id}}
-
-      - name: Slack Release Notification
-        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_SUCCESS}}
-          SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
-          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
-          MSG_MINIMAL: true
-
-      - name: Slack Notification
-        if: failure() && matrix.environment == 'Production'
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: ${{env.SLACK_ERROR}}
-          SLACK_TITLE: Failure in Post-Development Deploy
-          SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
-          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
 
   deployments_aks:
     name: Deployments aks
@@ -576,11 +429,51 @@ jobs:
           message: |
                    Review app deployed  to https://${{env.AKS_REVIEW_APPLICATION}}-${{github.event.number}}.${{env.REVIEW_AKS_DOMAIN}}
                    ${{ steps.dsiMessage.outputs.value }}
+      - name: Add Review Label
+        if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: Review
+
+      - name: Get Release Id from Tag
+        id: tag_id
+        uses: DFE-Digital/github-actions/DraftReleaseByTag@master
+        with:
+          TAG: ${{needs.prepare.outputs.release_tag}}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Release
+        if:  matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{steps.tag_id.outputs.release_id}}
+
+      - name: Slack Release Notification
+        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_SUCCESS}}
+          SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
+          SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
+          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
+          MSG_MINIMAL: true
+
+      - name: Slack Notification
+        if: failure() && matrix.environment == 'Production'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: ${{env.SLACK_ERROR}}
+          SLACK_TITLE: Failure in Post-Development Deploy
+          SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
+          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
 
   owasp:
     name: 'OWASP Test'
     runs-on: ubuntu-latest
-    needs: [ deployments ]
+    needs: [ deployments_aks ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
