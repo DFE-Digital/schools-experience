@@ -81,6 +81,15 @@ jobs:
           push: true
           build-args:
                  SHA=${{ steps.sha.outputs.short }}
+      - name: Fetch secrets from key vault
+        uses: azure/CLI@v1
+        id: fetch-secrets
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INFRA_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
 
       - name: Slack Notification
         if: failure() && github.ref == 'refs/heads/master'
