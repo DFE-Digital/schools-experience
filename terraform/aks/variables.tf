@@ -145,9 +145,13 @@ variable "statuscake_password_name" {
   default     = "SC-PASSWORD"
   description = "The name of the statuscake password"
 }
+variable "dsi_hostname" {
+  description = "The static hostname for DFE sign-in "
+  default = ""
+}
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)
-
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
   app_name_suffix   = var.app_name == null ? var.environment : var.app_name
+  web_external_hostnames = var.dsi_hostname == "" ? [] : [var.dsi_hostname]
 }

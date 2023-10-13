@@ -13,6 +13,7 @@ permissions:
   pull-requests: write
 
 jobs:
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -28,16 +29,7 @@ jobs:
 
       - uses: Azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
@@ -82,6 +74,15 @@ jobs:
           build-args:
                  SHA=${{ steps.sha.outputs.short }}
 
+      - name: Fetch slack web hook
+        uses: azure/CLI@v1
+        id: slack-web-hook
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
       - name: Slack Notification
         if: failure() && github.ref == 'refs/heads/master'
         uses: rtCamp/action-slack-notify@master
@@ -89,7 +90,7 @@ jobs:
            SLACK_COLOR: ${{env.SLACK_ERROR}}
            SLACK_MESSAGE: 'There has been a failure building the application'
            SLACK_TITLE: 'Failure Building Application'
-           SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
+           SLACK_WEBHOOK: " ${{ steps.slack-web-hook.outputs.SLACK-WEBHOOK }} "
 
   spec_tests:
     name: Unit Tests
@@ -105,15 +106,6 @@ jobs:
       - uses: Azure/login@v1
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -149,7 +141,6 @@ jobs:
           name: unit_tests
           path: ${{ github.workspace }}/out/test-report.xml
 
-
       - name:  Keep Code Coverage Report
         if: always()
         uses: actions/upload-artifact@v3
@@ -170,16 +161,7 @@ jobs:
 
       - uses: Azure/login@v1
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: SNYK-TOKEN
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -188,10 +170,20 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Fetch synk token from key vault
+        uses: azure/CLI@v1
+        id: fetch-synk-token
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SNYK-TOKEN" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SNYK-TOKEN=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
-          SNYK_TOKEN: ${{ steps.keyvault-yaml-secret.outputs.SNYK-TOKEN }}
+          SNYK_TOKEN: ${{ steps.fetch-synk-token.outputs.SNYK-TOKEN }}
+
         with:
           image: ${{needs.build.outputs.DOCKER_IMAGE}}
           args: --severity-threshold=high --file=Dockerfile --exclude-app-vulns --policy-path=/.snyk
@@ -311,16 +303,7 @@ jobs:
 
       - uses: Azure/login@v1
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: SONAR-TOKEN
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Download Test Artifacts
         uses: actions/download-artifact@v3
@@ -330,11 +313,20 @@ jobs:
       - name: Fixup report file paths
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
 
+      - name: Fetch Sonar token from key vault
+        uses: azure/CLI@v1
+        id: fetch-sonar-token
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SONAR-TOKEN" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SONAR-TOKEN=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ steps.keyvault-yaml-secret.outputs.SONAR-TOKEN }}
+          SONAR_TOKEN: ${{ steps.fetch-sonar-token.outputs.SONAR-TOKEN }}
 
   prepare:
     name: Configure Matrix Deployments
@@ -390,7 +382,7 @@ jobs:
     environment:
        name: ${{matrix.environment}}_aks
     concurrency: ${{matrix.environment}}_${{github.event.number}}_aks
-    needs: [ prepare ]
+    needs: [prepare ]
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -403,7 +395,14 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Get dsi_hostname AKS
+        if: matrix.environment == 'Review'
+        run: |
+              dsi_static_hostname=$( ${GITHUB_WORKSPACE}/script/get_next_mapping_aks.sh ${{github.event.number}} get-school-experience-review-pr-${{github.event.number}}.test.teacherservices.cloud )
+              echo "dsi_static_hostname=${dsi_static_hostname}" >> $GITHUB_ENV
+
       - name: Trigger Deployment to ${{matrix.environment}}
+        id: deploy-aks
         uses: ./.github/workflows/actions/deploy_v2
         with:
           environment: ${{matrix.environment}}
@@ -411,18 +410,19 @@ jobs:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pr:   ${{github.event.number}}
 
-      - name: Determine DfE Sign In Message
+
+      - name: Determine DfE Sign In Message - AKS
+        if: matrix.environment == 'Review'
         uses: haya14busa/action-cond@v1
         id: dsiMessage
         with:
-          cond: ${{ env.STATIC_ROUTE != '' }}
-          if_true: ':white_check_mark: DfE sign in route obtained: https://${{env.STATIC_ROUTE}}.london.cloudapps.digital'
-          if_false: ':warning: **DfE sign in route pool exhausted (close some open PRs!)**'
+          cond: ${{ env.dsi_static_hostname != '' }}
+          if_true: ':white_check_mark: DfE AKS sign in route obtained: https://${{ env.dsi_static_hostname }}'
+          if_false: ':warning: **DfE AKS sign in route pool for AKS exhausted (close some open PRs!)**'
 
       - name: Post sticky pull request comment
         if: matrix.environment == 'Review'
         uses: marocchino/sticky-pull-request-comment@v2
-
         with:
           recreate: true
           header: AKS
@@ -451,14 +451,23 @@ jobs:
         with:
           release_id: ${{steps.tag_id.outputs.release_id}}
 
+      - name: Fetch slack token
+        uses: azure/CLI@v1
+        id: fetch-slack-secret
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
       - name: Slack Release Notification
         if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_COLOR: ${{env.SLACK_SUCCESS}}
+          SLACK_MESSAGE:  ${{ fromJson( steps.tag_id.outputs.release_body) }}
           SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
-          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
+          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
           MSG_MINIMAL: true
 
       - name: Slack Notification
@@ -468,12 +477,12 @@ jobs:
           SLACK_COLOR: ${{env.SLACK_ERROR}}
           SLACK_TITLE: Failure in Post-Development Deploy
           SLACK_MESSAGE: Failure with initialising ${{matrix.environment}} deployment for ${{env.APPLICATION}}
-          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
+          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
 
   owasp:
     name: 'OWASP Test'
     runs-on: ubuntu-latest
-    needs: [ deployments_aks ]
+    needs: [deployments_aks ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
@@ -484,40 +493,49 @@ jobs:
 
       - uses: Azure/login@v1
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+            creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-infra-secret
+      - name: Fetch SECURE USERNAME
+        uses: azure/CLI@v1
+        id: fetch-username
         with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SECURE-USERNAME" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
+      - name: Fetch SECURE PASSWORD
+        uses: azure/CLI@v1
+        id: fetch-password
         with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-SECRETS
-          key: SECURE_USERNAME , SECURE_PASSWORD
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SECURE-PASSWORD" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.7.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{ steps.keyvault-yaml-secret.outputs.SECURE_USERNAME }}:${{ steps.keyvault-yaml-secret.outputs.SECURE_PASSWORD }}@${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}'
+          target: 'https://${{ steps.fetch-username.outputs.SECURE_USERNAME}}:${{ steps.fetch-password.outputs.SECURE_PASSWORD }}@${{env.AKS_APPLICATION_NAME}}-development.${{env.REVIEW_AKS_DOMAIN}}'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
+
+      - name: Fetch secrets from key vault
+        uses: azure/CLI@v1
+        id: fetch-slack-secret
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Slack Notification
         if: failure()
         uses: rtCamp/action-slack-notify@master
         env:
            SLACK_COLOR: ${{env.SLACK_FAILURE}}
-           SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.PAAS_APPLICATION_NAME}}-dev.${{env.DOMAIN}}/'
+           SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.AKS_APPLICATION_NAME}}-development.${{env.REVIEW_AKS_DOMAIN}}/'
            SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
-           SLACK_WEBHOOK: ${{ steps.keyvault-infra-secret.outputs.SLACK-WEBHOOK }}
+           SLACK_WEBHOOK: "${{ steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
