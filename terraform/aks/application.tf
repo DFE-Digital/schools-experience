@@ -39,6 +39,7 @@ module "web_application" {
   docker_image = var.docker_image
   command      = ["/app/docker-entrypoint.sh", "-m", "-f"]
   probe_path   = null
+  web_external_hostnames = local.web_external_hostnames
 }
 
 module "worker_application" {

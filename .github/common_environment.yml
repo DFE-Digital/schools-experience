@@ -10,3 +10,4 @@
   REVIEW_APPLICATION:    review-school-experience
   AKS_REVIEW_APPLICATION: get-school-experience-review-pr
   PAAS_APPLICATION_NAME: school-experience-app
+  AKS_APPLICATION_NAME:  get-school-experience
