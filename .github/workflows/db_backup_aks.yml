@@ -1,0 +1,25 @@
+name: Backup AKS Database
+on:
+  workflow_dispatch:
+  schedule: # 01:00 UTC
+    - cron: "0 1 * * *"
+jobs:
+  backup:
+    name: Backup AKS Database
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: [development,  staging, production]
+    environment:
+       name: ${{matrix.environment}}_aks
+    concurrency: ${{matrix.environment}}_${{github.event.number}}_aks
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Backup AKS Database
+        id: aks_db_backup
+        uses: ./.github/workflows/actions/database-backup
+        with:
+          environment: ${{matrix.environment}}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
