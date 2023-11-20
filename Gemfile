@@ -146,7 +146,7 @@ group :test do
 
   gem 'selenium-webdriver'
 
-  gem 'cucumber-rails', '>= 2.6.1', require: false
+  gem 'cucumber-rails', '>= 2.6.1'
   gem 'database_cleaner'
 
   gem 'rails-controller-testing', '>= 1.0.5'
