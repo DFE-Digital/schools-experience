@@ -99,7 +99,7 @@ gem 'invisible_captcha', '>= 2.0.0'
 gem 'meta-tags', '~> 2.17'
 
 if RUBY_PLATFORM =~ /x86_64-linux/
-  gem 'nokogiri', platforms: %i[x86_64-linux]
+  gem 'nokogiri', platforms: %i[ruby]
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
