@@ -42,7 +42,7 @@ RUN yarn install && yarn cache clean
 COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
 RUN gem install bundler --version='~> 2.3.4' && \
-    bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
+    bundle lock --add-platform x86_64-linux x86-mingw32 x86-mswin32 x64-mingw32 java && \
     bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
