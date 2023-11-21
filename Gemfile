@@ -98,6 +98,10 @@ gem 'actionpack-cloudfront', '>= 1.2.0'
 gem 'invisible_captcha', '>= 2.0.0'
 gem 'meta-tags', '~> 2.17'
 
+if RUBY_PLATFORM =~ /x86_64-linux/
+  gem 'nokogiri', platforms: %i[x86_64-linux]
+end
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
