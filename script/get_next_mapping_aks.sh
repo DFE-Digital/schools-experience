@@ -44,7 +44,7 @@ is_number_in_list() {
   return 1
 }
 
-# check if there is an existing linked ingress
+# check if there is an existing linked ingress --------------------
 existing_ing=$(check_existing_dsi_ingress)
 
 if [ -n "$existing_ing" ]; then
