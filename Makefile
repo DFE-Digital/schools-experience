@@ -67,6 +67,7 @@ review_aks:
 	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER"))
 	$(eval export PR_NAME=get-school-experience-review-pr-${PR_NUMBER}.test.teacherservices.cloud)
 	$(eval export TF_VAR_paas_application_name=${PR_NAME})
+
 	$(eval export TF_VAR_dsi_hostname=$(shell script/get_next_mapping_aks.sh ${PR_NUMBER}  ${PR_NAME}))
 	$(eval export TF_VAR_environment=review-pr-$(PR_NUMBER))
 
@@ -93,6 +94,7 @@ production_aks:
 .PHONY: ci
 ci:
 	$(eval AUTO_APPROVE=-auto-approve)
+	$(eval SKIP_AZURE_LOGIN=true)
 
 clean:
 	[ ! -f fetch_config.rb ]  \
