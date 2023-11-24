@@ -395,12 +395,6 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Get dsi_hostname AKS
-        if: matrix.environment == 'Review'
-        run: |
-              dsi_static_hostname=$( ${GITHUB_WORKSPACE}/script/get_next_mapping_aks.sh ${{github.event.number}} get-school-experience-review-pr-${{github.event.number}}.test.teacherservices.cloud )
-              echo "dsi_static_hostname=${dsi_static_hostname}" >> $GITHUB_ENV
-
       - name: Trigger Deployment to ${{matrix.environment}}
         id: deploy-aks
         uses: ./.github/workflows/actions/deploy_v2
@@ -416,8 +410,8 @@ jobs:
         uses: haya14busa/action-cond@v1
         id: dsiMessage
         with:
-          cond: ${{ env.dsi_static_hostname != '' }}
-          if_true: ':white_check_mark: DfE AKS sign in route obtained: https://${{ env.dsi_static_hostname }}'
+          cond: ${{ steps.deploy-aks.outputs.dsi-hostname != '' }}
+          if_true: ':white_check_mark: DfE AKS sign in route obtained: https://${{ steps.deploy-aks.outputs.dsi-hostname }}'
           if_false: ':warning: **DfE AKS sign in route pool for AKS exhausted (close some open PRs!)**'
 
       - name: Post sticky pull request comment
@@ -427,8 +421,9 @@ jobs:
           recreate: true
           header: AKS
           message: |
-                   Review app deployed  to https://${{env.AKS_REVIEW_APPLICATION}}-${{github.event.number}}.${{env.REVIEW_AKS_DOMAIN}}
-                   ${{ steps.dsiMessage.outputs.value }}
+            Review app deployed to https://${{env.AKS_REVIEW_APPLICATION}}-${{github.event.number}}.${{env.REVIEW_AKS_DOMAIN}}
+            ${{ steps.dsiMessage.outputs.value }}
+
       - name: Add Review Label
         if: matrix.environment == 'Review' && contains(github.event.pull_request.user.login, 'dependabot') == false
         uses: actions-ecosystem/action-add-labels@v1
@@ -465,7 +460,7 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_COLOR: ${{env.SLACK_SUCCESS}}
-          SLACK_MESSAGE:  ${{ fromJson( steps.tag_id.outputs.release_body) }}
+          SLACK_MESSAGE:  ${{ fromJson(steps.tag_id.outputs.release_body) }}
           SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
           SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
           MSG_MINIMAL: true

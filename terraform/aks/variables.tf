@@ -141,6 +141,7 @@ variable "review_url_redis_name" {
   default     = null
   description = "The name of the secret storing review redis url"
 }
+
 variable "statuscake_password_name" {
   default     = "SC-PASSWORD"
   description = "The name of the statuscake password"
@@ -149,9 +150,12 @@ variable "dsi_hostname" {
   description = "The static hostname for DFE sign-in "
   default = ""
 }
+variable "create_dsi_ingress" {
+  description = "Optional additional ingress for DSI hostname when front door is not used"
+  default = false
+}
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
   app_name_suffix   = var.app_name == null ? var.environment : var.app_name
-  web_external_hostnames = var.dsi_hostname == "" ? [] : [var.dsi_hostname]
 }

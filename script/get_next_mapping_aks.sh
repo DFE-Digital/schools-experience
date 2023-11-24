@@ -1,11 +1,15 @@
+#!/usr/bin/env bash
+
+set -eu
+set -o pipefail
+
 pr_number=${1}
-pr_name=${2}
+non_dsi_hostname=${2}
 maximun_ing_num=20
 
 get_all_relevant_ingresses() {
   # Find if it is already in the list of ingresses
-  ings=($(kubectl get ing -n git-development -o json | \
-    jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr")) | .metadata.name'))
+  ings=$(kubectl get ing -n git-development -o json | jq -r '.items[] | select(.metadata.name | startswith("get-school-experience-review-pr")) | .metadata.name')
 
   echo "${ings[@]}"
 }
@@ -13,23 +17,24 @@ get_all_relevant_ingresses() {
 check_existing_dsi_ingress() {
   # Find if it is already in the list of existing linked DSI  ingresses
   servicename="get-school-experience-review-pr-${pr_number}"
-  ings=($(kubectl get ing -o=custom-columns='NAME:.metadata.name,SVCs:..service.name'  -n git-development | grep  "${servicename}" | grep  -v "${pr_name}"))
-  echo "${ings}"
+  ings=$(kubectl get ing -o=custom-columns='NAME:.metadata.name,SVCs:..service.name'  -n git-development | grep  "\b${servicename}\b" | grep  -v "${non_dsi_hostname}")
+
+  echo "${ings}" | awk '{print $1}'
 }
 
 extract_numbers_from_list() {
   local all_existing_ings=$1
   local pattern="get-school-experience-review-pr-([0-9]+)\.test\.teacherservices\.cloud"
-  local all_existing_review_ings=()
+  local all_existing_review_ings=""
   for input_string in ${all_existing_ings}; do
     if [[ "$input_string" =~ $pattern ]]; then
       itemval="${BASH_REMATCH[1]}"
-      if ((1 <= itemval && itemval <= maximun_ing_num)); then
-        all_existing_review_ings+=("${BASH_REMATCH[1]}")
+      if [ 1 -le $itemval ] && [ $itemval -le $maximun_ing_num ]; then
+        all_existing_review_ings+=" ${BASH_REMATCH[1]}"
       fi
     fi
   done
-  echo "${all_existing_review_ings[@]}"
+  echo "${all_existing_review_ings}"
 }
 
 is_number_in_list() {

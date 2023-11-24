@@ -18,6 +18,8 @@ inputs:
 outputs:
   deploy-url:
     value: ${{ steps.set_env_var.outputs.deploy_url }}
+  dsi-hostname:
+    value: ${{ steps.dsi_hostname.outputs.dsi_hostname }}
 runs:
   using: composite
   steps:
@@ -42,6 +44,7 @@ runs:
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: ${{ env.TERRAFORM_VERSION }}
+        terraform_wrapper: false
 
     - uses: DFE-Digital/github-actions/set-arm-environment-variables@master
       with:
@@ -52,13 +55,10 @@ runs:
       shell: bash
       run: echo "short=$(echo "${{ inputs.sha }}" | cut -c -7)" >> $GITHUB_OUTPUT
 
-    - name: Print Sha
-      id: print-sha-environment
+    - name: K8 setup
       shell: bash
       run: |
-        echo "${{ inputs.sha }}"
-        echo "the passed in environment is ${{ inputs.environment  }}"
-        echo terraform version
+        az aks get-credentials -g s189t01-tsc-ts-rg -n s189t01-tsc-test-aks
 
     - name: Terraform init, plan & apply
       shell: bash
@@ -68,3 +68,10 @@ runs:
         make ci ${envval} terraform-apply-aks PR_NUMBER=${{ inputs.pr }}
       env:
         IMAGE_TAG: ${{ steps.sha.outputs.short }}
+
+    - name: Retrieve DSI hostname
+      id: dsi_hostname
+      shell: bash
+      run: |
+        dsi_hostname=$(terraform -chdir=terraform/aks output -raw dsi_hostname)
+        echo "dsi_hostname=${dsi_hostname}" >> "$GITHUB_OUTPUT"
