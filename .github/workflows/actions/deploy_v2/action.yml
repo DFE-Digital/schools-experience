@@ -55,7 +55,8 @@ runs:
       shell: bash
       run: echo "short=$(echo "${{ inputs.sha }}" | cut -c -7)" >> $GITHUB_OUTPUT
 
-    - name: K8 setup
+    - name: K8 setup for review apps
+      if: inputs.environment == 'review'
       shell: bash
       run: |
         az aks get-credentials -g s189t01-tsc-ts-rg -n s189t01-tsc-test-aks
