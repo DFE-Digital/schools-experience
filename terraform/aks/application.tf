@@ -11,8 +11,9 @@ module "application_configuration" {
   is_rails_application = true
 
   config_variables = {
-    ENVIRONMENT_NAME = var.environment
-    PGSSLMODE        = local.postgres_ssl_mode
+    ENVIRONMENT_NAME    = var.environment
+    PGSSLMODE           = local.postgres_ssl_mode
+    DFE_SIGNIN_BASE_URL = "https://${var.dsi_hostname}"
   }
   secret_variables = {
     DB_HOST     = var.deploy_postgres ? module.postgres[0].host : "${data.azurerm_key_vault_secret.db_host[0].value}"
@@ -28,18 +29,18 @@ module "web_application" {
 
   is_web = true
 
-  namespace    = var.namespace
-  environment  = var.environment
-  service_name = var.service_name
-  replicas  = var.app_replicas
+  namespace                  = var.namespace
+  environment                = var.environment
+  service_name               = var.service_name
+  replicas                   = var.app_replicas
   cluster_configuration_map  = module.cluster_data.configuration_map
   kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
-  docker_image = var.docker_image
-  command      = ["/app/docker-entrypoint.sh", "-m", "-f"]
-  probe_path   = null
-  web_external_hostnames = local.web_external_hostnames
+  docker_image           = var.docker_image
+  command                = ["/app/docker-entrypoint.sh", "-m", "-f"]
+  probe_path             = null
+  web_external_hostnames = var.create_dsi_ingress ? [var.dsi_hostname] : []
 }
 
 module "worker_application" {

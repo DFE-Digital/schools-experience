@@ -32,12 +32,6 @@ help:
 APPLICATION_SECRETS=SE-SECRETS
 INFRA_SECRETS=SE-INFRA-SECRETS
 
-.PHONY: development
-development:
-	$(eval export DEPLOY_ENV=dev)
-	$(eval export KEY_VAULT=s105d01-kv)
-	$(eval export AZURE_SUBSCRIPTION=s105-schoolexperience-development)
-
 .PHONY: development_aks
 development_aks:
 	$(eval include global_config/development.sh)
@@ -47,19 +41,6 @@ set-key-vault-names:
 	$(eval KEY_VAULT_APPLICATION_NAME=$(AZURE_RESOURCE_PREFIX)-$(SERVICE_SHORT)-$(CONFIG_SHORT)-app-kv)
 	$(eval KEY_VAULT_INFRASTRUCTURE_NAME=$(AZURE_RESOURCE_PREFIX)-$(SERVICE_SHORT)-$(CONFIG_SHORT)-inf-kv)
 
-.PHONY: review
-review:
-	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER", Please specify a pr number for your review app))
-	$(eval export PR_NAME=review-school-experience-${PR_NUMBER})
-	$(eval export DEPLOY_ENV=review)
-	$(eval export SPACE_NAME=get-into-teaching)
-	$(eval export KEY_VAULT=s105d01-kv)
-	$(eval export AZURE_SUBSCRIPTION=s105-schoolexperience-development)
-	$(eval export TF_VAR_paas_application_name=${PR_NAME})
-	cf target -s ${SPACE_NAME}
-	cf delete-orphaned-routes -f
-	$(eval export TF_VAR_static_route=$(shell script/get_next_mapping.sh ${PR_NAME}))
-	$(eval BACKEND_KEY=-backend-config=key=${PR_NAME}.tfstate)
 
 .PHONY: review_aks
 review_aks:
@@ -70,21 +51,9 @@ review_aks:
 	$(eval export TF_VAR_dsi_hostname=$(shell script/get_next_mapping_aks.sh ${PR_NUMBER}  ${PR_NAME}))
 	$(eval export TF_VAR_environment=review-pr-$(PR_NUMBER))
 
-.PHONY: staging
-staging:
-	$(eval export DEPLOY_ENV=staging)
-	$(eval export KEY_VAULT=s105t01-kv)
-	$(eval export AZURE_SUBSCRIPTION=s105-schoolexperience-test)
-
 .PHONY: staging_aks
 staging_aks:
 	$(eval include global_config/staging.sh)
-
-.PHONY: production
-production:
-	$(eval export DEPLOY_ENV=production)
-	$(eval export KEY_VAULT=s105p01-kv)
-	$(eval export AZURE_SUBSCRIPTION=s105-schoolexperience-production)
 
 .PHONY: production_aks
 production_aks:
@@ -93,6 +62,7 @@ production_aks:
 .PHONY: ci
 ci:
 	$(eval AUTO_APPROVE=-auto-approve)
+	$(eval SKIP_AZURE_LOGIN=true)
 
 clean:
 	[ ! -f fetch_config.rb ]  \
@@ -142,21 +112,8 @@ terraform-init-aks: composed-variables bin/terrafile set-azure-account
 	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
 	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG_PREFIX}-${IMAGE_TAG})
 
-terraform-init: set-azure-account
-	$(if $(or $(IMAGE_TAG), $(NO_IMAGE_TAG_DEFAULT)), , $(eval export IMAGE_TAG=master))
-	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
-	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/schools-experience:$(IMAGE_TAG))
-
-	terraform -chdir=terraform/paas init -reconfigure -upgrade -backend-config=${DEPLOY_ENV}.bk.vars ${BACKEND_KEY}
-
-terraform-plan: terraform-init
-	terraform -chdir=terraform/paas plan -var-file=${DEPLOY_ENV}.env.tfvars
-
 terraform-plan-aks: terraform-init-aks
 	terraform -chdir=terraform/aks plan -var-file "config/${CONFIG}.tfvars.json"
-
-terraform-apply: terraform-init
-	terraform -chdir=terraform/paas apply -var-file=${DEPLOY_ENV}.env.tfvars ${AUTO_APPROVE}
 
 terraform-apply-aks: terraform-init-aks
 	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}

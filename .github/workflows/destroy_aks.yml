@@ -32,6 +32,15 @@ jobs:
         with:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - uses: Azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: K8 setup for review apps
+        shell: bash
+        run: |
+          az aks get-credentials -g s189t01-tsc-ts-rg -n s189t01-tsc-test-aks
+
       - name: Terraform Destroy
         run: |
             make ci review_aks terraform-destroy-aks PR_NUMBER=${{github.event.number}}
