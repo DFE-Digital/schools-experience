@@ -301,7 +301,7 @@ GEM
     ice_cube (0.16.4)
     invisible_captcha (2.1.0)
       rails (>= 5.2)
-    json (2.6.2)
+    json (2.6.3)
     json-jwt (1.15.3)
       activesupport (>= 4.2)
       aes_key_wrap
