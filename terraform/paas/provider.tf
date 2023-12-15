@@ -28,7 +28,7 @@ terraform {
 
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.82.0"
+      version = "3.85.0"
     }
     cloudfoundry = {
       source  = "cloudfoundry-community/cloudfoundry"
