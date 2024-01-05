@@ -1,6 +1,6 @@
 # PowerBI dashboard data
 
-The powerBI db backup pipeline was migrated from the old paas environment to the new aks environment
+The powerBI db backup pipeline was migrated to the new aks environment
 
 the old pipeline was implemented using azure devops classic release pipeline.
 The new pipeline is also implemented using the classic azure devops release pipeline and it is located here

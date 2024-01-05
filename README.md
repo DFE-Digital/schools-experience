@@ -84,7 +84,7 @@ We also have markdown pages within the `doc` folder of this git repo
 - Cucumber
 - Dotenv (managing environment variables)
 - Dockerfile to package app for deployment
-- GOV.UK PaaS terraform files
+- GOV.UK  terraform files
 
 ## Getting started
 

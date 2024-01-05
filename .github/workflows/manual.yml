@@ -32,15 +32,6 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: DfE-Digital/keyvault-yaml-secret@v1
-        id:  keyvault-yaml-secret
-        with:
-          keyvault: ${{ secrets.KEY_VAULT}}
-          secret: SE-INFRA-SECRETS
-          key: SLACK-WEBHOOK, SLACK-RELEASE-NOTE-WEBHOOK
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Get Release Id from Tag
         id: tag_id
         uses: DFE-Digital/github-actions/DraftReleaseByTag@master
@@ -60,26 +51,32 @@ jobs:
         with:
           environment: ${{ github.event.inputs.environment }}
           sha:  ${{ steps.tag_id.outputs.release_sha }}
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-          KEY_VAULT:         ${{ secrets.KEY_VAULT }}
-          ARM_ACCESS_KEY:    ${{ secrets.ARM_ACCESS_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Fetch slack token
+        uses: azure/CLI@v1
+        id: fetch-slack-secret
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Slack Release Notification
         if: steps.tag_id.outputs.release_id && github.event.inputs.environment == 'Production'
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_COLOR: ${{env.SLACK_SUCCESS}}
+          SLACK_MESSAGE:  ${{ fromJson( steps.tag_id.outputs.release_body) }}
           SLACK_TITLE: "Release Published to ${{github.event.inputs.environment}}: ${{steps.tag_id.outputs.release_name}}"
-          SLACK_MESSAGE: ${{ fromJson( steps.tag_id.outputs.release_body) }}
-          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-RELEASE-NOTE-WEBHOOK }}
+          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
           MSG_MINIMAL: true
 
       - name: Slack Notification
         if: failure() && github.event.inputs.environment == 'Production'
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_COLOR: ${{env.SLACK_FAILURE}}
+          SLACK_COLOR: ${{env.SLACK_ERROR}}
           SLACK_TITLE: "Manual Release Failed: ${{steps.tag_id.outputs.release_name}}"
           SLACK_MESSAGE: Failure deploying ${{github.event.inputs.environment}} release
-          SLACK_WEBHOOK: ${{ steps.keyvault-yaml-secret.outputs.SLACK-WEBHOOK }}
+          SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"

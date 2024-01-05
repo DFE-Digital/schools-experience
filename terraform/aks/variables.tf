@@ -22,9 +22,6 @@ variable "config_short" {
 variable "service_name" {
   description = "Full name of the service. Lowercase and hyphen separated"
 }
-variable "paas_space" {
-  description = "the space for corresponding paas app"
-}
 variable "service_short" {
   description = "Short name to identify the service. Up to 6 charcters."
 }

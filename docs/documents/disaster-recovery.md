@@ -15,27 +15,18 @@ Disaster Recover (DR) follows the principles outlined in the [Becoming a Teacher
 
 ## Access
 
-### UK Gov PaaS
-
-The user will require access to the [UK Gov PaaS](https://docs.cloud.service.gov.uk/get_started.html). with the role SPACE DEVELOPER
-
-```
-API endpoint:   https://api.london.cloud.service.gov.uk
-org:            dfe
-space:          get-into-teaching-production
-```
 
 ### Azure Access
 
-The Department of Education Azure system is known as Cloud Infrastructure Platform (CIP). The user will require access to the School Experience production subscription, and will need to have elevated privilages set via Azure privilaged identity managment, so they can download files in the storage account. 
+The Department of Education Azure system is known as Cloud Infrastructure Platform (CIP). The user will require access to the School Experience production subscription, and will need to have elevated privilages set via Azure privilaged identity managment, so they can download files in the storage account.
 
 [Access to CIP Guide](https://dfedigital.atlassian.net/wiki/spaces/BaT/pages/1897955586/Azure+CIP)
 
 ## Specific to School Experience
 
-The data in Postgres is persistent and regular backups are carried out by Cloud Foundry (AWS). 
+The data in Postgres is persistent and regular backups are carried out by Cloud Foundry (AWS).
 
-However, Every night the Azure Pipeline PaaS to Azure Data Copy will run, as part of this process it exports the live databases. For restore purposes we are storing this file in an Azure file storage account (Production subscription ). 
+However, Every night the Azure Pipeline Datase backup  will run, as part of this process it exports the live databases. For restore purposes we are storing this file in an Azure file storage account (Production subscription ).
 
 This file can be used to recover the database in the event of accidental deletion.
 
@@ -45,7 +36,7 @@ The file can be downloaded via the Azure portal or using Azure CLI, in both case
 
 #### Azure CLI get storage keys
 
-Note: you will need to set your AZURE_STORAGE_KEY variable. To get this: 
+Note: you will need to set your AZURE_STORAGE_KEY variable. To get this:
 
 ```
 az login
@@ -70,43 +61,4 @@ az storage blob list --container-name <Backup Container> --account-name <Storage
 
 ## Choose a File and download it.
 az storage blob download --container-name <Backup Container> --account-name <Storage Account Name> --name Tuesday.tar.gz --file output.sql
-```
-
-### Connecting to PaaS
-
-There are two methods to connect to the UK Government PaaS depnding if you use Single Sign On (SSO) or Username and Password.
-
-#### Username and Password sign in 
-
-```
-cf login -a api.london.cloud.service.gov.uk -u USERNAME
-```
-
-#### SSO Sign in
-
-```
-cf login -a api.london.cloud.service.gov.uk --sso
-```
-
-### Import database
-
-Connect as a user with access to the new production postgres service
-
-```
-cf target -s get-into-teaching-production
-cf conduit school-experience-prod-pg-common-svc -- psql
-```
-Delete the contents of the database, this is only necessary if you are importing into a database with existing data.
-
-```
-\dt;  ### will give you a list of tables and their owners, you can drop them all by selecting the owner
-drop owned by rdsbroker_xxxxxxx_xxxxx_xxxx_xxxx_xxxxxxxxxx_manager; 
-```
-
-Note: The owner may have changed if the database service has been destroyed and rebuilt
-
-Import the data, assuming you have downloaded the file from Azure and named it output.sql
-
-```
-\i output.sql
 ```

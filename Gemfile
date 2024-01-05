@@ -28,7 +28,7 @@ gem 'shakapacker', '6.6.0'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
-# Install Semantic Logger, this is needed to make Logit.io work with PaaS
+# Install Semantic Logger, this is needed to make Logit.io work
 gem 'amazing_print'
 gem 'rails_semantic_logger'
 

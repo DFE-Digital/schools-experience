@@ -32,8 +32,8 @@ help:
 APPLICATION_SECRETS=SE-SECRETS
 INFRA_SECRETS=SE-INFRA-SECRETS
 
-.PHONY: development_aks
-development_aks:
+.PHONY: development
+development:
 	$(eval include global_config/development.sh)
 
 .PHONY: set-key-vault-names
@@ -42,21 +42,20 @@ set-key-vault-names:
 	$(eval KEY_VAULT_INFRASTRUCTURE_NAME=$(AZURE_RESOURCE_PREFIX)-$(SERVICE_SHORT)-$(CONFIG_SHORT)-inf-kv)
 
 
-.PHONY: review_aks
-review_aks:
+.PHONY: review
+review:
 	$(eval include global_config/review.sh)
 	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER"))
 	$(eval export PR_NAME=get-school-experience-review-pr-${PR_NUMBER}.test.teacherservices.cloud)
-	$(eval export TF_VAR_paas_application_name=${PR_NAME})
-	$(eval export TF_VAR_dsi_hostname=$(shell script/get_next_mapping_aks.sh ${PR_NUMBER}  ${PR_NAME}))
+	$(eval export TF_VAR_dsi_hostname=$(shell script/get_next_ing_mapping.sh ${PR_NUMBER}  ${PR_NAME}))
 	$(eval export TF_VAR_environment=review-pr-$(PR_NUMBER))
 
-.PHONY: staging_aks
-staging_aks:
+.PHONY: staging
+staging:
 	$(eval include global_config/staging.sh)
 
-.PHONY: production_aks
-production_aks:
+.PHONY: production
+production:
 	$(eval include global_config/production.sh)
 
 .PHONY: ci
@@ -97,7 +96,7 @@ bin/terrafile: ## Install terrafile to manage terraform modules
 	curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
 		| tar xz -C ./bin terrafile
 
-terraform-init-aks: composed-variables bin/terrafile set-azure-account
+terraform-init: composed-variables bin/terrafile set-azure-account
 	$(if ${IMAGE_TAG}, , $(eval IMAGE_TAG=master))
 
 	./bin/terrafile -p terraform/aks/vendor/modules -f terraform/aks/config/$(CONFIG)_Terrafile
@@ -112,20 +111,17 @@ terraform-init-aks: composed-variables bin/terrafile set-azure-account
 	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
 	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${IMAGE_TAG_PREFIX}-${IMAGE_TAG})
 
-terraform-plan-aks: terraform-init-aks
+terraform-plan: terraform-init
 	terraform -chdir=terraform/aks plan -var-file "config/${CONFIG}.tfvars.json"
 
-terraform-apply-aks: terraform-init-aks
+terraform-apply: terraform-init
 	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
-
-terraform-destroy: terraform-init
-	terraform -chdir=terraform/paas destroy -var-file=${DEPLOY_ENV}.env.tfvars ${AUTO_APPROVE}
 
 bin/konduit.sh:
 	curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/main/scripts/konduit.sh -o bin/konduit.sh \
 		&& chmod +x bin/konduit.sh
 
-terraform-destroy-aks: terraform-init-aks
+terraform-destroy: terraform-init
 	terraform -chdir=terraform/aks destroy -var-file=config/${CONFIG}.tfvars.json ${AUTO_APPROVE}
 
 delete-state-file:
