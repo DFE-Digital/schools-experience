@@ -115,7 +115,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bring up Docker compose Stack
-        run: docker-compose -f docker-compose-paas.yml up -d
+        run: docker-compose -f docker-compose-ci.yml up -d
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -130,7 +130,7 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run:  docker-compose -f docker-compose-paas.yml run --rm db-tasks rspec
+        run:  docker-compose -f docker-compose-ci.yml run --rm db-tasks rspec
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
@@ -219,7 +219,7 @@ jobs:
 
       - name: Run Cucumber Tests
         run: |-
-          docker-compose -f docker-compose-paas.yml run --rm \
+          docker-compose -f docker-compose-ci.yml run --rm \
             -e RAILS_ENV \
             -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
             -e NODE \
@@ -267,7 +267,7 @@ jobs:
 
       - name: Run Cucumber Tests
         run: |-
-          docker-compose -f docker-compose-paas.yml run --rm \
+          docker-compose -f docker-compose-ci.yml run --rm \
             -e RAILS_ENV \
             -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL \
             -e NODE \
@@ -334,18 +334,18 @@ jobs:
 
     runs-on: ubuntu-latest
     outputs:
-      matrix_aks_environments: ${{ env.MATRIX_AKS_ENVIRONMENTS }}
+      matrix_environments: ${{ env.MATRIX_ENVIRONMENTS }}
       release_tag: ${{steps.tag_version.outputs.pr_number}}
     steps:
       - name: Set matrix environments (Push to master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-            echo "MATRIX_AKS_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
+            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
         if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
         run: |
-            echo "MATRIX_AKS_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
+            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
       - name: Generate Tag from PR Number
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         id: tag_version
@@ -374,14 +374,14 @@ jobs:
           RELEASE_ID: ${{ steps.release.outputs.id }}
           TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-  deployments_aks:
-    name: Deployments aks
+  deployments:
+    name: Deployments
     strategy:
       max-parallel: 1
-      matrix: ${{fromJSON(needs.prepare.outputs.matrix_aks_environments)}}
+      matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
     environment:
-       name: ${{matrix.environment}}_aks
-    concurrency: ${{matrix.environment}}_${{github.event.number}}_aks
+       name: ${{matrix.environment}}
+    concurrency: ${{matrix.environment}}_${{github.event.number}}
     needs: [prepare ]
     runs-on: ubuntu-latest
     steps:
@@ -396,8 +396,8 @@ jobs:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Trigger Deployment to ${{matrix.environment}}
-        id: deploy-aks
-        uses: ./.github/workflows/actions/deploy_v2
+        id: deploy
+        uses: ./.github/workflows/actions/deploy
         with:
           environment: ${{matrix.environment}}
           sha:  ${{ github.sha }}
@@ -405,23 +405,23 @@ jobs:
           pr:   ${{github.event.number}}
 
 
-      - name: Determine DfE Sign In Message - AKS
+      - name: Determine DfE Sign In Message
         if: matrix.environment == 'Review'
         uses: haya14busa/action-cond@v1
         id: dsiMessage
         with:
-          cond: ${{ steps.deploy-aks.outputs.dsi-hostname != '' }}
-          if_true: ':white_check_mark: DfE AKS sign in route obtained: https://${{ steps.deploy-aks.outputs.dsi-hostname }}'
-          if_false: ':warning: **DfE AKS sign in route pool for AKS exhausted (close some open PRs!)**'
+          cond: ${{ steps.deploy.outputs.dsi-hostname != '' }}
+          if_true: ':white_check_mark: DfE  sign in route obtained: https://${{ steps.deploy.outputs.dsi-hostname }}'
+          if_false: ':warning: **DfE  sign in route pool  exhausted (close some open PRs!)**'
 
       - name: Post sticky pull request comment
         if: matrix.environment == 'Review'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          header: AKS
+          header: PR
           message: |
-            Review app deployed to https://${{env.AKS_REVIEW_APPLICATION}}-${{github.event.number}}.${{env.REVIEW_AKS_DOMAIN}}
+            Review app deployed to https://${{env.REVIEW_APPLICATION}}-${{github.event.number}}.${{env.REVIEW_DOMAIN}}
             ${{ steps.dsiMessage.outputs.value }}
 
       - name: Add Review Label
@@ -477,7 +477,7 @@ jobs:
   owasp:
     name: 'OWASP Test'
     runs-on: ubuntu-latest
-    needs: [deployments_aks ]
+    needs: [deployments ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
@@ -513,7 +513,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{ steps.fetch-username.outputs.SECURE_USERNAME}}:${{ steps.fetch-password.outputs.SECURE_PASSWORD }}@${{env.AKS_APPLICATION_NAME}}-development.${{env.REVIEW_AKS_DOMAIN}}'
+          target: 'https://${{ steps.fetch-username.outputs.SECURE_USERNAME}}:${{ steps.fetch-password.outputs.SECURE_PASSWORD }}@${{env.APPLICATION_NAME}}-development.${{env.REVIEW_DOMAIN}}'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
 
@@ -531,6 +531,6 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
            SLACK_COLOR: ${{env.SLACK_FAILURE}}
-           SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.AKS_APPLICATION_NAME}}-development.${{env.REVIEW_AKS_DOMAIN}}/'
+           SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.APPLICATION_NAME}}-development.${{env.REVIEW_DOMAIN}}/'
            SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
            SLACK_WEBHOOK: "${{ steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"

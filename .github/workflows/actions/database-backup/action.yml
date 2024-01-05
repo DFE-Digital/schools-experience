@@ -1,5 +1,5 @@
-name: Backup AKS Database
-description: backs up AKS database to Azure Storage
+name: Backup  Database
+description: backs up  database to Azure Storage
 
 inputs:
   environment:

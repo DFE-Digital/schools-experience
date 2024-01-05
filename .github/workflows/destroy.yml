@@ -7,9 +7,9 @@ jobs:
   destroy:
     name: Destroy
     environment:
-       name: review_aks
+       name: review
     runs-on: ubuntu-latest
-    concurrency: review_${{github.event.number}}_aks
+    concurrency: review_${{github.event.number}}
     defaults:
       run:
         shell: bash
@@ -43,7 +43,7 @@ jobs:
 
       - name: Terraform Destroy
         run: |
-            make ci review_aks terraform-destroy-aks PR_NUMBER=${{github.event.number}}
+            make ci review terraform-destroy PR_NUMBER=${{github.event.number}}
 
       - name: Delete Terraform State File
         run:  az storage blob delete --container-name  terraform-state --account-name s189t01gsetfstatervsa --account-key ${{secrets.ARM_ACCESS_KEY}} -n ${{github.event.number}}_kubernetes.tfstate

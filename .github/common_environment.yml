@@ -5,9 +5,7 @@
   SLACK_FOOTER:          School Experience
   DOCKER_REPOSITORY:     ghcr.io/dfe-digital/schools-experience
   DOMAIN:                london.cloudapps.digital
-  REVIEW_AKS_DOMAIN:     test.teacherservices.cloud
+  REVIEW_DOMAIN:     test.teacherservices.cloud
   APPLICATION:           School Experience
-  REVIEW_APPLICATION:    review-school-experience
-  AKS_REVIEW_APPLICATION: get-school-experience-review-pr
-  PAAS_APPLICATION_NAME: school-experience-app
-  AKS_APPLICATION_NAME:  get-school-experience
+  REVIEW_APPLICATION: get-school-experience-review-pr
+  APPLICATION_NAME:  get-school-experience
