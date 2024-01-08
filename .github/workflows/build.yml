@@ -75,6 +75,7 @@ jobs:
                  SHA=${{ steps.sha.outputs.short }}
 
       - name: Fetch slack web hook
+        if: failure() && github.ref == 'refs/heads/master'
         uses: azure/CLI@v1
         id: slack-web-hook
         with:
