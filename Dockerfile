@@ -41,8 +41,7 @@ RUN yarn install && yarn cache clean
 # Install Gems removing artifacts
 COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
-RUN gem install nokogiri --version 1.15.3 --platform x86_64-linux && \
-    gem install bundler --version='~> 2.3.4' && \
+RUN gem install bundler --version='~> 2.3.4' && \
     bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java && \
     bundle install --jobs=$(nproc --all) && \
     rm -rf /root/.bundle/cache && \
