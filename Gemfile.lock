@@ -136,7 +136,7 @@ GEM
     brakeman (6.0.1)
     breasal (0.0.1)
     builder (3.2.4)
-    bullet (7.0.4)
+    bullet (7.1.5)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
