@@ -11,7 +11,7 @@
     "@babel/plugin-transform-function-name": "^7.23.3",
     "@babel/helper-compilation-targets": "7.22.6",
     "@babel/preset-env":  "^7.23.2",
-    "@babel/runtime": "^7.22.3",
+    "@babel/runtime": "^7.23.8",
     "@googlemaps/js-api-loader": "^1.16.2",
     "@stimulus/polyfills": "^2.0.0",
     "accessible-autocomplete": "^2.0.4",
