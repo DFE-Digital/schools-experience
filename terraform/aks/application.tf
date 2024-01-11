@@ -38,7 +38,7 @@ module "web_application" {
 
   docker_image = var.docker_image
   command      = ["/app/docker-entrypoint.sh", "-m", "-f"]
-  probe_path   = null
+  probe_path   = "/healthcheck"
 }
 
 module "worker_application" {
