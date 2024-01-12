@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   get '/healthcheck.txt', to: 'healthchecks#show', as: :healthcheck
   get '/healthcheck', to: 'healthchecks#show', as: :healthcheck_json
+  get '/check', to: proc { [200, {}, %w[OK]] }
   get '/deployment.txt', to: 'healthchecks#deployment', as: :deployment
   get '/deployment', to: 'healthchecks#deployment', as: :deployment_json
   get '/healthchecks/api.txt', to: 'healthchecks#api_health', as: :api_health
