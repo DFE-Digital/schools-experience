@@ -135,7 +135,10 @@ Rails.application.configure do
   config.force_ssl = true
   config.ssl_options = {
     redirect: {
-      exclude: ->(request) { request.path.start_with?("/metrics") }
+      exclude: lambda do |request|
+        request.path.start_with?("/metrics") ||
+          request.path.start_with?("/check")
+      end
     }
   }
 
