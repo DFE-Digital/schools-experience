@@ -1,3 +1,3 @@
 BeforeAll do
-  Webpacker.compile
+  Shakapacker.compile
 end

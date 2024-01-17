@@ -86,7 +86,7 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    Webpacker.compile
+    Shakapacker.compile
   end
 
   config.after :suite do
