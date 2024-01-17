@@ -1,6 +1,7 @@
 // use the new NPM package name, `shakapacker`.
 // merge is webpack-merge from https://github.com/survivejs/webpack-merge
-const { webpackConfig: baseWebpackConfig, merge } = require('shakapacker')
+const { generateWebpackConfig, merge } = require('shakapacker')
+const baseWebpackConfig = generateWebpackConfig()
 
 const options = {
   resolve: {
