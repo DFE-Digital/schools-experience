@@ -1,2 +1,2 @@
 server: bin/rails server
-assets: bin/webpacker-dev-server
+assets: bin/shakapacker-dev-server
