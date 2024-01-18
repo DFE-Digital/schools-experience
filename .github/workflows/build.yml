@@ -396,6 +396,25 @@ jobs:
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+
+      - name: Fetch SECURE USERNAME
+        uses: azure/CLI@v1
+        id: fetch-username
+        with:
+          inlineScript: |
+              SECRET_VALUE=$(az keyvault secret show --name "SECURE-USERNAME" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+              echo "::add-mask::$SECRET_VALUE"
+              echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
+      - name: Fetch SECURE PASSWORD
+        uses: azure/CLI@v1
+        id: fetch-password
+        with:
+            inlineScript: |
+              SECRET_VALUE=$(az keyvault secret show --name "SECURE-PASSWORD" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+              echo "::add-mask::$SECRET_VALUE"
+              echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
       - name: Trigger Deployment to ${{matrix.environment}}
         id: deploy
         uses: ./.github/workflows/actions/deploy
@@ -404,6 +423,8 @@ jobs:
           sha:  ${{ github.sha }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pr:   ${{github.event.number}}
+          secure-username: ${{ steps.fetch-username.outputs.SECURE_USERNAME}}
+          secure-password: ${{ steps.fetch-password.outputs.SECURE_PASSWORD}}
 
 
       - name: Determine DfE Sign In Message

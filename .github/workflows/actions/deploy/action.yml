@@ -13,7 +13,12 @@ inputs:
   pr:
     description: Pull Request Reference
     required: false
-
+  secure-username:
+    description: secured username used to get healthcheck
+    required: true
+  secure-password:
+    description: secured password used to get healthcheck
+    required: true
 
 outputs:
   deploy-url:
@@ -31,14 +36,29 @@ runs:
         echo " tf_vars_file is $tf_vars_file"
         terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/terraform.tf | grep -o [0-9\.]*)
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
+        cluster=$(jq -r '.cluster' ${tf_vars_file})
+        echo "cluster=$cluster" >> $GITHUB_ENV
         echo "app_environment=$(jq -r '.environment' ${tf_vars_file})" >> $GITHUB_ENV
         echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
         echo "namespace=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
-        if [[ $cluster == 'production' ]]; then
-              echo "deploy_url=https://get-school-experience-${{ env.app_environment }}.teacherservices.cloud" >> $GITHUB_OUTPUT
-            else
-              echo "deploy_url=https://get-school-experience-${{ env.app_environment }}.${cluster}.teacherservices.cloud" >> $GITHUB_OUTPUT
-        fi
+
+        case "${{ inputs.environment }}" in
+          development)
+          echo "deploy_url=https://get-school-experience-development.$cluster.teacherservices.cloud" >> $GITHUB_ENV
+          ;;
+          staging)
+          echo "deploy_url=https://get-school-experience-staging.$cluster.teacherservices.cloud" >> $GITHUB_ENV
+          ;;
+          review)
+          echo "deploy_url=https://get-school-experience-review-pr-${{ inputs.pr }}.$cluster.teacherservices.cloud" >> $GITHUB_ENV
+          ;;
+          production)
+          echo "deploy_url=https://get-school-experience-production.teacherservices.cloud" >> $GITHUB_ENV
+          ;;
+         *)
+          echo "unknown cluster"
+          ;;
+        esac
 
     - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
       uses: hashicorp/setup-terraform@v2
@@ -65,10 +85,17 @@ runs:
       shell: bash
       run: |
         envval="${{ inputs.environment }}"
-        echo "envval is ${envval}"
         make ci ${envval} terraform-apply PR_NUMBER=${{ inputs.pr }}
       env:
         IMAGE_TAG: ${{ steps.sha.outputs.short }}
+
+    - name: Smoke tests
+      shell: bash
+      run: |
+               tests/confidence/healthcheck.sh ${{env.deploy_url}}  "${{ steps.sha.outputs.short }}"
+      env:
+        HTTPAUTH_USERNAME: ${{ inputs.secure-username }}
+        HTTPAUTH_PASSWORD: ${{ inputs.secure-password }}
 
     - name: Retrieve DSI hostname
       id: dsi_hostname
