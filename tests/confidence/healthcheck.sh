@@ -19,7 +19,6 @@ APP_SHA=${2}
 #APP_SHA="e1c94c1"
 #APP_SHA="e1c94cx"
 
-
 if [ -z "${HTTPAUTH_USERNAME}" ]
 then
     AUTHORITY=""
@@ -28,14 +27,13 @@ else
 fi
 
 rval=0
-FULL_URL="https://${URL}.london.cloudapps.digital/healthcheck"
+FULL_URL="${URL}/healthcheck"
 
 http_status()
 {
      echo $(curl ${AUTHORITY} -o /dev/null -s -w "%{http_code}"  ${FULL_URL})
 }
 
- 
 count=0
 while [ "$(http_status)" != "200" ]
 do
