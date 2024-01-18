@@ -2,7 +2,7 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
-  config.webpacker.check_yarn_integrity = true
+  config.shakapacker.check_yarn_integrity = true
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In development log more information
