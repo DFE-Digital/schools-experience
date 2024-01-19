@@ -3317,9 +3317,9 @@ globals@^11.1.0:
   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
 
 govuk-frontend@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.0.1.tgz#bceff58ecb399272cba32bd2b357fe16198e3249"
-  integrity sha512-X+B88mqYHoxAz0ID87Uxo3oHqdKBRnNHd3Cz8+u8nvQUAsrEzROFLK+t7sAu7e+fKqCCrJyIgx6Cmr6dIGnohQ==
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.7.0.tgz#69950b6c2e69f435ffe9aa60d8dee232dac977de"
+  integrity sha512-0OsdCusF5qvLWwKziU8zqxiC0nq6WP0ZQuw51ymZ/1V0tO71oIKMlSLN2S9bm8RcEGSoidPt2A34gKxePrLjvg==
 
 graceful-fs@^4.1.2, graceful-fs@^4.2.4, graceful-fs@^4.2.9:
   version "4.2.11"
