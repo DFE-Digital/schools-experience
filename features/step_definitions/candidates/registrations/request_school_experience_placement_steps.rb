@@ -1,6 +1,6 @@
 Then("the {string} word count should say {string}") do |label_text, expectation|
   within(page.find("label", text: label_text).ancestor('div.govuk-form-group')) do
-    expect(page).to have_css("span.govuk-character-count__message", text: expectation)
+    expect(page).to have_css("div.govuk-character-count__message", text: expectation)
   end
 end
 
