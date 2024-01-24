@@ -23,3 +23,7 @@ send_next_week_reminders_job:
 add_availability_job:
   cron: "40 9 * * *" # at 09:40
   class: "Cron::Reminders::AddAvailabilityJob"
+
+send_entity_table_checks_to_bigquery:
+  cron: "30 0 * * *"  # Every day at 00:30.
+  class: "DfE::Analytics::EntityTableCheckJob"
