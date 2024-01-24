@@ -12,6 +12,13 @@ permissions:
   packages: write
   pull-requests: write
 
+env:
+  code-coverage-artifact-name: code_coverage_${{github.run_number}}_${{github.run_attempt}}
+  unit-tests-artifact-name: unit_tests_${{github.run_number}}_${{github.run_attempt}}
+  rubocop-artifact-name: rubocop_results_${{github.run_number}}_${{github.run_attempt}}
+  cucumber-tests-artifact-name: cucumber_tests_${{github.run_number}}_${{github.run_attempt}}
+  selenium-cucumber-tests-artifact-name: selenium_cucumber_tests_${{github.run_number}}_${{github.run_attempt}}
+
 jobs:
 
   build:
@@ -125,9 +132,9 @@ jobs:
 
       - name: Keep Rubocop output
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: Rubocop_results
+          name: ${{ env.rubocop-artifact-name }}
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
@@ -137,16 +144,16 @@ jobs:
 
       - name:  Keep Unit Tests Results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: unit_tests
+          name: ${{ env.unit-tests-artifact-name }}
           path: ${{ github.workspace }}/out/test-report.xml
 
       - name:  Keep Code Coverage Report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: Code_Coverage
+          name: ${{ env.code-coverage-artifact-name }}
           path: ${{ github.workspace }}/coverage/coverage.json
 
   security_tests:
@@ -235,9 +242,9 @@ jobs:
 
       - name:  Keep Unit Tests Results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: cucumber_tests
+          name: ${{ env.cucumber-tests-artifact-name }}_${{ matrix.node }}
           path: ${{ github.workspace }}/out
 
   selenium_cucumber_tests:
@@ -284,9 +291,9 @@ jobs:
 
       - name:  Keep Unit Tests Results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: selenium_cucumber_tests
+          name: ${{ env.selenium-cucumber-tests-artifact-name }}_${{ matrix.node }}
           path: ${{ github.workspace }}/out
 
   sonarcloud:
@@ -307,12 +314,12 @@ jobs:
             creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Download Test Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
             path: ${{ github.workspace }}/out/
 
       - name: Fixup report file paths
-        run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
+        run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/${{ env.code-coverage-artifact-name }}/coverage.json
 
       - name: Fetch Sonar token from key vault
         uses: azure/CLI@v2
@@ -328,6 +335,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ steps.fetch-sonar-token.outputs.SONAR-TOKEN }}
+        with:
+          args: >
+            -Dsonar.ruby.rubocop.reportPath=./out/${{ env.rubocop-artifact-name }}/rubocop-result.json
+            -Dsonar.ruby.coverage.reportPaths=./out/${{ env.code-coverage-artifact-name }}/coverage.json
 
   prepare:
     name: Configure Matrix Deployments
