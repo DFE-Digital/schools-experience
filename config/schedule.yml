@@ -1,4 +1,5 @@
 # Sidekiq scheduled tasks/cron jobs
+require: "dfe-analytics"
 
 heart_beat_job:
   cron: "* * * * *" # every minute
