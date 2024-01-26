@@ -28,7 +28,7 @@ jobs:
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
-      - uses: DFE-Digital/github-actions/set-arm-environment-variables@master
+      - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
         with:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -39,7 +39,7 @@ jobs:
       - name: K8 setup for review apps
         shell: bash
         run: |
-          az aks get-credentials -g s189t01-tsc-ts-rg -n s189t01-tsc-test-aks
+          make review get-cluster-credentials PR_NUMBER=${{ github.event.number }}
 
       - name: Terraform Destroy
         run: |

@@ -66,7 +66,7 @@ runs:
         terraform_version: ${{ env.TERRAFORM_VERSION }}
         terraform_wrapper: false
 
-    - uses: DFE-Digital/github-actions/set-arm-environment-variables@master
+    - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
       with:
         azure-credentials: ${{ inputs.azure-credentials }}
 
@@ -79,7 +79,7 @@ runs:
       if: inputs.environment == 'review'
       shell: bash
       run: |
-        az aks get-credentials -g s189t01-tsc-ts-rg -n s189t01-tsc-test-aks
+        make review get-cluster-credentials PR_NUMBER=${{ inputs.pr }}
 
     - name: Terraform init, plan & apply
       shell: bash
