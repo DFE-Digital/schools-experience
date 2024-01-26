@@ -43,7 +43,7 @@ set-key-vault-names:
 
 
 .PHONY: review
-review:
+review: test-cluster
 	$(eval include global_config/review.sh)
 	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER"))
 	$(eval export PR_NAME=get-school-experience-review-pr-${PR_NUMBER}.test.teacherservices.cloud)
@@ -51,11 +51,11 @@ review:
 	$(eval export TF_VAR_environment=review-pr-$(PR_NUMBER))
 
 .PHONY: staging
-staging:
+staging: test-cluster
 	$(eval include global_config/staging.sh)
 
 .PHONY: production
-production:
+production: production-cluster
 	$(eval include global_config/production.sh)
 
 .PHONY: ci
@@ -187,3 +187,15 @@ domains-plan: domains domains-init ## Terraform plan for DNS environment domains
 
 domains-apply: domains domains-init ## Terraform apply for DNS environment domains. Usage: make development_aks domains-apply
 	terraform -chdir=terraform/domains/environment_domains apply -var-file config/${CONFIG}.tfvars.json ${AUTO_APPROVE}
+
+test-cluster:
+	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189t01-tsc-ts-rg)
+	$(eval CLUSTER_NAME=s189t01-tsc-test-aks)
+
+production-cluster:
+	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189p01-tsc-pd-rg)
+	$(eval CLUSTER_NAME=s189p01-tsc-production-aks)
+
+get-cluster-credentials: set-azure-account
+	az aks get-credentials --overwrite-existing -g ${CLUSTER_RESOURCE_GROUP_NAME} -n ${CLUSTER_NAME}
+	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
