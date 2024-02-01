@@ -1,8 +1,14 @@
 name: Backup Database
+# on:
+#   workflow_dispatch:
+#   schedule: # 01:00 UTC
+#     - cron: "0 1 * * *"
+
 on:
-  workflow_dispatch:
-  schedule: # 01:00 UTC
-    - cron: "0 1 * * *"
+  push:
+    branches:
+      - '**'
+
 jobs:
   backup:
     name: Backup Database
@@ -10,7 +16,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: [development,  staging, production]
+        environment: [development]
     environment:
        name: ${{matrix.environment}}
     concurrency: ${{matrix.environment}}_${{github.event.number}}
