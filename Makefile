@@ -33,7 +33,7 @@ APPLICATION_SECRETS=SE-SECRETS
 INFRA_SECRETS=SE-INFRA-SECRETS
 
 .PHONY: development
-development:
+development: test-cluster
 	$(eval include global_config/development.sh)
 
 .PHONY: set-key-vault-names
