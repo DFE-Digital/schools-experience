@@ -97,6 +97,10 @@ runs:
 
   - uses: azure/setup-kubectl@v3
 
+  - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+    with:
+      azure-credentials: ${{ inputs.azure_credentials }}
+
   - name: K8 setup
     shell: bash
     run: |
