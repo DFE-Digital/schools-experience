@@ -100,7 +100,7 @@ runs:
   - name: K8 setup
     shell: bash
     run: |
-      make ${{ inputs.environment }} get-cluster-credentials
+      make ci ${{ inputs.environment }} get-cluster-credentials
       make bin/konduit.sh
 
   - name: Setup postgres client
