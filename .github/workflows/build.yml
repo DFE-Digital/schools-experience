@@ -307,7 +307,7 @@ jobs:
             creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Download Test Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
             path: ${{ github.workspace }}/out/
 
