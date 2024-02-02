@@ -58,6 +58,10 @@ runs:
     with:
       version: "v1.26.1"
 
+  - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+      with:
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+
   - name: get environment variables
     shell: bash
     run: |
