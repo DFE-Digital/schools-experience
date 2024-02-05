@@ -23,3 +23,4 @@ jobs:
         with:
           environment: ${{matrix.environment}}
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          repo_credentials: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}

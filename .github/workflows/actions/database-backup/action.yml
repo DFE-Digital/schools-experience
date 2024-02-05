@@ -8,6 +8,9 @@ inputs:
   azure_credentials:
     description: "JSON object containing a service principal that can read from Azure Key Vault"
     required: true
+  repo_credentials:
+    description: "JSON object containing a service principal that can read from Azure Key Vault"
+    required: true
 
 
 outputs:
@@ -59,8 +62,8 @@ runs:
       version: "v1.26.1"
 
   - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
-      with:
-        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+    with:
+       azure-credentials: ${{ inputs.repo_credentials }}
 
   - name: get environment variables
     shell: bash
