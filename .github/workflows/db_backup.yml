@@ -15,6 +15,7 @@ jobs:
        name: ${{matrix.environment}}
     concurrency: ${{matrix.environment}}_${{github.event.number}}
     steps:
+
       - name: Check out the repo
         uses: actions/checkout@v4
       - name: Backup  Database
@@ -23,3 +24,4 @@ jobs:
         with:
           environment: ${{matrix.environment}}
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          repo_credentials: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}

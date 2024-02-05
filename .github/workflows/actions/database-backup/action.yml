@@ -5,10 +5,12 @@ inputs:
   environment:
     description: "The name of the environment"
     required: true
+  repo_credentials:
+    description: "JSON object containing a service principal that can read from Azure Key Vault"
+    required: true
   azure_credentials:
     description: "JSON object containing a service principal that can read from Azure Key Vault"
     required: true
-
 
 outputs:
   backup_artifact:
@@ -17,7 +19,6 @@ outputs:
 
 runs:
   using: composite
-
   steps:
   - uses: actions/checkout@v4
     id: Checkout
@@ -59,8 +60,8 @@ runs:
       version: "v1.26.1"
 
   - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
-      with:
-        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+    with:
+        azure-credentials: ${{ inputs.repo_credentials }}
 
   - name: get environment variables
     shell: bash
