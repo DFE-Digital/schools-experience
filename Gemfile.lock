@@ -125,8 +125,8 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     aes_key_wrap (1.1.0)
     amazing_print (1.5.0)
-    anyway_config (2.4.0)
-      ruby-next-core (>= 0.14.0)
+    anyway_config (2.6.2)
+      ruby-next-core (~> 1.0)
     ast (2.4.2)
     attr_required (1.0.1)
     bindata (2.4.14)
@@ -387,7 +387,7 @@ GEM
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     phonelib (0.8.2)
-    prometheus-client (2.1.0)
+    prometheus-client (4.2.2)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -534,7 +534,7 @@ GEM
       rubocop (~> 1.31)
     ruby-graphviz (1.2.5)
       rexml
-    ruby-next-core (0.15.3)
+    ruby-next-core (1.0.1)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -629,15 +629,15 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yabeda (0.11.0)
+    yabeda (0.12.0)
       anyway_config (>= 1.0, < 3)
       concurrent-ruby
       dry-initializer
     yabeda-http_requests (0.2.0)
       sniffer
       yabeda
-    yabeda-prometheus (0.8.0)
-      prometheus-client (>= 0.10, < 3.0)
+    yabeda-prometheus (0.9.1)
+      prometheus-client (>= 3.0, < 5.0)
       rack
       yabeda (~> 0.10)
     yabeda-puma-plugin (0.6.0)
