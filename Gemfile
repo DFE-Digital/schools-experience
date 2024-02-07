@@ -116,7 +116,7 @@ group :development, :test do
   # Testing framework
   gem 'factory_bot_rails', '>= 6.2.0'
   gem 'rspec_junit_formatter'
-  gem 'rspec-rails', '~> 6.0.1'
+  gem 'rspec-rails', '~> 6.1.1'
   gem 'rspec-sonarqube-formatter'
 
   gem 'brakeman', '>= 6.0.1'
