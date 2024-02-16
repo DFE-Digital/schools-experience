@@ -98,7 +98,7 @@ Rails.application.configure do
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = 'https://localhost:3000'
   config.x.oidc_client_id = 'schoolexperience'
-  config.x.oidc_client_secret = Rails.application.credentials[:dfe_pp_signin_secret]
+  config.x.oidc_client_secret = ENV['DFE_PP_SIGNIN_SECRET'] || Rails.application.credentials[:dfe_pp_signin_secret]
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
 
