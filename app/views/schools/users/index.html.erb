@@ -1,0 +1,9 @@
+<%
+  self.page_title = "Manage Users"
+
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Requests' => nil
+  }
+%>
+<%= @users.count %>
