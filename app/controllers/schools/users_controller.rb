@@ -1,7 +1,5 @@
 module Schools
-  class UsersController < ApplicationController
-    def index
-
-    end
+  class UsersController < BaseController
+    def index; end
   end
 end
