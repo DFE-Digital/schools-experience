@@ -5,9 +5,6 @@
   - sub
   - created_at
   - updated_at
-  - first_name
-  - last_name
-  - email
   :schools_on_boarding_profile_subjects:
   - id
   - schools_school_profile_id
