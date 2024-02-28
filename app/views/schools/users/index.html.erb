@@ -7,6 +7,10 @@
   }
 %>
 
+<% @current_school.attributes.each do |attr_name, attr_value| %>
+  <p><strong><%= attr_name %>:</strong> <%= attr_value %></p>
+<% end %>
+
 <table id="placement-requests" class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
