@@ -8,15 +8,6 @@ inputs:
   azure_credentials:
     description: "JSON object containing a service principal that can read from Azure Key Vault"
     required: true
-  repo_credentials:
-    description: "JSON object containing a service principal that can read from Azure Key Vault"
-    required: true
-
-
-outputs:
-  backup_artifact:
-    description: "The backup artifact name"
-    value: ${{ inputs.environment }}-backup
 
 runs:
   using: composite
@@ -63,7 +54,7 @@ runs:
 
   - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
     with:
-       azure-credentials: ${{ inputs.repo_credentials }}
+       azure-credentials: ${{ inputs.azure_credentials }}
 
   - name: get environment variables
     shell: bash
@@ -116,9 +107,9 @@ runs:
   - name: Backup ${{ inputs.environment }} DB
     shell: bash
     run: |
-
       bin/konduit.sh  -k ${{ env.INF_VAULT_NAME }} -d gse-${{ inputs.environment }} get-school-experience-${{ inputs.environment }}  -- pg_dump -E utf8 --clean --if-exists --no-owner --verbose --no-password -f ${BACKUP_FILE_NAME}.sql
       tar -cvzf ${{ env.BACKUP_FILE_NAME }}.tar.gz ${{ env.BACKUP_FILE_NAME }}.sql
+
   - name: Set Connection String
     shell: bash
     run: |
@@ -133,13 +124,6 @@ runs:
       --file ${{ env.BACKUP_FILE_NAME }}.tar.gz --name ${{ env.BACKUP_FILE_NAME }}.tar.gz --overwrite \
       --account-key  '${{ env.STORAGE_CONN_STR }}'
       rm ${BACKUP_FILE_NAME}.tar.gz
-
-  - name: Disk cleanup
-    shell: bash
-    run: |
-      sudo rm -rf /usr/local/lib/android || true
-      sudo rm -rf /usr/share/dotnet || true
-      sudo rm -rf /opt/ghc || true
 
   - name: Remove backup file
     shell: bash
