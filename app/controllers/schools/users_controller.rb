@@ -3,7 +3,7 @@ module Schools
     def index; end
 
     def new
-      @user = InviteUser.new
+      @user = UserInvite.new
     end
   end
 end

@@ -1,5 +1,5 @@
 module Schools
-  class InviteUser
+  class UserInvite
     include ActiveModel::Model
     include ActiveModel::Attributes
 
