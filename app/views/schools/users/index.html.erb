@@ -10,7 +10,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1>Manage users at <%=  %> </h1>
+    <h1>Manage users at <%= @current_school.name %> </h1>
     <%= link_to 'Add user', new_schools_user_path, class: 'govuk-button' %>
 
     <p>
@@ -21,6 +21,9 @@
         <li>accept or reject candidates requests for experience</li>
         <li>add other users from your school</li>
       </ul>
+    </p>
+    <p> To remove and manage users, you should go to
+     <a href="https://services.signin.education.gov.uk/my-services"> DFE Sign-in.</a>
     </p>
 
     <table id="placement-requests" class="govuk-table">
