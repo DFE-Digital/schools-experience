@@ -3,26 +3,36 @@
 
   self.breadcrumbs = {
     @current_school.name => schools_dashboard_path,
-    'Users' => nil
+    'users' => nil
   }
 %>
 
-<% @current_school.attributes.each do |attr_name, attr_value| %>
-  <p><strong><%= attr_name %>:</strong> <%= attr_value %></p>
-<% end %>
 
-<%= link_to 'Add user', new_schools_user_path, class: 'govuk-button' %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1>Manage users at <%=  %> </h1>
+    <%= link_to 'Add user', new_schools_user_path, class: 'govuk-button' %>
 
-<table id="placement-requests" class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th class="govuk-table__header">First Name</th>
-      <th class="govuk-table__header">Last Name</th>
-      <th class="govuk-table__header">Email</th>
-      <th class="govuk-table__header">Action</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
+    <p>
+      Users will be able to:
+      <ul ul class="govuk-list govuk-list--bullet">
+        <li>advertise experience at your school</li>
+        <li>allow candidates to request experience</li>
+        <li>accept or reject candidates requests for experience</li>
+        <li>add other users from your school</li>
+      </ul>
+    </p>
 
-  </tbody>
-</table>
+    <table id="placement-requests" class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header">Name</th>
+          <th class="govuk-table__header">Email</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+
+      </tbody>
+    </table>
+  </div>
+</div>
