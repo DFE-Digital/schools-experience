@@ -1,0 +1,35 @@
+<%= render partial: "form", locals: { user: @user } %>
+
+<% self.page_title = 'Add user details' %>
+<% content_for :back_link do govuk_back_link; end %>
+<p> Add user details </p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <%= form_tag('/submit_form') do %>
+          <h1 class="govuk-heading-l"> Personal details </h1>
+          <div class="field">
+            <%= label_tag :email, 'Email:' %>
+            <%= email_field_tag :email, nil, class: 'govuk_text_field' %>
+          </div>
+
+          <div class="field">
+            <%= label_tag :first_name, 'First Name:' %>
+            <%= text_field_tag :first_name, nil, class: 'govuk_text_field' %>
+          </div>
+
+          <div class="field">
+            <%= label_tag :last_name, 'Last Name:' %>
+            <%= text_field_tag :last_name, nil, class: 'govuk_text_field' %>
+          </div>
+          <section>
+            <p>
+              <%= submit_tag 'Submit', class: 'btn btn-primary' %>
+            </p>
+          </section>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

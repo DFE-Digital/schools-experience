@@ -1,0 +1,27 @@
+<% self.page_title = 'Add user details' %>
+<% content_for :back_link do govuk_back_link; end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <%= form_for user,
+              url: new_schools_user_path,
+              data: { controller: "prevent-double-click", action: "submit->prevent-double-click#disableSubmitButton" } do |f| %>
+          <p> Add user details </p>
+          <h1 class="govuk-heading-l"> Personal details </h1>
+
+          <%= f.govuk_error_summary %>
+
+          <%= f.govuk_text_field :first_name, autocomplete: 'given-name' %>
+
+          <%= f.govuk_text_field :last_name, autocomplete: 'family-name' %>
+
+          <%= f.govuk_email_field :email, autocomplete: 'on' %>
+
+          <%= f.govuk_submit 'Continue', data: { prevent_double_click_target: "submitButton" } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
