@@ -12,14 +12,15 @@
                   aria_label: "outstanding bookings and requests for #{school.name}" %>
               <% end %>
             <% end %>
-            <% if Schools::ChangeSchool.request_approval_url %>
-              <div class= 'govuk-radios__divider'>or</div>
-              <%= f.govuk_radio_button :change_to_urn, "request access", label: { text: "Request access to another school" } %>
-            <% end %>
           <% end %>
 
           <%= f.govuk_submit "Continue" %>
         <% end %>
+        <p> If your school is not listed, please contact
+          <a href="mailto:organise.school-experience@education.gov.uk">
+           DfE Sign-in support.
+          </a>
+        </p>
       <% elsif @dfe_sign_in_add_service_url %>
         <h1 class="govuk-heading-l">Manage school experience</h1>
 
