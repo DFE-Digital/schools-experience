@@ -29,7 +29,11 @@ module Schools
         [first_name, last_name].map(&:presence).join(' ')
       end
 
-      private
+    private
+
+      def client
+        @client ||= Schools::DFESignInAPI::Client.new
+      end
 
       def service_id
         ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID')
@@ -42,41 +46,23 @@ module Schools
         )
       end
 
-      def payload
+      def user_invite_payload
         {
-          sourceId: null,
+          sourceId: nil,
           given_name: first_name,
           family_name: last_name,
           email: email,
-          callback: redirect_url,
           organisationId: organisation_id
         }
       end
 
-      # def initialize(email:, first_name:, last_name:, organisation_id:)
-      #   @email = email
-      #   @first_name = first_name
-      #   @last_name = last_name
-      #   @organisation_id = organisation_id
-      # end
+      def merged_payload
+        client_payload.merge(user_invite_payload)
+      end
 
-      #   def call
-      #     invite_user
-      #   end
-
-      #   def invite_user
-      #     response = client.post(
-      #       '/users/invite',
-      #       {
-      #         email: email,
-      #         firstName: first_name,
-      #         lastName: last_name,
-      #         organisationId: organisation_id
-      #       }
-      #     )
-
-      #     response.body
-      #   end
+      def client_payload
+        client.payload
+      end
     end
   end
 end
