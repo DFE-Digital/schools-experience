@@ -1,5 +1,5 @@
 module Schools
-  module DfeSignInApi
+  module DFESignInAPI
     class UserInvite
       include ActiveModel::Model
       include ActiveModel::Attributes
@@ -8,43 +8,51 @@ module Schools
       attribute :first_name, :string
       attribute :last_name, :string
       attribute :organisation_id, :string
-      # attribute :role, :string
-      # attribute :service_id, :string
       # attribute :redirect_url, :string
 
-      validates :first_name, presence: true, length: { maximum: 50 }, unless: :read_only
-      validates :last_name, presence: true, length: { maximum: 50 }, unless: :read_only
+      validates :first_name, presence: true, length: { maximum: 50 }
+      validates :last_name, presence: true, length: { maximum: 50 }
       validates :email, presence: true, length: { maximum: 100 }
       validates :email, email_format: true, if: -> { email.present? }
       # validates :organisation_id, presence: true
-      # validates :role, presence: true
-      # validates :service_id, presence: true
       # validates :redirect_url, presence: true
 
-      # def self.compose(email:, first_name:, last_name:, organisation_id:, role:, service_id:, redirect_url:)
-      #   new \
-      #     email: email,
-      #     first_name: first_name,
-      #     last_name: last_name,
-      #     organisation_id: organisation_id,
-      #     role: role,
-      #     service_id: service_id,
-      #     redirect_url: redirect_url
-      # end
+      def invite_user
+        raise ApiDisabled unless client.enabled?
 
-      # def save
-      #   return false unless valid?
+        client.invite_user(merged_payload)
+      end
 
-      #   DfESignIn::InviteUser.call(
-      #     email: email,
-      #     first_name: first_name,
-      #     last_name: last_name,
-      #     organisation_id: organisation_id,
-      #     role: role,
-      #     service_id: service_id,
-      #     redirect_url: redirect_url
-      #   )
-      # end
+      def full_name
+        return nil unless first_name && last_name
+
+        [first_name, last_name].map(&:presence).join(' ')
+      end
+
+      private
+
+      def service_id
+        ENV.fetch('DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID')
+      end
+
+      def endpoint
+        URI::HTTPS.build(
+          host: Rails.configuration.x.dfe_sign_in_api_host,
+          path: ['/services', service_id, 'invitations'].join('/')
+        )
+      end
+
+      def payload
+        {
+          sourceId: null,
+          given_name: first_name,
+          family_name: last_name,
+          email: email,
+          callback: redirect_url,
+          organisationId: organisation_id
+        }
+      end
+
       # def initialize(email:, first_name:, last_name:, organisation_id:)
       #   @email = email
       #   @first_name = first_name

@@ -3,7 +3,7 @@ module Schools
     def index; end
 
     def new
-      @user = DfeSignInApi::UserInvite.new
+      @user = DFESignInAPI::UserInvite.new
     end
   end
 end
