@@ -1,0 +1,43 @@
+<% self.page_title = 'Check your answers' %>
+<% content_for :back_link do govuk_back_link; end %>
+
+<div class="govuk-grid-row" id="application-preview">
+  <div class="govuk-grid-column-two-thirds">
+    <section id="personal-details">
+      <p> Add user details </p>
+      <h1 class="govuk-heading-l">Check your answers</h1>
+      <dl class="placement-details govuk-summary-list">
+        <div class="address govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            First name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= @user.first_name %>
+          </dd>
+        </div>
+
+        <div class="phone-number govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Last name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= @user.last_name %>
+          </dd>
+        </div>
+
+        <div class="email-address govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Email address
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= @user.email %>
+          </dd>
+        </div>
+      </dl>
+      <div class="govuk-inset-text">
+        <p>The user will be sent an email to create an account and will have access to the school's dashboard.</p>
+      </div>
+        <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
+  </section>
+  </div>
+</div>
