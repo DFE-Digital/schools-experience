@@ -13,14 +13,18 @@
 
           <%= f.govuk_error_summary %>
 
+          <%= f.label :first_name, "First Name" %>
           <%= f.govuk_text_field :first_name, autocomplete: 'given-name' %>
 
+          <%= f.label :first_name, "Last Name" %>
           <%= f.govuk_text_field :last_name, autocomplete: 'family-name' %>
 
+          <%= f.label :first_name, "Email" %>
           <%= f.govuk_email_field :email, autocomplete: 'on' %>
 
           <%= f.govuk_submit 'Continue', data: { prevent_double_click_target: "submitButton" } %>
         <% end %>
+        <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
       </div>
     </div>
   </div>
