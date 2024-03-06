@@ -15,7 +15,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '8.0.2'
+gem 'activerecord-postgis-adapter', '8.0.3'
 gem 'breasal'
 gem 'geocoder'
 
