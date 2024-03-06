@@ -6,6 +6,7 @@ DfE::Analytics.configure do |config|
   # Whether to use ActiveJob or dispatch events immediately.
   #
   config.async = true
+  config.entity_table_checks_enabled = true
 
   # Which ActiveJob queue to put events on
   #
