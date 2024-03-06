@@ -49,7 +49,7 @@ jobs:
         if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         uses: DFE-Digital/github-actions/set-up-environment@master
 
-      - uses: Azure/login@v1
+      - uses: Azure/login@v2
         if:   fromJson(steps.pwsh_check_expire.outputs.json_data).data.Alert
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
