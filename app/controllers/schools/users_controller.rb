@@ -16,8 +16,8 @@ module Schools
 
       if params[:confirmed] == 'true'
         if @user_invite.valid?
-          @user_invite.invite_user
-          redirect_to schools_users_path, notice: "#{@user_invite.email} has been added."
+          invitation_response = @user_invite.invite_user
+          redirect_to schools_users_path, notice: "#{@user_invite.email} has been added. With Response: #{invitation_response} and #{@user_invite.organisation_id}"
         else
           render :new
         end

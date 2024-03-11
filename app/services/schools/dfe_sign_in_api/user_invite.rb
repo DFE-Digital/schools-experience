@@ -18,8 +18,12 @@ module Schools
 
       def invite_user
         @response = response
-        @response['success'] = @response['status'] == 'success' if @response.present?
-        @response
+        # @response['success'] = @response['status'] == 'success' if @response.present?
+        # @response
+      end
+
+      def create
+        @response = response
       end
 
     private
@@ -33,7 +37,8 @@ module Schools
           req.body = payload.to_json
         end
 
-        JSON.parse(resp.body)
+        # JSON.parse(resp.body)
+        resp
       end
 
       def service_id
@@ -53,7 +58,7 @@ module Schools
           given_name: firstname,
           family_name: lastname,
           email: email,
-          organisationId: organisation_id
+          organisation: organisation_id
         )
       end
     end

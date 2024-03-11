@@ -6,7 +6,7 @@
     <%= form_for(@user_invite, url: schools_users_path, method: :post) do |f| %>
       <section id="personal-details">
         <span class="govuk-caption-xl govuk-!-margin-top-4"> Add user </span>
-        <h1 class="govuk-heading-l"> Check your answers </h1>
+        <h1 class="govuk-heading-l"> Check your answers <%= @user_invite.organisation_id %></h1>
 
         <dl class="placement-details govuk-summary-list">
           <div class="address govuk-summary-list__row">
