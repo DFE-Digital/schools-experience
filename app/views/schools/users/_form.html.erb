@@ -1,0 +1,25 @@
+<% self.page_title = 'Add user details' %>
+<% content_for :back_link do govuk_back_link; end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for(@user_invite, url: schools_users_path, method: :post, html: {novalidate: false}) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-xl govuk-!-margin-top-4"> Add user details </span>
+      <h1 class="govuk-heading-l"> Personal details </h1>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field :firstname, autocomplete: 'given-name' %>
+
+      <%= f.govuk_text_field :lastname, autocomplete: 'family-name' %>
+
+      <%= f.govuk_email_field :email, autocomplete: 'on' %>
+
+      <%= f.govuk_submit 'Continue' %>
+    <% end %>
+    <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
+  </div>
+</div>
