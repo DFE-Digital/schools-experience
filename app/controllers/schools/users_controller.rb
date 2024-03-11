@@ -1,7 +1,7 @@
 module Schools
   class UsersController < BaseController
     def index
-      @users = DFESignInAPI::OrganisationUsers.new(current_user.sub, current_school.urn).users['users']
+      @users = DFESignInAPI::OrganisationUsers.new(current_user.sub, current_school.urn).users
       @dfe_sign_in_request_organisation_url =
         Rails.application.config.x.dfe_sign_in_request_organisation_url.presence
     end
@@ -16,8 +16,8 @@ module Schools
 
       if params[:confirmed] == 'true'
         if @user_invite.valid?
-          invitation_response = @user_invite.invite_user
-          redirect_to schools_users_path, notice: "#{@user_invite.email} has been added. With Response: #{invitation_response} and #{@user_invite.organisation_id}"
+          @user_invite.create
+          redirect_to schools_users_path, notice: "#{@user_invite.email} has been added."
         else
           render :new
         end

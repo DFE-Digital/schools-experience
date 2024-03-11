@@ -16,12 +16,6 @@ module Schools
       validates :email, email_format: true, if: -> { email.present? }
       validates :organisation_id, presence: true
 
-      def invite_user
-        @response = response
-        # @response['success'] = @response['status'] == 'success' if @response.present?
-        # @response
-      end
-
       def create
         @response = response
       end
@@ -37,8 +31,7 @@ module Schools
           req.body = payload.to_json
         end
 
-        # JSON.parse(resp.body)
-        resp
+        resp.body
       end
 
       def service_id
