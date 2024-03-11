@@ -1,38 +1,39 @@
 module Schools
   module DFESignInAPI
-    class UserInvite
+    class UserInvite < Client
       include ActiveModel::Model
       include ActiveModel::Attributes
+      include ActiveRecord::AttributeAssignment
 
       attribute :email, :string
-      attribute :first_name, :string
-      attribute :last_name, :string
+      attribute :firstname, :string
+      attribute :lastname, :string
       attribute :organisation_id, :string
-      # attribute :redirect_url, :string
 
-      validates :first_name, presence: true, length: { maximum: 50 }
-      validates :last_name, presence: true, length: { maximum: 50 }
+      validates :firstname, presence: true, length: { maximum: 50 }
+      validates :lastname, presence: true, length: { maximum: 50 }
       validates :email, presence: true, length: { maximum: 100 }
       validates :email, email_format: true, if: -> { email.present? }
-      # validates :organisation_id, presence: true
-      # validates :redirect_url, presence: true
+      validates :organisation_id, presence: true
 
       def invite_user
-        raise ApiDisabled unless client.enabled?
-
-        client.invite_user(merged_payload)
-      end
-
-      def full_name
-        return nil unless first_name && last_name
-
-        [first_name, last_name].map(&:presence).join(' ')
+        @response = response
+        @response['success'] = @response['status'] == 'success' if @response.present?
+        @response
       end
 
     private
 
-      def client
-        @client ||= Schools::DFESignInAPI::Client.new
+      def response
+        raise ApiDisabled unless enabled?
+
+        resp = faraday.post(endpoint) do |req|
+          req.headers['Authorization'] = "bearer #{token}"
+          req.headers['Content-Type'] = 'application/json'
+          req.body = payload.to_json
+        end
+
+        JSON.parse(resp.body)
       end
 
       def service_id
@@ -46,22 +47,14 @@ module Schools
         )
       end
 
-      def user_invite_payload
-        {
-          sourceId: nil,
-          given_name: first_name,
-          family_name: last_name,
+      def payload
+        super.merge(
+          sourceId: SecureRandom.uuid,
+          given_name: firstname,
+          family_name: lastname,
           email: email,
           organisationId: organisation_id
-        }
-      end
-
-      def merged_payload
-        client_payload.merge(user_invite_payload)
-      end
-
-      def client_payload
-        client.payload
+        )
       end
     end
   end

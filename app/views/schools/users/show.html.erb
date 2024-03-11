@@ -1,43 +1,61 @@
 <% self.page_title = 'Check your answers' %>
 <% content_for :back_link do govuk_back_link; end %>
 
-<div class="govuk-grid-row" id="application-preview">
+<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <section id="personal-details">
-      <p> Add user details </p>
-      <h1 class="govuk-heading-l">Check your answers</h1>
-      <dl class="placement-details govuk-summary-list">
-        <div class="address govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            First name
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <%= @user.first_name %>
-          </dd>
+    <%= form_for(@user_invite, url: schools_users_path, method: :post) do |f| %>
+      <section id="personal-details">
+        <span class="govuk-caption-xl govuk-!-margin-top-4"> Add user </span>
+        <h1 class="govuk-heading-l"> Check your answers </h1>
+
+        <dl class="placement-details govuk-summary-list">
+          <div class="address govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              First name
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <%= @user_invite.firstname %>
+              <%= f.hidden_field :firstname, value: @user_invite.firstname %>
+            </dd>
+            <dd>
+              <%= link_to 'Change', edit_schools_user_path(schools_dfe_sign_in_api_user_invite: { firstname: @user_invite.firstname, lastname: @user_invite.lastname, email: @user_invite.email }) %>
+            </dd>
+          </div>
+
+          <div class="phone-number govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Last name
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <%= @user_invite.lastname %>
+              <%= f.hidden_field :lastname, value: @user_invite.lastname %>
+            </dd>
+            <dd>
+              <%= link_to 'Change', edit_schools_user_path(schools_dfe_sign_in_api_user_invite: { firstname: @user_invite.firstname, lastname: @user_invite.lastname, email: @user_invite.email }) %>
+            </dd>
+          </div>
+
+          <div class="email-address govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Email address
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <%= @user_invite.email %>
+              <%= f.hidden_field :email, value: @user_invite.email %>
+            </dd>
+            <dd>
+              <%= link_to 'Change', edit_schools_user_path(schools_dfe_sign_in_api_user_invite: { firstname: @user_invite.firstname, lastname: @user_invite.lastname, email: @user_invite.email }) %>
+            </dd>
+          </div>
+          <%= hidden_field_tag :confirmed, true %>
+        </dl>
+        <div class="govuk-inset-text">
+          <p>The user will be sent an email to create an account and will have access to the school's dashboard.</p>
         </div>
 
-        <div class="phone-number govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Last name
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <%= @user.last_name %>
-          </dd>
-        </div>
-
-        <div class="email-address govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Email address
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <%= @user.email %>
-          </dd>
-        </div>
-      </dl>
-      <div class="govuk-inset-text">
-        <p>The user will be sent an email to create an account and will have access to the school's dashboard.</p>
-      </div>
-        <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
-  </section>
+          <%= f.govuk_submit 'Accept and submit', data: { prevent_double_click_target: "submitButton" } %>
+      </section>
+          <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
+    <% end %>
   </div>
 </div>

@@ -1,26 +1,44 @@
 module Schools
   class UsersController < BaseController
-    def index; end
+    def index
+      @users = DFESignInAPI::OrganisationUsers.new(current_user.sub, current_school.urn).users['users']
+      @dfe_sign_in_request_organisation_url =
+        Rails.application.config.x.dfe_sign_in_request_organisation_url.presence
+    end
 
     def new
-      @user = DFESignInAPI::UserInvite.new
+      @user_invite = DFESignInAPI::UserInvite.new
     end
 
     def create
-      @user_invite = DfeSignInApi::UserInvite.new(user_params)
+      @user_invite = DFESignInAPI::UserInvite.new(user_params)
+      @user_invite.organisation_id = DFESignInAPI::Organisation.new(current_user.sub, current_school.urn).current_organisation_id
 
-      if @user_invite.valid?
-        @user_invite.invite_user
-        redirect_to users_path, notice: 'User invited successfully.'
+      if params[:confirmed] == 'true'
+        if @user_invite.valid?
+          @user_invite.invite_user
+          redirect_to schools_users_path, notice: "#{@user_invite.email} has been added."
+        else
+          render :new
+        end
       else
-        render :new
+        render :show, locals: { user_invite: @user_invite }
       end
+    end
+
+    def show
+      render :show
+    end
+
+    def edit
+      @user_invite = DFESignInAPI::UserInvite.new(user_params)
+      render :new, locals: { user_invite: @user_invite }
     end
 
   private
 
     def user_params
-      params.require(:user).permit(:email, :first_name, :last_name, :organisation_id)
+      params.require(:schools_dfe_sign_in_api_user_invite).permit(:email, :firstname, :lastname, :organisation_id)
     end
   end
 end
