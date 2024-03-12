@@ -188,7 +188,7 @@ en:
         candidates/registrations/background_check:
           attributes:
             has_dbs_check:
-              inclusion: "Select an option"
+              inclusion: "Select whether you have a DBS certificate"
 
         candidates/registrations/contact_information:
           attributes:
