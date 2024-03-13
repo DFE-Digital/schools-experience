@@ -76,7 +76,7 @@ jobs:
 
       - name: Fetch slack web hook
         if: failure() && github.ref == 'refs/heads/master'
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: slack-web-hook
         with:
           inlineScript: |
@@ -172,7 +172,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fetch synk token from key vault
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-synk-token
         with:
           inlineScript: |
@@ -315,7 +315,7 @@ jobs:
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/Code_Coverage/coverage.json
 
       - name: Fetch Sonar token from key vault
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-sonar-token
         with:
           inlineScript: |
@@ -398,7 +398,7 @@ jobs:
 
 
       - name: Fetch SECURE USERNAME
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-username
         with:
           inlineScript: |
@@ -407,7 +407,7 @@ jobs:
               echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Fetch SECURE PASSWORD
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-password
         with:
             inlineScript: |
@@ -469,7 +469,7 @@ jobs:
           release_id: ${{steps.tag_id.outputs.release_id}}
 
       - name: Fetch slack token
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-slack-secret
         with:
           inlineScript: |
@@ -513,7 +513,7 @@ jobs:
             creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Fetch SECURE USERNAME
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-username
         with:
           inlineScript: |
@@ -522,7 +522,7 @@ jobs:
             echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Fetch SECURE PASSWORD
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-password
         with:
           inlineScript: |
@@ -540,7 +540,7 @@ jobs:
           cmd_options: '-a'
 
       - name: Fetch secrets from key vault
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-slack-secret
         with:
           inlineScript: |

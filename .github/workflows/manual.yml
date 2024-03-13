@@ -54,7 +54,7 @@ jobs:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Fetch slack token
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: fetch-slack-secret
         with:
           inlineScript: |
