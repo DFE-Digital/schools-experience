@@ -18,9 +18,16 @@ module Schools
 
       def create
         @response = response
+        send_user_invite_email
       end
 
     private
+
+      def send_user_invite_email
+        NotifyEmail::SchoolUserInvite.new(
+          to: email
+        ).despatch_later!
+      end
 
       def response
         raise ApiDisabled unless enabled?
