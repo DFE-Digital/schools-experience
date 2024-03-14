@@ -13,7 +13,7 @@ module Schools
       end
 
       def users
-        @users ||= response&.fetch('users', nil)
+        response&.fetch('users', nil)
       end
 
     private
