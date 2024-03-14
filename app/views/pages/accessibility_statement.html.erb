@@ -36,7 +36,7 @@
       </p>
 
       <p>
-        <%= link_to 'AbilityNet (opens in a new tab)', 'https://mcmw.abilitynet.org.uk/' %>
+        <%= link_to 'AbilityNet (opens in a new tab)', 'https://mcmw.abilitynet.org.uk/', target: "_blank" %>
         has advice on making your device easier to use if you have a disability..
       </p>
     </section>
@@ -49,9 +49,9 @@
         large print, easy read, audio recording or braille:
       </p>
 
-      <ul class="govuk-list">
+      <ul class="govuk-list govuk-list--bullet">
         <li>
-          <%= mail_to 'organise.school-experience@education.gov.uk',
+          email <%= mail_to 'organise.school-experience@education.gov.uk',
                 'organise.school-experience@education.gov.uk',
                 aria: { label: 'School experience support email address' } %>
         </li>
@@ -105,7 +105,7 @@
       <p>
         This service is partially compliant with the
         <%= link_to 'Web Content Accessibility Guidelines version 2.1', 'https://www.w3.org/TR/WCAG21/' %>
-        AA standard, due to the following non-compliances..
+        AA standard, due to the following non-compliances.
       </p>
 
       <h3 class="govuk-heading-s">
@@ -113,7 +113,7 @@
       </h3>
 
       <p>
-         <ul class="govuk-list">
+         <ul class="govuk-list govuk-list--bullet">
         <li>If a candidate tries to search for a school experience placement without entering a postcode,
           we do not surface an error message.
           This does not meet WCAG version 2.1 <%= link_to 'A – 3.3.1 Error Identification', 'https://www.w3.org/WAI/WCAG21/Understanding/error-identification.html' %>
