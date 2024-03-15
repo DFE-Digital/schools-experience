@@ -1,7 +1,7 @@
 module Schools
   class UsersController < BaseController
     def index
-      @users = DFESignInAPI::OrganisationUsers.new(current_user.sub, current_school.urn).users
+      @users = DFESignInAPI::OrganisationUsers.new(current_user.sub, current_school.urn).users_as_invite_objects
       @dfe_sign_in_manage_users_url =
         Rails.application.config.x.dfe_sign_in_manage_users_url.presence
     end

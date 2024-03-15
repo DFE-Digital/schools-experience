@@ -42,8 +42,8 @@
         <tbody class="govuk-table__body">
           <% @users.each do |user| %>
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell"><%= "#{user['firstName']} #{user['lastName']}" %></td>
-              <td class="govuk-table__cell"><%= user['email'] %></td>
+              <td class="govuk-table__cell"><%= "#{user.firstname} #{user.lastname}" %></td>
+              <td class="govuk-table__cell"><%= user.email %></td>
             </tr>
           <% end %>
 

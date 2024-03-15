@@ -14,6 +14,20 @@ module Schools
 
       def users
         response&.fetch('users', nil)
+        # users_as_invite_objects
+      end
+
+      def users_as_invite_objects
+        return [] if users.blank?
+
+        users.map do |user_data|
+          Schools::DFESignInAPI::UserInvite.new(
+            email: user_data['email'],
+            firstname: user_data['firstName'],
+            lastname: user_data['lastName'],
+            organisation_id: current_school_urn
+          )
+        end
       end
 
     private
