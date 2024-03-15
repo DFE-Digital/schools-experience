@@ -28,7 +28,9 @@
     <% if @users.any? %>
       <div class="pagination-info higher">
         <div class="pagination-slice">
+          <%= page_entries_info @users %>
         </div>
+        <%= paginate @users %>
       </div>
       <table id="invited-users" class="govuk-table">
         <thead class="govuk-table__head">
@@ -48,6 +50,7 @@
         </tbody>
       </table>
       <div class="pagination-info lower">
+        <%= paginate @users %>
       </div>
     <% else %>
       <p>
