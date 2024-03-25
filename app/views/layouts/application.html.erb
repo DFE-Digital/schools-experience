@@ -24,7 +24,7 @@
     <%= render(partial: "gtm_fallback") if gtm_enabled? %>
 
     <%= javascript_tag nonce: true do -%>
-      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+      document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
     <% end -%>
 
     <%= render partial: 'shared/application/cookie_banner' %>
