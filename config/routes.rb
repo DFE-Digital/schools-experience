@@ -65,7 +65,6 @@ Rails.application.routes.draw do
 
     resource :change_school, only: %i[show create], as: 'change', path: 'change', controller: 'change_schools'
     resources :users, only: %i[index new create show], controller: 'users'
-    resources :approvers, only: %i[index], controller: 'approvers'
     resource :prepopulate_school_profiles, only: %i[create]
 
     resource :dashboard, only: :show
