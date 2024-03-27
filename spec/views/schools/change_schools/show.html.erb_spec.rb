@@ -97,8 +97,8 @@ describe 'schools/change_schools/show', type: :view do
 
     before { render }
 
-    specify 'there should be an request access option' do
-      expect(rendered).to have_css("input[type='radio'][value='request access']")
+    specify 'there should not be an request access option' do
+      expect(rendered).not_to have_css("input[type='radio'][value='request access']")
     end
   end
 end
