@@ -26,6 +26,7 @@ Rails.application.configure do
   config.x.dfe_sign_in_api_role_check_enabled = false
   config.x.dfe_sign_in_api_school_change_enabled = false
   config.x.dfe_sign_in_request_organisation_url = ""
+  config.x.dfe_sign_in_manage_users_url = ""
   config.x.dfe_sign_in_request_service_url = ""
   config.x.dfe_sign_in_add_service_url = ""
 
