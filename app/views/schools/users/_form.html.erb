@@ -20,7 +20,7 @@
 
       <div class="govuk-button-group">
         <%= f.govuk_submit 'Continue' %>
-        <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
+        <%= govuk_link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite",  secondary: true %>
       </div>
     <% end %>
   </div>
