@@ -18,8 +18,10 @@
 
       <%= f.govuk_email_field :email, autocomplete: 'on' %>
 
-      <%= f.govuk_submit 'Continue' %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit 'Continue' %>
+        <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
+      </div>
     <% end %>
-    <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
   </div>
 </div>
