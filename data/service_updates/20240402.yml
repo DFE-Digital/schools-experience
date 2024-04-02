@@ -8,21 +8,17 @@ html_content: |-
   so you can now add new users directly on to your school’s account.</p>
 
   <h3>New users</h3>
-  <p>
-  "When you add a new user to your school profile, they can:"
+  <p>When you add a new user to your school profile, they can:</p>
   <ul class="govuk-list govuk-list--bullet">
     <li>‘advertise experience at your school’</li>
     <li>‘manage bookings and cancellations’</li>
     <li>‘add other people from your school’</li>
   </ul>
-  </p>
 
 <h3>Adding a new user</h3>
-<p>
-"To add a new user:"
+<p>To add a new user:</p>
  <ul class="govuk-list govuk-list--bullet">
   <li>‘go to the school dashboard in your account’</li>
   <li>‘go to the Manage users section’</li>
   <li>‘go to the Manage users section’</li>
 </ul>
-</p>
