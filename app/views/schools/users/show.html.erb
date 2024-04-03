@@ -53,9 +53,12 @@
           <p>The user will be sent an email to create an account and will have access to the school's dashboard.</p>
         </div>
 
+        <div class="govuk-button-group">
           <%= f.govuk_submit 'Accept and submit', data: { prevent_double_click_target: "submitButton" } %>
+          <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite", secondary: true %>
+        </div>
+
       </section>
-          <%= link_to "Cancel",  schools_users_path, 'aria-label': "Cancel user invite" %>
     <% end %>
   </div>
 </div>
