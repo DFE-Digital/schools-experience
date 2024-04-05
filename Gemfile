@@ -96,7 +96,7 @@ gem 'net-smtp', require: false
 gem 'actionpack-cloudfront', '>= 1.2.0'
 
 gem 'invisible_captcha', '>= 2.0.0'
-gem 'meta-tags', '~> 2.17'
+gem 'meta-tags', '~> 2.20'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
