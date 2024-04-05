@@ -71,3 +71,6 @@ $govuk-grid-widths: (
 .govuk-accordion__controls {
   margin-bottom: 1em;
 }
+input[type="checkbox"] {
+  width: 15%;
+}
