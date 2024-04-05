@@ -3,11 +3,11 @@ module Schools::PlacementDatesHelper
     availability_end_date_in_future = (placement_date.date - placement_date.end_availability_offset).future?
 
     if placement_date.available?
-      tag.strong "Open", class: "govuk-tag govuk-tag--available"
+      tag.strong "Open", class: "govuk-tag govuk-tag--green"
     elsif placement_date.active && availability_end_date_in_future
       tag.strong "Scheduled", class: "govuk-tag govuk-tag--grey"
     else
-      tag.strong "Closed", class: "govuk-tag govuk-tag--taken"
+      tag.strong "Closed", class: "govuk-tag govuk-tag--red"
     end
   end
 
