@@ -35,7 +35,7 @@ describe Schools::BookingsHelper, type: 'helper' do
       let(:booking) { create(:bookings_booking, :accepted) }
       it do
         is_expected.to \
-          have_css('strong.govuk-tag.govuk-tag--grey', text: 'Not set')
+          have_css('strong.govuk-tag.govuk-tag--light-blue', text: 'Not set')
       end
     end
   end
