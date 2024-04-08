@@ -37,6 +37,14 @@
                 readonly: personal_information.read_only,
                 disabled: personal_information.read_only %>
 
+          <p>
+            Your details are protected under the terms of our <%= link_to 'privacy notice', 'https://schoolexperience.education.gov.uk/privacy_policy' %>.
+          </p>
+          <p>
+            Our privacy notice explains how we use your personal data.
+            It's important you read this before requesting school experience.
+          </p>
+
           <%= f.govuk_submit 'Continue', data: { prevent_double_click_target: "submitButton" } %>
         <% end %>
       </div>
