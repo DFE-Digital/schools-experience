@@ -8,10 +8,6 @@ div[data-controller="grab-location"] {
     @include govuk-media-query($from: tablet) {
       line-height: 25px;
     }
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 
   &.school-search-form--show-coords-request .school-search-form__coords_request {
