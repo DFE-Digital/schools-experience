@@ -26,8 +26,12 @@ RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses
 RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
 			postgresql-libs postgresql-dev\
             chromium=99.0.4844.84-r0 chromium-chromedriver=99.0.4844.84-r0
-# Install Node.js 18 and Yarn
-RUN apk add --no-cache nodejs=18.0.0-r0 yarn=1.22.17-r0
+
+# Install Node.js 18
+RUN apk add --no-cache nodejs=18.0.0-r1 npm=18.0.0-r1
+
+# Install Yarn
+RUN npm install -g yarn@1.22.17
 
 # Remove once base image ruby:3.1.0-alpine3.15 has been updated
 RUN apk add --no-cache gmp=6.2.1-r1 libretls=3.3.4-r3
