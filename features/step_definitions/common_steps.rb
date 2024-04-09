@@ -105,7 +105,7 @@ end
 
 Then("the main site header should be {string}") do |title_text|
   expect(page).to have_css(
-    ".govuk-header .govuk-header__content .govuk-header__link--service-name",
+    ".govuk-header .govuk-header__content .govuk-header__service-name",
     text: title_text
   )
 end
