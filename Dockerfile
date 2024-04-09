@@ -24,7 +24,7 @@ RUN apk update && apk add -Uu --no-cache zlib-dev busybox ncurses
 
 # hadolint ignore=DL3018
 RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
-			postgresql-libs postgresql-dev nodejs yarn \
+			postgresql-libs postgresql-dev nodejs>=18 yarn \
             chromium=99.0.4844.84-r0 chromium-chromedriver=99.0.4844.84-r0
 
 # Remove once base image ruby:3.1.0-alpine3.15 has been updated
