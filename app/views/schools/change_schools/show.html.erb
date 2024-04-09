@@ -12,7 +12,7 @@
                   aria_label: "outstanding bookings and requests for #{school.name}" %>
               <% end %>
             <% end %>
-              <% if Schools::ChangeSchool.request_approval_url %>
+            <% if Schools::ChangeSchool.request_approval_url %>
               <div class= 'govuk-radios__divider'>or</div>
               <%= f.govuk_radio_button :change_to_urn, "request access", label: { text: "Request access to another school" } %>
             <% end %>
