@@ -28,7 +28,7 @@ RUN apk add -U --no-cache bash build-base git tzdata libxml2 libxml2-dev \
             chromium=99.0.4844.84-r0 chromium-chromedriver=99.0.4844.84-r0
 
 # Install Node.js 18
-RUN apk add --no-cache nodejs=18.0.0-r1 npm=18.0.0-r1
+RUN apk add --no-cache nodejs~=18 npm~=18
 
 # Install Yarn
 RUN npm install -g yarn@1.22.17
