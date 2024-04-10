@@ -98,7 +98,6 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'help-and-support' links:
             | Text                                   | Hint                                                                | Path                                 |
-            | Request access to another organisation | Request access to manage school experience for another organisation | /schools/organisation_access_request |
             | Contact us                             | Get in touch if you need help using the service                     | /schools/contact_us                  |
 
     Scenario: Candidate requests counter
