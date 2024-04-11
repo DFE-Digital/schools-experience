@@ -36,7 +36,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_application_preview_step button_text: 'Continue'
         complete_email_confirmation_step
         view_request_acknowledgement_step
-        visit_candidate_dashboard_step
       end
     end
 
