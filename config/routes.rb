@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/accessibility_statement', to: 'pages#accessibility_statement'
+  get '/terms_and_conditions', to: 'pages#terms_and_conditions'
   get '/cookies_policy', to: 'pages#cookies_policy'
   get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/schools/request_organisation', to: 'pages#schools_request_organisation'
