@@ -164,6 +164,8 @@ Rails.application.routes.draw do
     root to: 'home#index'
     get "splash", to: "home#splash"
 
+     get '/dashboard', to: redirect('/candidates')
+
     # email confirmation link
     get 'confirm/:uuid', to: 'registrations/placement_requests#create', as: :confirm
 
@@ -199,8 +201,8 @@ Rails.application.routes.draw do
       resource :feedback, only: %i[new create show], controller: "booking_feedbacks"
     end
 
-    get 'signin', to: 'sessions#new'
-    post 'signin', to: 'sessions#create'
+    get 'signin', to: redirect('/candidates')
+    post 'signin', to: redirect('/candidates')
     put 'signin', to: 'sessions#update', as: :signin_code
     get 'signout', to: 'sessions#sign_out'
 
