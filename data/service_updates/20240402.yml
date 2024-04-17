@@ -16,7 +16,7 @@ html_content: |-
   <h3>Adding a new user</h3>
   <p>To add a new user:</p>
   <ol class="govuk-list govuk-list--number">
-    <li>Go to the school dashboard in your account</li>
-    <li>Go to the Manage users section</li>
-    <li>Add the new user</li>
+    <li>Go to the school dashboard in your account.</li>
+    <li>Then go to the ‘Add new users’ section.</li>
+    <li>Enter the new user’s details.</li>
   </ol>
