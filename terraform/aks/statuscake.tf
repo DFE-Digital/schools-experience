@@ -5,5 +5,5 @@ module "statuscake" {
 
   uptime_urls    = each.value.website_url
   ssl_urls       = each.value.ssl_url
-  contact_groups = each.value.contact_group
+  contact_groups = each.value.contact_groups
 }
