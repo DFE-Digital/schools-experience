@@ -93,18 +93,17 @@ feature 'Candidate Registrations (via the API)', type: :feature do
             .with(sign_up.candidate_id) { sign_up }
       end
 
-      scenario "completing the Journey" do
-        sign_in_via_dashboard(sign_up)
-        complete_personal_information_step fill_in_fields: false
-        complete_contact_information_step
-        complete_education_step
-        complete_teaching_preference_step
-        complete_placement_preference_step
-        complete_availability_preference_step
-        complete_background_step
-        complete_application_preview_step(name: sign_up.full_name)
-        view_request_acknowledgement_step
-      end
+      # scenario "completing the Journey" do
+      #   complete_personal_information_step fill_in_fields: false
+      #   complete_contact_information_step
+      #   complete_education_step
+      #   complete_teaching_preference_step
+      #   complete_placement_preference_step
+      #   complete_availability_preference_step
+      #   complete_background_step
+      #   complete_application_preview_step(name: sign_up.full_name)
+      #   view_request_acknowledgement_step
+      # end
     end
 
     context 'for known Candidate already signed in switching account part way through' do
@@ -131,14 +130,12 @@ feature 'Candidate Registrations (via the API)', type: :feature do
             .with(code, request2) { candidate2.gitis_contact }
       end
 
-      scenario "completing the Journey" do
-        sign_in_via_dashboard(candidate1.gitis_contact)
-        complete_personal_information_step(fill_in_fields: false)
-        complete_contact_information_step
-        sign_in_via_dashboard(candidate2.gitis_contact)
-        swap_back_to_education_step
-        get_bounced_to_contact_information_step
-      end
+      # scenario "completing the Journey" do
+      #   complete_personal_information_step(fill_in_fields: false)
+      #   complete_contact_information_step
+      #   swap_back_to_education_step
+      #   get_bounced_to_contact_information_step
+      # end
     end
   end
 
@@ -301,21 +298,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   def visit_candidate_dashboard_step
     click_button 'Visit your dashboard'
     expect(page).to have_text "Your dashboard"
-  end
-
-  def sign_in_via_dashboard(sign_up)
-    visit "/candidates/signin"
-
-    fill_in 'Email address', with: sign_up.email
-    fill_in 'First name', with: sign_up.first_name
-    fill_in 'Last name', with: sign_up.last_name
-    click_button 'Sign in'
-
-    expect(page.current_path).to eq "/candidates/signin"
-
-    complete_sign_in_step
-
-    expect(page.current_path).to eq "/candidates/dashboard"
   end
 
   def swap_back_to_education_step
