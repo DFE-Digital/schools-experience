@@ -164,7 +164,7 @@ Rails.application.routes.draw do
     root to: 'home#index'
     get "splash", to: "home#splash"
 
-     get '/dashboard', to: redirect('/candidates')
+    get '/dashboard', to: redirect('/candidates')
 
     # email confirmation link
     get 'confirm/:uuid', to: 'registrations/placement_requests#create', as: :confirm
