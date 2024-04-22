@@ -7,7 +7,7 @@ class PagesController < ApplicationController
   end
 
   def privacy_policy
-    @privacy_policy = GetIntoTeachingApiClient::PrivacyPoliciesApi.new.get_latest_privacy_policy.text
+    @privacy_policy = GetIntoTeachingApiClient::PrivacyPoliciesApi.new.get_latest_privacy_policy
   end
 
   def schools_privacy_policy; end
