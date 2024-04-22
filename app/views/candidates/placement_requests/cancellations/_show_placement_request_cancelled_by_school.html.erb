@@ -17,8 +17,14 @@
       <%= rejection_reasons %>
     </p>
 
+        <h2 class="govuk-heading-m">
+       Request school experience
+        </h2>
     <p>
-      <%= link_to 'Request school experience at other schools', new_candidates_school_search_path %>
+      To request a different placement you can search to find school experience near you.
+    </p>
+    <p>
+      <%= govuk_link_to 'Search for school experience', new_candidates_school_search_path, class: "govuk-!-margin-bottom-0" %>
     </p>
 
     <p>
