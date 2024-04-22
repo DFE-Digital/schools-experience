@@ -14,14 +14,14 @@
     <%= render 'show_booking_cancelled_by_school',
       school_name: @cancellation.school.name,
       dates_requested: @cancellation.dates_requested,
-      rejection_reasons: @cancellation.reason,
+      rejection_reasons: @cancellation.reasons,
       extra_details: @cancellation.extra_details
     %>
   <% else %>
     <%= render 'show_placement_request_cancelled_by_school',
       school_name: @cancellation.school.name,
       dates_requested: @cancellation.dates_requested,
-      rejection_reasons: @cancellation.reason,
+      rejection_reasons: @cancellation.reasons,
       extra_details: @cancellation.extra_details
     %>
   <% end %>
