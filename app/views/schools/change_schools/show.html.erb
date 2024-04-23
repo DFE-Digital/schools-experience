@@ -12,18 +12,22 @@
                   aria_label: "outstanding bookings and requests for #{school.name}" %>
               <% end %>
             <% end %>
+            <% if Schools::ChangeSchool.request_approval_url %>
+              <div class= 'govuk-radios__divider'>or</div>
+              <%= f.govuk_radio_button :change_to_urn, "request access", label: { text: "Request access to another school" } %>
+            <% end %>
           <% end %>
 
           <%= f.govuk_submit "Continue" %>
         <% end %>
         <p>
-          If your school is not listed, please <%= link_to 'contact us', schools_contact_us_path %>
+          If you need help adding schools, please <%= link_to 'contact us', schools_contact_us_path %>
         </p>
       <% elsif @dfe_sign_in_add_service_url %>
         <h1 class="govuk-heading-l">Manage school experience</h1>
 
         <p class="govuk-body-l">
-          You do not have access to any schools yet
+          You do not have access to any schools yet.
         </p>
 
         <p>
