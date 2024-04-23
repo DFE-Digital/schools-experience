@@ -30,14 +30,12 @@
           You do not have access to any schools yet.
         </p>
 
+        <%= render 'pages/request_organisation_access' %>
+
         <p>
-          If you need access to a school, you should reach out to the approver within your organisation.
-        </p>
-        <p>
-          If your approver has already granted you access, please <%= link_to 'contact us', schools_contact_us_path %>.
+          If you need help adding schools, please <%= link_to 'contact us', schools_contact_us_path %>.
         </p>
 
-        <%= render 'pages/request_organisation_access' %>
       <% else %>
         <h1 class="govuk-heading-l">Manage school experience</h1>
 
