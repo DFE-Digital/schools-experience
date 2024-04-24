@@ -8,6 +8,8 @@
     <p class="govuk-notification-banner__heading">
       <p>
         Before you can receive requests, you need to complete your school profile.
+        Your personal details will be protected under the terms of our <%= link_to 'privacy notice', schools_privacy_policy_path =%>.
+        This explains how we use your personal data. It's important you read it before completing your school profile.
         <span class="govuk-heading-s govuk-!-margin-top-4">
           <%= link_to 'Complete your school profile',
             Feature.enabled?(:task_progress_on_boarding) ? schools_on_boarding_progress_path : schools_on_boarding_profile_path,
