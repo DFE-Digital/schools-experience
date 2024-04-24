@@ -11,11 +11,11 @@ feature "Save the referer" do
   end
 
   scenario "a user accepts the cookies from valid path" do
-    visit candidates_signin_path
+    visit root_path
 
     click_on "Accept analytics cookies"
 
-    expect(page.current_path).to eq(candidates_signin_path)
+    expect(page.current_path).to eq(root_path)
   end
 
   scenario "a user accepts the cookies from a blacklisted path" do

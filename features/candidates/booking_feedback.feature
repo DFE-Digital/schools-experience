@@ -44,4 +44,4 @@ Feature: Feedback
       And I choose 'Positively' from the 'How has your experience affected your decision to apply for teacher training?' radio buttons
       And I choose 'No' from the 'Do you want to apply for teacher training?' radio buttons
       When I click the 'Submit feedback' button
-      Then I should see the text 'Thank you for your feedback.'
+      Then I should see the text 'Thank you for your feedback'

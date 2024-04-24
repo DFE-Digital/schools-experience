@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-panel govuk-panel--confirmation">
       <h1 class="govuk-panel__title">
-        Your school experience booking has been cancelled by the school
+        Your school experience booking has already been cancelled by the school
       </h1>
     </div>
 
@@ -34,7 +34,11 @@
     </li>
     <h2 class="govuk-heading-m">View and request more school experience</h2>
     <p>
-      <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
+      To request a different placement you can search to find school experience near you.
     </p>
+    <p>
+      <%= govuk_link_to 'Search for school experience', new_candidates_school_search_path, class: "govuk-!-margin-bottom-0" %>
+    </p>
+
   </div>
 </div>

@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
   push:
-    branches: [ master ]
+    branches: [master]
 
 permissions:
   contents: write
@@ -20,7 +20,6 @@ env:
   selenium-cucumber-tests-artifact-name: selenium_cucumber_tests_${{github.run_number}}_${{github.run_attempt}}
 
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -41,7 +40,7 @@ jobs:
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
         with:
-             dockerfile: "Dockerfile"
+          dockerfile: "Dockerfile"
 
       - name: Set up Docker Buildx
         id: buildx
@@ -49,19 +48,19 @@ jobs:
 
       - name: Get Short SHA
         id: sha
-        run:  echo "short=$(echo $GITHUB_SHA | cut -c -7)" >> $GITHUB_OUTPUT
+        run: echo "short=$(echo $GITHUB_SHA | cut -c -7)" >> $GITHUB_OUTPUT
 
       - name: Set DOCKER_IMAGE environment variable
-        id:   docker
+        id: docker
         run: |
-             if [ "${{github.ref}}" == "refs/heads/master" ]
-             then
-                echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
-                echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:master" >> $GITHUB_OUTPUT
-             else
-                echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
-                echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
-             fi
+          if [ "${{github.ref}}" == "refs/heads/master" ]
+          then
+             echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
+             echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:master" >> $GITHUB_OUTPUT
+          else
+             echo "DOCKER_IMAGE=${{ env.DOCKER_REPOSITORY }}:review-${{steps.sha.outputs.short }}" >> $GITHUB_OUTPUT
+             echo "DOCKER_MASTER=${{ env.DOCKER_REPOSITORY }}:PR-${{ github.event.number }}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -75,11 +74,10 @@ jobs:
         with:
           cache-from: ${{ env.DOCKER_REPOSITORY }}:master
           tags: |
-                 ${{ steps.docker.outputs.DOCKER_IMAGE }}
-                 ${{ steps.docker.outputs.DOCKER_MASTER }}
+            ${{ steps.docker.outputs.DOCKER_IMAGE }}
+            ${{ steps.docker.outputs.DOCKER_MASTER }}
           push: true
-          build-args:
-                 SHA=${{ steps.sha.outputs.short }}
+          build-args: SHA=${{ steps.sha.outputs.short }}
 
       - name: Fetch slack web hook
         if: failure() && github.ref == 'refs/heads/master'
@@ -95,15 +93,15 @@ jobs:
         if: failure() && github.ref == 'refs/heads/master'
         uses: rtCamp/action-slack-notify@master
         env:
-           SLACK_COLOR: ${{env.SLACK_ERROR}}
-           SLACK_MESSAGE: 'There has been a failure building the application'
-           SLACK_TITLE: 'Failure Building Application'
-           SLACK_WEBHOOK: " ${{ steps.slack-web-hook.outputs.SLACK-WEBHOOK }} "
+          SLACK_COLOR: ${{env.SLACK_ERROR}}
+          SLACK_MESSAGE: "There has been a failure building the application"
+          SLACK_TITLE: "Failure Building Application"
+          SLACK_WEBHOOK: " ${{ steps.slack-web-hook.outputs.SLACK-WEBHOOK }} "
 
   spec_tests:
     name: Unit Tests
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [build]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -113,7 +111,7 @@ jobs:
 
       - uses: Azure/login@v2
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -128,7 +126,7 @@ jobs:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
       - name: Lint Ruby
-        run:  docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
+        run: docker run -t --rm -v ${PWD}/out:/app/out -e RAILS_ENV=test ${{needs.build.outputs.DOCKER_IMAGE}}  rubocop
 
       - name: Keep Rubocop output
         if: always()
@@ -138,18 +136,18 @@ jobs:
           path: ${{ github.workspace }}/out/rubocop-result.json
 
       - name: Run Specs
-        run:  docker-compose -f docker-compose-ci.yml run --rm db-tasks rspec
+        run: docker-compose -f docker-compose-ci.yml run --rm db-tasks rspec
         env:
           IMAGE: ${{needs.build.outputs.DOCKER_IMAGE}}
 
-      - name:  Keep Unit Tests Results
+      - name: Keep Unit Tests Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.unit-tests-artifact-name }}
           path: ${{ github.workspace }}/out/test-report.xml
 
-      - name:  Keep Code Coverage Report
+      - name: Keep Code Coverage Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -159,7 +157,7 @@ jobs:
   security_tests:
     name: Security Tests
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [build]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -169,7 +167,7 @@ jobs:
 
       - uses: Azure/login@v2
         with:
-            creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
+          creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -202,7 +200,7 @@ jobs:
   cucumber_tests:
     name: Cucumber Tests
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [build]
     strategy:
       fail-fast: false
       matrix:
@@ -216,7 +214,7 @@ jobs:
 
       - uses: Azure/login@v2
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -240,7 +238,7 @@ jobs:
           NODE: ${{ matrix.node }}
           NODE_COUNT: 2
 
-      - name:  Keep Unit Tests Results
+      - name: Keep Unit Tests Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -250,7 +248,7 @@ jobs:
   selenium_cucumber_tests:
     name: Chrome Cucumber Tests
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [build]
     strategy:
       fail-fast: false
       matrix:
@@ -264,7 +262,7 @@ jobs:
 
       - uses: Azure/login@v2
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -289,7 +287,7 @@ jobs:
           NODE: ${{ matrix.node }}
           NODE_COUNT: 2
 
-      - name:  Keep Unit Tests Results
+      - name: Keep Unit Tests Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -299,24 +297,23 @@ jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
-    needs: [ selenium_cucumber_tests, cucumber_tests , security_tests, spec_tests ]
+    needs: [selenium_cucumber_tests, cucumber_tests, security_tests, spec_tests]
     steps:
-
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: set-up-environment
         uses: DFE-Digital/github-actions/set-up-environment@master
 
       - uses: Azure/login@v2
         with:
-            creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
+          creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Download Test Artifacts
         uses: actions/download-artifact@v4
         with:
-            path: ${{ github.workspace }}/out/
+          path: ${{ github.workspace }}/out/
 
       - name: Fixup report file paths
         run: sudo sed -i "s?/app/app?/github/workspace/app?" ${{ github.workspace }}/out/${{ env.code-coverage-artifact-name }}/coverage.json
@@ -342,7 +339,7 @@ jobs:
 
   prepare:
     name: Configure Matrix Deployments
-    needs: [ sonarcloud ]
+    needs: [sonarcloud]
 
     runs-on: ubuntu-latest
     outputs:
@@ -352,12 +349,12 @@ jobs:
       - name: Set matrix environments (Push to master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
+          echo "MATRIX_ENVIRONMENTS={\"environment\":[\"development\",\"staging\",\"production\"]}" >> $GITHUB_ENV
 
       - name: Set matrix environments ( Review)
         if: github.event_name == 'pull_request' && github.ref != 'refs/heads/master'
         run: |
-            echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
+          echo "MATRIX_ENVIRONMENTS={\"environment\":[\"review\"]}" >> $GITHUB_ENV
       - name: Generate Tag from PR Number
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         id: tag_version
@@ -382,7 +379,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'  && steps.release.outputs.id
         uses: DFE-Digital/github-actions/CopyPRtoRelease@master
         with:
-          PR_NUMBER:  ${{ steps.tag_version.outputs.pr_number }}
+          PR_NUMBER: ${{ steps.tag_version.outputs.pr_number }}
           RELEASE_ID: ${{ steps.release.outputs.id }}
           TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -392,9 +389,9 @@ jobs:
       max-parallel: 1
       matrix: ${{fromJSON(needs.prepare.outputs.matrix_environments)}}
     environment:
-       name: ${{matrix.environment}}
+      name: ${{matrix.environment}}
     concurrency: ${{matrix.environment}}_${{github.event.number}}
-    needs: [prepare ]
+    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -405,38 +402,36 @@ jobs:
 
       - uses: Azure/login@v2
         with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Fetch SECURE USERNAME
         uses: azure/CLI@v2
         id: fetch-username
         with:
           inlineScript: |
-              SECRET_VALUE=$(az keyvault secret show --name "SECURE-USERNAME" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
-              echo "::add-mask::$SECRET_VALUE"
-              echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
+            SECRET_VALUE=$(az keyvault secret show --name "SECURE-USERNAME" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SECURE_USERNAME=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Fetch SECURE PASSWORD
         uses: azure/CLI@v2
         id: fetch-password
         with:
-            inlineScript: |
-              SECRET_VALUE=$(az keyvault secret show --name "SECURE-PASSWORD" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
-              echo "::add-mask::$SECRET_VALUE"
-              echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SECURE-PASSWORD" --vault-name "${{ secrets.APP_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Trigger Deployment to ${{matrix.environment}}
         id: deploy
         uses: ./.github/workflows/actions/deploy
         with:
           environment: ${{matrix.environment}}
-          sha:  ${{ github.sha }}
+          sha: ${{ github.sha }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          pr:   ${{github.event.number}}
+          pr: ${{github.event.number}}
           secure-username: ${{ steps.fetch-username.outputs.SECURE_USERNAME}}
           secure-password: ${{ steps.fetch-password.outputs.SECURE_PASSWORD}}
-
 
       - name: Determine DfE Sign In Message
         if: matrix.environment == 'Review'
@@ -444,8 +439,8 @@ jobs:
         id: dsiMessage
         with:
           cond: ${{ steps.deploy.outputs.dsi-hostname != '' }}
-          if_true: ':white_check_mark: DfE  sign in route obtained: https://${{ steps.deploy.outputs.dsi-hostname }}'
-          if_false: ':warning: **DfE  sign in route pool  exhausted (close some open PRs!)**'
+          if_true: ":white_check_mark: DfE  sign in route obtained: https://${{ steps.deploy.outputs.dsi-hostname }}"
+          if_false: ":warning: **DfE  sign in route pool  exhausted (close some open PRs!)**"
 
       - name: Post sticky pull request comment
         if: matrix.environment == 'Review'
@@ -472,7 +467,7 @@ jobs:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Release
-        if:  matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
+        if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
         uses: eregon/publish-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -493,7 +488,7 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_COLOR: ${{env.SLACK_SUCCESS}}
-          SLACK_MESSAGE:  ${{ fromJson(steps.tag_id.outputs.release_body) }}
+          SLACK_MESSAGE: ${{ fromJson(steps.tag_id.outputs.release_body) }}
           SLACK_TITLE: "Release Published: ${{steps.tag_id.outputs.release_name}}"
           SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
           MSG_MINIMAL: true
@@ -508,9 +503,9 @@ jobs:
           SLACK_WEBHOOK: "${{steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
 
   owasp:
-    name: 'OWASP Test'
+    name: "OWASP Test"
     runs-on: ubuntu-latest
-    needs: [deployments ]
+    needs: [deployments]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
@@ -521,7 +516,7 @@ jobs:
 
       - uses: Azure/login@v2
         with:
-            creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
+          creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
       - name: Fetch SECURE USERNAME
         uses: azure/CLI@v2
@@ -545,10 +540,10 @@ jobs:
         uses: zaproxy/action-full-scan@v0.10.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          docker_name: 'owasp/zap2docker-stable'
-          target: 'https://${{ steps.fetch-username.outputs.SECURE_USERNAME}}:${{ steps.fetch-password.outputs.SECURE_PASSWORD }}@${{env.APPLICATION_NAME}}-development.${{env.REVIEW_DOMAIN}}'
-          rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-a'
+          docker_name: "ghcr.io/zaproxy/zaproxy:stable"
+          target: "https://${{ steps.fetch-username.outputs.SECURE_USERNAME}}:${{ steps.fetch-password.outputs.SECURE_PASSWORD }}@${{env.APPLICATION_NAME}}-development.${{env.REVIEW_DOMAIN}}"
+          rules_file_name: ".zap/rules.tsv"
+          cmd_options: "-a"
 
       - name: Fetch secrets from key vault
         uses: azure/CLI@v2
@@ -563,7 +558,7 @@ jobs:
         if: failure()
         uses: rtCamp/action-slack-notify@master
         env:
-           SLACK_COLOR: ${{env.SLACK_FAILURE}}
-           SLACK_MESSAGE: 'Pipeline Failure carrying out OWASP Testing on https://${{env.APPLICATION_NAME}}-development.${{env.REVIEW_DOMAIN}}/'
-           SLACK_TITLE: 'Failure: OWSAP Testing has failed on  Development'
-           SLACK_WEBHOOK: "${{ steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
+          SLACK_COLOR: ${{env.SLACK_FAILURE}}
+          SLACK_MESSAGE: "Pipeline Failure carrying out OWASP Testing on https://${{env.APPLICATION_NAME}}-development.${{env.REVIEW_DOMAIN}}/"
+          SLACK_TITLE: "Failure: OWSAP Testing has failed on  Development"
+          SLACK_WEBHOOK: "${{ steps.fetch-slack-secret.outputs.SLACK-WEBHOOK}}"
