@@ -17,7 +17,7 @@
                    as: '',
                    url: candidates_schools_path,
                    method: :post,
-                   html: { class: 'school-search-form' },
+                   html: { novalidate: false, class: 'school-search-form' },
                    data: { controller: :autocomplete,
                            "autocomplete-target": "wrapper",
                            "autocomplete-api-key-value": Rails.application.config.x.google_maps_key,

@@ -29,6 +29,38 @@ export default class extends Controller {
 
     this.#setWrapperVisibility(true);
     await this.#initialiseService();
+
+    this.element.addEventListener('submit', this.validateLocationField.bind(this));
+  }
+
+  async validateLocationField(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const locationInput = document.getElementById('location-field');
+    const locationFormGroup = document.querySelector('[data-autocomplete-target="locationFormGroup"]');
+    let errorParagraph = locationFormGroup.querySelector('.govuk-error-message');
+
+    if (locationInput.value.trim() === "") {
+      if (!errorParagraph) {
+        errorParagraph = document.createElement('p');
+        errorParagraph.textContent = "Enter a location or post code";
+        errorParagraph.classList.add("govuk-error-message");
+
+        const hiddenErrorMessage = document.createElement("span");
+        hiddenErrorMessage.textContent = "Error:";
+        hiddenErrorMessage.classList.add("govuk-visually-hidden");
+        errorParagraph.prepend(hiddenErrorMessage);
+
+        locationFormGroup.appendChild(errorParagraph);
+        locationFormGroup.classList.add("govuk-form-group--error");
+      }
+    } else {
+      if (errorParagraph) {
+        errorParagraph.remove();
+        locationFormGroup.classList.remove("govuk-form-group--error");
+      }
+      form.submit();
+    }
   }
 
   #showErrorMessage() {
