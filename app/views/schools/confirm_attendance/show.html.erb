@@ -55,12 +55,11 @@
     <%= pagination_bar @bookings %>
 
     <div class="govuk-button-group">
-      <p>
+
         <%= f.govuk_submit 'Save and return to dashboard' %>
-      </p>
-      <p>
+
         <%= link_to 'View earlier attendance records', schools_attendances_path %>
-      </p>
+
     </div>
 
   <% end %>
@@ -73,12 +72,11 @@
   </p>
 
 <div class="govuk-button-group">
-  <p>
+
     <%= govuk_link_to "Return to dashboard", schools_dashboard_path, secondary: true %>
-  </p>
-  <p>
+
     <%= link_to 'View earlier attendance records', schools_attendances_path %>
-  </p>
+
 </div>
 <% end %>
 
