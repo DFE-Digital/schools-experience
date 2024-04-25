@@ -9,21 +9,30 @@
     </div>
 
     <p>
-      <%= school_name %> has cancelled your school experience for the following
-      dates: <%= dates_requested %>
-    </p>
-
+      Your school experience has been cancelled by:
+          </p>
+        <ul class="govuk-list govuk-list--bullet">
+        <li class="govuk-list__item">
+           <%= school_name %> on <%= dates_requested %>
+        </li>
+        </ul>
     <p>
-      Your booking was cancelled for the following reasons: <%= rejection_reasons %>
+      Your booking was cancelled for the following reasons:
     </p>
-
+    <ul class="govuk-list govuk-list--bullet">
+    <li class="govuk-list__item">
+        <%= rejection_reasons %>
+    </li>
+    </ul>
     <p>
-      Extra details from the school <%= extra_details %>
+      Extra details from the school:
     </p>
-
-  <h2 class="govuk-heading-m">
-    Request school experience
-  </h2>
+    <ul class="govuk-list govuk-list--bullet">
+    <li class="govuk-list__item">
+        <%= extra_details %>
+    </ul>
+    </li>
+    <h2 class="govuk-heading-m">View and request more school experience</h2>
     <p>
       To request a different placement you can search to find school experience near you.
     </p>
