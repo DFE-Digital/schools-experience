@@ -53,13 +53,43 @@ export default class extends Controller {
 
         locationFormGroup.insertBefore(errorParagraph, locationFormGroup.querySelector('.govuk-body'));
         locationFormGroup.classList.add("govuk-form-group--error");
+
+        this.createErrorSummary("Enter a location or postcode");
       }
     } else {
       if (errorParagraph) {
         errorParagraph.remove();
         locationFormGroup.classList.remove("govuk-form-group--error");
+        this.removeErrorSummary("Enter a location or postcode");
       }
       form.submit();
+    }
+  }
+
+  createErrorSummary(errorMessage) {
+    const errorSummary = document.querySelector('.govuk-error-summary');
+    if (!errorSummary) {
+      const form = document.querySelector('.school-search-form');
+      const errorSummaryHtml = `
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                <li><a href="#location-field">${errorMessage}</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      `;
+      form.insertAdjacentHTML('afterbegin', errorSummaryHtml);
+    }
+  }
+
+  removeErrorSummary(errorMessage) {
+    const errorSummary = document.querySelector('.govuk-error-summary');
+    if (errorSummary) {
+      errorSummary.remove();
     }
   }
 
