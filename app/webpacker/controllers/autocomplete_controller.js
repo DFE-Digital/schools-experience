@@ -51,7 +51,7 @@ export default class extends Controller {
         hiddenErrorMessage.classList.add("govuk-visually-hidden");
         errorParagraph.prepend(hiddenErrorMessage);
 
-        locationFormGroup.appendChild(errorParagraph);
+        locationFormGroup.insertBefore(errorParagraph, locationFormGroup.querySelector('.govuk-body'));
         locationFormGroup.classList.add("govuk-form-group--error");
       }
     } else {
