@@ -37,6 +37,16 @@ jobs:
         with:
           creds: ${{ secrets.GSE_REPO_AZ_CREDENTIALS }}
 
+      - name: Fetch slack web hook
+        if: failure() && github.ref == 'refs/heads/master'
+        uses: azure/CLI@v2
+        id: slack-web-hook
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
       - name: Lint Dockerfile
         uses: brpaz/hadolint-action@master
         with:
@@ -78,16 +88,6 @@ jobs:
             ${{ steps.docker.outputs.DOCKER_MASTER }}
           push: true
           build-args: SHA=${{ steps.sha.outputs.short }}
-
-      - name: Fetch slack web hook
-        if: failure() && github.ref == 'refs/heads/master'
-        uses: azure/CLI@v2
-        id: slack-web-hook
-        with:
-          inlineScript: |
-            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
-            echo "::add-mask::$SECRET_VALUE"
-            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Slack Notification
         if: failure() && github.ref == 'refs/heads/master'
@@ -422,6 +422,15 @@ jobs:
             echo "::add-mask::$SECRET_VALUE"
             echo "SECURE_PASSWORD=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
+      - name: Fetch slack token
+        uses: azure/CLI@v2
+        id: fetch-slack-secret
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
       - name: Trigger Deployment to ${{matrix.environment}}
         id: deploy
         uses: ./.github/workflows/actions/deploy
@@ -473,15 +482,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_id: ${{steps.tag_id.outputs.release_id}}
-
-      - name: Fetch slack token
-        uses: azure/CLI@v2
-        id: fetch-slack-secret
-        with:
-          inlineScript: |
-            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
-            echo "::add-mask::$SECRET_VALUE"
-            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Slack Release Notification
         if: matrix.environment  == 'Production' && steps.tag_id.outputs.release_id
@@ -546,6 +546,7 @@ jobs:
           cmd_options: "-a"
 
       - name: Fetch secrets from key vault
+        if: failure()
         uses: azure/CLI@v2
         id: fetch-slack-secret
         with:
@@ -553,6 +554,7 @@ jobs:
             SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
             echo "::add-mask::$SECRET_VALUE"
             echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
+
 
       - name: Slack Notification
         if: failure()
