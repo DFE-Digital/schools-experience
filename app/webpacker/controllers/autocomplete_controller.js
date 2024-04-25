@@ -43,7 +43,7 @@ export default class extends Controller {
     if (locationInput.value.trim() === "") {
       if (!errorParagraph) {
         errorParagraph = document.createElement('p');
-        errorParagraph.textContent = "Enter a location or post code";
+        errorParagraph.textContent = "Enter a location or postcode";
         errorParagraph.classList.add("govuk-error-message");
 
         const hiddenErrorMessage = document.createElement("span");
