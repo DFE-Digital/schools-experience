@@ -68,6 +68,7 @@ export default class extends Controller {
 
   createErrorSummary(errorMessage) {
     const errorSummary = document.querySelector('.govuk-error-summary');
+    const gridColumn = document.querySelector('.govuk-grid-column-full');
     if (!errorSummary) {
       const form = document.querySelector('.school-search-form');
       const errorSummaryHtml = `
@@ -82,7 +83,7 @@ export default class extends Controller {
           </div>
         </div>
       `;
-      form.insertAdjacentHTML('afterbegin', errorSummaryHtml);
+      gridColumn.insertAdjacentHTML('beforebegin', errorSummaryHtml);
     }
   }
 
