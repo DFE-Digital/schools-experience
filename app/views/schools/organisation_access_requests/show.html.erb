@@ -1,6 +1,7 @@
 <div id="dsi-org-access-request" class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <section>
+      <% content_for :back_link do govuk_back_link(schools_dashboard_path); end %>
       <%= page_heading "Request access to another organisation" %>
 
       <% if @dfe_sign_in_request_organisation_url %>
