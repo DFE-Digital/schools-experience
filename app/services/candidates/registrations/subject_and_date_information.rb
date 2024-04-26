@@ -73,6 +73,15 @@ module Candidates
           .flatten
           .group_by(&:date)
       end
+
+      private
+
+      def find_placement_date_subject
+        Bookings::PlacementDateSubject
+          .joins(:bookings_subject)
+          .where(bookings_placement_date_id: bookings_placement_date_id, bookings_subjects: { id: bookings_subject_id, hidden: false })
+          .first
+      end
     end
   end
 end
