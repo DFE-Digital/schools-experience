@@ -105,11 +105,14 @@ describe Candidates::Registrations::SubjectAndDateInformation, type: :model do
         subject.bookings_subject_id = 2
       end
 
-      before { allow(subject).to receive(:find_placement_date_subject).and_return('a') }
+      before { allow(Bookings::PlacementDateSubject).to receive(:find_by).and_return('a') }
 
       specify 'should find the placement date via its id' do
         subject.placement_date_subject
-        expect(subject).to have_received(:find_placement_date_subject)
+        expect(Bookings::PlacementDateSubject).to have_received(:find_by).with(
+          bookings_placement_date_id: 1,
+          bookings_subject_id: 2
+        )
       end
     end
 
