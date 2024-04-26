@@ -23,7 +23,7 @@ module Candidates
       end
 
       def bookings_subject
-        @bookings_subject ||= find_bookings_subject
+        @bookings_subject ||= Bookings::Subject.find_by(id: bookings_subject_id)
       end
 
       def date_and_subject_ids
@@ -72,19 +72,6 @@ module Candidates
           .map(&PlacementDateOption.method(:for_secondary_date))
           .flatten
           .group_by(&:date)
-      end
-
-    private
-
-      def find_placement_date_subject
-        Bookings::PlacementDateSubject
-          .joins(:bookings_subject)
-          .where(bookings_placement_date_id: bookings_placement_date_id, bookings_subjects: { id: bookings_subject_id, hidden: false })
-          .first
-      end
-
-      def find_bookings_subject
-        Bookings::Subject.find_by(id: bookings_subject_id, hidden: false)
       end
     end
   end
