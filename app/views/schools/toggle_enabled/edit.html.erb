@@ -1,4 +1,11 @@
-<% self.page_title = "Toggle requests" %>
+<% self.page_title = "Toggle requests"
+
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Toggle requests' => nil
+  }
+
+%>
 
 <%= form_for @current_school, url: schools_enabled_path, method: 'patch' do |f| %>
   <%= f.govuk_radio_buttons_fieldset(:enabled) do %>
