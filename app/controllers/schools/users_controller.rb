@@ -15,7 +15,8 @@ module Schools
           begin
             @user_invite.create
             redirect_to schools_users_path, notice: "#{@user_invite.email} has been added."
-          rescue StandardError
+          rescue StandardError => e
+            Rails.logger.error("User invite failed with: #{e}")
             flash.notice = "An error occurred while adding #{@user_invite.email}"
             render :show, locals: { user_invite: @user_invite }
           end

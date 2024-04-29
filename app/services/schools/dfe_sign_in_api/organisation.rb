@@ -9,7 +9,7 @@ module Schools
       end
 
       def current_organisation
-        organisations.find { |org| org['urn'].to_i == current_school_urn }
+        @current_organisation ||= organisations.find { |org| org['urn'].to_i == current_school_urn }
       end
 
       def current_organisation_ukprn
