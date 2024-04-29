@@ -1,6 +1,12 @@
 <% self.page_title = 'Close placement date' %>
 
-<% content_for :back_link do govuk_back_link; end %>
+<%
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Manage dates' => schools_placement_dates_path,
+    "Close placement on #{@placement_date.date.to_formatted_s(:govuk)}" => nil
+  }
+%>
 
 <div class="govuk-main-wrapper">
   <div class="govuk-grid-row">
