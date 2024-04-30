@@ -2,12 +2,12 @@
 
 ## Identify only vs Identity and Access Management
 
-Current DSI implementation on Manage School Experience is Identity and Access Management
-which allows users to invite new users, specify their roles (end-user or approver), give
-them access to organisation(s), added them to service(s), and remove them when they are
-no longer in the role or organisation.
+Current DFE Sign-In (DSI) implementation on Manage School Experience is Identity and
+Access Management which allows users to invite new users, specify their roles (end-user
+or approver), give them access to organisation(s), added them to service(s), and remove
+them when they are no longer in the role or organisation.
 
-However, the user have to perform all of these actions in the DSI dashboard. They cannot
+However, the user has to perform all of these actions in the DSI dashboard. They cannot
 perform any of these actions in Manage School Experience.
 
 We wanted to move to Identity only version of DSI so that we could use it just for the
@@ -28,7 +28,7 @@ the `public api` into the Manage School Experience service.
 
 Users will be able to invite new users via School Dashboard in Manage School Experience
 
-The new users will be assigned an organisation they have been invite to manage and will be
+The new users will be assigned an organisation they have been invited to manage and will be
 assigned an ‘End-user’ role by default.
 
 ## Caveat:
@@ -36,7 +36,7 @@ assigned an ‘End-user’ role by default.
 - DSI only assigns an ‘end-user’ role via public API - security protocol
 - DSI also does not assign service by default via public API - security protocol
 
-## Final solution
+## Current solution
 
 1. Maintain the Managed instance of DSI
 2. Users can invite users to the schools they are signed in to.
