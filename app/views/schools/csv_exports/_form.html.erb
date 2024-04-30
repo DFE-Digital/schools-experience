@@ -8,5 +8,8 @@
       <%= f.govuk_date_field :to_date %>
     </div>
   </div>
-  <%= f.govuk_submit("Export CSV") %>
+  <div class="govuk-button-group">
+    <%= f.govuk_submit("Export CSV") %>
+    <%= govuk_link_to 'Return to dashboard', schools_dashboard_path, secondary: true %>
+  </div>
 <% end %>
