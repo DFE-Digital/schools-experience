@@ -190,8 +190,6 @@
 
   <div class="request-options govuk-button-group">
     <% if @placement_request.open? %>
-      <div class="accept-or-reject">
-        <div class="govuk-se-button-container">
           <% if @placement_request.fixed_date_is_bookable? %>
             <%= govuk_link_to "Accept request", new_schools_placement_request_acceptance_confirm_booking_path(@placement_request) %>
           <% else %>
@@ -205,8 +203,6 @@
                                 form: { class: "under-consideration-button" } %>
           <% end %>
           <%= govuk_link_to "Reject request", new_schools_placement_request_cancellation_path(@placement_request), secondary: true %>
-        </div>
-      </div>
     <% end %>
     <div>
       <%= link_to 'Return to requests', schools_placement_requests_path %>
