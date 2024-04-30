@@ -28,7 +28,11 @@
           experience service.
         </p>
 
-        <%= render 'pages/request_organisation_access' %>
+        <div class = "govuk-button-group">
+            <%= render 'pages/request_organisation_access' %>
+            <%= link_to "Go back to #{@current_school&.name} dashboard", schools_dashboard_path, class: 'govuk-link' if current_urn %>
+        </div>
+
       <% else %>
         <h1 class="govuk-heading-l">Manage school experience</h1>
 
@@ -46,7 +50,6 @@
         </p>
       <% end %>
 
-      <%= link_to "Go back to #{@current_school&.name} dashboard", schools_dashboard_path, class: 'govuk-link' if current_urn %>
     <% else %>
       <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
