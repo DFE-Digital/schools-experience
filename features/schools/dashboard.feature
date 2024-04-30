@@ -41,7 +41,7 @@ Feature: The School Dashboard
             | Text            | Hint | Path                        |
             | Manage requests | None | /schools/placement_requests |
 
-    Scenario: Upcoming Bookings panel
+    Scenario: Upcoming bookings panel
         Given my school has fully-onboarded
         And it has 'fixed' availability
         When I am on the 'schools dashboard' page
@@ -101,7 +101,7 @@ Feature: The School Dashboard
             | Text                                   | Hint                                                                | Path                                 |
             | Request access to another organisation | Request access to manage school experience for another organisation | /schools/organisation_access_request |
             | Contact us                             | Get in touch if you need help using the service                     | /schools/contact_us                  |
-    
+
     Scenario: Candidate requests counter
         Given my school has fully-onboarded
         And there are 5 new requests
