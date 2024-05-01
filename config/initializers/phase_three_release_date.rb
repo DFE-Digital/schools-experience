@@ -1,1 +1,0 @@
-PHASE_THREE_RELEASE_DATE = Date.parse('2019-09-04')

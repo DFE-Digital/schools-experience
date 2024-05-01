@@ -90,10 +90,6 @@ module ApplicationHelper
     [user.given_name, user.family_name].join(' ')
   end
 
-  def phase_three_release_date
-    PHASE_THREE_RELEASE_DATE.to_formatted_s :govuk
-  end
-
   def chat_service
     link_to "online chat service", "https://getintoteaching.education.gov.uk/#talk-to-us"
   end
