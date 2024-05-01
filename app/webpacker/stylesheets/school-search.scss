@@ -185,9 +185,3 @@
     }
   }
 }
-
-[data-controller*="autocomplete"] {
-  input {
-    @extend .govuk-input;
-  }
-}
