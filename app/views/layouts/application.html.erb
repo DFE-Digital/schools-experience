@@ -117,6 +117,9 @@
                 </li>
               <% end %>
               <li class="govuk-footer__inline-list-item">
+                <%= link_to 'Terms and conditions', terms_and_conditions_path, class: 'govuk-footer__link' %>
+              </li>
+              <li class="govuk-footer__inline-list-item">
                 <%= link_to 'Accessibility statement', accessibility_statement_path, class: 'govuk-footer__link' %>
               </li>
               <% if in_schools_namespace? %>
