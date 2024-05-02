@@ -24,14 +24,22 @@
         </div>
 
         <% end %>
+        <p>
+          If you need help adding schools, please <%= link_to 'contact us', schools_contact_us_path %>.
+        </p>
       <% elsif @dfe_sign_in_add_service_url %>
         <h1 class="govuk-heading-l">Manage school experience</h1>
 
         <p class="govuk-body-l">
-          You have not yet been granted access to the Manage school
-          experience service.
+          You do not have access to any schools yet.
         </p>
             <%= render 'pages/request_organisation_access' %>
+
+        <%= render 'pages/request_organisation_access' %>
+
+        <p>
+          If you need help adding schools, please <%= link_to 'contact us', schools_contact_us_path %>.
+        </p>
 
       <% else %>
         <h1 class="govuk-heading-l">Manage school experience</h1>
