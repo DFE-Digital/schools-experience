@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").chomp
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.0.4'
+gem 'rails', '~> 7.0.8'
 
 gem 'json', '>= 2.3.0' # Fix for CVE-2020-10663
 
@@ -15,7 +15,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 
 # PostGIS adapter for Active Record
-gem 'activerecord-postgis-adapter', '8.0.2'
+gem 'activerecord-postgis-adapter', '8.0.3'
 gem 'breasal'
 gem 'geocoder'
 
@@ -96,7 +96,7 @@ gem 'net-smtp', require: false
 gem 'actionpack-cloudfront', '>= 1.2.0'
 
 gem 'invisible_captcha', '>= 2.0.0'
-gem 'meta-tags', '~> 2.17'
+gem 'meta-tags', '~> 2.20'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
@@ -116,7 +116,7 @@ group :development, :test do
   # Testing framework
   gem 'factory_bot_rails', '>= 6.2.0'
   gem 'rspec_junit_formatter'
-  gem 'rspec-rails', '~> 6.0.1'
+  gem 'rspec-rails', '~> 6.1.1'
   gem 'rspec-sonarqube-formatter'
 
   gem 'brakeman', '>= 6.0.1'
@@ -151,7 +151,7 @@ group :test do
 
   gem 'rails-controller-testing', '>= 1.0.5'
   gem "rspec-json_expectations", "~> 2.2"
-  gem 'shoulda-matchers', '~> 5.0'
+  gem 'shoulda-matchers', '~> 6.1'
 
   gem 'capybara-screenshot'
   gem 'simplecov', require: false

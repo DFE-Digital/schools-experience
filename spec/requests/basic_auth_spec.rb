@@ -33,14 +33,14 @@ describe "Basic authentication", type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it "authenticates on the /healthcheck.json path" do
+    it "does not authenticate on the /healthcheck.json path" do
       get healthcheck_json_path
-      expect(response).to have_http_status(:unauthorized)
+      expect(response).to have_http_status(:success)
     end
 
-    it "authenticates on the /healthcheck.txt path" do
+    it "does not authenticate on the /healthcheck.txt path" do
       get healthcheck_path
-      expect(response).to have_http_status(:unauthorized)
+      expect(response).to have_http_status(:success)
     end
 
     it "does not authenticate on the /deployment.txt path" do

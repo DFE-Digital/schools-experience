@@ -122,7 +122,13 @@ variable "worker_apps" {
 }
 
 variable "statuscake_alerts" {
-  type    = map(any)
+  type = map(
+    object({
+      website_url   = optional(list(string), [])
+      ssl_url       = optional(list(string), [])
+      contact_groups = optional(list(number), [])
+    })
+  )
   default = {}
 }
 

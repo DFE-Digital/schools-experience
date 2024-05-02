@@ -41,7 +41,7 @@ Feature: The School Dashboard
             | Text            | Hint | Path                        |
             | Manage requests | None | /schools/placement_requests |
 
-    Scenario: Upcoming Bookings panel
+    Scenario: Upcoming bookings panel
         Given my school has fully-onboarded
         And it has 'fixed' availability
         When I am on the 'schools dashboard' page

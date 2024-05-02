@@ -61,7 +61,7 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument("--disable-dev-shm-usage")
   options.add_argument("--window-size=1400,1400")
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, capabilities: [options])
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 if ENV['SELENIUM_CHROME_DRIVER']
