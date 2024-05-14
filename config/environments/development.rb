@@ -98,7 +98,7 @@ Rails.application.configure do
   # dfe signin config, should be in credentials or env vars
   config.x.base_url = 'https://localhost:3000'
   config.x.oidc_client_id = 'schoolexperience'
-  config.x.oidc_client_secret = Rails.application.credentials[:dfe_pp_signin_secret]
+  config.x.oidc_client_secret = ENV['DFE_PP_SIGNIN_SECRET'] || Rails.application.credentials[:dfe_pp_signin_secret]
   config.x.oidc_host = 'pp-oidc.signin.education.gov.uk'
   config.x.dfe_sign_in_api_host = 'pp-api.signin.education.gov.uk'
 
@@ -108,6 +108,7 @@ Rails.application.configure do
   config.x.dfe_sign_in_api_role_check_enabled = ENV['DFE_SIGNIN_API_ROLE_CHECK_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_api_school_change_enabled = ENV['DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED']&.in?(truthy_strings)
   config.x.dfe_sign_in_request_organisation_url = "https://pp-services.signin.education.gov.uk/request-organisation/search"
+  config.x.dfe_sign_in_manage_users_url = "https://pp-services.signin.education.gov.uk/approvals/users"
   config.x.dfe_sign_in_add_service_url = "https://pp-services.signin.education.gov.uk/approvals/select-organisation?action=add-service"
 
   if ENV['NOTIFY_CLIENT'].present?
