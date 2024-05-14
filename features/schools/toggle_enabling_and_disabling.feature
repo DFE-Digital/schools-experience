@@ -9,7 +9,7 @@ Feature: Toggling being enabled and disabled
 
     Scenario: Page title
         Given I am on the 'toggle requests' page
-        Then the page title should be 'Toggle requests'
+        Then the page title should be 'Turn profile on or off'
 
     Scenario: Page contents
         Given I am on the 'toggle requests' page
