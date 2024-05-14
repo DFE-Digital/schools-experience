@@ -81,25 +81,23 @@ Feature: The School Dashboard
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
         Then I should see the following 'history' links:
-            | Text                | Hint | Path                         |
-            | Withdrawn requests  | None | /schools/withdrawn_requests  |
-            | Rejected requests   | None | /schools/rejected_requests   |
-            | Previous bookings   | None | /schools/previous_bookings   |
-            | Cancelled bookings  | None | /schools/cancelled_bookings  |
+            | Text               | Hint | Path                        |
+            | Withdrawn requests | None | /schools/withdrawn_requests |
+            | Rejected requests  | None | /schools/rejected_requests  |
+            | Previous bookings  | None | /schools/previous_bookings  |
+            | Cancelled bookings | None | /schools/cancelled_bookings |
 
     Scenario: Show the Help and support panel if schools is onboarded
         Given my school has fully-onboarded
         When I am on the 'schools dashboard' page
         Then I should see the following 'help-and-support' links:
-            | Text                                   | Hint                                                                | Path                                 |
-            | Request access to another organisation | Request access to manage school experience for another organisation | /schools/organisation_access_request |
-            | Contact us                             | Get in touch if you need help using the service                     | /schools/contact_us                  |
+            | Text       | Hint                                            | Path                |
+            | Contact us | Get in touch if you need help using the service | /schools/contact_us |
 
     Scenario: Show the Help and support panel if schools is not onboarded
         When I am on the 'schools dashboard' page
         Then I should see the following 'help-and-support' links:
             | Text                                   | Hint                                                                | Path                                 |
-            | Request access to another organisation | Request access to manage school experience for another organisation | /schools/organisation_access_request |
             | Contact us                             | Get in touch if you need help using the service                     | /schools/contact_us                  |
 
     Scenario: Candidate requests counter
