@@ -38,7 +38,6 @@ Rails.application.routes.draw do
   get '/accessibility_statement', to: 'pages#accessibility_statement'
   get '/terms_and_conditions', to: 'pages#terms_and_conditions'
   get '/cookies_policy', to: 'pages#cookies_policy'
-  get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/schools/request_organisation', to: 'pages#schools_request_organisation'
   get '/schools/users/edit', to: 'schools/users#edit', as: :edit_schools_user
   resources :service_updates, only: %i[index show]
