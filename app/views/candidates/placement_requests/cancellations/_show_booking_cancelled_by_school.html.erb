@@ -4,26 +4,41 @@
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-panel govuk-panel--confirmation">
       <h1 class="govuk-panel__title">
-        Your school experience booking has been cancelled by the school
+        Your school experience booking has already been cancelled by the school
       </h1>
     </div>
 
     <p>
-      <%= school_name %> has cancelled your school experience for the following
-      dates: <%= dates_requested %>
-    </p>
-
+      Your school experience has been cancelled by:
+          </p>
+        <ul class="govuk-list govuk-list--bullet">
+        <li class="govuk-list__item">
+           <%= school_name %> on <%= dates_requested %>
+        </li>
+        </ul>
     <p>
-      Your booking was cancelled for the following reasons: <%= rejection_reasons %>
+      Your booking was cancelled for the following reasons:
     </p>
-
+    <ul class="govuk-list govuk-list--bullet">
+    <li class="govuk-list__item">
+        <%= rejection_reasons %>
+    </li>
+    </ul>
     <p>
-      Extra details from the school <%= extra_details %>
+      Extra details from the school:
     </p>
-
+    <ul class="govuk-list govuk-list--bullet">
+    <li class="govuk-list__item">
+        <%= extra_details %>
+    </ul>
+    </li>
     <h2 class="govuk-heading-m">View and request more school experience</h2>
     <p>
-      <%= link_to 'Your requests and bookings', candidates_dashboard_path %>
+      To request a different placement you can search to find school experience near you.
     </p>
+    <p>
+      <%= govuk_link_to 'Search for school experience', new_candidates_school_search_path, class: "govuk-!-margin-bottom-0" %>
+    </p>
+
   </div>
 </div>

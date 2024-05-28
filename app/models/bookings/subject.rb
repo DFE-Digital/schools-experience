@@ -33,7 +33,7 @@ class Bookings::Subject < ApplicationRecord
     dependent: :restrict_with_exception
 
   default_scope -> { where.not(hidden: true) }
-  scope :secondary_subjects, -> { where(secondary_subject: true) }
+  scope :secondary_subjects, -> { where(secondary_subject: true).where.not(hidden: true) }
 
   scope :ordered_by_name, -> { order(name: 'asc') }
 end

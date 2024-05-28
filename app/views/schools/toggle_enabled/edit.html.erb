@@ -1,4 +1,11 @@
-<% self.page_title = "Toggle requests" %>
+<% self.page_title = "Turn profile on or off"
+
+  self.breadcrumbs = {
+    @current_school.name => schools_dashboard_path,
+    'Turn profile on or off' => nil
+  }
+
+%>
 
 <%= form_for @current_school, url: schools_enabled_path, method: 'patch' do |f| %>
   <%= f.govuk_radio_buttons_fieldset(:enabled) do %>
@@ -6,5 +13,9 @@
     <%= f.govuk_radio_button :enabled, false, label: { text: "Turn profile off" }, hint: nil %>
   <% end %>
 
+<div class="govuk-button-group">
   <%= f.govuk_submit 'Continue' %>
+  <%= link_to 'Return to dashboard', schools_dashboard_path %>
+</div>
+
 <% end %>

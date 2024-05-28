@@ -31,6 +31,15 @@ jobs:
       - uses: Azure/login@v2
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Fetch slack token
+        uses: azure/CLI@v2
+        id: fetch-slack-secret
+        with:
+          inlineScript: |
+            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
+            echo "::add-mask::$SECRET_VALUE"
+            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Get Release Id from Tag
         id: tag_id
@@ -52,15 +61,6 @@ jobs:
           environment: ${{ github.event.inputs.environment }}
           sha:  ${{ steps.tag_id.outputs.release_sha }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Fetch slack token
-        uses: azure/CLI@v2
-        id: fetch-slack-secret
-        with:
-          inlineScript: |
-            SECRET_VALUE=$(az keyvault secret show --name "SLACK-WEBHOOK" --vault-name "${{ secrets.INF_KEY_VAULT}}" --query "value" -o tsv)
-            echo "::add-mask::$SECRET_VALUE"
-            echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
       - name: Slack Release Notification
         if: steps.tag_id.outputs.release_id && github.event.inputs.environment == 'Production'

@@ -36,7 +36,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_application_preview_step button_text: 'Continue'
         complete_email_confirmation_step
         view_request_acknowledgement_step
-        visit_candidate_dashboard_step
       end
     end
 
@@ -78,67 +77,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
         complete_background_step
         complete_application_preview_step(name: sign_up.full_name,)
         view_request_acknowledgement_step
-      end
-    end
-
-    context 'for known Candidate already signed in' do
-      include_context "api candidate matched back"
-      include_context "api correct verification code"
-
-      let(:email_address) { sign_up.email }
-      let!(:candidate) { create(:candidate, :confirmed, gitis_uuid: sign_up.candidate_id) }
-
-      before do
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:get_schools_experience_sign_up)
-            .with(sign_up.candidate_id) { sign_up }
-      end
-
-      scenario "completing the Journey" do
-        sign_in_via_dashboard(sign_up)
-        complete_personal_information_step fill_in_fields: false
-        complete_contact_information_step
-        complete_education_step
-        complete_teaching_preference_step
-        complete_placement_preference_step
-        complete_availability_preference_step
-        complete_background_step
-        complete_application_preview_step(name: sign_up.full_name)
-        view_request_acknowledgement_step
-      end
-    end
-
-    context 'for known Candidate already signed in switching account part way through' do
-      include_context "api candidate matched back"
-      include_context "api correct verification code"
-
-      let(:email_address) { sign_up.email }
-      let(:candidate1) { create(:candidate, :confirmed, gitis_contact: sign_up, gitis_uuid: sign_up.candidate_id) }
-      let(:candidate2) { create(:candidate, :confirmed, :with_api_contact) }
-      let(:request2) do
-        GetIntoTeachingApiClient::ExistingCandidateRequest.new(
-          first_name: candidate2.gitis_contact.first_name,
-          last_name: candidate2.gitis_contact.last_name,
-          email: candidate2.gitis_contact.email
-        )
-      end
-
-      before do
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:get_schools_experience_sign_up)
-            .with(candidate2.gitis_uuid) { candidate2.gitis_contact }
-        allow_any_instance_of(GetIntoTeachingApiClient::SchoolsExperienceApi).to \
-          receive(:exchange_access_token_for_schools_experience_sign_up)
-            .with(code, request2) { candidate2.gitis_contact }
-      end
-
-      scenario "completing the Journey" do
-        sign_in_via_dashboard(candidate1.gitis_contact)
-        complete_personal_information_step(fill_in_fields: false)
-        complete_contact_information_step
-        sign_in_via_dashboard(candidate2.gitis_contact)
-        swap_back_to_education_step
-        get_bounced_to_contact_information_step
       end
     end
   end
@@ -302,21 +240,6 @@ feature 'Candidate Registrations (via the API)', type: :feature do
   def visit_candidate_dashboard_step
     click_button 'Visit your dashboard'
     expect(page).to have_text "Your dashboard"
-  end
-
-  def sign_in_via_dashboard(sign_up)
-    visit "/candidates/signin"
-
-    fill_in 'Email address', with: sign_up.email
-    fill_in 'First name', with: sign_up.first_name
-    fill_in 'Last name', with: sign_up.last_name
-    click_button 'Sign in'
-
-    expect(page.current_path).to eq "/candidates/signin"
-
-    complete_sign_in_step
-
-    expect(page.current_path).to eq "/candidates/dashboard"
   end
 
   def swap_back_to_education_step

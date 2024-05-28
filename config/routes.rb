@@ -36,9 +36,10 @@ Rails.application.routes.draw do
 
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/accessibility_statement', to: 'pages#accessibility_statement'
+  get '/terms_and_conditions', to: 'pages#terms_and_conditions'
   get '/cookies_policy', to: 'pages#cookies_policy'
-  get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/schools/request_organisation', to: 'pages#schools_request_organisation'
+  get '/schools/users/edit', to: 'schools/users#edit', as: :edit_schools_user
   resources :service_updates, only: %i[index show]
   get '/service_update', to: 'service_updates#index'
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
@@ -63,6 +64,7 @@ Rails.application.routes.draw do
     resource :switch, only: %i[new show], controller: 'switch'
 
     resource :change_school, only: %i[show create], as: 'change', path: 'change', controller: 'change_schools'
+    resources :users, only: %i[index new create show], controller: 'users'
     resource :prepopulate_school_profiles, only: %i[create]
 
     resource :dashboard, only: :show
@@ -164,6 +166,8 @@ Rails.application.routes.draw do
     root to: 'home#index'
     get "splash", to: "home#splash"
 
+    get '/dashboard', to: redirect('/candidates')
+
     # email confirmation link
     get 'confirm/:uuid', to: 'registrations/placement_requests#create', as: :confirm
 
@@ -199,8 +203,8 @@ Rails.application.routes.draw do
       resource :feedback, only: %i[new create show], controller: "booking_feedbacks"
     end
 
-    get 'signin', to: 'sessions#new'
-    post 'signin', to: 'sessions#create'
+    get 'signin', to: redirect('/candidates')
+    post 'signin', to: redirect('/candidates')
     put 'signin', to: 'sessions#update', as: :signin_code
     get 'signout', to: 'sessions#sign_out'
 

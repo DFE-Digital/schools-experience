@@ -54,8 +54,12 @@
 
     <%= pagination_bar @bookings %>
 
-    <div>
-      <%= f.govuk_submit 'Save and return to dashboard' %>
+    <div class="govuk-button-group">
+
+        <%= f.govuk_submit 'Save and return to dashboard' %>
+
+        <%= link_to 'View earlier attendance records', schools_attendances_path %>
+
     </div>
 
   <% end %>
@@ -67,11 +71,13 @@
     There are no bookings that need their attendance to be confirmed.
   </p>
 
-  <p>
+<div class="govuk-button-group">
+
     <%= govuk_link_to "Return to dashboard", schools_dashboard_path, secondary: true %>
-  </p>
+
+    <%= link_to 'View earlier attendance records', schools_attendances_path %>
+
+</div>
 <% end %>
 
-<p>
-  <%= link_to 'View earlier attendance records', schools_attendances_path %>
-</p>
+
