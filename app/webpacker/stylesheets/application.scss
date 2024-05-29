@@ -26,7 +26,7 @@ $govuk-grid-widths: (
   full: 100%
 );
 
-@import "~govuk-frontend/dist/govuk/all";
+@import "~govuk-frontend/dist/govuk/index";
 @import "accessible-autocomplete" ;
 @import "global-styles" ;
 @import "contents-list" ;
