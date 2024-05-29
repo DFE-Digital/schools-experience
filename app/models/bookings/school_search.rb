@@ -4,7 +4,8 @@ require 'geocoding_response_country'
 class Bookings::SchoolSearch < ApplicationRecord
   attr_reader :location_name, :country
 
-  validates :location, presence: true, length: { minimum: 2 }, if: -> { location.is_a?(String) }
+  validates :location, presence: true, if: -> { query.nil? }
+  validates :location, length: { minimum: 2 }, if: -> { location.is_a?(String) }
 
   # Despite this being an England-only service, we want to search the whole of the UK
   # so that we can return results to users who are near the border.

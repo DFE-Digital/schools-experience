@@ -521,7 +521,7 @@ en:
             reason:
               blank: 'Cancellation reason is required'
             base:
-              no_rejection_category_selected: Chooose a reason for rejecting this candidate
+              no_rejection_category_selected: Choose a reason for rejecting this candidate
         bookings/school_search:
           attributes:
             location:

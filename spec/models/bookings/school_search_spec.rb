@@ -16,7 +16,13 @@ describe Bookings::SchoolSearch do
 
   describe 'Validation' do
     subject { described_class.new({}) }
+    it { is_expected.to validate_presence_of(:location) }
     it { is_expected.to validate_length_of(:location).is_at_least(2) }
+
+    context 'with a query parameter' do
+      subject { described_class.new({ query: "something" }) }
+      it { is_expected.to_not validate_presence_of(:location) }
+    end
   end
 
   describe '#geolocation' do
