@@ -16,12 +16,28 @@ describe Bookings::SchoolSearch do
 
   describe 'Validation' do
     subject { described_class.new({}) }
-    it { is_expected.to validate_presence_of(:location) }
     it { is_expected.to validate_length_of(:location).is_at_least(2) }
+    it { is_expected.not_to be_valid }
 
     context 'with a query parameter' do
-      subject { described_class.new({ query: "something" }) }
-      it { is_expected.to_not validate_presence_of(:location) }
+      subject { described_class.new({ query: "Somewhere" }) }
+      it { is_expected.to be_valid }
+    end
+
+    context 'with a non-compliant UTF8 query string' do
+      # NB: non-compliant UTF8 query strings are handled elsewhere in the codebase
+      subject { described_class.new({ query: "Springfield\xa1" }) }
+      it { is_expected.to be_valid }
+    end
+
+    context 'with a location hash' do
+      subject { described_class.new({ location: { longitude: 1.1, latitude: 2.2 } }) }
+      it { is_expected.to be_valid }
+    end
+
+    context 'with a location string' do
+      subject { described_class.new({ location: "John o'Groats" }) }
+      it { is_expected.to be_valid }
     end
   end
 

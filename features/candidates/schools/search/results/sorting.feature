@@ -5,7 +5,7 @@ Feature: Schools search page sorting
 
     @javascript
     Scenario: Sorting by distance when searching by a specified location
-        Given there there are schools with the following attributes:
+        Given there are schools with the following attributes:
             | Name              | Location   |
             | Manchester School | Manchester |
             | Rochdale School   | Rochdale   |
