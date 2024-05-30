@@ -5,7 +5,6 @@ class Bookings::SchoolSearch < ApplicationRecord
   attr_reader :location_name, :location_attribute, :country
 
   # NB: location could be a string (e.g. "Bury"), a hash in location_attribute (e.g. {:latitude=>"53.593", :longitude=>"-2.289"}) or nil if query is set
-  # validates :location, presence: true, unless: -> { [query].any? }
   validates :location, length: { minimum: 2 }, if: -> { location.is_a?(String) }
   validate :location_query_validator
 
