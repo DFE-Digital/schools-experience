@@ -22,7 +22,7 @@ Feature: Filtering school search results
         And it should have checkboxes for all subjects
 
     Scenario: Filtering while searching by current location (JS disabled)
-        Given there there are schools with the following attributes:
+        Given there are schools with the following attributes:
             | Name              | Phase     | Location   |
             | Manchester School | Secondary | Manchester |
             | Rochdale School   | Secondary | Rochdale   |
@@ -35,7 +35,7 @@ Feature: Filtering school search results
 
     @javascript
     Scenario: Filtering while searching by current location (JS enabled)
-        Given there there are schools with the following attributes:
+        Given there are schools with the following attributes:
             | Name              | Phase     | Location   |
             | Manchester School | Secondary | Manchester |
             | Rochdale School   | Secondary | Rochdale   |

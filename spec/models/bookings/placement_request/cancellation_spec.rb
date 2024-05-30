@@ -36,7 +36,7 @@ describe Bookings::PlacementRequest::Cancellation, type: :model do
 
       subject { cancellation.errors.messages }
 
-      it { is_expected.to include(base: ["Chooose a reason for rejecting this candidate"]) }
+      it { is_expected.to include(base: ["Choose a reason for rejecting this candidate"]) }
 
       context "when there are rejection categories specified" do
         let(:cancellation) { build(:cancellation, fully_booked: true) }

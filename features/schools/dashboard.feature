@@ -48,7 +48,7 @@ Feature: The School Dashboard
         Then I should see the following 'bookings' links:
             | Text                       | Hint                                                        | Path                        |
             | Manage upcoming bookings   | None                                                        | /schools/bookings           |
-            | Confirm booking attendance | Confirm if candidates have attended their school experience | /schools/confirm_attendance |
+            | Confirm booking attendance | None                                                        | /schools/confirm_attendance |
 
     Scenario: School profile panel
         Given my school has fully-onboarded
