@@ -41,6 +41,7 @@ module "web_application" {
   command                = ["/app/docker-entrypoint.sh", "-m", "-f"]
   probe_path             = "/check"
   web_external_hostnames = var.create_dsi_ingress ? [var.dsi_hostname] : []
+  enable_logit               = var.enable_logit
 }
 
 module "worker_application" {
@@ -57,4 +58,5 @@ module "worker_application" {
   command                    = ["/bin/sh", "-c", "bundle exec sidekiq -C config/sidekiq.yml"]
   max_memory                 = var.sidekiq_memory_max
   replicas                   = var.sidekiq_replicas
+  enable_logit               = var.enable_logit
 }
