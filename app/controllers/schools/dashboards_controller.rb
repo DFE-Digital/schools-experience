@@ -11,6 +11,5 @@ module Schools
       @dfe_sign_in_request_organisation_url =
         Rails.application.config.x.dfe_sign_in_request_organisation_url.presence
     end
-
   end
 end
