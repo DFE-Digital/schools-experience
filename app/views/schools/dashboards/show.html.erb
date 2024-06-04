@@ -36,8 +36,6 @@
       <% if @current_school.onboarded? %>
         <%= render 'profile_status' %>
 
-        <%= render 'service_update_notice' if @latest_service_update && !@viewed_latest_service_update %>
-
         <%= render partial: 'requests_and_bookings' %>
         <%= render partial: 'profile_and_dates' %>
         <%= render partial: 'history_and_support' %>
