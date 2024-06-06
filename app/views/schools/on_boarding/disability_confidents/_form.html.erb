@@ -13,20 +13,11 @@
 
         <div>
           <%= image_pack_tag 'static/images/disability-confident-small.png', alt: 'Disability confident logo' %>
-          <span class="govuk-hint">
-            This was previously known as the 'Two Ticks scheme'
-          </span>
         </div>
 
         <%= f.govuk_radio_button :is_disability_confident, "true", link_errors: true %>
         <%= f.govuk_radio_button :is_disability_confident, "false" %>
       <% end %>
-
-      <p>
-        Check if you're already signed up to the
-        <%= link_to 'scheme',
-          'https://www.gov.uk/government/publications/disability-confident-employers-that-have-signed-up' %>.
-      </p>
 
       <p>
         Find out more about how to become a
