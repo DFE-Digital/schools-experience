@@ -43,12 +43,7 @@ Rails.application.routes.draw do
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
   get '/dfe_signin_help', to: 'pages#dfe_signin_help'
   get '/service_updates', to: redirect('/schools/dashboard')
-  get '/service_updates/2024-05-02', to: redirect('/schools/dashboard')
-  get '/service_updates/2022-03-22', to: redirect('/schools/dashboard')
-  get '/service_updates/2022-01-27', to: redirect('/schools/dashboard')
-  get '/service_updates/2021-10-25', to: redirect('/schools/dashboard')
-  get '/service_updates/2021-02-22', to: redirect('/schools/dashboard')
-  get '/service_updates/2020-03-24', to: redirect('/schools/dashboard')
+  get '/service_updates/*anything', to: redirect('/schools/dashboard')
   get '/robots', to: 'pages#robots', constraints: ->(req) { req.format == :text }
   get '/sitemap', to: 'pages#sitemap', constraints: ->(req) { req.format == :xml }
   get "/candidates/guide_for_candidates", to: 'candidates/home#guide_for_candidates'
