@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   get '/schools/users/edit', to: 'schools/users#edit', as: :edit_schools_user
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
   get '/dfe_signin_help', to: 'pages#dfe_signin_help'
+  get '/service_updates', to redirect('/schools/dashboard')
   get '/robots', to: 'pages#robots', constraints: ->(req) { req.format == :text }
   get '/sitemap', to: 'pages#sitemap', constraints: ->(req) { req.format == :xml }
   get "/candidates/guide_for_candidates", to: 'candidates/home#guide_for_candidates'
@@ -165,7 +166,6 @@ Rails.application.routes.draw do
     get "splash", to: "home#splash"
 
     get '/dashboard', to: redirect('/candidates')
-    get '/service_updates', to redirect('/schools/dashboard')
 
     # email confirmation link
     get 'confirm/:uuid', to: 'registrations/placement_requests#create', as: :confirm
