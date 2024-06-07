@@ -14,8 +14,6 @@ class PagesController < ApplicationController
 
   def migration; end
 
-  def service_update; end
-
   def help_and_support_access_needs; end
 
   def schools_request_organisation

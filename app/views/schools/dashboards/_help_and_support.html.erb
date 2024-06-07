@@ -3,12 +3,6 @@
     <h2 class="govuk-heading-m">Help and support</h2>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <ul class="govuk-list">
-      <% if @latest_service_update %>
-      <li>
-        <%= link_to "Service updates and guidance - #{@latest_service_update.date.to_formatted_s(:govuk)}", service_updates_path %>
-        <span class="govuk-hint">Find out about the latest changes to the service and how it works</span>
-      </li>
-      <% end %>
       <li>
         <%= link_to 'Contact us', schools_contact_us_path %>
         <span class="govuk-hint">Get in touch if you need help using the service</span>
