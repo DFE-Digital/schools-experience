@@ -92,13 +92,13 @@ Feature: The School Dashboard
         When I am on the 'schools dashboard' page
         Then I should see the following 'help-and-support' links:
             | Text       | Hint                                            | Path                |
-            | Contact us | Get in touch if you need help using the service | /schools/contact_us |
+            | Contact us | if you need help using the service | /schools/contact_us |
 
     Scenario: Show the Help and support panel if schools is not onboarded
         When I am on the 'schools dashboard' page
         Then I should see the following 'help-and-support' links:
             | Text                                   | Hint                                                                | Path                                 |
-            | Contact us                             | Get in touch if you need help using the service                     | /schools/contact_us                  |
+            | Contact us | if you need help using the service | /schools/contact_us |
 
     Scenario: Candidate requests counter
         Given my school has fully-onboarded
