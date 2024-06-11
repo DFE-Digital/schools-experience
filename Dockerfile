@@ -39,7 +39,8 @@ RUN yarn install && yarn cache clean
 COPY .ruby-version Gemfile Gemfile.lock ./
 # hadolint ignore=SC2046
 RUN gem install bundler --version='~> 2.5.11' && \
-    bundle install --verbose --jobs=$(nproc --all) && \
+    bundle update --bundler=2.5.11 && \
+    bundle install --verbose && \
     rm -rf /root/.bundle/cache && \
     rm -rf /usr/local/bundle/cache
 
