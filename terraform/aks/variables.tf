@@ -157,6 +157,7 @@ variable "create_dsi_ingress" {
   description = "Optional additional ingress for DSI hostname when front door is not used"
   default = false
 }
+variable "enable_logit" { default = false }
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
