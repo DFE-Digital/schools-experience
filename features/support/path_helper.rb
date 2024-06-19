@@ -99,7 +99,6 @@ def path_for(descriptor, school: nil, placement_date_id: nil, booking_id: nil,
     "confirm attendance" => [:schools_confirm_attendance_path],
     "attendances" => [:schools_attendances_path],
     "new schools feedback" => [:new_schools_feedback_path],
-    "service updates" => [:service_updates_path],
     "school chooser" => [:schools_change_path],
     "csv download" => [:schools_csv_export_path],
   }

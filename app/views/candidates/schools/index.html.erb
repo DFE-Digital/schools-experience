@@ -58,7 +58,7 @@
           <div class="filter">
             <%= f.govuk_collection_check_boxes :subjects, Candidates::School.subjects, :first,
               ->(subject) { "#{subject.last} (#{@search.subject_count(subject.first)})" },
-              classes: %w(search-subjects-checkboxes), hint: { text: t("helpers.hint.subjects") } %>
+              class: %w(search-subjects-checkboxes), hint: { text: t("helpers.hint.subjects") } %>
           </div>
 
           <div class="filter">

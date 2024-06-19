@@ -36,13 +36,14 @@ Rails.application.routes.draw do
 
   get '/privacy_policy', to: 'pages#privacy_policy'
   get '/accessibility_statement', to: 'pages#accessibility_statement'
+  get '/terms_and_conditions', to: 'pages#terms_and_conditions'
   get '/cookies_policy', to: 'pages#cookies_policy'
-  get '/schools_privacy_policy', to: 'pages#schools_privacy_policy'
   get '/schools/request_organisation', to: 'pages#schools_request_organisation'
-  resources :service_updates, only: %i[index show]
-  get '/service_update', to: 'service_updates#index'
+  get '/schools/users/edit', to: 'schools/users#edit', as: :edit_schools_user
   get '/help_and_support_access_needs', to: 'pages#help_and_support_access_needs'
   get '/dfe_signin_help', to: 'pages#dfe_signin_help'
+  get '/service_updates', to: redirect('/schools/dashboard')
+  get '/service_updates/*anything', to: redirect('/schools/dashboard')
   get '/robots', to: 'pages#robots', constraints: ->(req) { req.format == :text }
   get '/sitemap', to: 'pages#sitemap', constraints: ->(req) { req.format == :xml }
   get "/candidates/guide_for_candidates", to: 'candidates/home#guide_for_candidates'
@@ -63,6 +64,7 @@ Rails.application.routes.draw do
     resource :switch, only: %i[new show], controller: 'switch'
 
     resource :change_school, only: %i[show create], as: 'change', path: 'change', controller: 'change_schools'
+    resources :users, only: %i[index new create show], controller: 'users'
     resource :prepopulate_school_profiles, only: %i[create]
 
     resource :dashboard, only: :show

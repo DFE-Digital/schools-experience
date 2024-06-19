@@ -1,4 +1,4 @@
-Given("there there are schools with the following attributes:") do |table|
+Given("there are schools with the following attributes:") do |table|
   def locate(place)
     {
       "Manchester" => Bookings::School::GEOFACTORY.point(-2.241, 53.481),
