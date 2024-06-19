@@ -1,8 +1,7 @@
 # Sidekiq scheduled tasks/cron jobs
-require: "dfe-analytics"
 
 heart_beat_job:
-  cron: "* * * * *" # every minute
+  cron: "* * * * *" # every minute
   class: "Cron::HeartBeatJob"
 
 identify_closed_schools_job:
@@ -14,7 +13,7 @@ sync_schools_job:
   class: "Cron::SyncSchoolsJob"
 
 send_tomorrow_reminders_job:
-  cron: "30 9 * * *" # at 09:30
+  cron: "30 9 * * *" # at 09:30
   class: "Cron::Reminders::TomorrowJob"
 
 send_next_week_reminders_job:
