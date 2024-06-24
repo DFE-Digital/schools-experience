@@ -59,7 +59,7 @@ gem "redis", "~> 4.7"
 
 gem 'kaminari'
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.12.7"
 
 gem "rolify"
 

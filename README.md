@@ -52,7 +52,7 @@ We also have markdown pages within the `doc` folder of this git repo
 15. Run `yarn spec` to run the Javascript tests.
 16. Run `rails s` to launch the app on https://localhost:3000.
 17. If running with `RAILS_ENV=production`, Sidekiq is needed for background job processing
-    a. running `bundle exec sidekiq -c config/sidekiq.yml` will start a Sidekiq Worker
+    a. running `bundle exec sidekiq --config config/sidekiq.yml` will start a Sidekiq Worker
 
 ### If Chrome give a certificates error and will not let you proceed
 
