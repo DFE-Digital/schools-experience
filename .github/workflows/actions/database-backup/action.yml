@@ -33,12 +33,12 @@ runs:
 
       echo "envs are:  ${{ env.INF_VAULT_NAME }} ${{ env.NAMESPACE }}  ${{ env.APP_ENVIRONMENT }}  ${{ env.CLUSTER }}"
 
-  - uses: Azure/login@v1
+  - uses: Azure/login@v2
     with:
       creds: ${{ inputs.azure_credentials }}
 
   - name: Fetch slack token
-    uses: azure/CLI@v1
+    uses: azure/CLI@v2
     id: fetch-slack-secret
     with:
       inlineScript: |
@@ -48,7 +48,7 @@ runs:
 
   - name: Install kubectl
     id: install-kubectl
-    uses: azure/setup-kubectl@v3
+    uses: azure/setup-kubectl@v4
     with:
       version: "v1.26.1"
 
@@ -93,7 +93,7 @@ runs:
           ;;
       esac
 
-  - uses: azure/setup-kubectl@v3
+  - uses: azure/setup-kubectl@v4
 
   - name: K8 setup
     shell: bash
