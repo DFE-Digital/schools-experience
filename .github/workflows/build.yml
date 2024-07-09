@@ -18,6 +18,7 @@ env:
   rubocop-artifact-name: rubocop_results_${{github.run_number}}_${{github.run_attempt}}
   cucumber-tests-artifact-name: cucumber_tests_${{github.run_number}}_${{github.run_attempt}}
   selenium-cucumber-tests-artifact-name: selenium_cucumber_tests_${{github.run_number}}_${{github.run_attempt}}
+  DOCKER_BUILD_RECORD_UPLOAD: false
 
 jobs:
   build:
