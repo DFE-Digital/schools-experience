@@ -158,6 +158,11 @@ variable "create_dsi_ingress" {
   default = false
 }
 variable "enable_logit" { default = false }
+variable "enable_prometheus_monitoring" {
+  type    = bool
+  default = false
+}
+
 locals {
   azure_credentials = try(jsondecode(var.azure_credentials_json), null)
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"

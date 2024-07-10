@@ -42,6 +42,8 @@ module "web_application" {
   probe_path             = "/check"
   web_external_hostnames = var.create_dsi_ingress ? [var.dsi_hostname] : []
   enable_logit               = var.enable_logit
+
+  enable_prometheus_monitoring  = var.enable_prometheus_monitoring
 }
 
 module "worker_application" {
