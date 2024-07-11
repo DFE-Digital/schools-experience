@@ -84,4 +84,35 @@ describe Candidates::Registrations::Education, type: :model do
       end
     end
   end
+
+  describe '#degree_subject_autocomplete?' do
+    before do
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with("DEGREE_SUBJECT_AUTOCOMPLETE_ENABLED", false).and_return(degree_subject_autocomplete_flag)
+    end
+
+    context "when DEGREE_SUBJECT_AUTOCOMPLETE_ENABLED is not set" do
+      let(:degree_subject_autocomplete_flag) { nil }
+
+      it "returns false" do
+        expect(subject).not_to be_degree_subject_autocomplete
+      end
+    end
+
+    context "when DEGREE_SUBJECT_AUTOCOMPLETE_ENABLED=0" do
+      let(:degree_subject_autocomplete_flag) { "0" }
+
+      it "returns false" do
+        expect(subject).not_to be_degree_subject_autocomplete
+      end
+    end
+
+    context "when DEGREE_SUBJECT_AUTOCOMPLETE_ENABLED=1" do
+      let(:degree_subject_autocomplete_flag) { "1" }
+
+      it "returns true" do
+        expect(subject).to be_degree_subject_autocomplete
+      end
+    end
+  end
 end

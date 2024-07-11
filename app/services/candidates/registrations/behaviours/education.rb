@@ -42,6 +42,10 @@ module Candidates
           NO_DEGREE_SUBJECT
         end
 
+        def degree_subject_autocomplete?
+          @degree_subject_autocomplete ||= ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEGREE_SUBJECT_AUTOCOMPLETE_ENABLED", false))
+        end
+
       private
 
         def degree_stage_requires_subject?
