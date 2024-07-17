@@ -38,11 +38,9 @@ end
 Given("I have completed the education form") do
   visit path_for 'education', school: @school
   choose 'Graduate or postgraduate'
-  select 'Physics', from: "What subject are you studying?"
-
-  # find_field(id: 'candidates-registrations-education-degree-subject-field').fill_in(with: "Physics")
-
+  fill_in "What subject are you studying?", with: "Physics"
   click_button 'Continue'
+  click_button 'Continue' # for reasons unknown, we need to click on this specific button twice in Capybara
 end
 
 Given("I have completed the teaching preference form") do
