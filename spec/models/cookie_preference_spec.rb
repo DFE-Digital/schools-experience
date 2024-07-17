@@ -94,10 +94,8 @@ describe CookiePreference, type: :model do
 
     subject { described_class.cookies }
 
-    context "when GTM_UA_ID is present" do
-      before { allow(ENV).to receive(:[]).with("GTM_UA_ID") { "abc123" } }
-
-      it { is_expected.to include({ analytics: %w[_ga _gid ai_session ai_user _gat_abc123] }) }
+    context "analytics cookies" do
+      it { is_expected.to include({ analytics: %w[_ga _gid ai_session ai_user] }) }
     end
   end
 
