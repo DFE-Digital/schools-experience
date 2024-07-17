@@ -137,7 +137,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
     # Submit registrations/education form successfully
     choose 'Graduate or postgraduate'
-    select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
+    select("Physics", from: "What subject are you studying?")
     click_button 'Continue'
   end
 
