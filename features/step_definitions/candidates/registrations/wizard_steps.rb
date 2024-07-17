@@ -38,7 +38,10 @@ end
 Given("I have completed the education form") do
   visit path_for 'education', school: @school
   choose 'Graduate or postgraduate'
-  select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
+  select 'Physics', from: "What subject are you studying?"
+
+  #find_field(id: 'candidates-registrations-education-degree-subject-field').fill_in(with: "Physics")
+  
   click_button 'Continue'
 end
 
