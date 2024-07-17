@@ -9,6 +9,26 @@ GIT
       request_store_rails (~> 2)
 
 GIT
+  remote: https://github.com/DFE-Digital/dfe-autocomplete.git
+  revision: 8e7389ff62a38bc8880323f6c58eed9c8d10f080
+  specs:
+    dfe-autocomplete (0.1.0)
+      actionview (>= 7.0.2.3)
+      activemodel (>= 7.0.2.3)
+      govuk-components
+      rails (>= 7.0.2.3)
+      view_component
+
+GIT
+  remote: https://github.com/DFE-Digital/dfe-reference-data.git
+  revision: 11d14fe7d8bf60514f3bd9479d35e8f52fce0afa
+  tag: v3.5.0
+  specs:
+    dfe-reference-data (3.5.0)
+      activesupport
+      tzinfo
+
+GIT
   remote: https://github.com/DFE-Digital/get-into-teaching-api-ruby-client.git
   revision: 6619b0f9e00db68618deb05ef493930d2dff3b5d
   ref: 6619b0f
@@ -291,6 +311,10 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
+    govuk-components (5.4.0)
+      html-attributes-utils (~> 1.0.0, >= 1.0.0)
+      pagy (>= 6, < 9)
+      view_component (>= 3.9, < 3.13)
     govuk_design_system_formbuilder (4.0.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
@@ -393,6 +417,7 @@ GEM
       webfinger (~> 1.2)
     os (1.1.4)
     package_json (0.1.0)
+    pagy (8.6.3)
     parallel (1.25.1)
     parallel_tests (4.7.1)
       parallel
@@ -631,6 +656,10 @@ GEM
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
+    view_component (3.12.1)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -712,6 +741,8 @@ DEPENDENCIES
   daemons
   database_cleaner
   dfe-analytics!
+  dfe-autocomplete!
+  dfe-reference-data!
   dotenv-rails (>= 2.7.6)
   factory_bot_rails (>= 6.2.0)
   faraday

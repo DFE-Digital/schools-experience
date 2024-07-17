@@ -3,6 +3,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ConfirmedBookings::DateController, type: :request do
   include_context "logged in DfE user"
+  include_context "Degree subject autocomplete enabled"
 
   let(:booking) do
     create(:bookings_booking, :accepted, bookings_school: @current_user_school)

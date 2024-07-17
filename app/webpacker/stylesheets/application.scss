@@ -27,6 +27,7 @@ $govuk-grid-widths: (
 );
 
 @import "~govuk-frontend/dist/govuk/index";
+@import "dfe-autocomplete/src/dfe-autocomplete";
 @import "accessible-autocomplete" ;
 @import "global-styles" ;
 @import "contents-list" ;

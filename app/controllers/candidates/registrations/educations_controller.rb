@@ -38,9 +38,11 @@ module Candidates
         params.require(:candidates_registrations_education).permit(
           :degree_stage,
           :degree_stage_explaination,
-          :degree_subject
+          :degree_subject,
+          :degree_subject_raw,
         ).tap do |params|
           params[:degree_stage_explaination] = nil unless params[:degree_stage] == 'Other'
+          params[:degree_subject] = params[:degree_subject_raw] if params.key?(:degree_subject_raw)
         end
       end
 

@@ -10,7 +10,12 @@ import "@stimulus/polyfills";
 import "custom-event-polyfill";
 import { Application } from "@hotwired/stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers";
+import dfeAutocomplete from "dfe-autocomplete";
 
 const application = Application.start();
 const context = require.context("controllers", true, /.js$/);
 application.load(definitionsFromContext(context));
+
+dfeAutocomplete({
+  rawAttribute: true
+});

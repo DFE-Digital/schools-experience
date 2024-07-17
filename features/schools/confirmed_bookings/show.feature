@@ -53,7 +53,7 @@ Feature: Viewing a booking
             | Heading                                 | Value                             |
             | What they want out of school experience | It’s just an idea                 |
             | Degree stage                            | Final year                        |
-            | Degree subject                          | Bioscience                        |
+            | Degree subject                          | Biological sciences               |
             | Teaching stage                          | I want to be a teacher            |
             | Teaching subject                        | First choice: Biology             |
             | Teaching subject                        | Second choice: Maths              |

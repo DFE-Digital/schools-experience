@@ -36,7 +36,7 @@ FactoryBot.define do
         "candidates_registrations_education" => {
           "degree_stage" => "Other",
           "degree_stage_explaination" => "Khan academy, level 3",
-          "degree_subject" => "Bioscience",
+          "degree_subject" => "Biological sciences",
           "created_at" => timestamp,
           "updated_at" => timestamp
         },

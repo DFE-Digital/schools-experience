@@ -3,6 +3,10 @@ inherit_gem:
     - config/default.yml
     - config/rails.yml
 
+Gemspec/RequiredRubyVersion:
+  Exclude:
+    - node_modules/dfe-autocomplete/dfe-autocomplete.gemspec
+
 Metrics/BlockLength:
   Exclude:
     - config/**/*
