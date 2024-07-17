@@ -59,7 +59,7 @@ Feature: Viewing a withdrawn request
             | Heading                                 | Value                                             |
             | What they want out of school experience | Become a teacher                                  |
             | Degree stage                            | I don't have a degree and am not studying for one |
-            | Degree subject                          | Not applicable                                    |
+            | Degree subject                          |                                                   |
             | Teaching stage                          | I’m very sure and think I’ll apply                |
             | Teaching subject                        | First choice: Maths                               |
             | Teaching subject                        | Second choice: Physics                            |
