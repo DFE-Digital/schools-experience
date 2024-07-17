@@ -40,8 +40,8 @@ Given("I have completed the education form") do
   choose 'Graduate or postgraduate'
   select 'Physics', from: "What subject are you studying?"
 
-  #find_field(id: 'candidates-registrations-education-degree-subject-field').fill_in(with: "Physics")
-  
+  # find_field(id: 'candidates-registrations-education-degree-subject-field').fill_in(with: "Physics")
+
   click_button 'Continue'
 end
 
