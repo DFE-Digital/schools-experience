@@ -17,8 +17,7 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - name: Backup  Database
-        id: db_backup
+      - name: Backup database
         uses: ./.github/workflows/actions/database-backup
         with:
           environment: ${{matrix.environment}}

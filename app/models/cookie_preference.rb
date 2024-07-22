@@ -44,9 +44,7 @@ class CookiePreference
     def cookies
       {
         analytics: %w[_ga _gid ai_session ai_user]
-      }.tap do |c|
-        c[:analytics] << "_gat_#{ENV['GTM_UA_ID']}" if ENV["GTM_UA_ID"].present?
-      end
+      }
     end
   end
 

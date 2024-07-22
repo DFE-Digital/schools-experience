@@ -31,8 +31,6 @@ runs:
       echo "APP_ENVIRONMENT=$APP_ENVIRONMENT" >> $GITHUB_ENV
       echo "CLUSTER=$CLUSTER" >> $GITHUB_ENV
 
-      echo "envs are:  ${{ env.INF_VAULT_NAME }} ${{ env.NAMESPACE }}  ${{ env.APP_ENVIRONMENT }}  ${{ env.CLUSTER }}"
-
   - uses: Azure/login@v2
     with:
       creds: ${{ inputs.azure_credentials }}
@@ -46,17 +44,14 @@ runs:
         echo "::add-mask::$SECRET_VALUE"
         echo "SLACK-WEBHOOK=$SECRET_VALUE" >> $GITHUB_OUTPUT
 
-  - name: Install kubectl
-    id: install-kubectl
-    uses: azure/setup-kubectl@v4
-    with:
-      version: "v1.26.1"
+  - name: Set kubectl
+    uses: DFE-Digital/github-actions/set-kubectl@master
 
   - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
     with:
        azure-credentials: ${{ inputs.azure_credentials }}
 
-  - name: get environment variables
+  - name: Set environment variables
     shell: bash
     run: |
       test_cluster_rg=s189t01-tsc-ts-rg
@@ -67,22 +62,18 @@ runs:
       echo "BACKUP_FILE_NAME=$BACKUP_FILE_NAME" >> $GITHUB_ENV
       case "${{ inputs.environment }}" in
       development)
-          echo "in development"
           echo "cluster_rg=$test_cluster_rg" >> $GITHUB_ENV
           echo "cluster_name=$test_cluster_name" >> $GITHUB_ENV
           echo "app_name=get-school-experience-development" >> $GITHUB_ENV
           echo "storage_account=s189t01gsedbbkdvdsa" >> $GITHUB_ENV
-
           ;;
       staging)
-          echo "in staging"
           echo "cluster_rg=$test_cluster_rg" >> $GITHUB_ENV
           echo "cluster_name=$test_cluster_name" >> $GITHUB_ENV
           echo "app_name=get-school-experience-staging" >> $GITHUB_ENV
           echo "storage_account=s189t01gsedbbkstgdsa" >> $GITHUB_ENV
           ;;
       production)
-          echo "in production"
           echo "cluster_rg=$production_cluster_rg" >> $GITHUB_ENV
           echo "cluster_name=$production_cluster_name" >> $GITHUB_ENV
           echo "app_name=get-school-experience-production" >> $GITHUB_ENV
@@ -92,8 +83,6 @@ runs:
           echo "unknown cluster"
           ;;
       esac
-
-  - uses: azure/setup-kubectl@v4
 
   - name: K8 setup
     shell: bash
@@ -107,7 +96,7 @@ runs:
   - name: Backup ${{ inputs.environment }} DB
     shell: bash
     run: |
-      bin/konduit.sh  -k ${{ env.INF_VAULT_NAME }} -d gse-${{ inputs.environment }} get-school-experience-${{ inputs.environment }}  -- pg_dump -E utf8 --clean --if-exists --no-owner --verbose --no-password -f ${BACKUP_FILE_NAME}.sql
+      bin/konduit.sh -k ${{ env.INF_VAULT_NAME }} -d gse-${{ inputs.environment }} get-school-experience-${{ inputs.environment }}  -- pg_dump -E utf8 --clean --if-exists --no-owner --verbose --no-password -f ${BACKUP_FILE_NAME}.sql
       tar -cvzf ${{ env.BACKUP_FILE_NAME }}.tar.gz ${{ env.BACKUP_FILE_NAME }}.sql
 
   - name: Set Connection String
