@@ -61,4 +61,6 @@ module "worker_application" {
   max_memory                 = var.sidekiq_memory_max
   replicas                   = var.sidekiq_replicas
   enable_logit               = var.enable_logit
+
+  enable_prometheus_monitoring  = var.enable_prometheus_monitoring
 }
