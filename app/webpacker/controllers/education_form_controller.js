@@ -24,11 +24,7 @@ export default class extends Controller {
 
     if (optionForNoDegree) {
       optionForNoDegree.hidden = requiresSubject
-      if ( !requiresSubject ) {
-        optionForNoDegree.selected = 'selected'
-      } else {
-        optionForNoDegree.selected = false
-      }
+      optionForNoDegree.selected = requiresSubject ? false : 'selected'
     } else if (inputForAutoComplete && !requiresSubject) {
       inputForAutoComplete.value = "";
     }
