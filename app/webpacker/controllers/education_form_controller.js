@@ -29,10 +29,9 @@ export default class extends Controller {
       } else {
         optionForNoDegree.selected = false
       }
-    } else if (inputForAutoComplete) {
-      if ( !requiresSubject ) {
-        inputForAutoComplete.value = "";
-      }
+    } else if (inputForAutoComplete && !requiresSubject) {
+      inputForAutoComplete.value = "";
+    }
     }
   }
 }
