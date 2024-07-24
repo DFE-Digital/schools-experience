@@ -8,7 +8,7 @@ Feature: Availability preference
         And the school offers 'Physics, Mathematics'
         And I have completed the personal information form
         And I have completed the contact information form
-        And I have completed the education form (select)
+        And I have completed the education form
         And I have completed the teaching preference form
         And I have completed the placement preference form
         And the school I'm applying to is flexible on dates

@@ -10,7 +10,7 @@ Feature: Entering teaching preference details
     Scenario: Filling in and submitting the form with errors
         Given I have completed the personal information form
         And I have completed the contact information form
-        And I have completed the education form (select)
+        And I have completed the education form
         And I am on the 'teaching preference' page for my school of choice
         When I submit the form
         Then I should see the validation error 'Select a teaching stage'
@@ -19,7 +19,7 @@ Feature: Entering teaching preference details
     Scenario: Filling in and subject the form
         Given I have completed the personal information form
         And I have completed the contact information form
-        And I have completed the education form (select)
+        And I have completed the education form
         And I am on the 'teaching preference' page for my school of choice
         And I make my teaching preference selection
         When I submit the form

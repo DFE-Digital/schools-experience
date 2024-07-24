@@ -10,7 +10,7 @@ Feature: Persisting registration information on navigating away
   Scenario: Returning to the wizard
     Given I have completed the personal information form
     And I have completed the contact information form
-    And I have completed the education form (select)
+    And I have completed the education form
     And I have completed the teaching preference form
     And I have completed the placement preference form
     And I have completed the availability preference form
