@@ -26,11 +26,12 @@ module Candidates
         end
 
         def available_degree_subjects
-          if degree_subject_autocomplete?
-            Hesa::Subject.all
-          else
-            OPTIONS_CONFIG.fetch 'DEGREE_SUBJECTS'
-          end
+          @available_degree_subjects ||=
+            if degree_subject_autocomplete?
+              DfE::ReferenceData::Degrees::SUBJECTS.all
+            else
+              OPTIONS_CONFIG.fetch 'DEGREE_SUBJECTS'
+            end
         end
 
         def requires_subject_for_degree_stage?(some_degree_stage)
