@@ -38,9 +38,16 @@ end
 Given("I have completed the education form") do
   visit path_for 'education', school: @school
   choose 'Graduate or postgraduate'
-  # The auto-complete dropdown list doesn't support the "select" method, so we
-  # need to fill in the inputbox and then tab to the next field instead
-  fill_in("What subject are you studying?", with: "Physics").send_keys :tab
+  subject_field = find_field("What subject are you studying?")
+  if subject_field.tag_name == "select"
+    # When javascript is disabled, the autocomplete becomes a simple option list
+    # which we can simply select from
+    subject_field.select "Physics"
+  else
+    # Otherwise we should fill-in the value like an input box, and then press
+    # tab or enter to advance to the next field after filling-in
+    subject_field.fill_in(with: "Physics").send_keys :tab
+  end
   click_button 'Continue'
 end
 
