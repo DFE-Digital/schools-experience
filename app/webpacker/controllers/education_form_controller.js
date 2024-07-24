@@ -28,6 +28,5 @@ export default class extends Controller {
     } else if (inputForAutoComplete && !requiresSubject) {
       inputForAutoComplete.value = "";
     }
-    }
   }
 }
