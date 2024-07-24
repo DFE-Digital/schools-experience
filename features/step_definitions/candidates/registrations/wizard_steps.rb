@@ -38,7 +38,9 @@ end
 Given("I have completed the education form") do
   visit path_for 'education', school: @school
   choose 'Graduate or postgraduate'
-  select "Physics", from: "What subject are you studying?"
+  # The auto-complete dropdown list doesn't support the "select" method, so we
+  # need to fill in the inputbox and then tab to the next field instead
+  fill_in("What subject are you studying?", with: "Physics").send_keys :tab
   click_button 'Continue'
 end
 
