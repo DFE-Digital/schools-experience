@@ -516,7 +516,7 @@ GEM
     request_store_rails (2.0.0)
       concurrent-ruby (~> 1.0)
     retriable (3.1.2)
-    rexml (3.3.1)
+    rexml (3.3.2)
       strscan
     rgeo (3.0.1)
     rgeo-activerecord (7.0.1)
