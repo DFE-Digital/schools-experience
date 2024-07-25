@@ -4,7 +4,7 @@ FactoryBot.define do
 
     objectives { "I want to be a teacher" }
     degree_stage { "Final year" }
-    degree_subject { "Bioscience" }
+    degree_subject { "Biological sciences" }
     teaching_stage { "It’s just an idea" }
     subject_first_choice { "Biology" }
     subject_second_choice { "Maths" }

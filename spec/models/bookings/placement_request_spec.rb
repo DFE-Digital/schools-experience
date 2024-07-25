@@ -460,19 +460,13 @@ describe Bookings::PlacementRequest, type: :model do
 
     it { is_expected.to validate_presence_of :degree_subject }
 
-    it do
-      is_expected.to validate_inclusion_of(:degree_subject)
-        .in_array(described_class::OPTIONS_CONFIG.fetch('DEGREE_SUBJECTS'))
-    end
-
     context 'when degree stage is "I don\'t have a degree and am not studying for one"' do
       before do
         allow(subject).to receive(:degree_stage) { "I don't have a degree and am not studying for one" }
       end
 
       it do
-        is_expected.to validate_inclusion_of(:degree_subject).in_array \
-          ['Not applicable']
+        is_expected.to validate_absence_of(:degree_subject)
       end
     end
 
@@ -482,8 +476,7 @@ describe Bookings::PlacementRequest, type: :model do
       end
 
       it do
-        is_expected.to validate_exclusion_of(:degree_subject).in_array \
-          ['Not applicable']
+        is_expected.to validate_presence_of(:degree_subject)
       end
     end
 

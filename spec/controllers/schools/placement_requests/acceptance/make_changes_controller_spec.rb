@@ -3,6 +3,7 @@ require Rails.root.join('spec', 'controllers', 'schools', 'session_context')
 
 describe Schools::PlacementRequests::Acceptance::MakeChangesController, type: :request do
   include_context "logged in DfE user"
+  include_context "Degree subject autocomplete enabled"
 
   let!(:pr) { create(:bookings_placement_request, school: @current_user_school) }
 

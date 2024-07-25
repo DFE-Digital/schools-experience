@@ -4,6 +4,7 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 describe Schools::PlacementRequestsController, type: :request do
   include ActiveSupport::Testing::TimeHelpers
   include_context "logged in DfE user"
+  include_context "Degree subject autocomplete enabled"
 
   let :school do
     Bookings::School.find_by! urn: urn

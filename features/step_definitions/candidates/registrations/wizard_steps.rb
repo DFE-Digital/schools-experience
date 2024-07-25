@@ -38,7 +38,16 @@ end
 Given("I have completed the education form") do
   visit path_for 'education', school: @school
   choose 'Graduate or postgraduate'
-  select 'Physics', from: 'If you have or are studying for a degree, tell us about your degree subject'
+  subject_field = find_field("What subject are you studying?")
+  if subject_field.tag_name == "select"
+    # When javascript is disabled, the autocomplete becomes a simple option list
+    # which we can simply select from
+    subject_field.select "Physics"
+  else
+    # Otherwise we should fill-in the value like an input box, and then press
+    # tab or enter to advance to the next field after filling-in
+    subject_field.fill_in(with: "Physics").send_keys :tab
+  end
   click_button 'Continue'
 end
 
@@ -96,7 +105,7 @@ end
 Then("the education form should populated with the details I've entered so far") do
   visit path_for 'education', school: @school
   expect(find_field('Graduate or postgraduate')).to be_checked
-  expect(find_field('If you have or are studying for a degree, tell us about your degree subject').value).to eq 'Physics'
+  expect(find_field('What subject are you studying?').value).to eq 'Physics'
 end
 
 Then("the teaching preference form should populated with the details I've entered so far") do

@@ -30,7 +30,20 @@
   </section>
 
   <section id="education-degree-subject-container" data-education-form-target="degreeSubjectContainer">
-    <%= f.govuk_collection_select \
+    <% if f.object.degree_subject_autocomplete? %>
+      <%= render DfE::Autocomplete::View.new(
+        f,
+        attribute_name: :degree_subject,
+        form_field: f.govuk_select(
+          :degree_subject,
+          options_for_select(dfe_autocomplete_options( f.object.available_degree_subjects), f.object.degree_subject),
+          label: { text: t('helpers.legend.candidates_registrations_education.degree_subject'),  size: 'm', tag: 'h2' },
+          hint: { text: t('helpers.hint.candidates_registrations_education.degree_subject') },
+          data: { education_form_target: 'degreeSubject' },
+          ),
+        ) %>
+    <% else %>
+      <%= f.govuk_collection_select \
       :degree_subject,
       f.object.available_degree_subjects,
       :to_s,
@@ -42,9 +55,10 @@
       },
       class: "govuk-select govuk-!-width-one-half",
       label: { class: "govuk-heading-m" } do %>
-      <p>
-        Select the nearest or equivalent subject.
-      </p>
+        <p>
+          Select the nearest or equivalent subject.
+        </p>
+      <% end %>
     <% end %>
   </section>
 

@@ -21,7 +21,7 @@ FactoryBot.define do
     objectives { 'Become a teacher' }
     degree_stage { "I don't have a degree and am not studying for one" }
     degree_stage_explaination { nil }
-    degree_subject { "Not applicable" }
+    degree_subject { "" }
     teaching_stage { "I’m very sure and think I’ll apply" }
     experience_type { 'both' }
 

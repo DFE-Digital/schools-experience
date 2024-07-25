@@ -18,13 +18,15 @@ export default class extends Controller {
     const options = this.degreeSubjectTarget.options
     const valueForNoDegree = this.degreeSubjectTarget.dataset.valueForNoDegree
     const optionForNoDegree = Array.from(options).find(o => o.value == valueForNoDegree)
+    const inputForAutoComplete = this.degreeSubjectContainerTarget.querySelector('input[name="' + this.degreeSubjectTarget.name.replace("]", "_raw]") +'"]')
 
     this.degreeSubjectContainerTarget.hidden = !requiresSubject
-    optionForNoDegree.hidden = requiresSubject
-    if ( !requiresSubject ) {
-      optionForNoDegree.selected = 'selected'
-    } else {
-      optionForNoDegree.selected = false
+
+    if (optionForNoDegree) {
+      optionForNoDegree.hidden = requiresSubject
+      optionForNoDegree.selected = requiresSubject ? false : 'selected'
+    } else if (inputForAutoComplete && !requiresSubject) {
+      inputForAutoComplete.value = "";
     }
   }
 }
