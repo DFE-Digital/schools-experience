@@ -32,7 +32,12 @@
   <section id="education-degree-subject-container" data-education-form-target="degreeSubjectContainer">
     <% if f.object.degree_subject_autocomplete? %>
       <%= f.hidden_field :nojs, value: true, class: 'nojs-flag' %>
-      <%= f.govuk_text_field :degree_subject_nojs, class: 'govuk-!-width-two-thirds hide-with-javascript' %>
+
+      <div id="degree_subject_nojs" class="hide-with-javascript">
+        <!-- no-javascript version of autocomplete box -->
+        <%=f.govuk_text_field :degree_subject_nojs, label: { size: 'm' } %>
+      </div>
+
       <%= render DfE::Autocomplete::View.new(
         f,
         attribute_name: :degree_subject,
@@ -42,6 +47,8 @@
           label: { text: t('helpers.legend.candidates_registrations_education.degree_subject'),  size: 'm', tag: 'h2' },
           hint: { text: t('helpers.hint.candidates_registrations_education.degree_subject') },
           data: { education_form_target: 'degreeSubject' },
+          class: "enable-with-javascript",
+          disabled: true,
           ),
         classes: "show-with-javascript",
         ) %>

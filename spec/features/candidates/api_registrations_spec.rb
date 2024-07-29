@@ -137,7 +137,12 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
     # Submit registrations/education form successfully
     choose 'Graduate or postgraduate'
-    select("Physics", from: "What subject are you studying?")
+
+    # For the autoselect, we fill-in the value like an input box
+    # NB: we do not tab to another control when using the rack-test driver
+    subject_field = find_field("What subject are you studying?")
+    subject_field.fill_in(with: "Physics")
+
     click_button 'Continue'
   end
 
