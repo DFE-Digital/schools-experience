@@ -6,9 +6,7 @@ module Candidates
       attribute :degree_stage_explaination, :string
       attribute :degree_subject, :string
 
-      attr_accessor :degree_subject_raw
-      attr_accessor :degree_subject_nojs
-      attr_accessor :nojs
+      attr_accessor :degree_subject_raw, :degree_subject_nojs, :nojs
     end
   end
 end
