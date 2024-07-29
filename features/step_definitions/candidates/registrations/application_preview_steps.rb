@@ -66,7 +66,7 @@ end
 
 Given("I have filled in my education details successfully") do
   choose 'Graduate or postgraduate'
-  select 'Physics', from: 'What subject are you studying?'
+  fill_in "What subject are you studying?", with: "Physics"
   click_button 'Continue'
   expect(page.current_path).to eq \
     "/candidates/schools/#{@school.urn}/registrations/teaching_preference/new"

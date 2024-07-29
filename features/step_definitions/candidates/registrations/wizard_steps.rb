@@ -38,10 +38,7 @@ end
 Given("I have completed the education form") do
   visit path_for 'education', school: @school
   choose 'Graduate or postgraduate'
-  subject_field = find_field("What subject are you studying?")
-  # We should fill-in the value like an input box, and then (in Selenium) press
-  # tab or enter to advance to the next field after filling-in
-  subject_field.fill_in(with: "Physics").send_keys :tab
+  fill_in "What subject are you studying?", with: "Physics"
   click_button 'Continue'
 end
 
