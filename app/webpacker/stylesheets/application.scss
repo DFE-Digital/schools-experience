@@ -30,6 +30,7 @@ $govuk-grid-widths: (
 @import "dfe-autocomplete/src/dfe-autocomplete";
 @import "accessible-autocomplete" ;
 @import "global-styles" ;
+@import "candidate";
 @import "contents-list" ;
 @import "cookie-banner" ;
 @import "form-extensions" ;

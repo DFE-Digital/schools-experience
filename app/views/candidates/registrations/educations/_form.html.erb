@@ -31,6 +31,8 @@
 
   <section id="education-degree-subject-container" data-education-form-target="degreeSubjectContainer">
     <% if f.object.degree_subject_autocomplete? %>
+      <%= f.hidden_field :nojs, value: true, class: 'nojs-flag' %>
+      <%= f.govuk_text_field :degree_subject_nojs, class: 'govuk-!-width-two-thirds hide-with-javascript' %>
       <%= render DfE::Autocomplete::View.new(
         f,
         attribute_name: :degree_subject,
@@ -41,6 +43,7 @@
           hint: { text: t('helpers.hint.candidates_registrations_education.degree_subject') },
           data: { education_form_target: 'degreeSubject' },
           ),
+        classes: "show-with-javascript",
         ) %>
     <% else %>
       <%= f.govuk_collection_select \
