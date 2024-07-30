@@ -7,7 +7,6 @@ module Candidates
 
       def create
         @education = Education.new education_params
-
         if @education.valid?
           persist @education
           redirect_to next_step_path
@@ -40,9 +39,15 @@ module Candidates
           :degree_stage_explaination,
           :degree_subject,
           :degree_subject_raw,
+          :degree_subject_nojs,
+          :nojs
         ).tap do |params|
           params[:degree_stage_explaination] = nil unless params[:degree_stage] == 'Other'
-          params[:degree_subject] = params[:degree_subject_raw] if params.key?(:degree_subject_raw)
+          if params.key?(:degree_subject_raw)
+            params[:degree_subject] = params[:degree_subject_raw]
+          elsif params.key?(:nojs) && ActiveModel::Type::Boolean.new.cast(params[:nojs])
+            params[:degree_subject] = params[:degree_subject_nojs]
+          end
         end
       end
 

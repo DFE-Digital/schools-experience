@@ -13,7 +13,7 @@ Feature: Entering candidate education details
         Given I am on the 'education' page for my school of choice
         When I submit the form
         Then I should see the validation error 'Select a degree stage'
-        And I should see the validation error 'Select a subject'
+        And I should see the validation error 'Enter a subject'
         Given I am on the 'education' page for my school of choice
         And I choose 'Other' as my degree stage
         When I submit the form

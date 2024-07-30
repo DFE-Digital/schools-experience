@@ -14,11 +14,28 @@ module Candidates
           validates :degree_stage, inclusion: { in: :available_degree_stages }, if: -> { degree_stage.present? }
           validates :degree_stage_explaination, presence: true, if: :degree_stage_explaination_required?
 
-          validates :degree_subject, presence: true, if: -> { degree_subject_simple? || degree_stage_requires_subject? }
-          validates :degree_subject, absence: true, if: -> { degree_subject_autocomplete? && !degree_stage_requires_subject? }
-          validates :degree_subject, inclusion: { in: :available_degree_subjects }, if: -> { degree_subject_simple? && degree_subject.present? && degree_stage_requires_subject? }
-          validates :degree_subject, inclusion: [NO_DEGREE_SUBJECT], if: :degree_stage_requires_n_a_subject?
-          validates :degree_subject, exclusion: [NO_DEGREE_SUBJECT], if: :degree_stage_requires_subject_in_subjects_list?
+          # if DEGREE_SUBJECT_AUTOCOMPLETE_ENABLED=true (degree_subject_autocomplete?)
+          # + if javascript is disabled (nojs?), then
+          validates :degree_subject_nojs, presence: true, if: -> { degree_subject_autocomplete? && nojs? && degree_stage_requires_subject? }
+          validates :degree_subject_nojs, absence: true,  if: -> { degree_subject_autocomplete? && nojs? && !degree_stage_requires_subject? }
+
+          # # + else if javascript is enabled (js?), then
+          validates :degree_subject, presence: true,  if: -> { degree_subject_autocomplete? && js? && degree_stage_requires_subject? }
+          validates :degree_subject, absence: true,   if: -> { degree_subject_autocomplete? && js? && !degree_stage_requires_subject? }
+
+          # if DEGREE_SUBJECT_AUTOCOMPLETE_ENABLED=false (degree_subject_simple?)
+          validates :degree_subject, presence: true,                                if: -> { degree_subject_simple? && degree_stage_requires_subject? }
+          validates :degree_subject, inclusion: { in: :available_degree_subjects }, if: -> { degree_subject_simple? && degree_stage_requires_subject? }
+          validates :degree_subject, inclusion: [NO_DEGREE_SUBJECT],                if: -> { degree_subject_simple? && degree_stage_requires_n_a_subject? }
+          validates :degree_subject, exclusion: [NO_DEGREE_SUBJECT],                if: -> { degree_subject_simple? && degree_stage_requires_subject_in_subjects_list? }
+        end
+
+        def js?
+          !nojs?
+        end
+
+        def nojs?
+          ActiveModel::Type::Boolean.new.cast(nojs) if defined?(nojs)
         end
 
         def available_degree_stages
@@ -65,15 +82,13 @@ module Candidates
         end
 
         def degree_stage_requires_subject_in_subjects_list?
-          degree_subject_simple? &&
-            degree_subject.present? &&
+          degree_subject.present? &&
             degree_stage.present? &&
             degree_stage_requires_subject?
         end
 
         def degree_stage_requires_n_a_subject?
-          degree_subject_simple? &&
-            degree_subject.present? &&
+          degree_subject.present? &&
             degree_stage.present? &&
             !degree_stage_requires_subject?
         end

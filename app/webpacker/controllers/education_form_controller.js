@@ -6,6 +6,10 @@ export default class extends Controller {
   connect() {
     const radioButtons = this.degreeStagesContainerTarget.querySelectorAll('input[type="radio"]')
     const checked = Array.from(radioButtons).find(r => r.checked)
+    this.degreeSubjectContainerTarget.querySelector('input.nojs-flag').value = false
+    this.degreeSubjectContainerTarget.querySelectorAll('.hide-with-javascript').forEach(c => c.style.display="none");
+    this.degreeSubjectContainerTarget.querySelectorAll('.show-with-javascript').forEach(c => c.style.display="block");
+    this.degreeSubjectContainerTarget.querySelectorAll(".enable-with-javascript").forEach(c => c.disabled=false);
     if (checked) { this.toggleDegreeSubjectContainer(checked) }
   }
 

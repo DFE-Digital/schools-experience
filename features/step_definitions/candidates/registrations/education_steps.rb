@@ -1,6 +1,6 @@
 Given("I make my degree selection") do
   choose 'Graduate or postgraduate'
-  select 'Physics', from: 'What subject are you studying?'
+  fill_in "What subject are you studying?", with: "Physics"
 end
 
 Given("I have completed the Education step") do

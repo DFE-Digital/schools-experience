@@ -137,7 +137,7 @@ feature 'Candidate Registrations (via the API)', type: :feature do
 
     # Submit registrations/education form successfully
     choose 'Graduate or postgraduate'
-    select("Physics", from: "What subject are you studying?")
+    fill_in "What subject are you studying?", with: "Physics"
     click_button 'Continue'
   end
 

@@ -1,6 +1,6 @@
 Given("I make my degree and teaching preference selections") do
   choose 'Graduate or postgraduate'
-  select 'Physics', from: 'What subject are you studying?'
+  fill_in "What subject are you studying?", with: "Physics"
   choose 'I want to become a teacher'
   select 'Physics', from: 'First choice'
   select 'Mathematics', from: 'Second choice'

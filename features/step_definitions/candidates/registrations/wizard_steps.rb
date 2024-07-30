@@ -38,16 +38,16 @@ end
 Given("I have completed the education form") do
   visit path_for 'education', school: @school
   choose 'Graduate or postgraduate'
+
   subject_field = find_field("What subject are you studying?")
-  if subject_field.tag_name == "select"
-    # When javascript is disabled, the autocomplete becomes a simple option list
-    # which we can simply select from
-    subject_field.select "Physics"
-  else
-    # Otherwise we should fill-in the value like an input box, and then press
-    # tab or enter to advance to the next field after filling-in
-    subject_field.fill_in(with: "Physics").send_keys :tab
+  subject_field.fill_in(with: "Physics")
+
+  unless subject_field.native.is_a?(Nokogiri::XML::Element)
+    # Unless we are using the standard rack-test driver (which does not support
+    # javascript), we need to change the focus off the control before continuing
+    subject_field.send_keys :tab
   end
+
   click_button 'Continue'
 end
 
