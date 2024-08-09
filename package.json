@@ -34,7 +34,7 @@
     "sass": "^1.77.6",
     "sass-loader": "^15.0.0",
     "semver": "^7.5.2",
-    "shakapacker": "7.2.2",
+    "shakapacker": "8.0.1",
     "stimulus": "^3.2.2",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "5",
@@ -76,5 +76,6 @@
   ],
   "scripts": {
     "spec": "jest"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
