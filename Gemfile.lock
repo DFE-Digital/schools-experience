@@ -332,7 +332,7 @@ GEM
     httpclient (2.8.3)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
-    ice_cube (0.16.4)
+    ice_cube (0.17.0)
     invisible_captcha (2.1.0)
       rails (>= 5.2)
     json (2.7.2)
