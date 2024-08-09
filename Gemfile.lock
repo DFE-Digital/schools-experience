@@ -152,7 +152,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    brakeman (6.0.1)
+    brakeman (6.1.2)
+      racc
     breasal (0.0.1)
     builder (3.3.0)
     bullet (7.1.5)
