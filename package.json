@@ -12,7 +12,7 @@
     "@babel/plugin-transform-runtime": "7",
     "@babel/preset-env": "7",
     "@babel/runtime": "7",
-    "@googlemaps/js-api-loader": "^1.16.6",
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@stimulus/polyfills": "^2.0.0",
     "@types/babel__core": "7",
     "@types/webpack": "5",
