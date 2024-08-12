@@ -8,14 +8,14 @@
     <%= csp_meta_tag %>
     <%= display_meta_tags %>
     <%= tag :meta, name: 'viewport', content: 'width=device-width, initial-scale=1' %>
-    <%= tag :meta, property: 'og:image', content: asset_pack_url('static/node_modules/govuk-frontend/dist/govuk/assets/images/govuk-opengraph-image.png') %>
+    <%= tag :meta, property: 'og:image', content: asset_pack_url('static/assets/images/govuk-opengraph-image.png') %>
     <%= tag :meta, name: 'theme-color', content: '#0b0c0c' %>
-    <%= favicon_link_tag asset_pack_path('static/node_modules/govuk-frontend/dist/govuk/assets/images/favicon.ico') %>
-    <%= favicon_link_tag asset_pack_path('static/node_modules/govuk-frontend/dist/govuk/assets/images/govuk-icon-mask.svg'), rel: 'mask-icon', type: 'image/svg', color: "#0b0c0c" %>
-    <%= favicon_link_tag asset_pack_path('static/node_modules/govuk-frontend/dist/govuk/assets/images/govuk-icon-180.png'), rel: 'govuk-icon-180', type: 'image/png', size: '180x180' %>
-    <%= favicon_link_tag asset_pack_path('static/node_modules/govuk-frontend/dist/govuk/assets/images/govuk-icon-192.png'), rel: 'govuk-icon-192', type: 'image/png', size: '192x192' %>
-    <%= favicon_link_tag asset_pack_path('static/node_modules/govuk-frontend/dist/govuk/assets/images/govuk-icon-512.png'), rel: 'govuk-icon-512', type: 'image/png', size: '512x512' %>
-    <%= favicon_link_tag asset_pack_path('static/node_modules/govuk-frontend/dist/govuk/assets/images/govuk-opengraph-image.png'), rel: 'apple-touch-icon', type: 'image/png' %>
+    <%= favicon_link_tag asset_pack_path('static/assets/images/favicon.ico') %>
+    <%= favicon_link_tag asset_pack_path('static/assets/images/govuk-icon-mask.svg'), rel: 'mask-icon', type: 'image/svg', color: "#0b0c0c" %>
+    <%= favicon_link_tag asset_pack_path('static/assets/images/govuk-icon-180.png'), rel: 'govuk-icon-180', type: 'image/png', size: '180x180' %>
+    <%= favicon_link_tag asset_pack_path('static/assets/images/govuk-icon-192.png'), rel: 'govuk-icon-192', type: 'image/png', size: '192x192' %>
+    <%= favicon_link_tag asset_pack_path('static/assets/images/govuk-icon-512.png'), rel: 'govuk-icon-512', type: 'image/png', size: '512x512' %>
+    <%= favicon_link_tag asset_pack_path('static/assets/images/govuk-opengraph-image.png'), rel: 'apple-touch-icon', type: 'image/png' %>
     <%= stylesheet_pack_tag 'application', media: 'all' %>
     <%= yield :head %>
   </head>
