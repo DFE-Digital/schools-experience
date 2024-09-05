@@ -33,6 +33,8 @@ module Bookings
 
       gitis_contact.accepted_policy_id = current_privacy_policy.id
 
+      gitis_contact.degree_subject = education.degree_subject
+
       gitis_contact
     end
 
