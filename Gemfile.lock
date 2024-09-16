@@ -391,7 +391,7 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    nio4r (2.7.0)
+    nio4r (2.7.3)
     nokogiri (1.16.7-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.16.7-arm-linux)
@@ -693,7 +693,7 @@ GEM
       prometheus-client (>= 3.0, < 5.0)
       rack
       yabeda (~> 0.10)
-    yabeda-puma-plugin (0.6.0)
+    yabeda-puma-plugin (0.7.1)
       json
       puma
       yabeda (~> 0.5)
