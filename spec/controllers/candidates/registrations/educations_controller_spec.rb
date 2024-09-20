@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe Candidates::Registrations::EducationsController, type: :request do
   include_context 'Stubbed current_registration'
-  include_context "Degree subject autocomplete enabled"
 
   let :registration_session do
     FactoryBot.build :registration_session, with: %i[

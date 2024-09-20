@@ -3,7 +3,6 @@ require 'rails_helper'
 describe Candidates::Registrations::PlacementPreferencesController, type: :request do
   include_context 'Stubbed candidates school'
   include_context 'Stubbed current_registration'
-  include_context "Degree subject autocomplete enabled"
 
   let :registration_session do
     FactoryBot.build :registration_session, with: %i[

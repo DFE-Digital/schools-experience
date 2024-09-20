@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe Candidates::Registrations::BackgroundChecksController, type: :request do
   include_context 'Stubbed current_registration'
-  include_context "Degree subject autocomplete enabled"
 
   before do
     FactoryBot.create :bookings_school, urn: 11_048
