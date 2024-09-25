@@ -44,3 +44,5 @@ at the PowerBI end, in order to change the database credentials and(possibly the
 go to Settings -> Manage connections and gateways
 open the data source options menu and choose settings
 change  username and password
+
+the gse-azdo-powerbi-prod secret in the s189p01-tsc-contributor Azure App Registration is used by the pipeline to connect to the s189 production subscription. If the secret is renewed, the pipeline variable aksclientSecret will need to be updated with the new secret value. Update within the 'S189 aks to Azure Data' pipeline via Edit -> Variables -> update aksclientSecret -> save. You can 'Create release' to confirm the pipeline runs successfully.
