@@ -3,7 +3,6 @@ require Rails.root.join("spec", "controllers", "schools", "session_context")
 
 describe Schools::ArchivedPlacementRequestsController, type: :request do
   include_context "logged in DfE user"
-  include_context "Degree subject autocomplete enabled"
 
   let(:school) { Bookings::School.find_by! urn: urn }
   let!(:profile) { create :bookings_profile, school: school }
