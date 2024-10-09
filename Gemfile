@@ -20,7 +20,7 @@ gem 'breasal'
 gem 'geocoder'
 
 # Use Puma as the app server
-gem 'puma', '~> 6.4.2'
+gem 'puma', '~> 6.4.3'
 
 # Transpile app-like JavaScript. Read more: https://github.com/shakacode/shakapacker
 gem 'shakapacker', '8.0.1'
