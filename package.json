@@ -25,7 +25,7 @@
     "css-minimizer-webpack-plugin": "^7.0.0",
     "custom-event-polyfill": "^1.0.7",
     "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete",
-    "express": "4.19.2",
+    "express": "4.20.0",
     "govuk-frontend": "^5.6.0",
     "js-cookie": "^3.0.5",
     "json5": "2.2.3",
