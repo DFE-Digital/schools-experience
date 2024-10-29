@@ -14,10 +14,15 @@ module "application_configuration" {
     ENVIRONMENT_NAME    = var.environment
     PGSSLMODE           = local.postgres_ssl_mode
     DFE_SIGNIN_BASE_URL = "https://${var.dsi_hostname}"
+    BIGQUERY_PROJECT_ID = "get-into-teaching"
+    BIGQUERY_TABLE_NAME = "events"
+    BIGQUERY_DATASET    = var.dataset_name
   }
   secret_variables = {
     DATABASE_URL = module.postgres[0].url
     REDIS_URL    = module.redis-cache[0].url
+
+    GOOGLE_CLOUD_CREDENTIALS = var.enable_dfe_analytics_federated_auth ? module.dfe_analytics[0].google_cloud_credentials : null
   }
 }
 
@@ -60,4 +65,6 @@ module "worker_application" {
   enable_logit               = var.enable_logit
 
   enable_prometheus_monitoring = var.enable_prometheus_monitoring
+
+  enable_gcp_wif = true
 }
