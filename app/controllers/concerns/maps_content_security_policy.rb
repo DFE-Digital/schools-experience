@@ -13,8 +13,7 @@ module MapsContentSecurityPolicy
         "https://www.google.com",
         "https://maps.googleapis.com",
         "https://www.googletagmanager.com",
-        "https://www.google-analytics.com",
-        "https://az416426.vo.msecnd.net" # needed for AppInsights
+        "https://www.google-analytics.com"
     end
   end
 end

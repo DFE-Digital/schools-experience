@@ -46,13 +46,6 @@ GIT
       get_into_teaching_api_client
 
 GIT
-  remote: https://github.com/microsoft/ApplicationInsights-Ruby.git
-  revision: a74292001cf12f6de957dfdcefaf8dbe415d7181
-  ref: a7429200
-  specs:
-    application_insights (0.5.7)
-
-GIT
   remote: https://github.com/mitsuru/validates_timeliness.git
   revision: f28a62589cc069d1d1f5dfd99e1749edca04cd68
   ref: f28a625
@@ -732,7 +725,6 @@ DEPENDENCIES
   acts_as_list
   addressable
   amazing_print
-  application_insights!
   bootsnap (>= 1.1.0)
   brakeman (>= 6.0.1)
   breasal
