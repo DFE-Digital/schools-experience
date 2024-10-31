@@ -26,10 +26,6 @@ If required Exceptions Notifications can be sent to Sentry.
 
 `SENTRY_DSN` - Send exception reports to sentry, config value supplied by Sentry. An organisation owner or #digital-tools-support can add new members to the school-experience team in the org dfe-teacher-services. Then a new key can be generated via https://sentry.io/settings/dfe-teacher-services/projects/school-experience/keys/.
 
-## Monitoring
-
-`APP_INSIGHTS_INSTRUMENTATION_KEY` - value supplied by Microsoft Application Insights
-
 ## Gitis configuration
 
 `CRM_PRIVACY_CONSENT_ID` - GUID for the privacy policy consent id used by candidates - supplied by Gitis team

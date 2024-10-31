@@ -74,7 +74,6 @@ gem 'rack-attack'
 gem 'rack-rewrite'
 gem 'rack-timeout'
 
-gem 'application_insights', github: 'microsoft/ApplicationInsights-Ruby', ref: 'a7429200'
 gem 'openid_connect'
 gem 'uk_postcode'
 
