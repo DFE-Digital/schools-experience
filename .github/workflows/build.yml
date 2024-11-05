@@ -328,7 +328,7 @@ jobs:
 
   prepare:
     name: Configure Matrix Deployments
-    needs: [sonarcloud]
+    needs: [build]
 
     runs-on: ubuntu-latest
     outputs:
