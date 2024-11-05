@@ -1,5 +1,5 @@
 module "postgres" {
-  count  = var.deploy_postgres ? 1 : 0
+  count  = 1
   source = "./vendor/modules/aks//aks/postgres"
 
   namespace                   = var.namespace
@@ -17,10 +17,12 @@ module "postgres" {
   azure_extensions            = ["POSTGIS", "address_standardizer", "plpgsql", "postgis_raster", "uuid-ossp", "citext"]
   azure_enable_high_availability = var.postgres_enable_high_availability
   azure_maintenance_window       = var.azure_maintenance_window
+  server_docker_image         = "postgis/postgis:14-3.4"
+  create_database = var.create_database
 }
 
 module "redis-cache" {
-  count  = var.deploy_redis ? 1 : 0
+  count  = 1
   source = "./vendor/modules/aks//aks/redis"
 
   namespace                 = var.namespace

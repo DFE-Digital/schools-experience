@@ -16,11 +16,8 @@ module "application_configuration" {
     DFE_SIGNIN_BASE_URL = "https://${var.dsi_hostname}"
   }
   secret_variables = {
-    DB_HOST     = var.deploy_postgres ? module.postgres[0].host : "${data.azurerm_key_vault_secret.db_host[0].value}"
-    DB_USERNAME = var.deploy_postgres ? module.postgres[0].username : "${data.azurerm_key_vault_secret.db_username[0].value}"
-    DB_PASSWORD = var.deploy_postgres ? module.postgres[0].password : "${data.azurerm_key_vault_secret.db_password[0].value}"
-    DB_DATABASE = var.deploy_postgres ? module.postgres[0].name : "${data.azurerm_key_vault_secret.db_name[0].value}"
-    REDIS_URL   = var.deploy_redis ? module.redis-cache[0].url : "${data.azurerm_key_vault_secret.redis_url[0].value}"
+    DATABASE_URL = module.postgres[0].url
+    REDIS_URL   = module.redis-cache[0].url
   }
 }
 
@@ -38,7 +35,7 @@ module "web_application" {
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
   docker_image           = var.docker_image
-  command                = ["/app/docker-entrypoint.sh", "-m", "-f"]
+  command                = var.webapp_command
   probe_path             = "/check"
   web_external_hostnames = var.create_dsi_ingress ? [var.dsi_hostname] : []
   enable_logit               = var.enable_logit

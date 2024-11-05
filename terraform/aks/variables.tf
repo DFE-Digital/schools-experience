@@ -50,16 +50,6 @@ variable "app_replicas" {
   default = 1
 }
 
-
-
-variable "external_url" {
-  default     = null
-  description = "Healthcheck URL for StatusCake monitoring"
-}
-variable "statuscake_contact_groups" {
-  default     = []
-  description = "ID of the contact group in statuscake web UI"
-}
 variable "enable_monitoring" {
   default     = false
   description = "Enable monitoring and alerting"
@@ -67,19 +57,6 @@ variable "enable_monitoring" {
 variable "azure_enable_backup_storage" {
   default     = true
   description = "Create storage account for database backup"
-}
-variable "deploy_redis" {
-  default     = true
-  description = "Whether Deploy redis or not"
-}
-
-variable "deploy_postgres" {
-  default     = true
-  description = "Whether Deploy postgres or not"
-}
-variable "key_vault_name" {
-  default     = null
-  description = "The name of the key vault to get postgres and redis"
 }
 
 variable "infra_key_vault_name" {
@@ -100,27 +77,6 @@ variable "postgres_enable_high_availability" {
   default = false
 }
 
-variable "review_db_dbname" {
-  default     = null
-  description = "The name of the secret storing review db name"
-}
-variable "review_db_password" {
-  default     = null
-  description = "The name of the secret storing review db password"
-}
-
-variable "worker_apps" {
-  type = map(
-    object({
-      startup_command = optional(list(string), [])
-      probe_command   = optional(list(string), [])
-      replicas        = optional(number, 1)
-      memory_max      = optional(string, "1Gi")
-    })
-  )
-  default = {}
-}
-
 variable "statuscake_alerts" {
   type = map(
     object({
@@ -130,19 +86,6 @@ variable "statuscake_alerts" {
     })
   )
   default = {}
-}
-
-variable "review_db_username" {
-  default     = null
-  description = "The name of the secret storing review db username"
-}
-variable "review_db_hostname" {
-  default     = null
-  description = "The name of the secret storing review db host"
-}
-variable "review_url_redis_name" {
-  default     = null
-  description = "The name of the secret storing review redis url"
 }
 
 variable "statuscake_password_name" {
@@ -161,6 +104,13 @@ variable "enable_logit" { default = false }
 variable "enable_prometheus_monitoring" {
   type    = bool
   default = false
+}
+variable "webapp_command" {
+  default     = ["/app/docker-entrypoint.sh", "-m", "-f"]
+  description = "Start command to initialise and run the web app"
+}
+variable "create_database" {
+  default = true
 }
 
 locals {
