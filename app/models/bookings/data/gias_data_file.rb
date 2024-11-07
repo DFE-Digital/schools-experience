@@ -4,6 +4,7 @@ module Bookings
       EXPECTED_HEADER = '"URN","LA (code)","LA (name)","EstablishmentNumber","EstablishmentName"'.freeze
       EXPECTED_FIRST_ROW = %r(\A\d{3}\d+,)
       TEMP_PATH = Rails.root.join('tmp', 'gias').freeze
+      SAMPLE_COUNT = 1000
       attr_reader :today
 
       def initialize
@@ -12,6 +13,10 @@ module Bookings
 
       def todays_file
         @todays_file ||= TEMP_PATH.join "edubase-#{today}.csv"
+      end
+
+      def todays_sample_file
+        @todays_sample_file ||= TEMP_PATH.join "sample-#{today}.csv"
       end
 
       def remove_todays_file!
@@ -32,6 +37,10 @@ module Bookings
         remove_old_files! # GC earlier files
 
         already_downloaded? ? todays_file : fetch_file
+      end
+
+      def sample_path
+        already_sampled? ? todays_sample_file : sample_file
       end
 
       def source_url
@@ -74,6 +83,10 @@ module Bookings
         File.exist? todays_file
       end
 
+      def already_sampled?
+        File.exist? todays_sample_file
+      end
+
       def fetch_file
         create_temp_dir
 
@@ -83,6 +96,11 @@ module Bookings
             raise InvalidSourceUri, "Invalid source URI: #{source_url}"
           end
         end
+      end
+
+      def sample_file
+        # NB: we need to pass the argument as a single commandline rather than as an array of parameters
+        todays_sample_file.to_s if system "head -n #{SAMPLE_COUNT} #{path} > #{todays_sample_file}"
       end
 
       def download_and_save
