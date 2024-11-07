@@ -15,4 +15,5 @@ end
 
 # rubocop:disable Rails/Output
 puts "\nYou can import all 47000 schools using 'bundle exec rails data:schools:mass_import'"
+puts "\nYou can import a sample of 1000 schools using 'bundle exec rails data:schools:sample_import'"
 # rubocop:enable Rails/Output
