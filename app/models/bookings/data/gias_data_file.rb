@@ -99,8 +99,10 @@ module Bookings
       end
 
       def sample_file
-        # NB: we need to pass the argument as a single commandline rather than as an array of parameters
-        todays_sample_file.to_s if system "head -n #{SAMPLE_COUNT} #{path} > #{todays_sample_file}"
+        IO.popen(["head", "-n #{SAMPLE_COUNT}", path.to_s]) do |io|
+          File.write(todays_sample_file, io.read)
+        end
+        todays_sample_file.to_s
       end
 
       def download_and_save
