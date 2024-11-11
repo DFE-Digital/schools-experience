@@ -56,8 +56,6 @@ DfE::Analytics.configure do |config|
 
   config.bigquery_maintenance_window = "08-09-2024 18:00..08-09-2024 19:00"
 
-
-
   # The name of the BigQuery table we’re writing to.
   #
   config.bigquery_table_name = 'events'
