@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     -e|prepare)
 	  echo Preparing database
-          bundle exec rails db:prepare
+          bundle exec rails db:prepare && bundle exec rails data:schools:sample_import
 	  shift
       ;;
     -p|profile)
