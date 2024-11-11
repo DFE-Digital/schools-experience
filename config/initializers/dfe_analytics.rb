@@ -1,11 +1,13 @@
 DfE::Analytics.configure do |config|
+  config.azure_federated_auth = true
+
   # Whether to log events instead of sending them to BigQuery.
   #
   config.log_only = false
 
   # Whether to use ActiveJob or dispatch events immediately.
   #
-  config.async = true
+  config.async = false
   config.entity_table_checks_enabled = true
 
   # Which ActiveJob queue to put events on
