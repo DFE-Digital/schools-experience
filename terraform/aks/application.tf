@@ -42,6 +42,7 @@ module "web_application" {
   probe_path             = "/check"
   web_external_hostnames = var.create_dsi_ingress ? [var.dsi_hostname] : []
   enable_logit               = var.enable_logit
+  enable_gcp_wif = true
 
   enable_prometheus_monitoring  = var.enable_prometheus_monitoring
 }
@@ -61,6 +62,7 @@ module "worker_application" {
   max_memory                 = var.sidekiq_memory_max
   replicas                   = var.sidekiq_replicas
   enable_logit               = var.enable_logit
+  enable_gcp_wif = true
 
   enable_prometheus_monitoring  = var.enable_prometheus_monitoring
 }
